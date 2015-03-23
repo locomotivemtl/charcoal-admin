@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Tests\Template\Object;
 
-use \Charcoal\Admin\Template\Object\Reorder as Colllection;
+use \Charcoal\Admin\Template\Object\Reorder as Reorder;
 
 class ReorderTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,6 +12,6 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
 	public function testConstructor()
 	{
 		$obj = new Reorder();
-		$this->assertInstanceOf('\Charcoal\Admin\Template\Objet\Reorder', $obj);
+		$this->assertInstanceOf('\Charcoal\Admin\Template\Object\Reorder', $obj);
 	}
 }

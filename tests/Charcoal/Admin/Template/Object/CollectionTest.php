@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Tests\Template\Object;
 
-use \Charcoal\Admin\Template\Object\Collection as Colllection;
+use \Charcoal\Admin\Template\Object\Collection as Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,6 +12,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 	public function testConstructor()
 	{
 		$obj = new Collection();
-		$this->assertInstanceOf('\Charcoal\Admin\Template\Objet\Collection', $obj);
+		$this->assertInstanceOf('\Charcoal\Admin\Template\Object\Collection', $obj);
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Tests\Template\Object;
 
-use \Charcoal\Admin\Template\Object\Edit as Colllection;
+use \Charcoal\Admin\Template\Object\Edit as Edit;
 
 class EditTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,6 +12,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
 	public function testConstructor()
 	{
 		$obj = new Edit();
-		$this->assertInstanceOf('\Charcoal\Admin\Template\Objet\Edit', $obj);
+		$this->assertInstanceOf('\Charcoal\Admin\Template\Object\Edit', $obj);
 	}
 }

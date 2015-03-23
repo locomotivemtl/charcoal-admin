@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Template\Object;
 
-use \Charcoal\Admin\Object as ObjectTemplate;
+use \Charcoal\Admin\Template\Object as ObjectTemplate;
 
 class Edit extends ObjectTemplate
 {

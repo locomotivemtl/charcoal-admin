@@ -3,3 +3,4 @@ npm-debug.log
 vendor
 
 tests/tmp
+phpdoc

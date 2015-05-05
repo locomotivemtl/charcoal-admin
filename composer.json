@@ -1,12 +1,18 @@
 {
     "name": "locomotivemtl/charcoal-admin",
+    "minimum-stability":"dev",
     "require": {
-        "locomotivemtl/charcoal-core":"@dev"
+        "locomotivemtl/charcoal-core":"@dev",
+        "locomotivemtl/charcoal-base":"@dev"
     },
     "repositories":[
         {
             "type":"vcs",
             "url":"https://github.com/locomotivemtl/charcoal-core"
+        },
+         {
+            "type":"vcs",
+            "url":"https://github.com/locomotivemtl/charcoal-base"
         }
     ],
     "autoload":{

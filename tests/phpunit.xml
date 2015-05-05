@@ -7,7 +7,6 @@
 	bootstrap="bootstrap.php" 
 	convertErrorsToExceptions="true"
 	colors="true" 
-	strict="true" 
 	verbose="true"
 >
 	<testsuites>

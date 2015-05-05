@@ -1,6 +1,9 @@
 <?php
 
-use \Charcoal\Admin as Admin;
+use \Charcoal\Admin\Module as AdminModule;
+use \Charcoal\Charcoal as Charcoal;
+
+session_start();
 
 // Composer autoloader for Charcoal's psr4-compliant Unit Tests
 $autoloader = require __DIR__ . '/../vendor/autoload.php';
@@ -9,5 +12,6 @@ $autoloader->add('Charcoal\\Admin\\Tests\\', __DIR__);
 
 
 // This var needs to be set automatically, for now
-//Charcoal::init();
+Charcoal::init();
+AdminModule::init();
 //Charcoal::config()['ROOT'] = '';

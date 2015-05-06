@@ -1,0 +1,18 @@
+{{!--
+Menu item partial
+=================
+
+
+--}}
+{{#active}}
+    <li>
+        <a href="{{url}}">{{label}}</a>
+        {{#has_children}}
+        	<ul>
+            {{#children}}
+                {{>charcoal/admin/widget/inc.menu.item}}
+            {{/children}}
+	        </ul>
+        {{/has_children}}
+    </li>
+{{/active}}

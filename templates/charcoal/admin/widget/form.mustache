@@ -1,0 +1,38 @@
+{{!-- 
+Form Widget
+===========
+
+`charcoal/admin/widget/form`
+
+This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
+
+--}}
+<div class="form">
+    <form action="{{action}}" method="{{method}}" enctype="multipart/form-data">
+    
+    {{#show_header}}
+    <section class="form-header">
+        {{#show_label}}
+            <h2 class="title">{{label}}</h2>
+        {{/show_label}}
+        {{#show_description}}
+            <div class="description">{{description}}</div>
+        {{/show_description}}
+    </section>
+    {{/show_header}}
+
+    <section class="form-content">
+        {{!-- Loop all form groups --}}
+        {{#groups}}
+            {{>$widget_template}}
+        {{/groups}}
+    </section>
+
+    {{#show_footer}}
+    <section class="form-footer">
+        {{#show_notes}}
+            <small class="notes">{{notes}}</small>
+        {{/show_notes}}
+    </section>
+    {{/show_footer}}
+</div>

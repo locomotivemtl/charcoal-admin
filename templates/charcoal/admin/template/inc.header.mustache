@@ -1,0 +1,29 @@
+{{!--
+Header include
+==============
+
+`charcoal/admin/template/inc.header`
+
+Open the HTML document and include meta tags and required external resources.
+
+Based on the HTML5 boilerplate.
+
+--}}
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>{{page_title}}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="charcoal/admin/screen.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+<body>
+
+{{#show_header_menu}}
+    {{>charcoal/admin/widget/menu.header}}
+{{/show_header_menu}}
+

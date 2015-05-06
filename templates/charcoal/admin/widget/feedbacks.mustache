@@ -1,0 +1,20 @@
+{{!-- 
+Feedbacks Widget
+================
+
+`charcoal/admin/widget/feedbacks
+
+Loop the available feedbacks (the `feedbacks()` method is available for all admin templates) and display them according to their level.
+
+This widget expects a `Charcoal\Admin\Template` (or children) model as context.
+
+--}}
+{{#has_feedbacks}}
+<div class="feedbacks">
+    {{#feedbacks}}
+    <div class="feedback {{level}}">
+        {{msg}}
+    </div>
+    {{/feedbacks}}
+</div>
+{{/has_feedbacks}}

@@ -1,0 +1,13 @@
+{{!-- 
+`charcoal/admin/widget/layout.start.php`
+
+This widget expects a `Layout` context
+--}}
+{{!-- Hack: Execute end login --}}
+{{start}}
+
+{{#cell_starts_row}}
+	<div class="layout-item layout-row split-{{row_num_columns}}">
+{{/cell_starts_row}}
+
+<div class="layout-item layout-col col-{{cell_span}}">

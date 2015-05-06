@@ -1,0 +1,17 @@
+{{>charcoal/admin/template/inc.header}}
+
+{{>charcoal/admin/widget/feedbacks}}
+
+{{!-- Object edit section --}}
+<section class="section object-collection">
+
+    <h2>{{title}}</h2>
+    <h3>{{subtitle}}</h3>
+
+    {{#dashboard}}
+        {{>charcoal/admin/widget/dashboard}}
+    {{/dashboard}}
+
+</section>
+
+{{>charcoal/admin/template/inc.footer}}

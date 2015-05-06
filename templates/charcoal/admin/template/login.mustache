@@ -1,0 +1,35 @@
+{{!--
+Login template
+==============
+
+`charcoal/admin/template/login`
+
+Display the login form / feedback
+
+This template expects a `Charcoal\Admin\Template\Login` model as context.
+
+--}}
+{{>charcoal/admin/template/inc.header}}
+
+{{>charcoal/admin/widget/feedbacks}}
+
+{{!-- Login form --}}
+<form method="post" action="{{url_login_action}}">
+	<input type="hidden" name="csrf_token" value="{{csrf_token}}">
+	<label for="username">{{#_t}}Username{{/_t}}</label>
+	<br/>
+	<input type="text" name="username" class="user" id="username">
+
+	<label for="password">{{#_t}}Password{{/_t}}</label>
+	<br/>
+	<input type="password" name="password" id="password">
+
+	<br/>
+	<input type="submit" name="login" class="submit" value="{{#_t}}Log in{{/_t}}">
+
+</form>
+
+<a href="{{url_lost_password}}">Lost your password?</a>
+
+
+{{>charcoal/admin/template/inc.footer}}

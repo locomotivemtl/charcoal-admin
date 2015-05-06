@@ -6,5 +6,5 @@ use \Charcoal\Admin\Template\Account as AccountTemplate;
 
 class Confirm extends AccountTemplate
 {
-
+    // ...
 }

@@ -1,3 +1,54 @@
 {
+	"parent":"charcoal/object/content",
 
+	"properties":{
+		"username":{
+			"type":"string",
+			"unique":true,
+			"allow_null":false
+		},
+		"email":{
+			"type":"email",
+			"allow_empty":false,
+			"allow_null":false
+		},
+		"password":{
+			"type":"password",
+			"allow_null":false,
+			"allow_empty":false
+		},
+		"groups":{
+			"type":"object",
+			"obj_type":"charcoal/admin/usergroup",
+			"multiple":true
+		},
+		"permissions":{
+			"type":"structure",
+			"multiple":true
+		},
+		"last_login_date":{
+			"type":"datetime"
+		},
+		"last_login_ip":{
+			"type":"ip"
+		},
+		"last_password_date":{
+			"type":"datetime"
+		},
+		"last_password_ip":{
+			"type":"ip"
+		},
+		"login_token":{
+			"type":"string"
+		}
+	},
+
+	"key":"username",
+	
+	"sources":{
+		"default":{
+			"table":"charcoal_admin_users"
+		}
+	},
+	"default_source":"default"
 }

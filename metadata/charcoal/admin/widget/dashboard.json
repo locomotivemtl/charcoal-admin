@@ -1,0 +1,13 @@
+{
+	"parent":"charcoal/admin/widget",
+
+	"properties":{
+		"layout":{
+			"type":"structure"
+		},
+		"widgets":{
+			"type":"structure",
+			"multiple":true
+		}
+	}
+}

@@ -1,0 +1,15 @@
+{
+	"parent":"charcoal/admin/widget",
+
+	"properties":{
+		"type":{
+			"type":"string"
+		},
+		"input_type":{
+			"type":"string"
+		},
+		"input_options":{
+			"type":"structure"
+		}
+	}
+}

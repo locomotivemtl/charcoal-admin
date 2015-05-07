@@ -122,7 +122,7 @@ module.exports = function(grunt) {
 		},
 		githooks: {
 			all: {
-				'pre-commit': 'jsonlint phplint phpunit phpcs phpdocumentor',
+				'pre-commit': 'jsonlint phplint phpunit phpcs',
 			}
 		}
 		

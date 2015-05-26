@@ -1,0 +1,17 @@
+<?php
+
+namespace Charcoal\Admin\Tests;
+
+use \Charcoal\Admin\AdminModule as AdminModule;
+
+class ModuleTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+    * Hello world
+    */
+    public function testConstructor()
+    {
+        $obj = new AdminModule();
+        $this->assertInstanceOf('\Charcoal\Admin\AdminModule', $obj);
+    }
+}

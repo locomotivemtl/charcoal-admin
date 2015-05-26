@@ -1,0 +1,21 @@
+{
+	"parent":"charcoal/admin/property/input",
+
+	"properties":{
+		"size":{
+			"type":"integer"
+		},
+		"min_length":{
+			"type":"integer"
+		},
+		"max_length":{
+			"type":"integer"
+		},
+		"pattern":{
+			"type":"string"
+		},
+		"placeholder":{
+			"type":"string"
+		}
+	}
+}

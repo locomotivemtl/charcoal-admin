@@ -1,16 +1,17 @@
 {{!--
-Textarea Property Input
+Checkbox Property Input
 =======================
--- }}
-<textarea 
+
+`charcoal/admin/property/input/checkbox`
+
+--}}
+<input 
+	type="checkbox" 
 	id="{{input_id}}" 
 	name="{{input_name}}" 
-	class="form-control {{input_class}}" 
-	cols="{{cols}}" 
-	rows="{{cols}}" 
+	class="{{input_class}}"
+	{{#checked}}checked{{/checked}}
 	{{#read_only}}read_only{{/read_only}} 
 	{{#required}}required{{/required}} 
 	{{#disabled}}disabled{{/disabled}}
 >
-    {{&input_val}}
-</textarea>

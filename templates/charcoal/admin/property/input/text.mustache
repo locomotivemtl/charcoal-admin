@@ -1,1 +1,22 @@
-<input type="text" id="{{input_id}}" name="{{input_name}}">
+{{!--
+Text input
+
+Display a property (most likely a `PropertyString`...) as a "text" input.
+
+`charcoal/admin/property/input/text`
+--}}
+<input 
+	type="text" 
+	id="{{input_id}}" 
+	name="{{input_name}}" 
+	class="form-control {{input_class}}" 
+	{{#size}}size="{{size}}"{{/size}}
+	{{#min_length}}minlength="{{min_length}}"{{/min_length}} 
+	{{#max_length}}maxlength="{{max_length}}"{{/max_length}}
+	{{#pattern}}pattern="{{pattern}}"{{/pattern}}
+	{{#placeholder}}placeholer="{{placeholder}}"{{/placeholder}}  
+	{{#read_only}}read_only{{/read_only}} 
+	{{#required}}required{{/required}} 
+	{{#disabled}}disabled{{/disabled}}
+	val="{{input_val}}"
+>

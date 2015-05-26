@@ -11,25 +11,44 @@ This template expects a `Charcoal\Admin\Template\Login` model as context.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-{{>charcoal/admin/widget/feedbacks}}
-
 {{!-- Login form --}}
-<form method="post" action="{{url_login_action}}">
-	<input type="hidden" name="csrf_token" value="{{csrf_token}}">
-	<label for="username">{{#_t}}Username{{/_t}}</label>
-	<br/>
-	<input type="text" name="username" class="user" id="username">
+<div class="container">
 
-	<label for="password">{{#_t}}Password{{/_t}}</label>
-	<br/>
-	<input type="password" name="password" id="password">
+	{{>charcoal/admin/widget/feedbacks}}
 
-	<br/>
-	<input type="submit" name="login" class="submit" value="{{#_t}}Log in{{/_t}}">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<strong>Sign in to Charcoal</strong>
+		</div>
+		<div class="panel-body">
+			<form method="post" action="{{url_login_action}}">
+				<input type="hidden" name="csrf_token" value="{{csrf_token}}">
 
-</form>
+				<label for="username" class="sr-only">{{#_t}}Username{{/_t}}</label>
+				<br/>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+					<input type="text" name="username" class="form-control" id="username" placeholder="{{#_t}}Username{{/_t}}" required autofocus>
+				</div>
 
-<a href="{{url_lost_password}}">Lost your password?</a>
+				<label for="password" class="sr-only">{{#_t}}Password{{/_t}}</label>
+				<br/>
+				<div class="input-group">
+		            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+					<input type="password" name="password" class="form-control" id="password" placeholder="{{#_t}}Password{{/_t}}" required>
+				</div>
 
+				<br/>
+
+				<button name="login" type="submit" class="btn btn-lg btn-primary btn-block"><span class="fa fa-sign-in" aria-hidden="true"></span> {{#_t}}Log in{{/_t}}</button>
+
+			</form>
+
+			<div class="pull-right">
+				<a href="{{url_lost_password}}">{{#_t}}Lost your password?{{/_t}}</a>
+			</div>
+		</div>
+	</div>
+</div>
 
 {{>charcoal/admin/template/inc.footer}}

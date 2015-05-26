@@ -8,12 +8,28 @@ Display the "home" dashboard.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-{{>charcoal/admin/widget/feedbacks}}
 
-<section class="section home">
 
-    <h2>{{title}}</h2>
-    <h3>{{subtitle}}</h3>
+<div class="container">
+
+	{{>charcoal/admin/widget/feedbacks}}
+
+</div>
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Unleash the power of the beast</h1>
+
+		<p>Welcome to Charcoal, the control panel / dashboard for your web data. Use this tool to manage and visualize everything needed for your website. More than a traditional CMS, Charcoal is a Web Framework. Ask your administrator how this tool can be customized further to suit your needs.</p>
+
+		<p class="pull-right">
+			<a class="btn btn-primary btn-warning btn-lg" href="#" role="button"><i class="fa fa-close"></i> Hide this message</a>
+			<a class="btn btn-primary btn-lg" href="#" role="button">Learn more <i class="fa fa-long-arrow-right"></i></a>
+		</p>
+	</div>
+</div>
+
+<section class="container section home">
 
     {{!-- Display the "home" dashboard --}}
     {{#dashboard}}
@@ -21,5 +37,6 @@ Display the "home" dashboard.
     {{/dashboard}}
     
 </section>
+
 
 {{>charcoal/admin/template/inc.footer}}

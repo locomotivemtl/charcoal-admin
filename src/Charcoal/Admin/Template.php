@@ -10,7 +10,8 @@ use \Charcoal\Charcoal as Charcoal;
 // From `charcoal-base`
 use \Charcoal\Template\AbstractTemplate as AbstractTemplate;
 
-use \Charcoal\Admin\Module as AdminModule;
+use \Charcoal\Admin\AdminModule as AdminModule;
+use \Charcoal\Admin\User as User;
 
 /**
 * Base class for all `Admin` Templates
@@ -64,6 +65,7 @@ class Template extends AbstractTemplate
             session_cache_limiter(false);
             session_start();
         }
+        $this->metadata();
         if ($this->auth_required() !== false) {
             $this->auth();
         }
@@ -124,9 +126,6 @@ class Template extends AbstractTemplate
 
     public function ident()
     {
-        if ($this->_ident === null) {
-            $this->_ident = 'Undefined ident';
-        }
         return $this->_ident;
     }
 
@@ -142,9 +141,6 @@ class Template extends AbstractTemplate
 
     public function label()
     {
-        if ($this->_label === null) {
-            $this->_label = 'Undefined label';
-        }
         return $this->_label;
     }
 
@@ -226,7 +222,16 @@ class Template extends AbstractTemplate
                     [
                         'active'=>true,
                         'label'=>'Child 2',
-                        'has_children'=>false
+                        'has_children'=>true,
+                        'children'=>[[
+                            'active'=>true,
+                            'label'=>'Foo',
+                            'has_children'=>false
+                        ],[
+                            'active'=>true,
+                            'label'=>'Bar',
+                            'has_children'=>false
+                        ]]
                     ]
                 ]
             ],
@@ -288,10 +293,11 @@ class Template extends AbstractTemplate
     */
     public function feedbacks()
     {
-        return [[
+        return [];
+        /*return [[
             'level'=>'error',
             'msg'=>'Feedback test error'
-        ]];
+        ]];*/
     }
 
     /**
@@ -308,11 +314,10 @@ class Template extends AbstractTemplate
     */
     protected function auth()
     {
-        $cfg = AdminModule::config();
+        //$cfg = AdminModule::config();
         $u = User::get_authenticated();
-        //var_dump($u);
         if ($u === null) {
-            $path = $cfg->base_path().'/login';
+            $path = Charcoal::config()->admin_path().'/login';
             //Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
         }
     }

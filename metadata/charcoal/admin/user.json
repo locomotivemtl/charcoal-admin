@@ -24,7 +24,8 @@
 		},
 		"permissions":{
 			"type":"structure",
-			"multiple":true
+			"multiple":true,
+			"input_type":"charcoal/admin/property/input/textarea"
 		},
 		"last_login_date":{
 			"type":"datetime"
@@ -33,7 +34,8 @@
 			"type":"ip"
 		},
 		"last_password_date":{
-			"type":"datetime"
+			"type":"datetime",
+			"description":"Date of the last password modification."
 		},
 		"last_password_ip":{
 			"type":"ip"
@@ -50,5 +52,47 @@
 			"table":"charcoal_admin_users"
 		}
 	},
-	"default_source":"default"
+	"default_source":"default",
+
+	"admin":{
+		"dashboards":{
+			"admin.edit":{
+				"layout":{
+					"structure":[{
+						"num_columns":3,
+						"columns":[2, 1]
+					}]
+				},
+				"widgets":{
+					"form":{
+						"type":"charcoal/admin/widget/objectForm",
+						"label":"Admin User Form",
+						"obj_type":"\\Charcoal\\Admin\\User",
+						"groups":{
+							"main":{
+								"label":"Information",
+								"properties":[
+									"username",
+									"email",
+									"password"
+								]
+							},
+							"access":{
+								"label":"Access levels",
+								"properties":[
+									"groups",
+									"permissions"
+								]
+							}
+						}
+					}
+				}
+			},
+			"admin.collection":{
+
+			}
+		},
+		"default_edit_dashboard":"admin.edit",
+		"default_collection_dashboard":"admin.collection"
+	}
 }

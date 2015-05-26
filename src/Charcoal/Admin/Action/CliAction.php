@@ -33,15 +33,15 @@ abstract class CliAction extends CliActionBase
     {
         $climate = $this->climate();
 
-        $climate->dump(session_status());
         $u = User::get_authenticated();
         if ($u === null) {
-            $climate->yellow()->out('You need to be logged in into your "admin" account to continue...'.session_id());
+            $climate->yellow()->out('You need to be logged in into your "admin" account to continue...');
             
             $input = $climate->input('Please enter your username:');
             $username = $input->prompt();
             $input = $climate->password('Please enter your password (hidden):');
             $password = $input->prompt();
+            $climate->br();
 
             $u = new User();
             try {

@@ -8,11 +8,29 @@ use \Charcoal\Admin\Widget as Widget;
 
 class Text extends Widget
 {
-    private $_title = '';
-    private $_subtitle = '';
-    private $_description = '';
-    private $_notes = '';
 
+    /**
+    * @var string $_title
+    */
+    protected $_title = '';
+    /**
+    * @var string $_subtitle
+    */
+    protected $_subtitle = '';
+    /**
+    * @var string $_description
+    */
+    protected $_description = '';
+    /**
+    * @var string $_notes
+    */
+    protected $_notes = '';
+
+    /**
+    * @param array $data
+    * @throws InvalidArgumentException
+    * @return Text Chainable
+    */
     public function set_data($data)
     {
         if (!is_array($data)) {

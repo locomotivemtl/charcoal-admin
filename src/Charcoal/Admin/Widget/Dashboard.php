@@ -9,14 +9,24 @@ use \Charcoal\Widget\WidgetFactory as WidgetFactory;
 use \Charcoal\Widget\WidgetInterface as WidgetInterface;
 
 use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\Widget\Layout as Layout;
 
+/**
+*
+*/
 class Dashboard extends Widget
 {
+    /**
+    * @var Layout $_layout
+    */
     public $_layout;
+    /**
+    * @var array $_widgets
+    */
     public $_widgets;
     
     /**
-    * @var array $data
+    * @param array $data
     * @throws InvalidArgumentException
     * @return Form (Chainable)
     */
@@ -66,7 +76,7 @@ class Dashboard extends Widget
     }
 
     /**
-    * @var array $widgets
+    * @param array $widgets
     * @throws InvalidArgumentException
     * @return Dashboard Chainable
     */
@@ -82,8 +92,8 @@ class Dashboard extends Widget
     }
 
     /**
-    * @var string $widget_ident
-    * @var WidgetInterface|array $widget
+    * @param string $widget_ident
+    * @param WidgetInterface|array $widget
     * @throws InvalidArgumentException
     */
     public function add_widget($widget_ident, $widget)
@@ -91,7 +101,8 @@ class Dashboard extends Widget
         if (!is_string($widget_ident)) {
             throw new InvalidArgumentException('Widget ident needs to be a string');
         }
-        if (($widget instanceof AbstractWidget)) {
+        
+        if (($widget instanceof WidgetInterface)) {
             $this->_widgets[$widget_ident] = $widget;
         } else if (is_array($widget)) {
             if (!isset($widget['ident'])) {
@@ -111,7 +122,11 @@ class Dashboard extends Widget
     */
     public function widgets()
     {
+        if ($this->_widgets === null) {
+            yield null;
+        }
         foreach ($this->_widgets as $widget) {
+            //var_dump($widget);
             if ($widget->active() === false) {
                 continue;
             }

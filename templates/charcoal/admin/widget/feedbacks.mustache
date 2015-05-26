@@ -12,7 +12,7 @@ This widget expects a `Charcoal\Admin\Template` (or children) model as context.
 {{#has_feedbacks}}
 <div class="feedbacks">
     {{#feedbacks}}
-    <div class="feedback {{level}}">
+    <div class="alert alert-danger alert-dismissible" role="alert">
         {{msg}}
     </div>
     {{/feedbacks}}

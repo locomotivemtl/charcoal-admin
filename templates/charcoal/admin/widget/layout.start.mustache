@@ -3,11 +3,11 @@
 
 This widget expects a `Layout` context
 --}}
-{{!-- Hack: Execute end login --}}
+{{!-- Hack: Execute start layout --}}
 {{start}}
 
 {{#cell_starts_row}}
-	<div class="layout-item layout-row split-{{row_num_columns}}">
+	<div>
 {{/cell_starts_row}}
 
-<div class="layout-item layout-col col-{{cell_span}}">
+<div class="col-md-{{cell_span_by12}}">

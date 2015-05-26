@@ -11,55 +11,29 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 --}}
 <fieldset class="form-group">
    
-    {{#show_header}}
-        {{#show_label}}
-             <legend>{{label}}</legend>
-        {{/show_label}}
-        {{#show_description}}
-            <section class="form-group-header">
-                <div class="description">{{description}}</div>
-            </section>
-        {{/show_description}}
-    {{/show_header}}
+    {{#show_label}}
+         <legend>Legend for form: {{label}}</legend>
+    {{/show_label}}
+
 
     <section class="form-group-content">
     {{!-- Loop all form properties --}}
     {{#form_properties}}
         <div class="property">
+            {{!-- Actual property input --}}
+            <div class="form-group">
+                <label for="{{prop.input_id}}" class="col-sm-3 control-label">Label{{label}}</label>
+                <div class="col-sm-9">
+                     {{#prop}}
+                        {{>$widget_template}}
+                    {{/prop}}
+                </div>
+            </div>
 
-            <section class="property-header">
-                {{#show_label}}
-                    <label for="{{input_id}}">{{label}}</label>
-                {{/show_label}}
-                {{#show_description}}
-                    <div class="description">{{description}}</div>
-                {{/show_description}}
-            </section>
-
-            <section class="property-content">
-                {{!-- Actual property input --}}
-                {{#property}}
-                    {{>$widget_template}}
-                {{/property}}
-            </section>
-            
-            {{#show_footer}}
-            <section class="form-group-footer">
-                {{#show_notes}}
-                <small class="notes">{{notes}}</small>
-                {{/show_notes}}
-            </section>
-            {{/show_footer}}
         </div>
     {{/form_properties}}
     </section>
 
-    {{#show_footer}}
-    <section class="form-group-footer">
-        {{#show_notes}}
-            <small class="notes">{{notes}}</small>
-        {{/show_notes}}
-    </section>
-    {{/show_footer}}
+
 
 </fieldset>

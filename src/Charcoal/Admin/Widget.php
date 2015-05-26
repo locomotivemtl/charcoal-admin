@@ -12,12 +12,21 @@ use \Charcoal\Widget\WidgetView as WidgetView;
 
 class Widget extends AbstractWidget
 {
+    /**
+    * @var string $_type
+    */
     private $_type;
     /**
     * @var string $_ident
     */
     private $_ident = '';
+    /**
+    * @var mixed $_label
+    */
     private $_label;
+    /**
+    * @var string $_lang
+    */
     private $_lang;
     /**
     * @var bool $_show_label
@@ -37,7 +46,7 @@ class Widget extends AbstractWidget
         if (!is_array($data)) {
             throw new InvalidArgumentException('Data must be an array');
         }
-
+        //var_dump($data);
         if (isset($data['type']) && $data['type'] !== null) {
             $this->set_type($data['type']);
         }
@@ -46,6 +55,9 @@ class Widget extends AbstractWidget
         }
         if (isset($data['label']) && $data['label'] !== null) {
             $this->set_label($data['label']);
+        }
+        if (isset($data['show_label']) && $data['show_label'] !== null) {
+            $this->set_show_label($data['show_label']);
         }
         if (isset($data['show_actions']) && $data['show_actions'] !== null) {
             $this->set_show_actions($data['show_actions']);
@@ -112,7 +124,7 @@ class Widget extends AbstractWidget
         if ($this->_label === null) {
             $this->_label = ucwords(str_replace(['_', '.', '/'], ' ', $this->ident()));
         }
-        return 'LABEL -'.$this->_label;
+        return $this->_label;
     }
 
     public function actions()
@@ -172,7 +184,7 @@ class Widget extends AbstractWidget
         }
     }
 
-    public function render()
+    public function render($template = null)
     {
         $view = new WidgetView();
         $view->set_context($this);

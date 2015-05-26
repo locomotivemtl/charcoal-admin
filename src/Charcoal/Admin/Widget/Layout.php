@@ -9,10 +9,15 @@ use \Charcoal\Admin\Widget as Widget;
 
 class Layout extends Widget
 {
+    /**
+    * @var integer $_position
+    */
     private $_position = 0;
 
-
-    private $_structure = [];
+    /**
+    * @var array $_structure
+    */
+    protected $_structure = [];
 
 
     public function __construct($data = null)
@@ -25,15 +30,17 @@ class Layout extends Widget
         }
     }
 
+    /**
+    * @param array $data
+    * @throws InvalidArgumentException
+    * @return Layout Chainable
+    */
     public function set_data($data)
     {
         if (!is_array($data)) {
             return new InvalidArgumentException('Data must be an array');
         }
 
-        if (isset($data['position']) && $data['position'] !== null) {
-            $this->set_position($data['position']);
-        }
         if (isset($data['structure']) && $data['structure'] !== null) {
             $this->set_structure($data['structure']);
         }
@@ -41,13 +48,9 @@ class Layout extends Widget
         return $this;
     }
 
-    public function set_position($position)
-    {
-        if (!is_int($position) || $position < 0) {
-            throw new InvalidArgumentException('Position needs to be a positive integer');
-        }
-    }
-
+    /**
+    * @return integer
+    */
     public function position()
     {
         return $this->_position;
@@ -69,10 +72,9 @@ class Layout extends Widget
         }
 
         $computed_layouts = [];
-
         foreach ($layouts as $l) {
             $loop = isset($l['loop']) ? $l['loop'] : 1;
-            $columns = isset($layout['columns']) ? $layout['columns'] : [1];
+            $columns = isset($l['columns']) ? $l['columns'] : [1];
             $orig_columns = $columns;
             for ($i=0; $i<$loop; $i++) {
                 $computed_layouts[] = $l;
@@ -99,7 +101,8 @@ class Layout extends Widget
     */
     public function num_rows()
     {
-        return count($this->structure());
+        $structure = $this->structure();
+        return count($structure);
     }
 
     /**
@@ -113,6 +116,10 @@ class Layout extends Widget
     */
     public function row_data($position = null)
     {
+        if ($position === null) {
+            $position = $this->position();
+        }
+
         $row_index = $this->row_index($position);
         if (isset($this->_structure[$row_index])) {
             return $this->_structure[$row_index];
@@ -131,9 +138,10 @@ class Layout extends Widget
         if ($position === null) {
             $position = $this->position();
         }
+
         $i = 0;
         $p = 0;
-        foreach ($this->_structure as $row) {
+        foreach ($this->_structure as $row_ident => $row) {
             $num_cells = count($row['columns']);
             $p += $num_cells;
             if ($p > $position) {
@@ -149,6 +157,10 @@ class Layout extends Widget
     */
     public function row_num_columns($position = null)
     {
+        if ($position === null) {
+            $position = $this->position();
+        }
+
         $row = $this->row_data($position);
         return array_sum($row['columns']);
     }
@@ -162,6 +174,10 @@ class Layout extends Widget
     */
     public function row_num_cells($position = null)
     {
+        if ($position === null) {
+            $position = $this->position();
+        }
+
         // Get the data ta position
         $row = $this->row_data($position);
         $num_cells = isset($row['columns']) ? count($row['columns']) : 0;
@@ -238,6 +254,16 @@ class Layout extends Widget
     }
     
     /**
+    * Get the span number as a part of 12 (for bootrap-style grids)
+    *
+    * @return integer
+    */
+    public function cell_span_by12($position = null)
+    {
+        return ($this->cell_span($position)*(12/$this->row_num_columns($position)));
+    }
+
+    /**
     * Get wether or not the current cell starts a row (is the first one on the row)
     *
     * @return boolean
@@ -270,12 +296,12 @@ class Layout extends Widget
 
     public function start()
     {
-        return 'START '.$this->position();
+        return '';
     }
 
     public function end()
     {
         $this->_position++;
-        return 'END '.$this->position();
+        return '';
     }
 }

@@ -10,14 +10,21 @@ use \Charcoal\Admin\Widget\Form as Form;
 class FormGroup extends Widget
 {
     private $_form;
-    private $_priority = 0;
-
-    private $_widget_type = '';
 
     /**
-    * @var array $_properties
+    * @var integer $_priority
     */
-    private $_properties;
+    private $_priority = 0;
+
+    /**
+    * @var string
+    */
+    private $_widget_type = 'properties';
+
+    /**
+    * @var array $_group_properties
+    */
+    private $_group_properties = [];
 
     /**
     * @var boolean
@@ -61,7 +68,7 @@ class FormGroup extends Widget
             $this->set_widget_type($data['widget_type']);
         }
         if (isset($data['properties']) && $data['properties'] !== null) {
-            $this->set_properties($data['properties']);
+            $this->set_group_properties($data['properties']);
         }
         if (isset($data['priority']) && $data['priority'] !== null) {
             $this->set_priority($data['priority']);
@@ -126,21 +133,27 @@ class FormGroup extends Widget
         return $this->_widget_type;
     }
 
-    public function set_properties($properties)
+    public function set_group_properties($properties)
     {
-        $this->_properties = $properties;
+        $this->_group_properties = $properties;
         return $this;
     }
 
-    public function properties()
+    public function group_properties()
     {
-        $properties = $this->_properties;
+        return $this->_group_properties;
+       
+    }
+
+    public function form_properties()
+    {
+        $group_properties = $this->group_properties();
         $form_properties = $this->form()->form_properties();
         
         $ret = [];
         foreach ($form_properties as $property_ident => $property) {
-            if (in_array($property_ident, $properties)) {
-                yield $property_ident => $properties;
+            if (in_array($property_ident, $group_properties)) {
+                yield $property_ident => $property;
             }
         }
     }

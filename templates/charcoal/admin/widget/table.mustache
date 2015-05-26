@@ -1,0 +1,36 @@
+{{!-- 
+Table Widget
+============
+
+`charcoal/admin/widget/table`
+
+This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
+
+--}}
+<div class="table">
+	{{#show_header}}
+
+	{{/show_header}}
+
+	{{#has_objects}}
+		<table class="table-responsive table-striped table-hover">
+		{{!-- Loop the list objects --}}
+		{{#objects}}
+		    <tr>
+		    {{#properties}}
+		        <td class="cell">{{label}}</td>
+		    {{/properties}}
+		    </tr>
+		{{/objects}}
+		</ul>
+	{{/has_objects}}
+	{{^has_objects}}
+		<div>
+			No objects
+		</div>
+	{{/has_objects}}
+
+	{{#show_footer}}
+
+	{{/show_footer}}
+</div>

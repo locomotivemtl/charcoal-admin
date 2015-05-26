@@ -11,9 +11,9 @@ use \Charcoal\Property\PropertyFactory as PropertyFactory;
 
 class FormProperty extends Widget
 {
-    private $_type;
-    private $_input_type;
-    private $_input_options;
+    protected $_type;
+    protected $_input_type;
+    protected $_input_options;
 
     private $_property_data = [];
     private $_property;
@@ -23,7 +23,7 @@ class FormProperty extends Widget
         if (!is_array($data)) {
             throw new InvalidArgumentException('Data must be an array');
         }
-
+ 
         parent::set_data($data);
         if (isset($data['type']) && $data['type'] !== null) {
             $this->set_type($data['type']);
@@ -62,10 +62,6 @@ class FormProperty extends Widget
         return true;
     }
 
-    public function label()
-    {
-        return 'Property Label';
-    }
 
     public function description()
     {
@@ -101,17 +97,18 @@ class FormProperty extends Widget
         return $this->_input_type;
     }
 
-    public function property()
+    /**
+    * @return PropertyInterface
+    */
+    public function prop()
     {
         if ($this->_property === null) {
+            var_dump($this->ident());
             $this->_property = PropertyFactory::instance()->get($this->type());
             $this->_property->set_data($this->_property_data);
         }
+        //var_dump($this->_property);
+        $GLOBALS['widget_template'] = $this->input_type();
         return $this->_property;
-    }
-
-    public function p()
-    {
-        return $this->property();
     }
 }

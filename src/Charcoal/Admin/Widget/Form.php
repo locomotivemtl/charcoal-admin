@@ -137,11 +137,13 @@ class Form extends Widget
         $groups = $this->_groups;
         uasort($groups, ['self', '_sort_groups_by_priority']);
         foreach ($groups as $group) {
-            if ($group->widget_type() != '') {
+            /*if ($group->widget_type() != '') {
                 $GLOBALS['widget_template'] = $group->widget_type();
             } else {
                 $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
-            }
+            }*/
+            $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
+            //var_dump($GLOBALS['widget_template']);
             yield $group->ident() => $group;
         }
     }

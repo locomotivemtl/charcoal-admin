@@ -52,9 +52,9 @@ class Objects extends CliAction
             $collection = $loader->load();
             $table = [];
 
-            foreach($collection as $c) {
+            foreach ($collection as $c) {
                 $obj = [];
-                foreach($props as $p) {
+                foreach ($props as $p) {
                     $prop = $c->p($p);
                     $obj[$prop->label()] = (string)$prop;
                 }

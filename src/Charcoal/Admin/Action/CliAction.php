@@ -16,7 +16,7 @@ abstract class CliAction extends CliActionBase
         $this->set_arguments($arguments);
 
         // Auth.
-        if($this->auth_required() !== false) {
+        if ($this->auth_required() !== false) {
             $this->auth();
         }
     }

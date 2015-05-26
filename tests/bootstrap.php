@@ -1,6 +1,6 @@
 <?php
 
-use \Charcoal\Admin\Module as AdminModule;
+use \Charcoal\Admin\AdminModule as AdminModule;
 use \Charcoal\Charcoal as Charcoal;
 
 session_start();
@@ -13,5 +13,5 @@ $autoloader->add('Charcoal\\Admin\\Tests\\', __DIR__);
 
 // This var needs to be set automatically, for now
 Charcoal::init();
-AdminModule::init();
+$admin_module = new AdminModule();
 //Charcoal::config()['ROOT'] = '';

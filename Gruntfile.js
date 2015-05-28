@@ -16,6 +16,36 @@ module.exports = function(grunt) {
 			}
 		},
 
+		jshint: {
+			files:['assets/src/scripts/**/*.js']
+		},
+
+		concat: {
+			options:{
+				separator:';'
+			},
+			dist: {
+				src: [
+					'assets/src/scripts/charcoal/admin/charcoal.js',
+					'assets/src/scripts/charcoal/admin/widget.js',
+					'assets/src/scripts/charcoal/admin/widget/*.js'
+				],
+				dest: 'assets/dist/scripts/charcoal.admin.js'
+			}
+		},
+
+		uglify: {
+			options: {
+				// the banner is inserted at the top of the output
+				banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+			},
+			dist: {
+				files: {
+					'assets/dist/scripts/charcoal.admin.min.js': ['<%= concat.dist.dest %>']
+				}
+			}
+		},
+
 		jsonlint:{
 			meta:{
 				src:[
@@ -118,6 +148,12 @@ module.exports = function(grunt) {
 					'tests/**/*.php',
 				],
 				tasks: ['phplint']
+			},
+			javascript: {
+				files: [
+					'assets/src/**/*.js'
+				],
+				tasks: ['jshint', 'concat', 'uglify']
 			}
 		},
 		githooks: {
@@ -129,6 +165,9 @@ module.exports = function(grunt) {
 	});
 
 	// Load plugin(s)
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-yaml-validate');
 	grunt.loadNpmTasks('grunt-jsonlint');
 	grunt.loadNpmTasks("grunt-phplint");
@@ -138,10 +177,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-phpdocumentor');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-githooks');
-	grunt.loadNpmTasks('grunt-composer');	
+	grunt.loadNpmTasks('grunt-composer');
 
 	// Register Task(s)
 	grunt.registerTask('default', [
+		'jshint',
+		'concat',
+		'uglify',
 		'jsonlint',
 		'phpunit',
 		//'phplint' // To slow for default

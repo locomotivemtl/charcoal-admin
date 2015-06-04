@@ -16,6 +16,21 @@ module.exports = function(grunt) {
 			}
 		},
 
+		copy:{
+			bootstrap3_dialog_js:{
+				expand:true,
+				cwd: 'bower_components/bootstrap3-dialog/dist/js',
+				src: ['**', '*'],
+				dest: 'assets/dist/scripts/vendors/'
+			},
+			bootstrap3_dialog_css:{
+				expand:true,
+				cwd: 'bower_components/bootstrap3-dialog/dist/css',
+				src: ['**', '*'],
+				dest: 'assets/dist/styles/vendors/'
+			}
+		},
+
 		jshint: {
 			files:['assets/src/scripts/**/*.js']
 		},
@@ -165,6 +180,7 @@ module.exports = function(grunt) {
 	});
 
 	// Load plugin(s)
+	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -181,6 +197,7 @@ module.exports = function(grunt) {
 
 	// Register Task(s)
 	grunt.registerTask('default', [
+		'copy',
 		'jshint',
 		'concat',
 		'uglify',

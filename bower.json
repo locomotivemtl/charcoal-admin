@@ -1,0 +1,19 @@
+{
+  "name": "charcoal-admin",
+  "version": "0.0.0",
+  "homepage": "https://github.com/locomotivemtl/charcoal-admin",
+  "authors": [
+    "Mathieu Ducharme <mat@locomotive.ca>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap3-dialog": "~1.34.4"
+  }
+}

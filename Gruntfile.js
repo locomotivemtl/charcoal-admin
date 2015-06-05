@@ -39,7 +39,10 @@ module.exports = function(grunt) {
 		},
 
 		jshint: {
-			files:['assets/src/scripts/**/*.js']
+			files:['assets/src/scripts/**/*.js'],
+			options: {
+				jshintrc: '.jshintrc'
+			}
 		},
 
 		concat: {

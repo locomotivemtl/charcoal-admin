@@ -38,7 +38,7 @@ class Layout extends Widget
     public function set_data($data)
     {
         if (!is_array($data)) {
-            return new InvalidArgumentException('Data must be an array');
+            throw new InvalidArgumentException('Data must be an array');
         }
 
         if (isset($data['structure']) && $data['structure'] !== null) {
@@ -78,20 +78,22 @@ class Layout extends Widget
             $orig_columns = $columns;
             for ($i=0; $i<$loop; $i++) {
                 $computed_layouts[] = $l;
-                if (empty($columns)) {
-                    $columns = $orig_columns; // Allow loop
-                }
-                $colspan = array_shift($columns);
-                $i += (1-$colspan);
+                $i ++;
             }
-            unset($i, $loop, $columns, $orig_columns, $colspan);
         }
-        unset($l);
 
         $this->_structure = $computed_layouts;
 
         // Chainable
         return $this;
+    }
+
+    /**
+    * @return array
+    */
+    public function structure()
+    {
+        return $this->_structure;
     }
 
     /**
@@ -106,32 +108,10 @@ class Layout extends Widget
     }
 
     /**
-    * Get the row information
-    *
-    * If no `$position` is specified, then the current position will be used.
-    *
-    * @param integer $position (Optional pos)
-    *
-    * @return array
-    */
-    public function row_data($position = null)
-    {
-        if ($position === null) {
-            $position = $this->position();
-        }
-
-        $row_index = $this->row_index($position);
-        if (isset($this->_structure[$row_index])) {
-            return $this->_structure[$row_index];
-        } else {
-            return null;
-        }
-    }
-
-    /**
     * Get the row index at a certain position
     *
-    * @param
+    * @param integer $position (Optional)
+    * @return integer|null
     */
     public function row_index($position = null)
     {
@@ -149,11 +129,34 @@ class Layout extends Widget
             }
             $i++;
         }
+        return null;
     }
 
     /**
-    * Get the number of columns of the row at a certain position
-    * @return integer
+    * Get the row information
+    *
+    * If no `$position` is specified, then the current position will be used.
+    *
+    * @param integer $position (Optional pos)
+    * @return array|null
+    */
+    public function row_data($position = null)
+    {
+        if ($position === null) {
+            $position = $this->position();
+        }
+
+        $row_index = $this->row_index($position);
+        if (isset($this->_structure[$row_index])) {
+            return $this->_structure[$row_index];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Get the number of columns (the colspan) of the row at a certain position
+    * @return integer|null
     */
     public function row_num_columns($position = null)
     {
@@ -162,7 +165,11 @@ class Layout extends Widget
         }
 
         $row = $this->row_data($position);
-        return array_sum($row['columns']);
+        if ($row === null) {
+            return null;
+        } else {
+            return array_sum($row['columns']);
+        }
     }
 
     /**
@@ -180,10 +187,10 @@ class Layout extends Widget
 
         // Get the data ta position
         $row = $this->row_data($position);
-        $num_cells = isset($row['columns']) ? count($row['columns']) : 0;
+        $num_cells = isset($row['columns']) ? count($row['columns']) : null;
         return $num_cells;
     }
-    
+
         /**
     * Get the cell index (position) of the first cell of current row
     */
@@ -193,10 +200,14 @@ class Layout extends Widget
             $position = $this->position();
         }
 
+        $structure = $this->structure();
+        if (empty($structure)) {
+            return null;
+        }
         $first_list = [];
         $i = 0;
         $p = 0;
-        foreach ($this->_structure as $row) {
+        foreach ($structure as $row) {
             $first_list[$i] = $p;
             if ($p > $position) {
                 // Previous p
@@ -204,6 +215,7 @@ class Layout extends Widget
             }
 
             $num_cells = isset($row['columns']) ? count($row['columns']) : 0;
+
             $p += $num_cells;
 
             $i++;
@@ -242,7 +254,7 @@ class Layout extends Widget
     /**
     * Get the span number (in # of columns) of the current cell
     *
-    * @return integer
+    * @return integer|null
     */
     public function cell_span($position = null)
     {
@@ -250,9 +262,9 @@ class Layout extends Widget
         $cell_index = $this->cell_row_index($position);
 
         // Cellspan (defaults to 1)
-        return isset($row['columns'][$cell_index]) ? (int)$row['columns'][$cell_index] : 1;
+        return isset($row['columns'][$cell_index]) ? (int)$row['columns'][$cell_index] : null;
     }
-    
+
     /**
     * Get the span number as a part of 12 (for bootrap-style grids)
     *
@@ -260,7 +272,11 @@ class Layout extends Widget
     */
     public function cell_span_by12($position = null)
     {
-        return ($this->cell_span($position)*(12/$this->row_num_columns($position)));
+        $num_columns =  $this->row_num_columns($position);
+        if (!$num_columns) {
+            return null;
+        }
+        return ($this->cell_span($position)*(12/$num_columns));
     }
 
     /**
@@ -274,7 +290,7 @@ class Layout extends Widget
             $position = $this->position();
         }
 
-        return ($this->cell_row_index($position) == 0);
+        return ($this->cell_row_index($position) === 0);
     }
 
     /**

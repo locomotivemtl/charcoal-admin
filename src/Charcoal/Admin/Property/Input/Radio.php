@@ -8,5 +8,9 @@ use \Charcoal\Admin\Property\Input as Input;
 
 class Radio extends Input
 {
-    // ...
+
+    public function choices()
+    {
+        return $this->p()->choices();
+    }
 }

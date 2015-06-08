@@ -6,6 +6,9 @@ use \InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Admin\Property\Input as Input;
 
+/**
+* Text Property Input Type
+*/
 class Text extends Input
 {
     /**
@@ -44,6 +47,7 @@ class Text extends Input
             throw new InvalidArgumentException('Data must be an array');
         }
 
+        parent::set_data($data);
         if (isset($data['size']) && $data['size'] !== null) {
             $this->set_size($data['size']);
         }

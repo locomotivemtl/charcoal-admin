@@ -1,13 +1,12 @@
 {{!--
-Text input
+Number input
 
-Display a property (most likely a `PropertyString`...) as a "text" input.
+Display a property (most likely a `PropertyInteger`...) as a "number" input.
 
-`charcoal/admin/property/input/text`
+`charcoal/admin/property/input/number`
 --}}
-{{#input}}
 <input 
-	type="text" 
+	type="number" 
 	id="{{input_id}}" 
 	name="{{input_name}}" 
 	class="form-control {{input_class}}" 
@@ -19,6 +18,5 @@ Display a property (most likely a `PropertyString`...) as a "text" input.
 	{{#read_only}}read_only{{/read_only}} 
 	{{#required}}required{{/required}} 
 	{{#disabled}}disabled{{/disabled}}
-	value="{{input_val}}"
+	value="{{val}}"
 >
-{{/input}}

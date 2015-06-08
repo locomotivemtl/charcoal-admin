@@ -6,7 +6,7 @@ use \InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Admin\Property\Input as Input;
 
-class File extends Input
+class Readonly extends Input
 {
     // ...
 }

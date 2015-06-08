@@ -158,6 +158,11 @@ class Input
         return 'input_name';
     }
 
+    public function input_val()
+    {
+        return $this->p()->val();
+    }
+
     public function set_input_type($input_type)
     {
         $this->_input_type = $input_type;
@@ -170,6 +175,12 @@ class Input
             $this->_input_type = 'charcoal/admin/property/input/text';
         }
         return $this->_input_type;
+    }
+
+    public function set_property($p)
+    {
+        $this->_property = $p;
+        return $this;
     }
 
     public function property()

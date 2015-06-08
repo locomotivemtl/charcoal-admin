@@ -2,28 +2,43 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\Property\InputFactory as InputFactory;
 
 // From `charcoal-core`
 use \Charcoal\Property\PropertyFactory as PropertyFactory;
+use \Charcoal\Property\PropertyInterface as PropertyInterface;
 
+/**
+*
+*/
 class FormProperty extends Widget
 {
     protected $_type;
     protected $_input_type;
     protected $_input_options;
 
+    private $_property_ident;
+    private $_property_val;
     private $_property_data = [];
     private $_property;
 
+    private $_active = true;
+
+    /**
+    * @param array $data
+    * @throws InvalidArgumentException
+    * @return FormProperty Chainable
+    */
     public function set_data($data)
     {
         if (!is_array($data)) {
             throw new InvalidArgumentException('Data must be an array');
         }
- 
+
         parent::set_data($data);
         if (isset($data['type']) && $data['type'] !== null) {
             $this->set_type($data['type']);
@@ -31,10 +46,58 @@ class FormProperty extends Widget
         if (isset($data['input_type']) && $data['input_type'] !== null) {
             $this->set_input_type($data['input_type']);
         }
+        if (isset($data['property_ident']) && $data['property_ident'] !== null) {
+            $this->set_property_ident($data['property_ident']);
+        }
+        if (isset($data['property_val']) && $data['property_val'] !== null) {
+            $this->set_property_val($data['property_val']);
+        }
+        if (isset($data['active']) && $data['active'] !==null) {
+            $this->set_active($data['active']);
+        }
 
         $this->_property_data = $data;
 
         return $this;
+    }
+
+    public function set_active($active)
+    {
+        if (!is_bool($active)) {
+            throw new InvalidArgumentException('Active must be a boolean');
+        }
+        $this->_active = $active;
+        return $this;
+    }
+
+    public function active()
+    {
+        return $this->_active;
+    }
+
+    public function set_property_ident($property_ident)
+    {
+        if (!is_string($property_ident)) {
+            throw new InvalidArgumentException('Property ident must be a string');
+        }
+        $this->_property_ident = $property_ident;
+        return $this;
+    }
+
+    public function property_ident()
+    {
+        return $this->_property_ident;
+    }
+
+    public function set_property_val($property_val)
+    {
+        $this->_property_val = $property_val;
+        return $this;
+    }
+
+    public function property_val()
+    {
+        return $this->_property_val;
     }
 
     public function show_label()
@@ -92,9 +155,32 @@ class FormProperty extends Widget
     public function input_type()
     {
         if ($this->_input_type === null) {
-            $this->_input_type = 'charcoal/admin/property/input/text';
+            try {
+                $prop = $this->prop();
+                $metadata = $prop->metadata();
+                $admin = $metadata['admin'];
+                $input_type = $admin['input_type'];
+
+            } catch (Exception $e) {
+                $input_type = 'charcoal/admin/property/input/text';
+            }
+            if (!$input_type) {
+                $input_type = 'charcoal/admin/property/input/text';
+            }
+            $this->_input_type = $input_type;
         }
         return $this->_input_type;
+    }
+
+    /**
+    * @param PropertyInterface $property
+    * @return FormProperty Chainable
+    */
+    public function set_prop(PropertyInterface $property)
+    {
+        $this->_property = $property;
+        //$this->_property->set_val($this->property_val());
+        return $this;
     }
 
     /**
@@ -103,12 +189,28 @@ class FormProperty extends Widget
     public function prop()
     {
         if ($this->_property === null) {
-            var_dump($this->ident());
-            $this->_property = PropertyFactory::instance()->get($this->type());
-            $this->_property->set_data($this->_property_data);
+            //var_dump($this->ident());
+            $p = PropertyFactory::instance()->get($this->type());
+
+
+            $p->set_ident($this->property_ident());
+            $p->set_data($this->_property_data);
+
+            $this->_property = $p;
         }
-        //var_dump($this->_property);
-        $GLOBALS['widget_template'] = $this->input_type();
+        $this->_property->set_val($this->property_val());
         return $this->_property;
     }
+
+    public function input()
+    {
+        $prop = $this->prop();
+        $input_type = $this->input_type();
+
+        $input = InputFactory::instance()->get($input_type);
+        $input->set_property($prop);
+        $GLOBALS['widget_template'] = $input_type;
+        return $input;
+    }
+
 }

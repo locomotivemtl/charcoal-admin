@@ -257,4 +257,19 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $obj->cell_ends_row(4));
         //$this->assertNull($obj->cell_ends_row(5));
     }
+
+    public function testStart()
+    {
+        $obj = new Layout();
+        $this->assertEquals('', $obj->start());
+    }
+
+    public function testEnd()
+    {
+        $obj = new Layout();
+        $this->assertEquals(0, $obj->position());
+        $ret = $obj->end();
+        $this->assertEquals(1, $obj->position());
+        $this->assertEquals('', $ret);
+    }
 }

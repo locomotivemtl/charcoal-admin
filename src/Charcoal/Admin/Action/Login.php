@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Action;
 
+use \Exception as Exception;
+use \InvalidArgumentException as InvalidArgumentException;
+
 use \Charcoal\Charcoal as Charcoal;
 
 use \Charcoal\Admin\Action as Action;
@@ -41,8 +44,16 @@ class Login extends Action
         }
     }
 
+    /**
+    * @param array $data
+    * @throws InvalidArgumentException
+    * @return Login Chainable
+    */
     public function set_data($data)
     {
+        if (!is_array($data)) {
+            throw new InvalidArgumentException('Data must be an array');
+        }
         parent::set_data($data);
         if (isset($data['next_url']) && $data['next_url'] !== null) {
             $this->set_next_url($data['next_url']);
@@ -60,12 +71,10 @@ class Login extends Action
         return Charcoal::app()->urlFor('admin/login');
     }
 
-
-
     public function set_next_url($next_url)
     {
         if (!is_string($next_url)) {
-            throw new \InvalidArgumentException('Next URL needs to be a string');
+            throw new InvalidArgumentException('Next URL needs to be a string');
         }
         $this->_next_url = $next_url;
         return $this;
@@ -92,7 +101,7 @@ class Login extends Action
         $u = new User();
         try {
             $is_authenticated = $u->authenticate($username, $password);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $is_authenticated = false;
         }
 
@@ -107,6 +116,9 @@ class Login extends Action
         }
     }
 
+    /**
+    * @return array
+    */
     public function response()
     {
         $success = $this->success();

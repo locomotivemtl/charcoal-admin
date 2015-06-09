@@ -51,13 +51,22 @@ abstract class CliAction extends CliActionBase
                 $is_authenticated = false;
             }
             if (!$is_authenticated) {
-                //$this->log_failed_attempt();
-
+                $this->log_failed_attempt();
                 $climate->br()->error('Authentication failed.');
                 die();
             } else {
-                //$this->log_successful_login();
+                $this->log_successful_login();
             }
         }
+    }
+
+    public function log_failed_attempt()
+    {
+
+    }
+
+    public function log_successful_login()
+    {
+
     }
 }

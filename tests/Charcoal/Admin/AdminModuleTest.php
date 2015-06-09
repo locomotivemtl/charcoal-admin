@@ -4,7 +4,7 @@ namespace Charcoal\Admin\Tests;
 
 use \Charcoal\Admin\AdminModule as AdminModule;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class AdminModuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * Hello world

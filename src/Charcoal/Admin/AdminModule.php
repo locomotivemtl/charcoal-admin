@@ -89,6 +89,10 @@ class AdminModule extends AbstractModule
         });
 
         $this->add_action_route('login');
+        $this->add_action_route('object/delete');
+        $this->add_action_route('widget/load');
+        $this->add_action_route('widget/table/inline');
+        $this->add_action_route('widget/table/inlinemulti');
 
         return $this;
     }
@@ -123,7 +127,7 @@ class AdminModule extends AbstractModule
     * @param array $args
     * @return Module Chainable
     */
-    public function add_template_route($tpl, $args = null)
+    public function add_template_route($tpl)
     {
         $admin_path = $this->config()->base_path();
         Charcoal::app()->get('/'.$tpl, function($args = null) use ($tpl) {
@@ -137,21 +141,32 @@ class AdminModule extends AbstractModule
     /**
     *  Bind all available admin actions to their auto-ident post routes.
     *
-    * @param array $args
+    * @param string $tpl
     * @return Module Chainable
     */
-    public function add_action_route($tpl, $args = null)
+    public function add_action_route($tpl)
     {
         $admin_path = $this->config()->base_path();
-        Charcoal::app()->post('/action/json/'.$tpl, function($args = null) use ($tpl) {
-            $action = new \Charcoal\Admin\Action\Login();
-            $action->set_mode('json');
-            $action->run();
+        Charcoal::app()->post('/action/json/'.$tpl, function($actions = null) use ($tpl) {
+            try {
+                //$action = new \Charcoal\Admin\Action\Login();
+                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
+                $action->set_mode('json');
+                $action->run();
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
         })->name($admin_path.'/action/json/'.$tpl);
 
-        Charcoal::app()->post('/action/'.$tpl, function($args = null) use ($tpl) {
-            $action = new \Charcoal\Admin\Action\Login();
-            $action->run();
+        Charcoal::app()->post('/action/'.$tpl, function($actions = null) use ($tpl) {
+            try {
+                //$action = new \Charcoal\Admin\Action\Login();
+                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
+                $action->set_mode('json');
+                $action->run();
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
         })->name($admin_path.'/action/'.$tpl);
         return $this;
     }
@@ -160,8 +175,9 @@ class AdminModule extends AbstractModule
     * @param array $args
     * @return Module Chainable
     */
-    public function add_cli_route($tpl, $args = null)
+    public function add_cli_route($tpl)
     {
+        unset($tpl);
         $admin_path = $this->config()->base_path();
         Charcoal::app()->get('/:actions+', function($actions = []) {
             try {

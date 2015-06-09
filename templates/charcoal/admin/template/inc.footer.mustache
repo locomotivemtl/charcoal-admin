@@ -1,11 +1,28 @@
     {{#show_footer_menu}}
         {{>charcoal/admin/widget/menu.footer}}
-    {{/show_footer_menu}}    
+    {{/show_footer_menu}}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    
-    <!-- Latest compiled and minified JavaScript -->
+    {{!-- Styles from widgets & templates --}}
+    {{&css_requirements}}
+    {{&css}}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<script src="{{url}}assets/admin/scripts/vendors/bootstrap-dialog.min.js"></script>
+
+	<script src="{{url}}assets/admin/scripts/charcoal.admin.js"></script>
+	<script>
+	$(document).ready(function(e) {
+		var admin = new Charcoal.Admin();
+		admin.url = '{{url}}';
+		admin.admin_path = 'admin';
+	});
+	</script>
+
+    {{!-- Scripts from widgets & templates --}}
+	{{&js_requirements}}
+	{{&js}}
 
 </body>
 </html>

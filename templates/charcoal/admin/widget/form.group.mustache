@@ -19,21 +19,19 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
     <section class="form-group-content">
     {{!-- Loop all form properties --}}
     {{#form_properties}}
-        <div class="property">
+        <div class="property" style="height:26px;">
             {{!-- Actual property input --}}
             <div class="form-group">
-                <label for="{{prop.input_id}}" class="col-sm-3 control-label">Label{{label}}</label>
+                <label for="{{prop.input_id}}" class="col-sm-3 control-label">{{prop.label}}</label>
                 <div class="col-sm-9">
-                     {{#prop}}
+                     {{#input}}
                         {{>$widget_template}}
-                    {{/prop}}
+                    {{/input}}
                 </div>
             </div>
 
         </div>
     {{/form_properties}}
     </section>
-
-
 
 </fieldset>

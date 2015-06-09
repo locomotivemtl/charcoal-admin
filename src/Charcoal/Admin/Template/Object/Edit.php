@@ -40,6 +40,8 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
     }
 
     /**
+    * @param array $data
+    * @throws Exception
     * @return Dashboard
     */
     public function create_dashboard($data = null)

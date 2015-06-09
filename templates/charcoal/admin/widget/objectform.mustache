@@ -1,18 +1,1 @@
-{{!-- 
-ObjectForm Widget
-===========
-
-`charcoal/admin/widget/form`
-
-This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
-
---}}
-<div class="form">
-    <form action="{{action}}" method="{{method}}" enctype="multipart/form-data">
-    
-    {{!-- Loop all form groups --}}
-    {{#groups}}
-        {{>$widget_template}}
-    {{/groups}}
-
-</div>
+{{>charcoal/admin/widget/form}}

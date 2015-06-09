@@ -142,17 +142,22 @@ class FormGroup extends Widget
     public function group_properties()
     {
         return $this->_group_properties;
-       
+
     }
 
     public function form_properties()
     {
         $group_properties = $this->group_properties();
         $form_properties = $this->form()->form_properties();
-        
+
         $ret = [];
         foreach ($form_properties as $property_ident => $property) {
             if (in_array($property_ident, $group_properties)) {
+                //var_dump($property);
+                if (is_callable([$this->form(), 'obj'])) {
+                    $val = $this->form()->obj()->p($property_ident)->val();
+                    $property->set_property_val($val);
+                }
                 yield $property_ident => $property;
             }
         }

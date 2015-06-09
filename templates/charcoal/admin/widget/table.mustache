@@ -7,22 +7,59 @@ Table Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 
 --}}
-<div class="table">
-	{{#show_header}}
-
-	{{/show_header}}
+<div class="charcoal-admin-widget-table" id="{{widget_id}}">
 
 	{{#has_objects}}
-		<table class="table-responsive table-striped table-hover">
+		<table class="table table-responsive table-striped table-hover">
+		{{#show_table_header}}
+		<thead>
+			<tr>
+			<td>
+				<input type="checkbox" class="select-all">
+			</td>
+			{{#proto.properties}}
+				<th>{{label}}</td>
+			{{/proto.properties}}
+			{{#show_object_actions}}
+				<th>Actions</th>
+			{{/show_object_actions}}
+			</tr>
+		</thead>
+		{{/show_table_header}}
 		{{!-- Loop the list objects --}}
+		<tbody>
 		{{#objects}}
-		    <tr>
+			
+		    <tr data-id="{{id}}">	
+		    	<td>
+		    		<input type="checkbox" class="select-row">
+		    	</td>
 		    {{#properties}}
-		        <td class="cell">{{label}}</td>
+		        <td  class="property-{{ident}}">{{val}}</td>
 		    {{/properties}}
+		    {{#show_object_actions}}
+		    	<td>
+		    		<div class="btn-group dropdown">
+		    		{{#object_actions}}
+		    			<button class="btn btn-default btn-xs obj-{{ident}}">{{label}}</button>
+		    		{{/object_actions}}
+		    		
+		    		</div>
+		    	</td>
+		    {{/show_object_actions}}
 		    </tr>
+			
+			
 		{{/objects}}
-		</ul>
+		</tbody>
+		{{#show_table_footer}}
+		<tfoot>
+			<tr>
+
+			</tr>
+		</tfoot>
+		{{/show_table_footer}}
+		</table>
 	{{/has_objects}}
 	{{^has_objects}}
 		<div>
@@ -30,7 +67,28 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 		</div>
 	{{/has_objects}}
 
-	{{#show_footer}}
+	<div class="btn-group">
+		{{#sublist_actions}}
+			<button class="btn btn-default btn-xs sublist-{{ident}}">{{label}}</button>
+		{{/sublist_actions}}
+	</div>
 
-	{{/show_footer}}
+	<div class="btn-group">
+		{{#list_actions}}
+			<button class="btn btn-default btn-xs list-{{ident}}">{{label}}</button>
+		{{/list_actions}}
+	</div>
 </div>
+
+
+{{#add_js}}
+<script>
+var table_widget;
+window.onload = function() {
+	table_widget = new Charcoal.Admin.Widget_Table({
+		obj_type: '{{obj_type}}',
+		widget_id: '{{widget_id}}'
+	});
+};
+</script>
+{{/add_js}}

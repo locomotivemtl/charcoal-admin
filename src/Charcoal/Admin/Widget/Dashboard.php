@@ -24,7 +24,7 @@ class Dashboard extends Widget
     * @var array $_widgets
     */
     public $_widgets;
-    
+
     /**
     * @param array $data
     * @throws InvalidArgumentException
@@ -101,13 +101,14 @@ class Dashboard extends Widget
         if (!is_string($widget_ident)) {
             throw new InvalidArgumentException('Widget ident needs to be a string');
         }
-        
+
         if (($widget instanceof WidgetInterface)) {
             $this->_widgets[$widget_ident] = $widget;
         } else if (is_array($widget)) {
             if (!isset($widget['ident'])) {
                 $widget['ident'] = $widget_ident;
             }
+            //var_dump($widget);
             $widget_type = isset($widget['type']) ? $widget['type'] : null;
             $w = WidgetFactory::instance()->create($widget_type);
             $w->set_data($widget);
@@ -124,14 +125,15 @@ class Dashboard extends Widget
     {
         if ($this->_widgets === null) {
             yield null;
-        }
-        foreach ($this->_widgets as $widget) {
-            //var_dump($widget);
-            if ($widget->active() === false) {
-                continue;
+        } else {
+            foreach ($this->_widgets as $widget) {
+                //var_dump($widget);
+                if ($widget->active() === false) {
+                    continue;
+                }
+                $GLOBALS['widget_template'] = $widget->type();
+                yield $widget->ident() => $widget;
             }
-            $GLOBALS['widget_template'] = $widget->type();
-            yield $widget->ident() => $widget;
         }
     }
 }

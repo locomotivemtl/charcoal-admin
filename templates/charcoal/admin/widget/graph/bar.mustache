@@ -1,0 +1,84 @@
+<div id="{{widget_id}}" style="height:{{height}}px;"></div>
+
+{{#add_js_requirement}}
+<script src="{{url}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
+{{/add_js_requirement}}
+
+{{#add_js}}
+<script type="text/javascript">
+require.config({
+    paths: {
+        echarts: '{{url}}assets/admin/scripts/vendors/'
+    }
+});
+
+require(
+    [
+        'echarts',
+        'echarts/chart/bar',
+        'echarts/chart/line'
+    ],
+    function (ec) {
+        var myChart = ec.init(document.getElementById('{{widget_id}}'));
+
+        myChart.showLoading({
+            text: 'Loading...',
+        });
+        myChart.hideLoading();
+
+        myChart.setOption({
+            color:[
+                {{#colors}}
+                    '{{.}}',
+                {{/colors}}
+            ],
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                show: false,
+                data:['Data 1', 'Data 2']
+            },
+            toolbox: {
+                show : true
+            },
+            calculable : false,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['J','F','M','A','M','J','J','A','S','O','N','D']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    splitArea : {show : true}
+                }
+            ],
+            series : [
+                {
+                    name:'Serie 1',
+                    type:'bar',
+                    /*itemStyle:{
+                        normal:{
+                            color:'rgba(0, 0, 255, 1)'
+                        }
+                    },*/
+                    data:[12.0, 14.9, 7.0, 23.2, 25.6, 76.7, 135.6, 152.2, 82.6, 40.0, 26.4, 13.3]
+                },
+                {
+                    name:'Serie 2',
+                    type:'bar',
+                    /*itemStyle:{
+                        normal:{
+                            color:'rgba(255,0,0, 1)'
+                        }
+                    },*/
+                    data:[12.6, 15.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 88.7, 48.8, 26.0, 12.3]
+                }
+            ]
+        });
+    }
+);
+</script>
+{{/add_js}}

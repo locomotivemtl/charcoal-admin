@@ -135,16 +135,20 @@ class Form extends Widget
     public function groups()
     {
         $groups = $this->_groups;
-        uasort($groups, ['self', '_sort_groups_by_priority']);
-        foreach ($groups as $group) {
-            /*if ($group->widget_type() != '') {
-                $GLOBALS['widget_template'] = $group->widget_type();
-            } else {
+        if (!is_array($this->_groups)) {
+            yield null;
+        } else {
+            uasort($groups, ['self', '_sort_groups_by_priority']);
+            foreach ($groups as $group) {
+                /*if ($group->widget_type() != '') {
+                    $GLOBALS['widget_template'] = $group->widget_type();
+                } else {
+                    $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
+                }*/
                 $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
-            }*/
-            $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
-            //var_dump($GLOBALS['widget_template']);
-            yield $group->ident() => $group;
+                //var_dump($GLOBALS['widget_template']);
+                yield $group->ident() => $group;
+            }
         }
     }
 
@@ -222,6 +226,7 @@ class Form extends Widget
             $this->_form_properties[$property_ident] = $property;
         } else if (is_array($property)) {
             $p = new FormProperty($property);
+            $p->set_property_ident($property_ident);
             $p->set_data($property);
             //$p->set_form($this);
             $this->_form_properties[$property_ident] = $p;
@@ -238,8 +243,9 @@ class Form extends Widget
             if ($prop->active() === false) {
                 continue;
             }
+            //var_dump($prop->property_ident());
             $GLOBALS['widget_template'] = $prop->input_type();
-            yield $prop->ident() => $prop;
+            yield $prop->property_ident() => $prop;
         }
     }
 

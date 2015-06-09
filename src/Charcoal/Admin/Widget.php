@@ -12,6 +12,8 @@ use \Charcoal\Widget\WidgetView as WidgetView;
 
 class Widget extends AbstractWidget
 {
+    public $_widget_id;
+
     /**
     * @var string $_type
     */
@@ -47,6 +49,9 @@ class Widget extends AbstractWidget
             throw new InvalidArgumentException('Data must be an array');
         }
         //var_dump($data);
+        if (isset($data['widget_id']) && $data['widget_id'] !== null) {
+            $this->set_widget_id($data['widget_id']);
+        }
         if (isset($data['type']) && $data['type'] !== null) {
             $this->set_type($data['type']);
         }
@@ -64,6 +69,20 @@ class Widget extends AbstractWidget
         }
 
         return $this;
+    }
+
+    public function set_widget_id($widget_id)
+    {
+        $this->_widget_id = $widget_id;
+        return $this;
+    }
+
+    public function widget_id()
+    {
+        if (!$this->_widget_id) {
+            $this->_widget_id = 'widget_'.uniqid();
+        }
+        return $this->_widget_id;
     }
 
     /**
@@ -186,6 +205,7 @@ class Widget extends AbstractWidget
 
     public function render($template = null)
     {
+        unset($template);
         $view = new WidgetView();
         $view->set_context($this);
         $content = $view->render_template($this->ident());

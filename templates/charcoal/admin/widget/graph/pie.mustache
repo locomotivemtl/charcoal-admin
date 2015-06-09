@@ -1,0 +1,62 @@
+<div id="{{widget_id}}" style="height:{{height}}px;"></div>
+
+{{#add_js_requirement}}
+<script src="{{url}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
+{{/add_js_requirement}}
+
+{{#add_js}}
+<script type="text/javascript">
+require.config({
+    paths: {
+        echarts: '{{url}}assets/admin/scripts/vendors/'
+    }
+});
+
+require(
+    [
+        'echarts',
+        'echarts/chart/pie'
+    ],
+    function (ec) {
+        var myChart = ec.init(document.getElementById('{{widget_id}}'));
+
+        myChart.showLoading({
+            text: 'Loading...',
+        });
+        myChart.hideLoading();
+
+        myChart.setOption({
+            color:[
+                {{#colors}}
+                    '{{.}}',
+                {{/colors}}
+            ],
+            tooltip : {
+                trigger: 'item'
+            },
+            legend: {
+                show: false,
+                data:['Data 1', 'Data 2']
+            },
+            toolbox: {
+                show : true
+            },
+            calculable : false,
+
+            series : [
+                {
+                    name:'Serie 1',
+                    type:'pie',
+                     radius : '50%',
+                    data:[ {value:335, name:'PHP'},
+                {value:310, name:'Javascript'},
+                {value:234, name:'JSON'},
+                {value:135, name:'HTML'}
+                ]
+                }
+            ]
+        });
+    }
+);
+</script>
+{{/add_js}}

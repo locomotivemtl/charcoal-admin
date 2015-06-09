@@ -7,6 +7,9 @@ use \InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
+/**
+* Fully implements ObjectContainerInterface
+*/
 trait ObjectContainerTrait
 {
     /**
@@ -104,10 +107,8 @@ trait ObjectContainerTrait
         if (!$obj_type) {
             throw new Exception('Can not create object, type is not defined.');
         }
-        if (!class_exists($obj_type)) {
-            throw new Exception(sprintf('Invalid object type "%s"', $obj_type));
-        }
-        $obj = new $obj_type;
+
+        $obj = ModelFactory::instance()->get($obj_type);
 
         $obj_id = $this->obj_id();
         if ($obj_id) {

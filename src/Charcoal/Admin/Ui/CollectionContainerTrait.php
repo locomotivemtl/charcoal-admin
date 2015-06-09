@@ -2,16 +2,39 @@
 
 namespace Charcoal\Admin\Ui;
 
+use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
+// From `charcoal-core`
+use \Charcoal\Loader\CollectionLoader as CollectionLoader;
+use \Charcoal\Model\Collection as Collection;
+use \Charcoal\Model\ModelFactory as ModelFactory;
+
+/**
+* Fully implements CollectionContainerInterface
+*/
 trait CollectionContainerTrait
 {
+    /**
+    * @var string $_obj_type
+    */
     protected $_obj_type;
+    /**
+    * @var string $_collection_ident
+    */
     protected $_collection_ident;
+    /**
+    * @var mixed $_collection_config
+    */
     protected $_collection_config;
+    /**
+    * @var Collection $_collection
+    */
+    protected $_collection;
 
     /**
     * @param array $data
+    * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
     public function set_collection_data($data)
@@ -35,6 +58,7 @@ trait CollectionContainerTrait
 
     /**
     * @param string $obj_type
+    * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
     public function set_obj_type($obj_type)
@@ -56,6 +80,7 @@ trait CollectionContainerTrait
 
     /**
     * @param string $collection_ident
+    * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
     public function set_collection_ident($collection_ident)
@@ -79,7 +104,7 @@ trait CollectionContainerTrait
     * @param mixed $dashboard_config
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection_config($dashboard_config)
+    public function set_collection_config($collection_config)
     {
         $this->_collection_config = $collection_config;
         return $this;
@@ -90,8 +115,8 @@ trait CollectionContainerTrait
     */
     public function collection_config()
     {
-        if ($this->collection_config === null) {
-            //$this->_collection_config = $this->create_collection_config();
+        if ($this->_collection_config === null) {
+            $this->_collection_config = $this->create_collection_config();
         }
         return $this->_collection_config;
     }
@@ -100,7 +125,11 @@ trait CollectionContainerTrait
     * @param array $data
     * @return mixed
     */
-    //abstract public function create_collection_config($data = null);
+    public function create_collection_config($data = null)
+    {
+        unset($data);
+        return [];
+    }
 
 
     /**
@@ -119,19 +148,43 @@ trait CollectionContainerTrait
     public function collection()
     {
         if ($this->_collection === null) {
-            // $this->_collection = $this->create_collection();
+            $this->_collection = $this->create_collection();
         }
         return $this->_collection;
     }
 
-    //abstract public function create_collection($data = null);
+    /**
+    * @param array $data
+    * @throws Exception
+    * @return CollectionLoader
+    */
+    public function create_collection($data = null)
+    {
+        unset($data);
+        $obj_type = $this->obj_type();
+        if (!$obj_type) {
+            throw new Exception(__CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.');
+        }
+        $obj = ModelFactory::instance()->get($obj_type);
 
+        $loader = new CollectionLoader();
+        $loader->set_model($obj);
+        $collection_config = $this->collection_config();
+        if (is_array($collection_config) && !empty($collection_config)) {
+            $loader->set_data($collection_config);
+        }
+        
+        $collection = $loader->load();
+        return $collection;
+    }
 
     /**
     * @return array
     */
     public function objects()
     {
+        $collection = $this->collection();
+        //var_dump($this->collection()->objects());
         return $this->collection()->objects();
     }
 
@@ -149,7 +202,8 @@ trait CollectionContainerTrait
     public function proto()
     {
         $obj_type = $this->obj_type();
-        return new $obj_type;
+        $obj = ModelFactory::instance()->get($obj_type);
+        return $obj;
     }
 
 }

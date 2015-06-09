@@ -321,4 +321,9 @@ class Template extends AbstractTemplate
             //Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
         }
     }
+
+    public function url()
+    {
+        return Charcoal::config()['URL'];
+    }
 }

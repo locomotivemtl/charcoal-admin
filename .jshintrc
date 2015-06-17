@@ -9,6 +9,8 @@
         "Charcoal":true,
         "$":true,
         "jQuery":true,
-        "BootstrapDialog":true
+        "BootstrapDialog":true,
+        "module":true,
+        "require":true
     }
 }

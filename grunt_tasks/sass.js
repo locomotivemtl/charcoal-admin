@@ -7,4 +7,4 @@ module.exports = {
             'assets/dist/styles/main.css': 'assets/src/styles/**/**/main.scss'
         }
     }
-}
+};

@@ -7,4 +7,4 @@ module.exports = {
             'assets/dist/images/svgs.svg': ['assets/src/images/svgs/*.svg'],
         }
     }
-}
+};

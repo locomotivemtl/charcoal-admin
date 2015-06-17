@@ -18,4 +18,4 @@ module.exports = {
         src: ['**/*.*', '*/*.*', '*.*'],
         dest: 'assets/dist/scripts/vendors/echarts/'
     }
-}
+};

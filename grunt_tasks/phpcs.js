@@ -16,4 +16,4 @@ module.exports = {
         extensions: 'php',
         showSniffCodes: true
     }
-}
+};

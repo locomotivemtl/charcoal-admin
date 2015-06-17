@@ -23,4 +23,4 @@ module.exports = {
             message: 'SVG is now concatenated'
         }
     }
-}
+};

@@ -13,4 +13,4 @@ module.exports = {
     tests: [
         'tests/**/*.php'
     ]
-}
+};

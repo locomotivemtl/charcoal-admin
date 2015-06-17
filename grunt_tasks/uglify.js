@@ -8,4 +8,4 @@ module.exports = {
             'assets/dist/scripts/charcoal.admin.min.js': ['<%= concat.dist.dest %>']
         }
     }
-}
+};

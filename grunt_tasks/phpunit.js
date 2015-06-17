@@ -13,4 +13,4 @@ module.exports = {
         debug:false,
         bootstrap:'tests/bootstrap.php'
     }
-}
+};

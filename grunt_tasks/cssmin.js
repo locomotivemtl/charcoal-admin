@@ -7,4 +7,4 @@ module.exports = {
             dest: 'assets/dist/styles/'
         }]
     }
-}
+};

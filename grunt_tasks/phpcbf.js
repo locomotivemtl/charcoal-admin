@@ -9,4 +9,4 @@ module.exports = {
         standard: 'phpcs.xml',
         noPatch: true
     }
-}
+};

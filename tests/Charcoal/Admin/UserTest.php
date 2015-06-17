@@ -27,4 +27,41 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\InvalidArgumentException');
         $obj->set_data(null);
     }
+
+    public function testSetUsername()
+    {
+        $obj = new User();
+        $ret = $obj->set_username('Foobar');
+        $this->assertSame($ret, $obj);
+        $this->assertEquals('foobar', $obj->username());
+
+        $this->setExpectedException('\InvalidArgumentException');
+        $obj->set_username(false);
+    }
+
+    public function testSetEmail()
+    {
+        $obj = new User();
+        $ret = $obj->set_email('test@example.com');
+        $this->assertSame($ret, $obj);
+        $this->assertEquals('test@example.com', $obj->email());
+
+        $this->setExpectedException('\InvalidArgumentException');
+        $obj->set_email(false);
+    }
+
+    /*public function testSetEmailInvalidEmailThrowsException()
+    {
+        $obj = new User();
+
+        $this->setExpectedException('\InvalidArgumentException');
+        $ret = $obj->set_email('foo');
+    }*/
+
+    public function testKey()
+    {
+        $obj = new User();
+        $ret = $obj->key();
+        $this->assertEquals('username', $ret);
+    }
 }

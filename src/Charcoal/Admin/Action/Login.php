@@ -97,20 +97,19 @@ class Login extends Action
             $this->set_success(false);
             $this->output(404);
         }
-
         $u = new User();
         try {
             $is_authenticated = $u->authenticate($username, $password);
         } catch (Exception $e) {
+            var_dump($e);
+            die();
             $is_authenticated = false;
         }
 
         if (!$is_authenticated) {
-            $this->log_failed_attempt();
             $this->set_success(false);
             $this->output(403);
         } else {
-            $this->log_successful_login();
             $this->set_success(true);
             $this->output(200);
         }
@@ -130,13 +129,4 @@ class Login extends Action
         return $response;
     }
 
-    public function log_failed_attempt()
-    {
-        // @todo
-    }
-
-    public function log_successful_login()
-    {
-        // @todo
-    }
 }

@@ -305,7 +305,8 @@ class Template extends AbstractTemplate
     */
     protected function auth_required()
     {
-        // Authentication is required by default. Disable in children template class if ncessary.
+        // Authentication is required by default. Disable in children template class if necessary.
+        // (for example, the "login" / "reset password" templates should return false...)
         return true;
     }
 
@@ -318,7 +319,8 @@ class Template extends AbstractTemplate
         $u = User::get_authenticated();
         if ($u === null) {
             $path = Charcoal::config()->admin_path().'/login';
-            //Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
+            Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
+            //die();
         }
     }
 

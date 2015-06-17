@@ -1,0 +1,58 @@
+// ==========================================================================
+// Nav list
+// ==========================================================================
+.c-nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border-top-width: 1px;
+	border-top-style: solid;
+
+	&.-light {
+		border-top-color: rgba($light-gray, 0.56);
+	}
+
+	&.-dark {
+		border-top-color: rgba($light-gray, 0.17);
+	}
+}
+
+.c-nav-list_item {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+
+	.c-nav-list.-light & {
+		border-bottom-color: rgba($light-gray, 0.56);
+	}
+
+	.c-nav-list.-dark & {
+		border-bottom-color: rgba($light-gray, 0.17);
+	}
+}
+
+.c-nav-list_header {
+	position: relative;
+	display: block;
+	color: $lighter-black;
+	height: rem($unit - 1);
+	line-height: rem($unit - 1);
+	padding: 0 rem(10px);
+	transition: background-color $speed;
+
+	&:hover {
+		color: $lighter-black;
+		text-decoration: none;
+		background-color: darken($charcoal-lightblue, 5%);
+	}
+
+	.c-nav-list.-secondary & {
+		&.is-active {
+			@extend .nav_arrow;
+
+			&:after {
+				right: rem(-20px);
+				border-right-color: $white;
+			}
+		}
+	}
+}

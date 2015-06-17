@@ -1,0 +1,35 @@
+// ==========================================================================
+// Header main
+// ==========================================================================
+.c-header-main {
+	background-color: $charcoal-blue;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: rem($unit);
+	backface-visibility: hidden;
+	display: flex;
+	align-items: center;
+}
+
+.c-header-main_link {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	width: auto;
+}
+
+.c-header-main_logo_img {
+	width: rem(87px);
+	height: rem(16px);
+	fill: $white;
+	margin: 0 rem(20px);
+}
+
+.c-header-main_help {
+	font-size: rem(12px);
+	opacity: 0.37;
+	color: $white;
+	margin: 0 rem(15px);
+}

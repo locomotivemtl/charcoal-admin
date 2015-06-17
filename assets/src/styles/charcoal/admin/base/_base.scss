@@ -1,0 +1,15 @@
+html {
+	@media (max-width: $to-huge) {
+		font-size: 14px;	
+	}
+
+	@media (min-width: $from-huge) {
+		font-size: $font-size;
+	}
+}
+
+body {
+	padding-top: rem($unit);
+	padding-left: rem($unit * 2);
+	min-height: 2000px; // Testing
+}

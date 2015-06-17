@@ -1,0 +1,51 @@
+// ==========================================================================
+// Settings
+// ==========================================================================
+
+// Colors
+// ==========================================================================
+// Generic
+$black: #000000;
+$lighter-black: #080909;
+$white: #ffffff;
+$gray: #6c6c6c;
+$light-gray: #b7b7b7;
+$dark-gray: #2b2b2b;
+$blue: #3498db;
+// Charcoal
+$charcoal-blue: #1a252d;
+$charcoal-lightblue: #eaf2f4;
+
+// Fonts
+// ==========================================================================
+$source-sans-pro: 'Source Sans Pro', sans-serif;
+$weight-light: 300;
+$weight-normal: 400;
+$weight-semi: 600;
+$weight-bold: 700;
+
+// Base
+// ==========================================================================
+$font-size: 16px;
+
+// Screen widths
+// ==========================================================================
+$from-tiny: 414px;
+$to-tiny: $from-tiny - 1;
+$from-small: 768px;
+$to-small: $from-small - 1;
+$from-medium: 1024px;
+$to-medium: $from-medium - 1;
+$from-large: 1280px;
+$to-large: $from-large - 1;
+$from-huge: 1680px;
+$to-huge: $from-huge - 1;
+
+// Units
+// ==========================================================================
+$unit: 60px;
+
+// Transitions
+// ==========================================================================
+$speed: 0.3s;
+$easing: linear;

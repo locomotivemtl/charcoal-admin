@@ -8,28 +8,36 @@ Display the "home" dashboard.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="container">
-	{{>charcoal/admin/widget/feedbacks}}
-</div>
+<nav class="c-nav-secondary">
+    <header class="c-nav-secondary_header">
+        <h1 class="c-nav-seconday_heading">Alertes</h1>
+    </header>
+    <ul class="c-nav-list -light -secondary">
+        <li class="c-nav-list_item">
+            <a class="c-nav-list_header is-active" href="#">
+                <span>Zone de publication</span>
+            </a>
+        </li>
+        <li class="c-nav-list_item">
+            <a class="c-nav-list_header" href="#">
+                <span>Zone de test d’envoie</span>
+            </a>
+        </li>
+        <li class="c-nav-list_item">
+            <a class="c-nav-list_header" href="#">
+                <span>Zone d’envoie</span>
+            </a>
+        </li>
+        <li class="c-nav-list_item">
+            <a class="c-nav-list_header" href="#">
+                <span>Gabarits</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
-<div class="jumbotron">
-	<div class="container">
-		<h1>Unleash the power of the beast</h1>
+<nav class="c-nav-user">
 
-		<p>Welcome to Charcoal, the control panel / dashboard for your web data. Use this tool to manage and visualize everything needed for your website. More than a traditional CMS, Charcoal is a Web Framework. Ask your administrator how this tool can be customized further to suit your needs.</p>
-
-		<p class="pull-right">
-			<a class="btn btn-primary btn-warning btn-lg" href="#" role="button"><i class="fa fa-close"></i> Hide this message</a>
-			<a class="btn btn-primary btn-lg" href="#" role="button">Learn more <i class="fa fa-long-arrow-right"></i></a>
-		</p>
-	</div>
-</div>
-
-<section class="container section home">
-    {{!-- Display the "home" dashboard --}}
-    {{#dashboard}}
-        {{>charcoal/admin/widget/dashboard}}
-    {{/dashboard}}
-</section>
+</nav>
 
 {{>charcoal/admin/template/inc.footer}}

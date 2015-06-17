@@ -1,0 +1,21 @@
+// ==========================================================================
+// Nav secondary
+// ==========================================================================
+.c-nav-secondary {
+	background-color: $charcoal-lightblue;
+	width: rem(360px);
+	min-height: 100vh;
+	height: 100%;
+	padding: 0 rem(20px);
+}
+
+.c-nav-secondary_header {
+	display: flex;
+	align-items: center;
+	height: rem($unit * 2 - 1);
+	padding: 0 rem(10px);
+}
+
+.c-nav-seconday_heading {
+	margin: 0;
+}

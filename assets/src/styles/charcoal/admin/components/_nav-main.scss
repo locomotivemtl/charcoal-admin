@@ -1,0 +1,99 @@
+// ==========================================================================
+// Nav main
+// ==========================================================================
+.c-nav-main {
+	background-color: $lighter-black;
+	position: fixed;
+	top: rem($unit);
+	bottom: 0;
+	left: 0;
+	width: rem($unit * 2);
+}
+
+.c-nav-main_list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.c-nav-main_item {
+	height: rem($unit * 2);
+	border-bottom: 1px solid $dark-gray;
+}
+
+.c-nav-main_link {
+	position: relative;
+	display: flex;
+	text-align: center;
+	font-size: rem(12px);
+	color: $gray;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+	transition: background-color $speed, color $speed;
+
+	&:hover, &.is-active {
+		color: $blue;
+		text-decoration: none;
+
+		&:before {
+			transform: translateX(100%);
+		}
+	}
+
+	&:before {
+		content: "";
+		position: absolute;
+		width: rem(5px);
+		background-color: $blue;
+		top: 0;
+		bottom: 0;
+		left: rem(-5px);
+		transform: translateX(0);
+		transition: transform $speed;
+	}
+
+	&.is-active {
+		@extend .nav_arrow;
+		background-color: $black;
+
+		&:after {
+			border-right-color: $charcoal-lightblue;
+		}
+
+		.c-nav-main_list:hover & {
+			&:before {
+				transform: translateX(0);
+			}
+
+			&:hover {
+				&:before {
+					transform: translateX(100%);
+				}
+			}
+		}
+	}
+}
+
+.c-nav-main_link_wrap {
+
+}
+
+.c-nav-main_link_icon {
+	width: rem(35px);
+	height: rem(35px);
+	fill: $gray;
+	transition: fill $speed;
+
+	.c-nav-main_link:hover & {
+
+	}
+
+	.c-nav-main_link:hover &, .c-nav-main_link.is-active & {
+		fill: $blue;
+	}
+}
+
+.c-nav-main_link_text {
+	display: block;
+}

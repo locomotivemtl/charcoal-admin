@@ -4,220 +4,47 @@
 */
 
 module.exports = function(grunt) {
-	"use strict";
+    "use strict";
 
-	// Project configuration.
-	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
+    function loadConfig(path) {
+        var glob = require('glob');
+        var object = {};
+        var key;
 
-		"yaml-validate": {
-			options: {
-				glob: ".travis.yml"
-			}
-		},
+        glob.sync('*', {cwd: path}).forEach(function(option) {
+            key = option.replace(/\.js$/,'');
+            object[key] = require(path + option);
+        });
 
-		copy:{
-			bootstrap3_dialog_js:{
-				expand:true,
-				cwd: 'bower_components/bootstrap3-dialog/dist/js',
-				src: ['**', '*'],
-				dest: 'assets/dist/scripts/vendors/'
-			},
-			bootstrap3_dialog_css:{
-				expand:true,
-				cwd: 'bower_components/bootstrap3-dialog/dist/css',
-				src: ['**', '*'],
-				dest: 'assets/dist/styles/vendors/'
-			},
-			echarts:{
-				expand:true,
-				cwd: 'bower_components/echarts/build/dist',
-				//src: ['echarts.js'],
-				src: ['**/*.*', '*/*.*', '*.*'],
-				dest: 'assets/dist/scripts/vendors/echarts/'
-			}
-		},
+        return object;
+    }
 
-		jshint: {
-			files:['assets/src/scripts/**/*.js'],
-			options: {
-				jshintrc: '.jshintrc'
-			}
-		},
+    var config = {
+        pkg: grunt.file.readJSON('package.json')
+    }
+    grunt.loadTasks('grunt_tasks');
+    grunt.util._.extend(config, loadConfig('./grunt_tasks/'));
+    grunt.initConfig(config);
 
-		concat: {
-			options:{
-				separator:';'
-			},
-			dist: {
-				src: [
-					'assets/src/scripts/charcoal/admin/charcoal.js',
-					'assets/src/scripts/charcoal/admin/widget.js',
-					'assets/src/scripts/charcoal/admin/widget/*.js'
-				],
-				dest: 'assets/dist/scripts/charcoal.admin.js'
-			}
-		},
+    // Load tasks
+    require('load-grunt-tasks')(grunt);
 
-		uglify: {
-			options: {
-				// the banner is inserted at the top of the output
-				banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
-			},
-			dist: {
-				files: {
-					'assets/dist/scripts/charcoal.admin.min.js': ['<%= concat.dist.dest %>']
-				}
-			}
-		},
+    // Register tasks
+    grunt.registerTask('default', [
+        'copy',
+        'jshint',
+        'concat',
+        'uglify',
+        'jsonlint',
+        'phpunit',
+        //'phplint' // To slow for default
+    ]);
+    grunt.registerTask('sync', ['browserSync', 'watch', 'notify:watch']);
+    grunt.registerTask('tests', [
+        'phpunit',
+        'phplint'
+    ]);
 
-		jsonlint:{
-			meta:{
-				src:[
-					'*.json'
-				]
-			},
-			config:{
-				src:[
-					'config/**/*.json'
-				]
-			},
-			metadata:{
-				src:[
-					'metadata/**/*.json'
-				]
-			}
-		},
-
-		phplint:{
-			options: {
-				swapPath: '/tmp',
-				phpArgs : {
-					// add -f for fatal errors
-					'-lf': null
-				}
-			},
-
-			src: [
-				'src/**/*.php'
-			],
-			tests: [
-				'tests/**/*.php'
-			]
-		},
-
-		phpunit:{
-
-			src: {
-				dir: 'tests/'
-			},
-
-			options: {
-				colors: true,
-				coverageHtml:'tests/tmp/report/',
-				//coverageText:'tests/tmp/report/',
-				testdoxHtml:'tests/tmp/testdox.html',
-				testdoxText:'tests/tmp/testdox.text',
-				verbose:true,
-				debug:false,
-				bootstrap:'tests/bootstrap.php'
-			}
-		},
-
-		phpcs: {
-			src:{
-				dir:[
-					'src/**/*.php'
-				]
-			},
-			tests: {
-				dir:[
-					'tests/**/*.php'
-				]
-			},
-			options: {
-				//bin: '<%= directories.composerBin %>/phpcs',
-				standard: 'phpcs.xml',
-				//ignore: 'database',
-				extensions: 'php',
-				showSniffCodes: true
-			}
-		},
-
-		phpcbf: {
-			src:{
-				src:['src/**/*.php']
-			},
-			tests: {
-				src:['tests/**/*.php']
-			},
-			options: {
-				standard: 'phpcs.xml',
-				noPatch: true
-			}
-		},
-
-		phpdocumentor: {
-			dist: {
-				options: {
-					config: 'phpdoc.dist.xml',
-					directory : ['src/', 'tests/'],
-					target : 'phpdoc/'
-				}
-			}
-		},
-		watch: {
-			php: {
-				files :[
-					'src/**/*.php',
-					'tests/**/*.php',
-				],
-				tasks: ['phplint']
-			},
-			javascript: {
-				files: [
-					'assets/src/**/*.js'
-				],
-				tasks: ['jshint', 'concat', 'uglify']
-			}
-		},
-		githooks: {
-			all: {
-				'pre-commit': 'jsonlint phplint phpunit phpcs',
-			}
-		}
-		
-	});
-
-	// Load plugin(s)
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-yaml-validate');
-	grunt.loadNpmTasks('grunt-jsonlint');
-	grunt.loadNpmTasks("grunt-phplint");
-	grunt.loadNpmTasks('grunt-phpunit');
-	grunt.loadNpmTasks('grunt-phpcs');
-	grunt.loadNpmTasks('grunt-phpcbf');
-	grunt.loadNpmTasks('grunt-phpdocumentor');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-githooks');
-	grunt.loadNpmTasks('grunt-composer');
-
-	// Register Task(s)
-	grunt.registerTask('default', [
-		'copy',
-		'jshint',
-		'concat',
-		'uglify',
-		'jsonlint',
-		'phpunit',
-		//'phplint' // To slow for default
-	]);
-	grunt.registerTask('tests', [
-		'phpunit',
-		'phplint'
-	]);
-	
 };
+
+

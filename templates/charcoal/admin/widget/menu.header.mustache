@@ -1,29 +1,70 @@
-{{!-- 
+{{!--
 Header menu Widget
 ==================
 
 `charcoal/admin/widget/menu.header`
 
 --}}
-<header>
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
+<header class="c-header-main">
+    <a class="c-header-main_link" href="#">
+        <svg class="c-header-main_logo_img" role="img" title="Charcoal"><use xlink:href="{{url}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
+    </a>
+    <a class="c-header-main_link" href="#">
+        <span class="c-header-main_help">
+            Besoin d’aide ?
+        </span>
+    </a>
+</header>
 
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-menu">
-				<span class="sr-only">{{#_t}}Toggle navigation{{/_t}}</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#"><strong>Charcoal</strong></a>
-		</div>
-
-		<ul class="collapse navbar-collapse nav navbar-nav" id="header-menu">
-			{{#header_menu}}
-				{{>charcoal/admin/widget/inc.menu.item}}
-			{{/header_menu}}
-		</ul>
-	</div>
+<nav class="c-nav-main">
+    <ul class="c-nav-main_list">
+        <li class="c-nav-main_item">
+            <a class="c-nav-main_link" href="#">
+                <span class="c-nav-main_link_wrap">
+                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#icon-home"></use></svg>
+                    <span class="c-nav-main_link_text">Accueil</span>
+                </span>
+            </a>
+        </li>
+        <li class="c-nav-main_item">
+            <a class="c-nav-main_link is-active" href="#">
+                <span class="c-nav-main_link_wrap">
+                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#icon-alerts"></use></svg>
+                    <span class="c-nav-main_link_text">Alertes</span>
+                </span>
+            </a>
+        </li>
+        <li class="c-nav-main_item">
+            <a class="c-nav-main_link" href="#">
+                <span class="c-nav-main_link_wrap">
+                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#icon-users"></use></svg>
+                    <span class="c-nav-main_link_text">Utilisateurs</span>
+                </span>
+            </a>
+        </li>
+        <li class="c-nav-main_item">
+            <a class="c-nav-main_link" href="#">
+                <span class="c-nav-main_link_wrap">
+                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#icon-contents"></use></svg>
+                    <span class="c-nav-main_link_text">Contenus</span>
+                </span>
+            </a>
+        </li>
+        <li class="c-nav-main_item">
+            <a class="c-nav-main_link" href="#">
+                <span class="c-nav-main_link_wrap">
+                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#icon-stats"></use></svg>
+                    <span class="c-nav-main_link_text">Statistiques</span>
+                </span>
+            </a>
+        </li>
+        <li class="c-nav-main_item">
+            <a class="c-nav-main_link" href="#">
+                <span class="c-nav-main_link_wrap">
+                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#icon-config"></use></svg>
+                    <span class="c-nav-main_link_text">Configuration</span>
+                </span>
+            </a>
+        </li>
+    </ul>
 </nav>
-</header>   

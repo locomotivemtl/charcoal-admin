@@ -1,35 +1,54 @@
 // ==========================================================================
-// Header main
+// Header main Components
 // ==========================================================================
 .c-header-main {
-	background-color: $charcoal-blue;
-	position: fixed;
-	top: 0;
-	right: 0;
-	left: 0;
-	height: rem($unit);
-	backface-visibility: hidden;
-	display: flex;
-	align-items: center;
+    background-color: $charcoal-blue;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: rem($unit);
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    z-index: 999;
 }
 
 .c-header-main_link {
-	display: flex;
-	align-items: center;
-	height: 100%;
-	width: auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: auto;
 }
 
 .c-header-main_logo_img {
-	width: rem(87px);
-	height: rem(16px);
-	fill: $white;
-	margin: 0 rem(20px);
+    width: rem(87px);
+    height: rem(16px);
+    fill: $white;
+    margin: 0 rem(20px);
 }
 
 .c-header-main_help {
-	font-size: rem(12px);
-	opacity: 0.37;
-	color: $white;
-	margin: 0 rem(15px);
+    font-size: rem(12px);
+    opacity: 0.37;
+    color: $white;
+    margin: 0 rem(15px);
+}
+
+.c-header-main_user {
+    @extend .c-nav;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $black;
+    border: none;
+    outline: none;
+    text-align: left;
+    color: $white;
+    transition: background-color $speed;
+
+    &:hover {
+        background-color: $lighter-black;
+    }
 }

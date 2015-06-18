@@ -1,0 +1,97 @@
+// ==========================================================================
+// Nav component
+// ==========================================================================
+
+.c-nav {
+    width: rem(360px);
+    padding: 0 rem(20px);
+}
+
+.c-nav_header {
+    display: flex;
+    align-items: center;
+    height: rem($unit * 2 - 1);
+    padding: 0 rem(10px);
+}
+
+.c-nav_arrow {
+    &:after {
+        right: 0;
+        top: 50%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(255, 255, 255, 0);
+        border-width: rem(10px);
+        margin-top: rem(-10px);
+    }
+}
+
+// Nav list
+// ==========================================================================
+.c-nav_list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top-width: 1px;
+    border-top-style: solid;
+
+    &.-light {
+        border-top-color: rgba($light-gray, 0.56);
+    }
+
+    &.-dark {
+        border-top-color: rgba($light-gray, 0.17);
+        color: $white;
+    }
+}
+
+.c-nav_list_item {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+
+    .c-nav_list.-light & {
+        border-bottom-color: rgba($light-gray, 0.56);
+    }
+
+    .c-nav_list.-dark & {
+        border-bottom-color: rgba($light-gray, 0.17);
+    }
+}
+
+.c-nav_list_header {
+    position: relative;
+    display: block;
+    height: rem($unit - 1);
+    line-height: rem($unit - 1);
+    padding: 0 rem(10px);
+    transition: background-color $speed;
+
+    .c-nav_list.-light & {
+        color: $lighter-black;
+    }
+
+    .c-nav_list.-dark & {
+        color: $white;
+    }
+
+    &:hover {
+        color: $lighter-black;
+        text-decoration: none;
+        background-color: darken($charcoal-lightblue, 5%);
+    }
+
+    .c-nav_list.-secondary & {
+        &.is-active {
+            @extend %nav_arrow;
+
+            &:after {
+                right: rem(-20px);
+                border-right-color: $white;
+            }
+        }
+    }
+}

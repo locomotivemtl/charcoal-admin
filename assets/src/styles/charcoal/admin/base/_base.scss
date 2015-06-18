@@ -1,6 +1,6 @@
 html {
 	@media (max-width: $to-huge) {
-		font-size: 14px;	
+		font-size: 14px;
 	}
 
 	@media (min-width: $from-huge) {
@@ -9,6 +9,7 @@ html {
 }
 
 body {
+    font-size: 1rem;
 	padding-top: rem($unit);
 	padding-left: rem($unit * 2);
 	min-height: 2000px; // Testing

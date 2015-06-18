@@ -1,7 +1,19 @@
 // ==========================================================================
 // Nav
 // ==========================================================================
-.nav_arrow {
+%o-nav {
+    width: rem(360px);
+    padding: 0 rem(20px);
+}
+
+%o-nav_header {
+    display: flex;
+    align-items: center;
+    height: rem($unit * 2 - 1);
+    padding: 0 rem(10px);
+}
+
+%o-nav_arrow {
 	&:after {
 		right: 0;
 		top: 50%;

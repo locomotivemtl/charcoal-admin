@@ -7,7 +7,7 @@
     top: rem($unit);
     right: 0;
     bottom: 0;
-    background-color: $lighter-black;
+    background-color: $charcoal-darkblue;
     color: $white;
 }
 
@@ -15,19 +15,28 @@
     width: rem(80px);
     height: rem(80px);
     overflow: hidden;
-    border-radius: 2px;
+    border-radius: $radius;
     margin-right: rem(20px);
+    flex-shrink: 0;
 
     img {
         width: 100%;
     }
 }
 
-.c-nav-user_username {
+.c-nav-user_info {
+    flex-grow: 1;
+}
+
+.c-nav-user_name {
     display: block;
+    width: 100%;
+    @include ellipsis;
 }
 
 .c-nav-user_link {
+    display: inline-block;
+    margin-top: rem(6px);
     color: $blue;
 
     &:hover {

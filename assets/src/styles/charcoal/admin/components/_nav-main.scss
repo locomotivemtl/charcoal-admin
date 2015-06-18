@@ -2,12 +2,13 @@
 // Nav main Components
 // ==========================================================================
 .c-nav-main {
-    background-color: $lighter-black;
+    background-color: $charcoal-darkblue;
     position: fixed;
     top: rem($unit);
     bottom: 0;
     left: 0;
     width: rem($unit * 2);
+    line-height: 1;
 }
 
 .c-nav-main_list {
@@ -54,7 +55,7 @@
     }
 
     &.is-active {
-        @extend %nav_arrow;
+        @extend .c-nav_arrow;
         background-color: $black;
 
         &:after {
@@ -84,6 +85,7 @@
     height: rem(35px);
     fill: $gray;
     transition: fill $speed;
+    margin-bottom: rem(7px);
 
     .c-nav-main_link:hover & {
 

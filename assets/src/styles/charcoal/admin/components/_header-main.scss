@@ -12,6 +12,7 @@
     display: flex;
     align-items: center;
     z-index: 999;
+    line-height: 1;
 }
 
 .c-header-main_link {
@@ -46,9 +47,67 @@
     outline: none;
     text-align: left;
     color: $white;
+    display: flex;
+    align-items: center;
     transition: background-color $speed;
 
-    &:hover {
-        background-color: $lighter-black;
+    &:hover, .has-nav-user & {
+        background-color: $charcoal-darkblue;
+    }
+}
+
+.c-header-main_user_name {
+    flex-grow: 1;
+    @include ellipsis;
+}
+
+.c-header-main_user_icon {
+
+}
+
+.c-header-main_user_icon_dot {
+    position: relative;
+    background-color: $white;
+    width: rem(4px);
+    height: rem(4px);
+    border-radius: 50%;
+    margin-bottom: rem(4px);
+    display: block;
+    transition: transform $speed, opacity $speed;
+    transform-origin: center right;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .has-nav-user & {
+        border-radius: 0px;
+        height: 2px;
+
+        &:nth-child(1) {
+            transform: rotate(-43deg) scaleX(4.7);
+            top: 1px;
+
+            @media (min-width: $from-small) {
+                transform: rotate(-43deg) scaleX(5.5);
+            }
+        }
+
+       &:nth-child(2) {
+            opacity: 0;
+
+            @media (min-width: $from-small) {
+                transform: scaleX(5.5);
+            }
+        }
+
+        &:nth-child(3) {
+            transform: rotate(43deg) scaleX(4.7);
+            bottom: -4px;
+
+            @media (min-width: $from-small) {
+                transform: rotate(43deg) scaleX(5.5);
+            }
+        }
     }
 }

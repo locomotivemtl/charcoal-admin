@@ -2,7 +2,7 @@
 // Mixins tools
 // ==========================================================================
 @mixin ellipsis {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -1,9 +1,9 @@
 // ==========================================================================
-// Mixins tools
+// Header Objects
 // ==========================================================================
 
-@mixin ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.o-header {
+    display: flex;
+    align-items: center;
+    height: ($unit * 2 - 1);
 }

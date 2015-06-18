@@ -1,3 +1,7 @@
+// ==========================================================================
+// Base
+// ==========================================================================
+
 html {
 	@media (max-width: $to-huge) {
 		font-size: 14px;
@@ -12,5 +16,4 @@ body {
     font-size: 1rem;
 	padding-top: rem($unit);
 	padding-left: rem($unit * 2);
-	min-height: 2000px; // Testing
 }

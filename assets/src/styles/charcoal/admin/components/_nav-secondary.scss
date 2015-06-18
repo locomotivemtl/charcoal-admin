@@ -1,11 +1,10 @@
 // ==========================================================================
 // Nav secondary Components
 // ==========================================================================
+
 .c-nav-secondary {
     @extend .c-nav;
 	background-color: $charcoal-lightblue;
-	min-height: 100vh;
-	height: 100%;
 }
 
 .c-nav-seconday_heading {

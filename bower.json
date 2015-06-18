@@ -4,7 +4,7 @@
   "homepage": "https://github.com/locomotivemtl/charcoal-admin",
   "authors": [
     "Mathieu Ducharme <mat@locomotive.ca>",
-    "Antoine Boulanger <antoine@locomotive.ca>",
+    "Antoine Boulanger <antoine@locomotive.ca>"
   ],
   "license": "MIT",
   "ignore": [

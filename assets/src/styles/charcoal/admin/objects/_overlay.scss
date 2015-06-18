@@ -1,0 +1,15 @@
+// ==========================================================================
+// Overlay
+// ==========================================================================
+.o-overlay {
+    position: fixed;
+    top: rem($unit);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba($black, 0.78);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity $slow-speed, visibility $slow-speed;
+    z-index: 98;
+}

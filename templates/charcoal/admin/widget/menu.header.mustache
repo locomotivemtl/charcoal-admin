@@ -14,7 +14,7 @@ Header menu Widget
             Besoin d’aide ?
         </span>
     </a>
-    <button class="c-header-main_user" type="button">
+    <button class="c-header-main_user" type="button" data-toggle="class" data-target="body" data-class="has-nav-user">
         <span class="c-header-main_user_name">Ville de sainte-Julie</span>
         <span class="c-header-main_user_icon">
             <span class="c-header-main_user_icon_dot"></span>
@@ -77,6 +77,7 @@ Header menu Widget
     </ul>
 </nav>
 
+<div class="c-nav-user-overlay" data-toggle="class" data-target="body" data-class="has-nav-user"></div>
 <nav class="c-nav-user">
     <header class="c-nav_header">
         <div class="c-nav-user_avatar">
@@ -148,3 +149,11 @@ Header menu Widget
         </li>
     </ul>
 </nav>
+
+{{#add_js}}
+<script>
+    $(document).ready(function() {
+        var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
+    });
+</script>
+{{/add_js}}

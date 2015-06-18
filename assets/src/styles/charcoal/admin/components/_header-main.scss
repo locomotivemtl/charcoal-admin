@@ -11,7 +11,7 @@
     backface-visibility: hidden;
     display: flex;
     align-items: center;
-    z-index: 999;
+    z-index: 99;
     line-height: 1;
 }
 
@@ -68,10 +68,10 @@
 .c-header-main_user_icon_dot {
     position: relative;
     background-color: $white;
-    width: rem(4px);
-    height: rem(4px);
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
-    margin-bottom: rem(4px);
+    margin-bottom: 4px;
     display: block;
     transition: transform $speed, opacity $speed;
     transform-origin: center right;
@@ -85,11 +85,10 @@
         height: 2px;
 
         &:nth-child(1) {
-            transform: rotate(-43deg) scaleX(4.7);
-            top: 1px;
+            transform: translateY(1px) rotate(-43deg) scaleX(4.7);
 
             @media (min-width: $from-small) {
-                transform: rotate(-43deg) scaleX(5.5);
+                transform: translateY(-1px) rotate(-43deg) scaleX(5.5);
             }
         }
 
@@ -102,11 +101,10 @@
         }
 
         &:nth-child(3) {
-            transform: rotate(43deg) scaleX(4.7);
-            bottom: -4px;
+            transform: translateY(-4px) rotate(43deg) scaleX(4.7);
 
             @media (min-width: $from-small) {
-                transform: rotate(43deg) scaleX(5.5);
+                transform: translateY(2px) rotate(43deg) scaleX(5.5);
             }
         }
     }

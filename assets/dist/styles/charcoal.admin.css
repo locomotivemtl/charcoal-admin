@@ -1189,7 +1189,7 @@ h6, .h6 {
     font-size: 75%; }
 
 h1, .h1 {
-  font-size: 31px; }
+  font-size: 1.9375rem; }
 
 h2, .h2 {
   font-size: 30px; }
@@ -6068,6 +6068,18 @@ body {
   padding-left: 7.5rem;
   min-height: 2000px; }
 
+.o-overlay, .c-nav-user-overlay {
+  position: fixed;
+  top: 3.75rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.78);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s, visibility 0.6s;
+  z-index: 98; }
+
 .c-header-main {
   background-color: #1a252d;
   position: fixed;
@@ -6078,7 +6090,7 @@ body {
   backface-visibility: hidden;
   display: flex;
   align-items: center;
-  z-index: 999;
+  z-index: 99;
   line-height: 1; }
 
 .c-header-main_link {
@@ -6124,10 +6136,10 @@ body {
 .c-header-main_user_icon_dot {
   position: relative;
   background-color: #ffffff;
-  width: 0.25rem;
-  height: 0.25rem;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
   display: block;
   transition: transform 0.3s, opacity 0.3s;
   transform-origin: center right; }
@@ -6137,22 +6149,20 @@ body {
     border-radius: 0px;
     height: 2px; }
     .has-nav-user .c-header-main_user_icon_dot:nth-child(1) {
-      transform: rotate(-43deg) scaleX(4.7);
-      top: 1px; }
+      transform: translateY(1px) rotate(-43deg) scaleX(4.7); }
       @media (min-width: 768px) {
         .has-nav-user .c-header-main_user_icon_dot:nth-child(1) {
-          transform: rotate(-43deg) scaleX(5.5); } }
+          transform: translateY(-1px) rotate(-43deg) scaleX(5.5); } }
     .has-nav-user .c-header-main_user_icon_dot:nth-child(2) {
       opacity: 0; }
       @media (min-width: 768px) {
         .has-nav-user .c-header-main_user_icon_dot:nth-child(2) {
           transform: scaleX(5.5); } }
     .has-nav-user .c-header-main_user_icon_dot:nth-child(3) {
-      transform: rotate(43deg) scaleX(4.7);
-      bottom: -4px; }
+      transform: translateY(-4px) rotate(43deg) scaleX(4.7); }
       @media (min-width: 768px) {
         .has-nav-user .c-header-main_user_icon_dot:nth-child(3) {
-          transform: rotate(43deg) scaleX(5.5); } }
+          transform: translateY(2px) rotate(43deg) scaleX(5.5); } }
 
 .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
   width: 22.5rem;
@@ -6338,7 +6348,16 @@ body {
   right: 0;
   bottom: 0;
   background-color: #080909;
-  color: #ffffff; }
+  color: #ffffff;
+  transform: translateX(100%);
+  transition: transform 0.6s;
+  z-index: 99; }
+  .has-nav-user .c-nav-user {
+    transform: translateX(0); }
+
+.has-nav-user .c-nav-user-overlay {
+  opacity: 1;
+  visibility: visible; }
 
 .c-nav-user_avatar {
   width: 5rem;

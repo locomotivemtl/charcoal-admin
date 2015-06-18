@@ -9,6 +9,22 @@
     bottom: 0;
     background-color: $charcoal-darkblue;
     color: $white;
+    transform: translateX(100%);
+    transition: transform $slow-speed;
+    z-index: 99;
+
+    .has-nav-user & {
+        transform: translateX(0);
+    }
+}
+
+.c-nav-user-overlay {
+    @extend .o-overlay;
+
+    .has-nav-user & {
+        opacity: 1;
+        visibility: visible;
+    }
 }
 
 .c-nav-user_avatar {

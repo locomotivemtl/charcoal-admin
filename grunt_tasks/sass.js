@@ -4,7 +4,7 @@ module.exports = {
     },
     dist: {
         files: {
-            'assets/dist/styles/main.css': 'assets/src/styles/**/**/main.scss'
+            'assets/dist/styles/charcoal.admin.css': 'assets/src/styles/**/charcoal.admin.scss'
         }
     }
 };

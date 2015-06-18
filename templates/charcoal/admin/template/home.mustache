@@ -8,36 +8,83 @@ Display the "home" dashboard.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<nav class="c-nav-secondary">
-    <header class="c-nav-secondary_header">
-        <h1 class="c-nav-seconday_heading">Alertes</h1>
-    </header>
-    <ul class="c-nav-list -light -secondary">
-        <li class="c-nav-list_item">
-            <a class="c-nav-list_header is-active" href="#">
-                <span>Zone de publication</span>
-            </a>
-        </li>
-        <li class="c-nav-list_item">
-            <a class="c-nav-list_header" href="#">
-                <span>Zone de test d’envoie</span>
-            </a>
-        </li>
-        <li class="c-nav-list_item">
-            <a class="c-nav-list_header" href="#">
-                <span>Zone d’envoie</span>
-            </a>
-        </li>
-        <li class="c-nav-list_item">
-            <a class="c-nav-list_header" href="#">
-                <span>Gabarits</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+<div class="o-flex">
 
-<nav class="c-nav-user">
+    <nav class="c-nav-secondary o-flex_aside">
+        <header class="o-header">
+            <h1 class="c-nav_heading">Alertes</h1>
+        </header>
+        <ul class="c-nav_list -light -secondary">
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header is-active">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Zone de publication
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number">
+                            23
+                        </span>
+                    </a>
+                </div>
+            </li>
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Zone de test d’envoie
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number is-new">
+                            20
+                        </span>
+                    </a>
+                </div>
+            </li>
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Zone d’envoie
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number">
+                            15
+                        </span>
+                    </a>
+                </div>
+            </li>
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Gabarits
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number">
+                            6
+                        </span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </nav>
 
-</nav>
+    <div class="o-flex_main">
+        <header class="o-header">
+            <div class="o-container">
+                <h1>Zone publication (23)</h1>
+            </div>
+        </header>
+        <div class="c-content_container">
+
+        </div>
+    </div>
+
+</div>
 
 {{>charcoal/admin/template/inc.footer}}

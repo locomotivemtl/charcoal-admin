@@ -1,9 +1,7 @@
 // ==========================================================================
-// Mixins tools
+// Tools Settings
 // ==========================================================================
 
-@mixin ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+@function rem($px, $base: $font-size) {
+    @return ($px / $base) * 1rem;
 }

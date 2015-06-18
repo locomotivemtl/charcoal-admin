@@ -13,7 +13,7 @@ module.exports = {
         tasks: ['jshint', 'concat', 'uglify', 'notify:concat']
     },
     sass: {
-        files: ['assets/src/styles/**/**/**/*.scss'],
+        files: ['assets/src/styles/**/*.scss'],
         tasks: ['sass', 'notify:sass'],
         options: {
             spawn: false,

@@ -1,9 +1,16 @@
 // ==========================================================================
-// Mixins tools
+// Flex Objects
 // ==========================================================================
 
-@mixin ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.o-flex {
+    display: flex;
+}
+
+.o-flex_aside {
+    flex: 0 0 auto;
+}
+
+.o-flex_main {
+    flex: 1;
+    min-height: 2000px; // Testing
 }

@@ -6,13 +6,14 @@
 // ==========================================================================
 // Generic
 $black: #000000;
-$lighter-black: #080909;
 $white: #ffffff;
 $gray: #6c6c6c;
-$light-gray: #b7b7b7;
-$dark-gray: #2b2b2b;
+$light-gray: #cccccc;
+$dark-gray: #262626;
+$red: #ed5564;
 $blue: #3498db;
 // Charcoal
+$charcoal-darkblue: #080909;
 $charcoal-blue: #1a252d;
 $charcoal-lightblue: #eaf2f4;
 
@@ -27,6 +28,7 @@ $weight-bold: 700;
 // Base
 // ==========================================================================
 $font-size: 16px;
+$radius: 2px;
 
 // Screen widths
 // ==========================================================================
@@ -48,4 +50,6 @@ $unit: 60px;
 // Transitions
 // ==========================================================================
 $speed: 0.3s;
+$slow-speed: 0.45s;
+$slower-speed: 0.6s;
 $easing: linear;

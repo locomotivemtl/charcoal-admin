@@ -14,6 +14,14 @@ Header menu Widget
             Besoin d’aide ?
         </span>
     </a>
+    <button class="c-header-main_user" type="button" data-toggle="class" data-target="body" data-class="has-nav-user">
+        <span class="c-header-main_user_name">Ville de sainte-Julie</span>
+        <span class="c-header-main_user_icon">
+            <span class="c-header-main_user_icon_dot"></span>
+            <span class="c-header-main_user_icon_dot"></span>
+            <span class="c-header-main_user_icon_dot"></span>
+        </span>
+    </button>
 </header>
 
 <nav class="c-nav-main">
@@ -68,3 +76,84 @@ Header menu Widget
         </li>
     </ul>
 </nav>
+
+<div class="c-nav-user-overlay" data-toggle="class" data-target="body" data-class="has-nav-user"></div>
+<nav class="c-nav-user">
+    <header class="o-header">
+        <div class="c-nav-user_avatar">
+            <img src="{{url}}assets/admin/images/user_01.jpg">
+        </div>
+        <div class="c-nav-user_info">
+            <span class="c-nav-user_name">
+                Alerte Sainte-Julie
+            </span>
+            <a class="c-nav-user_link" href="#">
+                Mon compte
+            </a>
+        </div>
+    </header>
+    <ul class="c-nav_list -dark">
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="#">
+                    <span class="c-nav_list_link_text">
+                        Gérer les comptes
+                    </span>
+                </a>
+            </div>
+        </li>
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="#">
+                    <span class="c-nav_list_link_text">
+                        Langues
+                    </span>
+                </a>
+            </div>
+        </li>
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="#">
+                    <span class="c-nav_list_link_text">
+                        Email test
+                    </span>
+                </a>
+            </div>
+        </li>
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="#">
+                    <span class="c-nav_list_link_text">
+                        SMS text
+                    </span>
+                </a>
+            </div>
+        </li>
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="#">
+                    <span class="c-nav_list_link_text">
+                        Aide
+                    </span>
+                </a>
+            </div>
+        </li>
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="#">
+                    <span class="c-nav_list_link_text">
+                        Clear cache
+                    </span>
+                </a>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+{{#add_js}}
+<script>
+    $(document).ready(function() {
+        var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
+    });
+</script>
+{{/add_js}}

@@ -32,11 +32,12 @@ module.exports = function(grunt) {
     // Register tasks
     grunt.registerTask('default', [
         'copy',
-        'jshint',
         'concat',
-        'uglify',
+        'jscs',
+        'jshint',
         'jsonlint',
         'phpunit',
+        'uglify',
         //'phplint' // To slow for default
     ]);
     grunt.registerTask('sync', ['browserSync', 'watch', 'notify:watch']);

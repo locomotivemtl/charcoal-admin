@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         var object = {};
         var key;
 
-        glob.sync('*', {cwd: path}).forEach(function(option) {
+        glob.sync('*.js', {cwd: path}).forEach(function(option) {
             key = option.replace(/\.js$/,'');
             object[key] = require(path + option);
         });
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
         'jscs',
         'jshint',
         'jsonlint',
-        'phpunit',
+        //'phpunit',
         'uglify',
         //'phplint' // To slow for default
     ]);

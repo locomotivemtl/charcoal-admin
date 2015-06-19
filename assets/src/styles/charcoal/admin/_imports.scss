@@ -2,24 +2,24 @@
 // Imports
 // ==========================================================================
 
+// Global tools
 @import "settings/tools";
-
-// Bootstrap core variables
-// ==========================================================================
-@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
-
-// Charcoal variables
-// ==========================================================================
-@import "settings/settings";
-@import "settings/bootstrap";
-
 
 // ==========================================================================
 // Bootstrap
 // ==========================================================================
 
+// Core variables
+@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+// Charcoal variables
+@import "settings/settings";
+// Core variables overwrites
+@import "bootstrap/variables";
+
 // Core mixins
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+// Core mixins overwrites
+@import "bootstrap/mixins/tab-focus";
 
 // Reset and dependencies
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
@@ -76,7 +76,7 @@
 // Font Awesome variables
 @import "../../../../../bower_components/fontawesome/scss/variables";
 // Charcoal variables
-@import "settings/fontawesome";
+@import "bootstrap/fontawesome/variables";
 // Font Awesome
 @import "../../../../../bower_components/fontawesome/scss/mixins";
 @import "../../../../../bower_components/fontawesome/scss/path";
@@ -133,6 +133,7 @@
 // ==========================================================================
 @import "bootstrap/forms";
 @import "bootstrap/tables";
+@import "bootstrap/buttons";
 
 // Trumps
 // ==========================================================================

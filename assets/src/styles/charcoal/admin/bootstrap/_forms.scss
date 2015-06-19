@@ -1,0 +1,24 @@
+// ==========================================================================
+// Forms
+// ==========================================================================
+
+// Focus for file, radio, and checkbox
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+   outline: none;
+}
+
+.radio,
+.checkbox {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.form-control {
+    box-shadow: none;
+
+    &:focus {
+        box-shadow: none;
+    }
+}

@@ -1,18 +1,12 @@
 module.exports = {
-    bootstrap3_dialog_js:{
-        expand:true,
-        cwd: 'bower_components/bootstrap3-dialog/dist/js',
+    bootstrap_fonts: {
+        expand: true,
+        cwd: 'bower_components/bootstrap-sass/assets/fonts/bootstrap/',
         src: ['**', '*'],
-        dest: 'assets/dist/scripts/vendors/'
+        dest: 'assets/dist/fonts/'
     },
-    bootstrap3_dialog_css:{
-        expand:true,
-        cwd: 'bower_components/bootstrap3-dialog/dist/css',
-        src: ['**', '*'],
-        dest: 'assets/dist/styles/vendors/'
-    },
-    echarts:{
-        expand:true,
+    echarts: {
+        expand: true,
         cwd: 'bower_components/echarts/build/dist',
         //src: ['echarts.js'],
         src: ['**/*.*', '*/*.*', '*.*'],

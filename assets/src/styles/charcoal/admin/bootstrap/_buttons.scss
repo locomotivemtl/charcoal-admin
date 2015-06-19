@@ -1,9 +1,8 @@
 // ==========================================================================
-// Forms
+// Buttons
 // ==========================================================================
 
-.radio,
-.checkbox {
-  margin-top: 0;
-  margin-bottom: 0;
+.btn {
+    font-size: rem(13px);
+    transition: background-color $speed;
 }

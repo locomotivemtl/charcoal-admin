@@ -12,7 +12,7 @@ $brand-danger:          $red;
 
 // Scaffolding
 // ==========================================================================
-$text-color:            $charcoal-darkblue;
+$text-color:            $color;
 
 // Typography
 // ==========================================================================
@@ -28,6 +28,10 @@ $font-size-h5:            $font-size-base !default;
 $font-size-h6:            ceil(($font-size-base * 0.85)) !default; // ~12px
 
 $headings-font-weight:    $weight-semi;
+
+// Iconography
+// ==========================================================================
+$icon-font-path: "../fonts/";
 
 // Components
 // ==========================================================================
@@ -65,3 +69,16 @@ $btn-danger-bg:                  $brand-danger;
 $btn-danger-border:              darken($btn-danger-bg, 10%);
 
 $btn-border-radius-base:         $border-radius-base;
+
+// Forms
+// ==========================================================================
+$input-color:                    $color;
+
+$input-border-focus:             $blue;
+
+$input-height-base:              48px;
+$input-height-small:             38px;
+
+// Grid system
+// ==========================================================================
+$grid-gutter-width:         rem(10px);

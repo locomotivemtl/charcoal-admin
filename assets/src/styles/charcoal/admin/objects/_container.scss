@@ -5,3 +5,7 @@
 .o-container {
     padding: 0 rem($unit);
 }
+
+.o-container_aside {
+    width: rem(360px - $unit);
+}

@@ -89,12 +89,58 @@ Display the "home" dashboard.
     </nav>
 
     <div class="o-flex_main">
-        <header class="o-header">
-            <div class="o-container">
-                <h1>Zone publication (23)</h1>
-            </div>
-        </header>
         <div class="o-container">
+
+            <header class="o-header">
+                <h1>Zone publication (23)</h1>
+                <div class="o-container_aside">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="Rechercher">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default input-sm" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="table-header clearfix">
+                <div class="pull-left">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">Actions</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-danger">Effacer</button>
+                </div>
+                <div class="pull-right">
+                    <strong>Filtres</strong>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info">Les plus récentes alertes</button>
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
@@ -117,7 +163,7 @@ Display the "home" dashboard.
                                     <label></label>
                                 </div>
                             </td>
-                            <td>9</td>
+                            <td class="text-center">9</td>
                             <td><strong>Retard sur le circuit 8</strong></td>
                             <td>Transport intermunicipal</td>
                             <td>Transport Intermunicipal</td>
@@ -125,18 +171,18 @@ Display the "home" dashboard.
                             <td></td>
                             <td>
                                 <div class="btn-group">
-                                  <button type="button" class="btn btn-primary">Modifier</button>
-                                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                  </button>
-                                  <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                  </ul>
+                                    <button type="button" class="btn btn-primary">Nouvelle alerte</button>
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="#">Separated link</a></li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>
@@ -144,26 +190,6 @@ Display the "home" dashboard.
                 </table>
             </div>
 
-            <!-- Standard button -->
-<button type="button" class="btn btn-default">Default</button>
-
-<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-<button type="button" class="btn btn-primary">Primary</button>
-
-<!-- Indicates a successful or positive action -->
-<button type="button" class="btn btn-success">Success</button>
-
-<!-- Contextual button for informational alert messages -->
-<button type="button" class="btn btn-info">Info</button>
-
-<!-- Indicates caution should be taken with this action -->
-<button type="button" class="btn btn-warning">Warning</button>
-
-<!-- Indicates a dangerous or potentially negative action -->
-<button type="button" class="btn btn-danger">Danger</button>
-
-<!-- Deemphasize a button by making it look like a link while maintaining button behavior -->
-<button type="button" class="btn btn-link">Link</button>
         </div>
     </div>
 

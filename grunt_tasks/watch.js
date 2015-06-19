@@ -4,17 +4,41 @@ module.exports = {
             'src/**/*.php',
             'tests/**/*.php',
         ],
-        tasks: ['phplint']
+        tasks: [
+            'phplint',
+            'notify:php'
+        ]
     },
     javascript: {
         files: [
-            'assets/src/scripts/**/*.js'
+            'assets/src/scripts/**/*.js',
+            'grunt_tasks/*.js'
         ],
-        tasks: ['jshint', 'concat', 'uglify', 'notify:concat']
+        tasks: [
+            'jshint',
+            'jscs',
+            'concat',
+            'uglify',
+            'notify:javascript'
+        ]
+    },
+    json: {
+        files: [
+            '*.json',
+            'config/*.json',
+            'metadata/**/*.json'
+        ],
+        tasks: [
+            'jsonlint',
+            'notify:json'
+        ]
     },
     sass: {
         files: ['assets/src/styles/**/*.scss'],
-        tasks: ['sass', 'notify:sass'],
+        tasks: [
+            'sass',
+            'notify:sass'
+        ],
         options: {
             spawn: false,
             livereload: true
@@ -22,7 +46,10 @@ module.exports = {
     },
     svg: {
         files: ['assets/src/images/**/*.svg'],
-        tasks: ['svgstore', 'notify:svg']
+        tasks: [
+            'svgstore',
+            'notify:svg'
+        ]
     },
     tasks: {
         files: ['grunt_tasks/*.js'],

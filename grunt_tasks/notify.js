@@ -1,8 +1,20 @@
 module.exports = {
-    watch: {
+    javascript: {
         options: {
             // title: '<%= pkg.title %>',
-            message: 'Keeping an eye out, Chief!'
+            message: 'JavaScript is linted and cleaned up'
+        }
+    },
+    json: {
+        options: {
+            // title: '<%= pkg.title %>',
+            message: 'JSON is linted'
+        }
+    },
+    php: {
+        options: {
+            // title: '<%= pkg.title %>',
+            message: 'PHP linted and cleaned up'
         }
     },
     sass: {
@@ -11,16 +23,16 @@ module.exports = {
             message: 'Sass compiled to CSS.'
         }
     },
-    concat: {
-        options: {
-            // title: '<%= pkg.title %>',
-            message: 'JavaScript is now concatenated'
-        }
-    },
     svg: {
         options: {
             // title: '<%= pkg.title %>',
             message: 'SVG is now concatenated'
+        }
+    },
+    watch: {
+        options: {
+            // title: '<%= pkg.title %>',
+            message: 'Keeping an eye out, Chief!'
         }
     }
 };

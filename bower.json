@@ -4,7 +4,7 @@
   "homepage": "https://github.com/locomotivemtl/charcoal-admin",
   "authors": [
     "Mathieu Ducharme <mat@locomotive.ca>",
-    "Antoine Boulanger <antoine@locomotive.ca>",
+    "Antoine Boulanger <antoine@locomotive.ca>"
   ],
   "license": "MIT",
   "ignore": [
@@ -16,7 +16,9 @@
   ],
   "dependencies": {
     "bootstrap3-dialog": "~1.34.4",
-    "bootstrap-sass": "~3.3.5"
+    "bootstrap-sass": "~3.3.5",
+    "awesome-bootstrap-checkbox": "~0.3.4",
+    "fontawesome": "~4.3.0"
   },
   "devDependencies": {
     "echarts": "~2.2.3"

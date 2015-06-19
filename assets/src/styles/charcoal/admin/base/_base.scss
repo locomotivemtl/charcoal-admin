@@ -17,3 +17,11 @@ body {
 	padding-top: rem($unit);
 	padding-left: rem($unit * 2);
 }
+
+th {
+    font-weight: $weight-normal;
+}
+
+td {
+    font-size: rem(14px);
+}

@@ -36,13 +36,14 @@
     padding: 0;
     border-top-width: 1px;
     border-top-style: solid;
+    margin-bottom: rem(30px);
 
     &.-light {
-        border-top-color: $light-gray;
+        border-top-color: $gray-light;
     }
 
     &.-dark {
-        border-top-color: $dark-gray;
+        border-top-color: $gray-dark;
         color: $white;
     }
 }
@@ -52,11 +53,11 @@
     border-bottom-style: solid;
 
     .c-nav_list.-light & {
-        border-bottom-color: $light-gray;
+        border-bottom-color: $gray-light;
     }
 
     .c-nav_list.-dark & {
-        border-bottom-color: $dark-gray;
+        border-bottom-color: $gray-dark;
     }
 }
 
@@ -78,11 +79,11 @@
     &:hover {
         .c-nav_list_link_text {
             .c-nav_list.-light & {
-                background-color: $light-gray;
+                background-color: $gray-light;
             }
 
             .c-nav_list.-dark & {
-                background-color: $dark-gray;
+                background-color: $gray-dark;
             }
         }
     }
@@ -133,7 +134,7 @@
 
 .c-nav_list_link_number {
     position: relative;
-    color: $light-gray;
+    color: $gray-light;
     margin-left: rem(10px);
     margin-right: rem(26px);
 

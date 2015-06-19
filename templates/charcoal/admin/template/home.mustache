@@ -72,6 +72,20 @@ Display the "home" dashboard.
                 </div>
             </li>
         </ul>
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger">Nouvelle alerte</button>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+        </div>
     </nav>
 
     <div class="o-flex_main">
@@ -80,8 +94,76 @@ Display the "home" dashboard.
                 <h1>Zone publication (23)</h1>
             </div>
         </header>
-        <div class="c-content_container">
+        <div class="o-container">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ID</th>
+                            <th>Titre de l'alerte</th>
+                            <th>Zone</th>
+                            <th>Catégorie</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                <div class="checkbox">
+                                    <input type="checkbox">
+                                    <label></label>
+                                </div>
+                            </td>
+                            <td>9</td>
+                            <td><strong>Retard sur le circuit 8</strong></td>
+                            <td>Transport intermunicipal</td>
+                            <td>Transport Intermunicipal</td>
+                            <td>Il y a 4 jours</td>
+                            <td></td>
+                            <td>
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-primary">Modifier</button>
+                                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                  </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
+            <!-- Standard button -->
+<button type="button" class="btn btn-default">Default</button>
+
+<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+<button type="button" class="btn btn-primary">Primary</button>
+
+<!-- Indicates a successful or positive action -->
+<button type="button" class="btn btn-success">Success</button>
+
+<!-- Contextual button for informational alert messages -->
+<button type="button" class="btn btn-info">Info</button>
+
+<!-- Indicates caution should be taken with this action -->
+<button type="button" class="btn btn-warning">Warning</button>
+
+<!-- Indicates a dangerous or potentially negative action -->
+<button type="button" class="btn btn-danger">Danger</button>
+
+<!-- Deemphasize a button by making it look like a link while maintaining button behavior -->
+<button type="button" class="btn btn-link">Link</button>
         </div>
     </div>
 

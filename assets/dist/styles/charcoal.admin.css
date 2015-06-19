@@ -8066,6 +8066,8 @@ td {
   align-items: center;
   justify-content: space-between;
   height: 119px; }
+  .o-header.-border {
+    border-bottom: 1px solid #cccccc; }
 
 .o-container {
   padding: 0 3.75rem; }
@@ -8387,6 +8389,9 @@ td {
   .c-nav-user_link:hover {
     color: #3498db;
     text-decoration: underline; }
+
+.c-aside {
+  width: 18.75rem; }
 
 input[type="file"]:focus,
 input[type="radio"]:focus,

@@ -74,6 +74,7 @@ class AdminModule extends AbstractModule
     public function setup_routes()
     {
         $this->add_template_route('home');
+        $this->add_template_route('contents');
         $this->add_template_route('login');
 
         // Admin catch-all (load template if it exists)
@@ -107,7 +108,7 @@ class AdminModule extends AbstractModule
             try {
                 $action_ident = implode('/', $actions);
                 $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$action_ident);
-                
+
             } catch (Exception $e) {
                 die('Error: '.$e->getMessage());
             }

@@ -409,7 +409,9 @@ class User extends Content implements
             $this->set_last_password_ip($ip);
         }
 
-        $this->update(['password', 'last_password_date', 'last_password_ip']);
+        if($this->id()) {
+            $this->update(['password', 'last_password_date', 'last_password_ip']);
+        }
     }
 
     public function login()
@@ -510,4 +512,18 @@ class User extends Content implements
         return $config;
     }
 
+    public function pre_save()
+    {
+        //var_dump('PRE SAVE');
+        parent::pre_save();
+    }
+
+    public function post_save()
+    {
+       // var_dump('POST SAVE');
+        parent::post_save();
+
+        $cfg = $this->config();
+        //var_dump($cfg);
+    }
 }

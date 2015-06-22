@@ -9,15 +9,18 @@ input[type="checkbox"]:focus {
    outline: none;
 }
 
+label {
+    margin: rem(20px) 0;
+    font-weight: $weight-normal;
+}
+
 .radio,
 .checkbox {
-  margin-top: 0;
-  margin-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .form-control {
-    box-shadow: none;
-
     &:focus {
         box-shadow: none;
     }

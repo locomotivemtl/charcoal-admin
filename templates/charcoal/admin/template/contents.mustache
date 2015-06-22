@@ -1,3 +1,4 @@
+
 {{!--
 Charcoal Admin Home Template
 ============================
@@ -95,27 +96,64 @@ Display the "home" dashboard.
                 <h1>Nouvelle alerte</h1>
             </header>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
+            <section class="o-section">
+                <div class="row">
+                    <div class="col-md-6">
+                         <div class="form-group">
+                            <label for="select1">Type d'alerte</label>
+                            <select class="form-control" id="select1">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="select2">Type de gabarit</label>
+                            <select class="form-control" id="select2">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <select class="form-control">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                </div>
-            </div>
+            </section>
 
+            <section class="o-section">
+                <div class="form-group">
+                    <label for="select3">Catégorie de l'alerte</label>
+                    <select class="form-control" id="select3">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="o-section">
+                <div class="row">
+                    <div class="col-md-8">
+                         <div class="form-group">
+                            <label for="input1">Titre de l'alerte</label>
+                            <input type="text" class="form-control" id="input1">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="date1">Date de l'alerte</label>
+                            <input type="text" class="form-control" id="date1">
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </div>
     </div>

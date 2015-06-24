@@ -1,14 +1,4 @@
 module.exports = {
-    php: {
-        files :[
-            'src/**/*.php',
-            'tests/**/*.php',
-        ],
-        tasks: [
-            'phplint',
-            'notify:php'
-        ]
-    },
     javascript: {
         files: [
             'assets/src/scripts/**/*.js',
@@ -31,6 +21,16 @@ module.exports = {
         tasks: [
             'jsonlint',
             'notify:json'
+        ]
+    },
+    php: {
+        files :[
+            'src/**/*.php',
+            'tests/**/*.php',
+        ],
+        tasks: [
+            'phplint',
+            'notify:php'
         ]
     },
     sass: {

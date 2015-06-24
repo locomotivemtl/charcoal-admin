@@ -1,6 +1,6 @@
 /**
 * Gruntfile.js
-* Charcoal-Core configuration for grunt. (The JavaScript Task Runner)
+* Charcoal-Admin configuration for grunt. (The JavaScript Task Runner)
 */
 
 module.exports = function(grunt) {

@@ -210,34 +210,44 @@ class Template extends AbstractTemplate
         return [
             [
                 'active'=>true,
-                'label'=>'Test',
+                'label'=>'Accueil',
+                'icon'=>'home',
                 'url'=>'#',
-                'has_children'=>true,
-                'children'=>[
-                    [
-                        'active'=>true,
-                        'label'=>'Child 1',
-                        'has_children'=>false
-                    ],
-                    [
-                        'active'=>true,
-                        'label'=>'Child 2',
-                        'has_children'=>true,
-                        'children'=>[[
-                            'active'=>true,
-                            'label'=>'Foo',
-                            'has_children'=>false
-                        ],[
-                            'active'=>true,
-                            'label'=>'Bar',
-                            'has_children'=>false
-                        ]]
-                    ]
-                ]
+                'has_children'=>false
             ],
             [
                 'active'=>true,
-                'label'=>'Test 2',
+                'selected'=>true,
+                'label'=>'Alertes',
+                'icon'=>'alerts',
+                'url'=>'#',
+                'has_children'=>false
+            ],
+            [
+                'active'=>true,
+                'label'=>'Utilisateurs',
+                'icon'=>'users',
+                'url'=>'#',
+                'has_children'=>false
+            ],
+            [
+                'active'=>true,
+                'label'=>'Contenus',
+                'icon'=>'contents',
+                'url'=>'#',
+                'has_children'=>false
+            ],
+            [
+                'active'=>true,
+                'label'=>'Statistiques',
+                'icon'=>'stats',
+                'url'=>'#',
+                'has_children'=>false
+            ],
+            [
+                'active'=>true,
+                'label'=>'Configuration',
+                'icon'=>'config',
                 'url'=>'#',
                 'has_children'=>false
             ]
@@ -325,6 +335,11 @@ class Template extends AbstractTemplate
     }
 
     public function url()
+    {
+        return Charcoal::config()['URL'];
+    }
+
+    public function base_url()
     {
         return Charcoal::config()['URL'];
     }

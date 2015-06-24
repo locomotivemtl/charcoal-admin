@@ -1,4 +1,4 @@
-{{!-- 
+{{!--
 Table Widget
 ============
 
@@ -29,8 +29,8 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 		{{!-- Loop the list objects --}}
 		<tbody>
 		{{#objects}}
-			
-		    <tr data-id="{{id}}">	
+
+		    <tr data-id="{{id}}">
 		    	<td>
 		    		<input type="checkbox" class="select-row">
 		    	</td>
@@ -43,13 +43,13 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 		    		{{#object_actions}}
 		    			<button class="btn btn-default btn-xs obj-{{ident}}">{{label}}</button>
 		    		{{/object_actions}}
-		    		
+
 		    		</div>
 		    	</td>
 		    {{/show_object_actions}}
 		    </tr>
-			
-			
+
+
 		{{/objects}}
 		</tbody>
 		{{#show_table_footer}}
@@ -84,11 +84,12 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 {{#add_js}}
 <script>
 var table_widget;
-window.onload = function() {
+$(document).ready(function() {
 	table_widget = new Charcoal.Admin.Widget_Table({
 		obj_type: '{{obj_type}}',
 		widget_id: '{{widget_id}}'
 	});
-};
+    //Charcoal.Admin.register_widget(table_widget);
+});
 </script>
 {{/add_js}}

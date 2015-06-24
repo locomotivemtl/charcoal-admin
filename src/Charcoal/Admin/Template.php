@@ -339,6 +339,11 @@ class Template extends AbstractTemplate
         return Charcoal::config()['URL'];
     }
 
+    public function admin_url()
+    {
+        return $this->base_url().'admin/';
+    }
+
     public function base_url()
     {
         return Charcoal::config()['URL'];

@@ -1,4 +1,4 @@
-{{!-- 
+{{!--
 Form Widget
 ===========
 
@@ -7,12 +7,28 @@ Form Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 
 --}}
-<div class="form">
-    <form action="{{action}}" method="{{method}}" enctype="multipart/form-data">
-    
-    {{!-- Loop all form groups --}}
-    {{#groups}}
-        {{>$widget_template}}
-    {{/groups}}
+<div class="form charcoal-admin-widget-form" id="{{widget_id}}">
+
+    <form action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data">
+
+        {{!-- Loop all form groups --}}
+        {{#groups}}
+            {{>$widget_template}}
+        {{/groups}}
+
+        <input class="form-submit" type="submit" value="Save">
+    </form>
 
 </div>
+
+{{#add_js}}
+<script>
+var form_widget;
+$(document).ready(function() {
+    form_widget = new Charcoal.Admin.Widget_Form({
+        widget_id: '{{widget_id}}'
+    });
+    //Charcoal.Admin.register_widget(form_widget);
+});
+</script>
+{{/add_js}}

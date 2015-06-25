@@ -42,8 +42,26 @@ class ObjectForm extends Form implements ObjectContainerInterface
         $data = array_merge_recursive($obj_data, $data);
 
         parent::set_data($data);
-        
+
         return $this;
+    }
+
+    public function action()
+    {
+        $action = parent::action();
+        if(!$action) {
+            $obj = $this->obj();
+            $obj_id = $obj->id();
+            if($obj_id) {
+                return 'action/object/update';
+            }
+            else {
+                return 'action/object/save';
+            }
+        }
+        else {
+            return $action;
+        }
     }
 
     /**

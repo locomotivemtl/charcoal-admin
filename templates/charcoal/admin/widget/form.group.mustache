@@ -10,7 +10,7 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
 --}}
 <fieldset class="form-group">
-   
+
     {{#show_label}}
          <legend>Legend for form: {{label}}</legend>
     {{/show_label}}
@@ -26,11 +26,13 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                 <div class="col-sm-9">
                      {{#input}}
                         {{>$widget_template}}
+
                     {{/input}}
                 </div>
             </div>
 
         </div>
+         <div style="clear:both;">&nbsp;</div>
     {{/form_properties}}
     </section>
 

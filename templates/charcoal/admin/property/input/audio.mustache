@@ -25,13 +25,14 @@ canvas {
 
 <canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
 <button class="btn btn-record" type="button">Record</button>
+<input type="hidden" id="{{input_id}}" value="">
 
 {{#add_js}}
 <script>
 var audio_property;
 $(document).ready(function() {
     audio_property = new Charcoal.Admin.Property_Audio({
-        //widget_id: '{{widget_id}}'
+        input_id : '{{input_id}}'
     });
 });
 </script>

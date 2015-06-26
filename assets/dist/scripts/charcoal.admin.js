@@ -39,32 +39,21 @@ Charcoal.Admin.Property.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Property_Audio = function (opts)
 {
-    /*
-        // Common Widget properties
-        this.widget_type = 'charcoal/admin/widget/table';
+    // Common Property properties
+    this.property_type = 'charcoal/admin/property/audio';
 
-        // Widget_Table properties
-        this.obj_type = null;
-        this.widget_id = null;
-        this.properties = null;
-        this.properties_options = null;
-        this.filters = null;
-        this.orders = null;
-        this.pagination = null;
-        this.filters = null;
-*/
-
-    this.audioContext = new window.AudioContext() || new window.webkitAudioContext();
-    this.audioInput = null;
-    this.realAudioInput = null;
-    this.inputPoint = null;
-    this.audioRecorder = null;
-    this.rafID = null;
+    // Property_Audio properties
+    this.audioContext    = new window.AudioContext() || new window.webkitAudioContext();
+    this.audioInput      = null;
+    this.realAudioInput  = null;
+    this.inputPoint      = null;
+    this.audioRecorder   = null;
+    this.rafID           = null;
     this.analyserContext = null;
-    this.canvasWidth = 0;
-    this.canvasHeight = 0;
-    this.recIndex = 0;
-    window.analyserNode = null;
+    this.canvasWidth     = 0;
+    this.canvasHeight    = 0;
+    this.recIndex        = 0;
+    window.analyserNode  = null;
 
     this.init(opts);
 };
@@ -74,12 +63,11 @@ Charcoal.Admin.Property_Audio.prototype.constructor = Charcoal.Admin.Property_Au
 Charcoal.Admin.Property_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
 Charcoal.Admin.Property_Audio.prototype.admin = new Charcoal.Admin();
 
-//Charcoal.Admin.Property_Audio.prototype.init = function (opts)
-Charcoal.Admin.Property_Audio.prototype.init = function ()
+Charcoal.Admin.Property_Audio.prototype.init = function (opts)
 {
     // Set properties
-    //var data = $.extend(true, {}, this.default_data(), opts);
-    //this.set_data(data);
+    var data = $.extend(true, {}, this.default_data(), opts);
+    this.set_data(data);
 
     this.bind_events();
     this.initAudio();
@@ -88,24 +76,15 @@ Charcoal.Admin.Property_Audio.prototype.init = function ()
 Charcoal.Admin.Property_Audio.prototype.default_data = function ()
 {
     return {
-        obj_type:   '',
-        widget_id:  null,
-        properties: null,
-        properties_options: null,
-        filters:    null,
-        orders:     null,
-        pagination:{
-            page:           1,
-            num_per_page:   50
-        }
-
+        obj_type: '',
+        input_id: null
     };
 };
 
 Charcoal.Admin.Property_Audio.prototype.set_data = function (data)
 {
-    this.obj_type = data.obj_type || '';
-    this.widget_id = data.widget_id || null;
+    this.obj_type = data.obj_type;
+    this.input_id = data.input_id;
     return this;
 };
 
@@ -123,21 +102,28 @@ Charcoal.Admin.Property_Audio.prototype.bind_obj_events = function ()
     });
 };
 
-Charcoal.Admin.Property_Audio.prototype.saveAudio = function () {
-    this.audioRecorder.exportWAV(this.doneEncoding);
-    // could get mono instead by saying
-    // audioRecorder.exportMonoWAV( doneEncoding );
-};
-
 Charcoal.Admin.Property_Audio.prototype.gotBuffers = function (buffers) {
-    var canvas = window.document.getElementById('wavedisplay');
+    var canvas = window.document.getElementById('wavedisplay'),
+        that   = this;
 
-    this.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffers[0]);
+    that.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffers[0]);
 
     // the ONLY time gotBuffers is called is right after a new recording is completed -
     // so here's where we should set up the download.
-    this.audioRecorder.exportWAV(this.doneEncoding);
+    that.audioRecorder.exportWAV(function (blob) {
+        that.doneEncoding(blob);
+    });
 };
+
+Charcoal.Admin.Property_Audio.prototype.saveToInput = function (data) {
+    if (data){
+        var input = window.document.getElementById(this.input_id);
+        if (input){
+            input.value = data;
+        }
+    }
+};
+
 Charcoal.Admin.Property_Audio.prototype.drawBuffer = function (width, height, context, data) {
     var step = Math.ceil(data.length / width);
     var amp = height / 2;
@@ -160,8 +146,21 @@ Charcoal.Admin.Property_Audio.prototype.drawBuffer = function (width, height, co
 };
 
 Charcoal.Admin.Property_Audio.prototype.doneEncoding = function (blob) {
-    window.Recorder.setupDownload(blob, 'myRecording' + ((this.recIndex < 10)?'0':'') + this.recIndex + '.wav');
-    this.recIndex++;
+
+    var reader = new window.FileReader(),
+        data   = null,
+        that   = this;
+
+    reader.readAsDataURL(blob);
+
+    reader.onloadend = function () {
+        data = reader.result;
+
+        that.recIndex++;
+
+        that.saveToInput(data);
+    };
+
 };
 
 Charcoal.Admin.Property_Audio.prototype.toggleRecording = function (button) {
@@ -176,25 +175,13 @@ Charcoal.Admin.Property_Audio.prototype.toggleRecording = function (button) {
         });
     } else {
         // start recording
-        window.console.log(!that.audioRecorder);
         if (!that.audioRecorder) {
             return;
         }
-        window.console.log(that.audioRecorder);
         button.classList.add('-is-recording');
         that.audioRecorder.clear();
         that.audioRecorder.record();
     }
-};
-
-Charcoal.Admin.Property_Audio.prototype.convertToMono = function (input) {
-    var splitter = this.audioContext.createChannelSplitter(2);
-    var merger = this.audioContext.createChannelMerger(2);
-
-    input.connect(splitter);
-    splitter.connect(merger, 0, 0);
-    splitter.connect(merger, 0, 1);
-    return merger;
 };
 
 Charcoal.Admin.Property_Audio.prototype.cancelAnalyserUpdates = function () {
@@ -214,7 +201,7 @@ Charcoal.Admin.Property_Audio.prototype.updateAnalysers = function () {
         that.analyserContext = canvas.getContext('2d');
     }
 
-    // analyzer draw code here
+    // Drawing Analyzer
     {
         var SPACING = 3;
         var BAR_WIDTH = 1;
@@ -248,20 +235,6 @@ Charcoal.Admin.Property_Audio.prototype.updateAnalysers = function () {
     });
 };
 
-//Charcoal.Admin.Property_Audio.prototype.toggleMono = function ( input ){
-Charcoal.Admin.Property_Audio.prototype.toggleMono = function () {
-    if (this.audioInput !== this.realAudioInput) {
-        this.audioInput.disconnect();
-        this.realAudioInput.disconnect();
-        this.audioInput = this.realAudioInput;
-    } else {
-        this.realAudioInput.disconnect();
-        this.audioInput = this.convertToMono(this.realAudioInput);
-    }
-
-    this.audioInput.connect(this.inputPoint);
-};
-
 Charcoal.Admin.Property_Audio.prototype.gotStream = function (stream) {
     this.inputPoint = this.audioContext.createGain();
 
@@ -269,8 +242,6 @@ Charcoal.Admin.Property_Audio.prototype.gotStream = function (stream) {
     this.realAudioInput = this.audioContext.createMediaStreamSource(stream);
     this.audioInput = this.realAudioInput;
     this.audioInput.connect(this.inputPoint);
-
-    //    audioInput = convertToMono( input );
 
     window.analyserNode = this.audioContext.createAnalyser();
     window.analyserNode.fftSize = 2048;
@@ -417,13 +388,6 @@ Charcoal.Admin.Property_Audio.prototype.initAudio = function () {
         source.connect(this.node);
         // if the script node is not connected to an output the "onaudioprocess" event is not triggered in chrome.
         this.node.connect(this.context.destination);
-    };
-
-    Recorder.setupDownload = function (blob, filename) {
-        var url = (window.URL || window.webkitURL).createObjectURL(blob);
-        var link = window.document.getElementById('save');
-        link.href = url;
-        link.download = filename || 'output.wav';
     };
 
     window.Recorder = Recorder;

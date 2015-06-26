@@ -48,9 +48,11 @@ class Input
         if (isset($data['input_type']) && $data['input_type'] !== null) {
             $this->set_input_type($data['input_type']);
         }
+        if (isset($data['input_id']) && $data['input_id'] !== null) {
+            $this->set_input_id($data['input_id']);
+        }
         // input_options
         // input_name
-        // input_id
         // input_class
         // property_data
 
@@ -148,9 +150,18 @@ class Input
         return $this->_disabled;
     }
 
+    public function set_input_id($input_id)
+    {
+        $this->_input_id = $input_id;
+        return $this;
+    }
+
     public function input_id()
     {
-        return 'input_id';
+        if (!$this->_input_id) {
+            $this->_input_id = 'input_'.uniqid();
+        }
+        return $this->_input_id;
     }
 
     public function input_name()

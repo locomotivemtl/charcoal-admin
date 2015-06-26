@@ -1,5 +1,5 @@
 /**
-* charcoal/admin/widget/table
+* charcoal/admin/widget/form
 *
 * Require:
 * - jQuery

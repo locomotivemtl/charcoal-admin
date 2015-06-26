@@ -5,3 +5,5 @@ bower_components
 
 tests/tmp
 phpdoc
+
+.DS_STORE

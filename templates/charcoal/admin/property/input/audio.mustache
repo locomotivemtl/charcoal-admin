@@ -1,0 +1,38 @@
+{{!--
+Audio Property Input
+=======================
+
+`charcoal/admin/property/input/audio`
+
+--}}
+{{#add_css}}
+<style>
+canvas {
+    display: inline-block;
+    background: #202020;
+    width: 50%;
+    height: 200px;
+    box-shadow: 0px 0px 10px blue;
+}
+.btn-record.-is-recording {
+    background: red;
+    /*background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%);*/
+    /*background: -moz-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%);*/
+    /*background: radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%);*/
+}
+</style>
+{{/add_css}}
+
+<canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
+<button class="btn btn-record" type="button">Record</button>
+
+{{#add_js}}
+<script>
+var audio_property;
+$(document).ready(function() {
+    audio_property = new Charcoal.Admin.Property_Audio({
+        //widget_id: '{{widget_id}}'
+    });
+});
+</script>
+{{/add_js}}

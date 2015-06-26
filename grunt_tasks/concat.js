@@ -5,6 +5,8 @@ module.exports = {
     dist: {
         src: [
             'assets/src/scripts/charcoal/admin/charcoal.js',
+            'assets/src/scripts/charcoal/admin/property.js',
+            'assets/src/scripts/charcoal/admin/property/*.js',
             'assets/src/scripts/charcoal/admin/template.js',
             'assets/src/scripts/charcoal/admin/template/*.js',
             'assets/src/scripts/charcoal/admin/widget.js',

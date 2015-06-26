@@ -1,6 +1,6 @@
-Charcoal.Admin.Template_MenuHeader = function()
+Charcoal.Admin.Template_MenuHeader = function ()
 {
-    $('[data-toggle="class"]').click(function(event) {
+    $('[data-toggle="class"]').click(function (event) {
         event.preventDefault();
 
         var $this = $(this);

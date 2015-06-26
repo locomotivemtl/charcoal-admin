@@ -31,7 +31,6 @@ class Load extends Action
 
         try {
             $widget = WidgetFactory::instance()->get($widget_type);
-            //var_dump($widget_options);
             $widget->set_data($widget_options);
 
             $this->_widget_html = $widget->render_template($widget_type);

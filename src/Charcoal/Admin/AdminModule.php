@@ -91,6 +91,8 @@ class AdminModule extends AbstractModule
 
         $this->add_action_route('login');
         $this->add_action_route('object/delete');
+        $this->add_action_route('object/save');
+        $this->add_action_route('object/update');
         $this->add_action_route('widget/load');
         $this->add_action_route('widget/table/inline');
         $this->add_action_route('widget/table/inlinemulti');

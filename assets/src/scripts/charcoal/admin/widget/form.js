@@ -29,33 +29,16 @@ Charcoal.Admin.Widget_Form.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Widget_Form.prototype.init = function (opts)
 {
-    // Set properties
-    var data = $.extend(true, {}, this.default_data(), opts);
+    var data = $.extend(true, {}, opts);
     this.set_data(data);
 
     this.bind_events();
 };
 
-Charcoal.Admin.Widget_Form.prototype.default_data = function ()
-{
-    return {
-        obj_type:   '',
-        widget_id:  null,
-        properties: null,
-        properties_options: null,
-        filters:    null,
-        orders:     null,
-        pagination:{
-            page:           1,
-            num_per_page:   50
-        }
-
-    };
-};
-
 Charcoal.Admin.Widget_Form.prototype.set_data = function (data)
 {
-    window.console.debug(data);
+    this.obj_type = data.obj_type || null;
+    this.obj_id = data.obj_id || null;
     return this;
 };
 
@@ -72,11 +55,15 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
         } else {
             url = that.admin.admin_url() + 'action/json/object/save';
         }
-        var f = $(this).parents('form');
+        var form_data = $(this).parents('form').serializeArray();
+        var obj_data = {};
+        $(form_data).each(function (index, obj) {
+            obj_data[obj.name] = obj.value;
+        });
         var data = {
             obj_type: that.obj_type,
             obj_id: that.obj_id,
-            obj_data: f.serialize()
+            obj_data: obj_data
         };
         $.post(url, data, function (response) {
             window.console.debug(response);

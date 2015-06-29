@@ -150,12 +150,19 @@ class Input
         return $this->_disabled;
     }
 
+    /**
+    * @param string $input_id
+    * @return Input Chainable
+    */
     public function set_input_id($input_id)
     {
         $this->_input_id = $input_id;
         return $this;
     }
 
+    /**
+    * @return string
+    */
     public function input_id()
     {
         if (!$this->_input_id) {
@@ -164,11 +171,17 @@ class Input
         return $this->_input_id;
     }
 
+    /**
+    * @return string
+    */
     public function input_name()
     {
-        return 'input_name';
+        return $this->p()->ident();
     }
 
+    /**
+    * @return string
+    */
     public function input_val()
     {
         return $this->p()->val();

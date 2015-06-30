@@ -34,7 +34,8 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         // @todo Test data is set
 
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
         $obj->set_data(false);
     }
 }

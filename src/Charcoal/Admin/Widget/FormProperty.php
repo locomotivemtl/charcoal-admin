@@ -30,15 +30,10 @@ class FormProperty extends Widget
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return FormProperty Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         parent::set_data($data);
         if (isset($data['type']) && $data['type'] !== null) {
             $this->set_type($data['type']);

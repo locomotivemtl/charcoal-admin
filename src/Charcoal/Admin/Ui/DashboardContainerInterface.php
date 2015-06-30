@@ -50,9 +50,9 @@ interface DashboardContainerInterface
     public function dashboard();
 
     /**
-    * @param array $data
+    * @param array $data Optional
     * @return Dashboard
     */
-    public function create_dashboard($data = null);
+    public function create_dashboard(array $data = null);
 
 }

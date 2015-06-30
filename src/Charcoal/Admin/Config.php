@@ -29,15 +29,10 @@ class Config extends AbstractConfig
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return Config Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         if (isset($data['base_path'])) {
             $this->set_base_path($data['base_path']);
         }

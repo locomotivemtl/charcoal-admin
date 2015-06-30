@@ -19,15 +19,10 @@ class Textarea extends Input
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
-    * @return Text Chainable
+    * @return Textarea Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         if (isset($data['cols']) && $data['cols'] !== null) {
             $this->set_cols($data['cols']);
         }

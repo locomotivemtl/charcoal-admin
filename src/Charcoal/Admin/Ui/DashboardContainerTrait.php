@@ -110,8 +110,8 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @param array $data
+    * @param array $data Optional
     * @return Dashboard
     */
-    abstract public function create_dashboard($data = null);
+    abstract public function create_dashboard(array $data = null);
 }

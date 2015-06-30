@@ -37,23 +37,22 @@ class Login extends Action
     */
     private $_next_url;
 
-    public function __construct($data = null)
+    /**
+    * @param array $data Optional
+    */
+    public function __construct(array $data = null)
     {
-        if ($data !== null) {
+        if (is_array($data)) {
             $this->set_data($data);
         }
     }
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return Login Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
         parent::set_data($data);
         if (isset($data['next_url']) && $data['next_url'] !== null) {
             $this->set_next_url($data['next_url']);

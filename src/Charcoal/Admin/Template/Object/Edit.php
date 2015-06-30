@@ -24,14 +24,10 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return Edit Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
         parent::set_data($data);
         
         $this->set_dashboard_data($data);
@@ -40,11 +36,11 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
     }
 
     /**
-    * @param array $data
+    * @param array $data Optional
     * @throws Exception
     * @return Dashboard
     */
-    public function create_dashboard($data = null)
+    public function create_dashboard(array $data = null)
     {
         $obj = $this->obj();
         $metadata = $obj->metadata();
@@ -70,7 +66,7 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
         }
 
         $dashboard = new Dashboard();
-        if ($data !== null) {
+        if (is_array($data)) {
             $dashboard->set_data($data);
         }
         $dashboard->set_data($dashboard_config);

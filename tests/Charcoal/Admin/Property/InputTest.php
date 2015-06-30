@@ -30,7 +30,8 @@ class InputTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj->disabled());
         $this->assertTrue($obj->read_only());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
         $obj->set_data(false);
     }
 }

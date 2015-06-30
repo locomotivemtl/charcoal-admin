@@ -23,15 +23,10 @@ class ObjectForm extends Form implements ObjectContainerInterface
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return ObjectForm Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         $this->set_obj_data($data);
 
         if (isset($data['form_ident']) && $data['form_ident'] !== null) {

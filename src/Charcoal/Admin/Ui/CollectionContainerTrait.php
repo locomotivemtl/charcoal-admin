@@ -154,11 +154,12 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @param array $data
+    * @todo Integrate $data; merge with $collection_config
+    * @param array $data Optional
     * @throws Exception
     * @return CollectionLoader
     */
-    public function create_collection($data = null)
+    public function create_collection(array $data = null)
     {
         unset($data);
         $obj_type = $this->obj_type();

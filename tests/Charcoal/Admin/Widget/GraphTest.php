@@ -18,7 +18,8 @@ class GraphTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(222, $obj->height());
         $this->assertEquals(['#ff0000', '#0000ff'], $obj->colors());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
         $obj->set_data(false);
     }
 

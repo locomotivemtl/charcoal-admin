@@ -31,7 +31,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('baz', $obj->label());
         $this->assertNotTrue($obj->show_actions());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
         $obj->set_data(null);
     }
 

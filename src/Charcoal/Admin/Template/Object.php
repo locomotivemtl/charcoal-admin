@@ -14,14 +14,10 @@ class Object extends Template implements ObjectContainerInterface
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return Object Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Daata must be an array');
-        }
         parent::set_data($data);
 
         $this->set_obj_data($data);

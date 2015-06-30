@@ -33,9 +33,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $obj->action());
     }
 
-    public function testSetDatanvalidArgumentSetsException()
+    public function testSetDataInvalidArgumentThrowsException()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
+
         $obj = new Form();
         $obj->set_data(null);
     }

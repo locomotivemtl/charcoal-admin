@@ -32,7 +32,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         //$this->assertEquals($computed, $obj->structure());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
         $obj->set_data(false);
     }
 

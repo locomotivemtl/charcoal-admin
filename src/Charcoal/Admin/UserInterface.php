@@ -8,7 +8,7 @@ interface UserInterface
     * @param array $data
     * @return UserInterface Chainable
     */
-    public function set_data($data);
+    public function set_data(array $data);
 
     /**
     * Force a lowercase username

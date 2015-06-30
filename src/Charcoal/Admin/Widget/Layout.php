@@ -19,28 +19,25 @@ class Layout extends Widget
     */
     protected $_structure = [];
 
-
-    public function __construct($data = null)
+    /**
+    * @param array $data Optional
+    */
+    public function __construct(array $data = null)
     {
         // Initialize (empty) structure
         $this->_structure = [];
 
-        if ($data !== null) {
+        if (is_array($data)) {
             $this->set_data($data);
         }
     }
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
     * @return Layout Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         if (isset($data['structure']) && $data['structure'] !== null) {
             $this->set_structure($data['structure']);
         }

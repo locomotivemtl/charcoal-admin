@@ -24,7 +24,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->base_path());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        # $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\PHPUnit_Framework_Error');
         $obj->set_data(false);
     }
 

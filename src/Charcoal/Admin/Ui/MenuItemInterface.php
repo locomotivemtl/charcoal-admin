@@ -6,9 +6,9 @@ interface MenuItemInterface
 {
     /**
     * @param array $data
-    * @return MenuItem Chainable
+    * @return MenuItemInterface Chainable
     */
-    public function set_data($data);
+    public function set_data(array $data);
 
     /**
     * @param string $ident

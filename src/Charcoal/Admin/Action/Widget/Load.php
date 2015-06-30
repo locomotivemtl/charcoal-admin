@@ -31,7 +31,10 @@ class Load extends Action
 
         try {
             $widget = WidgetFactory::instance()->get($widget_type);
-            $widget->set_data($widget_options);
+
+            if (is_array($widget_options)) {
+                $widget->set_data($widget_options);
+            }
 
             $this->_widget_html = $widget->render_template($widget_type);
             $this->_widget_id = $widget->widget_id();

@@ -28,14 +28,10 @@ class Collection extends Template implements CollectionContainerInterface, Dashb
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
-    * @return Edit Chainable
+    * @return Collection Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
         parent::set_data($data);
         
         $this->set_collection_data($data);
@@ -45,11 +41,11 @@ class Collection extends Template implements CollectionContainerInterface, Dashb
     }
 
     /**
-    * @param array $data
+    * @param array $data Optional
     * @throws Exception
     * @return Dashboard
     */
-    public function create_dashboard($data = null)
+    public function create_dashboard(array $data = null)
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
@@ -75,7 +71,7 @@ class Collection extends Template implements CollectionContainerInterface, Dashb
         }
 
         $dashboard = new Dashboard();
-        if ($data !== null) {
+        if (is_array($data)) {
             $dashboard->set_data($data);
         }
         $dashboard->set_data($dashboard_config);

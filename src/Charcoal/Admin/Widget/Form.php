@@ -38,26 +38,24 @@ class Form extends Widget
     /*public $read_only;
     public $next_actions;*/
 
-    public function __construct($data = null)
+    /**
+    * @param array $data Optional
+    */
+    public function __construct(array $data = null)
     {
         //parent::__construct($data);
 
-        if ($data !== null) {
+        if (is_array($data)) {
             $this->set_data($data);
         }
     }
 
     /**
     * @var array $data
-    * @throws InvalidArgumentException
-    * @return Form (Chainable)
+    * @return Form Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         parent::set_data($data);
 
         if (isset($data['layout']) && $data['layout'] !== null) {

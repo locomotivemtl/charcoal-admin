@@ -19,11 +19,14 @@ class Table extends Widget implements CollectionContainerInterface
     protected $_orders;
     protected $_filters;
 
-    public function __construct($data = null)
+    /**
+    * @param array $data Optional
+    */
+    public function __construct(array $data = null)
     {
         //parent::__construct($data);
 
-        if ($data !== null) {
+        if (is_array($data)) {
             $this->set_data($data);
            
         }
@@ -31,15 +34,10 @@ class Table extends Widget implements CollectionContainerInterface
 
     /**
     * @var array $data
-    * @throws InvalidArgumentException
-    * @return Form (Chainable)
+    * @return Table Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         parent::set_data($data);
         $this->set_collection_data($data);
 

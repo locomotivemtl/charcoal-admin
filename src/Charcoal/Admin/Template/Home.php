@@ -18,14 +18,10 @@ class Home extends Template implements DashboardContainerInterface
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
-    * @return Edit Chainable
+    * @return Home Chainable
     */
-    public function set_data($data)
+    public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
         parent::set_data($data);
 
         $this->set_dashboard_data($data);
@@ -34,9 +30,10 @@ class Home extends Template implements DashboardContainerInterface
     }
 
     /**
+    * @param array $data Optional
     * @return Dashboard
     */
-    public function create_dashboard($data = null)
+    public function create_dashboard(array $data = null)
     {
         $dashboard_ident = $this->dashboard_ident();
         $dashboard_config = $this->dashboard_config();
@@ -44,7 +41,7 @@ class Home extends Template implements DashboardContainerInterface
         $metadata = $this->metadata();
 
         $dashboard = new Dashboard();
-        if ($data !== null) {
+        if (is_array($data)) {
             $dashboard->set_data($data);
         } else if (isset($metadata['dashboard'])) {
             $dashboard->set_data($metadata['dashboard']);

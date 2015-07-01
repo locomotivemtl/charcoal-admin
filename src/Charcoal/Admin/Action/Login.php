@@ -100,8 +100,6 @@ class Login extends Action
         try {
             $is_authenticated = $u->authenticate($username, $password);
         } catch (Exception $e) {
-            var_dump($e);
-            die();
             $is_authenticated = false;
         }
 

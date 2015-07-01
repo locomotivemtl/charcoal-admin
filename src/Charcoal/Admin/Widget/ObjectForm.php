@@ -44,17 +44,15 @@ class ObjectForm extends Form implements ObjectContainerInterface
     public function action()
     {
         $action = parent::action();
-        if(!$action) {
+        if (!$action) {
             $obj = $this->obj();
             $obj_id = $obj->id();
-            if($obj_id) {
+            if ($obj_id) {
                 return 'action/object/update';
-            }
-            else {
+            } else {
                 return 'action/object/save';
             }
-        }
-        else {
+        } else {
             return $action;
         }
     }

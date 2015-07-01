@@ -45,9 +45,5 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Baz', $obj->title());
         $this->assertNotTrue($obj->show_header_menu());
         $this->assertNotTrue($obj->show_footer_menu());
-
-        # $this->setExpectedException('\InvalidArgumentException');
-        $this->setExpectedException('\PHPUnit_Framework_Error');
-        $obj->set_data(null);
     }
 }

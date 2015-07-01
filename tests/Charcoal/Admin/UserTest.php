@@ -23,10 +23,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->username());
-
-        # $this->setExpectedException('\InvalidArgumentException');
-        $this->setExpectedException('\PHPUnit_Framework_Error');
-        $obj->set_data(null);
     }
 
     public function testSetUsername()

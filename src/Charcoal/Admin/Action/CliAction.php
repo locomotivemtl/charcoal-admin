@@ -21,6 +21,16 @@ abstract class CliAction extends CliActionBase
         }
     }
 
+    /**
+    * Determine if user authentication is required.
+    *
+    * Authentication is required by default. If unnecessary,
+    * replace this method in the inherited template class.
+    *
+    * @see \Charcoal\Admin\Template::auth_required()
+    *
+    * @return boolean
+    */
     public function auth_required()
     {
         return true;

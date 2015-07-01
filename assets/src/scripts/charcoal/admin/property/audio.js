@@ -13,16 +13,18 @@ Charcoal.Admin.Property_Audio = function (opts)
     this.property_type = 'charcoal/admin/property/audio';
 
     // Property_Audio properties
-    this.audio_context     = null;
-    this.audio_recorder    = null;
-    this.animation_frame   = null;
-    this.analyser_context  = null;
-    this.canvas_width      = 0;
-    this.canvas_height     = 0;
-    this.recording_index   = 0;
-    this.current_recording = null;
-    this.audio_player      = null;
-    this.$playback_button  = $('.btn-play');
+    this.audio_context       = null;
+    this.audio_recorder      = null;
+    this.animation_frame     = null;
+    this.analyser_context    = null;
+    this.canvas_width        = 0;
+    this.canvas_height       = 0;
+    this.recording_index     = 0;
+    this.current_recording   = null;
+    this.audio_player        = null;
+    this.$record_button      = $('.btn-record');
+    this.$stop_record_button = $('.btn-stop-record');
+    this.$playback_button    = $('.btn-play');
 
     this.init(opts);
 };
@@ -130,12 +132,15 @@ Charcoal.Admin.Property_Audio.prototype.bind_events = function ()
 {
     var that = this;
 
-    $('.btn-record').on('click',function (e) {
-        that.toggle_recording(e.target);
+    that.$record_button.on('click',function () {
+        that.manage_recording();
+    });
+
+    that.$stop_record_button.on('click',function () {
+        that.manage_recording('stop');
     });
 
     that.$playback_button.on('click',function () {
-
         // Test for existing recording first
         if (that.recording_index !== 0 && that.audio_player !== null){
             that.toggle_playback();
@@ -153,36 +158,63 @@ Charcoal.Admin.Property_Audio.prototype.got_stream = function (stream) {
 
     var that = this;
 
-    this.audio_context = new window.AudioContext();
-    this.audio_player  = new window.Audio_Player({
+    that.audio_context = new window.AudioContext();
+    that.audio_player  = new window.Audio_Player({
         on_ended: function () {
-            that.toggle_playback();
+            that.toggle_playback_button(false);
         }
     });
 
-    var input_point = this.audio_context.createGain(),
-        audio_node = this.audio_context.createMediaStreamSource(stream),
+    var input_point = that.audio_context.createGain(),
+        audio_node = that.audio_context.createMediaStreamSource(stream),
         zero_gain  = null;
 
     audio_node.connect(input_point);
-
-    window.analyserNode = this.audio_context.createAnalyser();
-
+    window.analyserNode = that.audio_context.createAnalyser();
     window.analyserNode.fftSize = 2048;
-
     input_point.connect(window.analyserNode);
-
-    this.audio_recorder = new window.Recorder(input_point);
-
-    zero_gain = this.audio_context.createGain();
-
+    that.audio_recorder = new window.Recorder(input_point);
+    zero_gain = that.audio_context.createGain();
     zero_gain.gain.value = 0.0;
-
     input_point.connect(zero_gain);
+    zero_gain.connect(that.audio_context.destination);
+    that.update_analysers();
+};
 
-    zero_gain.connect(this.audio_context.destination);
+/**
+ * Manage recording of audio and button states
+ * @method toggle_recording
+ * @param Node button
+ */
+Charcoal.Admin.Property_Audio.prototype.manage_recording = function (state) {
 
-    this.update_analysers();
+    var that = this;
+
+    if (that.audio_recorder.is_recording()) {
+
+        // If we're recording, we can either pause or stop the recording
+        if (state === 'stop'){
+            that.audio_recorder.stop();
+            that.audio_recorder.get_buffers(function (buffers) {
+                that.got_buffers(buffers);
+                that.audio_recorder.clear();
+            });
+            that.$stop_record_button.addClass('-is-hidden');
+        }else {
+            that.audio_recorder.stop();
+        }
+
+        that.toggle_recording_button(false);
+
+    // Start recording
+    } else {
+        if (!that.audio_recorder) {
+            return;
+        }
+        that.audio_recorder.record();
+        that.toggle_recording_button(true);
+        that.$stop_record_button.removeClass('-is-hidden');
+    }
 };
 
 /**
@@ -190,32 +222,20 @@ Charcoal.Admin.Property_Audio.prototype.got_stream = function (stream) {
  * @method toggle_recording
  * @param Node button
  */
-Charcoal.Admin.Property_Audio.prototype.toggle_recording = function (button) {
+Charcoal.Admin.Property_Audio.prototype.toggle_recording_button = function (set_as_recording) {
 
-    var that = this;
-
-    // Stop recording
-    if (button.classList.contains('-is-recording')) {
-        that.audio_recorder.stop();
-        button.classList.remove('-is-recording');
-        that.audio_recorder.get_buffers(function (buffers) {
-            that.got_buffers(buffers);
-        });
-    // Start recording
+    if (set_as_recording) {
+        this.$record_button.addClass('-is-recording');
+        this.$record_button.text(this.$record_button.attr('data-label-pause'));
     } else {
-        if (!that.audio_recorder) {
-            return;
-        }
-        button.classList.add('-is-recording');
-        that.audio_recorder.clear();
-        that.audio_recorder.record();
+        this.$record_button.removeClass('-is-recording');
+        this.$record_button.text(this.$record_button.attr('data-label-record'));
     }
 };
 
 /**
  * Toggle playback of recorded audio
  * @method toggle_playback
- * @param Node button
  */
 Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
 
@@ -223,8 +243,7 @@ Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
     if (this.audio_player.is_playing()) {
 
         this.audio_player.pause();
-        this.$playback_button.removeClass('-is-playing');
-        this.$playback_button.text(this.$playback_button.attr('data-label-play'));
+        this.toggle_playback_button(false);
 
     // Start playback
     } else {
@@ -232,11 +251,26 @@ Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
         if (!this.audio_player) {
             return;
         }
-
         this.audio_player.play();
+        this.toggle_playback_button(true);
+
+    }
+
+};
+
+/**
+ * Toggle playback button
+ * @method toggle_playback_button
+ * @param bool set_as_playing
+ */
+Charcoal.Admin.Property_Audio.prototype.toggle_playback_button = function (set_as_playing) {
+
+    if (set_as_playing) {
         this.$playback_button.addClass('-is-playing');
         this.$playback_button.text(this.$playback_button.attr('data-label-pause'));
-
+    } else {
+        this.$playback_button.removeClass('-is-playing');
+        this.$playback_button.text(this.$playback_button.attr('data-label-play'));
     }
 
 };
@@ -328,6 +362,8 @@ Charcoal.Admin.Property_Audio.prototype.manage_audio_data = function (data) {
         // Save the data for playback
         this.audio_player.src(data);
         this.audio_player.load();
+
+        this.$playback_button.removeClass('-is-hidden');
     }
 };
 
@@ -471,6 +507,10 @@ Charcoal.Admin.Property_Audio.prototype.update_analysers = function () {
             });
         };
 
+        this.is_recording = function () {
+            return recording;
+        };
+
         worker.onmessage = function (e) {
             var blob = e.data;
             current_callback(blob);
@@ -502,7 +542,7 @@ Charcoal.Admin.Property_Audio.prototype.update_analysers = function () {
             on_timeupdate: cfg.on_timeupdate || function () {}
         };
 
-        this.element    = new window.Audio();
+        this.element = new window.Audio();
 
         this.play = function () {
             this.element.play();

@@ -18,6 +18,7 @@ class UserConfig extends AbstractConfig
     private $lost_password_email;
 
     /**
+    * @todo Integrate $data merge
     * @param array $data
     * @return UserConfig Chainable
     */

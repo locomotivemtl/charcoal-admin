@@ -306,17 +306,23 @@ class Template extends AbstractTemplate
     }
 
     /**
+    * Determine if user authentication is required.
+    *
+    * Authentication is required by default. If unnecessary,
+    * replace this method in the inherited template class.
+    *
+    * For example, the "Login" / "Reset Password" templates
+    * should return `FALSE`.
+    *
     * @return boolean
     */
     protected function auth_required()
     {
-        // Authentication is required by default. Disable in children template class if necessary.
-        // (for example, the "login" / "reset password" templates should return false...)
         return true;
     }
 
     /**
-    *
+    * Determine if the current user is authenticated. If not it redirects them to the login page.
     */
     protected function auth()
     {

@@ -1,11 +1,11 @@
 {
+    "browser":true,
     "curly":true,
     "eqeqeq": true,
     "eqnull": true,
     "undef":true,
     "unused": true,
     "globals":{
-        "window":true,
         "Charcoal":true,
         "$":true,
         "jQuery":true,

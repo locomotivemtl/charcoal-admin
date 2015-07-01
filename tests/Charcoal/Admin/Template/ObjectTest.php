@@ -23,10 +23,6 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->obj_type());
-
-        # $this->setExpectedException('\InvalidArgumentException');
-        $this->setExpectedException('\PHPUnit_Framework_Error');
-        $obj->set_data(null);
     }
 
     public function testSetObjType()

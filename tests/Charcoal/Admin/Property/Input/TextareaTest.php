@@ -25,10 +25,6 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->cols());
         $this->assertEquals(84, $obj->rows());
-
-        # $this->setExpectedException('\InvalidArgumentException');
-        $this->setExpectedException('\PHPUnit_Framework_Error');
-        $obj->set_data(false);
     }
 
     public function testSetCols()

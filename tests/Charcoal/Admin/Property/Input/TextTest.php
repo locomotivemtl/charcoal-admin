@@ -31,10 +31,6 @@ class TextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(100, $obj->max_length());
         $this->assertEquals('foo', $obj->pattern());
         $this->assertEquals('bar', $obj->placeholder());
-
-        # $this->setExpectedException('\InvalidArgumentException');
-        $this->setExpectedException('\PHPUnit_Framework_Error');
-        $obj->set_data(false);
     }
 
     public function testSetSize()

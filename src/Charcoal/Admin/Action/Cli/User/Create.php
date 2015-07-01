@@ -36,15 +36,14 @@ class Create extends CliAction
             ];
 
             $vals = [];
-            foreach($properties as $prop) {
-                if(!in_array($prop->ident(), $shown_props)) {
+            foreach ($properties as $prop) {
+                if (!in_array($prop->ident(), $shown_props)) {
                     continue;
                 }
                 $climate->dump($prop->type());
-                if($prop->type() == 'password') {
+                if ($prop->type() == 'password') {
                      $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
-                }
-                else {
+                } else {
                     $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
                 }
                 $v = $input->prompt();
@@ -62,8 +61,7 @@ class Create extends CliAction
             $ret = $user->save();
 
             $climate->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $climate->error($e->getMessage());
             die();
         }
@@ -76,10 +74,10 @@ class Create extends CliAction
     {
         $proto = new User();
         $source = $proto->source();
-        if($source->table_exists() !== true) {
+        if ($source->table_exists() !== true) {
             return false;
         }
-        if($source->table_is_empty() === true) {
+        if ($source->table_is_empty() === true) {
             return false;
         }
         return true;

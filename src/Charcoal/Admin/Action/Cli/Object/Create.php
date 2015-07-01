@@ -2,13 +2,15 @@
 
 namespace Charcoal\Admin\Action\Cli\Object;
 
+use \Exception as Exception;
+
 use \Charcoal\Admin\Action\CliAction as CliAction;
 
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
 class Create extends CliAction
 {
-    
+
     public function default_arguments()
     {
         $arguments = [
@@ -32,7 +34,7 @@ class Create extends CliAction
     {
         $climate = $this->climate();
 
-        $climate->underline()->out('Create object');
+        $climate->underline()->out('Create a new object');
 
         if ($climate->arguments->defined('help')) {
             $climate->usage();
@@ -57,9 +59,9 @@ class Create extends CliAction
             }
 
             $obj->set_flat_data($vals);
-            $obj->save();
+            $ret = $obj->save();
 
-            $climate->green()->out("\n".'Success!');
+            $climate->green()->out("\n".sprintf('Success! Object "%s" created.', $ret));
 
         } catch (\Exception $e) {
             $climate->error($e->getMessage());

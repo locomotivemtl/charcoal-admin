@@ -153,7 +153,10 @@ interface UserInterface
     public function key();
 
     /**
-    * @return UserInterface
+    * Get the currently authenticated user.
+    *
+    * @param bool $reinit Whether to reload user data from source
+    * @return UserInterface|null
     */
     static public function get_authenticated($reinit = true);
 

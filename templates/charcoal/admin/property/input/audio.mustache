@@ -5,7 +5,7 @@ Audio Property Input
 `charcoal/admin/property/input/audio`
 
 --}}
-{{#add_css}}
+{{!#add_css}}
 <style>
 canvas {
     display: inline-block;
@@ -16,15 +16,16 @@ canvas {
 }
 .btn-record.-is-recording {
     background: red;
-    /*background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%);*/
-    /*background: -moz-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%);*/
-    /*background: radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%);*/
+}
+.btn-play.-is-playing {
+    background: green;
 }
 </style>
-{{/add_css}}
+{{!/add_css}}
 
 <canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
 <button class="btn btn-record" type="button">Record</button>
+<button class="btn btn-play" type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
 <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
 
 {{#add_js}}

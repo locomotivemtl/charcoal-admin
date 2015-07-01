@@ -14,8 +14,9 @@ class Save extends Action
 {
     public function run()
     {
+
         $obj_type = Charcoal::app()->request->post('obj_type');
-        $obj_data = Charcoal::app()->request->post('obj_data');
+        $obj_data = Charcoal::app()->request->post();
         if (!$obj_type) {
             $this->set_success(false);
             $this->output(404);

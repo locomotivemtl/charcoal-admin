@@ -5,15 +5,18 @@
 		"username":{
 			"type":"string",
 			"unique":true,
+            "required":true,
 			"allow_null":false
 		},
 		"email":{
 			"type":"email",
+            "required":true,
 			"allow_empty":false,
 			"allow_null":false
 		},
 		"password":{
 			"type":"password",
+            "required":true,
 			"allow_null":false,
 			"allow_empty":false
 		},
@@ -46,7 +49,7 @@
 	},
 
 	"key":"username",
-	
+
 	"sources":{
 		"default":{
 			"table":"charcoal_admin_users"
@@ -66,7 +69,7 @@
 			}
 		},
 		"default_list":"default",
-		
+
 		"forms":{
 
 		},

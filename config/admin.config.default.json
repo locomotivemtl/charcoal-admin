@@ -1,3 +1,31 @@
 {
-	"base_path":"admin"
+	"base_path":"admin",
+
+    "user":{
+        "subscription_email":{
+            "active":true,
+            "template":"charcoal/admin/email/user.subscription",
+            "campaign":"admin.user.subscription",
+            "from":{
+                "name":"Charcoal",
+                "email":"registration@charcoal.locomotive.ca"
+            },
+            "subject":"Your subscription to Charcoal",
+            "log":true,
+            "track":true
+        },
+        "lost_password_email":{
+            "active":true,
+            "template":"charcoal/admin/email/user.lost_password",
+            "campaign":"admin.user.lost_password",
+            "from":{
+                "name":"Charcoal",
+                "email":"registration@charcoal.locomotive.ca"
+            },
+            "subject":"Reset your Charcoal password",
+            "log":true,
+            "track":true
+
+        }
+    }
 }

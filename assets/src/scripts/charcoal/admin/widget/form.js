@@ -55,25 +55,29 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
         } else {
             url = that.admin.admin_url() + 'action/json/object/save';
         }
-        var form_data = $(this).parents('form').serializeArray();
-        var obj_data = {};
-        $(form_data).each(function (index, obj) {
-            obj_data[obj.name] = obj.value;
-        });
-        var data = {
-            obj_type: that.obj_type,
-            obj_id: that.obj_id,
-            obj_data: obj_data
-        };
-        $.post(url, data, function (response) {
-            window.console.debug(response);
-            if (response.success) {
-                window.alert('Save successful!');
-            } else {
-                window.alert('Error. Could not save object.');
+        var $form = $(this).parents('form');
+
+        var form_data = new FormData($form[0]);
+        form_data.append('obj_type', that.obj_type);
+        form_data.append('obj_id', that.obj_id);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: form_data,
+            success: function (response) {
+                window.console.debug(response);
+                if (response.success) {
+                    window.alert('Save successful!');
+                } else {
+                    window.alert('Error. Could not save object.');
+                }
+            },
+            error: function () {
+                window.alert('Error attempting to save form.');
             }
-        }).fail(function () {
-            window.alert('Error attempting to save form.');
         });
     });
 };

@@ -24,11 +24,11 @@ class InputFactory extends AbstractFactory
         if (class_exists($class_name)) {
             $obj = new $class_name();
             if (!($obj instanceof Input)) {
-                throw new Exception('Invalid input: '.$type.' (not a property input)');
+                throw new Exception('Invalid property input: '.$type.' (not a property input)');
             }
             return $obj;
         } else {
-            throw new Exception('Invalid model: '.$type);
+            throw new Exception('Invalid property input: '.$type);
         }
     }
 

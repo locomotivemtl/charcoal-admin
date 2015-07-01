@@ -324,8 +324,11 @@ class Template extends AbstractTemplate
         $u = User::get_authenticated();
         if ($u === null) {
             $path = Charcoal::config()->admin_path().'/login';
-            Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
-            //die();
+            try {
+                Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
+            } catch (\Exception $e) {
+                exit;
+            }
         }
     }
 

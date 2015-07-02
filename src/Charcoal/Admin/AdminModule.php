@@ -25,7 +25,7 @@ class AdminModule extends AbstractModule
     * @param array $data
     * @return Module Chainable
     */
-    public function init($data = null)
+    public function init(array $data = null)
     {
         // A session is necessary for the admin module
         if (session_id() === '') {

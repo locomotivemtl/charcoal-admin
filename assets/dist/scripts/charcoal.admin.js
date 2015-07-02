@@ -50,9 +50,10 @@ Charcoal.Admin.Property_Audio = function (opts)
     this.recording_index     = 0;
     this.current_recording   = null;
     this.audio_player        = null;
-    this.$record_button      = $('.btn-record');
-    this.$stop_record_button = $('.btn-stop-record');
-    this.$playback_button    = $('.btn-play');
+    this.$record_button      = $('.btn-record:first');
+    this.$stop_record_button = $('.btn-stop-record:first');
+    this.$playback_button    = $('.btn-play:first');
+    this.$reset_button       = $('.btn-reset:first');
 
     this.init(opts);
 };
@@ -175,6 +176,10 @@ Charcoal.Admin.Property_Audio.prototype.bind_events = function ()
         }
     });
 
+    that.$reset_button.on('click',function () {
+        that.reset_audio();
+    });
+
 };
 
 /**
@@ -189,7 +194,7 @@ Charcoal.Admin.Property_Audio.prototype.got_stream = function (stream) {
     that.audio_context = new window.AudioContext();
     that.audio_player  = new window.Audio_Player({
         on_ended: function () {
-            that.toggle_playback_button(false);
+            that.manage_button_states('pause_playback');
         }
     });
 
@@ -209,6 +214,160 @@ Charcoal.Admin.Property_Audio.prototype.got_stream = function (stream) {
     that.update_analysers();
 };
 
+Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action) {
+
+    switch (action){
+
+        case 'start_recording' :
+            /**
+             * General actions
+             * - Clear previous recordings if any
+             *
+             * Record button
+             * - Label = Pause
+             * - Color = Red
+             */
+            this.$record_button.text(this.$record_button.attr('data-label-pause'));
+            this.$record_button.addClass('-is-recording');
+            /**
+             * Stop record button
+             * - Enable (will save and complete recording)
+             */
+            this.$stop_record_button.prop('disabled',false);
+            /**
+             * Playback button
+             * - Disable (no playing while recording)
+             */
+            this.$playback_button.prop('disabled',true);
+            /**
+             * Reset button
+             * - Enable
+             */
+            this.$reset_button.prop('disabled',false);
+
+        break;
+
+        case 'pause_recording' :
+            /**
+             * Record button
+             * - Label = Record
+             * - Color = Default
+             */
+            this.$record_button.text(this.$record_button.attr('data-label-record'));
+            this.$record_button.removeClass('-is-recording');
+            /**
+             * Stop record button
+             * - Enable (will save and complete recording)
+             */
+            this.$stop_record_button.prop('disabled',false);
+            /**
+             * Playback button
+             * - Disable (no playing while recording)
+             *   - Unless you want to hear what you had recorded previously - do we want this?
+             */
+            this.$playback_button.prop('disabled',true);
+            /**
+             * Reset button
+             * - Enable
+             */
+            this.$reset_button.prop('disabled',false);
+
+        break;
+
+        case 'stop_recording' :
+            /**
+             * Record button
+             * - Label = Record
+             * - Color = Default
+             */
+            this.$record_button.text(this.$record_button.attr('data-label-record'));
+            this.$record_button.removeClass('-is-recording');
+            /**
+             * Stop record button
+             * - Disable
+             */
+            this.$stop_record_button.prop('disabled',true);
+            /**
+             * Playback button
+             * - Enable
+             */
+            this.$playback_button.prop('disabled',false);
+            /**
+             * Reset button
+             * - Enable
+             */
+            this.$reset_button.prop('disabled',false);
+
+        break;
+
+        case 'start_playback' :
+            /**
+             * Record button
+             *
+             * Stop record button
+             *
+             * Playback button
+             * - Label = Pause
+             * - Color = Green
+             */
+            this.$playback_button.text(this.$playback_button.attr('data-label-pause'));
+            this.$playback_button.addClass('-is-playing');
+            /**
+             * Reset button
+             */
+
+        break;
+
+        case 'pause_playback' :
+            /**
+             * Record button
+             *
+             * Stop record button
+             *
+             * Playback button
+             * - Label = Play
+             * - Color = Default
+             */
+            this.$playback_button.text(this.$playback_button.attr('data-label-play'));
+            this.$playback_button.removeClass('-is-playing');
+            /**
+             * Reset button
+             */
+
+        break;
+
+        case 'reset' :
+            /**
+             * Record button
+             * - Label = Record
+             * - Color = Default
+             */
+            this.$record_button.text(this.$record_button.attr('data-label-record'));
+            this.$record_button.removeClass('-is-recording');
+            /**
+             * Stop record button
+             * - Disable
+             */
+            this.$stop_record_button.prop('disabled',true);
+            /**
+             * Playback button
+             * - Disable
+             * - Label = Play
+             * - Color = Default
+             */
+            this.$playback_button.prop('disabled',true);
+            this.$playback_button.text(this.$playback_button.attr('data-label-play'));
+            this.$playback_button.removeClass('-is-playing');
+            /**
+             * Reset button
+             * - Disable
+             */
+            this.$reset_button.prop('disabled',true);
+
+        break;
+    }
+};
+
 /**
  * Manage recording of audio and button states
  * @method toggle_recording
@@ -218,46 +377,25 @@ Charcoal.Admin.Property_Audio.prototype.manage_recording = function (state) {
 
     var that = this;
 
+    if (state === 'stop'){
+        that.audio_recorder.stop();
+        that.audio_recorder.get_buffers(function (buffers) {
+            that.got_buffers(buffers);
+            that.audio_recorder.clear();
+        });
+        that.manage_button_states('stop_recording');
+        return;
+    }
     if (that.audio_recorder.is_recording()) {
-
-        // If we're recording, we can either pause or stop the recording
-        if (state === 'stop'){
-            that.audio_recorder.stop();
-            that.audio_recorder.get_buffers(function (buffers) {
-                that.got_buffers(buffers);
-                that.audio_recorder.clear();
-            });
-            that.$stop_record_button.addClass('-is-hidden');
-        }else {
-            that.audio_recorder.stop();
-        }
-
-        that.toggle_recording_button(false);
-
+        that.audio_recorder.stop();
+        that.manage_button_states('pause_recording');
     // Start recording
     } else {
         if (!that.audio_recorder) {
             return;
         }
         that.audio_recorder.record();
-        that.toggle_recording_button(true);
-        that.$stop_record_button.removeClass('-is-hidden');
-    }
-};
-
-/**
- * Toggle recording of audio and manage button state
- * @method toggle_recording
- * @param Node button
- */
-Charcoal.Admin.Property_Audio.prototype.toggle_recording_button = function (set_as_recording) {
-
-    if (set_as_recording) {
-        this.$record_button.addClass('-is-recording');
-        this.$record_button.text(this.$record_button.attr('data-label-pause'));
-    } else {
-        this.$record_button.removeClass('-is-recording');
-        this.$record_button.text(this.$record_button.attr('data-label-record'));
+        that.manage_button_states('start_recording');
     }
 };
 
@@ -271,7 +409,7 @@ Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
     if (this.audio_player.is_playing()) {
 
         this.audio_player.pause();
-        this.toggle_playback_button(false);
+        this.manage_button_states('pause_playback');
 
     // Start playback
     } else {
@@ -280,26 +418,38 @@ Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
             return;
         }
         this.audio_player.play();
-        this.toggle_playback_button(true);
+        this.manage_button_states('start_playback');
 
     }
 
 };
 
 /**
- * Toggle playback button
- * @method toggle_playback_button
- * @param bool set_as_playing
+ * Reset the recorder and player
+ * @method toggle_playback
  */
-Charcoal.Admin.Property_Audio.prototype.toggle_playback_button = function (set_as_playing) {
+Charcoal.Admin.Property_Audio.prototype.reset_audio = function () {
 
-    if (set_as_playing) {
-        this.$playback_button.addClass('-is-playing');
-        this.$playback_button.text(this.$playback_button.attr('data-label-pause'));
-    } else {
-        this.$playback_button.removeClass('-is-playing');
-        this.$playback_button.text(this.$playback_button.attr('data-label-play'));
-    }
+    // Visuals
+    var analyser = window.document.getElementById('analyser'),
+        analyser_context = analyser.getContext('2d');
+
+    analyser_context.clearRect(0, 0, analyser.canvas_width, analyser.canvas_height);
+
+    var wavedisplay = window.document.getElementById('wavedisplay'),
+        wavedisplay_context = wavedisplay.getContext('2d');
+
+    wavedisplay_context.clearRect(0, 0, wavedisplay.canvas_width, wavedisplay.canvas_height);
+
+    // Medias
+    this.audio_player.load();
+    this.audio_player.src('');
+
+    this.audio_recorder.stop();
+    this.audio_recorder.clear();
+
+    // Buttons
+    this.manage_button_states('reset');
 
 };
 

@@ -14,9 +14,6 @@ canvas {
     height: 200px;
     box-shadow: 0px 0px 10px blue;
 }
-.btn.-is-hidden {
-    display: none;
-}
 .btn-record.-is-recording {
     background: red;
 }
@@ -30,11 +27,13 @@ canvas {
 
 <button class="btn btn-record" type="button" data-label-record="Record" data-label-pause="Pause">Record</button>
 
-<button class="btn btn-stop-record -is-hidden" type="button">Stop recording</button>
+<button class="btn btn-stop-record" disabled type="button">Stop recording</button>
 
-<button class="btn btn-play -is-hidden" type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
+<button class="btn btn-play" disabled type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
 
-<input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
+<button class="btn btn-reset" disabled type="button">Reset</button>
+
+ <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
 
 {{#add_js}}
 <script>

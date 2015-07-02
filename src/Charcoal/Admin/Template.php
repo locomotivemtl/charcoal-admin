@@ -334,8 +334,10 @@ class Template extends AbstractTemplate
                 // @todo Investigate why app()->redirect throws an exception
                 Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
             } catch (\Exception $e) {
-                header('Location:'.Charcoal::app()->urlFor($path));
-                exit;
+                if(!headers_sent()) {
+                    header('Location:'.Charcoal::app()->urlFor($path));
+                    exit;
+                }
             }
         }
     }

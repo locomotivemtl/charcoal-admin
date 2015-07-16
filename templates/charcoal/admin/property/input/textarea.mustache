@@ -2,14 +2,14 @@
 Textarea Property Input
 =======================
 -- }}
-<textarea 
-	id="{{input_id}}" 
-	name="{{input_name}}" 
-	class="form-control {{input_class}}" 
-	cols="{{cols}}" 
-	rows="{{cols}}" 
-	{{#read_only}}read_only{{/read_only}} 
-	{{#required}}required{{/required}} 
+<textarea
+	id="{{input_id}}"
+	name="{{input_name}}"
+	class="form-control {{input_class}}"
+	cols="{{cols}}"
+	rows="{{rows}}"
+	{{#read_only}}read_only{{/read_only}}
+	{{#required}}required{{/required}}
 	{{#disabled}}disabled{{/disabled}}
 >
     {{&input_val}}

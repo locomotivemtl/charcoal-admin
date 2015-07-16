@@ -1,0 +1,159 @@
+/**
+* charcoal/admin/property/input/tinymce
+*
+* Require:
+* - jQuery
+* - tinyMCE
+*/
+Charcoal.Admin.Property_Input_Tinymce = function (opts)
+{
+    this.input_type = 'charcoal/admin/property/input/tinymce';
+
+    // Input properties
+    this.input_id = null;
+    this.editor_options = null;
+
+    this.init(opts);
+};
+
+Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
+{
+    this.input_id = opts.input_id || null;
+    this.editor_options = opts.editor_options || {};
+
+    var default_opts = {
+        //language: 'fr_FR',
+
+        // Plugins
+        plugins: [
+            'advlist',
+            'anchor',
+            'autolink',
+            'autoresize',
+            //'autosave',
+            //'bbcode',
+            'charmap',
+            'code',
+            'colorpicker',
+            'contextmenu',
+            //'directionality',
+            //'emoticons',
+            //'fullpage',
+            'fullscreen',
+            'hr',
+            'image',
+            //'imagetools',
+            //'insertdatetime',
+            //'layer',
+            //'legacyoutput',
+            'link',
+            'lists',
+            //'importcss',
+            'media',
+            'nonbreaking',
+            'noneditable',
+            //'pagebreak',
+            'paste',
+            //'preview',
+            'print',
+            //'save',
+            'searchreplace',
+            //'spellchecker',
+            'tabfocus',
+            'table',
+            //'template',
+            //'textcolor',
+            //'textpattern',
+            'visualblocks',
+            'visualchars',
+            'wordcount'
+        ],
+
+        // Toolbar
+        toolbar: 'undo redo | ' +
+        'styleselect | ' +
+        'bold italic | ' +
+        'forecolor backcolor | ' +
+        'alignleft aligncenter alignright alignjustify | ' +
+        'bullist numlist outdent indent | ' +
+        'link image anchor',
+
+        // General
+        browser_spellcheck: true,
+        end_container_on_empty_block: true,
+
+        // Cleanup / Output
+        allow_conditional_comments: true,
+        convert_fonts_to_spans: true,
+        forced_root_block: 'p',
+        //forced_root_block_attrs: {},
+        // remove_trailing_brs: true
+
+        // Content style
+        //body_id: "",
+        //body_class: "",
+        //content_css:"",
+        //content_style:"",
+
+        // URL
+        allow_script_urls: false,
+        document_base_url: '{{base_url}}',
+        relative_urls: true,
+        remove_script_host: false,
+
+        // Plugins options
+        autoresize_min_height: '150px',
+        autoresize_max_height: '400px',
+        //code_dialog_width: '400px',
+        //code_dialog_height: '400px',
+        contextmenu: 'link image inserttable | cell row column deletetable',
+        //image_list: [],
+        image_advtab: true,
+        //image_class_list: [],
+        //imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
+        //link_list: [],
+        //target_list: [],
+        //rel_list: [],
+        //link_class_list: [],
+        importcss_append: true,
+        //importcss_file_filter: "",
+        //importcss_selector_filter: ".my-prefix-",
+        //importcss_groups: [],
+        // importcss_merge_classes: false,
+        media_alt_source: false,
+        media_poster: true,
+        media_dimensions: true,
+        //media_filter_html: false,
+        nonbreaking_force_tab: false,
+        //pagebreak_separator: ""
+        paste_data_images: true,
+        paste_as_text: true,
+        //paste_preprocess: function(plugin, args) { },
+        //paste_postprocess: function(plugin, args) { },
+        //paste_word_valid_elements: "",
+        //paste_webkit_styles: "",
+        //paste_retain_style_properties: "",
+        paste_merge_formats: true,
+        //save_enablewhendirty: true,
+        //save_onsavecallback: function() { },
+        //save_oncancelcallback: function() { },
+        //table_clone_elements: "",
+        table_grid: true,
+        table_tab_navigation: true,
+        //table_default_attributes: {},
+        //table_default_styles: {},
+        //table_class_list: [],
+        //table_cell_class_list: []
+        //table_row_class_list: [],
+        //templates: [].
+        //textpattern_patterns: [],
+        visualblocks_default_state: false
+
+    };
+
+    var tinymce_opts = $.extend({}, default_opts, this.editor_options);
+
+    tinymce_opts.selector = '#' + this.input_id;
+
+    tinymce.init(tinymce_opts); // jshint ignore:line
+};

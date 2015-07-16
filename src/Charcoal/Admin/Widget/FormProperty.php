@@ -51,6 +51,7 @@ class FormProperty extends Widget
             $this->set_active($data['active']);
         }
 
+        // Keep the data in copy, this will be passed to the property and/or input later
         $this->_property_data = $data;
 
         return $this;
@@ -204,6 +205,7 @@ class FormProperty extends Widget
 
         $input = InputFactory::instance()->get($input_type);
         $input->set_property($prop);
+        $input->set_data($this->_property_data);
         $GLOBALS['widget_template'] = $input_type;
         return $input;
     }

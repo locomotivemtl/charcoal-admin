@@ -42,9 +42,9 @@ class Input
         if (isset($data['disabled']) && $data['disabled'] !== null) {
             $this->set_disabled($data['disabled']);
         }
-        if (isset($data['type']) && $data['type'] !== null) {
+        /*if (isset($data['type']) && $data['type'] !== null) {
             $this->set_type($data['type']);
-        }
+        }*/
         if (isset($data['input_type']) && $data['input_type'] !== null) {
             $this->set_input_type($data['input_type']);
         }

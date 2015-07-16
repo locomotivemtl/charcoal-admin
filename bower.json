@@ -20,7 +20,8 @@
     "awesome-bootstrap-checkbox": "~0.3.4",
     "fontawesome": "~4.3.0",
     "bootstrap-switch": "~3.3.2",
-    "summernote": "~0.6.9"
+    "summernote": "~0.6.9",
+    "tinymce": "~4.2.1"
   },
   "devDependencies": {
     "echarts": "~2.2.3"

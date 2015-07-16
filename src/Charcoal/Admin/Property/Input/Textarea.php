@@ -23,6 +23,7 @@ class Textarea extends Input
     */
     public function set_data(array $data)
     {
+        parent::set_data($data);
         if (isset($data['cols']) && $data['cols'] !== null) {
             $this->set_cols($data['cols']);
         }
@@ -54,7 +55,7 @@ class Textarea extends Input
     {
         return $this->_cols;
     }
-    
+
     /**
     * @param integer $rows
     * @throws InvalidArgumentException

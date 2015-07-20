@@ -2568,7 +2568,7 @@ select[multiple].input-lg, .input-group-lg > select[multiple].form-control,
 .has-feedback {
   position: relative; }
   .has-feedback .form-control {
-    padding-right: 0; }
+    padding-right: 60px; }
 
 .form-control-feedback {
   position: absolute;

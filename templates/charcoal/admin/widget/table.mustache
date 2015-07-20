@@ -10,13 +10,55 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 <div class="charcoal-admin-widget-table" id="{{widget_id}}">
 
 	{{#has_objects}}
-		<table class="table table-responsive table-striped table-hover">
+        <div class="table-header clearfix">
+            <div class="pull-left">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">Actions</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{#sublist_actions}}
+                           <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
+                        {{/sublist_actions}}
+                    </ul>
+                </div>
+                {{#list_actions}}
+                    <button class="btn list-{{ident}}">{{label}}</button>
+                {{/list_actions}}
+
+
+            </div>
+            <div class="pull-right">
+                <strong>Filtres</strong>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info">Les plus récentes alertes</button>
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="table-responsive">
+		<table class="table table-bordered">
 		{{#show_table_header}}
 		<thead>
 			<tr>
-			<td>
+			<th>
 				<input type="checkbox" class="select-all">
-			</td>
+			</th>
 			{{#proto.properties}}
 				<th>{{label}}</td>
 			{{/proto.properties}}
@@ -39,12 +81,18 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 		    {{/properties}}
 		    {{#show_object_actions}}
 		    	<td>
-		    		<div class="btn-group dropdown">
-		    		{{#object_actions}}
-		    			<button class="btn btn-default btn-xs obj-{{ident}}">{{label}}</button>
-		    		{{/object_actions}}
-
-		    		</div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">Nouvelle alerte</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{#object_actions}}
+                                <li><a class="obj-{{ident}}" href="#">{{label}}</a></li>
+                            {{/object_actions}}
+                        </ul>
+                    </div>
 		    	</td>
 		    {{/show_object_actions}}
 		    </tr>
@@ -66,18 +114,6 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 			No objects
 		</div>
 	{{/has_objects}}
-
-	<div class="btn-group">
-		{{#sublist_actions}}
-			<button class="btn btn-default btn-xs sublist-{{ident}}">{{label}}</button>
-		{{/sublist_actions}}
-	</div>
-
-	<div class="btn-group">
-		{{#list_actions}}
-			<button class="btn btn-default btn-xs list-{{ident}}">{{label}}</button>
-		{{/list_actions}}
-	</div>
 </div>
 
 

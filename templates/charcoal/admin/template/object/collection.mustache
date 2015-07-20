@@ -14,11 +14,20 @@ This template expects a `Charcoal\Admin\Template\Object\Collection` model as con
 {{>charcoal/admin/widget/feedbacks}}
 
 {{!-- Object edit section --}}
-<section class="section object-collection">
-
-    <h2>{{title}}</h2>
-    <h3>{{subtitle}}</h3>
-
+<section class="o-container">
+    <header class="o-header">
+        <h1>{{title}}</h1>
+        <div class="o-container_aside">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" placeholder="Rechercher">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default input-sm" type="button">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </header>
     {{#dashboard}}
         {{>charcoal/admin/widget/dashboard}}
     {{/dashboard}}

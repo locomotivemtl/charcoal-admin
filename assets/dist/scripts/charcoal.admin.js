@@ -1013,7 +1013,9 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 };
 ;Charcoal.Admin.Template_MenuHeader = function ()
 {
-    $('[data-toggle="class"]').click(function (event) {
+    // toggle-class.js
+    // ==========================================================================
+    $('.js-toggle-class').click(function (event) {
         event.preventDefault();
 
         var $this = $(this);
@@ -1021,6 +1023,19 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
         var dataTarget = $this.data('target');
 
         $(dataTarget).toggleClass(dataClass);
+    });
+
+    // accordion.js
+    // ==========================================================================
+    $(document).on('click', '.js-accordion-header', function(event) {
+            event.preventDefault();
+
+        var $this = $(this);
+
+        $this.toggleClass('is-open')
+             .siblings('.js-accordion-content')
+             .stop()
+             .slideToggle();
     });
 };
 ;/**

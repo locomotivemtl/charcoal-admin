@@ -13,7 +13,7 @@
 }
 
 .c-nav_arrow {
-    &:after {
+    &::after {
         right: 0;
         top: 50%;
         border: solid transparent;
@@ -39,26 +39,25 @@
     margin-bottom: rem(30px);
 
     &.-light {
-        border-top-color: $gray-light;
+        border-color: $gray-light;
     }
 
     &.-dark {
-        border-top-color: $gray-dark;
+        border-color: $gray-dark;
         color: $white;
+    }
+
+    .c-nav_list {
+        padding-left: rem(30px);
+        border-top: none;
+        margin-bottom: 0;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
     }
 }
 
 .c-nav_list_item {
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
 
-    .c-nav_list.-light & {
-        border-bottom-color: $gray-light;
-    }
-
-    .c-nav_list.-dark & {
-        border-bottom-color: $gray-dark;
-    }
 }
 
 .c-nav_list_header {
@@ -67,13 +66,17 @@
     align-items: center;
     height: rem($unit - 1);
     transition: background-color $speed;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 
     .c-nav_list.-light & {
         color: $charcoal-darkblue;
+        border-bottom-color: $gray-light;
     }
 
     .c-nav_list.-dark & {
         color: $white;
+        border-bottom-color: $gray-dark;
     }
 
     &:hover {
@@ -92,11 +95,15 @@
         &.is-active {
             @extend .c-nav_arrow;
 
-            &:after {
+            &::after {
                 right: rem(-20px);
                 border-right-color: $white;
             }
         }
+    }
+
+    .c-nav_list_item:last-child & {
+        border-bottom: none;
     }
 }
 
@@ -141,7 +148,7 @@
     &.is-new {
         color: $red;
 
-        &:after {
+        &::after {
             content: "";
             background-color: $red;
             width: rem(6px);
@@ -154,4 +161,54 @@
             margin-right: -3px;
         }
     }
+}
+
+.c-nav_list_link_plus {
+    position: relative;
+    width: rem(20px);
+    height: rem(20px);
+    border-radius: $radius;
+    background-color: $white;
+    margin: 0 rem(10px);
+    transition: background-color $speed;
+
+    &::before, &::after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        background-color: $charcoal-blue;
+        transition: background-color $speed, opacity $speed;
+    }
+
+    &::before {
+        top: 50%;
+        right: rem(6px);
+        left: rem(6px);
+        height: rem(2px);
+        margin-top: -1px;
+    }
+
+    &::after {
+        top: rem(6px);
+        bottom: rem(6px);
+        left: 50%;
+        width: rem(2px);
+        margin-left: -1px;
+    }
+
+    .c-nav_list_header.is-open & {
+        background-color: $charcoal-blue;
+
+        &::before, &::after {
+            background-color: $white;
+        }
+
+        &::after {
+            opacity: 0;
+        }
+    }
+}
+
+.c-nav_list_content {
+    display: none;
 }

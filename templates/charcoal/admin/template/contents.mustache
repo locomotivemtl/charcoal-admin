@@ -15,63 +15,56 @@ Display the "home" dashboard.
         <header class="o-header">
             <h1 class="c-nav_heading">Alertes</h1>
         </header>
-        <ul class="c-nav_list -light -secondary">
-            <li class="c-nav_list_item">
-                <div class="c-nav_list_header is-active">
+        <ul class="c-nav_list -light -secondary js-accordion">
+            {{#for_loop.6}}
+            <li class="c-nav_list_item js-accordion-item">
+                <div class="c-nav_list_header js-accordion-header">
                     <a class="c-nav_list_link" href="#">
                         <span class="c-nav_list_link_main">
                             <span class="c-nav_list_link_text">
-                                Zone de publication
+                                Section un
                             </span>
                         </span>
-                        <span class="c-nav_list_link_number">
-                            23
-                        </span>
+                        <span class="c-nav_list_link_plus"></span>
                     </a>
                 </div>
-            </li>
-            <li class="c-nav_list_item">
-                <div class="c-nav_list_header">
-                    <a class="c-nav_list_link" href="#">
-                        <span class="c-nav_list_link_main">
-                            <span class="c-nav_list_link_text">
-                                Zone de test d’envoie
-                            </span>
-                        </span>
-                        <span class="c-nav_list_link_number is-new">
-                            20
-                        </span>
-                    </a>
+                <div class="c-nav_list_content js-accordion-content">
+                    <ul class="c-nav_list -light -secondary">
+                        {{#for_loop.4}}
+                        <li class="c-nav_list_item js-accordion-item">
+                            <div class="c-nav_list_header js-accordion-header">
+                            <a class="c-nav_list_link" href="#">
+                                    <span class="c-nav_list_link_main">
+                                        <span class="c-nav_list_link_text">
+                                            Section un
+                                        </span>
+                                    </span>
+                                    <span class="c-nav_list_link_plus"></span>
+                                </a>
+                            </div>
+                            <div class="c-nav_list_content js-accordion-content">
+                            <ul class="c-nav_list -light -secondary">
+                                {{#for_loop.4}}
+                                <li class="c-nav_list_item js-accordion-item">
+                                    <div class="c-nav_list_header js-accordion-header">
+                                    <a class="c-nav_list_link" href="#">
+                                            <span class="c-nav_list_link_main">
+                                                <span class="c-nav_list_link_text">
+                                                    Section un
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                                {{/for_loop.4}}
+                            </ul>
+                        </div>
+                        </li>
+                        {{/for_loop.4}}
+                    </ul>
                 </div>
             </li>
-            <li class="c-nav_list_item">
-                <div class="c-nav_list_header">
-                    <a class="c-nav_list_link" href="#">
-                        <span class="c-nav_list_link_main">
-                            <span class="c-nav_list_link_text">
-                                Zone d’envoie
-                            </span>
-                        </span>
-                        <span class="c-nav_list_link_number">
-                            15
-                        </span>
-                    </a>
-                </div>
-            </li>
-            <li class="c-nav_list_item">
-                <div class="c-nav_list_header">
-                    <a class="c-nav_list_link" href="#">
-                        <span class="c-nav_list_link_main">
-                            <span class="c-nav_list_link_text">
-                                Gabarits
-                            </span>
-                        </span>
-                        <span class="c-nav_list_link_number">
-                            6
-                        </span>
-                    </a>
-                </div>
-            </li>
+            {{/for_loop.6}}
         </ul>
         <div class="btn-group">
             <button type="button" class="btn btn-danger">Nouvelle alerte</button>

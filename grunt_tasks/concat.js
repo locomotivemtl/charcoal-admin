@@ -2,8 +2,10 @@ module.exports = {
     options:{
         separator:';'
     },
-    dist: {
+    scripts : {
         src: [
+            'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+
             'assets/src/scripts/charcoal/admin/charcoal.js',
             'assets/src/scripts/charcoal/admin/property.js',
             'assets/src/scripts/charcoal/admin/property/*.js',
@@ -14,5 +16,13 @@ module.exports = {
             'assets/src/scripts/charcoal/admin/widget/*.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.js'
+    },
+    css : {
+        src: [
+           'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
+           'assets/dist/styles/charcoal.admin.css'
+
+        ],
+        dest: 'assets/dist/styles/charcoal.admin.css'
     }
 };

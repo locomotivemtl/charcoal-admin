@@ -9,7 +9,6 @@ Display the "home" dashboard.
 {{>charcoal/admin/template/inc.header}}
 
 <div class="o-flex">
-
     <nav class="c-nav-secondary o-flex_aside">
         <header class="o-header">
             <h1 class="c-nav_heading">Alertes</h1>
@@ -168,7 +167,7 @@ Display the "home" dashboard.
                             <td>Transport intermunicipal</td>
                             <td>Transport Intermunicipal</td>
                             <td>Il y a 4 jours</td>
-                            <td></td>
+                            <td><input class="js-bs-switch" type="checkbox" name="" checked></td>
                             <td>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary">Nouvelle alerte</button>
@@ -194,5 +193,17 @@ Display the "home" dashboard.
     </div>
 
 </div>
+
+{{#add_js}}
+<script>
+var table_widget;
+$(document).ready(function() {
+    //initialisation de bootstrap switch http://www.bootstrap-switch.org/
+    $(".js-bs-switch").bootstrapSwitch();
+});
+</script>
+{{/add_js}}
+
+
 
 {{>charcoal/admin/template/inc.footer}}

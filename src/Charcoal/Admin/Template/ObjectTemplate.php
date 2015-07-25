@@ -2,13 +2,18 @@
 
 namespace Charcoal\Admin\Template;
 
+// Dependencies from `PHP`
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Template as Template;
+// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Ui\ObjectContainerInterface as ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
 
-class Object extends Template implements ObjectContainerInterface
+// Local parent namespace dependencies
+use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+
+
+class ObjectTemplate extends AdminTemplate implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 

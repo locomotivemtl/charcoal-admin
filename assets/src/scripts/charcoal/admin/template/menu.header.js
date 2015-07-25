@@ -14,8 +14,8 @@ Charcoal.Admin.Template_MenuHeader = function ()
 
     // accordion.js
     // ==========================================================================
-    $(document).on('click', '.js-accordion-header', function(event) {
-            event.preventDefault();
+    $(document).on('click', '.js-accordion-header', function (event) {
+        event.preventDefault();
 
         var $this = $(this);
 

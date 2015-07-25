@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Template\Account;
 
-use \Charcoal\Admin\Template\Account as AccountTemplate;
+use \Charcoal\Admin\Template\AccountTemplate as AccountTemplate;
 
-class Info extends AccountTemplate
+class InfoTemplate extends AccountTemplate
 {
 
 }

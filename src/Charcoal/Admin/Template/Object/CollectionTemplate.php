@@ -2,34 +2,39 @@
 
 namespace Charcoal\Admin\Template\Object;
 
+// Dependencies from `PHP`
 use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Template\Object as ObjectTemplate;
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
+use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 use \Charcoal\Admin\Ui\DashboardContainerInterface as DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait as DashboardContainerTrait;
-use \Charcoal\Admin\Ui\ObjectContainerInterface as ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
-use \Charcoal\Admin\Widget as Widget;
-use \Charcoal\Admin\Widget\Layout as Layout;
 use \Charcoal\Admin\Widget\Dashboard as Dashboard;
 
-// From `charcoal-base`
-use \Charcoal\Widget\WidgetFactory as WidgetFactory;
 
-class Edit extends ObjectTemplate implements DashboardContainerInterface, ObjectContainerInterface
+// Local parent namespace dependencies
+use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+
+/**
+* admin/object/collection template.
+*/
+class CollectionTemplate extends AdminTemplate implements CollectionContainerInterface, DashboardContainerInterface
 {
+    use CollectionContainerTrait;
     use DashboardContainerTrait;
-    //use ObjectContainerTrait;
+
 
     /**
     * @param array $data
-    * @return Edit Chainable
+    * @return Collection Chainable
     */
     public function set_data(array $data)
     {
         parent::set_data($data);
-        
+
+        $this->set_collection_data($data);
         $this->set_dashboard_data($data);
 
         return $this;
@@ -42,7 +47,7 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
     */
     public function create_dashboard(array $data = null)
     {
-        $obj = $this->obj();
+        $obj = $this->proto();
         $metadata = $obj->metadata();
         $dashboard_ident = $this->dashboard_ident();
         $dashboard_config = $this->dashboard_config();
@@ -53,10 +58,10 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
         }
 
         if ($dashboard_ident === null || $dashboard_ident === '') {
-            if (!isset($admin_metadata['default_edit_dashboard'])) {
-                throw new Exception('No default edit dashboard defined in object admin metadata');
+            if (!isset($admin_metadata['default_collection_dashboard'])) {
+                throw new Exception('No default collection dashboard defined in object admin metadata');
             }
-            $dashboard_ident = $admin_metadata['default_edit_dashboard'];
+            $dashboard_ident = $admin_metadata['default_collection_dashboard'];
         }
         if ($dashboard_config === null || empty($dashboard_config)) {
             if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboard_ident])) {
@@ -70,7 +75,14 @@ class Edit extends ObjectTemplate implements DashboardContainerInterface, Object
             $dashboard->set_data($data);
         }
         $dashboard->set_data($dashboard_config);
-
         return $dashboard;
     }
+
+
+
+    public function create_collection_config($config_data = null)
+    {
+
+    }
+
 }

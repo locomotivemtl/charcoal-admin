@@ -2,9 +2,16 @@
 
 namespace Charcoal\Admin\Property;
 
+// Dependencies from `PHP`
 use \InvalidArgumentException as InvalidArgumentException;
 
-class Input
+// Local namespace dependencies
+use \Charcoal\Admin\Property\PropertyInputInterface as PropertyInputInterface;
+
+/**
+*
+*/
+abstract class AbstractPropertyInput implements PropertyInputInterface
 {
     private $_ident;
 
@@ -189,6 +196,9 @@ class Input
 
     public function set_input_type($input_type)
     {
+        if (!is_string($input_type)) {
+            throw new InvalidArgumentException('Input type must be a string.');
+        }
         $this->_input_type = $input_type;
         return $this;
     }

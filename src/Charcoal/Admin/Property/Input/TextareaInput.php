@@ -4,9 +4,12 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Property\Input as Input;
+use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
-class Textarea extends Input
+/**
+*
+*/
+class TextareaInput extends AbstractPropertyInput
 {
     /**
     * @var integer $_cols

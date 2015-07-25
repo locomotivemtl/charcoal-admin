@@ -4,12 +4,12 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Property\Input as Input;
+use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
 * Number Property Input Type
 */
-class Number extends Input
+class NumberInput extends AbstractPropertyInput
 {
      /**
     * @var integer $min
@@ -44,7 +44,7 @@ class Number extends Input
         if (isset($data['step']) && $data['step'] !== null) {
             $this->set_step($data['step']);
         }
-        
+
 
         return $this;
     }

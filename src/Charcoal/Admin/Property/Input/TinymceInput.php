@@ -4,12 +4,12 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Property\Input\Textarea as TextareaInput;
+use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-* Tinymce Property Input
+*
 */
-class Tinymce extends TextareaInput
+class TinymceInput extends AbstractPropertyInput
 {
     /**
     * The TinyMCE options
@@ -24,7 +24,7 @@ class Tinymce extends TextareaInput
     public function set_data(array $data)
     {
         parent::set_data($data);
-        if(isset($data['editor_options']) && $data['editor_options'] !== null) {
+        if (isset($data['editor_options']) && $data['editor_options'] !== null) {
             $this->set_editor_options($data['editor_options']);
         }
         return $this;
@@ -65,7 +65,7 @@ class Tinymce extends TextareaInput
     */
     public function add_editor_option($opt_ident, $opt_val)
     {
-        if(!is_string($opt_ident)) {
+        if (!is_string($opt_ident)) {
             throw new InvalidArgumentException('Option ident must be a string.');
         }
         $this->_editor_options[$opt_ident] = $opt_val;

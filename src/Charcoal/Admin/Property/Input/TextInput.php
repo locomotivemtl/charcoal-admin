@@ -4,12 +4,12 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Property\Input as Input;
+use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-* Text Property Input Type
+*
 */
-class Text extends Input
+class TextInput extends AbstractPropertyInput
 {
     /**
     * @var integer $_size
@@ -24,7 +24,7 @@ class Text extends Input
     * @var integer $_max_length
     */
     private $_max_length = 0;
-    
+
 
     /**
     * @var string $_pattern

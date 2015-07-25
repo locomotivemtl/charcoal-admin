@@ -10,7 +10,10 @@ use \Charcoal\Widget\AbstractWidget as AbstractWidget;
 // From `charcoal-base`
 use \Charcoal\Widget\WidgetView as WidgetView;
 
-class Widget extends AbstractWidget
+/**
+*
+*/
+class AdminWidget extends AbstractWidget
 {
     public $_widget_id;
 

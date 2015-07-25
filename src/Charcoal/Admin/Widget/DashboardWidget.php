@@ -8,16 +8,16 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Widget\WidgetFactory as WidgetFactory;
 use \Charcoal\Widget\WidgetInterface as WidgetInterface;
 
-use \Charcoal\Admin\Widget as Widget;
-use \Charcoal\Admin\Widget\Layout as Layout;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
 
 /**
 *
 */
-class Dashboard extends Widget
+class DashboardWidget extends AdminWidget
 {
     /**
-    * @var Layout $_layout
+    * @var LayoutWidget $_layout
     */
     public $_layout;
     /**
@@ -44,26 +44,26 @@ class Dashboard extends Widget
     }
 
     /**
-    * @param Layout|array
+    * @param LayoutWidget|array
     * @throws InvalidArgumentException
     * @return Dashboard Chainable
     */
     public function set_layout($layout)
     {
-        if (($layout instanceof Layout)) {
+        if (($layout instanceof LayoutWidget)) {
             $this->_layout = $layout;
         } else if (is_array($layout)) {
-            $l = new Layout();
+            $l = new LayoutWidget();
             $l->set_data($layout);
             $this->_layout = $l;
         } else {
-            throw new InvalidArgumentException('Layout must be a Layout object or an array');
+            throw new InvalidArgumentException('LayoutWidget must be a LayoutWidget object or an array');
         }
         return $this;
     }
 
     /**
-    * @return Layout
+    * @return LayoutWidget
     */
     public function layout()
     {

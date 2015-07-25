@@ -5,9 +5,9 @@ namespace Charcoal\Admin\Widget;
 use \InvalidArgumentException as InvalidArgumentException;
 use \Iterator as Iterator;
 
-use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 
-class Layout extends Widget
+class LayoutWidget extends AdminWidget
 {
     /**
     * @var integer $_position

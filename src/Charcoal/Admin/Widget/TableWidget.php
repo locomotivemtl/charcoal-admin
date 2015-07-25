@@ -9,7 +9,7 @@ use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 /**
 * The table widget displays a collection in a tabular (table) format.
 */
-class Table extends Widget implements CollectionContainerInterface
+class TableWidget extends Widget implements CollectionContainerInterface
 {
     use CollectionContainerTrait;
 
@@ -28,7 +28,7 @@ class Table extends Widget implements CollectionContainerInterface
 
         if (is_array($data)) {
             $this->set_data($data);
-           
+
         }
     }
 

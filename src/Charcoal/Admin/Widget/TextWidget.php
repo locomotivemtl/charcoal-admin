@@ -4,9 +4,9 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 
-class Text extends Widget
+class TextWidget extends AdminWidget
 {
 
     /**

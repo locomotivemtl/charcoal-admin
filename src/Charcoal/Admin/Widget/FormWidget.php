@@ -4,9 +4,12 @@ namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 
-class Form extends Widget
+// Local namespace dependencies
+use \Charcoal\Admin\Widget\FormGroupWidget as FormGroupWidget;
+
+class FormWidget extends AdminWidget
 {
 
     /*public $label;
@@ -115,11 +118,11 @@ class Form extends Widget
         if (!is_string($group_ident)) {
             throw new InvalidArgumentException('Group ident must be a string');
         }
-        if (($group instanceof FormGroup)) {
+        if (($group instanceof FormGroupWidget)) {
             $group->set_form($this);
             $this->_groups[$group_ident] = $group;
         } else if (is_array($group)) {
-            $g = new FormGroup();
+            $g = new FormGroupWidget();
             $g->set_form($this);
             $g->set_data($group);
             $this->_groups[$group_ident] = $g;

@@ -5,12 +5,12 @@ namespace Charcoal\Admin\Widget;
 use \InvalidArgumentException as InvalidArgumentException;
 
 // From `charcoal-admin`
-use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 
 /**
 *
 */
-class Graph extends Widget
+class GraphWidget extends AdminWidget
 {
     /**
     * @var mixed $_height

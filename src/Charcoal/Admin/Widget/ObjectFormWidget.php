@@ -4,7 +4,8 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Widget\Form as Form;
+use \Charcoal\Admin\Widget\FormWidget as FormWidget;
+use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
 
 use \Charcoal\Admin\Ui\ObjectContainerInterface as ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
@@ -12,7 +13,7 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
 /**
 *
 */
-class ObjectForm extends Form implements ObjectContainerInterface
+class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
@@ -105,7 +106,7 @@ class ObjectForm extends Form implements ObjectContainerInterface
        //var_dump($obj);
        $props = $obj->metadata()->properties();
        foreach ($props as $property_ident => $property) {
-            $p = new FormProperty($property);
+            $p = new FormPropertyWidget($property);
             $p->set_property_ident($property_ident);
             $p->set_data($property);
             yield $property_ident => $p;

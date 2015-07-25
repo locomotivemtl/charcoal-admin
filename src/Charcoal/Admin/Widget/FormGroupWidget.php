@@ -4,10 +4,10 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Widget as Widget;
-use \Charcoal\Admin\Widget\Form as Form;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\Widget\FormWidget as FormWidget;
 
-class FormGroup extends Widget
+class FormGroupWidget extends AdminWidget
 {
     private $_form;
 
@@ -100,14 +100,14 @@ class FormGroup extends Widget
     * @param Form $form
     * @return FormGroup Chainable
     */
-    public function set_form(Form $form)
+    public function set_form(FormWidget $form)
     {
         $this->_form = $form;
         return $this;
     }
 
     /**
-    * @return Form or null
+    * @return FormWidget or null
     */
     public function form()
     {
@@ -161,7 +161,7 @@ class FormGroup extends Widget
     /**
     * @var integer $priority
     * @throws InvalidArgumentException
-    * @return FormGroup Chainable
+    * @return FormGroupWidget Chainable
     */
     public function set_priority($priority)
     {

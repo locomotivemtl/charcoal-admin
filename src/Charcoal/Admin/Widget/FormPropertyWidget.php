@@ -5,8 +5,8 @@ namespace Charcoal\Admin\Widget;
 use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
-use \Charcoal\Admin\Widget as Widget;
-use \Charcoal\Admin\Property\InputFactory as InputFactory;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\Property\PropertyInputFactory as PropertyInputFactory;
 
 // From `charcoal-core`
 use \Charcoal\Property\PropertyFactory as PropertyFactory;
@@ -15,7 +15,7 @@ use \Charcoal\Property\PropertyInterface as PropertyInterface;
 /**
 *
 */
-class FormProperty extends Widget
+class FormPropertyWidget extends AdminWidget
 {
     protected $_type;
     protected $_input_type;
@@ -57,6 +57,11 @@ class FormProperty extends Widget
         return $this;
     }
 
+    /**
+    * @param boolean $active
+    * @throws InvalidArgumentException
+    * @return FormPropertyWidget Chainable
+    */
     public function set_active($active)
     {
         if (!is_bool($active)) {
@@ -66,11 +71,19 @@ class FormProperty extends Widget
         return $this;
     }
 
+    /**
+    * @return boolean
+    */
     public function active()
     {
         return $this->_active;
     }
 
+    /**
+    * @param string $property
+    * @throws InvalidArgumentException
+    * @return FormPropertyWidget
+    */
     public function set_property_ident($property_ident)
     {
         if (!is_string($property_ident)) {
@@ -80,74 +93,115 @@ class FormProperty extends Widget
         return $this;
     }
 
+    /**
+    *
+    */
     public function property_ident()
     {
         return $this->_property_ident;
     }
 
+    /**
+    *
+    */
     public function set_property_val($property_val)
     {
         $this->_property_val = $property_val;
         return $this;
     }
 
+    /**
+    *
+    */
     public function property_val()
     {
         return $this->_property_val;
     }
 
+    /**
+    *
+    */
     public function show_label()
     {
         return true;
     }
 
+    /**
+    *
+    */
     public function show_description()
     {
         return true;
     }
 
+    /**
+    *
+    */
     public function show_header()
     {
         return true;
     }
 
+    /**
+    *
+    */
     public function show_footer()
     {
         return true;
     }
 
+    /**
+    *
+    */
     public function show_notes()
     {
         return true;
     }
 
-
+    /**
+    *
+    */
     public function description()
     {
         return 'Property Description';
     }
 
+    /**
+    *
+    */
     public function notes()
     {
         return 'Property Notes';
     }
 
+    /**
+    *
+    */
     public function input_id()
     {
         return 'input_id';
     }
 
+    /**
+    *
+    */
     public function input_name()
     {
         return 'input_name';
     }
 
+    /**
+    *
+    */
     public function set_input_type($input_type)
     {
         $this->_input_type = $input_type;
         return $this;
     }
 
+    /**
+    *
+    */
     public function input_type()
     {
         if ($this->_input_type === null) {
@@ -198,12 +252,15 @@ class FormProperty extends Widget
         return $this->_property;
     }
 
+    /**
+    * @return PropertyInputInterface
+    */
     public function input()
     {
         $prop = $this->prop();
         $input_type = $this->input_type();
 
-        $input = InputFactory::instance()->get($input_type);
+        $input = PropertyInputFactory::instance()->get($input_type);
         $input->set_property($prop);
         $input->set_data($this->_property_data);
         $GLOBALS['widget_template'] = $input_type;

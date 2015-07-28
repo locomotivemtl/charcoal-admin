@@ -19,7 +19,7 @@ $charcoal-lightblue: #eaf2f4;
 
 // Fonts
 // ==========================================================================
-$source-sans-pro: 'Source Sans Pro', sans-serif;
+$roboto: 'Roboto', sans-serif;
 $weight-light: 300;
 $weight-normal: 400;
 $weight-semi: 600;
@@ -27,6 +27,7 @@ $weight-bold: 700;
 
 // Base
 // ==========================================================================
+$font-family: $roboto;
 $font-size: 16px;
 $color: $charcoal-darkblue;
 $radius: 2px;

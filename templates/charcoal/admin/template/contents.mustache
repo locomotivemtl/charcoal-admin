@@ -13,19 +13,31 @@ Display the "home" dashboard.
 
     <nav class="c-nav-secondary o-flex_aside">
         <header class="o-header">
-            <h1 class="c-nav_heading">Alertes</h1>
+            <h1 class="c-nav_heading">Contenus</h1>
         </header>
         <ul class="c-nav_list -light -secondary js-accordion">
+             <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <div class="c-nav_list_link_main">
+                            <p class="c-nav_list_link_text -bold">
+                                <svg class="c-nav_list_link_icon" role="img"><use xlink:href="{{url}}assets/admin/images/svgs.svg#sort"></use></svg>
+                                Réorganiser
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </li>
             {{#for_loop.6}}
             <li class="c-nav_list_item js-accordion-item">
                 <div class="c-nav_list_header js-accordion-header">
                     <a class="c-nav_list_link" href="#">
-                        <span class="c-nav_list_link_main">
-                            <span class="c-nav_list_link_text">
+                        <div class="c-nav_list_link_main">
+                            <p class="c-nav_list_link_text">
                                 Section un
-                            </span>
-                        </span>
-                        <span class="c-nav_list_link_plus"></span>
+                            </p>
+                        </div>
+                        <div class="c-nav_list_link_plus"></div>
                     </a>
                 </div>
                 <div class="c-nav_list_content js-accordion-content">
@@ -34,12 +46,12 @@ Display the "home" dashboard.
                         <li class="c-nav_list_item js-accordion-item">
                             <div class="c-nav_list_header js-accordion-header">
                             <a class="c-nav_list_link" href="#">
-                                    <span class="c-nav_list_link_main">
-                                        <span class="c-nav_list_link_text">
+                                    <div class="c-nav_list_link_main">
+                                        <p class="c-nav_list_link_text">
                                             Section un
-                                        </span>
-                                    </span>
-                                    <span class="c-nav_list_link_plus"></span>
+                                        </p>
+                                    </div>
+                                    <div class="c-nav_list_link_plus"></div>
                                 </a>
                             </div>
                             <div class="c-nav_list_content js-accordion-content">
@@ -48,11 +60,11 @@ Display the "home" dashboard.
                                 <li class="c-nav_list_item js-accordion-item">
                                     <div class="c-nav_list_header js-accordion-header">
                                     <a class="c-nav_list_link" href="#">
-                                            <span class="c-nav_list_link_main">
-                                                <span class="c-nav_list_link_text">
+                                            <div class="c-nav_list_link_main">
+                                                <p class="c-nav_list_link_text">
                                                     Section un
-                                                </span>
-                                            </span>
+                                                </p>
+                                            </div>
                                         </a>
                                     </div>
                                 </li>
@@ -66,20 +78,6 @@ Display the "home" dashboard.
             </li>
             {{/for_loop.6}}
         </ul>
-        <div class="btn-group">
-            <button type="button" class="btn btn-danger">Nouvelle alerte</button>
-            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-            </ul>
-        </div>
     </nav>
 
     <div class="o-flex_main">

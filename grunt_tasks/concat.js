@@ -5,6 +5,7 @@ module.exports = {
     scripts : {
         src: [
             'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+            'bower_components/summernote/dist/summernote.js',
 
             'assets/src/scripts/charcoal/admin/charcoal.js',
             'assets/src/scripts/charcoal/admin/property.js',

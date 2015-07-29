@@ -1156,7 +1156,7 @@ hr {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: inherit;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.1;
   color: inherit; }
   h1 small,
@@ -8090,8 +8090,8 @@ button.close {
   .note-editor.dragover .note-dropzone {
     display: table; }
   .note-editor .note-toolbar {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #a9a9a9; }
+    margin: -5px -10px 0 -10px;
+    padding: 0; }
   .note-editor.fullscreen {
     position: fixed;
     top: 0;
@@ -8119,9 +8119,10 @@ button.close {
         margin: 1px auto;
         border-top: 1px solid #a9a9a9; }
   .note-editor .note-editable[contenteditable=true]:empty:not(:focus):before {
-    content: attr(data-placeholder);
-    color: #a9a9a9; }
+    content: attr(data-placeholder); }
   .note-editor .note-editable {
+    background-color: #fff;
+    color: #000;
     padding: 10px;
     overflow: auto;
     outline: none; }
@@ -8427,7 +8428,8 @@ td {
   justify-content: space-between;
   height: 119px; }
   .o-header.-border {
-    border-bottom: 1px solid #cccccc; }
+    border-bottom: 1px solid #cccccc;
+    margin-bottom: 1.25rem; }
 
 .o-container {
   padding: 0 3.75rem; }
@@ -8839,6 +8841,13 @@ td {
 
 .c-login_avatar_image {
   width: 100%; }
+
+.note-editor {
+  border-color: #ccc;
+  border-radius: 4px; }
+  .note-editor .note-toolbar {
+    margin: 0;
+    padding: 0 0 5px 5px; }
 
 input[type="file"]:focus,
 input[type="radio"]:focus,

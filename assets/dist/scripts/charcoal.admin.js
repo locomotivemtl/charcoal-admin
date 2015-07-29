@@ -993,7 +993,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 {
     var that = this;
 
-    $('.login-submit').on('click', function (e) {
+    $('.js-login-submit').on('click', function (e) {
         e.preventDefault();
 
         var form = $(this).parents('form');

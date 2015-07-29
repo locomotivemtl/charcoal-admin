@@ -3240,19 +3240,19 @@ fieldset[disabled] a.btn {
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.3333333;
-  border-radius: 6px; }
+  border-radius: 2px; }
 
 .btn-sm, .btn-group-sm > .btn {
   padding: 5px 10px;
   font-size: 12px;
   line-height: 1.5;
-  border-radius: 3px; }
+  border-radius: 2px; }
 
 .btn-xs, .btn-group-xs > .btn {
   padding: 1px 5px;
   font-size: 12px;
   line-height: 1.5;
-  border-radius: 3px; }
+  border-radius: 2px; }
 
 .btn-block {
   display: block;
@@ -8401,8 +8401,9 @@ button.close {
 body {
   font-family: "Roboto", sans-serif;
   font-size: 1rem;
-  padding-top: 3.75rem;
-  padding-left: 7.5rem; }
+  padding-top: 3.75rem; }
+  body.has-nav-main {
+    padding-left: 7.5rem; }
 
 th {
   font-weight: 400; }
@@ -8448,6 +8449,15 @@ td {
   visibility: hidden;
   transition: opacity 0.45s, visibility 0.45s;
   z-index: 98; }
+
+.o-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center; }
 
 .c-header-main {
   background-color: #1a252d;
@@ -8804,13 +8814,38 @@ td {
 .c-aside {
   width: 18.75rem; }
 
+.c-login {
+  position: relative;
+  display: block;
+  width: 22.5rem;
+  padding: 3.75rem;
+  margin: 0 auto;
+  margin-top: 11.25rem;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.11);
+  border-radius: 2px;
+  font-size: 13px; }
+
+.c-login_header {
+  text-align: center;
+  margin-bottom: 1.875rem; }
+
+.c-login_avatar {
+  display: inline-block;
+  width: 5.9375rem;
+  height: 5.9375rem;
+  border-radius: 50%;
+  overflow: hidden; }
+
+.c-login_avatar_image {
+  width: 100%; }
+
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
   outline: none; }
 
 label {
-  margin: 1.25rem 0;
   font-weight: 400; }
 
 .radio,
@@ -8845,3 +8880,14 @@ label {
 .btn {
   font-size: 0.8125rem;
   transition: background-color 0.3s; }
+  .btn.btn-lg, .btn-group-lg > .btn {
+    font-size: 1rem; }
+
+.u-background-blue {
+  background-color: #1a252d; }
+
+.u-background-darkblue {
+  background-color: #080909; }
+
+.u-background-lightblue {
+  background-color: #eaf2f4; }

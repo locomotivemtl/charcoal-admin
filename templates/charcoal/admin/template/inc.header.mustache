@@ -30,10 +30,9 @@ Based on the HTML5 boilerplate.
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link href="{{url}}assets/admin/styles/charcoal.admin.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body {{#show_header_menu}}class="has-nav-main"{{/show_header_menu}}>
 
-    {{#show_header_menu}}
-        {{>charcoal/admin/widget/menu.header}}
-    {{/show_header_menu}}
+
+    {{>charcoal/admin/widget/menu.header}}
 
     <main>

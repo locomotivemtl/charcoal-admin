@@ -16,7 +16,10 @@ body {
     font-family: $font-family;
     font-size: 1rem;
 	padding-top: rem($unit);
-	padding-left: rem($unit * 2);
+
+    &.has-nav-main {
+        padding-left: rem($unit * 2);
+    }
 }
 
 th {

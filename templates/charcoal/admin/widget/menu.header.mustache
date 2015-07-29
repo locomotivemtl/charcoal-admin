@@ -14,6 +14,7 @@ Header menu Widget
             {{#_t}}Besoin d’aide ?{{/_t}}
         </span>
     </a>
+    {{#show_header_menu}}
     <button class="c-header-main_user js-toggle-class" type="button" data-target="body" data-class="has-nav-user">
         <span class="c-header-main_user_name">Ville de sainte-Julie</span>
         <span class="c-header-main_user_icon">
@@ -22,8 +23,10 @@ Header menu Widget
             <span class="c-header-main_user_icon_dot"></span>
         </span>
     </button>
+    {{/show_header_menu}}
 </header>
 
+{{#show_header_menu}}
 {{!-- Charcoal Main Menu --}}
 <nav class="c-nav-main">
     <ul class="c-nav-main_list">
@@ -106,6 +109,7 @@ Header menu Widget
     </ul>
     <button type="button" class="btn btn-danger">Déconnexion</button>
 </nav>
+{{/show_header_menu}}
 
 {{#add_js}}
 <script>

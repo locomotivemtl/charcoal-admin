@@ -1,0 +1,33 @@
+// ==========================================================================
+// Login
+// ==========================================================================
+
+.c-login {
+    position: relative;
+    display: block;
+    width: rem(360px);
+    padding: rem($unit);
+    margin: 0 auto;
+    margin-top: rem(180px);
+    background-color: $white;
+    box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.11);
+    border-radius: $radius;
+    font-size: 13px;
+}
+
+.c-login_header {
+    text-align: center;
+    margin-bottom: rem(30px);
+}
+
+.c-login_avatar {
+    display: inline-block;
+    width: rem(95px);
+    height: rem(95px);
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.c-login_avatar_image {
+    width: 100%;
+}

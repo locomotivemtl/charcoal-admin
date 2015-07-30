@@ -4,6 +4,14 @@
 
 .o-container {
     padding: 0 rem($unit);
+
+    &.-right {
+        padding-left: 0;
+    }
+
+    &.-top {
+        padding-top: rem($unit);
+    }
 }
 
 .o-container_aside {

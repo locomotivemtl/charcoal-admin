@@ -1,0 +1,82 @@
+// ==========================================================================
+// Panel
+// ==========================================================================
+
+.c-panel {
+    background-color: $charcoal-lightblue;
+
+    &.-fixed {
+        position: fixed;
+        width: rem(300px);
+        top: rem($unit * 2);
+        right: rem($unit);
+    }
+}
+
+// Header
+// ==========================================================================
+.c-panel_header {
+    background-color: $black;
+    padding: 0 rem(30px);
+    display: flex;
+    align-items: center;
+    color: $white;
+    height: rem(50px);
+}
+
+// Main
+// ==========================================================================
+.c-panel_main {
+    padding: 0 rem(30px);
+    margin: rem(30px) 0;
+}
+
+.c-panel_table {
+    width: 100%;
+    margin-top: rem(15px);
+    margin-bottom: rem(25px);
+    font-size: rem(13px);
+}
+
+.c-panel_table_row {
+    border-top: 1px solid $gray-light;
+    border-bottom: 1px solid $gray-light;
+}
+
+.c-panel_table_header {
+    opacity: 0.4;
+}
+
+.c-panel_table_header, .c-panel_table_data {
+    padding: rem(8px) 0;
+}
+
+// Footer
+// ==========================================================================
+.c-panel_footer {
+    background-color: $charcoal-lightblue-dark;
+    padding: 0 rem(30px);
+    height: rem(50px);
+    display: flex;
+}
+
+.c-panel_footer_item {
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem(13px);
+    transition: color $speed;
+
+    &:hover {
+        &.-red {
+            color: $red;
+        }
+
+        &.-blue {
+            color: $blue;
+        }
+    }
+}

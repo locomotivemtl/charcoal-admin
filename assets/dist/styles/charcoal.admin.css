@@ -8433,6 +8433,10 @@ td {
 
 .o-container {
   padding: 0 3.75rem; }
+  .o-container.-right {
+    padding-left: 0; }
+  .o-container.-top {
+    padding-top: 3.75rem; }
 
 .o-container_aside {
   width: 18.75rem; }
@@ -8814,7 +8818,7 @@ td {
     text-decoration: underline; }
 
 .c-aside {
-  width: 18.75rem; }
+  width: 22.5rem; }
 
 .c-login {
   position: relative;
@@ -8842,12 +8846,61 @@ td {
 .c-login_avatar_image {
   width: 100%; }
 
-.note-editor {
-  border-color: #ccc;
-  border-radius: 4px; }
-  .note-editor .note-toolbar {
-    margin: 0;
-    padding: 0 0 5px 5px; }
+.c-panel {
+  background-color: #eaf2f4; }
+  .c-panel.-fixed {
+    position: fixed;
+    width: 18.75rem;
+    top: 7.5rem;
+    right: 3.75rem; }
+
+.c-panel_header {
+  background-color: #000000;
+  padding: 0 1.875rem;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  height: 3.125rem; }
+
+.c-panel_main {
+  padding: 0 1.875rem;
+  margin: 1.875rem 0; }
+
+.c-panel_table {
+  width: 100%;
+  margin-top: 0.9375rem;
+  margin-bottom: 1.5625rem;
+  font-size: 0.8125rem; }
+
+.c-panel_table_row {
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc; }
+
+.c-panel_table_header {
+  opacity: 0.4; }
+
+.c-panel_table_header, .c-panel_table_data {
+  padding: 0.5rem 0; }
+
+.c-panel_footer {
+  background-color: #d9e5e8;
+  padding: 0 1.875rem;
+  height: 3.125rem;
+  display: flex; }
+
+.c-panel_footer_item {
+  width: 50%;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  transition: color 0.3s; }
+  .c-panel_footer_item:hover.-red {
+    color: #ed5564; }
+  .c-panel_footer_item:hover.-blue {
+    color: #3498db; }
 
 input[type="file"]:focus,
 input[type="radio"]:focus,
@@ -8891,6 +8944,13 @@ label {
   transition: background-color 0.3s; }
   .btn.btn-lg, .btn-group-lg > .btn {
     font-size: 1rem; }
+
+.note-editor {
+  border-color: #ccc;
+  border-radius: 4px; }
+  .note-editor .note-toolbar {
+    margin: 0;
+    padding: 0 0 5px 5px; }
 
 .u-background-blue {
   background-color: #1a252d; }

@@ -29,6 +29,12 @@ module.exports = {
             message: 'SVG is now concatenated'
         }
     },
+    copy: {
+        options: {
+            // title: '<%= pkg.title %>',
+            message: 'Admin assets are copied'
+        }
+    },
     watch: {
         options: {
             // title: '<%= pkg.title %>',

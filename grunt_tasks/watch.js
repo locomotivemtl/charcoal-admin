@@ -52,6 +52,13 @@ module.exports = {
             'notify:svg'
         ]
     },
+    dist: {
+        files: ['assets/dist/**/*'],
+        tasks: [
+            'copy:admin',
+            'notify:copy'
+        ]
+    },
     tasks: {
         files: ['grunt_tasks/*.js'],
         options: {

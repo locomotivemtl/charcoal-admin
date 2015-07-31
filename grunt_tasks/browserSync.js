@@ -2,10 +2,8 @@ module.exports = {
     dev: {
         bsFiles: {
             src : [
-                'assets/dist/styles/*.css',
-                'assets/dist/scripts/*.js',
-                'assets/dist/images/*',
-                'templates/charcoal/admin/**/*'
+                'templates/charcoal/admin/**/*',
+                '../../../www/assets/admin/**/*'
             ]
         },
         options: {

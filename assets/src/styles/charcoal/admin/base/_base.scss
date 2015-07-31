@@ -22,6 +22,11 @@ body {
     }
 }
 
+::selection {
+    background-color: $blue;
+    text-shadow: none;
+}
+
 th {
     font-weight: $weight-normal;
 }
@@ -29,3 +34,5 @@ th {
 td {
     font-size: rem(14px);
 }
+
+

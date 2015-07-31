@@ -8406,6 +8406,10 @@ body {
   body.has-nav-main {
     padding-left: 7.5rem; }
 
+::selection {
+  background-color: #3498db;
+  text-shadow: none; }
+
 th {
   font-weight: 400; }
 

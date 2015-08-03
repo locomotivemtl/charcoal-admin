@@ -105,12 +105,6 @@ class User extends Content implements
         if (!is_string($email)) {
             throw new InvalidArgumentException('Email must be a string');
         }
-        $email_property = $this->p('email');
-        //$email_property = PropertyFactory::instance()->get('email');
-        $email_property->set_val($email);
-        if ($email_property->validate() === false) {
-            throw new InvalidArgumentException('Email must be a valid email');
-        }
         $this->_email = $email;
         return $this;
     }
@@ -405,7 +399,7 @@ class User extends Content implements
             $this->set_last_password_ip($ip);
         }
 
-        if($this->id()) {
+        if ($this->id()) {
             $this->update(['password', 'last_password_date', 'last_password_ip']);
         }
     }

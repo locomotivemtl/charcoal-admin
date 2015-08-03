@@ -1,0 +1,25 @@
+{{!--
+Switch Property Input
+=======================
+
+`charcoal/admin/property/input/switch`
+
+--}}
+<input
+    type="checkbox"
+    id="{{input_id}}"
+    name="{{input_name}}"
+    class="js-bs-switch {{input_class}}"
+    {{#checked}}checked{{/checked}}
+    {{#read_only}}read_only{{/read_only}}
+    {{#required}}required{{/required}}
+    {{#disabled}}disabled{{/disabled}}
+>
+
+{{#add_js}}
+<script>
+$(document).ready(function() {
+    $(".js-bs-switch").bootstrapSwitch();
+});
+</script>
+{{/add_js}}

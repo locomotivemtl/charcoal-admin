@@ -2,6 +2,12 @@
 
 namespace Charcoal\Admin\Property;
 
+// From `charcoal-base`
+use \Charcoal\Property\PropertyInterface as PropertyInterface;
+
+/**
+*
+*/
 interface PropertyInputInterface
 {
     /**
@@ -90,7 +96,7 @@ interface PropertyInputInterface
     /**
     * @param PropertyInterface $p
     */
-    public function set_property($p);
+    public function set_property(PropertyInterface $p);
 
     /**
     * @return PropertyInterface

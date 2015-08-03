@@ -5,6 +5,9 @@ namespace Charcoal\Admin\Property;
 // Dependencies from `PHP`
 use \InvalidArgumentException as InvalidArgumentException;
 
+// From `charcoal-base`
+use \Charcoal\Property\PropertyInterface as PropertyInterface;
+
 // Local namespace dependencies
 use \Charcoal\Admin\Property\PropertyInputInterface as PropertyInputInterface;
 
@@ -23,9 +26,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     protected $_input_type;
     protected $_input_options;
 
-    protected $_input_id;
-    protected $_input_name;
-    protected $_input_class;
+    protected $_input_id = null;
+    protected $_input_class = '';
+    //protected $_input_name;
 
     private $_property_data = [];
     private $_property;
@@ -57,6 +60,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         }
         if (isset($data['input_id']) && $data['input_id'] !== null) {
             $this->set_input_id($data['input_id']);
+        }
+        if (isset($data['input_class']) && $data['input_class'] !== null) {
+            $this->set_input_class($data['input_class']);
         }
         // input_options
         // input_name
@@ -92,7 +98,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
 
     /**
     * @param boolean $read_only
-    * @throws InvalidArgumentException if the read_only is not a string
+    * @throws InvalidArgumentException if the read_only is not a boolean
     * @return Widget (Chainable)
     */
     public function set_read_only($read_only)
@@ -168,6 +174,10 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
+    * Get the input ID.
+    *
+    * If none was previously set, than a unique random one will be generated.
+    *
     * @return string
     */
     public function input_id()
@@ -179,6 +189,27 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
+    * @param string $input_class
+    * @throws InvalidArgumentException
+    * @return AbstractPropertyInput Chainable
+    */
+    public function set_input_class($input_class)
+    {
+        if(!is_string($input_class)) {
+            throw new InvalidArgumentException('Input class must be a string');
+        }
+        $this->_input_class = $input_class;
+        return $this;
+    }
+
+    public function input_class()
+    {
+        return $this->_input_class;
+    }
+
+    /**
+    * The input name should always be the property's ident.
+    *
     * @return string
     */
     public function input_name()
@@ -211,12 +242,16 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         return $this->_input_type;
     }
 
-    public function set_property($p)
+
+    public function set_property(PropertyInterface $p)
     {
         $this->_property = $p;
         return $this;
     }
 
+    /**
+    * @return PropertyInterface
+    */
     public function property()
     {
         if ($this->_property === null) {
@@ -226,6 +261,11 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         return $this->_property;
     }
 
+    /**
+    * Alias of the `property` method.
+    *
+    * @return PropertyInterface
+    */
     public function p()
     {
         return $this->property();

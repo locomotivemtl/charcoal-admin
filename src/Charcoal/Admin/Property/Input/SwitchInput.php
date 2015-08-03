@@ -9,7 +9,7 @@ use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 /**
 *
 */
-class CheckboxInput extends AbstractPropertyInput
+class SwitchInput extends AbstractPropertyInput
 {
     /**
     * @return boolean

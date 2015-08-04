@@ -2,19 +2,21 @@
 
 namespace Charcoal\Admin;
 
+// Dependencies from `PHP`
 use \InvalidArgumentException as InvalidArgumentException;
 
 // From `charcoal-base`
 use \Charcoal\Widget\AbstractWidget as AbstractWidget;
-
-// From `charcoal-base`
 use \Charcoal\Widget\WidgetView as WidgetView;
 
 /**
-*
+* The base Widget for the `admin` module.
 */
 class AdminWidget extends AbstractWidget
 {
+    /**
+    * @var string $_widget_id
+    */
     public $_widget_id;
 
     /**
@@ -44,14 +46,10 @@ class AdminWidget extends AbstractWidget
 
     /**
     * @var array $data
-    * @return Widget Chainable
+    * @return AdminWidget Chainable
     */
     public function set_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-        //var_dump($data);
         if (isset($data['widget_id']) && $data['widget_id'] !== null) {
             $this->set_widget_id($data['widget_id']);
         }
@@ -91,7 +89,7 @@ class AdminWidget extends AbstractWidget
     /**
     * @param string $type
     * @throws InvalidArgumentException
-    * @return Widget Chainable
+    * @return AdminWidget Chainable
     */
     public function set_type($type)
     {
@@ -113,7 +111,7 @@ class AdminWidget extends AbstractWidget
     /**
     * @param string $ident
     * @throws InvalidArgumentException if the ident is not a string
-    * @return Widget (Chainable)
+    * @return AdminWidget (Chainable)
     */
     public function set_ident($ident)
     {
@@ -157,7 +155,7 @@ class AdminWidget extends AbstractWidget
     /**
     * @param boolean show
     * @throws InvalidArgumentException
-    * @return Widget Chainable
+    * @return AdminWidget Chainable
     */
     public function set_show_actions($show)
     {
@@ -183,7 +181,7 @@ class AdminWidget extends AbstractWidget
     /**
     * @param boolean show
     * @throws InvalidArgumentException
-    * @return Widget Chainable
+    * @return AdminWidget Chainable
     */
     public function set_show_label($show)
     {
@@ -206,6 +204,10 @@ class AdminWidget extends AbstractWidget
         }
     }
 
+    /**
+    * @param mixed $template Unused
+    * @return string
+    */
     public function render($template = null)
     {
         unset($template);
@@ -215,6 +217,9 @@ class AdminWidget extends AbstractWidget
         return $content;
     }
 
+    /**
+    *
+    */
     public function layout()
     {
         return true;

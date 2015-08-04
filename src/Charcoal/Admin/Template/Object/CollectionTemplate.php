@@ -11,7 +11,7 @@ use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterf
 use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 use \Charcoal\Admin\Ui\DashboardContainerInterface as DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait as DashboardContainerTrait;
-use \Charcoal\Admin\Widget\Dashboard as Dashboard;
+use \Charcoal\Admin\Widget\DashboardWidget as Dashboard;
 
 
 // Local parent namespace dependencies

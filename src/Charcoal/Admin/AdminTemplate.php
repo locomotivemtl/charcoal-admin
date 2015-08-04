@@ -14,7 +14,9 @@ use \Charcoal\Admin\AdminModule as AdminModule;
 use \Charcoal\Admin\User as User;
 
 /**
-* Base class for all `Admin` Templates
+* Base class for all `admin` Templates.
+*
+* An action extends [\
 *
 * # Available (mustache) methods
 * - `title` (string) - The page title
@@ -82,7 +84,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
     * @var array $data
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_data(array $data)
     {
@@ -111,7 +113,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
     * @param mixed $ident
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_ident($ident)
     {
@@ -126,7 +128,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
     * @param mixed $label
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_label($label)
     {
@@ -141,7 +143,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
     * @param mixed $title
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_title($title)
     {
@@ -159,7 +161,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
     * @param mixed $subtitle
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_subtitle($subtitle)
     {
@@ -178,7 +180,7 @@ class AdminTemplate extends AbstractTemplate
     /**
     * @param boolean $show
     * @throws InvalidArgumentException
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_show_header_menu($show)
     {
@@ -252,7 +254,7 @@ class AdminTemplate extends AbstractTemplate
     /**
     * @param boolean $show
     * @throws InvalidArgumentException
-    * @return Template Chainable
+    * @return AdminTemplate Chainable
     */
     public function set_show_footer_menu($show)
     {

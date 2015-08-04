@@ -14,6 +14,9 @@ use \Charcoal\Action\ActionFactory as ActionFactory;
 
 use \Charcoal\Admin\Config as Config;
 
+/**
+* The base class for the `admin` Module
+*/
 class AdminModule extends AbstractModule
 {
     /**

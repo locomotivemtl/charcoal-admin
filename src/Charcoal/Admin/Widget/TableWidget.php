@@ -2,21 +2,35 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 
 /**
 * The table widget displays a collection in a tabular (table) format.
 */
-class TableWidget extends Widget implements CollectionContainerInterface
+class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
     use CollectionContainerTrait;
 
+    /**
+    * @var array $_properties
+    */
     protected $_properties;
+
+    /**
+    * @var $_properties_options
+    */
     protected $_properties_options;
 
+    /**
+    * @var array $_orders
+    */
     protected $_orders;
+
+    /**
+    * @var array $_filters
+    */
     protected $_filters;
 
     /**
@@ -33,8 +47,8 @@ class TableWidget extends Widget implements CollectionContainerInterface
     }
 
     /**
-    * @var array $data
-    * @return Table Chainable
+    * @param array $data
+    * @return TableWidget Chainable
     */
     public function set_data(array $data)
     {
@@ -44,11 +58,17 @@ class TableWidget extends Widget implements CollectionContainerInterface
         return $this;
     }
 
+    /**
+    * @return boolean
+    */
     public function show_object_actions()
     {
         return true;
     }
 
+    /**
+    * @return array
+    */
     public function object_actions()
     {
         return [
@@ -71,6 +91,9 @@ class TableWidget extends Widget implements CollectionContainerInterface
         ];
     }
 
+    /**
+    * @return array
+    */
     public function list_actions()
     {
         return [
@@ -89,6 +112,9 @@ class TableWidget extends Widget implements CollectionContainerInterface
         ];
     }
 
+    /**
+    * @return array
+    */
     public function sublist_actions()
     {
         return [

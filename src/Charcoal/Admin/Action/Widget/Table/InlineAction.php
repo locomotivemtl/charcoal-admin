@@ -8,11 +8,11 @@ use \Exception as Exception;
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
-use \Charcoal\Admin\Action as Action;
+use \Charcoal\Admin\AdminAction as AdminAction;
 use \Charcoal\Admin\Widget\ObjectForm as ObjectForm;
 use \Charcoal\Admin\Widget\FormProperty as FormProperty;
 
-class Inline extends Action
+class InlineAction extends AdminAction
 {
     protected $_inline_properties;
 
@@ -31,7 +31,7 @@ class Inline extends Action
             $this->set_success(false);
             $this->output(404);
         }
-        
+
         try {
             $obj = ModelFactory::instance()->get($obj_type);
             $obj->load($obj_id);

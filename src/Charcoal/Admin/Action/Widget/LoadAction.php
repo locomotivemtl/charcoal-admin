@@ -11,9 +11,12 @@ use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Widget\WidgetFactory as WidgetFactory;
 
 // From `charcoal-admin`
-use \Charcoal\Admin\Action as Action;
+use \Charcoal\Admin\AdminAction as AdminAction;
 
-class Load extends Action
+/**
+*
+*/
+class LoadAction extends AdminAction
 {
     protected $_widget_id = '';
     protected $_widget_html = '';

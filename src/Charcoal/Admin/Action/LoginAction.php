@@ -2,15 +2,19 @@
 
 namespace Charcoal\Admin\Action;
 
+// Dependencies from `PHP`
 use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
+// From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
 
-use \Charcoal\Admin\Action as Action;
+use \Charcoal\Admin\AdminAction as AdminAction;
 use \Charcoal\Admin\User as User;
 
 /**
+* Admin Login Action: Attempt to log a user in.
+*
 * ## Parameters
 * **Required parameters**
 * - `username`
@@ -29,24 +33,11 @@ use \Charcoal\Admin\User as User;
 * - `200` in case of a successful login
 * - `403` in case of wrong credentials
 * - `404` if a required parameter is missing
+*
+* @see \Charcoal\Charcoal::app() The `Slim` application inside the core Charcoal object, used to read request and set response.
 */
-class Login extends Action
+class LoginAction extends AdminAction
 {
-    /**
-    * @var string
-    */
-    private $_next_url;
-
-    /**
-    * @param array $data Optional
-    */
-    public function __construct(array $data = null)
-    {
-        if (is_array($data)) {
-            $this->set_data($data);
-        }
-    }
-
     /**
     * @param array $data
     * @return Login Chainable
@@ -60,16 +51,14 @@ class Login extends Action
         return $this;
     }
 
-    public function success_url()
-    {
-        return $this->next_url();
-    }
-
-    public function failure_url()
-    {
-        return Charcoal::app()->urlFor('admin/login');
-    }
-
+    /**
+    * Assign the next URL.
+    *
+    * Note that any string is accepted. It should be validated before using this method.
+    *
+    * @param string $next_url
+    * @throws InvalidArgumentException If the $next_url parameter is not a string.
+    */
     public function set_next_url($next_url)
     {
         if (!is_string($next_url)) {
@@ -79,6 +68,11 @@ class Login extends Action
         return $this;
     }
 
+    /**
+    * Get the next URL.
+    *
+    * If none was assigned, generate the default URL (frrom `admin/home`)
+    */
     public function next_url()
     {
         if (!$this->_next_url) {
@@ -87,6 +81,27 @@ class Login extends Action
         return $this->_next_url;
     }
 
+    /**
+    * @return string
+    */
+    public function success_url()
+    {
+        return $this->next_url();
+    }
+
+    /**
+    * @return string
+    */
+    public function failure_url()
+    {
+        return Charcoal::app()->urlFor('admin/login');
+    }
+
+
+
+    /**
+    * @return void
+    */
     public function run()
     {
         $username = Charcoal::app()->request->post('username');

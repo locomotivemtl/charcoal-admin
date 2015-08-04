@@ -8,10 +8,38 @@ use \Exception as Exception;
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
-use \Charcoal\Admin\Action as Action;
+use \Charcoal\Admin\AdminAction as AdminAction;
 
-class Delete extends Action
+/**
+* Admin Object Delete Action: Delete an object
+*
+* ## Parameters
+* **Required parameters**
+* - `username`
+* - `password`
+* **Optional parameters**
+* - `next_url`
+*
+* ## Response
+* - `success` true if login was successful, false otherwise.
+*   - Failure should also send a different HTTP code: see below.
+* - `feedbacks` (Optional) operation feedbacks, if any.
+* - `next_url` Redirect URL, in case of successfull login.
+*   - This is the `next_url` parameter if it was set, or the default admin URL if not
+*
+* ## HTTP Codes
+* - `200` in case of a successful object deletion
+* - `404` if any error occurs
+*
+* Ident: `charcoal/admin/action/object/delete`
+*
+* @see \Charcoal\Charcoal::app() The `Slim` application inside the core Charcoal object, used to read request and set response.
+*/
+class DeleteAction extends AdminAction
 {
+    /**
+    * @return void
+    */
     public function run()
     {
         $obj_type = Charcoal::app()->request->post('obj_type');
@@ -19,7 +47,12 @@ class Delete extends Action
         //var_dump($obj_type);
         //var_dump($obj_id);
 
-        if (!$obj_type || !$obj_id) {
+        if (!$obj_type) {
+            $this->set_success(false);
+            $this->output(404);
+        }
+
+        if ($obj_id) {
             $this->set_success(false);
             $this->output(404);
         }

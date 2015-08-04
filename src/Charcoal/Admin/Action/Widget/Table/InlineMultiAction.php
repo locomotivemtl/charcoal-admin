@@ -8,11 +8,14 @@ use \Exception as Exception;
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
-use \Charcoal\Admin\Action as Action;
+use \Charcoal\Admin\AdminAction as AdminAction;
 use \Charcoal\Admin\Widget\ObjectForm as ObjectForm;
 use \Charcoal\Admin\Widget\FormProperty as FormProperty;
 
-class Inlinemulti extends Action
+/**
+*
+*/
+class InlineMultiAction extends AdminAction
 {
     protected $_objects;
 
@@ -31,7 +34,7 @@ class Inlinemulti extends Action
             $this->set_success(false);
             $this->output(404);
         }
-        
+
         try {
             $this->_objects = [];
             foreach ($obj_ids as $obj_id) {

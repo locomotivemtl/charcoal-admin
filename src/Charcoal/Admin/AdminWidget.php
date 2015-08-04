@@ -216,12 +216,4 @@ class AdminWidget extends AbstractWidget
         $content = $view->render_template($this->ident());
         return $content;
     }
-
-    /**
-    *
-    */
-    public function layout()
-    {
-        return true;
-    }
 }

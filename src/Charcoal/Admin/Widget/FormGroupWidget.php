@@ -6,6 +6,7 @@ use \InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Admin\AdminWidget as AdminWidget;
 use \Charcoal\Admin\Widget\FormWidget as FormWidget;
+use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
 
 class FormGroupWidget extends AdminWidget
 {
@@ -46,8 +47,11 @@ class FormGroupWidget extends AdminWidget
     * @var boolean
     */
     private $_show_notes = true;
+    /**
+    * @var string $_title
+    */
+    private $_title = '';
 
-    private $_title;
     private $_description;
     private $_notes;
 
@@ -92,8 +96,38 @@ class FormGroupWidget extends AdminWidget
         if (isset($data['notes']) && $data['notes'] !== null) {
             $this->set_notes($data['notes']);
         }
+        if (isset($data['layout']) && $data['layout'] !== null) {
+            $this->set_layout($data['layout']);
+        }
 
         return $this;
+    }
+
+    /**
+    * @param LayoutWidget|array
+    * @throws InvalidArgumentException
+    * @return Dashboard Chainable
+    */
+    public function set_layout($layout)
+    {
+        if (($layout instanceof LayoutWidget)) {
+            $this->_layout = $layout;
+        } else if (is_array($layout)) {
+            $l = new LayoutWidget();
+            $l->set_data($layout);
+            $this->_layout = $l;
+        } else {
+            throw new InvalidArgumentException('LayoutWidget must be a LayoutWidget object or an array');
+        }
+        return $this;
+    }
+
+    /**
+    * @return LayoutWidget
+    */
+    public function layout()
+    {
+        return $this->_layout;
     }
 
     /**
@@ -200,7 +234,11 @@ class FormGroupWidget extends AdminWidget
     */
     public function show_title()
     {
-        return true;
+        if ($this->_show_title === false) {
+            return false;
+        } else {
+            return !!$this->title();
+        }
     }
 
     /**
@@ -308,7 +346,7 @@ class FormGroupWidget extends AdminWidget
 
     public function title()
     {
-        return 'Group Label';
+        return $this->_title;
     }
 
     public function set_description($description)

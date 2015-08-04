@@ -9,31 +9,69 @@ Display a form group (as a fieldset) and loop the properties to display them.
 This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
 --}}
-<fieldset class="form-group">
+<!--
+<section class="form-group-content">
+{{!-- Loop all form properties --}}
+{{#form_properties}}
+    <div class="property" style="height:26px;">
+        {{!-- Actual property input --}}
+        <div class="form-group">
+            <label for="{{prop.input_id}}" class="col-sm-3 control-label">{{prop.label}}</label>
+            <div class="col-sm-9">
+                 {{#input}}
+                    {{>$widget_template}}
 
-    {{#show_label}}
-         <legend>Legend for form: {{label}}</legend>
-    {{/show_label}}
+                {{/input}}
+            </div>
+        </div>
 
+    </div>
+     <div style="clear:both;">&nbsp;</div>
+{{/form_properties}}
+</section>
+-->
+<fieldset class="o-container">
 
-    <section class="form-group-content">
-    {{!-- Loop all form properties --}}
-    {{#form_properties}}
-        <div class="property" style="height:26px;">
-            {{!-- Actual property input --}}
-            <div class="form-group">
-                <label for="{{prop.input_id}}" class="col-sm-3 control-label">{{prop.label}}</label>
-                <div class="col-sm-9">
-                     {{#input}}
+    <header class="o-header -border">
+        {{#show_title}}
+        <h2>{{title}}</h1>
+        {{/show_title}}
+    </header>
+
+{{#form_properties}}
+
+    {{#layout}}
+
+        {{start}}
+        {{#cell_starts_row}}
+
+    <section class="o-section">
+        <div class="row">
+
+        {{/cell_starts_row}}
+    {{/layout}}
+
+            <div class="col-md-{{layout.cell_span_by12}}">
+                 <div class="form-group">
+                    <label for="{{prop.input_id}}">{{prop.label}}</label>
+                    {{#input}}
                         {{>$widget_template}}
-
                     {{/input}}
                 </div>
             </div>
 
+    {{#layout}}
+        {{#cell_ends_row}}
+
         </div>
-         <div style="clear:both;">&nbsp;</div>
-    {{/form_properties}}
     </section>
+
+        {{/cell_ends_row}}
+
+        {{!-- Hack: Execute end layout --}}
+        {{end}}
+    {{/layout}}
+
+{{/form_properties}}
 
 </fieldset>

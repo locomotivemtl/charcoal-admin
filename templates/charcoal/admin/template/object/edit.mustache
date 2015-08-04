@@ -11,22 +11,14 @@ This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="container">
+    {{>charcoal/admin/widget/feedbacks}}
 
-	{{>charcoal/admin/widget/feedbacks}}
+    <h2>{{title}}</h2>
+    <h3>{{subtitle}}</h3>
 
-	<section class="section object-edit">
-
-	    <h2>{{title}}</h2>
-	    <h3>{{subtitle}}</h3>
-
-	    {{!-- Display the object's "edit" dashboard --}}
-	    {{#dashboard}}
-	        {{>charcoal/admin/widget/dashboard}}
-	    {{/dashboard}}
-	    
-	</section>
-
-</div>
+    {{!-- Display the object's "edit" dashboard --}}
+    {{#dashboard}}
+        {{>charcoal/admin/widget/dashboard}}
+    {{/dashboard}}
 
 {{>charcoal/admin/template/inc.footer}}

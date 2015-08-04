@@ -5,6 +5,7 @@ namespace Charcoal\Admin\Widget;
 use InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
 
 // Local namespace dependencies
 use \Charcoal\Admin\Widget\FormGroupWidget as FormGroupWidget;
@@ -83,19 +84,28 @@ class FormWidget extends AdminWidget
         return $this;
     }
 
+    /**
+    * @param LayoutWidget|array
+    * @throws InvalidArgumentException
+    * @return Dashboard Chainable
+    */
     public function set_layout($layout)
     {
-        if (($layout instanceof Layout)) {
+        if (($layout instanceof LayoutWidget)) {
             $this->_layout = $layout;
         } else if (is_array($layout)) {
-            $layout = new Layout();
-            $layout->set_data($layout);
-            $this->_layout = $layout;
+            $l = new LayoutWidget();
+            $l->set_data($layout);
+            $this->_layout = $l;
         } else {
-            throw new InvalidArgumentException('Layout must be a Layout object or an array');
+            throw new InvalidArgumentException('LayoutWidget must be a LayoutWidget object or an array');
         }
+        return $this;
     }
 
+    /**
+    * @return LayoutWidget
+    */
     public function layout()
     {
         return $this->_layout;

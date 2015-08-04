@@ -7,19 +7,79 @@ Object Form Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 
 --}}
-<div class="form charcoal-admin-widget-form" id="{{widget_id}}">
 
-    <form action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data">
+<form action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widget_id}}">
 
-        {{!-- Loop all form groups --}}
-        {{#groups}}
-            {{>$widget_template}}
-        {{/groups}}
+    <div class="o-flex">
 
+        <div class="o-flex_main">
+
+            {{!-- Loop all form groups --}}
+            {{#groups}}
+                {{>$widget_template}}
+            {{/groups}}
+
+        </div>
+
+        <aside class="c-aside o-flex_aside">
+            <div class="o-container -top -right">
+                <div class="c-panel -fixed">
+                    <header class="c-panel_header">
+                        Actions
+                    </header>
+
+                    <div class="c-panel_main">
+                        <p>
+                            Attention, innondation dans le secteur de boucherville ouest
+                        </p>
+                        <table class="c-panel_table">
+                            <tr class="c-panel_table_row">
+                                <th class="c-panel_table_header">Status</th>
+                                <td class="c-panel_table_data">Brouillon</td>
+                            </tr>
+                            <tr class="c-panel_table_row">
+                                <th class="c-panel_table_header">Création</th>
+                                <td class="c-panel_table_data">20.24.14  16:00</td>
+                            </tr>
+                            <tr class="c-panel_table_row">
+                                <th class="c-panel_table_header">Révision</th>
+                                <td class="c-panel_table_data">20.24.14  16:00</td>
+                            </tr>
+                        </table>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info btn-lg btn-block">Sauvegarder</button>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger btn-lg btn-block">Envoyer l'alerte</button>
+                        </div>
+                    </div>
+
+                    <footer class="c-panel_footer">
+                        <div class="c-panel_footer_item -red">
+                            <span>
+                                <i class="fa fa-trash-o"></i> Effacer
+                            </span>
+                        </div>
+                        <div class="c-panel_footer_item -blue">
+                            <span>
+                                <i class="fa fa-refresh"></i> Réinitialiser
+                            </span>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </aside>
+
+        {{!-- Loop all form groups
         <input class="form-submit" type="submit" value="Save">
-    </form>
+        --}}
 
-</div>
+    {{#show_label}}
+         <legend>Legend for form: {{label}}</legend>
+    {{/show_label}}
+
+    </div>
+</form>
 
 {{#add_js}}
 <script>

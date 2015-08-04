@@ -20,6 +20,12 @@ trait ObjectContainerTrait
     * @var string $_obj_id
     */
     protected $_obj_id;
+
+    /**
+    * @var string $_obj_base_class
+    */
+    protected $_obj_base_class;
+
     /**
     * @var Object $_obj
     */
@@ -42,6 +48,9 @@ trait ObjectContainerTrait
         if (isset($data['obj_id']) && $data['obj_id'] !== null) {
             $this->set_obj_id($data['obj_id']);
         }
+        if (isset($data['obj_base_class']) && $data['obj_base_class'] !== null) {
+            $this->set_obj_id($data['obj_base_class']);
+        }
 
         return $this;
     }
@@ -56,7 +65,7 @@ trait ObjectContainerTrait
         if (!is_string($obj_type)) {
             throw new InvalidArgumentException('Obj type needs to be a string');
         }
-        $this->_obj_type = $obj_type;
+        $this->_obj_type = str_replace(['.', '_'], '/', $obj_type);
         return $this;
     }
 
@@ -65,21 +74,26 @@ trait ObjectContainerTrait
     */
     public function obj_type()
     {
-        return str_replace(['.', '_'], '/', $this->_obj_type);
+        return $this->_obj_type;
     }
 
     /**
-    * @param mixed $obj_id
+    * @param string|numeric $obj_id
     * @return ObjectContainerInterface Chainable
     */
     public function set_obj_id($obj_id)
     {
+        if (!is_scalar($obj_id)) {
+            throw new InvalidArgumentException('Obj ID must be a string or numerical value.');
+        }
         $this->_obj_id = $obj_id;
         return $this;
     }
 
     /**
-    * @return mixed
+    * Assign the Object ID
+    *
+    * @return string|numeric
     */
     public function obj_id()
     {
@@ -87,33 +101,115 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @return Object
+    * @param string $obj_base_class
+    * @throws InvalidArgumentException If the base class is not a string
+    * @return ObjectContainerInterface Chainable
+    */
+    public function set_obj_base_class($obj_base_class)
+    {
+        if (!is_string($obj_base_class)) {
+            throw new InvalidArgumentException('Base class must be a string.');
+        }
+        $this->_obj_base_class = $obj_base_class;
+        return $this;
+    }
+
+    /**
+    * @return string|null
+    */
+    public function obj_base_class()
+    {
+        return $this->_obj_base_class;
+    }
+
+    /**
+    * Create or load the object
+    *
+    * @return ModelInterface
     */
     public function obj()
     {
         if ($this->_obj === null) {
             $this->_obj = $this->create_obj();
         }
+        if ($this->obj_id()) {
+            $this->_obj = $this->load_obj();
+        }
+
         return $this->_obj;
     }
 
     /**
     * @throws Exception
-    * @return Object
+    * @return ModelInterface
     */
-   public function create_obj()
-   {
-        $obj_type = $this->_obj_type;
-        if (!$obj_type) {
-            throw new Exception('Can not create object, type is not defined.');
+    public function create_obj()
+    {
+        if (!$this->validate_obj_type()) {
+            throw new Exception('Can not create object, Invalid object type');
         }
+
+        $obj_type = $this->obj_type();
 
         $obj = ModelFactory::instance()->get($obj_type);
 
-        $obj_id = $this->obj_id();
-        if ($obj_id) {
-            $obj->load($obj_id);
-        }
         return $obj;
-   }
+    }
+
+    /**
+    * @throws Exception
+    * @return ModelInterface The loaded object
+    */
+    public function load_obj()
+    {
+        if ($this->_obj === null) {
+            $this->_obj = $this->create_obj();
+        }
+        $obj = $this->_obj;
+
+        $obj_id = $this->obj_id();
+        if (!$obj_id) {
+            throw new Exception('Can not load object. Object ID is not defined.');
+        }
+        $obj->load($obj_id);
+        return $obj;
+    }
+
+    /**
+    * @return boolean
+    */
+    protected function validate_obj_type()
+    {
+        try {
+            $obj_type = $this->obj_type();
+            if (!$obj_type) {
+                return false;
+            }
+            // Catch exception to know if the obj_type is valid
+            $obj = ModelFactory::instance()->get($obj_type);
+            if (!$this->validate_obj_base_class($obj)) {
+                throw Exception('Can not create object, type is not an instance of obj_base_class');
+            }
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+    * @return boolean
+    */
+    protected function validate_obj_base_class($obj)
+    {
+        $obj_base_class = $this->obj_base_class();
+        if (!$obj_base_class) {
+            // If no base class is set, then no validation is performed.
+            return true;
+        }
+        try {
+            return ($obj instanceof $obj_base_class);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }

@@ -33,8 +33,18 @@ interface ObjectContainerInterface
     public function obj_id();
 
     /**
-    * @return Object
+    * @return ModelInterface
     */
     public function obj();
+
+    /**
+    * @return ModelInterface
+    */
+    public function create_obj();
+
+    /**
+    * @return ModelInterface
+    */
+    public function load_obj();
 
 }

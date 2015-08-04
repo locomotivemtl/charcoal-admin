@@ -195,7 +195,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     */
     public function set_input_class($input_class)
     {
-        if(!is_string($input_class)) {
+        if (!is_string($input_class)) {
             throw new InvalidArgumentException('Input class must be a string');
         }
         $this->_input_class = $input_class;
@@ -222,9 +222,25 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     */
     public function input_val()
     {
-        return $this->p()->val();
+        $prop = $this->p();
+        $val = $prop->val();
+        if ($val == null) {
+            return '';
+        }
+        if ($prop->l10n()) {
+            $val = $val->val();
+        }
+
+        if (!is_scalar($val)) {
+            $val = json_encode($val, true);
+        }
+
+        return $val;
     }
 
+    /**
+    * @param string $input_type
+    */
     public function set_input_type($input_type)
     {
         if (!is_string($input_type)) {
@@ -234,6 +250,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         return $this;
     }
 
+    /**
+    * @return string
+    */
     public function input_type()
     {
         if ($this->_input_type === null) {
@@ -242,7 +261,10 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         return $this->_input_type;
     }
 
-
+    /**
+    * @param PropertyInterface $p
+    * @return AbstractPropertyInput Chainable
+    */
     public function set_property(PropertyInterface $p)
     {
         $this->_property = $p;

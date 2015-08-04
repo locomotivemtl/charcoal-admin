@@ -119,6 +119,7 @@ class User extends Content implements
 
     /**
     * @param string $password
+    * @throws InvalidArgumentException
     * @return UserInterface Chainable
     */
     public function set_password($password)
@@ -229,6 +230,7 @@ class User extends Content implements
 
     /**
     * @param string|DateTime $ts
+    * @throws InvalidArgumentException
     * @return UserInterface Chainable
     */
     public function set_last_login_date($ts)
@@ -253,6 +255,7 @@ class User extends Content implements
 
     /**
     * @param string|int $ip
+    * @throws InvalidArgumentException
     * @return UserInterface Chainable
     */
     public function set_last_login_ip($ip)
@@ -277,6 +280,7 @@ class User extends Content implements
 
     /**
     * @param string|DateTime $ts
+    * @throws InvalidArgumentException
     * @return UserInterface Chainable
     */
     public function set_last_password_date($ts)
@@ -302,6 +306,7 @@ class User extends Content implements
 
     /**
     * @param string|int $ip
+    * @throws InvalidArgumentException
     * @return UserInterface Chainable
     */
     public function set_last_password_ip($ip)
@@ -317,6 +322,7 @@ class User extends Content implements
     }
     /**
     * Get the last password change IP in x.x.x.x format
+    *
     * @return string
     */
     public function last_password_ip()
@@ -506,18 +512,5 @@ class User extends Content implements
         return $config;
     }
 
-    public function pre_save()
-    {
-        //var_dump('PRE SAVE');
-        parent::pre_save();
-    }
 
-    public function post_save()
-    {
-       // var_dump('POST SAVE');
-        parent::post_save();
-
-        $cfg = $this->config();
-        //var_dump($cfg);
-    }
 }

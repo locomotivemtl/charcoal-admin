@@ -51,6 +51,10 @@ class FormGroupWidget extends AdminWidget
     * @var string $_title
     */
     private $_title = '';
+    /**
+    * @var LayoutWidget $_layout
+    */
+    public $_layout;
 
     private $_description;
     private $_notes;

@@ -29,9 +29,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
                     </header>
 
                     <div class="c-panel_main">
-                        <p>
-                            Attention, innondation dans le secteur de boucherville ouest
-                        </p>
+                        <p>Attention, innondation dans le secteur de boucherville ouest</p>
                         <table class="c-panel_table">
                             <tr class="c-panel_table_row">
                                 <th class="c-panel_table_header">Status</th>
@@ -47,7 +45,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
                             </tr>
                         </table>
                         <div class="form-group">
-                            <button type="button" class="btn btn-info btn-lg btn-block">Sauvegarder</button>
+                            <button type="submit" class="btn btn-info btn-lg btn-block" value="Save">Sauvegarder</button>
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-danger btn-lg btn-block">Envoyer l'alerte</button>
@@ -70,13 +68,9 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
             </div>
         </aside>
 
-        {{!-- Loop all form groups
-        <input class="form-submit" type="submit" value="Save">
-        --}}
-
-    {{#show_label}}
-         <legend>Legend for form: {{label}}</legend>
-    {{/show_label}}
+        <input type="hidden" name="widget_id" value="{{widget_id}}">
+        <input type="hidden" name="obj_type" value="{{obj_type}}">
+        <input type="hidden" name="obj_id" value="{{obj_id}}">
 
     </div>
 </form>
@@ -87,7 +81,8 @@ var form_widget;
 $(document).ready(function() {
     form_widget = new Charcoal.Admin.Widget_Form({
         widget_id: '{{widget_id}}',
-        obj_type: '{{obj_type}}'
+        obj_type: '{{obj_type}}',
+        obj_id: '{{obj_id}}'
     });
     //Charcoal.Admin.register_widget(form_widget);
 });

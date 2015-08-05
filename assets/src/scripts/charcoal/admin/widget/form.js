@@ -15,6 +15,7 @@ Charcoal.Admin.Widget_Form = function (opts)
     this.widget_type = 'charcoal/admin/widget/form';
 
     // Widget_Form properties
+    this.widget_id = null;
     this.obj_type = null;
     this.obj_id = null;
 
@@ -37,8 +38,10 @@ Charcoal.Admin.Widget_Form.prototype.init = function (opts)
 
 Charcoal.Admin.Widget_Form.prototype.set_data = function (data)
 {
+    this.widget_id = data.widget_id || null;
     this.obj_type = data.obj_type || null;
     this.obj_id = data.obj_id || null;
+
     return this;
 };
 
@@ -46,18 +49,20 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
 {
     var that = this;
 
-    $('.form-submit').on('click', function (e) {
+    $('#' + that.widget_id).on('submit', function (e) {
         e.preventDefault();
 
-        var url;
+        var $form = $(this),
+            form_data = new FormData($form[0]),
+            url;
+
         if (that.obj_id) {
             url = that.admin.admin_url() + 'action/json/object/update';
         } else {
             url = that.admin.admin_url() + 'action/json/object/save';
         }
-        var $form = $(this).parents('form');
 
-        var form_data = new FormData($form[0]);
+        form_data.append('widget_id', that.widget_id);
         form_data.append('obj_type', that.obj_type);
         form_data.append('obj_id', that.obj_id);
 
@@ -68,7 +73,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             contentType: false,
             data: form_data,
             success: function (response) {
-                window.console.debug(response);
+                console.debug(response);
                 if (response.success) {
                     window.alert('Save successful!');
                 } else {

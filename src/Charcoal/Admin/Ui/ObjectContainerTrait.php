@@ -146,7 +146,7 @@ trait ObjectContainerTrait
     public function create_obj()
     {
         if (!$this->validate_obj_type()) {
-            throw new Exception(sprintf('Can not create object, Invalid object type. Object type is : %1',$this->obj_type()));
+            throw new Exception(sprintf('Can not create object, Invalid object type. Object type is : %1', $this->obj_type()));
         }
 
         $obj_type = $this->obj_type();

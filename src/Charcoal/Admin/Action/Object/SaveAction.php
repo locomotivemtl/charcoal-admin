@@ -122,7 +122,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
 
         $response = [
             'success'=>$this->success(),
-            'obj_id'=>$this->obj_id(),
+            'obj_id'=>$this->obj()->id(),
             'obj'=>$this->obj()
         ];
         return $response;

@@ -11,6 +11,7 @@
         "jQuery":true,
         "BootstrapDialog":true,
         "module":true,
-        "require":true
+        "require":true,
+        "console":true
     }
 }

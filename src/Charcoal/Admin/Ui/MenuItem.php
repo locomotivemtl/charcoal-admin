@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Ui;
 
+// From `charcoal-core`
+use \Charcoal\Translation\TranslationString as TranslationString;
+
 /**
 *
 */
@@ -11,6 +14,18 @@ class MenuItem
     protected $_label;
     protected $_url;
     protected $_children;
+
+    /**
+    * Accept an array of data as constructor.
+    *
+    * @param array $data
+    */
+    final public function __construct(array $data=null)
+    {
+        if($data !== null) {
+            $this->set_data($data);
+        }
+    }
 
     /**
     * @param array $data
@@ -62,7 +77,7 @@ class MenuItem
     */
     public function set_label($label)
     {
-        $this->_label = $label;
+        $this->_label = new TranslationString($label);
         return $this;
     }
 
@@ -125,8 +140,7 @@ class MenuItem
     public function add_child($child)
     {
         if (is_array($child)) {
-            $c = new MenuItem();
-            $c->set_data($child);
+            $c = new MenuItem($child);
             $this->_children[] = $c;
         } else if ($child instanceof MenuItem) {
             $this->children[] = $child;

@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Charcoal\Admin\Template as Template;
+use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class AdminTemplateTest extends \PHPUnit_Framework_TestCase
 {
     public static function getMethod($obj, $name)
     {
@@ -16,13 +16,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $obj = new Template();
+        $obj = new AdminTemplate();
         $this->assertInstanceOf('\Charcoal\Admin\Template', $obj);
     }
 
     public function testAuthRequiredIsTrue()
     {
-        $obj = new Template();
+        $obj = new AdminTemplate();
         $foo = self::getMethod($obj, 'auth_required');
         $res = $foo->invoke($obj);
         $this->assertTrue($res);
@@ -30,7 +30,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testSetData()
     {
-        $obj = new Template();
+        $obj = new AdminTemplate();
         $ret = $obj->set_data([
             'ident'=>'foo',
             'label'=>'Bar',

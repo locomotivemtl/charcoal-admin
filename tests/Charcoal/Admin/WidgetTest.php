@@ -2,22 +2,22 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Charcoal\Admin\Widget as Widget;
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 
-class WidgetTest extends \PHPUnit_Framework_TestCase
+class AdminWidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * Hello world
     */
     public function testConstructor()
     {
-        $obj = new Widget();
-        $this->assertInstanceOf('\Charcoal\Admin\Widget', $obj);
+        $obj = new AdminWidget();
+        $this->assertInstanceOf('\Charcoal\Admin\AdminWidget', $obj);
     }
 
     public function testSetData()
     {
-        $obj = new Widget();
+        $obj = new AdminWidget();
         $ret = $obj->set_data([
             'type'=>'foo',
             'ident'=>'bar',
@@ -34,7 +34,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testSetType()
     {
-        $obj = new Widget();
+        $obj = new AdminWidget();
         $this->assertEquals(null, $obj->type());
 
         $ret = $obj->set_type('foo');
@@ -47,10 +47,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLabel()
     {
-        $obj = new Widget();
+        $obj = new AdminWidget();
         $this->assertEquals(null, $obj->label());
 
-        $obj = new Widget();
+        $obj = new AdminWidget();
         $obj->set_ident('foo.bar');
         $this->assertEquals('Foo Bar', $obj->label());
 

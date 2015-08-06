@@ -18,4 +18,12 @@ class SwitchInput extends AbstractPropertyInput
     {
         return !!$this->p()->val();
     }
+
+    /**
+    * @return int
+    */
+    public function value()
+    {
+        return ( $this->p()->val() ) ? : 0;
+    }
 }

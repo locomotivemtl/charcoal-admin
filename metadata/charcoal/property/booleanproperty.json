@@ -1,6 +1,6 @@
 {
     "admin":{
-        "input_type":"charcoal/admin/property/input/radio"
+        "input_type":"charcoal/admin/property/input/switch"
     }
 }
 

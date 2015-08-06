@@ -7,19 +7,28 @@ Switch Property Input
 --}}
 <input
     type="checkbox"
-    id="{{input_id}}"
-    name="{{input_name}}"
     class="js-bs-switch {{input_class}}"
+    data-target="{{input_id}}"
     {{#checked}}checked{{/checked}}
     {{#read_only}}read_only{{/read_only}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
 >
+<input type="hidden"
+    id="{{input_id}}"
+    name="{{input_name}}"
+    value="{{value}}"
+>
 
 {{#add_js}}
 <script>
 $(document).ready(function() {
-    $(".js-bs-switch").bootstrapSwitch();
+    $(".js-bs-switch").bootstrapSwitch({
+        onSwitchChange: function(event, state) {
+            var input = this.getAttribute('data-target');
+            $('#' + input).val( (state) ? 1 : 0 );
+        }
+    });
 });
 </script>
 {{/add_js}}

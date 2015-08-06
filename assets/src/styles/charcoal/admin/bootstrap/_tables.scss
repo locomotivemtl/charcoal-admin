@@ -1,22 +1,6 @@
 // ==========================================================================
 // Tables
 // ==========================================================================
-
-.table-header {
-    padding: $table-cell-padding;
-    border: 1px solid $table-border-color;
-    border-bottom: none;
-    font-size: rem(13px);
-
-    .btn, .btn-group {
-        margin-left: $grid-gutter-width;
-
-        &:first-child {
-            margin-left: 0;
-        }
-    }
-}
-
 .table {
   > thead,
   > tbody,

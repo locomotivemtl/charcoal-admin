@@ -143,6 +143,12 @@
 @import "bootstrap/tables";
 @import "bootstrap/buttons";
 
+// Bootstrap custom components
+// ==========================================================================
+@import "bootstrap-custom/table-header";
+@import "bootstrap-custom/map-maker";
+
+
 // Vendors
 // ==========================================================================
 @import "vendors/summernote";

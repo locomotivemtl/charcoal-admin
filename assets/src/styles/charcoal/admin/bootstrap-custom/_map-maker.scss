@@ -1,0 +1,109 @@
+// ==========================================================================
+// Map maker
+// ==========================================================================
+.map-maker {
+    overflow: hidden;
+
+    height: 540px;
+}
+
+.map-maker_actions {
+    float: left;
+
+    width: 60px;
+    height: 100%;
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        height: 100%;
+    }
+    .btn {
+        position: relative;
+        background-color: $white;
+
+        padding: 0;
+
+        border-radius: 0;
+
+        flex: 1;
+
+        &:after {
+            position: absolute;
+            top: -1px;
+            bottom: -1px;
+            left: 0;
+
+            width: 5px;
+
+            content: "";
+            transition: transform $speed;
+            transform: translateX(calc(-100% - 1px));
+
+            background-color: $blue;
+        }
+        &:active {
+            background-color: $white;
+        }
+        &:hover,  &.-active {
+            background-color: $white;
+            &:after {
+                transform: translateX(0);
+            }
+
+            .map-maker_icon {
+                fill:$blue;
+            }
+        }
+    }
+}
+
+.map-maker_content {
+    float: left;
+
+    width: calc(100% - 60px);
+    height: 100%;
+}
+
+.map-maker_icon {
+    width: 30px;
+    height: 30px;
+
+    fill:$black;
+
+    transition: fill 0.5s;
+}
+
+
+.map-maker_map {
+    overflow: hidden;
+
+    height: calc(100% - 60px);
+
+    background-image: url(../images/placeholder-map.png);
+    background-size: cover;
+}
+
+.map-maker_header {
+    padding: 11.5px 20px;
+
+    border-width: 1px;
+    border-color: $gray-light;
+    border-top-style: solid;
+    border-right-style: solid;
+}
+
+.map-maker_label {
+    margin-right:13px;
+}
+
+.map-maker_btn {
+    margin-left:13px;
+}
+
+
+.map-maker_input {
+    width: calc(100% - 216px);
+    display: inline-block;
+}

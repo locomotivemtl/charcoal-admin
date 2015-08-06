@@ -5,6 +5,9 @@ namespace Charcoal\Admin;
 // Dependencies from `PHP`
 use \InvalidArgumentException as InvalidArgumentException;
 
+// From `charcoal-core`
+use \Charcoal\Translation\TranslationString as TranslationString;
+
 // From `charcoal-base`
 use \Charcoal\Widget\AbstractWidget as AbstractWidget;
 use \Charcoal\Widget\WidgetView as WidgetView;
@@ -130,9 +133,13 @@ class AdminWidget extends AbstractWidget
         return $this->_ident;
     }
 
+    /**
+    * @param mixed $label
+    * @return AdminWidget Chainable
+    */
     public function set_label($label)
     {
-        $this->_label = $label;
+        $this->_label = new TranslationString($label);
         return $this;
     }
 
@@ -142,7 +149,9 @@ class AdminWidget extends AbstractWidget
     public function label()
     {
         if ($this->_label === null) {
-            $this->_label = ucwords(str_replace(['_', '.', '/'], ' ', $this->ident()));
+            // Generate label from ident
+            $label = ucwords(str_replace(['_', '.', '/'], ' ', $this->ident()));
+            $this->_label = new TranslationString($label);
         }
         return $this->_label;
     }
@@ -198,7 +207,7 @@ class AdminWidget extends AbstractWidget
     public function show_label()
     {
         if ($this->_show_label !== false) {
-            return ($this->label() == '');
+            return ((string)$this->label() == '');
         } else {
             return false;
         }

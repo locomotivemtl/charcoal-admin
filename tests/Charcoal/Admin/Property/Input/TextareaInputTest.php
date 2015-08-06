@@ -2,22 +2,22 @@
 
 namespace Charcoal\Admin\Tests\Property\Input;
 
-use \Charcoal\Admin\Property\Input\Textarea as Textarea;
+use \Charcoal\Admin\Property\Input\TextareaInput as TextareaInput;
 
-class TextareaTest extends \PHPUnit_Framework_TestCase
+class TextareaInputTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * Hello world
     */
     public function testConstructor()
     {
-        $obj = new Textarea();
-        $this->assertInstanceOf('\Charcoal\Admin\Property\Input\Textarea', $obj);
+        $obj = new TextareaInput();
+        $this->assertInstanceOf('\Charcoal\Admin\Property\Input\TextareaInput', $obj);
     }
 
     public function testSetData()
     {
-        $obj = new Textarea();
+        $obj = new TextareaInput();
         $ret = $obj->set_data([
             'cols'=>42,
             'rows'=>84
@@ -29,7 +29,7 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCols()
     {
-        $obj = new Textarea();
+        $obj = new TextareaInput();
         $ret = $obj->set_cols(42);
 
         $this->assertSame($ret, $obj);
@@ -41,7 +41,7 @@ class TextareaTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRows()
     {
-        $obj = new Textarea();
+        $obj = new TextareaInput();
         $ret = $obj->set_rows(42);
 
         $this->assertSame($ret, $obj);

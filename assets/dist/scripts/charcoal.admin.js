@@ -8304,10 +8304,20 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
             if (response.success) {
                 window.location.href = response.next_url;
             } else {
-                window.alert('Error');
+                //window.alert('Error');
+                BootstrapDialog.show({
+                    title: 'Login error',
+                    message: 'Authentication failed. Please try again.',
+                    type: BootstrapDialog.TYPE_DANGER
+                });
             }
         }).fail(function () {
-            window.alert('Error');
+            //window.alert('Error');
+            BootstrapDialog.show({
+                title: 'Login error',
+                message: 'Authentication failed. Please try again.',
+                type: BootstrapDialog.TYPE_DANGER
+            });
         });
     });
 };
@@ -8433,13 +8443,28 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             success: function (response) {
                 console.debug(response);
                 if (response.success) {
-                    window.alert('Save successful!');
+                    //window.alert('Save successful!');
+                    BootstrapDialog.show({
+                        title: 'Save successful!',
+                        message: 'Object was successfully saved to storage.',
+                        type: BootstrapDialog.TYPE_SUCCESS
+                    });
                 } else {
-                    window.alert('Error. Could not save object.');
+                    //window.alert('Error. Could not save object.');
+                    BootstrapDialog.show({
+                        title: 'Error. Could not save object.',
+                        message: 'An error occurred and the object could not be saved.',
+                        type: BootstrapDialog.TYPE_DANGER
+                    });
                 }
             },
             error: function () {
-                window.alert('Error attempting to save form.');
+                //window.alert('Error. Could not save object.');
+                BootstrapDialog.show({
+                    title: 'Error. Could not save object.',
+                    message: 'An error occurred and the object could not be saved.',
+                    type: BootstrapDialog.TYPE_DANGER
+                });
             }
         });
     });

@@ -8090,8 +8090,8 @@ button.close {
   .note-editor.dragover .note-dropzone {
     display: table; }
   .note-editor .note-toolbar {
-    margin: -5px -10px 0 -10px;
-    padding: 0; }
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #a9a9a9; }
   .note-editor.fullscreen {
     position: fixed;
     top: 0;
@@ -8119,10 +8119,9 @@ button.close {
         margin: 1px auto;
         border-top: 1px solid #a9a9a9; }
   .note-editor .note-editable[contenteditable=true]:empty:not(:focus):before {
-    content: attr(data-placeholder); }
+    content: attr(data-placeholder);
+    color: #a9a9a9; }
   .note-editor .note-editable {
-    background-color: #fff;
-    color: #000;
     padding: 10px;
     overflow: auto;
     outline: none; }
@@ -8379,10 +8378,6 @@ button.close {
       right: -5px;
       bottom: -5px;
       cursor: se-resize; }
-    .note-handle .note-control-selection .note-control-se.note-control-holder {
-      cursor: default;
-      border-top: none;
-      border-left: none; }
     .note-handle .note-control-selection .note-control-selection-info {
       right: 0;
       bottom: 0;

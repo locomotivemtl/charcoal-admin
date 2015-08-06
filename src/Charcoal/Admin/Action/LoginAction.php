@@ -39,6 +39,11 @@ use \Charcoal\Admin\User as User;
 class LoginAction extends AdminAction
 {
     /**
+    * @var string $_next_url
+    */
+    protected $_next_url;
+
+    /**
     * @param array $data
     * @return Login Chainable
     */
@@ -97,8 +102,6 @@ class LoginAction extends AdminAction
         return Charcoal::app()->urlFor('admin/login');
     }
 
-
-
     /**
     * @return void
     */
@@ -110,6 +113,7 @@ class LoginAction extends AdminAction
         if (!$username || !$password) {
             $this->set_success(false);
             $this->output(404);
+            return;
         }
         $u = new User();
         try {

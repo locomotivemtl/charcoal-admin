@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Tests\Property\Input;
 
-use \Charcoal\Admin\Property\Input\Text as Text;
+use \Charcoal\Admin\Property\Input\TextInput as Text;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextInputTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * Hello world

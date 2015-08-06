@@ -2,16 +2,16 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Charcoal\Admin\Action\Login as Login;
+use \Charcoal\Admin\Action\LoginAction as LoginAction;
 
-class LoginTest extends \PHPUnit_Framework_TestCase
+class LoginActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * Hello world
     */
     public function testConstructor()
     {
-        $obj = new Login();
+        $obj = new LoginAction();
         $this->assertInstanceOf('\Charcoal\Admin\Action\Login', $obj);
     }
 }

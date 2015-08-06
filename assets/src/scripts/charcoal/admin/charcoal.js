@@ -10,9 +10,20 @@ Charcoal.Admin = function ()
     this.url = '';
     this.admin_path = '';
 
+    /**
+    * Private ComponentManage instance
+    * @var {object}
+    */
+    //this._manager = new Charcoal.Admin.ComponentManager();
+
     this.admin_url = function ()
     {
         return this.url + this.admin_path + '/';
     };
 
 };
+
+//Charcoal.Admin.manager = function ()
+//{
+//    return Charcoal.Admin._manager;
+//};

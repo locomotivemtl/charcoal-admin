@@ -22,6 +22,7 @@ Switch Property Input
 
 {{#add_js}}
 <script>
+var test ;
 $(document).ready(function() {
     $(".js-bs-switch").bootstrapSwitch({
         onSwitchChange: function(event, state) {
@@ -29,6 +30,14 @@ $(document).ready(function() {
             $('#' + input).val( (state) ? 1 : 0 );
         }
     });
+
+
+    //Charcoal.Admin.manager().add_property_input({
+    //    id: '{{input_id}}',
+    //    type: 'charcoal/admin/property/input/switch',
+    //    data: {}
+    //});
+    //Charcoal.Admin.register_widget(form_widget);
 });
 </script>
 {{/add_js}}

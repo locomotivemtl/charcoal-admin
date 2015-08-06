@@ -7331,11 +7331,42 @@ Charcoal.Admin = function ()
     this.url = '';
     this.admin_path = '';
 
+    /**
+    * Private ComponentManage instance
+    * @var {object}
+    */
+    //this._manager = new Charcoal.Admin.ComponentManager();
+
     this.admin_url = function ()
     {
         return this.url + this.admin_path + '/';
     };
 
+};
+
+//Charcoal.Admin.manager = function ()
+//{
+//    return Charcoal.Admin._manager;
+//};
+;/**
+* charcoal/admin/component_manager
+*/
+
+Charcoal.Admin.ComponentManager = function (opts)
+{
+
+    this.init(opts);
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.init = function ()
+{
+    window.alert('We going to Factory soon');
+};
+
+Charcoal.Admin.ComponentManager.prototype.add_property_input = function ()
+{
+    window.alert('We going to Factory soon');
 };
 ;/**
 * charcoal/admin/property

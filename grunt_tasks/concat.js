@@ -8,6 +8,7 @@ module.exports = {
             'bower_components/summernote/dist/summernote.js',
 
             'assets/src/scripts/charcoal/admin/charcoal.js',
+            'assets/src/scripts/charcoal/admin/component_manager.js',
             'assets/src/scripts/charcoal/admin/property.js',
             'assets/src/scripts/charcoal/admin/property/*.js',
             'assets/src/scripts/charcoal/admin/property/input/*.js',

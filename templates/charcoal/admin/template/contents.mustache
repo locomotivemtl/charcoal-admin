@@ -96,6 +96,7 @@ Display the "home" dashboard.
                     <div class="col-md-6">
                          <div class="form-group">
                             <label for="select1">Type d'alerte</label>
+                            <span class="c-info" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</span>
                             <select class="form-control" id="select1">
                                 <option>1</option>
                                 <option>2</option>
@@ -208,5 +209,15 @@ Display the "home" dashboard.
     </aside>
 
 </div>
+
+
+{{#add_js}}
+<script>
+    $(document).ready(function() {
+         $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{{/add_js}}
+
 
 {{>charcoal/admin/template/inc.footer}}

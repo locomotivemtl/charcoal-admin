@@ -1,0 +1,21 @@
+// ==========================================================================
+// Info - (?) additional info
+// ==========================================================================
+
+.c-info {
+    display: inline-block;
+
+    width: 23px;
+    height: 23px;
+
+    text-align: center;
+
+    border: 1px solid $gray-light;
+    border-radius: 50%;
+
+    color:$gray-light;
+    text-indent: -1px;
+
+    margin-left:10px;
+    cursor:help;
+}

@@ -358,4 +358,16 @@ class AdminTemplate extends AbstractTemplate
     {
         return Charcoal::config()['URL'];
     }
+
+    public function for_loop()
+    {
+       $return = [];
+
+       for ($i = 1; $i <= 10; $i++) {
+           $return[$i] = new \ArrayIterator( array_combine( range(1, $i), range(1, $i) ) );
+       }
+
+       return $return;
+   }
+
 }

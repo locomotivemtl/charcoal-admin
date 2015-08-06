@@ -8424,10 +8424,6 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             url = that.admin.admin_url() + 'action/json/object/save';
         }
 
-        form_data.append('widget_id', that.widget_id);
-        form_data.append('obj_type', that.obj_type);
-        form_data.append('obj_id', that.obj_id);
-
         $.ajax({
             url: url,
             type: 'POST',

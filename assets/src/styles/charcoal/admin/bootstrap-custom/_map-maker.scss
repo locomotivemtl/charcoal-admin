@@ -18,6 +18,20 @@
 
         width: 100%;
         height: 100%;
+
+        &:hover {
+            .btn.-active {
+                &::after {
+                    transform: translateX(calc(-100% - 1px));
+                }
+
+                &:hover {
+                    &::after {
+                        transform: translateX(0);
+                    }
+                }
+            }
+        }
     }
     .btn {
         position: relative;

@@ -8979,6 +8979,10 @@ label {
     flex-direction: column;
     width: 100%;
     height: 100%; }
+    .map-maker_actions .btn-group-vertical:hover .btn.-active::after {
+      transform: translateX(calc(-100% - 1px)); }
+    .map-maker_actions .btn-group-vertical:hover .btn.-active:hover::after {
+      transform: translateX(0); }
   .map-maker_actions .btn {
     position: relative;
     background-color: #ffffff;

@@ -2,11 +2,8 @@ module.exports = {
     options:{
         separator:';'
     },
-    scripts : {
+    app: {
         src: [
-            'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
-            'bower_components/summernote/dist/summernote.js',
-
             'assets/src/scripts/charcoal/admin/charcoal.js',
             'assets/src/scripts/charcoal/admin/component_manager.js',
             'assets/src/scripts/charcoal/admin/property.js',
@@ -18,6 +15,13 @@ module.exports = {
             'assets/src/scripts/charcoal/admin/widget/*.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.js'
+    },
+    vendors: {
+        src: [
+            'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',
+            'bower_components/summernote/dist/summernote.js',
+        ],
+        dest: 'assets/dist/scripts/charcoal.admin.vendors.js'
     },
     css : {
         src: [

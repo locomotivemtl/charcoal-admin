@@ -30,7 +30,6 @@ Charcoal.Admin.Widget_Table = function (opts)
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Table.prototype.constructor = Charcoal.Admin.Widget_Table;
 Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
-Charcoal.Admin.Widget_Table.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Widget_Table.prototype.init = function (opts)
 {
@@ -85,7 +84,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
         e.preventDefault();
         var obj_id = $(this).parents('tr').data('id');
 
-        var url = that.admin.admin_url() + 'action/json/widget/load';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
         var data = {
             widget_type: 'charcoal/admin/widget/objectForm',
             widget_options: {
@@ -112,7 +111,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
         e.preventDefault();
         var row = $(this).parents('tr');
         var obj_id = row.data('id');
-        var url = that.admin.admin_url() + 'action/json/widget/table/inline';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inline';
         var data = {
             obj_type: that.obj_type,
             obj_id: obj_id
@@ -132,7 +131,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
         e.preventDefault();
         var obj_id = $(this).parents('tr').data('id');
         if (window.confirm('Are you sure you want to delete this object?')) {
-            var url = that.admin.admin_url() + 'action/json/object/delete';
+            var url = Charcoal.Admin.admin_url() + 'action/json/object/delete';
             var data = {
                 obj_type: that.obj_type,
                 obj_id: obj_id
@@ -155,7 +154,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_list_events = function ()
 
     $('.list-quick-create').on('click', function (e) {
         e.preventDefault();
-        var url = that.admin.admin_url() + 'action/json/widget/load';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
         var data = {
             widget_type: 'charcoal/admin/widget/objectForm',
             widget_options: {
@@ -188,7 +187,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_sublist_events = function ()
         e.preventDefault();
         var sublist = that.sublist();
         //console.debug(sublist);
-        var url = that.admin.admin_url() + 'action/json/widget/table/inlinemulti';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inlinemulti';
         var data = {
             obj_type: that.obj_type,
             obj_ids: sublist.obj_ids
@@ -249,7 +248,7 @@ Charcoal.Admin.Widget_Table.prototype.reload = function ()
 {
     var that = this;
 
-    var url = that.admin.admin_url() + 'action/json/widget/load';
+    var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
     var data = {
         widget_type:    that.widget_type,
         widget_options: that.widget_options()

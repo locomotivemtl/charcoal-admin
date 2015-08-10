@@ -1,51 +1,94 @@
 var Charcoal = Charcoal || {};
-Charcoal.Admin = function ()
+/**
+* Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
+* It gives access to private properties and public methods
+* @return  {object}  Charcoal.Admin
+*/
+Charcoal.Admin = (function ()
 {
-    // This is a singleton
-    if (arguments.callee.singleton_instance) {
-        return arguments.callee.singleton_instance;
-    }
-    arguments.callee.singleton_instance = this;
+    'use strict';
 
-    this.url = '';
-    this.admin_path = '';
-
-    /**
-    * Private ComponentManage instance
-    * @var {object}
-    */
-    //this._manager = new Charcoal.Admin.ComponentManager();
-
-    this.admin_url = function ()
-    {
-        return this.url + this.admin_path + '/';
+    this.options = {
+        base_url: null,
+        admin_path: null,
+        manager: null
     };
 
-};
+    /**
+    * Object function that acts as Admin initialization code and container for public methods
+    */
+    function Admin()
+    {
+        this.options.manager = new Charcoal.Admin.ComponentManager();
+    }
 
-//Charcoal.Admin.manager = function ()
-//{
-//    return Charcoal.Admin._manager;
-//};
+    /**
+    * Set data that can be used by public methods
+    * @param  {object}  data  Object containing data that needs to be set
+    */
+    Admin.set_data = function (data)
+    {
+        this.options = $.extend(true, this.options, data);
+    };
+
+    /**
+    * Generates the admin URL used by forms and other objects
+    * @return  {string}  URL for admin section
+    */
+    Admin.admin_url = function ()
+    {
+        return this.options.base_url + this.options.admin_path + '/';
+    };
+
+    /**
+     * Provides an access to our instanciated ComponentManager
+     * @return  {object}  ComponentManager instance
+     */
+    Admin.manager = function ()
+    {
+        return this.options.manager;
+    };
+
+    return Admin;
+
+}());
 ;/**
 * charcoal/admin/component_manager
 */
 
-Charcoal.Admin.ComponentManager = function (opts)
+Charcoal.Admin.ComponentManager = function ()
 {
-
-    this.init(opts);
-
+    this.test = 'Test string';
 };
 
-Charcoal.Admin.ComponentManager.prototype.init = function ()
+Charcoal.Admin.ComponentManager.prototype.set_data = function (data)
 {
-    window.alert('We going to Factory soon');
+    this.test = data.test || null;
+};
+
+Charcoal.Admin.ComponentManager.prototype.output = function ()
+{
+    console.log(this.test);
 };
 
 Charcoal.Admin.ComponentManager.prototype.add_property_input = function ()
 {
-    window.alert('We going to Factory soon');
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.add_widget = function ()
+{
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.add_template = function ()
+{
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.render = function ()
+{
+
 };
 ;/**
 * charcoal/admin/property
@@ -55,8 +98,6 @@ Charcoal.Admin.Property = function (opts)
 {
     window.alert('Property ' + opts);
 };
-
-Charcoal.Admin.Property.prototype.admin = new Charcoal.Admin();
 ;/**
  * charcoal/admin/property/audio
  * Require:
@@ -92,7 +133,6 @@ Charcoal.Admin.Property_Audio = function (opts)
 Charcoal.Admin.Property_Audio.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Audio.prototype.constructor = Charcoal.Admin.Property_Audio;
 Charcoal.Admin.Property_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
-Charcoal.Admin.Property_Audio.prototype.admin = new Charcoal.Admin();
 
 /**
  * Return default data
@@ -967,8 +1007,6 @@ Charcoal.Admin.Template = function (opts)
 {
     window.alert('Template ' + opts);
 };
-
-Charcoal.Admin.Template.prototype.admin = new Charcoal.Admin();
 ;/**
 * charcoal/admin/template/login
 *
@@ -991,7 +1029,6 @@ Charcoal.Admin.Template_Login = function (opts)
 Charcoal.Admin.Template_Login.prototype = Object.create(Charcoal.Admin.Template.prototype);
 Charcoal.Admin.Template_Login.prototype.constructor = Charcoal.Admin.Template_Login;
 Charcoal.Admin.Template_Login.prototype.parent = Charcoal.Admin.Template.prototype;
-Charcoal.Admin.Template_Login.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Template_Login.prototype.init = function (opts)
 {
@@ -1001,13 +1038,12 @@ Charcoal.Admin.Template_Login.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 {
-    var that = this;
 
     $('.js-login-submit').on('click', function (e) {
         e.preventDefault();
 
         var form = $(this).parents('form');
-        var url = that.admin.admin_url() + 'action/json/login';
+        var url = Charcoal.Admin.admin_url() + 'action/json/login';
         var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);
@@ -1067,13 +1103,11 @@ Charcoal.Admin.Widget = function (opts)
     window.alert('Widget ' + opts);
 };
 
-Charcoal.Admin.Widget.prototype.admin = new Charcoal.Admin();
-
 Charcoal.Admin.Widget.prototype.reload = function (cb)
 {
     var that = this;
 
-    var url = that.admin.admin_url() + 'action/json/widget/load';
+    var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
     var data = {
         widget_type:    that.widget_type,
         widget_options: that.widget_options()
@@ -1108,14 +1142,11 @@ Charcoal.Admin.Widget_Form = function (opts)
 Charcoal.Admin.Widget_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
-Charcoal.Admin.Widget_Form.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Widget_Form.prototype.init = function (opts)
 {
     var data = $.extend(true, {}, opts);
-    this.set_data(data);
-
-    this.bind_events();
+    this.set_data(data).bind_events();
 };
 
 Charcoal.Admin.Widget_Form.prototype.set_data = function (data)
@@ -1139,9 +1170,9 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             url;
 
         if (that.obj_id) {
-            url = that.admin.admin_url() + 'action/json/object/update';
+            url = Charcoal.Admin.admin_url() + 'action/json/object/update';
         } else {
-            url = that.admin.admin_url() + 'action/json/object/save';
+            url = Charcoal.Admin.admin_url() + 'action/json/object/save';
         }
 
         $.ajax({
@@ -1211,7 +1242,6 @@ Charcoal.Admin.Widget_Table = function (opts)
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Table.prototype.constructor = Charcoal.Admin.Widget_Table;
 Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
-Charcoal.Admin.Widget_Table.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Widget_Table.prototype.init = function (opts)
 {
@@ -1266,7 +1296,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
         e.preventDefault();
         var obj_id = $(this).parents('tr').data('id');
 
-        var url = that.admin.admin_url() + 'action/json/widget/load';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
         var data = {
             widget_type: 'charcoal/admin/widget/objectForm',
             widget_options: {
@@ -1293,7 +1323,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
         e.preventDefault();
         var row = $(this).parents('tr');
         var obj_id = row.data('id');
-        var url = that.admin.admin_url() + 'action/json/widget/table/inline';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inline';
         var data = {
             obj_type: that.obj_type,
             obj_id: obj_id
@@ -1313,7 +1343,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
         e.preventDefault();
         var obj_id = $(this).parents('tr').data('id');
         if (window.confirm('Are you sure you want to delete this object?')) {
-            var url = that.admin.admin_url() + 'action/json/object/delete';
+            var url = Charcoal.Admin.admin_url() + 'action/json/object/delete';
             var data = {
                 obj_type: that.obj_type,
                 obj_id: obj_id
@@ -1336,7 +1366,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_list_events = function ()
 
     $('.list-quick-create').on('click', function (e) {
         e.preventDefault();
-        var url = that.admin.admin_url() + 'action/json/widget/load';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
         var data = {
             widget_type: 'charcoal/admin/widget/objectForm',
             widget_options: {
@@ -1369,7 +1399,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_sublist_events = function ()
         e.preventDefault();
         var sublist = that.sublist();
         //console.debug(sublist);
-        var url = that.admin.admin_url() + 'action/json/widget/table/inlinemulti';
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inlinemulti';
         var data = {
             obj_type: that.obj_type,
             obj_ids: sublist.obj_ids
@@ -1430,7 +1460,7 @@ Charcoal.Admin.Widget_Table.prototype.reload = function ()
 {
     var that = this;
 
-    var url = that.admin.admin_url() + 'action/json/widget/load';
+    var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
     var data = {
         widget_type:    that.widget_type,
         widget_options: that.widget_options()

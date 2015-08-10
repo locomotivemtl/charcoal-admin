@@ -33,7 +33,6 @@ Charcoal.Admin.Property_Audio = function (opts)
 Charcoal.Admin.Property_Audio.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Audio.prototype.constructor = Charcoal.Admin.Property_Audio;
 Charcoal.Admin.Property_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
-Charcoal.Admin.Property_Audio.prototype.admin = new Charcoal.Admin();
 
 /**
  * Return default data

@@ -2,19 +2,37 @@
 * charcoal/admin/component_manager
 */
 
-Charcoal.Admin.ComponentManager = function (opts)
+Charcoal.Admin.ComponentManager = function ()
 {
-
-    this.init(opts);
-
+    this.test = 'Test string';
 };
 
-Charcoal.Admin.ComponentManager.prototype.init = function ()
+Charcoal.Admin.ComponentManager.prototype.set_data = function (data)
 {
-    window.alert('We going to Factory soon');
+    this.test = data.test || null;
+};
+
+Charcoal.Admin.ComponentManager.prototype.output = function ()
+{
+    console.log(this.test);
 };
 
 Charcoal.Admin.ComponentManager.prototype.add_property_input = function ()
 {
-    window.alert('We going to Factory soon');
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.add_widget = function ()
+{
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.add_template = function ()
+{
+
+};
+
+Charcoal.Admin.ComponentManager.prototype.render = function ()
+{
+
 };

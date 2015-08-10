@@ -16,11 +16,10 @@
     <script src="{{base_url}}assets/admin/scripts/charcoal.admin.vendors.js"></script>
 	<script src="{{base_url}}assets/admin/scripts/charcoal.admin.js"></script>
 	<script>
-	$(document).ready(function(e) {
-		var admin = new Charcoal.Admin();
-		admin.url = '{{base_url}}';
-		admin.admin_path = 'admin';
-	});
+        Charcoal.Admin.set_data({
+            'base_url'   : '{{base_url}}',
+            'admin_path' : 'admin'
+        });
 	</script>
 
     {{!-- Scripts from widgets & templates --}}

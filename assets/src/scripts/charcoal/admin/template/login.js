@@ -20,7 +20,6 @@ Charcoal.Admin.Template_Login = function (opts)
 Charcoal.Admin.Template_Login.prototype = Object.create(Charcoal.Admin.Template.prototype);
 Charcoal.Admin.Template_Login.prototype.constructor = Charcoal.Admin.Template_Login;
 Charcoal.Admin.Template_Login.prototype.parent = Charcoal.Admin.Template.prototype;
-Charcoal.Admin.Template_Login.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Template_Login.prototype.init = function (opts)
 {
@@ -30,13 +29,12 @@ Charcoal.Admin.Template_Login.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 {
-    var that = this;
 
     $('.js-login-submit').on('click', function (e) {
         e.preventDefault();
 
         var form = $(this).parents('form');
-        var url = that.admin.admin_url() + 'action/json/login';
+        var url = Charcoal.Admin.admin_url() + 'action/json/login';
         var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);

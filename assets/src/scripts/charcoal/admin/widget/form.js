@@ -26,14 +26,11 @@ Charcoal.Admin.Widget_Form = function (opts)
 Charcoal.Admin.Widget_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
-Charcoal.Admin.Widget_Form.prototype.admin = new Charcoal.Admin();
 
 Charcoal.Admin.Widget_Form.prototype.init = function (opts)
 {
     var data = $.extend(true, {}, opts);
-    this.set_data(data);
-
-    this.bind_events();
+    this.set_data(data).bind_events();
 };
 
 Charcoal.Admin.Widget_Form.prototype.set_data = function (data)
@@ -57,9 +54,9 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             url;
 
         if (that.obj_id) {
-            url = that.admin.admin_url() + 'action/json/object/update';
+            url = Charcoal.Admin.admin_url() + 'action/json/object/update';
         } else {
-            url = that.admin.admin_url() + 'action/json/object/save';
+            url = Charcoal.Admin.admin_url() + 'action/json/object/save';
         }
 
         $.ajax({

@@ -8,18 +8,17 @@ Charcoal.Admin = (function ()
 {
     'use strict';
 
-    this.options = {
-        base_url: null,
-        admin_path: null,
-        manager: null
-    };
+    var options = {
+            base_url: null,
+            admin_path: null,
+        },
+        manager;
 
     /**
-    * Object function that acts as Admin initialization code and container for public methods
+    * Object function that acts as a container for public methods
     */
     function Admin()
     {
-        this.options.manager = new Charcoal.Admin.ComponentManager();
     }
 
     /**
@@ -28,7 +27,7 @@ Charcoal.Admin = (function ()
     */
     Admin.set_data = function (data)
     {
-        this.options = $.extend(true, this.options, data);
+        options = $.extend(true, options, data);
     };
 
     /**
@@ -37,16 +36,41 @@ Charcoal.Admin = (function ()
     */
     Admin.admin_url = function ()
     {
-        return this.options.base_url + this.options.admin_path + '/';
+        return options.base_url + options.admin_path + '/';
     };
 
     /**
-     * Provides an access to our instanciated ComponentManager
-     * @return  {object}  ComponentManager instance
-     */
+    * Provides an access to our instanciated ComponentManager
+    * @return  {object}  ComponentManager instance
+    */
     Admin.manager = function ()
     {
-        return this.options.manager;
+        if (typeof(manager) === 'undefined') {
+            manager = new Charcoal.Admin.ComponentManager();
+        }
+
+        return manager;
+    };
+
+    /**
+    * Convert an object namespace string into a usable object name
+    * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
+    * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+    */
+    Admin.get_object_name = function (name)
+    {
+        // Getting rid of Charcoal.Admin namespacing
+        var string_array = name.split('/');
+        string_array = string_array.splice(2,string_array.length);
+
+        // Uppercasing
+        string_array.forEach(function (element, index, array) {
+            array[index] = element.charAt(0).toUpperCase() + element.slice(1);
+        });
+
+        name = string_array.join('_');
+
+        return name;
     };
 
     return Admin;
@@ -58,37 +82,41 @@ Charcoal.Admin = (function ()
 
 Charcoal.Admin.ComponentManager = function ()
 {
-    this.test = 'Test string';
+    this.input_properties = [];
+    this.widgets = [];
+    this.templates = [];
 };
 
-Charcoal.Admin.ComponentManager.prototype.set_data = function (data)
+Charcoal.Admin.ComponentManager.prototype.add_property_input = function (opts)
 {
-    this.test = data.test || null;
+    this.add_component(this.input_properties, opts);
 };
 
-Charcoal.Admin.ComponentManager.prototype.output = function ()
+Charcoal.Admin.ComponentManager.prototype.add_widget = function (opts)
 {
-    console.log(this.test);
+    this.add_component(this.widgets, opts);
 };
 
-Charcoal.Admin.ComponentManager.prototype.add_property_input = function ()
+Charcoal.Admin.ComponentManager.prototype.add_template = function (opts)
 {
-
+    this.add_component(this.templates, opts);
 };
 
-Charcoal.Admin.ComponentManager.prototype.add_widget = function ()
+Charcoal.Admin.ComponentManager.prototype.add_component = function (component_array, opts)
 {
+    // Figure out which component to instanciate
+    var ident = Charcoal.Admin.get_object_name(opts.type);
 
-};
+    // Make sure it exists first
+    if (typeof(Charcoal.Admin[ident]) === 'function') {
 
-Charcoal.Admin.ComponentManager.prototype.add_template = function ()
-{
+        var component = new Charcoal.Admin[ident](opts);
 
-};
+        component_array.push(component);
 
-Charcoal.Admin.ComponentManager.prototype.render = function ()
-{
-
+    } else {
+        console.log('Was not able to instanciate ' + ident);
+    }
 };
 ;/**
 * charcoal/admin/property
@@ -841,6 +869,42 @@ Charcoal.Admin.Property_Audio.prototype.update_analysers = function () {
 
 })(window);
 ;/**
+* charcoal/admin/property/input/switch
+*
+* Require:
+* - jQuery
+* - bootstrapSwitch
+*/
+Charcoal.Admin.Property_Input_Switch = function (opts)
+{
+    this.input_type = 'charcoal/admin/property/input/switch';
+
+    this.input_id = opts.input_id || null;
+
+    var defaults = {
+        input_selector: null,
+        switch_selector: null
+    };
+
+    this.options = $.extend({}, defaults, opts.data);
+
+    this.create_switch();
+};
+Charcoal.Admin.Property_Input_Switch.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Switch.prototype.constructor = Charcoal.Admin.Property_Input_Switch;
+Charcoal.Admin.Property_Input_Switch.prototype.parent = Charcoal.Admin.Property.prototype;
+
+Charcoal.Admin.Property_Input_Switch.prototype.create_switch = function ()
+{
+    var that = this;
+
+    $(that.options.switch_selector).bootstrapSwitch({
+        onSwitchChange: function (event, state) {
+            $(that.options.input_selector).val((state) ? 1 : 0);
+        }
+    });
+};
+;/**
 * charcoal/admin/property/input/tinymce
 *
 * Require:
@@ -857,6 +921,9 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
 
     this.init(opts);
 };
+Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
+Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property.prototype;
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
 {

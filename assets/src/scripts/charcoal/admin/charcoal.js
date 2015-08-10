@@ -8,18 +8,17 @@ Charcoal.Admin = (function ()
 {
     'use strict';
 
-    this.options = {
-        base_url: null,
-        admin_path: null,
-        manager: null
-    };
+    var options = {
+            base_url: null,
+            admin_path: null,
+        },
+        manager;
 
     /**
-    * Object function that acts as Admin initialization code and container for public methods
+    * Object function that acts as a container for public methods
     */
     function Admin()
     {
-        this.options.manager = new Charcoal.Admin.ComponentManager();
     }
 
     /**
@@ -28,7 +27,7 @@ Charcoal.Admin = (function ()
     */
     Admin.set_data = function (data)
     {
-        this.options = $.extend(true, this.options, data);
+        options = $.extend(true, options, data);
     };
 
     /**
@@ -37,16 +36,41 @@ Charcoal.Admin = (function ()
     */
     Admin.admin_url = function ()
     {
-        return this.options.base_url + this.options.admin_path + '/';
+        return options.base_url + options.admin_path + '/';
     };
 
     /**
-     * Provides an access to our instanciated ComponentManager
-     * @return  {object}  ComponentManager instance
-     */
+    * Provides an access to our instanciated ComponentManager
+    * @return  {object}  ComponentManager instance
+    */
     Admin.manager = function ()
     {
-        return this.options.manager;
+        if (typeof(manager) === 'undefined') {
+            manager = new Charcoal.Admin.ComponentManager();
+        }
+
+        return manager;
+    };
+
+    /**
+    * Convert an object namespace string into a usable object name
+    * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
+    * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+    */
+    Admin.get_object_name = function (name)
+    {
+        // Getting rid of Charcoal.Admin namespacing
+        var string_array = name.split('/');
+        string_array = string_array.splice(2,string_array.length);
+
+        // Uppercasing
+        string_array.forEach(function (element, index, array) {
+            array[index] = element.charAt(0).toUpperCase() + element.slice(1);
+        });
+
+        name = string_array.join('_');
+
+        return name;
     };
 
     return Admin;

@@ -15,6 +15,9 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
 
     this.init(opts);
 };
+Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
+Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property.prototype;
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
 {

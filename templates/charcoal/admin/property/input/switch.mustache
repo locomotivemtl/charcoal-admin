@@ -6,8 +6,9 @@ Switch Property Input
 
 --}}
 <input
+    id="switch_{{input_id}}"
     type="checkbox"
-    class="js-bs-switch {{input_class}}"
+    class="{{input_class}}"
     data-target="{{input_id}}"
     {{#checked}}checked{{/checked}}
     {{#read_only}}read_only{{/read_only}}
@@ -22,22 +23,13 @@ Switch Property Input
 
 {{#add_js}}
 <script>
-var test ;
-$(document).ready(function() {
-    $(".js-bs-switch").bootstrapSwitch({
-        onSwitchChange: function(event, state) {
-            var input = this.getAttribute('data-target');
-            $('#' + input).val( (state) ? 1 : 0 );
-        }
-    });
-
-
-    //Charcoal.Admin.manager().add_property_input({
-    //    id: '{{input_id}}',
-    //    type: 'charcoal/admin/property/input/switch',
-    //    data: {}
-    //});
-    //Charcoal.Admin.register_widget(form_widget);
+Charcoal.Admin.manager().add_property_input({
+    id: '{{input_id}}',
+    type: 'charcoal/admin/property/input/switch',
+    data: {
+        input_selector : '#{{input_id}}',
+        switch_selector : '#switch_{{input_id}}'
+    }
 });
 </script>
 {{/add_js}}

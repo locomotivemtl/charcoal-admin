@@ -12,7 +12,7 @@
 
     width: 60px;
     height: 100%;
-    .btn-group {
+    .btn-group-vertical {
         display: flex;
         flex-direction: column;
 
@@ -68,7 +68,7 @@
 
 .map-maker_icon {
     width: 30px;
-    height: 30px;
+    height: 40px;
 
     fill:$black;
 

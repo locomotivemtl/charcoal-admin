@@ -240,6 +240,8 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
 
     /**
     * @param string $input_type
+    * @throws InvalidArgumentException if provided argument is not of type 'string'.
+    * @return  AbstractPropertyInput Chainable
     */
     public function set_input_type($input_type)
     {

@@ -33,7 +33,7 @@ trait ObjectContainerTrait
 
     /**
     * @param array $data
-    * @throws InvalidArgumentException
+    * @throws InvalidArgumentException if provided argument is not of type 'array'.
     * @return ObjectContainerInterface Chainable
     */
     public function set_obj_data($data)
@@ -57,7 +57,7 @@ trait ObjectContainerTrait
 
     /**
     * @param string $obj_type
-    * @throws InvalidArgumentException
+    * @throws InvalidArgumentException if provided argument is not of type 'string'.
     * @return ObjectContainerInterface Chainable
     */
     public function set_obj_type($obj_type)
@@ -79,6 +79,7 @@ trait ObjectContainerTrait
 
     /**
     * @param string|numeric $obj_id
+    * @throws InvalidArgumentException if provided argument is not of type 'scalar'.
     * @return ObjectContainerInterface Chainable
     */
     public function set_obj_id($obj_id)
@@ -102,7 +103,7 @@ trait ObjectContainerTrait
 
     /**
     * @param string $obj_base_class
-    * @throws InvalidArgumentException If the base class is not a string
+    * @throws InvalidArgumentException if provided argument is not of type 'string'.
     * @return ObjectContainerInterface Chainable
     */
     public function set_obj_base_class($obj_base_class)
@@ -176,6 +177,7 @@ trait ObjectContainerTrait
     }
 
     /**
+    * @throws Exception
     * @return boolean
     */
     protected function validate_obj_type()

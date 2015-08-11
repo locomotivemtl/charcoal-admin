@@ -181,7 +181,7 @@ class FormGroupWidget extends AdminWidget
     public function form_properties()
     {
         $group_properties = $this->group_properties();
-        $form_properties = $this->form()->form_properties();
+        $form_properties = $this->form()->form_properties($group_properties);
 
         $ret = [];
         foreach ($form_properties as $property_ident => $property) {

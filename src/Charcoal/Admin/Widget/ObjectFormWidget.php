@@ -100,17 +100,22 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     *
     * @todo Merge with property_options
     */
-    public function form_properties()
+    public function form_properties(array $group = null)
     {
-       $obj = $this->obj();
-       //var_dump($obj);
-       $props = $obj->metadata()->properties();
-       foreach ($props as $property_ident => $property) {
+        $obj = $this->obj();
+        $props = $obj->metadata()->properties();
+
+        // We need to sort form properties by form group property order if a group exists
+        if (!empty($group)) {
+            $props = array_merge(array_flip( $group ), $props);
+        }
+
+        foreach ($props as $property_ident => $property) {
             $p = new FormPropertyWidget($property);
             $p->set_property_ident($property_ident);
             $p->set_data($property);
             yield $property_ident => $p;
-       }
+        }
     }
 
     /**

@@ -248,7 +248,7 @@ class FormWidget extends AdminWidget
         return $this;
     }
 
-    public function form_properties()
+    public function form_properties(array $group = null)
     {
         foreach ($this->_form_properties as $prop) {
             if ($prop->active() === false) {

@@ -910,57 +910,65 @@ Charcoal.Admin.Property_Input_Switch = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/switch';
 
-    // Widget_Form properties
-    this.input_id = opts.input_id || null;
+    // Property_Input_Switch properties
+    this.input_id = null;
+    this.input_selector = null;
+    this.switch_selector = null;
 
-    var defaults = {
-        input_selector: null,
-        switch_selector: null
-    };
-
-    this.options = $.extend({}, defaults, opts.data);
-
-    this.create_switch();
+    this.set_properties(opts).create_switch();
 };
 Charcoal.Admin.Property_Input_Switch.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Switch.prototype.constructor = Charcoal.Admin.Property_Input_Switch;
 Charcoal.Admin.Property_Input_Switch.prototype.parent = Charcoal.Admin.Property.prototype;
 
+Charcoal.Admin.Property_Input_Switch.prototype.set_properties = function (opts)
+{
+    this.input_id = opts.id || this.input_id;
+    this.input_selector = opts.data.input_selector || this.input_selector;
+    this.switch_selector = opts.data.switch_selector || this.switch_selector;
+
+    return this;
+};
+
 Charcoal.Admin.Property_Input_Switch.prototype.create_switch = function ()
 {
     var that = this;
 
-    $(that.options.switch_selector).bootstrapSwitch({
+    $(that.switch_selector).bootstrapSwitch({
         onSwitchChange: function (event, state) {
-            $(that.options.input_selector).val((state) ? 1 : 0);
+            $(that.input_selector).val((state) ? 1 : 0);
         }
     });
 };
 ;/**
+* TinyMCE implementation for WYSIWYG inputs
 * charcoal/admin/property/input/tinymce
 *
 * Require:
 * - jQuery
 * - tinyMCE
+*
+* @param  {Object}  opts Options for input property
 */
+
 Charcoal.Admin.Property_Input_Tinymce = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/tinymce';
 
-    // Input properties
+    // Property_Input_Tinymce properties
     this.input_id = null;
     this.editor_options = null;
 
-    this.init(opts);
+    this.set_properties(opts).create_tinymce();
 };
 Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
 Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
-    this.input_id = opts.input_id || null;
-    this.editor_options = opts.editor_options || {};
+    this.input_id = opts.id || this.input_id;
+    this.editor_options = opts.editor_options || this.editor_options;
 
     var default_opts = {
         //language: 'fr_FR',
@@ -1092,11 +1100,15 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
 
     };
 
-    var tinymce_opts = $.extend({}, default_opts, this.editor_options);
+    this.editor_options = $.extend({}, default_opts, this.editor_options);
+    this.editor_options.selector = '#' + this.input_id;
 
-    tinymce_opts.selector = '#' + this.input_id;
+    return this;
+};
 
-    tinymce.init(tinymce_opts); // jshint ignore:line
+Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
+{
+    window.tinymce.init(this.editor_options);
 };
 ;/**
 * charcoal/admin/template
@@ -1219,7 +1231,6 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 *
 * Require:
 * - jQuery
-* - bootstrapSwitch
 * - Boostrap3-Dialog
 *
 * @param  {Object}  opts Options for widget

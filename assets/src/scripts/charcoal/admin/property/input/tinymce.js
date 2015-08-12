@@ -1,28 +1,32 @@
 /**
+* TinyMCE implementation for WYSIWYG inputs
 * charcoal/admin/property/input/tinymce
 *
 * Require:
 * - jQuery
 * - tinyMCE
+*
+* @param  {Object}  opts Options for input property
 */
+
 Charcoal.Admin.Property_Input_Tinymce = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/tinymce';
 
-    // Input properties
+    // Property_Input_Tinymce properties
     this.input_id = null;
     this.editor_options = null;
 
-    this.init(opts);
+    this.set_properties(opts).create_tinymce();
 };
 Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
 Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
-    this.input_id = opts.input_id || null;
-    this.editor_options = opts.editor_options || {};
+    this.input_id = opts.id || this.input_id;
+    this.editor_options = opts.editor_options || this.editor_options;
 
     var default_opts = {
         //language: 'fr_FR',
@@ -154,9 +158,13 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function (opts)
 
     };
 
-    var tinymce_opts = $.extend({}, default_opts, this.editor_options);
+    this.editor_options = $.extend({}, default_opts, this.editor_options);
+    this.editor_options.selector = '#' + this.input_id;
 
-    tinymce_opts.selector = '#' + this.input_id;
+    return this;
+};
 
-    tinymce.init(tinymce_opts); // jshint ignore:line
+Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
+{
+    window.tinymce.init(this.editor_options);
 };

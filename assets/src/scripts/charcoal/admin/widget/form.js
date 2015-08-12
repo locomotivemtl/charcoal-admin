@@ -4,7 +4,6 @@
 *
 * Require:
 * - jQuery
-* - bootstrapSwitch
 * - Boostrap3-Dialog
 *
 * @param  {Object}  opts Options for widget

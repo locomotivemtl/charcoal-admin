@@ -77,14 +77,14 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 
 {{#add_js}}
 <script>
-var form_widget;
-$(document).ready(function() {
-    form_widget = new Charcoal.Admin.Widget_Form({
-        widget_id: '{{widget_id}}',
+Charcoal.Admin.manager().add_widget({
+    id: '{{widget_id}}',
+    type: 'charcoal/admin/widget/form',
+    data: {
+        form_selector: '#{{widget_id}}',
         obj_type: '{{obj_type}}',
         obj_id: '{{obj_id}}'
-    });
-    //Charcoal.Admin.register_widget(form_widget);
+    }
 });
 </script>
 {{/add_js}}

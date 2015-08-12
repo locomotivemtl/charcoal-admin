@@ -99,7 +99,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
 
             $ret = $obj->update();
             if ($ret) {
-                $this->log_object_save();
+                $this->log_object_update();
                 $this->set_success(true);
                 $this->output();
             } else {

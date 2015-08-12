@@ -28,6 +28,10 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     */
     public function set_data(array $data)
     {
+        // @TODO Remove once RequirementContainer is implemented
+        // Needed this to be able to output {{obj_id}}
+        $data = array_merge($_GET, $data);
+
         $this->set_obj_data($data);
 
         if (isset($data['form_ident']) && $data['form_ident'] !== null) {
@@ -88,7 +92,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         $form_ident = $this->form_ident();
         if (!$form_ident) {
             $form_ident = isset($admin_metadata['default_form']) ? $admin_metadata['default_form'] : '';
-;
         }
 
         $obj_form_data = isset($admin_metadata['forms'][$form_ident]) ? $admin_metadata['forms'][$form_ident] : [];

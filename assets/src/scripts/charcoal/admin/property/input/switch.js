@@ -1,14 +1,19 @@
 /**
+* Switch looking input that manages boolean properties
 * charcoal/admin/property/input/switch
 *
 * Require:
 * - jQuery
 * - bootstrapSwitch
+*
+* @param  {Object}  opts Options for input property
 */
+
 Charcoal.Admin.Property_Input_Switch = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/switch';
 
+    // Widget_Form properties
     this.input_id = opts.input_id || null;
 
     var defaults = {

@@ -7,9 +7,9 @@ Form Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 
 --}}
-<div class="form charcoal-admin-widget-form" id="{{widget_id}}">
+<div class="form charcoal-admin-widget-form">
 
-    <form action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data">
+    <form id="{{widget_id}}" action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data">
 
         {{!-- Loop all form groups --}}
         {{#groups}}
@@ -23,12 +23,11 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 
 {{#add_js}}
 <script>
-var form_widget;
-$(document).ready(function() {
-    form_widget = new Charcoal.Admin.Widget_Form({
-        widget_id: '{{widget_id}}'
-    });
-    //Charcoal.Admin.register_widget(form_widget);
+Charcoal.Admin.manager().add_widget({
+    id: '{{widget_id}}',
+    type: 'charcoal/admin/widget/form',
+    data: {
+    }
 });
 </script>
 {{/add_js}}

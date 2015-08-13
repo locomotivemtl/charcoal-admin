@@ -136,22 +136,22 @@ Charcoal.Admin.Widget_Table.prototype.bind_list_events = function ()
 {
     var that = this;
 
-    $('.list-quick-create').on('click', function (e) {
+    $('.js-list-quick-create',that.table_selector).on('click', function (e) {
         e.preventDefault();
-        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
-        var data = {
-            widget_type: 'charcoal/admin/widget/objectForm',
-            widget_options: {
-                obj_type: that.obj_type,
-                obj_id: 0
-            }
-        };
+        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+            data = {
+                widget_type: 'charcoal/admin/widget/objectForm',
+                widget_options: {
+                    obj_type: that.obj_type,
+                    obj_id: 0
+                }
+            };
         $.post(url, data, function (response) {
             var dlg = BootstrapDialog.show({
-                title: 'Quick Create',
-                message: '...',
-                nl2br: false
-            });
+                    title: 'Quick Create',
+                    message: '...',
+                    nl2br: false
+                });
             if (response.success) {
                 dlg.setMessage(response.widget_html);
             } else {

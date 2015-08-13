@@ -80,6 +80,9 @@ class AdminModule extends AbstractModule
         $this->add_template_route('contents');
         $this->add_template_route('login');
 
+        $this->add_template_route('object/edit');
+        $this->add_template_route('object/collection');
+
         // Admin catch-all (load template if it exists)
         Charcoal::app()->get('/:actions+?', function ($actions = ['home']) {
             $template = implode('/', $actions);

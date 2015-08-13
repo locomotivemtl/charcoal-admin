@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \Charcoal\Charcoal as Charcoal;
+
 use \Charcoal\Admin\AdminWidget as AdminWidget;
 
 use \Charcoal\Property\PropertyFactory as PropertyFactory;
@@ -210,16 +212,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         return [
             [
-                'label'=>'Create New',
-                'ident'=>'create'
+                'label' => 'Create New',
+                'ident' => 'create',
+                'url' => Charcoal::app()->urlfor('admin/object/edit') . '?obj_type=' . $this->obj_type()
             ],
             [
-                'label'=>'Quick Create',
-                'ident'=>'quick-create'
+                'label' => 'Quick Create',
+                'ident' => 'quick-create',
+                'is_button' => true
             ],
             [
-                'label'=>'Reorder',
-                'ident'=>'reorder'
+                'label' => 'Reorder',
+                'ident' => 'reorder',
+                'is_button' => true
             ]
         ];
     }

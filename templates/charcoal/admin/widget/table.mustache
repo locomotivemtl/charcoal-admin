@@ -24,7 +24,12 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     </ul>
                 </div>
                 {{#list_actions}}
-                    <button class="btn list-{{ident}}">{{label}}</button>
+                    {{#is_button}}
+                    <button class="btn btn-default js-list-{{ident}}">{{label}}</button>
+                    {{/is_button}}
+                    {{^is_button}}
+                    <a class="btn btn-default list-{{ident}}" href="{{url}}">{{label}}</a>
+                    {{/is_button}}
                 {{/list_actions}}
 
 

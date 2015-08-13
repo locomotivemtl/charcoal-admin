@@ -21,6 +21,12 @@ class LoadAction extends AdminAction
     protected $_widget_id = '';
     protected $_widget_html = '';
 
+    public function set_data(array $data)
+    {
+        unset($data);
+        return $this;
+    }
+
     public function run()
     {
         $widget_type = Charcoal::app()->request->post('widget_type');

@@ -8,8 +8,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 
 --}}
 <div class="charcoal-admin-widget-table" id="{{widget_id}}">
-    {{collection_ident}}
-	{{#has_objects}}
+    {{#has_objects}}
         <div class="table-header clearfix">
             <div class="pull-left">
                 <div class="btn-group">
@@ -52,35 +51,35 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 
 
         <div class="table-responsive">
-		<table class="table table-bordered">
-		{{#show_table_header}}
-		<thead>
-			<tr>
-			<th>
-				<input type="checkbox" class="select-all">
-			</th>
-			{{#proto.properties}}
-				<th>{{label}}</td>
-			{{/proto.properties}}
-			{{#show_object_actions}}
-				<th>Actions</th>
-			{{/show_object_actions}}
-			</tr>
-		</thead>
-		{{/show_table_header}}
-		{{!-- Loop the list objects --}}
-		<tbody>
-		{{#objects}}
+        <table class="table table-bordered">
+        {{#show_table_header}}
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" class="select-all">
+                </th>
+            {{#collection_properties}}
+                <th>{{label}}</td>
+            {{/collection_properties}}
+            {{#show_object_actions}}
+                <th>Actions</th>
+            {{/show_object_actions}}
+            </tr>
+        </thead>
+        {{/show_table_header}}
+        {{!-- Loop the list objects --}}
+        <tbody>
+        {{#object_rows}}
 
-		    <tr data-id="{{id}}">
-		    	<td>
-		    		<input type="checkbox" class="select-row">
-		    	</td>
-		    {{#properties}}
-		        <td class="property-{{ident}}">{{val}}</td>
-		    {{/properties}}
-		    {{#show_object_actions}}
-		    	<td>
+            <tr data-id="{{object_id}}">
+                <td>
+                    <input type="checkbox" class="select-row">
+                </td>
+            {{#object_properties}}
+                <td class="property-{{ident}}">{{val}}</td>
+            {{/object_properties}}
+            {{#show_object_actions}}
+                <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary">Nouvelle alerte</button>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -93,27 +92,27 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                             {{/object_actions}}
                         </ul>
                     </div>
-		    	</td>
-		    {{/show_object_actions}}
-		    </tr>
+                </td>
+            {{/show_object_actions}}
+            </tr>
 
 
-		{{/objects}}
-		</tbody>
-		{{#show_table_footer}}
-		<tfoot>
-			<tr>
+        {{/object_rows}}
+        </tbody>
+        {{#show_table_footer}}
+        <tfoot>
+            <tr>
 
-			</tr>
-		</tfoot>
-		{{/show_table_footer}}
-		</table>
-	{{/has_objects}}
-	{{^has_objects}}
-		<div>
-			No objects
-		</div>
-	{{/has_objects}}
+            </tr>
+        </tfoot>
+        {{/show_table_footer}}
+        </table>
+    {{/has_objects}}
+    {{^has_objects}}
+        <div>
+            No objects
+        </div>
+    {{/has_objects}}
 </div>
 
 
@@ -123,7 +122,7 @@ Charcoal.Admin.manager().add_property_input({
     id: '{{widget_id}}',
     type: 'charcoal/admin/widget/table',
     data: {
-		obj_type: '{{obj_type}}'
+        obj_type: '{{obj_type}}'
     }
 });
 </script>

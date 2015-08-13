@@ -3,6 +3,10 @@
 namespace Charcoal\Admin\Widget;
 
 use \Charcoal\Admin\AdminWidget as AdminWidget;
+
+use \Charcoal\Property\PropertyFactory as PropertyFactory;
+use \Charcoal\Property\PropertyInterface as PropertyInterface;
+
 use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 
@@ -91,6 +95,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $this->_collection_ident;
     }
 
+    /**
+    * Fetch metadata from current obj_type
+    * @return array List of metadata
+    */
     public function data_from_object()
     {
         $obj = $this->proto();
@@ -101,8 +109,65 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $collection_ident = isset($admin_metadata['default_list']) ? $admin_metadata['default_list'] : '';
         }
 
-        $obj_form_data = isset($admin_metadata['lists'][$collection_ident]) ? $admin_metadata['lists'][$collection_ident] : [];
-        return $obj_form_data;
+        $obj_list_data = isset($admin_metadata['lists'][$collection_ident]) ? $admin_metadata['lists'][$collection_ident] : [];
+
+        return $obj_list_data;
+    }
+
+    /**
+    * Sets and returns properties
+    * Manages which to display, and their order, as set in object metadata
+    * @return  FormPropertyWidget  Generator function
+    */
+    public function properties()
+    {
+        if ($this->_properties === null) {
+            $obj = $this->proto();
+            $props = $obj->metadata()->properties();
+
+            $collection_ident = $this->collection_ident();
+
+            if ($collection_ident) {
+                $metadata = $obj->metadata();
+                $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+
+                if (isset($admin_metadata['lists'][$collection_ident]['properties'])) {
+                    // Flipping to have property ident as key
+                    $list_properties = array_flip($admin_metadata['lists'][$collection_ident]['properties']);
+                    // Replacing values of list_properties from index to actual property values
+                    $props = array_replace($list_properties, $props);
+                    // Get only the keys that are in list_properties from props
+                    $props = array_intersect_key($props, $list_properties);
+                }
+            }
+
+            $this->_properties = $props;
+        }
+
+        return $this->_properties;
+    }
+
+    /**
+    * Properties to display in collection template, and their order, as set in object metadata
+    * @return  FormPropertyWidget         Generator function
+    */
+    public function collection_properties()
+    {
+        $props = $this->properties();
+
+        foreach ($props as $property_ident => $property) {
+            $property_metadata = $props[$property_ident];
+
+            $p = PropertyFactory::instance()->get($property_metadata['type']);
+            $p->set_ident($property_ident);
+            $p->set_data($property_metadata);
+
+            $column = [
+                'label' => $p->label()
+            ];
+
+            yield $column;
+        }
     }
 
     /**

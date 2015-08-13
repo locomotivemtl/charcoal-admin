@@ -166,7 +166,42 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return boolean
+    * Supplies properties for objects in table template specific to object configuration
+    * @return  Generator
+    */
+    public function object_rows()
+    {
+
+        // Get properties as defined in object's list metadata
+        $sorted_properties = $this->properties();
+
+        // Collection objects
+        $objects = $this->objects();
+
+        // Go through each object to generate an array of properties listed in object's list metadata
+        foreach ($objects as $object) {
+            $object_properties = [];
+
+            foreach ($sorted_properties as $property_ident => $property_data) {
+                $property_value = $object->property($property_ident)->val();
+
+                $object_properties[] = [
+                    'ident' => $property_ident,
+                    'val'   => $property_value
+                ];
+            };
+
+            $row = [
+                'object_id' => $object->id(),
+                'object_properties' => $object_properties
+            ];
+
+            yield $row;
+        }
+    }
+
+    /**
+    * @return Boolean
     */
     public function has_objects()
     {

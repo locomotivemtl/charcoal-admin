@@ -39,15 +39,13 @@ trait CollectionContainerTrait
     */
     public function set_collection_data($data)
     {
+
         if (!is_array($data)) {
             throw new InvalidArgumentException('Data must be an array');
         }
 
         if (isset($data['obj_type']) && $data['obj_type'] !== null) {
             $this->set_obj_type($data['obj_type']);
-        }
-        if (isset($data['collection_ident']) && $data['collection_ident'] !== null) {
-            $this->set_collection_ident($data['collection_ident']);
         }
         if (isset($data['collection_config']) && $data['collection_config'] !== null) {
             $this->set_collection_config($data['collection_config']);
@@ -58,7 +56,7 @@ trait CollectionContainerTrait
 
     /**
     * @param string $obj_type
-    * @throws InvalidArgumentException
+    * @throws InvalidArgumentException if provided argument is not of type 'string'.
     * @return CollectionContainerInterface Chainable
     */
     public function set_obj_type($obj_type)
@@ -66,7 +64,7 @@ trait CollectionContainerTrait
         if (!is_string($obj_type)) {
             throw new InvalidArgumentException('Obj type must be a string');
         }
-        $this->_obj_type = $obj_type;
+        $this->_obj_type = str_replace(['.', '_'], '/', $obj_type);
         return $this;
     }
 
@@ -76,28 +74,6 @@ trait CollectionContainerTrait
     public function obj_type()
     {
         return $this->_obj_type;
-    }
-
-    /**
-    * @param string $collection_ident
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
-    public function set_collection_ident($collection_ident)
-    {
-        if (!is_string($collection_ident)) {
-            throw new InvalidArgumentException('Collection ident must be a string');
-        }
-        $this->_collection_ident = $collection_ident;
-        return $this;
-    }
-
-    /**
-    * @return string
-    */
-    public function collection_ident()
-    {
-        return $this->_collection_ident;
     }
 
     /**
@@ -174,7 +150,7 @@ trait CollectionContainerTrait
         if (is_array($collection_config) && !empty($collection_config)) {
             $loader->set_data($collection_config);
         }
-        
+
         $collection = $loader->load();
         return $collection;
     }

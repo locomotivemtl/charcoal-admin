@@ -1,66 +1,49 @@
 /**
+* Table widget used for listing collections of objects
 * charcoal/admin/widget/table
 *
 * Require:
 * - jQuery
-* - Boostrap3
 * - Boostrap3-Dialog
+*
+* @param  {Object}  opts Options for widget
 */
-
-//Charcoal.Admin.Widget_Table = new Charcoal.Admin.Widget();        // Here's where the inheritance occurs
 
 Charcoal.Admin.Widget_Table = function (opts)
 {
-    // Common Widget properties
     this.widget_type = 'charcoal/admin/widget/table';
 
     // Widget_Table properties
     this.obj_type = null;
     this.widget_id = null;
+    this.table_selector = null;
     this.properties = null;
     this.properties_options = null;
     this.filters = null;
     this.orders = null;
-    this.pagination = null;
-    this.filters = null;
+    this.pagination = {
+        page: 1,
+        num_per_page: 50
+    };
 
-    this.init(opts);
+    this.set_properties(opts).bind_events();
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Table.prototype.constructor = Charcoal.Admin.Widget_Table;
 Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
 
-Charcoal.Admin.Widget_Table.prototype.init = function (opts)
+Charcoal.Admin.Widget_Table.prototype.set_properties = function (opts)
 {
-    // Set properties
-    var data = $.extend(true, {}, this.default_data(), opts);
-    this.set_data(data);
+    this.obj_type = opts.data.obj_type || this.obj_type;
+    this.widget_id = opts.id || this.widget_id;
+    this.table_selector = '#' + this.widget_id;
+    this.properties = opts.data.properties || this.properties;
+    this.properties_options = opts.data.properties_options || this.properties_options;
+    this.filters = opts.data.filters || this.filters;
+    this.orders = opts.data.orders || this.orders;
+    this.pagination = opts.data.pagination || this.pagination;
 
-    this.bind_events();
-};
-
-Charcoal.Admin.Widget_Table.prototype.default_data = function ()
-{
-    return {
-        obj_type:   '',
-        widget_id:  null,
-        properties: null,
-        properties_options: null,
-        filters:    null,
-        orders:     null,
-        pagination:{
-            page:           1,
-            num_per_page:   50
-        }
-
-    };
-};
-
-Charcoal.Admin.Widget_Table.prototype.set_data = function (data)
-{
-    this.obj_type = data.obj_type || '';
-    this.widget_id = data.widget_id || null;
     return this;
 };
 
@@ -75,11 +58,12 @@ Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
 {
     var that = this;
 
-    $('.obj-edit').on('click', function (e) {
+    $('.js-obj-edit', this.table_selector).on('click', function (e) {
         e.preventDefault();
         var obj_id = $(this).parents('tr').data('id');
         window.alert('Edit ' + obj_id);
     });
+
     $('.obj-quick-edit').on('click', function (e) {
         e.preventDefault();
         var obj_id = $(this).parents('tr').data('id');

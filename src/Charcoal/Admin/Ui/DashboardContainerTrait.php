@@ -29,7 +29,7 @@ trait DashboardContainerTrait
         if (!is_array($data)) {
             throw new InvalidArgumentException('Data must be an array');
         }
-        
+
         if (isset($data['dashboard_ident'])) {
             $this->set_dashboard_ident($data['dashboard_ident']);
         }

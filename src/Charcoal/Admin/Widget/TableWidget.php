@@ -36,6 +36,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @param array $data Optional
     */
+    /*
     public function __construct(array $data = null)
     {
         //parent::__construct($data);
@@ -45,6 +46,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         }
     }
+    */
 
     /**
     * @param array $data
@@ -52,10 +54,55 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     */
     public function set_data(array $data)
     {
-        parent::set_data($data);
+
         $this->set_collection_data($data);
 
+        if (isset($data['collection_ident']) && $data['collection_ident'] !== null) {
+            $this->set_collection_ident($data['collection_ident']);
+        }
+
+        $obj_data = $this->data_from_object();
+        $data = array_merge_recursive($obj_data, $data);
+
+        parent::set_data($data);
+
         return $this;
+    }
+
+    /**
+    * @param string $collection_ident
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_collection_ident($collection_ident)
+    {
+        if (!is_string($collection_ident)) {
+            throw new InvalidArgumentException('Collection ident must be a string');
+        }
+        $this->_collection_ident = $collection_ident;
+        return $this;
+    }
+
+    /**
+    * @return string
+    */
+    public function collection_ident()
+    {
+        return $this->_collection_ident;
+    }
+
+    public function data_from_object()
+    {
+        $obj = $this->proto();
+        $metadata = $obj->metadata();
+        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $collection_ident = $this->collection_ident();
+        if (!$collection_ident) {
+            $collection_ident = isset($admin_metadata['default_list']) ? $admin_metadata['default_list'] : '';
+        }
+
+        $obj_form_data = isset($admin_metadata['lists'][$collection_ident]) ? $admin_metadata['lists'][$collection_ident] : [];
+        return $obj_form_data;
     }
 
     /**

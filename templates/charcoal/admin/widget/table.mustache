@@ -8,7 +8,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 
 --}}
 <div class="charcoal-admin-widget-table" id="{{widget_id}}">
-
+    {{collection_ident}}
 	{{#has_objects}}
         <div class="table-header clearfix">
             <div class="pull-left">
@@ -20,7 +20,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     </button>
                     <ul class="dropdown-menu">
                         {{#sublist_actions}}
-                           <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
+                            <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
                         {{/sublist_actions}}
                     </ul>
                 </div>
@@ -77,7 +77,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 		    		<input type="checkbox" class="select-row">
 		    	</td>
 		    {{#properties}}
-		        <td  class="property-{{ident}}">{{val}}</td>
+		        <td class="property-{{ident}}">{{val}}</td>
 		    {{/properties}}
 		    {{#show_object_actions}}
 		    	<td>
@@ -119,13 +119,12 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 
 {{#add_js}}
 <script>
-var table_widget;
-$(document).ready(function() {
-	table_widget = new Charcoal.Admin.Widget_Table({
-		obj_type: '{{obj_type}}',
-		widget_id: '{{widget_id}}'
-	});
-    //Charcoal.Admin.register_widget(table_widget);
+Charcoal.Admin.manager().add_property_input({
+    id: '{{widget_id}}',
+    type: 'charcoal/admin/widget/table',
+    data: {
+		obj_type: '{{obj_type}}'
+    }
 });
 </script>
 {{/add_js}}

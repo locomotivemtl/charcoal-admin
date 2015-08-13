@@ -22,17 +22,6 @@ interface CollectionContainerInterface
     public function obj_type();
 
     /**
-    * @param string $collection_ident
-    * @return CollectionContainerInterface Chainable
-    */
-    public function set_collection_ident($collection_ident);
-
-    /**
-    * @return string
-    */
-    public function collection_ident();
-
-    /**
     * @param mixed $dashboard_config
     * @return CollectionContainerInterface Chainable
     */

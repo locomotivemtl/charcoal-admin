@@ -2,18 +2,10 @@
 
 namespace Charcoal\Admin\Tests\Property\Input;
 
-use \Charcoal\Admin\Property\Input\TextareaInput as TextareaInput;
+use \Charcoal\Admin\Property\Input\TextareaInput;
 
 class TextareaInputTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * Hello world
-    */
-    public function testConstructor()
-    {
-        $obj = new TextareaInput();
-        $this->assertInstanceOf('\Charcoal\Admin\Property\Input\TextareaInput', $obj);
-    }
 
     public function testSetData()
     {

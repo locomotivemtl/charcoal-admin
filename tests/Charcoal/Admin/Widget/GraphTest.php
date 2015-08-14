@@ -2,14 +2,14 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
-use \Charcoal\Admin\Widget\Graph as Graph;
+use \Charcoal\Admin\Widget\GraphWidget;
 
-class GraphTest extends \PHPUnit_Framework_TestCase
+class GraphWidgetTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testSetData()
     {
-        $obj = new Graph();
+        $obj = new GraphWidget();
         $ret = $obj->set_data([
             'height'=>222,
             'colors'=>['#ff0000', '#0000ff']
@@ -21,7 +21,7 @@ class GraphTest extends \PHPUnit_Framework_TestCase
 
     public function testSetHeight()
     {
-        $obj = new Graph();
+        $obj = new GraphWidget();
         $this->assertEquals(400, $obj->height());
 
         $ret = $obj->set_height(333);
@@ -34,7 +34,7 @@ class GraphTest extends \PHPUnit_Framework_TestCase
 
     public function testSetColors()
     {
-        $obj = new Graph();
+        $obj = new GraphWidget();
         $this->assertEquals($obj->default_colors(), $obj->colors());
 
         $ret = $obj->set_colors(['#fff', '#000']);

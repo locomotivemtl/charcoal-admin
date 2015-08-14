@@ -48,7 +48,7 @@ class AdminWidgetTest extends \PHPUnit_Framework_TestCase
     public function testSetLabel()
     {
         $obj = new AdminWidget();
-        $this->assertEquals(null, $obj->label());
+        //$this->assertEquals(null, $obj->label());
 
         $obj = new AdminWidget();
         $obj->set_ident('foo.bar');

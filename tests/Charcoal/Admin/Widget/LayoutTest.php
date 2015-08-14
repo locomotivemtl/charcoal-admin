@@ -2,17 +2,17 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
-use \Charcoal\Admin\Widget\Layout as Layout;
+use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
 
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
     * Hello world
     */
     public function testConstructor()
     {
-        $obj = new Layout();
-        $this->assertInstanceOf('\Charcoal\Admin\Widget\Layout', $obj);
+        $obj = new LayoutWidget();
+        $this->assertInstanceOf('\Charcoal\Admin\Widget\LayoutWidget', $obj);
         $this->assertEquals(0, $obj->position());
     }
 
@@ -25,7 +25,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'columns'=>[1]
         ];
 
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $ret = $obj->set_data([
             'structure'=>$struct
         ]);
@@ -35,7 +35,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testSetStructure()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertEquals([], $obj->structure());
 
         $struct = [
@@ -51,7 +51,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $ret = $obj->set_structure($struct);
 
         $this->assertSame($ret, $obj);
@@ -63,7 +63,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testNumRows()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertEquals(0, $obj->num_rows());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -75,7 +75,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testRowIndex()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->row_index());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -92,7 +92,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testRowData()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->row_data());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -109,7 +109,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testRowNumColumns()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->row_num_columns());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -126,7 +126,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testRowNumCells()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->row_num_cells());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -143,7 +143,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testRowFirstCellIndex()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->row_first_cell_index());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -160,7 +160,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testCellRowIndex()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         //$this->assertNull($obj->cell_row_index());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -177,7 +177,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testNumCellsTotal()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertEquals(0, $obj->num_cells_total());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -189,7 +189,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testNumCellSpan()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->cell_span());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -206,7 +206,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testNumCellSpanBy12()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertNull($obj->cell_span_by12());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -223,7 +223,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testCellStartsRow()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         //$this->assertNull($obj->cell_starts_row());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -240,7 +240,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testCellEndsRow()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         //$this->assertNull($obj->cell_starts_row());
         $obj->set_structure([
             ['columns'=>[1]],
@@ -257,13 +257,13 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testStart()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertEquals('', $obj->start());
     }
 
     public function testEnd()
     {
-        $obj = new Layout();
+        $obj = new LayoutWidget();
         $this->assertEquals(0, $obj->position());
         $ret = $obj->end();
         $this->assertEquals(1, $obj->position());

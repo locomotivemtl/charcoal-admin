@@ -1,10 +1,9 @@
 <?php
-
 namespace Charcoal\Admin\Tests\Template;
 
-use \Charcoal\Admin\Template\Login as Login;
+use \Charcoal\Admin\Template\LoginTemplate;
 
-class LoginTest extends \PHPUnit_Framework_TestCase
+class LoginTemplateTest extends \PHPUnit_Framework_TestCase
 {
     public static function getMethod($obj, $name)
     {
@@ -16,13 +15,13 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $obj = new Login();
-        $this->assertInstanceOf('\Charcoal\Admin\Template\Login', $obj);
+        $obj = new LoginTemplate();
+        $this->assertInstanceOf('\Charcoal\Admin\Template\LoginTemplate', $obj);
     }
 
     public function testAuthRequiredIsFalse()
     {
-        $obj = new Login();
+        $obj = new LoginTemplate();
         $foo = self::getMethod($obj, 'auth_required');
         $res = $foo->invoke($obj);
         $this->assertNotTrue($res);
@@ -30,14 +29,14 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
     public function testShowHeaderMenuIsFalse()
     {
-        $obj = new Login();
+        $obj = new LoginTemplate();
         $ret = $obj->show_header_menu();
         $this->assertNotTrue($ret);
     }
 
     public function testShowFooterMenuIsFalse()
     {
-        $obj = new Login();
+        $obj = new LoginTemplate();
         $ret = $obj->show_footer_menu();
         $this->assertNotTrue($ret);
     }

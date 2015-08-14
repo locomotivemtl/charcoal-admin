@@ -2,22 +2,14 @@
 
 namespace Charcoal\Admin\Tests\Property\Input;
 
-use \Charcoal\Admin\Property\Input\TextInput as Text;
+use \Charcoal\Admin\Property\Input\TextInput;
 
 class TextInputTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * Hello world
-    */
-    public function testConstructor()
-    {
-        $obj = new Text();
-        $this->assertInstanceOf('\Charcoal\Admin\Property\Input\Text', $obj);
-    }
 
     public function testSetData()
     {
-        $obj = new Text();
+        $obj = new TextInput();
         $ret = $obj->set_data([
             'size'=>42,
             'min_length'=>10,
@@ -35,7 +27,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSize()
     {
-        $obj = new Text();
+        $obj = new TextInput();
         $ret = $obj->set_size(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->size());
@@ -47,7 +39,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMinLength()
     {
-        $obj = new Text();
+        $obj = new TextInput();
         $ret = $obj->set_min_length(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->min_length());
@@ -59,7 +51,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMaxLength()
     {
-        $obj = new Text();
+        $obj = new TextInput();
         $ret = $obj->set_max_length(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->max_length());
@@ -71,7 +63,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPattern()
     {
-        $obj = new Text();
+        $obj = new TextInput();
         $ret = $obj->set_pattern('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->pattern());
@@ -83,7 +75,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPlaceholder()
     {
-        $obj = new Text();
+        $obj = new TextInput();
         $ret = $obj->set_placeholder('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->placeholder());

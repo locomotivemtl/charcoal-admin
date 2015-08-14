@@ -6,14 +6,6 @@ use \Charcoal\Admin\Config as Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * Hello world
-    */
-    public function testConstructor()
-    {
-        $obj = new Config();
-        $this->assertInstanceOf('\Charcoal\Admin\Config', $obj);
-    }
 
     public function testSetData()
     {

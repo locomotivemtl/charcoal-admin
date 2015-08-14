@@ -2,22 +2,19 @@
 
 namespace Charcoal\Admin\Tests\Property;
 
-use \Charcoal\Admin\Property\Input as Input;
 
-class InputTest extends \PHPUnit_Framework_TestCase
+class AbstractInputTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * Hello world
-    */
-    public function testConstructor()
+    public $obj;
+
+    public function setUp()
     {
-        $obj = new Input();
-        $this->assertInstanceOf('\Charcoal\Admin\Property\Input', $obj);
+        $this->obj = $this->getMockForAbstractClass('\Charcoal\Admin\Property\AbstractPropertyInput');
     }
 
     public function testSetData()
     {
-        $obj = new Input();
+        $obj = $this->obj;
         $ret = $obj->set_data([
             'ident'=>'foo',
             'required'=>true,

@@ -19,7 +19,7 @@ module.exports = {
         dest: 'assets/dist/scripts/vendors/jquery/'
     },
     qunit: {
-        expend: true,
+        expand: true,
         cwd: 'bower_components/qunit/qunit/',
         src: ['qunit.*'],
         dest: 'assets/dist/scripts/vendors/qunit/'

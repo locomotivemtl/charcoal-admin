@@ -31,7 +31,7 @@ module.exports = function(grunt) {
 
     // Register tasks
     grunt.registerTask('default', [
-        'copy:bower',
+        'copy',
         'concat',
         'jscs',
         'jshint',

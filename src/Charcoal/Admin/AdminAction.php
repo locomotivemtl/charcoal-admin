@@ -5,10 +5,10 @@ namespace Charcoal\Admin;
 // Dependencies from `PHP`
 use \Exception as Exception;
 
-// From `charcoal-core`
+// Module `charcoal-core` dependencies
 use Charcoal\Charcoal as Charcoal;
 
-// From `charcoal-base`
+// Module `charcoal-base` dependencies
 use Charcoal\Action\AbstractAction as AbstractAction;
 
 /**

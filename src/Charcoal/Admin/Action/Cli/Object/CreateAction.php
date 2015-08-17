@@ -54,7 +54,8 @@ class CreateAction extends CliAction
 
             $vals = [];
             foreach ($properties as $prop) {
-                $input = $climate->input(sprintf('Enter value for "%s":', $prop->ident()));
+                //$input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
+                $input = $this->property_to_input($prop);
                 $vals[$prop->ident()] = $input->prompt();
             }
 
@@ -67,6 +68,28 @@ class CreateAction extends CliAction
             $climate->error($e->getMessage());
             die();
         }
+    }
+
+    public function property_to_input($prop)
+    {
+        $climate = $this->climate();
+
+        if ($prop->type() == 'password') {
+            $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
+        }
+        elseif ($prop->type() == 'boolean') {
+            $opts = [
+                1 => $prop->true_label(),
+                0 => $prop->false_label()
+            ];
+            $input = $climate->radio(sprintf('Enter value for "%s":', $prop->label()), $opts);
+        } else {
+            $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
+            if($prop->type() == 'text' || $prop->type == 'html') {
+                $input->multiLine();
+            }
+        }
+        return $input;
     }
 
     public function set_obj_type($obj_type)

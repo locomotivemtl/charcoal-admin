@@ -7,9 +7,9 @@ use \Charcoal\Action\CliAction as CliAction;
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
 /**
-* Create an object's table (sql source) according to its metadata's properties.
+* Alter an object's table (sql source) according to its metadata's properties.
 */
-class Create extends CliAction
+class AlterAction extends CliAction
 {
     public function __construct()
     {
@@ -35,11 +35,14 @@ class Create extends CliAction
         return $arguments;
     }
 
+    /**
+    * Actually run the script
+    */
     public function run()
     {
         $climate = $this->climate();
 
-        $climate->underline()->out('Create object table');
+        $climate->underline()->out('Alert object table');
 
         if ($climate->arguments->defined('help')) {
             $climate->usage();
@@ -50,6 +53,7 @@ class Create extends CliAction
         $verbose = !$climate->arguments->get('quiet');
 
         $obj_type = $this->arg_or_input('obj-type');
+
         try {
             $this->set_obj_type($obj_type);
             $obj = ModelFactory::instance()->get($obj_type);
@@ -57,21 +61,29 @@ class Create extends CliAction
             $source = $obj->source();
 
             $table = $source->table();
-            $climate->bold()->out(sprintf('The table "%s" will be created...', $table));
+            if ($verbose) {
+                $climate->bold()->out(sprintf('The table "%s" will be altered, if necessary...', $table));
+            }
+
+            if ($verbose) {
+                $metadata = $obj->metadata();
+                $properties = $metadata->properties();
+                $prop_names = array_keys($properties);
+                $climate->out(sprintf("The %d following properties will be used: \"%s\"", count($prop_names), implode(', ', $prop_names)));
+            }
 
             $input = $climate->confirm('Continue?');
             if (!$input->confirmed()) {
                 return false;
             }
 
-            if ($source->table_exists()) {
-                $climate->error(sprintf('The table "%s" already exists. This script can only create new tables.', $table));
-                $climate->darkGray()->out('If you want to alter the table with the latest object\'s metadata, run the `admin/object/table/alter` script.');
+            if (!$source->table_exists()) {
+                $climate->error(sprintf('The table "%s" does not exist. This script can only alter existing tables.', $table));
+                $climate->darkGray()->out('If you want to create the table with the latest object\'s metadata, run the `admin/object/table/create` script.');
                 die();
             }
-            
 
-            $ret = $source->create_table();
+            $ret = $source->alter_table();
 
             $climate->green()->out("\n".'Success!');
 
@@ -82,9 +94,9 @@ class Create extends CliAction
     }
 
     /**
-    * @param string $obj_type
+    * @param string
     * @throws InvalidArgumentException
-    * @return Create Chainable
+    * @return Alter Chainable
     */
     public function set_obj_type($obj_type)
     {
@@ -93,6 +105,14 @@ class Create extends CliAction
         }
         $this->_obj_type = $obj_type;
         return $this;
+    }
+
+    /**
+    * @return string
+    */
+    public function obj_type()
+    {
+        return $this->_obj_type;
     }
 
     /**

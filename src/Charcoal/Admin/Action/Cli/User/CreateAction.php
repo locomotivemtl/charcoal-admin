@@ -7,7 +7,7 @@ use \Exception as Exception;
 use \Charcoal\Admin\Action\CliAction as CliAction;
 use \Charcoal\Admin\User as User;
 
-class Create extends CliAction
+class CreateAction extends CliAction
 {
     public function run()
     {
@@ -40,7 +40,7 @@ class Create extends CliAction
                 if (!in_array($prop->ident(), $shown_props)) {
                     continue;
                 }
-                $climate->dump($prop->type());
+                //$climate->dump($prop->type());
                 if ($prop->type() == 'password') {
                      $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
                 } else {
@@ -59,8 +59,13 @@ class Create extends CliAction
             $user->set_flat_data($vals);
 
             $ret = $user->save();
-
-            $climate->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
+            if($ret) {
+                $climate->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
+            }
+            else {
+                //$climate->dump($user->validator()->error_results());
+                $climate->red()->out("\nError. Object could not be created.");
+            }
         } catch (Exception $e) {
             $climate->error($e->getMessage());
             die();

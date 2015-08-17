@@ -91,6 +91,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
 
             $obj->set_flat_data($this->save_data());
             $validation = $obj->validate();
+
             // @todo Handle validation
 
             $ret = $obj->save();
@@ -106,6 +107,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 $this->output(404);
             }
         } catch (Exception $e) {
+            var_dump($e);
             $this->set_obj(null);
             $this->set_success(false);
             $this->output(404);

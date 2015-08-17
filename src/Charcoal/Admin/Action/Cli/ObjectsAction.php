@@ -1,27 +1,21 @@
 <?php
 
-namespace Charcoal\Admin\Action\Cli\Object;
-
-use \Exception as Exception;
+namespace Charcoal\Admin\Action\Cli;
 
 use \Charcoal\Admin\Action\CliAction as CliAction;
 
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
-class Create extends CliAction
-{
+use \Charcoal\Loader\CollectionLoader as CollectionLoader;
 
+class ObjectsAction extends CliAction
+{
     public function default_arguments()
     {
         $arguments = [
             'obj-type' => [
                 'longPrefix'   => 'obj-type',
-                'description'  => 'Object type',
-                'defaultValue' => ''
-            ],
-            'obj-id' => [
-                'longPrefiex'  => 'obj-id',
-                'description'  => 'Object ID',
+                'description'  => 'Object type. Leave empty to enter it interactively.',
                 'defaultValue' => ''
             ]
         ];
@@ -34,7 +28,7 @@ class Create extends CliAction
     {
         $climate = $this->climate();
 
-        $climate->underline()->out('Create a new object');
+        $climate->underline()->out('List objects');
 
         if ($climate->arguments->defined('help')) {
             $climate->usage();
@@ -45,25 +39,32 @@ class Create extends CliAction
         $verbose = !$climate->arguments->get('quiet');
 
         $obj_type = $this->arg_or_input('obj-type');
-        $obj_id = $this->arg_or_input('obj-id');
         try {
             $this->set_obj_type($obj_type);
             $obj = ModelFactory::instance()->get($obj_type);
 
-            $properties = $obj->properties();
+            $loader = new CollectionLoader();
+            $loader->set_model($obj);
+            //$loader->set_source($obj->source());
 
-            $vals = [];
-            foreach ($properties as $prop) {
-                $input = $climate->input(sprintf('Enter value for "%s":', $prop->ident()));
-                $vals[$prop->ident()] = $input->prompt();
+            $props = array_keys($obj->properties());
+
+            $collection = $loader->load();
+            $table = [];
+
+            foreach ($collection as $c) {
+                $obj = [];
+                foreach ($props as $p) {
+                    $prop = $c->p($p);
+                    $obj[$prop->label()] = (string)$prop;
+                }
+                $table[] = $obj;
+
             }
-
-            $obj->set_flat_data($vals);
-            $ret = $obj->save();
-
-            $climate->green()->out("\n".sprintf('Success! Object "%s" created.', $ret));
+            $climate->table($table);
 
         } catch (\Exception $e) {
+            //$climate->dump($e);
             $climate->error($e->getMessage());
             die();
         }

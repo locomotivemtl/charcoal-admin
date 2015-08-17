@@ -156,6 +156,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
     };
 };
 
+/*
 Charcoal.Admin.Widget_Table.prototype.reload = function ()
 {
     var that = this,
@@ -178,6 +179,7 @@ Charcoal.Admin.Widget_Table.prototype.reload = function ()
     });
 
 };
+*/
 
 /**
 * Table_Row object
@@ -256,7 +258,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
                 p;
 
             for (p in inline_properties) {
-                var td = that.element.find('.property-' + p);
+                var td = $(that.element).find('.property-' + p);
                 td.html(inline_properties[p]);
             }
         }
@@ -265,16 +267,18 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
 
 Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
 {
+    var that = this,
+        data = {
+            obj_type: that.obj_type,
+            obj_id: that.obj_id
+        };
+
     if (window.confirm('Are you sure you want to delete this object?')) {
-        var that = this,
-            data = {
-                obj_type: that.obj_type,
-                obj_id: that.obj_id
-            };
 
         $.post(that.delete_url, data, function (response) {
             if (response.success) {
-                that.widget_table.reload();
+                $(that.element).remove();
+                //that.widget_table.reload();
             } else {
                 window.alert('Delete failed.');
             }

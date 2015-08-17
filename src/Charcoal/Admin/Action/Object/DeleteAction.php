@@ -37,6 +37,13 @@ use \Charcoal\Admin\AdminAction as AdminAction;
 */
 class DeleteAction extends AdminAction
 {
+
+    public function set_data(array $data)
+    {
+        unset($data);
+        return $this;
+    }
+
     /**
     * @return void
     */
@@ -44,15 +51,13 @@ class DeleteAction extends AdminAction
     {
         $obj_type = Charcoal::app()->request->post('obj_type');
         $obj_id = Charcoal::app()->request->post('obj_id');
-        //var_dump($obj_type);
-        //var_dump($obj_id);
 
         if (!$obj_type) {
             $this->set_success(false);
             $this->output(404);
         }
 
-        if ($obj_id) {
+        if (!$obj_id) {
             $this->set_success(false);
             $this->output(404);
         }
@@ -82,8 +87,9 @@ class DeleteAction extends AdminAction
         $success = $this->success();
 
         $response = [
-            'success'=>$this->success()
+            'success'=>$success
         ];
+
         return $response;
     }
 

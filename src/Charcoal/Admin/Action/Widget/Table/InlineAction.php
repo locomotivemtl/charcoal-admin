@@ -9,12 +9,18 @@ use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
 use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\Widget\ObjectForm as ObjectForm;
-use \Charcoal\Admin\Widget\FormProperty as FormProperty;
+use \Charcoal\Admin\Widget\ObjectFormWidget as ObjectFormWidget;
+use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
 
 class InlineAction extends AdminAction
 {
     protected $_inline_properties;
+
+    public function set_data(array $data)
+    {
+        unset($data);
+        return $this;
+    }
 
     /**
     * Run the inline action
@@ -40,12 +46,12 @@ class InlineAction extends AdminAction
                 $this->output(404);
             }
 
-            $obj_form = new ObjectForm();
+            $obj_form = new ObjectFormWidget();
             $obj_form->set_obj_type($obj_type);
             $obj_form->set_obj_id($obj_id);
             $form_properties = $obj_form->form_properties();
             foreach ($form_properties as $property_ident => $property) {
-                if (!($property instanceof FormProperty)) {
+                if (!($property instanceof FormPropertyWidget)) {
                     continue;
                 }
                 $p = $obj->p($property_ident);

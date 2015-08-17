@@ -19,6 +19,12 @@ class InlineMultiAction extends AdminAction
 {
     protected $_objects;
 
+    public function set_data(array $data)
+    {
+        unset($data);
+        return $this;
+    }
+
     /**
     * Run the inline action
     * Set the inline properties from request's parameter

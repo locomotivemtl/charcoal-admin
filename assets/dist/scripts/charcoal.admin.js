@@ -140,6 +140,7 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
                 this.components[component_type][i] = component;
             } catch (error) {
                 console.log('Was not able to instanciate ' + component_data.ident);
+                console.log(error);
             }
         }
 
@@ -1352,8 +1353,9 @@ Charcoal.Admin.Widget_Table = function (opts)
         page: 1,
         num_per_page: 50
     };
+    this.table_rows = [];
 
-    this.set_properties(opts).bind_events();
+    this.set_properties(opts).create_rows().bind_events();
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -1374,92 +1376,20 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function (opts)
     return this;
 };
 
+Charcoal.Admin.Widget_Table.prototype.create_rows = function ()
+{
+    var rows = $('.js-table-row');
+
+    for (var i = 0, len = rows.length; i < len; i++) {
+        var element = rows[i],
+            row = new Charcoal.Admin.Widget_Table.Table_Row(this,element);
+        this.table_rows.push(row);
+    }
+
+    return this;
+};
+
 Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
-{
-    this.bind_obj_events();
-    this.bind_list_events();
-    this.bind_sublist_events();
-};
-
-Charcoal.Admin.Widget_Table.prototype.bind_obj_events = function ()
-{
-    var that = this;
-
-    $('.js-obj-edit', this.table_selector).on('click', function (e) {
-        e.preventDefault();
-        var obj_id = $(this).parents('tr').data('id');
-        window.alert('Edit ' + obj_id);
-    });
-
-    $('.obj-quick-edit').on('click', function (e) {
-        e.preventDefault();
-        var obj_id = $(this).parents('tr').data('id');
-
-        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
-        var data = {
-            widget_type: 'charcoal/admin/widget/objectForm',
-            widget_options: {
-                obj_type: that.obj_type,
-                obj_id: obj_id
-            }
-        };
-        $.post(url, data, function (response) {
-            var dlg = BootstrapDialog.show({
-                title: 'Quick Edit',
-                message: '...',
-                nl2br: false
-            });
-            if (response.success) {
-                dlg.setMessage(response.widget_html);
-            } else {
-                dlg.setType(BootstrapDialog.TYPE_DANGER);
-                dlg.setMessage('Error');
-            }
-        });
-
-    });
-    $('.obj-inline-edit').on('click', function (e) {
-        e.preventDefault();
-        var row = $(this).parents('tr');
-        var obj_id = row.data('id');
-        var url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inline';
-        var data = {
-            obj_type: that.obj_type,
-            obj_id: obj_id
-        };
-        $.post(url, data, function (response) {
-            if (response.success) {
-                var inline_properties = response.inline_properties;
-                var p;
-                for (p in inline_properties) {
-                    var td = row.find('.property-' + p);
-                    td.html(inline_properties[p]);
-                }
-            }
-        });
-    });
-    $('.obj-delete').on('click', function (e) {
-        e.preventDefault();
-        var obj_id = $(this).parents('tr').data('id');
-        if (window.confirm('Are you sure you want to delete this object?')) {
-            var url = Charcoal.Admin.admin_url() + 'action/json/object/delete';
-            var data = {
-                obj_type: that.obj_type,
-                obj_id: obj_id
-            };
-            $.post(url, data, function (response) {
-                if (response.success) {
-                    that.reload();
-                } else {
-                    window.alert('Delete failed.');
-                }
-            });
-        }
-    });
-
-};
-
-Charcoal.Admin.Widget_Table.prototype.bind_list_events = function ()
 {
     var that = this;
 
@@ -1488,21 +1418,17 @@ Charcoal.Admin.Widget_Table.prototype.bind_list_events = function ()
         });
 
     });
-};
 
-Charcoal.Admin.Widget_Table.prototype.bind_sublist_events = function ()
-{
-    var that = this;
-
-    $('.sublist-inline-edit').on('click', function (e) {
+    $('.js-sublist-inline-edit').on('click', function (e) {
         e.preventDefault();
-        var sublist = that.sublist();
-        //console.debug(sublist);
-        var url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inlinemulti';
-        var data = {
-            obj_type: that.obj_type,
-            obj_ids: sublist.obj_ids
-        };
+
+        var sublist = that.sublist(),
+            url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inlinemulti',
+            data = {
+                obj_type: that.obj_type,
+                obj_ids: sublist.obj_ids
+            };
+
         $.post(url, data, function (response) {
             //console.debug(response);
             if (response.success) {
@@ -1512,10 +1438,11 @@ Charcoal.Admin.Widget_Table.prototype.bind_sublist_events = function ()
                 for (var i = 0;i <= objects.length -1;i++) {
                     //console.debug(i);
                     window.console.debug(objects[i]);
-                    var inline_properties = objects[i].inline_properties;
-                    var row = $(sublist.elems[i]).parents('tr');
 
-                    var p = 0;
+                    var inline_properties = objects[i].inline_properties,
+                        row = $(sublist.elems[i]).parents('tr'),
+                        p = 0;
+
                     for (p in inline_properties) {
                         var td = row.find('.property-' + p);
                         td.html(inline_properties[p]);
@@ -1531,15 +1458,17 @@ Charcoal.Admin.Widget_Table.prototype.sublist = function ()
 {
     //var that = this;
 
-    var selected = $('.select-row:checked');
-    var ret = {
-        elems: [],
-        obj_ids: []
-    };
+    var selected = $('.select-row:checked'),
+        ret = {
+            elems: [],
+            obj_ids: []
+        };
+
     selected.each(function (i, el) {
         ret.obj_ids.push($(el).parents('tr').data('id'));
         ret.elems.push(el);
     });
+
     return ret;
 };
 
@@ -1557,13 +1486,13 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 
 Charcoal.Admin.Widget_Table.prototype.reload = function ()
 {
-    var that = this;
+    var that = this,
+        url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+        data = {
+            widget_type:    that.widget_type,
+            widget_options: that.widget_options()
+        };
 
-    var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
-    var data = {
-        widget_type:    that.widget_type,
-        widget_options: that.widget_options()
-    };
     $.post(url, data, function (response) {
         //console.debug(that.elem_id);
         if (response.success && response.widget_html) {
@@ -1576,6 +1505,109 @@ Charcoal.Admin.Widget_Table.prototype.reload = function ()
 
     });
 
+};
+
+/**
+* Table_Row object
+*/
+Charcoal.Admin.Widget_Table.Table_Row = function (container, row)
+{
+    this.widget_table = container;
+    this.element = row;
+
+    this.obj_id = this.element.getAttribute('data-id');
+    this.obj_type = this.widget_table.obj_type;
+    this.load_url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
+    this.inline_url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inline';
+    this.delete_url = Charcoal.Admin.admin_url() + 'action/json/object/delete';
+
+    this.bind_events();
+};
+
+Charcoal.Admin.Widget_Table.Table_Row.prototype.bind_events = function ()
+{
+    var that = this;
+
+    $('.js-obj-quick-edit', that.element).on('click', function (e) {
+        e.preventDefault();
+        that.quick_edit();
+    });
+
+    $('.js-obj-inline-edit', that.element).on('click', function (e) {
+        e.preventDefault();
+        that.inline_edit();
+    });
+
+    $('.js-obj-delete', that.element).on('click', function (e) {
+        e.preventDefault();
+        that.delete_object();
+    });
+};
+
+Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
+{
+    var data = {
+        widget_type: 'charcoal/admin/widget/objectForm',
+        widget_options: {
+            obj_type: this.obj_type,
+            obj_id: this.obj_id
+        }
+    };
+
+    $.post(this.load_url, data, function (response) {
+        var dlg = BootstrapDialog.show({
+            title: 'Quick Edit',
+            message: '...',
+            nl2br: false
+        });
+        if (response.success) {
+            dlg.setMessage(response.widget_html);
+        } else {
+            dlg.setType(BootstrapDialog.TYPE_DANGER);
+            dlg.setMessage('Error');
+        }
+    });
+};
+
+Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
+{
+    var that = this,
+        data = {
+        obj_type: that.obj_type,
+        obj_id: that.obj_id
+    };
+
+    $.post(that.inline_url, data, function (response) {
+        if (response.success) {
+
+            var inline_properties = response.inline_properties,
+                p;
+
+            for (p in inline_properties) {
+                var td = that.element.find('.property-' + p);
+                td.html(inline_properties[p]);
+            }
+        }
+    });
+};
+
+Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
+{
+    if (window.confirm('Are you sure you want to delete this object?')) {
+        var that = this,
+            data = {
+                obj_type: that.obj_type,
+                obj_id: that.obj_id
+            };
+
+        $.post(that.delete_url, data, function (response) {
+            if (response.success) {
+                that.widget_table.reload();
+            } else {
+                window.alert('Delete failed.');
+            }
+        });
+    }
 };
 ;Charcoal.Admin.Widget_Wysiwyg = function ()
 {

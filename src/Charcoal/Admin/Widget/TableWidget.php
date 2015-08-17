@@ -187,20 +187,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         return [
             [
-                'label'=>'Edit',
-                'ident'=>'edit'
+                'label' => 'Quick Edit',
+                'ident' => 'quick-edit',
+                'is_button' => true
             ],
             [
-                'label'=>'Quick Edit',
-                'ident'=>'quick-edit'
+                'label' => 'Inline Edit',
+                'ident' => 'inline-edit',
+                'is_button' => true
             ],
             [
-                'label'=>'Inline Edit',
-                'ident'=>'inline-edit'
-            ],
-            [
-                'label'=>'Delete',
-                'ident'=>'delete'
+                'label' => 'Delete',
+                'ident' => 'delete',
+                'is_button' => true
             ]
         ];
     }
@@ -214,7 +213,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             [
                 'label' => 'Create New',
                 'ident' => 'create',
-                'url' => Charcoal::app()->urlfor('admin/object/edit') . '?obj_type=' . $this->obj_type()
+                'url' => $this->object_edit_url()
             ],
             [
                 'label' => 'Quick Create',
@@ -260,6 +259,15 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function show_table_footer()
     {
         return false;
+    }
+
+    /**
+    * Generate URL for editing object
+    * @return string
+    */
+    public function object_edit_url()
+    {
+        return Charcoal::app()->urlfor('admin/object/edit') . '?obj_type=' . $this->obj_type();
     }
 
 

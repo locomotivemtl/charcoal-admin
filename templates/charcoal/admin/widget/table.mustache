@@ -31,8 +31,6 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     <a class="btn btn-default list-{{ident}}" href="{{url}}">{{label}}</a>
                     {{/is_button}}
                 {{/list_actions}}
-
-
             </div>
             <div class="pull-right">
                 <strong>Filtres</strong>
@@ -53,8 +51,6 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
             </div>
         </div>
 
-
-
         <div class="table-responsive">
         <table class="table table-bordered">
         {{#show_table_header}}
@@ -72,11 +68,12 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
             </tr>
         </thead>
         {{/show_table_header}}
+
         {{!-- Loop the list objects --}}
         <tbody>
         {{#object_rows}}
 
-            <tr data-id="{{object_id}}">
+            <tr class="js-table-row" data-id="{{object_id}}">
                 <td>
                     <input type="checkbox" class="select-row">
                 </td>
@@ -86,14 +83,14 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
             {{#show_object_actions}}
                 <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary">Nouvelle alerte</button>
+                        <a href="{{object_edit_url}}&amp;obj_id={{object_id}}" class="btn btn-primary">Edit</a>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu">
                             {{#object_actions}}
-                                <li><a class="obj-{{ident}}" href="#">{{label}}</a></li>
+                                <li><a class="js-obj-{{ident}}" href="#">{{label}}</a></li>
                             {{/object_actions}}
                         </ul>
                     </div>

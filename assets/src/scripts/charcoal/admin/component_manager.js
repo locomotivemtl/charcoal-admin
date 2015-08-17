@@ -62,6 +62,7 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
                 this.components[component_type][i] = component;
             } catch (error) {
                 console.log('Was not able to instanciate ' + component_data.ident);
+                console.log(error);
             }
         }
 

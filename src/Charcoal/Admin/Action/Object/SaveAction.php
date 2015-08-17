@@ -107,7 +107,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 $this->output(404);
             }
         } catch (Exception $e) {
-            var_dump($e);
+            //var_dump($e);
             $this->set_obj(null);
             $this->set_success(false);
             $this->output(404);

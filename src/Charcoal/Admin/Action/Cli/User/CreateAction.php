@@ -59,10 +59,9 @@ class CreateAction extends CliAction
             $user->set_flat_data($vals);
 
             $ret = $user->save();
-            if($ret) {
+            if ($ret) {
                 $climate->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
-            }
-            else {
+            } else {
                 //$climate->dump($user->validator()->error_results());
                 $climate->red()->out("\nError. Object could not be created.");
             }

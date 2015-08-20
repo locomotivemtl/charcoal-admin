@@ -5,8 +5,8 @@
 .c-info {
     display: inline-block;
 
-    width: 23px;
-    height: 23px;
+    width: rem(23px);
+    height: rem(23px);
 
     text-align: center;
 
@@ -14,8 +14,8 @@
     border-radius: 50%;
 
     color:$gray-light;
-    text-indent: -1px;
+    text-indent: rem(-1px);
 
-    margin-left:10px;
+    margin-left:rem(10px);
     cursor:help;
 }

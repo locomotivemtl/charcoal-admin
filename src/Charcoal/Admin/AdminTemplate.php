@@ -2,16 +2,17 @@
 
 namespace Charcoal\Admin;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \Exception;
+use \InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal as Charcoal;
+use \Charcoal\Charcoal;
 
 // From `charcoal-base`
-use \Charcoal\Template\AbstractTemplate as AbstractTemplate;
+use \Charcoal\Template\AbstractTemplate;
 
-use \Charcoal\Admin\AdminModule as AdminModule;
-use \Charcoal\Admin\User as User;
+use \Charcoal\Admin\AdminModule;
+use \Charcoal\Admin\User;
 
 /**
 * Base class for all `admin` Templates.
@@ -67,7 +68,7 @@ class AdminTemplate extends AbstractTemplate
             session_cache_limiter(false);
             session_start();
         }
-        $this->metadata();
+        //$this->metadata();
         if ($this->auth_required() !== false) {
             $this->auth();
         }
@@ -209,7 +210,7 @@ class AdminTemplate extends AbstractTemplate
                 'active'=>true,
                 'label'=>'Accueil',
                 'icon'=>'home',
-                'url'=>'#',
+                'url'=>'admin/home',
                 'has_children'=>false
             ],
             [
@@ -217,14 +218,14 @@ class AdminTemplate extends AbstractTemplate
                 'selected'=>true,
                 'label'=>'Alertes',
                 'icon'=>'alerts',
-                'url'=>'#',
+                'url'=>'admin/object/collection?obj_type=alert/alert',
                 'has_children'=>false
             ],
             [
                 'active'=>true,
                 'label'=>'Utilisateurs',
                 'icon'=>'users',
-                'url'=>'#',
+                'url'=>'admin/object/collection?obj_type=alert/user',
                 'has_children'=>false
             ],
             [
@@ -334,7 +335,8 @@ class AdminTemplate extends AbstractTemplate
             $path = Charcoal::config()->admin_path().'/login';
             try {
                 // @todo Investigate why app()->redirect throws an exception
-                Charcoal::app()->redirect(Charcoal::app()->urlFor($path), 403);
+                Charcoal::app()->response->withRedirect($path, 403);
+
             } catch (\Exception $e) {
                 if (!headers_sent()) {
                     header('Location:'.Charcoal::app()->urlFor($path));
@@ -346,6 +348,7 @@ class AdminTemplate extends AbstractTemplate
 
     public function url()
     {
+        // Obsolete. Use base_url.
         return Charcoal::config()['URL'];
     }
 

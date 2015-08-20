@@ -4,6 +4,10 @@ namespace Charcoal\Admin;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 // From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Module\AbstractModule as AbstractModule;
@@ -12,63 +16,58 @@ use \Charcoal\Module\AbstractModule as AbstractModule;
 use \Charcoal\Template\TemplateView as TemplateView;
 use \Charcoal\Action\ActionFactory as ActionFactory;
 
-use \Charcoal\Admin\Config as Config;
+use \Charcoal\Admin\Config as AdminConfig;
 
 /**
 * The base class for the `admin` Module
 */
-class AdminModule extends AbstractModule
+class AdminModule
 {
     /**
-    * @var Config $_config
+    * @var AdminConfig $_config
     */
     private $_config;
-
     /**
-    * @param array $data
-    * @return Module Chainable
+    * @var \Slim\App $_app
     */
-    public function init(array $data = null)
+    private $_app;
+
+    static public function setup($app)
     {
         // A session is necessary for the admin module
         if (session_id() === '') {
             session_start();
         }
 
-        $this->_config = new Config();
+        $container = $app->getContainer();
+        $container['charcoal/admin/module'] = function($c) use ($app) {
+            return new AdminModule([
+                'config'=>$c['charcoal/admin/config'],
+                'app'=>$app
+            ]);
+        };
 
-        if (isset($data['config'])) {
-            $this->set_config($data['config']);
-        }
+        $container['charcoal/admin/config'] = function($c) {
+            $config = new AdminConfig();
+            $config->set_data($c['config']->get('admin'));
+            return $config;
+        };
 
+        // Admin module
+        $app->get('/admin', 'charcoal/admin/module:default_route');
+        $app->group('/admin', 'charcoal/admin/module:setup_routes');
+    }
+
+    public function __construct($data)
+    {
+        $this->_config = $data['config'];
+        $this->_app = $data['app'];
+
+        // Hack
         $metadata_path = realpath(__DIR__.'/../../../metadata/');
         $templates_path = realpath(__DIR__.'/../../../templates/');
         Charcoal::config()->add_metadata_path($metadata_path);
         Charcoal::config()->add_template_path($templates_path);
-
-        return $this;
-    }
-
-    /**
-    * @var mixed $config
-    * @throws InvalidArgumentException if config is not a string, array or Config object
-    * @return Module Chainable
-    */
-    public function set_config($config)
-    {
-        if ($this->_config === null) {
-            $this->config = new Config();
-        }
-        if (is_string($config)) {
-            $this->_config->add_file($config);
-        } else if (is_array($config)) {
-            $this->_config->set_data($config);
-        } else if (($config instanceof Config)) {
-            $this->_config = $config;
-        } else {
-            throw new InvalidArgumentException('Config must be a string (filename), array (config data) or Config object');
-        }
-        return $this;
     }
 
     /**
@@ -84,7 +83,7 @@ class AdminModule extends AbstractModule
         $this->add_template_route('object/collection');
 
         // Admin catch-all (load template if it exists)
-        Charcoal::app()->get('/:actions+?', function ($actions = ['home']) {
+        $this->app()->get('/:actions+?', function ($actions = ['home'], ServerRequestInterface $request, ResponseInterface $response, $args = null) {
             $template = implode('/', $actions);
             $view = new TemplateView();
             $content = $view->from_ident('charcoal/admin/template/'.$template)->render();
@@ -102,17 +101,27 @@ class AdminModule extends AbstractModule
         $this->add_action_route('widget/load');
         $this->add_action_route('widget/table/inline');
         $this->add_action_route('widget/table/inlinemulti');
+        $this->add_action_route('messaging/send-sms');
 
         return $this;
+    }
+
+    public function default_route(ServerRequestInterface $request, ResponseInterface $response, $args = null)
+    {
+        $view = new TemplateView();
+        $content = $view->from_ident('charcoal/admin/template/home')->render();
+        $response->write($content);
+        return $response;
     }
 
     /**
     * @return Module Chainable
     */
-    public function setup_cli_routes()
+    public function setup_cli_routes($app = null)
     {
+        $this->_app = $app;
         // Admin catch-all (load template if it exists)
-        Charcoal::app()->get('/:actions+?', function ($actions = ['home']) {
+        $this->app()->get('/:actions+?', function ($actions = ['home']) {
             try {
                 $action_ident = implode('/', $actions);
                 $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$action_ident);
@@ -139,11 +148,12 @@ class AdminModule extends AbstractModule
     public function add_template_route($tpl)
     {
         $admin_path = $this->config()->base_path();
-        Charcoal::app()->get('/'.$tpl, function($args = null) use ($tpl) {
+        $this->app()->get('/'.$tpl, function(ServerRequestInterface $request, ResponseInterface $response) use ($tpl) {
             $view = new TemplateView();
             $content = $view->from_ident('charcoal/admin/template/'.$tpl)->render();
-            echo $content;
-        })->name($admin_path.'/'.$tpl);
+            $response->write($content);
+            return $response;
+        })->setName($admin_path.'/'.$tpl);
         return $this;
     }
 
@@ -156,7 +166,7 @@ class AdminModule extends AbstractModule
     public function add_action_route($tpl)
     {
         $admin_path = $this->config()->base_path();
-        Charcoal::app()->post('/action/json/'.$tpl, function($actions = null) use ($tpl) {
+        $this->_app->post('/action/json/'.$tpl, function($actions = null) use ($tpl) {
             try {
                 //$action = new \Charcoal\Admin\Action\Login();
                 $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
@@ -165,9 +175,10 @@ class AdminModule extends AbstractModule
             } catch (Exception $e) {
                 die($e->getMessage());
             }
-        })->name($admin_path.'/action/json/'.$tpl);
+        });
 
-        Charcoal::app()->post('/action/'.$tpl, function($actions = null) use ($tpl) {
+        $this->_app->post('/action/'.$tpl, function($actions = null) use ($tpl) {
+
             try {
                 //$action = new \Charcoal\Admin\Action\Login();
                 $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
@@ -176,7 +187,7 @@ class AdminModule extends AbstractModule
             } catch (Exception $e) {
                 die($e->getMessage());
             }
-        })->name($admin_path.'/action/'.$tpl);
+        });
         return $this;
     }
 
@@ -198,6 +209,11 @@ class AdminModule extends AbstractModule
             }
         });
         return $this;
+    }
+
+    public function app()
+    {
+        return $this->_app;
     }
 
     /**

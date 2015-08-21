@@ -57,6 +57,7 @@ Charcoal.Admin = (function ()
     * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
     * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
     */
+
     Admin.get_object_name = function (name)
     {
         // Getting rid of Charcoal.Admin namespacing
@@ -65,6 +66,18 @@ Charcoal.Admin = (function ()
 
         // Uppercasing
         string_array.forEach(function (element, index, array) {
+
+            // Camel case when splitted by '-'
+            // Joined back with '_'
+            var substr_array = element.split('-');
+            if (substr_array.length > 1) {
+                console.log(substr_array);
+                substr_array.forEach(function (e, i) {
+                    substr_array[ i ] = e.charAt(0).toUpperCase() + e.slice(1);
+                });
+                element = substr_array.join('_');
+            }
+
             array[index] = element.charAt(0).toUpperCase() + element.slice(1);
         });
 
@@ -73,6 +86,96 @@ Charcoal.Admin = (function ()
         return name;
     };
 
+    return Admin;
+
+}());
+var Charcoal = Charcoal || {};
+/**
+* Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
+* It gives access to private properties and public methods
+* @return  {object}  Charcoal.Admin
+*/
+Charcoal.Admin = (function ()
+{
+    'use strict';
+
+    var options = {
+            base_url: null,
+            admin_path: null,
+        },
+        manager;
+
+    /**
+    * Object function that acts as a container for public methods
+    */
+    function Admin()
+    {
+    }
+
+    /**
+    * Set data that can be used by public methods
+    * @param  {object}  data  Object containing data that needs to be set
+    */
+    Admin.set_data = function (data)
+    {
+        options = $.extend(true, options, data);
+    };
+
+    /**
+    * Generates the admin URL used by forms and other objects
+    * @return  {string}  URL for admin section
+    */
+    Admin.admin_url = function ()
+    {
+        return options.base_url + options.admin_path + '/';
+    };
+
+    /**
+    * Provides an access to our instanciated ComponentManager
+    * @return  {object}  ComponentManager instance
+    */
+    Admin.manager = function ()
+    {
+        if (typeof(manager) === 'undefined') {
+            manager = new Charcoal.Admin.ComponentManager();
+        }
+
+        return manager;
+    };
+
+    /**
+    * Convert an object namespace string into a usable object name
+    * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
+    * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+    */
+
+    Admin.get_object_name = function (name)
+    {
+        // Getting rid of Charcoal.Admin namespacing
+        var string_array = name.split('/');
+        string_array = string_array.splice(2,string_array.length);
+
+        // Uppercasing
+        string_array.forEach(function (element, index, array) {
+
+            // Camel case when splitted by '-'
+            // Joined back with '_'
+            var substr_array = element.split('-');
+            if (substr_array.length > 1) {
+                console.log(substr_array);
+                substr_array.forEach(function (e, i) {
+                    substr_array[ i ] = e.charAt(0).toUpperCase() + e.slice(1);
+                });
+                element = substr_array.join('_');
+            }
+
+            array[index] = element.charAt(0).toUpperCase() + element.slice(1);
+        });
+
+        name = string_array.join('_');
+
+        return name;
+    };
     return Admin;
 
 }());
@@ -896,6 +999,99 @@ Charcoal.Admin.Property_Audio.prototype.update_analysers = function () {
     window.Audio_Player = Audio_Player;
 
 })(window);
+;/***
+* `charcoal/admin/property/input/map-widget`
+* Property_Input_Map_Widget Javascript class
+*
+*/
+Charcoal.Admin.Property_Input_Map_Widget = function (data)
+{
+    // Scope
+    var that = this;
+
+    // Input type
+    this.input_type = 'charcoal/admin/property/input/map-widget';
+
+    // Controller
+    this.controller = undefined;
+
+    // Set options
+    this.data = data;
+
+    if (typeof google === 'undefined') {
+        // If google is undefined,
+        window._tmp_google_onload_function = function () {
+            that.load_plugin();
+        };
+
+        $.getScript(
+            'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
+            '&language=fr&callback=_tmp_google_onload_function',
+            function () {}
+        );
+    } else {
+        that.init();
+    }
+
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Map_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Map_Widget;
+Charcoal.Admin.Property_Input_Map_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.load_plugin = function ()
+{
+    // Scope
+    var that = this;
+
+    // Remove unnecessary tmp function
+    delete window._tmp_google_onload_function;
+
+    // Add the actual plugin
+    $.getScript(Charcoal.Admin.admin_url() +
+        '../../vendor/locomotivemtl/charcoal-admin/bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
+        function () {
+            that.init();
+        });
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
+{
+    if (typeof BB === 'undefined' || typeof google === 'undefined') {
+        // We don't have what we need
+        console.error('Plugins not loaded');
+        return false;
+    }
+
+    var _data = this.data;
+
+    // Shouldn't happen at that point
+    if (typeof _data.id === 'undefined') {
+        console.error('Missing ID');
+    }
+
+    // Create new map instance
+    this.controller = new window.BB.gmap.controller(
+        document.getElementById(this.data.id),
+        {
+            use_clusterer: true,
+            map: {
+                center: {
+                    x: 45.3712923,
+                    y: -73.9820994
+                },
+                zoom: 14,
+                mapType: 'roadmap',
+                coordsType: 'inpage', // array, json? (vs ul li)
+                map_mode: 'default'
+            }
+        }
+    );
+
+    // Init new map instance
+    this.controller.init();
+
+};
 ;/**
 * Switch looking input that manages boolean properties
 * charcoal/admin/property/input/switch

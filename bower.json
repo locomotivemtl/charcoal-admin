@@ -22,7 +22,8 @@
     "fontawesome": "~4.3.0",
     "summernote": "~0.6.13",
     "tinymce": "~4.2.1",
-    "qunit": "~1.18.0"
+    "qunit": "~1.18.0",
+    "bb-gmap":""
   },
   "devDependencies": {
     "echarts": "~2.2.3"

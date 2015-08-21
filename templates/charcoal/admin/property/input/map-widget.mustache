@@ -1,0 +1,46 @@
+{{!
+    MAP INPUT / WIDGET
+    The map input widget will allow the user to access data that come from a google map
+}}
+<div class="map-maker">
+    <div class="map-maker_actions">
+        <div class="btn-group-vertical" role="group" aria-label="...">
+            <button type="button" class="btn btn-default -active"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
+            <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
+            <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
+            <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
+        </div>
+    </div>
+    <div class="map-maker_content">
+        <div class="map-maker_header">
+            <label class="map-maker_label" for="map-maker-search">Adresse</label>
+            <input class="map-maker_input form-control" id="map-maker-search" type="text">
+             <button type="button" class="map-maker_btn btn btn-primary btn-lg btn-info" data-toggle="modal" data-target="#myModal">
+                Sauvegarder
+            </button>
+        </div>
+        <div class="map-maker_map" id="{{input_id}}"></div>
+    </div>
+</div>
+
+{{!
+    Input that will contain the actual data
+    This input will be posted on save / update
+}}
+<input type="hidden"
+    name="{{input_name}}"
+    value="{{value}}"
+>
+
+{{#add_js}}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id: '{{input_id}}',
+    type: 'charcoal/admin/property/input/map-widget',
+    data: {
+        input_selector : '#{{input_id}}',
+        switch_selector : '#switch_{{input_id}}'
+    }
+});
+</script>
+{{/add_js}}

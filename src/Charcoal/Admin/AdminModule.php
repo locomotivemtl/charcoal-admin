@@ -77,6 +77,7 @@ class AdminModule
     {
         $this->add_template_route('home');
         $this->add_template_route('contents');
+        $this->add_template_route('envoie');
         $this->add_template_route('login');
 
         $this->add_template_route('object/edit');

@@ -46,6 +46,14 @@ $to-large: $from-large - 1;
 $from-huge: 1680px;
 $to-huge: $from-huge - 1;
 
+
+$heading1: rem(31px); // .alpha
+$heading2: rem(20px); // .beta
+$heading3: rem(19px); // .gamma
+$heading4: rem(16px); // .delta
+$heading5: rem(13px); // .epsilon
+$heading6: rem(11px); // .zeta
+
 // Units
 // ==========================================================================
 $unit: 60px;

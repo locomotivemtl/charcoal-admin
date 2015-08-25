@@ -71,7 +71,6 @@ Charcoal.Admin = (function ()
             // Joined back with '_'
             var substr_array = element.split('-');
             if (substr_array.length > 1) {
-                console.log(substr_array);
                 substr_array.forEach(function (e, i) {
                     substr_array[ i ] = e.charAt(0).toUpperCase() + e.slice(1);
                 });
@@ -162,7 +161,6 @@ Charcoal.Admin = (function ()
             // Joined back with '_'
             var substr_array = element.split('-');
             if (substr_array.length > 1) {
-                console.log(substr_array);
                 substr_array.forEach(function (e, i) {
                     substr_array[ i ] = e.charAt(0).toUpperCase() + e.slice(1);
                 });

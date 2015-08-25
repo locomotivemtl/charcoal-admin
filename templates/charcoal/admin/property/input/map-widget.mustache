@@ -1,36 +1,45 @@
 {{!
     MAP INPUT / WIDGET
     The map input widget will allow the user to access data that come from a google map
+    There are difference possible action such as:
+    - Create new marker
+    - Create new line
+    - Create new polygon
+    - Create new area (radius) not yet active
+    - Add marker by address
+    - Center map by address
 }}
-<div class="map-maker">
+<div class="map-maker" id="{{input_id}}">
     <div class="map-maker_actions">
         <div class="btn-group-vertical" role="group" aria-label="...">
-            <button type="button" class="btn btn-default -active"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
-            <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
-            <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
+            <button type="button" class="btn btn-default {{! -active }} js-add-marker"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
+            <button type="button" class="btn btn-default js-add-line"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
+            <button type="button" class="btn btn-default js-add-polygon"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
+            {{#inexistant_function}}
             <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
+            {{/inexistant_function}}
         </div>
     </div>
     <div class="map-maker_content">
         <div class="map-maker_header">
             <label class="map-maker_label" for="map-maker-search">Adresse</label>
-            <input class="map-maker_input form-control" id="map-maker-search" type="text">
-             <button type="button" class="map-maker_btn btn btn-primary btn-lg btn-info" data-toggle="modal" data-target="#myModal">
+            <input class="map-maker_input form-control js-address" name="map-maker-search" type="text">
+             <button type="button" class="map-maker_btn btn btn-primary btn-lg btn-info js-add_place_by_address" data-toggle="modal" data-target="#myModal">
                 Sauvegarder
             </button>
         </div>
-        <div class="map-maker_map" id="{{input_id}}"></div>
+        <div class="map-maker_map"></div>
     </div>
+    {{!
+        Input that will contain the actual data
+        This input will be posted on save / update
+    }}
+    <input type="hidden"
+        name="{{input_name}}"
+        value="{{value}}"
+    >
 </div>
 
-{{!
-    Input that will contain the actual data
-    This input will be posted on save / update
-}}
-<input type="hidden"
-    name="{{input_name}}"
-    value="{{value}}"
->
 
 {{#add_js}}
 <script>

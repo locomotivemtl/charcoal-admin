@@ -37,7 +37,6 @@ module.exports = {
         files: ['assets/src/styles/**/*.scss'],
         tasks: [
             'sass',
-            'concat:css',
             'notify:sass'
         ],
         options: {

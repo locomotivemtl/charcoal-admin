@@ -22,13 +22,5 @@ module.exports = {
             'bower_components/summernote/dist/summernote.js',
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js'
-    },
-    css : {
-        src: [
-           'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
-           'assets/dist/styles/charcoal.admin.vendors.css'
-
-        ],
-        dest: 'assets/dist/styles/charcoal.admin.vendors.css'
     }
 };

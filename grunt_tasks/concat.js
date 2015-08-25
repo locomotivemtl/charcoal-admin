@@ -26,9 +26,9 @@ module.exports = {
     css : {
         src: [
            'bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
-           'assets/dist/styles/charcoal.admin.css'
+           'assets/dist/styles/charcoal.admin.vendors.css'
 
         ],
-        dest: 'assets/dist/styles/charcoal.admin.css'
+        dest: 'assets/dist/styles/charcoal.admin.vendors.css'
     }
 };

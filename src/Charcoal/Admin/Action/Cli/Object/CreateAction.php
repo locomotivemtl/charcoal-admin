@@ -76,8 +76,7 @@ class CreateAction extends CliAction
 
         if ($prop->type() == 'password') {
             $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
-        }
-        elseif ($prop->type() == 'boolean') {
+        } else if ($prop->type() == 'boolean') {
             $opts = [
                 1 => $prop->true_label(),
                 0 => $prop->false_label()
@@ -85,7 +84,7 @@ class CreateAction extends CliAction
             $input = $climate->radio(sprintf('Enter value for "%s":', $prop->label()), $opts);
         } else {
             $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
-            if($prop->type() == 'text' || $prop->type == 'html') {
+            if ($prop->type() == 'text' || $prop->type == 'html') {
                 $input->multiLine();
             }
         }

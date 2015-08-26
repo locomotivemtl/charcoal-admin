@@ -178,27 +178,27 @@ class AdminModule
     * @param string $tpl
     * @return Module Chainable
     */
-    public function add_action_route($tpl)
+    public function add_action_route($action_ident)
     {
         $admin_path = $this->config()->base_path();
-        $this->_app->post('/action/json/'.$tpl, function(ServerRequestInterface $request, ResponseInterface $response, $actions = null) use ($tpl) {
+        $this->app()->post('/action/json/'.$action_ident, function(ServerRequestInterface $request, ResponseInterface $response, $args = null) use ($action_ident) {
             try {
                 //$action = new \Charcoal\Admin\Action\Login();
-                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
-                $action->set_mode('json');
-                $action->run($request, $response);
+                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
+                return $action
+                    ->set_mode('json')
+                    ->run($request, $response);
             } catch (Exception $e) {
                 die($e->getMessage());
             }
         });
 
-        $this->_app->post('/action/'.$tpl, function($actions = null) use ($tpl) {
-
+        $this->app()->post('/action/'.$action_ident, function(ServerRequestInterface $request, ResponseInterface $response, $args = null) use ($action_ident) {
             try {
                 //$action = new \Charcoal\Admin\Action\Login();
-                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
+                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
                 $action->set_mode('json');
-                $action->run();
+                return $action->run();
             } catch (Exception $e) {
                 die($e->getMessage());
             }

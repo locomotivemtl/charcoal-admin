@@ -5,6 +5,10 @@ namespace Charcoal\Admin\Action\Object;
 // Dependencies from `PHP`
 use \Exception as Exception;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 // Module `charcoal-core` dependencies
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -83,32 +87,33 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     /**
     * @return void
     */
-    public function run()
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->set_data(Charcoal::app()->request->post());
-        //$obj_type = Charcoal::app()->request->post('obj_type');
-        //$obj_id = Charcoal::app()->request->post('obj_id');
-        $update_data = Charcoal::app()->request->post();
+        $this->set_data($request->getParams());
+
 
         try {
+            // Load (or reload) object (From `ObjectContainerTrait`)
             $obj = $this->load_obj();
 
             $obj->set_flat_data($this->update_data());
             $validation = $obj->validate();
+
             // @todo Handle validation
 
             $ret = $obj->update();
+
             if ($ret) {
                 $this->log_object_update();
                 $this->set_success(true);
-                $this->output();
+                return $this->output($response);
             } else {
                 $this->set_success(false);
-                $this->output(404);
+                return $this->output($response->withStatus(404));
             }
         } catch (Exception $e) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
     }

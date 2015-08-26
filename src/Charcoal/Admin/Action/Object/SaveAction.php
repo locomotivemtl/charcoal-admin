@@ -4,6 +4,10 @@ namespace Charcoal\Admin\Action\Object;
 
 use \Exception as Exception;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 // Module `charcoal-core` dependencies
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -22,6 +26,7 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
 * ## Response
 * - `success` _boolean_ True if the object was properly saved, false in case of any error.
 * - `obj_id` _mixed_ The created object ID, if any.
+* - `obj` _array_ The created object data.
 *
 * ## HTTP Codes
 * - `200` in case of a successful login
@@ -81,9 +86,9 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     *
     * @see \Charcoal\Model\ModelFactory::get()
     */
-    public function run()
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->set_data(Charcoal::app()->request->post());
+        $this->set_data($request->getParams());
 
         try {
             // Create or load object (From `ObjectContainerTrait`)
@@ -100,17 +105,17 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 $this->set_obj($obj);
                 $this->log_object_save();
                 $this->set_success(true);
-                $this->output();
+                return $this->output($response);
             } else {
                 $this->set_obj(null);
                 $this->set_success(false);
-                $this->output(404);
+                return $this->output($response->withStatus(404));
             }
         } catch (Exception $e) {
             //var_dump($e);
             $this->set_obj(null);
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
     }

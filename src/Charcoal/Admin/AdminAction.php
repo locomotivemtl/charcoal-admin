@@ -38,24 +38,27 @@ abstract class AdminAction extends AbstractAction
     * @param integer $http_code
     * @throws Exception if mode is invalid
     */
-    public function output($http_code = 200)
+    public function output($response)
     {
-        $response = $this->response();
         $mode = $this->mode();
 
         if ($mode == self::MODE_JSON) {
-            Charcoal::app()->response->setStatus($http_code);
-            Charcoal::app()->response->headers->set('Content-Type', 'application/json');
-            echo json_encode($response);
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->write(json_encode($this->response()));
         } else if ($mode == self::MODE_REDIRECT) {
-            Charcoal::app()->response->redirect($this->redirect_url(), $http_code);
+            return $response
+                ->withHeader('Location', $this->redirect_url());
         } else {
-            throw new Exception('Invalid mode');
+            throw new Exception(
+                sprintf('Invalid mode "%s"', $mode)
+            );
         }
-
     }
 
     /**
+    * Default response stub
+    *
     * @return array
     */
     public function response()
@@ -67,21 +70,5 @@ abstract class AdminAction extends AbstractAction
             'next_url'=>$this->redirect_url()
         ];
         return $response;
-    }
-
-    /**
-    * @return string
-    */
-    public function ip()
-    {
-        return Charcoal::app()->request->getIp();
-    }
-
-    /**
-    * @return string
-    */
-    public function user_agent()
-    {
-        return Charcoal::app()->request->getUserAgent();
     }
 }

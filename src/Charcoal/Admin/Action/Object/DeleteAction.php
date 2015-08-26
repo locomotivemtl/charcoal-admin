@@ -4,6 +4,10 @@ namespace Charcoal\Admin\Action\Object;
 
 use \Exception as Exception;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 // From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -47,19 +51,20 @@ class DeleteAction extends AdminAction
     /**
     * @return void
     */
-    public function run()
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $obj_type = Charcoal::app()->request->post('obj_type');
-        $obj_id = Charcoal::app()->request->post('obj_id');
+
+        $obj_type = $request->getParam('obj_type');
+        $obj_id = $request->getParam('obj_id');
 
         if (!$obj_type) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
         if (!$obj_id) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
         try {
@@ -67,17 +72,17 @@ class DeleteAction extends AdminAction
             $obj->load($obj_id);
             if (!$obj->id()) {
                 $this->set_success(false);
-                $this->output(404);
+                return $this->output($response->withStatus(404));
             }
             $res = $obj->delete();
             if ($res) {
                 $this->log_object_delete();
                 $this->set_success(true);
-                $this->output();
+                return $this->output($response);
             }
         } catch (Exception $e) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
     }

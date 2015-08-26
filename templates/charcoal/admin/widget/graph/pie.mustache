@@ -1,14 +1,14 @@
 <div id="{{widget_id}}" style="height:{{height}}px;"></div>
 
 {{#add_js_requirement}}
-<script src="{{url}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
+<script src="{{base_url}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
 {{/add_js_requirement}}
 
 {{#add_js}}
 <script type="text/javascript">
 require.config({
     paths: {
-        echarts: '{{url}}assets/admin/scripts/vendors/echarts/'
+        echarts: '{{base_url}}assets/admin/scripts/vendors/echarts/'
     }
 });
 

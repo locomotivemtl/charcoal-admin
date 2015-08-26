@@ -1,6 +1,37 @@
 {
 	"base_path":"admin",
 
+    "routes":{
+        "templates":{
+            "home":{},
+            "login":{},
+            "object/edit":{},
+            "object/collection":{},
+
+            "contents":{},
+            "envoie":{}
+        },
+        "default_view":"home",
+        "actions":{
+            "login":{},
+            "object/delete":{},
+            "object/save":{},
+            "object/update":{},
+            "widget/load":{},
+            "widget/table/inline":{},
+            "widget/table/inline-multi":{},
+            "messaging/send-sms":{}
+        },
+        "default_action":null,
+        "cli_actions":{
+
+        },
+        "cron_actions":{
+
+        }
+
+    },
+
     "user":{
         "subscription_email":{
             "active":true,

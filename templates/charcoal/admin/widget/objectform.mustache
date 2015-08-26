@@ -21,52 +21,10 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 
         </div>
 
-        <aside class="c-aside o-flex_aside">
-            <div class="o-container -top -right">
-                <div class="c-panel -fixed">
-                    <header class="c-panel_header">
-                        Actions
-                    </header>
-
-                    <div class="c-panel_main">
-                        <p>Attention, innondation dans le secteur de boucherville ouest</p>
-                        <table class="c-panel_table">
-                            <tr class="c-panel_table_row">
-                                <th class="c-panel_table_header">Status</th>
-                                <td class="c-panel_table_data">Brouillon</td>
-                            </tr>
-                            <tr class="c-panel_table_row">
-                                <th class="c-panel_table_header">Création</th>
-                                <td class="c-panel_table_data">20.24.14  16:00</td>
-                            </tr>
-                            <tr class="c-panel_table_row">
-                                <th class="c-panel_table_header">Révision</th>
-                                <td class="c-panel_table_data">20.24.14  16:00</td>
-                            </tr>
-                        </table>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-info btn-lg btn-block" value="Save">Sauvegarder</button>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-danger btn-lg btn-block">Envoyer l'alerte</button>
-                        </div>
-                    </div>
-
-                    <footer class="c-panel_footer">
-                        <div class="c-panel_footer_item -red">
-                            <span>
-                                <i class="fa fa-trash-o"></i> Effacer
-                            </span>
-                        </div>
-                        <div class="c-panel_footer_item -blue">
-                            <span>
-                                <i class="fa fa-refresh"></i> Réinitialiser
-                            </span>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        </aside>
+        {{!-- Get the FormSidebarWidget object --}}
+        {{#sidebars}}
+            {{>charcoal/admin/widget/form.sidebar}}
+        {{/sidebars}}
 
         <input type="hidden" name="widget_id" value="{{widget_id}}">
         <input type="hidden" name="obj_type" value="{{obj_type}}">

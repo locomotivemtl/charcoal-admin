@@ -5,10 +5,11 @@ Switch Property Input
 `charcoal/admin/property/input/switch`
 
 --}}
+<div>
 <input
     id="switch_{{input_id}}"
     type="checkbox"
-    class="{{input_class}}"
+    class="form-control {{input_class}}"
     data-target="{{input_id}}"
     {{#checked}}checked{{/checked}}
     {{#read_only}}read_only{{/read_only}}
@@ -20,6 +21,7 @@ Switch Property Input
     name="{{input_name}}"
     value="{{value}}"
 >
+</div>
 
 {{#add_js}}
 <script>

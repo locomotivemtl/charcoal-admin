@@ -17,7 +17,14 @@ use \Charcoal\Property\PropertyInterface;
 */
 class FormPropertyWidget extends AdminWidget
 {
+    /**
+    * In memory copy of the PropertyInput object
+    * @var PropertyInputInterface $_input
+    */
+    private $_input;
+
     protected $_type;
+
     protected $_input_type;
     protected $_input_options;
 
@@ -131,30 +138,17 @@ class FormPropertyWidget extends AdminWidget
     */
     public function show_description()
     {
+        return rand(0, 1);
         return true;
     }
 
-    /**
-    *
-    */
-    public function show_header()
-    {
-        return true;
-    }
-
-    /**
-    *
-    */
-    public function show_footer()
-    {
-        return true;
-    }
 
     /**
     *
     */
     public function show_notes()
     {
+        return rand(0, 1);
         return true;
     }
 
@@ -257,15 +251,18 @@ class FormPropertyWidget extends AdminWidget
     */
     public function input()
     {
+        if ($this->_input !== null) {
+            return $this->_input;
+        }
         $prop = $this->prop();
         $input_type = $this->input_type();
 
-        $factory = PropertyInputFactory::instance();
-        $input = PropertyInputFactory::instance()->create($input_type);
-        $input->set_property($prop);
-        $input->set_data($this->_property_data);
+        $this->_input = PropertyInputFactory::instance()->create($input_type);
+        $this->_input->set_property($prop);
+        $this->_input->set_data($this->_property_data);
+
         $GLOBALS['widget_template'] = $input_type;
-        return $input;
+        return $this->_input;
     }
 
 }

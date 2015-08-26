@@ -2,20 +2,27 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException as InvalidArgumentException;
+// Dependencies from `PHP`
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
-use \Charcoal\Admin\Widget\FormWidget as FormWidget;
-use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
+// Module `charcoal-core` dependencies
+use \Charcoal\Translation\TranslationString;
 
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Widget\FormWidget;
+use \Charcoal\Admin\Widget\LayoutWidget;
+
+/**
+* Form Group Widget Controller
+*/
 class FormGroupWidget extends AdminWidget
 {
-    private $_form;
-
     /**
-    * @var integer $_priority
+    * In-memory copy of the parent form widget.
+    * @var FormWidget $_form
     */
-    private $_priority = 0;
+    private $_form;
 
     /**
     * @var string
@@ -23,18 +30,52 @@ class FormGroupWidget extends AdminWidget
     private $_widget_type = 'properties';
 
     /**
+    * @var LayoutWidget $_layout
+    */
+    public $_layout;
+
+    /**
+    * Order / sorting is done with the "priority".
+    * @var integer $_priority
+    */
+    private $_priority = 0;
+
+
+    /**
     * @var array $_group_properties
     */
     private $_group_properties = [];
 
     /**
+    * @var TranslationString $_title
+    */
+    private $_title = '';
+
+    /**
+    * @var TranslationString $_description
+    */
+    private $_description;
+    /**
+    * @var TranslationString $_notes
+    */
+    private $_notes;
+
+    /**
+    * If it is set to false, will disable display of title.
     * @var boolean
     */
     private $_show_title = true;
     /**
+    * If it is set to false, will disable display of description
     * @var boolean
     */
     private $_show_description = true;
+    /**
+    * If it is set to false, will disable display of the notes (footer).
+    * @var boolean
+    */
+    private $_show_notes = true;
+
     /**
     * @var boolean
     */
@@ -43,21 +84,25 @@ class FormGroupWidget extends AdminWidget
     * @var boolean
     */
     private $_show_footer = true;
-    /**
-    * @var boolean
-    */
-    private $_show_notes = true;
-    /**
-    * @var string $_title
-    */
-    private $_title = '';
-    /**
-    * @var LayoutWidget $_layout
-    */
-    public $_layout;
 
-    private $_description;
-    private $_notes;
+
+    /**
+    * @param Form $form
+    * @return FormGroupWidget Chainable
+    */
+    public function set_form(FormWidget $form)
+    {
+        $this->_form = $form;
+        return $this;
+    }
+
+    /**
+    * @return FormWidget or null
+    */
+    public function form()
+    {
+        return $this->_form;
+    }
 
     /**
     * @var string
@@ -70,26 +115,14 @@ class FormGroupWidget extends AdminWidget
         if (isset($data['widget_type']) && $data['widget_type'] !== null) {
             $this->set_widget_type($data['widget_type']);
         }
+        if (isset($data['layout']) && $data['layout'] !== null) {
+            $this->set_layout($data['layout']);
+        }
         if (isset($data['properties']) && $data['properties'] !== null) {
             $this->set_group_properties($data['properties']);
         }
         if (isset($data['priority']) && $data['priority'] !== null) {
             $this->set_priority($data['priority']);
-        }
-        if (isset($data['show_title']) && $data['show_title'] !== null) {
-            $this->set_show_title($data['show_title']);
-        }
-        if (isset($data['show_description']) && $data['show_description'] !== null) {
-            $this->set_show_description($data['show_description']);
-        }
-        if (isset($data['show_header']) && $data['show_header'] !== null) {
-            $this->set_show_header($data['show_header']);
-        }
-        if (isset($data['show_footer']) && $data['show_footer'] !== null) {
-            $this->set_show_footer($data['show_footer']);
-        }
-        if (isset($data['show_notes']) && $data['show_notes'] !== null) {
-            $this->set_show_notes($data['show_notes']);
         }
         if (isset($data['title']) && $data['title'] !== null) {
             $this->set_title($data['title']);
@@ -100,17 +133,51 @@ class FormGroupWidget extends AdminWidget
         if (isset($data['notes']) && $data['notes'] !== null) {
             $this->set_notes($data['notes']);
         }
-        if (isset($data['layout']) && $data['layout'] !== null) {
-            $this->set_layout($data['layout']);
+        if (isset($data['show_title']) && $data['show_title'] !== null) {
+            $this->set_show_title($data['show_title']);
+        }
+        if (isset($data['show_description']) && $data['show_description'] !== null) {
+            $this->set_show_description($data['show_description']);
+        }
+        if (isset($data['show_notes']) && $data['show_notes'] !== null) {
+            $this->set_show_notes($data['show_notes']);
+        }
+        if (isset($data['show_header']) && $data['show_header'] !== null) {
+            $this->set_show_header($data['show_header']);
+        }
+        if (isset($data['show_footer']) && $data['show_footer'] !== null) {
+            $this->set_show_footer($data['show_footer']);
         }
 
         return $this;
     }
 
     /**
+    * @var string $widget_type
+    * @throws InvalidArgumentException
+    * @return FormGroupWidget Chainable
+    */
+    public function set_widget_type($widget_type)
+    {
+        if (!is_string($widget_type)) {
+            throw new InvalidArgumentException('Widget type must be a string');
+        }
+        $this->_widget_type = $widget_type;
+        return $this;
+    }
+
+    /**
+    * @return string
+    */
+    public function widget_type()
+    {
+        return $this->_widget_type;
+    }
+
+    /**
     * @param LayoutWidget|array
     * @throws InvalidArgumentException
-    * @return Dashboard Chainable
+    * @return FormGroupWidget Chainable
     */
     public function set_layout($layout)
     {
@@ -134,37 +201,9 @@ class FormGroupWidget extends AdminWidget
         return $this->_layout;
     }
 
-    /**
-    * @param Form $form
-    * @return FormGroup Chainable
-    */
-    public function set_form(FormWidget $form)
-    {
-        $this->_form = $form;
-        return $this;
-    }
 
-    /**
-    * @return FormWidget or null
-    */
-    public function form()
-    {
-        return $this->_form;
-    }
 
-    public function set_widget_type($widget_type)
-    {
-        if (!is_string($widget_type)) {
-            throw new InvalidArgumentException('Widget type must be a string');
-        }
-        $this->_widget_type = $widget_type;
-        return $this;
-    }
 
-    public function widget_type()
-    {
-        return $this->_widget_type;
-    }
 
     public function set_group_properties($properties)
     {
@@ -217,6 +256,54 @@ class FormGroupWidget extends AdminWidget
     public function priority()
     {
         return $this->_priority;
+    }
+
+
+    public function set_title($title)
+    {
+        $this->_title = new TranslationString($title);
+        return $this;
+    }
+
+    public function title()
+    {
+        return $this->_title;
+    }
+
+    /**
+    * @var mixed $description
+    * @return $
+    */
+    public function set_description($description)
+    {
+        $this->_description = new TranslationString($description);
+        return $this;
+    }
+
+    /**
+    * @return TranslationString
+    */
+    public function description()
+    {
+        return new TranslationString('Group Description');
+    }
+
+    /**
+    * @param mixed $notes
+    * @return FormGroupWidget Chainable
+    */
+    public function set_notes($notes)
+    {
+        $this->_notes = new TranslationString($notes);
+        return $this;
+    }
+
+    /**
+    * @return TranslationString
+    */
+    public function notes()
+    {
+        return new TranslationString('Group Notes');
     }
 
     /**
@@ -272,6 +359,33 @@ class FormGroupWidget extends AdminWidget
     * @throws InvalidArgumentException
     * @return FormGroup Chainable
     */
+    public function set_show_notes($show)
+    {
+        if (!is_bool($show)) {
+            throw new InvalidArgumentException('Show must be a boolean');
+        }
+        $this->_show_notes = $show;
+        return $this;
+    }
+
+    /**
+    * @return boolean
+    */
+    public function show_notes()
+    {
+        if ($this->_show_notes === false) {
+            return false;
+        } else {
+            $notes = $this->notes();
+            return !!$notes;
+        }
+    }
+
+    /**
+    * @param boolean $show
+    * @throws InvalidArgumentException
+    * @return FormGroup Chainable
+    */
     public function set_show_header($show)
     {
         if (!is_bool($show)) {
@@ -315,63 +429,6 @@ class FormGroupWidget extends AdminWidget
         }
     }
 
-    /**
-    * @param boolean $show
-    * @throws InvalidArgumentException
-    * @return FormGroup Chainable
-    */
-    public function set_show_notes($show)
-    {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
-        }
-        $this->_show_notes = $show;
-        return $this;
-    }
 
-    /**
-    * @return boolean
-    */
-    public function show_notes()
-    {
-        if ($this->_show_notes === false) {
-            return false;
-        } else {
-            $notes = $this->notes();
-            return !!$notes;
-        }
-    }
 
-    public function set_title($title)
-    {
-        $this->_title = $title;
-        return $this;
-    }
-
-    public function title()
-    {
-        return $this->_title;
-    }
-
-    public function set_description($description)
-    {
-        $this->_description = $description;
-        return $this;
-    }
-
-    public function description()
-    {
-        return 'Group Description';
-    }
-
-    public function set_notes($notes)
-    {
-        $this->_notes = $notes;
-        return $this;
-    }
-
-    public function notes()
-    {
-        return 'Group Notes';
-    }
 }

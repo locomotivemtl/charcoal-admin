@@ -48,6 +48,7 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
         $dashboard_ident = $this->dashboard_ident();
         $dashboard_config = $this->dashboard_config();
 
+
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         if ($admin_metadata === null) {
             throw new Exception('No dashboard for object');

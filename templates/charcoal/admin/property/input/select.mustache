@@ -1,0 +1,14 @@
+{{!--
+Select input
+
+Display a property as a select with "choices".
+
+`charcoal/admin/property/input/select`
+--}}
+<select id="{{input_id}}" name="{{input_name}}" class="form-control {{input_class}}">
+    {{#choices}}
+    <option value="{{value}}">
+        {{label}}
+    </option>
+    {{/choices}}
+</select>

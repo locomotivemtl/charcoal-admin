@@ -111,8 +111,9 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
         </table>
     {{/has_objects}}
     {{^has_objects}}
-        <div>
-            No objects
+        No object.
+        <div class="btn-group" role="group" aria-label="...">
+            <a class="btn btn-default" href="{{object_edit_url}}">Create a new object</a>
         </div>
     {{/has_objects}}
 </div>

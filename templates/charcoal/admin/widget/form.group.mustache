@@ -34,9 +34,20 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
             <div class="col-md-{{layout.cell_span_by12}}">
                  <div class="form-group">
                     <label for="{{prop.input_id}}">{{prop.label}}</label>
+
+                {{#show_description}}
+                    <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
+                {{/show_description}}
+
                     {{#input}}
+                        {{!-- PropertyInput --}}
                         {{>$widget_template}}
                     {{/input}}
+
+                {{#show_notes}}
+                    <p class="help-block">{{notes}}</p>
+                {{/show_notes}}
+
                 </div>
             </div>
 
@@ -55,3 +66,11 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 {{/form_properties}}
 
 </fieldset>
+
+{{#add_js}}
+<script>
+    $(document).ready(function() {
+         $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{{/add_js}}

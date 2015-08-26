@@ -26,14 +26,17 @@ class FormWidget extends AdminWidget
     public $show_notes;
     public $show_actions;*/
 
-    private $_layout;
-    private $_groups;
+    protected $_layout;
+    protected $_groups = [];
+    protected $_sidebars = [];
 
     private $_action = '';
     private $_method = 'post';
 
     private $_form_data = [];
     private $_form_properties = [];
+
+
 
     /*public $use_captcha;
     public $use_token;
@@ -68,6 +71,9 @@ class FormWidget extends AdminWidget
         if (isset($data['groups']) && $data['groups'] !== null) {
             $this->set_groups($data['groups']);
         }
+        if (isset($data['sidebars']) && $data['sidebars'] !== null) {
+            $this->set_sidebars($data['sidebars']);
+        }
         if (isset($data['form_properties']) && $data['form_properties'] !== null) {
             $this->set_form_properties($data['form_properties']);
         }
@@ -87,7 +93,7 @@ class FormWidget extends AdminWidget
     /**
     * @param LayoutWidget|array
     * @throws InvalidArgumentException
-    * @return Dashboard Chainable
+    * @return FormWidget Chainable
     */
     public function set_layout($layout)
     {
@@ -95,27 +101,25 @@ class FormWidget extends AdminWidget
             $this->_layout = $layout;
         } else if (is_array($layout)) {
             $l = new LayoutWidget();
+//            $l->set_parent($this);
             $l->set_data($layout);
             $this->_layout = $l;
         } else {
-            throw new InvalidArgumentException('LayoutWidget must be a LayoutWidget object or an array');
+            throw new InvalidArgumentException('Layout must be a LayoutWidget object or an array');
         }
         return $this;
     }
 
     /**
-    * @return LayoutWidget
+    * @return LayoutWidget|null
     */
     public function layout()
     {
         return $this->_layout;
     }
 
-    public function set_groups($groups)
+    public function set_groups(array $groups)
     {
-        if (!is_array($groups)) {
-            throw new InvalidArgumentException('Groups need to be an array');
-        }
         $this->_groups = [];
         foreach ($groups as $group_ident => $group) {
             $this->add_group($group_ident, $group);
@@ -143,6 +147,9 @@ class FormWidget extends AdminWidget
         return $this;
     }
 
+    /**
+    * Group generator
+    */
     public function groups()
     {
         $groups = $this->_groups;
@@ -163,6 +170,67 @@ class FormWidget extends AdminWidget
         }
     }
 
+
+    public function set_sidebars(array $sidebars)
+    {
+        $this->_sidebars = [];
+        foreach ($sidebars as $sidebar_ident => $sidebar) {
+            //var_dump($sidebar_ident);
+            $this->add_sidebar($sidebar_ident, $sidebar);
+        }
+        return $this;
+    }
+    /**
+    * @param array|FormSidebarWidget $sidebar
+    * @throws InvalidArgumentException
+    * @return FormWidget Chainable
+    */
+    public function add_sidebar($sidebar_ident, $sidebar)
+    {
+        if (!is_string($sidebar_ident)) {
+            throw new InvalidArgumentException('Sidebar ident must be a string');
+        }
+        if (($sidebar instanceof FormSidebarWidget)) {
+            $this->_sidebars[$sidebar_ident] = $sidebar;
+        } else if (is_array($sidebar)) {
+            $s = new FormSidebarWidget();
+            $s->set_form($this);
+            $s->set_data($sidebar);
+            $this->_sidebars[$sidebar_ident] = $s;
+        } else {
+            throw new InvalidArgumentException('Sidebar must be a FormSidebarWidget object or an array');
+        }
+        return $this;
+    }
+
+    /**
+    * @return FormSidebarWidget
+    */
+    public function sidebars()
+    {
+        $sidebars = $this->_sidebars;
+        if (!is_array($this->_sidebars)) {
+            yield null;
+        } else {
+            uasort($sidebars, ['self', '_sort_sidebars_by_priority']);
+            foreach ($sidebars as $sidebar) {
+                /*if ($sidebar->widget_type() != '') {
+                    $GLOBALS['widget_template'] = $sidebar->widget_type();
+                } else {
+                    $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
+                }*/
+                $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
+                //var_dump($GLOBALS['widget_template']);
+                yield $sidebar->ident() => $sidebar;
+            }
+        }
+    }
+
+    /**
+    * @param string $action
+    * @throws InvalidArgumentException
+    * @return FormWidget Chainable
+    */
     public function set_action($action)
     {
         if (!is_string($action)) {
@@ -233,13 +301,13 @@ class FormWidget extends AdminWidget
             throw new InvalidArgumentException('Property ident must be a string');
         }
 
-        if (($property instanceof FormProperty)) {
+        if (($property instanceof FormPropertyWidget)) {
             $this->_form_properties[$property_ident] = $property;
         } else if (is_array($property)) {
-            $p = new FormProperty($property);
+            $p = new FormPropertyWidget($property);
             $p->set_property_ident($property_ident);
             $p->set_data($property);
-            //$p->set_form($this);
+//            $p->set_form($this);
             $this->_form_properties[$property_ident] = $p;
         } else {
             throw new InvalidArgumentException('Property must be a FormProperty object or an array');
@@ -266,6 +334,21 @@ class FormWidget extends AdminWidget
     * To be called with uasort()
     */
     static protected function _sort_groups_by_priority($a, $b)
+    {
+        $a = $a->priority();
+        $b = $b->priority();
+
+        if ($a == $b) {
+            return 1; // Should be 0?
+        }
+
+        return ($a < $b) ? (-1) : 1;
+    }
+
+    /**
+    * To be called with uasort()
+    */
+    static protected function _sort_sidebars_by_priority($a, $b)
     {
         $a = $a->priority();
         $b = $b->priority();

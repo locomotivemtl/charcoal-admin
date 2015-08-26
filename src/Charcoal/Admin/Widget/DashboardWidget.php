@@ -4,12 +4,14 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException as InvalidArgumentException;
 
-// From `charcoal-base`
-use \Charcoal\Widget\WidgetFactory as WidgetFactory;
-use \Charcoal\Widget\WidgetInterface as WidgetInterface;
+use \Charcoal\Charcoal;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
-use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
+// From `charcoal-base`
+use \Charcoal\Widget\WidgetFactory;
+use \Charcoal\Widget\WidgetInterface;
+
+use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Widget\LayoutWidget;
 
 /**
 *
@@ -118,14 +120,16 @@ class DashboardWidget extends AdminWidget
     */
     public function widgets()
     {
+        //var_dump($this->_widgets);
         if ($this->_widgets === null) {
             yield null;
         } else {
             foreach ($this->_widgets as $widget) {
-                //var_dump($widget);
                 if ($widget->active() === false) {
+;
                     continue;
                 }
+                Charcoal::logger()->debug(sprintf('Yield widget %s', $widget->type()));
                 $GLOBALS['widget_template'] = $widget->type();
                 yield $widget->ident() => $widget;
             }

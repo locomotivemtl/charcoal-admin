@@ -2,19 +2,19 @@
 
 namespace Charcoal\Admin;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
 // From PSR-7
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal as Charcoal;
-use \Charcoal\Module\AbstractModule as AbstractModule;
+use \Charcoal\Charcoal;
+use \Charcoal\Module\AbstractModule;
 
 // From `charcoal-base`
-use \Charcoal\Template\TemplateView as TemplateView;
-use \Charcoal\Action\ActionFactory as ActionFactory;
+use \Charcoal\Template\TemplateView;
+use \Charcoal\Action\ActionFactory;
 
 use \Charcoal\Admin\Config as AdminConfig;
 
@@ -32,6 +32,24 @@ class AdminModule
     */
     private $_app;
 
+    /**
+    * Charcoal admin setup.
+    *
+    * This module is bound to the `/admin` URL.
+    *
+    * ## Provides
+    * - `charcoal/admin/module` An instance of this module
+    *   - Exact type: `\Charcoal\Admin\AdminModule`
+    *   - which implements `\Charcoal\Module\ModuleInterface`
+    * - `charcoal/admin/config`
+    * - `
+    *
+    * ## Dependencies
+    * - `charcoal/config` Provided by \Charcoal\CharcoalModule
+    *
+    * @param \Slim\App $app
+    * @return void
+    */
     static public function setup($app)
     {
         // A session is necessary for the admin module
@@ -49,8 +67,12 @@ class AdminModule
 
         $container['charcoal/admin/config'] = function($c) {
             $config = new AdminConfig();
-            $config->set_data($c['config']->get('admin'));
+            $config->set_data($c['charcoal/config']->get('admin'));
             return $config;
+        };
+
+        $container['charcoal/admin/template_view'] = function($c) {
+            $view = new TemplateView();
         };
 
         // Admin module
@@ -58,6 +80,9 @@ class AdminModule
         $app->group('/admin', 'charcoal/admin/module:setup_routes');
     }
 
+    /**
+    * @param array $data Dependencies map
+    */
     public function __construct($data)
     {
         $this->_config = $data['config'];
@@ -75,40 +100,26 @@ class AdminModule
     */
     public function setup_routes()
     {
-        $this->add_template_route('home');
-        $this->add_template_route('contents');
-        $this->add_template_route('envoie');
-        $this->add_template_route('login');
 
-        $this->add_template_route('object/edit');
-        $this->add_template_route('object/collection');
+        $container = $this->app()->getContainer();
+        $config = $this->config();
 
-        // Admin catch-all (load template if it exists)
-        $this->app()->get('/:actions+?', function ($actions = ['home'], ServerRequestInterface $request, ResponseInterface $response, $args = null) {
-            $template = implode('/', $actions);
-            $view = new TemplateView();
-            $content = $view->from_ident('charcoal/admin/template/'.$template)->render();
-            if ($content) {
-                echo $content;
-            } else {
-                Charcoal::app()->halt(404, 'Admin Page not found');
-            }
-        });
+        $router_views = $config->get('routes/templates');
+        foreach ($router_views as $view_ident => $view_options) {
+            $this->add_template_route($view_ident);
+        }
 
-        $this->add_action_route('login');
-        $this->add_action_route('object/delete');
-        $this->add_action_route('object/save');
-        $this->add_action_route('object/update');
-        $this->add_action_route('widget/load');
-        $this->add_action_route('widget/table/inline');
-        $this->add_action_route('widget/table/inlinemulti');
-        $this->add_action_route('messaging/send-sms');
+        $router_actions = $config->get('routes/actions');
+        foreach ($router_actions as $action_ident => $action_options) {
+            $this->add_action_route($action_ident);
+        }
 
         return $this;
     }
 
     public function default_route(ServerRequestInterface $request, ResponseInterface $response, $args = null)
     {
+        unset($request);
         $view = new TemplateView();
         $content = $view->from_ident('charcoal/admin/template/home')->render();
         $response->write($content);
@@ -146,16 +157,19 @@ class AdminModule
     * @param array $args
     * @return Module Chainable
     */
-    public function add_template_route($tpl)
+    public function add_template_route($view_ident)
     {
         $admin_path = $this->config()->base_path();
-        $this->app()->get('/'.$tpl, function(ServerRequestInterface $request, ResponseInterface $response) use ($tpl) {
+        $this->app()->get('/'.$view_ident, function(ServerRequestInterface $request, ResponseInterface $response) use ($view_ident) {
+
             $view = new TemplateView();
-            $content = $view->from_ident('charcoal/admin/template/'.$tpl)->render();
+            $view->from_ident('charcoal/admin/template/'.$view_ident);
+            $model = $view->controller();
+            $content = $view->render();
             $response->write($content);
             return $response;
-        })->setName($admin_path.'/'.$tpl);
-        return $this;
+        })->setName($admin_path.'/'.$view_ident);
+
     }
 
     /**
@@ -167,12 +181,12 @@ class AdminModule
     public function add_action_route($tpl)
     {
         $admin_path = $this->config()->base_path();
-        $this->_app->post('/action/json/'.$tpl, function($actions = null) use ($tpl) {
+        $this->_app->post('/action/json/'.$tpl, function(ServerRequestInterface $request, ResponseInterface $response, $actions = null) use ($tpl) {
             try {
                 //$action = new \Charcoal\Admin\Action\Login();
                 $action = ActionFactory::instance()->get('charcoal/admin/action/'.$tpl);
                 $action->set_mode('json');
-                $action->run();
+                $action->run($request, $response);
             } catch (Exception $e) {
                 die($e->getMessage());
             }

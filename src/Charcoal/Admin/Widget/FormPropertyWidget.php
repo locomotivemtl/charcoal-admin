@@ -6,11 +6,11 @@ use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
 use \Charcoal\Admin\AdminWidget as AdminWidget;
-use \Charcoal\Admin\Property\PropertyInputFactory as PropertyInputFactory;
+use \Charcoal\Admin\Property\PropertyInputFactory;
 
 // From `charcoal-core`
-use \Charcoal\Property\PropertyFactory as PropertyFactory;
-use \Charcoal\Property\PropertyInterface as PropertyInterface;
+use \Charcoal\Property\PropertyFactory;
+use \Charcoal\Property\PropertyInterface;
 
 /**
 *
@@ -260,6 +260,7 @@ class FormPropertyWidget extends AdminWidget
         $prop = $this->prop();
         $input_type = $this->input_type();
 
+        $factory = PropertyInputFactory::instance();
         $input = PropertyInputFactory::instance()->create($input_type);
         $input->set_property($prop);
         $input->set_data($this->_property_data);

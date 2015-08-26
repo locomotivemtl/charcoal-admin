@@ -10,12 +10,15 @@ class UserConfig extends AbstractConfig
     /**
     * @var array $subscription_email
     */
-    private $subscription_email;
+    private $_subscription_email;
+
+    private $_subscription_sms;
+    private $_subscription_voice;
 
     /**
     * @var array $lost_password_email
     */
-    private $lost_password_email;
+    private $_lost_password_email;
 
     /**
     * @todo Integrate $data merge

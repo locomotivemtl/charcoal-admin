@@ -2,20 +2,19 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use \Exception as Exception;
+use \Exception;
 
 // From PSR-7
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // Module `charcoal-core` dependencies
-use \Charcoal\Charcoal as Charcoal;
-use \Charcoal\Model\ModelFactory as ModelFactory;
+use \Charcoal\Model\ModelFactory;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\Ui\ObjectContainerInterface as ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
+use \Charcoal\Admin\AdminAction;
+use \Charcoal\Admin\Ui\ObjectContainerInterface;
+use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
 * Admin Save Action: Save an object in its Storage.

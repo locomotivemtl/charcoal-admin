@@ -210,7 +210,7 @@ class AdminTemplate extends AbstractTemplate
                 'active'=>true,
                 'label'=>'Accueil',
                 'icon'=>'home',
-                'url'=>'admin/home',
+                'url'=>$this->admin_url().'home',
                 'has_children'=>false
             ],
             [
@@ -218,14 +218,14 @@ class AdminTemplate extends AbstractTemplate
                 'selected'=>true,
                 'label'=>'Alertes',
                 'icon'=>'alerts',
-                'url'=>'admin/object/collection?obj_type=alert/alert',
+                'url'=>$this->admin_url().'object/collection?obj_type=alert/alert',
                 'has_children'=>false
             ],
             [
                 'active'=>true,
                 'label'=>'Utilisateurs',
                 'icon'=>'users',
-                'url'=>'admin/object/collection?obj_type=alert/user',
+                'url'=>$this->admin_url().'object/collection?obj_type=alert/user',
                 'has_children'=>false
             ],
             [
@@ -332,7 +332,7 @@ class AdminTemplate extends AbstractTemplate
         //$cfg = AdminModule::config();
         $u = User::get_authenticated();
         if ($u === null) {
-            $path = Charcoal::config()->admin_path().'/login';
+            $path = Charcoal::config()->get('admin_path').'/login';
             try {
                 // @todo Investigate why app()->redirect throws an exception
                 Charcoal::app()->response->withRedirect($path, 403);
@@ -346,20 +346,20 @@ class AdminTemplate extends AbstractTemplate
         }
     }
 
-    public function url()
-    {
-        // Obsolete. Use base_url.
-        return Charcoal::config()['URL'];
-    }
-
+    /**
+    * @return string
+    */
     public function admin_url()
     {
         return $this->base_url().'admin/';
     }
 
+    /**
+    * @return string
+    */
     public function base_url()
     {
-        return Charcoal::config()['URL'];
+        return Charcoal::config()->get('URL');
     }
 
     public function for_loop()

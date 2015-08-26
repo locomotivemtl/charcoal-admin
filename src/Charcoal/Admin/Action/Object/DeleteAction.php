@@ -2,17 +2,16 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use \Exception as Exception;
+use \Exception;
 
 // From PSR-7
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal as Charcoal;
-use \Charcoal\Model\ModelFactory as ModelFactory;
+use \Charcoal\Model\ModelFactory;
 
-use \Charcoal\Admin\AdminAction as AdminAction;
+use \Charcoal\Admin\AdminAction;
 
 /**
 * Admin Object Delete Action: Delete an object

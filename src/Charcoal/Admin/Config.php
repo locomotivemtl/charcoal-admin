@@ -33,6 +33,7 @@ class Config extends AbstractConfig
     */
     public function set_data(array $data)
     {
+        parent::set_data($data);
         if (isset($data['base_path'])) {
             $this->set_base_path($data['base_path']);
         }

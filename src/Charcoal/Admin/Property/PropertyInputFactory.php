@@ -18,9 +18,8 @@ class PropertyInputFactory extends IdentFactory
     /**
     * @param array $data
     */
-    public function __construct(array $data = null)
+    public function __construct()
     {
-        unset($data);
         $this->set_base_class('\Charcoal\Admin\Property\PropertyInputInterface');
     }
 

@@ -279,7 +279,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     public function property()
     {
         if ($this->_property === null) {
-            $this->_property = PropertyFactory::instance()->get($this->type());
+            $this->_property = PropertyFactory::instance()->create($this->type());
             $this->_property->set_data($this->_property_data);
         }
         return $this->_property;

@@ -198,7 +198,7 @@ class AdminModule
                 //$action = new \Charcoal\Admin\Action\Login();
                 $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
                 $action->set_mode('json');
-                return $action->run();
+                return $action->run($request, $response);
             } catch (Exception $e) {
                 die($e->getMessage());
             }

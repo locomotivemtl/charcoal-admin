@@ -9,7 +9,9 @@
             "object/collection":{},
 
             "contents":{},
-            "envoie":{}
+            "envoie":{},
+
+            "messaging/send-sms":{}
         },
         "default_view":"home",
         "actions":{
@@ -20,6 +22,7 @@
             "widget/load":{},
             "widget/table/inline":{},
             "widget/table/inline-multi":{},
+
             "messaging/send-sms":{}
         },
         "default_action":null,

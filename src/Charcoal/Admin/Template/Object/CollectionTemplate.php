@@ -25,6 +25,17 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     use CollectionContainerTrait;
     use DashboardContainerTrait;
 
+    public function __construct(array $data = null)
+    {
+        parent::__construct($data);
+
+        $obj = $this->proto();
+        if($obj->source()->table_exists() === false) {
+            $obj->source()->create_table();
+            $this->add_feedback('A new table was created for object.');
+        }
+
+    }
 
     /**
     * @param array $data
@@ -49,23 +60,30 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
+
         $dashboard_ident = $this->dashboard_ident();
         $dashboard_config = $this->dashboard_config();
 
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         if ($admin_metadata === null) {
-            throw new Exception('No dashboard for object');
+            throw new Exception(
+                'No dashboard for object (no admin metadata).'
+            );
         }
 
         if ($dashboard_ident === null || $dashboard_ident === '') {
             if (!isset($admin_metadata['default_collection_dashboard'])) {
-                throw new Exception('No default collection dashboard defined in object admin metadata');
+                throw new Exception(
+                    'No default collection dashboard defined in object admin metadata.'
+                );
             }
             $dashboard_ident = $admin_metadata['default_collection_dashboard'];
         }
         if ($dashboard_config === null || empty($dashboard_config)) {
             if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboard_ident])) {
-                throw new Exception('Dashboard config is not defined.');
+                throw new Exception(
+                    'Dashboard config is not defined.'
+                );
             }
             $dashboard_config = $admin_metadata['dashboards'][$dashboard_ident];
         }
@@ -75,9 +93,9 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
             $dashboard->set_data($data);
         }
         $dashboard->set_data($dashboard_config);
+
         return $dashboard;
     }
-
 
 
     public function create_collection_config($config_data = null)

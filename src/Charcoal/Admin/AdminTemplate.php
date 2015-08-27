@@ -55,6 +55,8 @@ class AdminTemplate extends AbstractTemplate
     */
     protected $_show_footer_menu = true;
 
+    private $_feedbacks;
+
     /**
     * Constructor.
     * Ensure authentication before serving the template.
@@ -62,7 +64,7 @@ class AdminTemplate extends AbstractTemplate
     *
     * @param arrray $data
     */
-    public function __construct($data = null)
+    public function __construct(array $data = null)
     {
         if (!session_id()) {
             session_cache_limiter(false);
@@ -301,11 +303,15 @@ class AdminTemplate extends AbstractTemplate
     */
     public function feedbacks()
     {
-        return [];
-        /*return [[
-            'level'=>'error',
-            'msg'=>'Feedback test error'
-        ]];*/
+        return $this->_feedbacks;
+    }
+
+    public function add_feedback($msg, $level='info')
+    {
+        $this->_feedbacks[] = [
+            'msg'=>$msg,
+            'level'=>$level
+        ];
     }
 
     /**

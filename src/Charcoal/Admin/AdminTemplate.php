@@ -306,7 +306,7 @@ class AdminTemplate extends AbstractTemplate
         return $this->_feedbacks;
     }
 
-    public function add_feedback($msg, $level='info')
+    public function add_feedback($msg, $level = 'info')
     {
         $this->_feedbacks[] = [
             'msg'=>$msg,

@@ -30,7 +30,7 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         parent::__construct($data);
 
         $obj = $this->proto();
-        if($obj->source()->table_exists() === false) {
+        if ($obj->source()->table_exists() === false) {
             $obj->source()->create_table();
             $this->add_feedback('A new table was created for object.');
         }

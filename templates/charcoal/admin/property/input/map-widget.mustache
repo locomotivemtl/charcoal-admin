@@ -16,6 +16,7 @@
             <button type="button" class="btn btn-default js-add-line"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
             <button type="button" class="btn btn-default js-add-polygon"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
             {{#inexistant_function}}
+            {{! Added this here to keep this button's integration, but cannot be used yet with the plugin }}
             <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
             {{/inexistant_function}}
         </div>

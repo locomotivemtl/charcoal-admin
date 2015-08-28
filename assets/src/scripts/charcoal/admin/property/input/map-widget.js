@@ -14,8 +14,8 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
     // Controller
     this._controller = undefined;
 
-    // HTML DOM container
-    this._container = undefined;
+    // HTML DOM element
+    this._element = undefined;
 
     this._object_inc = 0;
 
@@ -77,7 +77,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 
     // Create new map instance
     this._controller = new window.BB.gmap.controller(
-        this.container().find('.map-maker_map').get(0),
+        this.element().find('.map-maker_map').get(0),
         {
             use_clusterer: true,
             map: {
@@ -102,20 +102,20 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 };
 
 /**
-* Return the DOMElement container
+* Return the DOMElement element
 * @return {jQuery Object} $( '#' + this.data.id );
 * If not set, creates it
 */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.container = function ()
+Charcoal.Admin.Property_Input_Map_Widget.prototype.element = function ()
 {
-    if (!this._container) {
+    if (!this._element) {
         if (!this.data.id) {
             // Error...
             return false;
         }
-        this._container = $('#' + this.data.id);
+        this._element = $('#' + this.data.id);
     }
-    return this._container;
+    return this._element;
 };
 
 /**
@@ -145,7 +145,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
     var key = 'object';
 
-    this.container().on('click', '.js-add-marker', function (e)
+    this.element().on('click', '.js-add-marker', function (e)
     {
         e.preventDefault();
 
@@ -162,7 +162,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().create_new('marker', key + that.object_index());
     });
 
-    this.container().on('click', '.js-add-line', function (e)
+    this.element().on('click', '.js-add-line', function (e)
     {
         e.preventDefault();
 
@@ -179,7 +179,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().create_new('line', key + that.object_index());
     });
 
-    this.container().on('click', '.js-add-polygon', function (e)
+    this.element().on('click', '.js-add-polygon', function (e)
     {
         e.preventDefault();
 
@@ -196,10 +196,10 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().create_new('polygon', key + that.object_index());
     });
 
-    this.container().on('click', '.js-add_place_by_address', function (e) {
+    this.element().on('click', '.js-add_place_by_address', function (e) {
         e.preventDefault();
 
-        var value = that.container().find('.js-address').val();
+        var value = that.element().find('.js-address').val();
         if (!value) {
             // No value specified, no need to go further
             return false;
@@ -218,3 +218,27 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
 };
 
+/**
+* I believe this should fit the PHP model
+* Added the save() function to be called on form submit
+* Could be inherited from a global Charcoal.Admin.Property Prototype
+* Extra ideas:
+* - save
+* - validate
+* @return this (chainable)
+*/
+Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function ()
+{
+    // Get raw map datas
+    var raw = this.controller().export();
+
+    // We might wanna save ONLY the places values
+    var places = (typeof raw.places === 'object') ? raw.places : {};
+
+    // Affect to the current property's input
+    // I see no reason to have more than one input hidden here.
+    // Split with classes or data if needed
+    this.element().find('input[type=hidden]').val(JSON.stringify(places));
+
+    return this;
+};

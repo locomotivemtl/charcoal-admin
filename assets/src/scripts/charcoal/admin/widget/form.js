@@ -47,6 +47,10 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
 
 Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
 {
+    // Let the component manager prepare the submit first
+    // Calls the save function on each properties
+    Charcoal.Admin.manager().prepare_submit();
+
     var that = this,
         form_data = new FormData(form),
         url,

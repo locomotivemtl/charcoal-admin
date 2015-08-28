@@ -43,11 +43,14 @@ Charcoal.Admin.ComponentManager.prototype.add_component = function (component_ty
         this.components[component_type].push(opts);
 
     } else {
-        console.log('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
+        console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
     }
 
 };
 
+/**
+* @todo Document
+*/
 Charcoal.Admin.ComponentManager.prototype.render = function ()
 {
 
@@ -61,10 +64,52 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
                 var component = new Charcoal.Admin[component_data.ident](component_data);
                 this.components[component_type][i] = component;
             } catch (error) {
-                console.log('Was not able to instanciate ' + component_data.ident);
-                console.log(error);
+                console.error('Was not able to instanciate ' + component_data.ident);
+                console.error(error);
             }
         }
 
     }
+};
+
+/**
+* This is called by the widget.form on form submit
+* Called save because it's calling the save method on the properties' input
+* @see admin/widget/form.js submit_form()
+* @return boolean Success (in case of validation)
+*/
+Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
+{
+    // Get inputs
+    var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
+
+    if (!inputs.length) {
+        // No inputs? Move on
+        return true;
+    }
+
+    var length = inputs.length;
+    var input;
+
+    // Loop for validation
+    var k = 0;
+    for (; k < length; k++) {
+        input = inputs[ k ];
+        if (typeof input.validate === 'function') {
+            input.validate();
+        }
+    }
+
+    // We should add a check if the validation passed right here, before saving
+
+    // Loop for save
+    var i = 0;
+    for (; i < length; i++) {
+        input = inputs[ i ];
+        if (typeof input.save === 'function') {
+            input.save();
+        }
+    }
+
+    return true;
 };

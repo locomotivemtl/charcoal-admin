@@ -84,96 +84,6 @@ Charcoal.Admin = (function ()
 
         return name;
     };
-
-    return Admin;
-
-}());
-var Charcoal = Charcoal || {};
-/**
-* Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
-* It gives access to private properties and public methods
-* @return  {object}  Charcoal.Admin
-*/
-Charcoal.Admin = (function ()
-{
-    'use strict';
-
-    var options = {
-            base_url: null,
-            admin_path: null,
-        },
-        manager;
-
-    /**
-    * Object function that acts as a container for public methods
-    */
-    function Admin()
-    {
-    }
-
-    /**
-    * Set data that can be used by public methods
-    * @param  {object}  data  Object containing data that needs to be set
-    */
-    Admin.set_data = function (data)
-    {
-        options = $.extend(true, options, data);
-    };
-
-    /**
-    * Generates the admin URL used by forms and other objects
-    * @return  {string}  URL for admin section
-    */
-    Admin.admin_url = function ()
-    {
-        return options.base_url + options.admin_path + '/';
-    };
-
-    /**
-    * Provides an access to our instanciated ComponentManager
-    * @return  {object}  ComponentManager instance
-    */
-    Admin.manager = function ()
-    {
-        if (typeof(manager) === 'undefined') {
-            manager = new Charcoal.Admin.ComponentManager();
-        }
-
-        return manager;
-    };
-
-    /**
-    * Convert an object namespace string into a usable object name
-    * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
-    * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
-    */
-
-    Admin.get_object_name = function (name)
-    {
-        // Getting rid of Charcoal.Admin namespacing
-        var string_array = name.split('/');
-        string_array = string_array.splice(2,string_array.length);
-
-        // Uppercasing
-        string_array.forEach(function (element, index, array) {
-
-            // Camel case when splitted by '-'
-            // Joined back with '_'
-            var substr_array = element.split('-');
-            if (substr_array.length > 1) {
-                substr_array.forEach(function (e, i) {
-                    substr_array[ i ] = e.charAt(0).toUpperCase() + e.slice(1);
-                });
-                element = substr_array.join('_');
-            }
-
-            array[index] = element.charAt(0).toUpperCase() + element.slice(1);
-        });
-
-        name = string_array.join('_');
-
-        return name;
-    };
     return Admin;
 
 }());
@@ -222,11 +132,14 @@ Charcoal.Admin.ComponentManager.prototype.add_component = function (component_ty
         this.components[component_type].push(opts);
 
     } else {
-        console.log('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
+        console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
     }
 
 };
 
+/**
+* @todo Document
+*/
 Charcoal.Admin.ComponentManager.prototype.render = function ()
 {
 
@@ -240,12 +153,54 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
                 var component = new Charcoal.Admin[component_data.ident](component_data);
                 this.components[component_type][i] = component;
             } catch (error) {
-                console.log('Was not able to instanciate ' + component_data.ident);
-                console.log(error);
+                console.error('Was not able to instanciate ' + component_data.ident);
+                console.error(error);
             }
         }
 
     }
+};
+
+/**
+* This is called by the widget.form on form submit
+* Called save because it's calling the save method on the properties' input
+* @see admin/widget/form.js submit_form()
+* @return boolean Success (in case of validation)
+*/
+Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
+{
+    // Get inputs
+    var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
+
+    if (!inputs.length) {
+        // No inputs? Move on
+        return true;
+    }
+
+    var length = inputs.length;
+    var input;
+
+    // Loop for validation
+    var k = 0;
+    for (; k < length; k++) {
+        input = inputs[ k ];
+        if (typeof input.validate === 'function') {
+            input.validate();
+        }
+    }
+
+    // We should add a check if the validation passed right here, before saving
+
+    // Loop for save
+    var i = 0;
+    for (; i < length; i++) {
+        input = inputs[ i ];
+        if (typeof input.save === 'function') {
+            input.save();
+        }
+    }
+
+    return true;
 };
 ;/**
 * charcoal/admin/property
@@ -254,6 +209,20 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 Charcoal.Admin.Property = function (opts)
 {
     window.alert('Property ' + opts);
+};
+
+/**
+* Interface?
+* I suggest we use this for every property, just as PHP does
+* We do not have default action but return the current object
+* This will prevent further errors, and this will allow easy
+* validation throughout the form
+* @return this (chainable)
+*/
+Charcoal.Admin.Property.prototype.save = function ()
+{
+    // Default action = nothing
+    return this;
 };
 ;/**
  * charcoal/admin/property/audio
@@ -1013,8 +982,8 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
     // Controller
     this._controller = undefined;
 
-    // HTML DOM container
-    this._container = undefined;
+    // HTML DOM element
+    this._element = undefined;
 
     this._object_inc = 0;
 
@@ -1076,7 +1045,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 
     // Create new map instance
     this._controller = new window.BB.gmap.controller(
-        this.container().find('.map-maker_map').get(0),
+        this.element().find('.map-maker_map').get(0),
         {
             use_clusterer: true,
             map: {
@@ -1101,20 +1070,20 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 };
 
 /**
-* Return the DOMElement container
+* Return the DOMElement element
 * @return {jQuery Object} $( '#' + this.data.id );
 * If not set, creates it
 */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.container = function ()
+Charcoal.Admin.Property_Input_Map_Widget.prototype.element = function ()
 {
-    if (!this._container) {
+    if (!this._element) {
         if (!this.data.id) {
             // Error...
             return false;
         }
-        this._container = $('#' + this.data.id);
+        this._element = $('#' + this.data.id);
     }
-    return this._container;
+    return this._element;
 };
 
 /**
@@ -1144,7 +1113,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
     var key = 'object';
 
-    this.container().on('click', '.js-add-marker', function (e)
+    this.element().on('click', '.js-add-marker', function (e)
     {
         e.preventDefault();
 
@@ -1161,7 +1130,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().create_new('marker', key + that.object_index());
     });
 
-    this.container().on('click', '.js-add-line', function (e)
+    this.element().on('click', '.js-add-line', function (e)
     {
         e.preventDefault();
 
@@ -1178,7 +1147,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().create_new('line', key + that.object_index());
     });
 
-    this.container().on('click', '.js-add-polygon', function (e)
+    this.element().on('click', '.js-add-polygon', function (e)
     {
         e.preventDefault();
 
@@ -1195,10 +1164,10 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().create_new('polygon', key + that.object_index());
     });
 
-    this.container().on('click', '.js-add_place_by_address', function (e) {
+    this.element().on('click', '.js-add_place_by_address', function (e) {
         e.preventDefault();
 
-        var value = that.container().find('.js-address').val();
+        var value = that.element().find('.js-address').val();
         if (!value) {
             // No value specified, no need to go further
             return false;
@@ -1217,6 +1186,30 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
 };
 
+/**
+* I believe this should fit the PHP model
+* Added the save() function to be called on form submit
+* Could be inherited from a global Charcoal.Admin.Property Prototype
+* Extra ideas:
+* - save
+* - validate
+* @return this (chainable)
+*/
+Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function ()
+{
+    // Get raw map datas
+    var raw = this.controller().export();
+
+    // We might wanna save ONLY the places values
+    var places = (typeof raw.places === 'object') ? raw.places : {};
+
+    // Affect to the current property's input
+    // I see no reason to have more than one input hidden here.
+    // Split with classes or data if needed
+    this.element().find('input[type=hidden]').val(JSON.stringify(places));
+
+    return this;
+};
 ;/**
 * Switch looking input that manages boolean properties
 * charcoal/admin/property/input/switch
@@ -1596,6 +1589,10 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
 
 Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
 {
+    // Let the component manager prepare the submit first
+    // Calls the save function on each properties
+    Charcoal.Admin.manager().prepare_submit();
+
     var that = this,
         form_data = new FormData(form),
         url,

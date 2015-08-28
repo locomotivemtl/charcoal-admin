@@ -2,6 +2,12 @@
 
 namespace Charcoal\Admin\Action\Cli;
 
+use \Exception;
+
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 use \Charcoal\Admin\Action\CliAction as CliAction;
 
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -10,6 +16,21 @@ use \Charcoal\Loader\CollectionLoader as CollectionLoader;
 
 class ObjectsAction extends CliAction
 {
+    /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->run($request, $response);
+    }
+
+    /**
+    * @return array
+    */
     public function default_arguments()
     {
         $arguments = [
@@ -24,15 +45,22 @@ class ObjectsAction extends CliAction
         return $arguments;
     }
 
-    public function run()
+    /**
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
+        unset($request); // Unused
+
         $climate = $this->climate();
 
         $climate->underline()->out('List objects');
 
         if ($climate->arguments->defined('help')) {
             $climate->usage();
-            die();
+            return $response;
         }
 
         $climate->arguments->parse();
@@ -63,11 +91,11 @@ class ObjectsAction extends CliAction
             }
             $climate->table($table);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //$climate->dump($e);
             $climate->error($e->getMessage());
-            die();
         }
+        return $response;
     }
 
     public function set_obj_type($obj_type)
@@ -82,7 +110,8 @@ class ObjectsAction extends CliAction
     public function response()
     {
         return [
-            'success'=>$this->success()
+            'success'=>$this->success(),
+            'feedbacks'=>$this->feedbacks()
         ];
     }
 }

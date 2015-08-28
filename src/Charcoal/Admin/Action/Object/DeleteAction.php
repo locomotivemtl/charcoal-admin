@@ -41,6 +41,18 @@ use \Charcoal\Admin\AdminAction;
 class DeleteAction extends AdminAction
 {
 
+    /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->run($request, $response);
+    }
+
     public function set_data(array $data)
     {
         unset($data);

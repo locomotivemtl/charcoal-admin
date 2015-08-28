@@ -40,6 +40,18 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     protected $_update_data = [];
 
     /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->run($request, $response);
+    }
+
+    /**
     * @param array $data
     * @return LoginAction Chainable
     */
@@ -90,7 +102,6 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     {
         $this->set_data($request->getParams());
 
-
         try {
             // Load (or reload) object (From `ObjectContainerTrait`)
             $obj = $this->load_obj();
@@ -112,6 +123,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
             }
         } catch (Exception $e) {
             $this->set_success(false);
+            $this->add_feedback('error', $e->getMessage());
             return $this->output($response->withStatus(404));
         }
 
@@ -125,7 +137,10 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
         $success = $this->success();
 
         $response = [
-            'success'=>$this->success()
+            'success'=>$this->success(),
+            'obj_id'=>$this->obj()->id(),
+            'obj'=>$this->obj(),
+            'feedbacks'=>$this->feedbacks()
         ];
         return $response;
     }

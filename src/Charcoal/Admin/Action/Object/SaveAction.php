@@ -38,6 +38,18 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     protected $_save_data = [];
 
     /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->run($request, $response);
+    }
+
+    /**
     * @param array $data
     * @return LoginAction Chainable
     */
@@ -79,6 +91,8 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         $this->_obj = $obj;
         return $this;
     }
+
+
 
     /**
     * @return void
@@ -129,7 +143,8 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         $response = [
             'success'=>$this->success(),
             'obj_id'=>$this->obj()->id(),
-            'obj'=>$this->obj()
+            'obj'=>$this->obj(),
+            'feedbacks'=>$this->feedbacks()
         ];
         return $response;
     }

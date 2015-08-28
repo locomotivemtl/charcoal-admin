@@ -120,6 +120,7 @@ class AdminModule
     public function default_route(ServerRequestInterface $request, ResponseInterface $response, $args = null)
     {
         unset($request);
+        unset($args);
         $view = new TemplateView();
         $content = $view->from_ident('charcoal/admin/template/home')->render();
         $response->write($content);
@@ -185,9 +186,8 @@ class AdminModule
             try {
                 //$action = new \Charcoal\Admin\Action\Login();
                 $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
-                return $action
-                    ->set_mode('json')
-                    ->run($request, $response);
+                $action->set_mode('json');
+                return $action($request, $response);
             } catch (Exception $e) {
                 die($e->getMessage());
             }
@@ -198,7 +198,7 @@ class AdminModule
                 //$action = new \Charcoal\Admin\Action\Login();
                 $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
                 $action->set_mode('json');
-                return $action->run($request, $response);
+                return $action($request, $response);
             } catch (Exception $e) {
                 die($e->getMessage());
             }

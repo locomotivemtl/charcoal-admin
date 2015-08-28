@@ -2,6 +2,10 @@
 
 namespace Charcoal\Admin\Action\Cli\Object\Table;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 use \Charcoal\Action\CliAction as CliAction;
 
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -16,6 +20,18 @@ class AlterAction extends CliAction
         $arguments = $this->default_arguments();
         $this->set_arguments($arguments);
 
+    }
+
+    /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->run($request, $response);
     }
 
     /**
@@ -38,8 +54,10 @@ class AlterAction extends CliAction
     /**
     * Actually run the script
     */
-    public function run()
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
+        unset($request); // Unused
+
         $climate = $this->climate();
 
         $climate->underline()->out('Alert object table');
@@ -88,9 +106,9 @@ class AlterAction extends CliAction
             $climate->green()->out("\n".'Success!');
 
         } catch (\Exception $e) {
-            $climate->error($e->getMessage());
-            die();
+            $climate->red()->error($e->getMessage());
         }
+        return $response;
     }
 
     /**
@@ -121,7 +139,8 @@ class AlterAction extends CliAction
     public function response()
     {
         return [
-            'success'=>$this->success()
+            'success'=>$this->success(),
+            'feedbacks'=>$this->feedbacks()
         ];
     }
 }

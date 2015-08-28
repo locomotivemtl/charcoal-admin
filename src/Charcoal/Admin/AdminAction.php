@@ -18,6 +18,8 @@ use Charcoal\Action\AbstractAction as AbstractAction;
 */
 abstract class AdminAction extends AbstractAction
 {
+    private $_feedbacks;
+
     /**
     * @param array $data Optional
     */
@@ -57,6 +59,30 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
+    * @return boolean
+    */
+    public function has_feedbacks()
+    {
+        return (count($this->feedbacks()) > 0);
+    }
+
+    /**
+    * @return array
+    */
+    public function feedbacks()
+    {
+        return $this->_feedbacks;
+    }
+
+    public function add_feedback($msg, $level = 'info')
+    {
+        $this->_feedbacks[] = [
+            'msg'=>$msg,
+            'level'=>$level
+        ];
+    }
+
+    /**
     * Default response stub
     *
     * @return array
@@ -67,7 +93,8 @@ abstract class AdminAction extends AbstractAction
 
         $response = [
             'success'=>$this->success(),
-            'next_url'=>$this->redirect_url()
+            'next_url'=>$this->redirect_url(),
+            'feedbacks'=>$this->feedbacks()
         ];
         return $response;
     }

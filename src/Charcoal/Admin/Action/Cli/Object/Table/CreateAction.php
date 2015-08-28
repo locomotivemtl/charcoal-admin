@@ -2,6 +2,11 @@
 
 namespace Charcoal\Admin\Action\Cli\Object\Table;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
+
 use \Charcoal\Action\CliAction as CliAction;
 
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -11,11 +16,25 @@ use \Charcoal\Model\ModelFactory as ModelFactory;
 */
 class CreateAction extends CliAction
 {
+    /**
+    *
+    */
     public function __construct()
     {
         $arguments = $this->default_arguments();
         $this->set_arguments($arguments);
+    }
 
+    /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->run($request, $response);
     }
 
     /**
@@ -35,8 +54,15 @@ class CreateAction extends CliAction
         return $arguments;
     }
 
-    public function run()
+    /**
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
+        unset($request); // Unused
+
         $climate = $this->climate();
 
         $climate->underline()->out('Create object table');
@@ -61,13 +87,13 @@ class CreateAction extends CliAction
 
             $input = $climate->confirm('Continue?');
             if (!$input->confirmed()) {
-                return false;
+                return $response;
             }
 
             if ($source->table_exists()) {
                 $climate->error(sprintf('The table "%s" already exists. This script can only create new tables.', $table));
                 $climate->darkGray()->out('If you want to alter the table with the latest object\'s metadata, run the `admin/object/table/alter` script.');
-                die();
+                return $response;
             }
 
 
@@ -77,8 +103,9 @@ class CreateAction extends CliAction
 
         } catch (\Exception $e) {
             $climate->error($e->getMessage());
-            die();
         }
+
+        return $response;
     }
 
     /**
@@ -101,7 +128,8 @@ class CreateAction extends CliAction
     public function response()
     {
         return [
-            'success'=>$this->success()
+            'success'=>$this->success(),
+            'feedbacks'=>$this->feedbacks()
         ];
     }
 }

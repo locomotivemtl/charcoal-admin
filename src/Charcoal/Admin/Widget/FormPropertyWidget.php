@@ -134,38 +134,38 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-    *
+    * @return boolean
     */
     public function show_description()
     {
-        return rand(0, 1);
-        return true;
+        $description = $this->prop()->description();
+        return !!$description;
     }
 
 
     /**
-    *
+    * @return boolean
     */
     public function show_notes()
     {
-        return rand(0, 1);
-        return true;
+        $notes = $this->prop()->notes();
+        return !!$notes;
     }
 
     /**
-    *
+    * @return TranslationString
     */
     public function description()
     {
-        return 'Property Description';
+        return $this->prop()->description();
     }
 
     /**
-    *
+    * @return TranslationString
     */
     public function notes()
     {
-        return 'Property Notes';
+        return $this->prop()->notes();
     }
 
     /**

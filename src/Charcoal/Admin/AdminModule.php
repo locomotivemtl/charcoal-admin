@@ -133,15 +133,15 @@ class AdminModule
     {
         $this->_app = $app;
         // Admin catch-all (load template if it exists)
-        $this->app()->get('/:actions+?', function ($actions = ['home']) {
+        $app->get('/{actions:.*}', function ($req, $res, $args) {
             try {
                 $action_ident = implode('/', $actions);
-                $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$action_ident);
+                $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$args['actions']);
+                $action($req, $res);
 
             } catch (Exception $e) {
                 die('Error: '.$e->getMessage());
             }
-            $action->run();
         });
 
         return $this;

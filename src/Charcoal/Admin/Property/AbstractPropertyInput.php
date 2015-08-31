@@ -214,7 +214,11 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     */
     public function input_name()
     {
-        return $this->p()->ident();
+        $name = $this->p()->ident();
+        if ($this->p()->l10n()) {
+            $name .= '[fr]';
+        }
+        return $name;
     }
 
     /**

@@ -1,0 +1,43 @@
+{{!--
+Datetime picker Property Input
+=======================
+
+`charcoal/admin/property/input/datetimepicker`
+
+--}}
+
+{{#input}}
+<div class="input-group date" id="datetimepicker_{{input_id}}">
+    <input
+        type="text"
+        id="{{input_id}}"
+        name="{{input_name}}"
+        class="form-control {{input_class}}"
+        {{#placeholder}}placeholer="{{placeholder}}"{{/placeholder}}
+        {{#read_only}}read_only{{/read_only}}
+        {{#required}}required{{/required}}
+        {{#disabled}}disabled{{/disabled}}
+        value="{{display_val}}"
+    >
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>
+{{/input}}
+
+{{#add_js}}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id: '{{input_id}}',
+    type: 'charcoal/admin/property/input/datetimepicker',
+    data: {
+        datetimepicker_selector : '#datetimepicker_{{input_id}}',
+        datetimepicker_options: {
+            // moment.js formatting
+            format: 'YYYY-MM-DD HH:mm:ss',
+            defaultDate: '{{display_val}}'
+        }
+    }
+});
+</script>
+{{/add_js}}

@@ -1,5 +1,5 @@
 {
 	"admin":{
-		"input_type":"charcoal/admin/property/input/text"
+		"input_type":"charcoal/admin/property/input/datetimepicker"
 	}
 }

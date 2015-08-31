@@ -11,7 +11,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
     {{#has_objects}}
     <div class="table-header clearfix">
         <div class="pull-left">
-            <div class="btn-group">
+            <!--<div class="btn-group">
                 <button type="button" class="btn btn-primary">Actions</button>
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
@@ -22,7 +22,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                         <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
                     {{/sublist_actions}}
                 </ul>
-            </div>
+            </div>-->
             {{#list_actions}}
                 {{#is_button}}
                 <button class="btn btn-default js-list-{{ident}}">{{label}}</button>
@@ -32,6 +32,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                 {{/is_button}}
             {{/list_actions}}
         </div>
+        <!--
         <div class="pull-right">
             <strong>Filtres</strong>
             <div class="btn-group">
@@ -49,6 +50,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                 </ul>
             </div>
         </div>
+        -->
     </div>
 
     {{!--

@@ -76,8 +76,10 @@
 
 // Font Awesome variables
 @import "../../../../../bower_components/fontawesome/scss/variables";
+
 // Charcoal variables
 @import "vendors/fontawesome/variables";
+
 // Font Awesome
 @import "../../../../../bower_components/fontawesome/scss/mixins";
 @import "../../../../../bower_components/fontawesome/scss/path";
@@ -96,6 +98,9 @@
 
 // Summernote
 @import "../../../../../bower_components/summernote/src/sass/summernote.scss";
+
+// Bootstrap Dialog
+@import "../../../../../bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog";
 
 // Bootstrap Switch
 @import "../../../../../bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch";

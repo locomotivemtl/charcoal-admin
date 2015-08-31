@@ -40,6 +40,5 @@ Charcoal.Admin.Property_Input_Datetimepicker.prototype.set_properties = function
 
 Charcoal.Admin.Property_Input_Datetimepicker.prototype.create_datetimepicker = function ()
 {
-    console.log(this.datetimepicker_options);
     $(this.datetimepicker_selector).datetimepicker(this.datetimepicker_options);
 };

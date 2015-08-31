@@ -214,7 +214,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 'label' => 'Create New',
                 'ident' => 'create',
                 'url' => $this->object_edit_url()
-            ],
+            ]/*,
             [
                 'label' => 'Quick Create',
                 'ident' => 'quick-create',
@@ -224,7 +224,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 'label' => 'Reorder',
                 'ident' => 'reorder',
                 'is_button' => true
-            ]
+            ]*/
         ];
     }
 

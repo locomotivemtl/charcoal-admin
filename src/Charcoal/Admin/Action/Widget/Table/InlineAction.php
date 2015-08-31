@@ -4,6 +4,11 @@ namespace Charcoal\Admin\Action\Widget\Table;
 
 use \Exception as Exception;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
+
 // From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -23,19 +28,32 @@ class InlineAction extends AdminAction
     }
 
     /**
-    * Run the inline action
-    * Set the inline properties from request's parameter
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
     */
-    public function run()
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $obj_type = Charcoal::app()->request->post('obj_type');
-        $obj_id = Charcoal::app()->request->post('obj_id');
+        return $this->run($request, $response);
+    }
+
+    /**
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $obj_type = $request->getParam('obj_type');
+        $obj_id = $request->getParam('obj_id');
         //var_dump($obj_type);
         //var_dump($obj_id);
 
         if (!$obj_type || !$obj_id) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
         try {
@@ -43,7 +61,7 @@ class InlineAction extends AdminAction
             $obj->load($obj_id);
             if (!$obj->id()) {
                 $this->set_success(false);
-                $this->output(404);
+                return $this->output($response->withStatus(404));
             }
 
             $obj_form = new ObjectFormWidget();
@@ -61,11 +79,11 @@ class InlineAction extends AdminAction
                 $this->_inline_properties[$property_ident] = $property->render_template($input_type);
             }
             $this->set_success(true);
-            $this->output();
+            return $this->output($response);
 
         } catch (Exception $e) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
     }
 
@@ -75,7 +93,8 @@ class InlineAction extends AdminAction
 
         $response = [
             'success'=>$this->success(),
-            'inline_properties'=>$this->_inline_properties
+            'inline_properties'=>$this->_inline_properties,
+            'feedbacks'=>$this->feedbacks()
         ];
         return $response;
     }

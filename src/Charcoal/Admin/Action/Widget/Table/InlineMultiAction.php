@@ -4,6 +4,11 @@ namespace Charcoal\Admin\Action\Widget\Table;
 
 use \Exception as Exception;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
+
 // From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
 use \Charcoal\Model\ModelFactory as ModelFactory;
@@ -26,19 +31,32 @@ class InlineMultiAction extends AdminAction
     }
 
     /**
-    * Run the inline action
-    * Set the inline properties from request's parameter
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
     */
-    public function run()
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $obj_type = Charcoal::app()->request->post('obj_type');
-        $obj_ids = Charcoal::app()->request->post('obj_ids');
+        return $this->run($request, $response);
+    }
+
+    /**
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $obj_type = $request->getParam('obj_type');
+        $obj_ids = $request->getParam('obj_ids');
         //var_dump($obj_type);
         //var_dump($obj_id);
 
         if (!$obj_type || !$obj_ids) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
 
         try {
@@ -70,11 +88,11 @@ class InlineMultiAction extends AdminAction
                 $this->_objects[] = $o;
             }
             $this->set_success(true);
-            $this->output();
+            return $this->output($response);
 
         } catch (Exception $e) {
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
     }
 
@@ -84,7 +102,8 @@ class InlineMultiAction extends AdminAction
 
         $response = [
             'success' => $this->success(),
-            'objects' => $this->_objects
+            'objects' => $this->_objects,
+            'feedbacks' => $this->feedbacks()
         ];
         return $response;
     }

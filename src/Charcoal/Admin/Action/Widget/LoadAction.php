@@ -4,6 +4,10 @@ namespace Charcoal\Admin\Action\Widget;
 
 use \Exception as Exception;
 
+// From PSR-7
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
 // From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
 
@@ -27,15 +31,32 @@ class LoadAction extends AdminAction
         return $this;
     }
 
-    public function run()
+    /**
+    * Make the class callable
+    *
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $widget_type = Charcoal::app()->request->post('widget_type');
-        $widget_options = Charcoal::app()->request->post('widget_options');
+        return $this->run($request, $response);
+    }
+
+    /**
+    * @param ServerRequestInterface $request
+    * @param ResponseInterface $response
+    * @return ResponseInterface
+    */
+    public function run(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $widget_type = $request->getParam('widget_type');
+        $widget_options = $request->getParam('widget_options');
 
         if (!$widget_type) {
             $this->set_success(false);
             $this->output(404);
-            return;
+            return $this->output($response->withStatus(404));
         }
 
         try {
@@ -49,11 +70,11 @@ class LoadAction extends AdminAction
             $this->_widget_id = $widget->widget_id();
 
             $this->set_success(true);
-            $this->output();
+            return $this->output($response);
         } catch (Exception $e) {
             //var_dump($e);
             $this->set_success(false);
-            $this->output(404);
+            return $this->output($response->withStatus(404));
         }
     }
 
@@ -64,7 +85,8 @@ class LoadAction extends AdminAction
         $response = [
             'success'=>$this->success(),
             'widget_html'=>$this->_widget_html,
-            'widget_id'=>$this->_widget_id
+            'widget_id'=>$this->_widget_id,
+            'feedbacks'=>$this->feedbacks()
         ];
         return $response;
     }

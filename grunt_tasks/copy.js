@@ -26,9 +26,15 @@ module.exports = {
     },
     tinymce: {
         expand: true,
-        cwd: 'bower_components/tinymce',
+        cwd: 'bower_components/tinymce/',
         src: ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/modern/theme.min.js', 'tinymce.min.js'],
         dest: 'assets/dist/scripts/vendors/tinymce/'
+    },
+    bb_gmap:{
+        expand: true,
+        cwd: 'bower_components/bb-gmap/assets/scripts/dist/min/',
+        src: ['*.js'],
+        dest: 'assets/dist/scripts/vendors/bb-gmap/'
     },
     admin: {
         expand: true,

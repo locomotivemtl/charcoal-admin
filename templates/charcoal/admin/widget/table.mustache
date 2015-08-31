@@ -9,105 +9,107 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 --}}
 <div class="charcoal-admin-widget-table" id="{{widget_id}}">
     {{#has_objects}}
-        <div class="table-header clearfix">
-            <div class="pull-left">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary">Actions</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        {{#sublist_actions}}
-                            <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
-                        {{/sublist_actions}}
-                    </ul>
-                </div>
-                {{#list_actions}}
-                    {{#is_button}}
-                    <button class="btn btn-default js-list-{{ident}}">{{label}}</button>
-                    {{/is_button}}
-                    {{^is_button}}
-                    <a class="btn btn-default list-{{ident}}" href="{{url}}">{{label}}</a>
-                    {{/is_button}}
-                {{/list_actions}}
+    <div class="table-header clearfix">
+        <div class="pull-left">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary">Actions</button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    {{#sublist_actions}}
+                        <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
+                    {{/sublist_actions}}
+                </ul>
             </div>
-            <div class="pull-right">
-                <strong>Filtres</strong>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-info">Les plus récentes alertes</button>
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </div>
+            {{#list_actions}}
+                {{#is_button}}
+                <button class="btn btn-default js-list-{{ident}}">{{label}}</button>
+                {{/is_button}}
+                {{^is_button}}
+                <a class="btn btn-default list-{{ident}}" href="{{url}}">{{label}}</a>
+                {{/is_button}}
+            {{/list_actions}}
+        </div>
+        <div class="pull-right">
+            <strong>Filtres</strong>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info">Les plus récentes alertes</button>
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <div class="table-responsive">
+    {{!--
+    @TODO Implement a better responsive table solution (Tablesaw?)
+    <div class="table-responsive">
+    --}}
+    <div>
         <table class="table table-bordered">
-        {{#show_table_header}}
-        <thead>
-            <tr>
-                <th>
-                    <input type="checkbox" class="select-all">
-                </th>
-            {{#collection_properties}}
-                <th>{{label}}</td>
-            {{/collection_properties}}
-            {{#show_object_actions}}
-                <th>Actions</th>
-            {{/show_object_actions}}
-            </tr>
-        </thead>
-        {{/show_table_header}}
+            {{#show_table_header}}
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" class="select-all">
+                    </th>
+                {{#collection_properties}}
+                    <th>{{label}}</td>
+                {{/collection_properties}}
+                {{#show_object_actions}}
+                    <th>Actions</th>
+                {{/show_object_actions}}
+                </tr>
+            </thead>
+            {{/show_table_header}}
 
-        {{!-- Loop the list objects --}}
-        <tbody>
-        {{#object_rows}}
+            <tbody>
+                {{!-- Loop the list objects --}}
+                {{#object_rows}}
 
-            <tr class="js-table-row" data-id="{{object_id}}">
-                <td>
-                    <input type="checkbox" class="select-row">
-                </td>
-            {{#object_properties}}
-                <td class="property-{{ident}}">{{val}}</td>
-            {{/object_properties}}
-            {{#show_object_actions}}
-                <td>
-                    <div class="btn-group">
-                        <a href="{{object_edit_url}}&amp;obj_id={{object_id}}" class="btn btn-primary">Edit</a>
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            {{#object_actions}}
+                <tr class="js-table-row" data-id="{{object_id}}">
+                    <td>
+                        <input type="checkbox" class="select-row">
+                    </td>
+                    {{#object_properties}}
+                    <td class="property-{{ident}}">{{val}}</td>
+                    {{/object_properties}}
+                    {{#show_object_actions}}
+                    <td>
+                        <div class="btn-group">
+                            <a href="{{object_edit_url}}&amp;obj_id={{object_id}}" class="btn btn-primary">Edit</a>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                {{#object_actions}}
                                 <li><a class="js-obj-{{ident}}" href="#">{{label}}</a></li>
-                            {{/object_actions}}
-                        </ul>
-                    </div>
-                </td>
-            {{/show_object_actions}}
-            </tr>
+                                {{/object_actions}}
+                            </ul>
+                        </div>
+                    </td>
+                    {{/show_object_actions}}
+                </tr>
+                {{/object_rows}}
+            </tbody>
+            {{#show_table_footer}}
+            <tfoot>
+                <tr>
 
-
-        {{/object_rows}}
-        </tbody>
-        {{#show_table_footer}}
-        <tfoot>
-            <tr>
-
-            </tr>
-        </tfoot>
-        {{/show_table_footer}}
+                </tr>
+            </tfoot>
+            {{/show_table_footer}}
         </table>
     {{/has_objects}}
     {{^has_objects}}
@@ -116,8 +118,8 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
             <a class="btn btn-default" href="{{object_edit_url}}">Create a new object</a>
         </div>
     {{/has_objects}}
+    </div>
 </div>
-
 
 {{#add_js}}
 <script>

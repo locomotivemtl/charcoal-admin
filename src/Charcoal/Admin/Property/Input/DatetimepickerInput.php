@@ -26,10 +26,10 @@ class DatetimepickerInput extends AbstractPropertyInput
     * Format `DateTime` to string.
     *
     * @todo   Adapt for l10n
-    * @return string
+    * @return string|null
     */
     public function display_val()
     {
-        return $this->p()->val()->format($this->date_format());
+        return ($this->p()->val()) ? $this->p()->val()->format($this->date_format()) : null;
     }
 }

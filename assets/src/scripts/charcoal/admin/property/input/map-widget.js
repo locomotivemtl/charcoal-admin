@@ -239,6 +239,12 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
     });
 
+    that.controller().on('focus', function () {
+        that.element().find('.js-add-polygon').removeClass('-active');
+        that.element().find('.js-add-marker').removeClass('-active');
+        that.element().find('.js-add-line').removeClass('-active');
+    });
+
 };
 
 /**

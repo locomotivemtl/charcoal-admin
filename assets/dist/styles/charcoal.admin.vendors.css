@@ -7875,18 +7875,23 @@ button.close {
       padding-top: 1px;
       font-size: 11px;
       color: #080909; }
-  .checkbox input[type="checkbox"] {
+  .checkbox input[type="checkbox"],
+  .checkbox input[type="radio"] {
     opacity: 0;
     z-index: 1; }
-    .checkbox input[type="checkbox"]:focus + label::before {
+    .checkbox input[type="checkbox"]:focus + label::before,
+    .checkbox input[type="radio"]:focus + label::before {
       outline: 0;
       border-color: #3498db; }
-    .checkbox input[type="checkbox"]:checked + label::after {
+    .checkbox input[type="checkbox"]:checked + label::after,
+    .checkbox input[type="radio"]:checked + label::after {
       font-family: "FontAwesome";
       content: ""; }
-    .checkbox input[type="checkbox"]:disabled + label {
+    .checkbox input[type="checkbox"]:disabled + label,
+    .checkbox input[type="radio"]:disabled + label {
       opacity: 0.65; }
-      .checkbox input[type="checkbox"]:disabled + label::before {
+      .checkbox input[type="checkbox"]:disabled + label::before,
+      .checkbox input[type="radio"]:disabled + label::before {
         background-color: #eeeeee;
         cursor: not-allowed; }
   .checkbox.checkbox-circle label::before {
@@ -7894,39 +7899,49 @@ button.close {
   .checkbox.checkbox-inline {
     margin-top: 0; }
 
-.checkbox-primary input[type="checkbox"]:checked + label::before {
+.checkbox-primary input[type="checkbox"]:checked + label::before,
+.checkbox-primary input[type="radio"]:checked + label::before {
   background-color: #1a252d;
   border-color: #1a252d; }
 
-.checkbox-primary input[type="checkbox"]:checked + label::after {
+.checkbox-primary input[type="checkbox"]:checked + label::after,
+.checkbox-primary input[type="radio"]:checked + label::after {
   color: #fff; }
 
-.checkbox-danger input[type="checkbox"]:checked + label::before {
+.checkbox-danger input[type="checkbox"]:checked + label::before,
+.checkbox-danger input[type="radio"]:checked + label::before {
   background-color: #ed5564;
   border-color: #ed5564; }
 
-.checkbox-danger input[type="checkbox"]:checked + label::after {
+.checkbox-danger input[type="checkbox"]:checked + label::after,
+.checkbox-danger input[type="radio"]:checked + label::after {
   color: #fff; }
 
-.checkbox-info input[type="checkbox"]:checked + label::before {
+.checkbox-info input[type="checkbox"]:checked + label::before,
+.checkbox-info input[type="radio"]:checked + label::before {
   background-color: #3498db;
   border-color: #3498db; }
 
-.checkbox-info input[type="checkbox"]:checked + label::after {
+.checkbox-info input[type="checkbox"]:checked + label::after,
+.checkbox-info input[type="radio"]:checked + label::after {
   color: #fff; }
 
-.checkbox-warning input[type="checkbox"]:checked + label::before {
+.checkbox-warning input[type="checkbox"]:checked + label::before,
+.checkbox-warning input[type="radio"]:checked + label::before {
   background-color: #f0ad4e;
   border-color: #f0ad4e; }
 
-.checkbox-warning input[type="checkbox"]:checked + label::after {
+.checkbox-warning input[type="checkbox"]:checked + label::after,
+.checkbox-warning input[type="radio"]:checked + label::after {
   color: #fff; }
 
-.checkbox-success input[type="checkbox"]:checked + label::before {
+.checkbox-success input[type="checkbox"]:checked + label::before,
+.checkbox-success input[type="radio"]:checked + label::before {
   background-color: #5cb85c;
   border-color: #5cb85c; }
 
-.checkbox-success input[type="checkbox"]:checked + label::after {
+.checkbox-success input[type="checkbox"]:checked + label::after,
+.checkbox-success input[type="radio"]:checked + label::after {
   color: #fff; }
 
 .radio {
@@ -8031,6 +8046,19 @@ button.close {
 
 .radio-success input[type="radio"]:checked + label::after {
   background-color: #5cb85c; }
+
+input[type="checkbox"].styled:checked + label:after,
+input[type="radio"].styled:checked + label:after {
+  font-family: 'FontAwesome';
+  content: "\f00c"; }
+
+input[type="checkbox"] .styled:checked + label::before,
+input[type="radio"] .styled:checked + label::before {
+  color: #fff; }
+
+input[type="checkbox"] .styled:checked + label::after,
+input[type="radio"] .styled:checked + label::after {
+  color: #fff; }
 
 /* Theme Mixins
  ------------------------------------------*/

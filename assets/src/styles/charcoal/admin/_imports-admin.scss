@@ -43,6 +43,7 @@
 @import "objects/container";
 @import "objects/overlay";
 @import "objects/background";
+@import "objects/toolbox";
 
 // Components
 // ==========================================================================
@@ -56,6 +57,7 @@
 @import "components/panel";
 @import "components/info";
 @import "components/audio-player-simple";
+@import "components/map-maker";
 
 // Bootstrap overwrites
 // ==========================================================================
@@ -66,7 +68,6 @@
 // Bootstrap custom components
 // ==========================================================================
 @import "bootstrap-custom/table-header";
-@import "bootstrap-custom/map-maker";
 
 
 // Vendors

@@ -76,6 +76,68 @@ td {
   background-size: cover;
   background-position: center; }
 
+.o-toolbox {
+  height: 540px;
+  overflow: hidden; }
+
+.o-toolbox_actions {
+  height: 100%;
+  width: 60px; }
+  .-left .o-toolbox_actions {
+    float: left; }
+  .-right .o-toolbox_actions {
+    float: right; }
+  .o-toolbox_actions .btn-group-vertical {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%; }
+    .o-toolbox_actions .btn-group-vertical:hover .btn.-active::after {
+      transform: translateX(calc(-100% - 1px)); }
+    .o-toolbox_actions .btn-group-vertical:hover .btn.-active:hover::after {
+      transform: translateX(0); }
+  .o-toolbox_actions .btn {
+    background-color: #ffffff;
+    border-radius: 0;
+    flex: 1;
+    padding: 0;
+    position: relative; }
+    .o-toolbox_actions .btn::after {
+      background-color: #3498db;
+      bottom: -1px;
+      content: "";
+      left: 0;
+      position: absolute;
+      top: -1px;
+      transform: translateX(calc(-100% - 1px));
+      transition: transform 0.3s;
+      width: 5px; }
+    .o-toolbox_actions .btn:active {
+      background-color: #ffffff; }
+    .o-toolbox_actions .btn:hover,
+    .o-toolbox_actions .btn.-active {
+      background-color: #ffffff; }
+      .o-toolbox_actions .btn:hover:after,
+      .o-toolbox_actions .btn.-active:after {
+        transform: translateX(0); }
+      .o-toolbox_actions .btn:hover .o-toolbox_icon,
+      .o-toolbox_actions .btn.-active .o-toolbox_icon {
+        fill: #3498db; }
+
+.o-toolbox_content {
+  height: 100%;
+  width: calc(100% - 60px); }
+  .-left .o-toolbox_content {
+    float: left; }
+  .-right .o-toolbox_content {
+    float: right; }
+
+.o-toolbox_icon {
+  fill: #000000;
+  height: 40px;
+  transition: fill 0.5s;
+  width: 30px; }
+
 .c-header-main {
   background-color: #1a252d;
   position: fixed;
@@ -563,6 +625,28 @@ td {
   color: #cccccc;
   vertical-align: middle; }
 
+.c-map-maker_map {
+  background-color: #E5E3DF;
+  height: calc(100% - 60px);
+  overflow: hidden; }
+
+.c-map-maker_header {
+  border-color: #cccccc;
+  border-right-style: solid;
+  border-top-style: solid;
+  border-width: 1px;
+  padding: 11.5px 20px; }
+
+.c-map-maker_label {
+  margin-right: 13px; }
+
+.c-map-maker_btn {
+  margin-left: 13px; }
+
+.c-map-maker_input {
+  display: inline-block;
+  width: calc(100% - 216px); }
+
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
@@ -605,82 +689,6 @@ label {
     margin-left: 15px; }
     .table-header .btn:first-child, .table-header .btn-group:first-child {
       margin-left: 0; }
-
-.map-maker {
-  overflow: hidden;
-  height: 540px; }
-
-.map-maker_actions {
-  float: left;
-  width: 60px;
-  height: 100%; }
-  .map-maker_actions .btn-group-vertical {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%; }
-    .map-maker_actions .btn-group-vertical:hover .btn.-active::after {
-      transform: translateX(calc(-100% - 1px)); }
-    .map-maker_actions .btn-group-vertical:hover .btn.-active:hover::after {
-      transform: translateX(0); }
-  .map-maker_actions .btn {
-    position: relative;
-    background-color: #ffffff;
-    padding: 0;
-    border-radius: 0;
-    flex: 1; }
-    .map-maker_actions .btn:after {
-      position: absolute;
-      top: -1px;
-      bottom: -1px;
-      left: 0;
-      width: 5px;
-      content: "";
-      transition: transform 0.3s;
-      transform: translateX(calc(-100% - 1px));
-      background-color: #3498db; }
-    .map-maker_actions .btn:active {
-      background-color: #ffffff; }
-    .map-maker_actions .btn:hover, .map-maker_actions .btn.-active {
-      background-color: #ffffff; }
-      .map-maker_actions .btn:hover:after, .map-maker_actions .btn.-active:after {
-        transform: translateX(0); }
-      .map-maker_actions .btn:hover .map-maker_icon, .map-maker_actions .btn.-active .map-maker_icon {
-        fill: #3498db; }
-
-.map-maker_content {
-  float: left;
-  width: calc(100% - 60px);
-  height: 100%; }
-
-.map-maker_icon {
-  width: 30px;
-  height: 40px;
-  fill: #000000;
-  transition: fill 0.5s; }
-
-.map-maker_map {
-  overflow: hidden;
-  height: calc(100% - 60px);
-  background-image: url(../images/placeholder-map.png);
-  background-size: cover; }
-
-.map-maker_header {
-  padding: 11.5px 20px;
-  border-width: 1px;
-  border-color: #cccccc;
-  border-top-style: solid;
-  border-right-style: solid; }
-
-.map-maker_label {
-  margin-right: 13px; }
-
-.map-maker_btn {
-  margin-left: 13px; }
-
-.map-maker_input {
-  width: calc(100% - 216px);
-  display: inline-block; }
 
 .note-editor {
   border-color: #ccc;

@@ -11,7 +11,11 @@
             "contents":{},
             "envoie":{},
 
-            "messaging/send-sms":{}
+            "messaging/send-sms":{},
+            "messaging/send-voice":{},
+
+            "alert/test":{},
+            "alert/send":{}
         },
         "default_view":"home",
         "actions":{
@@ -23,7 +27,8 @@
             "widget/table/inline":{},
             "widget/table/inline-multi":{},
 
-            "messaging/send-sms":{}
+            "messaging/send-sms":{},
+            "messaging/send-voice":{}
         },
         "default_action":null,
         "cli_actions":{

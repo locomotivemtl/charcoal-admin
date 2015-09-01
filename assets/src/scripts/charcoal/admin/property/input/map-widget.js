@@ -111,7 +111,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 
     // Create new map instance
     this._controller = new window.BB.gmap.controller(
-        this.element().find('.map-maker_map').get(0),
+        this.element().find('.js-map-maker-map').get(0),
         map_options
     );
 

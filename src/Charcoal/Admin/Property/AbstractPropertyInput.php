@@ -6,6 +6,7 @@ namespace Charcoal\Admin\Property;
 use \InvalidArgumentException as InvalidArgumentException;
 
 // From `charcoal-base`
+use \Charcoal\Property\PropertyFactory as PropertyFactory;
 use \Charcoal\Property\PropertyInterface as PropertyInterface;
 
 // Local namespace dependencies
@@ -284,7 +285,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     public function property()
     {
         if ($this->_property === null) {
-            $this->_property = PropertyFactory::instance()->create($this->type());
+            $this->_property = PropertyFactory::instance()->create($this->input_type());
             $this->_property->set_data($this->_property_data);
         }
         return $this->_property;

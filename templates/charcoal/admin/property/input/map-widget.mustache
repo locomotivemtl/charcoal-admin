@@ -9,27 +9,27 @@
     - Add marker by address
     - Center map by address
 }}
-<div class="map-maker" id="{{input_id}}">
-    <div class="map-maker_actions">
+<div class="o-toolbox -left" id="{{input_id}}">
+    <div class="o-toolbox_actions">
         <div class="btn-group-vertical" role="group" aria-label="...">
-            <button type="button" class="btn btn-default {{! -active }} js-add-marker"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
-            <button type="button" class="btn btn-default js-add-line"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
-            <button type="button" class="btn btn-default js-add-polygon"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
+            <button type="button" class="btn btn-default {{! -active }} js-add-marker"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
+            <button type="button" class="btn btn-default js-add-line"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
+            <button type="button" class="btn btn-default js-add-polygon"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
             {{#inexistant_function}}
             {{! Added this here to keep this button's integration, but cannot be used yet with the plugin }}
-            <button type="button" class="btn btn-default"><svg class="map-maker_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
+            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
             {{/inexistant_function}}
         </div>
     </div>
-    <div class="map-maker_content">
-        <div class="map-maker_header">
-            <label class="map-maker_label" for="map-maker-search">Adresse</label>
-            <input class="map-maker_input form-control js-address" name="map-maker-search" type="text">
-             <button type="button" class="map-maker_btn btn btn-primary btn-lg btn-info js-add_place_by_address" data-toggle="modal" data-target="#myModal">
+    <div class="o-toolbox_content c-map-maker">
+        <div class="c-map-maker_header">
+            <label class="c-map-maker_label" for="c-map-maker-search">Adresse</label>
+            <input class="c-map-maker_input form-control js-address" name="c-map-maker-search" type="text">
+            <button type="button" class="c-map-maker_btn btn btn-lg btn-info js-add_place_by_address" data-toggle="modal" data-target="#myModal">
                 Sauvegarder
             </button>
         </div>
-        <div class="map-maker_map"></div>
+        <div class="c-map-maker_map js-map-maker-map"></div>
     </div>
     {{!
         Input that will contain the actual data

@@ -22,7 +22,13 @@ use \Charcoal\Admin\AdminAction as AdminAction;
 */
 class LoadAction extends AdminAction
 {
+    /**
+    * @var string $_widget_id
+    */
     protected $_widget_id = '';
+    /**
+    * @var string $_widget_html
+    */
     protected $_widget_html = '';
 
     public function set_data(array $data)

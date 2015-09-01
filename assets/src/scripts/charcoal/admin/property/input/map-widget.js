@@ -21,7 +21,7 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
     if (typeof google === 'undefined') {
         // If google is undefined,
         window._tmp_google_onload_function = function () {
-            that.load_plugin();
+            that.init();
         };
 
         $.getScript(
@@ -30,7 +30,6 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
             function () {}
         );
     } else {
-        console.log('pourriture');
         that.init();
     }
 
@@ -40,29 +39,11 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype = Object.create(Charcoal.Admi
 Charcoal.Admin.Property_Input_Map_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Map_Widget;
 Charcoal.Admin.Property_Input_Map_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.load_plugin = function ()
-{
-    // Scope
-    var that = this;
-
-    // Remove unnecessary tmp function
-    delete window._tmp_google_onload_function;
-
-    // @TODO Bene, fix this.
-    that.init();
-    /*
-    // Add the actual plugin
-    $.getScript(Charcoal.Admin.admin_url() +
-        // '../../vendor/locomotivemtl/charcoal-admin/bower_components/bb-gmap/assets/scripts/dist/bb.gmap.js',
-        '../../vendor/locomotivemtl/charcoal-admin/bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
-        function () {
-            that.init();
-        });
-    */
-};
-
 Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 {
+    if (typeof window._tmp_google_onload_function !== 'undefined') {
+        delete window._tmp_google_onload_function;
+    }
     if (typeof BB === 'undefined' || typeof google === 'undefined') {
         // We don't have what we need
         console.error('Plugins not loaded');
@@ -76,7 +57,26 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         console.error('Missing ID');
     }
 
+    var default_styles = {
+        strokeColor: '#000000',
+        strokeOpacity: 0.8,
+        strokeWeight: 3,
+        fillColor: '#ffffff',
+        fillOpacity: 0.35,
+        hover: {
+            strokeColor: '#000000',
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            fillColor: '#ffffff',
+            fillOpacity: 0.5
+        },
+        focused: {
+            fillOpacity: 0.8
+        }
+    };
+
     var map_options = {
+        default_styles: default_styles,
         use_clusterer: true,
         map: {
             center: {
@@ -91,8 +91,22 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
     };
 
     var current_value = this.element().find('input[type=hidden]').val();
+
     if (current_value) {
-        map_options.places = JSON.parse(current_value);
+
+        var places = JSON.parse(current_value);
+
+        var merged_places = {};
+
+        for (var ident in places) {
+            merged_places[ ident ] = places[ ident ];
+            merged_places[ ident ].styles = $.extend(places[ ident ].styles, default_styles);
+        }
+
+        if (current_value) {
+            map_options.places = merged_places;
+            // map_options.places = JSON.parse(current_value);
+        }
     }
 
     // Create new map instance
@@ -150,7 +164,14 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         $(this).siblings('.-active').removeClass('-active');
         $(this).addClass('-active');
 
-        that.controller().create_new('marker', key + that.object_index());
+        // Find uniq item ident
+        var object_id = key + that.object_index();
+        while (that.controller().get_place(object_id)) {
+            object_id = key + that.object_index();
+        }
+
+        // Start creation of a new object
+        that.controller().create_new('marker', object_id);
     });
 
     this.element().on('click', '.js-add-line', function (e)
@@ -167,7 +188,12 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         $(this).siblings('.-active').removeClass('-active');
         $(this).addClass('-active');
 
-        that.controller().create_new('line', key + that.object_index());
+        var object_id = key + that.object_index();
+
+        while (that.controller().get_place(object_id)) {
+            object_id = key + that.object_index();
+        }
+        that.controller().create_new('line', object_id);
     });
 
     this.element().on('click', '.js-add-polygon', function (e)
@@ -184,7 +210,13 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         $(this).siblings('.-active').removeClass('-active');
         $(this).addClass('-active');
 
-        that.controller().create_new('polygon', key + that.object_index());
+        var object_id = key + that.object_index();
+
+        while (that.controller().get_place(object_id)) {
+            object_id = key + that.object_index();
+        }
+
+        that.controller().create_new('polygon', object_id);
     });
 
     this.element().on('click', '.js-add_place_by_address', function (e) {

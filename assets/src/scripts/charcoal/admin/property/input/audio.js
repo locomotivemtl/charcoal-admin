@@ -1,40 +1,33 @@
 /**
  * Interface for saving audio messages
+ * Property_Input_Audio JavaScript class
  * charcoal/admin/property/input/audio
- * Require:
- * - jQuery
+ *
  * @see https://github.com/cwilso/AudioRecorder
  * @see https://github.com/mattdiamond/Recorderjs
+ *
  * @method Property_Input_Audio
  * @param Object opts
  */
-
-Charcoal.Admin.Property_Input_Audio = function (opts)
+Charcoal.Admin.Property_Input_Audio = function (data)
 {
-    this.property_type = 'charcoal/admin/property/input/audio';
+    // Input type
+    data.input_type = 'charcoal/admin/property/input/audio';
 
-    // Property_Input_Audio properties
-    this.input_id            = null;
-    this.audio_selector      = null;
+    Charcoal.Admin.Property.call(this, data);
 
-    this.audio_context       = null;
-    this.audio_recorder      = null;
-    this.animation_frame     = null;
-    this.analyser_context    = null;
-    this.canvas_width        = 0;
-    this.canvas_height       = 0;
-    this.recording_index     = 0;
-    this.current_recording   = null;
-    this.audio_player        = null;
+    // Properties for each audio type
+    this._textProperties       = {};
+    this._recording_properties = {};
+    this._file_properties      = {};
 
-    // Elements
-    this.$audio_container    = null;
-    this.$record_button      = null;
-    this.$stop_button        = null;
-    this.$playback_button    = null;
-    this.$reset_button       = null;
+    // Navigation
+    this.active_pane = data.data.active_pane || 'text';
 
-    this.set_properties(opts).create_audio();
+    // Recorder
+    this._recorder = undefined;
+
+    this.init();
 };
 
 Charcoal.Admin.Property_Input_Audio.prototype = Object.create(Charcoal.Admin.Property.prototype);
@@ -42,30 +35,113 @@ Charcoal.Admin.Property_Input_Audio.prototype.constructor = Charcoal.Admin.Prope
 Charcoal.Admin.Property_Input_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
 
 /**
- * Set data
- * @method set_data
- * @param Object data
- * @return ThisExpression
+ * Set properties
+ * @method init
  */
-Charcoal.Admin.Property_Input_Audio.prototype.set_properties = function (opts)
+Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
 {
-    this.input_id = opts.id || this.input_id;
-    this.audio_selector = opts.data.audio_selector || this.audio_selector;
+    var _data = this.data;
 
-    this.$audio_container    = $(this.audio_selector);
-    this.$record_button      = $('.js-audio-record', this.$audio_container);
-    this.$stop_button        = $('.js-audio-stop', this.$audio_container);
-    this.$playback_button    = $('.js-audio-play', this.$audio_container);
-    this.$reset_button       = $('.js-audio-reset', this.$audio_container);
+    // Shouldn't happen at this point
+    if (typeof _data.id === 'undefined') {
+        console.error('Missing ID');
+    }
+
+    // Text properties
+    // ====================
+
+    // Recording properties
+    // ====================
+    this._recording_properties.audio_context     = null;
+    this._recording_properties.audio_recorder    = null;
+    this._recording_properties.animation_frame   = null;
+    this._recording_properties.analyser_context  = null;
+    this._recording_properties.canvas_width      = 0;
+    this._recording_properties.canvas_height     = 0;
+    this._recording_properties.recording_index   = 0;
+    this._recording_properties.current_recording = null;
+    this._recording_properties.audio_player      = null;
+    // Elements
+    this._recording_properties.record_button_class   = '.js-recording-record';
+    this._recording_properties.stop_button_class     = '.js-recording-stop';
+    this._recording_properties.playback_button_class = '.js-recording-playback';
+    this._recording_properties.reset_button_class    = '.js-recording-reset';
+
+    // File properties
+    // ====================
+    //
+
+    //var current_value = this.element().find('input[type=hidden]').val();
+
+    //if (current_value) {
+    // Do something with current values
+    //}
+
+    // Set active nav and bind listeners for controls.
+    this.set_nav(this.active_pane).bind_nav_controls();
+
+    // Create new audio recording instance
+    //this.init_recording();
+
+};
+
+/**
+ * Set active pane
+ * @param   {Object}          $toggle  Pane toggle button (jQuery Object)
+ * @param   {String}          pane     Ident of pane to activate
+ * @return  {ThisExpression}
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
+{
+    if (pane) {
+        var $toggles = $('.js-toggle-pane'),
+            $panes = $('.js-pane'),
+            $pane = $panes.filter('[data-pane="' + pane + '"]');
+
+        console.log(pane);
+        console.log($pane);
+
+        // Already active
+        if (!$pane.hasClass('-active')) {
+
+            // Find which toggle and set as active
+            var $toggle = $toggles.filter('[data-pane="' + pane + '"]');
+            $toggles.removeClass('-active');
+            $toggle.addClass('-active');
+
+            // Hide all
+            $panes.removeClass('-active');
+            $panes.addClass('hidden');
+
+            // Show one
+            $pane.removeClass('hidden');
+            $pane.addClass('-active');
+        }
+    }
 
     return this;
+};
+
+/**
+ * Create tabular navigation
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.bind_nav_controls = function ()
+{
+    // Scope
+    var that = this;
+
+    this.element().on('click', '.js-toggle-pane', function ()
+    {
+        var $toggle = $(this);
+        that.set_nav($toggle.attr('data-pane'));
+    });
 };
 
 /**
  * Check for browser capabilities
  * @method init_audio
  */
-Charcoal.Admin.Property_Input_Audio.prototype.create_audio = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function () {
     var that = this;
 
     if (!window.navigator.getUserMedia){

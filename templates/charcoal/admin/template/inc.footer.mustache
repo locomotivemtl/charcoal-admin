@@ -18,6 +18,15 @@
             'base_url'   : '{{base_url}}',
             'admin_path' : 'admin'
         });
+
+
+        $(document).ready(function() {
+            // Initialize tooltips globally
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        // Initialize bootstrap-select globally
+        $('.selectpicker').selectpicker({});
 	</script>
 
     {{!-- Scripts from widgets & templates --}}

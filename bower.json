@@ -18,15 +18,17 @@
     "awesome-bootstrap-checkbox": "~0.3.4",
     "bb-gmap": "master",
     "bootstrap-sass": "~3.3.5",
+    "bootstrap-select": "~1.7.3",
     "bootstrap-switch": "~3.3.2",
     "bootstrap3-dialog": "~1.34.4",
+    "echarts": "~2.2.3",
     "eonasdan-bootstrap-datetimepicker": "~4.15.35",
     "fontawesome": "~4.3.0",
-    "qunit": "~1.18.0",
     "summernote": "~0.6.13",
     "tinymce": "~4.2.1"
+
   },
   "devDependencies": {
-    "echarts": "~2.2.3"
+    "qunit": "~1.18.0"
   }
 }

@@ -5,7 +5,7 @@ module.exports = {
     },
     app: {
         files: {
-            'assets/dist/scripts/charcoal.admin.min.js': ['<%= concat.app.dest %>']
+            'assets/dist/scripts/charcoal.admin.min.js': ['<%= concat.admin.dest %>']
         }
     },
     vendors: {

@@ -23,25 +23,23 @@ canvas {
 </style>
 {{!/add_css}}
 
-<canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
-
-<button class="btn btn-record" type="button" data-label-record="Record" data-label-pause="Pause">Record</button>
-
-<button class="btn btn-stop-record" disabled type="button">Stop recording</button>
-
-<button class="btn btn-play" disabled type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
-
-<button class="btn btn-reset" disabled type="button">Reset</button>
-
- <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
+<div id="audio_container_{{input_id}}">
+    <canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
+    <button class="btn btn-record js-audio-record" type="button" data-label-record="Record" data-label-pause="Pause">Record</button>
+    <button class="btn btn-stop-record js-audio-stop" disabled type="button">Stop recording</button>
+    <button class="btn btn-play js-audio-play" disabled type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
+    <button class="btn btn-reset js-audio-reset" disabled type="button">Reset</button>
+    <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
+</div>
 
 {{#add_js}}
 <script>
-var audio_property;
-$(document).ready(function() {
-    audio_property = new Charcoal.Admin.Property_Audio({
-        input_id : '{{input_id}}'
-    });
+Charcoal.Admin.manager().add_property_input({
+    id: '{{input_id}}',
+    type: 'charcoal/admin/property/input/audio',
+    data: {
+        audio_selector: '#audio_container_{{input_id}}'
+    }
 });
 </script>
 {{/add_js}}

@@ -316,20 +316,24 @@ Charcoal.Admin.Property.prototype.save = function ()
     return this;
 };
 ;/**
- * charcoal/admin/property/audio
+ * Interface for saving audio messages
+ * charcoal/admin/property/input/audio
  * Require:
  * - jQuery
  * @see https://github.com/cwilso/AudioRecorder
  * @see https://github.com/mattdiamond/Recorderjs
- * @method Property_Audio
+ * @method Property_Input_Audio
  * @param Object opts
  */
-Charcoal.Admin.Property_Audio = function (opts)
-{
-    // Common Property properties
-    this.property_type = 'charcoal/admin/property/audio';
 
-    // Property_Audio properties
+Charcoal.Admin.Property_Input_Audio = function (opts)
+{
+    this.property_type = 'charcoal/admin/property/input/audio';
+
+    // Property_Input_Audio properties
+    this.input_id            = null;
+    this.audio_selector      = null;
+
     this.audio_context       = null;
     this.audio_recorder      = null;
     this.animation_frame     = null;
@@ -339,30 +343,20 @@ Charcoal.Admin.Property_Audio = function (opts)
     this.recording_index     = 0;
     this.current_recording   = null;
     this.audio_player        = null;
-    this.$record_button      = $('.btn-record:first');
-    this.$stop_record_button = $('.btn-stop-record:first');
-    this.$playback_button    = $('.btn-play:first');
-    this.$reset_button       = $('.btn-reset:first');
 
-    this.init(opts);
+    // Elements
+    this.$audio_container    = null;
+    this.$record_button      = null;
+    this.$stop_button        = null;
+    this.$playback_button    = null;
+    this.$reset_button       = null;
+
+    this.set_properties(opts).create_audio();
 };
 
-Charcoal.Admin.Property_Audio.prototype = Object.create(Charcoal.Admin.Property.prototype);
-Charcoal.Admin.Property_Audio.prototype.constructor = Charcoal.Admin.Property_Audio;
-Charcoal.Admin.Property_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
-
-/**
- * Return default data
- * @method default_data
- * @return Object default_data
- */
-Charcoal.Admin.Property_Audio.prototype.default_data = function ()
-{
-    return {
-        obj_type: '',
-        input_id: null
-    };
-};
+Charcoal.Admin.Property_Input_Audio.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Audio.prototype.constructor = Charcoal.Admin.Property_Input_Audio;
+Charcoal.Admin.Property_Input_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
 
 /**
  * Set data
@@ -370,32 +364,25 @@ Charcoal.Admin.Property_Audio.prototype.default_data = function ()
  * @param Object data
  * @return ThisExpression
  */
-Charcoal.Admin.Property_Audio.prototype.set_data = function (data)
+Charcoal.Admin.Property_Input_Audio.prototype.set_properties = function (opts)
 {
-    this.obj_type = data.obj_type;
-    this.input_id = data.input_id;
+    this.input_id = opts.id || this.input_id;
+    this.audio_selector = opts.data.audio_selector || this.audio_selector;
+
+    this.$audio_container    = $(this.audio_selector);
+    this.$record_button      = $('.js-audio-record', this.$audio_container);
+    this.$stop_button        = $('.js-audio-stop', this.$audio_container);
+    this.$playback_button    = $('.js-audio-play', this.$audio_container);
+    this.$reset_button       = $('.js-audio-reset', this.$audio_container);
+
     return this;
-};
-
-/**
- * Merge options with defaults and initialize the property
- * @method init
- * @param Object opts
- */
-Charcoal.Admin.Property_Audio.prototype.init = function (opts)
-{
-    // Set properties
-    var data = $.extend(true, {}, this.default_data(), opts);
-    this.set_data(data);
-
-    this.init_audio();
 };
 
 /**
  * Check for browser capabilities
  * @method init_audio
  */
-Charcoal.Admin.Property_Audio.prototype.init_audio = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.create_audio = function () {
     var that = this;
 
     if (!window.navigator.getUserMedia){
@@ -445,7 +432,7 @@ Charcoal.Admin.Property_Audio.prototype.init_audio = function () {
  * Bind events
  * @method bind_events
  */
-Charcoal.Admin.Property_Audio.prototype.bind_events = function ()
+Charcoal.Admin.Property_Input_Audio.prototype.bind_events = function ()
 {
     var that = this;
 
@@ -453,7 +440,7 @@ Charcoal.Admin.Property_Audio.prototype.bind_events = function ()
         that.manage_recording();
     });
 
-    that.$stop_record_button.on('click',function () {
+    that.$stop_button.on('click',function () {
         that.manage_recording('stop');
     });
 
@@ -475,7 +462,7 @@ Charcoal.Admin.Property_Audio.prototype.bind_events = function ()
  * @method got_stream
  * @param MediaStream stream
  */
-Charcoal.Admin.Property_Audio.prototype.got_stream = function (stream) {
+Charcoal.Admin.Property_Input_Audio.prototype.got_stream = function (stream) {
 
     var that = this;
 
@@ -502,7 +489,7 @@ Charcoal.Admin.Property_Audio.prototype.got_stream = function (stream) {
     that.update_analysers();
 };
 
-Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action) {
+Charcoal.Admin.Property_Input_Audio.prototype.manage_button_states = function (action) {
 
     switch (action){
 
@@ -521,7 +508,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action)
              * Stop record button
              * - Enable (will save and complete recording)
              */
-            this.$stop_record_button.prop('disabled',false);
+            this.$stop_button.prop('disabled',false);
             /**
              * Playback button
              * - Disable (no playing while recording)
@@ -547,7 +534,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action)
              * Stop record button
              * - Enable (will save and complete recording)
              */
-            this.$stop_record_button.prop('disabled',false);
+            this.$stop_button.prop('disabled',false);
             /**
              * Playback button
              * - Disable (no playing while recording)
@@ -574,7 +561,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action)
              * Stop record button
              * - Disable
              */
-            this.$stop_record_button.prop('disabled',true);
+            this.$stop_button.prop('disabled',true);
             /**
              * Playback button
              * - Enable
@@ -636,7 +623,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action)
              * Stop record button
              * - Disable
              */
-            this.$stop_record_button.prop('disabled',true);
+            this.$stop_button.prop('disabled',true);
             /**
              * Playback button
              * - Disable
@@ -661,7 +648,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_button_states = function (action)
  * @method toggle_recording
  * @param Node button
  */
-Charcoal.Admin.Property_Audio.prototype.manage_recording = function (state) {
+Charcoal.Admin.Property_Input_Audio.prototype.manage_recording = function (state) {
 
     var that = this;
 
@@ -691,7 +678,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_recording = function (state) {
  * Toggle playback of recorded audio
  * @method toggle_playback
  */
-Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.toggle_playback = function () {
 
     // Stop playback
     if (this.audio_player.is_playing()) {
@@ -716,7 +703,7 @@ Charcoal.Admin.Property_Audio.prototype.toggle_playback = function () {
  * Reset the recorder and player
  * @method toggle_playback
  */
-Charcoal.Admin.Property_Audio.prototype.reset_audio = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.reset_audio = function () {
 
     // Visuals
     var analyser = window.document.getElementById('analyser'),
@@ -747,7 +734,7 @@ Charcoal.Admin.Property_Audio.prototype.reset_audio = function () {
  * @method got_buffers
  * @param array buffers
  */
-Charcoal.Admin.Property_Audio.prototype.got_buffers = function (buffers) {
+Charcoal.Admin.Property_Input_Audio.prototype.got_buffers = function (buffers) {
     var canvas = window.document.getElementById('wavedisplay'),
         that   = this;
 
@@ -766,7 +753,7 @@ Charcoal.Admin.Property_Audio.prototype.got_buffers = function (buffers) {
  * @param RenderingContext context
  * @param array data
  */
-Charcoal.Admin.Property_Audio.prototype.draw_buffer = function (width, height, context, data) {
+Charcoal.Admin.Property_Input_Audio.prototype.draw_buffer = function (width, height, context, data) {
     var step = Math.ceil(data.length / width),
         amp = height / 2;
 
@@ -795,7 +782,7 @@ Charcoal.Admin.Property_Audio.prototype.draw_buffer = function (width, height, c
  * @method done_encoding
  * @param Blob blob
  */
-Charcoal.Admin.Property_Audio.prototype.done_encoding = function (blob) {
+Charcoal.Admin.Property_Input_Audio.prototype.done_encoding = function (blob) {
 
     var reader = new window.FileReader(),
         data   = null,
@@ -816,7 +803,7 @@ Charcoal.Admin.Property_Audio.prototype.done_encoding = function (blob) {
  * @method save_to_input
  * @param string data
  */
-Charcoal.Admin.Property_Audio.prototype.manage_audio_data = function (data) {
+Charcoal.Admin.Property_Input_Audio.prototype.manage_audio_data = function (data) {
     if (data){
 
         // Write the data to an input for saving
@@ -837,7 +824,7 @@ Charcoal.Admin.Property_Audio.prototype.manage_audio_data = function (data) {
  * Stop refreshing the analyser
  * @method cancel_analyser_update
  */
-Charcoal.Admin.Property_Audio.prototype.cancel_analyser_update = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.cancel_analyser_update = function () {
     window.cancelAnimationFrame(this.animation_frame);
     this.animation_frame = null;
 };
@@ -846,7 +833,7 @@ Charcoal.Admin.Property_Audio.prototype.cancel_analyser_update = function () {
  * Update analyser graph according to microphone input
  * @method update_analysers
  */
-Charcoal.Admin.Property_Audio.prototype.update_analysers = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.update_analysers = function () {
 
     var that = this;
 

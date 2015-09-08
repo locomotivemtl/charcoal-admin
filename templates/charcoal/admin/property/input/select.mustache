@@ -1,14 +1,22 @@
-{{!--
+ {{!--
 Select input
 
 Display a property as a select with "choices".
 
 `charcoal/admin/property/input/select`
 --}}
-<select id="{{input_id}}" name="{{input_name}}" class="form-control {{input_class}}">
+<select
+    id="{{input_id}}"
+    name="{{input_name}}"
+    class="form-control selectpicker {{input_class}}"
+    {{#multiple}}multiple data-max-options=""{{/multiple}}
+    {{#required}}required{{/required}}
+    {{#disabled}}disabled{{/disabled}}
+    {{#header}}data-header="Test"{{/header}}
+>
     {{#choices}}
-    <option value="{{value}}">
-        {{label}}
+    <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}">
+        {{title}}
     </option>
     {{/choices}}
 </select>

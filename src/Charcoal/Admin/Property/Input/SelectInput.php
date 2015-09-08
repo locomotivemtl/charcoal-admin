@@ -12,4 +12,9 @@ use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 class SelectInput extends AbstractPropertyInput
 {
     // ...
+
+    public function choices()
+    {
+        return $this->p()->choices();
+    }
 }

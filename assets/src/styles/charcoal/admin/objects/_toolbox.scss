@@ -2,17 +2,18 @@
 // Toolbox (navigation/actions + content)
 // ==========================================================================
 .o-toolbox {
-    height: 540px;
+    border-radius: 2px;
+    height: rem(540px);
     overflow: hidden;
 
     &.-small {
-        height: 330px;
+        height: rem(330px);
     }
 }
 
 .o-toolbox_actions {
     height: 100%;
-    width: 60px;
+    width: rem(60px);
 
     .-left &{
         float: left;
@@ -27,6 +28,7 @@
         height: 100%;
         width: 100%;
 
+        /*
         &:hover {
             .btn.-active {
                 &::after {
@@ -39,6 +41,12 @@
                     }
                 }
             }
+        }
+        */
+
+        // Bootstrap override
+        > .btn:first-child:not(:last-child) {
+            border-top-right-radius: 0;
         }
     }
 
@@ -81,20 +89,33 @@
 }
 
 .o-toolbox_content {
+    border: 1px solid #ccc;
+    height: 100%;
+    width: calc(100% - #{rem(60px)});
+
     .-left &{
+        border-left: none;
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
         float: left;
     }
     .-right & {
+        border-right: none;
+        border-bottom-left-radius: 2px;
+        border-top-left-radius: 2px;
         float: right;
     }
+}
 
+.o-toolbox_pane {
+    position: relative;
     height: 100%;
-    width: calc(100% - 60px);
+    width: 100%;
 }
 
 .o-toolbox_icon {
     fill: $black;
-    height: 40px;
+    height: rem(40px);
     transition: fill 0.5s;
-    width: 25px;
+    width: rem(25px);
 }

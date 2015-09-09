@@ -14,6 +14,7 @@
             "messaging/send-sms":{},
             "messaging/send-voice":{},
 
+            "alert/create":{},
             "alert/test":{},
             "alert/send":{},
             "alert/create":{}

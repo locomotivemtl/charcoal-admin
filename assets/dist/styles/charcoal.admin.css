@@ -94,6 +94,7 @@ td {
     display: flex;
     flex-direction: column;
     height: 100%;
+<<<<<<< HEAD
     width: 100%;
     /*
         &:hover {
@@ -110,6 +111,9 @@ td {
             }
         }
         */ }
+=======
+    width: 100%; }
+>>>>>>> Skinned vocal message recording interface
     .o-toolbox_actions .btn-group-vertical > .btn:first-child:not(:last-child) {
       border-top-right-radius: 0; }
   .o-toolbox_actions .btn {
@@ -619,39 +623,87 @@ td {
   font-weight: normal;
   line-height: 1.375rem; }
 
-.audio-player-simple_button {
+.c-audio-player {
   position: relative;
-  display: inline-block;
-  width: 2.5rem;
-  height: 2.5rem;
-  vertical-align: middle;
+  height: 100%;
+  width: 100%; }
+
+.c-audio-player_wrap {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3; }
+
+.c-audio-player_canvas {
+  background: #ffffff;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 0; }
+
+.c-audio-player_button {
+  background-color: #cccccc;
+  box-shadow: 0px 5px 8px -4px rgba(0, 0, 0, 0.1);
   border: none;
   border-radius: 50%;
+  display: inline-block;
+  height: 2.8125rem;
   outline: none;
-  background-color: #cccccc; }
-  .audio-player-simple_button .glyphicon {
-    line-height: 2.5rem;
-    position: absolute;
-    top: -0.0625rem;
-    left: 50%;
-    margin-left: -0.375rem;
-    transition: opacity 0.3s;
-    color: #ffffff; }
-  .audio-player-simple_button .glyphicon-pause {
-    opacity: 0; }
-  .audio-player-simple_button.paused .glyphicon-pause {
+  padding: 0;
+  position: relative;
+  vertical-align: middle;
+  width: 2.8125rem; }
+  .c-audio-player_button.-record {
+    background: linear-gradient(to top, #f1f1f1, #ffffff);
+    border: 1px solid #d7d7d7;
+    font-size: 1.875rem;
+    height: 6.6875rem;
+    width: 6.6875rem; }
+    .c-audio-player_button.-record .glyphicon {
+      color: #6c6c6c; }
+  .c-audio-player_button.is-playing {
+    background-color: #98CE9A; }
+    .c-audio-player_button.is-playing .glyphicon-pause {
+      opacity: 1; }
+    .c-audio-player_button.is-playing .glyphicon-play {
+      opacity: 0; }
+  .c-audio-player_button.is-recording .glyphicon-pause {
     opacity: 1; }
-  .audio-player-simple_button.paused .glyphicon-play {
+  .c-audio-player_button.is-recording .c-audio-player_button_circle {
+    opacity: 0; }
+  .c-audio-player_button .glyphicon {
+    color: #ffffff;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%); }
+  .c-audio-player_button .glyphicon-pause {
     opacity: 0; }
 
-.audio-player-simple_time {
+.c-audio-player_button_circle {
+  background-color: #ff6b6b;
+  border-radius: 50%;
+  height: 1.75rem;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.75rem; }
+
+.c-audio-player_time {
+  color: #cccccc;
+  display: inline-block;
   font-size: 3.125rem;
   font-weight: 300;
-  display: inline-block;
-  width: calc(100% - 3.75rem);
   padding-left: 0.9375rem;
-  color: #cccccc;
-  vertical-align: middle; }
+  vertical-align: middle;
+  width: calc(100% - 3.75rem); }
+  .-complex .c-audio-player_time {
+    font-size: 6.25rem;
+    width: auto; }
 
 .c-map-maker_map {
   background-color: #E5E3DF;

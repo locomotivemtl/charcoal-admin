@@ -1,0 +1,112 @@
+// ==========================================================================
+// Recording maker
+// ==========================================================================
+
+.c-audio-player {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.c-audio-player_wrap {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+
+.c-audio-player_canvas {
+    background: $white;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+
+.c-audio-player_button {
+    background-color: $gray-light;
+    box-shadow: 0px 5px 8px -4px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    height: rem(45px);
+    outline: none;
+    padding: 0;
+    position: relative;
+    vertical-align: middle;
+    width: rem(45px);
+
+    &.-record {
+        background: linear-gradient(to top, #f1f1f1, #ffffff);
+        border: 1px solid #d7d7d7;
+        font-size: rem(30px);
+        height: rem(107px);
+        width: rem(107px);
+
+        .glyphicon {
+            color: $gray;
+        }
+    }
+
+    &.is-playing {
+        background-color: #98CE9A;
+
+        .glyphicon-pause {
+            opacity: 1;
+        }
+        .glyphicon-play {
+            opacity: 0;
+        }
+    }
+
+    &.is-recording {
+        .glyphicon-pause {
+            opacity: 1;
+        }
+        .c-audio-player_button_circle {
+            opacity: 0;
+        }
+    }
+
+    .glyphicon {
+        color: $white;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .glyphicon-pause {
+        opacity: 0;
+    }
+}
+
+.c-audio-player_button_circle {
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    height: rem(28px);
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: rem(28px);
+}
+
+.c-audio-player_time {
+    color: $gray-light;
+    display: inline-block;
+    font-size: rem(50px);
+    font-weight: $weight-light;
+    padding-left: rem(15px);
+    vertical-align: middle;
+    width: calc(100% - #{rem(60px)});
+
+    .-complex & {
+        font-size: rem(100px);
+        width: auto;
+    }
+}

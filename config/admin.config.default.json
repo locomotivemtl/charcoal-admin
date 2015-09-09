@@ -15,7 +15,8 @@
             "messaging/send-voice":{},
 
             "alert/test":{},
-            "alert/send":{}
+            "alert/send":{},
+            "alert/create":{}
         },
         "default_view":"home",
         "actions":{

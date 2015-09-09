@@ -5,23 +5,6 @@ Audio Property Input
 `charcoal/admin/property/input/audio`
 
 --}}
-{{!#add_css}}
-<style>
-canvas {
-    display: inline-block;
-    background: #202020;
-    width: 50%;
-    height: 200px;
-    box-shadow: 0px 0px 10px blue;
-}
-.btn-record.-is-recording {
-    background: red;
-}
-.btn-play.-is-playing {
-    background: green;
-}
-</style>
-{{!/add_css}}
 
 <div class="o-toolbox -small -left" id="{{input_id}}">
     <div class="o-toolbox_actions">
@@ -32,29 +15,44 @@ canvas {
         </div>
     </div>
     <div class="o-toolbox_content">
-        <div class="js-pane hidden" data-pane="text"></div>
-        <div class="js-pane hidden" data-pane="recording">
+        <div class="o-toolbox_pane js-pane hidden" data-pane="text"></div>
+        <div class="o-toolbox_pane js-pane hidden" data-pane="recording">
+            <div class="c-audio-player -complex">
+                <div class="c-audio-player_wrap">
 
-            <div id="audio_container_{{input_id}}">
-                <canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
-                <button class="btn btn-record js-recording-record" type="button" data-label-record="Record" data-label-pause="Pause">Record</button>
-                <button class="btn btn-stop-record js-recording-stop" disabled type="button">Stop recording</button>
-                <button class="btn btn-play js-recording-playback" disabled type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
-                <button class="btn btn-reset js-recording-reset" disabled type="button">Reset</button>
-                <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
+                    <button class="btn c-audio-player_button -playback js-recording-playback" disabled type="button" title="Toggle playback">
+                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn c-audio-player_button -stop js-recording-stop" disabled type="button" title="Complete recording">
+                        <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn c-audio-player_button -reset js-recording-reset" disabled type="button" title="Restart recording">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </button>
+
+                    <button class="btn c-audio-player_button -record js-recording-record" type="button">
+                        <span class="c-audio-player_button_circle"></span>
+                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                    </button>
+
+                    <span class="c-audio-player_time js-recording-timer">00:00</span>
+                </div>
+                <canvas class="c-audio-player_canvas -analyser js-recording-analyser"></canvas>
+                <canvas class="c-audio-player_canvas -waves hidden js-recording-waves"></canvas>
             </div>
-
         </div>
-        <div class="js-pane hidden" data-pane="file"></div>
+        <div class="o-toolbox_pane js-pane hidden" data-pane="file"></div>
     </div>
     {{!
         Input that will contain the actual data
         This input will be posted on save / update
     }}
-    <input type="hidden"
+    <input
+        id="hidden_{{input_id}}"
+        type="hidden"
         name="{{input_name}}"
-        value="{{input_val}}"
-    >
+        value="{{input_val}}">
 </div>
 
 
@@ -64,7 +62,8 @@ Charcoal.Admin.manager().add_property_input({
     id: '{{input_id}}',
     type: 'charcoal/admin/property/input/audio',
     data: {
-        active_pane: 'recording'
+        active_pane: 'recording',
+        hidden_input_id: 'hidden_{{input_id}}'
     }
 });
 </script>

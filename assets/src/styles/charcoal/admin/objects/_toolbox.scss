@@ -28,22 +28,6 @@
         height: 100%;
         width: 100%;
 
-        /*
-        &:hover {
-            .btn.-active {
-                &::after {
-                    transform: translateX(calc(-100% - 1px));
-                }
-
-                &:hover {
-                    &::after {
-                        transform: translateX(0);
-                    }
-                }
-            }
-        }
-        */
-
         // Bootstrap override
         > .btn:first-child:not(:last-child) {
             border-top-right-radius: 0;

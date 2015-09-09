@@ -25,14 +25,14 @@ module.exports = {
             // Bootstrap 3 Datepicker
             'bower_components/moment/min/moment.min.js',
             'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            // Bootstrap Select
-            'bower_components/bootstrap-select/dist/js/bootstrap-select.min.js',
             // Summernote
             'bower_components/summernote/dist/summernote.js',
             // BB Map
-            'bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js'
+            'bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
+            // Bootstrap Select
+            'bower_components/bootstrap-select/dist/js/bootstrap-select.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
-        separator: ';\n'
+        separator: "\n"
     }
 };

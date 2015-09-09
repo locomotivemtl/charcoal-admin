@@ -23,25 +23,49 @@ canvas {
 </style>
 {{!/add_css}}
 
-<canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
+<div class="o-toolbox -small -left" id="{{input_id}}">
+    <div class="o-toolbox_actions">
+        <div class="btn-group-vertical">
+            <button type="button" class="btn btn-default js-toggle-pane" data-pane="text"><svg class="o-toolbox_icon" role="img" title="Enter text"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-text"></use></svg></button>
+            <button type="button" class="btn btn-default js-toggle-pane" data-pane="recording"><svg class="o-toolbox_icon" role="img" title="Record a message"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-microphone"></use></svg></button>
+            <button type="button" class="btn btn-default js-toggle-pane" data-pane="file"><svg class="o-toolbox_icon" role="img" title="Use an audio file"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-file"></use></svg></button>
+        </div>
+    </div>
+    <div class="o-toolbox_content">
+        <div class="js-pane hidden" data-pane="text"></div>
+        <div class="js-pane hidden" data-pane="recording">
 
-<button class="btn btn-record" type="button" data-label-record="Record" data-label-pause="Pause">Record</button>
+            <div id="audio_container_{{input_id}}">
+                <canvas id="analyser" width="500" height="250"></canvas><canvas id="wavedisplay" width="500" height="250"></canvas>
+                <button class="btn btn-record js-recording-record" type="button" data-label-record="Record" data-label-pause="Pause">Record</button>
+                <button class="btn btn-stop-record js-recording-stop" disabled type="button">Stop recording</button>
+                <button class="btn btn-play js-recording-playback" disabled type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
+                <button class="btn btn-reset js-recording-reset" disabled type="button">Reset</button>
+                <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
+            </div>
 
-<button class="btn btn-stop-record" disabled type="button">Stop recording</button>
+        </div>
+        <div class="js-pane hidden" data-pane="file"></div>
+    </div>
+    {{!
+        Input that will contain the actual data
+        This input will be posted on save / update
+    }}
+    <input type="hidden"
+        name="{{input_name}}"
+        value="{{input_val}}"
+    >
+</div>
 
-<button class="btn btn-play" disabled type="button" data-label-play="Play" data-label-pause="Pause">Play</button>
-
-<button class="btn btn-reset" disabled type="button">Reset</button>
-
- <input type="hidden" id="{{input_id}}" name="{{input_name}}" value="">
 
 {{#add_js}}
 <script>
-var audio_property;
-$(document).ready(function() {
-    audio_property = new Charcoal.Admin.Property_Audio({
-        input_id : '{{input_id}}'
-    });
+Charcoal.Admin.manager().add_property_input({
+    id: '{{input_id}}',
+    type: 'charcoal/admin/property/input/audio',
+    data: {
+        active_pane: 'recording'
+    }
 });
 </script>
 {{/add_js}}

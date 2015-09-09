@@ -100,25 +100,33 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     */
     public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->set_data($request->getParams());
-
         try {
+            $this->set_data($request->getParams());
+
             // Load (or reload) object (From `ObjectContainerTrait`)
             $obj = $this->load_obj();
 
-            $obj->set_flat_data($this->update_data());
-            $validation = $obj->validate();
+            $obj->set_data($this->update_data());
+            $valid = $obj->validate();
 
-            // @todo Handle validation
+            if (!$valid) {
+                $validation = $obj->validation();
+                // @todo: Validation info to feedback
+                $this->set_success(false);
+                $this->add_feedback('error', 'Failed to update object: validation error(s).');
+                return $this->output($response->withStatus(404));
+            }
 
             $ret = $obj->update();
 
             if ($ret) {
                 $this->log_object_update();
                 $this->set_success(true);
+                $this->add_feedback('success', sprintf('Object was successfully updated. (ID: %s)', $obj->id()));
                 return $this->output($response);
             } else {
                 $this->set_success(false);
+                $this->add_feedback('error', 'Could not update objet. Unknown error');
                 return $this->output($response->withStatus(404));
             }
         } catch (Exception $e) {

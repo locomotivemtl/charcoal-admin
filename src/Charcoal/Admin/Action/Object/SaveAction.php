@@ -101,16 +101,23 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     */
     public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->set_data($request->getParams());
 
         try {
+            $this->set_data($request->getParams());
+
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
 
             $obj->set_flat_data($this->save_data());
-            $validation = $obj->validate();
+            $valid = $obj->validate();
 
-            // @todo Handle validation
+            if (!$valid) {
+                $validation = $obj->validation();
+                // @todo: Validation info to feedback
+                $this->set_success(false);
+                $this->add_feedback('error', 'Failed to save object: validation error(s).')
+                return $this->output($response->withStatus(404));
+            }
 
             $ret = $obj->save();
 
@@ -118,6 +125,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 $this->set_obj($obj);
                 $this->log_object_save();
                 $this->set_success(true);
+                $this->add_feedback('success', 'Object saved successfully');
                 return $this->output($response);
             } else {
                 $this->set_obj(null);
@@ -128,6 +136,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
             //var_dump($e);
             $this->set_obj(null);
             $this->set_success(false);
+            $this->add_feedback('error', $e->getMessage());
             return $this->output($response->withStatus(404));
         }
 

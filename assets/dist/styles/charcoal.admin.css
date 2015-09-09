@@ -77,14 +77,15 @@ td {
   background-position: center; }
 
 .o-toolbox {
-  height: 540px;
+  border-radius: 2px;
+  height: 33.75rem;
   overflow: hidden; }
   .o-toolbox.-small {
-    height: 330px; }
+    height: 20.625rem; }
 
 .o-toolbox_actions {
   height: 100%;
-  width: 60px; }
+  width: 3.75rem; }
   .-left .o-toolbox_actions {
     float: left; }
   .-right .o-toolbox_actions {
@@ -93,11 +94,24 @@ td {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 100%; }
-    .o-toolbox_actions .btn-group-vertical:hover .btn.-active::after {
-      transform: translateX(calc(-100% - 1px)); }
-    .o-toolbox_actions .btn-group-vertical:hover .btn.-active:hover::after {
-      transform: translateX(0); }
+    width: 100%;
+    /*
+        &:hover {
+            .btn.-active {
+                &::after {
+                    transform: translateX(calc(-100% - 1px));
+                }
+
+                &:hover {
+                    &::after {
+                        transform: translateX(0);
+                    }
+                }
+            }
+        }
+        */ }
+    .o-toolbox_actions .btn-group-vertical > .btn:first-child:not(:last-child) {
+      border-top-right-radius: 0; }
   .o-toolbox_actions .btn {
     background-color: #ffffff;
     border-radius: 0;
@@ -127,18 +141,30 @@ td {
         fill: #3498db; }
 
 .o-toolbox_content {
+  border: 1px solid #ccc;
   height: 100%;
-  width: calc(100% - 60px); }
+  width: calc(100% - 3.75rem); }
   .-left .o-toolbox_content {
+    border-left: none;
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
     float: left; }
   .-right .o-toolbox_content {
+    border-right: none;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
     float: right; }
+
+.o-toolbox_pane {
+  position: relative;
+  height: 100%;
+  width: 100%; }
 
 .o-toolbox_icon {
   fill: #000000;
-  height: 40px;
+  height: 2.5rem;
   transition: fill 0.5s;
-  width: 25px; }
+  width: 1.5625rem; }
 
 .c-header-main {
   background-color: #1a252d;
@@ -629,15 +655,23 @@ td {
 
 .c-map-maker_map {
   background-color: #E5E3DF;
-  height: calc(100% - 60px);
-  overflow: hidden; }
+  height: 100%;
+  overflow: hidden;
+  top: -72px; }
+  .maker_header-open .c-map-maker_map {
+    height: calc(100% - 72px);
+    top: 0; }
 
 .c-map-maker_header {
   border-color: #cccccc;
   border-right-style: solid;
   border-top-style: solid;
   border-width: 1px;
-  padding: 11.5px 20px; }
+  padding: 11.5px 20px;
+  position: relative;
+  top: -72px; }
+  .maker_header-open .c-map-maker_header {
+    top: 0; }
 
 .c-map-maker_label {
   margin-right: 13px; }
@@ -647,7 +681,7 @@ td {
 
 .c-map-maker_input {
   display: inline-block;
-  width: calc(100% - 216px); }
+  width: calc(100% - 242px); }
 
 input[type="file"]:focus,
 input[type="radio"]:focus,

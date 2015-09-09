@@ -77,7 +77,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 
     var map_options = {
         default_styles: default_styles,
-        use_clusterer: true,
+        use_clusterer: false,
         map: {
             center: {
                 x: 45.3712923,
@@ -90,22 +90,23 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         }
     };
 
+    // Get current map state from DB
+    // This is located in the hidden input
     var current_value = this.element().find('input[type=hidden]').val();
 
     if (current_value) {
-
+        // Parse the value
         var places = JSON.parse(current_value);
 
+        // Merge places with default styles
         var merged_places = {};
-
         for (var ident in places) {
             merged_places[ ident ] = places[ ident ];
             merged_places[ ident ].styles = $.extend(places[ ident ].styles, default_styles);
         }
 
-        if (current_value) {
+        if (merged_places) {
             map_options.places = merged_places;
-            // map_options.places = JSON.parse(current_value);
         }
     }
 
@@ -116,7 +117,13 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
     );
 
     // Init new map instance
-    this.controller().init();
+    this.controller().init().ready(
+        function (ctrl) {
+            ctrl.fit_bounds();
+        }
+    );
+
+    this.controller().remove_focus();
 
     // Start listeners for controls.
     this.controls();
@@ -154,16 +161,6 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
     {
         e.preventDefault();
 
-        // already picked
-        if ($(this).hasClass('-active')) {
-            $(this).removeClass('-active');
-            return false;
-        }
-
-        // Active state
-        $(this).siblings('.-active').removeClass('-active');
-        $(this).addClass('-active');
-
         // Find uniq item ident
         var object_id = key + that.object_index();
         while (that.controller().get_place(object_id)) {
@@ -172,6 +169,25 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
         // Start creation of a new object
         that.controller().create_new('marker', object_id);
+    });
+
+    this.element().on('click', '.js-display-marker-toolbox', function (e) {
+        e.preventDefault();
+
+        // already picked
+        if ($(this).hasClass('-active')) {
+            $(this).removeClass('-active');
+            // Little helper
+            that.hide_marker_toolbar();
+            return false;
+        }
+
+        // Active state
+        $(this).siblings('.-active').removeClass('-active');
+        $(this).addClass('-active');
+
+        // Little helper
+        that.display_marker_toolbar();
     });
 
     this.element().on('click', '.js-add-line', function (e)
@@ -231,6 +247,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         that.controller().add_place_by_address('object' + that.object_index(), value, {
             type: 'marker',
             draggable: true,
+            editable: true,
             // After loading the marker object
             loaded_callback: function (marker) {
                 that.controller().map().setCenter(marker.object().getPosition());
@@ -239,12 +256,41 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
     });
 
-    that.controller().on('focus', function () {
+    that.controller().on('focus', function (obj) {
+        var type = obj.data('type');
+
         that.element().find('.js-add-polygon').removeClass('-active');
-        that.element().find('.js-add-marker').removeClass('-active');
+        that.element().find('.js-display-marker-toolbox').removeClass('-active');
+        // that.element().find('.js-add-marker').removeClass('-active');
         that.element().find('.js-add-line').removeClass('-active');
+
+        switch (type) {
+            case 'marker' :
+                that.element().find('.js-display-marker-toolbox').addClass('-active');
+            break;
+
+            case 'polygon' :
+                that.element().find('.js-add-polygon').addClass('-active');
+            break;
+
+            case 'line' :
+                that.element().find('.js-add-line').addClass('-active');
+            break;
+        }
     });
 
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.display_marker_toolbar = function ()
+{
+    // Displays the tool bar.
+    $('.c-map-maker ').addClass('maker_header-open');
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = function ()
+{
+    // Displays the tool bar.
+    $('.c-map-maker ').removeClass('maker_header-open');
 };
 
 /**

@@ -12,7 +12,7 @@
 <div class="o-toolbox -left" id="{{input_id}}">
     <div class="o-toolbox_actions">
         <div class="btn-group-vertical" role="group" aria-label="...">
-            <button type="button" class="btn btn-default {{! -active }} js-add-marker"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
+            <button type="button" class="btn btn-default {{! -active }} js-display-marker-toolbox"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
             <button type="button" class="btn btn-default js-add-line"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
             <button type="button" class="btn btn-default js-add-polygon"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
             {{#inexistant_function}}
@@ -26,7 +26,11 @@
             <label class="c-map-maker_label" for="c-map-maker-search">Adresse</label>
             <input class="c-map-maker_input form-control js-address" name="c-map-maker-search" type="text">
             <button type="button" class="c-map-maker_btn btn btn-lg btn-info js-add_place_by_address" data-toggle="modal" data-target="#myModal">
-                Sauvegarder
+                Trouver
+            </button>
+
+            <button type="button" class="c-map-maker_btn btn btn-lg btn-info js-add-marker">
+                +
             </button>
         </div>
         <div class="c-map-maker_map js-map-maker-map"></div>

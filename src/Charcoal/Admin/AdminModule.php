@@ -136,7 +136,6 @@ class AdminModule
         // Admin catch-all (load template if it exists)
         $app->get('/{actions:.*}', function ($req, $res, $args) {
             try {
-                $action_ident = implode('/', $actions);
                 $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$args['actions']);
                 $action($req, $res);
 

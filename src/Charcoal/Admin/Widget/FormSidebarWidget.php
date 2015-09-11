@@ -118,7 +118,8 @@ class FormSidebarWidget extends AdminWidget
                 continue;
             }
             $label = new TranslationString($action['label']);
-            $url = $action['url'];
+            $url = $this->form()->obj()->render( $action['url'] );
+
             // Info = default
             // Possible: danger, info
             $btn = isset( $action['type'] ) ? $action['type'] : 'info';

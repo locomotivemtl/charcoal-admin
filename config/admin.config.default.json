@@ -14,6 +14,7 @@
             "messaging/send-sms":{},
             "messaging/send-voice":{},
 
+            "alert/home":{},
             "alert/create":{},
             "alert/test":{},
             "alert/send":{},
@@ -30,7 +31,11 @@
             "widget/table/inline-multi":{},
 
             "messaging/send-sms":{},
-            "messaging/send-voice":{}
+            "messaging/send-voice":{},
+
+            "alert/send-test-email":{},
+            "alert/send-test-sms":{},
+            "alert/send-test-voice":{}
         },
         "default_action":null,
         "cli_actions":{

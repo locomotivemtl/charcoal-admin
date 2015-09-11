@@ -115,7 +115,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 $validation = $obj->validation();
                 // @todo: Validation info to feedback
                 $this->set_success(false);
-                $this->add_feedback('error', 'Failed to save object: validation error(s).')
+                $this->add_feedback('error', 'Failed to save object: validation error(s).');
                 return $this->output($response->withStatus(404));
             }
 

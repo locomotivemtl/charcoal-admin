@@ -73,12 +73,11 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         success: function (response) {
             console.debug(response);
             if (response.success) {
+                // Default, add feedback to list
+                Charcoal.Admin.feedback().add_data(response.feedbacks);
+
                 if (!is_new_object) {
-                    BootstrapDialog.show({
-                        title: 'Save successful!',
-                        message: 'Object was successfully saved to storage.',
-                        type: BootstrapDialog.TYPE_SUCCESS
-                    });
+                    Charcoal.Admin.feedback().call();
                 } else {
                     window.location.href =
                         Charcoal.Admin.admin_url() +
@@ -86,19 +85,23 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
                         '&obj_id=' + response.obj_id;
                 }
             } else {
-                BootstrapDialog.show({
-                    title: 'Error. Could not save object.',
-                    message: 'An error occurred and the object could not be saved.',
-                    type: BootstrapDialog.TYPE_DANGER
-                });
+                Charcoal.Admin.feedback().add_data(
+                    [{
+                        level: 'An error occurred and the object could not be saved.',
+                        msg: 'error'
+                    }]
+                );
+                Charcoal.Admin.feedback().call();
             }
         },
         error: function () {
-            BootstrapDialog.show({
-                title: 'Error. Could not save object.',
-                message: 'An error occurred and the object could not be saved.',
-                type: BootstrapDialog.TYPE_DANGER
-            });
+            Charcoal.Admin.feedback().add_data(
+                [{
+                    level: 'An error occurred and the object could not be saved.',
+                    msg: 'error'
+                }]
+            );
+            Charcoal.Admin.feedback().call();
         }
     });
 };

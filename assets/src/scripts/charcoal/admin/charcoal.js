@@ -12,7 +12,8 @@ Charcoal.Admin = (function ()
             base_url: null,
             admin_path: null,
         },
-        manager;
+        manager,
+        feedback;
 
     /**
     * Object function that acts as a container for public methods
@@ -50,6 +51,21 @@ Charcoal.Admin = (function ()
         }
 
         return manager;
+    };
+
+    /**
+    * Provides an access to our instanciated Feedback object
+    * You can set the data already in as a parameter when necessary.
+    * @return {Object} Feedback instance
+    */
+    Admin.feedback = function (data)
+    {
+        if (typeof feedback === 'undefined') {
+            feedback = new Charcoal.Admin.Feedback();
+        }
+        feedback.add_data(data);
+
+        return feedback;
     };
 
     /**

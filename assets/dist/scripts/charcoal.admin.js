@@ -12,7 +12,8 @@ Charcoal.Admin = (function ()
             base_url: null,
             admin_path: null,
         },
-        manager;
+        manager,
+        feedback;
 
     /**
     * Object function that acts as a container for public methods
@@ -50,6 +51,21 @@ Charcoal.Admin = (function ()
         }
 
         return manager;
+    };
+
+    /**
+    * Provides an access to our instanciated Feedback object
+    * You can set the data already in as a parameter when necessary.
+    * @return {Object} Feedback instance
+    */
+    Admin.feedback = function (data)
+    {
+        if (typeof feedback === 'undefined') {
+            feedback = new Charcoal.Admin.Feedback();
+        }
+        feedback.add_data(data);
+
+        return feedback;
     };
 
     /**
@@ -201,6 +217,162 @@ Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
     }
 
     return true;
+};
+;/**
+* charcoal/admin/feedback
+* Class that deals with all the feedbacks throughout the admin
+* Feedbacks uses the LEVEL concept which could be:
+* - `success`
+* - `warning`
+* - `error`
+*
+* It uses BootstrapDialog to display all of this.
+*
+*/
+
+/**
+* @return this
+*/
+Charcoal.Admin.Feedback = function ()
+{
+    this.msgs = [];
+    this.context_definitions = {
+        success: {
+            title: 'Succès!',
+            type: BootstrapDialog.TYPE_SUCCESS
+        },
+        warning: {
+            title: 'Attention!',
+            type: BootstrapDialog.TYPE_WARNING
+        },
+        error: {
+            title: 'Une erreur s\'est produite!',
+            type: BootstrapDialog.TYPE_DANGER
+        }
+    };
+    return this;
+};
+
+/**
+* Expects and array of object that looks just like this:
+* [
+*   { 'level' : 'success', 'msg' : 'Good job!' },
+*   { 'level' : 'success', 'msg' : 'Good job!' }
+* ]
+*
+* You can add other parameters as well.
+*
+* You can set a context, in order to display in a SEPARATE popup
+* The default context would be GLOBAL.
+* Example of context:
+* - `save`
+* - `update`
+* - `edit`
+* - `refresh`
+* - `display`
+* etc.
+*
+*
+* This will class all success object by level in order to display a FULL LIST
+* once the call method is...called
+* @param {object} data
+* @param {string} context // OR OBJECT? { name : 'global', title : '' }
+* @return this
+*/
+Charcoal.Admin.Feedback.prototype.add_data = function (data/*, context*/)
+{
+    if (typeof data !== 'object') {
+        // Bad values.
+        return this;
+    }
+
+    // if (typeof context === 'object' &&
+    //(typeof context.name === 'undefined' || typeof context.title === 'undefined')) {
+    //     return this;
+    // }
+
+    // if (!context) {
+    //     // Default context
+    //     context = { name : 'global' };
+    // }
+
+    // if (typeof this.msgs[ context ] === 'undefined') {
+    //     this.msgs[ context ] = [];
+    // }
+
+    // Add to all msgs
+    this.msgs = this.msgs.concat(data);
+
+    // Chainable
+    return this;
+};
+
+/**
+* A context is basicly a DIFFERENT POPUP
+* That way, you can separate feedback even if there on the same level
+* @return this
+*/
+Charcoal.Admin.Feedback.prototype.add_context = function (context) {
+    if (!context) {
+        return this;
+    }
+
+    if (typeof context.name === 'undefined' || typeof context.title === 'undefined') {
+        return this;
+    }
+
+    this.context_definitions[ context.name ] = context;
+    // for (var k in context) {
+    //     if (typeof context[ k ].title === 'undefined') {
+    //         // WRONG
+    //         return this;
+    //         break;
+    //     }
+    // }
+
+    return this;
+};
+
+/**
+* Outputs the results of all feedback accumulated on the page load
+* @return this
+*/
+Charcoal.Admin.Feedback.prototype.call = function ()
+{
+    if (!this.msgs) {
+        return this;
+    }
+
+    var i = 0;
+    var total = this.msgs.length;
+
+    var ret = {};
+
+    for (; i < total; i++) {
+        if (typeof this.msgs[ i ].level === 'undefined') {
+            continue;
+        }
+
+        if (typeof ret[ this.msgs[i].level ] === 'undefined') {
+            ret[ this.msgs[i].level ] = [];
+        }
+        ret[ this.msgs[i].level ].push(this.msgs[i].msg);
+    }
+
+    for (var level in ret) {
+        if (typeof this.context_definitions[ level ] === 'undefined') {
+            continue;
+        }
+
+        BootstrapDialog.show({
+            title: this.context_definitions[ level ].title,
+            message: ret[ level ].join('<br/>'),
+            type: this.context_definitions[ level ].type
+        });
+
+    }
+
+    return this;
 };
 ;/**
 * charcoal/admin/property
@@ -1965,12 +2137,11 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         success: function (response) {
             console.debug(response);
             if (response.success) {
+                // Default, add feedback to list
+                Charcoal.Admin.feedback().add_data(response.feedbacks);
+
                 if (!is_new_object) {
-                    BootstrapDialog.show({
-                        title: 'Save successful!',
-                        message: 'Object was successfully saved to storage.',
-                        type: BootstrapDialog.TYPE_SUCCESS
-                    });
+                    Charcoal.Admin.feedback().call();
                 } else {
                     window.location.href =
                         Charcoal.Admin.admin_url() +
@@ -1978,19 +2149,23 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
                         '&obj_id=' + response.obj_id;
                 }
             } else {
-                BootstrapDialog.show({
-                    title: 'Error. Could not save object.',
-                    message: 'An error occurred and the object could not be saved.',
-                    type: BootstrapDialog.TYPE_DANGER
-                });
+                Charcoal.Admin.feedback().add_data(
+                    [{
+                        level: 'An error occurred and the object could not be saved.',
+                        msg: 'error'
+                    }]
+                );
+                Charcoal.Admin.feedback().call();
             }
         },
         error: function () {
-            BootstrapDialog.show({
-                title: 'Error. Could not save object.',
-                message: 'An error occurred and the object could not be saved.',
-                type: BootstrapDialog.TYPE_DANGER
-            });
+            Charcoal.Admin.feedback().add_data(
+                [{
+                    level: 'An error occurred and the object could not be saved.',
+                    msg: 'error'
+                }]
+            );
+            Charcoal.Admin.feedback().call();
         }
     });
 };

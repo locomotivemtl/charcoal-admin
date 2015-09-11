@@ -74,7 +74,7 @@ abstract class AdminAction extends AbstractAction
         return $this->_feedbacks;
     }
 
-    public function add_feedback($msg, $level = 'info')
+    public function add_feedback($level, $msg)
     {
         $this->_feedbacks[] = [
             'msg'=>$msg,

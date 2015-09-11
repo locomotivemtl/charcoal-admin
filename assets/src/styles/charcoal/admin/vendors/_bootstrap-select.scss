@@ -1,0 +1,14 @@
+// ==========================================================================
+// Bootstrap select
+// ==========================================================================
+.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    width:100%;
+}
+
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+    font-size:16px;
+}
+
+.bootstrap-select > .dropdown-toggle {
+    padding: 12px;
+}

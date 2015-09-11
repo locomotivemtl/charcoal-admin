@@ -94,26 +94,7 @@ td {
     display: flex;
     flex-direction: column;
     height: 100%;
-<<<<<<< HEAD
-    width: 100%;
-    /*
-        &:hover {
-            .btn.-active {
-                &::after {
-                    transform: translateX(calc(-100% - 1px));
-                }
-
-                &:hover {
-                    &::after {
-                        transform: translateX(0);
-                    }
-                }
-            }
-        }
-        */ }
-=======
     width: 100%; }
->>>>>>> Skinned vocal message recording interface
     .o-toolbox_actions .btn-group-vertical > .btn:first-child:not(:last-child) {
       border-top-right-radius: 0; }
   .o-toolbox_actions .btn {
@@ -782,6 +763,15 @@ label {
   .note-editor .note-toolbar {
     margin: 0;
     padding: 0 0 5px 5px; }
+
+.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+  width: 100%; }
+
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+  font-size: 16px; }
+
+.bootstrap-select > .dropdown-toggle {
+  padding: 12px; }
 
 .u-background-blue {
   background-color: #1a252d; }

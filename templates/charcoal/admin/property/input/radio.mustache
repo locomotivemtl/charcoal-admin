@@ -5,19 +5,21 @@ Radio Property Input
 `charcoal/admin/property/input/radio`
 
 --}}
+<div>
 {{#input}}
 {{#choices}}
-	{{label}}
 	<input
-		type="radio" 
-		id="{{input_id}}" 
-		name="{{input_name}}" 
-		class="{{input_class}}" 
+		type="radio"
+		id="{{input_id}}"
+		name="{{input_name}}"
+		class="{{input_class}}"
 		{{#selected}}checked{{/selected}}
-		{{#read_only}}read_only{{/read_only}} 
-		{{#required}}required{{/required}} 
+		{{#read_only}}read_only{{/read_only}}
+		{{#required}}required{{/required}}
 		{{#disabled}}disabled{{/disabled}}
 		value="{{value}}"
 	>
+    <span>{{title}}</span>
 {{/choices}}
 {{/input}}
+</div>

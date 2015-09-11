@@ -15,8 +15,11 @@ Audio Property Input
         </div>
     </div>
     <div class="o-toolbox_content">
-        <div class="o-toolbox_pane js-pane hidden" data-pane="text"></div>
+        <div class="o-toolbox_pane js-pane hidden" data-pane="text">
+            <textarea class="form-control" name="voice_message">{{message.fr}}</textarea>
+        </div>
         <div class="o-toolbox_pane js-pane hidden" data-pane="recording">
+            {{!-- Here be the recording widget --}}
             <div class="c-audio-player -complex">
                 <div class="c-audio-player_wrap">
 
@@ -42,7 +45,9 @@ Audio Property Input
                 <canvas class="c-audio-player_canvas -waves hidden js-recording-waves"></canvas>
             </div>
         </div>
-        <div class="o-toolbox_pane js-pane hidden" data-pane="file"></div>
+        <div class="o-toolbox_pane js-pane hidden" data-pane="file">
+            <input type="file" class="form-control">
+        </div>
     </div>
     {{!
         Input that will contain the actual data

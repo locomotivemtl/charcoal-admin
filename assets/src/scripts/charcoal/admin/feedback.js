@@ -152,5 +152,18 @@ Charcoal.Admin.Feedback.prototype.call = function ()
 
     }
 
+    // Reset
+    this.reset();
+
     return this;
+};
+
+/**
+* Resets the feedback object
+* When you call the feedback, no need to keep it in memory
+* @return this (chainable)
+*/
+Charcoal.Admin.Feedback.prototype.reset = function ()
+{
+    this.msgs = [];
 };

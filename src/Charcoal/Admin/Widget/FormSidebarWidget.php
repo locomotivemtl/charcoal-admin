@@ -5,6 +5,7 @@ namespace Charcoal\Admin\Widget;
 use \Charcoal\Translation\TranslationString;
 
 use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Template\TemplateViewController as TemplateViewController;
 
 class FormSidebarWidget extends AdminWidget
 {
@@ -18,6 +19,11 @@ class FormSidebarWidget extends AdminWidget
     * @var string
     */
     private $_widget_type = 'properties';
+
+    /**
+    * @var Object $_actions
+    */
+    private $_actions;
 
     protected $_sidebar_sidebar_properties = [];
     protected $_priority;
@@ -50,6 +56,9 @@ class FormSidebarWidget extends AdminWidget
         }
         if (isset($data['title'])) {
             $this->set_title($data['title']);
+        }
+        if (isset($data['actions'])) {
+            $this->set_actions($data['actions']);
         }
         return $this;
     }
@@ -92,6 +101,43 @@ class FormSidebarWidget extends AdminWidget
         }
     }
 
+    /**
+    * Defined the form actions
+    * @param Object $actions
+    * @return FormGroupWidget Chainable
+    */
+    public function set_actions($actions)
+    {
+        if (!$actions) {
+            return $this;
+        }
+        $this->_actions = [];
+
+        foreach ($actions as $ident => $action) {
+            if (!isset($action['url']) || !isset($action['label'])) {
+                continue;
+            }
+            $label = new TranslationString($action['label']);
+            $url = $action['url'];
+            // Info = default
+            // Possible: danger, info
+            $btn = isset( $action['type'] ) ? $action['type'] : 'info';
+            $this->_actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn ];
+        }
+
+        return $this;
+    }
+
+    /**
+    * Returns the actions as an ArrayIterator
+    * [ ['label' => $label, 'url' => $url] ]
+    * @see $this->set_actions()
+    * @return object actions
+    */
+    public function actions()
+    {
+        return $this->_actions;
+    }
 
     /**
     * @var integer $priority

@@ -156,26 +156,90 @@ Display the "home" dashboard.
                 {{>charcoal/admin/widget/wysiwyg}}
             </section>
 
-            <div class="o-toolbox -left">
-                <div class="o-toolbox_actions">
-                    <div class="btn-group-vertical" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default -active"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
-                        <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
-                        <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
-                        <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
+            <section class="o-section">
+                <div class="o-toolbox -left">
+                    <div class="o-toolbox_actions">
+                        <div class="btn-group-vertical" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default -active"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
+                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
+                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
+                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
+                        </div>
+                    </div>
+                    <div class="o-toolbox_content c-map-maker">
+                        <div class="c-map-maker_header">
+                            <label class="c-map-maker_label" for="c-map-maker-search">Adresse</label>
+                            <input class="c-map-maker_input form-control" id="c-map-maker-search" type="text">
+                             <button type="button" class="c-map-maker_btn btn btn-lg btn-info" data-toggle="modal" data-target="#myModal">
+                                Sauvegarder
+                            </button>
+                        </div>
+                        <div class="c-map-maker_map js-map-maker-map"></div>
                     </div>
                 </div>
-                <div class="o-toolbox_content c-map-maker">
-                    <div class="c-map-maker_header">
-                        <label class="c-map-maker_label" for="c-map-maker-search">Adresse</label>
-                        <input class="c-map-maker_input form-control" id="c-map-maker-search" type="text">
-                         <button type="button" class="c-map-maker_btn btn btn-lg btn-info" data-toggle="modal" data-target="#myModal">
-                            Sauvegarder
-                        </button>
+            </section>
+
+             <section class="o-section">
+                <div class="table-header clearfix">
+                    <div class="pull-left">
+                        <strong>Utilisateurs</strong>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">Actions</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="c-map-maker_map js-map-maker-map"></div>
                 </div>
-            </div>
+
+                <div class="module">
+                    <div class="module__stats col-md-5">
+                        <div class="stats">
+                            <div class="stats__title">24567</div>
+
+                            <div class="stats__info">
+                                <div class="stats__bar">
+                                    <div class="stats__progress" style="width:10%"></div>
+                                </div>
+                                <span class="stats__text -left">1 heures</span>
+                                <span class="stats__text -right">0</span>
+                            </div>
+                            <div class="stats__info">
+                                <div class="stats__bar">
+                                    <div class="stats__progress" style="width:16%"></div>
+                                </div>
+                                <span class="stats__text -left">24 heures</span>
+                                <span class="stats__text -right">24 heures</span>
+                            </div>
+                            <div class="stats__info">
+                                <div class="stats__bar">
+                                    <div class="stats__progress" style="width:26%"></div>
+                                </div>
+                                <span class="stats__text -left">7 jours</span>
+                                <span class="stats__text -right">7 jours</span>
+                            </div>
+                            <div class="stats__info">
+                                <div class="stats__bar">
+                                    <div class="stats__progress" style="width:100%"></div>
+                                </div>
+                                <span class="stats__text -left">30 jours</span>
+                                <span class="stats__text -right">30 jours</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="module__graph col-md-7">
+                        <img src="http://i.imgur.com/WPfaCof.png" alt="">
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 

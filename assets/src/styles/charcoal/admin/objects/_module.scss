@@ -1,0 +1,27 @@
+// ==========================================================================
+// Module
+// ==========================================================================
+.module {
+    border:1px solid $gray-light;
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    img {
+        max-width:100%;
+    }
+
+}
+
+.module__stats {
+    padding:20px;
+     border-right:1px solid  $gray-light;
+}
+
+.module__graph {
+    padding:20px;
+
+}

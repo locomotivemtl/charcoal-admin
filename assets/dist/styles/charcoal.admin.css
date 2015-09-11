@@ -162,6 +162,22 @@ td {
   transition: fill 0.5s;
   width: 1.5625rem; }
 
+.module {
+  border: 1px solid #cccccc; }
+  .module:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .module img {
+    max-width: 100%; }
+
+.module__stats {
+  padding: 20px;
+  border-right: 1px solid #cccccc; }
+
+.module__graph {
+  padding: 20px; }
+
 .c-header-main {
   background-color: #1a252d;
   position: fixed;
@@ -724,6 +740,34 @@ td {
 .c-map-maker_input {
   display: inline-block;
   width: calc(100% - 242px); }
+
+.stats__title {
+  font-size: 6.25rem;
+  font-weight: 100; }
+
+.stats__bar {
+  height: 0.375rem;
+  width: 100%;
+  background-color: #cccccc; }
+
+.stats__progress {
+  height: 0.375rem;
+  background-color: #3498db; }
+
+.stats__info {
+  margin-bottom: 0.9375rem; }
+  .stats__info:after {
+    content: "";
+    display: table;
+    clear: both; }
+
+.stats__text {
+  margin-top: 0.3125rem;
+  display: block; }
+  .stats__text.-left {
+    float: left; }
+  .stats__text.-right {
+    float: right; }
 
 input[type="file"]:focus,
 input[type="radio"]:focus,

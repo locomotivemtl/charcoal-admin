@@ -8,5 +8,19 @@ use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 class AudioInput extends AbstractPropertyInput
 {
+    private $message;
+    private $audio_data;
+    private $audio_file;
 
+    public function set_message($message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
+    public function message()
+    {
+        var_dump($this->message);
+        return $this->message;
+    }
 }

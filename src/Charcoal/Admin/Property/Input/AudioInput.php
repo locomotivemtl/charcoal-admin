@@ -20,7 +20,7 @@ class AudioInput extends AbstractPropertyInput
 
     public function message()
     {
-        var_dump($this->message);
+        // var_dump($this->message);
         return $this->message;
     }
 }

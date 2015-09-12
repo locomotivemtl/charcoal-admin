@@ -120,8 +120,11 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
     this.controller().init().ready(
         function (ctrl) {
             ctrl.fit_bounds();
+            ctrl.remove_focus();
         }
     );
+
+    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
 
     this.controller().remove_focus();
 

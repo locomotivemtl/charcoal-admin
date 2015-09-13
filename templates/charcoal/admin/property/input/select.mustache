@@ -15,7 +15,7 @@ Display a property as a select with "choices".
     {{#header}}data-header="Test"{{/header}}
 >
     {{#choices}}
-    <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}">
+    <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}" {{#selected}}selected{{/selected}}>
         {{title}}
     </option>
     {{/choices}}

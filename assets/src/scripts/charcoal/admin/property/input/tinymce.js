@@ -161,6 +161,12 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
     this.editor_options = $.extend({}, default_opts, this.editor_options);
     this.editor_options.selector = '#' + this.input_id;
 
+    this.editor_options.setup = function (editor) {
+        editor.on('change', function () {
+            window.tinymce.triggerSave();
+        });
+    };
+
     return this;
 };
 

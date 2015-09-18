@@ -161,7 +161,6 @@ trait CollectionContainerTrait
     public function objects()
     {
         $collection = $this->collection();
-        //var_dump($this->collection()->objects());
         return $this->collection()->objects();
     }
 

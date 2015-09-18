@@ -12,6 +12,7 @@ use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 use \Charcoal\Admin\Ui\DashboardContainerInterface as DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait as DashboardContainerTrait;
 use \Charcoal\Admin\Widget\DashboardWidget as Dashboard;
+use \Charcoal\Widget\WidgetFactory;
 
 
 // Local parent namespace dependencies
@@ -32,7 +33,7 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         $obj = $this->proto();
         if ($obj->source()->table_exists() === false) {
             $obj->source()->create_table();
-            $this->add_feedback('A new table was created for object.');
+            $this->add_feedback('success', 'A new table was created for object.');
         }
 
     }
@@ -101,6 +102,41 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     public function create_collection_config($config_data = null)
     {
 
+    }
+
+    /**
+    * Sets the search widget accodingly
+    * Uses the "default_search_list" ident that should point
+    * on ident in the "lists"
+    *
+    * @see charcoal/admin/widget/search
+    * @return widget
+    */
+    public function search_widget()
+    {
+        $widget = WidgetFactory::instance()->create('charcoal/admin/widget/search');
+        $widget->set_obj_type( $this->obj_type() );
+
+        $obj = $this->proto();
+        $metadata = $obj->metadata();
+
+        $admin_metadata = $metadata['admin'];
+        $lists = $admin_metadata['lists'];
+
+        $list_ident = ( isset($admin_metadata['default_search_list']) ) ? $admin_metadata['default_search_list'] : '';
+
+        if (!$list_ident) {
+            $list_ident = ( isset($admin_metadata['default_list']) ) ? $admin_metadata['default_list'] : '';
+        }
+
+        if (!$list_ident) {
+            $list_ident = 'default';
+        }
+
+        // Note that if the ident doesn't match a list,
+        // it will return basicly every properties of the object
+        $widget->set_collection_ident( $list_ident );
+        return $widget;
     }
 
 }

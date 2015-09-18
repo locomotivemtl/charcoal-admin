@@ -1,0 +1,28 @@
+
+<div class="o-container_aside" id="{{widget_id}}">
+    <div class="input-group">
+        <input type="text" class="form-control input-sm" placeholder="Rechercher">
+            <span class="input-group-btn">
+            <button class="btn btn-default input-sm" type="button">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </span>
+    </div>
+</div>
+
+{{json_properties_list}}
+
+{{#add_js}}
+<script>
+Charcoal.Admin.manager().add_widget({
+    id: '{{widget_id}}',
+    type: 'charcoal/admin/widget/search',
+    data: {
+        obj_type: '{{obj_type}}',
+        list: {{&json_properties_list}}
+    }
+});
+</script>
+{{/add_js}}
+
+

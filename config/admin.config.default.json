@@ -35,7 +35,8 @@
 
             "alert/send-test-email":{},
             "alert/send-test-sms":{},
-            "alert/send-test-voice":{}
+            "alert/send-test-voice":{},
+            "alert/send":{}
         },
         "default_action":null,
         "cli_actions":{

@@ -211,7 +211,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         return [
             [
-                'label' => 'Create New',
+                'label' => 'Créer un nouveau',
                 'ident' => 'create',
                 'url' => $this->object_edit_url()
             ]/*,

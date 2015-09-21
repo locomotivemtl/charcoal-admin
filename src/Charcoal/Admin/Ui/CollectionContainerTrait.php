@@ -182,8 +182,17 @@ trait CollectionContainerTrait
             $object_properties = [];
 
             foreach ($sorted_properties as $property_ident => $property_data) {
-                $property_value = $object->property($property_ident)->val();
+                $property = $object->property($property_ident);
+                $property_value = $property->val();
 
+                if ($property->l10n() === true) {
+                    $property_value = $property_value['fr'];
+                }
+                if ($property->multiple() === true) {
+                    if (is_array($property_value)) {
+                        $property_value = implode(',', $property_value);
+                    }
+                }
                 $object_properties[] = [
                     'ident' => $property_ident,
                     'val'   => $property_value

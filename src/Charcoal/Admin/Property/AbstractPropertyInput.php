@@ -237,12 +237,18 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     {
         $prop = $this->p();
         $val = $prop->val();
+
         if ($val === null) {
             return '';
         }
 
         if ($prop->l10n()) {
-            return $val['fr'];
+            if (isset($val['fr'])) {
+                return $val['fr'];
+            } else {
+                return $val;
+            }
+
         }
 
         if (!is_scalar($val)) {

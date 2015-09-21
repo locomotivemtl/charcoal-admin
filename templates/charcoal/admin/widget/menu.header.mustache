@@ -16,7 +16,7 @@ Header menu Widget
     </a>
     {{#show_header_menu}}
     <button class="c-header-main_user js-toggle-class" type="button" data-target="body" data-class="has-nav-user">
-        <span class="c-header-main_user_name">Ville de Sainte-Julie</span>
+        <span class="c-header-main_user_name">Bienvenue sur memo</span>
         <span class="c-header-main_user_icon">
             <span class="c-header-main_user_icon_dot"></span>
             <span class="c-header-main_user_icon_dot"></span>
@@ -44,7 +44,7 @@ Header menu Widget
         </div>
         <div class="c-nav-user_info">
             <span class="c-nav-user_name">
-                Alerte Sainte-Julie
+                Memo
             </span>
             <a class="c-nav-user_link" href="#">
                 Mon compte
@@ -81,9 +81,18 @@ Header menu Widget
         </li>
         <li class="c-nav_list_item">
             <div class="c-nav_list_header">
-                <a class="c-nav_list_link" href="#">
+                <a class="c-nav_list_link" href="{{base_url}}admin/messaging/send-sms">
                     <span class="c-nav_list_link_text">
-                        SMS text
+                        Tester les SMS
+                    </span>
+                </a>
+            </div>
+        </li>
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header">
+                <a class="c-nav_list_link" href="{{base_url}}admin/messaging/send-voice">
+                    <span class="c-nav_list_link_text">
+                        Tester les messages vocaux
                     </span>
                 </a>
             </div>
@@ -98,14 +107,6 @@ Header menu Widget
             </div>
         </li>
         <li class="c-nav_list_item">
-            <div class="c-nav_list_header">
-                <a class="c-nav_list_link" href="#">
-                    <span class="c-nav_list_link_text">
-                        Clear cache
-                    </span>
-                </a>
-            </div>
-        </li>
     </ul>
     <button type="button" class="btn btn-danger">Déconnexion</button>
 </nav>

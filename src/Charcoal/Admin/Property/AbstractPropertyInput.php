@@ -243,11 +243,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         }
 
         if ($prop->l10n()) {
-
-            if(isset($val['fr'])) {
+            if (isset($val['fr'])) {
                 return $val['fr'];
-            }
-            else {
+            } else {
                 return $val;
             }
 

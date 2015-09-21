@@ -76,7 +76,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
             {{/show_table_header}}
 
             <tbody>
-                {{!-- Loop the list objects --}}
+                {{!-- Loop the list objects (from CollectionContainerTrait) --}}
                 {{#object_rows}}
 
                 <tr class="js-table-row" data-id="{{object_id}}">

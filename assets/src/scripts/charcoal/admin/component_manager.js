@@ -45,7 +45,6 @@ Charcoal.Admin.ComponentManager.prototype.add_component = function (component_ty
     } else {
         console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
     }
-
 };
 
 /**
@@ -63,6 +62,16 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
             try {
                 var component = new Charcoal.Admin[component_data.ident](component_data);
                 this.components[component_type][i] = component;
+
+                // Automatic supra class call
+                switch (component_type) {
+                    case 'widgets' :
+                        // Automatic call on superclass
+                        Charcoal.Admin.Widget.call(component, component_data);
+                        component.init();
+                    break;
+                }
+
             } catch (error) {
                 console.error('Was not able to instanciate ' + component_data.ident);
                 console.error(error);

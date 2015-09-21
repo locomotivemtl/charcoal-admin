@@ -9,7 +9,7 @@
 * @param  {Object}  opts Options for widget
 */
 
-Charcoal.Admin.Widget_Table = function (opts)
+Charcoal.Admin.Widget_Table = function ()
 {
     this.widget_type = 'charcoal/admin/widget/table';
 
@@ -27,15 +27,24 @@ Charcoal.Admin.Widget_Table = function (opts)
     };
     this.table_rows = [];
 
-    this.set_properties(opts).create_rows().bind_events();
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Table.prototype.constructor = Charcoal.Admin.Widget_Table;
 Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
 
-Charcoal.Admin.Widget_Table.prototype.set_properties = function (opts)
+/**
+* Necessary for a widget.
+*/
+Charcoal.Admin.Widget_Table.prototype.init = function ()
 {
+    this.set_properties().create_rows().bind_events();
+};
+
+Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
+{
+    var opts = this.opts();
+
     this.obj_type = opts.data.obj_type || this.obj_type;
     this.widget_id = opts.id || this.widget_id;
     this.table_selector = '#' + this.widget_id;
@@ -44,6 +53,9 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function (opts)
     this.filters = opts.data.filters || this.filters;
     this.orders = opts.data.orders || this.orders;
     this.pagination = opts.data.pagination || this.pagination;
+
+    // @todo remove the hardcoded shit
+    this.collection_ident = opts.data.collection_ident || 'default';
 
     return this;
 };
@@ -144,6 +156,46 @@ Charcoal.Admin.Widget_Table.prototype.sublist = function ()
     return ret;
 };
 
+/**
+* As it says, it ADDs a filter to the already existing list
+* @param object
+* @return this chainable
+* @see set_filters
+*/
+Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
+{
+    var filters = this.get_filters();
+
+    // Null by default
+    // When you add a filter, you want it to be
+    // in an object
+    if (filters === null) {
+        filters = {};
+    }
+
+    filters = $.extend(filters, filter);
+    this.set_filters(filters);
+
+    return this;
+};
+
+/**
+* This will overwrite existing filters
+*/
+Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters)
+{
+    this.filters = filters;
+};
+
+/**
+* Getter
+* @return {Object | null} filters
+*/
+Charcoal.Admin.Widget_Table.prototype.get_filters = function ()
+{
+    return this.filters;
+};
+
 Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 {
     return {
@@ -152,34 +204,29 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
         properties_options: this.properties_options,
         filters:    this.filters,
         orders:     this.orders,
-        pagination: this.pagination
+        pagination: this.pagination,
+        collection_ident: this.collection_ident
     };
 };
 
-/*
-Charcoal.Admin.Widget_Table.prototype.reload = function ()
+/**
+*
+*/
+Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
 {
-    var that = this,
-        url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
-        data = {
-            widget_type:    that.widget_type,
-            widget_options: that.widget_options()
-        };
-
-    $.post(url, data, function (response) {
-        //console.debug(that.elem_id);
-        if (response.success && response.widget_html) {
-            //console.debug(response.widget_html);
-            $('#' + that.widget_id).replaceWith(response.widget_html);
-            that.widget_id = response.widget_id;
-            // Rebind events
-            that.bind_events();
+    var callback = function (response)
+    {
+        if (typeof cb === 'function') {
+            cb(response);
         }
+    };
 
-    });
+    // Call supra class
+    Charcoal.Admin.Widget.prototype.reload.call(this, callback);
+
+    return this;
 
 };
-*/
 
 /**
 * Table_Row object

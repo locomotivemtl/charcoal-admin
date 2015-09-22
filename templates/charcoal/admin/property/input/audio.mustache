@@ -16,7 +16,7 @@ Audio Property Input
     </div>
     <div class="o-toolbox_content">
         <div class="o-toolbox_pane js-pane hidden" data-pane="text">
-            <textarea class="form-control" name="voice_message" style="height:100%;" name="voice_message">{{voice_message}}</textarea>
+            <textarea class="form-control -norounded -noborder js-text-focus" name="voice_message" style="height:100%;" name="voice_message">{{voice_message}}</textarea>
         </div>
         <div class="o-toolbox_pane js-pane hidden" data-pane="recording">
             {{!-- Here be the recording widget --}}
@@ -67,7 +67,7 @@ Charcoal.Admin.manager().add_property_input({
     id: '{{input_id}}',
     type: 'charcoal/admin/property/input/audio',
     data: {
-        active_pane: 'text',
+        active_pane: 'recording',
         hidden_input_id: 'hidden_{{input_id}}'
     }
 });

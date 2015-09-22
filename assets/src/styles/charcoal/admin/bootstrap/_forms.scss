@@ -23,4 +23,12 @@ label {
     &:focus {
         box-shadow: none;
     }
+
+    &.-norounded {
+        border-radius: 0;
+    }
+
+    &.-noborder {
+        border: none;
+    }
 }

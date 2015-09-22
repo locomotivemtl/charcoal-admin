@@ -1,0 +1,22 @@
+{{!--
+File Property Input
+===================
+
+`charcoal/admin/property/input/image`
+
+--}}
+
+{{#input_val}}
+    <img src="{{base_url}}{{input_val}}" style="max-width: 100%">
+    <input type="hidden" value="{{input_val}}" name="{{input_name}}">
+{{/input_val}}
+<input
+    type="file"
+    id="{{input_id}}"
+    name="{{input_name}}"
+    class="{{input_class}}"
+    {{#accept}}accept="{{accept}}"{{/accept}}
+    {{#read_only}}read_only{{/read_only}}
+    {{#required}}required{{/required}}
+    {{#disabled}}disabled{{/disabled}}
+>

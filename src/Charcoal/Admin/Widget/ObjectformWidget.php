@@ -13,7 +13,7 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
 /**
 *
 */
-class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
+class ObjectformWidget extends FormWidget implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 

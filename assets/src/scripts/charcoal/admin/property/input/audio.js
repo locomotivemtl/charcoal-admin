@@ -53,7 +53,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
     // Text properties
     // ====================
     // Elements
-    this.text_properties.$focusable_input = $('.js-text-focus', this.element());
+    this.text_properties.$voice_message = $('.js-text-voice-message', this.element());
 
     // Recording properties
     // ====================
@@ -144,7 +144,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
         }
     }
 
-
     return this;
 };
 
@@ -167,7 +166,39 @@ Charcoal.Admin.Property_Input_Audio.prototype.prepare_pane = function (pane)
  * Mainly allows us to target focus to the textarea
  */
 Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
-    this.text_properties.$focusable_input.focus();
+
+    // Don't reinitialized this pane
+    if (this.initialized_types.indexOf('text') !== -1) {
+        return;
+    }
+
+    this.initialized_types.push('recording');
+
+    var message = this.text_properties.$voice_message.val();
+
+    message = this.text_strip_tags(message);
+
+    this.text_properties.$voice_message.val(message);
+
+};
+
+/**
+ * @see http://phpjs.org/functions/strip_tags/
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input, allowed) {
+
+    allowed = (((allowed || '') + '')
+        .toLowerCase()
+        .match(/<[a-z][a-z0-9]*>/g) || [])
+        .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+
+    var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+        commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+
+    return input.replace(commentsAndPhpTags, '')
+        .replace(tags, function ($0, $1) {
+            return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
+        });
 };
 
 /**

@@ -9,14 +9,14 @@ Audio Property Input
 <div class="o-toolbox -small -left" id="{{input_id}}">
     <div class="o-toolbox_actions">
         <div class="btn-group-vertical">
-            <button type="button" class="btn btn-default js-toggle-pane" data-pane="text"><svg class="o-toolbox_icon" role="img" title="Enter text"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-text"></use></svg></button>
+            <label for="voice_message_input_{{input_id}}" class="btn btn-default js-toggle-pane" data-pane="text"><svg class="o-toolbox_icon" role="img" title="Enter text"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-text"></use></svg></label>
             <button type="button" class="btn btn-default js-toggle-pane" data-pane="recording"><svg class="o-toolbox_icon" role="img" title="Record a message"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-microphone"></use></svg></button>
             <button type="button" class="btn btn-default js-toggle-pane" data-pane="file"><svg class="o-toolbox_icon" role="img" title="Use an audio file"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-file"></use></svg></button>
         </div>
     </div>
     <div class="o-toolbox_content">
         <div class="o-toolbox_pane js-pane hidden" data-pane="text">
-            <textarea class="form-control -norounded -noborder js-text-focus" name="voice_message" style="height:100%;" name="voice_message[fr]">{{alert.voice_message.fr}}</textarea>
+            <textarea id="voice_message_input_{{input_id}}" class="form-control -norounded -noborder js-text-voice-message" name="voice_message" style="height:100%;" name="voice_message[fr]">{{alert.voice_message.fr}}</textarea>
         </div>
         <div class="o-toolbox_pane js-pane hidden" data-pane="recording">
             {{!-- Here be the recording widget --}}
@@ -46,7 +46,13 @@ Audio Property Input
             </div>
         </div>
         <div class="o-toolbox_pane js-pane hidden" data-pane="file">
+            {{#alert.voice_audio}}
+            <audio src="/{{alert.voice_audio}}" controls>
+            {{/alert.voice_audio}}
+            {{^alert.voice_audio}}
             <input type="file" name="voice_audio" class="form-control">
+            {{/alert.voice_audio}}
+
         </div>
     </div>
     {{!
@@ -67,7 +73,7 @@ Charcoal.Admin.manager().add_property_input({
     id: '{{input_id}}',
     type: 'charcoal/admin/property/input/audio',
     data: {
-        active_pane: 'recording',
+        active_pane: 'text',
         hidden_input_id: 'hidden_{{input_id}}'
     }
 });

@@ -144,7 +144,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
         }
     }
 
-
     return this;
 };
 
@@ -161,13 +160,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.prepare_pane = function (pane)
     if (typeof(check_function) === 'function') {
         this[function_name]();
     }
-};
-
-/**
- * Mainly allows us to target focus to the textarea
- */
-Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
-    this.text_properties.$focusable_input.focus();
 };
 
 /**

@@ -178,7 +178,6 @@ class FormWidget extends AdminWidget
     */
     public function next_url()
     {
-        var_dump($this->_next_url);
         return $this->_next_url;
     }
 

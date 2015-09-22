@@ -1,5 +1,5 @@
 {
 	"admin":{
-		"input_type":"charcoal/admin/property/input/file"
+		"input_type":"charcoal/admin/property/input/image"
 	}
 }

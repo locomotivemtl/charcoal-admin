@@ -89,7 +89,8 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     {{#show_object_actions}}
                     <td>
                         <div class="btn-group">
-                            <a href="{{object_edit_url}}&amp;obj_id={{object_id}}" class="btn btn-primary">Edit</a>
+                            <a href="{{object_edit_url}}&amp;obj_id={{object_id}}" class="btn btn-primary">Modifier</a>
+                        {{#has_object_actions}}
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -99,6 +100,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                                 <li><a class="js-obj-{{ident}}" href="#">{{label}}</a></li>
                                 {{/object_actions}}
                             </ul>
+                        {{/has_object_actions}}
                         </div>
                     </td>
                     {{/show_object_actions}}

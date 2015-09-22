@@ -186,22 +186,31 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function object_actions()
     {
         return [
-            [
-                'label' => 'Quick Edit',
-                'ident' => 'quick-edit',
-                'is_button' => true
-            ],
-            [
-                'label' => 'Inline Edit',
-                'ident' => 'inline-edit',
-                'is_button' => true
-            ],
-            [
-                'label' => 'Delete',
-                'ident' => 'delete',
-                'is_button' => true
-            ]
+            // [
+            //     'label' => 'Quick Edit',
+            //     'ident' => 'quick-edit',
+            //     'is_button' => true
+            // ],
+            // [
+            //     'label' => 'Inline Edit',
+            //     'ident' => 'inline-edit',
+            //     'is_button' => true
+            // ],
+            // [
+            //     'label' => 'Delete',
+            //     'ident' => 'delete',
+            //     'is_button' => true
+            // ]
         ];
+    }
+
+    /**
+    * @return boolean
+    */
+    public function has_object_actions()
+    {
+        $actions = $this->object_actions();
+        return (count($actions) > 0);
     }
 
     /**

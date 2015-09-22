@@ -2076,9 +2076,10 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 };
 ;/**
 * charcoal/admin/widget
-*/
-
-/**
+* This should be the base for all widgets
+* It is still possible to add a widget without passing
+* throught this class, but not suggested
+*
 * Interface:
 * ## Setters
 * - `set_opts`
@@ -2229,13 +2230,13 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
     $.post(url, data, function (response) {
         if (typeof response.widget_id === 'string') {
             that.set_id(response.widget_id);
-            that.element().addClass('fade').addClass('out');
+            that.element().fadeOut();
             setTimeout(function () {
                 that.element().replaceWith(response.widget_html);
                 that.set_element($('#' + that.id()));
 
                 // Pure dompe.
-                that.element().addClass('invisible').addClass('fade').addClass('in').removeClass('invisible');
+                that.element().hide().fadeIn();
                 that.init();
             }, 600);
         }
@@ -2456,7 +2457,11 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
     // Dumb loop
     for (; i < total; i++) {
         var single_filter = {};
-        single_filter[ properties[i] ] = val;
+        single_filter[ properties[i] ] = {};
+        single_filter[ properties[i] ].val = val;
+        single_filter[ properties[i] ].property = properties[i];
+        single_filter[ properties[i] ].operator = '=';
+
         widget.add_filter(single_filter);
     }
 
@@ -2483,10 +2488,10 @@ Charcoal.Admin.Widget_Table = function ()
     this.obj_type = null;
     this.widget_id = null;
     this.table_selector = null;
-    this.properties = null;
+    // this.properties = null;
     this.properties_options = null;
     this.filters = null;
-    this.orders = null;
+    this.orders = [];
     this.pagination = {
         page: 1,
         num_per_page: 50
@@ -2666,11 +2671,13 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 {
     return {
         obj_type:   this.obj_type,
-        properties: this.properties,
-        properties_options: this.properties_options,
-        filters:    this.filters,
-        orders:     this.orders,
-        pagination: this.pagination,
+        collection_config: {
+            properties: this.properties,
+            properties_options: this.properties_options,
+            filters:    this.filters,
+            orders:     this.orders,
+            pagination: this.pagination
+        },
         collection_ident: this.collection_ident
     };
 };
@@ -2798,6 +2805,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
         });
     }
 };
+
 ;Charcoal.Admin.Widget_Wysiwyg = function ()
 {
     $('.js-wysiwyg').summernote({

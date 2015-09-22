@@ -1,8 +1,9 @@
 /**
 * charcoal/admin/widget
-*/
-
-/**
+* This should be the base for all widgets
+* It is still possible to add a widget without passing
+* throught this class, but not suggested
+*
 * Interface:
 * ## Setters
 * - `set_opts`
@@ -153,13 +154,13 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
     $.post(url, data, function (response) {
         if (typeof response.widget_id === 'string') {
             that.set_id(response.widget_id);
-            that.element().addClass('fade').addClass('out');
+            that.element().fadeOut();
             setTimeout(function () {
                 that.element().replaceWith(response.widget_html);
                 that.set_element($('#' + that.id()));
 
                 // Pure dompe.
-                that.element().addClass('invisible').addClass('fade').addClass('in').removeClass('invisible');
+                that.element().hide().fadeIn();
                 that.init();
             }, 600);
         }

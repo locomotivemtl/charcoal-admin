@@ -17,10 +17,10 @@ Charcoal.Admin.Widget_Table = function ()
     this.obj_type = null;
     this.widget_id = null;
     this.table_selector = null;
-    this.properties = null;
+    // this.properties = null;
     this.properties_options = null;
     this.filters = null;
-    this.orders = null;
+    this.orders = [];
     this.pagination = {
         page: 1,
         num_per_page: 50
@@ -200,11 +200,13 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 {
     return {
         obj_type:   this.obj_type,
-        properties: this.properties,
-        properties_options: this.properties_options,
-        filters:    this.filters,
-        orders:     this.orders,
-        pagination: this.pagination,
+        collection_config: {
+            properties: this.properties,
+            properties_options: this.properties_options,
+            filters:    this.filters,
+            orders:     this.orders,
+            pagination: this.pagination
+        },
         collection_ident: this.collection_ident
     };
 };
@@ -332,3 +334,4 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
         });
     }
 };
+

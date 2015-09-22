@@ -103,7 +103,11 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
     // Dumb loop
     for (; i < total; i++) {
         var single_filter = {};
-        single_filter[ properties[i] ] = val;
+        single_filter[ properties[i] ] = {};
+        single_filter[ properties[i] ].val = val;
+        single_filter[ properties[i] ].property = properties[i];
+        single_filter[ properties[i] ].operator = '=';
+
         widget.add_filter(single_filter);
     }
 

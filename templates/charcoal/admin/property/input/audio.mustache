@@ -46,7 +46,13 @@ Audio Property Input
             </div>
         </div>
         <div class="o-toolbox_pane js-pane hidden" data-pane="file">
+            {{#alert.voice_audio}}
+            <audio src="/{{alert.voice_audio}}" controls>
+            {{/alert.voice_audio}}
+            {{^alert.voice_audio}}
             <input type="file" name="voice_audio" class="form-control">
+            {{/alert.voice_audio}}
+
         </div>
     </div>
     {{!
@@ -67,7 +73,7 @@ Charcoal.Admin.manager().add_property_input({
     id: '{{input_id}}',
     type: 'charcoal/admin/property/input/audio',
     data: {
-        active_pane: 'recording',
+        active_pane: 'text',
         hidden_input_id: 'hidden_{{input_id}}'
     }
 });

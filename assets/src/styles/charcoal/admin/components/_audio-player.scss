@@ -9,9 +9,8 @@
 }
 
 .c-audio-player_wrap {
+    height: 100%;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     z-index: 3;
 }
 
@@ -25,7 +24,6 @@
     width: 100%;
     z-index: 0;
 }
-
 
 .c-audio-player_button {
     background-color: $gray-light;
@@ -49,6 +47,35 @@
 
         .glyphicon {
             color: $gray;
+        }
+    }
+
+    // Button placement
+    @media (min-width: $from-medium) {
+        .-complex & {
+            position: absolute;
+
+            &.-record,
+            &.-stop {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            &.-record {
+                left: rem(160px);
+            }
+            &.-stop {
+                left: rem(90px);
+            }
+            &.-playback,
+            &.-reset {
+                left: rem(110px);
+            }
+            &.-playback {
+                top: 25%;
+            }
+            &.-reset {
+                bottom: 25%;
+            }
         }
     }
 
@@ -106,5 +133,13 @@
     .-complex & {
         font-size: rem(100px);
         width: auto;
+
+        // Button placement
+        @media (min-width: $from-medium) {
+            left: rem(310px);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
     }
 }

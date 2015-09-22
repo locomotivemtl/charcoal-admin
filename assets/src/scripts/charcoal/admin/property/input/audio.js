@@ -17,9 +17,12 @@ Charcoal.Admin.Property_Input_Audio = function (data)
     Charcoal.Admin.Property.call(this, data);
 
     // Properties for each audio type
-    this.textProperties       = {};
+    this.text_properties       = {};
     this.recording_properties = {};
     this.file_properties      = {};
+
+    // Types that have been initialized
+    this.initialized_types = [];
 
     // Navigation
     this.active_pane = data.data.active_pane || 'text';
@@ -49,6 +52,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
 
     // Text properties
     // ====================
+    // Elements
+    this.text_properties.$focusable_input = $('.js-text-focus', this.element());
 
     // Recording properties
     // ====================
@@ -88,13 +93,25 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
     // Set active nav and bind listeners for controls.
     this.set_nav(this.active_pane).bind_nav_controls();
 
-    // Enable audio recording
-    this.init_recording();
-
 };
 
 /**
- * Set active pane
+ * Create tabular navigation
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.bind_nav_controls = function ()
+{
+    // Scope
+    var that = this;
+
+    this.element().on('click', '.js-toggle-pane', function ()
+    {
+        var $toggle = $(this);
+        that.set_nav($toggle.attr('data-pane'));
+    });
+};
+
+/**
+ * Display active pane
  * @param   {Object}          $toggle  Pane toggle button (jQuery Object)
  * @param   {String}          pane     Ident of pane to activate
  * @return  {ThisExpression}
@@ -121,32 +138,51 @@ Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
             // Show one
             $pane.removeClass('hidden');
             $pane.addClass('-active');
+
+            // Activate the pane's content
+            this.prepare_pane(pane);
         }
     }
+
 
     return this;
 };
 
 /**
- * Create tabular navigation
+ * Prepare pane content on its first display
+ * @param  {String}  pane  Ident of pane to activate
  */
-Charcoal.Admin.Property_Input_Audio.prototype.bind_nav_controls = function ()
+Charcoal.Admin.Property_Input_Audio.prototype.prepare_pane = function (pane)
 {
-    // Scope
-    var that = this;
+    var function_name = 'init_' + pane,
+        check_function = Charcoal.Admin.Property_Input_Audio.prototype[function_name];
 
-    this.element().on('click', '.js-toggle-pane', function ()
-    {
-        var $toggle = $(this);
-        that.set_nav($toggle.attr('data-pane'));
-    });
+    // Magic init of a pane if a function exists for the pane param
+    if (typeof(check_function) === 'function') {
+        this[function_name]();
+    }
+};
+
+/**
+ * Mainly allows us to target focus to the textarea
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
+    this.text_properties.$focusable_input.focus();
 };
 
 /**
  * Check for browser capabilities
  */
 Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function () {
+
+    // Don't reinitialized this pane
+    if (this.initialized_types.indexOf('recording') !== -1) {
+        return;
+    }
+
     var that = this;
+
+    that.initialized_types.push('recording');
 
     if (!window.navigator.getUserMedia){
         window.navigator.getUserMedia =

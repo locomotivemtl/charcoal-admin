@@ -18,6 +18,7 @@
             "alert/create":{},
             "alert/test":{},
             "alert/send":{},
+            "alert/sent-stats":{},
             "alert/create":{}
         },
         "default_view":"home",

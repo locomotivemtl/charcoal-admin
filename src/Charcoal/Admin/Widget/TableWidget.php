@@ -205,6 +205,15 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
+    * @return boolean
+    */
+    public function has_object_actions()
+    {
+        $actions = $this->object_actions();
+        return (count($actions) > 0);
+    }
+
+    /**
     * @return array
     */
     public function list_actions()

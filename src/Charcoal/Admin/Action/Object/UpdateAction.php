@@ -60,9 +60,15 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
         //parent::set_data($data);
         $this->set_obj_data($data);
 
+        if (isset($data['next_url'])) {
+            $this->set_next_url($data['next_url']);
+            unset($data['next_url']);
+        }
+
         unset($data['obj_type']);
         unset($data['obj_id']);
         $this->set_update_data($data);
+
 
         return $this;
     }
@@ -101,7 +107,8 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
         try {
-            $this->set_data($request->getParams());
+            $params = $request->getParams();
+            $this->set_data($params);
 
             // Load (or reload) object (From `ObjectContainerTrait`)
             $obj = $this->load_obj();
@@ -148,7 +155,8 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
             'success'=>$this->success(),
             'obj_id'=>$this->obj()->id(),
             'obj'=>$this->obj(),
-            'feedbacks'=>$this->feedbacks()
+            'feedbacks'=>$this->feedbacks(),
+            'next_url'=>$this->next_url()
         ];
         return $response;
     }

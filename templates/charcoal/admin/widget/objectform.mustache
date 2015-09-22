@@ -7,13 +7,11 @@ Object Form Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 
 --}}
-
 <form action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widget_id}}">
 
     <div class="o-flex">
 
         <div class="o-flex_main">
-
             {{!-- Loop all form groups --}}
             {{#groups}}
                 {{>$widget_template}}
@@ -29,6 +27,10 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
         <input type="hidden" name="widget_id" value="{{widget_id}}">
         <input type="hidden" name="obj_type" value="{{obj_type}}">
         <input type="hidden" name="obj_id" value="{{obj_id}}">
+
+        {{#next_url}}
+        <input type="hidden" name="next_url" value="{{next_url}}">
+        {{/next_url}}
 
     </div>
 </form>

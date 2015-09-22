@@ -16,6 +16,8 @@
 Charcoal.Admin.Feedback = function ()
 {
     this.msgs = [];
+    this.actions = [];
+
     this.context_definitions = {
         success: {
             title: 'Succès!',
@@ -114,6 +116,14 @@ Charcoal.Admin.Feedback.prototype.add_context = function (context) {
 };
 
 /**
+* Actions in the dialog box
+*/
+Charcoal.Admin.Feedback.prototype.add_action = function (opts)
+{
+    this.actions.push(opts);
+};
+
+/**
 * Outputs the results of all feedback accumulated on the page load
 * @return this
 */
@@ -144,10 +154,25 @@ Charcoal.Admin.Feedback.prototype.call = function ()
             continue;
         }
 
+        var buttons = [];
+
+        if (this.actions.length) {
+            var k = 0;
+            var count = this.actions.length;
+            for (; k < count; k++) {
+                var action = this.actions[ k ];
+                buttons.push({
+                    label: action.label,
+                    action: action.callback
+                });
+            }
+        }
+
         BootstrapDialog.show({
             title: this.context_definitions[ level ].title,
             message: ret[ level ].join('<br/>'),
-            type: this.context_definitions[ level ].type
+            type: this.context_definitions[ level ].type,
+            buttons: buttons
         });
 
     }

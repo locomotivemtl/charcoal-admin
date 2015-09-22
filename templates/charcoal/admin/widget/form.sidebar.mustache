@@ -1,7 +1,7 @@
  {{!--
 
 --}}
-<aside class="c-aside o-flex_aside">
+<aside class="c-aside o-flex_aside" id="{{widget_id}}">
     <div class="o-container -top -right">
         <div class="c-panel -fixed">
             <header class="c-panel_header">
@@ -22,9 +22,10 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-info btn-lg btn-block" value="Save">Sauvegarder</button>
                 </div>
+
                 {{#actions}}
                 <div class="form-group">
-                    <a href="{{base_url}}{{url}}" class="btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
+                    <a href="{{base_url}}{{url}}" class="{{^obj_id}}disabled{{/obj_id}} btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
                 </div>
                 {{/actions}}
             </div>
@@ -44,3 +45,16 @@
         </div>
     </div>
     </aside>
+
+{{#add_js}}
+<script>
+Charcoal.Admin.manager().add_widget({
+    id: '{{widget_id}}',
+    type: 'charcoal/admin/widget/form.sidebar',
+    data: {
+        obj_type: '{{obj_type}}',
+        collection_ident: '{{collection_ident}}'
+    }
+});
+</script>
+{{/add_js}}

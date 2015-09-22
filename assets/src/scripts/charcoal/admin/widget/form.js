@@ -71,18 +71,36 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         contentType: false,
         data: form_data,
         success: function (response) {
-            console.debug(response);
             if (response.success) {
+
                 // Default, add feedback to list
                 Charcoal.Admin.feedback().add_data(response.feedbacks);
+
+                if (response.next_url) {
+                    // @todo "dynamise" the label
+                    Charcoal.Admin.feedback().add_action({
+                        label: 'Continuer',
+                        callback: function () {
+                            window.location.href =
+                                Charcoal.Admin.admin_url() +
+                                response.next_url;
+                        }
+                    });
+                }
 
                 if (!is_new_object) {
                     Charcoal.Admin.feedback().call();
                 } else {
-                    window.location.href =
-                        Charcoal.Admin.admin_url() +
-                        'object/edit?obj_type=' + that.obj_type +
-                        '&obj_id=' + response.obj_id;
+                    if (response.next_url) {
+                        window.location.href =
+                            Charcoal.Admin.admin_url() +
+                            response.next_url;
+                    } else {
+                        window.location.href =
+                            Charcoal.Admin.admin_url() +
+                            'object/edit?obj_type=' + that.obj_type +
+                            '&obj_id=' + response.obj_id;
+                    }
                 }
             } else {
                 Charcoal.Admin.feedback().add_data(

@@ -55,6 +55,10 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     */
     public function set_data(array $data)
     {
+        if (isset($data['next_url'])) {
+            $this->set_next_url($data['next_url']);
+            unset($data['next_url']);
+        }
         //parent::set_data($data);
         $this->set_obj_data($data);
 
@@ -153,7 +157,8 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
             'success'=>$this->success(),
             'obj_id'=>$this->obj()->id(),
             'obj'=>$this->obj(),
-            'feedbacks'=>$this->feedbacks()
+            'feedbacks'=>$this->feedbacks(),
+            'next_url'=>$this->next_url()
         ];
         return $response;
     }

@@ -245,6 +245,8 @@ Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
 Charcoal.Admin.Feedback = function ()
 {
     this.msgs = [];
+    this.actions = [];
+
     this.context_definitions = {
         success: {
             title: 'Succès!',
@@ -343,6 +345,14 @@ Charcoal.Admin.Feedback.prototype.add_context = function (context) {
 };
 
 /**
+* Actions in the dialog box
+*/
+Charcoal.Admin.Feedback.prototype.add_action = function (opts)
+{
+    this.actions.push(opts);
+};
+
+/**
 * Outputs the results of all feedback accumulated on the page load
 * @return this
 */
@@ -373,10 +383,25 @@ Charcoal.Admin.Feedback.prototype.call = function ()
             continue;
         }
 
+        var buttons = [];
+
+        if (this.actions.length) {
+            var k = 0;
+            var count = this.actions.length;
+            for (; k < count; k++) {
+                var action = this.actions[ k ];
+                buttons.push({
+                    label: action.label,
+                    action: action.callback
+                });
+            }
+        }
+
         BootstrapDialog.show({
             title: this.context_definitions[ level ].title,
             message: ret[ level ].join('<br/>'),
-            type: this.context_definitions[ level ].type
+            type: this.context_definitions[ level ].type,
+            buttons: buttons
         });
 
     }
@@ -2318,18 +2343,36 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         contentType: false,
         data: form_data,
         success: function (response) {
-            console.debug(response);
             if (response.success) {
+
                 // Default, add feedback to list
                 Charcoal.Admin.feedback().add_data(response.feedbacks);
+
+                if (response.next_url) {
+                    // @todo "dynamise" the label
+                    Charcoal.Admin.feedback().add_action({
+                        label: 'Continuer',
+                        callback: function () {
+                            window.location.href =
+                                Charcoal.Admin.admin_url() +
+                                response.next_url;
+                        }
+                    });
+                }
 
                 if (!is_new_object) {
                     Charcoal.Admin.feedback().call();
                 } else {
-                    window.location.href =
-                        Charcoal.Admin.admin_url() +
-                        'object/edit?obj_type=' + that.obj_type +
-                        '&obj_id=' + response.obj_id;
+                    if (response.next_url) {
+                        window.location.href =
+                            Charcoal.Admin.admin_url() +
+                            response.next_url;
+                    } else {
+                        window.location.href =
+                            Charcoal.Admin.admin_url() +
+                            'object/edit?obj_type=' + that.obj_type +
+                            '&obj_id=' + response.obj_id;
+                    }
                 }
             } else {
                 Charcoal.Admin.feedback().add_data(

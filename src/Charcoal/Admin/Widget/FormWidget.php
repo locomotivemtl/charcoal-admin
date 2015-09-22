@@ -28,6 +28,7 @@ class FormWidget extends AdminWidget
 
     protected $_layout;
     protected $_groups = [];
+    protected $_next_url;
     protected $_sidebars = [];
 
     private $_action = '';
@@ -70,6 +71,9 @@ class FormWidget extends AdminWidget
         }
         if (isset($data['groups']) && $data['groups'] !== null) {
             $this->set_groups($data['groups']);
+        }
+        if (isset($data['next_url']) && $data['next_url'] !== null) {
+            $this->set_next_url($data['next_url']);
         }
         if (isset($data['sidebars']) && $data['sidebars'] !== null) {
             $this->set_sidebars($data['sidebars']);
@@ -146,6 +150,38 @@ class FormWidget extends AdminWidget
 
         return $this;
     }
+
+    /**
+    * @param string $url
+    * @throws InvalidArgumentException if success is not a boolean
+    * @return ActionInterface Chainable
+    */
+    public function set_next_url($url)
+    {
+        if (!is_string($url)) {
+            throw new InvalidArgumentException(
+                'URL needs to be a string'
+            );
+        }
+
+        if (!$this->obj()) {
+            $this->_next_url = $url;
+            return $this;
+        }
+
+        $this->_next_url = $this->obj()->render( $url );
+        return $this;
+    }
+
+    /**
+    * @return bool
+    */
+    public function next_url()
+    {
+        var_dump($this->_next_url);
+        return $this->_next_url;
+    }
+
 
     /**
     * Group generator

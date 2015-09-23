@@ -172,7 +172,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
         return;
     }
 
-    this.initialized_types.push('recording');
+    this.initialized_types.push('text');
 
     var message = this.text_properties.$voice_message.val();
 
@@ -187,7 +187,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
  */
 Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input, allowed) {
 
-    allowed = (((allowed || '') + '')
+    allowed = ((String(allowed) || '')
         .toLowerCase()
         .match(/<[a-z][a-z0-9]*>/g) || [])
         .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)

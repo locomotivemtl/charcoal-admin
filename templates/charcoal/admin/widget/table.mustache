@@ -25,10 +25,10 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
             </div>-->
             {{#list_actions}}
                 {{#is_button}}
-                <button class="btn btn-default js-list-{{ident}}">{{label}}</button>
+                <button class="btn btn-default js-list-{{ident}}" data-widget-type="{{widget_type}}">{{label}}</button>
                 {{/is_button}}
                 {{^is_button}}
-                <a class="btn btn-default list-{{ident}}" href="{{url}}">{{label}}</a>
+                <a class="btn btn-default js-list-{{ident}}" href="{{url}}" data-widget-type="{{widget_type}}">{{label}}</a>
                 {{/is_button}}
             {{/list_actions}}
         </div>
@@ -58,7 +58,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
     <div class="table-responsive">
     --}}
     <div>
-        <table class="table table-bordered">
+        <table class="table table-bordered table-hover">
             {{#show_table_header}}
             <thead>
                 <tr>

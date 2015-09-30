@@ -1,0 +1,73 @@
+{{!--
+Import list Dialog
+--}}
+
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Type de liste</label>
+        <div class="col-sm-10">
+            <select class="form-control" name="type">
+                <option value="infocanada">Infos-Canada (.csv)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Fichier liste</label>
+        <div class="col-sm-10">
+            <input type="file" name="import_file" class="form-control" placeholder="Fichier">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Groupe</label>
+        <div class="col-sm-10">
+            <select class="form-control" name="default_group">
+                <option value="">Aucun</option>
+                <option value="test">Test</option>
+                <option value="_create">Nouveau</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Langue par défaut</label>
+        <div class="col-sm-10">
+            <select class="form-control" name="default_lang">
+                <option value="fr">Français</option>
+                <option value="en">Anglais</option>
+
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <button class="btn" id="import-list-btn">Importer la liste</button>
+    </div>
+</form>
+
+<script>
+$('#import-list-btn').on('click', function(e) {
+    e.preventDefault();
+    var $form = $(this).parents('form');
+    var form_data = new FormData($form[0]);
+    console.debug(form_data);
+    $.ajax({
+        type: 'POST',
+        url: Charcoal.Admin.admin_url() + 'action/json/alert/import-user-list',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            if(response.success) {
+                window.location.reload();
+            }
+            else {
+                alert('Erreur.');
+            }
+        }
+
+    });
+});
+</script>

@@ -34,6 +34,7 @@
             "messaging/send-sms":{},
             "messaging/send-voice":{},
 
+            "alert/import-user-list":{},
             "alert/send-test-email":{},
             "alert/send-test-sms":{},
             "alert/send-test-voice":{},

@@ -2337,6 +2337,48 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
     });
 
 };
+
+/**
+* Load the widget into a dialog
+*/
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
+{
+    //var that = this;
+
+    var title = dialog_opts.title || '',
+        type = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT;
+
+    BootstrapDialog.show({
+        title: title,
+        type: type,
+        nl2br: false,
+        message: function (dialog) {
+            console.debug(dialog);
+            var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+                data = {
+                    widget_type:    dialog_opts.widget_type//that.widget_type//,
+                    //widget_options: that.widget_options()
+                },
+                $message = $('<div>Loading...</div>');
+
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: data
+            }).done(function (response) {
+                console.debug(response);
+                if (response.success) {
+                    dialog.setMessage(response.widget_html);
+                } else {
+                    dialog.setType(BootstrapDialog.TYPE_DANGER);
+                    dialog.setMessage('Error');
+                }
+            });
+            return $message;
+        }
+
+    });
+};
 ;/**
 * Form widget that manages data sending
 * charcoal/admin/widget/form
@@ -2463,6 +2505,150 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
     });
 };
 ;/**
+* Form widget that manages data sending
+* charcoal/admin/widget/form.sidebar
+*
+* Require:
+* - jQuery
+*
+* @param  {Object}  opts Options for widget
+*/
+
+Charcoal.Admin.Widget_Form_Sidebar = function ()
+{
+    this.widget_type = 'charcoal/admin/widget/form.sidebar';
+
+    return this;
+};
+
+Charcoal.Admin.Widget_Form_Sidebar.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Form_Sidebar.prototype.constructor = Charcoal.Admin.Widget_Form;
+Charcoal.Admin.Widget_Form_Sidebar.prototype.parent = Charcoal.Admin.Widget.prototype;
+
+/**
+* Called automatically by the component manager
+* Instantiation of pretty much every thing you want!
+*
+* @return this
+*/
+Charcoal.Admin.Widget_Form_Sidebar.prototype.init = function ()
+{
+
+    return this;
+};
+;/**
+* Map sidebar
+*
+* According lat, lon or address must be specified
+* Styles might be defined as well.
+*
+* @param  {Object}  opts Options for widget
+*/
+
+Charcoal.Admin.Widget_Map = function ()
+{
+    this._controller = undefined;
+    this.widget_type = 'charcoal/admin/widget/map';
+
+    return this;
+};
+
+Charcoal.Admin.Widget_Map.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Map.prototype.constructor = Charcoal.Admin.Widget_Map;
+Charcoal.Admin.Widget_Map.prototype.parent = Charcoal.Admin.Widget.prototype;
+
+/**
+* Called automatically by the component manager
+* Instantiation of pretty much every thing you want!
+*
+* @return this
+*/
+Charcoal.Admin.Widget_Map.prototype.init = function ()
+{
+    var that = this;
+
+    if (typeof google === 'undefined') {
+        // If google is undefined,
+        window._tmp_google_onload_function = function () {
+            that.activate_map();
+        };
+
+        $.getScript(
+            'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
+            '&language=fr&callback=_tmp_google_onload_function',
+            function () {}
+        );
+    } else {
+        that.activate_map();
+    }
+
+    return this;
+};
+
+Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
+{
+    var default_styles = {
+        strokeColor: '#000000',
+        strokeOpacity: 0.8,
+        strokeWeight: 3,
+        fillColor: '#ffffff',
+        fillOpacity: 0.35,
+        hover: {
+            strokeColor: '#000000',
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            fillColor: '#ffffff',
+            fillOpacity: 0.5
+        },
+        focused: {
+            fillOpacity: 0.8
+        }
+    };
+
+    var map_options = {
+        default_styles: default_styles,
+        use_clusterer: false,
+        map: {
+            center: {
+                x: this.opts('coords')[0],
+                y: this.opts('coords')[1]
+            },
+            zoom: 14,
+            mapType: 'roadmap',
+            coordsType: 'inpage', // array, json? (vs ul li)
+            map_mode: 'default'
+        },
+        places:{
+            first:{
+                type: 'marker',
+                coords: this.coords(),
+            }
+        }
+    };
+
+    // Create new map instance
+    this._controller = new window.BB.gmap.controller(
+        this.element().find('.js-map-maker-map').get(0),
+        map_options
+    );
+
+    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+
+    this.controller().remove_focus();
+    this.controller().init();
+
+};
+
+Charcoal.Admin.Widget_Map.prototype.controller = function ()
+{
+    return this._controller;
+};
+
+Charcoal.Admin.Widget_Map.prototype.coords = function ()
+{
+    return this.opts('coords');
+};
+;/**
 * Search widget used for filtering a list
 * charcoal/admin/widget/search
 *
@@ -2568,12 +2754,15 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
     for (; i < total; i++) {
         var single_filter = {};
         single_filter[ properties[i] ] = {};
-        single_filter[ properties[i] ].val = val;
+        single_filter[ properties[i] ].val = '%' + val + '%';
         single_filter[ properties[i] ].property = properties[i];
-        single_filter[ properties[i] ].operator = '=';
+        single_filter[ properties[i] ].operator = 'LIKE';
+        single_filter[ properties[i] ].operand = 'OR';
 
         widget.add_filter(single_filter);
     }
+
+    //    widget.add_search(val, properties);
 
     widget.reload();
 
@@ -2658,11 +2847,12 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 {
     var that = this;
 
-    $('.js-list-quick-create',that.table_selector).on('click', function (e) {
+    // The "quick create" event button loads the objectform widget
+    $('.js-list-quick-create', that.table_selector).on('click', function (e) {
         e.preventDefault();
         var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
             data = {
-                widget_type: 'charcoal/admin/widget/objectForm',
+                widget_type: 'charcoal/admin/widget/objectform',
                 widget_options: {
                     obj_type: that.obj_type,
                     obj_id: 0
@@ -2716,6 +2906,24 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             }
         });
 
+    });
+
+    $('.js-list-import', that.element).on('click', function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var widget_type = $this.data('widget-type');
+        console.debug(widget_type);
+        //console.debug(this.title());
+
+        that.widget_dialog({
+            title: 'Importer une liste',
+            widget_type: widget_type,
+            widget_options: {
+                obj_type: that.obj_type,
+                obj_id: 0
+            }
+        });
     });
 };
 
@@ -2809,6 +3017,58 @@ Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
 
     return this;
 
+};
+
+/**
+* Load a widget (via ajax) into a dialog
+*
+* ## Options
+* - `title`
+* - `widget_type`
+* - `widget_options`
+*/
+Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
+{
+    //return new Charcoal.Admin.Widget(opts).dialog(opts);
+    var title = opts.title || '',
+        type = opts.type || BootstrapDialog.TYPE_PRIMARY,
+        widget_type = opts.widget_type,
+        widget_options = opts.widget_options || {};
+
+    if (!widget_type) {
+        return;
+    }
+
+    BootstrapDialog.show({
+            title: title,
+            type: type,
+            nl2br: false,
+            message: function (dialog) {
+                console.debug(dialog);
+                var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+                    data = {
+                        widget_type: widget_type,
+                        widget_options: widget_options
+                    },
+                    $message = $('<div>Loading...</div>');
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data
+                }).done(function (response) {
+                    console.debug(response);
+                    if (response.success) {
+                        dialog.setMessage(response.widget_html);
+                    } else {
+                        dialog.setType(BootstrapDialog.TYPE_DANGER);
+                        dialog.setMessage('Error');
+                    }
+                });
+                return $message;
+            }
+
+        });
 };
 
 /**

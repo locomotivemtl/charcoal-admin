@@ -105,7 +105,7 @@ class DashboardWidget extends AdminWidget
             if (!isset($widget['ident'])) {
                 $widget['ident'] = $widget_ident;
             }
-            //var_dump($widget);
+
             $widget_type = isset($widget['type']) ? $widget['type'] : null;
             $w = WidgetFactory::instance()->create($widget_type);
             $w->set_data($widget);
@@ -120,7 +120,6 @@ class DashboardWidget extends AdminWidget
     */
     public function widgets()
     {
-        //var_dump($this->_widgets);
         if ($this->_widgets === null) {
             yield null;
         } else {

@@ -1,0 +1,28 @@
+ {{!--
+    Map sidebar
+--}}
+
+<div class="o-flex" id="{{widget_id}}">
+    <div class="">
+        <div class="o-container">
+            <div class="c-map-maker_map js-map-maker-map" style="height: 400px; width: 1000px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{#add_js}}
+<script>
+Charcoal.Admin.manager().add_widget({
+    id: '{{widget_id}}',
+    type: 'charcoal/admin/widget/map',
+    data: {
+        obj_type: '{{obj_type}}'
+    },
+    coords : [{{lat}}, {{lon}}]
+});
+</script>
+{{/add_js}}

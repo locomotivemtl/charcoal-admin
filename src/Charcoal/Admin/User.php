@@ -3,10 +3,11 @@
 namespace Charcoal\Admin;
 
 // Module `charcoal-base` dependencies
-use \Charcoal\User\AbstractUser as AbstractUser;
+use \Charcoal\User\AbstractUser;
 
 // Local namespace dependencies
-use \Charcoal\Admin\UserConfig as UserConfig;
+use \Charcoal\Admin\UserConfig;
+use \Charcoal\Admin\UserGroup;
 
 /**
 * Admin User class
@@ -34,6 +35,11 @@ class User extends AbstractUser
             $config->set_data($data);
         }
         return $config;
+    }
+
+    public function create_group()
+    {
+        return new UserGroup();
     }
 
 }

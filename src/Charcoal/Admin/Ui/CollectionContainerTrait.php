@@ -16,21 +16,21 @@ use \Charcoal\Model\ModelFactory as ModelFactory;
 trait CollectionContainerTrait
 {
     /**
-    * @var string $_obj_type
+    * @var string $obj_type
     */
-    protected $_obj_type;
+    private $obj_type;
     /**
-    * @var string $_collection_ident
+    * @var string $collection_ident
     */
-    protected $_collection_ident;
+    private $collection_ident;
     /**
-    * @var mixed $_collection_config
+    * @var mixed $collection_config
     */
-    protected $_collection_config;
+    private $collection_config;
     /**
-    * @var Collection $_collection
+    * @var Collection $collection
     */
-    protected $_collection;
+    private $collection;
 
     /**
     * @param array $data
@@ -64,7 +64,7 @@ trait CollectionContainerTrait
         if (!is_string($obj_type)) {
             throw new InvalidArgumentException('Obj type must be a string');
         }
-        $this->_obj_type = str_replace(['.', '_'], '/', $obj_type);
+        $this->obj_type = str_replace(['.', '_'], '/', $obj_type);
         return $this;
     }
 
@@ -73,7 +73,7 @@ trait CollectionContainerTrait
     */
     public function obj_type()
     {
-        return $this->_obj_type;
+        return $this->obj_type;
     }
 
     /**
@@ -82,7 +82,7 @@ trait CollectionContainerTrait
     */
     public function set_collection_config($collection_config)
     {
-        $this->_collection_config = $collection_config;
+        $this->collection_config = $collection_config;
         return $this;
     }
 
@@ -91,10 +91,10 @@ trait CollectionContainerTrait
     */
     public function collection_config()
     {
-        if ($this->_collection_config === null) {
-            $this->_collection_config = $this->create_collection_config();
+        if ($this->collection_config === null) {
+            $this->collection_config = $this->create_collection_config();
         }
-        return $this->_collection_config;
+        return $this->collection_config;
     }
 
     /**
@@ -114,7 +114,7 @@ trait CollectionContainerTrait
     */
     public function set_collection($collection)
     {
-        $this->_collection = $collection;
+        $this->collection = $collection;
         return $this;
     }
 
@@ -123,10 +123,10 @@ trait CollectionContainerTrait
     */
     public function collection()
     {
-        if ($this->_collection === null) {
-            $this->_collection = $this->create_collection();
+        if ($this->collection === null) {
+            $this->collection = $this->create_collection();
         }
-        return $this->_collection;
+        return $this->collection;
     }
 
     /**
@@ -150,6 +150,11 @@ trait CollectionContainerTrait
         if (is_array($collection_config) && !empty($collection_config)) {
             $loader->set_data($collection_config);
         }
+
+        $loader->set_pagination([
+            'page'=>1,
+            'num_per_page'=>50
+        ]);
 
         $collection = $loader->load();
         return $collection;

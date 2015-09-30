@@ -42,17 +42,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @param array $data Optional
     */
-    /*
-    public function __construct(array $data = null)
-    {
-        //parent::__construct($data);
-
-        if (is_array($data)) {
-            $this->set_data($data);
-
-        }
-    }
-    */
 
     /**
     * @param array $data
@@ -222,18 +211,15 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             [
                 'label' => 'Créer un nouveau',
                 'ident' => 'create',
-                'url' => $this->object_edit_url()
-            ]/*,
-            [
-                'label' => 'Quick Create',
-                'ident' => 'quick-create',
-                'is_button' => true
+                'url' => $this->object_edit_url(),
+                'widget_type' => ''
             ],
             [
-                'label' => 'Reorder',
-                'ident' => 'reorder',
-                'is_button' => true
-            ]*/
+                'label' => 'Importer une liste',
+                'ident' => 'import',
+                'is_button' => true,
+                'widget_type' => 'charcoal/admin/widget/dialog/importlist'
+            ]
         ];
     }
 

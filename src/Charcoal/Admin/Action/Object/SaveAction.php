@@ -114,7 +114,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
 
             $obj->set_flat_data($this->save_data());
             $valid = $obj->validate();
-
+            $valid = true;
             if (!$valid) {
                 $validation = $obj->validation();
                 // @todo: Validation info to feedback

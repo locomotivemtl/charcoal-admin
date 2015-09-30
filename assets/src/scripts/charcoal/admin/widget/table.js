@@ -77,11 +77,12 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 {
     var that = this;
 
-    $('.js-list-quick-create',that.table_selector).on('click', function (e) {
+    // The "quick create" event button loads the objectform widget
+    $('.js-list-quick-create', that.table_selector).on('click', function (e) {
         e.preventDefault();
         var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
             data = {
-                widget_type: 'charcoal/admin/widget/objectForm',
+                widget_type: 'charcoal/admin/widget/objectform',
                 widget_options: {
                     obj_type: that.obj_type,
                     obj_id: 0
@@ -135,6 +136,24 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             }
         });
 
+    });
+
+    $('.js-list-import', that.element).on('click', function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var widget_type = $this.data('widget-type');
+        console.debug(widget_type);
+        //console.debug(this.title());
+
+        that.widget_dialog({
+            title: 'Importer une liste',
+            widget_type: widget_type,
+            widget_options: {
+                obj_type: that.obj_type,
+                obj_id: 0
+            }
+        });
     });
 };
 
@@ -228,6 +247,58 @@ Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
 
     return this;
 
+};
+
+/**
+* Load a widget (via ajax) into a dialog
+*
+* ## Options
+* - `title`
+* - `widget_type`
+* - `widget_options`
+*/
+Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
+{
+    //return new Charcoal.Admin.Widget(opts).dialog(opts);
+    var title = opts.title || '',
+        type = opts.type || BootstrapDialog.TYPE_PRIMARY,
+        widget_type = opts.widget_type,
+        widget_options = opts.widget_options || {};
+
+    if (!widget_type) {
+        return;
+    }
+
+    BootstrapDialog.show({
+            title: title,
+            type: type,
+            nl2br: false,
+            message: function (dialog) {
+                console.debug(dialog);
+                var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+                    data = {
+                        widget_type: widget_type,
+                        widget_options: widget_options
+                    },
+                    $message = $('<div>Loading...</div>');
+
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data
+                }).done(function (response) {
+                    console.debug(response);
+                    if (response.success) {
+                        dialog.setMessage(response.widget_html);
+                    } else {
+                        dialog.setType(BootstrapDialog.TYPE_DANGER);
+                        dialog.setMessage('Error');
+                    }
+                });
+                return $message;
+            }
+
+        });
 };
 
 /**

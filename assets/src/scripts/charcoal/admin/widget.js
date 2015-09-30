@@ -169,3 +169,45 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
     });
 
 };
+
+/**
+* Load the widget into a dialog
+*/
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
+{
+    //var that = this;
+
+    var title = dialog_opts.title || '',
+        type = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT;
+
+    BootstrapDialog.show({
+        title: title,
+        type: type,
+        nl2br: false,
+        message: function (dialog) {
+            console.debug(dialog);
+            var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+                data = {
+                    widget_type:    dialog_opts.widget_type//that.widget_type//,
+                    //widget_options: that.widget_options()
+                },
+                $message = $('<div>Loading...</div>');
+
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: data
+            }).done(function (response) {
+                console.debug(response);
+                if (response.success) {
+                    dialog.setMessage(response.widget_html);
+                } else {
+                    dialog.setType(BootstrapDialog.TYPE_DANGER);
+                    dialog.setMessage('Error');
+                }
+            });
+            return $message;
+        }
+
+    });
+};

@@ -104,12 +104,15 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
     for (; i < total; i++) {
         var single_filter = {};
         single_filter[ properties[i] ] = {};
-        single_filter[ properties[i] ].val = val;
+        single_filter[ properties[i] ].val = '%' + val + '%';
         single_filter[ properties[i] ].property = properties[i];
-        single_filter[ properties[i] ].operator = '=';
+        single_filter[ properties[i] ].operator = 'LIKE';
+        single_filter[ properties[i] ].operand = 'OR';
 
         widget.add_filter(single_filter);
     }
+
+    //    widget.add_search(val, properties);
 
     widget.reload();
 

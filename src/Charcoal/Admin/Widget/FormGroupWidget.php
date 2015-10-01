@@ -13,43 +13,26 @@ use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\LayoutWidget;
 
+use \Charcoal\Admin\Ui\FormGroupInterface;
+use \Charcoal\Admin\Ui\FormGroupTrait;
+
 /**
 * Form Group Widget Controller
 */
-class FormGroupWidget extends AdminWidget
+class FormGroupWidget extends AdminWidget implements FormGroupInterface
 {
-    /**
-    * In-memory copy of the parent form widget.
-    * @var FormWidget $_form
-    */
-    private $_form;
-
-    /**
-    * @var string
-    */
-    private $_widget_type = 'properties';
+    use FormGroupTrait;
 
     /**
     * @var LayoutWidget $_layout
     */
     public $_layout;
 
-    /**
-    * Order / sorting is done with the "priority".
-    * @var integer $_priority
-    */
-    private $_priority = 0;
-
 
     /**
     * @var array $_group_properties
     */
     private $_group_properties = [];
-
-    /**
-    * @var TranslationString $_title
-    */
-    private $_title = '';
 
     /**
     * @var TranslationString $_description
@@ -86,23 +69,6 @@ class FormGroupWidget extends AdminWidget
     private $_show_footer = true;
 
 
-    /**
-    * @param Form $form
-    * @return FormGroupWidget Chainable
-    */
-    public function set_form(FormWidget $form)
-    {
-        $this->_form = $form;
-        return $this;
-    }
-
-    /**
-    * @return FormWidget or null
-    */
-    public function form()
-    {
-        return $this->_form;
-    }
 
     /**
     * @var string
@@ -112,57 +78,10 @@ class FormGroupWidget extends AdminWidget
     {
         parent::set_data($data);
 
-        if (isset($data['widget_type']) && $data['widget_type'] !== null) {
-            $this->set_widget_type($data['widget_type']);
-        }
-        if (isset($data['layout']) && $data['layout'] !== null) {
-            $this->set_layout($data['layout']);
-        }
         if (isset($data['properties']) && $data['properties'] !== null) {
             $this->set_group_properties($data['properties']);
         }
-        if (isset($data['priority']) && $data['priority'] !== null) {
-            $this->set_priority($data['priority']);
-        }
-        if (isset($data['title']) && $data['title'] !== null) {
-            $this->set_title($data['title']);
-        }
-        if (isset($data['description']) && $data['description'] !== null) {
-            $this->set_description($data['description']);
-        }
-        if (isset($data['notes']) && $data['notes'] !== null) {
-            $this->set_notes($data['notes']);
-        }
-        if (isset($data['show_title']) && $data['show_title'] !== null) {
-            $this->set_show_title($data['show_title']);
-        }
-        if (isset($data['show_description']) && $data['show_description'] !== null) {
-            $this->set_show_description($data['show_description']);
-        }
-        if (isset($data['show_notes']) && $data['show_notes'] !== null) {
-            $this->set_show_notes($data['show_notes']);
-        }
-        if (isset($data['show_header']) && $data['show_header'] !== null) {
-            $this->set_show_header($data['show_header']);
-        }
-        if (isset($data['show_footer']) && $data['show_footer'] !== null) {
-            $this->set_show_footer($data['show_footer']);
-        }
 
-        return $this;
-    }
-
-    /**
-    * @var string $widget_type
-    * @throws InvalidArgumentException
-    * @return FormGroupWidget Chainable
-    */
-    public function set_widget_type($widget_type)
-    {
-        if (!is_string($widget_type)) {
-            throw new InvalidArgumentException('Widget type must be a string');
-        }
-        $this->_widget_type = $widget_type;
         return $this;
     }
 
@@ -171,7 +90,34 @@ class FormGroupWidget extends AdminWidget
     */
     public function widget_type()
     {
-        return $this->_widget_type;
+        return 'charcoal/admin/widget/formgroup';
+    }
+
+    /**
+    * Sets the widget options
+    */
+    public function set_widget_options($opts)
+    {
+        if (!$opts) {
+            return $this;
+        }
+        $this->_widget_options = $opts;
+
+        return $this;
+    }
+
+    public function widget_options()
+    {
+        return $this->_widget_options;
+    }
+
+    public function json_widget_options()
+    {
+        if (!$this->widget_options()) {
+            return false;
+        }
+
+        return json_encode($this->widget_options());
     }
 
     /**
@@ -428,7 +374,6 @@ class FormGroupWidget extends AdminWidget
             return $this->show_notes();
         }
     }
-
 
 
 }

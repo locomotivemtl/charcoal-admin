@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException as InvalidArgumentException;
 
+use \Charcoal\Widget\WidgetFactory;
 use \Charcoal\Admin\AdminWidget as AdminWidget;
 use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
 
@@ -136,11 +137,14 @@ class FormWidget extends AdminWidget
         if (!is_string($group_ident)) {
             throw new InvalidArgumentException('Group ident must be a string');
         }
-        if (($group instanceof FormGroupWidget)) {
+
+        if (($group instanceof FormGroupInterface)) {
             $group->set_form($this);
             $this->_groups[$group_ident] = $group;
         } else if (is_array($group)) {
-            $g = new FormGroupWidget();
+            $widget_type = isset($group['widget_type']) ? $group['widget_type'] : 'charcoal/admin/widget/formgroup';
+            $g = WidgetFactory::instance()->create($widget_type);
+//            $g = new FormGroupWidget();
             $g->set_form($this);
             $g->set_data($group);
             $this->_groups[$group_ident] = $g;
@@ -193,13 +197,7 @@ class FormWidget extends AdminWidget
         } else {
             uasort($groups, ['self', '_sort_groups_by_priority']);
             foreach ($groups as $group) {
-                /*if ($group->widget_type() != '') {
-                    $GLOBALS['widget_template'] = $group->widget_type();
-                } else {
-                    $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
-                }*/
-                $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.group';
-                //var_dump($GLOBALS['widget_template']);
+                $GLOBALS['widget_template'] = $group->widget_type();
                 yield $group->ident() => $group;
             }
         }

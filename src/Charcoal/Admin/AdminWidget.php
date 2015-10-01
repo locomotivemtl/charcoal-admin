@@ -47,33 +47,6 @@ class AdminWidget extends AbstractWidget
     */
     private $_show_actions;
 
-    /**
-    * @var array $data
-    * @return AdminWidget Chainable
-    */
-    public function set_data(array $data)
-    {
-        if (isset($data['widget_id']) && $data['widget_id'] !== null) {
-            $this->set_widget_id($data['widget_id']);
-        }
-        if (isset($data['type']) && $data['type'] !== null) {
-            $this->set_type($data['type']);
-        }
-        if (isset($data['ident']) && $data['ident'] !== null) {
-            $this->set_ident($data['ident']);
-        }
-        if (isset($data['label']) && $data['label'] !== null) {
-            $this->set_label($data['label']);
-        }
-        if (isset($data['show_label']) && $data['show_label'] !== null) {
-            $this->set_show_label($data['show_label']);
-        }
-        if (isset($data['show_actions']) && $data['show_actions'] !== null) {
-            $this->set_show_actions($data['show_actions']);
-        }
-
-        return $this;
-    }
 
     public function set_widget_id($widget_id)
     {

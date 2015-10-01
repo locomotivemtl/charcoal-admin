@@ -10,32 +10,18 @@ use \Charcoal\Template\TemplateViewController as TemplateViewController;
 // From `charcoal-base`
 use \Charcoal\Model\ModelFactory;
 
-class MapWidget extends AdminWidget
-{
-    /**
-    * @var string
-    */
-    private $_widget_type = '';
 
-    /**
-    * @var Object $_actions
-    */
-    private $_actions;
+use \Charcoal\Admin\Ui\FormGroupInterface;
+use \Charcoal\Admin\Ui\FormGroupTrait;
+
+class MapWidget extends AdminWidget implements FormGroupInterface
+{
+    use FormGroupTrait;
 
     /**
     * @var object styles (concerning the marker style)
     */
     private $_styles;
-
-    protected $_sidebar_sidebar_properties = [];
-    protected $_priority;
-
-    /**
-    * @var TranslationString $_title
-    * @var TranslationString $_subtitle
-    */
-    protected $_title;
-    protected $_subtitle;
 
     private $_lat_property;
     private $_lon_property;
@@ -62,7 +48,7 @@ class MapWidget extends AdminWidget
         return $this;
     }
 
-    public function set_lat_property( $p )
+    public function set_lat_property($p)
     {
         $this->_lat_property = $p;
     }
@@ -71,7 +57,7 @@ class MapWidget extends AdminWidget
     {
         return $this->_lat_property;
     }
-    public function set_lon_property( $p )
+    public function set_lon_property($p)
     {
         $this->_lon_property = $p;
     }
@@ -82,7 +68,7 @@ class MapWidget extends AdminWidget
 
     public function lat()
     {
-        if (!$this->obj()) {
+        if (!$this->obj() || !$this->lat_property()) {
             return false;
         }
         $obj = $this->obj();
@@ -91,7 +77,7 @@ class MapWidget extends AdminWidget
 
     public function lon()
     {
-        if (!$this->obj()) {
+        if (!$this->obj() || !$this->lon_property()) {
             return false;
         }
         $obj = $this->obj();
@@ -166,8 +152,8 @@ class MapWidget extends AdminWidget
         return $this->_title;
     }
 
-    public function priority()
+    public function widget_type()
     {
-        return 2;
+        return 'charcoal/admin/widget/map';
     }
 }

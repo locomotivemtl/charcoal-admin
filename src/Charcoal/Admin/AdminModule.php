@@ -10,10 +10,11 @@ use Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
 use \Charcoal\Charcoal;
-use \Charcoal\Module\AbstractModule;
+use \Charcoal\Model\ModelFactory;
 
 // From `charcoal-base`
-use \Charcoal\Template\TemplateView;
+use \Charcoal\Module\AbstractModule;
+use \Charcoal\Template\TemplateFactory;
 use \Charcoal\Action\ActionFactory;
 
 use \Charcoal\Admin\Config as AdminConfig;
@@ -71,8 +72,35 @@ class AdminModule
             return $config;
         };
 
-        $container['charcoal/admin/template_view'] = function($c) {
-            $view = new TemplateView();
+        $container['charcoal/view/config'] = function($c) {
+            return new \Charcoal\View\ViewConfig($c['charcoal/config']->get('view'));
+        };
+
+        $container['charcoal/view/loader'] = function($c) {
+            $loader = new \Charcoal\View\Mustache\MustacheLoader([
+                'logger' => $c['logger']
+            ]);
+            $loader->set_search_path(Charcoal::config()->template_path());
+            return $loader;
+        };
+
+        $container['charcoal/view/engine'] = function($c) {
+            $engine = new \Charcoal\View\Mustache\MustacheEngine([
+                'logger' => $c['logger'],
+                'loader' =>$c['charcoal/view/loader']
+            ]);
+            return $engine;
+        };
+
+        $container['charcoal/view'] = function($c) {
+
+            $view = new \Charcoal\View\GenericView([
+                'config' => $c['charcoal/view/config'],
+                'logger' => $c['logger']
+            ]);
+            $view->set_engine($c['charcoal/view/engine']);
+
+            return $view;
         };
 
         // Admin module
@@ -121,8 +149,14 @@ class AdminModule
     {
         unset($request);
         unset($args);
-        $view = new TemplateView();
-        $content = $view->from_ident('charcoal/admin/template/home')->render();
+
+        $c = $this->_app->getContainer();
+        $view = $c['charcoal/view'];
+
+        $type = 'charcoal/admin/template/home';
+
+        $context = TemplateFactory::instance()->create($type);
+        $content = $view->render_template($type, $context);
         $response->write($content);
         return $response;
     }
@@ -162,10 +196,14 @@ class AdminModule
         $admin_path = $this->config()->base_path();
         $this->app()->get('/'.$view_ident, function(ServerRequestInterface $request, ResponseInterface $response) use ($view_ident) {
 
-            $view = new TemplateView();
-            $view->from_ident('charcoal/admin/template/'.$view_ident);
-            $model = $view->controller();
-            $content = $view->render();
+            $c = $this->getContainer();
+            $view = $c['charcoal/view'];
+
+            $type = 'charcoal/admin/template/'.$view_ident;
+
+            $template = $view->load_template($type);
+            $context = TemplateFactory::instance()->create($type);
+            $content = $view->render_template($type, $context);
             $response->write($content);
             return $response;
         })->setName($admin_path.'/'.$view_ident);

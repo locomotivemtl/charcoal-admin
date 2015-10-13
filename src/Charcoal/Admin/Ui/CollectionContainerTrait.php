@@ -27,6 +27,18 @@ trait CollectionContainerTrait
     * @var mixed $collection_config
     */
     private $collection_config;
+
+    /**
+    * @var integer $page
+    */
+    private $page = 1;
+
+    /**
+    * @var integer $num_per_page
+    */
+    private $num_per_page = 50;
+
+
     /**
     * @var Collection $collection
     */
@@ -37,13 +49,8 @@ trait CollectionContainerTrait
     * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection_data($data)
+    public function set_collection_data(array $data)
     {
-
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
         if (isset($data['obj_type']) && $data['obj_type'] !== null) {
             $this->set_obj_type($data['obj_type']);
         }
@@ -77,6 +84,30 @@ trait CollectionContainerTrait
     }
 
     /**
+    * @param string $collection_ident
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_collection_ident($collection_ident)
+    {
+        if(!is_string($collection_ident)) {
+            throw new InvalidArgumentException(
+                'Collection identifier must be a string'
+            );
+        }
+        $this->collection_ident = $collection_ident;
+        return $this;
+    }
+
+    /**
+    * @return string|null
+    */
+    public function collection_ident()
+    {
+        return $this->collection_ident;
+    }
+
+    /**
     * @param mixed $dashboard_config
     * @return CollectionContainerInterface Chainable
     */
@@ -107,6 +138,63 @@ trait CollectionContainerTrait
         return [];
     }
 
+    /**
+    * @param integer $page
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_page($page)
+    {
+        if(!is_int($page)) {
+            throw new InvalidArgumentException(
+                'Page must be an integer value.'
+            );
+        }
+        if($page < 1) {
+            throw new InvalidArgumentException(
+                'Page must be 1 or greater.'
+            );
+        }
+        $this->page = $page;
+        return $this;
+    }
+
+    /**
+    * @return integer
+    */
+    public function page()
+    {
+        return $this->page;
+    }
+
+    /**
+    * @param integer $num_per_page
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_num_per_page($num_per_page)
+    {
+        if(!is_int($num_per_page)) {
+            throw new InvalidArgumentException(
+                'Num per page must be an integer value.'
+            );
+        }
+        if($num_per_page < 1) {
+            throw new InvalidArgumentException(
+                'Num per page must be 1 or greater.'
+            );
+        }
+        $this->num_per_page = $num_per_page;
+        return $this;
+    }
+
+    /**
+    * @return integer
+    */
+    public function num_per_page()
+    {
+        return $this->num_per_page;
+    }
 
     /**
     * @param mixed $collection
@@ -152,8 +240,8 @@ trait CollectionContainerTrait
         }
 
         $loader->set_pagination([
-            'page'=>1,
-            'num_per_page'=>50
+            'page'=>$this->page(),
+            'num_per_page'=>$this->num_per_page()
         ]);
 
         $collection = $loader->load();
@@ -175,7 +263,6 @@ trait CollectionContainerTrait
     */
     public function object_rows()
     {
-
         // Get properties as defined in object's list metadata
         $sorted_properties = $this->properties();
 

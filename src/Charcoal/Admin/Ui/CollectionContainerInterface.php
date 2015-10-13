@@ -8,7 +8,7 @@ interface CollectionContainerInterface
     * @param array $data
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection_data($data);
+    public function set_collection_data(array $data);
 
     /**
     * @param string $obj_type
@@ -20,6 +20,18 @@ interface CollectionContainerInterface
     * @return string
     */
     public function obj_type();
+
+    /**
+    * @param string $collection_ident
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_collection_ident($collection_ident);
+
+    /**
+    * @return string|null
+    */
+    public function collection_ident();
 
     /**
     * @param mixed $dashboard_config
@@ -38,6 +50,31 @@ interface CollectionContainerInterface
     */
     //public function create_collection_config($data = null);
 
+
+
+    /**
+    * @param integer $page
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_page($page);
+
+    /**
+    * @return integer
+    */
+    public function page();
+
+    /**
+    * @param integer $num_per_page
+    * @throws InvalidArgumentException
+    * @return CollectionContainerInterface Chainable
+    */
+    public function set_num_per_page($num_per_page);
+
+    /**
+    * @return integer
+    */
+    public function num_per_page();
 
     /**
     * @param mixed $collection

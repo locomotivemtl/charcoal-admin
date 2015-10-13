@@ -7,5 +7,7 @@ $autoloader = require __DIR__ . '/../vendor/autoload.php';
 $autoloader->add('Charcoal\\Admin\\', __DIR__.'/../src/');
 $autoloader->add('Charcoal\\Admin\\Tests\\', __DIR__);
 
-
-
+$config = new \Charcoal\CharcoalConfig();
+\Charcoal\Charcoal::init([
+    'config'=>$config
+]);

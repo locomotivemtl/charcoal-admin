@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin;
 
+use \Exception;
 use \InvalidArgumentException;
 
 // From PSR-7

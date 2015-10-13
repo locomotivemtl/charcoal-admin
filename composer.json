@@ -1,5 +1,6 @@
 {
     "name": "locomotivemtl/charcoal-admin",
+    "description": "The administration dashboard / backend for Charcoal",
     "minimum-stability":"dev",
     "require": {
         "locomotivemtl/charcoal-core":"@dev",

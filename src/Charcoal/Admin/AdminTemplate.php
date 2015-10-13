@@ -91,26 +91,20 @@ class AdminTemplate extends AbstractTemplate
     */
     public function set_data(array $data)
     {
-        if (isset($data['ident']) && $data['ident'] !== null) {
-            $this->set_ident($data['ident']);
-        }
-        if (isset($data['label']) && $data['label'] !== null) {
-            $this->set_label($data['label']);
-        }
-        if (isset($data['title']) && $data['title'] !== null) {
-            $this->set_title($data['title']);
-        }
-        if (isset($data['subtitle']) && $data['subtitle'] !== null) {
-            $this->set_subtitle($data['subtitle']);
-        }
+        foreach ($data as $prop => $val) {
+            $func = [$this, 'set_'.$prop];
 
-        if (isset($data['show_header_menu']) && $data['show_header_menu'] !== null) {
-            $this->set_show_header_menu($data['show_header_menu']);
-        }
-        if (isset($data['show_footer_menu']) && $data['show_footer_menu'] !== null) {
-            $this->set_show_footer_menu($data['show_footer_menu']);
-        }
+            if ($val === null) {
+                continue;
+            }
 
+            if (is_callable($func)) {
+                call_user_func($func, $val);
+                unset($data[$prop]);
+            } else {
+                $this->{$prop} = $val;
+            }
+        }
         return $this;
     }
 

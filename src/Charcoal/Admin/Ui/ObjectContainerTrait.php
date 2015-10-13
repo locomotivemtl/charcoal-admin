@@ -147,12 +147,16 @@ trait ObjectContainerTrait
     public function create_obj()
     {
         if (!$this->validate_obj_type()) {
-            throw new Exception(sprintf('Can not create object, Invalid object type. Object type is : %1', $this->obj_type()));
+            throw new Exception(
+                sprintf('Can not create object, Invalid object type. Object type is : %1', $this->obj_type())
+            );
         }
 
         $obj_type = $this->obj_type();
 
-        $obj = ModelFactory::instance()->get($obj_type);
+        $obj = ModelFactory::instance()->create($obj_type, [
+            'logger'=>\Charcoal\Charcoal::logger()
+        ]);
 
         return $obj;
     }
@@ -170,7 +174,9 @@ trait ObjectContainerTrait
 
         $obj_id = $this->obj_id();
         if (!$obj_id) {
-            throw new Exception('Can not load object. Object ID is not defined.');
+            throw new Exception(
+                'Can not load object. Object ID is not defined.'
+            );
         }
         $obj->load($obj_id);
         return $obj;
@@ -188,9 +194,13 @@ trait ObjectContainerTrait
                 return false;
             }
             // Catch exception to know if the obj_type is valid
-            $obj = ModelFactory::instance()->get($obj_type);
+            $obj = ModelFactory::instance()->get($obj_type, [
+                'logger'=>\Charcoal\Charcoal::logger()
+            ]);
             if (!$this->validate_obj_base_class($obj)) {
-                throw Exception('Can not create object, type is not an instance of obj_base_class');
+                throw Exception(
+                    'Can not create object, type is not an instance of obj_base_class'
+                );
             }
             return true;
         } catch (Exception $e) {

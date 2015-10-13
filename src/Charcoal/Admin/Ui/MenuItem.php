@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Ui;
 
+use \InvalidArgumentException;
+
 // From `charcoal-core`
 use \Charcoal\Translation\TranslationString as TranslationString;
 
@@ -57,7 +59,9 @@ class MenuItem
     public function set_ident($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException('Ident must a string');
+            throw new InvalidArgumentException(
+                'Ident must a string'
+            );
         }
         $this->_ident = $ident;
         return $this;
@@ -123,7 +127,9 @@ class MenuItem
     public function set_children($children)
     {
         if (!is_array($children)) {
-            throw new InvalidArgumentException('Children must be an array');
+            throw new InvalidArgumentException(
+                'Children must be an array'
+            );
         }
         $this->_children = [];
         foreach ($children as $c) {
@@ -145,7 +151,9 @@ class MenuItem
         } else if ($child instanceof MenuItem) {
             $this->children[] = $child;
         } else {
-            throw new InvalidArgumentException('Child must be an array or a MenuItem object');
+            throw new InvalidArgumentException(
+                'Child must be an array or a MenuItem object'
+            );
         }
         return $this;
     }

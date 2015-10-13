@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \InvalidArgumentException;
+
 use \Charcoal\Charcoal as Charcoal;
 
 use \Charcoal\Admin\AdminWidget as AdminWidget;
@@ -83,7 +85,9 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     public function set_collection_ident($collection_ident)
     {
         if (!is_string($collection_ident)) {
-            throw new InvalidArgumentException('Collection ident must be a string');
+            throw new InvalidArgumentException(
+                'Collection ident must be a string'
+            );
         }
         $this->_collection_ident = $collection_ident;
         return $this;

@@ -2,15 +2,17 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Charcoal as Charcoal;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Charcoal;
 
-use \Charcoal\Property\PropertyFactory as PropertyFactory;
-use \Charcoal\Property\PropertyInterface as PropertyInterface;
+use \Charcoal\Admin\AdminWidget;
 
-use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
-use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
+use \Charcoal\Property\PropertyFactory;
+use \Charcoal\Property\PropertyInterface;
+
+use \Charcoal\Admin\Ui\CollectionContainerInterface;
+use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
 * The table widget displays a collection in a tabular (table) format.
@@ -72,7 +74,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function set_collection_ident($collection_ident)
     {
         if (!is_string($collection_ident)) {
-            throw new InvalidArgumentException('Collection ident must be a string');
+            throw new InvalidArgumentException(
+                'Collection ident must be a string'
+            );
         }
         $this->_collection_ident = $collection_ident;
         return $this;

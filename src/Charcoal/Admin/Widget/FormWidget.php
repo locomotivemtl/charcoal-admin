@@ -2,14 +2,15 @@
 
 namespace Charcoal\Admin\Widget;
 
-use InvalidArgumentException as InvalidArgumentException;
+use InvalidArgumentException;
 
 use \Charcoal\Widget\WidgetFactory;
-use \Charcoal\Admin\AdminWidget as AdminWidget;
-use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
+use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\FormGroupInterface;
+use \Charcoal\Admin\Widget\LayoutWidget;
 
 // Local namespace dependencies
-use \Charcoal\Admin\Widget\FormGroupWidget as FormGroupWidget;
+use \Charcoal\Admin\Widget\FormGroupWidget;
 
 class FormWidget extends AdminWidget
 {

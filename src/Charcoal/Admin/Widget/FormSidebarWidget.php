@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \InvalidArgumentException;
+
 use \Charcoal\Translation\TranslationString;
 
 use \Charcoal\Admin\AdminWidget;
@@ -148,7 +150,9 @@ class FormSidebarWidget extends AdminWidget
     public function set_priority($priority)
     {
         if (!is_int($priority)) {
-            throw new InvalidArgumentException('Priority must be an integer');
+            throw new InvalidArgumentException(
+                'Priority must be an integer'
+            );
         }
         $priority = (int)$priority;
         $this->_priority = $priority;

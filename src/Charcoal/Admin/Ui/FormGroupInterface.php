@@ -6,6 +6,18 @@ use \Charcoal\Admin\Widget\FormWidget;
 interface FormGroupInterface
 {
     /**
+    * All FormGroup-s should have a form associated
+    * @param FormWidget
+    * @return FormGroupInterface
+    */
+    public function set_form(FormWidget $form);
+
+    /**
+    * @return FormWidget
+    */
+    public function form();
+
+    /**
     * This should really be in the WidgetInterface...
     * @return string widget type
     */
@@ -32,20 +44,6 @@ interface FormGroupInterface
     * @return String
     */
     public function subtitle();
-
-
-    /**
-    * All FormGroup-s should have a form associated
-    * @param FormWidget
-    * @return FormGroupInterface
-    */
-    public function set_form(FormWidget $form);
-
-    /**
-    * @return FormWidget
-    */
-    public function form();
-
 
     /**
     * @var integer $priority

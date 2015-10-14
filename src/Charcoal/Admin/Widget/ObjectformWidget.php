@@ -46,6 +46,28 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
         return $this;
     }
 
+     /**
+    * @param string $url
+    * @throws InvalidArgumentException if success is not a boolean
+    * @return ActionInterface Chainable
+    */
+    public function set_next_url($url)
+    {
+        if (!is_string($url)) {
+            throw new InvalidArgumentException(
+                'URL needs to be a string'
+            );
+        }
+
+        if (!$this->obj()) {
+            $this->next_url = $url;
+            return $this;
+        }
+
+        $this->next_url = $this->obj()->render( $url );
+        return $this;
+    }
+
     /**
     * Form action (target URL)
     *

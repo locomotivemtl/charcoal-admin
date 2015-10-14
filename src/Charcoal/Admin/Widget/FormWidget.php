@@ -6,14 +6,17 @@ use InvalidArgumentException;
 
 use \Charcoal\Widget\WidgetFactory;
 use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\FormInterface;
+use \Charcoal\Admin\Ui\FormTrait;
 use \Charcoal\Admin\Ui\FormGroupInterface;
 use \Charcoal\Admin\Widget\LayoutWidget;
 
 // Local namespace dependencies
 use \Charcoal\Admin\Widget\FormGroupWidget;
 
-class FormWidget extends AdminWidget
+class FormWidget extends AdminWidget implements FormInterface
 {
+    use FormTrait;
 
     /*public $label;
     public $subtitle;
@@ -29,15 +32,8 @@ class FormWidget extends AdminWidget
     public $show_actions;*/
 
     protected $layout;
-    protected $groups = [];
-    protected $next_url;
+
     protected $sidebars = [];
-
-    private $action = '';
-    private $method = 'post';
-
-    private $form_data = [];
-    private $form_properties = [];
 
     /*public $use_captcha;
     public $use_token;
@@ -56,6 +52,38 @@ class FormWidget extends AdminWidget
         if (is_array($data)) {
             $this->set_data($data);
         }
+    }
+
+    /**
+    * @param array|null $data
+    * @return FormGroupInterface
+    */
+    public function create_group(array $data = null)
+    {
+        $widget_type = isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formgroup';
+        $group = WidgetFactory::instance()->create($widget_type, [
+            'logger' => $this->logger()
+        ]);
+        $group->set_form($this);
+        if ($data) {
+            $group->set_data($data);
+        }
+        return $group;
+
+    }
+
+
+    /**
+    * @param array $data
+    * @return FormPropertyInterface
+    */
+    public function create_form_property(array $data = null)
+    {
+        $p = new FormPropertyWidget();
+        if ($data !== null) {
+            $p->set_data($data);
+        }
+        return $p;
     }
 
     /**
@@ -88,90 +116,6 @@ class FormWidget extends AdminWidget
     public function layout()
     {
         return $this->layout;
-    }
-
-    public function set_groups(array $groups)
-    {
-        $this->groups = [];
-        foreach ($groups as $group_ident => $group) {
-            $this->add_group($group_ident, $group);
-        }
-        return $this;
-    }
-
-    public function add_group($group_ident, $group)
-    {
-        if (!is_string($group_ident)) {
-            throw new InvalidArgumentException(
-                'Group ident must be a string'
-            );
-        }
-
-        if (($group instanceof FormGroupInterface)) {
-            $group->set_form($this);
-            $this->groups[$group_ident] = $group;
-        } else if (is_array($group)) {
-            $widget_type = isset($group['widget_type']) ? $group['widget_type'] : 'charcoal/admin/widget/formgroup';
-            $g = WidgetFactory::instance()->create($widget_type);
-//            $g = new FormGroupWidget();
-            $g->set_form($this);
-            $g->set_data($group);
-            $this->groups[$group_ident] = $g;
-        } else {
-            throw new InvalidArgumentException(
-                'Group must be a FormGroup object or an array'
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-    * @param string $url
-    * @throws InvalidArgumentException if success is not a boolean
-    * @return ActionInterface Chainable
-    */
-    public function set_next_url($url)
-    {
-        if (!is_string($url)) {
-            throw new InvalidArgumentException(
-                'URL needs to be a string'
-            );
-        }
-
-        if (!$this->obj()) {
-            $this->next_url = $url;
-            return $this;
-        }
-
-        $this->next_url = $this->obj()->render( $url );
-        return $this;
-    }
-
-    /**
-    * @return bool
-    */
-    public function next_url()
-    {
-        return $this->next_url;
-    }
-
-
-    /**
-    * Group generator
-    */
-    public function groups()
-    {
-        $groups = $this->groups;
-        if (!is_array($this->groups)) {
-            yield null;
-        } else {
-            uasort($groups, ['self', 'sort_groups_by_priority']);
-            foreach ($groups as $group) {
-                $GLOBALS['widget_template'] = $group->widget_type();
-                yield $group->ident() => $group;
-            }
-        }
     }
 
 
@@ -230,156 +174,6 @@ class FormWidget extends AdminWidget
                 yield $sidebar->ident() => $sidebar;
             }
         }
-    }
-
-    /**
-    * @param string $action
-    * @throws InvalidArgumentException
-    * @return FormWidget Chainable
-    */
-    public function set_action($action)
-    {
-        if (!is_string($action)) {
-            throw new InvalidArgumentException(
-                'Action must be a string'
-            );
-        }
-        $this->action = $action;
-        return $this;
-    }
-
-    /**
-    * @return string
-    */
-    public function action()
-    {
-        return $this->action;
-    }
-
-    /**
-    * @param string $method Either "post" or "get"
-    * @throws InvalidArgumentException
-    * @return FormWidget Chainable
-    */
-    public function set_method($method)
-    {
-        $method = strtolower($method);
-        if (!in_array($method, ['post', 'get'])) {
-            throw new InvalidArgumentException(
-                'Method must be "post" or "get"'
-            );
-        }
-        $this->method = $method;
-        return $this;
-    }
-
-    /**
-    * @return string Either "post" or "get"
-    */
-    public function method()
-    {
-        return $this->method;
-    }
-
-    /**
-    * @param array $data
-    * @return FormWidget Chainable
-    */
-    public function set_form_data(array $data)
-    {
-        $this->form_data = $data;
-        return $this;
-    }
-
-    /**
-    * @param string $key
-    * @param mixed $val
-    * @throws InvalidArgumentException
-    * @return FormWidget Chainable
-    */
-    public function add_form_data($key, $val)
-    {
-        if (!is_string($key)) {
-            throw new InvalidArgumentException(
-                'Key must be a string'
-            );
-        }
-        $this->form_data[$key] = $val;
-        return $this;
-    }
-
-    /**
-    * @return array
-    */
-    public function form_data()
-    {
-        return $this->form_data;
-    }
-
-    public function set_form_properties(array $properties)
-    {
-        $this->form_properties = [];
-        foreach ($properties as $property_ident => $property) {
-            $this->add_form_property($property_ident, $property);
-        }
-        return $this;
-    }
-
-    public function add_form_property($property_ident, $property)
-    {
-        if (!is_string($property_ident)) {
-            throw new InvalidArgumentException(
-                'Property ident must be a string'
-            );
-        }
-
-        if (($property instanceof FormPropertyWidget)) {
-            $this->form_properties[$property_ident] = $property;
-        } else if (is_array($property)) {
-            $p = new FormPropertyWidget($property);
-            $p->set_property_ident($property_ident);
-            $p->set_data($property);
-            $this->form_properties[$property_ident] = $p;
-        } else {
-            throw new InvalidArgumentException(
-                'Property must be a FormProperty object or an array'
-            );
-        }
-
-        return $this;
-    }
-
-    public function form_properties(array $group = null)
-    {
-        unset($group);
-
-        foreach ($this->form_properties as $prop) {
-            if ($prop->active() === false) {
-                continue;
-            }
-            //var_dump($prop->property_ident());
-            $GLOBALS['widget_template'] = $prop->input_type();
-            yield $prop->property_ident() => $prop;
-        }
-    }
-
-    /**
-    * To be called with uasort()
-    *
-    * @param FormGroupInterface $a
-    * @param FormGroupInterface $b
-    * @return integer Sorting value: -1, 0, or 1
-    */
-    static protected function sort_groups_by_priority(FormGroupInterface $a, FormGroupInterface $b)
-    {
-        $a = $a->priority();
-        $b = $b->priority();
-
-        if ($a == $b) {
-            return 1; // Should be 0?
-        }
-
-        return ($a < $b) ? (-1) : 1;
     }
 
     /**

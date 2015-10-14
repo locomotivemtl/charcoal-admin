@@ -5,17 +5,29 @@ namespace Charcoal\Admin\Ui;
 use \InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Translation\TranslationString as TranslationString;
+use \Charcoal\Translation\TranslationString;
 
 /**
 *
 */
 class MenuItem
 {
-    protected $_ident;
-    protected $_label;
-    protected $_url;
-    protected $_children;
+    /**
+    * @var string $ident
+    */
+    protected $ident;
+    /**
+    * @var TranslationString $label
+    */
+    protected $label;
+    /**
+    * @var string $url
+    */
+    protected $url;
+    /**
+    * @var array $children
+    */
+    protected $children;
 
     /**
     * Accept an array of data as constructor.
@@ -63,7 +75,7 @@ class MenuItem
                 'Ident must a string'
             );
         }
-        $this->_ident = $ident;
+        $this->ident = $ident;
         return $this;
     }
 
@@ -72,7 +84,7 @@ class MenuItem
     */
     public function ident()
     {
-        return $this->_ident;
+        return $this->ident;
     }
 
     /**
@@ -81,7 +93,7 @@ class MenuItem
     */
     public function set_label($label)
     {
-        $this->_label = new TranslationString($label);
+        $this->label = new TranslationString($label);
         return $this;
     }
 
@@ -90,7 +102,7 @@ class MenuItem
     */
     public function label()
     {
-        return $this->_label;
+        return $this->label;
     }
 
     /**
@@ -99,7 +111,7 @@ class MenuItem
     */
     public function set_url($url)
     {
-        $this->_url = $url;
+        $this->url = $url;
         return $this;
     }
 
@@ -108,7 +120,7 @@ class MenuItem
     */
     public function url()
     {
-        return $this->_url;
+        return $this->url;
     }
 
     /**
@@ -131,7 +143,7 @@ class MenuItem
                 'Children must be an array'
             );
         }
-        $this->_children = [];
+        $this->children = [];
         foreach ($children as $c) {
             $this->add_child($c);
         }
@@ -147,7 +159,7 @@ class MenuItem
     {
         if (is_array($child)) {
             $c = new MenuItem($child);
-            $this->_children[] = $c;
+            $this->children[] = $c;
         } else if ($child instanceof MenuItem) {
             $this->children[] = $child;
         } else {
@@ -163,7 +175,7 @@ class MenuItem
     */
     public function children()
     {
-        return $this->_children;
+        return $this->children;
     }
 
     /**
@@ -171,7 +183,7 @@ class MenuItem
     */
     public function has_children()
     {
-        return count($this->_children > 0);
+        return count($this->children > 0);
     }
 
     /**
@@ -179,6 +191,6 @@ class MenuItem
     */
     public function num_children()
     {
-        return count($this->_children);
+        return count($this->children);
     }
 }

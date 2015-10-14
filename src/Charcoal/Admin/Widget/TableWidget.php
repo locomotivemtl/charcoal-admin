@@ -22,73 +22,24 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     use CollectionContainerTrait;
 
     /**
-    * @var array $_properties
+    * @var array $properties
     */
-    protected $_properties;
+    protected $properties;
 
     /**
-    * @var $_properties_options
+    * @var $properties_options
     */
-    protected $_properties_options;
+    protected $properties_options;
 
     /**
-    * @var array $_orders
+    * @var array $orders
     */
-    protected $_orders;
+    protected $orders;
 
     /**
-    * @var array $_filters
+    * @var array $filters
     */
-    protected $_filters;
-
-    /**
-    * @param array $data Optional
-    */
-
-    /**
-    * @param array $data
-    * @return TableWidget Chainable
-    */
-    public function set_data(array $data)
-    {
-
-        $this->set_collection_data($data);
-
-        if (isset($data['collection_ident']) && $data['collection_ident'] !== null) {
-            $this->set_collection_ident($data['collection_ident']);
-        }
-
-        $obj_data = $this->data_from_object();
-        $data = array_merge_recursive($obj_data, $data);
-
-        parent::set_data($data);
-
-        return $this;
-    }
-
-    /**
-    * @param string $collection_ident
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
-    public function set_collection_ident($collection_ident)
-    {
-        if (!is_string($collection_ident)) {
-            throw new InvalidArgumentException(
-                'Collection ident must be a string'
-            );
-        }
-        $this->_collection_ident = $collection_ident;
-        return $this;
-    }
-
-    /**
-    * @return string
-    */
-    public function collection_ident()
-    {
-        return $this->_collection_ident;
-    }
+    protected $filters;
 
     /**
     * Fetch metadata from current obj_type
@@ -116,7 +67,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     */
     public function properties()
     {
-        if ($this->_properties === null) {
+        if ($this->properties === null) {
             $obj = $this->proto();
             $props = $obj->metadata()->properties();
 
@@ -136,10 +87,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 }
             }
 
-            $this->_properties = $props;
+            $this->properties = $props;
         }
 
-        return $this->_properties;
+        return $this->properties;
     }
 
     /**

@@ -5,6 +5,8 @@ namespace Charcoal\Admin\Widget;
 use \Exception;
 use \InvalidArgumentException;
 
+use \Charcoal\Admin\Ui\FormPropertyInterface;
+use \Charcoal\Admin\Ui\FormPropertyTrait;
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Property\PropertyInputFactory;
 
@@ -15,8 +17,10 @@ use \Charcoal\Property\PropertyInterface;
 /**
 *
 */
-class FormPropertyWidget extends AdminWidget
+class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
 {
+    use FormPropertyTrait;
+
     /**
     * In memory copy of the PropertyInput object
     * @var PropertyInputInterface $input

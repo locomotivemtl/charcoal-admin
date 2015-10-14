@@ -19,10 +19,12 @@ trait CollectionContainerTrait
     * @var string $obj_type
     */
     private $obj_type;
+
     /**
     * @var string $collection_ident
     */
     private $collection_ident;
+
     /**
     * @var mixed $collection_config
     */
@@ -43,23 +45,6 @@ trait CollectionContainerTrait
     * @var Collection $collection
     */
     private $collection;
-
-    /**
-    * @param array $data
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
-    public function set_collection_data(array $data)
-    {
-        if (isset($data['obj_type']) && $data['obj_type'] !== null) {
-            $this->set_obj_type($data['obj_type']);
-        }
-        if (isset($data['collection_config']) && $data['collection_config'] !== null) {
-            $this->set_collection_config($data['collection_config']);
-        }
-
-        return $this;
-    }
 
     /**
     * @param string $obj_type
@@ -301,12 +286,25 @@ trait CollectionContainerTrait
     }
 
     /**
+    * @return integer
+    */
+    public function num_objects()
+    {
+        return count($this->objects());
+    }
+
+    /**
     * @return Object
     */
     public function proto()
     {
         $obj_type = $this->obj_type();
-        $obj = ModelFactory::instance()->get($obj_type);
+        if ($obj_type === null) {
+            return null;
+        }
+        $obj = ModelFactory::instance()->get($obj_type, [
+            'logger' => $this->logger()
+        ]);
         return $obj;
     }
 

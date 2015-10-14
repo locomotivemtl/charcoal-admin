@@ -5,12 +5,6 @@ namespace Charcoal\Admin\Ui;
 interface CollectionContainerInterface
 {
     /**
-    * @param array $data
-    * @return CollectionContainerInterface Chainable
-    */
-    public function set_collection_data(array $data);
-
-    /**
     * @param string $obj_type
     * @return CollectionContainerInterface Chainable
     */

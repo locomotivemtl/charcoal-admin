@@ -28,7 +28,6 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public $layout;
 
-
     /**
     * @var array $group_properties
     */
@@ -82,6 +81,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
 
         return $this;
     }
+
 
     /**
     * @return string

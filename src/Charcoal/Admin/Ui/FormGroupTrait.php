@@ -2,9 +2,11 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \Charcoal\Admin\Widget\FormWidget;
-
+// Dependencies from `PHP`
 use \InvalidArgumentException;
+
+// Local namespace dependencies
+use \Charcoal\Admin\Ui\FormInterface;
 
 /**
 * FormGroupTrait with basic methods to make
@@ -18,7 +20,7 @@ trait FormGroupTrait
 {
     /**
     * In-memory copy of the parent form widget.
-    * @var FormWidget $form
+    * @var FormInterface $form
     */
     private $form;
 
@@ -34,9 +36,12 @@ trait FormGroupTrait
     * but this will be called by the Form widget
     *
     * @var string $title
-    * @var string $subtitle
     */
     private $title;
+
+    /**
+    * @var string $subtitle
+    */
     private $subtitle;
 
     /**
@@ -110,14 +115,14 @@ trait FormGroupTrait
     * @param Form $form
     * @return FormGroupWidget Chainable
     */
-    public function set_form(FormWidget $form)
+    public function set_form(FormInterface $form)
     {
         $this->form = $form;
         return $this;
     }
 
     /**
-    * @return FormWidget or null
+    * @return FormInterface|null Associated form.
     */
     public function form()
     {

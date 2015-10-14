@@ -18,48 +18,48 @@ use \Charcoal\Widget\WidgetView as WidgetView;
 class AdminWidget extends AbstractWidget
 {
     /**
-    * @var string $_widget_id
+    * @var string $widget_id
     */
-    public $_widget_id;
+    public $widget_id;
 
     /**
-    * @var string $_type
+    * @var string $type
     */
-    private $_type;
+    private $type;
     /**
-    * @var string $_ident
+    * @var string $ident
     */
-    private $_ident = '';
+    private $ident = '';
     /**
-    * @var mixed $_label
+    * @var mixed $label
     */
-    private $_label;
+    private $label;
     /**
-    * @var string $_lang
+    * @var string $lang
     */
-    private $_lang;
+    private $lang;
     /**
-    * @var bool $_show_label
+    * @var bool $show_label
     */
-    private $_show_label;
+    private $show_label;
     /**
-    * @var bool $_show_actions
+    * @var bool $show_actions
     */
-    private $_show_actions;
+    private $show_actions;
 
 
     public function set_widget_id($widget_id)
     {
-        $this->_widget_id = $widget_id;
+        $this->widget_id = $widget_id;
         return $this;
     }
 
     public function widget_id()
     {
-        if (!$this->_widget_id) {
-            $this->_widget_id = 'widget_'.uniqid();
+        if (!$this->widget_id) {
+            $this->widget_id = 'widget_'.uniqid();
         }
-        return $this->_widget_id;
+        return $this->widget_id;
     }
 
     /**
@@ -70,9 +70,11 @@ class AdminWidget extends AbstractWidget
     public function set_type($type)
     {
         if (!is_string($type)) {
-            throw new InvalidArgumentException('Template ident must be a string');
+            throw new InvalidArgumentException(
+                'Template ident must be a string'
+            );
         }
-        $this->_type = $type;
+        $this->type = $type;
         return $this;
     }
 
@@ -81,7 +83,7 @@ class AdminWidget extends AbstractWidget
     */
     public function type()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -94,7 +96,7 @@ class AdminWidget extends AbstractWidget
         if (!is_string($ident)) {
             throw new InvalidArgumentException(__CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.');
         }
-        $this->_ident = $ident;
+        $this->ident = $ident;
         return $this;
     }
 
@@ -103,7 +105,7 @@ class AdminWidget extends AbstractWidget
     */
     public function ident()
     {
-        return $this->_ident;
+        return $this->ident;
     }
 
     /**
@@ -112,7 +114,7 @@ class AdminWidget extends AbstractWidget
     */
     public function set_label($label)
     {
-        $this->_label = new TranslationString($label);
+        $this->label = new TranslationString($label);
         return $this;
     }
 
@@ -121,12 +123,12 @@ class AdminWidget extends AbstractWidget
     */
     public function label()
     {
-        if ($this->_label === null) {
+        if ($this->label === null) {
             // Generate label from ident
             $label = ucwords(str_replace(['_', '.', '/'], ' ', $this->ident()));
-            $this->_label = new TranslationString($label);
+            $this->label = new TranslationString($label);
         }
-        return $this->_label;
+        return $this->label;
     }
 
     public function actions()
@@ -144,7 +146,7 @@ class AdminWidget extends AbstractWidget
         if (!is_bool($show)) {
             throw new InvalidArgumentException('Show actions must be a boolean');
         }
-        $this->_show_actions = $show;
+        $this->show_actions = $show;
         return $this;
     }
 
@@ -153,7 +155,7 @@ class AdminWidget extends AbstractWidget
     */
     public function show_actions()
     {
-        if ($this->_show_actions !== false) {
+        if ($this->show_actions !== false) {
             return (count($this->actions()) > 0);
         } else {
             return false;
@@ -170,7 +172,7 @@ class AdminWidget extends AbstractWidget
         if (!is_bool($show)) {
             throw new InvalidArgumentException('Show actions must be a boolean');
         }
-        $this->_show_label = $show;
+        $this->show_label = $show;
         return $this;
     }
 
@@ -179,7 +181,7 @@ class AdminWidget extends AbstractWidget
     */
     public function show_label()
     {
-        if ($this->_show_label !== false) {
+        if ($this->show_label !== false) {
             return ((string)$this->label() == '');
         } else {
             return false;

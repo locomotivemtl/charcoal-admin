@@ -28,18 +28,16 @@ class FormWidget extends AdminWidget
     public $show_notes;
     public $show_actions;*/
 
-    protected $_layout;
-    protected $_groups = [];
-    protected $_next_url;
-    protected $_sidebars = [];
+    protected $layout;
+    protected $groups = [];
+    protected $next_url;
+    protected $sidebars = [];
 
-    private $_action = '';
-    private $_method = 'post';
+    private $action = '';
+    private $method = 'post';
 
-    private $_form_data = [];
-    private $_form_properties = [];
-
-
+    private $form_data = [];
+    private $form_properties = [];
 
     /*public $use_captcha;
     public $use_token;
@@ -61,42 +59,6 @@ class FormWidget extends AdminWidget
     }
 
     /**
-    * @var array $data
-    * @return Form Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        if (isset($data['layout']) && $data['layout'] !== null) {
-            $this->set_layout($data['layout']);
-        }
-        if (isset($data['groups']) && $data['groups'] !== null) {
-            $this->set_groups($data['groups']);
-        }
-        if (isset($data['next_url']) && $data['next_url'] !== null) {
-            $this->set_next_url($data['next_url']);
-        }
-        if (isset($data['sidebars']) && $data['sidebars'] !== null) {
-            $this->set_sidebars($data['sidebars']);
-        }
-        if (isset($data['form_properties']) && $data['form_properties'] !== null) {
-            $this->set_form_properties($data['form_properties']);
-        }
-        if (isset($data['form_data']) && $data['form_data'] !== null) {
-            $this->set_form_data($data['form_data']);
-        }
-        if (isset($data['action']) && $data['action'] !== null) {
-            $this->set_action($data['action']);
-        }
-        if (isset($data['method']) && $data['method'] !== null) {
-            $this->set_method($data['method']);
-        }
-
-        return $this;
-    }
-
-    /**
     * @param LayoutWidget|array
     * @throws InvalidArgumentException
     * @return FormWidget Chainable
@@ -104,14 +66,18 @@ class FormWidget extends AdminWidget
     public function set_layout($layout)
     {
         if (($layout instanceof LayoutWidget)) {
-            $this->_layout = $layout;
+            $this->layout = $layout;
         } else if (is_array($layout)) {
-            $l = new LayoutWidget();
+            $l = new LayoutWidget([
+                'logger' => $this->logger()
+            ]);
 //            $l->set_parent($this);
             $l->set_data($layout);
-            $this->_layout = $l;
+            $this->layout = $l;
         } else {
-            throw new InvalidArgumentException('Layout must be a LayoutWidget object or an array');
+            throw new InvalidArgumentException(
+                'Layout must be a LayoutWidget object or an array'
+            );
         }
         return $this;
     }
@@ -121,12 +87,12 @@ class FormWidget extends AdminWidget
     */
     public function layout()
     {
-        return $this->_layout;
+        return $this->layout;
     }
 
     public function set_groups(array $groups)
     {
-        $this->_groups = [];
+        $this->groups = [];
         foreach ($groups as $group_ident => $group) {
             $this->add_group($group_ident, $group);
         }
@@ -136,21 +102,25 @@ class FormWidget extends AdminWidget
     public function add_group($group_ident, $group)
     {
         if (!is_string($group_ident)) {
-            throw new InvalidArgumentException('Group ident must be a string');
+            throw new InvalidArgumentException(
+                'Group ident must be a string'
+            );
         }
 
         if (($group instanceof FormGroupInterface)) {
             $group->set_form($this);
-            $this->_groups[$group_ident] = $group;
+            $this->groups[$group_ident] = $group;
         } else if (is_array($group)) {
             $widget_type = isset($group['widget_type']) ? $group['widget_type'] : 'charcoal/admin/widget/formgroup';
             $g = WidgetFactory::instance()->create($widget_type);
 //            $g = new FormGroupWidget();
             $g->set_form($this);
             $g->set_data($group);
-            $this->_groups[$group_ident] = $g;
+            $this->groups[$group_ident] = $g;
         } else {
-            throw new InvalidArgumentException('Group must be a FormGroup object or an array');
+            throw new InvalidArgumentException(
+                'Group must be a FormGroup object or an array'
+            );
         }
 
         return $this;
@@ -170,11 +140,11 @@ class FormWidget extends AdminWidget
         }
 
         if (!$this->obj()) {
-            $this->_next_url = $url;
+            $this->next_url = $url;
             return $this;
         }
 
-        $this->_next_url = $this->obj()->render( $url );
+        $this->next_url = $this->obj()->render( $url );
         return $this;
     }
 
@@ -183,7 +153,7 @@ class FormWidget extends AdminWidget
     */
     public function next_url()
     {
-        return $this->_next_url;
+        return $this->next_url;
     }
 
 
@@ -192,11 +162,11 @@ class FormWidget extends AdminWidget
     */
     public function groups()
     {
-        $groups = $this->_groups;
-        if (!is_array($this->_groups)) {
+        $groups = $this->groups;
+        if (!is_array($this->groups)) {
             yield null;
         } else {
-            uasort($groups, ['self', '_sort_groups_by_priority']);
+            uasort($groups, ['self', 'sort_groups_by_priority']);
             foreach ($groups as $group) {
                 $GLOBALS['widget_template'] = $group->widget_type();
                 yield $group->ident() => $group;
@@ -207,9 +177,8 @@ class FormWidget extends AdminWidget
 
     public function set_sidebars(array $sidebars)
     {
-        $this->_sidebars = [];
+        $this->sidebars = [];
         foreach ($sidebars as $sidebar_ident => $sidebar) {
-            //var_dump($sidebar_ident);
             $this->add_sidebar($sidebar_ident, $sidebar);
         }
         return $this;
@@ -222,17 +191,21 @@ class FormWidget extends AdminWidget
     public function add_sidebar($sidebar_ident, $sidebar)
     {
         if (!is_string($sidebar_ident)) {
-            throw new InvalidArgumentException('Sidebar ident must be a string');
+            throw new InvalidArgumentException(
+                'Sidebar ident must be a string'
+            );
         }
         if (($sidebar instanceof FormSidebarWidget)) {
-            $this->_sidebars[$sidebar_ident] = $sidebar;
+            $this->sidebars[$sidebar_ident] = $sidebar;
         } else if (is_array($sidebar)) {
             $s = new FormSidebarWidget();
             $s->set_form($this);
             $s->set_data($sidebar);
-            $this->_sidebars[$sidebar_ident] = $s;
+            $this->sidebars[$sidebar_ident] = $s;
         } else {
-            throw new InvalidArgumentException('Sidebar must be a FormSidebarWidget object or an array');
+            throw new InvalidArgumentException(
+                'Sidebar must be a FormSidebarWidget object or an array'
+            );
         }
         return $this;
     }
@@ -242,11 +215,11 @@ class FormWidget extends AdminWidget
     */
     public function sidebars()
     {
-        $sidebars = $this->_sidebars;
-        if (!is_array($this->_sidebars)) {
+        $sidebars = $this->sidebars;
+        if (!is_array($this->sidebars)) {
             yield null;
         } else {
-            uasort($sidebars, ['self', '_sort_sidebars_by_priority']);
+            uasort($sidebars, ['self', 'sort_sidebars_by_priority']);
             foreach ($sidebars as $sidebar) {
                 /*if ($sidebar->widget_type() != '') {
                     $GLOBALS['widget_template'] = $sidebar->widget_type();
@@ -254,7 +227,6 @@ class FormWidget extends AdminWidget
                     $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
                 }*/
                 $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
-                //var_dump($GLOBALS['widget_template']);
                 yield $sidebar->ident() => $sidebar;
             }
         }
@@ -268,61 +240,85 @@ class FormWidget extends AdminWidget
     public function set_action($action)
     {
         if (!is_string($action)) {
-            throw new InvalidArgumentException('Action must be a string');
+            throw new InvalidArgumentException(
+                'Action must be a string'
+            );
         }
-        $this->_action = $action;
+        $this->action = $action;
         return $this;
     }
 
+    /**
+    * @return string
+    */
     public function action()
     {
-        return $this->_action;
+        return $this->action;
     }
 
+    /**
+    * @param string $method Either "post" or "get"
+    * @throws InvalidArgumentException
+    * @return FormWidget Chainable
+    */
     public function set_method($method)
     {
         $method = strtolower($method);
         if (!in_array($method, ['post', 'get'])) {
-            throw new InvalidArgumentException('Method must be "post" or "get"');
+            throw new InvalidArgumentException(
+                'Method must be "post" or "get"'
+            );
         }
-        $this->_method = $method;
+        $this->method = $method;
         return $this;
     }
 
+    /**
+    * @return string Either "post" or "get"
+    */
     public function method()
     {
-        return $this->_method;
+        return $this->method;
     }
 
-    public function set_form_data($data)
+    /**
+    * @param array $data
+    * @return FormWidget Chainable
+    */
+    public function set_form_data(array $data)
     {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Form data must be an array');
-        }
-        $this->_form_data = $data;
+        $this->form_data = $data;
         return $this;
     }
 
+    /**
+    * @param string $key
+    * @param mixed $val
+    * @throws InvalidArgumentException
+    * @return FormWidget Chainable
+    */
     public function add_form_data($key, $val)
     {
         if (!is_string($key)) {
-            throw new InvalidArgumentException('Key must be a string');
+            throw new InvalidArgumentException(
+                'Key must be a string'
+            );
         }
-        $this->_form_data[$key] = $val;
+        $this->form_data[$key] = $val;
         return $this;
     }
 
+    /**
+    * @return array
+    */
     public function form_data()
     {
-        return $this->_form_data;
+        return $this->form_data;
     }
 
-    public function set_form_properties($properties)
+    public function set_form_properties(array $properties)
     {
-        if (!is_array($properties)) {
-            throw new InvalidArgumentException('Properties must be an array');
-        }
-        $this->_form_properties = [];
+        $this->form_properties = [];
         foreach ($properties as $property_ident => $property) {
             $this->add_form_property($property_ident, $property);
         }
@@ -332,19 +328,22 @@ class FormWidget extends AdminWidget
     public function add_form_property($property_ident, $property)
     {
         if (!is_string($property_ident)) {
-            throw new InvalidArgumentException('Property ident must be a string');
+            throw new InvalidArgumentException(
+                'Property ident must be a string'
+            );
         }
 
         if (($property instanceof FormPropertyWidget)) {
-            $this->_form_properties[$property_ident] = $property;
+            $this->form_properties[$property_ident] = $property;
         } else if (is_array($property)) {
             $p = new FormPropertyWidget($property);
             $p->set_property_ident($property_ident);
             $p->set_data($property);
-//            $p->set_form($this);
-            $this->_form_properties[$property_ident] = $p;
+            $this->form_properties[$property_ident] = $p;
         } else {
-            throw new InvalidArgumentException('Property must be a FormProperty object or an array');
+            throw new InvalidArgumentException(
+                'Property must be a FormProperty object or an array'
+            );
         }
 
         return $this;
@@ -354,7 +353,7 @@ class FormWidget extends AdminWidget
     {
         unset($group);
 
-        foreach ($this->_form_properties as $prop) {
+        foreach ($this->form_properties as $prop) {
             if ($prop->active() === false) {
                 continue;
             }
@@ -366,8 +365,12 @@ class FormWidget extends AdminWidget
 
     /**
     * To be called with uasort()
+    *
+    * @param FormGroupInterface $a
+    * @param FormGroupInterface $b
+    * @return integer Sorting value: -1, 0, or 1
     */
-    static protected function _sort_groups_by_priority($a, $b)
+    static protected function sort_groups_by_priority(FormGroupInterface $a, FormGroupInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();
@@ -381,8 +384,12 @@ class FormWidget extends AdminWidget
 
     /**
     * To be called with uasort()
+    *
+    * @param FormGroupInterface $a
+    * @param FormGroupInterface $b
+    * @return integer Sorting value: -1, 0, or 1
     */
-    static protected function _sort_sidebars_by_priority($a, $b)
+    static protected function sort_sidebars_by_priority(FormGroupInterface $a, FormGroupInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();

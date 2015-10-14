@@ -7,42 +7,29 @@ use \Iterator as Iterator;
 
 use \Charcoal\Admin\AdminWidget as AdminWidget;
 
+/**
+* Layout Widget Controller
+*/
 class LayoutWidget extends AdminWidget
 {
     /**
-    * @var integer $_position
+    * @var integer $position
     */
-    private $_position = 0;
+    private $position = 0;
 
     /**
-    * @var array $_structure
+    * @var array $structure
     */
-    protected $_structure = [];
+    protected $structure = [];
 
     /**
     * @param array $data Optional
     */
     public function __construct(array $data = null)
     {
-        // Initialize (empty) structure
-        $this->_structure = [];
-
         if (is_array($data)) {
             $this->set_data($data);
         }
-    }
-
-    /**
-    * @param array $data
-    * @return Layout Chainable
-    */
-    public function set_data(array $data)
-    {
-        if (isset($data['structure']) && $data['structure'] !== null) {
-            $this->set_structure($data['structure']);
-        }
-
-        return $this;
     }
 
     /**
@@ -50,7 +37,7 @@ class LayoutWidget extends AdminWidget
     */
     public function position()
     {
-        return $this->_position;
+        return $this->position;
     }
 
     /**
@@ -79,7 +66,7 @@ class LayoutWidget extends AdminWidget
             }
         }
 
-        $this->_structure = $computed_layouts;
+        $this->structure = $computed_layouts;
 
         // Chainable
         return $this;
@@ -90,7 +77,7 @@ class LayoutWidget extends AdminWidget
     */
     public function structure()
     {
-        return $this->_structure;
+        return $this->structure;
     }
 
     /**
@@ -118,7 +105,7 @@ class LayoutWidget extends AdminWidget
 
         $i = 0;
         $p = 0;
-        foreach ($this->_structure as $row_ident => $row) {
+        foreach ($this->structure as $row_ident => $row) {
             $num_cells = count($row['columns']);
             $p += $num_cells;
             if ($p > $position) {
@@ -144,8 +131,8 @@ class LayoutWidget extends AdminWidget
         }
 
         $row_index = $this->row_index($position);
-        if (isset($this->_structure[$row_index])) {
-            return $this->_structure[$row_index];
+        if (isset($this->structure[$row_index])) {
+            return $this->structure[$row_index];
         } else {
             return null;
         }
@@ -241,7 +228,7 @@ class LayoutWidget extends AdminWidget
     public function num_cells_total()
     {
         $num_cells = 0;
-        foreach ($this->_structure as $row) {
+        foreach ($this->structure as $row) {
             $row_cols = isset($row['columns']) ? count($row['columns']) : 0;
             $num_cells += $row_cols;
         }
@@ -307,14 +294,20 @@ class LayoutWidget extends AdminWidget
         return ($cell_num >= ($num_cells-1));
     }
 
+    /**
+    * @return string
+    */
     public function start()
     {
         return '';
     }
 
+    /**
+    * @return string
+    */
     public function end()
     {
-        $this->_position++;
+        $this->position++;
         return '';
     }
 }

@@ -26,13 +26,13 @@ use \Charcoal\Admin\Config as AdminConfig;
 class AdminModule
 {
     /**
-    * @var AdminConfig $_config
+    * @var AdminConfig $config
     */
-    private $_config;
+    private $config;
     /**
-    * @var \Slim\App $_app
+    * @var \Slim\App $app
     */
-    private $_app;
+    private $app;
 
     /**
     * Charcoal admin setup.
@@ -94,13 +94,11 @@ class AdminModule
         };
 
         $container['charcoal/view'] = function($c) {
-
             $view = new \Charcoal\View\GenericView([
                 'config' => $c['charcoal/view/config'],
                 'logger' => $c['logger']
             ]);
             $view->set_engine($c['charcoal/view/engine']);
-
             return $view;
         };
 
@@ -114,8 +112,8 @@ class AdminModule
     */
     public function __construct($data)
     {
-        $this->_config = $data['config'];
-        $this->_app = $data['app'];
+        $this->config = $data['config'];
+        $this->app = $data['app'];
 
         // Hack
         $metadata_path = realpath(__DIR__.'/../../../metadata/');
@@ -151,7 +149,7 @@ class AdminModule
         unset($request);
         unset($args);
 
-        $c = $this->_app->getContainer();
+        $c = $this->app->getContainer();
         $view = $c['charcoal/view'];
 
         $type = 'charcoal/admin/template/home';
@@ -167,7 +165,7 @@ class AdminModule
     */
     public function setup_cli_routes($app = null)
     {
-        $this->_app = $app;
+        $this->app = $app;
         // Admin catch-all (load template if it exists)
         $app->get('/{actions:.*}', function ($req, $res, $args) {
             try {
@@ -266,7 +264,7 @@ class AdminModule
 
     public function app()
     {
-        return $this->_app;
+        return $this->app;
     }
 
     /**
@@ -274,7 +272,7 @@ class AdminModule
     */
     public function config()
     {
-        return $this->_config;
+        return $this->config;
     }
 
 }

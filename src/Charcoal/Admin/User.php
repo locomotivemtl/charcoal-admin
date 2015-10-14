@@ -25,21 +25,29 @@ class User extends AbstractUser
     /**
     * ConfigurableInterface > create_config()
     *
-    * @param array $data Optional
+    * @param array|null $data Optional
     * @return UserConfig
     */
     public function create_config(array $data = null)
     {
         $config = new UserConfig();
-        if (is_array($data)) {
+        if ($data !== null) {
             $config->set_data($data);
         }
         return $config;
     }
 
-    public function create_group()
+    /**
+    * @param array|null $data Optional
+    * @return UserGroup
+    */
+    public function create_group(array $data = null)
     {
-        return new UserGroup();
+        $group =  new UserGroup();
+        if ($data !== null) {
+            $group->set_data($data);
+        }
+        return $group;
     }
 
 }

@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Action\Cli\Object\Table;
 
+use \Exception;
+use \InvalidArgumentException;
+
 // From PSR-7
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -105,7 +108,7 @@ class AlterAction extends CliAction
 
             $climate->green()->out("\n".'Success!');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $climate->red()->error($e->getMessage());
         }
         return $response;

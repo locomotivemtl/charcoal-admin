@@ -2,15 +2,19 @@
 
 namespace Charcoal\Admin\Action\Cli\Object;
 
-use \Exception as Exception;
+use \Exception;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\Action\CliAction as CliAction;
+use \Charcoal\Admin\Action\CliAction;
 
-use \Charcoal\Model\ModelFactory as ModelFactory;
+use \Charcoal\Model\ModelFactory;
 
 class CreateAction extends CliAction
 {
 
+    /**
+    * @return array
+    */
     public function default_arguments()
     {
         $arguments = [

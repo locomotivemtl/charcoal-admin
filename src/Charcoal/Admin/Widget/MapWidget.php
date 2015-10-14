@@ -21,49 +21,27 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     /**
     * @var object styles (concerning the marker style)
     */
-    private $_styles;
+    private $styles;
 
-    private $_lat_property;
-    private $_lon_property;
-
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        if (isset($data['title'])) {
-            $this->set_title($data['title']);
-        }
-        if (isset($data['subtitle'])) {
-            $this->set_title($data['subtitle']);
-        }
-        if (isset($data['actions'])) {
-            $this->set_actions($data['actions']);
-        }
-        if (isset($data['lat_property'])) {
-            $this->set_lat_property($data['lat_property']);
-        }
-        if (isset($data['lon_property'])) {
-            $this->set_lon_property($data['lon_property']);
-        }
-        return $this;
-    }
+    private $lat_property;
+    private $lon_property;
 
     public function set_lat_property($p)
     {
-        $this->_lat_property = $p;
+        $this->lat_property = $p;
     }
 
     public function lat_property()
     {
-        return $this->_lat_property;
+        return $this->lat_property;
     }
     public function set_lon_property($p)
     {
-        $this->_lon_property = $p;
+        $this->lon_property = $p;
     }
     public function lon_property()
     {
-        return $this->_lon_property;
+        return $this->lon_property;
     }
 
     public function lat()
@@ -104,10 +82,12 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     public function obj()
     {
         $obj = null;
-        $id = ( isset($_GET['obj_id']) ? $_GET['obj_id'] : 0 );
-        $obj_type = ( isset($_GET['obj_type']) ? $_GET['obj_type'] : 0 );
+        $id = ( isset($GET['obj_id']) ? $GET['obj_id'] : 0 );
+        $obj_type = ( isset($GET['obj_type']) ? $GET['obj_type'] : 0 );
         if ($id && $obj_type) {
-            $obj = ModelFactory::instance()->get($obj_type);
+            $obj = ModelFactory::instance()->get($obj_type, [
+                'logger'=>$this->logger()
+            ]);
             $obj->load($id);
         }
         return $obj;
@@ -116,42 +96,55 @@ class MapWidget extends AdminWidget implements FormGroupInterface
 
     /**
     * Title and subtitle getter/setters
-    * @param {Mixed} - l10n object OR string
-    * @return (setters) $this (chainable)
-    * @return (getters) String
+    * @param mixed $subtitle l10n object OR string
+    * @return MapWidget Chainable
     */
     public function set_subtitle($subtitle)
     {
         if ($subtitle === null) {
-            $this->_title = null;
+            $this->title = null;
         } else {
-            $this->_title = new TranslationString($subtitle);
-        }
-    }
-
-    public function subtitle()
-    {
-        return $this->_subtitle;
-    }
-
-    public function set_title($title)
-    {
-        if ($title === null) {
-            $this->_title = null;
-        } else {
-            $this->_title = new TranslationString($title);
+            $this->title = new TranslationString($subtitle);
         }
         return $this;
     }
 
-    public function title()
+    /**
+    * @return TranslationString
+    */
+    public function subtitle()
     {
-        if ($this->_title === null) {
-            $this->set_title('Actions');
-        }
-        return $this->_title;
+        return $this->subtitle;
     }
 
+    /**
+    * @param mixed $title
+    * @return MapWidget Chainable
+    */
+    public function set_title($title)
+    {
+        if ($title === null) {
+            $this->title = null;
+        } else {
+            $this->title = new TranslationString($title);
+        }
+        return $this;
+    }
+
+    /**
+    * @return TranslationString
+    */
+    public function title()
+    {
+        if ($this->title === null) {
+            return new TranslationString('Actions');
+        }
+        return $this->title;
+    }
+
+    /**
+    * @return string
+    */
     public function widget_type()
     {
         return 'charcoal/admin/widget/map';

@@ -14,7 +14,7 @@ use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 class LoginTemplate extends AdminTemplate
 {
     /**
-    *
+    * @return boolean
     */
     protected function auth_required()
     {
@@ -22,7 +22,7 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-    *
+    * @return boolean
     */
     public function show_header_menu()
     {
@@ -30,7 +30,7 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-    *
+    * @return boolean
     */
     public function show_footer_menu()
     {
@@ -38,10 +38,10 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-    *
+    * @return string
     */
     public function url_login_action()
     {
-        return Charcoal::app()->urlFor('admin/action/login');
+        return 'action/login';
     }
 }

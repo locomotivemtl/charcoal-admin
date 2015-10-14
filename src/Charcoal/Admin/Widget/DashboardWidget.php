@@ -19,31 +19,13 @@ use \Charcoal\Admin\Widget\LayoutWidget;
 class DashboardWidget extends AdminWidget
 {
     /**
-    * @var LayoutWidget $_layout
+    * @var LayoutWidget $$layout
     */
-    public $_layout;
+    public $layout;
     /**
-    * @var array $_widgets
+    * @var array $widgets
     */
-    public $_widgets;
-
-    /**
-    * @param array $data
-    * @return Dashboard Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        if (isset($data['layout']) && $data['layout'] !== null) {
-            $this->set_layout($data['layout']);
-        }
-        if (isset($data['widgets']) && $data['widgets'] !== null) {
-            $this->set_widgets($data['widgets']);
-        }
-
-        return $this;
-    }
+    public $widgets;
 
     /**
     * @param LayoutWidget|array
@@ -53,13 +35,17 @@ class DashboardWidget extends AdminWidget
     public function set_layout($layout)
     {
         if (($layout instanceof LayoutWidget)) {
-            $this->_layout = $layout;
+            $this->layout = $layout;
         } else if (is_array($layout)) {
-            $l = new LayoutWidget();
+            $l = new LayoutWidget([
+                'logger'=>$this->logger()
+            ]);
             $l->set_data($layout);
-            $this->_layout = $l;
+            $this->layout = $l;
         } else {
-            throw new InvalidArgumentException('LayoutWidget must be a LayoutWidget object or an array');
+            throw new InvalidArgumentException(
+                'LayoutWidget must be a LayoutWidget object or an array'
+            );
         }
         return $this;
     }
@@ -69,7 +55,7 @@ class DashboardWidget extends AdminWidget
     */
     public function layout()
     {
-        return $this->_layout;
+        return $this->layout;
     }
 
     /**
@@ -80,7 +66,9 @@ class DashboardWidget extends AdminWidget
     public function set_widgets($widgets)
     {
         if (!is_array($widgets)) {
-            throw new InvalidArgumentException('Widgets must be an array');
+            throw new InvalidArgumentException(
+                'Widgets must be an array'
+            );
         }
         foreach ($widgets as $widget_ident => $widget) {
             $this->add_widget($widget_ident, $widget);
@@ -96,22 +84,28 @@ class DashboardWidget extends AdminWidget
     public function add_widget($widget_ident, $widget)
     {
         if (!is_string($widget_ident)) {
-            throw new InvalidArgumentException('Widget ident needs to be a string');
+            throw new InvalidArgumentException(
+                'Widget ident needs to be a string'
+            );
         }
 
         if (($widget instanceof WidgetInterface)) {
-            $this->_widgets[$widget_ident] = $widget;
+            $this->widgets[$widget_ident] = $widget;
         } else if (is_array($widget)) {
             if (!isset($widget['ident'])) {
                 $widget['ident'] = $widget_ident;
             }
 
             $widget_type = isset($widget['type']) ? $widget['type'] : null;
-            $w = WidgetFactory::instance()->create($widget_type);
+            $w = WidgetFactory::instance()->create($widget_type, [
+                'logger'=>$this->logger()
+            ]);
             $w->set_data($widget);
-            $this->_widgets[$widget_ident] = $w;
+            $this->widgets[$widget_ident] = $w;
         } else {
-            throw new InvalidArgumentException('Invalid Widget');
+            throw new InvalidArgumentException(
+                'Invalid Widget'
+            );
         }
     }
 
@@ -120,10 +114,10 @@ class DashboardWidget extends AdminWidget
     */
     public function widgets()
     {
-        if ($this->_widgets === null) {
+        if ($this->widgets === null) {
             yield null;
         } else {
-            foreach ($this->_widgets as $widget) {
+            foreach ($this->widgets as $widget) {
                 if ($widget->active() === false) {
 ;
                     continue;

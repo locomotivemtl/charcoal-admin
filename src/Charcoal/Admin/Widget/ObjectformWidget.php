@@ -2,16 +2,16 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\Widget\FormWidget as FormWidget;
-use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
+use \Charcoal\Admin\Widget\FormWidget;
+use \Charcoal\Admin\Widget\FormPropertyWidget;
 
-use \Charcoal\Admin\Ui\ObjectContainerInterface as ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
+use \Charcoal\Admin\Ui\ObjectContainerInterface;
+use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
-*
+* @todo This class needs to be renamed to "ObjectFormWidget" (object-form)
 */
 class ObjectformWidget extends FormWidget implements ObjectContainerInterface
 {
@@ -20,7 +20,7 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
     /**
     * @var string
     */
-    protected $_form_ident;
+    protected $form_ident;
 
     /**
     * @param array $data
@@ -46,6 +46,11 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
         return $this;
     }
 
+    /**
+    * Form action (target URL)
+    *
+    * @return string Relative URL
+    */
     public function action()
     {
         $action = parent::action();
@@ -70,9 +75,11 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
     public function set_form_ident($form_ident)
     {
         if (!is_string($form_ident)) {
-            throw new InvalidArgumentException('Form ident must be a string');
+            throw new InvalidArgumentException(
+                'Form ident must be a string'
+            );
         }
-        $this->_form_ident = $form_ident;
+        $this->form_ident = $form_ident;
         return $this;
     }
 
@@ -81,7 +88,7 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
     */
     public function form_ident()
     {
-        return $this->_form_ident;
+        return $this->form_ident;
     }
 
     public function data_from_object()
@@ -114,7 +121,9 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
         }
 
         foreach ($props as $property_ident => $property) {
-            $p = new FormPropertyWidget($property);
+            $p = new FormPropertyWidget($property, [
+                'logger'=>$this->logger()
+            ]);
             $p->set_property_ident($property_ident);
             $p->set_data($property);
             yield $property_ident => $p;

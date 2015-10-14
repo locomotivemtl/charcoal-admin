@@ -39,20 +39,6 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     }
 
     /**
-    * @param array $data
-    * @return Collection Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        $this->set_collection_data($data);
-        $this->set_dashboard_data($data);
-
-        return $this;
-    }
-
-    /**
     * @param array $data Optional
     * @throws Exception
     * @return Dashboard

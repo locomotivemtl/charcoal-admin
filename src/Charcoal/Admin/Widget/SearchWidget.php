@@ -4,13 +4,13 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
-use \Charcoal\Charcoal as Charcoal;
-
-use \Charcoal\Admin\AdminWidget as AdminWidget;
-
+// From `charcoal-core`
+use \Charcoal\Charcoal;
 use \Charcoal\Property\PropertyFactory as PropertyFactory;
 use \Charcoal\Property\PropertyInterface as PropertyInterface;
 
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\AdminWidget as AdminWidget;
 use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 
@@ -22,24 +22,24 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     use CollectionContainerTrait;
 
     /**
-    * @var array $_properties
+    * @var array $properties
     */
-    protected $_properties;
+    protected $properties;
 
     /**
-    * @var $_properties_options
+    * @var $properties_options
     */
-    protected $_properties_options;
+    protected $properties_options;
 
     /**
-    * @var array $_orders
+    * @var array $orders
     */
-    protected $_orders;
+    protected $orders;
 
     /**
-    * @var array $_filters
+    * @var array $filters
     */
-    protected $_filters;
+    protected $filters;
 
     /**
     * @param array $data Optional
@@ -63,12 +63,6 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     public function set_data(array $data)
     {
 
-        $this->set_collection_data($data);
-
-        if (isset($data['collection_ident']) && $data['collection_ident'] !== null) {
-            $this->set_collection_ident($data['collection_ident']);
-        }
-
         $obj_data = $this->data_from_object();
         $data = array_merge_recursive($obj_data, $data);
 
@@ -89,7 +83,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
                 'Collection ident must be a string'
             );
         }
-        $this->_collection_ident = $collection_ident;
+        $this->collection_ident = $collection_ident;
         return $this;
     }
 
@@ -98,7 +92,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     */
     public function collection_ident()
     {
-        return $this->_collection_ident;
+        return $this->collection_ident;
     }
 
     /**
@@ -127,7 +121,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     */
     public function properties()
     {
-        if ($this->_properties === null) {
+        if ($this->properties === null) {
             $obj = $this->proto();
             $props = $obj->metadata()->properties();
 
@@ -147,10 +141,10 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
                 }
             }
 
-            $this->_properties = $props;
+            $this->properties = $props;
         }
 
-        return $this->_properties;
+        return $this->properties;
     }
 
     /**

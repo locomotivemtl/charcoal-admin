@@ -2,65 +2,29 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\AdminWidget;
 
 class TextWidget extends AdminWidget
 {
 
     /**
-    * @var string $_title
+    * @var string $title
     */
-    protected $_title = '';
+    protected $title = '';
     /**
-    * @var string $_subtitle
+    * @var string $subtitle
     */
-    protected $_subtitle = '';
+    protected $subtitle = '';
     /**
-    * @var string $_description
+    * @var string $description
     */
-    protected $_description = '';
+    protected $description = '';
     /**
-    * @var string $_notes
+    * @var string $notes
     */
-    protected $_notes = '';
-
-    /**
-    * @param array $data
-    * @return Text Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        if (isset($data['show_title']) && $data['show_title'] !== null) {
-            $this->set_show_title($data['show_title']);
-        }
-        if (isset($data['show_subtitle']) && $data['show_subtitle'] !== null) {
-            $this->set_show_subtitle($data['show_subtitle']);
-        }
-        if (isset($data['show_description']) && $data['show_description'] !== null) {
-            $this->set_show_description($data['show_description']);
-        }
-        if (isset($data['show_notes']) && $data['show_notes'] !== null) {
-            $this->set_show_notes($data['show_notes']);
-        }
-        if (isset($data['title']) && $data['title'] !== null) {
-            $this->set_title($data['title']);
-        }
-        if (isset($data['subtitle']) && $data['subtitle'] !== null) {
-            $this->set_subtitle($data['subtitle']);
-        }
-        if (isset($data['description']) && $data['description'] !== null) {
-            $this->set_description($data['description']);
-        }
-        if (isset($data['notes']) && $data['notes'] !== null) {
-            $this->set_notes($data['notes']);
-        }
-
-        return $this;
-    }
+    protected $notes = '';
 
     /**
     * @param boolean $show
@@ -70,9 +34,11 @@ class TextWidget extends AdminWidget
     public function set_show_title($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_title = $show;
+        $this->show_title = $show;
         return $this;
     }
 
@@ -81,7 +47,7 @@ class TextWidget extends AdminWidget
     */
     public function show_title()
     {
-        if ($this->_show_title === false) {
+        if ($this->show_title === false) {
             return false;
         } else {
             return !!$this->title();
@@ -96,9 +62,11 @@ class TextWidget extends AdminWidget
     public function set_show_subtitle($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_subtitle = $show;
+        $this->show_subtitle = $show;
         return $this;
     }
 
@@ -107,7 +75,7 @@ class TextWidget extends AdminWidget
     */
     public function show_subtitle()
     {
-        if ($this->_show_subtitle === false) {
+        if ($this->show_subtitle === false) {
             return false;
         } else {
             return !!$this->subtitle();
@@ -122,9 +90,11 @@ class TextWidget extends AdminWidget
     public function set_show_description($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_description = $show;
+        $this->show_description = $show;
         return $this;
     }
 
@@ -133,7 +103,7 @@ class TextWidget extends AdminWidget
     */
     public function show_description()
     {
-        if ($this->_show_description === false) {
+        if ($this->show_description === false) {
             return false;
         } else {
             return !!$this->description();
@@ -148,9 +118,11 @@ class TextWidget extends AdminWidget
     public function set_show_notes($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_notes = $show;
+        $this->show_notes = $show;
         return $this;
     }
 
@@ -159,7 +131,7 @@ class TextWidget extends AdminWidget
     */
     public function show_notes()
     {
-        if ($this->_show_notes === false) {
+        if ($this->show_notes === false) {
             return false;
         } else {
             return !!$this->notes();
@@ -168,45 +140,45 @@ class TextWidget extends AdminWidget
 
     public function set_title($title)
     {
-        $this->_title = $title;
+        $this->title = $title;
         return $this;
     }
 
     public function title()
     {
-        return $this->_title;
+        return $this->title;
     }
 
     public function set_subtitle($subtitle)
     {
-        $this->_subtitle = $subtitle;
+        $this->subtitle = $subtitle;
         return $this;
     }
 
     public function subtitle()
     {
-        return $this->_subtitle;
+        return $this->subtitle;
     }
 
     public function set_description($description)
     {
-        $this->_description = $description;
+        $this->description = $description;
         return $this;
     }
 
     public function description()
     {
-        return $this->_description;
+        return $this->description;
     }
 
     public function set_notes($notes)
     {
-        $this->_notes = $notes;
+        $this->notes = $notes;
         return $this;
     }
 
     public function notes()
     {
-        return $this->_notes;
+        return $this->notes;
     }
 }

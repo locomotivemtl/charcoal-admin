@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Action;
 
+// From `charoal-core`
+use \Charcoal\Charcoal;
+
 // From `charcoal-base`
 use \Charcoal\Action\CliAction as CliActionBase;
 
@@ -33,7 +36,7 @@ abstract class CliAction extends CliActionBase
     */
     public function auth_required()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -46,14 +49,16 @@ abstract class CliAction extends CliActionBase
         $u = User::get_authenticated();
         if ($u === null) {
             $climate->yellow()->out('You need to be logged in into your "admin" account to continue...');
-            
+
             $input = $climate->input('Please enter your username:');
             $username = $input->prompt();
             $input = $climate->password('Please enter your password (hidden):');
             $password = $input->prompt();
             $climate->br();
 
-            $u = new User();
+            $u = new User([
+                'logger'=>Charcoal::logger()
+            ]);
             try {
                 $is_authenticated = $u->authenticate($username, $password);
             } catch (\Exception $e) {

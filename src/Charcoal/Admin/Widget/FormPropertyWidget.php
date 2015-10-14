@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Exception as Exception;
-use \InvalidArgumentException as InvalidArgumentException;
+use \Exception;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Property\PropertyInputFactory;
 
 // From `charcoal-core`
@@ -19,21 +19,24 @@ class FormPropertyWidget extends AdminWidget
 {
     /**
     * In memory copy of the PropertyInput object
-    * @var PropertyInputInterface $_input
+    * @var PropertyInputInterface $input
     */
-    private $_input;
+    private $input;
 
-    protected $_type;
+    protected $type;
 
-    protected $_input_type;
-    protected $_input_options;
+    protected $input_type;
+    protected $input_options;
 
-    private $_property_ident;
-    private $_property_val;
-    private $_property_data = [];
-    private $_property;
+    private $property_ident;
+    private $property_val;
+    private $property_data = [];
+    private $property;
 
-    private $_active = true;
+    /**
+    * @param boolean $active
+    */
+    private $active = true;
 
     /**
     * @param array $data
@@ -42,24 +45,9 @@ class FormPropertyWidget extends AdminWidget
     public function set_data(array $data)
     {
         parent::set_data($data);
-        if (isset($data['type']) && $data['type'] !== null) {
-            $this->set_type($data['type']);
-        }
-        if (isset($data['input_type']) && $data['input_type'] !== null) {
-            $this->set_input_type($data['input_type']);
-        }
-        if (isset($data['property_ident']) && $data['property_ident'] !== null) {
-            $this->set_property_ident($data['property_ident']);
-        }
-        if (isset($data['property_val']) && $data['property_val'] !== null) {
-            $this->set_property_val($data['property_val']);
-        }
-        if (isset($data['active']) && $data['active'] !==null) {
-            $this->set_active($data['active']);
-        }
 
         // Keep the data in copy, this will be passed to the property and/or input later
-        $this->_property_data = $data;
+        $this->property_data = $data;
 
         return $this;
     }
@@ -72,9 +60,11 @@ class FormPropertyWidget extends AdminWidget
     public function set_active($active)
     {
         if (!is_bool($active)) {
-            throw new InvalidArgumentException('Active must be a boolean');
+            throw new InvalidArgumentException(
+                'Active must be a boolean'
+            );
         }
-        $this->_active = $active;
+        $this->active = $active;
         return $this;
     }
 
@@ -83,7 +73,7 @@ class FormPropertyWidget extends AdminWidget
     */
     public function active()
     {
-        return $this->_active;
+        return $this->active;
     }
 
     /**
@@ -94,9 +84,11 @@ class FormPropertyWidget extends AdminWidget
     public function set_property_ident($property_ident)
     {
         if (!is_string($property_ident)) {
-            throw new InvalidArgumentException('Property ident must be a string');
+            throw new InvalidArgumentException(
+                'Property ident must be a string'
+            );
         }
-        $this->_property_ident = $property_ident;
+        $this->property_ident = $property_ident;
         return $this;
     }
 
@@ -105,7 +97,7 @@ class FormPropertyWidget extends AdminWidget
     */
     public function property_ident()
     {
-        return $this->_property_ident;
+        return $this->property_ident;
     }
 
     /**
@@ -113,7 +105,7 @@ class FormPropertyWidget extends AdminWidget
     */
     public function set_property_val($property_val)
     {
-        $this->_property_val = $property_val;
+        $this->property_val = $property_val;
         return $this;
     }
 
@@ -122,7 +114,7 @@ class FormPropertyWidget extends AdminWidget
     */
     public function property_val()
     {
-        return $this->_property_val;
+        return $this->property_val;
     }
 
     /**
@@ -169,7 +161,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-    *
+    * @return string
     */
     public function input_id()
     {
@@ -177,7 +169,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-    *
+    * @return string
     */
     public function input_name()
     {
@@ -189,7 +181,7 @@ class FormPropertyWidget extends AdminWidget
     */
     public function set_input_type($input_type)
     {
-        $this->_input_type = $input_type;
+        $this->input_type = $input_type;
         return $this;
     }
 
@@ -198,7 +190,7 @@ class FormPropertyWidget extends AdminWidget
     */
     public function input_type()
     {
-        if ($this->_input_type === null) {
+        if ($this->input_type === null) {
             try {
                 $prop = $this->prop();
                 $metadata = $prop->metadata();
@@ -210,9 +202,9 @@ class FormPropertyWidget extends AdminWidget
             if (!$input_type) {
                 $input_type = 'charcoal/admin/property/input/text';
             }
-            $this->_input_type = $input_type;
+            $this->input_type = $input_type;
         }
-        return $this->_input_type;
+        return $this->input_type;
     }
 
     /**
@@ -221,8 +213,8 @@ class FormPropertyWidget extends AdminWidget
     */
     public function set_prop(PropertyInterface $property)
     {
-        $this->_property = $property;
-        //$this->_property->set_val($this->property_val());
+        $this->property = $property;
+        //$this->property->set_val($this->property_val());
         return $this;
     }
 
@@ -231,18 +223,17 @@ class FormPropertyWidget extends AdminWidget
     */
     public function prop()
     {
-        if ($this->_property === null) {
-            //var_dump($this->ident());
+        if ($this->property === null) {
             $p = PropertyFactory::instance()->get($this->type());
 
 
             $p->set_ident($this->property_ident());
-            $p->set_data($this->_property_data);
+            $p->set_data($this->property_data);
 
-            $this->_property = $p;
+            $this->property = $p;
         }
-        $this->_property->set_val($this->property_val());
-        return $this->_property;
+        $this->property->set_val($this->property_val());
+        return $this->property;
     }
 
     /**
@@ -250,18 +241,18 @@ class FormPropertyWidget extends AdminWidget
     */
     public function input()
     {
-        if ($this->_input !== null) {
-            return $this->_input;
+        if ($this->input !== null) {
+            return $this->input;
         }
         $prop = $this->prop();
         $input_type = $this->input_type();
 
-        $this->_input = PropertyInputFactory::instance()->create($input_type);
-        $this->_input->set_property($prop);
-        $this->_input->set_data($this->_property_data);
+        $this->input = PropertyInputFactory::instance()->create($input_type);
+        $this->input->set_property($prop);
+        $this->input->set_data($this->property_data);
 
         $GLOBALS['widget_template'] = $input_type;
-        return $this->_input;
+        return $this->input;
     }
 
 }

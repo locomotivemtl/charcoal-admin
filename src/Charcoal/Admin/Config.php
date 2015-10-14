@@ -28,20 +28,6 @@ class Config extends AbstractConfig
     }
 
     /**
-    * @param array $data
-    * @return Config Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-        if (isset($data['base_path'])) {
-            $this->set_base_path($data['base_path']);
-        }
-
-        return $this;
-    }
-
-    /**
     * @param string $path
     * @throws InvalidArgumentException
     * @return Config Chainable

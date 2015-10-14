@@ -2,41 +2,24 @@
 namespace Charcoal\Admin\Widget;
 
 // From `PHP`
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
 // From `charcoal-admin`
-use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \Charcoal\Admin\AdminWidget;
 
 /**
-*
+* Base Graph widget
 */
 class GraphWidget extends AdminWidget
 {
     /**
-    * @var mixed $_height
+    * @var mixed $height
     */
-    protected $_height = 400;
+    protected $height = 400;
     /**
-    * @var array $_colors
+    * @var array $colors
     */
-    protected $_colors;
-
-    /**
-    * @param array $data
-    * @return Graph Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        if (isset($data['height']) && $data['height'] !== null) {
-            $this->set_height($data['height']);
-        }
-        if (isset($data['colors']) && $data['colors'] !== null) {
-            $this->set_colors($data['colors']);
-        }
-        return $this;
-    }
+    protected $colors;
 
     /**
     * @param mixed $height
@@ -44,7 +27,7 @@ class GraphWidget extends AdminWidget
     */
     public function set_height($height)
     {
-        $this->_height = $height;
+        $this->height = $height;
         return $this;
     }
 
@@ -53,7 +36,7 @@ class GraphWidget extends AdminWidget
     */
     public function height()
     {
-        return $this->_height;
+        return $this->height;
     }
 
     /**
@@ -64,9 +47,11 @@ class GraphWidget extends AdminWidget
     public function set_colors($colors)
     {
         if (!is_array($colors)) {
-            throw new InvalidArgumentException('Colors must be an array');
+            throw new InvalidArgumentException(
+                'Colors must be an array'
+            );
         }
-        $this->_colors = $colors;
+        $this->colors = $colors;
         return $this;
     }
 
@@ -75,10 +60,10 @@ class GraphWidget extends AdminWidget
     */
     public function colors()
     {
-        if ($this->_colors === null || empty($this->_colors)) {
-            $this->_colors = $this->default_colors();
+        if ($this->colors === null || empty($this->colors)) {
+            $this->colors = $this->default_colors();
         }
-        return $this->_colors;
+        return $this->colors;
     }
 
     /**

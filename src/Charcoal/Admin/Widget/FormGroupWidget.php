@@ -24,55 +24,53 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     use FormGroupTrait;
 
     /**
-    * @var LayoutWidget $_layout
+    * @var LayoutWidget $layout
     */
-    public $_layout;
+    public $layout;
 
 
     /**
-    * @var array $_group_properties
+    * @var array $group_properties
     */
-    private $_group_properties = [];
+    private $group_properties = [];
 
     /**
-    * @var TranslationString $_description
+    * @var TranslationString $description
     */
-    private $_description;
+    private $description;
     /**
-    * @var TranslationString $_notes
+    * @var TranslationString $notes
     */
-    private $_notes;
+    private $notes;
 
     /**
     * If it is set to false, will disable display of title.
-    * @var boolean
+    * @var boolean $show_title
     */
-    private $_show_title = true;
+    private $show_title = true;
     /**
     * If it is set to false, will disable display of description
-    * @var boolean
+    * @var boolean $show_description
     */
-    private $_show_description = true;
+    private $show_description = true;
     /**
     * If it is set to false, will disable display of the notes (footer).
-    * @var boolean
+    * @var boolean $show_notes
     */
-    private $_show_notes = true;
+    private $show_notes = true;
 
     /**
-    * @var boolean
+    * @var boolean $show_header
     */
-    private $_show_header = true;
+    private $show_header = true;
     /**
-    * @var boolean
+    * @var boolean $show_footer
     */
-    private $_show_footer = true;
-
-
+    private $show_footer = true;
 
     /**
     * @var string
-    * @return FormGroup Chainable
+    * @return FormGroupWidget Chainable
     */
     public function set_data(array $data)
     {
@@ -101,14 +99,14 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
         if (!$opts) {
             return $this;
         }
-        $this->_widget_options = $opts;
+        $this->widget_options = $opts;
 
         return $this;
     }
 
     public function widget_options()
     {
-        return $this->_widget_options;
+        return $this->widget_options;
     }
 
     public function json_widget_options()
@@ -128,11 +126,13 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     public function set_layout($layout)
     {
         if (($layout instanceof LayoutWidget)) {
-            $this->_layout = $layout;
+            $this->layout = $layout;
         } else if (is_array($layout)) {
-            $l = new LayoutWidget();
+            $l = new LayoutWidget([
+                'logger'=>$this->logger()
+            ]);
             $l->set_data($layout);
-            $this->_layout = $l;
+            $this->layout = $l;
         } else {
             throw new InvalidArgumentException('LayoutWidget must be a LayoutWidget object or an array');
         }
@@ -144,7 +144,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public function layout()
     {
-        return $this->_layout;
+        return $this->layout;
     }
 
 
@@ -153,13 +153,13 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
 
     public function set_group_properties($properties)
     {
-        $this->_group_properties = $properties;
+        $this->group_properties = $properties;
         return $this;
     }
 
     public function group_properties()
     {
-        return $this->_group_properties;
+        return $this->group_properties;
 
     }
 
@@ -181,39 +181,16 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
         }
     }
 
-    /**
-    * @var integer $priority
-    * @throws InvalidArgumentException
-    * @return FormGroupWidget Chainable
-    */
-    public function set_priority($priority)
-    {
-        if (!is_int($priority)) {
-            throw new InvalidArgumentException('Priority must be an integer');
-        }
-        $priority = (int)$priority;
-        $this->_priority = $priority;
-        return $this;
-    }
-
-    /**
-    * @return integer
-    */
-    public function priority()
-    {
-        return $this->_priority;
-    }
-
 
     public function set_title($title)
     {
-        $this->_title = new TranslationString($title);
+        $this->title = new TranslationString($title);
         return $this;
     }
 
     public function title()
     {
-        return $this->_title;
+        return $this->title;
     }
 
     /**
@@ -222,7 +199,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public function set_description($description)
     {
-        $this->_description = new TranslationString($description);
+        $this->description = new TranslationString($description);
         return $this;
     }
 
@@ -240,7 +217,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public function set_notes($notes)
     {
-        $this->_notes = new TranslationString($notes);
+        $this->notes = new TranslationString($notes);
         return $this;
     }
 
@@ -260,9 +237,11 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     public function set_show_title($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_title = $show;
+        $this->show_title = $show;
         return $this;
     }
 
@@ -271,7 +250,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public function show_title()
     {
-        if ($this->_show_title === false) {
+        if ($this->show_title === false) {
             return false;
         } else {
             return !!$this->title();
@@ -286,9 +265,11 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     public function set_show_description($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_description = $show;
+        $this->show_description = $show;
         return $this;
     }
 
@@ -308,9 +289,11 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     public function set_show_notes($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_notes = $show;
+        $this->show_notes = $show;
         return $this;
     }
 
@@ -319,7 +302,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public function show_notes()
     {
-        if ($this->_show_notes === false) {
+        if ($this->show_notes === false) {
             return false;
         } else {
             $notes = $this->notes();
@@ -335,9 +318,11 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     public function set_show_header($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_header = $show;
+        $this->show_header = $show;
         return $this;
     }
 
@@ -357,9 +342,11 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     public function set_show_footer($show)
     {
         if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show must be a boolean');
+            throw new InvalidArgumentException(
+                'Show must be a boolean'
+            );
         }
-        $this->_show_fooger = $show;
+        $this->show_fooger = $show;
         return $this;
     }
 
@@ -368,12 +355,11 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     */
     public function show_footer()
     {
-        if ($this->_show_footer === false) {
+        if ($this->show_footer === false) {
             return false;
         } else {
             return $this->show_notes();
         }
     }
-
 
 }

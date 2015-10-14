@@ -18,7 +18,7 @@ use Charcoal\Action\AbstractAction as AbstractAction;
 */
 abstract class AdminAction extends AbstractAction
 {
-    private $_feedbacks;
+    private $feedbacks;
 
     /**
     * @param array $data Optional
@@ -29,12 +29,6 @@ abstract class AdminAction extends AbstractAction
             $this->set_data($data);
         }
     }
-
-    /**
-    * @param array $data
-    * @return AdminAction Chainable
-    */
-    abstract public function set_data(array $data);
 
     /**
     * @param integer $http_code
@@ -67,16 +61,24 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
+    * @return integer
+    */
+    public function num_feedbacks()
+    {
+        return count($this->feedbacks());
+    }
+
+    /**
     * @return array
     */
     public function feedbacks()
     {
-        return $this->_feedbacks;
+        return $this->feedbacks;
     }
 
     public function add_feedback($level, $msg)
     {
-        $this->_feedbacks[] = [
+        $this->feedbacks[] = [
             'msg'=>$msg,
             'level'=>$level
         ];

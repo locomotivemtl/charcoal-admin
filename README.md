@@ -5,37 +5,45 @@ The standard Charcoal Admin Panel (Backend Dashboard).
 
 # How to install
 
-Except for development purpose, this module should never be run by itself or as standalone. Therefore, the preferred way to install this module is to require it as a `composer` dependency in a project.
+The preferred (and only supported) way of installing charcoal-admin is with **composer**:
 
-`composer require locomotivemtl/charcoal-admin`
+```shell
+$ composer require locomotivemtl/charcoal-admin
+```
 
-## Charcoal dependencies
+## Dependencies
 
 - [locomotivemtl/charcoal-core](https://github.com/locomotivemtl/charcoal-core)
   - The framework classes. (Cache, Model, Metadata, View, Property, source, etc.)
+  - It brings the following dependencies:
+    - [locomotivemtl/charcoal-config](https://github.com/locomotivemtl/charcoal-config)
+      - The configuration container for all things Charcoal.
+    - [locomotivemtl/charcoal-view](https://github.com/locomotivemtl/charcoal-view)
+      - The view / templating engines. Mustache is the default engine.
 - [locomotivemtl/charcoal-base](https://github.com/locomotivemtl/charcoal-base)
   - Base project classes: Assets, Objects, Properties, Templates and Widgets
+  - It brings the additional charcoal dependencies:
+    - [locomotivemtl/charcoal-image](https://github.com/locomotivemtl/charcoal-image)
+      - Image manipulation.
 
-> 👉 As of now, those packages are not distributed by Packagist but easily installable by Composer by specifiying the repository. Read the [composer.json](composer.json) file for details.
+> 👉 Development dependencies are described in the _Development_ section of this README file.
 
 Which, in turn, require:
-- PHP 5.5+
-- MySQL (with PDO drivers for PHP)
-  - Other databases are currently not supported
-- Apache with mod_rewrite
-- `slim` for the routing engine and HTTP handling
-- `mustache` for the template engine
-- `phpmailer` to send emails
-- `climate` for CLI utilities
-- `monolog` for (_PSR-3_) logging
-
-## Build system(s)
-
-`composer` is the preferred way of installing Charcoal modules and projects.
-
-`grunt` is used to build the assets from source and also run the various scripts (linters, unit tests) automatically. The CSS is generated with `sass`. Running `grunt watch` while developping ensures that all assets are generated properly.
-
-The external javascript dependencies are managed with `bower`.
+- `PHP 5.5+`
+  - Older versions of PHP are deprecated, therefore not supported.
+  - `ext-fileinfo` File / MIME identification.
+  - `ext-mbstring` Multi-bytes string support.
+  - `ext-pdo` PDO Database driver.
+- MySQL
+  - Other databases (_postgresql_, _sqlite_) should work but are not supported.
+- Apache with `mod_rewrite`
+  - Other HTTP servers (_IIS_, _nginx) should work but are not supported.
+- `pimple/pimple` for dependency injection container.
+- `slim/slim` for the routing engine and HTTP handling.
+- `mustache/mustache` for the template engine.
+- `phpmailer` to send emails.
+- `league/climate` for CLI utilities.
+- `monolog/monolog` for (_PSR-3_) logging.
 
 # Core concepts
 **todo**
@@ -103,12 +111,16 @@ This class provides additional controls to all templates:
 
 ## Widgets
 The following base widgets are available to build the various _admin_ templates:
-- Dashboard
-- Feedbacks
-- Form
-- FormGroup
-- FormProperty
+- `Dashboard`
+- `Feedbacks`
+- `Form`
+- `FormGroup`
+- `FormProperty`
+- `Graph/Bar`
+- `Graph/Line`
+- `Graph/Pie`
 - Layout
+- MapWidget
 - Table
 - TableProperty
 
@@ -119,18 +131,29 @@ The following property inputs are available  to build forms in the _admin_ modul
 - `Audio`
   - A special HTML5 widget to record an audio file from the microphone.
 - `Checkbox`
+- `Datetimepicker`
+  - A date-time picker widget.
+  - Requires the ``
 - `File`
   - A default `<input type="file">` that can be used as a base for all _File_ properties.
+- `Image`
+  - A specialized file input meant for uploading / previewing images.
+- `MapWidget`
+  - A specialized widget to edit a point on a map.
+  - Requires google-map.
 - `Number`
 - `Radio`
 - `Readonly`
+- `Select`
 - `Switch`
   - A specialized _Checkbox_ meant to be displayed as an on/off switch.
 - `Text`
   - A default `<input type="text">` that can be used with most property types.
 - `Textarea`
+  - A default `<textarea>` editor that can be used with most textual property types.
 - `Tinymce`
-  - A specialized _Textarea_ augmented with the _tinymce_ library.
+  - A specialized _Textarea_ wysiwyg editor.
+  - Requires the `tinymce` javascript library.
 
 # Actions
 See the [src/Charcoal/Admin/Action/](src/Charcoal/Admin/Action/) directory for the list of availables Actions in this module.
@@ -138,6 +161,14 @@ See the [src/Charcoal/Admin/Action/](src/Charcoal/Admin/Action/) directory for t
 In addition to being standard Action Models (controllers), all _Action_ of the admin module also implements the `\Charcoal\Admin\Action` class.
 
 ## Post Actions
+
+- `admin/login`
+- `admin/object/delete`
+- `admin/object/save`
+- `admin/object/update`
+- `admin/widget/load`
+- `admin/widget/table/inline`
+- `admin/widget/table/inlinue-multi`
 
 ## Cli Actions
 See the [src/Charcoal/Admin/Action/Cli/](src/Charcoal/Admin/Action/Cli/) directory for the list of all available Cli Actions in this module.
@@ -150,47 +181,51 @@ _Cli Actions_ are specialized action meant to be run, interactively, from the Co
   - List the object of a certain `obj-type`.
 - `admin/object/create`
   - Create a new object (and save it to storage) of a certain `obj-type` according to its metadata's properties.
-- `admin/object/metadata/edit`
-  - Edit an existing object (and update storage) of a certain `obj-type` according to its metadata's properties.
-- `admin/object/metadata/admin/dashboards`
-  - List the available object's dashboards and set the default ones.
-- `admin/object/metadata/admin/forms`
-  - List the available object's forms and set the default ones.
-- `admin/object/metadata/admin/dashboard/create`
-  - Create a new admin dashboard.
-- `admin/object/metadata/admin/dashboard/edit`
-  - Edit an existing admin dashboard.
-- `admin/object/metadata/admin/form/create`
-  - Create a new admin form.
-- `admin/object/metadata/admin/form/edit`
-  - Edit an existing admin form.
 - `admin/object/table/alter`
   - Alter the existing database table of `obj-type` according to its metadata's properties.
 - `admin/object/table/create`
   - Create the database table for `obj-type` according to its metadata's properties.
+- `admin/user/create`
 
 
 # Development
 
 ## Coding style
 
-Like `charcoal-core` and other Charcoal modules, the admin module use the following coding style for PHP:
-- _PSR-1_, except for the _CamelCaps_ method name requirement
-- _PSR-2_
-- array should be written in short notation (`[]` instead of `array()`)
-- Docblocks for _phpdocumentor_
+The Charcoal-Admin module follows the Charcoal coding-style:
 
-Coding styles are  enforced with `grunt phpcs` (_PHP Code Sniffer_). The actual ruleset can be found in [phpcs.xml][phpcs.xml].
+- [_PSR-1_](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md), except for
+  - Method names MUST be declared in `snake_case`.
+- [_PSR-2_](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md), except for the PSR-1 requirement.q
+- [_PSR-4_](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md), autoloading is therefore provided by _Composer_
+- [_phpDocumentor_](http://phpdoc.org/)
+  - Add DocBlocks for all classes, methods, and functions;
+  - For type-hinting, use `boolean` (instead of `bool`), `integer` (instead of `int`), `float` (instead of `double` or `real`);
+  - Omit the `@return` tag if the method does not return anything.
+- Naming conventions
+  - Read the [phpcs.xml](phpcs.xml) file for all the details.
 
-> 👉 To fix minor coding style problems, run `grunt phpcbf` (_PHP Code Beautifier and Fixer_). This tool use the same ruleset to try and fix what can be don automatically.
+> Coding style validation / enforcement can be performed with `grunt phpcs`. An auto-fixer is also available with `grunt phpcbf`.
 
 For Javascript, the following coding style is enforced:
 - **todo**
 
-## Git Hooks
-
-## Continuous Integration
-
-## Unit tests
-
 Every classes, methods and functions should be covered by unit tests. PHP code can be tested with _PHPUnit_ and Javascript code with _QUnit_.
+
+## Authors
+
+- Mathieu Ducharme <mat@locomotive.ca>
+- Benjamin Roch <benjamin@locomotive.ca>
+- Dominic Lord <dom@locomotive.ca>
+- Chauncey McAskill <chauncey@locomotive.ca>
+- Antoine Boulanger <antoine@locomotive.ca>
+
+## Changelog
+
+### 0.1
+_Unreleased_
+- Initial release
+
+## TODOs
+
+- Unit test coverage

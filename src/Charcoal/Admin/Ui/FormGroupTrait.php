@@ -4,52 +4,70 @@ namespace Charcoal\Admin\Ui;
 
 use \Charcoal\Admin\Widget\FormWidget;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
 /**
 * FormGroupTrait with basic methods to make
 * sure when it's looped in the form widget,
 * it has all the basic methods it requires
 * to display as expected.
+*
 * @see FormGroupInterface
 */
 trait FormGroupTrait
 {
     /**
     * In-memory copy of the parent form widget.
-    * @var FormWidget $_form
+    * @var FormWidget $form
     */
-    private $_form;
+    private $form;
 
     /**
     * Should always be declared in every widget
     * using that trait.
-    * @var string $_widget_type
+    * @var string $widget_type
     */
-    private $_widget_type;
+    private $widget_type;
 
     /**
     * These might never be used in the widget
     * but this will be called by the Form widget
     *
-    * @var string $_title
-    * @var string $_subtitle
+    * @var string $title
+    * @var string $subtitle
     */
-    private $_title;
-    private $_subtitle;
+    private $title;
+    private $subtitle;
 
     /**
     * Order / sorting is done with the "priority".
-    * @var integer $_priority
+    * @var integer $priority
     */
-    private $_priority = 0;
+    private $priority = 0;
+
 
     /**
-    * @return String || null
+    * @param string $type
+    * @throws InvalidArgumentException
+    * @return AdminWidget Chainable
+    */
+    public function set_widget_type($type)
+    {
+        if (!is_string($type)) {
+            throw new InvalidArgumentException(
+                'Widget type must be a string'
+            );
+        }
+        $this->widget_type = $type;
+        return $this;
+    }
+
+    /**
+    * @return string
     */
     public function widget_type()
     {
-        return '';
+        return $this->widget_type;
     }
 
     /**
@@ -58,7 +76,7 @@ trait FormGroupTrait
     */
     public function set_title($title)
     {
-        $this->_title = $title;
+        $this->title = $title;
         return $this;
     }
 
@@ -67,7 +85,7 @@ trait FormGroupTrait
     */
     public function title()
     {
-        return $this->_title;
+        return $this->title;
     }
 
     /**
@@ -76,7 +94,7 @@ trait FormGroupTrait
     */
     public function set_subtitle($subtitle)
     {
-        $this->_subtitle = $subtitle;
+        $this->subtitle = $subtitle;
         return $this;
     }
 
@@ -85,7 +103,7 @@ trait FormGroupTrait
     */
     public function subtitle()
     {
-        return $this->_subtitle;
+        return $this->subtitle;
     }
 
     /**
@@ -94,7 +112,7 @@ trait FormGroupTrait
     */
     public function set_form(FormWidget $form)
     {
-        $this->_form = $form;
+        $this->form = $form;
         return $this;
     }
 
@@ -103,21 +121,23 @@ trait FormGroupTrait
     */
     public function form()
     {
-        return $this->_form;
+        return $this->form;
     }
 
     /**
     * @var integer $priority
     * @throws InvalidArgumentException
-    * @return FormGroupWidget Chainable
+    * @return FormGroupInterface Chainable
     */
     public function set_priority($priority)
     {
         if (!is_int($priority)) {
-            throw new InvalidArgumentException('Priority must be an integer');
+            throw new InvalidArgumentException(
+                'Priority must be an integer'
+            );
         }
         $priority = (int)$priority;
-        $this->_priority = $priority;
+        $this->priority = $priority;
         return $this;
     }
 
@@ -126,8 +146,7 @@ trait FormGroupTrait
     */
     public function priority()
     {
-        return $this->_priority;
+        return $this->priority;
     }
-
 
 }

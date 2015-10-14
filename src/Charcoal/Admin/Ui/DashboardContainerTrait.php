@@ -48,7 +48,9 @@ trait DashboardContainerTrait
     public function set_dashboard_ident($dashboard_ident)
     {
         if (!is_string($dashboard_ident)) {
-            throw new InvalidArgumentException('Dashboard ident needs to be a string');
+            throw new InvalidArgumentException(
+                'Dashboard ident needs to be a string'
+            );
         }
         $this->_dashboard_ident = $dashboard_ident;
         return $this;

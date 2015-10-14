@@ -90,7 +90,7 @@ trait CollectionContainerTrait
     */
     public function set_collection_ident($collection_ident)
     {
-        if(!is_string($collection_ident)) {
+        if (!is_string($collection_ident)) {
             throw new InvalidArgumentException(
                 'Collection identifier must be a string'
             );
@@ -145,12 +145,12 @@ trait CollectionContainerTrait
     */
     public function set_page($page)
     {
-        if(!is_int($page)) {
+        if (!is_int($page)) {
             throw new InvalidArgumentException(
                 'Page must be an integer value.'
             );
         }
-        if($page < 1) {
+        if ($page < 1) {
             throw new InvalidArgumentException(
                 'Page must be 1 or greater.'
             );
@@ -174,12 +174,12 @@ trait CollectionContainerTrait
     */
     public function set_num_per_page($num_per_page)
     {
-        if(!is_int($num_per_page)) {
+        if (!is_int($num_per_page)) {
             throw new InvalidArgumentException(
                 'Num per page must be an integer value.'
             );
         }
-        if($num_per_page < 1) {
+        if ($num_per_page < 1) {
             throw new InvalidArgumentException(
                 'Num per page must be 1 or greater.'
             );

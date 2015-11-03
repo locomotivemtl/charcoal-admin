@@ -122,7 +122,7 @@ trait DashboardTrait
             'logger'=>$this->logger()
         ]);
         if ($data !== null) {
-            $widget->set_data($widget);
+            $widget->set_data($data);
         }
         return $widget;
     }

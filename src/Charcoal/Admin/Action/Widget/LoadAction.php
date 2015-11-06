@@ -25,11 +25,11 @@ class LoadAction extends AdminAction
     /**
     * @var string $_widget_id
     */
-    protected $_widget_id = '';
+    protected $widget_id = '';
     /**
     * @var string $_widget_html
     */
-    protected $_widget_html = '';
+    protected $widget_html = '';
 
     public function set_data(array $data)
     {
@@ -56,6 +56,9 @@ class LoadAction extends AdminAction
     */
     public function run(ServerRequestInterface $request, ResponseInterface $response)
     {
+        $app = Charcoal::app();
+        $container = $app->getContainer();
+
         $widget_type = $request->getParam('widget_type');
         $widget_options = $request->getParam('widget_options');
 
@@ -67,13 +70,16 @@ class LoadAction extends AdminAction
 
         try {
             $widget = WidgetFactory::instance()->get($widget_type);
+            $widget->set_view($container['charcoal/view']);
 
             if (is_array($widget_options)) {
                 $widget->set_data($widget_options);
             }
+            $widget_html = $widget->render_template($widget_type);
+            $widget_id = $widget->widget_id();
 
-            $this->_widget_html = $widget->render_template($widget_type);
-            $this->_widget_id = $widget->widget_id();
+            $this->set_widget_html($widget_html);
+            $this->set_widget_id($widget_id);
 
             $this->set_success(true);
             return $this->output($response);
@@ -84,14 +90,62 @@ class LoadAction extends AdminAction
         }
     }
 
+    /**
+    * @param string $html
+    * @throws InvalidArgumentException
+    * @return LoadAction Chainable
+    */
+    public function set_widget_html($html)
+    {
+        if(!is_string($html)) {
+            throw new InvalidArgumentException(
+                'Widget HTML must be a string'
+            );
+        }
+        $this->widget_html = $html;
+        return $this;
+    }
+
+    /**
+    * @return string
+    */
+    public function widget_html()
+    {
+        return $this->widget_html;
+    }
+
+    /**
+    * @param string $html
+    * @throws InvalidArgumentException
+    * @return LoadAction Chainable
+    */
+    public function set_widget_id($id)
+    {
+        if(!is_string($id)) {
+            throw new InvalidArgumentException(
+                'Widget ID must be a string'
+            );
+        }
+        $this->widget_id = $id;
+        return $this;
+    }
+
+    /**
+    *
+    */
+    public function widget_id()
+    {
+        return $this->widget_id;
+    }
+
     public function response()
     {
         $success = $this->success();
 
         $response = [
             'success'=>$this->success(),
-            'widget_html'=>$this->_widget_html,
-            'widget_id'=>$this->_widget_id,
+            'widget_html'=>$this->widget_html(),
+            'widget_id'=>$this->widget_id(),
             'feedbacks'=>$this->feedbacks()
         ];
         return $response;

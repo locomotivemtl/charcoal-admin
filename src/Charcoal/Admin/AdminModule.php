@@ -52,7 +52,7 @@ class AdminModule
     * @param \Slim\App $app
     * @return void
     */
-    static public function setup($app)
+    static public function setup(\Slim\App $app)
     {
         // A session is necessary for the admin module
         if (session_id() === '') {
@@ -146,6 +146,7 @@ class AdminModule
 
     public function default_route(ServerRequestInterface $request, ResponseInterface $response, $args = null)
     {
+        // Unused vars
         unset($request);
         unset($args);
 
@@ -168,13 +169,8 @@ class AdminModule
         $this->app = $app;
         // Admin catch-all (load template if it exists)
         $app->get('/{actions:.*}', function ($req, $res, $args) {
-            try {
-                $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$args['actions']);
-                $action($req, $res);
-
-            } catch (Exception $e) {
-                die('Error: '.$e->getMessage());
-            }
+            $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$args['actions']);
+            $action($req, $res);
         });
 
         return $this;
@@ -200,7 +196,6 @@ class AdminModule
 
             $type = 'charcoal/admin/template/'.$view_ident;
 
-            $template = $view->load_template($type);
             $context = TemplateFactory::instance()->create($type);
             $content = $view->render_template($type, $context);
             $response->write($content);
@@ -219,25 +214,19 @@ class AdminModule
     {
         $admin_path = $this->config()->base_path();
         $this->app()->post('/action/json/'.$action_ident, function(ServerRequestInterface $request, ResponseInterface $response, $args = null) use ($action_ident) {
-            try {
-                //$action = new \Charcoal\Admin\Action\Login();
-                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
-                $action->set_mode('json');
-                return $action($request, $response);
-            } catch (Exception $e) {
-                die($e->getMessage());
-            }
+            //$action = new \Charcoal\Admin\Action\Login();
+            $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
+            $action->set_mode('json');
+            return $action($request, $response);
         });
 
         $this->app()->post('/action/'.$action_ident, function(ServerRequestInterface $request, ResponseInterface $response, $args = null) use ($action_ident) {
-            try {
-                //$action = new \Charcoal\Admin\Action\Login();
-                $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
-                $action->set_mode('json');
-                return $action($request, $response);
-            } catch (Exception $e) {
-                die($e->getMessage());
-            }
+
+            //$action = new \Charcoal\Admin\Action\Login();
+            $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
+            $action->set_mode('json');
+            return $action($request, $response);
+
         });
         return $this;
     }
@@ -251,13 +240,9 @@ class AdminModule
         unset($tpl);
         $admin_path = $this->config()->base_path();
         Charcoal::app()->get('/:actions+', function($actions = []) {
-            try {
-                $action_ident = implode('/', $actions);
-                $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$action_ident);
-                $action->run();
-            } catch (Exception $e) {
-                die($e->getMessage()."\n");
-            }
+            $action_ident = implode('/', $actions);
+            $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$action_ident);
+            $action->run();
         });
         return $this;
     }

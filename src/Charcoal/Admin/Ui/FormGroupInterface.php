@@ -1,7 +1,9 @@
 <?php
 
 namespace Charcoal\Admin\Ui;
-use \Charcoal\Admin\Widget\FormWidget;
+
+// Local namespace dependencies
+use \Charcoal\Admin\Ui\FormInterface;
 
 interface FormGroupInterface
 {
@@ -10,7 +12,7 @@ interface FormGroupInterface
     * @param FormWidget
     * @return FormGroupInterface
     */
-    public function set_form(FormWidget $form);
+    public function set_form(FormInterface $form);
 
     /**
     * @return FormWidget

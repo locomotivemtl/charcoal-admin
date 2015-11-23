@@ -6,13 +6,16 @@ namespace Charcoal\Admin\Template\Object;
 use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
+// From `charcoal-app`
+use \Charcoal\App\Template\WidgetFactory;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 use \Charcoal\Admin\Ui\DashboardContainerInterface as DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait as DashboardContainerTrait;
 use \Charcoal\Admin\Widget\DashboardWidget as Dashboard;
-use \Charcoal\Widget\WidgetFactory;
+
 
 
 // Local parent namespace dependencies

@@ -49,7 +49,7 @@ class CreateAction extends CliAction
         $verbose = !$climate->arguments->get('quiet');
 
         $obj_type = $this->arg_or_input('obj-type');
-        $obj_id = $this->arg_or_input('obj-id');
+
         try {
             $this->set_obj_type($obj_type);
             $obj = ModelFactory::instance()->get($obj_type);
@@ -70,7 +70,6 @@ class CreateAction extends CliAction
 
         } catch (\Exception $e) {
             $climate->error($e->getMessage());
-            die();
         }
     }
 

@@ -4,7 +4,9 @@ namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException;
 
-use \Charcoal\Widget\WidgetFactory;
+// From `charcoal-app`
+use \Charcoal\App\Template\WidgetFactory;
+
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormInterface;
 use \Charcoal\Admin\Ui\FormTrait;

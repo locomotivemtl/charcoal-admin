@@ -7,9 +7,10 @@ use \InvalidArgumentException;
 
 // From `charcoal-core`
 use \Charcoal\Charcoal;
+use \Charcoal\Translation\TranslationString;
 
-// From `charcoal-base`
-use \Charcoal\Template\AbstractTemplate;
+// From `charcoal-app`
+use \Charcoal\App\Template\AbstractTemplate;
 
 use \Charcoal\Admin\AdminModule;
 use \Charcoal\Admin\User;
@@ -20,8 +21,8 @@ use \Charcoal\Admin\User;
 * An action extends [\
 *
 * # Available (mustache) methods
-* - `title` (string) - The page title
-* - `subtitle` (string) The page subtitle
+* - `title` (TranslationString) - The page title
+* - `subtitle` (TranslationString) The page subtitle
 * - `show_header_menu` (bool) - Display the header menu or not
 * - `header_menu` (iterator) - The header menu data
 * - `show_footer_menu` (bool) - Display the footer menu or not
@@ -32,30 +33,36 @@ use \Charcoal\Admin\User;
 class AdminTemplate extends AbstractTemplate
 {
     /**
-    * @var string $_ident
+    * @var string $ident
     */
-    protected $_ident = '';
-    protected $_label = '';
+    private $ident = '';
+    /**
+    * @var TranslationString $label
+    */
+    private $label = '';
 
     /**
-    * @var mixed $_title
+    * @var TranslationString $title
     */
-    protected $_title = '';
+    private $title = '';
     /**
-    * @var mixed $_subtitle
+    * @var TranslationString $subtitle
     */
-    protected $_subtitle = '';
+    private $subtitle = '';
 
     /**
-    * @var boolean $_show_header_menu
+    * @var boolean $show_header_menu
     */
-    protected $_show_header_menu = true;
+    private $show_header_menu = true;
     /**
-    * @var boolean $_show_footer_menu
+    * @var boolean $show_footer_menu
     */
-    protected $_show_footer_menu = true;
+    private $show_footer_menu = true;
 
-    private $_feedbacks;
+    /**
+    * @var array $feedbacks
+    */
+    private $feedbacks;
 
     /**
     * Constructor.
@@ -114,13 +121,16 @@ class AdminTemplate extends AbstractTemplate
     */
     public function set_ident($ident)
     {
-        $this->_ident = $ident;
+        $this->ident = $ident;
         return $this;
     }
 
+    /**
+    * @param string
+    */
     public function ident()
     {
-        return $this->_ident;
+        return $this->ident;
     }
 
     /**
@@ -129,13 +139,16 @@ class AdminTemplate extends AbstractTemplate
     */
     public function set_label($label)
     {
-        $this->_label = $label;
+        $this->label = new TranslationString($label);
         return $this;
     }
 
+    /**
+    * @return TranslationString
+    */
     public function label()
     {
-        return $this->_label;
+        return $this->label;
     }
 
     /**
@@ -144,16 +157,19 @@ class AdminTemplate extends AbstractTemplate
     */
     public function set_title($title)
     {
-        $this->_title = $title;
+        $this->title = new TranslationString($title);
         return $this;
     }
 
+    /**
+    * @return TranslationString
+    */
     public function title()
     {
-        if ($this->_title === null) {
-            $this->_title = 'Undefined title';
+        if ($this->title === null) {
+            $this->title = 'Undefined title';
         }
-        return $this->_title;
+        return $this->title;
     }
 
     /**
@@ -162,16 +178,19 @@ class AdminTemplate extends AbstractTemplate
     */
     public function set_subtitle($subtitle)
     {
-        $this->_subtitle = $subtitle;
+        $this->subtitle = new TranslationString($subtitle);
         return $this;
     }
 
+    /**
+    * @return TranslationString
+    */
     public function subtitle()
     {
-        if ($this->_subtitle === null) {
-            $this->_subtitle = 'Undefined title';
+        if ($this->subtitle === null) {
+            $this->subtitle = 'Undefined title';
         }
-        return $this->_subtitle;
+        return $this->subtitle;
     }
 
     /**
@@ -184,7 +203,7 @@ class AdminTemplate extends AbstractTemplate
         if (!is_bool($show)) {
             throw new InvalidArgumentException('Show menu must be a boolean');
         }
-        $this->_show_header_menu = $show;
+        $this->show_header_menu = $show;
         return $this;
     }
 
@@ -193,7 +212,7 @@ class AdminTemplate extends AbstractTemplate
     */
     public function show_header_menu()
     {
-        return $this->_show_header_menu;
+        return $this->show_header_menu;
     }
 
     /**
@@ -258,7 +277,7 @@ class AdminTemplate extends AbstractTemplate
         if (!is_bool($show)) {
             throw new InvalidArgumentException('Show menu must be a boolean');
         }
-        $this->_show_footer_menu = $show;
+        $this->show_footer_menu = $show;
         return $this;
     }
 
@@ -267,7 +286,7 @@ class AdminTemplate extends AbstractTemplate
     */
     public function show_footer_menu()
     {
-        return $this->_show_footer_menu;
+        return $this->show_footer_menu;
     }
 
     /**
@@ -297,12 +316,12 @@ class AdminTemplate extends AbstractTemplate
     */
     public function feedbacks()
     {
-        return $this->_feedbacks;
+        return $this->feedbacks;
     }
 
     public function add_feedback($level, $msg)
     {
-        $this->_feedbacks[] = [
+        $this->feedbacks[] = [
             'msg'=>$msg,
             'level'=>$level
         ];
@@ -319,7 +338,7 @@ class AdminTemplate extends AbstractTemplate
     *
     * @return boolean
     */
-    protected function auth_required()
+    private function auth_required()
     {
         return true;
     }
@@ -327,7 +346,7 @@ class AdminTemplate extends AbstractTemplate
     /**
     * Determine if the current user is authenticated. If not it redirects them to the login page.
     */
-    protected function auth()
+    private function auth()
     {
         //$cfg = AdminModule::config();
         $u = User::get_authenticated();
@@ -335,7 +354,7 @@ class AdminTemplate extends AbstractTemplate
             $path = Charcoal::config()->get('admin_path').'/login';
             try {
                 // @todo Investigate why app()->redirect throws an exception
-                Charcoal::app()->response->withRedirect($path, 403);
+                //Charcoal::app()->response->withRedirect($path, 403);
 
             } catch (\Exception $e) {
                 if (!headers_sent()) {

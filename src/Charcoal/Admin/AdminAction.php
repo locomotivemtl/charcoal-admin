@@ -18,7 +18,7 @@ use Charcoal\Action\AbstractAction as AbstractAction;
 */
 abstract class AdminAction extends AbstractAction
 {
-    private $feedbacks;
+    private $feedbacks = [];
 
     /**
     * @param array $data Optional
@@ -28,6 +28,35 @@ abstract class AdminAction extends AbstractAction
         if ($data !== null) {
             $this->set_data($data);
         }
+
+        if ($this->auth_required() === true) {
+            // @todo Authentication
+            $this->auth();
+        }
+    }
+
+    /**
+    * Authentication is required by default.
+    *
+    * Change to false in
+    *
+    * @return boolean
+    */
+    public function auth_required()
+    {
+        return true;
+    }
+
+    /**
+    * Determine if the current user is authenticated. If not it redirects them to the login page.
+    */
+    private function auth()
+    {
+        //$cfg = AdminModule::config();
+        $u = User::get_authenticated();
+        if ($u === null) {
+            die('Auth required');
+       }
     }
 
     /**

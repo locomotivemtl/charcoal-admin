@@ -9,10 +9,12 @@ use \InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From `charcoal-core`
+use \Charcoal\Model\ModelFactory;
 
-use \Charcoal\Action\CliAction as CliAction;
+// From `charcoal-base`
+use \Charcoal\Action\CliAction;
 
-use \Charcoal\Model\ModelFactory as ModelFactory;
 
 /**
 * Create an object's table (sql source) according to its metadata's properties.
@@ -76,7 +78,6 @@ class CreateAction extends CliAction
         }
 
         $climate->arguments->parse();
-        $verbose = !$climate->arguments->get('quiet');
 
         $obj_type = $this->arg_or_input('obj-type');
         try {

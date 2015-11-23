@@ -3,19 +3,37 @@
 namespace Charcoal\Admin\Action\Cli;
 
 use \Exception;
+use \InvalidArgumentException;
 
 // From PSR-7
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-use \Charcoal\Admin\Action\CliAction as CliAction;
+// Module `charcoal-core` dependencies
+use \Charcoal\Model\ModelFactory;
+use \Charcoal\Loader\CollectionLoader;
 
-use \Charcoal\Model\ModelFactory as ModelFactory;
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\Action\CliAction;
+use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
+use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 
-use \Charcoal\Loader\CollectionLoader as CollectionLoader;
-
-class ObjectsAction extends CliAction
+/**
+* Script action to list the objects of a certain type.
+*
+* ## Required parameters
+* > When not running in silent mode, required parameters omitted from the command will be asked interactively.
+* - `obj-type`
+*
+* ## Optional parametrs
+* - `num-per-page`
+* - `page`
+* - `list-ident`
+*/
+class ObjectsAction extends CliAction implements CollectionContainerInterface
 {
+    use CollectionContainerTrait;
+
     /**
     * Make the class callable
     *
@@ -38,6 +56,20 @@ class ObjectsAction extends CliAction
                 'longPrefix'   => 'obj-type',
                 'description'  => 'Object type. Leave empty to enter it interactively.',
                 'defaultValue' => ''
+            ],
+            'num' => [
+                'prefix'       => 'n',
+                'longPrefix'   => 'num',
+                'description'  => 'Number of objects to retrieve.',
+                'defaultValue' => 250,
+                'castTo'       => 'int'
+            ],
+            'page' => [
+                'prefix'       => 'p',
+                'longPrefix'   => 'page',
+                'description'  => 'Current page. Depends on the number of objects.',
+                'defaultValue' => 1,
+                'castTo'       => 'int'
             ]
         ];
 
@@ -66,25 +98,39 @@ class ObjectsAction extends CliAction
         $climate->arguments->parse();
         $verbose = !$climate->arguments->get('quiet');
 
-        $obj_type = $this->arg_or_input('obj-type');
         try {
-            $this->set_obj_type($obj_type);
-            $obj = ModelFactory::instance()->get($obj_type);
+            $data = [
+                'obj_type'      => $this->arg_or_input('obj-type'),
+                'page'          => $climate->arguments->get('page'),
+                'num_per_page'  => $climate->arguments->get('num')
+            ];
+
+            $this->set_data($data);
+
+            $model = ModelFactory::instance()->get($this->obj_type());
 
             $loader = new CollectionLoader();
-            $loader->set_model($obj);
-            //$loader->set_source($obj->source());
-
-            $props = array_keys($obj->properties());
+            $loader->set_model($model);
+            $loader->set_pagination([
+                'page' => $this->page(),
+                'num_per_page' => $this->num_per_page()
+            ]);
 
             $collection = $loader->load();
+            $collection = $this->collection();
             $table = [];
+
+            $rows = $this->object_rows();
+            // ...
 
             foreach ($collection as $c) {
                 $obj = [];
-                foreach ($props as $p) {
-                    $prop = $c->p($p);
-                    $obj[$prop->label()] = (string)$prop;
+                $props = $model->properties();
+                foreach ($props as $property_ident => $unused) {
+                    $prop = $c->p($property_ident);
+                    $label = (string)$prop->label();
+                    $val = (string)$prop->display_val();
+                    $obj[$label] = $val;
                 }
                 $table[] = $obj;
 
@@ -92,26 +138,25 @@ class ObjectsAction extends CliAction
             $climate->table($table);
 
         } catch (Exception $e) {
-            //$climate->dump($e);
+            //$climate->out($e->xdebug_message);
             $climate->error($e->getMessage());
         }
         return $response;
     }
 
-    public function set_obj_type($obj_type)
-    {
-        if (!is_string($obj_type)) {
-            throw new InvalidArgumentException('Obj type needs to be a string.');
-        }
-        $this->_obj_type = $obj_type;
-        return $this;
-    }
-
+    /**
+    * @return array
+    */
     public function response()
     {
         return [
             'success'=>$this->success(),
             'feedbacks'=>$this->feedbacks()
         ];
+    }
+
+    public function properties()
+    {
+        return [];
     }
 }

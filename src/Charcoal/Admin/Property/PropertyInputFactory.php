@@ -2,35 +2,28 @@
 
 namespace Charcoal\Admin\Property;
 
-use \Exception as Exception;
-
-use \Charcoal\Admin\Property\Input as Input;
-
-// From `charcoal-core`
-use \Charcoal\Core\IdentFactory as IdentFactory;
-use \Charcoal\Property\PropertyInterface as PropertyInterface;
+// Module `charcoal-factory` dependencies
+use \Charcoal\Factory\ResolverFactory;
 
 /**
 *
 */
-class PropertyInputFactory extends IdentFactory
+class PropertyInputFactory extends ResolverFactory
 {
+
     /**
     * @param array $data
     */
-    public function __construct()
+    public function base_class()
     {
-        $this->set_base_class('\Charcoal\Admin\Property\PropertyInputInterface');
+        return '\Charcoal\Admin\Property\PropertyInputInterface';
     }
 
     /**
-    * IdentFactory > factory_class()
-    *
-    * @param string
     * @return string
     */
-    public function prepare_classname($class)
+    public function resolver_suffix()
     {
-        return $class.'Input';
+        return 'Input';
     }
 }

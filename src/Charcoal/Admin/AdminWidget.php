@@ -9,7 +9,7 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Translation\TranslationString as TranslationString;
 
 // From `charcoal-base`
-use \Charcoal\Widget\AbstractWidget as AbstractWidget;
+use \Charcoal\App\Template\AbstractWidget as AbstractWidget;
 use \Charcoal\Widget\WidgetView as WidgetView;
 
 /**

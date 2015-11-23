@@ -2,20 +2,21 @@
 
 namespace Charcoal\Admin\Action\Widget;
 
-use \Exception as Exception;
+use \Exception;
+use \InvalidArgumentException;
 
 // From PSR-7
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal as Charcoal;
+use \Charcoal\Charcoal;
 
 // From `charcoal-admin`
-use \Charcoal\Widget\WidgetFactory as WidgetFactory;
+use \Charcoal\Widget\WidgetFactory;
 
 // From `charcoal-admin`
-use \Charcoal\Admin\AdminAction as AdminAction;
+use \Charcoal\Admin\AdminAction;
 
 /**
 *
@@ -26,16 +27,11 @@ class LoadAction extends AdminAction
     * @var string $_widget_id
     */
     protected $widget_id = '';
+
     /**
     * @var string $_widget_html
     */
     protected $widget_html = '';
-
-    public function set_data(array $data)
-    {
-        unset($data);
-        return $this;
-    }
 
     /**
     * Make the class callable
@@ -91,13 +87,13 @@ class LoadAction extends AdminAction
     }
 
     /**
-    * @param string $html
+    * @param string $widget_html
     * @throws InvalidArgumentException
     * @return LoadAction Chainable
     */
     public function set_widget_html($html)
     {
-        if(!is_string($html)) {
+        if (!is_string($html)) {
             throw new InvalidArgumentException(
                 'Widget HTML must be a string'
             );
@@ -115,13 +111,13 @@ class LoadAction extends AdminAction
     }
 
     /**
-    * @param string $html
+    * @param string $widget_id
     * @throws InvalidArgumentException
     * @return LoadAction Chainable
     */
     public function set_widget_id($id)
     {
-        if(!is_string($id)) {
+        if (!is_string($id)) {
             throw new InvalidArgumentException(
                 'Widget ID must be a string'
             );
@@ -131,13 +127,16 @@ class LoadAction extends AdminAction
     }
 
     /**
-    *
+    * @return string
     */
     public function widget_id()
     {
         return $this->widget_id;
     }
 
+    /**
+    * @return string
+    */
     public function response()
     {
         $success = $this->success();

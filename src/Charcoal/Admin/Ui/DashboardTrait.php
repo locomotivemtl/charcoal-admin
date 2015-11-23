@@ -8,9 +8,9 @@ use \InvalidArgumentException;
 // From `charcoal-core`
 use \Charcoal\Charcoal;
 
-// From `charcoal-base`
-use \Charcoal\Widget\WidgetFactory;
-use \Charcoal\Widget\WidgetInterface;
+// From `charcoal-app`
+use \Charcoal\App\Template\WidgetFactory;
+use \Charcoal\App\Template\WidgetInterface;
 
 // Local namespace dependencies
 use \Charcoal\Admin\Ui\LayoutInterface;

@@ -13,10 +13,9 @@ use Psr\Http\Message\ResponseInterface;
 use \Charcoal\Charcoal;
 use \Charcoal\Model\ModelFactory;
 
-// From `charcoal-base`
-use \Charcoal\Module\AbstractModule;
-use \Charcoal\Template\TemplateFactory;
-use \Charcoal\Action\ActionFactory;
+// From `charcoal-app`
+use \Charcoal\App\Action\ActionFactory;
+use \Charcoal\App\Template\TemplateFactory;
 
 use \Charcoal\Admin\Config as AdminConfig;
 
@@ -29,6 +28,7 @@ class AdminModule
     * @var AdminConfig $config
     */
     private $config;
+
     /**
     * @var \Slim\App $app
     */

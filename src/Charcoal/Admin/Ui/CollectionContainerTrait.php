@@ -54,7 +54,9 @@ trait CollectionContainerTrait
     public function set_obj_type($obj_type)
     {
         if (!is_string($obj_type)) {
-            throw new InvalidArgumentException('Obj type must be a string');
+            throw new InvalidArgumentException(
+                'Obj type must be a string'
+            );
         }
         $this->obj_type = str_replace(['.', '_'], '/', $obj_type);
         return $this;
@@ -93,7 +95,7 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @param mixed $dashboard_config
+    * @param mixed $collection_config
     * @return CollectionContainerInterface Chainable
     */
     public function set_collection_config($collection_config)
@@ -220,6 +222,7 @@ trait CollectionContainerTrait
         $loader = new CollectionLoader();
         $loader->set_model($obj);
         $collection_config = $this->collection_config();
+        var_dump($collection_config);
         if (is_array($collection_config) && !empty($collection_config)) {
             $loader->set_data($collection_config);
         }
@@ -230,6 +233,7 @@ trait CollectionContainerTrait
         ]);
 
         $collection = $loader->load();
+        var_dump($collection);
         return $collection;
     }
 

@@ -122,7 +122,9 @@ class AlterAction extends CliAction
     public function set_obj_type($obj_type)
     {
         if (!is_string($obj_type)) {
-            throw new InvalidArgumentException('Obj type needs to be a string.');
+            throw new InvalidArgumentException(
+                'Obj type needs to be a string.'
+            );
         }
         $this->_obj_type = $obj_type;
         return $this;

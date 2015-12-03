@@ -3,13 +3,16 @@
   "version": "0.0.1",
   "description": "Charcoal Admin (Backend) Module",
   "homepage": "http://charcoal.locomotive.ca",
-  "author": "Mathieu Ducharme <mat@locomotive.ca>",
+  "author": {
+    "name": "Mathieu Ducharme",
+    "email": "mat@locomotive.ca"
+  },
   "contributors": [
-    "Benjamin Roch <benjamin@locomotive.ca>",
-    "Stephen Bégay <stephen@locomotive.ca>",
-    "Antoine Boulanger <antoine@locomotive.ca>"
+    {
+      "name": "Locomotive",
+      "homepage": "http://locomotive.ca"
+    }
   ],
-  "private": true,
   "devDependencies": {
     "autoprefixer-core": "^6.0.1",
     "glob": "^6.0.1",

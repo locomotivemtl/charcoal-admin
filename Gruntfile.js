@@ -45,7 +45,4 @@ module.exports = function(grunt) {
         'phpunit',
         'phplint'
     ]);
-
 };
-
-

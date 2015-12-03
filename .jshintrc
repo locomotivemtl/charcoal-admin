@@ -1,17 +1,17 @@
 {
-    "browser":true,
-    "curly":true,
-    "eqeqeq": true,
-    "eqnull": true,
-    "undef":true,
-    "unused": true,
-    "globals":{
-        "Charcoal":true,
-        "$":true,
-        "jQuery":true,
-        "BootstrapDialog":true,
-        "module":true,
-        "require":true,
-        "console":true
-    }
+  "browser": true,
+  "curly": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "undef": true,
+  "unused": true,
+  "globals": {
+    "Charcoal": true,
+    "$": true,
+    "jQuery": true,
+    "BootstrapDialog": true,
+    "module": true,
+    "require": true,
+    "console": true
+  }
 }

@@ -1,24 +1,14 @@
 {
-    "name": "locomotivemtl/charcoal-admin",
-    "description": "The administration dashboard / backend for Charcoal",
-    "minimum-stability":"dev",
-    "require": {
-        "locomotivemtl/charcoal-core":"@dev",
-        "locomotivemtl/charcoal-base":"@dev"
-    },
-    "repositories":[
-        {
-            "type":"vcs",
-            "url":"https://github.com/locomotivemtl/charcoal-core"
-        },
-         {
-            "type":"vcs",
-            "url":"https://github.com/locomotivemtl/charcoal-base"
-        }
-    ],
-    "autoload":{
-        "psr-4":{
-            "Charcoal\\Admin\\": "src/Charcoal/Admin"
-        }
+  "name": "locomotivemtl/charcoal-admin",
+  "description": "The administration dashboard / backend for Charcoal",
+  "minimum-stability": "dev",
+  "require": {
+    "locomotivemtl/charcoal-core": "@dev",
+    "locomotivemtl/charcoal-base": "@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Charcoal\\Admin\\": "src/Charcoal/Admin"
     }
+  }
 }

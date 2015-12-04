@@ -22,6 +22,7 @@ module.exports = function(grunt) {
     var config = {
         pkg: grunt.file.readJSON('package.json')
     }
+
     grunt.loadTasks('grunt_tasks');
     grunt.util._.extend(config, loadConfig('./grunt_tasks/'));
     grunt.initConfig(config);
@@ -45,7 +46,4 @@ module.exports = function(grunt) {
         'phpunit',
         'phplint'
     ]);
-
 };
-
-

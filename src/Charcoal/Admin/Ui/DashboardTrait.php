@@ -30,6 +30,8 @@ trait DashboardTrait
     */
     private $widgets;
 
+    private $widget_factory;
+
     /**
     * @param LayoutWidget|array
     * @throws InvalidArgumentException
@@ -111,6 +113,14 @@ trait DashboardTrait
         }
     }
 
+    private function widget_factory()
+    {
+        if($this->widget_factory === null) {
+            $this->widget_factory = new WidgetFactory();
+        }
+        return $this->widget_factory;
+    }
+
     /**
     * @param array $data
     * @return WidgetInterface
@@ -118,7 +128,10 @@ trait DashboardTrait
     public function create_widget(array $data = null)
     {
         $widget_type = isset($data['type']) ? $data['type'] : null;
-        $widget = WidgetFactory::instance()->create($widget_type, [
+
+        $this->logger()->debug('Creating a new widget: '.$data['type'], $data);
+
+        $widget = $this->widget_factory()->create($widget_type, [
             'logger'=>$this->logger()
         ]);
         if ($data !== null) {

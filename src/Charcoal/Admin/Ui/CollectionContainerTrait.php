@@ -46,6 +46,8 @@ trait CollectionContainerTrait
     */
     private $collection;
 
+    private $model_factory;
+
     /**
     * @param string $obj_type
     * @throws InvalidArgumentException if provided argument is not of type 'string'.
@@ -217,12 +219,13 @@ trait CollectionContainerTrait
         if (!$obj_type) {
             throw new Exception(__CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.');
         }
-        $obj = ModelFactory::instance()->get($obj_type);
+        $factory = $this->model_factory();
+        $obj = $factory->create($obj_type);
 
         $loader = new CollectionLoader();
         $loader->set_model($obj);
         $collection_config = $this->collection_config();
-        var_dump($collection_config);
+        //var_dump($collection_config);
         if (is_array($collection_config) && !empty($collection_config)) {
             $loader->set_data($collection_config);
         }
@@ -306,10 +309,19 @@ trait CollectionContainerTrait
         if ($obj_type === null) {
             return null;
         }
-        $obj = ModelFactory::instance()->get($obj_type, [
+        $factory = $this->model_factory();
+        $obj = $factory->get($obj_type, [
             'logger' => $this->logger()
         ]);
         return $obj;
+    }
+
+    private function model_factory()
+    {
+        if($this->model_factory === null) {
+            $this->model_factory = new ModelFactory();
+        }
+        return $this->model_factory;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin;
 
+// Dependencies from `PHP`
 use \Exception;
 use \InvalidArgumentException;
 
@@ -15,24 +16,25 @@ use \Charcoal\Model\ModelFactory;
 
 // From `charcoal-app`
 use \Charcoal\App\Action\ActionFactory;
+use \Charcoal\App\Module\AbstractModule;
+use \Charcoal\App\Module\ModuleInterface;
 use \Charcoal\App\Template\TemplateFactory;
 
+// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Config as AdminConfig;
 
 /**
 * The base class for the `admin` Module
 */
-class AdminModule
+class AdminModule extends AbstractModule implements
+    ModuleInterface
 {
+
     /**
     * @var AdminConfig $config
     */
     private $config;
 
-    /**
-    * @var \Slim\App $app
-    */
-    private $app;
 
     /**
     * Charcoal admin setup.
@@ -52,18 +54,25 @@ class AdminModule
     * @param \Slim\App $app
     * @return void
     */
-    static public function setup(\Slim\App $app)
+    public function setup()
     {
         // A session is necessary for the admin module
         if (session_id() === '') {
             session_start();
         }
 
-        $container = $app->getContainer();
-        $container['charcoal/admin/module'] = function($c) use ($app) {
+        // Hack
+        $metadata_path = realpath(__DIR__.'/../../../metadata/');
+        $templates_path = realpath(__DIR__.'/../../../templates/');
+        Charcoal::config()->add_metadata_path($metadata_path);
+        Charcoal::config()->add_template_path($templates_path);
+
+        $container = $this->app()->getContainer();
+        $container['charcoal/admin/module'] = function($c) {
             return new AdminModule([
+                'logger'=>$c['logger'],
                 'config'=>$c['charcoal/admin/config'],
-                'app'=>$app
+                'app'=>$this->app()
             ]);
         };
 
@@ -103,29 +112,16 @@ class AdminModule
         };
 
         // Admin module
-        $app->get('/admin', 'charcoal/admin/module:default_route');
-        $app->group('/admin', 'charcoal/admin/module:setup_routes');
+        $this->app()->get('/admin', 'charcoal/admin/module:default_route');
+        $this->app()->group('/admin', 'charcoal/admin/module:setup_routes');
     }
 
-    /**
-    * @param array $data Dependencies map
-    */
-    public function __construct($data)
-    {
-        $this->config = $data['config'];
-        $this->app = $data['app'];
 
-        // Hack
-        $metadata_path = realpath(__DIR__.'/../../../metadata/');
-        $templates_path = realpath(__DIR__.'/../../../templates/');
-        Charcoal::config()->add_metadata_path($metadata_path);
-        Charcoal::config()->add_template_path($templates_path);
-    }
 
     /**
     * @return Module Chainable
     */
-    public function setup_routes()
+    public function setup_routes2()
     {
 
         $container = $this->app()->getContainer();
@@ -144,18 +140,21 @@ class AdminModule
         return $this;
     }
 
-    public function default_route(ServerRequestInterface $request, ResponseInterface $response, $args = null)
+    public function default_route2(ServerRequestInterface $request, ResponseInterface $response, $args = null)
     {
         // Unused vars
         unset($request);
         unset($args);
 
-        $c = $this->app->getContainer();
+        $c = $this->app()->getContainer();
         $view = $c['charcoal/view'];
 
         $type = 'charcoal/admin/template/home';
 
-        $context = TemplateFactory::instance()->create($type);
+        $factory = new TemplateFactory();
+        $context = $factory->create($type, [
+            'app'=>$this->app()
+        ]);
         $content = $view->render_template($type, $context);
         $response->write($content);
         return $response;
@@ -164,12 +163,12 @@ class AdminModule
     /**
     * @return Module Chainable
     */
-    public function setup_cli_routes($app = null)
+    public function setup_cli_routes2()
     {
-        $this->app = $app;
         // Admin catch-all (load template if it exists)
-        $app->get('/{actions:.*}', function ($req, $res, $args) {
-            $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$args['actions']);
+        $this->app()->get('/{actions:.*}', function ($req, $res, $args) {
+            $factory = new ActionFactory();
+            $action = $factory->get('charcoal/admin/action/cli/'.$args['actions']);
             $action($req, $res);
         });
 
@@ -196,7 +195,11 @@ class AdminModule
 
             $type = 'charcoal/admin/template/'.$view_ident;
 
-            $context = TemplateFactory::instance()->create($type);
+
+            $factory = new TemplateFactory();
+            $context = $factory->create($type, [
+                'app'=>$this
+            ]);
             $content = $view->render_template($type, $context);
             $response->write($content);
             return $response;
@@ -223,7 +226,8 @@ class AdminModule
         $this->app()->post('/action/'.$action_ident, function(ServerRequestInterface $request, ResponseInterface $response, $args = null) use ($action_ident) {
 
             //$action = new \Charcoal\Admin\Action\Login();
-            $action = ActionFactory::instance()->get('charcoal/admin/action/'.$action_ident);
+            $factory = new ActionFactory();
+            $action = $factory->create('charcoal/admin/action/'.$action_ident);
             $action->set_mode('json');
             return $action($request, $response);
 
@@ -241,23 +245,22 @@ class AdminModule
         $admin_path = $this->config()->base_path();
         Charcoal::app()->get('/:actions+', function($actions = []) {
             $action_ident = implode('/', $actions);
-            $action = ActionFactory::instance()->get('charcoal/admin/action/cli/'.$action_ident);
+            $factory = new ActionFactory();
+            $action = $factory->create('charcoal/admin/action/cli/'.$action_ident);
+
             $action->run();
         });
         return $this;
     }
 
-    public function app()
-    {
-        return $this->app;
-    }
 
-    /**
-    * @return Config
-    */
-    public function config()
+    public function create_config(array $data = null)
     {
-        return $this->config;
+        $config = new AdminConfig();
+        if($data !== null) {
+            $config->set_data($data);
+        }
+        return $config;
     }
 
 }

@@ -78,7 +78,9 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
             $dashboard_config = $admin_metadata['dashboards'][$dashboard_ident];
         }
 
-        $dashboard = new Dashboard();
+        $dashboard = new Dashboard([
+            'logger'=>$this->logger()
+        ]);
         if (is_array($data)) {
             $dashboard->set_data($data);
         }
@@ -103,7 +105,8 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     */
     public function search_widget()
     {
-        $widget = WidgetFactory::instance()->create('charcoal/admin/widget/search');
+        $factory = new WidgetFactory();
+        $widget = $factory->create('charcoal/admin/widget/search');
         $widget->set_obj_type( $this->obj_type() );
 
         $obj = $this->proto();

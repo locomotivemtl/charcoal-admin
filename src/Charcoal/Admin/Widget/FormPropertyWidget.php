@@ -42,6 +42,10 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     */
     private $active = true;
 
+
+    private $property_factory;
+    private $property_input_factory;
+
     /**
     * @param array $data
     * @return FormProperty Chainable
@@ -228,7 +232,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     public function prop()
     {
         if ($this->property === null) {
-            $p = PropertyFactory::instance()->get($this->type());
+            $p = $this->property_factory()->get($this->type());
 
 
             $p->set_ident($this->property_ident());
@@ -251,12 +255,28 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
         $prop = $this->prop();
         $input_type = $this->input_type();
 
-        $this->input = PropertyInputFactory::instance()->create($input_type);
+        $this->input = $this->property_input_factory()->create($input_type);
         $this->input->set_property($prop);
         $this->input->set_data($this->property_data);
 
         $GLOBALS['widget_template'] = $input_type;
         return $this->input;
+    }
+
+    private function property_factory()
+    {
+        if($this->property_factory === null) {
+            $this->property_factory = new PropertyFactory();
+        }
+        return $this->property_factory;
+    }
+
+    private function property_input_factory()
+    {
+        if($this->property_input_factory === null) {
+            $this->property_input_factory = new PropertyInputFactory();
+        }
+        return $this->property_input_factory;
     }
 
 }

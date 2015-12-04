@@ -88,7 +88,7 @@ class AdminTemplate extends AbstractTemplate
             $data = array_merge_recursive($_GET, $data);
         }
 
-        parent::__construct($data);
+        $this->set_data($data);
 
     }
 

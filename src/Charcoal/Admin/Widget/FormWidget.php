@@ -44,6 +44,8 @@ class FormWidget extends AdminWidget implements FormInterface
     /*public $read_only;
     public $next_actions;*/
 
+    private $widget_factory;
+
     /**
     * @param array $data Optional
     */
@@ -63,7 +65,7 @@ class FormWidget extends AdminWidget implements FormInterface
     public function create_group(array $data = null)
     {
         $widget_type = isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formgroup';
-        $group = WidgetFactory::instance()->create($widget_type, [
+        $group = $this->widget_factory()->create($widget_type, [
             'logger' => $this->logger()
         ]);
         $group->set_form($this);
@@ -195,5 +197,16 @@ class FormWidget extends AdminWidget implements FormInterface
         }
 
         return ($a < $b) ? (-1) : 1;
+    }
+
+    /**
+    * @return WidgetFactory
+    */
+    private function widget_factory()
+    {
+        if($this->widget_factory === null) {
+            $this->widget_factory = new WidgetFactory();
+        }
+        return $this->widget_factory;
     }
 }

@@ -41,6 +41,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     */
     protected $filters;
 
+    private $property_factory;
+
     /**
     * Fetch metadata from current obj_type
     * @return array List of metadata
@@ -104,7 +106,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         foreach ($props as $property_ident => $property) {
             $property_metadata = $props[$property_ident];
 
-            $p = PropertyFactory::instance()->get($property_metadata['type']);
+            $p = $this->property_factory()->get($property_metadata['type']);
             $p->set_ident($property_ident);
             $p->set_data($property_metadata);
 
@@ -220,5 +222,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return Charcoal::config()->get('URL').'admin/object/edit?obj_type='.$this->obj_type();
     }
 
-
+    /**
+    * @return PropertyFactory
+    */
+    private function property_factory()
+    {
+        if($this->property_factory === null) {
+            $this->property_factory = new PropertyFactory();
+        }
+        return $this->property_factory;
+    }
 }

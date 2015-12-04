@@ -54,7 +54,9 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
             $dashboard_config = $admin_metadata['dashboards'][$dashboard_ident];
         }
 
-        $dashboard = new DashboardWidget();
+        $dashboard = new DashboardWidget([
+            'logger'=>$this->logger()
+        ]);
         if (is_array($data)) {
             $dashboard->set_data($data);
         }

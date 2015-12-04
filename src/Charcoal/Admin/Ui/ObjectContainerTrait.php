@@ -154,7 +154,8 @@ trait ObjectContainerTrait
 
         $obj_type = $this->obj_type();
 
-        $obj = ModelFactory::instance()->create($obj_type, [
+        $factory = new ModelFactory();
+        $obj = $factory->create($obj_type, [
             'logger'=>\Charcoal\Charcoal::logger()
         ]);
 
@@ -193,8 +194,9 @@ trait ObjectContainerTrait
             if (!$obj_type) {
                 return false;
             }
+            $factory = new ModelFactory();
             // Catch exception to know if the obj_type is valid
-            $obj = ModelFactory::instance()->get($obj_type, [
+            $obj = $factory->get($obj_type, [
                 'logger'=>\Charcoal\Charcoal::logger()
             ]);
             if (!$this->validate_obj_base_class($obj)) {

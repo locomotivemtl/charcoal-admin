@@ -3,10 +3,18 @@
 
     "routes":{
         "templates":{
-            "home":{},
-            "login":{},
-            "object/edit":{},
-            "object/collection":{},
+            "home":{
+                "ident":"charcoal/admin/template/home"
+            },
+            "login":{
+                "ident":"charcoal/admin/template/login"
+            },
+            "object/edit":{
+                "ident":"charcoal/admin/template/object/edit"
+            },
+            "object/collection":{
+                "ident":"charcoal/admin/template/object/collection"
+            },
 
             "contents":{},
             "envoie":{},

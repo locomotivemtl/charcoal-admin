@@ -57,10 +57,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         is_new_object;
 
     if (that.obj_id) {
-        url = Charcoal.Admin.admin_url() + 'action/json/object/update';
+        url = Charcoal.Admin.admin_url() + 'object/update';
         is_new_object = false;
     } else {
-        url = Charcoal.Admin.admin_url() + 'action/json/object/save';
+        url = Charcoal.Admin.admin_url() + 'object/save';
         is_new_object = true;
     }
 

@@ -2115,7 +2115,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
         e.preventDefault();
 
         var form = $(this).parents('form');
-        var url = Charcoal.Admin.admin_url() + 'action/json/login';
+        var url = Charcoal.Admin.admin_url() + 'login';
         var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);
@@ -2310,7 +2310,7 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 {
     var that = this;
 
-    var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
+    var url = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
         widget_type:    that.widget_type,
         widget_options: that.widget_options()
@@ -2354,7 +2354,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
         nl2br: false,
         message: function (dialog) {
             console.debug(dialog);
-            var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+            var url = Charcoal.Admin.admin_url() + 'widget/load',
                 data = {
                     widget_type:    dialog_opts.widget_type//that.widget_type//,
                     //widget_options: that.widget_options()
@@ -2438,10 +2438,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         is_new_object;
 
     if (that.obj_id) {
-        url = Charcoal.Admin.admin_url() + 'action/json/object/update';
+        url = Charcoal.Admin.admin_url() + 'object/update';
         is_new_object = false;
     } else {
-        url = Charcoal.Admin.admin_url() + 'action/json/object/save';
+        url = Charcoal.Admin.admin_url() + 'object/save';
         is_new_object = true;
     }
 
@@ -2503,38 +2503,6 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
             Charcoal.Admin.feedback().call();
         }
     });
-};
-;/**
-* Form widget that manages data sending
-* charcoal/admin/widget/form.sidebar
-*
-* Require:
-* - jQuery
-*
-* @param  {Object}  opts Options for widget
-*/
-
-Charcoal.Admin.Widget_Form_Sidebar = function ()
-{
-    this.widget_type = 'charcoal/admin/widget/form.sidebar';
-
-    return this;
-};
-
-Charcoal.Admin.Widget_Form_Sidebar.prototype = Object.create(Charcoal.Admin.Widget.prototype);
-Charcoal.Admin.Widget_Form_Sidebar.prototype.constructor = Charcoal.Admin.Widget_Form;
-Charcoal.Admin.Widget_Form_Sidebar.prototype.parent = Charcoal.Admin.Widget.prototype;
-
-/**
-* Called automatically by the component manager
-* Instantiation of pretty much every thing you want!
-*
-* @return this
-*/
-Charcoal.Admin.Widget_Form_Sidebar.prototype.init = function ()
-{
-
-    return this;
 };
 ;/**
 * Map sidebar
@@ -2850,7 +2818,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
     // The "quick create" event button loads the objectform widget
     $('.js-list-quick-create', that.table_selector).on('click', function (e) {
         e.preventDefault();
-        var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+        var url = Charcoal.Admin.admin_url() + 'widget/load',
             data = {
                 widget_type: 'charcoal/admin/widget/objectform',
                 widget_options: {
@@ -2878,7 +2846,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         e.preventDefault();
 
         var sublist = that.sublist(),
-            url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inlinemulti',
+            url = Charcoal.Admin.admin_url() + 'widget/table/inlinemulti',
             data = {
                 obj_type: that.obj_type,
                 obj_ids: sublist.obj_ids
@@ -3045,7 +3013,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
             nl2br: false,
             message: function (dialog) {
                 console.debug(dialog);
-                var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+                var url = Charcoal.Admin.admin_url() + 'widget/load',
                     data = {
                         widget_type: widget_type,
                         widget_options: widget_options
@@ -3081,9 +3049,9 @@ Charcoal.Admin.Widget_Table.Table_Row = function (container, row)
 
     this.obj_id = this.element.getAttribute('data-id');
     this.obj_type = this.widget_table.obj_type;
-    this.load_url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
-    this.inline_url = Charcoal.Admin.admin_url() + 'action/json/widget/table/inline';
-    this.delete_url = Charcoal.Admin.admin_url() + 'action/json/object/delete';
+    this.load_url = Charcoal.Admin.admin_url() + 'widget/load';
+    this.inline_url = Charcoal.Admin.admin_url() + 'widget/table/inline';
+    this.delete_url = Charcoal.Admin.admin_url() + 'object/delete';
 
     this.bind_events();
 };

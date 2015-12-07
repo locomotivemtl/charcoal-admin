@@ -142,7 +142,7 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 {
     var that = this;
 
-    var url = Charcoal.Admin.admin_url() + 'action/json/widget/load';
+    var url = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
         widget_type:    that.widget_type,
         widget_options: that.widget_options()
@@ -186,7 +186,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
         nl2br: false,
         message: function (dialog) {
             console.debug(dialog);
-            var url = Charcoal.Admin.admin_url() + 'action/json/widget/load',
+            var url = Charcoal.Admin.admin_url() + 'widget/load',
                 data = {
                     widget_type:    dialog_opts.widget_type//that.widget_type//,
                     //widget_options: that.widget_options()

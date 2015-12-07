@@ -34,7 +34,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
         e.preventDefault();
 
         var form = $(this).parents('form');
-        var url = Charcoal.Admin.admin_url() + 'action/json/login';
+        var url = Charcoal.Admin.admin_url() + 'login';
         var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);

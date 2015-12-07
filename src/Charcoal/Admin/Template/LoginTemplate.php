@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Template;
 
-// Module `charcoal-core` dependencies
-use \Charcoal\Charcoal as Charcoal;
-
 // Local parent namespace dependencies
 use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
@@ -14,6 +11,8 @@ use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 class LoginTemplate extends AdminTemplate
 {
     /**
+    * Authentication is obviously never required for the login page.
+    *
     * @return boolean
     */
     protected function auth_required()

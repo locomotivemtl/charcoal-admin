@@ -6,8 +6,9 @@ namespace Charcoal\Admin\Action;
 use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
-// From `charcoal-core`
-use \Charcoal\Charcoal as Charcoal;
+// PSR-7 (http messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 use \Charcoal\Admin\AdminAction as AdminAction;
 use \Charcoal\Admin\User as User;
@@ -34,7 +35,6 @@ use \Charcoal\Admin\User as User;
 * - `403` in case of wrong credentials
 * - `404` if a required parameter is missing
 *
-* @see \Charcoal\Charcoal::app() The `Slim` application inside the core Charcoal object, used to read request and set response.
 */
 class LoginAction extends AdminAction
 {
@@ -44,17 +44,17 @@ class LoginAction extends AdminAction
     protected $_next_url;
 
     /**
-    * @param array $data
-    * @return Login Chainable
+    * Authentication is required by default.
+    *
+    * Change to false in
+    *
+    * @return boolean
     */
-    public function set_data(array $data)
+    public function auth_required()
     {
-        parent::set_data($data);
-        if (isset($data['next_url']) && $data['next_url'] !== null) {
-            $this->set_next_url($data['next_url']);
-        }
-        return $this;
+        return false;
     }
+
 
     /**
     * Assign the next URL.
@@ -74,48 +74,22 @@ class LoginAction extends AdminAction
     }
 
     /**
-    * Get the next URL.
-    *
-    * If none was assigned, generate the default URL (frrom `admin/home`)
-    */
-    public function next_url()
+     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @return ResponseInterface
+     */
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
-        if (!$this->_next_url) {
-            return Charcoal::app()->urlFor('admin/home');
-        }
-        return $this->_next_url;
-    }
-
-    /**
-    * @return string
-    */
-    public function success_url()
-    {
-        return $this->next_url();
-    }
-
-    /**
-    * @return string
-    */
-    public function failure_url()
-    {
-        return Charcoal::app()->urlFor('admin/login');
-    }
-
-    /**
-    * @return void
-    */
-    public function run()
-    {
-        $username = Charcoal::app()->request->post('username');
-        $password = Charcoal::app()->request->post('password');
+        $post_data = $request->getParsedBody();
+        $username = $post_data['username'];
+        $password = $post_data['password'];
 
         if (!$username || !$password) {
             $this->set_success(false);
-            $this->output(404);
-            return;
+            return $response->withStatus(404);
         }
         $u = new User();
+
         try {
             $is_authenticated = $u->authenticate($username, $password);
         } catch (Exception $e) {
@@ -124,25 +98,25 @@ class LoginAction extends AdminAction
 
         if (!$is_authenticated) {
             $this->set_success(false);
-            $this->output(403);
+            return $response->withStatus(403);
         } else {
             $this->set_success(true);
-            $this->output(200);
+            return $response;
         }
     }
 
     /**
     * @return array
     */
-    public function response()
+    public function results()
     {
         $success = $this->success();
 
-        $response = [
+        $results = [
             'success'=>$this->success(),
             'next_url'=>$this->redirect_url()
         ];
-        return $response;
+        return $results;
     }
 
 }

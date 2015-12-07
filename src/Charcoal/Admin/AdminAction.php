@@ -9,7 +9,7 @@ use \Exception as Exception;
 use Charcoal\Charcoal as Charcoal;
 
 // Module `charcoal-base` dependencies
-use Charcoal\Action\AbstractAction as AbstractAction;
+use Charcoal\App\Action\AbstractAction as AbstractAction;
 
 /**
 * The base class for the `admin` Actions.

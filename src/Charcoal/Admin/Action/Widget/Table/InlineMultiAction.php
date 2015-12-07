@@ -31,18 +31,6 @@ class InlineMultiAction extends AdminAction
     }
 
     /**
-    * Make the class callable
-    *
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
-    */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        return $this->run($request, $response);
-    }
-
-    /**
     * @param ServerRequestInterface $request
     * @param ResponseInterface $response
     * @return ResponseInterface
@@ -96,15 +84,15 @@ class InlineMultiAction extends AdminAction
         }
     }
 
-    public function response()
+    public function results()
     {
         $success = $this->success();
 
-        $response = [
+        $results = [
             'success' => $this->success(),
             'objects' => $this->_objects,
             'feedbacks' => $this->feedbacks()
         ];
-        return $response;
+        return $results;
     }
 }

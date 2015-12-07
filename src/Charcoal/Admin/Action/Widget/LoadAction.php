@@ -5,9 +5,10 @@ namespace Charcoal\Admin\Action\Widget;
 use \Exception;
 use \InvalidArgumentException;
 
-// From PSR-7
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+// PSR-7 (http messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
+
 
 // From `charcoal-core`
 use \Charcoal\Charcoal;
@@ -34,25 +35,13 @@ class LoadAction extends AdminAction
     protected $widget_html = '';
 
     /**
-    * Make the class callable
-    *
     * @param ServerRequestInterface $request
     * @param ResponseInterface $response
     * @return ResponseInterface
     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
-        return $this->run($request, $response);
-    }
-
-    /**
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
-    */
-    public function run(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        $app = Charcoal::app();
+        $app = $this->app();
         $container = $app->getContainer();
 
         $widget_type = $request->getParam('widget_type');
@@ -65,7 +54,10 @@ class LoadAction extends AdminAction
         }
 
         try {
-            $widget = WidgetFactory::instance()->get($widget_type);
+            $widget_factory = new WidgetFactory();
+            $widget = $widget_factory->create($widget_type, [
+
+            ]);
             $widget->set_view($container['charcoal/view']);
 
             if (is_array($widget_options)) {
@@ -82,32 +74,8 @@ class LoadAction extends AdminAction
         } catch (Exception $e) {
             //var_dump($e);
             $this->set_success(false);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
-    }
-
-    /**
-    * @param string $widget_html
-    * @throws InvalidArgumentException
-    * @return LoadAction Chainable
-    */
-    public function set_widget_html($html)
-    {
-        if (!is_string($html)) {
-            throw new InvalidArgumentException(
-                'Widget HTML must be a string'
-            );
-        }
-        $this->widget_html = $html;
-        return $this;
-    }
-
-    /**
-    * @return string
-    */
-    public function widget_html()
-    {
-        return $this->widget_html;
     }
 
     /**
@@ -135,18 +103,44 @@ class LoadAction extends AdminAction
     }
 
     /**
+    * @param string $widget_html
+    * @throws InvalidArgumentException
+    * @return LoadAction Chainable
+    */
+    public function set_widget_html($html)
+    {
+        if (!is_string($html)) {
+            throw new InvalidArgumentException(
+                'Widget HTML must be a string'
+            );
+        }
+        $this->widget_html = $html;
+        return $this;
+    }
+
+    /**
     * @return string
     */
-    public function response()
+    public function widget_html()
+    {
+        return $this->widget_html;
+    }
+
+
+
+    /**
+    * @return string
+    */
+    public function results()
     {
         $success = $this->success();
 
-        $response = [
+        $results = [
             'success'=>$this->success(),
             'widget_html'=>$this->widget_html(),
             'widget_id'=>$this->widget_id(),
             'feedbacks'=>$this->feedbacks()
         ];
-        return $response;
+        return $results;
     }
 }

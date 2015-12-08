@@ -257,7 +257,7 @@ class AdminModule extends AbstractModule implements
     public function create_config(array $data = null)
     {
         $config = new AdminConfig();
-        if($data !== null) {
+        if ($data !== null) {
             $config->set_data($data);
         }
         return $config;

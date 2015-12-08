@@ -316,7 +316,7 @@ trait CollectionContainerTrait
 
     private function model_factory()
     {
-        if($this->model_factory === null) {
+        if ($this->model_factory === null) {
             $this->model_factory = new ModelFactory();
         }
         return $this->model_factory;

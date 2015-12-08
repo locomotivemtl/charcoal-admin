@@ -227,7 +227,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     */
     private function property_factory()
     {
-        if($this->property_factory === null) {
+        if ($this->property_factory === null) {
             $this->property_factory = new PropertyFactory();
         }
         return $this->property_factory;

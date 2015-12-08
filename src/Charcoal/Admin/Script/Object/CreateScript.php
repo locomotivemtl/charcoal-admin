@@ -51,6 +51,8 @@ class CreateScript extends AdminScript
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request); // Unused
+
         $climate = $this->climate();
 
         $climate->underline()->out(
@@ -80,6 +82,7 @@ class CreateScript extends AdminScript
             "\n".sprintf('Success! Object "%s" created.', $ret)
         );
 
+        return $response;
     }
 
     public function property_to_input($prop)

@@ -204,7 +204,7 @@ class FormWidget extends AdminWidget implements FormInterface
     */
     private function widget_factory()
     {
-        if($this->widget_factory === null) {
+        if ($this->widget_factory === null) {
             $this->widget_factory = new WidgetFactory();
         }
         return $this->widget_factory;

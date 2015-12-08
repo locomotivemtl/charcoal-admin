@@ -265,7 +265,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
 
     private function property_factory()
     {
-        if($this->property_factory === null) {
+        if ($this->property_factory === null) {
             $this->property_factory = new PropertyFactory();
         }
         return $this->property_factory;
@@ -273,7 +273,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
 
     private function property_input_factory()
     {
-        if($this->property_input_factory === null) {
+        if ($this->property_input_factory === null) {
             $this->property_input_factory = new PropertyInputFactory();
         }
         return $this->property_input_factory;

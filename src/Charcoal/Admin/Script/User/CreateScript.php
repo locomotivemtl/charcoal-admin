@@ -22,6 +22,8 @@ class CreateScript extends AdminScript
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $climate = $this->climate();
 
         $climate->underline()->out(

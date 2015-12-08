@@ -90,7 +90,7 @@ class AdminModule extends AbstractModule implements
             $loader = new \Charcoal\View\Mustache\MustacheLoader([
                 'logger' => $c['logger']
             ]);
-            $loader->set_search_path(Charcoal::config()->template_path());
+            $loader->set_paths(Charcoal::config()->templates_path());
             return $loader;
         };
 

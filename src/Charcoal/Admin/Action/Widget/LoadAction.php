@@ -14,7 +14,7 @@ use \Psr\Http\Message\ResponseInterface;
 use \Charcoal\Charcoal;
 
 // From `charcoal-admin`
-use \Charcoal\Widget\WidgetFactory;
+use \Charcoal\App\Template\WidgetFactory;
 
 // From `charcoal-admin`
 use \Charcoal\Admin\AdminAction;

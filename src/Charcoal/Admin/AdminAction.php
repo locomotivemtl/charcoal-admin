@@ -3,13 +3,13 @@
 namespace Charcoal\Admin;
 
 // Dependencies from `PHP`
-use \Exception as Exception;
+use \Exception;
 
 // Module `charcoal-core` dependencies
-use Charcoal\Charcoal as Charcoal;
+use Charcoal\Charcoal;
 
-// Module `charcoal-base` dependencies
-use Charcoal\App\Action\AbstractAction as AbstractAction;
+// Module `charcoal-app` dependencies
+use Charcoal\App\Action\AbstractAction;
 
 /**
 * The base class for the `admin` Actions.
@@ -44,7 +44,7 @@ abstract class AdminAction extends AbstractAction
     */
     public function auth_required()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -118,15 +118,15 @@ abstract class AdminAction extends AbstractAction
     *
     * @return array
     */
-    public function response()
+    public function results()
     {
         $success = $this->success();
 
-        $response = [
+        $results = [
             'success'=>$this->success(),
             'next_url'=>$this->redirect_url(),
             'feedbacks'=>$this->feedbacks()
         ];
-        return $response;
+        return $results;
     }
 }

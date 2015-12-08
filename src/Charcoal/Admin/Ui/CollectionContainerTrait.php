@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Ui;
 
 use \Exception as Exception;
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
 // From `charcoal-core`
 use \Charcoal\Loader\CollectionLoader as CollectionLoader;
@@ -225,7 +225,6 @@ trait CollectionContainerTrait
         $loader = new CollectionLoader();
         $loader->set_model($obj);
         $collection_config = $this->collection_config();
-        //var_dump($collection_config);
         if (is_array($collection_config) && !empty($collection_config)) {
             $loader->set_data($collection_config);
         }
@@ -236,7 +235,6 @@ trait CollectionContainerTrait
         ]);
 
         $collection = $loader->load();
-        var_dump($collection);
         return $collection;
     }
 

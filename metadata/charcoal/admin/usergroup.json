@@ -1,3 +1,17 @@
 {
+  "parent":"charcoal/object/content",
 
+  "properties":{
+    "id":{
+      "type":"id"
+    }
+  },
+  "key":"id",
+
+  "sources":{
+    "default":{
+      "table":"charcoal_admin_usergroups"
+    }
+  },
+  "default_source":"default"
 }

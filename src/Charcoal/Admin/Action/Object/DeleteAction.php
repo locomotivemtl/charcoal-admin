@@ -2,15 +2,17 @@
 
 namespace Charcoal\Admin\Action\Object;
 
+// Dependencies from `PHP`
 use \Exception;
 
-// From PSR-7
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+// PSR-7 (http messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
 use \Charcoal\Model\ModelFactory;
 
+// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 
 /**
@@ -18,10 +20,8 @@ use \Charcoal\Admin\AdminAction;
 *
 * ## Parameters
 * **Required parameters**
-* - `username`
-* - `password`
-* **Optional parameters**
-* - `next_url`
+* - `obj_type`
+* - `obj_id`
 *
 * ## Response
 * - `success` true if login was successful, false otherwise.
@@ -42,27 +42,11 @@ class DeleteAction extends AdminAction
 {
 
     /**
-    * Make the class callable
-    *
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
-    */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        return $this->run($request, $response);
-    }
-
-    public function set_data(array $data)
-    {
-        unset($data);
-        return $this;
-    }
-
-    /**
-    * @return void
-    */
-    public function run(ServerRequestInterface $request, ResponseInterface $response)
+     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @return ResponseInterface
+     */
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
 
         $obj_type = $request->getParam('obj_type');
@@ -70,43 +54,44 @@ class DeleteAction extends AdminAction
 
         if (!$obj_type) {
             $this->set_success(false);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
         if (!$obj_id) {
             $this->set_success(false);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
         try {
-            $obj = ModelFactory::instance()->get($obj_type);
+            $model_factory = new ModelFactory();
+            $obj = $model_factory->create($obj_type);
             $obj->load($obj_id);
             if (!$obj->id()) {
                 $this->set_success(false);
-                return $this->output($response->withStatus(404));
+                return $response->withStatus(404);
             }
             $res = $obj->delete();
             if ($res) {
                 $this->log_object_delete();
                 $this->set_success(true);
-                return $this->output($response);
+                return $response;
             }
         } catch (Exception $e) {
             $this->set_success(false);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
     }
 
-    public function response()
+    public function results()
     {
         $success = $this->success();
 
-        $response = [
+        $results = [
             'success'=>$success
         ];
 
-        return $response;
+        return $results;
     }
 
     public function log_object_delete()

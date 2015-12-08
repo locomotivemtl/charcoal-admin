@@ -5,17 +5,14 @@ namespace Charcoal\Admin\Action\Object;
 // Dependencies from `PHP`
 use \Exception as Exception;
 
-// From PSR-7
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
-// Module `charcoal-core` dependencies
-use \Charcoal\Model\ModelFactory as ModelFactory;
+// PSR-7 (http messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\Ui\ObjectContainerInterface as ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait as ObjectContainerTrait;
+use \Charcoal\Admin\AdminAction;
+use \Charcoal\Admin\Ui\ObjectContainerInterface;
+use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
 * Admin Update Action: Save an object in its Storage.
@@ -37,19 +34,10 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
-    protected $_update_data = [];
-
     /**
-    * Make the class callable
-    *
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
+    * @var array $update_data
     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        return $this->run($request, $response);
-    }
+    protected $update_data = [];
 
     /**
     * @param array $data
@@ -79,7 +67,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     */
     public function set_update_data(array $update_data)
     {
-        $this->_update_data = $update_data;
+        $this->update_data = $update_data;
         return $this;
     }
 
@@ -88,7 +76,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     */
     public function update_data()
     {
-        return $this->_update_data;
+        return $this->update_data;
     }
 
     /**
@@ -102,9 +90,11 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @return void
-    */
-    public function run(ServerRequestInterface $request, ResponseInterface $response)
+     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @return ResponseInterface
+     */
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
             $params = $request->getParams();
@@ -121,7 +111,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
                 // @todo: Validation info to feedback
                 $this->set_success(false);
                 $this->add_feedback('error', 'Failed to update object: validation error(s).');
-                return $this->output($response->withStatus(404));
+                return $response->withStatus(404);
             }
 
             $ret = $obj->update();
@@ -130,16 +120,16 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
                 $this->log_object_update();
                 $this->set_success(true);
                 $this->add_feedback('success', sprintf('Object was successfully updated. (ID: %s)', $obj->id()));
-                return $this->output($response);
+                return $response;
             } else {
                 $this->set_success(false);
                 $this->add_feedback('error', 'Could not update objet. Unknown error');
-                return $this->output($response->withStatus(404));
+                return $response->withStatus(404);
             }
         } catch (Exception $e) {
             $this->set_success(false);
             $this->add_feedback('error', $e->getMessage());
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
     }
@@ -147,10 +137,8 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     /**
     * @return array
     */
-    public function response()
+    public function results()
     {
-        $success = $this->success();
-
         $response = [
             'success'=>$this->success(),
             'obj_id'=>$this->obj()->id(),
@@ -158,7 +146,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
             'feedbacks'=>$this->feedbacks(),
             'next_url'=>$this->next_url()
         ];
-        return $response;
+        return $results;
     }
 
     /**

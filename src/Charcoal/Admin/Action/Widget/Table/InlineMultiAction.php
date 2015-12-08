@@ -2,12 +2,12 @@
 
 namespace Charcoal\Admin\Action\Widget\Table;
 
-use \Exception as Exception;
+// Dependencies from `PHP`
+use \Exception;
 
-// From PSR-7
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
+// PSR-7 (http messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
 use \Charcoal\Charcoal as Charcoal;
@@ -24,33 +24,26 @@ class InlineMultiAction extends AdminAction
 {
     protected $_objects;
 
-    public function set_data(array $data)
-    {
-        unset($data);
-        return $this;
-    }
-
     /**
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
-    */
-    public function run(ServerRequestInterface $request, ResponseInterface $response)
+     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @return ResponseInterface
+     */
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
         $obj_type = $request->getParam('obj_type');
         $obj_ids = $request->getParam('obj_ids');
-        //var_dump($obj_type);
-        //var_dump($obj_id);
 
         if (!$obj_type || !$obj_ids) {
             $this->set_success(false);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
         try {
+            $model_factory = new ModelFactory();
             $this->_objects = [];
             foreach ($obj_ids as $obj_id) {
-                $obj = ModelFactory::instance()->get($obj_type);
+                $obj = $model_factory->create($obj_type);
                 $obj->load($obj_id);
                 if (!$obj->id()) {
                     continue;
@@ -59,7 +52,9 @@ class InlineMultiAction extends AdminAction
                 $o = [];
                 $o['id'] = $obj->id();
 
-                $obj_form = new ObjectForm();
+                $obj_form = new ObjectForm([
+                    'logger' => $this->logger()
+                ]);
                 $obj_form->set_obj_type($obj_type);
                 $obj_form->set_obj_id($obj_id);
                 $form_properties = $obj_form->form_properties();
@@ -76,18 +71,19 @@ class InlineMultiAction extends AdminAction
                 $this->_objects[] = $o;
             }
             $this->set_success(true);
-            return $this->output($response);
+            return $response;
 
         } catch (Exception $e) {
             $this->set_success(false);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
     }
 
+    /**
+    * @return array
+    */
     public function results()
     {
-        $success = $this->success();
-
         $results = [
             'success' => $this->success(),
             'objects' => $this->_objects,

@@ -49,8 +49,7 @@ class LoadAction extends AdminAction
 
         if (!$widget_type) {
             $this->set_success(false);
-            $this->output(404);
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
         try {
@@ -70,7 +69,7 @@ class LoadAction extends AdminAction
             $this->set_widget_id($widget_id);
 
             $this->set_success(true);
-            return $this->output($response);
+            return $response;
         } catch (Exception $e) {
             //var_dump($e);
             $this->set_success(false);
@@ -125,8 +124,6 @@ class LoadAction extends AdminAction
     {
         return $this->widget_html;
     }
-
-
 
     /**
     * @return string

@@ -2,14 +2,12 @@
 
 namespace Charcoal\Admin\Action\Object;
 
+// Dependencies from `PHP`
 use \Exception;
 
-// From PSR-7
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
-// Module `charcoal-core` dependencies
-use \Charcoal\Model\ModelFactory;
+// PSR-7 (http messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
@@ -35,19 +33,10 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
-    protected $_save_data = [];
-
     /**
-    * Make the class callable
-    *
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
+    * @var array $save_data
     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response)
-    {
-        return $this->run($request, $response);
-    }
+    private $save_data = [];
 
     /**
     * @param array $data
@@ -55,11 +44,8 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     */
     public function set_data(array $data)
     {
-        if (isset($data['next_url'])) {
-            $this->set_next_url($data['next_url']);
-            unset($data['next_url']);
-        }
-        //parent::set_data($data);
+
+        parent::set_data($data);
         $this->set_obj_data($data);
 
         unset($data['obj_type']);
@@ -74,7 +60,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     */
     public function set_save_data(array $save_data)
     {
-        $this->_save_data = $save_data;
+        $this->save_data = $save_data;
         return $this;
     }
 
@@ -83,7 +69,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     */
     public function save_data()
     {
-        return $this->_save_data;
+        return $this->save_data;
     }
 
     /**
@@ -96,16 +82,13 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         return $this;
     }
 
-
-
     /**
-    * @return void
-    *
-    * @see \Charcoal\Model\ModelFactory::get()
-    */
-    public function run(ServerRequestInterface $request, ResponseInterface $response)
+     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @return ResponseInterface
+     */
+    public function run(RequestInterface $request, ResponseInterface $response)
     {
-
         try {
             $this->set_data($request->getParams());
 
@@ -120,7 +103,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 // @todo: Validation info to feedback
                 $this->set_success(false);
                 $this->add_feedback('error', 'Failed to save object: validation error(s).');
-                return $this->output($response->withStatus(404));
+                return $response->withStatus(404);
             }
 
             $ret = $obj->save();
@@ -130,18 +113,18 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 $this->log_object_save();
                 $this->set_success(true);
                 $this->add_feedback('success', 'Object saved successfully');
-                return $this->output($response);
+                return $response;
             } else {
                 $this->set_obj(null);
                 $this->set_success(false);
-                return $this->output($response->withStatus(404));
+                return $response->withStatus(404);
             }
         } catch (Exception $e) {
             //var_dump($e);
             $this->set_obj(null);
             $this->set_success(false);
             $this->add_feedback('error', $e->getMessage());
-            return $this->output($response->withStatus(404));
+            return $response->withStatus(404);
         }
 
     }
@@ -149,18 +132,16 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     /**
     * @return array
     */
-    public function response()
+    public function results()
     {
-        $success = $this->success();
-
-        $response = [
-            'success'=>$this->success(),
-            'obj_id'=>$this->obj()->id(),
-            'obj'=>$this->obj(),
-            'feedbacks'=>$this->feedbacks(),
-            'next_url'=>$this->next_url()
+        $results = [
+            'success'   => $this->success(),
+            'obj_id'    => $this->obj()->id(),
+            'obj'       => $this->obj(),
+            'feedbacks' => $this->feedbacks(),
+            'next_url'  => $this->next_url()
         ];
-        return $response;
+        return $results;
     }
 
     /**

@@ -60,28 +60,6 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
-    * @param integer $http_code
-    * @throws Exception if mode is invalid
-    */
-    public function output($response)
-    {
-        $mode = $this->mode();
-
-        if ($mode == self::MODE_JSON) {
-            return $response
-                ->withHeader('Content-Type', 'application/json')
-                ->write(json_encode($this->response()));
-        } else if ($mode == self::MODE_REDIRECT) {
-            return $response
-                ->withHeader('Location', $this->redirect_url());
-        } else {
-            throw new Exception(
-                sprintf('Invalid mode "%s"', $mode)
-            );
-        }
-    }
-
-    /**
     * @return boolean
     */
     public function has_feedbacks()

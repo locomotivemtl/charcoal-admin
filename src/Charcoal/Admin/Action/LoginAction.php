@@ -80,15 +80,21 @@ class LoginAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $post_data = $request->getParsedBody();
-        $username = $post_data['username'];
-        $password = $post_data['password'];
+        $username = $request->getParam('username');
+        $password = $request->getParam('password');
 
         if (!$username || !$password) {
             $this->set_success(false);
             return $response->withStatus(404);
         }
-        $u = new User();
+
+        $this->logger()->debug(
+            sprintf('Admin login attempt: "%s"', $username)
+        );
+
+        $u = new User([
+            'logger' => $this->logger()
+        ]);
 
         try {
             $is_authenticated = $u->authenticate($username, $password);
@@ -97,9 +103,15 @@ class LoginAction extends AdminAction
         }
 
         if (!$is_authenticated) {
+            $this->logger()->warning(
+                sprintf('Login attempt failure: "%s"', $username)
+            );
             $this->set_success(false);
             return $response->withStatus(403);
         } else {
+            $this->logger()->debug(
+                sprintf('Login attempt successful: "%s"', $username)
+            );
             $this->set_success(true);
             return $response;
         }
@@ -110,11 +122,9 @@ class LoginAction extends AdminAction
     */
     public function results()
     {
-        $success = $this->success();
-
         $results = [
-            'success'=>$this->success(),
-            'next_url'=>$this->redirect_url()
+            'success'   => $this->success(),
+            'next_url'  => $this->redirect_url()
         ];
         return $results;
     }

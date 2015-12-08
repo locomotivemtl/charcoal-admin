@@ -10,6 +10,7 @@ use \Charcoal\Charcoal;
 use \Charcoal\Translation\TranslationString;
 
 // From `charcoal-app`
+use \Charcoal\App\App as CharcoalApp;
 use \Charcoal\App\Template\AbstractTemplate;
 
 use \Charcoal\Admin\AdminModule;
@@ -353,12 +354,12 @@ class AdminTemplate extends AbstractTemplate
         if ($u === null) {
             $path = Charcoal::config()->get('admin_path').'/login';
             try {
-                // @todo Investigate why app()->redirect throws an exception
-                //Charcoal::app()->response->withRedirect($path, 403);
+                // @todo Investigate why instance()->redirect throws an exception
+                // CharcoalApp::instance()->response->withRedirect($path, 403);
 
             } catch (\Exception $e) {
                 if (!headers_sent()) {
-                    header('Location:'.Charcoal::app()->urlFor($path));
+                    header('Location:'.CharcoalApp::instance()->urlFor($path));
                     exit;
                 }
             }

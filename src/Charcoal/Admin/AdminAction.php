@@ -14,7 +14,7 @@ use Charcoal\App\Action\AbstractAction;
 /**
 * The base class for the `admin` Actions.
 *
-* @see \Charcoal\Charcoal::app() The `Slim` application inside the core Charcoal object, used to set response.
+* @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to set response.
 */
 abstract class AdminAction extends AbstractAction
 {

@@ -15,6 +15,7 @@ use \Charcoal\Charcoal;
 use \Charcoal\Model\ModelFactory;
 
 // From `charcoal-app`
+use \Charcoal\App\App as CharcoalApp;
 use \Charcoal\App\Action\ActionFactory;
 use \Charcoal\App\Module\AbstractModule;
 use \Charcoal\App\Module\ModuleInterface;
@@ -243,7 +244,7 @@ class AdminModule extends AbstractModule implements
     {
         unset($tpl);
         $admin_path = $this->config()->base_path();
-        Charcoal::app()->get('/:actions+', function($actions = []) {
+        CharcoalApp::instance()->get('/:actions+', function($actions = []) {
             $action_ident = implode('/', $actions);
             $factory = new ActionFactory();
             $action = $factory->create('charcoal/admin/action/cli/'.$action_ident);

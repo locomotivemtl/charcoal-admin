@@ -19,8 +19,12 @@
             "contents":{},
             "envoie":{},
 
-            "messaging/send-sms":{},
-            "messaging/send-voice":{},
+            "messaging/send-sms":{
+              "ident":"charcoal/admin/template/messaging/send-sms"
+            },
+            "messaging/send-voice":{
+              "ident":"charcoal/admin/template/messaging/send-voice"
+            },
 
             "alert/home":{
               "ident":"charcoal/admin/template/alert/home"
@@ -33,8 +37,7 @@
             },
             "alert/sent-stats":{
               "ident":"charcoal/admin/template/alert/sent-stats"
-
-              },
+            },
             "alert/create":{
               "ident":"charcoal/admin/template/alert/create"
             }
@@ -63,8 +66,12 @@
               "ident":"charcoal/admin/action/widget/table/inline-multi"
             },
 
-            "messaging/send-sms":{},
-            "messaging/send-voice":{},
+            "messaging/send-sms":{
+              "ident":"charcoal/admin/action/messaging/send-sms"
+            },
+            "messaging/send-voice":{
+              "ident":"charcoal/admin/action/messaging/send-voice"
+            },
 
             "alert/import-user-list":{
               "ident":"charcoal/admin/action/alert/import-user-list"
@@ -82,7 +89,27 @@
               "ident":"charcoal/admin/action/alert/send"
             }
         },
-        "default_action":null
+        "default_action":null,
+        "scripts":{
+          "object/create":{
+            "ident":"charcoal/admin/script/object/create"
+          },
+          "object/table/alter":{
+            "ident":"charcoal/admin/script/object/table/alter"
+          },
+          "object/table/create":{
+            "ident":"charcoal/admin/script/object/table/create"
+          },
+          "objects":{
+            "ident":"charcoal/admin/script/objects"
+          },
+          "user/create":{
+            "ident":"charcoal/admin/script/user/create"
+          },
+          "user/reset-password":{
+            "ident":"charcoal/admin/script/user/reset-password"
+          }
+        }
     },
 
     "user":{

@@ -3,7 +3,15 @@
 // ==========================================================================
 
 html {
-	@media (max-width: $to-huge) {
+    @media (max-width: $to-small) {
+        font-size: 12px;
+    }
+
+    @media (min-width: $from-small) and (max-width: $to-medium) {
+        font-size: 13px;
+    }
+
+	@media (min-width: $from-medium) and (max-width: $to-huge) {
 		font-size: 14px;
 	}
 
@@ -18,7 +26,13 @@ body {
 	padding-top: rem($unit);
 
     &.has-nav-main {
-        padding-left: rem($unit * 2);
+        @media (max-width: $to-small) {
+            padding-left: 45px;
+        }
+
+        @media (min-width: $from-small) {
+            padding-left: rem($unit * 2);
+        }
     }
 }
 

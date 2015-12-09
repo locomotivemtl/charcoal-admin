@@ -3,14 +3,26 @@
 // ==========================================================================
 
 .o-container {
-    padding: 0 rem($unit);
+    @media (max-width: $to-small) {
+        padding: 0 $unit-small;
+    }
+
+    @media (min-width: $from-small) {
+        padding: 0 rem($unit);
+    }
 
     &.-right {
         padding-left: 0;
     }
 
     &.-top {
-        padding-top: rem($unit);
+        @media (max-width: $to-small) {
+            padding-top: $unit-small;
+        }
+
+        @media (min-width: $from-small) {
+            padding-top: rem($unit);
+        }
     }
 }
 

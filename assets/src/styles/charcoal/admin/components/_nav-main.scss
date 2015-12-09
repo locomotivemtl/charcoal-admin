@@ -8,8 +8,15 @@
     top: rem($unit);
     bottom: 0;
     left: 0;
-    width: rem($unit * 2);
     line-height: 1;
+
+    @media (max-width: $to-small) {
+        width: 45px;
+    }
+
+    @media (min-width: $from-small) {
+        width: rem($unit * 2);
+    }
 }
 
 .c-nav-main_list {
@@ -19,8 +26,15 @@
 }
 
 .c-nav-main_item {
-    height: rem($unit * 2);
     border-bottom: 1px solid $gray-dark;
+
+    @media (max-width: $to-small) {
+        height: 65px;
+    }
+
+    @media (min-width: $from-small) {
+        height: rem($unit * 2);
+    }
 }
 
 .c-nav-main_link {
@@ -50,13 +64,21 @@
     &:before {
         content: "";
         position: absolute;
-        width: rem(5px);
         background-color: $blue;
         top: 0;
         bottom: 0;
-        left: rem(-5px);
         transform: translateX(0);
         transition: transform $speed;
+
+        @media (max-width: $to-small) {
+            width: 3px;
+            left: -3px;
+        }
+
+        @media (min-width: $from-small) {
+            width: rem(5px);
+            left: rem(-5px);
+        }
     }
 
     &.is-active {
@@ -86,14 +108,18 @@
 }
 
 .c-nav-main_link_icon {
-    width: rem(35px);
-    height: rem(35px);
     fill: $gray;
     transition: fill $speed;
     margin-bottom: rem(7px);
 
-    .c-nav-main_link:hover & {
+    @media (max-width: $to-small) {
+        width: 21px;
+        height: 21px;
+    }
 
+    @media (min-width: $from-small) {
+        width: rem(35px);
+        height: rem(35px);
     }
 
     .c-nav-main_link:hover &, .c-nav-main_link.is-active & {
@@ -102,5 +128,11 @@
 }
 
 .c-nav-main_link_text {
-    display: block;
+    @media (max-width: $to-small) {
+        display: none;
+    }
+
+    @media (min-width: $from-small) {
+        display: block;
+    }
 }

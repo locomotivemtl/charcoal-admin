@@ -11,14 +11,101 @@ This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-    {{>charcoal/admin/widget/feedbacks}}
+<div class="o-flex">
+    <nav class="c-nav-secondary o-flex_aside">
+        <header class="o-header">
+            <h1 class="c-nav_heading">Alertes</h1>
+        </header>
+        <ul class="c-nav_list -light -secondary">
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header is-active">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Zone de publication
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number">
+                            23
+                        </span>
+                    </a>
+                </div>
+            </li>
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Zone de test d’envoi
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number is-new">
+                            20
+                        </span>
+                    </a>
+                </div>
+            </li>
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Zone d’envoie
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number">
+                            15
+                        </span>
+                    </a>
+                </div>
+            </li>
+            <li class="c-nav_list_item">
+                <div class="c-nav_list_header">
+                    <a class="c-nav_list_link" href="#">
+                        <span class="c-nav_list_link_main">
+                            <span class="c-nav_list_link_text">
+                                Gabarits
+                            </span>
+                        </span>
+                        <span class="c-nav_list_link_number">
+                            6
+                        </span>
+                    </a>
+                </div>
+            </li>
+        </ul>
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger">Nouvelle alerte</button>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <h2>{{title}}</h2>
-    <h3>{{subtitle}}</h3>
+    <div class="o-flex_main">
+        <div class="o-container">
 
-    {{!-- Display the object's "edit" dashboard --}}
-    {{#dashboard}}
-        {{>charcoal/admin/widget/dashboard}}
-    {{/dashboard}}
+            {{>charcoal/admin/widget/feedbacks}}
+
+            <h2>{{title}}</h2>
+            <h3>{{subtitle}}</h3>
+
+            {{!-- Display the object's "edit" dashboard --}}
+            {{#dashboard}}
+                {{>charcoal/admin/widget/dashboard}}
+            {{/dashboard}}
+
+        </div>
+    </div>
+
+</div>
 
 {{>charcoal/admin/template/inc.footer}}

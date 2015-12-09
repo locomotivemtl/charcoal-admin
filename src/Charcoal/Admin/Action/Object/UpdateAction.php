@@ -139,12 +139,11 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     */
     public function results()
     {
-        $response = [
+        $results = [
             'success'=>$this->success(),
             'obj_id'=>$this->obj()->id(),
             'obj'=>$this->obj(),
-            'feedbacks'=>$this->feedbacks(),
-            'next_url'=>$this->next_url()
+            'feedbacks'=>$this->feedbacks()
         ];
         return $results;
     }

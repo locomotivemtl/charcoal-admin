@@ -13,7 +13,7 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 /**
 * @todo This class needs to be renamed to "ObjectFormWidget" (object-form)
 */
-class ObjectformWidget extends FormWidget implements ObjectContainerInterface
+class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
@@ -143,7 +143,7 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
         }
 
         foreach ($props as $property_ident => $property) {
-            $p = new FormPropertyWidget($property, [
+            $p = new FormPropertyWidget([
                 'logger'=>$this->logger()
             ]);
             $p->set_property_ident($property_ident);

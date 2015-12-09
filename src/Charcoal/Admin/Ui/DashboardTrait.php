@@ -150,7 +150,6 @@ trait DashboardTrait
         } else {
             foreach ($this->widgets as $widget) {
                 if ($widget->active() === false) {
-;
                     continue;
                 }
                 Charcoal::logger()->debug(sprintf('Yield widget %s', $widget->type()));

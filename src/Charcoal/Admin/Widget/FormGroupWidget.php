@@ -82,13 +82,12 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
         return $this;
     }
 
-
     /**
     * @return string
     */
     public function widget_type()
     {
-        return 'charcoal/admin/widget/formgroup';
+        return 'charcoal/admin/widget/formGroup';
     }
 
     /**

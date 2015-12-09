@@ -64,7 +64,7 @@ class FormWidget extends AdminWidget implements FormInterface
     */
     public function create_group(array $data = null)
     {
-        $widget_type = isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formgroup';
+        $widget_type = (isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formGroup');
         $group = $this->widget_factory()->create($widget_type, [
             'logger' => $this->logger()
         ]);

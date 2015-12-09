@@ -5,6 +5,7 @@
 .c-nav-secondary {
     @extend .c-nav;
 	background-color: $charcoal-lightblue;
+    padding-bottom: rem($unit);
 
     @media (max-width: $to-large) {
         display: none;

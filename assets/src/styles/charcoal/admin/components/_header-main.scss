@@ -24,17 +24,32 @@
 }
 
 .c-header-main_logo_img {
-    width: rem(87px);
-    height: rem(16px);
     fill: $white;
     margin: 0 rem(20px);
+
+    @media (max-width: $to-small) {
+        width: 77px;
+        height: 14px;
+    }
+
+    @media (min-width: $from-small) {
+        width: rem(87px);
+        height: rem(16px);
+    }
 }
 
 .c-header-main_help {
     font-size: rem(12px);
     opacity: 0.37;
     color: $white;
-    margin: 0 rem(15px);
+
+    @media (max-width: $to-small) {
+        margin: 0 2px;
+    }
+
+    @media (min-width: $from-small) {
+        margin: 0 rem(15px);
+    }
 
     .c-header-main_link:hover & {
         text-decoration: underline;
@@ -57,6 +72,10 @@
     align-items: center;
     transition: background-color $speed;
 
+    @media (max-width: $to-small) {
+        width: 150px !important;
+    }
+
     &:hover, .has-nav-user & {
         background-color: $charcoal-darkblue;
     }
@@ -65,6 +84,7 @@
 .c-header-main_user_name {
     flex-grow: 1;
     @include ellipsis;
+    margin-right: rem(20px);
 }
 
 .c-header-main_user_icon {

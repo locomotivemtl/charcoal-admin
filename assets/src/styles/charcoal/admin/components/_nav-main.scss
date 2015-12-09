@@ -110,7 +110,6 @@
 .c-nav-main_link_icon {
     fill: $gray;
     transition: fill $speed;
-    margin-bottom: rem(7px);
 
     @media (max-width: $to-small) {
         width: 21px;
@@ -120,6 +119,7 @@
     @media (min-width: $from-small) {
         width: rem(35px);
         height: rem(35px);
+        margin-bottom: rem(7px);
     }
 
     .c-nav-main_link:hover &, .c-nav-main_link.is-active & {

@@ -35,6 +35,11 @@
     opacity: 0.37;
     color: $white;
     margin: 0 rem(15px);
+
+    .c-header-main_link:hover & {
+        text-decoration: underline;
+        color: $white;
+    }
 }
 
 .c-header-main_user {

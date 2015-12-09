@@ -211,6 +211,9 @@ td {
   opacity: 0.37;
   color: #ffffff;
   margin: 0 0.9375rem; }
+  .c-header-main_link:hover .c-header-main_help {
+    text-decoration: underline;
+    color: #ffffff; }
 
 .c-header-main_user {
   position: absolute;
@@ -447,6 +450,8 @@ td {
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s, color 0.3s; }
+  .c-nav-main_link:focus {
+    color: #6c6c6c; }
   .c-nav-main_link:hover, .c-nav-main_link.is-active {
     color: #3498db;
     text-decoration: none; }
@@ -840,6 +845,9 @@ label {
   transition: background-color 0.3s; }
   .btn.btn-lg {
     font-size: 1rem; }
+
+a:focus {
+  text-decoration: none; }
 
 .table-header {
   padding: 0.9375rem;

@@ -13,7 +13,7 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 /**
 * @todo This class needs to be renamed to "ObjectFormWidget" (object-form)
 */
-class ObjectformWidget extends FormWidget implements ObjectContainerInterface
+class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
@@ -21,6 +21,14 @@ class ObjectformWidget extends FormWidget implements ObjectContainerInterface
     * @var string
     */
     protected $form_ident;
+
+    /**
+    * @return string
+    */
+    public function widget_type()
+    {
+        return 'charcoal/admin/widget/objectForm';
+    }
 
     /**
     * @param array $data

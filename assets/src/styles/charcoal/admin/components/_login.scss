@@ -3,12 +3,22 @@
 // ==========================================================================
 
 .c-login {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    min-height: rem(700px);
+}
+
+.c-login_panel {
     position: relative;
     display: block;
     width: rem(360px);
     padding: rem($unit);
     margin: 0 auto;
-    margin-top: rem(180px);
     background-color: $white;
     box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.11);
     border-radius: $radius;

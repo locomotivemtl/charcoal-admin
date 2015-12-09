@@ -11,49 +11,50 @@ This template expects a `Charcoal\Admin\Template\Login` model as context.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-background u-background-lightblue"></div>
+<div class="o-background -fixed u-background-lightblue"></div>
 
 {{!-- Login form --}}
 
-
 <div class="c-login">
-    <div class="c-login_header">
-        <div class="c-login_avatar">
-            <img class="c-login_avatar_image" src="{{base_url}}assets/admin/images/avatar.jpg">
+    <div class="c-login_panel">
+        <div class="c-login_header">
+            <div class="c-login_avatar">
+                <img class="c-login_avatar_image" src="{{base_url}}assets/admin/images/avatar.jpg">
+            </div>
         </div>
+        <form method="post" action="{{url_login_action}}">
+            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
+
+             <div class="form-group">
+                <label class="sr-only" for="username">{{#_t}}Username{{/_t}}</label>
+                <div class="input-group">
+                    <label class="input-group-addon" for="username"><i class="fa fa-user fa-fw"></i></label>
+                    <input class="form-control" type="text" name="username" id="username" placeholder="{{#_t}}Username{{/_t}}" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="password">{{#_t}}Password{{/_t}}</label>
+                <div class="input-group">
+                    <label class="input-group-addon" for="password"><i class="fa fa-lock fa-fw"></i></label>
+                    <input class="form-control" type="password" name="password" id="password" placeholder="{{#_t}}Password{{/_t}}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <input type="checkbox" id="checkbox1">
+                    <label for="checkbox1">
+                        {{#_t}}Remember me?{{/_t}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log in{{/_t}}</button>
+            </div>
+        </form>
+
+        <a href="{{url_lost_password}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a>
+        {{>charcoal/admin/widget/feedbacks}}
     </div>
-    <form method="post" action="{{url_login_action}}">
-        <input type="hidden" name="csrf_token" value="{{csrf_token}}">
-
-         <div class="form-group">
-            <label class="sr-only" for="username">{{#_t}}Username{{/_t}}</label>
-            <div class="input-group">
-                <label class="input-group-addon" for="username"><i class="fa fa-user fa-fw"></i></label>
-                <input class="form-control" type="text" name="username" id="username" placeholder="{{#_t}}Username{{/_t}}" required autofocus>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="password">{{#_t}}Password{{/_t}}</label>
-            <div class="input-group">
-                <label class="input-group-addon" for="password"><i class="fa fa-lock fa-fw"></i></label>
-                <input class="form-control" type="password" name="password" id="password" placeholder="{{#_t}}Password{{/_t}}" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="checkbox">
-                <input type="checkbox" id="checkbox1">
-                <label for="checkbox1">
-                    {{#_t}}Remember me?{{/_t}}
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log in{{/_t}}</button>
-        </div>
-    </form>
-
-    <a href="{{url_lost_password}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a>
-    {{>charcoal/admin/widget/feedbacks}}
 </div>
 
 {{#add_js}}

@@ -86,6 +86,8 @@ td {
   left: 0;
   background-size: cover;
   background-position: center; }
+  .o-background.-fixed {
+    position: fixed; }
 
 .o-toolbox {
   border-radius: 2px;
@@ -130,14 +132,11 @@ td {
       width: 5px; }
     .o-toolbox_actions .btn:active {
       background-color: #ffffff; }
-    .o-toolbox_actions .btn:hover,
-    .o-toolbox_actions .btn.-active {
+    .o-toolbox_actions .btn:hover, .o-toolbox_actions .btn.-active {
       background-color: #ffffff; }
-      .o-toolbox_actions .btn:hover::after,
-      .o-toolbox_actions .btn.-active::after {
+      .o-toolbox_actions .btn:hover::after, .o-toolbox_actions .btn.-active::after {
         transform: translateX(0); }
-      .o-toolbox_actions .btn:hover .o-toolbox_icon,
-      .o-toolbox_actions .btn.-active .o-toolbox_icon {
+      .o-toolbox_actions .btn:hover .o-toolbox_icon, .o-toolbox_actions .btn.-active .o-toolbox_icon {
         fill: #3498db; }
 
 .o-toolbox_content {
@@ -539,12 +538,21 @@ td {
   width: 22.5rem; }
 
 .c-login {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  min-height: 43.75rem; }
+
+.c-login_panel {
   position: relative;
   display: block;
   width: 22.5rem;
   padding: 3.75rem;
   margin: 0 auto;
-  margin-top: 11.25rem;
   background-color: #ffffff;
   box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.11);
   border-radius: 2px;
@@ -678,16 +686,14 @@ td {
   @media (min-width: 1024px) {
     .-complex .c-audio-player_button {
       position: absolute; }
-      .-complex .c-audio-player_button.-record,
-      .-complex .c-audio-player_button.-stop {
+      .-complex .c-audio-player_button.-record, .-complex .c-audio-player_button.-stop {
         top: 50%;
         transform: translateY(-50%); }
       .-complex .c-audio-player_button.-record {
         left: 10rem; }
       .-complex .c-audio-player_button.-stop {
         left: 5.625rem; }
-      .-complex .c-audio-player_button.-playback,
-      .-complex .c-audio-player_button.-reset {
+      .-complex .c-audio-player_button.-playback, .-complex .c-audio-player_button.-reset {
         left: 6.875rem; }
       .-complex .c-audio-player_button.-playback {
         top: 25%; }

@@ -12,5 +12,5 @@
 
 .o-flex_main {
     flex: 1;
-    min-height: 2000px; // Testing
+    min-height: calc(100vh - #{rem($unit)});
 }

@@ -35,15 +35,15 @@ $radius: 2px;
 
 // Screen widths
 // ==========================================================================
-$from-tiny: 414px;
+$from-tiny: 500px;
 $to-tiny: $from-tiny - 1;
-$from-small: 768px;
+$from-small: 700px;
 $to-small: $from-small - 1;
-$from-medium: 1024px;
+$from-medium: 1000px;
 $to-medium: $from-medium - 1;
-$from-large: 1280px;
+$from-large: 1200px;
 $to-large: $from-large - 1;
-$from-huge: 1680px;
+$from-huge: 1600px;
 $to-huge: $from-huge - 1;
 
 
@@ -57,6 +57,7 @@ $heading6: rem(11px); // .zeta
 // Units
 // ==========================================================================
 $unit: 60px;
+$unit-small: 15px;
 
 // Transitions
 // ==========================================================================

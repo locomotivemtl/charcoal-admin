@@ -9,6 +9,9 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Property\PropertyFactory as PropertyFactory;
 use \Charcoal\Property\PropertyInterface as PropertyInterface;
 
+// From `charcoal-core`
+use \Charcoal\Translation\TranslationConfig;
+
 // Local namespace dependencies
 use \Charcoal\Admin\Property\PropertyInputInterface as PropertyInputInterface;
 
@@ -243,12 +246,11 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         }
 
         if ($prop->l10n()) {
-            if (isset($val['fr'])) {
-                return $val['fr'];
-            } else {
-                return $val;
-            }
+            $lang = TranslationConfig::instance()->current_language();
 
+            if (isset($val[$lang])) {
+                $val = $val[$lang];
+            }
         }
 
         if (!is_scalar($val)) {

@@ -14,6 +14,10 @@
     transition: transform $slow-speed;
     z-index: 99;
 
+    @media (max-width: $to-small) {
+        width: 150px;
+    }
+
     .has-nav-user & {
         transform: translateX(0);
     }
@@ -43,6 +47,10 @@
 
 .c-nav-user_info {
     flex-grow: 1;
+
+    @media (max-width: $to-small) {
+        padding: 15px 0 17px;
+    }
 }
 
 .c-nav-user_name {

@@ -23,6 +23,14 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     protected $form_ident;
 
     /**
+    * @return string
+    */
+    public function widget_type()
+    {
+        return 'charcoal/admin/widget/objectForm';
+    }
+
+    /**
     * @param array $data
     * @return ObjectForm Chainable
     */

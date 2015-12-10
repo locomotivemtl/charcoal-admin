@@ -3,6 +3,9 @@
 
     "routes":{
         "templates":{
+            "help":{
+              "ident":"charcoal/admin/template/help"
+            },
             "home":{
                 "ident":"charcoal/admin/template/home"
             },

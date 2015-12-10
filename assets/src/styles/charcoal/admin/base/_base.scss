@@ -8,11 +8,11 @@ html {
     }
 
     @media (min-width: $from-small) and (max-width: $to-medium) {
-        font-size: 13px;
+        font-size: 12px;
     }
 
-	@media (min-width: $from-medium) and (max-width: $to-huge) {
-		font-size: 14px;
+	@media (min-width: $from-small) and (max-width: $to-huge) {
+		font-size: 12px;
 	}
 
 	@media (min-width: $from-huge) {

@@ -7,11 +7,7 @@
         padding: 0 $unit-small;
     }
 
-    @media (min-width: $from-small) and (max-width: $to-huge) {
-        padding: 0 rem($unit / 1.5);
-    }
-
-    @media (min-width: $from-huge) {
+    @media (min-width: $from-small) {
         padding: 0 rem($unit);
     }
 
@@ -31,7 +27,7 @@
 }
 
 .o-container_aside {
-    width: rem(360px - $unit);
+    width: rem($nav - $unit);
 }
 
 .o-section {

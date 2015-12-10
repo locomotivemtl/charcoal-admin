@@ -23,11 +23,11 @@
 
 @media (min-width: 700px) and (max-width: 999px) {
   html {
-    font-size: 13px; } }
+    font-size: 12px; } }
 
-@media (min-width: 1000px) and (max-width: 1599px) {
+@media (min-width: 700px) and (max-width: 1599px) {
   html {
-    font-size: 14px; } }
+    font-size: 12px; } }
 
 @media (min-width: 1600px) {
   html {
@@ -84,11 +84,7 @@ td {
   .o-container {
     padding: 0 15px; } }
 
-@media (min-width: 700px) and (max-width: 1599px) {
-  .o-container {
-    padding: 0 2.5rem; } }
-
-@media (min-width: 1600px) {
+@media (min-width: 700px) {
   .o-container {
     padding: 0 3.75rem; } }
 
@@ -104,7 +100,7 @@ td {
     padding-top: 3.75rem; } }
 
 .o-container_aside {
-  width: 18.75rem; }
+  width: 17.5rem; }
 
 .o-section {
   margin-bottom: 2.5rem; }
@@ -327,14 +323,9 @@ td {
           transform: translateY(2px) rotate(43deg) scaleX(5.5); } }
 
 .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
+  width: 21.25rem;
   padding: 0 1.25rem;
   line-height: 1; }
-  @media (max-width: 1599px) {
-    .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
-      width: 240px; } }
-  @media (min-width: 1600px) {
-    .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
-      width: 22.5rem; } }
 
 .c-nav_heading {
   padding: 0 0.625rem;
@@ -406,7 +397,6 @@ td {
   display: flex;
   flex-grow: 1;
   align-items: center;
-  width: 100%;
   height: 100%; }
   .c-nav_list.-light .c-nav_list_link {
     color: #080909; }
@@ -647,7 +637,7 @@ td {
     text-decoration: underline; }
 
 .c-aside {
-  width: 22.5rem; }
+  width: 21.25rem; }
 
 .c-login {
   position: absolute;
@@ -662,7 +652,7 @@ td {
 .c-login_panel {
   position: relative;
   display: block;
-  width: 22.5rem;
+  width: 21.25rem;
   padding: 3.75rem;
   margin: 0 auto;
   background-color: #ffffff;
@@ -688,15 +678,9 @@ td {
   background-color: #eaf2f4; }
   .c-panel.-fixed {
     position: fixed;
-    top: 7.5rem; }
-    @media (max-width: 1599px) {
-      .c-panel.-fixed {
-        right: 2.5rem;
-        width: 240px; } }
-    @media (min-width: 1600px) {
-      .c-panel.-fixed {
-        right: 3.75rem;
-        width: 18.75rem; } }
+    width: 17.5rem;
+    top: 7.5rem;
+    right: 3.75rem; }
 
 .c-panel_header {
   background-color: #000000;

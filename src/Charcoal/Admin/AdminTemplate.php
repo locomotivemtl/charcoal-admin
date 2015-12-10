@@ -342,7 +342,7 @@ class AdminTemplate extends AbstractTemplate
     */
     protected function auth_required()
     {
-        return true;
+        return false;
     }
 
     /**

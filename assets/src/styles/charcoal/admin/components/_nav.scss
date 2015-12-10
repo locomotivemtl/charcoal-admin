@@ -6,11 +6,11 @@
     padding: 0 rem(20px);
     line-height: 1;
 
-    @media (max-width: $to-small) {
+    @media (max-width: $to-huge) {
         width: 240px;
     }
 
-    @media (min-width: $from-small) {
+    @media (min-width: $from-huge) {
         width: rem(360px);
     }
 }

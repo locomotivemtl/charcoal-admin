@@ -7,9 +7,17 @@
 
     &.-fixed {
         position: fixed;
-        width: rem(300px);
         top: rem($unit * 2);
-        right: rem($unit);
+
+        @media (max-width: $to-huge) {
+            right: rem($unit / 1.5);
+            width: 240px;
+        }
+
+        @media (min-width: $from-huge) {
+            right: rem($unit);
+            width: rem(300px);
+        }
     }
 }
 

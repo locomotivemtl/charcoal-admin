@@ -84,7 +84,11 @@ td {
   .o-container {
     padding: 0 15px; } }
 
-@media (min-width: 700px) {
+@media (min-width: 700px) and (max-width: 1599px) {
+  .o-container {
+    padding: 0 2.5rem; } }
+
+@media (min-width: 1600px) {
   .o-container {
     padding: 0 3.75rem; } }
 
@@ -325,10 +329,10 @@ td {
 .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
   padding: 0 1.25rem;
   line-height: 1; }
-  @media (max-width: 699px) {
+  @media (max-width: 1599px) {
     .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
       width: 240px; } }
-  @media (min-width: 700px) {
+  @media (min-width: 1600px) {
     .c-nav, .c-header-main_user, .c-nav-secondary, .c-nav-user {
       width: 22.5rem; } }
 
@@ -684,9 +688,15 @@ td {
   background-color: #eaf2f4; }
   .c-panel.-fixed {
     position: fixed;
-    width: 18.75rem;
-    top: 7.5rem;
-    right: 3.75rem; }
+    top: 7.5rem; }
+    @media (max-width: 1599px) {
+      .c-panel.-fixed {
+        right: 2.5rem;
+        width: 240px; } }
+    @media (min-width: 1600px) {
+      .c-panel.-fixed {
+        right: 3.75rem;
+        width: 18.75rem; } }
 
 .c-panel_header {
   background-color: #000000;
@@ -977,6 +987,37 @@ a:focus {
 
 .bootstrap-select > .dropdown-toggle {
   padding: 12px; }
+
+.bootstrap-switch {
+  line-height: 0.5rem; }
+
+.bootstrap-switch .bootstrap-switch-handle-on,
+.bootstrap-switch .bootstrap-switch-handle-off,
+.bootstrap-switch .bootstrap-switch-label {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem; }
+
+.bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on,
+.bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off,
+.bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-label {
+  padding: 1px 0.3125rem;
+  font-size: 0.75rem; }
+
+.bootstrap-switch.bootstrap-switch-small .bootstrap-switch-handle-on,
+.bootstrap-switch.bootstrap-switch-small .bootstrap-switch-handle-off,
+.bootstrap-switch.bootstrap-switch-small .bootstrap-switch-label {
+  padding: 0.3125rem 0.625rem;
+  font-size: 0.75rem; }
+
+.bootstrap-switch.bootstrap-switch-large .bootstrap-switch-handle-on,
+.bootstrap-switch.bootstrap-switch-large .bootstrap-switch-handle-off,
+.bootstrap-switch.bootstrap-switch-large .bootstrap-switch-label {
+  padding: 0.375rem 1rem;
+  font-size: 1.125rem; }
+
+.bootstrap-switch.bootstrap-switch-focused {
+  box-shadow: none; }
 
 .u-background-blue {
   background-color: #1a252d; }

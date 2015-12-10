@@ -124,7 +124,7 @@ class LoginAction extends AdminAction
     {
         $results = [
             'success'   => $this->success(),
-            'next_url'  => $this->redirect_url()
+            'next_url'  => 'home'
         ];
         return $results;
     }

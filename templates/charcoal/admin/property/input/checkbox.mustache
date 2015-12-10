@@ -5,13 +5,16 @@ Checkbox Property Input
 `charcoal/admin/property/input/checkbox`
 
 --}}
-<input
-    type="checkbox"
-    id="{{input_id}}"
-    name="{{input_name}}"
-    class="{{input_class}}"
-    {{#checked}}checked{{/checked}}
-    {{#read_only}}read_only{{/read_only}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
->
+<div class="checkbox">
+    <input
+        type="checkbox"
+        id="{{input_id}}"
+        name="{{input_name}}"
+        class="{{input_class}}"
+        {{#checked}}checked{{/checked}}
+        {{#read_only}}read_only{{/read_only}}
+        {{#required}}required{{/required}}
+        {{#disabled}}disabled{{/disabled}}
+    >
+    <label></label>
+</div>

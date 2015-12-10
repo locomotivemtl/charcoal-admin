@@ -11,7 +11,7 @@ html {
         font-size: 12px;
     }
 
-	@media (min-width: $from-small) and (max-width: $to-huge) {
+	@media (min-width: $from-medium) and (max-width: $to-huge) {
 		font-size: 12px;
 	}
 
@@ -38,6 +38,7 @@ body {
 
 ::selection {
     background-color: $blue;
+    color: $white;
     text-shadow: none;
 }
 

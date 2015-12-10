@@ -4,6 +4,8 @@
 
 .c-panel {
     background-color: $charcoal-lightblue;
+    border-radius: $radius;
+    overflow: hidden;
 
     &.-fixed {
         position: fixed;

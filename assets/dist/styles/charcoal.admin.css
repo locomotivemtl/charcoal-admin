@@ -25,7 +25,7 @@
   html {
     font-size: 12px; } }
 
-@media (min-width: 700px) and (max-width: 1599px) {
+@media (min-width: 1000px) and (max-width: 1599px) {
   html {
     font-size: 12px; } }
 
@@ -46,6 +46,7 @@ body {
 
 ::selection {
   background-color: #3498db;
+  color: #ffffff;
   text-shadow: none; }
 
 th {
@@ -675,7 +676,9 @@ td {
   width: 100%; }
 
 .c-panel {
-  background-color: #eaf2f4; }
+  background-color: #eaf2f4;
+  border-radius: 2px;
+  overflow: hidden; }
   .c-panel.-fixed {
     position: fixed;
     width: 17.5rem;
@@ -738,7 +741,6 @@ td {
   border: 1px solid #cccccc;
   border-radius: 50%;
   color: #cccccc;
-  text-indent: -0.0625rem;
   margin-left: 0.625rem;
   cursor: help;
   font-size: 1rem;
@@ -937,6 +939,10 @@ label {
 .table > thead > tr > th {
   border-bottom-width: 1px; }
 
+.table_checkbox {
+  width: 3.125rem;
+  text-align: center; }
+
 .btn {
   font-size: 0.8125rem;
   transition: background-color 0.3s; }
@@ -1002,6 +1008,25 @@ a:focus {
 
 .bootstrap-switch.bootstrap-switch-focused {
   box-shadow: none; }
+
+.checkbox {
+  padding-left: 1.25rem; }
+  .checkbox.-nolabel label {
+    padding-left: 0; }
+  .checkbox label {
+    min-height: 1.25rem; }
+    .checkbox label::before {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-left: -1.25rem;
+      border-radius: 2px; }
+    .checkbox label::after {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-left: -1.25rem;
+      font-size: 0.875rem;
+      text-align: center;
+      padding: 0; }
 
 .u-background-blue {
   background-color: #1a252d; }

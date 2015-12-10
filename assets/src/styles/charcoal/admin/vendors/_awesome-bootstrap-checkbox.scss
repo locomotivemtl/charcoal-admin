@@ -1,0 +1,33 @@
+// ==========================================================================
+// Checkboxes
+// ==========================================================================
+
+.checkbox{
+  padding-left: rem(20px);
+
+  &.-nolabel {
+    label {
+        padding-left: 0;
+    }
+  }
+
+  label {
+    min-height: rem(20px);
+
+    &::before{
+        width: rem(20px);
+        height: rem(20px);
+        margin-left: rem(-20px);
+        border-radius: $radius;
+    }
+
+    &::after{
+        width: rem(20px);
+        height: rem(20px);
+        margin-left: rem(-20px);
+        font-size: rem(14px);
+        text-align: center;
+        padding: 0;
+    }
+  }
+}

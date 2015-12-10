@@ -146,7 +146,9 @@ class FormWidget extends AdminWidget implements FormInterface
         if (($sidebar instanceof FormSidebarWidget)) {
             $this->sidebars[$sidebar_ident] = $sidebar;
         } else if (is_array($sidebar)) {
-            $s = new FormSidebarWidget();
+            $s = new FormSidebarWidget([
+                'logger'=>$this->logger()
+            ]);
             $s->set_form($this);
             $s->set_data($sidebar);
             $this->sidebars[$sidebar_ident] = $s;

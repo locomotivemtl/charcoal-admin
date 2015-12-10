@@ -62,17 +62,11 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
 
     /**
     * @param boolean $active
-    * @throws InvalidArgumentException
     * @return FormPropertyWidget Chainable
     */
     public function set_active($active)
     {
-        if (!is_bool($active)) {
-            throw new InvalidArgumentException(
-                'Active must be a boolean'
-            );
-        }
-        $this->active = $active;
+        $this->active = !!$active;
         return $this;
     }
 

@@ -1,0 +1,50 @@
+{{!--
+charcoal/admin/widget/sidemenu
+}}
+
+<nav class="c-nav-secondary o-flex_aside">
+    <header class="o-header">
+        <h1 class="c-nav_heading">{{title}}</h1>
+    </header>
+    {{#has_links}}
+    <ul class="c-nav_list -light -secondary">
+    {{#links}}
+        <li class="c-nav_list_item">
+            <div class="c-nav_list_header {{#selected}}is-active{{/selected}}">
+                <a class="c-nav_list_link" href="{{admin_url}}{{url}}">
+                    <span class="c-nav_list_link_main">
+                        <span class="c-nav_list_link_text">
+                            {{name}}
+                        </span>
+                    </span>
+                    {{#num}}
+                    <span class="c-nav_list_link_number {{#num_new}}is-new{{/num_new}}">
+                        {{num}}
+                    </span>
+                    {{/num}}
+                </a>
+            </div>
+        </li>
+    {{/links}}
+    </ul>
+    {{/has_links}}
+
+    {{#has_actions}}
+    {{!--  --}}
+    <div class="btn-group">
+        <button type="button" class="btn btn-danger">Nouvelle alerte</button>
+        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+        </ul>
+    </div>
+    {{/has_actions}}
+
+</nav>

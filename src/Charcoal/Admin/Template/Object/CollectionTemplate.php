@@ -29,6 +29,8 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     use CollectionContainerTrait;
     use DashboardContainerTrait;
 
+    private $sidemenu;
+
     public function __construct(array $data = null)
     {
         parent::__construct($data);
@@ -45,43 +47,16 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     * @param array $data Optional
     * @throws Exception
     * @return Dashboard
+    * @see DashboardContainerTrait::create_dashboard()
     */
     public function create_dashboard(array $data = null)
     {
-        $obj = $this->proto();
-        $metadata = $obj->metadata();
-
-        $dashboard_ident = $this->dashboard_ident();
-        $dashboard_config = $this->dashboard_config();
-
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        if ($admin_metadata === null) {
-            throw new Exception(
-                'No dashboard for object (no admin metadata).'
-            );
-        }
-
-        if ($dashboard_ident === null || $dashboard_ident === '') {
-            if (!isset($admin_metadata['default_collection_dashboard'])) {
-                throw new Exception(
-                    'No default collection dashboard defined in object admin metadata.'
-                );
-            }
-            $dashboard_ident = $admin_metadata['default_collection_dashboard'];
-        }
-        if ($dashboard_config === null || empty($dashboard_config)) {
-            if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboard_ident])) {
-                throw new Exception(
-                    'Dashboard config is not defined.'
-                );
-            }
-            $dashboard_config = $admin_metadata['dashboards'][$dashboard_ident];
-        }
+        $dashboard_config = $this->obj_collection_dashboard_config();
 
         $dashboard = new Dashboard([
             'logger'=>$this->logger()
         ]);
-        if (is_array($data)) {
+        if ($data !== null) {
             $dashboard->set_data($data);
         }
         $dashboard->set_data($dashboard_config);
@@ -89,10 +64,25 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         return $dashboard;
     }
 
-
-    public function create_collection_config($config_data = null)
+    /**
+    * @return SidemenuWidgetInterface
+    */
+    public function sidemenu()
     {
+        $dashboard_config = $this->obj_collection_dashboard_config();;
+        if (!isset($dashboard_config['sidemenu'])) {
+            return null;
+        }
 
+        $sidemenu_config = $dashboard_config['sidemenu'];
+
+        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
+        $widget_factory = new WidgetFactory();
+        $widget_type = isset($sidemenu_config['widget_type']) ? $sidemenu_config['widget_type'] : 'charcoal/admin/widget/sidemenu';
+        $sidemenu = $widget_factory->create($widget_type, [
+            'logger'=>$this->logger()
+        ]);
+        return $sidemenu;
     }
 
     /**
@@ -129,6 +119,40 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         // it will return basicly every properties of the object
         $widget->set_collection_ident( $list_ident );
         return $widget;
+    }
+
+    private function obj_collection_dashboard_config()
+    {
+        $obj = $this->proto();
+        $metadata = $obj->metadata();
+        $dashboard_ident = $this->dashboard_ident();
+        $dashboard_config = $this->dashboard_config();
+
+        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        if ($admin_metadata === null) {
+            throw new Exception(
+                'No dashboard for object (no admin metadata).'
+            );
+        }
+
+        if ($dashboard_ident === null || $dashboard_ident === '') {
+            if (!isset($admin_metadata['default_collection_dashboard'])) {
+                throw new Exception(
+                    'No default collection dashboard defined in object admin metadata.'
+                );
+            }
+            $dashboard_ident = $admin_metadata['default_collection_dashboard'];
+        }
+        if ($dashboard_config === null || empty($dashboard_config)) {
+            if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboard_ident])) {
+                throw new Exception(
+                    'Dashboard config is not defined.'
+                );
+            }
+            $dashboard_config = $admin_metadata['dashboards'][$dashboard_ident];
+        }
+
+        return $dashboard_config;
     }
 
 }

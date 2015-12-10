@@ -78,18 +78,15 @@ class AdminTemplate extends AbstractTemplate
             session_cache_limiter(false);
             session_start();
         }
-        //$this->metadata();
+
+        parent::set_data($data);
+
         if ($this->auth_required() !== false) {
             $this->auth();
         }
 
-        if ($data === null) {
-            $data = $_GET;
-        } else {
-            $data = array_merge_recursive($_GET, $data);
-        }
-
-        $this->set_data($data);
+        // Initialize data with GET
+        $this->set_data($_GET);
 
     }
 
@@ -196,15 +193,11 @@ class AdminTemplate extends AbstractTemplate
 
     /**
     * @param boolean $show
-    * @throws InvalidArgumentException
     * @return AdminTemplate Chainable
     */
     public function set_show_header_menu($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show menu must be a boolean');
-        }
-        $this->show_header_menu = $show;
+        $this->show_header_menu = !!$show;
         return $this;
     }
 
@@ -221,9 +214,15 @@ class AdminTemplate extends AbstractTemplate
     */
     public function header_menu()
     {
+        $obj_type = isset($_GET['obj_type']) ? $_GET['obj_type'] : '';
+
+        $alert_selected = in_array($obj_type, ['alert/alert', 'alert/category', 'alert/']);
+        $user_selected = in_array($obj_type, ['alert/user', 'alert/bulkuser']);
+        $content_selected = in_array($obj_type, ['alert/faq', 'alert/text']);
+
         return [
             [
-                'active'=>true,
+                'active'=>false,
                 'label'=>'Accueil',
                 'icon'=>'home',
                 'url'=>$this->admin_url().'home',
@@ -231,7 +230,7 @@ class AdminTemplate extends AbstractTemplate
             ],
             [
                 'active'=>true,
-                'selected'=>true,
+                'selected'=>$alert_selected,
                 'label'=>'Alertes',
                 'icon'=>'alerts',
                 'url'=>$this->admin_url().'object/collection?obj_type=alert/alert',
@@ -239,6 +238,7 @@ class AdminTemplate extends AbstractTemplate
             ],
             [
                 'active'=>true,
+                'selected'=>$user_selected,
                 'label'=>'Utilisateurs',
                 'icon'=>'users',
                 'url'=>$this->admin_url().'object/collection?obj_type=alert/user',
@@ -246,20 +246,21 @@ class AdminTemplate extends AbstractTemplate
             ],
             [
                 'active'=>true,
+                'selected'=>$content_selected,
                 'label'=>'Contenus',
                 'icon'=>'contents',
-                'url'=>'#',
+                'url'=>$this->admin_url().'object/collection?obj_type=alert/faq',
                 'has_children'=>false
             ],
             [
-                'active'=>true,
+                'active'=>false,
                 'label'=>'Statistiques',
                 'icon'=>'stats',
                 'url'=>'#',
                 'has_children'=>false
             ],
             [
-                'active'=>true,
+                'active'=>false,
                 'label'=>'Configuration',
                 'icon'=>'config',
                 'url'=>'#',
@@ -339,7 +340,7 @@ class AdminTemplate extends AbstractTemplate
     *
     * @return boolean
     */
-    private function auth_required()
+    protected function auth_required()
     {
         return true;
     }
@@ -352,17 +353,8 @@ class AdminTemplate extends AbstractTemplate
         //$cfg = AdminModule::config();
         $u = User::get_authenticated();
         if ($u === null) {
-            $path = Charcoal::config()->get('admin_path').'/login';
-            try {
-                // @todo Investigate why instance()->redirect throws an exception
-                // CharcoalApp::instance()->response->withRedirect($path, 403);
-
-            } catch (\Exception $e) {
-                if (!headers_sent()) {
-                    header('Location:'.CharcoalApp::instance()->urlFor($path));
-                    exit;
-                }
-            }
+            header('Location: '.$this->admin_url().'login');
+            exit;
         }
     }
 

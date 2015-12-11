@@ -6,6 +6,11 @@ Header menu Widget
 
 --}}
 <header class="c-header-main">
+    <div class="c-header-main_button js-toggle-class" data-target="body" data-class="has-nav-open">
+        <span class="c-header-main_button_line"></span>
+        <span class="c-header-main_button_line"></span>
+        <span class="c-header-main_button_line"></span>
+    </div>
     <a class="c-header-main_link" href="{{admin_url}}home">
         <svg class="c-header-main_logo_img" role="img" title="Charcoal"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
     </a>
@@ -28,6 +33,7 @@ Header menu Widget
 
 {{#show_header_menu}}
 {{!-- Charcoal Main Menu --}}
+<div class="c-nav-main-overlay js-toggle-class" data-target="body" data-class="has-nav-open"></div>
 <nav class="c-nav-main">
     <ul class="c-nav-main_list">
         {{#header_menu}}

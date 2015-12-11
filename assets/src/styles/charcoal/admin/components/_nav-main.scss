@@ -1,7 +1,6 @@
 // ==========================================================================
 // Nav main Components
 // ==========================================================================
-
 .c-nav-main {
     background-color: $charcoal-darkblue;
     position: fixed;
@@ -11,11 +10,31 @@
     line-height: 1;
 
     @media (max-width: $to-small) {
+        top: 45px;
+        left: -45px;
         width: 45px;
     }
 
     @media (min-width: $from-small) {
         width: rem($unit * 2);
+    }
+
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        top: rem($unit);
+        left: rem(-$unit * 2);
+    }
+
+    @media (max-width: $to-large) {
+        position: fixed;
+        bottom: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        z-index: 999;
+        transition: transform 0.2s;
+
+        .has-nav-open & {
+            transform: translateX(100%);
+        }
     }
 }
 
@@ -134,5 +153,18 @@
 
     @media (min-width: $from-small) {
         display: block;
+    }
+}
+
+.c-nav-main-overlay {
+    @extend .o-overlay;
+
+    @media (min-width: $from-large) {
+        display: none;
+    }
+
+    .has-nav-open & {
+        opacity: 1;
+        visibility: visible;
     }
 }

@@ -4,6 +4,7 @@
 
 .checkbox{
   padding-left: rem(20px);
+  cursor: pointer;
 
   &.-nolabel {
     label {
@@ -29,5 +30,9 @@
         text-align: center;
         padding: 0;
     }
+  }
+
+  input {
+    cursor: pointer;
   }
 }

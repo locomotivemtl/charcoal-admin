@@ -7,11 +7,11 @@ html {
         font-size: 12px;
     }
 
-    @media (min-width: $from-small) and (max-width: $to-medium) {
-        font-size: 12px;
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        font-size: 13px;
     }
 
-	@media (min-width: $from-medium) and (max-width: $to-huge) {
+	@media (min-width: $from-large) and (max-width: $to-huge) {
 		font-size: 12px;
 	}
 
@@ -26,11 +26,7 @@ body {
 	padding-top: rem($unit);
 
     &.has-nav-main {
-        @media (max-width: $to-small) {
-            padding-left: 45px;
-        }
-
-        @media (min-width: $from-small) {
+        @media (min-width: $from-large) {
             padding-left: rem($unit * 2);
         }
     }

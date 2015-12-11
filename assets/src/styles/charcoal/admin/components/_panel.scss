@@ -8,10 +8,26 @@
     overflow: hidden;
 
     &.-fixed {
-        position: fixed;
-        width: rem(280px);
-        top: rem($unit * 2);
-        right: rem($unit);
+        @media (max-width: $to-small) {
+            width: 100%;
+        }
+
+        @media (min-width: $from-small) and (max-width: $to-medium) {
+           width: 50%;
+        }
+
+        @media (max-width: $to-medium) {
+            margin-top: rem($unit / 2);
+            margin-bottom: rem($unit);
+        }
+
+        @media (min-width: $from-medium) {
+            position: fixed;
+            top: rem($unit * 2);
+            right: rem($unit);
+            width: rem(280px);
+        }
+
     }
 }
 

@@ -3,14 +3,21 @@
 // ==========================================================================
 
 .o-flex {
-    display: flex;
+    @media (min-width: $from-medium) {
+        display: flex;
+    }
 }
 
 .o-flex_aside {
-    flex: 0 0 auto;
+    @media (min-width: $from-medium) {
+        flex: 0 0 auto;
+    }
+
 }
 
 .o-flex_main {
-    flex: 1;
-    min-height: calc(100vh - #{rem($unit)});
+    @media (min-width: $from-medium) {
+        min-height: calc(100vh - #{rem($unit)});
+        flex: 1;
+    }
 }

@@ -52,15 +52,18 @@ th {
 td {
   font-size: 0.875rem; }
 
-.o-flex {
-  display: flex; }
+@media (min-width: 1000px) {
+  .o-flex {
+    display: flex; } }
 
-.o-flex_aside {
-  flex: 0 0 auto; }
+@media (min-width: 1000px) {
+  .o-flex_aside {
+    flex: 0 0 auto; } }
 
-.o-flex_main {
-  flex: 1;
-  min-height: calc(100vh - 3.75rem); }
+@media (min-width: 1000px) {
+  .o-flex_main {
+    min-height: calc(100vh - 3.75rem);
+    flex: 1; } }
 
 @media (max-width: 699px) {
   .o-header {
@@ -734,8 +737,9 @@ td {
     color: #3498db;
     text-decoration: underline; }
 
-.c-aside {
-  width: 21.25rem; }
+@media (min-width: 1000px) {
+  .c-aside {
+    width: 21.25rem; } }
 
 .c-login {
   position: absolute;
@@ -776,11 +780,22 @@ td {
   background-color: #eaf2f4;
   border-radius: 2px;
   overflow: hidden; }
-  .c-panel.-fixed {
-    position: fixed;
-    width: 17.5rem;
-    top: 7.5rem;
-    right: 3.75rem; }
+  @media (max-width: 699px) {
+    .c-panel.-fixed {
+      width: 100%; } }
+  @media (min-width: 700px) and (max-width: 999px) {
+    .c-panel.-fixed {
+      width: 50%; } }
+  @media (max-width: 999px) {
+    .c-panel.-fixed {
+      margin-top: 1.875rem;
+      margin-bottom: 3.75rem; } }
+  @media (min-width: 1000px) {
+    .c-panel.-fixed {
+      position: fixed;
+      top: 7.5rem;
+      right: 3.75rem;
+      width: 17.5rem; } }
 
 .c-panel_header {
   background-color: #000000;

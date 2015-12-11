@@ -2,5 +2,7 @@
 // Aside widget Components
 // ==========================================================================
 .c-aside {
-    width: rem($nav);
+    @media (min-width: $from-medium) {
+        width: rem($nav);
+    }
 }

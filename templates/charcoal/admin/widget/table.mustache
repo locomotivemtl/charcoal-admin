@@ -29,7 +29,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     <button class="btn btn-info js-list-{{ident}}" data-widget-type="{{widget_type}}">{{label}}</button>
                     {{/is_button}}
                     {{^is_button}}
-                    <a class="btn btn-info js-list-{{ident}}" href="{{url}}" data-widget-type="{{widget_type}}">{{label}}</a>
+                    <a class="btn btn-info js-list-{{ident}}" href="{{admin_url}}{{url}}" data-widget-type="{{widget_type}}">{{label}}</a>
                     {{/is_button}}
                 {{/list_actions}}
             </div>

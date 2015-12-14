@@ -164,20 +164,21 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     */
     public function list_actions()
     {
-        return [
-            [
-                'label' => 'Créer un nouveau',
-                'ident' => 'create',
-                'url' => $this->object_edit_url(),
-                'widget_type' => ''
-            ],
-            [
-                'label' => 'Importer une liste',
-                'ident' => 'import',
-                'is_button' => true,
-                'widget_type' => 'charcoal/admin/widget/dialog/importlist'
-            ]
-        ];
+        $obj = $this->proto();
+        $props = $obj->metadata()->properties();
+        $collection_ident = $this->collection_ident();
+        if ($collection_ident) {
+                $metadata = $obj->metadata();
+                $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+                $list_options = $admin_metadata['lists'][$collection_ident];
+
+                $list_actions = isset($list_options['list_actions']) ?$list_options['list_actions'] : [];
+                return $list_actions;
+
+        }
+        else {
+            return [];
+        }
     }
 
     /**

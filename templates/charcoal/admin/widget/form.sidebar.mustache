@@ -31,13 +31,16 @@
             </div>
 
             <footer class="c-panel_footer">
+                {{!--
+                @todo Only show the "delete" button if there's an object's ID.
+                }}
                 <div class="c-panel_footer_item -red">
-                    <span>
+                    <span class="js-obj-delete">
                        <i class="fa fa-trash-o"></i> Effacer
                     </span>
                 </div>
                 <div class="c-panel_footer_item -blue">
-                    <span>
+                    <span class="js-reset-form">
                         <i class="fa fa-refresh"></i> Réinitialiser
                     </span>
                 </div>

@@ -39,9 +39,22 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
 {
     var that = this;
 
+    // Submit the form via ajax
     $(that.form_selector).on('submit', function (e) {
         e.preventDefault();
         that.submit_form(this);
+    });
+
+    // Any delete button should trigger the delete-object method.
+    $('.js-obj-delete').on('click', function (e) {
+        e.preventDefault();
+        that.delete_object(this);
+    });
+
+    $('.js-reset-form').on('click', function (e) {
+        e.preventDefault();
+        console.debug(this);
+        $(that.form_selector)[0].reset();
     });
 };
 
@@ -122,4 +135,43 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
             Charcoal.Admin.feedback().call();
         }
     });
+};
+
+/**
+* Handle the "delete" button / action.
+*/
+Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
+{
+    var that = this;
+    console.debug(form);
+    BootstrapDialog.confirm({
+        title: 'Confirmer la suppression',
+        type: BootstrapDialog.TYPE_DANGER,
+        message:'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
+        btnOKLabel: 'Supprimer',
+        btnCancelLabel: 'Annuler',
+        callback: function (result) {
+            if (result) {
+                var url = Charcoal.Admin.admin_url() + 'object/delete';
+                var data = {
+                    obj_type: that.obj_type,
+                    obj_id: that.obj_id
+                };
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data
+                }).done(function (response) {
+                    console.debug(response);
+                    if (response.success) {
+                        var url = Charcoal.Admin.admin_url() + 'object/collection?obj_type=' + that.obj_type;
+                        window.location.href = url;
+                    } else {
+                        window.alert('Erreur. Impossible de supprimer cet objet.');
+                    }
+                });
+            }
+        }
+    });
+
 };

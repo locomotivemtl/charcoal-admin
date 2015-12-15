@@ -22,7 +22,7 @@
 		},
 		"groups":{
 			"type":"object",
-			"obj_type":"charcoal/admin/usergroup",
+			"obj_type":"charcoal/admin/user-group",
 			"multiple":true
 		},
 		"permissions":{

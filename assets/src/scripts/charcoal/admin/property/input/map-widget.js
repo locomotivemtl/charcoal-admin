@@ -90,6 +90,8 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         }
     };
 
+    map_options = $.extend(true, map_options, _data.data);
+
     // Get current map state from DB
     // This is located in the hidden input
     var current_value = this.element().find('input[type=hidden]').val();

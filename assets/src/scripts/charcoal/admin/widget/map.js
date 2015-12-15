@@ -36,7 +36,7 @@ Charcoal.Admin.Widget_Map.prototype.init = function ()
         };
 
         $.getScript(
-            'http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
+            'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
             '&language=fr&callback=_tmp_google_onload_function',
             function () {}
         );

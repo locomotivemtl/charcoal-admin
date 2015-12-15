@@ -87,7 +87,7 @@
 					"form":{
 						"type":"charcoal/admin/widget/objectForm",
 						"label":"Admin User Form",
-						"obj_type":"\\Charcoal\\Admin\\User",
+						"obj_type":"charcoal/admin/user",
 						"groups":{
 							"main":{
 								"label":"Information",
@@ -119,7 +119,7 @@
 					"list":{
 						"type":"charcoal/admin/widget/table",
 						"label":"Admin user list",
-						"obj_type":"\\Charcoal\\Admin\\User"
+						"obj_type":"charcoal/admin/user"
 					}
 				}
 			}

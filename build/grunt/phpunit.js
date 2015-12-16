@@ -2,8 +2,8 @@ module.exports = {
     src: {
         dir: 'tests/'
     },
-
     options: {
+        bin: 'vendor/bin/phpunit',
         colors: true,
         coverageHtml:'tests/tmp/report/',
         //coverageText:'tests/tmp/report/',

@@ -39,7 +39,9 @@ trait ObjectContainerTrait
     public function set_obj_data($data)
     {
         if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
+            throw new InvalidArgumentException(
+                'Data must be an array'
+            );
         }
 
         if (isset($data['obj_type']) && $data['obj_type'] !== null) {
@@ -63,7 +65,9 @@ trait ObjectContainerTrait
     public function set_obj_type($obj_type)
     {
         if (!is_string($obj_type)) {
-            throw new InvalidArgumentException('Obj type needs to be a string');
+            throw new InvalidArgumentException(
+                'Obj type needs to be a string'
+            );
         }
         $this->_obj_type = str_replace(['.', '_'], '/', $obj_type);
         return $this;
@@ -85,7 +89,9 @@ trait ObjectContainerTrait
     public function set_obj_id($obj_id)
     {
         if (!is_scalar($obj_id)) {
-            throw new InvalidArgumentException('Obj ID must be a string or numerical value.');
+            throw new InvalidArgumentException(
+                'Obj ID must be a string or numerical value.'
+            );
         }
         $this->_obj_id = $obj_id;
         return $this;
@@ -109,7 +115,9 @@ trait ObjectContainerTrait
     public function set_obj_base_class($obj_base_class)
     {
         if (!is_string($obj_base_class)) {
-            throw new InvalidArgumentException('Base class must be a string.');
+            throw new InvalidArgumentException(
+                'Base class must be a string.'
+            );
         }
         $this->_obj_base_class = $obj_base_class;
         return $this;
@@ -124,7 +132,8 @@ trait ObjectContainerTrait
     }
 
     /**
-    * Create or load the object
+    * Create or load the object.
+    *
     *
     * @return ModelInterface
     */
@@ -135,6 +144,35 @@ trait ObjectContainerTrait
         }
         if ($this->obj_id()) {
             $this->_obj = $this->load_obj();
+        }
+        else if (isset($_GET['clone_id'])) {
+            try {
+                $obj_class = get_class($this->_obj);
+                $clone = new $obj_class([
+                    'logger' => $this->logger()
+                ]);
+                $clone->load($_GET['clone_id']);
+                $clone_data =
+                $this->_obj->set_data($clone->data());
+            } catch (Exception $e) {
+                $this->logger()->error('Clone error: '.$e->getMessage());
+            }
+        }
+        else if (isset($_GET['blueprint_id'])) {
+            try {
+                $model_factory = new ModelFactory();
+                $blueprint = $model_factory->create($this->_obj->blueprint_type(), [
+                    'logger'=>$this->logger()
+                ]);
+                $blueprint->load($_GET['blueprint_id']);
+                $data = $blueprint->data();
+                unset($data[$blueprint->key()]);
+                $this->_obj->set_data($blueprint->data());
+                // Todo: Blueprint feedback.
+            } catch (Exception $e) {
+                $this->logger()->error('Blueprint error: '.$e->getMessage());
+                // Todo: Error feedback
+            }
         }
 
         return $this->_obj;

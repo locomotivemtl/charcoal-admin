@@ -2730,9 +2730,15 @@ Charcoal.Admin.Widget_Search.prototype.init = function ()
     var that = this;
 
     // Submit
-    $elem.on('click', 'button', function (e) {
+    $elem.on('click', '.js-search', function (e) {
         e.preventDefault();
         that.submit();
+    });
+
+    // Undo
+    $elem.on('click', '.js-undo', function (e) {
+        e.preventDefault();
+        that.undo();
     });
 };
 
@@ -2742,7 +2748,6 @@ Charcoal.Admin.Widget_Search.prototype.init = function ()
 */
 Charcoal.Admin.Widget_Search.prototype.submit = function ()
 {
-
     var manager = Charcoal.Admin.manager();
     var widgets = manager.components.widgets;
 
@@ -2752,6 +2757,17 @@ Charcoal.Admin.Widget_Search.prototype.submit = function ()
         this.dispatch(widgets[i]);
     }
 
+    return this;
+};
+
+/**
+* Resets the search filters
+* @return this (chainable);
+*/
+Charcoal.Admin.Widget_Search.prototype.undo = function ()
+{
+    this.element().find('input').val('');
+    this.submit();
     return this;
 };
 

@@ -1631,13 +1631,19 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 
         // Merge places with default styles
         var merged_places = {};
+        var index = 0;
         for (var ident in places) {
+            index++;
             merged_places[ ident ] = places[ ident ];
             merged_places[ ident ].styles = $.extend(places[ ident ].styles, default_styles);
         }
 
         if (merged_places) {
             map_options.places = merged_places;
+        }
+
+        if (index) {
+            this._object_inc = index;
         }
     }
 

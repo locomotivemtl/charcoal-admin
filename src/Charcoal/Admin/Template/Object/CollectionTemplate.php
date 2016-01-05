@@ -54,7 +54,7 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         $dashboard_config = $this->obj_collection_dashboard_config();
 
         $dashboard = new Dashboard([
-            'logger'=>$this->logger()
+            'logger'=>$this->logger
         ]);
         if ($data !== null) {
             $dashboard->set_data($data);
@@ -80,7 +80,7 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         $widget_factory = new WidgetFactory();
         $widget_type = isset($sidemenu_config['widget_type']) ? $sidemenu_config['widget_type'] : 'charcoal/admin/widget/sidemenu';
         $sidemenu = $widget_factory->create($widget_type, [
-            'logger'=>$this->logger()
+            'logger'=>$this->logger
         ]);
         return $sidemenu;
     }

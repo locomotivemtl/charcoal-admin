@@ -83,7 +83,7 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
 
         $model_factory = new ModelFactory();
         $model = $model_factory->create($this->obj_type(), [
-            'logger' => $this->logger()
+            'logger' => $this->logger
         ]);
 
         $loader = new CollectionLoader();

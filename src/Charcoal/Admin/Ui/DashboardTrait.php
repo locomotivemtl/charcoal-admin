@@ -129,10 +129,10 @@ trait DashboardTrait
     {
         $widget_type = isset($data['type']) ? $data['type'] : null;
 
-        $this->logger()->debug('Creating a new widget: '.$data['type'], $data);
+        $this->logger->debug('Creating a new widget: '.$data['type'], $data);
 
         $widget = $this->widget_factory()->create($widget_type, [
-            'logger'=>$this->logger()
+            'logger'=>$this->logger
         ]);
         if ($data !== null) {
             $widget->set_data($data);

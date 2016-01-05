@@ -66,7 +66,7 @@ class FormWidget extends AdminWidget implements FormInterface
     {
         $widget_type = (isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formGroup');
         $group = $this->widget_factory()->create($widget_type, [
-            'logger' => $this->logger()
+            'logger' => $this->logger
         ]);
         $group->set_form($this);
         if ($data) {
@@ -101,7 +101,7 @@ class FormWidget extends AdminWidget implements FormInterface
             $this->layout = $layout;
         } else if (is_array($layout)) {
             $l = new LayoutWidget([
-                'logger' => $this->logger()
+                'logger' => $this->logger
             ]);
 //            $l->set_parent($this);
             $l->set_data($layout);
@@ -147,7 +147,7 @@ class FormWidget extends AdminWidget implements FormInterface
             $this->sidebars[$sidebar_ident] = $sidebar;
         } else if (is_array($sidebar)) {
             $s = new FormSidebarWidget([
-                'logger'=>$this->logger()
+                'logger'=>$this->logger
             ]);
             $s->set_form($this);
             $s->set_data($sidebar);

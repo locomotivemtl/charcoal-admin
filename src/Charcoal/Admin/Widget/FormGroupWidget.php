@@ -128,7 +128,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
             $this->layout = $layout;
         } else if (is_array($layout)) {
             $l = new LayoutWidget([
-                'logger'=>$this->logger()
+                'logger'=>$this->logger
             ]);
             $l->set_data($layout);
             $this->layout = $l;

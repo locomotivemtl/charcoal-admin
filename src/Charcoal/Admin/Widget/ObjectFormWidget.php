@@ -152,7 +152,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 
         foreach ($props as $property_ident => $property) {
             $p = new FormPropertyWidget([
-                'logger'=>$this->logger()
+                'logger'=>$this->logger
             ]);
             $p->set_property_ident($property_ident);
             $p->set_data($property);

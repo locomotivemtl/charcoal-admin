@@ -3,14 +3,14 @@
 namespace Charcoal\Admin;
 
 // Dependencies from `PHP`
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Translation\TranslationString as TranslationString;
+use \Charcoal\Translation\TranslationString;
 
 // From `charcoal-base`
-use \Charcoal\App\Template\AbstractWidget as AbstractWidget;
-use \Charcoal\Widget\WidgetView as WidgetView;
+use \Charcoal\App\Template\AbstractWidget;
+use \Charcoal\Widget\WidgetView;
 
 /**
 * The base Widget for the `admin` module.
@@ -94,7 +94,9 @@ class AdminWidget extends AbstractWidget
     public function set_ident($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(__CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.');
+            throw new InvalidArgumentException(
+                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
+            );
         }
         $this->ident = $ident;
         return $this;

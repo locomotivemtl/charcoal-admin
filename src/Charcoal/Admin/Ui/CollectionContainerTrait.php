@@ -309,7 +309,7 @@ trait CollectionContainerTrait
         }
         $factory = $this->model_factory();
         $obj = $factory->get($obj_type, [
-            'logger' => $this->logger()
+            'logger' => $this->logger
         ]);
         return $obj;
     }

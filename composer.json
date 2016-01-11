@@ -20,7 +20,8 @@
   "minimum-stability": "dev",
   "require": {
     "locomotivemtl/charcoal-core": "@dev",
-    "locomotivemtl/charcoal-base": "@dev"
+    "locomotivemtl/charcoal-base": "@dev",
+    "locomotivemtl/charcoal-app": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8",

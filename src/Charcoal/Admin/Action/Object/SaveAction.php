@@ -34,51 +34,51 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
-    * @var array $save_data
+    * @var array $saveData
     */
-    private $save_data = [];
+    private $saveData = [];
 
     /**
     * @param array $data
     * @return LoginAction Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
 
-        parent::set_data($data);
-        $this->set_obj_data($data);
+        parent::setData($data);
+        $this->setObjData($data);
 
         unset($data['obj_type']);
-        $this->set_save_data($data);
+        $this->setSaveData($data);
 
         return $this;
     }
 
     /**
-    * @param array $save_data
+    * @param array $saveData
     * @return SaveAction Chainable
     */
-    public function set_save_data(array $save_data)
+    public function setSaveData(array $saveData)
     {
-        $this->save_data = $save_data;
+        $this->saveData = $saveData;
         return $this;
     }
 
     /**
     * @return array
     */
-    public function save_data()
+    public function saveData()
     {
-        return $this->save_data;
+        return $this->saveData;
     }
 
     /**
-    * @param ModelInterface|null $save_data
+    * @param ModelInterface|null $saveData
     * @return SaveAction Chainable
     */
-    public function set_obj($obj)
+    public function setObj($obj)
     {
-        $this->_obj = $obj;
+        $this->Obj = $obj;
         return $this;
     }
 
@@ -90,40 +90,40 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $this->set_data($request->getParams());
+            $this->setData($request->getParams());
 
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
 
-            $obj->set_flat_data($this->save_data());
+            $obj->setFlatData($this->saveData());
             $valid = $obj->validate();
             $valid = true;
             if (!$valid) {
                 $validation = $obj->validation();
                 // @todo: Validation info to feedback
-                $this->set_success(false);
-                $this->add_feedback('error', 'Failed to save object: validation error(s).');
+                $this->setSuccess(false);
+                $this->addFeedback('error', 'Failed to save object: validation error(s).');
                 return $response->withStatus(404);
             }
 
             $ret = $obj->save();
 
             if ($ret) {
-                $this->set_obj($obj);
-                $this->log_object_save();
-                $this->set_success(true);
-                $this->add_feedback('success', 'Object saved successfully');
+                $this->setObj($obj);
+                $this->logObjectSave();
+                $this->setSuccess(true);
+                $this->addFeedback('success', 'Object saved successfully');
                 return $response;
             } else {
-                $this->set_obj(null);
-                $this->set_success(false);
+                $this->setObj(null);
+                $this->setSuccess(false);
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
             //var_dump($e);
-            $this->set_obj(null);
-            $this->set_success(false);
-            $this->add_feedback('error', $e->getMessage());
+            $this->setObj(null);
+            $this->setSuccess(false);
+            $this->addFeedback('error', $e->getMessage());
             return $response->withStatus(404);
         }
 
@@ -143,11 +143,4 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         return $results;
     }
 
-    /**
-    *
-    */
-    public function log_object_save()
-    {
-        // @todo
-    }
 }

@@ -19,11 +19,11 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
     <div class="c-login_panel">
         <div class="c-login_header">
             <div class="c-login_avatar">
-                <img class="c-login_avatar_image" src="{{base_url}}assets/admin/images/avatar.jpg">
+                <img class="c-login_avatar_image" src="{{baseUrl}}assets/admin/images/avatar.jpg">
             </div>
         </div>
-        <form method="post" action="{{url_login_action}}">
-            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
+        <form method="post" action="{{urlLoginAction}}">
+            <input type="hidden" name="csrf_token" value="{{csrfToken}}">
 
              <div class="form-group">
                 <label class="sr-only" for="username">{{#_t}}Username{{/_t}}</label>
@@ -52,13 +52,13 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
             </div>
         </form>
 
-        {{!--<a href="{{url_lost_password}_}" id="btn-lost-password">{{#_t}_}Lost your password?{{/_t}_}</a>--}}
+        {{!--<a href="{{urlLostPassword}_}" id="btn-lost-password">{{#_t}_}Lost your password?{{/_t}_}</a>--}}
 
         {{>charcoal/admin/widget/feedbacks}}
     </div>
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 var login_template;
 $(document).ready(function() {
@@ -68,6 +68,6 @@ $(document).ready(function() {
     //Charcoal.Admin.register_template(login_template);
 });
 </script>
-{{/add_js}}
+{{/addJs}}
 
 {{>charcoal/admin/template/inc.footer}}

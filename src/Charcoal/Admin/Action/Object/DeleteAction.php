@@ -53,12 +53,12 @@ class DeleteAction extends AdminAction
         $obj_id = $request->getParam('obj_id');
 
         if (!$obj_type) {
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
 
         if (!$obj_id) {
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
 
@@ -74,8 +74,7 @@ class DeleteAction extends AdminAction
             }
             $res = $obj->delete();
             if ($res) {
-                $this->log_object_delete();
-                $this->set_success(true);
+                $this->setSuccess(true);
                 return $response;
             }
         } catch (Exception $e) {
@@ -96,10 +95,5 @@ class DeleteAction extends AdminAction
         ];
 
         return $results;
-    }
-
-    public function log_object_delete()
-    {
-        // @todo
     }
 }

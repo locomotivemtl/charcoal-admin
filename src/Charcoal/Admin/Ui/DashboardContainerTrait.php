@@ -7,85 +7,85 @@ use \InvalidArgumentException as InvalidArgumentException;
 trait DashboardContainerTrait
 {
     /**
-    * @var string $_dashboboard_ident
+    * @var string $dashboboardIdent
     */
-    protected $_dashboard_ident;
+    protected $dashboardIdent;
     /**
-    * @var mixed $_dashboard_config
+    * @var mixed $dashboardConfig
     */
-    protected $_dashboard_config;
+    protected $dashboardConfig;
     /**
-    * @var Dashboard $_dashboard
+    * @var Dashboard $dashboard
     */
-    protected $_dashboard;
+    protected $dashboard;
 
     /**
     * @param array $data
     * @throws InvalidArgumentException
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard_data($data = null)
+    public function setDashboardData($data = null)
     {
         if (!is_array($data)) {
             throw new InvalidArgumentException('Data must be an array');
         }
 
-        if (isset($data['dashboard_ident'])) {
-            $this->set_dashboard_ident($data['dashboard_ident']);
+        if (isset($data['dashboardIdent'])) {
+            $this->setDashboardIdent($data['dashboardIdent']);
         }
-        if (isset($data['dashboard_config'])) {
-            $this->set_dashboard_config($data['dashboard_config']);
+        if (isset($data['dashboardConfig'])) {
+            $this->setDashboardConfig($data['dashboardConfig']);
         }
 
         return $this;
     }
 
     /**
-    * @param string $dashboard_ident
+    * @param string $dashboardIdent
     * @throws InvalidArgumentException
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard_ident($dashboard_ident)
+    public function setDashboardIdent($dashboardIdent)
     {
-        if (!is_string($dashboard_ident)) {
+        if (!is_string($dashboardIdent)) {
             throw new InvalidArgumentException(
                 'Dashboard ident needs to be a string'
             );
         }
-        $this->_dashboard_ident = $dashboard_ident;
+        $this->dashboardIdent = $dashboardIdent;
         return $this;
     }
 
     /**
     * @return string
     */
-    public function dashboard_ident()
+    public function dashboardIdent()
     {
-        return $this->_dashboard_ident;
+        return $this->dashboardIdent;
     }
 
     /**
-    * @param mixed $dashboard_config
+    * @param mixed $dashboardConfig
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard_config($dashboard_config)
+    public function setDashboardConfig($dashboardConfig)
     {
-        $this->_dashboard_config = $dashboard_config;
+        $this->dashboardConfig = $dashboardConfig;
         return $this;
     }
 
     /**
     * @return mixed
     */
-    public function dashboard_config()
+    public function dashboardConfig()
     {
-        if ($this->_dashboard_config === null) {
-            $this->_dashboard_config = $this->create_dashboard_config();
+        if ($this->dashboardConfig === null) {
+            $this->dashboardConfig = $this->createDashboardConfig();
         }
-        return $this->_dashboard_config;
+        return $this->dashboardConfig;
     }
 
-    public function create_dashboard_config($data = null)
+    public function createDashboardConfig($data = null)
     {
         return null;
     }
@@ -94,9 +94,9 @@ trait DashboardContainerTrait
     * @param Dashboard $dashboard
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard($dashboard)
+    public function setDashboard($dashboard)
     {
-        $this->_dashboard = $dashboard;
+        $this->dashboard = $dashboard;
         return $this;
     }
 
@@ -105,15 +105,15 @@ trait DashboardContainerTrait
     */
     public function dashboard()
     {
-        if ($this->_dashboard === null) {
-            $this->_dashboard = $this->create_dashboard();
+        if ($this->dashboard === null) {
+            $this->dashboard = $this->createDashboard();
         }
-        return $this->_dashboard;
+        return $this->dashboard;
     }
 
     /**
     * @param array $data Optional
     * @return Dashboard
     */
-    abstract public function create_dashboard(array $data = null);
+    abstract public function createDashboard(array $data = null);
 }

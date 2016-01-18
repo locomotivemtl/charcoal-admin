@@ -8,41 +8,41 @@ interface DashboardContainerInterface
     * @param array $data
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard_data($data = null);
+    public function setDashboardData($data = null);
 
     /**
-    * @param string $dashboard_ident
+    * @param string $dashboardIdent
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard_ident($dashboard_ident);
+    public function setDashboardIdent($dashboardIdent);
 
     /**
     * @return string
     */
-    public function dashboard_ident();
+    public function dashboardIdent();
 
     /**
-    * @param mixed $dashboard_config
+    * @param mixed $dashboardConfig
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard_config($dashboard_config);
+    public function setDashboardConfig($dashboardConfig);
 
     /**
     * @return mixed
     */
-    public function dashboard_config();
+    public function dashboardConfig();
 
     /**
     * @param array $data
     * @return mixed
     */
-    public function create_dashboard_config($data = null);
+    public function createDashboardConfig($data = null);
 
     /**
     * @param mixed $dashboard
     * @return DashboardContainerInterface Chainable
     */
-    public function set_dashboard($dashboard);
+    public function setDashboard($dashboard);
 
     /**
     * @return Dashboard
@@ -53,6 +53,6 @@ interface DashboardContainerInterface
     * @param array $data Optional
     * @return Dashboard
     */
-    public function create_dashboard(array $data = null);
+    public function createDashboard(array $data = null);
 
 }

@@ -34,7 +34,7 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
     /**
     * @return array
     */
-    public function default_arguments()
+    public function defaultArguments()
     {
         $arguments = [
             'obj-type' => [
@@ -58,7 +58,7 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
             ]
         ];
 
-        $arguments = array_merge(parent::default_arguments(), $arguments);
+        $arguments = array_merge(parent::defaultArguments(), $arguments);
         return $arguments;
     }
 
@@ -75,14 +75,14 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
 
         $climate->underline()->out('List objects');
 
-        $this->set_data([
-            'obj_type'      => $this->arg_or_input('obj-type'),
+        $this->setData([
+            'obj_type'      => $this->argOrInput('obj-type'),
             'page'          => $climate->arguments->get('page'),
             'num_per_page'  => $climate->arguments->get('num')
         ]);
 
-        $model_factory = new ModelFactory();
-        $model = $model_factory->create($this->obj_type(), [
+        $modelFactory = new ModelFactory();
+        $model = $modelFactory->create($this->objType(), [
             'logger' => $this->logger
         ]);
 
@@ -90,7 +90,7 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
         $loader->set_model($model);
         $loader->set_pagination([
             'page' => $this->page(),
-            'num_per_page' => $this->num_per_page()
+            'num_per_page' => $this->numPerPage()
         ]);
 
         $collection = $loader->load();
@@ -105,7 +105,7 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
             foreach ($props as $property_ident => $unused) {
                 $prop = $c->p($property_ident);
                 $label = (string)$prop->label();
-                $val = (string)$prop->display_val();
+                $val = (string)$prop->displayVal();
                 $obj[$label] = $val;
             }
             $table[] = $obj;

@@ -20,7 +20,7 @@ abstract class AdminScript extends AbstractScript
         parent::init();
 
         // Authenticate terminal user as an admin user.
-        if ($this->auth_required() !== false) {
+        if ($this->authRequired() !== false) {
             $this->auth();
         }
     }
@@ -31,11 +31,11 @@ abstract class AdminScript extends AbstractScript
     * Authentication is required by default. If unnecessary,
     * replace this method in the inherited template class.
     *
-    * @see \Charcoal\Admin\Template::auth_required()
+    * @see \Charcoal\Admin\Template::authRequired()
     *
     * @return boolean
     */
-    public function auth_required()
+    public function authRequired()
     {
         return false;
     }
@@ -43,7 +43,7 @@ abstract class AdminScript extends AbstractScript
     /**
     *
     */
-    public function auth()
+    protected function auth()
     {
         $climate = $this->climate();
 
@@ -80,28 +80,88 @@ abstract class AdminScript extends AbstractScript
             }
 
             if (!$is_authenticated) {
-                $this->log_failed_attempt($username);
+                $this->logFailedAttempt($username);
                 $climate->br()->error(
                     'Authentication failed.'
                 );
                 die();
             } else {
-                $this->log_successful_login($username);
+                $this->logSuccessfulLogin($username);
             }
         }
     }
 
-    public function log_failed_attempt($username)
+    protected function logFailedAttempt($username)
     {
         $this->logger()->warning(
             sprintf('Login attempt failure: "%s"', $username)
         );
     }
 
-    public function log_successful_login($username)
+    protected function logSuccessfulLogin($username)
     {
         $this->logger()->debug(
             sprintf('Login attempt successful: "%s"', $username)
         );
+    }
+
+    /**
+    * @param PropertyInterface $prop The property to retrieve input from.
+    * @return
+    */
+    protected function propertyToInput(PropertyInterface $prop)
+    {
+        $climate = $this->climate();
+
+        if ($prop->type() == 'password') {
+            return $this->passwordInput($prop);
+        } else if ($prop->type() == 'boolean') {
+            return $this->booleanInput($prop);
+        } else {
+            $input = $climate->input(
+                sprintf('Enter value for "%s":', $prop->label())
+            );
+            if ($prop->type() == 'text' || $prop->type == 'html') {
+                $input->multiLine();
+            }
+        }
+        return $input;
+    }
+
+    /**
+    * Get a CLI input from a boolean property.
+    *
+    * @param PropertyInterface $prop The property to retrieve input from.
+    * @return \League\CLImate\TerminalObject\Dynamic\Input
+    */
+    private function booleanInput(PropertyInterface $prop)
+    {
+        $climate = $this->climate();
+
+        $opts = [
+            1 => $prop->trueLabel(),
+            0 => $prop->falseLabel()
+        ];
+        $input = $climate->radio(
+            sprintf('Enter value for "%s":', $prop->label()),
+            $opts
+        );
+        return $input;
+    }
+
+    /**
+    * Get a CLI password input (hidden) from a password property.
+    *
+    * @param PropertyInterface $prop The property to retrieve input from.
+    * @return \League\CLImate\TerminalObject\Dynamic\Input
+    */
+    private function passwordInput(PropertyInterface $prop)
+    {
+        $climate = $this->climate();
+
+        $input = $climate->password(
+            sprintf('Enter value for "%s":', $prop->label())
+        );
+        return $input;
     }
 }

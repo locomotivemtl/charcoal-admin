@@ -12,98 +12,73 @@ use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 class TextInput extends AbstractPropertyInput
 {
     /**
-    * @var integer $_size
+    * @var integer $size
     */
-    private $_size = 0;
+    private $size = 0;
 
     /**
-    * @var integer $min_length
+    * @var integer $minLength
     */
-    private $_min_length = 0;
+    private $minLength = 0;
     /**
-    * @var integer $_max_length
+    * @var integer $maxLength
     */
-    private $_max_length = 0;
+    private $maxLength = 0;
 
-
-    /**
-    * @var string $_pattern
-    */
-    private $_pattern = '';
 
     /**
-    * @var string $_placeholder
+    * @var string $pattern
     */
-    private $_placeholder = '';
+    private $pattern = '';
 
     /**
-    * @param array $data
-    * @return Text Chainable
+    * @var string $placeholder
     */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-        if (isset($data['size']) && $data['size'] !== null) {
-            $this->set_size($data['size']);
-        }
-        if (isset($data['min_length']) && $data['min_length'] !== null) {
-            $this->set_min_length($data['min_length']);
-        }
-        if (isset($data['max_length']) && $data['max_length'] !== null) {
-            $this->set_max_length($data['max_length']);
-        }
-        if (isset($data['pattern']) && $data['pattern'] !== null) {
-            $this->set_pattern($data['pattern']);
-        }
-        if (isset($data['placeholder']) && $data['placeholder'] !== null) {
-            $this->set_placeholder($data['placeholder']);
-        }
+    private $placeholder = '';
 
-        return $this;
-    }
 
     /**
-    * @param integer $min_length
+    * @param integer $minLength
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_min_length($min_length)
+    public function setMinLength($minLength)
     {
-        if (!is_integer($min_length)) {
+        if (!is_integer($minLength)) {
             throw new InvalidArgumentException('Min length needs to be an integer');
         }
-        $this->_min_length = $min_length;
+        $this->minLength = $minLength;
         return $this;
     }
 
     /**
     * @return integer
     */
-    public function min_length()
+    public function minLength()
     {
-        return $this->_min_length;
+        return $this->minLength;
     }
 
     /**
-    * @param integer $max_length
+    * @param integer $maxLength
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_max_length($max_length)
+    public function setMaxLength($maxLength)
     {
-        if (!is_integer($max_length)) {
+        if (!is_integer($maxLength)) {
             throw new InvalidArgumentException('Max length needs to be an integer');
         }
-        $this->_max_length = $max_length;
+        $this->maxLength = $maxLength;
         return $this;
     }
 
     /**
     * @return integer
     */
-    public function max_length()
+    public function maxLength()
     {
-        return $this->_max_length;
+        return $this->maxLength;
     }
 
     /**
@@ -111,12 +86,12 @@ class TextInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_size($size)
+    public function setSize($size)
     {
         if (!is_integer($size)) {
             throw new InvalidArgumentException('Size needs to be an integer');
         }
-        $this->_size = $size;
+        $this->size = $size;
         return $this;
     }
 
@@ -125,7 +100,7 @@ class TextInput extends AbstractPropertyInput
     */
     public function size()
     {
-        return $this->_size;
+        return $this->size;
     }
 
         /**
@@ -133,12 +108,12 @@ class TextInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_pattern($pattern)
+    public function setPattern($pattern)
     {
         if (!is_string($pattern)) {
             throw new InvalidArgumentException('Pattern needs to be a string');
         }
-        $this->_pattern = $pattern;
+        $this->pattern = $pattern;
         return $this;
     }
 
@@ -147,7 +122,7 @@ class TextInput extends AbstractPropertyInput
     */
     public function pattern()
     {
-        return $this->_pattern;
+        return $this->pattern;
     }
 
     /**
@@ -155,12 +130,12 @@ class TextInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_placeholder($placeholder)
+    public function setPlaceholder($placeholder)
     {
         if (!is_string($placeholder)) {
             throw new InvalidArgumentException('Accept needs to be a string');
         }
-        $this->_placeholder = $placeholder;
+        $this->placeholder = $placeholder;
         return $this;
     }
 
@@ -169,6 +144,6 @@ class TextInput extends AbstractPropertyInput
     */
     public function placeholder()
     {
-        return $this->_placeholder;
+        return $this->placeholder;
     }
 }

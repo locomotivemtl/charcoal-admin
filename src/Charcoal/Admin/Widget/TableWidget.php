@@ -27,9 +27,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $properties;
 
     /**
-    * @var $properties_options
+    * @var $propertiesOptions
     */
-    protected $properties_options;
+    protected $propertiesOptions;
 
     /**
     * @var array $orders
@@ -41,23 +41,23 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     */
     protected $filters;
 
-    private $property_factory;
+    private $propertyFactory;
 
     /**
     * Fetch metadata from current obj_type
     * @return array List of metadata
     */
-    public function data_from_object()
+    public function dataFromObject()
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $collection_ident = $this->collection_ident();
-        if (!$collection_ident) {
-            $collection_ident = isset($admin_metadata['default_list']) ? $admin_metadata['default_list'] : '';
+        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $collectionIdent = $this->collectionIdent();
+        if (!$collectionIdent) {
+            $collectionIdent = isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '';
         }
 
-        $obj_list_data = isset($admin_metadata['lists'][$collection_ident]) ? $admin_metadata['lists'][$collection_ident] : [];
+        $obj_list_data = isset($adminMetadata['lists'][$collectionIdent]) ? $adminMetadata['lists'][$collectionIdent] : [];
 
         return $obj_list_data;
     }
@@ -73,19 +73,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $obj = $this->proto();
             $props = $obj->metadata()->properties();
 
-            $collection_ident = $this->collection_ident();
+            $collectionIdent = $this->collectionIdent();
 
-            if ($collection_ident) {
+            if ($collectionIdent) {
                 $metadata = $obj->metadata();
-                $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+                $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
 
-                if (isset($admin_metadata['lists'][$collection_ident]['properties'])) {
+                if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
                     // Flipping to have property ident as key
-                    $list_properties = array_flip($admin_metadata['lists'][$collection_ident]['properties']);
-                    // Replacing values of list_properties from index to actual property values
-                    $props = array_replace($list_properties, $props);
-                    // Get only the keys that are in list_properties from props
-                    $props = array_intersect_key($props, $list_properties);
+                    $listProperties = arrayFlip($adminMetadata['lists'][$collectionIdent]['properties']);
+                    // Replacing values of listProperties from index to actual property values
+                    $props = array_replace($listProperties, $props);
+                    // Get only the keys that are in listProperties from props
+                    $props = array_intersect_key($props, $listProperties);
                 }
             }
 
@@ -99,16 +99,18 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     * Properties to display in collection template, and their order, as set in object metadata
     * @return  FormPropertyWidget         Generator function
     */
-    public function collection_properties()
+    public function collectionProperties()
     {
         $props = $this->properties();
 
-        foreach ($props as $property_ident => $property) {
-            $property_metadata = $props[$property_ident];
+        foreach ($props as $propertyIdent => $property) {
+            $propertyMetadata = $props[$propertyIdent];
 
-            $p = $this->property_factory()->get($property_metadata['type']);
-            $p->set_ident($property_ident);
-            $p->set_data($property_metadata);
+            $p = $this->propertyFactory()->get($propertyMetadata['type'], [
+                'logger'=>$this->logger
+            ]);
+            $p->setIdent($propertyIdent);
+            $p->set_data($propertyMetadata);
 
             $column = [
                 'label' => $p->label()
@@ -121,7 +123,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @return boolean
     */
-    public function show_object_actions()
+    public function showObjectActions()
     {
         return true;
     }
@@ -129,7 +131,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @return array
     */
-    public function object_actions()
+    public function objectActions()
     {
         return [
             // [
@@ -153,30 +155,29 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @return boolean
     */
-    public function has_object_actions()
+    public function hasObjectActions()
     {
-        $actions = $this->object_actions();
+        $actions = $this->objectActions();
         return (count($actions) > 0);
     }
 
     /**
     * @return array
     */
-    public function list_actions()
+    public function listActions()
     {
         $obj = $this->proto();
         $props = $obj->metadata()->properties();
-        $collection_ident = $this->collection_ident();
-        if ($collection_ident) {
+        $collectionIdent = $this->collectionIdent();
+        if ($collectionIdent) {
                 $metadata = $obj->metadata();
-                $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-                $list_options = $admin_metadata['lists'][$collection_ident];
+                $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+                $listOptions = $adminMetadata['lists'][$collectionIdent];
 
-                $list_actions = isset($list_options['list_actions']) ?$list_options['list_actions'] : [];
-                return $list_actions;
+                $listActions = isset($listOptions['list_actions']) ? $listOptions['list_actions'] : [];
+                return $listActions;
 
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -184,7 +185,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @return array
     */
-    public function sublist_actions()
+    public function sublistActions()
     {
         return [
             [
@@ -201,7 +202,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @return boolean
     */
-    public function show_table_header()
+    public function showTableHeader()
     {
         return true;
     }
@@ -209,7 +210,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
     * @return boolean
     */
-    public function show_table_footer()
+    public function showTableFooter()
     {
         return false;
     }
@@ -218,19 +219,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     * Generate URL for editing object
     * @return string
     */
-    public function object_edit_url()
+    public function objectEditUrl()
     {
-        return Charcoal::config()->get('URL').'admin/object/edit?obj_type='.$this->obj_type();
+        return \Charcoal\App\App::instance()->config()->get('URL').'admin/object/edit?obj_type='.$this->obj_type();
     }
 
     /**
     * @return PropertyFactory
     */
-    private function property_factory()
+    private function propertyFactory()
     {
-        if ($this->property_factory === null) {
-            $this->property_factory = new PropertyFactory();
+        if ($this->propertyFactory === null) {
+            $this->propertyFactory = new PropertyFactory();
         }
-        return $this->property_factory;
+        return $this->propertyFactory;
     }
 }

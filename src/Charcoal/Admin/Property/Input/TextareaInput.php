@@ -12,42 +12,27 @@ use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 class TextareaInput extends AbstractPropertyInput
 {
     /**
-    * @var integer $_cols
+    * @var integer $cols
     */
-    private $_cols;
+    private $cols;
     /**
-    * @var integer $_rows
+    * @var integer $rows
     */
-    private $_rows;
-
-    /**
-    * @param array $data
-    * @return Textarea Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-        if (isset($data['cols']) && $data['cols'] !== null) {
-            $this->set_cols($data['cols']);
-        }
-        if (isset($data['rows']) && $data['rows'] !== null) {
-            $this->set_rows($data['rows']);
-        }
-
-        return $this;
-    }
+    private $rows;
 
     /**
     * @param integer $cols
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_cols($cols)
+    public function setCols($cols)
     {
         if (!is_integer($cols)) {
-            throw new InvalidArgumentException('Accept needs to be a string');
+            throw new InvalidArgumentException(
+                'Accept needs to be a string'
+            );
         }
-        $this->_cols = $cols;
+        $this->cols = $cols;
         return $this;
     }
 
@@ -56,7 +41,7 @@ class TextareaInput extends AbstractPropertyInput
     */
     public function cols()
     {
-        return $this->_cols;
+        return $this->cols;
     }
 
     /**
@@ -64,12 +49,14 @@ class TextareaInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_rows($rows)
+    public function setRows($rows)
     {
         if (!is_integer($rows)) {
-            throw new InvalidArgumentException('Accept needs to be a string');
+            throw new InvalidArgumentException(
+                'Accept needs to be a string'
+            );
         }
-        $this->_rows = $rows;
+        $this->rows = $rows;
         return $this;
     }
 
@@ -78,6 +65,6 @@ class TextareaInput extends AbstractPropertyInput
     */
     public function rows()
     {
-        return $this->_rows;
+        return $this->rows;
     }
 }

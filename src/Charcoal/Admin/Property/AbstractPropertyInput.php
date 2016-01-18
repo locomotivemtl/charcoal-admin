@@ -22,20 +22,20 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
 {
     private $ident;
 
-    private $read_only;
+    private $readOnly;
     private $required;
     private $disabled;
     private $multiple;
 
     protected $type;
-    protected $input_type;
+    protected $inputType;
     protected $input_options;
 
-    protected $input_id = null;
-    protected $input_class = '';
-    //protected $input_name;
+    protected $inputId = null;
+    protected $inputClass = '';
+    //protected $inputName;
 
-    private $property_data = [];
+    private $propertyData = [];
     private $property;
 
     /**
@@ -43,19 +43,19 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     *
     * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
     *
-    * For example, calling with `set_data(['properties'=>$properties])` would call
-    *`set_properties($properties)`, becasue `set_properties()` exists.
+    * For example, calling with `setData(['properties'=>$properties])` would call
+    *`setProperties($properties)`, becasue `setProperties()` exists.
     *
-    * But calling with `set_data(['foobar'=>$foo])` would set the `$foobar` member
+    * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
     * on the metadata object, because the method `set_foobar()` does not exist.
     *
     * @param array $data
     * @return Input Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
         foreach ($data as $prop => $val) {
-            $func = [$this, 'set_'.$prop];
+            $func = [$this, $this->setter($prop)];
             if (is_callable($func)) {
                 call_user_func($func, $val);
                 unset($data[$prop]);
@@ -64,7 +64,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
             }
         }
 
-        $this->property_data = $data;
+        $this->propertyData = $data;
 
         return $this;
     }
@@ -74,10 +74,11 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     * @throws InvalidArgumentException if the ident is not a string
     * @return Widget (Chainable)
     */
-    public function set_ident($ident)
+    public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(__CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.');
+            throw new InvalidArgumentException(
+                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.');
         }
         $this->ident = $ident;
         return $this;
@@ -92,38 +93,31 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param boolean $read_only
-    * @throws InvalidArgumentException if the read_only is not a boolean
+    * @param boolean $readOnly
+    * @throws InvalidArgumentException if the readOnly is not a boolean
     * @return Widget (Chainable)
     */
-    public function set_read_only($read_only)
+    public function setReadOnly($readOnly)
     {
-        if (!is_bool($read_only)) {
-            throw new InvalidArgumentException(__CLASS__.'::'.__FUNCTION__.'() - read_only must be a boolean.');
-        }
-        $this->read_only = $read_only;
+        $this->readOnly = !!$readOnly;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function read_only()
+    public function readOnly()
     {
-        return $this->read_only;
+        return $this->readOnly;
     }
 
     /**
     * @param boolean $required
-    * @throws InvalidArgumentException if the required is not a string
     * @return Widget (Chainable)
     */
-    public function set_required($required)
+    public function setRequired($required)
     {
-        if (!is_bool($required)) {
-            throw new InvalidArgumentException(__CLASS__.'::'.__FUNCTION__.'() - required must be a boolean.');
-        }
-        $this->required = $required;
+        $this->required = !!$required;
         return $this;
     }
 
@@ -140,7 +134,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     * @param boolean $disabled
     * @return Widget (Chainable)
     */
-    public function set_disabled($disabled)
+    public function setDisabled($disabled)
     {
         $this->disabled = !!$disabled;
         return $this;
@@ -158,7 +152,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     * @param boolean $multiple
     * @return Widget (Chainable)
     */
-    public function set_multiple($multiple)
+    public function setMultiple($multiple)
     {
         $this->multiple = !!$multiple;
         return $this;
@@ -173,12 +167,12 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param string $input_id
+    * @param string $inputId
     * @return Input Chainable
     */
-    public function set_input_id($input_id)
+    public function setInputId($inputId)
     {
-        $this->input_id = $input_id;
+        $this->inputId = $inputId;
         return $this;
     }
 
@@ -189,31 +183,32 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     *
     * @return string
     */
-    public function input_id()
+    public function inputId()
     {
-        if (!$this->input_id) {
-            $this->input_id = 'input_'.uniqid();
+        if (!$this->inputId) {
+            $this->inputId = 'input_'.uniqid();
         }
-        return $this->input_id;
+        return $this->inputId;
     }
 
     /**
-    * @param string $input_class
+    * @param string $inputClass
     * @throws InvalidArgumentException
     * @return AbstractPropertyInput Chainable
     */
-    public function set_input_class($input_class)
+    public function setInputClass($inputClass)
     {
-        if (!is_string($input_class)) {
-            throw new InvalidArgumentException('Input class must be a string');
+        if (!is_string($inputClass)) {
+            throw new InvalidArgumentException(
+                'Input class must be a string');
         }
-        $this->input_class = $input_class;
+        $this->inputClass = $inputClass;
         return $this;
     }
 
-    public function input_class()
+    public function inputClass()
     {
-        return $this->input_class;
+        return $this->inputClass;
     }
 
     /**
@@ -221,7 +216,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     *
     * @return string
     */
-    public function input_name()
+    public function inputName()
     {
         $name = $this->p()->ident();
         if ($this->multiple()) {
@@ -236,7 +231,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     /**
     * @return string
     */
-    public function input_val()
+    public function inputVal()
     {
         $prop = $this->p();
         $val = $prop->val();
@@ -261,35 +256,37 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param string $input_type
+    * @param string $inputType
     * @throws InvalidArgumentException if provided argument is not of type 'string'.
     * @return  AbstractPropertyInput Chainable
     */
-    public function set_input_type($input_type)
+    public function setInputType($inputType)
     {
-        if (!is_string($input_type)) {
-            throw new InvalidArgumentException('Input type must be a string.');
+        if (!is_string($inputType)) {
+            throw new InvalidArgumentException(
+                'Input type must be a string.'
+            );
         }
-        $this->input_type = $input_type;
+        $this->inputType = $inputType;
         return $this;
     }
 
     /**
     * @return string
     */
-    public function input_type()
+    public function inputType()
     {
-        if ($this->input_type === null) {
-            $this->input_type = 'charcoal/admin/property/input/text';
+        if ($this->inputType === null) {
+            $this->inputType = 'charcoal/admin/property/input/text';
         }
-        return $this->input_type;
+        return $this->inputType;
     }
 
     /**
     * @param PropertyInterface $p
     * @return AbstractPropertyInput Chainable
     */
-    public function set_property(PropertyInterface $p)
+    public function setProperty(PropertyInterface $p)
     {
         $this->property = $p;
         return $this;
@@ -301,9 +298,11 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     public function property()
     {
         if ($this->property === null) {
-            $property_factory = new PropertyFactory();
-            $this->property = $property_factory->create($this->input_type());
-            $this->property->set_data($this->property_data);
+            $propertyFactory = new PropertyFactory();
+            $this->property = $propertyFactory->create($this->inputType(), [
+                'logger'=>$this->logger
+            ]);
+            $this->property->setData($this->propertyData);
         }
         return $this->property;
     }
@@ -316,5 +315,41 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     public function p()
     {
         return $this->property();
+    }
+
+    /**
+     * Allow an object to define how the key getter are called.
+     *
+     * @param string $key The key to get the getter from.
+     * @return string The getter method name, for a given key.
+     */
+    protected function getter($key)
+    {
+        $getter = $key;
+        return $this->camelize($getter);
+    }
+
+    /**
+     * Allow an object to define how the key setter are called.
+     *
+     * @param string $key The key to get the setter from.
+     * @return string The setter method name, for a given key.
+     */
+    protected function setter($key)
+    {
+        $setter = 'set_'.$key;
+        return $this->camelize($setter);
+
+    }
+
+    /**
+     * Transform a snake_case string to camelCase.
+     *
+     * @param string $str The snake_case string to camelize.
+     * @return string The camelCase string.
+     */
+    private function camelize($str)
+    {
+        return lcfirst(implode('', array_map('ucfirst', explode('_', $str))));
     }
 }

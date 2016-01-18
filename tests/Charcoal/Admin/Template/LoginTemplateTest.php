@@ -22,7 +22,7 @@ class LoginTemplateTest extends \PHPUnit_Framework_TestCase
     public function testAuthRequiredIsFalse()
     {
         $obj = new LoginTemplate();
-        $foo = self::getMethod($obj, 'auth_required');
+        $foo = self::getMethod($obj, 'authRequired');
         $res = $foo->invoke($obj);
         $this->assertNotTrue($res);
     }
@@ -30,14 +30,14 @@ class LoginTemplateTest extends \PHPUnit_Framework_TestCase
     public function testShowHeaderMenuIsFalse()
     {
         $obj = new LoginTemplate();
-        $ret = $obj->show_header_menu();
+        $ret = $obj->showHeaderMenu();
         $this->assertNotTrue($ret);
     }
 
     public function testShowFooterMenuIsFalse()
     {
         $obj = new LoginTemplate();
-        $ret = $obj->show_footer_menu();
+        $ret = $obj->showFooterMenu();
         $this->assertNotTrue($ret);
     }
 }

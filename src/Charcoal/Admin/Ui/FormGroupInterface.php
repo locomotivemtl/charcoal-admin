@@ -12,7 +12,7 @@ interface FormGroupInterface
     * @param FormWidget
     * @return FormGroupInterface
     */
-    public function set_form(FormInterface $form);
+    public function setForm(FormInterface $form);
 
     /**
     * @return FormWidget
@@ -23,13 +23,13 @@ interface FormGroupInterface
     * This should really be in the WidgetInterface...
     * @return string widget type
     */
-    public function widget_type();
+    public function widgetType();
 
     /**
     * @param string $title
     * @return FormGroupInterface Chainable
     */
-    public function set_title($data);
+    public function setTitle($data);
 
     /**
     * @return String
@@ -40,7 +40,7 @@ interface FormGroupInterface
     * @param string $subtitle
     * @return FormGroupInterface Chainable
     */
-    public function set_subtitle($data);
+    public function setSubtitle($data);
 
     /**
     * @return String
@@ -52,7 +52,7 @@ interface FormGroupInterface
     * @throws InvalidArgumentException
     * @return FormGroupWidget Chainable
     */
-    public function set_priority($priority);
+    public function setPriority($priority);
 
     /**
     * @return Integer

@@ -15,7 +15,7 @@ class AbstractInputTest extends \PHPUnit_Framework_TestCase
     public function testSetData()
     {
         $obj = $this->obj;
-        $ret = $obj->set_data([
+        $ret = $obj->setData([
             'ident'=>'foo',
             'required'=>true,
             'disabled'=>true,
@@ -25,6 +25,6 @@ class AbstractInputTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $obj->ident());
         $this->assertTrue($obj->required());
         $this->assertTrue($obj->disabled());
-        $this->assertTrue($obj->read_only());
+        $this->assertTrue($obj->readOnly());
     }
 }

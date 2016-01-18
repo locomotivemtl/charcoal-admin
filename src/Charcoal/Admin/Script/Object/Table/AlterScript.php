@@ -21,7 +21,7 @@ class AlterScript extends AdminScript
     /**
     * @return array
     */
-    public function default_arguments()
+    public function defaultArguments()
     {
         $arguments = [
             'obj-type' => [
@@ -31,7 +31,7 @@ class AlterScript extends AdminScript
             ]
         ];
 
-        $arguments = array_merge(parent::default_arguments(), $arguments);
+        $arguments = array_merge(parent::defaultArguments(), $arguments);
         return $arguments;
     }
 
@@ -50,7 +50,7 @@ class AlterScript extends AdminScript
             'Alter object table from metadata'
         );
 
-        $obj_type = $this->arg_or_input('obj-type');
+        $obj_type = $this->argOrInput('obj-type');
 
         $model_factory = new ModelFactory();
         $obj = $model_factory->create($obj_type, [
@@ -84,7 +84,7 @@ class AlterScript extends AdminScript
             return $response;
         }
 
-        if (!$source->table_exists()) {
+        if (!$source->tableExists()) {
             $climate->error(
                 sprintf('The table "%s" does not exist. This script can only alter existing tables.', $table)
             );
@@ -94,7 +94,7 @@ class AlterScript extends AdminScript
             return $response;
         }
 
-        $ret = $source->alter_table();
+        $ret = $source->alterTable();
 
         $climate->green()->out(
             "\n".'Success!'

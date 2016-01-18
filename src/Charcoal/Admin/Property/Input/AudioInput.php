@@ -12,7 +12,7 @@ class AudioInput extends AbstractPropertyInput
     private $audio_data;
     private $audio_file;
 
-    public function set_message($message)
+    public function setMessage($message)
     {
         $this->message = $message;
         return $this;

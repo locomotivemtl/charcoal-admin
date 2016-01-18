@@ -37,7 +37,7 @@ class MenuItem
     final public function __construct(array $data = null)
     {
         if ($data !== null) {
-            $this->set_data($data);
+            $this->setData($data);
         }
     }
 
@@ -45,19 +45,19 @@ class MenuItem
     * @param array $data
     * @return MenuItem Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
         if (isset($data['ident']) && $data['ident'] !== null) {
-            $this->set_ident($data['ident']);
+            $this->setIdent($data['ident']);
         }
         if (isset($data['label']) && $data['label'] !== null) {
-            $this->set_label($data['label']);
+            $this->setLabel($data['label']);
         }
         if (isset($data['url']) && $data['url'] !== null) {
-            $this->set_url($data['url']);
+            $this->setUrl($data['url']);
         }
         if (isset($data['children']) && $data['children'] !== null) {
-            $this->set_children($data['children']);
+            $this->setChildren($data['children']);
         }
 
         return $this;
@@ -68,7 +68,7 @@ class MenuItem
     * @throws InvalidArgumentException
     * @return MenuItem Chainable
     */
-    public function set_ident($ident)
+    public function setIdent($ident)
     {
         if (!is_string($ident)) {
             throw new InvalidArgumentException(
@@ -91,7 +91,7 @@ class MenuItem
     * @param string $label
     * @return MenuItem Chainable
     */
-    public function set_label($label)
+    public function setLabel($label)
     {
         $this->label = new TranslationString($label);
         return $this;
@@ -109,7 +109,7 @@ class MenuItem
     * @param string $url
     * @return MenuItem Chainable
     */
-    public function set_url($url)
+    public function setUrl($url)
     {
         $this->url = $url;
         return $this;
@@ -126,7 +126,7 @@ class MenuItem
     /**
     * @return boolean
     */
-    public function has_url()
+    public function hasUrl()
     {
         return !!($this->url());
     }
@@ -136,7 +136,7 @@ class MenuItem
     * @throws InvalidArgumentException
     * @return MenuItem Chainable
     */
-    public function set_children($children)
+    public function setChildren($children)
     {
         if (!is_array($children)) {
             throw new InvalidArgumentException(
@@ -145,7 +145,7 @@ class MenuItem
         }
         $this->children = [];
         foreach ($children as $c) {
-            $this->add_child($c);
+            $this->addChild($c);
         }
         return $this;
     }
@@ -155,7 +155,7 @@ class MenuItem
     * @throws InvalidArgumentException
     * @return MenuItem Chainable
     */
-    public function add_child($child)
+    public function addChild($child)
     {
         if (is_array($child)) {
             $c = new MenuItem($child);
@@ -181,7 +181,7 @@ class MenuItem
     /**
     * @return boolean
     */
-    public function has_children()
+    public function hasChildren()
     {
         return count($this->children > 0);
     }
@@ -189,7 +189,7 @@ class MenuItem
     /**
     * @return integer
     */
-    public function num_children()
+    public function numChildren()
     {
         return count($this->children);
     }

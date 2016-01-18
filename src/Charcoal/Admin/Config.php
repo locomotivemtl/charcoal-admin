@@ -2,29 +2,33 @@
 
 namespace Charcoal\Admin;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Config\AbstractConfig as AbstractConfig;
+use \Charcoal\Config\AbstractConfig;
 
+/**
+*
+*/
 class Config extends AbstractConfig
 {
     const DEFAULT_BASE_PATH = 'admin';
 
     /**
-    * @var string $_base_path
+    * @var string $_basePath
     */
-    private $_base_path = self::DEFAULT_BASE_PATH;
+    private $basePath = self::DEFAULT_BASE_PATH;
 
     /**
-    * @param string|array $data
+    * The default data is defined in a JSON file.
+    *
+    * @return array
     */
-    public function __construct($data = null)
+    public function defaults()
     {
-        // Relative to src/Charcoal/Admin/
-        $this->add_file(realpath(__DIR__.'/../../../config').'/admin.config.default.json');
-
-        parent::__construct($data);
+        $file_content = file_get_contents(realpath(__DIR__.'/../../../config').'/admin.config.default.json');
+        $config = json_decode($file_content, true);
+        return $config;
     }
 
     /**
@@ -32,22 +36,26 @@ class Config extends AbstractConfig
     * @throws InvalidArgumentException
     * @return Config Chainable
     */
-    public function set_base_path($path)
+    public function setBasePath($path)
     {
         if (!is_string($path)) {
-            throw new InvalidArgumentException('Path must be a string');
+            throw new InvalidArgumentException(
+                'Path must be a string'
+            );
         }
         // Can not be empty
         if ($path == '') {
-            throw new InvalidArgumentException('Path can not be empty');
+            throw new InvalidArgumentException(
+                'Path can not be empty'
+            );
         }
-        $this->_base_path = $path;
+        $this->basePath = $path;
         return $this;
     }
 
-    public function base_path()
+    public function basePath()
     {
-        return $this->_base_path;
+        return $this->basePath;
     }
 
 }

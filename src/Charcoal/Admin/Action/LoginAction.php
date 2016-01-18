@@ -3,15 +3,15 @@
 namespace Charcoal\Admin\Action;
 
 // Dependencies from `PHP`
-use \Exception as Exception;
-use \InvalidArgumentException as InvalidArgumentException;
+use \Exception;
+use \InvalidArgumentException;
 
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\User as User;
+use \Charcoal\Admin\AdminAction;
+use \Charcoal\Admin\User;
 
 /**
 * Admin Login Action: Attempt to log a user in.
@@ -21,14 +21,14 @@ use \Charcoal\Admin\User as User;
 * - `username`
 * - `password`
 * **Optional parameters**
-* - `next_url`
+* - `nextUrl`
 *
 * ## Response
 * - `success` true if login was successful, false otherwise.
 *   - Failure should also send a different HTTP code: see below.
 * - `feedbacks` (Optional) operation feedbacks, if any.
-* - `next_url` Redirect URL, in case of successfull login.
-*   - This is the `next_url` parameter if it was set, or the default admin URL if not
+* - `nextUrl` Redirect URL, in case of successfull login.
+*   - This is the `nextUrl` parameter if it was set, or the default admin URL if not
 *
 * ## HTTP Codes
 * - `200` in case of a successful login
@@ -39,9 +39,9 @@ use \Charcoal\Admin\User as User;
 class LoginAction extends AdminAction
 {
     /**
-    * @var string $_next_url
+    * @var string $nextUrl
     */
-    protected $_next_url;
+    protected $nextUrl;
 
     /**
     * Authentication is required by default.
@@ -50,7 +50,7 @@ class LoginAction extends AdminAction
     *
     * @return boolean
     */
-    public function auth_required()
+    public function authRequired()
     {
         return false;
     }
@@ -61,15 +61,17 @@ class LoginAction extends AdminAction
     *
     * Note that any string is accepted. It should be validated before using this method.
     *
-    * @param string $next_url
-    * @throws InvalidArgumentException If the $next_url parameter is not a string.
+    * @param string $nextUrl
+    * @throws InvalidArgumentException If the $nextUrl parameter is not a string.
     */
-    public function set_next_url($next_url)
+    public function setNextUrl($nextUrl)
     {
-        if (!is_string($next_url)) {
-            throw new InvalidArgumentException('Next URL needs to be a string');
+        if (!is_string($nextUrl)) {
+            throw new InvalidArgumentException(
+                'Next URL needs to be a string'
+            );
         }
-        $this->_next_url = $next_url;
+        $this->nextUrl = $nextUrl;
         return $this;
     }
 
@@ -84,7 +86,7 @@ class LoginAction extends AdminAction
         $password = $request->getParam('password');
 
         if (!$username || !$password) {
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
 
@@ -97,22 +99,22 @@ class LoginAction extends AdminAction
         ]);
 
         try {
-            $is_authenticated = $u->authenticate($username, $password);
+            $isAuthenticated = $u->authenticate($username, $password);
         } catch (Exception $e) {
-            $is_authenticated = false;
+            $isAuthenticated = false;
         }
 
-        if (!$is_authenticated) {
+        if (!$isAuthenticated) {
             $this->logger()->warning(
                 sprintf('Login attempt failure: "%s"', $username)
             );
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(403);
         } else {
             $this->logger()->debug(
                 sprintf('Login attempt successful: "%s"', $username)
             );
-            $this->set_success(true);
+            $this->setSuccess(true);
             return $response;
         }
     }
@@ -124,7 +126,7 @@ class LoginAction extends AdminAction
     {
         $results = [
             'success'   => $this->success(),
-            'next_url'  => 'home'
+            'nextUrl'  => 'home'
         ];
         return $results;
     }

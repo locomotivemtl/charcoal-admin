@@ -30,19 +30,19 @@ trait DashboardTrait
     */
     private $widgets;
 
-    private $widget_factory;
+    private $widgetFactory;
 
     /**
     * @param LayoutWidget|array
     * @throws InvalidArgumentException
     * @return Dashboard Chainable
     */
-    public function set_layout($layout)
+    public function setLayout($layout)
     {
         if (($layout instanceof LayoutInterface)) {
             $this->layout = $layout;
         } else if (is_array($layout)) {
-            $l = $this->create_layout($layout);
+            $l = $this->createLayout($layout);
             $this->layout = $l;
         } else {
             throw new InvalidArgumentException(
@@ -56,7 +56,7 @@ trait DashboardTrait
     * @param array|null $data
     * @return LayoutInterface
     */
-    abstract public function create_layout(array $data = null);
+    abstract public function createLayout(array $data = null);
 
     /**
     * @return LayoutWidget
@@ -71,41 +71,41 @@ trait DashboardTrait
     * @throws InvalidArgumentException
     * @return Dashboard Chainable
     */
-    public function set_widgets($widgets)
+    public function setWidgets($widgets)
     {
         if (!is_array($widgets)) {
             throw new InvalidArgumentException(
                 'Widgets must be an array'
             );
         }
-        foreach ($widgets as $widget_ident => $widget) {
-            $this->add_widget($widget_ident, $widget);
+        foreach ($widgets as $widgetIdent => $widget) {
+            $this->addWidget($widgetIdent, $widget);
         }
         return $this;
     }
 
     /**
-    * @param string $widget_ident
+    * @param string $widgetIdent
     * @param WidgetInterface|array $widget
     * @throws InvalidArgumentException
     */
-    public function add_widget($widget_ident, $widget)
+    public function addWidget($widgetIdent, $widget)
     {
-        if (!is_string($widget_ident)) {
+        if (!is_string($widgetIdent)) {
             throw new InvalidArgumentException(
                 'Widget ident needs to be a string'
             );
         }
 
         if (($widget instanceof WidgetInterface)) {
-            $this->widgets[$widget_ident] = $widget;
+            $this->widgets[$widgetIdent] = $widget;
         } else if (is_array($widget)) {
             if (!isset($widget['ident'])) {
-                $widget['ident'] = $widget_ident;
+                $widget['ident'] = $widgetIdent;
             }
 
-            $w = $this->create_widget($widget);
-            $this->widgets[$widget_ident] = $w;
+            $w = $this->createWidget($widget);
+            $this->widgets[$widgetIdent] = $w;
         } else {
             throw new InvalidArgumentException(
                 'Invalid Widget'
@@ -113,29 +113,28 @@ trait DashboardTrait
         }
     }
 
-    private function widget_factory()
+    private function widgetFactory()
     {
-        if ($this->widget_factory === null) {
-            $this->widget_factory = new WidgetFactory();
+        if ($this->widgetFactory === null) {
+            $this->widgetFactory = new WidgetFactory();
         }
-        return $this->widget_factory;
+        return $this->widgetFactory;
     }
 
     /**
     * @param array $data
     * @return WidgetInterface
     */
-    public function create_widget(array $data = null)
+    public function createWidget(array $data = null)
     {
         $widget_type = isset($data['type']) ? $data['type'] : null;
 
         $this->logger->debug('Creating a new widget: '.$data['type'], $data);
-
-        $widget = $this->widget_factory()->create($widget_type, [
+        $widget = $this->widgetFactory()->create($widget_type, [
             'logger'=>$this->logger
         ]);
         if ($data !== null) {
-            $widget->set_data($data);
+            $widget->setData($data);
         }
         return $widget;
     }
@@ -152,7 +151,7 @@ trait DashboardTrait
                 if ($widget->active() === false) {
                     continue;
                 }
-                Charcoal::logger()->debug(sprintf('Yield widget %s', $widget->type()));
+                $this->logger->debug(sprintf('Yield widget %s', $widget->type()));
                 $GLOBALS['widget_template'] = $widget->type();
                 yield $widget->ident() => $widget;
             }
@@ -162,7 +161,7 @@ trait DashboardTrait
     /**
     * @return boolean
     */
-    public function has_widgets()
+    public function hasWidgets()
     {
         return (count($this->widgets) > 0);
     }
@@ -170,7 +169,7 @@ trait DashboardTrait
     /**
     * @return integer
     */
-    public function num_widgets()
+    public function numWidgets()
     {
         return count($this->widgets);
     }

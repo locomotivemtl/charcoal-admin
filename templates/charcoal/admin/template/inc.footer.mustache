@@ -1,11 +1,11 @@
     </main>
 
-    {{#show_footer_menu}}
+    {{#showFooterMenu}}
         {{>charcoal/admin/widget/menu.footer}}
-    {{/show_footer_menu}}
+    {{/showFooterMenu}}
 
     {{!-- Styles from widgets & templates --}}
-    {{&css_requirements}}
+    {{&cssRequirements}}
     {{&css}}
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -15,7 +15,7 @@
 	<script src="{{base_url}}assets/admin/scripts/charcoal.admin.js"></script>
 	<script>
         Charcoal.Admin.set_data({
-            'base_url'   : '{{base_url}}',
+            'base_url'   : '{{baseUrl}}',
             'admin_path' : 'admin'
         });
 
@@ -30,7 +30,7 @@
 	</script>
 
     {{!-- Scripts from widgets & templates --}}
-	{{&js_requirements}}
+	{{&jsRequirements}}
 	{{&js}}
 
 </body>

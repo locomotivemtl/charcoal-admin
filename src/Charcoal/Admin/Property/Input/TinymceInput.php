@@ -13,48 +13,35 @@ class TinymceInput extends AbstractPropertyInput
 {
     /**
     * The TinyMCE options
-    * @var array $_editor_options
+    * @var array $editorOptions
     */
-    private $_editor_options = [];
-
-    /**
-    * @param array $data
-    * @return Tinymce Chainable
-    */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-        if (isset($data['editor_options']) && $data['editor_options'] !== null) {
-            $this->set_editor_options($data['editor_options']);
-        }
-        return $this;
-    }
+    private $editorOptions = [];
 
     /**
     * @param array $opts
     * @return Tinymce Chainable
     */
-    public function set_editor_options(array $opts)
+    public function setEditorOptions(array $opts)
     {
-        $this->_editor_options = $opts;
+        $this->editorOptions = $opts;
         return $this;
     }
 
     /**
     * @return array
     */
-    public function editor_options()
+    public function editorOptions()
     {
-        return $this->_editor_options;
+        return $this->editorOptions;
     }
 
     /**
     * Get the editor options as a JSON string
     * @return string
     */
-    public function editor_options_json()
+    public function editorOptionsJson()
     {
-        return json_encode($this->editor_options());
+        return json_encode($this->editorOptions());
     }
 
     /**
@@ -63,12 +50,14 @@ class TinymceInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Tinymce Chainable
     */
-    public function add_editor_option($opt_ident, $opt_val)
+    public function addEditorOption($opt_ident, $opt_val)
     {
         if (!is_string($opt_ident)) {
-            throw new InvalidArgumentException('Option ident must be a string.');
+            throw new InvalidArgumentException(
+                'Option ident must be a string.'
+            );
         }
-        $this->_editor_options[$opt_ident] = $opt_val;
+        $this->editorOptions[$opt_ident] = $opt_val;
         return $this;
     }
 

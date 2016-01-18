@@ -24,12 +24,12 @@ class FormTraitTest extends \PHPUnit_Framework_TestCase
     {
         $obj = $this->obj;
         $this->assertEquals('', $obj->action());
-        $ret = $obj->set_action('foo');
+        $ret = $obj->setAction('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->action());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_action(true);
+        $obj->setAction(true);
     }
 
     /**
@@ -53,22 +53,22 @@ class FormTraitTest extends \PHPUnit_Framework_TestCase
     // }
 
     /**
-    * Assert that the `set_next_url()` method:
+    * Assert that the `setNextUrl()` method:
     * - is chainable
     * - sets the action
     * - throws an exception if the parameter is not a string
-    * and that the `next_url()` method
+    * and that the `nextUrl()` method
     * - defaults to ""
     */
     public function testSetNextUrl()
     {
         $obj = $this->obj;
-        $this->assertEquals('', $obj->next_url());
-        $ret = $obj->set_next_url('foo');
+        $this->assertEquals('', $obj->nextUrl());
+        $ret = $obj->setNextUrl('foo');
         $this->assertSame($ret, $obj);
-        $this->assertEquals('foo', $obj->next_url());
+        $this->assertEquals('foo', $obj->nextUrl());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_next_url(true);
+        $obj->setNextUrl(true);
     }
 }

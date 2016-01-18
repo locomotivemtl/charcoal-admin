@@ -12,6 +12,7 @@ use \Psr\Http\Message\ResponseInterface;
 
 // Module `charcoal-core` dependencies
 use \Charcoal\Model\ModelFactory;
+use \Charcoal\Property\PropertyInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
@@ -25,7 +26,7 @@ class CreateScript extends AdminScript
     /**
     * @return array
     */
-    public function default_arguments()
+    public function defaultArguments()
     {
         $arguments = [
             'obj-type' => [
@@ -40,7 +41,7 @@ class CreateScript extends AdminScript
             ]
         ];
 
-        $arguments = array_merge(parent::default_arguments(), $arguments);
+        $arguments = array_merge(parent::defaultArguments(), $arguments);
         return $arguments;
     }
 
@@ -59,10 +60,10 @@ class CreateScript extends AdminScript
             'Create a new object'
         );
 
-        $obj_type = $this->arg_or_input('obj-type');
+        $objType = $this->argOrInput('obj-type');
 
         $model_factory = new ModelFactory();
-        $obj = $model_factory->create($obj_type, [
+        $obj = $model_factory->create($objType, [
             'logger'=>$this->logger
         ]);
 
@@ -71,11 +72,11 @@ class CreateScript extends AdminScript
         $vals = [];
         foreach ($properties as $prop) {
             //$input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
-            $input = $this->property_to_input($prop);
+            $input = $this->propertyToInput($prop);
             $vals[$prop->ident()] = $input->prompt();
         }
 
-        $obj->set_flat_data($vals);
+        $obj->setFlatData($vals);
         $ret = $obj->save();
 
         $climate->green()->out(
@@ -85,32 +86,6 @@ class CreateScript extends AdminScript
         return $response;
     }
 
-    public function property_to_input($prop)
-    {
-        $climate = $this->climate();
 
-        if ($prop->type() == 'password') {
-            $input = $climate->password(
-                sprintf('Enter value for "%s":', $prop->label())
-            );
-        } else if ($prop->type() == 'boolean') {
-            $opts = [
-                1 => $prop->true_label(),
-                0 => $prop->false_label()
-            ];
-            $input = $climate->radio(
-                sprintf('Enter value for "%s":', $prop->label()),
-                $opts
-            );
-        } else {
-            $input = $climate->input(
-                sprintf('Enter value for "%s":', $prop->label())
-            );
-            if ($prop->type() == 'text' || $prop->type == 'html') {
-                $input->multiLine();
-            }
-        }
-        return $input;
-    }
 
 }

@@ -62,12 +62,6 @@ class AdminModule extends AbstractModule implements
             session_start();
         }
 
-        // Hack
-        $metadata_path = realpath(__DIR__.'/../../../metadata/');
-        $templates_path = realpath(__DIR__.'/../../../templates/');
-        Charcoal::config()->add_metadata_path($metadata_path);
-        Charcoal::config()->add_template_path($templates_path);
-
         $container = $this->app()->getContainer();
         $container['charcoal/admin/module'] = function($c) {
             return new AdminModule([
@@ -79,12 +73,12 @@ class AdminModule extends AbstractModule implements
 
         $container['charcoal/admin/config'] = function($c) {
             $config = new AdminConfig();
-            $config->set_data($c['charcoal/config']->get('admin'));
+            $config->merge($c['charcoal/app/config']->get('admin'));
             return $config;
         };
 
         $container['charcoal/view/config'] = function($c) {
-            return new \Charcoal\View\ViewConfig($c['charcoal/config']->get('view'));
+            return new \Charcoal\View\ViewConfig($c['charcoal/app/config']->get('view'));
         };
 
         $container['charcoal/view/loader'] = function($c) {
@@ -113,15 +107,18 @@ class AdminModule extends AbstractModule implements
         };
 
         // Admin module
-        $this->app()->get('/admin', 'charcoal/admin/module:default_route');
-        $this->app()->group('/admin', 'charcoal/admin/module:setup_routes');
+        $this->app()->get('/admin', 'charcoal/admin/module:defaultRoute');
+        $this->app()->group('/admin', 'charcoal/admin/module:setupRoutes');
     }
 
-    public function create_config(array $data = null)
+    public function createConfig(array $data = null)
     {
-        $config = new AdminConfig();
+        $container = $this->app()->getContainer();
+        $app_config = $container->get('charcoal/app/config');
+
+        $config = new AdminConfig($app_config->get('admin'));
         if ($data !== null) {
-            $config->set_data($data);
+            $config->merge($data);
         }
         return $config;
     }

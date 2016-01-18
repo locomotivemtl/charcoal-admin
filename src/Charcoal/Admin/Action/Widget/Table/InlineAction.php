@@ -21,12 +21,12 @@ use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
 * Inline action: Return the inline edit properties HTML from an object
 *
 * ## Required parameters
-* - `obj_type`
-* - `obj_id`
+* - `objType`
+* - `objId`
 */
 class InlineAction extends AdminAction
 {
-    protected $_inline_properties;
+    protected $inlineProperties;
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -35,44 +35,44 @@ class InlineAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $obj_type = $request->getParam('obj_type');
-        $obj_id = $request->getParam('obj_id');
+        $objType = $request->getParam('obj_type');
+        $objId = $request->getParam('obj_id');
 
-        if (!$obj_type || !$obj_id) {
-            $this->set_success(false);
+        if (!$objType || !$objId) {
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
 
         try {
-            $model_factory = new ModelFactory();
-            $obj = $model_factory->create($obj_type);
-            $obj->load($obj_id);
+            $modelFactory = new ModelFactory();
+            $obj = $modelFactory->create($objType);
+            $obj->load($objId);
             if (!$obj->id()) {
-                $this->set_success(false);
+                $this->setSuccess(false);
                 return $response->withStatus(404);
             }
 
             $obj_form = new ObjectFormWidget([
                 'logger' => $this->logger()
             ]);
-            $obj_form->set_obj_type($obj_type);
-            $obj_form->set_obj_id($obj_id);
-            $form_properties = $obj_form->form_properties();
-            foreach ($form_properties as $property_ident => $property) {
+            $obj_form->set_objType($objType);
+            $obj_form->set_objId($objId);
+            $formProperties = $obj_form->formProperties();
+            foreach ($formProperties as $propertyIdent => $property) {
                 if (!($property instanceof FormPropertyWidget)) {
                     continue;
                 }
-                $p = $obj->p($property_ident);
-                $property->set_property_val($p->val());
-                $property->set_prop($p);
-                $input_type = $property->input_type();
-                $this->_inline_properties[$property_ident] = $property->render_template($input_type);
+                $p = $obj->p($propertyIdent);
+                $property->setPropertyVal($p->val());
+                $property->setProp($p);
+                $inputType = $property->inputType();
+                $this->inlineProperties[$propertyIdent] = $property->renderTemplate($inputType);
             }
-            $this->set_success(true);
+            $this->setSuccess(true);
             return $response;
 
         } catch (Exception $e) {
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
     }
@@ -84,7 +84,7 @@ class InlineAction extends AdminAction
     {
         $response = [
             'success'           => $this->success(),
-            'inline_properties' => $this->_inline_properties,
+            'inline_properties' => $this->inlineProperties,
             'feedbacks'         => $this->feedbacks()
         ];
         return $results;

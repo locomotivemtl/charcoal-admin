@@ -40,23 +40,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-app.git",
-                "reference": "7b3637232928c238833890c0f5431a1fedf17578"
+                "reference": "6722dee3ef489a8a5e618062df0cea6b7899d09f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-app/zipball/7b3637232928c238833890c0f5431a1fedf17578",
-                "reference": "7b3637232928c238833890c0f5431a1fedf17578",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-app/zipball/6722dee3ef489a8a5e618062df0cea6b7899d09f",
+                "reference": "6722dee3ef489a8a5e618062df0cea6b7899d09f",
                 "shasum": ""
             },
             "require": {
                 "locomotivemtl/charcoal-config": "~0.1",
+                "locomotivemtl/charcoal-core": "dev-master",
                 "locomotivemtl/charcoal-factory": "dev-master",
-                "locomotivemtl/charcoal-queue": "dev-master",
                 "locomotivemtl/charcoal-view": "dev-master",
                 "monolog/monolog": "^1.16",
-                "mustache/mustache": "~2.9.0",
                 "php": ">=5.5.0",
-                "slim/slim": "^3.0"
+                "slim/slim": "^3.1.0",
+                "tedivm/stash": "dev-master"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8",
@@ -88,7 +88,7 @@
             ],
             "description": "Charcoal App, based on Slim 3",
             "homepage": "https://charcoal.locomotive.ca",
-            "time": "2016-01-05 21:25:56"
+            "time": "2016-01-18 18:46:44"
         },
         {
             "name": "locomotivemtl/charcoal-base",
@@ -96,12 +96,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-base.git",
-                "reference": "70b31cd5c0b0631903ced455a6417d586d708623"
+                "reference": "5b23436c62ca9664c003328fc6b06a51917cfc23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-base/zipball/70b31cd5c0b0631903ced455a6417d586d708623",
-                "reference": "70b31cd5c0b0631903ced455a6417d586d708623",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-base/zipball/5b23436c62ca9664c003328fc6b06a51917cfc23",
+                "reference": "5b23436c62ca9664c003328fc6b06a51917cfc23",
                 "shasum": ""
             },
             "require": {
@@ -144,20 +144,20 @@
                 "locomotive",
                 "php"
             ],
-            "time": "2016-01-11 15:53:44"
+            "time": "2016-01-18 18:47:22"
         },
         {
             "name": "locomotivemtl/charcoal-config",
-            "version": "0.2",
+            "version": "0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-config.git",
-                "reference": "9c6c7e4e83d4e61f370bff28f2d6b284d335909a"
+                "reference": "415389b3d2b587c8f312561876dbc4a801002270"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-config/zipball/9c6c7e4e83d4e61f370bff28f2d6b284d335909a",
-                "reference": "9c6c7e4e83d4e61f370bff28f2d6b284d335909a",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-config/zipball/415389b3d2b587c8f312561876dbc4a801002270",
+                "reference": "415389b3d2b587c8f312561876dbc4a801002270",
                 "shasum": ""
             },
             "require": {
@@ -193,7 +193,7 @@
             ],
             "description": "Configuration container for all things Charcoal",
             "homepage": "http://locomotivemtl.github.io/charcoal-config/",
-            "time": "2015-12-09 16:07:58"
+            "time": "2016-01-15 20:54:35"
         },
         {
             "name": "locomotivemtl/charcoal-core",
@@ -201,17 +201,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-core.git",
-                "reference": "14193dce3ba90dc50b227ad4125831f7bd6ffc94"
+                "reference": "e4ec70117020962720ccb21af81add408f71b081"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-core/zipball/14193dce3ba90dc50b227ad4125831f7bd6ffc94",
-                "reference": "14193dce3ba90dc50b227ad4125831f7bd6ffc94",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-core/zipball/e4ec70117020962720ccb21af81add408f71b081",
+                "reference": "e4ec70117020962720ccb21af81add408f71b081",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-pdo": "*",
+                "locomotivemtl/charcoal-app": "dev-master",
                 "locomotivemtl/charcoal-config": "~0.2",
                 "locomotivemtl/charcoal-factory": "dev-master",
                 "locomotivemtl/charcoal-view": "dev-master",
@@ -254,7 +255,7 @@
                 "locomotive",
                 "php"
             ],
-            "time": "2016-01-11 15:50:15"
+            "time": "2016-01-18 18:49:40"
         },
         {
             "name": "locomotivemtl/charcoal-factory",
@@ -262,12 +263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-factory.git",
-                "reference": "4d7d0cfcd5f0d3450821481f01a1137d190a9a10"
+                "reference": "65bf098e081711e1b438e9af89e94c45ecf79f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-factory/zipball/4d7d0cfcd5f0d3450821481f01a1137d190a9a10",
-                "reference": "4d7d0cfcd5f0d3450821481f01a1137d190a9a10",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-factory/zipball/65bf098e081711e1b438e9af89e94c45ecf79f71",
+                "reference": "65bf098e081711e1b438e9af89e94c45ecf79f71",
                 "shasum": ""
             },
             "require": {
@@ -299,7 +300,7 @@
             ],
             "description": "Charcoal object creation (Factory, AbstractFactory, Builder, Class Resolver)",
             "homepage": "https://charcoal.locomotive.ca",
-            "time": "2015-12-16 22:40:03"
+            "time": "2016-01-15 20:15:31"
         },
         {
             "name": "locomotivemtl/charcoal-image",
@@ -361,76 +362,21 @@
             "time": "2015-12-16 22:39:27"
         },
         {
-            "name": "locomotivemtl/charcoal-queue",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/locomotivemtl/charcoal-queue.git",
-                "reference": "c30365ca2ae7cf73fb6960d76e824db17ea3fb29"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-queue/zipball/c30365ca2ae7cf73fb6960d76e824db17ea3fb29",
-                "reference": "c30365ca2ae7cf73fb6960d76e824db17ea3fb29",
-                "shasum": ""
-            },
-            "require": {
-                "locomotivemtl/charcoal-core": "@dev",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8",
-                "squizlabs/php_codesniffer": "^2.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Charcoal\\": "src/Charcoal"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mathieu Ducharme",
-                    "email": "mat@locomotive.ca"
-                },
-                {
-                    "name": "Locomotive",
-                    "homepage": "https://locomotive.ca"
-                }
-            ],
-            "description": "Queue, Queue items and Queueable objects for Charcoal",
-            "homepage": "https://charcoal.locomotive.ca",
-            "keywords": [
-                "charcoal",
-                "cms",
-                "framework",
-                "locomotive",
-                "php",
-                "queue"
-            ],
-            "time": "2015-12-16 22:37:41"
-        },
-        {
             "name": "locomotivemtl/charcoal-view",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-view.git",
-                "reference": "9a7ff251231a32f870de2366e633e70021e5e45d"
+                "reference": "96e4965874e3cfa9da52a4191b826f208e2bcab4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-view/zipball/9a7ff251231a32f870de2366e633e70021e5e45d",
-                "reference": "9a7ff251231a32f870de2366e633e70021e5e45d",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-view/zipball/96e4965874e3cfa9da52a4191b826f208e2bcab4",
+                "reference": "96e4965874e3cfa9da52a4191b826f208e2bcab4",
                 "shasum": ""
             },
             "require": {
                 "locomotivemtl/charcoal-config": "~0.2",
-                "locomotivemtl/charcoal-core": "@dev",
                 "php": ">=5.5.0",
                 "psr/http-message": "^1.0",
                 "psr/log": "^1.0"
@@ -468,7 +414,7 @@
             ],
             "description": "Charcoal View (templates)",
             "homepage": "https://charcoal.locomotive.ca",
-            "time": "2016-01-05 18:46:58"
+            "time": "2016-01-15 21:37:05"
         },
         {
             "name": "monolog/monolog",
@@ -547,52 +493,6 @@
                 "psr-3"
             ],
             "time": "2015-12-18 18:24:15"
-        },
-        {
-            "name": "mustache/mustache",
-            "version": "v2.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "c745b01956caf27d26b55a72a90aff56bc169cd6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/c745b01956caf27d26b55a72a90aff56bc169cd6",
-                "reference": "c745b01956caf27d26b55a72a90aff56bc169cd6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.4"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "~1.6",
-                "phpunit/phpunit": "~3.7|~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Mustache": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Justin Hileman",
-                    "email": "justin@justinhileman.info",
-                    "homepage": "http://justinhileman.com"
-                }
-            ],
-            "description": "A Mustache implementation in PHP.",
-            "homepage": "https://github.com/bobthecow/mustache.php",
-            "keywords": [
-                "mustache",
-                "templating"
-            ],
-            "time": "2015-08-15 19:23:13"
         },
         {
             "name": "nikic/fast-route",
@@ -845,6 +745,60 @@
                 "router"
             ],
             "time": "2016-01-08 15:37:50"
+        },
+        {
+            "name": "tedivm/stash",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedious/Stash.git",
+                "reference": "3489b13bad93c81a898fcb1054ae954575e1a7b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tedious/Stash/zipball/3489b13bad93c81a898fcb1054ae954575e1a7b6",
+                "reference": "3489b13bad93c81a898fcb1054ae954575e1a7b6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7.0"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.9",
+                "phpunit/phpunit": "4.7.*",
+                "satooshi/php-coveralls": "1.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stash\\": "src/Stash/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                },
+                {
+                    "name": "Josh Hall-Bachner",
+                    "email": "charlequin@gmail.com"
+                }
+            ],
+            "description": "The place to keep your cache.",
+            "homepage": "http://github.com/tedious/Stash",
+            "keywords": [
+                "apc",
+                "cache",
+                "caching",
+                "memcached",
+                "redis",
+                "sessions"
+            ],
+            "time": "2015-12-29 00:07:05"
         }
     ],
     "packages-dev": [
@@ -1259,12 +1213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d0896b45cbc66f60e957f19a95e826ccf7fbb321"
+                "reference": "7f0787732c8472b4ade576236cf19e0e4f1c5e55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d0896b45cbc66f60e957f19a95e826ccf7fbb321",
-                "reference": "d0896b45cbc66f60e957f19a95e826ccf7fbb321",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7f0787732c8472b4ade576236cf19e0e4f1c5e55",
+                "reference": "7f0787732c8472b4ade576236cf19e0e4f1c5e55",
                 "shasum": ""
             },
             "require": {
@@ -1323,7 +1277,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-01-08 13:46:07"
+            "time": "2016-01-13 10:07:55"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1759,12 +1713,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "7ca4086194a9633a72c95ee6984267ab9e5c8cdd"
+                "reference": "7271b28e04ebc1fbec31b31f6ae22ad478425156"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/7ca4086194a9633a72c95ee6984267ab9e5c8cdd",
-                "reference": "7ca4086194a9633a72c95ee6984267ab9e5c8cdd",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/7271b28e04ebc1fbec31b31f6ae22ad478425156",
+                "reference": "7271b28e04ebc1fbec31b31f6ae22ad478425156",
                 "shasum": ""
             },
             "require": {
@@ -1782,7 +1736,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -1828,7 +1782,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-01-11 04:32:15"
+            "time": "2016-01-18 05:26:11"
         },
         {
             "name": "symfony/yaml",
@@ -1836,12 +1790,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9db3e5a309bd5f3dfd974f5b42d820904352c4d8"
+                "reference": "82287b794641153ae1837b9288c3ae90cecdf5c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9db3e5a309bd5f3dfd974f5b42d820904352c4d8",
-                "reference": "9db3e5a309bd5f3dfd974f5b42d820904352c4d8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/82287b794641153ae1837b9288c3ae90cecdf5c4",
+                "reference": "82287b794641153ae1837b9288c3ae90cecdf5c4",
                 "shasum": ""
             },
             "require": {
@@ -1877,7 +1831,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-06 10:01:46"
+            "time": "2016-01-13 16:23:43"
         }
     ],
     "aliases": [],

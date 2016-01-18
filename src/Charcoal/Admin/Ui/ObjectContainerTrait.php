@@ -13,87 +13,61 @@ use \Charcoal\Model\ModelFactory as ModelFactory;
 trait ObjectContainerTrait
 {
     /**
-    * @var string $_obj_type
+    * @var string $objType
     */
-    protected $_obj_type;
+    protected $objType;
     /**
-    * @var string $_obj_id
+    * @var string $objId
     */
-    protected $_obj_id;
-
-    /**
-    * @var string $_obj_base_class
-    */
-    protected $_obj_base_class;
+    protected $objId;
 
     /**
-    * @var Object $_obj
+    * @var string $objBaseClass
     */
-    protected $_obj;
+    protected $objBaseClass;
 
     /**
-    * @param array $data
-    * @throws InvalidArgumentException if provided argument is not of type 'array'.
-    * @return ObjectContainerInterface Chainable
+    * @var Object $obj
     */
-    public function set_obj_data($data)
-    {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException(
-                'Data must be an array'
-            );
-        }
-
-        if (isset($data['obj_type']) && $data['obj_type'] !== null) {
-            $this->set_obj_type($data['obj_type']);
-        }
-        if (isset($data['obj_id']) && $data['obj_id'] !== null) {
-            $this->set_obj_id($data['obj_id']);
-        }
-        if (isset($data['obj_base_class']) && $data['obj_base_class'] !== null) {
-            $this->set_obj_id($data['obj_base_class']);
-        }
-
-        return $this;
-    }
+    protected $obj;
 
     /**
-    * @param string $obj_type
+    * @param string $objType
     * @throws InvalidArgumentException if provided argument is not of type 'string'.
     * @return ObjectContainerInterface Chainable
     */
-    public function set_obj_type($obj_type)
+    public function setObjType($objType)
     {
-        if (!is_string($obj_type)) {
+        if (!is_string($objType)) {
             throw new InvalidArgumentException(
                 'Obj type needs to be a string'
             );
         }
-        $this->_obj_type = str_replace(['.', '_'], '/', $obj_type);
+        $this->objType = str_replace(['.', '_'], '/', $objType);
         return $this;
     }
 
     /**
     * @return string
     */
-    public function obj_type()
+    public function objType()
     {
-        return $this->_obj_type;
+        return $this->objType;
     }
 
     /**
-    * @param string|numeric $obj_id
+    * @param string|numeric $objId
     * @throws InvalidArgumentException if provided argument is not of type 'scalar'.
     * @return ObjectContainerInterface Chainable
     */
-    public function set_obj_id($obj_id)
+    public function setObjId($objId)
     {
-        if (!is_scalar($obj_id)) {
+        if (!is_scalar($objId)) {
             throw new InvalidArgumentException(
                 'Obj ID must be a string or numerical value.'
             );
         }
-        $this->_obj_id = $obj_id;
+        $this->objId = $objId;
         return $this;
     }
 
@@ -102,33 +76,33 @@ trait ObjectContainerTrait
     *
     * @return string|numeric
     */
-    public function obj_id()
+    public function objId()
     {
-        return $this->_obj_id;
+        return $this->objId;
     }
 
     /**
-    * @param string $obj_base_class
+    * @param string $objBaseClass
     * @throws InvalidArgumentException if provided argument is not of type 'string'.
     * @return ObjectContainerInterface Chainable
     */
-    public function set_obj_base_class($obj_base_class)
+    public function setObjBaseClass($objBaseClass)
     {
-        if (!is_string($obj_base_class)) {
+        if (!is_string($objBaseClass)) {
             throw new InvalidArgumentException(
                 'Base class must be a string.'
             );
         }
-        $this->_obj_base_class = $obj_base_class;
+        $this->objBaseClass = $objBaseClass;
         return $this;
     }
 
     /**
     * @return string|null
     */
-    public function obj_base_class()
+    public function objBaseClass()
     {
-        return $this->_obj_base_class;
+        return $this->objBaseClass;
     }
 
     /**
@@ -139,35 +113,34 @@ trait ObjectContainerTrait
     */
     public function obj()
     {
-        if ($this->_obj === null) {
-            $this->_obj = $this->create_obj();
+        if ($this->obj === null) {
+            $this->obj = $this->createObj();
         }
-        if ($this->obj_id()) {
-            $this->_obj = $this->load_obj();
-        }
-        else if (isset($_GET['clone_id'])) {
+
+        if ($this->objId()) {
+            $this->obj = $this->loadObj();
+        } else if (isset($GET['clone_id'])) {
             try {
-                $obj_class = get_class($this->_obj);
-                $clone = new $obj_class([
+                $objClass = getClass($this->obj);
+                $clone = new $objClass([
                     'logger' => $this->logger()
                 ]);
-                $clone->load($_GET['clone_id']);
+                $clone->load($GET['clone_id']);
                 $clone_data =
-                $this->_obj->set_data($clone->data());
+                $this->obj->set_data($clone->data());
             } catch (Exception $e) {
                 $this->logger()->error('Clone error: '.$e->getMessage());
             }
-        }
-        else if (isset($_GET['blueprint_id'])) {
+        } else if (isset($GET['blueprint_id'])) {
             try {
                 $model_factory = new ModelFactory();
-                $blueprint = $model_factory->create($this->_obj->blueprint_type(), [
+                $blueprint = $model_factory->create($this->obj->blueprintType(), [
                     'logger'=>$this->logger()
                 ]);
-                $blueprint->load($_GET['blueprint_id']);
+                $blueprint->load($GET['blueprint_id']);
                 $data = $blueprint->data();
                 unset($data[$blueprint->key()]);
-                $this->_obj->set_data($blueprint->data());
+                $this->obj->set_data($blueprint->data());
                 // Todo: Blueprint feedback.
             } catch (Exception $e) {
                 $this->logger()->error('Blueprint error: '.$e->getMessage());
@@ -175,26 +148,26 @@ trait ObjectContainerTrait
             }
         }
 
-        return $this->_obj;
+        return $this->obj;
     }
 
     /**
     * @throws Exception
     * @return ModelInterface
     */
-    public function create_obj()
+    public function createObj()
     {
-        if (!$this->validate_obj_type()) {
+        if (!$this->validateObjType()) {
             throw new Exception(
-                sprintf('Can not create object, Invalid object type. Object type is : %1', $this->obj_type())
+                sprintf('Can not create object, Invalid object type. Object type is : %1', $this->objType())
             );
         }
 
-        $obj_type = $this->obj_type();
+        $objType = $this->objType();
 
         $factory = new ModelFactory();
-        $obj = $factory->create($obj_type, [
-            'logger'=>\Charcoal\Charcoal::logger()
+        $obj = $factory->create($objType, [
+            'logger'=>$this->logger
         ]);
 
         return $obj;
@@ -204,20 +177,20 @@ trait ObjectContainerTrait
     * @throws Exception
     * @return ModelInterface The loaded object
     */
-    public function load_obj()
+    public function loadObj()
     {
-        if ($this->_obj === null) {
-            $this->_obj = $this->create_obj();
+        if ($this->obj === null) {
+            $this->obj = $this->createObj();
         }
-        $obj = $this->_obj;
+        $obj = $this->obj;
 
-        $obj_id = $this->obj_id();
-        if (!$obj_id) {
+        $objId = $this->objId();
+        if (!$objId) {
             throw new Exception(
                 'Can not load object. Object ID is not defined.'
             );
         }
-        $obj->load($obj_id);
+        $obj->load($objId);
         return $obj;
     }
 
@@ -225,21 +198,19 @@ trait ObjectContainerTrait
     * @throws Exception
     * @return boolean
     */
-    protected function validate_obj_type()
+    protected function validateObjType()
     {
         try {
-            $obj_type = $this->obj_type();
-            if (!$obj_type) {
-                return false;
-            }
+            $objType = $this->objType();
             $factory = new ModelFactory();
-            // Catch exception to know if the obj_type is valid
-            $obj = $factory->get($obj_type, [
-                'logger'=>\Charcoal\Charcoal::logger()
+            // Catch exception to know if the objType is valid
+
+            $obj = $factory->get($objType, [
+                'logger'=>$this->logger
             ]);
-            if (!$this->validate_obj_base_class($obj)) {
+            if (!$this->validateObjBaseClass($obj)) {
                 throw Exception(
-                    'Can not create object, type is not an instance of obj_base_class'
+                    'Can not create object, type is not an instance of objBaseClass'
                 );
             }
             return true;
@@ -251,15 +222,15 @@ trait ObjectContainerTrait
     /**
     * @return boolean
     */
-    protected function validate_obj_base_class($obj)
+    protected function validateObjBaseClass($obj)
     {
-        $obj_base_class = $this->obj_base_class();
-        if (!$obj_base_class) {
+        $objBaseClass = $this->objBaseClass();
+        if (!$objBaseClass) {
             // If no base class is set, then no validation is performed.
             return true;
         }
         try {
-            return ($obj instanceof $obj_base_class);
+            return ($obj instanceof $objBaseClass);
         } catch (Exception $e) {
             return false;
         }

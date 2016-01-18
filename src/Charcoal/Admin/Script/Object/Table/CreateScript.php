@@ -22,7 +22,7 @@ class CreateScript extends AdminScript
     /**
     * @return array
     */
-    public function default_arguments()
+    public function defaultArguments()
     {
         $arguments = [
             'obj-type' => [
@@ -32,7 +32,7 @@ class CreateScript extends AdminScript
             ]
         ];
 
-        $arguments = array_merge(parent::default_arguments(), $arguments);
+        $arguments = array_merge(parent::defaultArguments(), $arguments);
         return $arguments;
     }
 
@@ -51,7 +51,7 @@ class CreateScript extends AdminScript
             'Create object table from metadata');
 
 
-        $obj_type = $this->arg_or_input('obj-type');
+        $obj_type = $this->argOrInput('obj-type');
 
         $model_factory = new ModelFactory();
         $obj = $model_factory->create($obj_type, [
@@ -85,7 +85,7 @@ class CreateScript extends AdminScript
             return $response;
         }
 
-        if ($source->table_exists()) {
+        if ($source->tableExists()) {
             $climate->error(
                 sprintf('The table "%s" already exists. This script can only create new tables.', $table)
             );
@@ -95,7 +95,7 @@ class CreateScript extends AdminScript
             return $response;
         }
 
-        $ret = $source->create_table();
+        $ret = $source->createTable();
 
         $climate->green()->out(
             "\n".'Success!'

@@ -15,7 +15,7 @@ class LoginTemplate extends AdminTemplate
     *
     * @return boolean
     */
-    protected function auth_required()
+    protected function authRequired()
     {
         return false;
     }
@@ -23,7 +23,7 @@ class LoginTemplate extends AdminTemplate
     /**
     * @return boolean
     */
-    public function show_header_menu()
+    public function showHeaderMenu()
     {
         return false;
     }
@@ -31,7 +31,7 @@ class LoginTemplate extends AdminTemplate
     /**
     * @return boolean
     */
-    public function show_footer_menu()
+    public function showFooterMenu()
     {
         return false;
     }
@@ -39,7 +39,7 @@ class LoginTemplate extends AdminTemplate
     /**
     * @return string
     */
-    public function url_login_action()
+    public function urlLoginAction()
     {
         return 'action/login';
     }

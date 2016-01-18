@@ -5,44 +5,44 @@ namespace Charcoal\Admin\Ui;
 interface CollectionContainerInterface
 {
     /**
-    * @param string $obj_type
+    * @param string $objType
     * @return CollectionContainerInterface Chainable
     */
-    public function set_obj_type($obj_type);
+    public function setObjType($objType);
 
     /**
     * @return string
     */
-    public function obj_type();
+    public function objType();
 
     /**
-    * @param string $collection_ident
+    * @param string $collectionIdent
     * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection_ident($collection_ident);
+    public function setCollectionIdent($collectionIdent);
 
     /**
     * @return string|null
     */
-    public function collection_ident();
+    public function collectionIdent();
 
     /**
-    * @param mixed $dashboard_config
+    * @param mixed $dashboardConfig
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection_config($dashboard_config);
+    public function setCollectionConfig($dashboardConfig);
 
     /**
     * @return mixed
     */
-    public function collection_config();
+    public function collectionConfig();
 
     /**
     * @param array $data
     * @return mixed
     */
-    //public function create_collection_config($data = null);
+    //public function createCollectionConfig($data = null);
 
 
 
@@ -51,7 +51,7 @@ interface CollectionContainerInterface
     * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
-    public function set_page($page);
+    public function setPage($page);
 
     /**
     * @return integer
@@ -59,22 +59,22 @@ interface CollectionContainerInterface
     public function page();
 
     /**
-    * @param integer $num_per_page
+    * @param integer $numPerPage
     * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
-    public function set_num_per_page($num_per_page);
+    public function setNumPerPage($numPerPage);
 
     /**
     * @return integer
     */
-    public function num_per_page();
+    public function numPerPage();
 
     /**
     * @param mixed $collection
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection($collection);
+    public function setCollection($collection);
 
     /**
     * @return Collection
@@ -89,7 +89,7 @@ interface CollectionContainerInterface
     /**
     * @return boolean
     */
-    public function has_objects();
+    public function hasObjects();
 
     /**
     * @return Object

@@ -52,17 +52,18 @@ class CreateScript extends AdminScript
             } else {
                 $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
             }
+            $input = $this->propertyToInput($prop);
             $v = $input->prompt();
 
-            $prop->set_val($v);
+            $prop->setVal($v);
             $valid = $prop->validate();
             $vals[$prop->ident()] = $v;
         }
 
-        $user->reset_password($vals['password']);
+        $user->resetPassword($vals['password']);
         unset($vals['password']);
 
-        $user->set_flat_data($vals);
+        $user->setFlatData($vals);
 
         $ret = $user->save();
         if ($ret) {
@@ -78,7 +79,7 @@ class CreateScript extends AdminScript
     /**
     * @return boolean
     */
-    public function auth_required()
+    public function authRequired()
     {
         $proto = new User();
         $source = $proto->source();

@@ -14,14 +14,14 @@ interface PropertyInputInterface
     * @param array $data
     * @return Input Chainable
     */
-    public function set_data(array $data);
+    public function setData(array $data);
 
     /**
     * @param string $ident
     * @throws InvalidArgumentException if the ident is not a string
     * @return PropertyInputInterface Chainable
     */
-    public function set_ident($ident);
+    public function setIdent($ident);
 
     /**
     * @return string
@@ -29,23 +29,23 @@ interface PropertyInputInterface
     public function ident();
 
     /**
-    * @param boolean $read_only
-    * @throws InvalidArgumentException if the read_only is not a string
+    * @param boolean $readOnly
+    * @throws InvalidArgumentException if the readOnly is not a string
     * @return PropertyInputInterface Chainable
     */
-    public function set_read_only($read_only);
+    public function setReadOnly($readOnly);
 
     /**
     * @return boolean
     */
-    public function read_only();
+    public function readOnly();
 
     /**
     * @param boolean $required
     * @throws InvalidArgumentException if the required is not a string
     * @return PropertyInputInterface Chainable
     */
-    public function set_required($required);
+    public function setRequired($required);
 
     /**
     * @return boolean
@@ -58,7 +58,7 @@ interface PropertyInputInterface
     * @throws InvalidArgumentException if the disabled is not a string
     * @return PropertyInputInterface Chainable
     */
-    public function set_disabled($disabled);
+    public function setDisabled($disabled);
 
     /**
     * @return boolean
@@ -66,37 +66,37 @@ interface PropertyInputInterface
     public function disabled();
 
     /**
-    * @param string $input_id
+    * @param string $inputId
     * @return Input Chainable
     */
-    public function set_input_id($input_id);
+    public function setInputId($inputId);
 
     /**
     * @return string
     */
-    public function input_id();
+    public function inputId();
 
     /**
     * @return string
     */
-    public function input_name();
+    public function inputName();
 
     /**
     * @return string
     */
-    public function input_val();
+    public function inputVal();
 
     /**
     * @param string $input_type
     */
-    public function set_input_type($input_type);
+    public function setInputType($input_type);
 
-    public function input_type();
+    public function inputType();
 
     /**
     * @param PropertyInterface $p
     */
-    public function set_property(PropertyInterface $p);
+    public function setProperty(PropertyInterface $p);
 
     /**
     * @return PropertyInterface

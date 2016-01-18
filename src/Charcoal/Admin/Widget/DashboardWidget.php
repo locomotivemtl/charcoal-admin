@@ -25,13 +25,13 @@ class DashboardWidget extends AdminWidget implements DashboardInterface
     * @param array|null $data
     * @return LayoutInterface
     */
-    public function create_layout(array $data = null)
+    public function createLayout(array $data = null)
     {
         $layout = new LayoutWidget([
             'logger'=>$this->logger
         ]);
         if ($data !== null) {
-            $layout->set_data($data);
+            $layout->setData($data);
         }
         return $layout;
     }

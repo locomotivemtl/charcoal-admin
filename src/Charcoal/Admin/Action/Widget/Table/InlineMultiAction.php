@@ -22,7 +22,7 @@ use \Charcoal\Admin\Widget\FormProperty as FormProperty;
 */
 class InlineMultiAction extends AdminAction
 {
-    protected $_objects;
+    protected $objects;
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -31,20 +31,20 @@ class InlineMultiAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $obj_type = $request->getParam('obj_type');
-        $obj_ids = $request->getParam('obj_ids');
+        $objType = $request->getParam('obj_type');
+        $objIds = $request->getParam('obj_ids');
 
-        if (!$obj_type || !$obj_ids) {
-            $this->set_success(false);
+        if (!$objType || !$objIds) {
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
 
         try {
             $model_factory = new ModelFactory();
-            $this->_objects = [];
-            foreach ($obj_ids as $obj_id) {
-                $obj = $model_factory->create($obj_type);
-                $obj->load($obj_id);
+            $this->objects = [];
+            foreach ($objIds as $objId) {
+                $obj = $model_factory->create($objType);
+                $obj->load($objId);
                 if (!$obj->id()) {
                     continue;
                 }
@@ -52,29 +52,29 @@ class InlineMultiAction extends AdminAction
                 $o = [];
                 $o['id'] = $obj->id();
 
-                $obj_form = new ObjectForm([
+                $objForm = new ObjectForm([
                     'logger' => $this->logger()
                 ]);
-                $obj_form->set_obj_type($obj_type);
-                $obj_form->set_obj_id($obj_id);
-                $form_properties = $obj_form->form_properties();
-                foreach ($form_properties as $property_ident => $property) {
+                $objForm->set_objType($objType);
+                $objForm->set_objId($objId);
+                $formProperties = $objForm->formProperties();
+                foreach ($formProperties as $propertyIdent => $property) {
                     if (!($property instanceof FormProperty)) {
                         continue;
                     }
-                    $p = $obj->p($property_ident);
-                    $property->set_property_val($p->val());
-                    $property->set_prop($p);
-                    $input_type = $property->input_type();
-                    $o['inline_properties'][$property_ident] = $property->render_template($input_type);
+                    $p = $obj->p($propertyIdent);
+                    $property->setProperty_val($p->val());
+                    $property->setProp($p);
+                    $inputType = $property->inputType();
+                    $o['inlineProperties'][$propertyIdent] = $property->renderTemplate($inputType);
                 }
-                $this->_objects[] = $o;
+                $this->objects[] = $o;
             }
-            $this->set_success(true);
+            $this->setSuccess(true);
             return $response;
 
         } catch (Exception $e) {
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(404);
         }
     }
@@ -86,7 +86,7 @@ class InlineMultiAction extends AdminAction
     {
         $results = [
             'success' => $this->success(),
-            'objects' => $this->_objects,
+            'objects' => $this->objects,
             'feedbacks' => $this->feedbacks()
         ];
         return $results;

@@ -12,7 +12,7 @@ class LostPasswordTemplate extends AdminTemplate
     *
     * @return boolean
     */
-    protected function auth_required()
+    protected function authRequired()
     {
         return false;
     }
@@ -20,7 +20,7 @@ class LostPasswordTemplate extends AdminTemplate
     /**
     * @return boolean
     */
-    public function show_header_menu()
+    public function showHeaderMenu()
     {
         return false;
     }
@@ -28,7 +28,7 @@ class LostPasswordTemplate extends AdminTemplate
     /**
     * @return boolean
     */
-    public function show_footer_menu()
+    public function showFooterMenu()
     {
         return false;
     }

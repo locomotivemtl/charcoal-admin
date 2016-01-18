@@ -10,24 +10,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetData()
     {
         $obj = new Config();
-        $ret = $obj->set_data([
-            'base_path'=>'foo'
+        $ret = $obj->merge([
+            'basePath'=>'foo'
         ]);
         $this->assertSame($ret, $obj);
-        $this->assertEquals('foo', $obj->base_path());
+        $this->assertEquals('foo', $obj->basePath());
     }
 
     public function testSetBasePath()
     {
         $obj = new Config();
-        $this->assertEquals('admin', $obj->base_path());
+        $this->assertEquals('admin', $obj->basePath());
 
-        $ret = $obj->set_base_path('foo');
+        $ret = $obj->setBasePath('foo');
         $this->assertSame($ret, $obj);
-        $this->assertEquals('foo', $obj->base_path());
+        $this->assertEquals('foo', $obj->basePath());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_base_path([]);
+        $obj->setBasePath([]);
     }
 
     public function testSetBasePathEmptyParamThrowsException()
@@ -35,7 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $obj = new Config();
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_base_path('');
+        $obj->setBasePath('');
     }
 
 }

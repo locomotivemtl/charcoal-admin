@@ -27,9 +27,9 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     protected $properties;
 
     /**
-    * @var $properties_options
+    * @var $propertiesOptions
     */
-    protected $properties_options;
+    protected $propertiesOptions;
 
     /**
     * @var array $orders
@@ -50,7 +50,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
         //parent::__construct($data);
 
         if (is_array($data)) {
-            $this->set_data($data);
+            $this->setData($data);
 
         }
     }
@@ -60,58 +60,58 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     * @param array $data
     * @return TableWidget Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
 
-        $obj_data = $this->data_from_object();
-        $data = array_merge_recursive($obj_data, $data);
+        $objData = $this->dataFromObject();
+        $data = array_merge_recursive($objData, $data);
 
-        parent::set_data($data);
+        parent::setData($data);
 
         return $this;
     }
 
     /**
-    * @param string $collection_ident
+    * @param string $collectionIdent
     * @throws InvalidArgumentException
     * @return CollectionContainerInterface Chainable
     */
-    public function set_collection_ident($collection_ident)
+    public function setCollectionIdent($collectionIdent)
     {
-        if (!is_string($collection_ident)) {
+        if (!is_string($collectionIdent)) {
             throw new InvalidArgumentException(
                 'Collection ident must be a string'
             );
         }
-        $this->collection_ident = $collection_ident;
+        $this->collectionIdent = $collectionIdent;
         return $this;
     }
 
     /**
     * @return string
     */
-    public function collection_ident()
+    public function collectionIdent()
     {
-        return $this->collection_ident;
+        return $this->collectionIdent;
     }
 
     /**
     * Fetch metadata from current obj_type
     * @return array List of metadata
     */
-    public function data_from_object()
+    public function dataFromObject()
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $collection_ident = $this->collection_ident();
-        if (!$collection_ident) {
-            $collection_ident = isset($admin_metadata['default_list']) ? $admin_metadata['default_list'] : '';
+        $collectionIdent = $this->collectionIdent();
+        if (!$collectionIdent) {
+            $collectionIdent = isset($admin_metadata['defaultList']) ? $admin_metadata['defaultList'] : '';
         }
 
-        $obj_list_data = isset($admin_metadata['lists'][$collection_ident]) ? $admin_metadata['lists'][$collection_ident] : [];
+        $objListData = isset($admin_metadata['lists'][$collectionIdent]) ? $admin_metadata['lists'][$collectionIdent] : [];
 
-        return $obj_list_data;
+        return $objListData;
     }
 
     /**
@@ -125,19 +125,19 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
             $obj = $this->proto();
             $props = $obj->metadata()->properties();
 
-            $collection_ident = $this->collection_ident();
+            $collectionIdent = $this->collectionIdent();
 
-            if ($collection_ident) {
+            if ($collectionIdent) {
                 $metadata = $obj->metadata();
                 $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
 
-                if (isset($admin_metadata['lists'][$collection_ident]['properties'])) {
+                if (isset($admin_metadata['lists'][$collectionIdent]['properties'])) {
                     // Flipping to have property ident as key
-                    $list_properties = array_flip($admin_metadata['lists'][$collection_ident]['properties']);
-                    // Replacing values of list_properties from index to actual property values
-                    $props = array_replace($list_properties, $props);
-                    // Get only the keys that are in list_properties from props
-                    $props = array_intersect_key($props, $list_properties);
+                    $listProperties = array_flip($admin_metadata['lists'][$collectionIdent]['properties']);
+                    // Replacing values of listProperties from index to actual property values
+                    $props = array_replace($listProperties, $props);
+                    // Get only the keys that are in listProperties from props
+                    $props = array_intersect_key($props, $listProperties);
                 }
             }
 
@@ -151,15 +151,15 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     * Properties to display in collection template, and their order, as set in object metadata
     * @return  FormPropertyWidget         Generator function
     */
-    public function json_properties_list()
+    public function jsonPropertiesList()
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $collection_ident = $this->collection_ident();
+        $collectionIdent = $this->collectionIdent();
 
-        if (isset($admin_metadata['lists'][$collection_ident]['properties'])) {
-            $props = $admin_metadata['lists'][$collection_ident]['properties'];
+        if (isset($admin_metadata['lists'][$collectionIdent]['properties'])) {
+            $props = $admin_metadata['lists'][$collectionIdent]['properties'];
         }
         return json_encode( $props );
     }

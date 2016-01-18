@@ -26,10 +26,10 @@ abstract class AdminAction extends AbstractAction
     final public function __construct(array $data = null)
     {
         if ($data !== null) {
-            $this->set_data($data);
+            $this->setData($data);
         }
 
-        if ($this->auth_required() === true) {
+        if ($this->authRequired() === true) {
             // @todo Authentication
             $this->auth();
         }
@@ -42,7 +42,7 @@ abstract class AdminAction extends AbstractAction
     *
     * @return boolean
     */
-    public function auth_required()
+    public function authRequired()
     {
         return false;
     }
@@ -53,7 +53,7 @@ abstract class AdminAction extends AbstractAction
     private function auth()
     {
         //$cfg = AdminModule::config();
-        $u = User::get_authenticated();
+        $u = User::getAuthenticated();
         if ($u === null) {
             die('Auth required');
        }
@@ -62,7 +62,7 @@ abstract class AdminAction extends AbstractAction
     /**
     * @return boolean
     */
-    public function has_feedbacks()
+    public function hasFeedbacks()
     {
         return (count($this->feedbacks()) > 0);
     }
@@ -70,7 +70,7 @@ abstract class AdminAction extends AbstractAction
     /**
     * @return integer
     */
-    public function num_feedbacks()
+    public function numFeedbacks()
     {
         return count($this->feedbacks());
     }
@@ -83,7 +83,7 @@ abstract class AdminAction extends AbstractAction
         return $this->feedbacks;
     }
 
-    public function add_feedback($level, $msg)
+    public function addFeedback($level, $msg)
     {
         $this->feedbacks[] = [
             'msg'=>$msg,
@@ -102,7 +102,7 @@ abstract class AdminAction extends AbstractAction
 
         $results = [
             'success'=>$this->success(),
-            'next_url'=>$this->redirect_url(),
+            'next_url'=>$this->redirectUrl(),
             'feedbacks'=>$this->feedbacks()
         ];
         return $results;

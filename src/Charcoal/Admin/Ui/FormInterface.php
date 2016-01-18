@@ -12,7 +12,7 @@ interface FormInterface
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function set_action($action);
+    public function setAction($action);
 
     /**
     * @return string
@@ -24,7 +24,7 @@ interface FormInterface
     * @throws InvalidArgumentException
     * @return FormWidget Chainable
     */
-    public function set_method($method);
+    public function setMethod($method);
 
     /**
     * @return string Either "post" or "get"
@@ -36,18 +36,18 @@ interface FormInterface
     * @throws InvalidArgumentException if success is not a boolean
     * @return ActionInterface Chainable
     */
-    public function set_next_url($url);
+    public function setNextUrl($url);
 
     /**
     * @return bool
     */
-    public function next_url();
+    public function nextUrl();
 
     /**
     * @param array $groups
     * @return FormInterface Chainable
     */
-    public function set_groups(array $groups);
+    public function setGroups(array $groups);
 
     /**
     * @param string $group_ident
@@ -55,7 +55,7 @@ interface FormInterface
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function add_group($group_ident, $group);
+    public function addGroup($group_ident, $group);
 
     /**
     * Group generator
@@ -66,7 +66,7 @@ interface FormInterface
     * @param array $data
     * @return FormWidget Chainable
     */
-    public function set_form_data(array $data);
+    public function setFormData(array $data);
 
     /**
     * @param string $key
@@ -74,18 +74,18 @@ interface FormInterface
     * @throws InvalidArgumentException
     * @return FormWidget Chainable
     */
-    public function add_form_data($key, $val);
+    public function addFormData($key, $val);
 
     /**
     * @return array
     */
-    public function form_data();
+    public function formData();
 
         /**
     * @param array $properties
     * @return FormInterface Chainable
     */
-    public function set_form_properties(array $properties);
+    public function setFormProperties(array $properties);
 
     /**
     * @param string $property_ident
@@ -93,16 +93,16 @@ interface FormInterface
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function add_form_property($property_ident, $property);
+    public function addFormProperty($property_ident, $property);
 
     /**
     * @param array|null $data
     * @return FormPropertyInterface
     */
-    public function create_form_property(array $data = null);
+    public function createFormProperty(array $data = null);
 
     /**
     * Properties generator
     */
-    public function form_properties();
+    public function formProperties();
 }

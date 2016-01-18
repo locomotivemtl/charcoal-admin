@@ -29,12 +29,12 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
 
     protected $type;
 
-    protected $input_type;
-    protected $input_options;
+    protected $inputType;
+    protected $inputOptions;
 
-    private $property_ident;
-    private $property_val;
-    private $property_data = [];
+    private $propertyIdent;
+    private $propertyVal;
+    private $propertyData = [];
     private $property;
 
     /**
@@ -43,19 +43,19 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     private $active = true;
 
 
-    private $property_factory;
-    private $property_input_factory;
+    private $propertyFactory;
+    private $propertyInputFactory;
 
     /**
     * @param array $data
     * @return FormProperty Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
-        parent::set_data($data);
+        parent::setData($data);
 
         // Keep the data in copy, this will be passed to the property and/or input later
-        $this->property_data = $data;
+        $this->propertyData = $data;
 
         return $this;
     }
@@ -64,7 +64,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     * @param boolean $active
     * @return FormPropertyWidget Chainable
     */
-    public function set_active($active)
+    public function setActive($active)
     {
         $this->active = !!$active;
         return $this;
@@ -83,46 +83,46 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     * @throws InvalidArgumentException
     * @return FormPropertyWidget
     */
-    public function set_property_ident($property_ident)
+    public function setPropertyIdent($propertyIdent)
     {
-        if (!is_string($property_ident)) {
+        if (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
                 'Property ident must be a string'
             );
         }
-        $this->property_ident = $property_ident;
+        $this->propertyIdent = $propertyIdent;
         return $this;
     }
 
     /**
     *
     */
-    public function property_ident()
+    public function propertyIdent()
     {
-        return $this->property_ident;
+        return $this->propertyIdent;
     }
 
     /**
     *
     */
-    public function set_property_val($property_val)
+    public function setPropertyVal($propertyVal)
     {
-        $this->property_val = $property_val;
+        $this->propertyVal = $propertyVal;
         return $this;
     }
 
     /**
     *
     */
-    public function property_val()
+    public function propertyVal()
     {
-        return $this->property_val;
+        return $this->propertyVal;
     }
 
     /**
     *
     */
-    public function show_label()
+    public function showLabel()
     {
         return true;
     }
@@ -130,7 +130,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     /**
     * @return boolean
     */
-    public function show_description()
+    public function showDescription()
     {
         $description = $this->prop()->description();
         return !!$description;
@@ -140,7 +140,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     /**
     * @return boolean
     */
-    public function show_notes()
+    public function showNotes()
     {
         $notes = $this->prop()->notes();
         return !!$notes;
@@ -165,7 +165,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     /**
     * @return string
     */
-    public function input_id()
+    public function inputId()
     {
         return 'input_id';
     }
@@ -173,7 +173,7 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     /**
     * @return string
     */
-    public function input_name()
+    public function inputName()
     {
         return 'input_name';
     }
@@ -181,42 +181,42 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     /**
     *
     */
-    public function set_input_type($input_type)
+    public function setInputType($inputType)
     {
-        $this->input_type = $input_type;
+        $this->inputType = $inputType;
         return $this;
     }
 
     /**
     *
     */
-    public function input_type()
+    public function inputType()
     {
-        if ($this->input_type === null) {
+        if ($this->inputType === null) {
             try {
                 $prop = $this->prop();
                 $metadata = $prop->metadata();
-                $input_type = isset($metadata['admin']) ? $metadata['admin']['input_type'] : '';
+                $inputType = isset($metadata['admin']) ? $metadata['admin']['inputType'] : '';
 
             } catch (Exception $e) {
-                $input_type = 'charcoal/admin/property/input/text';
+                $inputType = 'charcoal/admin/property/input/text';
             }
-            if (!$input_type) {
-                $input_type = 'charcoal/admin/property/input/text';
+            if (!$inputType) {
+                $inputType = 'charcoal/admin/property/input/text';
             }
-            $this->input_type = $input_type;
+            $this->inputType = $inputType;
         }
-        return $this->input_type;
+        return $this->inputType;
     }
 
     /**
     * @param PropertyInterface $property
     * @return FormProperty Chainable
     */
-    public function set_prop(PropertyInterface $property)
+    public function setProp(PropertyInterface $property)
     {
         $this->property = $property;
-        //$this->property->set_val($this->property_val());
+        //$this->property->setVal($this->propertyVal());
         return $this;
     }
 
@@ -226,15 +226,17 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
     public function prop()
     {
         if ($this->property === null) {
-            $p = $this->property_factory()->get($this->type());
+            $p = $this->propertyFactory()->get($this->type(), [
+                'logger'=>$this->logger
+            ]);
 
 
-            $p->set_ident($this->property_ident());
-            $p->set_data($this->property_data);
+            $p->setIdent($this->propertyIdent());
+            $p->setData($this->propertyData);
 
             $this->property = $p;
         }
-        $this->property->set_val($this->property_val());
+        $this->property->setVal($this->propertyVal());
         return $this->property;
     }
 
@@ -247,30 +249,32 @@ class FormPropertyWidget extends AdminWidget implements FormPropertyInterface
             return $this->input;
         }
         $prop = $this->prop();
-        $input_type = $this->input_type();
+        $inputType = $this->inputType();
 
-        $this->input = $this->property_input_factory()->create($input_type);
-        $this->input->set_property($prop);
-        $this->input->set_data($this->property_data);
+        $this->input = $this->propertyInputFactory()->create($inputType, [
+            'logger'=>$this->logger
+        ]);
+        $this->input->setProperty($prop);
+        $this->input->setData($this->propertyData);
 
-        $GLOBALS['widget_template'] = $input_type;
+        $GLOBALS['widget_template'] = $inputType;
         return $this->input;
     }
 
-    private function property_factory()
+    private function propertyFactory()
     {
-        if ($this->property_factory === null) {
-            $this->property_factory = new PropertyFactory();
+        if ($this->propertyFactory === null) {
+            $this->propertyFactory = new PropertyFactory();
         }
-        return $this->property_factory;
+        return $this->propertyFactory;
     }
 
-    private function property_input_factory()
+    private function propertyInputFactory()
     {
-        if ($this->property_input_factory === null) {
-            $this->property_input_factory = new PropertyInputFactory();
+        if ($this->propertyInputFactory === null) {
+            $this->propertyInputFactory = new PropertyInputFactory();
         }
-        return $this->property_input_factory;
+        return $this->propertyInputFactory;
     }
 
 }

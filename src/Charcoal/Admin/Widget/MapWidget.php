@@ -23,43 +23,43 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     */
     private $styles;
 
-    private $lat_property;
-    private $lon_property;
+    private $latProperty;
+    private $lonProperty;
 
-    public function set_lat_property($p)
+    public function setLatProperty($p)
     {
-        $this->lat_property = $p;
+        $this->latProperty = $p;
     }
 
-    public function lat_property()
+    public function latProperty()
     {
-        return $this->lat_property;
+        return $this->latProperty;
     }
-    public function set_lon_property($p)
+    public function setLonProperty($p)
     {
-        $this->lon_property = $p;
+        $this->lonProperty = $p;
     }
-    public function lon_property()
+    public function lonProperty()
     {
-        return $this->lon_property;
+        return $this->lonProperty;
     }
 
     public function lat()
     {
-        if (!$this->obj() || !$this->lat_property()) {
+        if (!$this->obj() || !$this->latProperty()) {
             return false;
         }
         $obj = $this->obj();
-        return call_user_func([$obj, $this->lat_property()]);
+        return call_user_func([$obj, $this->latProperty()]);
     }
 
     public function lon()
     {
-        if (!$this->obj() || !$this->lon_property()) {
+        if (!$this->obj() || !$this->lonProperty()) {
             return false;
         }
         $obj = $this->obj();
-        return call_user_func([$obj, $this->lon_property()]);
+        return call_user_func([$obj, $this->lonProperty()]);
     }
 
     /**
@@ -70,7 +70,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
 
     }
 
-    public function set_styles($styles)
+    public function setStyles($styles)
     {
         if (!$styles) {
             return $this;
@@ -86,7 +86,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         $obj_type = ( isset($GET['obj_type']) ? $GET['obj_type'] : 0 );
         if ($id && $obj_type) {
             $obj = ModelFactory::instance()->get($obj_type, [
-                'logger'=>$this->logger()
+                'logger'=>$this->logger
             ]);
             $obj->load($id);
         }
@@ -99,7 +99,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     * @param mixed $subtitle l10n object OR string
     * @return MapWidget Chainable
     */
-    public function set_subtitle($subtitle)
+    public function setSubtitle($subtitle)
     {
         if ($subtitle === null) {
             $this->title = null;
@@ -121,7 +121,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     * @param mixed $title
     * @return MapWidget Chainable
     */
-    public function set_title($title)
+    public function setTitle($title)
     {
         if ($title === null) {
             $this->title = null;
@@ -145,7 +145,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     /**
     * @return string
     */
-    public function widget_type()
+    public function widgetType()
     {
         return 'charcoal/admin/widget/map';
     }

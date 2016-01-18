@@ -6,19 +6,18 @@ use \Charcoal\Admin\AdminWidget as AdminWidget;
 
 class AdminWidgetTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * Hello world
-    */
-    public function testConstructor()
+    public function setUp()
     {
-        $obj = new AdminWidget();
-        $this->assertInstanceOf('\Charcoal\Admin\AdminWidget', $obj);
+        $logger = new \Psr\Log\NullLogger();
+        $this->obj = new AdminWidget([
+            'logger'=>$logger
+        ]);
     }
 
     public function testSetData()
     {
-        $obj = new AdminWidget();
-        $ret = $obj->set_data([
+        $obj = $this->obj;
+        $ret = $obj->setData([
             'type'=>'foo',
             'ident'=>'bar',
             'label'=>'baz',
@@ -29,32 +28,32 @@ class AdminWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $obj->type());
         $this->assertEquals('bar', $obj->ident());
         $this->assertEquals('baz', $obj->label());
-        $this->assertNotTrue($obj->show_actions());
+        $this->assertNotTrue($obj->showActions());
     }
 
     public function testSetType()
     {
-        $obj = new AdminWidget();
+        $obj = $this->obj;
         $this->assertEquals(null, $obj->type());
 
-        $ret = $obj->set_type('foo');
+        $ret = $obj->setType('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->type());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_type(null);
+        $obj->setType(null);
     }
 
     public function testSetLabel()
     {
-        $obj = new AdminWidget();
+        $obj = $this->obj;
         //$this->assertEquals(null, $obj->label());
 
-        $obj = new AdminWidget();
-        $obj->set_ident('foo.bar');
+        $obj = $this->obj;
+        $obj->setIdent('foo.bar');
         $this->assertEquals('Foo Bar', $obj->label());
 
-        $obj->set_label('foo');
+        $obj->setLabel('foo');
         $this->assertEquals('foo', $obj->label());
 
         //$this->setExpectedException('\InvalidArgumentException');

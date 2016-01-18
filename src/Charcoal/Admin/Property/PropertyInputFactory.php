@@ -14,7 +14,7 @@ class PropertyInputFactory extends ResolverFactory
     /**
     * @param array $data
     */
-    public function base_class()
+    public function baseClass()
     {
         return '\Charcoal\Admin\Property\PropertyInputInterface';
     }
@@ -22,7 +22,7 @@ class PropertyInputFactory extends ResolverFactory
     /**
     * @return string
     */
-    public function resolver_suffix()
+    public function resolverSuffix()
     {
         return 'Input';
     }

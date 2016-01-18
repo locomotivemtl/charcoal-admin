@@ -24,11 +24,11 @@ use \Charcoal\Admin\User;
 * # Available (mustache) methods
 * - `title` (TranslationString) - The page title
 * - `subtitle` (TranslationString) The page subtitle
-* - `show_header_menu` (bool) - Display the header menu or not
-* - `header_menu` (iterator) - The header menu data
-* - `show_footer_menu` (bool) - Display the footer menu or not
-* - `footer_menu` (iterator) - The footer menu data
-* - `has_feedback` (bool) - If there is feedback to display or not
+* - `showHeaderMenu` (bool) - Display the header menu or not
+* - `headerMenu` (iterator) - The header menu data
+* - `showFooterMenu` (bool) - Display the footer menu or not
+* - `footerMenu` (iterator) - The footer menu data
+* - `hasFeedback` (bool) - If there is feedback to display or not
 * - `feedback` (iterator) - The feedback data
 */
 class AdminTemplate extends AbstractTemplate
@@ -52,13 +52,13 @@ class AdminTemplate extends AbstractTemplate
     private $subtitle = '';
 
     /**
-    * @var boolean $show_header_menu
+    * @var boolean $showHeaderMenu
     */
-    private $show_header_menu = true;
+    private $showHeaderMenu = true;
     /**
-    * @var boolean $show_footer_menu
+    * @var boolean $showFooterMenu
     */
-    private $show_footer_menu = true;
+    private $showFooterMenu = true;
 
     /**
     * @var array $feedbacks
@@ -79,14 +79,14 @@ class AdminTemplate extends AbstractTemplate
             session_start();
         }
 
-        parent::set_data($data);
+        parent::setData($data);
 
-        if ($this->auth_required() !== false) {
+        if ($this->authRequired() !== false) {
             $this->auth();
         }
 
         // Initialize data with GET
-        $this->set_data($_GET);
+        $this->setData($_GET);
 
     }
 
@@ -94,7 +94,7 @@ class AdminTemplate extends AbstractTemplate
     * @var array $data
     * @return AdminTemplate Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
         foreach ($data as $prop => $val) {
             $func = [$this, 'set_'.$prop];
@@ -117,7 +117,7 @@ class AdminTemplate extends AbstractTemplate
     * @param mixed $ident
     * @return AdminTemplate Chainable
     */
-    public function set_ident($ident)
+    public function setIdent($ident)
     {
         $this->ident = $ident;
         return $this;
@@ -135,7 +135,7 @@ class AdminTemplate extends AbstractTemplate
     * @param mixed $label
     * @return AdminTemplate Chainable
     */
-    public function set_label($label)
+    public function setLabel($label)
     {
         $this->label = new TranslationString($label);
         return $this;
@@ -153,7 +153,7 @@ class AdminTemplate extends AbstractTemplate
     * @param mixed $title
     * @return AdminTemplate Chainable
     */
-    public function set_title($title)
+    public function setTitle($title)
     {
         $this->title = new TranslationString($title);
         return $this;
@@ -174,7 +174,7 @@ class AdminTemplate extends AbstractTemplate
     * @param mixed $subtitle
     * @return AdminTemplate Chainable
     */
-    public function set_subtitle($subtitle)
+    public function setSubtitle($subtitle)
     {
         $this->subtitle = new TranslationString($subtitle);
         return $this;
@@ -195,24 +195,24 @@ class AdminTemplate extends AbstractTemplate
     * @param boolean $show
     * @return AdminTemplate Chainable
     */
-    public function set_show_header_menu($show)
+    public function setShowHeaderMenu($show)
     {
-        $this->show_header_menu = !!$show;
+        $this->showHeaderMenu = !!$show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_header_menu()
+    public function showHeaderMenu()
     {
-        return $this->show_header_menu;
+        return $this->showHeaderMenu;
     }
 
     /**
     * @return array
     */
-    public function header_menu()
+    public function headerMenu()
     {
         $obj_type = isset($_GET['obj_type']) ? $_GET['obj_type'] : '';
 
@@ -225,7 +225,7 @@ class AdminTemplate extends AbstractTemplate
                 'active'=>false,
                 'label'=>'Accueil',
                 'icon'=>'home',
-                'url'=>$this->admin_url().'home',
+                'url'=>$this->adminUrl().'home',
                 'has_children'=>false
             ],
             [
@@ -233,7 +233,7 @@ class AdminTemplate extends AbstractTemplate
                 'selected'=>$alert_selected,
                 'label'=>'Alertes',
                 'icon'=>'alerts',
-                'url'=>$this->admin_url().'object/collection?obj_type=alert/alert',
+                'url'=>$this->adminUrl().'object/collection?obj_type=alert/alert',
                 'has_children'=>false
             ],
             [
@@ -241,7 +241,7 @@ class AdminTemplate extends AbstractTemplate
                 'selected'=>$user_selected,
                 'label'=>'Utilisateurs',
                 'icon'=>'users',
-                'url'=>$this->admin_url().'object/collection?obj_type=alert/user',
+                'url'=>$this->adminUrl().'object/collection?obj_type=alert/user',
                 'has_children'=>false
             ],
             [
@@ -249,7 +249,7 @@ class AdminTemplate extends AbstractTemplate
                 'selected'=>$content_selected,
                 'label'=>'Contenus',
                 'icon'=>'contents',
-                'url'=>$this->admin_url().'object/collection?obj_type=alert/faq',
+                'url'=>$this->adminUrl().'object/collection?obj_type=alert/faq',
                 'has_children'=>false
             ],
             [
@@ -274,27 +274,27 @@ class AdminTemplate extends AbstractTemplate
     * @throws InvalidArgumentException
     * @return AdminTemplate Chainable
     */
-    public function set_show_footer_menu($show)
+    public function setShowFooterMenu($show)
     {
         if (!is_bool($show)) {
             throw new InvalidArgumentException('Show menu must be a boolean');
         }
-        $this->show_footer_menu = $show;
+        $this->showFooterMenu = $show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_footer_menu()
+    public function showFooterMenu()
     {
-        return $this->show_footer_menu;
+        return $this->showFooterMenu;
     }
 
     /**
     * @return array
     */
-    public function footer_menu()
+    public function footerMenu()
     {
         // @todo
         return [];
@@ -308,7 +308,7 @@ class AdminTemplate extends AbstractTemplate
     /**
     * @return boolean
     */
-    public function has_feedbacks()
+    public function hasFeedbacks()
     {
         return (count($this->feedbacks()) > 0);
     }
@@ -321,7 +321,7 @@ class AdminTemplate extends AbstractTemplate
         return $this->feedbacks;
     }
 
-    public function add_feedback($level, $msg)
+    public function addFeedback($level, $msg)
     {
         $this->feedbacks[] = [
             'msg'=>$msg,
@@ -340,7 +340,7 @@ class AdminTemplate extends AbstractTemplate
     *
     * @return boolean
     */
-    protected function auth_required()
+    protected function authRequired()
     {
         return false;
     }
@@ -353,7 +353,7 @@ class AdminTemplate extends AbstractTemplate
         //$cfg = AdminModule::config();
         $u = User::get_authenticated();
         if ($u === null) {
-            header('Location: '.$this->admin_url().'login');
+            header('Location: '.$this->adminUrl().'login');
             exit;
         }
     }
@@ -361,20 +361,20 @@ class AdminTemplate extends AbstractTemplate
     /**
     * @return string
     */
-    public function admin_url()
+    public function adminUrl()
     {
-        return $this->base_url().'admin/';
+        return $this->baseUrl().'admin/';
     }
 
     /**
     * @return string
     */
-    public function base_url()
+    public function baseUrl()
     {
-        return Charcoal::config()->get('URL');
+        return $this->app()->config()->get('URL');
     }
 
-    public function for_loop()
+    public function forLoop()
     {
        $return = [];
 

@@ -20,12 +20,12 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     /**
     * @var string
     */
-    protected $form_ident;
+    protected $formIdent;
 
     /**
     * @return string
     */
-    public function widget_type()
+    public function widgetType()
     {
         return 'charcoal/admin/widget/objectForm';
     }
@@ -34,22 +34,21 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     * @param array $data
     * @return ObjectForm Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
         // @TODO Remove once RequirementContainer is implemented
-        // Needed this to be able to output {{obj_id}}
+        // Needed this to be able to output {{objId}}
         $data = array_merge($_GET, $data);
 
-        $this->set_obj_data($data);
+        $this->setObjData($data);
 
-        if (isset($data['form_ident']) && $data['form_ident'] !== null) {
-            $this->set_form_ident($data['form_ident']);
+        if (isset($data['formIdent']) && $data['formIdent'] !== null) {
+            $this->setFormIdent($data['formIdent']);
         }
+        $objData = $this->dataFromObject();
+        $data = array_merge_recursive($objData, $data);
 
-        $obj_data = $this->data_from_object();
-        $data = array_merge_recursive($obj_data, $data);
-
-        parent::set_data($data);
+        parent::setData($data);
 
         return $this;
     }
@@ -59,7 +58,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     * @throws InvalidArgumentException if success is not a boolean
     * @return ActionInterface Chainable
     */
-    public function set_next_url($url)
+    public function setNextUrl($url)
     {
         if (!is_string($url)) {
             throw new InvalidArgumentException(
@@ -68,11 +67,11 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         }
 
         if (!$this->obj()) {
-            $this->next_url = $url;
+            $this->nextUrl = $url;
             return $this;
         }
 
-        $this->next_url = $this->obj()->render( $url );
+        $this->nextUrl = $this->obj()->render( $url );
         return $this;
     }
 
@@ -86,8 +85,8 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         $action = parent::action();
         if (!$action) {
             $obj = $this->obj();
-            $obj_id = $obj->id();
-            if ($obj_id) {
+            $objId = $obj->id();
+            if ($objId) {
                 return 'action/object/update';
             } else {
                 return 'action/object/save';
@@ -98,41 +97,41 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-    * @param string $form_ident
+    * @param string $formIdent
     * @throws InvalidArgumentException
     * @return ObjectForm Chainable
     */
-    public function set_form_ident($form_ident)
+    public function setFormIdent($formIdent)
     {
-        if (!is_string($form_ident)) {
+        if (!is_string($formIdent)) {
             throw new InvalidArgumentException(
                 'Form ident must be a string'
             );
         }
-        $this->form_ident = $form_ident;
+        $this->formIdent = $formIdent;
         return $this;
     }
 
     /**
     * @return string
     */
-    public function form_ident()
+    public function formIdent()
     {
-        return $this->form_ident;
+        return $this->formIdent;
     }
 
-    public function data_from_object()
+    public function dataFromObject()
     {
         $obj = $this->obj();
         $metadata = $obj->metadata();
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $form_ident = $this->form_ident();
-        if (!$form_ident) {
-            $form_ident = isset($admin_metadata['default_form']) ? $admin_metadata['default_form'] : '';
+        $formIdent = $this->formIdent();
+        if (!$formIdent) {
+            $formIdent = isset($admin_metadata['defaultForm']) ? $admin_metadata['defaultForm'] : '';
         }
 
-        $obj_form_data = isset($admin_metadata['forms'][$form_ident]) ? $admin_metadata['forms'][$form_ident] : [];
-        return $obj_form_data;
+        $objFormData = isset($admin_metadata['forms'][$formIdent]) ? $admin_metadata['forms'][$formIdent] : [];
+        return $objFormData;
     }
 
     /**
@@ -140,7 +139,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     *
     * @todo Merge with property_options
     */
-    public function form_properties(array $group = null)
+    public function formProperties(array $group = null)
     {
         $obj = $this->obj();
         $props = $obj->metadata()->properties();
@@ -150,23 +149,23 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
             $props = array_merge(array_flip( $group ), $props);
         }
 
-        foreach ($props as $property_ident => $property) {
+        foreach ($props as $propertyIdent => $property) {
             $p = new FormPropertyWidget([
                 'logger'=>$this->logger
             ]);
-            $p->set_property_ident($property_ident);
-            $p->set_data($property);
-            yield $property_ident => $p;
+            $p->setPropertyIdent($propertyIdent);
+            $p->setData($property);
+            yield $propertyIdent => $p;
         }
     }
 
     /**
     * @return array
     */
-    public function form_data()
+    public function formData()
     {
         $obj = $this->obj();
-        $form_data = $obj->data();
-        return $form_data;
+        $formData = $obj->data();
+        return $formData;
     }
 }

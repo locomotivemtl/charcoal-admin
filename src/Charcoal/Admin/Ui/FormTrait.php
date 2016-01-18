@@ -25,9 +25,9 @@ trait FormTrait
     private $method = 'post';
 
     /**
-    * @var string $next_url
+    * @var string $nextUrl
     */
-    private $next_url = '';
+    private $nextUrl = '';
 
     /**
     * @var array $groups
@@ -35,20 +35,20 @@ trait FormTrait
     protected $groups = [];
 
     /**
-    * @var array $form_data
+    * @var array $formData
     */
-    private $form_data = [];
+    private $formData = [];
     /**
-    * @var array $form_properties
+    * @var array $formProperties
     */
-    private $form_properties = [];
+    private $formProperties = [];
 
     /**
     * @param string $action
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function set_action($action)
+    public function setAction($action)
     {
         if (!is_string($action)) {
             throw new InvalidArgumentException(
@@ -72,7 +72,7 @@ trait FormTrait
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function set_method($method)
+    public function setMethod($method)
     {
         $method = strtolower($method);
         if (!in_array($method, ['post', 'get'])) {
@@ -97,7 +97,7 @@ trait FormTrait
     * @throws InvalidArgumentException if success is not a boolean
     * @return ActionInterface Chainable
     */
-    public function set_next_url($url)
+    public function setNextUrl($url)
     {
         if (!is_string($url)) {
             throw new InvalidArgumentException(
@@ -105,51 +105,51 @@ trait FormTrait
             );
         }
 
-        $this->next_url = $url;
+        $this->nextUrl = $url;
         return $this;
     }
 
     /**
     * @return bool
     */
-    public function next_url()
+    public function nextUrl()
     {
-        return $this->next_url;
+        return $this->nextUrl;
     }
 
     /**
     * @param array $groups
     * @return FormInterface Chainable
     */
-    public function set_groups(array $groups)
+    public function setGroups(array $groups)
     {
         $this->groups = [];
-        foreach ($groups as $group_ident => $group) {
-            $this->add_group($group_ident, $group);
+        foreach ($groups as $groupIdent => $group) {
+            $this->addGroup($groupIdent, $group);
         }
         return $this;
     }
 
     /**
-    * @param string $group_ident
+    * @param string $groupIdent
     * @param array|FormGroupInterface
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function add_group($group_ident, $group)
+    public function addGroup($groupIdent, $group)
     {
-        if (!is_string($group_ident)) {
+        if (!is_string($groupIdent)) {
             throw new InvalidArgumentException(
                 'Group ident must be a string'
             );
         }
 
         if (($group instanceof FormGroupInterface)) {
-            $group->set_form($this);
-            $this->groups[$group_ident] = $group;
+            $group->setForm($this);
+            $this->groups[$groupIdent] = $group;
         } else if (is_array($group)) {
-            $g = $this->create_group($group);
-            $this->groups[$group_ident] = $g;
+            $g = $this->createGroup($group);
+            $this->groups[$groupIdent] = $g;
         } else {
             throw new InvalidArgumentException(
                 'Group must be a Form Group object or an array'
@@ -163,7 +163,7 @@ trait FormTrait
     * @param array|null $data
     * @return FormGroupInterface
     */
-    abstract public function create_group(array $data = null);
+    abstract public function createGroup(array $data = null);
 
     /**
     * Group generator
@@ -174,9 +174,9 @@ trait FormTrait
         if (!is_array($this->groups)) {
             yield null;
         } else {
-            uasort($groups, ['self', 'sort_groups_by_priority']);
+            uasort($groups, ['self', 'sortGroupsByPriority']);
             foreach ($groups as $group) {
-                $GLOBALS['widget_template'] = $group->widget_type();
+                $GLOBALS['widget_template'] = $group->widgetType();
                 yield $group->ident() => $group;
             }
         }
@@ -185,7 +185,7 @@ trait FormTrait
     /**
     * @return boolean
     */
-    public function has_groups()
+    public function hasGroups()
     {
         return (count($this->groups) > 0);
     }
@@ -193,7 +193,7 @@ trait FormTrait
     /**
     * @return integer
     */
-    public function num_groups()
+    public function numGroups()
     {
         return count($this->groups);
     }
@@ -205,7 +205,7 @@ trait FormTrait
     * @param FormGroupInterface $b
     * @return integer Sorting value: -1, 0, or 1
     */
-    static protected function sort_groups_by_priority(FormGroupInterface $a, FormGroupInterface $b)
+    static protected function sortGroupsByPriority(FormGroupInterface $a, FormGroupInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();
@@ -218,12 +218,12 @@ trait FormTrait
     }
 
     /**
-    * @param array $form_data
+    * @param array $formData
     * @return FormInterface Chainable
     */
-    public function set_form_data(array $form_data)
+    public function setFormData(array $formData)
     {
-        $this->form_data = $form_data;
+        $this->formData = $formData;
         return $this;
     }
 
@@ -233,58 +233,58 @@ trait FormTrait
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function add_form_data($key, $val)
+    public function addFormData($key, $val)
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException(
                 'Key must be a string'
             );
         }
-        $this->form_data[$key] = $val;
+        $this->formData[$key] = $val;
         return $this;
     }
 
     /**
     * @return array
     */
-    public function form_data()
+    public function formData()
     {
-        return $this->form_data;
+        return $this->formData;
     }
 
     /**
     * @param array $properties
     * @return FormInterface Chainable
     */
-    public function set_form_properties(array $properties)
+    public function setFormProperties(array $properties)
     {
-        $this->form_properties = [];
-        foreach ($properties as $property_ident => $property) {
-            $this->add_form_property($property_ident, $property);
+        $this->formProperties = [];
+        foreach ($properties as $propertyIdent => $property) {
+            $this->addFormProperty($propertyIdent, $property);
         }
         return $this;
     }
 
     /**
-    * @param string $property_ident
+    * @param string $propertyIdent
     * @param array|FormPropertyInterface
     * @throws InvalidArgumentException
     * @return FormInterface Chainable
     */
-    public function add_form_property($property_ident, $property)
+    public function addFormProperty($propertyIdent, $property)
     {
-        if (!is_string($property_ident)) {
+        if (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
                 'Property ident must be a string'
             );
         }
 
         if (($property instanceof FormPropertyInterface)) {
-            $this->form_properties[$property_ident] = $property;
+            $this->formProperties[$propertyIdent] = $property;
         } else if (is_array($property)) {
-            $p = $this->create_form_property($property);
-            $p->set_property_ident($property_ident);
-            $this->form_properties[$property_ident] = $p;
+            $p = $this->createFormProperty($property);
+            $p->setPropertyIdent($propertyIdent);
+            $this->formProperties[$propertyIdent] = $p;
         } else {
             throw new InvalidArgumentException(
                 'Property must be a FormProperty object or an array'
@@ -298,23 +298,23 @@ trait FormTrait
     * @param array|null $data
     * @return FormPropertyInterface
     */
-    abstract public function create_form_property(array $data = null);
+    abstract public function createFormProperty(array $data = null);
 
     /**
     * Properties generator
     */
-    public function form_properties()
+    public function formProperties()
     {
         $sidebars = $this->sidebars;
         if (!is_array($this->sidebars)) {
             yield null;
         } else {
-            foreach ($this->form_properties as $prop) {
+            foreach ($this->formProperties as $prop) {
                 if ($prop->active() === false) {
                     continue;
                 }
-                $GLOBALS['widget_template'] = $prop->input_type();
-                yield $prop->property_ident() => $prop;
+                $GLOBALS['widget_template'] = $prop->inputType();
+                yield $prop->propertyIdent() => $prop;
             }
         }
     }

@@ -28,26 +28,20 @@ class TextWidget extends AdminWidget
 
     /**
     * @param boolean $show
-    * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_show_title($show)
+    public function setShowTitle($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException(
-                'Show must be a boolean'
-            );
-        }
-        $this->show_title = $show;
+        $this->showTitle = !!$show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_title()
+    public function showTitle()
     {
-        if ($this->show_title === false) {
+        if ($this->showTitle === false) {
             return false;
         } else {
             return !!$this->title();
@@ -56,26 +50,20 @@ class TextWidget extends AdminWidget
 
     /**
     * @param boolean $show
-    * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_show_subtitle($show)
+    public function setShowSubtitle($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException(
-                'Show must be a boolean'
-            );
-        }
-        $this->show_subtitle = $show;
+        $this->showSubtitle = !!$show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_subtitle()
+    public function showSubtitle()
     {
-        if ($this->show_subtitle === false) {
+        if ($this->showSubtitle === false) {
             return false;
         } else {
             return !!$this->subtitle();
@@ -87,23 +75,18 @@ class TextWidget extends AdminWidget
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_show_description($show)
+    public function setShowDescription($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException(
-                'Show must be a boolean'
-            );
-        }
-        $this->show_description = $show;
+        $this->showDescription = !!$show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_description()
+    public function showDescription()
     {
-        if ($this->show_description === false) {
+        if ($this->showDescription === false) {
             return false;
         } else {
             return !!$this->description();
@@ -115,30 +98,30 @@ class TextWidget extends AdminWidget
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_show_notes($show)
+    public function setShowNotes($show)
     {
         if (!is_bool($show)) {
             throw new InvalidArgumentException(
                 'Show must be a boolean'
             );
         }
-        $this->show_notes = $show;
+        $this->showNotes = $show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_notes()
+    public function showNotes()
     {
-        if ($this->show_notes === false) {
+        if ($this->showNotes === false) {
             return false;
         } else {
             return !!$this->notes();
         }
     }
 
-    public function set_title($title)
+    public function setTitle($title)
     {
         $this->title = $title;
         return $this;
@@ -149,7 +132,7 @@ class TextWidget extends AdminWidget
         return $this->title;
     }
 
-    public function set_subtitle($subtitle)
+    public function setSubtitle($subtitle)
     {
         $this->subtitle = $subtitle;
         return $this;
@@ -160,7 +143,7 @@ class TextWidget extends AdminWidget
         return $this->subtitle;
     }
 
-    public function set_description($description)
+    public function setDescription($description)
     {
         $this->description = $description;
         return $this;
@@ -171,7 +154,7 @@ class TextWidget extends AdminWidget
         return $this->description;
     }
 
-    public function set_notes($notes)
+    public function setNotes($notes)
     {
         $this->notes = $notes;
         return $this;

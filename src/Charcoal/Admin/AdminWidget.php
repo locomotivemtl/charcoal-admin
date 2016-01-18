@@ -18,9 +18,9 @@ use \Charcoal\Widget\WidgetView;
 class AdminWidget extends AbstractWidget
 {
     /**
-    * @var string $widget_id
+    * @var string $widgetId
     */
-    public $widget_id;
+    public $widgetId;
 
     /**
     * @var string $type
@@ -39,27 +39,27 @@ class AdminWidget extends AbstractWidget
     */
     private $lang;
     /**
-    * @var bool $show_label
+    * @var bool $showLabel
     */
-    private $show_label;
+    private $showLabel;
     /**
-    * @var bool $show_actions
+    * @var bool $showActions
     */
-    private $show_actions;
+    private $showActions;
 
 
-    public function set_widget_id($widget_id)
+    public function setWidgetId($widgetId)
     {
-        $this->widget_id = $widget_id;
+        $this->widgetId = $widgetId;
         return $this;
     }
 
-    public function widget_id()
+    public function widgetId()
     {
-        if (!$this->widget_id) {
-            $this->widget_id = 'widget_'.uniqid();
+        if (!$this->widgetId) {
+            $this->widgetId = 'widget_'.uniqid();
         }
-        return $this->widget_id;
+        return $this->widgetId;
     }
 
     /**
@@ -67,7 +67,7 @@ class AdminWidget extends AbstractWidget
     * @throws InvalidArgumentException
     * @return AdminWidget Chainable
     */
-    public function set_type($type)
+    public function setType($type)
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException(
@@ -91,7 +91,7 @@ class AdminWidget extends AbstractWidget
     * @throws InvalidArgumentException if the ident is not a string
     * @return AdminWidget (Chainable)
     */
-    public function set_ident($ident)
+    public function setIdent($ident)
     {
         if (!is_string($ident)) {
             throw new InvalidArgumentException(
@@ -114,7 +114,7 @@ class AdminWidget extends AbstractWidget
     * @param mixed $label
     * @return AdminWidget Chainable
     */
-    public function set_label($label)
+    public function setLabel($label)
     {
         $this->label = new TranslationString($label);
         return $this;
@@ -139,25 +139,21 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-    * @param boolean show
-    * @throws InvalidArgumentException
+    * @param boolean $show
     * @return AdminWidget Chainable
     */
-    public function set_show_actions($show)
+    public function setShowActions($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show actions must be a boolean');
-        }
-        $this->show_actions = $show;
+        $this->showActions = !!$show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_actions()
+    public function showActions()
     {
-        if ($this->show_actions !== false) {
+        if ($this->showActions !== false) {
             return (count($this->actions()) > 0);
         } else {
             return false;
@@ -165,25 +161,21 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-    * @param boolean show
-    * @throws InvalidArgumentException
+    * @param boolean $show
     * @return AdminWidget Chainable
     */
-    public function set_show_label($show)
+    public function setShowLabel($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show actions must be a boolean');
-        }
-        $this->show_label = $show;
+        $this->showLabel = !!$show;
         return $this;
     }
 
     /**
     * @return boolean
     */
-    public function show_label()
+    public function showLabel()
     {
-        if ($this->show_label !== false) {
+        if ($this->showLabel !== false) {
             return ((string)$this->label() == '');
         } else {
             return false;
@@ -199,7 +191,7 @@ class AdminWidget extends AbstractWidget
         unset($template);
         $view = new WidgetView();
         $view->set_context($this);
-        $content = $view->render_template($this->ident());
+        $content = $view->renderTemplate($this->ident());
         return $content;
     }
 }

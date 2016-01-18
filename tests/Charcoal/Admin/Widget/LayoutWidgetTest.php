@@ -6,12 +6,17 @@ use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
 
 class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-    * Hello world
-    */
-    public function testConstructor()
+    public function setUp()
     {
-        $obj = new LayoutWidget();
+        $logger = new \Psr\Log\NullLogger();
+        $this->obj = new LayoutWidget([
+            'logger' => $logger
+        ]);
+    }
+
+    public function testDefaultPosition()
+    {
+        $obj = $this->obj;
         $this->assertInstanceOf('\Charcoal\Admin\Widget\LayoutWidget', $obj);
         $this->assertEquals(0, $obj->position());
     }
@@ -25,8 +30,8 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
             'columns'=>[1]
         ];
 
-        $obj = new LayoutWidget();
-        $ret = $obj->set_data([
+        $obj = $this->obj;
+        $ret = $obj->setData([
             'structure'=>$struct
         ]);
         $this->assertSame($ret, $obj);
@@ -35,7 +40,7 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testSetStructure()
     {
-        $obj = new LayoutWidget();
+        $obj = $this->obj;
         $this->assertEquals([], $obj->structure());
 
         $struct = [
@@ -51,219 +56,219 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $obj = new LayoutWidget();
-        $ret = $obj->set_structure($struct);
+        $obj = $this->obj;
+        $ret = $obj->setStructure($struct);
 
         $this->assertSame($ret, $obj);
         //$this->assertEquals($struct, $obj->structure());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_structure([]);
+        $obj->setStructure([]);
     }
 
     public function testNumRows()
     {
-        $obj = new LayoutWidget();
-        $this->assertEquals(0, $obj->num_rows());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertEquals(0, $obj->numRows());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,1]]
         ]);
-        $this->assertEquals(3, $obj->num_rows());
+        $this->assertEquals(3, $obj->numRows());
     }
 
     public function testRowIndex()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->row_index());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->rowIndex());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,1]]
         ]);
-        $this->assertEquals(0, $obj->row_index(0));
-        $this->assertEquals(1, $obj->row_index(1));
-        $this->assertEquals(1, $obj->row_index(2));
-        $this->assertEquals(2, $obj->row_index(3));
-        $this->assertEquals(2, $obj->row_index(4));
-        $this->assertEquals(0, $obj->row_index(5));
+        $this->assertEquals(0, $obj->rowIndex(0));
+        $this->assertEquals(1, $obj->rowIndex(1));
+        $this->assertEquals(1, $obj->rowIndex(2));
+        $this->assertEquals(2, $obj->rowIndex(3));
+        $this->assertEquals(2, $obj->rowIndex(4));
+        $this->assertEquals(0, $obj->rowIndex(5));
     }
 
     public function testRowData()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->row_data());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->rowData());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,1]]
         ]);
-        $this->assertEquals(['columns'=>[1]], $obj->row_data(0));
-        $this->assertEquals(['columns'=>[1,2]], $obj->row_data(1));
-        $this->assertEquals(['columns'=>[1,2]], $obj->row_data(2));
-        $this->assertEquals(['columns'=>[2,1]], $obj->row_data(3));
-        $this->assertEquals(['columns'=>[2,1]], $obj->row_data(4));
-        $this->assertNull($obj->row_data(5));
+        $this->assertEquals(['columns'=>[1]], $obj->rowData(0));
+        $this->assertEquals(['columns'=>[1,2]], $obj->rowData(1));
+        $this->assertEquals(['columns'=>[1,2]], $obj->rowData(2));
+        $this->assertEquals(['columns'=>[2,1]], $obj->rowData(3));
+        $this->assertEquals(['columns'=>[2,1]], $obj->rowData(4));
+        $this->assertNull($obj->rowData(5));
     }
 
     public function testRowNumColumns()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->row_num_columns());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->rowNumColumns());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,2]]
         ]);
-        $this->assertEquals(1, $obj->row_num_columns(0));
-        $this->assertEquals(3, $obj->row_num_columns(1));
-        $this->assertEquals(3, $obj->row_num_columns(2));
-        $this->assertEquals(4, $obj->row_num_columns(3));
-        $this->assertEquals(4, $obj->row_num_columns(4));
-        $this->assertNull($obj->row_num_columns(5));
+        $this->assertEquals(1, $obj->rowNumColumns(0));
+        $this->assertEquals(3, $obj->rowNumColumns(1));
+        $this->assertEquals(3, $obj->rowNumColumns(2));
+        $this->assertEquals(4, $obj->rowNumColumns(3));
+        $this->assertEquals(4, $obj->rowNumColumns(4));
+        $this->assertNull($obj->rowNumColumns(5));
     }
 
     public function testRowNumCells()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->row_num_cells());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->rowNumCells());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,2]]
         ]);
-        $this->assertEquals(1, $obj->row_num_cells(0));
-        $this->assertEquals(2, $obj->row_num_cells(1));
-        $this->assertEquals(2, $obj->row_num_cells(2));
-        $this->assertEquals(2, $obj->row_num_cells(3));
-        $this->assertEquals(2, $obj->row_num_cells(4));
-        $this->assertNull($obj->row_num_cells(5));
+        $this->assertEquals(1, $obj->rowNumCells(0));
+        $this->assertEquals(2, $obj->rowNumCells(1));
+        $this->assertEquals(2, $obj->rowNumCells(2));
+        $this->assertEquals(2, $obj->rowNumCells(3));
+        $this->assertEquals(2, $obj->rowNumCells(4));
+        $this->assertNull($obj->rowNumCells(5));
     }
 
     public function testRowFirstCellIndex()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->row_first_cell_index());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->rowFirstCellIndex());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,2]]
         ]);
-        $this->assertEquals(0, $obj->row_first_cell_index(0));
-        $this->assertEquals(1, $obj->row_first_cell_index(1));
-        $this->assertEquals(1, $obj->row_first_cell_index(2));
-        $this->assertEquals(3, $obj->row_first_cell_index(3));
-        $this->assertEquals(3, $obj->row_first_cell_index(4));
-        //$this->assertNull($obj->row_first_cell_index(5));
+        $this->assertEquals(0, $obj->rowFirstCellIndex(0));
+        $this->assertEquals(1, $obj->rowFirstCellIndex(1));
+        $this->assertEquals(1, $obj->rowFirstCellIndex(2));
+        $this->assertEquals(3, $obj->rowFirstCellIndex(3));
+        $this->assertEquals(3, $obj->rowFirstCellIndex(4));
+        //$this->assertNull($obj->rowFirstCellIndex(5));
     }
 
     public function testCellRowIndex()
     {
-        $obj = new LayoutWidget();
-        //$this->assertNull($obj->cell_row_index());
-        $obj->set_structure([
+        $obj = $this->obj;
+        //$this->assertNull($obj->cellRowIndex());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,2]]
         ]);
-        $this->assertEquals(0, $obj->cell_row_index(0));
-        $this->assertEquals(0, $obj->cell_row_index(1));
-        $this->assertEquals(1, $obj->cell_row_index(2));
-        $this->assertEquals(0, $obj->cell_row_index(3));
-        $this->assertEquals(1, $obj->cell_row_index(4));
-        //$this->assertNull($obj->cell_row_index(5));
+        $this->assertEquals(0, $obj->cellRowIndex(0));
+        $this->assertEquals(0, $obj->cellRowIndex(1));
+        $this->assertEquals(1, $obj->cellRowIndex(2));
+        $this->assertEquals(0, $obj->cellRowIndex(3));
+        $this->assertEquals(1, $obj->cellRowIndex(4));
+        //$this->assertNull($obj->cellRowIndex(5));
     }
 
     public function testNumCellsTotal()
     {
-        $obj = new LayoutWidget();
-        $this->assertEquals(0, $obj->num_cells_total());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertEquals(0, $obj->numCellsTotal());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,2]]
         ]);
-        $this->assertEquals(5, $obj->num_cells_total());
+        $this->assertEquals(5, $obj->numCellsTotal());
     }
 
     public function testNumCellSpan()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->cell_span());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->cellSpan());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[2,2]]
         ]);
-        $this->assertEquals(1, $obj->cell_span(0));
-        $this->assertEquals(1, $obj->cell_span(1));
-        $this->assertEquals(2, $obj->cell_span(2));
-        $this->assertEquals(2, $obj->cell_span(3));
-        $this->assertEquals(2, $obj->cell_span(4));
-        $this->assertNull($obj->cell_span(5));
+        $this->assertEquals(1, $obj->cellSpan(0));
+        $this->assertEquals(1, $obj->cellSpan(1));
+        $this->assertEquals(2, $obj->cellSpan(2));
+        $this->assertEquals(2, $obj->cellSpan(3));
+        $this->assertEquals(2, $obj->cellSpan(4));
+        $this->assertNull($obj->cellSpan(5));
     }
 
     public function testNumCellSpanBy12()
     {
-        $obj = new LayoutWidget();
-        $this->assertNull($obj->cell_span_by12());
-        $obj->set_structure([
+        $obj = $this->obj;
+        $this->assertNull($obj->cellSpanBy12());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[3,1]]
         ]);
-        $this->assertEquals(12, $obj->cell_span_by12(0));
-        $this->assertEquals(4, $obj->cell_span_by12(1));
-        $this->assertEquals(8, $obj->cell_span_by12(2));
-        $this->assertEquals(9, $obj->cell_span_by12(3));
-        $this->assertEquals(3, $obj->cell_span_by12(4));
-        $this->assertNull($obj->cell_span_by12(5));
+        $this->assertEquals(12, $obj->cellSpanBy12(0));
+        $this->assertEquals(4, $obj->cellSpanBy12(1));
+        $this->assertEquals(8, $obj->cellSpanBy12(2));
+        $this->assertEquals(9, $obj->cellSpanBy12(3));
+        $this->assertEquals(3, $obj->cellSpanBy12(4));
+        $this->assertNull($obj->cellSpanBy12(5));
     }
 
     public function testCellStartsRow()
     {
-        $obj = new LayoutWidget();
-        //$this->assertNull($obj->cell_starts_row());
-        $obj->set_structure([
+        $obj = $this->obj;
+        //$this->assertNull($obj->cellStartsRow());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[3,1]]
         ]);
-        $this->assertEquals(true, $obj->cell_starts_row(0));
-        $this->assertEquals(true, $obj->cell_starts_row(1));
-        $this->assertEquals(false, $obj->cell_starts_row(2));
-        $this->assertEquals(true, $obj->cell_starts_row(3));
-        $this->assertEquals(false, $obj->cell_starts_row(4));
-        //$this->assertNull($obj->cell_starts_row(5));
+        $this->assertEquals(true, $obj->cellStartsRow(0));
+        $this->assertEquals(true, $obj->cellStartsRow(1));
+        $this->assertEquals(false, $obj->cellStartsRow(2));
+        $this->assertEquals(true, $obj->cellStartsRow(3));
+        $this->assertEquals(false, $obj->cellStartsRow(4));
+        //$this->assertNull($obj->cellStartsRow(5));
     }
 
     public function testCellEndsRow()
     {
-        $obj = new LayoutWidget();
-        //$this->assertNull($obj->cell_starts_row());
-        $obj->set_structure([
+        $obj = $this->obj;
+        //$this->assertNull($obj->cellStartsRow());
+        $obj->setStructure([
             ['columns'=>[1]],
             ['columns'=>[1,2]],
             ['columns'=>[3,1]]
         ]);
-        $this->assertEquals(true, $obj->cell_ends_row(0));
-        $this->assertEquals(false, $obj->cell_ends_row(1));
-        $this->assertEquals(true, $obj->cell_ends_row(2));
-        $this->assertEquals(false, $obj->cell_ends_row(3));
-        $this->assertEquals(true, $obj->cell_ends_row(4));
-        //$this->assertNull($obj->cell_ends_row(5));
+        $this->assertEquals(true, $obj->cellEndsRow(0));
+        $this->assertEquals(false, $obj->cellEndsRow(1));
+        $this->assertEquals(true, $obj->cellEndsRow(2));
+        $this->assertEquals(false, $obj->cellEndsRow(3));
+        $this->assertEquals(true, $obj->cellEndsRow(4));
+        //$this->assertNull($obj->cellEndsRow(5));
     }
 
     public function testStart()
     {
-        $obj = new LayoutWidget();
+        $obj = $this->obj;
         $this->assertEquals('', $obj->start());
     }
 
     public function testEnd()
     {
-        $obj = new LayoutWidget();
+        $obj = $this->obj;
         $this->assertEquals(0, $obj->position());
         $ret = $obj->end();
         $this->assertEquals(1, $obj->position());

@@ -6,11 +6,18 @@ use \Charcoal\Admin\Widget\GraphWidget;
 
 class GraphWidgetTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $logger = new \Psr\Log\NullLogger();
+        $this->obj = new GraphWidget([
+            'logger'=>$logger
+        ]);
+    }
 
     public function testSetData()
     {
-        $obj = new GraphWidget();
-        $ret = $obj->set_data([
+        $obj = $this->obj;
+        $ret = $obj->setData([
             'height'=>222,
             'colors'=>['#ff0000', '#0000ff']
         ]);
@@ -21,27 +28,27 @@ class GraphWidgetTest extends \PHPUnit_Framework_TestCase
 
     public function testSetHeight()
     {
-        $obj = new GraphWidget();
+        $obj =  $this->obj;
         $this->assertEquals(400, $obj->height());
 
-        $ret = $obj->set_height(333);
+        $ret = $obj->setHeight(333);
         $this->assertSame($obj, $ret);
         $this->assertEquals(333, $obj->height());
 
         //$this->setExpectedException('\InvalidArgumentException');
-        //$obj->set_height(false);
+        //$obj->setHeight(false);
     }
 
     public function testSetColors()
     {
-        $obj = new GraphWidget();
-        $this->assertEquals($obj->default_colors(), $obj->colors());
+        $obj =  $this->obj;
+        $this->assertEquals($obj->defaultColors(), $obj->colors());
 
-        $ret = $obj->set_colors(['#fff', '#000']);
+        $ret = $obj->setColors(['#fff', '#000']);
         $this->assertSame($ret, $obj);
         $this->assertEquals(['#fff', '#000'], $obj->colors());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_colors('#fff');
+        $obj->setColors('#fff');
     }
 }

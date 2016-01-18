@@ -14,52 +14,30 @@ class NumberInput extends AbstractPropertyInput
      /**
     * @var integer $min
     */
-    private $_min = 0;
+    private $min = 0;
     /**
-    * @var integer $_max
+    * @var integer $max
     */
-    private $_max = 0;
-
-    /**
-    * @var float $_step
-    */
-    private $_step = 0;
+    private $max = 0;
 
     /**
-    * @param array $data
-    * @return Number Chainable
+    * @var float $step
     */
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-        if (isset($data['size']) && $data['size'] !== null) {
-            $this->set_size($data['size']);
-        }
-        if (isset($data['min']) && $data['min'] !== null) {
-            $this->set_min($data['min']);
-        }
-        if (isset($data['max']) && $data['max'] !== null) {
-            $this->set_max($data['max']);
-        }
-        if (isset($data['step']) && $data['step'] !== null) {
-            $this->set_step($data['step']);
-        }
+    private $step = 0;
 
-
-        return $this;
-    }
-
-       /**
+    /**
     * @param integer $min
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_min($min)
+    public function setMin($min)
     {
         if (!is_integer($min)) {
-            throw new InvalidArgumentException('Min length needs to be an integer');
+            throw new InvalidArgumentException(
+                'Min length needs to be an integer'
+            );
         }
-        $this->_min = $min;
+        $this->min = $min;
         return $this;
     }
 
@@ -68,7 +46,7 @@ class NumberInput extends AbstractPropertyInput
     */
     public function min()
     {
-        return $this->_min;
+        return $this->min;
     }
 
     /**
@@ -76,12 +54,14 @@ class NumberInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_max($max)
+    public function setMax($max)
     {
         if (!is_integer($max)) {
-            throw new InvalidArgumentException('Max length needs to be an integer');
+            throw new InvalidArgumentException(
+                'Max length needs to be an integer'
+            );
         }
-        $this->_max = $max;
+        $this->max = $max;
         return $this;
     }
 
@@ -90,7 +70,7 @@ class NumberInput extends AbstractPropertyInput
     */
     public function max()
     {
-        return $this->_max;
+        return $this->max;
     }
 
     /**
@@ -98,12 +78,14 @@ class NumberInput extends AbstractPropertyInput
     * @throws InvalidArgumentException
     * @return Text Chainable
     */
-    public function set_step($step)
+    public function setStep($step)
     {
         if (!is_float($step)) {
-            throw new InvalidArgumentException('Size needs to be an integer');
+            throw new InvalidArgumentException(
+                'Step size needs to be a float'
+            );
         }
-        $this->_step = $step;
+        $this->step = $step;
         return $this;
     }
 
@@ -112,6 +94,6 @@ class NumberInput extends AbstractPropertyInput
     */
     public function step()
     {
-        return $this->_step;
+        return $this->step;
     }
 }

@@ -16,17 +16,17 @@ class SelectInput extends AbstractPropertyInput
     public function choices()
     {
         $choices = $this->p()->choices();
-        foreach($choices as $choice_ident=>$choice) {
-            if(!isset($choice['value'])) {
-                $choice['value'] = $choice_ident;
+        foreach ($choices as $choiceIdent => $choice) {
+            if (!isset($choice['value'])) {
+                $choice['value'] = $choiceIdent;
             }
-            if(!isset($choice['label'])) {
-                $choice['label'] = ucwords(strtolower(str_replace('_', ' ', $choice_ident)));
+            if (!isset($choice['label'])) {
+                $choice['label'] = ucwords(strtolower(str_replace('_', ' ', $choiceIdent)));
             }
-            if(!isset($choice['title'])) {
+            if (!isset($choice['title'])) {
                 $choice['title'] = $choice['label'];
             }
-            $choice['selected'] = $this->is_choice_selected($choice_ident);
+            $choice['selected'] = $this->isChoiceSelected($choiceIdent);
 
             yield $choice;
         }
@@ -35,7 +35,7 @@ class SelectInput extends AbstractPropertyInput
         /**
     * @return boolean
     */
-    public function is_choice_selected($c)
+    public function isChoiceSelected($c)
     {
         $val = $this->p()->val();
         if ($val === null) {

@@ -8,13 +8,13 @@ interface MenuItemInterface
     * @param array $data
     * @return MenuItemInterface Chainable
     */
-    public function set_data(array $data);
+    public function setData(array $data);
 
     /**
     * @param string $ident
     * @return MenuItem Chainable
     */
-    public function set_ident($ident);
+    public function setIdent($ident);
 
     /**
     * @return string
@@ -25,7 +25,7 @@ interface MenuItemInterface
     * @param string $label
     * @return MenuItem Chainable
     */
-    public function set_label($label);
+    public function setLabel($label);
 
     /**
     * @return string
@@ -36,7 +36,7 @@ interface MenuItemInterface
     * @param string $url
     * @return MenuItem Chainable
     */
-    public function set_url($url);
+    public function setUrl($url);
 
     /**
     * @return string
@@ -46,19 +46,19 @@ interface MenuItemInterface
     /**
     * @return boolean
     */
-    public function has_url();
+    public function hasUrl();
 
     /**
     * @param array $children
     * @return MenuItem Chainable
     */
-    public function set_children($children);
+    public function setChildren($children);
 
     /**
     * @param array|MenuItem $child
     * @return MenuItem Chainable
     */
-    public function add_child($child);
+    public function addChild($child);
 
     /**
     * @return array
@@ -68,10 +68,10 @@ interface MenuItemInterface
     /**
     * @return boolean
     */
-    public function has_children();
+    public function hasChildren();
 
     /**
     * @return integer
     */
-    public function num_children();
+    public function numChildren();
 }

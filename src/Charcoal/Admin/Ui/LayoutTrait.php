@@ -25,7 +25,7 @@ trait LayoutTrait
     * @throws InvalidArgumentException
     * @return LayoutInterface Chainable
     */
-    public function set_position($position)
+    public function setPosition($position)
     {
         if (!is_int($position)) {
             throw new InvalidArgumentException(
@@ -53,7 +53,7 @@ trait LayoutTrait
     * @throws InvalidArgumentException
     * @return array Computed layouts, ready for looping
     */
-    public function set_structure($layouts)
+    public function setStructure($layouts)
     {
         if (!is_array($layouts) || empty($layouts)) {
             throw new InvalidArgumentException(
@@ -61,18 +61,18 @@ trait LayoutTrait
             );
         }
 
-        $computed_layouts = [];
+        $computedLayouts = [];
         foreach ($layouts as $l) {
             $loop = isset($l['loop']) ? $l['loop'] : 1;
             $columns = isset($l['columns']) ? $l['columns'] : [1];
-            $orig_columns = $columns;
+            $origColumns = $columns;
             for ($i=0; $i<$loop; $i++) {
-                $computed_layouts[] = $l;
+                $computedLayouts[] = $l;
                 $i ++;
             }
         }
 
-        $this->structure = $computed_layouts;
+        $this->structure = $computedLayouts;
 
         // Chainable
         return $this;
@@ -91,7 +91,7 @@ trait LayoutTrait
     *
     * @return integer
     */
-    public function num_rows()
+    public function numRows()
     {
         $structure = $this->structure();
         return count($structure);
@@ -103,7 +103,7 @@ trait LayoutTrait
     * @param integer $position (Optional)
     * @return integer|null
     */
-    public function row_index($position = null)
+    public function rowIndex($position = null)
     {
         if ($position === null) {
             $position = $this->position();
@@ -112,8 +112,8 @@ trait LayoutTrait
         $i = 0;
         $p = 0;
         foreach ($this->structure as $row_ident => $row) {
-            $num_cells = count($row['columns']);
-            $p += $num_cells;
+            $numCells = count($row['columns']);
+            $p += $numCells;
             if ($p > $position) {
                 return $i;
             }
@@ -130,15 +130,15 @@ trait LayoutTrait
     * @param integer $position (Optional pos)
     * @return array|null
     */
-    public function row_data($position = null)
+    public function rowData($position = null)
     {
         if ($position === null) {
             $position = $this->position();
         }
 
-        $row_index = $this->row_index($position);
-        if (isset($this->structure[$row_index])) {
-            return $this->structure[$row_index];
+        $rowIndex = $this->rowIndex($position);
+        if (isset($this->structure[$rowIndex])) {
+            return $this->structure[$rowIndex];
         } else {
             return null;
         }
@@ -148,13 +148,13 @@ trait LayoutTrait
     * Get the number of columns (the colspan) of the row at a certain position
     * @return integer|null
     */
-    public function row_num_columns($position = null)
+    public function rowNumColumns($position = null)
     {
         if ($position === null) {
             $position = $this->position();
         }
 
-        $row = $this->row_data($position);
+        $row = $this->rowData($position);
         if ($row === null) {
             return null;
         } else {
@@ -169,22 +169,22 @@ trait LayoutTrait
     *
     * @return integer
     */
-    public function row_num_cells($position = null)
+    public function rowNumCells($position = null)
     {
         if ($position === null) {
             $position = $this->position();
         }
 
         // Get the data ta position
-        $row = $this->row_data($position);
-        $num_cells = isset($row['columns']) ? count($row['columns']) : null;
-        return $num_cells;
+        $row = $this->rowData($position);
+        $numCells = isset($row['columns']) ? count($row['columns']) : null;
+        return $numCells;
     }
 
         /**
     * Get the cell index (position) of the first cell of current row
     */
-    public function row_first_cell_index($position = null)
+    public function rowFirstCellIndex($position = null)
     {
         if ($position === null) {
             $position = $this->position();
@@ -194,34 +194,34 @@ trait LayoutTrait
         if (empty($structure)) {
             return null;
         }
-        $first_list = [];
+        $firstList = [];
         $i = 0;
         $p = 0;
         foreach ($structure as $row) {
-            $first_list[$i] = $p;
+            $firstList[$i] = $p;
             if ($p > $position) {
                 // Previous p
-                return $first_list[($i-1)];
+                return $firstList[($i-1)];
             }
 
-            $num_cells = isset($row['columns']) ? count($row['columns']) : 0;
+            $numCells = isset($row['columns']) ? count($row['columns']) : 0;
 
-            $p += $num_cells;
+            $p += $numCells;
 
             $i++;
         }
-        return $first_list[($i-1)];
+        return $firstList[($i-1)];
     }
 
     /**
     * Get the cell index in the current row
     */
-    public function cell_row_index($position = null)
+    public function cellRowIndex($position = null)
     {
         if ($position === null) {
             $position = $this->position();
         }
-        $first = $this->row_first_cell_index($position);
+        $first = $this->rowFirstCellIndex($position);
 
         return ($position - $first);
     }
@@ -231,14 +231,14 @@ trait LayoutTrait
     *
     * @return integer
     */
-    public function num_cells_total()
+    public function numCellsTotal()
     {
-        $num_cells = 0;
+        $numCells = 0;
         foreach ($this->structure as $row) {
-            $row_cols = isset($row['columns']) ? count($row['columns']) : 0;
-            $num_cells += $row_cols;
+            $rowCols = isset($row['columns']) ? count($row['columns']) : 0;
+            $numCells += $rowCols;
         }
-        return $num_cells;
+        return $numCells;
     }
 
     /**
@@ -246,13 +246,13 @@ trait LayoutTrait
     *
     * @return integer|null
     */
-    public function cell_span($position = null)
+    public function cellSpan($position = null)
     {
-        $row = $this->row_data($position);
-        $cell_index = $this->cell_row_index($position);
+        $row = $this->rowData($position);
+        $cellIndex = $this->cellRowIndex($position);
 
         // Cellspan (defaults to 1)
-        return isset($row['columns'][$cell_index]) ? (int)$row['columns'][$cell_index] : null;
+        return isset($row['columns'][$cellIndex]) ? (int)$row['columns'][$cellIndex] : null;
     }
 
     /**
@@ -260,13 +260,13 @@ trait LayoutTrait
     *
     * @return integer
     */
-    public function cell_span_by12($position = null)
+    public function cellSpanBy12($position = null)
     {
-        $num_columns =  $this->row_num_columns($position);
-        if (!$num_columns) {
+        $numColumns =  $this->rowNumColumns($position);
+        if (!$numColumns) {
             return null;
         }
-        return ($this->cell_span($position)*(12/$num_columns));
+        return ($this->cellSpan($position)*(12/$numColumns));
     }
 
     /**
@@ -274,13 +274,13 @@ trait LayoutTrait
     *
     * @return boolean
     */
-    public function cell_starts_row($position = null)
+    public function cellStartsRow($position = null)
     {
         if ($position === null) {
             $position = $this->position();
         }
 
-        return ($this->cell_row_index($position) === 0);
+        return ($this->cellRowIndex($position) === 0);
     }
 
     /**
@@ -288,16 +288,16 @@ trait LayoutTrait
     *
     * @return boolean
     */
-    public function cell_ends_row($position = null)
+    public function cellEndsRow($position = null)
     {
         if ($position === null) {
             $position = $this->position();
         }
 
-        $cell_num = $this->cell_row_index($position);
-        $num_cells = $this->row_num_cells($position);
+        $cellNum = $this->cellRowIndex($position);
+        $numCells = $this->rowNumCells($position);
 
-        return ($cell_num >= ($num_cells-1));
+        return ($cellNum >= ($numCells-1));
     }
 
     /**

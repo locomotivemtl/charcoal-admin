@@ -35,18 +35,18 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
-    * @var array $update_data
+    * @var array $updateData
     */
-    protected $update_data = [];
+    protected $updateData = [];
 
     /**
     * @param array $data
     * @return LoginAction Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
-        //parent::set_data($data);
-        $this->set_obj_data($data);
+        //parent::setData($data);
+        $this->setObjData($data);
 
         if (isset($data['next_url'])) {
             $this->set_next_url($data['next_url']);
@@ -55,37 +55,37 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
 
         unset($data['obj_type']);
         unset($data['obj_id']);
-        $this->set_update_data($data);
+        $this->setUpdateData($data);
 
 
         return $this;
     }
 
     /**
-    * @param array $update_data
+    * @param array $updateData
     * @return SaveAction Chainable
     */
-    public function set_update_data(array $update_data)
+    public function setUpdateData(array $updateData)
     {
-        $this->update_data = $update_data;
+        $this->updateData = $updateData;
         return $this;
     }
 
     /**
     * @return array
     */
-    public function update_data()
+    public function updateData()
     {
-        return $this->update_data;
+        return $this->updateData;
     }
 
     /**
-    * @param ModelInterface|null $save_data
+    * @param ModelInterface|null $saveData
     * @return SaveAction Chainable
     */
-    public function set_obj($obj)
+    public function setObj($obj)
     {
-        $this->_obj = $obj;
+        $this->Obj = $obj;
         return $this;
     }
 
@@ -98,37 +98,36 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     {
         try {
             $params = $request->getParams();
-            $this->set_data($params);
+            $this->setData($params);
 
             // Load (or reload) object (From `ObjectContainerTrait`)
-            $obj = $this->load_obj();
+            $obj = $this->loadObj();
 
-            $obj->set_data($this->update_data());
+            $obj->setData($this->updateData());
             $valid = $obj->validate();
 
             if (!$valid) {
                 $validation = $obj->validation();
                 // @todo: Validation info to feedback
-                $this->set_success(false);
-                $this->add_feedback('error', 'Failed to update object: validation error(s).');
+                $this->setSuccess(false);
+                $this->addFeedback('error', 'Failed to update object: validation error(s).');
                 return $response->withStatus(404);
             }
 
             $ret = $obj->update();
 
             if ($ret) {
-                $this->log_object_update();
-                $this->set_success(true);
-                $this->add_feedback('success', sprintf('Object was successfully updated. (ID: %s)', $obj->id()));
+                $this->setSuccess(true);
+                $this->addFeedback('success', sprintf('Object was successfully updated. (ID: %s)', $obj->id()));
                 return $response;
             } else {
-                $this->set_success(false);
-                $this->add_feedback('error', 'Could not update objet. Unknown error');
+                $this->setSuccess(false);
+                $this->addFeedback('error', 'Could not update objet. Unknown error');
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
-            $this->set_success(false);
-            $this->add_feedback('error', $e->getMessage());
+            $this->setSuccess(false);
+            $this->addFeedback('error', $e->getMessage());
             return $response->withStatus(404);
         }
 
@@ -146,13 +145,5 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
             'feedbacks'=>$this->feedbacks()
         ];
         return $results;
-    }
-
-    /**
-    *
-    */
-    public function log_object_update()
-    {
-        // @todo
     }
 }

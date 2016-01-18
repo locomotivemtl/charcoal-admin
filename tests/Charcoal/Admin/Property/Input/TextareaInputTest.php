@@ -10,7 +10,7 @@ class TextareaInputTest extends \PHPUnit_Framework_TestCase
     public function testSetData()
     {
         $obj = new TextareaInput();
-        $ret = $obj->set_data([
+        $ret = $obj->setData([
             'cols'=>42,
             'rows'=>84
         ]);
@@ -22,24 +22,24 @@ class TextareaInputTest extends \PHPUnit_Framework_TestCase
     public function testSetCols()
     {
         $obj = new TextareaInput();
-        $ret = $obj->set_cols(42);
+        $ret = $obj->setCols(42);
 
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->cols());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_cols('foo');
+        $obj->setCols('foo');
     }
 
     public function testSetRows()
     {
         $obj = new TextareaInput();
-        $ret = $obj->set_rows(42);
+        $ret = $obj->setRows(42);
 
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->rows());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_rows('foo');
+        $obj->setRows('foo');
     }
 }

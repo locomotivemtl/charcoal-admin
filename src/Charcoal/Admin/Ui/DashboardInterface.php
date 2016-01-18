@@ -12,7 +12,7 @@ interface DashboardInterface
     * @param LayoutInterface|array
     * @return DashboardInterface Chainable
     */
-    public function set_layout($layout);
+    public function setLayout($layout);
 
     /**
     * @return LayoutInterface
@@ -23,14 +23,14 @@ interface DashboardInterface
     * @param array $widgets
     * @return DashboardInterface Chainable
     */
-    public function set_widgets($widgets);
+    public function setWidgets($widgets);
 
     /**
     * @param string $widget_ident
     * @param WidgetInterface|array $widget
     * @return DashboardInterface Chainable
     */
-    public function add_widget($widget_ident, $widget);
+    public function addWidget($widgetIdent, $widget);
 
     /**
     * Widgets generator
@@ -40,10 +40,10 @@ interface DashboardInterface
     /**
     * @return boolean
     */
-    public function has_widgets();
+    public function hasWidgets();
 
     /**
     * @return integer
     */
-    public function num_widgets();
+    public function numWidgets();
 }

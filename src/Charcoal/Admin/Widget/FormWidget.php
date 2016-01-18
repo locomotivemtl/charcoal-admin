@@ -23,13 +23,13 @@ class FormWidget extends AdminWidget implements FormInterface
     /*public $label;
     public $subtitle;
     public $description;
-    public $long_description;
+    public $longDescription;
     public $notes;*/
 
     //public $type;
 
-    /*public $show_label;
-    public $show_description;
+    /*public $showLabel;
+    public $showDescription;
     public $show_notes;
     public $show_actions;*/
 
@@ -44,31 +44,19 @@ class FormWidget extends AdminWidget implements FormInterface
     /*public $read_only;
     public $next_actions;*/
 
-    private $widget_factory;
-
-    /**
-    * @param array $data Optional
-    */
-    public function __construct(array $data = null)
-    {
-        //parent::__construct($data);
-
-        if (is_array($data)) {
-            $this->set_data($data);
-        }
-    }
+    private $widgetFactory;
 
     /**
     * @param array|null $data
     * @return FormGroupInterface
     */
-    public function create_group(array $data = null)
+    public function createGroup(array $data = null)
     {
         $widget_type = (isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formGroup');
-        $group = $this->widget_factory()->create($widget_type, [
+        $group = $this->widgetFactory()->create($widget_type, [
             'logger' => $this->logger
         ]);
-        $group->set_form($this);
+        $group->setForm($this);
         if ($data) {
             $group->set_data($data);
         }
@@ -81,9 +69,11 @@ class FormWidget extends AdminWidget implements FormInterface
     * @param array $data
     * @return FormPropertyInterface
     */
-    public function create_form_property(array $data = null)
+    public function createFormProperty(array $data = null)
     {
-        $p = new FormPropertyWidget();
+        $p = new FormPropertyWidget([
+            'logger'=>$this->logger
+        ]);
         if ($data !== null) {
             $p->set_data($data);
         }
@@ -95,7 +85,7 @@ class FormWidget extends AdminWidget implements FormInterface
     * @throws InvalidArgumentException
     * @return FormWidget Chainable
     */
-    public function set_layout($layout)
+    public function setLayout($layout)
     {
         if (($layout instanceof LayoutWidget)) {
             $this->layout = $layout;
@@ -122,36 +112,39 @@ class FormWidget extends AdminWidget implements FormInterface
         return $this->layout;
     }
 
-
-    public function set_sidebars(array $sidebars)
+    /**
+    *
+    */
+    public function setSidebars(array $sidebars)
     {
         $this->sidebars = [];
-        foreach ($sidebars as $sidebar_ident => $sidebar) {
-            $this->add_sidebar($sidebar_ident, $sidebar);
+        foreach ($sidebars as $sidebarIdent => $sidebar) {
+            $this->addSidebar($sidebarIdent, $sidebar);
         }
         return $this;
     }
+
     /**
     * @param array|FormSidebarWidget $sidebar
     * @throws InvalidArgumentException
     * @return FormWidget Chainable
     */
-    public function add_sidebar($sidebar_ident, $sidebar)
+    public function addSidebar($sidebarIdent, $sidebar)
     {
-        if (!is_string($sidebar_ident)) {
+        if (!is_string($sidebarIdent)) {
             throw new InvalidArgumentException(
                 'Sidebar ident must be a string'
             );
         }
         if (($sidebar instanceof FormSidebarWidget)) {
-            $this->sidebars[$sidebar_ident] = $sidebar;
+            $this->sidebars[$sidebarIdent] = $sidebar;
         } else if (is_array($sidebar)) {
             $s = new FormSidebarWidget([
                 'logger'=>$this->logger
             ]);
-            $s->set_form($this);
-            $s->set_data($sidebar);
-            $this->sidebars[$sidebar_ident] = $s;
+            $s->setForm($this);
+            $s->setData($sidebar);
+            $this->sidebars[$sidebarIdent] = $s;
         } else {
             throw new InvalidArgumentException(
                 'Sidebar must be a FormSidebarWidget object or an array'
@@ -169,7 +162,7 @@ class FormWidget extends AdminWidget implements FormInterface
         if (!is_array($this->sidebars)) {
             yield null;
         } else {
-            uasort($sidebars, ['self', 'sort_sidebars_by_priority']);
+            uasort($sidebars, ['self', 'sortSidebarsByPriority']);
             foreach ($sidebars as $sidebar) {
                 /*if ($sidebar->widget_type() != '') {
                     $GLOBALS['widget_template'] = $sidebar->widget_type();
@@ -189,7 +182,7 @@ class FormWidget extends AdminWidget implements FormInterface
     * @param FormGroupInterface $b
     * @return integer Sorting value: -1, 0, or 1
     */
-    static protected function sort_sidebars_by_priority(FormGroupInterface $a, FormGroupInterface $b)
+    static protected function sortSidebarsByPriority(FormGroupInterface $a, FormGroupInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();
@@ -204,11 +197,11 @@ class FormWidget extends AdminWidget implements FormInterface
     /**
     * @return WidgetFactory
     */
-    private function widget_factory()
+    private function widgetFactory()
     {
-        if ($this->widget_factory === null) {
-            $this->widget_factory = new WidgetFactory();
+        if ($this->widgetFactory === null) {
+            $this->widgetFactory = new WidgetFactory();
         }
-        return $this->widget_factory;
+        return $this->widgetFactory;
     }
 }

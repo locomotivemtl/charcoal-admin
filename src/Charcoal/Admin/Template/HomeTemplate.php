@@ -29,11 +29,11 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     * @param array $data
     * @return Home Chainable
     */
-    public function set_data(array $data)
+    public function setData(array $data)
     {
-        parent::set_data($data);
+        parent::setData($data);
 
-        $this->set_dashboard_data($data);
+        $this->setDashboardData($data);
 
         return $this;
     }
@@ -42,18 +42,18 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     * @param array $data Optional
     * @return Dashboard
     */
-    public function create_dashboard(array $data = null)
+    public function createDashboard(array $data = null)
     {
-        $dashboard_ident = $this->dashboard_ident();
-        $dashboard_config = $this->dashboard_config();
+        $dashboardIdent = $this->dashboardIdent();
+        $dashboardConfig = $this->dashboardConfig();
 
         $metadata = $this->metadata();
 
         $dashboard = new Dashboard();
         if (is_array($data)) {
-            $dashboard->set_data($data);
+            $dashboard->setData($data);
         } else if (isset($metadata['dashboard'])) {
-            $dashboard->set_data($metadata['dashboard']);
+            $dashboard->setData($metadata['dashboard']);
         }
 
         return $dashboard;

@@ -27,9 +27,9 @@ trait FormGroupTrait
     /**
     * Should always be declared in every widget
     * using that trait.
-    * @var string $widget_type
+    * @var string $widgetType
     */
-    private $widget_type;
+    private $widgetType;
 
     /**
     * These might never be used in the widget
@@ -56,30 +56,30 @@ trait FormGroupTrait
     * @throws InvalidArgumentException
     * @return AdminWidget Chainable
     */
-    public function set_widget_type($type)
+    public function setWidgetType($type)
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException(
                 'Widget type must be a string'
             );
         }
-        $this->widget_type = $type;
+        $this->widgetType = $type;
         return $this;
     }
 
     /**
     * @return string
     */
-    public function widget_type()
+    public function widgetType()
     {
-        return $this->widget_type;
+        return $this->widgetType;
     }
 
     /**
     * @param String $title
     * @return $this (chainable)
     */
-    public function set_title($title)
+    public function setTitle($title)
     {
         $this->title = $title;
         return $this;
@@ -97,7 +97,7 @@ trait FormGroupTrait
     * @param String $title
     * @return $this (chainable)
     */
-    public function set_subtitle($subtitle)
+    public function setSubtitle($subtitle)
     {
         $this->subtitle = $subtitle;
         return $this;
@@ -115,7 +115,7 @@ trait FormGroupTrait
     * @param Form $form
     * @return FormGroupWidget Chainable
     */
-    public function set_form(FormInterface $form)
+    public function setForm(FormInterface $form)
     {
         $this->form = $form;
         return $this;
@@ -134,7 +134,7 @@ trait FormGroupTrait
     * @throws InvalidArgumentException
     * @return FormGroupInterface Chainable
     */
-    public function set_priority($priority)
+    public function setPriority($priority)
     {
         if (!is_int($priority)) {
             throw new InvalidArgumentException(

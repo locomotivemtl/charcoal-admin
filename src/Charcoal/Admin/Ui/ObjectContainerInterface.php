@@ -4,33 +4,28 @@ namespace Charcoal\Admin\Ui;
 
 interface ObjectContainerInterface
 {
-    /**
-    * @param array $data
-    * @return ObjectContainerInterface Chainable
-    */
-    public function set_obj_data($data);
 
     /**
-    * @param string $obj_type
+    * @param string $objType
     * @return ObjectContainerInterface Chainable
     */
-    public function set_obj_type($obj_type);
+    public function setObjType($objType);
 
     /**
     * @return string
     */
-    public function obj_type();
+    public function objType();
 
     /**
-    * @param mixed $obj_id
+    * @param mixed $objId
     * @return ObjectContainerInterface Chainable
     */
-    public function set_obj_id($obj_id);
+    public function setObjId($objId);
 
     /**
     * @return mixed
     */
-    public function obj_id();
+    public function objId();
 
     /**
     * @return ModelInterface
@@ -40,11 +35,11 @@ interface ObjectContainerInterface
     /**
     * @return ModelInterface
     */
-    public function create_obj();
+    public function createObj();
 
     /**
     * @return ModelInterface
     */
-    public function load_obj();
+    public function loadObj();
 
 }

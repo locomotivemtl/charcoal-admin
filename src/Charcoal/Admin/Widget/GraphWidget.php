@@ -25,7 +25,7 @@ class GraphWidget extends AdminWidget
     * @param mixed $height
     * @return Graph Chainable
     */
-    public function set_height($height)
+    public function setHeight($height)
     {
         $this->height = $height;
         return $this;
@@ -40,17 +40,11 @@ class GraphWidget extends AdminWidget
     }
 
     /**
-    * @param array $colors
-    * @throws InvalidArgumentException
+    * @param string[] $colors
     * @return Graph Chainable
     */
-    public function set_colors($colors)
+    public function setColors(array $colors)
     {
-        if (!is_array($colors)) {
-            throw new InvalidArgumentException(
-                'Colors must be an array'
-            );
-        }
         $this->colors = $colors;
         return $this;
     }
@@ -61,7 +55,7 @@ class GraphWidget extends AdminWidget
     public function colors()
     {
         if ($this->colors === null || empty($this->colors)) {
-            $this->colors = $this->default_colors();
+            $this->colors = $this->defaultColors();
         }
         return $this->colors;
     }
@@ -69,7 +63,7 @@ class GraphWidget extends AdminWidget
     /**
     * @todo Read from widget metadata
     */
-    public function default_colors()
+    public function defaultColors()
     {
         return [
             '#f0ad4e',

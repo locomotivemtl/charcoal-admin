@@ -13,90 +13,70 @@ class FormSidebarWidget extends AdminWidget
 {
     /**
     * In-memory copy of the parent form widget.
-    * @var FormWidget $_form
+    * @var FormWidget $form
     */
-    private $_form;
+    private $form;
 
     /**
     * @var string
     */
-    private $_widget_type = 'properties';
+    private $widget_type = 'properties';
 
     /**
-    * @var Object $_actions
+    * @var Object $actions
     */
-    private $_actions;
+    private $actions;
 
-    protected $_sidebar_sidebar_properties = [];
-    protected $_priority;
+    protected $sidebar_sidebarProperties = [];
+    protected $priority;
 
     /**
-    * @var TranslationString $_title
+    * @var TranslationString $title
     */
-    protected $_title;
+    protected $title;
 
-    public function set_form(FormWidget $form)
+    public function setForm(FormWidget $form)
     {
-        $this->_form = $form;
+        $this->form = $form;
         return $this;
     }
 
     public function form()
     {
-        return $this->_form;
-    }
-
-    public function set_data(array $data)
-    {
-        parent::set_data($data);
-
-        if (isset($data['properties'])) {
-            $this->set_sidebar_properties($data['properties']);
-        }
-        if (isset($data['priority']) && $data['priority'] !== null) {
-            $this->set_priority($data['priority']);
-        }
-        if (isset($data['title'])) {
-            $this->set_title($data['title']);
-        }
-        if (isset($data['actions'])) {
-            $this->set_actions($data['actions']);
-        }
-        return $this;
+        return $this->form;
     }
 
 
-
-    public function set_subtitle($subtitle)
+    public function setSubtitle($subtitle)
     {
         if ($subtitle === null) {
-            $this->_title = null;
+            $this->title = null;
         } else {
-            $this->_title = new TranslationString($subtitle);
+            $this->title = new TranslationString($subtitle);
         }
     }
 
-    public function set_sidebar_properties($properties)
+    public function setSidebarProperties($properties)
     {
-        $this->_sidebar_properties = $properties;
+        $this->sidebarProperties = $properties;
         return $this;
     }
 
-    public function sidebar_properties()
+    public function sidebarProperties()
     {
-        return $this->_sidebar_properties;
+        return $this->sidebarProperties;
     }
 
-    public function form_properties()
+    public function formProperties()
     {
-        $sidebar_properties = $this->sidebar_properties();
-        $form_properties = $this->form()->form_properties($sidebar_properties);
+        $sidebarProperties = $this->sidebarProperties();
+        $formProperties = $this->form()->formProperties($sidebarProperties);
         $ret = [];
-        foreach ($form_properties as $property_ident => $property) {
-            if (in_array($property_ident, $sidebar_properties)) {
+        foreach ($formProperties as $property_ident => $property) {
+            if (in_array($property_ident, $sidebarProperties)) {
                 if (is_callable([$this->form(), 'obj'])) {
                     $val = $this->form()->obj()->p($property_ident)->val();
-                    $property->set_property_val($val);
+                    $property->setProperty_val($val);
                 }
                 yield $property_ident => $property;
             }
@@ -108,12 +88,12 @@ class FormSidebarWidget extends AdminWidget
     * @param Object $actions
     * @return FormGroupWidget Chainable
     */
-    public function set_actions($actions)
+    public function setActions($actions)
     {
         if (!$actions) {
             return $this;
         }
-        $this->_actions = [];
+        $this->actions = [];
 
         foreach ($actions as $ident => $action) {
             if (!isset($action['url']) || !isset($action['label'])) {
@@ -125,7 +105,7 @@ class FormSidebarWidget extends AdminWidget
             // Info = default
             // Possible: danger, info
             $btn = isset( $action['type'] ) ? $action['type'] : 'info';
-            $this->_actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn ];
+            $this->actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn ];
         }
 
         return $this;
@@ -139,7 +119,7 @@ class FormSidebarWidget extends AdminWidget
     */
     public function actions()
     {
-        return $this->_actions;
+        return $this->actions;
     }
 
     /**
@@ -147,7 +127,7 @@ class FormSidebarWidget extends AdminWidget
     * @throws InvalidArgumentException
     * @return FormGroupWidget Chainable
     */
-    public function set_priority($priority)
+    public function setPriority($priority)
     {
         if (!is_int($priority)) {
             throw new InvalidArgumentException(
@@ -155,7 +135,7 @@ class FormSidebarWidget extends AdminWidget
             );
         }
         $priority = (int)$priority;
-        $this->_priority = $priority;
+        $this->priority = $priority;
         return $this;
     }
 
@@ -164,26 +144,28 @@ class FormSidebarWidget extends AdminWidget
     */
     public function priority()
     {
-        return $this->_priority;
+        return $this->priority;
     }
 
-
-
-    public function set_title($title)
+    /**
+    * @param mixed $title
+    * @return FormSidebarWidget Chainable
+    */
+    public function setTitle($title)
     {
         if ($title === null) {
-            $this->_title = null;
+            $this->title = null;
         } else {
-            $this->_title = new TranslationString($title);
+            $this->title = new TranslationString($title);
         }
         return $this;
     }
 
     public function title()
     {
-        if ($this->_title === null) {
+        if ($this->title === null) {
             $this->set_title('Actions');
         }
-        return $this->_title;
+        return $this->title;
     }
 }

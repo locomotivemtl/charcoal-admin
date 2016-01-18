@@ -17,22 +17,22 @@ class User extends AbstractUser
     /**
     * @return string
     */
-    static public function session_key()
+    static public function sessionKey()
     {
         return 'admin.user';
     }
 
     /**
-    * ConfigurableInterface > create_config()
+    * ConfigurableInterface > createConfig()
     *
     * @param array|null $data Optional
     * @return UserConfig
     */
-    public function create_config(array $data = null)
+    public function createConfig(array $data = null)
     {
         $config = new UserConfig();
         if ($data !== null) {
-            $config->set_data($data);
+            $config->merge($data);
         }
         return $config;
     }
@@ -41,11 +41,11 @@ class User extends AbstractUser
     * @param array|null $data Optional
     * @return UserGroup
     */
-    public function create_group(array $data = null)
+    public function createGroup(array $data = null)
     {
         $group =  new UserGroup();
         if ($data !== null) {
-            $group->set_data($data);
+            $group->setData($data);
         }
         return $group;
     }

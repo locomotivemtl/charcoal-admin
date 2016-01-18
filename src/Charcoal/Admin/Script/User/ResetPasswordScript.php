@@ -30,7 +30,7 @@ class ResetPasswordScript extends AdminScript
             'Reset a Charcoal Administrator password'
         );
 
-        $username = $this->arg_or_input('username');
+        $username = $this->argOrInput('username');
 
         $user = new User();
         $user->load($username);

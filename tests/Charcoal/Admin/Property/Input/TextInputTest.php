@@ -10,7 +10,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
     public function testSetData()
     {
         $obj = new TextInput();
-        $ret = $obj->set_data([
+        $ret = $obj->setData([
             'size'=>42,
             'min_length'=>10,
             'max_length'=>100,
@@ -19,8 +19,8 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->size());
-        $this->assertEquals(10, $obj->min_length());
-        $this->assertEquals(100, $obj->max_length());
+        $this->assertEquals(10, $obj->minLength());
+        $this->assertEquals(100, $obj->maxLength());
         $this->assertEquals('foo', $obj->pattern());
         $this->assertEquals('bar', $obj->placeholder());
     }
@@ -28,60 +28,60 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
     public function testSetSize()
     {
         $obj = new TextInput();
-        $ret = $obj->set_size(42);
+        $ret = $obj->setSize(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->size());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_size(false);
+        $obj->setSize(false);
 
     }
 
     public function testSetMinLength()
     {
         $obj = new TextInput();
-        $ret = $obj->set_min_length(42);
+        $ret = $obj->setMinLength(42);
         $this->assertSame($ret, $obj);
-        $this->assertEquals(42, $obj->min_length());
+        $this->assertEquals(42, $obj->minLength());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_min_length(false);
+        $obj->setMinLength(false);
 
     }
 
     public function testSetMaxLength()
     {
         $obj = new TextInput();
-        $ret = $obj->set_max_length(42);
+        $ret = $obj->setMaxLength(42);
         $this->assertSame($ret, $obj);
-        $this->assertEquals(42, $obj->max_length());
+        $this->assertEquals(42, $obj->maxLength());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_max_length(false);
+        $obj->setMaxLength(false);
 
     }
 
     public function testSetPattern()
     {
         $obj = new TextInput();
-        $ret = $obj->set_pattern('foo');
+        $ret = $obj->setPattern('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->pattern());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_pattern(false);
+        $obj->setPattern(false);
 
     }
 
     public function testSetPlaceholder()
     {
         $obj = new TextInput();
-        $ret = $obj->set_placeholder('foo');
+        $ret = $obj->setPlaceholder('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->placeholder());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->set_placeholder(false);
+        $obj->setPlaceholder(false);
 
     }
 }

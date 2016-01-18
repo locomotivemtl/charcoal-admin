@@ -29,19 +29,19 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
     * @param array $data Optional
     * @throws Exception
     * @return Dashboard
-    * @see DashboardContainerTrait::create_dashboard()
+    * @see DashboardContainerTrait::createDashboard()
     */
-    public function create_dashboard(array $data = null)
+    public function createDashboard(array $data = null)
     {
-        $dashboard_config = $this->obj_edit_dashboard_config();
+        $dashboardConfig = $this->objEditDashboardConfig();
 
         $dashboard = new DashboardWidget([
             'logger'=>$this->logger
         ]);
         if ($data !== null) {
-            $dashboard->set_data($data);
+            $dashboard->setData($data);
         }
-        $dashboard->set_data($dashboard_config);
+        $dashboard->setData($dashboardConfig);
 
         return $dashboard;
     }
@@ -51,28 +51,29 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
     */
     public function sidemenu()
     {
-        $dashboard_config = $this->obj_edit_dashboard_config();;
-        if (!isset($dashboard_config['sidemenu'])) {
+        $dashboardConfig = $this->objEditDashboardConfig();
+;
+        if (!isset($dashboardConfig['sidemenu'])) {
             return null;
         }
 
-        $sidemenu_config = $dashboard_config['sidemenu'];
+        $sidemenuConfig = $dashboardConfig['sidemenu'];
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-        $widget_factory = new WidgetFactory();
-        $widget_type = isset($sidemenu_config['widget_type']) ? $sidemenu_config['widget_type'] : 'charcoal/admin/widget/sidemenu';
-        $sidemenu = $widget_factory->create($widget_type, [
+        $widgetFactory = new WidgetFactory();
+        $widget_type = isset($sidemenuConfig['widget_type']) ? $sidemenuConfig['widget_type'] : 'charcoal/admin/widget/sidemenu';
+        $sidemenu = $widgetFactory->create($widget_type, [
             'logger'=>$this->logger
         ]);
         return $sidemenu;
     }
 
-    private function obj_edit_dashboard_config()
+    private function objEditDashboardConfig()
     {
         $obj = $this->obj();
         $metadata = $obj->metadata();
-        $dashboard_ident = $this->dashboard_ident();
-        $dashboard_config = $this->dashboard_config();
+        $dashboardIdent = $this->dashboardIdent();
+        $dashboardConfig = $this->dashboardConfig();
 
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         if ($admin_metadata === null) {
@@ -81,23 +82,23 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
             );
         }
 
-        if ($dashboard_ident === null || $dashboard_ident === '') {
-            if (!isset($admin_metadata['default_edit_dashboard'])) {
+        if ($dashboardIdent === null || $dashboardIdent === '') {
+            if (!isset($admin_metadata['defaultEditDashboard'])) {
                 throw new Exception(
                     'No default edit dashboard defined in object admin metadata'
                 );
             }
-            $dashboard_ident = $admin_metadata['default_edit_dashboard'];
+            $dashboardIdent = $admin_metadata['defaultEditDashboard'];
         }
-        if ($dashboard_config === null || empty($dashboard_config)) {
-            if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboard_ident])) {
+        if ($dashboardConfig === null || empty($dashboardConfig)) {
+            if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboardIdent])) {
                 throw new Exception(
                     'Dashboard config is not defined.'
                 );
             }
-            $dashboard_config = $admin_metadata['dashboards'][$dashboard_ident];
+            $dashboardConfig = $admin_metadata['dashboards'][$dashboardIdent];
         }
 
-        return $dashboard_config;
+        return $dashboardConfig;
     }
 }

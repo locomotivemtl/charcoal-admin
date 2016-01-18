@@ -16,15 +16,4 @@ use \Charcoal\Admin\Ui\LayoutTrait;
 class LayoutWidget extends AdminWidget implements LayoutInterface
 {
     use LayoutTrait;
-
-    /**
-    * @param array $data Optional
-    */
-    public function __construct(array $data = null)
-    {
-        if (is_array($data)) {
-            $this->set_data($data);
-        }
-    }
-
 }

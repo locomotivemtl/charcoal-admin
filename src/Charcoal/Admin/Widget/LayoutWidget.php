@@ -11,8 +11,8 @@ use \Charcoal\Admin\Ui\LayoutInterface;
 use \Charcoal\Admin\Ui\LayoutTrait;
 
 /**
-* Layout Widget Controller
-*/
+ * Layout Widget Controller
+ */
 class LayoutWidget extends AdminWidget implements LayoutInterface
 {
     use LayoutTrait;

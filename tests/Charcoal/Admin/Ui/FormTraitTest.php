@@ -2,7 +2,6 @@
 
 namespace Charcoal\Tests\Admin\Ui;
 
-
 class FormTraitTest extends \PHPUnit_Framework_TestCase
 {
     public $obj;
@@ -13,13 +12,13 @@ class FormTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * Assert that the `set_action()` method:
-    * - is chainable
-    * - sets the action
-    * - throws an exception if the parameter is not a string
-    * and that the `action()` method
-    * - defaults to ""
-    */
+     * Assert that the `set_action()` method:
+     * - is chainable
+     * - sets the action
+     * - throws an exception if the parameter is not a string
+     * and that the `action()` method
+     * - defaults to ""
+     */
     public function testSetAction()
     {
         $obj = $this->obj;
@@ -33,13 +32,13 @@ class FormTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * Assert that the `set_method()` method:
-    * - is chainable
-    * - sets the method
-    * - throws an exception if the parameter is not a string
-    * and that the `method()` method
-    * - defaults to "post"
-    */
+     * Assert that the `set_method()` method:
+     * - is chainable
+     * - sets the method
+     * - throws an exception if the parameter is not a string
+     * and that the `method()` method
+     * - defaults to "post"
+     */
     // public function testSetMethod()
     // {
     // 	$obj = $this->obj;
@@ -53,13 +52,13 @@ class FormTraitTest extends \PHPUnit_Framework_TestCase
     // }
 
     /**
-    * Assert that the `setNextUrl()` method:
-    * - is chainable
-    * - sets the action
-    * - throws an exception if the parameter is not a string
-    * and that the `nextUrl()` method
-    * - defaults to ""
-    */
+     * Assert that the `setNextUrl()` method:
+     * - is chainable
+     * - sets the action
+     * - throws an exception if the parameter is not a string
+     * and that the `nextUrl()` method
+     * - defaults to ""
+     */
     public function testSetNextUrl()
     {
         $obj = $this->obj;

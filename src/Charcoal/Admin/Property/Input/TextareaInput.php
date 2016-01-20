@@ -7,24 +7,24 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-*
-*/
+ *
+ */
 class TextareaInput extends AbstractPropertyInput
 {
     /**
-    * @var integer $cols
-    */
+     * @var integer $cols
+     */
     private $cols;
     /**
-    * @var integer $rows
-    */
+     * @var integer $rows
+     */
     private $rows;
 
     /**
-    * @param integer $cols
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $cols
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setCols($cols)
     {
         if (!is_integer($cols)) {
@@ -37,18 +37,18 @@ class TextareaInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function cols()
     {
         return $this->cols;
     }
 
     /**
-    * @param integer $rows
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $rows
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setRows($rows)
     {
         if (!is_integer($rows)) {
@@ -61,8 +61,8 @@ class TextareaInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function rows()
     {
         return $this->rows;

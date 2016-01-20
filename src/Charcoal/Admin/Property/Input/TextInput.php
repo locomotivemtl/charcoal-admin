@@ -7,41 +7,41 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-*
-*/
+ *
+ */
 class TextInput extends AbstractPropertyInput
 {
     /**
-    * @var integer $size
-    */
+     * @var integer $size
+     */
     private $size = 0;
 
     /**
-    * @var integer $minLength
-    */
+     * @var integer $minLength
+     */
     private $minLength = 0;
     /**
-    * @var integer $maxLength
-    */
+     * @var integer $maxLength
+     */
     private $maxLength = 0;
 
 
     /**
-    * @var string $pattern
-    */
+     * @var string $pattern
+     */
     private $pattern = '';
 
     /**
-    * @var string $placeholder
-    */
+     * @var string $placeholder
+     */
     private $placeholder = '';
 
 
     /**
-    * @param integer $minLength
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $minLength
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setMinLength($minLength)
     {
         if (!is_integer($minLength)) {
@@ -52,18 +52,18 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function minLength()
     {
         return $this->minLength;
     }
 
     /**
-    * @param integer $maxLength
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $maxLength
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setMaxLength($maxLength)
     {
         if (!is_integer($maxLength)) {
@@ -74,18 +74,18 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function maxLength()
     {
         return $this->maxLength;
     }
 
     /**
-    * @param integer $size
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $size
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setSize($size)
     {
         if (!is_integer($size)) {
@@ -96,18 +96,18 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function size()
     {
         return $this->size;
     }
 
         /**
-    * @param string $pattern
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+         * @param string $pattern
+         * @throws InvalidArgumentException
+         * @return Text Chainable
+         */
     public function setPattern($pattern)
     {
         if (!is_string($pattern)) {
@@ -118,18 +118,18 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function pattern()
     {
         return $this->pattern;
     }
 
     /**
-    * @param string $placeholder
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param string $placeholder
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setPlaceholder($placeholder)
     {
         if (!is_string($placeholder)) {
@@ -140,8 +140,8 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function placeholder()
     {
         return $this->placeholder;

@@ -15,34 +15,34 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
-* Admin Update Action: Save an object in its Storage.
-*
-* ## Required Parameters
-* - `obj_type` _string_ The object type, as an identifier for a `ModelInterface`.
-* - `obj_id` _mixed_ The object ID to load and update
-*
-* ## Response
-* - `success` _boolean_ True if the object was properly saved, false in case of any error.
-*
-* ## HTTP Codes
-* - `200` in case of a successful login
-* - `404` if any error occurs
-*
-* Ident: `charcoal/admin/action/object/update`
-*/
+ * Admin Update Action: Save an object in its Storage.
+ *
+ * ## Required Parameters
+ * - `obj_type` _string_ The object type, as an identifier for a `ModelInterface`.
+ * - `obj_id` _mixed_ The object ID to load and update
+ *
+ * ## Response
+ * - `success` _boolean_ True if the object was properly saved, false in case of any error.
+ *
+ * ## HTTP Codes
+ * - `200` in case of a successful login
+ * - `404` if any error occurs
+ *
+ * Ident: `charcoal/admin/action/object/update`
+ */
 class UpdateAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
     /**
-    * @var array $updateData
-    */
+     * @var array $updateData
+     */
     protected $updateData = [];
 
     /**
-    * @param array $data
-    * @return LoginAction Chainable
-    */
+     * @param array $data
+     * @return LoginAction Chainable
+     */
     public function setData(array $data)
     {
         //parent::setData($data);
@@ -62,9 +62,9 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @param array $updateData
-    * @return SaveAction Chainable
-    */
+     * @param array $updateData
+     * @return SaveAction Chainable
+     */
     public function setUpdateData(array $updateData)
     {
         $this->updateData = $updateData;
@@ -72,17 +72,17 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function updateData()
     {
         return $this->updateData;
     }
 
     /**
-    * @param ModelInterface|null $saveData
-    * @return SaveAction Chainable
-    */
+     * @param ModelInterface|null $saveData
+     * @return SaveAction Chainable
+     */
     public function setObj($obj)
     {
         $this->Obj = $obj;
@@ -134,8 +134,8 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function results()
     {
         $results = [

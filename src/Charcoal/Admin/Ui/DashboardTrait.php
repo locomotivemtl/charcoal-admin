@@ -21,22 +21,22 @@ use \Charcoal\Admin\Ui\LayoutInterface;
 trait DashboardTrait
 {
     /**
-    * @var LayoutWidget $layout
-    */
+     * @var LayoutWidget $layout
+     */
     private $layout;
 
     /**
-    * @var array $widgets
-    */
+     * @var array $widgets
+     */
     private $widgets;
 
     private $widgetFactory;
 
     /**
-    * @param LayoutWidget|array
-    * @throws InvalidArgumentException
-    * @return Dashboard Chainable
-    */
+     * @param LayoutWidget|array
+     * @throws InvalidArgumentException
+     * @return Dashboard Chainable
+     */
     public function setLayout($layout)
     {
         if (($layout instanceof LayoutInterface)) {
@@ -53,24 +53,24 @@ trait DashboardTrait
     }
 
     /**
-    * @param array|null $data
-    * @return LayoutInterface
-    */
+     * @param array|null $data
+     * @return LayoutInterface
+     */
     abstract public function createLayout(array $data = null);
 
     /**
-    * @return LayoutWidget
-    */
+     * @return LayoutWidget
+     */
     public function layout()
     {
         return $this->layout;
     }
 
     /**
-    * @param array $widgets
-    * @throws InvalidArgumentException
-    * @return Dashboard Chainable
-    */
+     * @param array $widgets
+     * @throws InvalidArgumentException
+     * @return Dashboard Chainable
+     */
     public function setWidgets($widgets)
     {
         if (!is_array($widgets)) {
@@ -85,10 +85,10 @@ trait DashboardTrait
     }
 
     /**
-    * @param string $widgetIdent
-    * @param WidgetInterface|array $widget
-    * @throws InvalidArgumentException
-    */
+     * @param string                $widgetIdent
+     * @param WidgetInterface|array $widget
+     * @throws InvalidArgumentException
+     */
     public function addWidget($widgetIdent, $widget)
     {
         if (!is_string($widgetIdent)) {
@@ -122,9 +122,9 @@ trait DashboardTrait
     }
 
     /**
-    * @param array $data
-    * @return WidgetInterface
-    */
+     * @param array $data
+     * @return WidgetInterface
+     */
     public function createWidget(array $data = null)
     {
         $widget_type = isset($data['type']) ? $data['type'] : null;
@@ -140,8 +140,8 @@ trait DashboardTrait
     }
 
     /**
-    * Widgets generator
-    */
+     * Widgets generator
+     */
     public function widgets()
     {
         if ($this->widgets === null) {
@@ -159,16 +159,16 @@ trait DashboardTrait
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasWidgets()
     {
         return (count($this->widgets) > 0);
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numWidgets()
     {
         return count($this->widgets);

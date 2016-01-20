@@ -16,24 +16,24 @@ use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
-* Script action to list the objects of a certain type.
-*
-* ## Required parameters
-* > When not running in silent mode, required parameters omitted from the command will be asked interactively.
-* - `obj-type`
-*
-* ## Optional parametrs
-* - `num-per-page`
-* - `page`
-* - `list-ident`
-*/
+ * Script action to list the objects of a certain type.
+ *
+ * ## Required parameters
+ * > When not running in silent mode, required parameters omitted from the command will be asked interactively.
+ * - `obj-type`
+ *
+ * ## Optional parametrs
+ * - `num-per-page`
+ * - `page`
+ * - `list-ident`
+ */
 class ObjectsScript extends AdminScript implements CollectionContainerInterface
 {
     use CollectionContainerTrait;
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function defaultArguments()
     {
         $arguments = [
@@ -69,7 +69,8 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        unset($request); // Unused
+        unset($request);
+// Unused
 
         $climate = $this->climate();
 
@@ -115,5 +116,4 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
 
         return $response;
     }
-
 }

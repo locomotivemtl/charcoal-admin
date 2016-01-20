@@ -16,43 +16,43 @@ use \Charcoal\Model\ModelFactory as ModelFactory;
 trait CollectionContainerTrait
 {
     /**
-    * @var string $objType
-    */
+     * @var string $objType
+     */
     private $objType;
 
     /**
-    * @var string $collectionIdent
-    */
+     * @var string $collectionIdent
+     */
     private $collectionIdent;
 
     /**
-    * @var mixed $collectionConfig
-    */
+     * @var mixed $collectionConfig
+     */
     private $collectionConfig;
 
     /**
-    * @var integer $page
-    */
+     * @var integer $page
+     */
     private $page = 1;
 
     /**
-    * @var integer $numPerPage
-    */
+     * @var integer $numPerPage
+     */
     private $numPerPage = 50;
 
 
     /**
-    * @var Collection $collection
-    */
+     * @var Collection $collection
+     */
     private $collection;
 
     private $modelFactory;
 
     /**
-    * @param string $objType
-    * @throws InvalidArgumentException if provided argument is not of type 'string'.
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param string $objType
+     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @return CollectionContainerInterface Chainable
+     */
     public function setObjType($objType)
     {
         if (!is_string($objType)) {
@@ -65,18 +65,18 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function objType()
     {
         return $this->objType;
     }
 
     /**
-    * @param string $collectionIdent
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param string $collectionIdent
+     * @throws InvalidArgumentException
+     * @return CollectionContainerInterface Chainable
+     */
     public function setCollectionIdent($collectionIdent)
     {
         if (!is_string($collectionIdent)) {
@@ -89,17 +89,17 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return string|null
-    */
+     * @return string|null
+     */
     public function collectionIdent()
     {
         return $this->collectionIdent;
     }
 
     /**
-    * @param mixed $collectionConfig
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param mixed $collectionConfig
+     * @return CollectionContainerInterface Chainable
+     */
     public function setCollectionConfig($collectionConfig)
     {
         $this->collectionConfig = $collectionConfig;
@@ -107,8 +107,8 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function collectionConfig()
     {
         if ($this->collectionConfig === null) {
@@ -118,9 +118,9 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @param array $data
-    * @return mixed
-    */
+     * @param array $data
+     * @return mixed
+     */
     public function createCollectionConfig($data = null)
     {
         unset($data);
@@ -128,10 +128,10 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @param integer $page
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param integer $page
+     * @throws InvalidArgumentException
+     * @return CollectionContainerInterface Chainable
+     */
     public function setPage($page)
     {
         if (!is_int($page)) {
@@ -149,18 +149,18 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function page()
     {
         return $this->page;
     }
 
     /**
-    * @param integer $numPerPage
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param integer $numPerPage
+     * @throws InvalidArgumentException
+     * @return CollectionContainerInterface Chainable
+     */
     public function setNumPerPage($numPerPage)
     {
         if (!is_int($numPerPage)) {
@@ -178,17 +178,17 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numPerPage()
     {
         return $this->numPerPage;
     }
 
     /**
-    * @param mixed $collection
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param mixed $collection
+     * @return CollectionContainerInterface Chainable
+     */
     public function setCollection($collection)
     {
         $this->collection = $collection;
@@ -196,8 +196,8 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return Collection
-    */
+     * @return Collection
+     */
     public function collection()
     {
         if ($this->collection === null) {
@@ -207,11 +207,11 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @todo Integrate $data; merge with $collectionConfig
-    * @param array $data Optional
-    * @throws Exception
-    * @return CollectionLoader
-    */
+     * @todo Integrate $data; merge with $collectionConfig
+     * @param array $data Optional
+     * @throws Exception
+     * @return CollectionLoader
+     */
     public function createCollection(array $data = null)
     {
         unset($data);
@@ -245,8 +245,8 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function objects()
     {
         $collection = $this->collection();
@@ -254,9 +254,9 @@ trait CollectionContainerTrait
     }
 
     /**
-    * Supplies properties for objects in table template specific to object configuration
-    * @return  Generator
-    */
+     * Supplies properties for objects in table template specific to object configuration
+     * @return  Generator
+     */
     public function objectRows()
     {
         // Get properties as defined in object's list metadata
@@ -289,25 +289,25 @@ trait CollectionContainerTrait
     }
 
     /**
-    * @return Boolean
-    */
+     * @return boolean
+     */
     public function hasObjects()
     {
         return (count($this->objects()) > 0);
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numObjects()
     {
         return count($this->objects());
     }
 
     /**
-    * @throws InvalidArgumentException If the object type is not defined / can not create prototype.
-    * @return Object
-    */
+     * @throws InvalidArgumentException If the object type is not defined / can not create prototype.
+     * @return object
+     */
     public function proto()
     {
         $objType = $this->objType();
@@ -323,6 +323,9 @@ trait CollectionContainerTrait
         return $obj;
     }
 
+    /**
+     * @return ModelFactory
+     */
     private function modelFactory()
     {
         if ($this->modelFactory === null) {
@@ -330,5 +333,4 @@ trait CollectionContainerTrait
         }
         return $this->modelFactory;
     }
-
 }

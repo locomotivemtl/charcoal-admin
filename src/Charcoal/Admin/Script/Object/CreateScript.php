@@ -18,14 +18,14 @@ use \Charcoal\Property\PropertyInterface;
 use \Charcoal\Admin\AdminScript;
 
 /**
-*
-*/
+ *
+ */
 class CreateScript extends AdminScript
 {
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function defaultArguments()
     {
         $arguments = [
@@ -52,7 +52,8 @@ class CreateScript extends AdminScript
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        unset($request); // Unused
+        unset($request);
+// Unused
 
         $climate = $this->climate();
 
@@ -85,7 +86,4 @@ class CreateScript extends AdminScript
 
         return $response;
     }
-
-
-
 }

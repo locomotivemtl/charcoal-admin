@@ -6,30 +6,38 @@ use \InvalidArgumentException;
 
 use \Charcoal\Admin\AdminWidget;
 
+use \Charcoal\Translation\TranslationString;
+
+/**
+ *
+ */
 class TextWidget extends AdminWidget
 {
 
     /**
-    * @var string $title
-    */
+     * @var string $title
+     */
     protected $title = '';
+
     /**
-    * @var string $subtitle
-    */
+     * @var string $subtitle
+     */
     protected $subtitle = '';
+
     /**
-    * @var string $description
-    */
+     * @var string $description
+     */
     protected $description = '';
+
     /**
-    * @var string $notes
-    */
+     * @var string $notes
+     */
     protected $notes = '';
 
     /**
-    * @param boolean $show
-    * @return Text Chainable
-    */
+     * @param boolean $show
+     * @return Text Chainable
+     */
     public function setShowTitle($show)
     {
         $this->showTitle = !!$show;
@@ -37,8 +45,8 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showTitle()
     {
         if ($this->showTitle === false) {
@@ -49,9 +57,9 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @param boolean $show
-    * @return Text Chainable
-    */
+     * @param boolean $show
+     * @return Text Chainable
+     */
     public function setShowSubtitle($show)
     {
         $this->showSubtitle = !!$show;
@@ -59,8 +67,8 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showSubtitle()
     {
         if ($this->showSubtitle === false) {
@@ -71,10 +79,10 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @param boolean $show
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param boolean $show
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setShowDescription($show)
     {
         $this->showDescription = !!$show;
@@ -82,8 +90,8 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showDescription()
     {
         if ($this->showDescription === false) {
@@ -94,10 +102,10 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @param boolean $show
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param boolean $show
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setShowNotes($show)
     {
         if (!is_bool($show)) {
@@ -110,8 +118,8 @@ class TextWidget extends AdminWidget
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showNotes()
     {
         if ($this->showNotes === false) {
@@ -121,45 +129,73 @@ class TextWidget extends AdminWidget
         }
     }
 
+    /**
+     * @param mixed $title The text widget title.
+     * @return TextWidget Chainable
+     */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = new TranslationString($title);
         return $this;
     }
 
+    /**
+     * @return TranslationString
+     */
     public function title()
     {
         return $this->title;
     }
 
+    /**
+     * @param mixed $subtitle The text widget subtitle.
+     * @return TextWidget Chainable
+     */
     public function setSubtitle($subtitle)
     {
-        $this->subtitle = $subtitle;
+        $this->subtitle = new TranslationString($subtitle);
         return $this;
     }
 
+    /**
+     * @return TranslationString
+     */
     public function subtitle()
     {
         return $this->subtitle;
     }
 
+    /**
+     * @param mixed $description The text widget description (main content).
+     * @return TextWidget Chainable
+     */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = new TranslationString($description);
         return $this;
     }
 
+    /**
+     * @return TranslationString
+     */
     public function description()
     {
         return $this->description;
     }
 
+    /**
+     * @param mixed $notes The text widget notes.
+     * @return TextWidget Chainable
+     */
     public function setNotes($notes)
     {
-        $this->notes = $notes;
+        $this->notes = new TranslationString($notes);
         return $this;
     }
 
+    /**
+     * @return TranslationString
+     */
     public function notes()
     {
         return $this->notes;

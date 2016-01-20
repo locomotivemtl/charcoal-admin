@@ -15,33 +15,33 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
-* Admin Save Action: Save an object in its Storage.
-*
-* ## Required Parameters
-* - `obj_type`
-*
-* ## Response
-* - `success` _boolean_ True if the object was properly saved, false in case of any error.
-* - `obj_id` _mixed_ The created object ID, if any.
-* - `obj` _array_ The created object data.
-*
-* ## HTTP Codes
-* - `200` in case of a successful login
-* - `404` if any error occurs
-*/
+ * Admin Save Action: Save an object in its Storage.
+ *
+ * ## Required Parameters
+ * - `obj_type`
+ *
+ * ## Response
+ * - `success` _boolean_ True if the object was properly saved, false in case of any error.
+ * - `obj_id` _mixed_ The created object ID, if any.
+ * - `obj` _array_ The created object data.
+ *
+ * ## HTTP Codes
+ * - `200` in case of a successful login
+ * - `404` if any error occurs
+ */
 class SaveAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
     /**
-    * @var array $saveData
-    */
+     * @var array $saveData
+     */
     private $saveData = [];
 
     /**
-    * @param array $data
-    * @return LoginAction Chainable
-    */
+     * @param array $data
+     * @return LoginAction Chainable
+     */
     public function setData(array $data)
     {
 
@@ -55,9 +55,9 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @param array $saveData
-    * @return SaveAction Chainable
-    */
+     * @param array $saveData
+     * @return SaveAction Chainable
+     */
     public function setSaveData(array $saveData)
     {
         $this->saveData = $saveData;
@@ -65,17 +65,17 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function saveData()
     {
         return $this->saveData;
     }
 
     /**
-    * @param ModelInterface|null $saveData
-    * @return SaveAction Chainable
-    */
+     * @param ModelInterface|null $saveData
+     * @return SaveAction Chainable
+     */
     public function setObj($obj)
     {
         $this->Obj = $obj;
@@ -130,8 +130,8 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function results()
     {
         $results = [
@@ -142,5 +142,4 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         ];
         return $results;
     }
-
 }

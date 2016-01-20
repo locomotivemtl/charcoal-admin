@@ -2,7 +2,6 @@
 
 namespace Charcoal\Tests\Admin\Ui;
 
-
 class LayoutTraitTest extends \PHPUnit_Framework_TestCase
 {
     public $obj;

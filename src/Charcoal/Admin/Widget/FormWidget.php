@@ -16,40 +16,23 @@ use \Charcoal\Admin\Widget\LayoutWidget;
 // Local namespace dependencies
 use \Charcoal\Admin\Widget\FormGroupWidget;
 
+/**
+ *
+ */
 class FormWidget extends AdminWidget implements FormInterface
 {
     use FormTrait;
-
-    /*public $label;
-    public $subtitle;
-    public $description;
-    public $longDescription;
-    public $notes;*/
-
-    //public $type;
-
-    /*public $showLabel;
-    public $showDescription;
-    public $show_notes;
-    public $show_actions;*/
 
     protected $layout;
 
     protected $sidebars = [];
 
-    /*public $use_captcha;
-    public $use_token;
-    public $lang;*/
-
-    /*public $read_only;
-    public $next_actions;*/
-
     private $widgetFactory;
 
     /**
-    * @param array|null $data
-    * @return FormGroupInterface
-    */
+     * @param array|null $data
+     * @return FormGroupInterface
+     */
     public function createGroup(array $data = null)
     {
         $widget_type = (isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formGroup');
@@ -64,27 +47,26 @@ class FormWidget extends AdminWidget implements FormInterface
 
     }
 
-
     /**
-    * @param array $data
-    * @return FormPropertyInterface
-    */
+     * @param array $data
+     * @return FormPropertyInterface
+     */
     public function createFormProperty(array $data = null)
     {
         $p = new FormPropertyWidget([
             'logger'=>$this->logger
         ]);
         if ($data !== null) {
-            $p->set_data($data);
+            $p->setData($data);
         }
         return $p;
     }
 
     /**
-    * @param LayoutWidget|array
-    * @throws InvalidArgumentException
-    * @return FormWidget Chainable
-    */
+     * @param LayoutWidget|array
+     * @throws InvalidArgumentException
+     * @return FormWidget Chainable
+     */
     public function setLayout($layout)
     {
         if (($layout instanceof LayoutWidget)) {
@@ -94,7 +76,7 @@ class FormWidget extends AdminWidget implements FormInterface
                 'logger' => $this->logger
             ]);
 //            $l->set_parent($this);
-            $l->set_data($layout);
+            $l->setData($layout);
             $this->layout = $l;
         } else {
             throw new InvalidArgumentException(
@@ -105,16 +87,16 @@ class FormWidget extends AdminWidget implements FormInterface
     }
 
     /**
-    * @return LayoutWidget|null
-    */
+     * @return LayoutWidget|null
+     */
     public function layout()
     {
         return $this->layout;
     }
 
     /**
-    *
-    */
+     *
+     */
     public function setSidebars(array $sidebars)
     {
         $this->sidebars = [];
@@ -125,10 +107,10 @@ class FormWidget extends AdminWidget implements FormInterface
     }
 
     /**
-    * @param array|FormSidebarWidget $sidebar
-    * @throws InvalidArgumentException
-    * @return FormWidget Chainable
-    */
+     * @param array|FormSidebarWidget $sidebar
+     * @throws InvalidArgumentException
+     * @return FormWidget Chainable
+     */
     public function addSidebar($sidebarIdent, $sidebar)
     {
         if (!is_string($sidebarIdent)) {
@@ -154,8 +136,8 @@ class FormWidget extends AdminWidget implements FormInterface
     }
 
     /**
-    * @return FormSidebarWidget
-    */
+     * @return FormSidebarWidget
+     */
     public function sidebars()
     {
         $sidebars = $this->sidebars;
@@ -176,27 +158,28 @@ class FormWidget extends AdminWidget implements FormInterface
     }
 
     /**
-    * To be called with uasort()
-    *
-    * @param FormGroupInterface $a
-    * @param FormGroupInterface $b
-    * @return integer Sorting value: -1, 0, or 1
-    */
-    static protected function sortSidebarsByPriority(FormGroupInterface $a, FormGroupInterface $b)
+     * To be called with uasort().
+     *
+     * @param FormGroupInterface $a Item "a" to compare, for sorting.
+     * @param FormGroupInterface $b Item "b" to compaer, for sorting.
+     * @return integer Sorting value: -1, 0, or 1
+     */
+    protected static function sortSidebarsByPriority(FormGroupInterface $a, FormGroupInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();
 
         if ($a == $b) {
-            return 1; // Should be 0?
+            return 1;
+// Should be 0?
         }
 
         return ($a < $b) ? (-1) : 1;
     }
 
     /**
-    * @return WidgetFactory
-    */
+     * @return WidgetFactory
+     */
     private function widgetFactory()
     {
         if ($this->widgetFactory === null) {

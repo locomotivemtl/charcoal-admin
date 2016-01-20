@@ -12,10 +12,10 @@ use Charcoal\Charcoal;
 use Charcoal\App\Action\AbstractAction;
 
 /**
-* The base class for the `admin` Actions.
-*
-* @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to set response.
-*/
+ * The base class for the `admin` Actions.
+ *
+ * @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to set response.
+ */
 abstract class AdminAction extends AbstractAction
 {
     private $feedbacks = [];
@@ -36,48 +36,48 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
-    * Authentication is required by default.
-    *
-    * Change to false in
-    *
-    * @return boolean
-    */
+     * Authentication is required by default.
+     *
+     * Change to false in
+     *
+     * @return boolean
+     */
     public function authRequired()
     {
         return false;
     }
 
     /**
-    * Determine if the current user is authenticated. If not it redirects them to the login page.
-    */
+     * Determine if the current user is authenticated. If not it redirects them to the login page.
+     */
     private function auth()
     {
         //$cfg = AdminModule::config();
         $u = User::getAuthenticated();
         if ($u === null) {
             die('Auth required');
-       }
+        }
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasFeedbacks()
     {
         return (count($this->feedbacks()) > 0);
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numFeedbacks()
     {
         return count($this->feedbacks());
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function feedbacks()
     {
         return $this->feedbacks;
@@ -92,10 +92,10 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
-    * Default response stub
-    *
-    * @return array
-    */
+     * Default response stub
+     *
+     * @return array
+     */
     public function results()
     {
         $success = $this->success();

@@ -2,13 +2,13 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
+use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
-*
-*/
+ * Image Property Input
+ */
 class ImageInput extends FileInput
 {
     // ...

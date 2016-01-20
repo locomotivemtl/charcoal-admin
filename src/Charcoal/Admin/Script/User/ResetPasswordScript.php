@@ -10,10 +10,9 @@ use \Psr\Http\Message\ResponseInterface;
 use \Charcoal\Admin\AdminScript;
 use \Charcoal\Admin\User;
 
-
 /**
-*
-*/
+ *
+ */
 class ResetPasswordScript extends AdminScript
 {
     /**

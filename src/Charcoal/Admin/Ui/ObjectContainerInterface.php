@@ -6,40 +6,39 @@ interface ObjectContainerInterface
 {
 
     /**
-    * @param string $objType
-    * @return ObjectContainerInterface Chainable
-    */
+     * @param string $objType
+     * @return ObjectContainerInterface Chainable
+     */
     public function setObjType($objType);
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function objType();
 
     /**
-    * @param mixed $objId
-    * @return ObjectContainerInterface Chainable
-    */
+     * @param mixed $objId
+     * @return ObjectContainerInterface Chainable
+     */
     public function setObjId($objId);
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function objId();
 
     /**
-    * @return ModelInterface
-    */
+     * @return ModelInterface
+     */
     public function obj();
 
     /**
-    * @return ModelInterface
-    */
+     * @return ModelInterface
+     */
     public function createObj();
 
     /**
-    * @return ModelInterface
-    */
+     * @return ModelInterface
+     */
     public function loadObj();
-
 }

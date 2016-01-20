@@ -17,60 +17,64 @@ use \Charcoal\Admin\Ui\FormGroupInterface;
 use \Charcoal\Admin\Ui\FormGroupTrait;
 
 /**
-* Form Group Widget Controller
-*/
+ * Form Group Widget Controller
+ */
 class FormGroupWidget extends AdminWidget implements FormGroupInterface
 {
     use FormGroupTrait;
 
     /**
-    * @var LayoutWidget $layout
-    */
+     * @var LayoutWidget $layout
+     */
     public $layout;
 
     /**
-    * @var array $groupProperties
-    */
+     * @var array $groupProperties
+     */
     private $groupProperties = [];
 
     /**
-    * @var TranslationString $description
-    */
+     * @var TranslationString $description
+     */
     private $description;
+
     /**
-    * @var TranslationString $notes
-    */
+     * @var TranslationString $notes
+     */
     private $notes;
 
     /**
-    * If it is set to false, will disable display of title.
-    * @var boolean $showTitle
-    */
+     * If it is set to false, will disable display of title.
+     * @var boolean $showTitle
+     */
     private $showTitle = true;
+
     /**
-    * If it is set to false, will disable display of description
-    * @var boolean $showDescription
-    */
+     * If it is set to false, will disable display of description
+     * @var boolean $showDescription
+     */
     private $showDescription = true;
+
     /**
-    * If it is set to false, will disable display of the notes (footer).
-    * @var boolean $showNotes
-    */
+     * If it is set to false, will disable display of the notes (footer).
+     * @var boolean $showNotes
+     */
     private $showNotes = true;
 
     /**
-    * @var boolean $showHeader
-    */
+     * @var boolean $showHeader
+     */
     private $showHeader = true;
+
     /**
-    * @var boolean $showFooter
-    */
+     * @var boolean $showFooter
+     */
     private $showFooter = true;
 
     /**
-    * @var string
-    * @return FormGroupWidget Chainable
-    */
+     * @var string
+     * @return FormGroupWidget Chainable
+     */
     public function setData(array $data)
     {
         parent::setData($data);
@@ -83,16 +87,16 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function widgetType()
     {
         return 'charcoal/admin/widget/formGroup';
     }
 
     /**
-    * Sets the widget options
-    */
+     * Sets the widget options
+     */
     public function setWidgetOptions($opts)
     {
         if (!$opts) {
@@ -118,10 +122,10 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @param LayoutWidget|array
-    * @throws InvalidArgumentException
-    * @return FormGroupWidget Chainable
-    */
+     * @param LayoutWidget|array
+     * @throws InvalidArgumentException
+     * @return FormGroupWidget Chainable
+     */
     public function setLayout($layout)
     {
         if (($layout instanceof LayoutWidget)) {
@@ -139,8 +143,8 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return LayoutWidget
-    */
+     * @return LayoutWidget
+     */
     public function layout()
     {
         return $this->layout;
@@ -180,22 +184,28 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
         }
     }
 
-
+    /**
+     * @var mixed $description The group title.
+     * @return FormGroupWidget Chainable
+     */
     public function setTitle($title)
     {
         $this->title = new TranslationString($title);
         return $this;
     }
 
+    /**
+     * @return TranslationString
+     */
     public function title()
     {
         return $this->title;
     }
 
     /**
-    * @var mixed $description
-    * @return $
-    */
+     * @var mixed $description The group description.
+     * @return FormGroupWidget Chainable
+     */
     public function setDescription($description)
     {
         $this->description = new TranslationString($description);
@@ -203,17 +213,17 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function description()
     {
-        return new TranslationString('Group Description');
+        return $this->description;
     }
 
     /**
-    * @param mixed $notes
-    * @return FormGroupWidget Chainable
-    */
+     * @param mixed $notes The group notes.
+     * @return FormGroupWidget Chainable
+     */
     public function setNotes($notes)
     {
         $this->notes = new TranslationString($notes);
@@ -221,17 +231,17 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function notes()
     {
-        return new TranslationString('Group Notes');
+        return $this->notes;
     }
 
     /**
-    * @param boolean $show
-    * @return FormGroup Chainable
-    */
+     * @param boolean $show The show title flag.
+     * @return FormGroup Chainable
+     */
     public function setShowTitle($show)
     {
         $this->showTitle = !!$show;
@@ -239,8 +249,8 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showTitle()
     {
         if ($this->showTitle === false) {
@@ -251,9 +261,9 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @param boolean $show
-    * @return FormGroup Chainable
-    */
+     * @param boolean $show The show description flag.
+     * @return FormGroup Chainable
+     */
     public function setShowDescription($show)
     {
         $this->showDescription = !!$show;
@@ -261,17 +271,17 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showDescription()
     {
         return true;
     }
 
     /**
-    * @param boolean $show
-    * @return FormGroup Chainable
-    */
+     * @param boolean $show The show notes flag.
+     * @return FormGroup Chainable
+     */
     public function setShowNotes($show)
     {
         $this->showNotes = !!$show;
@@ -279,8 +289,8 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showNotes()
     {
         if ($this->showNotes === false) {
@@ -292,9 +302,9 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @param boolean $show
-    * @return FormGroup Chainable
-    */
+     * @param boolean $show The show header flag.
+     * @return FormGroup Chainable
+     */
     public function setShowHeader($show)
     {
         $this->showHeader = !!$show;
@@ -302,17 +312,17 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showHeader()
     {
         return true;
     }
 
     /**
-    * @param boolean $show
-    * @return FormGroup Chainable
-    */
+     * @param boolean $show The show footer flag.
+     * @return FormGroup Chainable
+     */
     public function setShowFooter($show)
     {
         $this->showFooger = !!$show;
@@ -320,8 +330,8 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showFooter()
     {
         if ($this->showFooter === false) {
@@ -330,5 +340,4 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
             return $this->showNotes();
         }
     }
-
 }

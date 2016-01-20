@@ -11,29 +11,29 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
-* @todo This class needs to be renamed to "ObjectFormWidget" (object-form)
-*/
+ *
+ */
 class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
     /**
-    * @var string
-    */
+     * @var string
+     */
     protected $formIdent;
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function widgetType()
     {
         return 'charcoal/admin/widget/objectForm';
     }
 
     /**
-    * @param array $data
-    * @return ObjectForm Chainable
-    */
+     * @param array $data The widget data
+     * @return ObjectForm Chainable
+     */
     public function setData(array $data)
     {
         // @TODO Remove once RequirementContainer is implemented
@@ -54,10 +54,10 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
      /**
-    * @param string $url
-    * @throws InvalidArgumentException if success is not a boolean
-    * @return ActionInterface Chainable
-    */
+      * @param string $url The next URL.
+      * @throws InvalidArgumentException if success is not a boolean
+      * @return ActionInterface Chainable
+      */
     public function setNextUrl($url)
     {
         if (!is_string($url)) {
@@ -71,15 +71,15 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
             return $this;
         }
 
-        $this->nextUrl = $this->obj()->render( $url );
+        $this->nextUrl = $this->obj()->render($url);
         return $this;
     }
 
     /**
-    * Form action (target URL)
-    *
-    * @return string Relative URL
-    */
+     * Form action (target URL)
+     *
+     * @return string Relative URL
+     */
     public function action()
     {
         $action = parent::action();
@@ -97,10 +97,10 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-    * @param string $formIdent
-    * @throws InvalidArgumentException
-    * @return ObjectForm Chainable
-    */
+     * @param string $formIdent The form ident.
+     * @throws InvalidArgumentException
+     * @return ObjectForm Chainable
+     */
     public function setFormIdent($formIdent)
     {
         if (!is_string($formIdent)) {
@@ -113,13 +113,18 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function formIdent()
     {
         return $this->formIdent;
     }
 
+    /**
+     * Set the data from an object.
+     *
+     * @return array
+     */
     public function dataFromObject()
     {
         $obj = $this->obj();
@@ -135,10 +140,10 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-    * FormProperty Generator
-    *
-    * @todo Merge with property_options
-    */
+     * FormProperty Generator
+     *
+     * @todo Merge with property_options
+     */
     public function formProperties(array $group = null)
     {
         $obj = $this->obj();
@@ -146,7 +151,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 
         // We need to sort form properties by form group property order if a group exists
         if (!empty($group)) {
-            $props = array_merge(array_flip( $group ), $props);
+            $props = array_merge(array_flip($group), $props);
         }
 
         foreach ($props as $propertyIdent => $property) {
@@ -160,8 +165,8 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function formData()
     {
         $obj = $this->obj();

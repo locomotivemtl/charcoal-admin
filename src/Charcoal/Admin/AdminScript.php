@@ -11,8 +11,8 @@ use Charcoal\App\Script\AbstractScript;
 use \Charcoal\Admin\User;
 
 /**
-*
-*/
+ *
+ */
 abstract class AdminScript extends AbstractScript
 {
     public function init()
@@ -26,23 +26,23 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-    * Determine if user authentication is required.
-    *
-    * Authentication is required by default. If unnecessary,
-    * replace this method in the inherited template class.
-    *
-    * @see \Charcoal\Admin\Template::authRequired()
-    *
-    * @return boolean
-    */
+     * Determine if user authentication is required.
+     *
+     * Authentication is required by default. If unnecessary,
+     * replace this method in the inherited template class.
+     *
+     * @see \Charcoal\Admin\Template::authRequired()
+     *
+     * @return boolean
+     */
     public function authRequired()
     {
         return false;
     }
 
     /**
-    *
-    */
+     *
+     */
     protected function auth()
     {
         $climate = $this->climate();
@@ -106,9 +106,9 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-    * @param PropertyInterface $prop The property to retrieve input from.
-    * @return
-    */
+     * @param PropertyInterface $prop The property to retrieve input from.
+     * @return
+     */
     protected function propertyToInput(PropertyInterface $prop)
     {
         $climate = $this->climate();
@@ -129,11 +129,11 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-    * Get a CLI input from a boolean property.
-    *
-    * @param PropertyInterface $prop The property to retrieve input from.
-    * @return \League\CLImate\TerminalObject\Dynamic\Input
-    */
+     * Get a CLI input from a boolean property.
+     *
+     * @param PropertyInterface $prop The property to retrieve input from.
+     * @return \League\CLImate\TerminalObject\Dynamic\Input
+     */
     private function booleanInput(PropertyInterface $prop)
     {
         $climate = $this->climate();
@@ -150,11 +150,11 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-    * Get a CLI password input (hidden) from a password property.
-    *
-    * @param PropertyInterface $prop The property to retrieve input from.
-    * @return \League\CLImate\TerminalObject\Dynamic\Input
-    */
+     * Get a CLI password input (hidden) from a password property.
+     *
+     * @param PropertyInterface $prop The property to retrieve input from.
+     * @return \League\CLImate\TerminalObject\Dynamic\Input
+     */
     private function passwordInput(PropertyInterface $prop)
     {
         $climate = $this->climate();

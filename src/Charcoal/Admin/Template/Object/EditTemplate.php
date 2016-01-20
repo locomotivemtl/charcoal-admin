@@ -26,11 +26,11 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
     private $sidemenu;
 
     /**
-    * @param array $data Optional
-    * @throws Exception
-    * @return Dashboard
-    * @see DashboardContainerTrait::createDashboard()
-    */
+     * @param array $data Optional
+     * @throws Exception
+     * @return Dashboard
+     * @see DashboardContainerTrait::createDashboard()
+     */
     public function createDashboard(array $data = null)
     {
         $dashboardConfig = $this->objEditDashboardConfig();
@@ -47,12 +47,12 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
     }
 
     /**
-    * @return SidemenuWidgetInterface
-    */
+     * @return SidemenuWidgetInterface
+     */
     public function sidemenu()
     {
         $dashboardConfig = $this->objEditDashboardConfig();
-;
+        ;
         if (!isset($dashboardConfig['sidemenu'])) {
             return null;
         }

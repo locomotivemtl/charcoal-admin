@@ -5,73 +5,73 @@ namespace Charcoal\Admin\Ui;
 interface MenuItemInterface
 {
     /**
-    * @param array $data
-    * @return MenuItemInterface Chainable
-    */
+     * @param array $data
+     * @return MenuItemInterface Chainable
+     */
     public function setData(array $data);
 
     /**
-    * @param string $ident
-    * @return MenuItem Chainable
-    */
+     * @param string $ident
+     * @return MenuItem Chainable
+     */
     public function setIdent($ident);
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function ident();
 
     /**
-    * @param string $label
-    * @return MenuItem Chainable
-    */
+     * @param string $label
+     * @return MenuItem Chainable
+     */
     public function setLabel($label);
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function label();
 
     /**
-    * @param string $url
-    * @return MenuItem Chainable
-    */
+     * @param string $url
+     * @return MenuItem Chainable
+     */
     public function setUrl($url);
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function url();
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasUrl();
 
     /**
-    * @param array $children
-    * @return MenuItem Chainable
-    */
+     * @param array $children
+     * @return MenuItem Chainable
+     */
     public function setChildren($children);
 
     /**
-    * @param array|MenuItem $child
-    * @return MenuItem Chainable
-    */
+     * @param array|MenuItem $child
+     * @return MenuItem Chainable
+     */
     public function addChild($child);
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function children();
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasChildren();
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numChildren();
 }

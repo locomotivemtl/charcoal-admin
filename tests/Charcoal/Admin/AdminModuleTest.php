@@ -7,8 +7,8 @@ use \Charcoal\Admin\AdminModule as AdminModule;
 class AdminModuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-    * Hello world
-    */
+     * Hello world
+     */
     public function testConstructor()
     {
         $obj = new AdminModule([

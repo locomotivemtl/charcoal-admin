@@ -18,12 +18,12 @@ use \Charcoal\Admin\Widget\ObjectFormWidget as ObjectFormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
 
 /**
-* Inline action: Return the inline edit properties HTML from an object
-*
-* ## Required parameters
-* - `objType`
-* - `objId`
-*/
+ * Inline action: Return the inline edit properties HTML from an object
+ *
+ * ## Required parameters
+ * - `objType`
+ * - `objId`
+ */
 class InlineAction extends AdminAction
 {
     protected $inlineProperties;
@@ -78,8 +78,8 @@ class InlineAction extends AdminAction
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function results()
     {
         $response = [

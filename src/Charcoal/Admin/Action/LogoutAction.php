@@ -14,8 +14,8 @@ use \Charcoal\Admin\AdminAction as AdminAction;
 use \Charcoal\Admin\User as User;
 
 /**
-*
-*/
+ *
+ */
 class LogoutAction extends AdminAction
 {
     /**
@@ -35,8 +35,8 @@ class LogoutAction extends AdminAction
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function results()
     {
         $results = [

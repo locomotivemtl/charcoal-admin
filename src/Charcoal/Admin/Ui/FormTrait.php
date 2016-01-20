@@ -15,39 +15,39 @@ use \Charcoal\Admin\Ui\FormPropertyInterface;
 trait FormTrait
 {
     /**
-    * @var string $action
-    */
+     * @var string $action
+     */
     private $action = '';
 
     /**
-    * @var string $method
-    */
+     * @var string $method
+     */
     private $method = 'post';
 
     /**
-    * @var string $nextUrl
-    */
+     * @var string $nextUrl
+     */
     private $nextUrl = '';
 
     /**
-    * @var array $groups
-    */
+     * @var array $groups
+     */
     protected $groups = [];
 
     /**
-    * @var array $formData
-    */
+     * @var array $formData
+     */
     private $formData = [];
     /**
-    * @var array $formProperties
-    */
+     * @var array $formProperties
+     */
     private $formProperties = [];
 
     /**
-    * @param string $action
-    * @throws InvalidArgumentException
-    * @return FormInterface Chainable
-    */
+     * @param string $action
+     * @throws InvalidArgumentException
+     * @return FormInterface Chainable
+     */
     public function setAction($action)
     {
         if (!is_string($action)) {
@@ -60,18 +60,18 @@ trait FormTrait
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function action()
     {
         return $this->action;
     }
 
     /**
-    * @param string $method Either "post" or "get"
-    * @throws InvalidArgumentException
-    * @return FormInterface Chainable
-    */
+     * @param string $method Either "post" or "get"
+     * @throws InvalidArgumentException
+     * @return FormInterface Chainable
+     */
     public function setMethod($method)
     {
         $method = strtolower($method);
@@ -85,18 +85,18 @@ trait FormTrait
     }
 
     /**
-    * @return string Either "post" or "get"
-    */
+     * @return string Either "post" or "get"
+     */
     public function method()
     {
         return $this->method;
     }
 
     /**
-    * @param string $url
-    * @throws InvalidArgumentException if success is not a boolean
-    * @return ActionInterface Chainable
-    */
+     * @param string $url
+     * @throws InvalidArgumentException if success is not a boolean
+     * @return ActionInterface Chainable
+     */
     public function setNextUrl($url)
     {
         if (!is_string($url)) {
@@ -110,17 +110,17 @@ trait FormTrait
     }
 
     /**
-    * @return bool
-    */
+     * @return boolean
+     */
     public function nextUrl()
     {
         return $this->nextUrl;
     }
 
     /**
-    * @param array $groups
-    * @return FormInterface Chainable
-    */
+     * @param array $groups
+     * @return FormInterface Chainable
+     */
     public function setGroups(array $groups)
     {
         $this->groups = [];
@@ -131,11 +131,11 @@ trait FormTrait
     }
 
     /**
-    * @param string $groupIdent
-    * @param array|FormGroupInterface
-    * @throws InvalidArgumentException
-    * @return FormInterface Chainable
-    */
+     * @param string                   $groupIdent
+     * @param array|FormGroupInterface
+     * @throws InvalidArgumentException
+     * @return FormInterface Chainable
+     */
     public function addGroup($groupIdent, $group)
     {
         if (!is_string($groupIdent)) {
@@ -160,14 +160,14 @@ trait FormTrait
     }
 
     /**
-    * @param array|null $data
-    * @return FormGroupInterface
-    */
+     * @param array|null $data
+     * @return FormGroupInterface
+     */
     abstract public function createGroup(array $data = null);
 
     /**
-    * Group generator
-    */
+     * Group generator
+     */
     public function groups()
     {
         $groups = $this->groups;
@@ -183,44 +183,45 @@ trait FormTrait
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasGroups()
     {
         return (count($this->groups) > 0);
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numGroups()
     {
         return count($this->groups);
     }
 
     /**
-    * To be called with uasort()
-    *
-    * @param FormGroupInterface $a
-    * @param FormGroupInterface $b
-    * @return integer Sorting value: -1, 0, or 1
-    */
+     * To be called with uasort()
+     *
+     * @param FormGroupInterface $a
+     * @param FormGroupInterface $b
+     * @return integer Sorting value: -1, 0, or 1
+     */
     static protected function sortGroupsByPriority(FormGroupInterface $a, FormGroupInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();
 
         if ($a == $b) {
-            return 1; // Should be 0?
+            return 1;
+// Should be 0?
         }
 
         return ($a < $b) ? (-1) : 1;
     }
 
     /**
-    * @param array $formData
-    * @return FormInterface Chainable
-    */
+     * @param array $formData
+     * @return FormInterface Chainable
+     */
     public function setFormData(array $formData)
     {
         $this->formData = $formData;
@@ -228,11 +229,11 @@ trait FormTrait
     }
 
     /**
-    * @param string $key
-    * @param mixed $val
-    * @throws InvalidArgumentException
-    * @return FormInterface Chainable
-    */
+     * @param string $key
+     * @param mixed  $val
+     * @throws InvalidArgumentException
+     * @return FormInterface Chainable
+     */
     public function addFormData($key, $val)
     {
         if (!is_string($key)) {
@@ -245,17 +246,17 @@ trait FormTrait
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function formData()
     {
         return $this->formData;
     }
 
     /**
-    * @param array $properties
-    * @return FormInterface Chainable
-    */
+     * @param array $properties
+     * @return FormInterface Chainable
+     */
     public function setFormProperties(array $properties)
     {
         $this->formProperties = [];
@@ -266,11 +267,11 @@ trait FormTrait
     }
 
     /**
-    * @param string $propertyIdent
-    * @param array|FormPropertyInterface
-    * @throws InvalidArgumentException
-    * @return FormInterface Chainable
-    */
+     * @param string                      $propertyIdent
+     * @param array|FormPropertyInterface
+     * @throws InvalidArgumentException
+     * @return FormInterface Chainable
+     */
     public function addFormProperty($propertyIdent, $property)
     {
         if (!is_string($propertyIdent)) {
@@ -295,14 +296,14 @@ trait FormTrait
     }
 
     /**
-    * @param array|null $data
-    * @return FormPropertyInterface
-    */
+     * @param array|null $data
+     * @return FormPropertyInterface
+     */
     abstract public function createFormProperty(array $data = null);
 
     /**
-    * Properties generator
-    */
+     * Properties generator
+     */
     public function formProperties()
     {
         $sidebars = $this->sidebars;
@@ -318,5 +319,4 @@ trait FormTrait
             }
         }
     }
-
 }

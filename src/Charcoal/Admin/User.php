@@ -10,24 +10,24 @@ use \Charcoal\Admin\UserConfig;
 use \Charcoal\Admin\UserGroup;
 
 /**
-* Admin User class
-*/
+ * Admin User class.
+ */
 class User extends AbstractUser
 {
     /**
-    * @return string
-    */
-    static public function sessionKey()
+     * @return string
+     */
+    public static function sessionKey()
     {
         return 'admin.user';
     }
 
     /**
-    * ConfigurableInterface > createConfig()
-    *
-    * @param array|null $data Optional
-    * @return UserConfig
-    */
+     * ConfigurableInterface > createConfig()
+     *
+     * @param array|null $data Optional. User config data.
+     * @return UserConfig
+     */
     public function createConfig(array $data = null)
     {
         $config = new UserConfig();
@@ -38,9 +38,9 @@ class User extends AbstractUser
     }
 
     /**
-    * @param array|null $data Optional
-    * @return UserGroup
-    */
+     * @param array|null $data Optional. Default usergroup data.
+     * @return UserGroup
+     */
     public function createGroup(array $data = null)
     {
         $group =  new UserGroup();
@@ -49,5 +49,4 @@ class User extends AbstractUser
         }
         return $group;
     }
-
 }

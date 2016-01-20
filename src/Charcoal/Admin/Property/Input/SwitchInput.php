@@ -7,21 +7,21 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-*
-*/
+ *
+ */
 class SwitchInput extends AbstractPropertyInput
 {
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function checked()
     {
         return !!$this->p()->val();
     }
 
     /**
-    * @return int
-    */
+     * @return integer
+     */
     public function value()
     {
         return ( $this->p()->val() ) ? : 0;

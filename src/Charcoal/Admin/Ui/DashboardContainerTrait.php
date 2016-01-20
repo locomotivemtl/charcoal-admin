@@ -7,23 +7,23 @@ use \InvalidArgumentException as InvalidArgumentException;
 trait DashboardContainerTrait
 {
     /**
-    * @var string $dashboboardIdent
-    */
+     * @var string $dashboboardIdent
+     */
     protected $dashboardIdent;
     /**
-    * @var mixed $dashboardConfig
-    */
+     * @var mixed $dashboardConfig
+     */
     protected $dashboardConfig;
     /**
-    * @var Dashboard $dashboard
-    */
+     * @var Dashboard $dashboard
+     */
     protected $dashboard;
 
     /**
-    * @param array $data
-    * @throws InvalidArgumentException
-    * @return DashboardContainerInterface Chainable
-    */
+     * @param array $data
+     * @throws InvalidArgumentException
+     * @return DashboardContainerInterface Chainable
+     */
     public function setDashboardData($data = null)
     {
         if (!is_array($data)) {
@@ -41,10 +41,10 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @param string $dashboardIdent
-    * @throws InvalidArgumentException
-    * @return DashboardContainerInterface Chainable
-    */
+     * @param string $dashboardIdent
+     * @throws InvalidArgumentException
+     * @return DashboardContainerInterface Chainable
+     */
     public function setDashboardIdent($dashboardIdent)
     {
         if (!is_string($dashboardIdent)) {
@@ -57,17 +57,17 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function dashboardIdent()
     {
         return $this->dashboardIdent;
     }
 
     /**
-    * @param mixed $dashboardConfig
-    * @return DashboardContainerInterface Chainable
-    */
+     * @param mixed $dashboardConfig
+     * @return DashboardContainerInterface Chainable
+     */
     public function setDashboardConfig($dashboardConfig)
     {
         $this->dashboardConfig = $dashboardConfig;
@@ -75,8 +75,8 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function dashboardConfig()
     {
         if ($this->dashboardConfig === null) {
@@ -91,9 +91,9 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @param Dashboard $dashboard
-    * @return DashboardContainerInterface Chainable
-    */
+     * @param Dashboard $dashboard
+     * @return DashboardContainerInterface Chainable
+     */
     public function setDashboard($dashboard)
     {
         $this->dashboard = $dashboard;
@@ -101,8 +101,8 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @return Dashboard
-    */
+     * @return Dashboard
+     */
     public function dashboard()
     {
         if ($this->dashboard === null) {
@@ -112,8 +112,8 @@ trait DashboardContainerTrait
     }
 
     /**
-    * @param array $data Optional
-    * @return Dashboard
-    */
+     * @param array $data Optional
+     * @return Dashboard
+     */
     abstract public function createDashboard(array $data = null);
 }

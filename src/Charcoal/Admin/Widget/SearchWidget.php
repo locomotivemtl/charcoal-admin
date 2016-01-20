@@ -15,51 +15,36 @@ use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterf
 use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
 
 /**
-* The table widget displays a collection in a tabular (table) format.
-*/
+ * The table widget displays a collection in a tabular (table) format.
+ */
 class SearchWidget extends AdminWidget implements CollectionContainerInterface
 {
     use CollectionContainerTrait;
 
     /**
-    * @var array $properties
-    */
+     * @var array $properties
+     */
     protected $properties;
 
     /**
-    * @var $propertiesOptions
-    */
+     * @var $propertiesOptions
+     */
     protected $propertiesOptions;
 
     /**
-    * @var array $orders
-    */
+     * @var array $orders
+     */
     protected $orders;
 
     /**
-    * @var array $filters
-    */
+     * @var array $filters
+     */
     protected $filters;
 
     /**
-    * @param array $data Optional
-    */
-    /*
-    public function __construct(array $data = null)
-    {
-        //parent::__construct($data);
-
-        if (is_array($data)) {
-            $this->setData($data);
-
-        }
-    }
-    */
-
-    /**
-    * @param array $data
-    * @return TableWidget Chainable
-    */
+     * @param array $data The search widget data.
+     * @return TableWidget Chainable
+     */
     public function setData(array $data)
     {
 
@@ -72,10 +57,10 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @param string $collectionIdent
-    * @throws InvalidArgumentException
-    * @return CollectionContainerInterface Chainable
-    */
+     * @param string $collectionIdent
+     * @throws InvalidArgumentException
+     * @return CollectionContainerInterface Chainable
+     */
     public function setCollectionIdent($collectionIdent)
     {
         if (!is_string($collectionIdent)) {
@@ -88,17 +73,17 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function collectionIdent()
     {
         return $this->collectionIdent;
     }
 
     /**
-    * Fetch metadata from current obj_type
-    * @return array List of metadata
-    */
+     * Fetch metadata from current obj_type
+     * @return array List of metadata
+     */
     public function dataFromObject()
     {
         $obj = $this->proto();
@@ -115,10 +100,10 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * Sets and returns properties
-    * Manages which to display, and their order, as set in object metadata
-    * @return  FormPropertyWidget  Generator function
-    */
+     * Sets and returns properties
+     * Manages which to display, and their order, as set in object metadata
+     * @return  FormPropertyWidget  Generator function
+     */
     public function properties()
     {
         if ($this->properties === null) {
@@ -148,9 +133,9 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * Properties to display in collection template, and their order, as set in object metadata
-    * @return  FormPropertyWidget         Generator function
-    */
+     * Properties to display in collection template, and their order, as set in object metadata
+     * @return  FormPropertyWidget         Generator function
+     */
     public function jsonPropertiesList()
     {
         $obj = $this->proto();
@@ -161,8 +146,6 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
         if (isset($admin_metadata['lists'][$collectionIdent]['properties'])) {
             $props = $admin_metadata['lists'][$collectionIdent]['properties'];
         }
-        return json_encode( $props );
+        return json_encode($props);
     }
-
-
 }

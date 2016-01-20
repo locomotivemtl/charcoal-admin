@@ -7,29 +7,29 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-* Number Property Input Type
-*/
+ * Number Property Input Type
+ */
 class NumberInput extends AbstractPropertyInput
 {
      /**
-    * @var integer $min
-    */
+      * @var integer $min
+      */
     private $min = 0;
     /**
-    * @var integer $max
-    */
+     * @var integer $max
+     */
     private $max = 0;
 
     /**
-    * @var float $step
-    */
+     * @var float $step
+     */
     private $step = 0;
 
     /**
-    * @param integer $min
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $min
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setMin($min)
     {
         if (!is_integer($min)) {
@@ -42,18 +42,18 @@ class NumberInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function min()
     {
         return $this->min;
     }
 
     /**
-    * @param integer $max
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $max
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setMax($max)
     {
         if (!is_integer($max)) {
@@ -66,18 +66,18 @@ class NumberInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function max()
     {
         return $this->max;
     }
 
     /**
-    * @param integer $step
-    * @throws InvalidArgumentException
-    * @return Text Chainable
-    */
+     * @param integer $step
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
     public function setStep($step)
     {
         if (!is_float($step)) {
@@ -90,8 +90,8 @@ class NumberInput extends AbstractPropertyInput
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function step()
     {
         return $this->step;

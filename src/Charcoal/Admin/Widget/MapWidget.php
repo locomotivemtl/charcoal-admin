@@ -5,7 +5,6 @@ namespace Charcoal\Admin\Widget;
 use \Charcoal\Translation\TranslationString;
 
 use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Template\TemplateViewController as TemplateViewController;
 
 // From `charcoal-base`
 use \Charcoal\Model\ModelFactory;
@@ -19,26 +18,44 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     use FormGroupTrait;
 
     /**
-    * @var object styles (concerning the marker style)
-    */
+     * @var object styles (concerning the marker style)
+     */
     private $styles;
 
     private $latProperty;
     private $lonProperty;
 
+    /**
+     * @param string $p The latitude property ident.
+     * @return MapWidget Chainable
+     */
     public function setLatProperty($p)
     {
         $this->latProperty = $p;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function latProperty()
     {
         return $this->latProperty;
     }
+
+     /**
+      * @param string $p The longitude property ident.
+      * @return MapWidget Chainable
+      */
     public function setLonProperty($p)
     {
         $this->lonProperty = $p;
+        return $this;
     }
+
+    /**
+     * @return string
+     */
     public function lonProperty()
     {
         return $this->lonProperty;
@@ -63,8 +80,8 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * Styles
-    */
+     * Styles
+     */
     public function styles()
     {
 
@@ -79,6 +96,11 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         return $this;
     }
 
+    /**
+     * Get the widget's associated object.
+     *
+     * @return ModelInterface
+     */
     public function obj()
     {
         $obj = null;
@@ -95,10 +117,11 @@ class MapWidget extends AdminWidget implements FormGroupInterface
 
 
     /**
-    * Title and subtitle getter/setters
-    * @param mixed $subtitle l10n object OR string
-    * @return MapWidget Chainable
-    */
+     * Title and subtitle getter/setters
+     *
+     * @param mixed $subtitle The map widget subtitle.
+     * @return MapWidget Chainable
+     */
     public function setSubtitle($subtitle)
     {
         if ($subtitle === null) {
@@ -110,17 +133,17 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function subtitle()
     {
         return $this->subtitle;
     }
 
     /**
-    * @param mixed $title
-    * @return MapWidget Chainable
-    */
+     * @param mixed $title The map widget title.
+     * @return MapWidget Chainable
+     */
     public function setTitle($title)
     {
         if ($title === null) {
@@ -132,8 +155,8 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function title()
     {
         if ($this->title === null) {
@@ -143,8 +166,8 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function widgetType()
     {
         return 'charcoal/admin/widget/map';

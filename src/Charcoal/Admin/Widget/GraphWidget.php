@@ -8,23 +8,23 @@ use \InvalidArgumentException;
 use \Charcoal\Admin\AdminWidget;
 
 /**
-* Base Graph widget
-*/
+ * Base Graph widget
+ */
 class GraphWidget extends AdminWidget
 {
     /**
-    * @var mixed $height
-    */
+     * @var mixed $height
+     */
     protected $height = 400;
     /**
-    * @var array $colors
-    */
+     * @var array $colors
+     */
     protected $colors;
 
     /**
-    * @param mixed $height
-    * @return Graph Chainable
-    */
+     * @param mixed $height
+     * @return Graph Chainable
+     */
     public function setHeight($height)
     {
         $this->height = $height;
@@ -32,17 +32,17 @@ class GraphWidget extends AdminWidget
     }
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function height()
     {
         return $this->height;
     }
 
     /**
-    * @param string[] $colors
-    * @return Graph Chainable
-    */
+     * @param string[] $colors
+     * @return Graph Chainable
+     */
     public function setColors(array $colors)
     {
         $this->colors = $colors;
@@ -50,8 +50,8 @@ class GraphWidget extends AdminWidget
     }
 
     /**
-    *
-    */
+     *
+     */
     public function colors()
     {
         if ($this->colors === null || empty($this->colors)) {
@@ -61,8 +61,8 @@ class GraphWidget extends AdminWidget
     }
 
     /**
-    * @todo Read from widget metadata
-    */
+     * @todo Read from widget metadata
+     */
     public function defaultColors()
     {
         return [

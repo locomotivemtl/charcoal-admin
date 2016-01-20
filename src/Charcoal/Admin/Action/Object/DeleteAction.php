@@ -16,28 +16,28 @@ use \Charcoal\Model\ModelFactory;
 use \Charcoal\Admin\AdminAction;
 
 /**
-* Admin Object Delete Action: Delete an object
-*
-* ## Parameters
-* **Required parameters**
-* - `obj_type`
-* - `obj_id`
-*
-* ## Response
-* - `success` true if login was successful, false otherwise.
-*   - Failure should also send a different HTTP code: see below.
-* - `feedbacks` (Optional) operation feedbacks, if any.
-* - `next_url` Redirect URL, in case of successfull login.
-*   - This is the `next_url` parameter if it was set, or the default admin URL if not
-*
-* ## HTTP Codes
-* - `200` in case of a successful object deletion
-* - `404` if any error occurs
-*
-* Ident: `charcoal/admin/action/object/delete`
-*
-* @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to read request and set response.
-*/
+ * Admin Object Delete Action: Delete an object
+ *
+ * ## Parameters
+ * **Required parameters**
+ * - `obj_type`
+ * - `obj_id`
+ *
+ * ## Response
+ * - `success` true if login was successful, false otherwise.
+ *   - Failure should also send a different HTTP code: see below.
+ * - `feedbacks` (Optional) operation feedbacks, if any.
+ * - `next_url` Redirect URL, in case of successfull login.
+ *   - This is the `next_url` parameter if it was set, or the default admin URL if not
+ *
+ * ## HTTP Codes
+ * - `200` in case of a successful object deletion
+ * - `404` if any error occurs
+ *
+ * Ident: `charcoal/admin/action/object/delete`
+ *
+ * @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to read request and set response.
+ */
 class DeleteAction extends AdminAction
 {
 
@@ -85,8 +85,8 @@ class DeleteAction extends AdminAction
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function results()
     {
         $results = [

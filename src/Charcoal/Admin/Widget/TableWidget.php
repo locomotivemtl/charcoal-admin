@@ -15,38 +15,41 @@ use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
-* The table widget displays a collection in a tabular (table) format.
-*/
+ * The table widget displays a collection in a tabular (table) format.
+ */
 class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
     use CollectionContainerTrait;
 
     /**
-    * @var array $properties
-    */
+     * @var array $properties
+     */
     protected $properties;
 
     /**
-    * @var $propertiesOptions
-    */
+     * @var $propertiesOptions
+     */
     protected $propertiesOptions;
 
     /**
-    * @var array $orders
-    */
+     * @var array $orders
+     */
     protected $orders;
 
     /**
-    * @var array $filters
-    */
+     * @var array $filters
+     */
     protected $filters;
 
+    /**
+     * @var PropertyFactory $propertyFactory
+     */
     private $propertyFactory;
 
     /**
-    * Fetch metadata from current obj_type
-    * @return array List of metadata
-    */
+     * Fetch metadata from current obj_type
+     * @return array List of metadata
+     */
     public function dataFromObject()
     {
         $obj = $this->proto();
@@ -63,10 +66,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * Sets and returns properties
-    * Manages which to display, and their order, as set in object metadata
-    * @return  FormPropertyWidget  Generator function
-    */
+     * Sets and returns properties
+     * Manages which to display, and their order, as set in object metadata
+     * @return  FormPropertyWidget  Generator function
+     */
     public function properties()
     {
         if ($this->properties === null) {
@@ -96,9 +99,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * Properties to display in collection template, and their order, as set in object metadata
-    * @return  FormPropertyWidget         Generator function
-    */
+     * Properties to display in collection template, and their order, as set in object metadata
+     * @return  FormPropertyWidget         Generator function
+     */
     public function collectionProperties()
     {
         $props = $this->properties();
@@ -121,16 +124,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showObjectActions()
     {
         return true;
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function objectActions()
     {
         return [
@@ -153,8 +156,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasObjectActions()
     {
         $actions = $this->objectActions();
@@ -162,8 +165,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function listActions()
     {
         $obj = $this->proto();
@@ -183,8 +186,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function sublistActions()
     {
         return [
@@ -200,33 +203,33 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showTableHeader()
     {
         return true;
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showTableFooter()
     {
         return false;
     }
 
     /**
-    * Generate URL for editing object
-    * @return string
-    */
+     * Generate URL for editing object
+     * @return string
+     */
     public function objectEditUrl()
     {
         return \Charcoal\App\App::instance()->config()->get('URL').'admin/object/edit?obj_type='.$this->obj_type();
     }
 
     /**
-    * @return PropertyFactory
-    */
+     * @return PropertyFactory
+     */
     private function propertyFactory()
     {
         if ($this->propertyFactory === null) {

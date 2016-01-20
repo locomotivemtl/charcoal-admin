@@ -20,25 +20,25 @@ use \Charcoal\App\Template\WidgetFactory;
 use \Charcoal\Admin\AdminAction;
 
 /**
-*
-*/
+ *
+ */
 class LoadAction extends AdminAction
 {
     /**
-    * @var string $widgetId
-    */
+     * @var string $widgetId
+     */
     protected $widgetId = '';
 
     /**
-    * @var string $widgetHtml
-    */
+     * @var string $widgetHtml
+     */
     protected $widgetHtml = '';
 
     /**
-    * @param ServerRequestInterface $request
-    * @param ResponseInterface $response
-    * @return ResponseInterface
-    */
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @return ResponseInterface
+     */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         $app = $this->app();
@@ -78,10 +78,10 @@ class LoadAction extends AdminAction
     }
 
     /**
-    * @param string $widgetId
-    * @throws InvalidArgumentException
-    * @return LoadAction Chainable
-    */
+     * @param string $widgetId
+     * @throws InvalidArgumentException
+     * @return LoadAction Chainable
+     */
     public function setWidgetId($id)
     {
         if (!is_string($id)) {
@@ -94,18 +94,18 @@ class LoadAction extends AdminAction
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function widgetId()
     {
         return $this->widgetId;
     }
 
     /**
-    * @param string $widgetHtml
-    * @throws InvalidArgumentException
-    * @return LoadAction Chainable
-    */
+     * @param string $widgetHtml
+     * @throws InvalidArgumentException
+     * @return LoadAction Chainable
+     */
     public function setWidgetHtml($html)
     {
         if (!is_string($html)) {
@@ -118,16 +118,16 @@ class LoadAction extends AdminAction
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function widgetHtml()
     {
         return $this->widgetHtml;
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function results()
     {
         $success = $this->success();

@@ -11,8 +11,8 @@ use \Charcoal\Admin\AdminScript;
 use \Charcoal\Admin\User;
 
 /**
-*
-*/
+ *
+ */
 class CreateScript extends AdminScript
 {
     /**
@@ -77,8 +77,8 @@ class CreateScript extends AdminScript
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function authRequired()
     {
         $proto = new User();

@@ -8,22 +8,22 @@ use \InvalidArgumentException;
 use \Charcoal\Config\AbstractConfig;
 
 /**
-*
-*/
+ * Admin Config.
+ */
 class Config extends AbstractConfig
 {
     const DEFAULT_BASE_PATH = 'admin';
 
     /**
-    * @var string $_basePath
-    */
+     * @var string $_basePath
+     */
     private $basePath = self::DEFAULT_BASE_PATH;
 
     /**
-    * The default data is defined in a JSON file.
-    *
-    * @return array
-    */
+     * The default data is defined in a JSON file.
+     *
+     * @return array
+     */
     public function defaults()
     {
         $file_content = file_get_contents(realpath(__DIR__.'/../../../config').'/admin.config.default.json');
@@ -32,10 +32,10 @@ class Config extends AbstractConfig
     }
 
     /**
-    * @param string $path
-    * @throws InvalidArgumentException
-    * @return Config Chainable
-    */
+     * @param string $path The admin module base path.
+     * @throws InvalidArgumentException
+     * @return Config Chainable
+     */
     public function setBasePath($path)
     {
         if (!is_string($path)) {
@@ -53,9 +53,11 @@ class Config extends AbstractConfig
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function basePath()
     {
         return $this->basePath;
     }
-
 }

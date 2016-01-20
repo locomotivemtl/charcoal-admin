@@ -25,36 +25,36 @@ use \Charcoal\App\Template\TemplateFactory;
 use \Charcoal\Admin\Config as AdminConfig;
 
 /**
-* The base class for the `admin` Module
-*/
+ * The base class for the `admin` Module
+ */
 class AdminModule extends AbstractModule implements
     ModuleInterface
 {
 
     /**
-    * @var AdminConfig $config
-    */
+     * @var AdminConfig $config
+     */
     private $config;
 
 
     /**
-    * Charcoal admin setup.
-    *
-    * This module is bound to the `/admin` URL.
-    *
-    * ## Provides
-    * - `charcoal/admin/module` An instance of this module
-    *   - Exact type: `\Charcoal\Admin\AdminModule`
-    *   - which implements `\Charcoal\Module\ModuleInterface`
-    * - `charcoal/admin/config`
-    * - `
-    *
-    * ## Dependencies
-    * - `charcoal/config` Provided by \Charcoal\CharcoalModule
-    *
-    * @param \Slim\App $app
-    * @return void
-    */
+     * Charcoal admin setup.
+     *
+     * This module is bound to the `/admin` URL.
+     *
+     * ## Provides
+     * - `charcoal/admin/module` An instance of this module
+     *   - Exact type: `\Charcoal\Admin\AdminModule`
+     *   - which implements `\Charcoal\Module\ModuleInterface`
+     * - `charcoal/admin/config`
+     * - `
+     *
+     * ## Dependencies
+     * - `charcoal/config` Provided by \Charcoal\CharcoalModule
+     *
+     * @param \Slim\App $app
+     * @return void
+     */
     public function setup()
     {
         // A session is necessary for the admin module
@@ -122,5 +122,4 @@ class AdminModule extends AbstractModule implements
         }
         return $config;
     }
-
 }

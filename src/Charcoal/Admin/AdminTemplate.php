@@ -17,61 +17,61 @@ use \Charcoal\Admin\AdminModule;
 use \Charcoal\Admin\User;
 
 /**
-* Base class for all `admin` Templates.
-*
-* An action extends [\
-*
-* # Available (mustache) methods
-* - `title` (TranslationString) - The page title
-* - `subtitle` (TranslationString) The page subtitle
-* - `showHeaderMenu` (bool) - Display the header menu or not
-* - `headerMenu` (iterator) - The header menu data
-* - `showFooterMenu` (bool) - Display the footer menu or not
-* - `footerMenu` (iterator) - The footer menu data
-* - `hasFeedback` (bool) - If there is feedback to display or not
-* - `feedback` (iterator) - The feedback data
-*/
+ * Base class for all `admin` Templates.
+ *
+ * An action extends [\
+ *
+ * # Available (mustache) methods
+ * - `title` (TranslationString) - The page title
+ * - `subtitle` (TranslationString) The page subtitle
+ * - `showHeaderMenu` (bool) - Display the header menu or not
+ * - `headerMenu` (iterator) - The header menu data
+ * - `showFooterMenu` (bool) - Display the footer menu or not
+ * - `footerMenu` (iterator) - The footer menu data
+ * - `hasFeedback` (bool) - If there is feedback to display or not
+ * - `feedback` (iterator) - The feedback data
+ */
 class AdminTemplate extends AbstractTemplate
 {
     /**
-    * @var string $ident
-    */
+     * @var string $ident
+     */
     private $ident = '';
     /**
-    * @var TranslationString $label
-    */
+     * @var TranslationString $label
+     */
     private $label = '';
 
     /**
-    * @var TranslationString $title
-    */
+     * @var TranslationString $title
+     */
     private $title = '';
     /**
-    * @var TranslationString $subtitle
-    */
+     * @var TranslationString $subtitle
+     */
     private $subtitle = '';
 
     /**
-    * @var boolean $showHeaderMenu
-    */
+     * @var boolean $showHeaderMenu
+     */
     private $showHeaderMenu = true;
     /**
-    * @var boolean $showFooterMenu
-    */
+     * @var boolean $showFooterMenu
+     */
     private $showFooterMenu = true;
 
     /**
-    * @var array $feedbacks
-    */
+     * @var array $feedbacks
+     */
     private $feedbacks;
 
     /**
-    * Constructor.
-    * Ensure authentication before serving the template.
-    * @todo Check permissions
-    *
-    * @param arrray $data
-    */
+     * Constructor.
+     * Ensure authentication before serving the template.
+     * @todo Check permissions
+     *
+     * @param arrray $data
+     */
     public function __construct(array $data = null)
     {
         if (!session_id()) {
@@ -91,9 +91,9 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @var array $data
-    * @return AdminTemplate Chainable
-    */
+     * @var array $data
+     * @return AdminTemplate Chainable
+     */
     public function setData(array $data)
     {
         foreach ($data as $prop => $val) {
@@ -114,9 +114,9 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @param mixed $ident
-    * @return AdminTemplate Chainable
-    */
+     * @param mixed $ident
+     * @return AdminTemplate Chainable
+     */
     public function setIdent($ident)
     {
         $this->ident = $ident;
@@ -124,17 +124,17 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @param string
-    */
+     * @param string
+     */
     public function ident()
     {
         return $this->ident;
     }
 
     /**
-    * @param mixed $label
-    * @return AdminTemplate Chainable
-    */
+     * @param mixed $label
+     * @return AdminTemplate Chainable
+     */
     public function setLabel($label)
     {
         $this->label = new TranslationString($label);
@@ -142,17 +142,17 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function label()
     {
         return $this->label;
     }
 
     /**
-    * @param mixed $title
-    * @return AdminTemplate Chainable
-    */
+     * @param mixed $title
+     * @return AdminTemplate Chainable
+     */
     public function setTitle($title)
     {
         $this->title = new TranslationString($title);
@@ -160,8 +160,8 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function title()
     {
         if ($this->title === null) {
@@ -171,9 +171,9 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @param mixed $subtitle
-    * @return AdminTemplate Chainable
-    */
+     * @param mixed $subtitle
+     * @return AdminTemplate Chainable
+     */
     public function setSubtitle($subtitle)
     {
         $this->subtitle = new TranslationString($subtitle);
@@ -181,8 +181,8 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return TranslationString
-    */
+     * @return TranslationString
+     */
     public function subtitle()
     {
         if ($this->subtitle === null) {
@@ -192,9 +192,9 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @param boolean $show
-    * @return AdminTemplate Chainable
-    */
+     * @param boolean $show
+     * @return AdminTemplate Chainable
+     */
     public function setShowHeaderMenu($show)
     {
         $this->showHeaderMenu = !!$show;
@@ -202,16 +202,16 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showHeaderMenu()
     {
         return $this->showHeaderMenu;
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function headerMenu()
     {
         $obj_type = isset($_GET['obj_type']) ? $_GET['obj_type'] : '';
@@ -270,10 +270,10 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @param boolean $show
-    * @throws InvalidArgumentException
-    * @return AdminTemplate Chainable
-    */
+     * @param boolean $show
+     * @throws InvalidArgumentException
+     * @return AdminTemplate Chainable
+     */
     public function setShowFooterMenu($show)
     {
         if (!is_bool($show)) {
@@ -284,16 +284,16 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showFooterMenu()
     {
         return $this->showFooterMenu;
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function footerMenu()
     {
         // @todo
@@ -306,16 +306,16 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasFeedbacks()
     {
         return (count($this->feedbacks()) > 0);
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function feedbacks()
     {
         return $this->feedbacks;
@@ -330,24 +330,24 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * Determine if user authentication is required.
-    *
-    * Authentication is required by default. If unnecessary,
-    * replace this method in the inherited template class.
-    *
-    * For example, the "Login" / "Reset Password" templates
-    * should return `FALSE`.
-    *
-    * @return boolean
-    */
+     * Determine if user authentication is required.
+     *
+     * Authentication is required by default. If unnecessary,
+     * replace this method in the inherited template class.
+     *
+     * For example, the "Login" / "Reset Password" templates
+     * should return `FALSE`.
+     *
+     * @return boolean
+     */
     protected function authRequired()
     {
         return false;
     }
 
     /**
-    * Determine if the current user is authenticated. If not it redirects them to the login page.
-    */
+     * Determine if the current user is authenticated. If not it redirects them to the login page.
+     */
     private function auth()
     {
         //$cfg = AdminModule::config();
@@ -359,16 +359,16 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function adminUrl()
     {
         return $this->baseUrl().'admin/';
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function baseUrl()
     {
         return $this->app()->config()->get('URL');
@@ -376,13 +376,12 @@ class AdminTemplate extends AbstractTemplate
 
     public function forLoop()
     {
-       $return = [];
+        $return = [];
 
-       for ($i = 1; $i <= 10; $i++) {
-           $return[$i] = new \ArrayIterator( array_combine( range(1, $i), range(1, $i) ) );
-       }
+        for ($i = 1; $i <= 10; $i++) {
+            $return[$i] = new \ArrayIterator(array_combine(range(1, $i), range(1, $i)));
+        }
 
-       return $return;
-   }
-
+        return $return;
+    }
 }

@@ -7,8 +7,8 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-*
-*/
+ *
+ */
 class SelectInput extends AbstractPropertyInput
 {
     // ...
@@ -33,8 +33,8 @@ class SelectInput extends AbstractPropertyInput
     }
 
         /**
-    * @return boolean
-    */
+         * @return boolean
+         */
     public function isChoiceSelected($c)
     {
         $val = $this->p()->val();

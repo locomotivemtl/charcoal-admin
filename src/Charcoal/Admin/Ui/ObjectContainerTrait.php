@@ -13,29 +13,29 @@ use \Charcoal\Model\ModelFactory as ModelFactory;
 trait ObjectContainerTrait
 {
     /**
-    * @var string $objType
-    */
+     * @var string $objType
+     */
     protected $objType;
     /**
-    * @var string $objId
-    */
+     * @var string $objId
+     */
     protected $objId;
 
     /**
-    * @var string $objBaseClass
-    */
+     * @var string $objBaseClass
+     */
     protected $objBaseClass;
 
     /**
-    * @var Object $obj
-    */
+     * @var Object $obj
+     */
     protected $obj;
 
     /**
-    * @param string $objType
-    * @throws InvalidArgumentException if provided argument is not of type 'string'.
-    * @return ObjectContainerInterface Chainable
-    */
+     * @param string $objType
+     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @return ObjectContainerInterface Chainable
+     */
     public function setObjType($objType)
     {
         if (!is_string($objType)) {
@@ -48,18 +48,18 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function objType()
     {
         return $this->objType;
     }
 
     /**
-    * @param string|numeric $objId
-    * @throws InvalidArgumentException if provided argument is not of type 'scalar'.
-    * @return ObjectContainerInterface Chainable
-    */
+     * @param string|numeric $objId
+     * @throws InvalidArgumentException if provided argument is not of type 'scalar'.
+     * @return ObjectContainerInterface Chainable
+     */
     public function setObjId($objId)
     {
         if (!is_scalar($objId)) {
@@ -72,20 +72,20 @@ trait ObjectContainerTrait
     }
 
     /**
-    * Assign the Object ID
-    *
-    * @return string|numeric
-    */
+     * Assign the Object ID
+     *
+     * @return string|numeric
+     */
     public function objId()
     {
         return $this->objId;
     }
 
     /**
-    * @param string $objBaseClass
-    * @throws InvalidArgumentException if provided argument is not of type 'string'.
-    * @return ObjectContainerInterface Chainable
-    */
+     * @param string $objBaseClass
+     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @return ObjectContainerInterface Chainable
+     */
     public function setObjBaseClass($objBaseClass)
     {
         if (!is_string($objBaseClass)) {
@@ -98,19 +98,19 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @return string|null
-    */
+     * @return string|null
+     */
     public function objBaseClass()
     {
         return $this->objBaseClass;
     }
 
     /**
-    * Create or load the object.
-    *
-    *
-    * @return ModelInterface
-    */
+     * Create or load the object.
+     *
+     *
+     * @return ModelInterface
+     */
     public function obj()
     {
         if ($this->obj === null) {
@@ -152,9 +152,9 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @throws Exception
-    * @return ModelInterface
-    */
+     * @throws Exception
+     * @return ModelInterface
+     */
     public function createObj()
     {
         if (!$this->validateObjType()) {
@@ -174,9 +174,9 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @throws Exception
-    * @return ModelInterface The loaded object
-    */
+     * @throws Exception
+     * @return ModelInterface The loaded object
+     */
     public function loadObj()
     {
         if ($this->obj === null) {
@@ -195,9 +195,9 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @throws Exception
-    * @return boolean
-    */
+     * @throws Exception
+     * @return boolean
+     */
     protected function validateObjType()
     {
         try {
@@ -220,8 +220,8 @@ trait ObjectContainerTrait
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     protected function validateObjBaseClass($obj)
     {
         $objBaseClass = $this->objBaseClass();

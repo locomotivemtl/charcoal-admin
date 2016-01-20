@@ -8,55 +8,54 @@ use \Charcoal\Admin\Ui\FormInterface;
 interface FormGroupInterface
 {
     /**
-    * All FormGroup-s should have a form associated
-    * @param FormWidget
-    * @return FormGroupInterface
-    */
+     * All FormGroup-s should have a form associated
+     * @param FormWidget
+     * @return FormGroupInterface
+     */
     public function setForm(FormInterface $form);
 
     /**
-    * @return FormWidget
-    */
+     * @return FormWidget
+     */
     public function form();
 
     /**
-    * This should really be in the WidgetInterface...
-    * @return string widget type
-    */
+     * This should really be in the WidgetInterface...
+     * @return string widget type
+     */
     public function widgetType();
 
     /**
-    * @param string $title
-    * @return FormGroupInterface Chainable
-    */
+     * @param string $title
+     * @return FormGroupInterface Chainable
+     */
     public function setTitle($data);
 
     /**
-    * @return String
-    */
+     * @return string
+     */
     public function title();
 
     /**
-    * @param string $subtitle
-    * @return FormGroupInterface Chainable
-    */
+     * @param string $subtitle
+     * @return FormGroupInterface Chainable
+     */
     public function setSubtitle($data);
 
     /**
-    * @return String
-    */
+     * @return string
+     */
     public function subtitle();
 
     /**
-    * @var integer $priority
-    * @throws InvalidArgumentException
-    * @return FormGroupWidget Chainable
-    */
+     * @var integer $priority
+     * @throws InvalidArgumentException
+     * @return FormGroupWidget Chainable
+     */
     public function setPriority($priority);
 
     /**
-    * @return Integer
-    */
+     * @return integer
+     */
     public function priority();
-
 }

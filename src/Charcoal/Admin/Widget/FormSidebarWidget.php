@@ -7,32 +7,34 @@ use \InvalidArgumentException;
 use \Charcoal\Translation\TranslationString;
 
 use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Template\TemplateViewController as TemplateViewController;
 
+/**
+ *
+ */
 class FormSidebarWidget extends AdminWidget
 {
     /**
-    * In-memory copy of the parent form widget.
-    * @var FormWidget $form
-    */
+     * In-memory copy of the parent form widget.
+     * @var FormWidget $form
+     */
     private $form;
 
     /**
-    * @var string
-    */
+     * @var string
+     */
     private $widget_type = 'properties';
 
     /**
-    * @var Object $actions
-    */
+     * @var Object $actions
+     */
     private $actions;
 
     protected $sidebar_sidebarProperties = [];
     protected $priority;
 
     /**
-    * @var TranslationString $title
-    */
+     * @var TranslationString $title
+     */
     protected $title;
 
     public function setForm(FormWidget $form)
@@ -84,10 +86,10 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-    * Defined the form actions
-    * @param Object $actions
-    * @return FormGroupWidget Chainable
-    */
+     * Defined the form actions
+     * @param object $actions
+     * @return FormGroupWidget Chainable
+     */
     public function setActions($actions)
     {
         if (!$actions) {
@@ -100,11 +102,11 @@ class FormSidebarWidget extends AdminWidget
                 continue;
             }
             $label = new TranslationString($action['label']);
-            $url = $this->form()->obj()->render( $action['url'] );
+            $url = $this->form()->obj()->render($action['url']);
 
             // Info = default
             // Possible: danger, info
-            $btn = isset( $action['type'] ) ? $action['type'] : 'info';
+            $btn = isset($action['type']) ? $action['type'] : 'info';
             $this->actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn ];
         }
 
@@ -112,21 +114,21 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-    * Returns the actions as an ArrayIterator
-    * [ ['label' => $label, 'url' => $url] ]
-    * @see $this->set_actions()
-    * @return object actions
-    */
+     * Returns the actions as an ArrayIterator
+     * [ ['label' => $label, 'url' => $url] ]
+     * @see $this->set_actions()
+     * @return object actions
+     */
     public function actions()
     {
         return $this->actions;
     }
 
     /**
-    * @var integer $priority
-    * @throws InvalidArgumentException
-    * @return FormGroupWidget Chainable
-    */
+     * @var integer $priority
+     * @throws InvalidArgumentException
+     * @return FormGroupWidget Chainable
+     */
     public function setPriority($priority)
     {
         if (!is_int($priority)) {
@@ -140,17 +142,17 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function priority()
     {
         return $this->priority;
     }
 
     /**
-    * @param mixed $title
-    * @return FormSidebarWidget Chainable
-    */
+     * @param mixed $title
+     * @return FormSidebarWidget Chainable
+     */
     public function setTitle($title)
     {
         if ($title === null) {

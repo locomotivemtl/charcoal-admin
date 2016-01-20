@@ -16,8 +16,8 @@ use \Charcoal\Translation\TranslationConfig;
 use \Charcoal\Admin\Property\PropertyInputInterface as PropertyInputInterface;
 
 /**
-*
-*/
+ *
+ */
 abstract class AbstractPropertyInput implements PropertyInputInterface
 {
     private $ident;
@@ -39,19 +39,19 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     private $property;
 
     /**
-    * This function takes an array and fill the model object with its value.
-    *
-    * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
-    *
-    * For example, calling with `setData(['properties'=>$properties])` would call
-    *`setProperties($properties)`, becasue `setProperties()` exists.
-    *
-    * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
-    * on the metadata object, because the method `set_foobar()` does not exist.
-    *
-    * @param array $data
-    * @return Input Chainable
-    */
+     * This function takes an array and fill the model object with its value.
+     *
+     * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
+     *
+     * For example, calling with `setData(['properties'=>$properties])` would call
+     * `setProperties($properties)`, becasue `setProperties()` exists.
+     *
+     * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
+     * on the metadata object, because the method `set_foobar()` does not exist.
+     *
+     * @param array $data
+     * @return Input Chainable
+     */
     public function setData(array $data)
     {
         foreach ($data as $prop => $val) {
@@ -70,33 +70,34 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param string $ident
-    * @throws InvalidArgumentException if the ident is not a string
-    * @return Widget (Chainable)
-    */
+     * @param string $ident
+     * @throws InvalidArgumentException if the ident is not a string
+     * @return Widget (Chainable)
+     */
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
             throw new InvalidArgumentException(
-                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.');
+                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
+            );
         }
         $this->ident = $ident;
         return $this;
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function ident()
     {
         return $this->ident;
     }
 
     /**
-    * @param boolean $readOnly
-    * @throws InvalidArgumentException if the readOnly is not a boolean
-    * @return Widget (Chainable)
-    */
+     * @param boolean $readOnly
+     * @throws InvalidArgumentException if the readOnly is not a boolean
+     * @return Widget (Chainable)
+     */
     public function setReadOnly($readOnly)
     {
         $this->readOnly = !!$readOnly;
@@ -104,17 +105,17 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function readOnly()
     {
         return $this->readOnly;
     }
 
     /**
-    * @param boolean $required
-    * @return Widget (Chainable)
-    */
+     * @param boolean $required
+     * @return Widget (Chainable)
+     */
     public function setRequired($required)
     {
         $this->required = !!$required;
@@ -122,8 +123,8 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function required()
     {
         return $this->required;
@@ -131,9 +132,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
 
 
     /**
-    * @param boolean $disabled
-    * @return Widget (Chainable)
-    */
+     * @param boolean $disabled
+     * @return Widget (Chainable)
+     */
     public function setDisabled($disabled)
     {
         $this->disabled = !!$disabled;
@@ -141,17 +142,17 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function disabled()
     {
         return $this->disabled;
     }
 
     /**
-    * @param boolean $multiple
-    * @return Widget (Chainable)
-    */
+     * @param boolean $multiple
+     * @return Widget (Chainable)
+     */
     public function setMultiple($multiple)
     {
         $this->multiple = !!$multiple;
@@ -159,17 +160,17 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function multiple()
     {
         return $this->multiple;
     }
 
     /**
-    * @param string $inputId
-    * @return Input Chainable
-    */
+     * @param string $inputId
+     * @return Input Chainable
+     */
     public function setInputId($inputId)
     {
         $this->inputId = $inputId;
@@ -177,12 +178,12 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * Get the input ID.
-    *
-    * If none was previously set, than a unique random one will be generated.
-    *
-    * @return string
-    */
+     * Get the input ID.
+     *
+     * If none was previously set, than a unique random one will be generated.
+     *
+     * @return string
+     */
     public function inputId()
     {
         if (!$this->inputId) {
@@ -192,15 +193,16 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param string $inputClass
-    * @throws InvalidArgumentException
-    * @return AbstractPropertyInput Chainable
-    */
+     * @param string $inputClass
+     * @throws InvalidArgumentException
+     * @return AbstractPropertyInput Chainable
+     */
     public function setInputClass($inputClass)
     {
         if (!is_string($inputClass)) {
             throw new InvalidArgumentException(
-                'Input class must be a string');
+                'Input class must be a string'
+            );
         }
         $this->inputClass = $inputClass;
         return $this;
@@ -212,10 +214,10 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * The input name should always be the property's ident.
-    *
-    * @return string
-    */
+     * The input name should always be the property's ident.
+     *
+     * @return string
+     */
     public function inputName()
     {
         $name = $this->p()->ident();
@@ -229,8 +231,8 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function inputVal()
     {
         $prop = $this->p();
@@ -256,10 +258,10 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param string $inputType
-    * @throws InvalidArgumentException if provided argument is not of type 'string'.
-    * @return  AbstractPropertyInput Chainable
-    */
+     * @param string $inputType
+     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @return  AbstractPropertyInput Chainable
+     */
     public function setInputType($inputType)
     {
         if (!is_string($inputType)) {
@@ -272,8 +274,8 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function inputType()
     {
         if ($this->inputType === null) {
@@ -283,9 +285,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @param PropertyInterface $p
-    * @return AbstractPropertyInput Chainable
-    */
+     * @param PropertyInterface $p
+     * @return AbstractPropertyInput Chainable
+     */
     public function setProperty(PropertyInterface $p)
     {
         $this->property = $p;
@@ -293,8 +295,8 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * @return PropertyInterface
-    */
+     * @return PropertyInterface
+     */
     public function property()
     {
         if ($this->property === null) {
@@ -308,10 +310,10 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
     }
 
     /**
-    * Alias of the `property` method.
-    *
-    * @return PropertyInterface
-    */
+     * Alias of the `property` method.
+     *
+     * @return PropertyInterface
+     */
     public function p()
     {
         return $this->property();

@@ -12,16 +12,15 @@ use \Charcoal\Model\ModelFactory;
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
 
-
 /**
-* Create an object's table (sql source) according to its metadata's properties.
-*/
+ * Create an object's table (sql source) according to its metadata's properties.
+ */
 class CreateScript extends AdminScript
 {
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function defaultArguments()
     {
         $arguments = [
@@ -43,12 +42,14 @@ class CreateScript extends AdminScript
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        unset($request); // Unused
+        unset($request);
+// Unused
 
         $climate = $this->climate();
 
         $climate->underline()->out(
-            'Create object table from metadata');
+            'Create object table from metadata'
+        );
 
 
         $obj_type = $this->argOrInput('obj-type');
@@ -71,7 +72,7 @@ class CreateScript extends AdminScript
             $prop_names = array_keys($properties);
             $climate->out(
                 sprintf(
-                    "The %d following properties will be used: \"%s\"",
+                    'The %d following properties will be used: "%s"',
                     count($prop_names),
                     implode(', ', $prop_names)
                 )

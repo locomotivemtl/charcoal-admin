@@ -7,8 +7,8 @@ use \Charcoal\Admin\UserGroup as UserGroup;
 class UserGroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-    * Hello world
-    */
+     * Hello world
+     */
     public function testConstructor()
     {
         $logger = new \Psr\Log\NullLogger();

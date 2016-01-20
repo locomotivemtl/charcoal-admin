@@ -7,8 +7,8 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
-*
-*/
+ *
+ */
 class ReadonlyInput extends AbstractPropertyInput
 {
     // ...

@@ -13,8 +13,8 @@ use \Charcoal\Admin\Widget\Dashboard as Dashboard;
 use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
 /**
-* The Home template is a simple Dashboard, loaded from the metadata.
-*/
+ * The Home template is a simple Dashboard, loaded from the metadata.
+ */
 class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
 {
     use DashboardContainerTrait;
@@ -26,9 +26,9 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     }
 
     /**
-    * @param array $data
-    * @return Home Chainable
-    */
+     * @param array $data
+     * @return Home Chainable
+     */
     public function setData(array $data)
     {
         parent::setData($data);
@@ -39,9 +39,9 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     }
 
     /**
-    * @param array $data Optional
-    * @return Dashboard
-    */
+     * @param array $data Optional
+     * @return Dashboard
+     */
     public function createDashboard(array $data = null)
     {
         $dashboardIdent = $this->dashboardIdent();

@@ -8,25 +8,25 @@ use \InvalidArgumentException;
 use \Charcoal\Translation\TranslationString;
 
 /**
-*
-*/
+ *
+ */
 class MenuItem
 {
     /**
-    * @var string $ident
-    */
+     * @var string $ident
+     */
     protected $ident;
     /**
-    * @var TranslationString $label
-    */
+     * @var TranslationString $label
+     */
     protected $label;
     /**
-    * @var string $url
-    */
+     * @var string $url
+     */
     protected $url;
     /**
-    * @var array $children
-    */
+     * @var array $children
+     */
     protected $children;
 
     /**
@@ -42,9 +42,9 @@ class MenuItem
     }
 
     /**
-    * @param array $data
-    * @return MenuItem Chainable
-    */
+     * @param array $data
+     * @return MenuItem Chainable
+     */
     public function setData(array $data)
     {
         if (isset($data['ident']) && $data['ident'] !== null) {
@@ -64,10 +64,10 @@ class MenuItem
     }
 
     /**
-    * @param string $ident
-    * @throws InvalidArgumentException
-    * @return MenuItem Chainable
-    */
+     * @param string $ident
+     * @throws InvalidArgumentException
+     * @return MenuItem Chainable
+     */
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
@@ -80,17 +80,17 @@ class MenuItem
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function ident()
     {
         return $this->ident;
     }
 
     /**
-    * @param string $label
-    * @return MenuItem Chainable
-    */
+     * @param string $label
+     * @return MenuItem Chainable
+     */
     public function setLabel($label)
     {
         $this->label = new TranslationString($label);
@@ -98,17 +98,17 @@ class MenuItem
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function label()
     {
         return $this->label;
     }
 
     /**
-    * @param string $url
-    * @return MenuItem Chainable
-    */
+     * @param string $url
+     * @return MenuItem Chainable
+     */
     public function setUrl($url)
     {
         $this->url = $url;
@@ -116,26 +116,26 @@ class MenuItem
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function url()
     {
         return $this->url;
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasUrl()
     {
         return !!($this->url());
     }
 
     /**
-    * @param array $children
-    * @throws InvalidArgumentException
-    * @return MenuItem Chainable
-    */
+     * @param array $children
+     * @throws InvalidArgumentException
+     * @return MenuItem Chainable
+     */
     public function setChildren($children)
     {
         if (!is_array($children)) {
@@ -151,10 +151,10 @@ class MenuItem
     }
 
     /**
-    * @param array|MenuItem $child
-    * @throws InvalidArgumentException
-    * @return MenuItem Chainable
-    */
+     * @param array|MenuItem $child
+     * @throws InvalidArgumentException
+     * @return MenuItem Chainable
+     */
     public function addChild($child)
     {
         if (is_array($child)) {
@@ -171,24 +171,24 @@ class MenuItem
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function children()
     {
         return $this->children;
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function hasChildren()
     {
         return count($this->children > 0);
     }
 
     /**
-    * @return integer
-    */
+     * @return integer
+     */
     public function numChildren()
     {
         return count($this->children);

@@ -18,8 +18,8 @@ use \Charcoal\Admin\Widget\ObjectForm as ObjectForm;
 use \Charcoal\Admin\Widget\FormProperty as FormProperty;
 
 /**
-*
-*/
+ *
+ */
 class InlineMultiAction extends AdminAction
 {
     protected $objects;
@@ -80,8 +80,8 @@ class InlineMultiAction extends AdminAction
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function results()
     {
         $results = [

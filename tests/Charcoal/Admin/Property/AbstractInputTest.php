@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Tests\Property;
 
-
 class AbstractInputTest extends \PHPUnit_Framework_TestCase
 {
     public $obj;

@@ -9,8 +9,8 @@ use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 class AdminTemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
-    * Helper function for retrieving protected / private methods.
-    */
+     * Helper function for retrieving protected / private methods.
+     */
     public static function getMethod($obj, $name)
     {
         $class = new ReflectionClass($obj);
@@ -20,8 +20,8 @@ class AdminTemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * Assert that the method `auth_required` is turned on by default.
-    */
+     * Assert that the method `auth_required` is turned on by default.
+     */
     public function testAuthRequiredIsTrue()
     {
         $obj = new AdminTemplate();
@@ -31,10 +31,10 @@ class AdminTemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * Assert that the `set_data` method:
-    * - is chainable
-    * - sets the values
-    */
+     * Assert that the `set_data` method:
+     * - is chainable
+     * - sets the values
+     */
     public function testSetData()
     {
         $obj = new AdminTemplate();

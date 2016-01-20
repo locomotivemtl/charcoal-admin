@@ -22,8 +22,8 @@ use \Charcoal\Admin\Widget\DashboardWidget as Dashboard;
 use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
 /**
-* admin/object/collection template.
-*/
+ * admin/object/collection template.
+ */
 class CollectionTemplate extends AdminTemplate implements CollectionContainerInterface, DashboardContainerInterface
 {
     use CollectionContainerTrait;
@@ -49,11 +49,11 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     }
 
     /**
-    * @param array $data Optional
-    * @throws Exception
-    * @return Dashboard
-    * @see DashboardContainerTrait::createDashboard()
-    */
+     * @param array $data Optional
+     * @throws Exception
+     * @return Dashboard
+     * @see DashboardContainerTrait::createDashboard()
+     */
     public function createDashboard(array $data = null)
     {
         $dashboardConfig = $this->objCollectionDashboardConfig();
@@ -70,12 +70,12 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     }
 
     /**
-    * @return SidemenuWidgetInterface
-    */
+     * @return SidemenuWidgetInterface
+     */
     public function sidemenu()
     {
         $dashboardConfig = $this->objCollectionDashboardConfig();
-;
+        ;
         if (!isset($dashboardConfig['sidemenu'])) {
             return null;
         }
@@ -92,20 +92,20 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
     }
 
     /**
-    * Sets the search widget accodingly
-    * Uses the "default_search_list" ident that should point
-    * on ident in the "lists"
-    *
-    * @see charcoal/admin/widget/search
-    * @return widget
-    */
+     * Sets the search widget accodingly
+     * Uses the "default_search_list" ident that should point
+     * on ident in the "lists"
+     *
+     * @see charcoal/admin/widget/search
+     * @return widget
+     */
     public function searchWidget()
     {
         $factory = new WidgetFactory();
         $widget = $factory->create('charcoal/admin/widget/search', [
             'logger'=>$this->logger
         ]);
-        $widget->set_objType( $this->objType() );
+        $widget->set_objType($this->objType());
 
         $obj = $this->proto();
         $metadata = $obj->metadata();
@@ -125,7 +125,7 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
 
         // Note that if the ident doesn't match a list,
         // it will return basicly every properties of the object
-        $widget->setCollectionIdent( $listIdent );
+        $widget->setCollectionIdent($listIdent);
         return $widget;
     }
 
@@ -161,5 +161,4 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
 
         return $dashboardConfig;
     }
-
 }

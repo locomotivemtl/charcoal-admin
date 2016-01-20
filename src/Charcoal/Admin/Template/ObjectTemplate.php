@@ -18,6 +18,4 @@ use \Charcoal\App\Template\WidgetFactory;
 class ObjectTemplate extends AdminTemplate implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
-
-
 }

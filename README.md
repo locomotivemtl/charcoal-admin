@@ -143,7 +143,7 @@ The following property inputs are available  to build forms in the _admin_ modul
 - `Audio`
 	- A special HTML5 widget to record an audio file from the microphone.
 - `Checkbox`
-- `Datetimepicker`
+- `DateTimePicker`
 	- A date-time picker widget.
 	- Requires the ``
 - `File`

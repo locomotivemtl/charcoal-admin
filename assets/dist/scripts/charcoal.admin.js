@@ -1484,7 +1484,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
 
 })(window);
 ;/**
-* Datetime picker that manages datetime properties
+* DateTime picker that manages datetime properties
 * charcoal/admin/property/input/datetimepicker
 *
 * Require:
@@ -1493,22 +1493,22 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
 * @param  {Object}  opts  Options for input property
 */
 
-Charcoal.Admin.Property_Input_Datetimepicker = function (opts)
+Charcoal.Admin.Property_Input_DateTimePicker = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/datetimepicker';
 
-    // Property_Input_Datetimepicker properties
+    // Property_Input_DateTimePicker properties
     this.input_id = null;
     this.datetimepicker_selector = null;
     this.datetimepicker_options = null;
 
     this.set_properties(opts).create_datetimepicker();
 };
-Charcoal.Admin.Property_Input_Datetimepicker.prototype = Object.create(Charcoal.Admin.Property.prototype);
-Charcoal.Admin.Property_Input_Datetimepicker.prototype.constructor = Charcoal.Admin.Property_Input_Datetimepicker;
-Charcoal.Admin.Property_Input_Datetimepicker.prototype.parent = Charcoal.Admin.Property.prototype;
+Charcoal.Admin.Property_Input_DateTimePicker.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.constructor = Charcoal.Admin.Property_Input_DateTimePicker;
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Datetimepicker.prototype.set_properties = function (opts)
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function (opts)
 {
     this.input_id = opts.id || this.input_id;
     this.datetimepicker_selector = opts.data.datetimepicker_selector || this.datetimepicker_selector;
@@ -1523,7 +1523,7 @@ Charcoal.Admin.Property_Input_Datetimepicker.prototype.set_properties = function
     return this;
 };
 
-Charcoal.Admin.Property_Input_Datetimepicker.prototype.create_datetimepicker = function ()
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = function ()
 {
     $(this.datetimepicker_selector).datetimepicker(this.datetimepicker_options);
 };

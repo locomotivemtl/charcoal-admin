@@ -31,13 +31,13 @@
 			"input_type":"charcoal/admin/property/input/textarea"
 		},
 		"last_login_date":{
-			"type":"datetime"
+			"type": "date-time"
 		},
 		"last_login_ip":{
 			"type":"ip"
 		},
 		"last_password_date":{
-			"type":"datetime",
+			"type": "date-time",
 			"description":"Date of the last password modification."
 		},
 		"last_password_ip":{

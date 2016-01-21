@@ -7,8 +7,8 @@ use \InvalidArgumentException as InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
 
 /**
- * Datetime Picker input
+ * DateTime Picker input
  */
-class DatetimepickerInput extends AbstractPropertyInput
+class DateTimePickerInput extends AbstractPropertyInput
 {
 }

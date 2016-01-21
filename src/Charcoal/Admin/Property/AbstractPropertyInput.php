@@ -243,7 +243,7 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
         }
 
         if ($prop->l10n()) {
-            $lang = TranslationConfig::instance()->current_language();
+            $lang = TranslationConfig::instance()->currentLanguage();
 
             if (isset($val[$lang])) {
                 $val = $val[$lang];

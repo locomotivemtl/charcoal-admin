@@ -30,11 +30,11 @@ trait DashboardContainerTrait
             throw new InvalidArgumentException('Data must be an array');
         }
 
-        if (isset($data['dashboardIdent'])) {
-            $this->setDashboardIdent($data['dashboardIdent']);
+        if (isset($data['dashboard_ident'])) {
+            $this->setDashboardIdent($data['dashboard_ident']);
         }
-        if (isset($data['dashboardConfig'])) {
-            $this->setDashboardConfig($data['dashboardConfig']);
+        if (isset($data['dashboard_config'])) {
+            $this->setDashboardConfig($data['dashboard_config']);
         }
 
         return $this;

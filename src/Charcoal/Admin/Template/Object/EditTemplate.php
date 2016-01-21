@@ -83,12 +83,12 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
         }
 
         if ($dashboardIdent === null || $dashboardIdent === '') {
-            if (!isset($admin_metadata['defaultEditDashboard'])) {
+            if (!isset($admin_metadata['default_edit_dashboard'])) {
                 throw new Exception(
                     'No default edit dashboard defined in object admin metadata'
                 );
             }
-            $dashboardIdent = $admin_metadata['defaultEditDashboard'];
+            $dashboardIdent = $admin_metadata['default_edit_dashboard'];
         }
         if ($dashboardConfig === null || empty($dashboardConfig)) {
             if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboardIdent])) {

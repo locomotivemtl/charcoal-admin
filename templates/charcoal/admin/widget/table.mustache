@@ -8,32 +8,34 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 
 --}}
 <div class="o-section">
-    <div class="charcoal-admin-widget-table" id="{{widget_id}}">
-        {{#has_objects}}
+    <div class="charcoal-admin-widget-table" id="{{widgetId}}">
+        {{#hasObjects}}
         <div class="table-header clearfix">
             <div class="pull-left">
-                <!--<div class="btn-group">
+                {{!--
+                <div class="btn-group">
                     <button type="button" class="btn btn-primary">Actions</button>
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
-                        {{#sublist_actions}}
-                            <li><a href="#0" class="sublist-{{ident}}">{{label}}</a></li>
-                        {{/sublist_actions}}
+                        [[#sublistActions]]
+                            <li><a href="#0" class="sublist-[[ident]]">[[label]]</a></li>
+                        [[/sublistActions]]
                     </ul>
-                </div>-->
-                {{#list_actions}}
-                    {{#is_button}}
-                    <button class="btn btn-info js-list-{{ident}}" data-widget-type="{{widget_type}}">{{label}}</button>
-                    {{/is_button}}
-                    {{^is_button}}
-                    <a class="btn btn-info js-list-{{ident}}" href="{{admin_url}}{{url}}" data-widget-type="{{widget_type}}">{{label}}</a>
-                    {{/is_button}}
-                {{/list_actions}}
+                </div>
+                --}}
+                {{#listActions}}
+                    {{#isButton}}
+                    <button class="btn btn-info js-list-{{ident}}" data-widget-type="{{widgetType}}">{{label}}</button>
+                    {{/isButton}}
+                    {{^isButton}}
+                    <a class="btn btn-info js-list-{{ident}}" href="{{adminUrl}}{{url}}" data-widget-type="{{widgetType}}">{{label}}</a>
+                    {{/isButton}}
+                {{/listActions}}
             </div>
-            <!--
+            {{!--
             <div class="pull-right">
                 <strong>Filtres</strong>
                 <div class="btn-group">
@@ -51,16 +53,16 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     </ul>
                 </div>
             </div>
-            -->
+            --}}
         </div>
 
         {{!--
         @TODO Implement a better responsive table solution (Tablesaw?)
         <div class="table-responsive">
         --}}
-        <div>
+        <div class="table-container">
             <table class="table table-bordered table-hover">
-                {{#show_table_header}}
+                {{#showTableHeader}}
                 <thead>
                     <tr>
                         <th class="table_checkbox">
@@ -69,79 +71,78 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                                 <label for="checkboxall"></label>
                             </div>
                         </th>
-                    {{#collection_properties}}
+                        {{#collectionProperties}}
                         <th>{{label}}</td>
-                    {{/collection_properties}}
-                    {{#show_object_actions}}
+                        {{/collectionProperties}}
+                        {{#showObjectActions}}
                         <th>Actions</th>
-                    {{/show_object_actions}}
+                        {{/showObjectActions}}
                     </tr>
                 </thead>
-                {{/show_table_header}}
+                {{/showTableHeader}}
 
                 <tbody>
                     {{!-- Loop the list objects (from CollectionContainerTrait) --}}
-                    {{#object_rows}}
-
-                    <tr class="js-table-row" data-id="{{object_id}}">
+                    {{#objectRows}}
+                    <tr class="js-table-row" data-id="{{objectId}}">
                         <td class="table_checkbox">
                             <div class="checkbox -nolabel">
-                                <input type="checkbox" class="select-row" id="checkbox{{object_id}}">
-                                <label for="checkbox{{object_id}}"></label>
+                                <input type="checkbox" class="select-row" id="checkbox{{objectId}}">
+                                <label for="checkbox{{objectId}}"></label>
                             </div>
                         </td>
-                        {{#object_properties}}
+                        {{#objectProperties}}
                         <td class="property-{{ident}}">{{val}}</td>
-                        {{/object_properties}}
-                        {{#show_object_actions}}
+                        {{/objectProperties}}
+                        {{#showObjectActions}}
                         <td>
                             <div class="btn-group">
-                                <a href="{{object_edit_url}}&amp;obj_id={{object_id}}" class="btn btn-primary">Modifier</a>
-                            {{#has_object_actions}}
+                                <a href="{{objectEditUrl}}&amp;obj_id={{objectId}}" class="btn btn-primary">Modifier</a>
+                            {{#hasObjectActions}}
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="caret"></span>
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    {{#object_actions}}
+                                    {{#objectActions}}
                                     <li><a class="js-obj-{{ident}}" href="#">{{label}}</a></li>
-                                    {{/object_actions}}
+                                    {{/objectActions}}
                                 </ul>
-                            {{/has_object_actions}}
+                            {{/hasObjectActions}}
                             </div>
                         </td>
-                        {{/show_object_actions}}
+                        {{/showObjectActions}}
                     </tr>
-                    {{/object_rows}}
+                    {{/objectRows}}
                 </tbody>
-                {{#show_table_footer}}
+                {{#showTableFooter}}
                 <tfoot>
                     <tr>
 
                     </tr>
                 </tfoot>
-                {{/show_table_footer}}
+                {{/showTableFooter}}
             </table>
-        {{/has_objects}}
-        {{^has_objects}}
+        {{/hasObjects}}
+        {{^hasObjects}}
             No object.
             <div class="btn-group" role="group" aria-label="...">
-                <a class="btn btn-default" href="{{object_edit_url}}">Create a new object</a>
+                <a class="btn btn-default" href="{{objectEditUrl}}">Create a new object</a>
             </div>
-        {{/has_objects}}
+        {{/hasObjects}}
         </div>
     </div>
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widget_id}}',
+    id: '{{widgetId}}',
     type: 'charcoal/admin/widget/table',
     data: {
-        obj_type: '{{obj_type}}',
-        collection_ident: '{{collection_ident}}'
+        obj_type: '{{objType}}',
+        collection_ident: '{{collectionIdent}}'
     }
 });
 </script>
-{{/add_js}}
+{{/addJs}}

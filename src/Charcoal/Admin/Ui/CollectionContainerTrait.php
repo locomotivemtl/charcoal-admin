@@ -221,7 +221,7 @@ trait CollectionContainerTrait
                 __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
             );
         }
-        $factory = $this->model_factory();
+        $factory = $this->modelFactory();
         $obj = $factory->create($objType, [
             'logger' => $this->logger
         ]);
@@ -229,15 +229,15 @@ trait CollectionContainerTrait
         $loader = new CollectionLoader([
             'logger' => $this->logger
         ]);
-        $loader->set_model($obj);
+        $loader->setModel($obj);
         $collectionConfig = $this->collectionConfig();
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
-            $loader->set_data($collectionConfig);
+            $loader->setData($collectionConfig);
         }
 
         $loader->setPagination([
-            'page'          => $this->page(),
-            'numPerPage'    => $this->numPerPage()
+            'page'       => $this->page(),
+            'numPerPage' => $this->numPerPage()
         ]);
 
         $collection = $loader->load();
@@ -260,28 +260,28 @@ trait CollectionContainerTrait
     public function objectRows()
     {
         // Get properties as defined in object's list metadata
-        $sorted_properties = $this->properties();
+        $sortedProperties = $this->properties();
 
         // Collection objects
         $objects = $this->objects();
 
         // Go through each object to generate an array of properties listed in object's list metadata
         foreach ($objects as $object) {
-            $object_properties = [];
+            $objectProperties = [];
 
-            foreach ($sorted_properties as $propertyIdent => $property_data) {
+            foreach ($sortedProperties as $propertyIdent => $propertyData) {
                 $property = $object->property($propertyIdent);
-                $property_value = $property->display_val();
+                $propertyValue = $property->displayVal();
 
-                $object_properties[] = [
+                $objectProperties[] = [
                     'ident' => $propertyIdent,
-                    'val'   => $property_value
+                    'val'   => $propertyValue
                 ];
             };
 
             $row = [
-                'object_id' => $object->id(),
-                'object_properties' => $object_properties
+                'objectId' => $object->id(),
+                'objectProperties' => $objectProperties
             ];
 
             yield $row;

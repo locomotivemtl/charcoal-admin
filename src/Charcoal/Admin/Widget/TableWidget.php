@@ -60,9 +60,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $collectionIdent = isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '';
         }
 
-        $obj_list_data = isset($adminMetadata['lists'][$collectionIdent]) ? $adminMetadata['lists'][$collectionIdent] : [];
+        $objListData = isset($adminMetadata['lists'][$collectionIdent]) ? $adminMetadata['lists'][$collectionIdent] : [];
 
-        return $obj_list_data;
+        return $objListData;
     }
 
     /**
@@ -84,7 +84,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
                 if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
                     // Flipping to have property ident as key
-                    $listProperties = arrayFlip($adminMetadata['lists'][$collectionIdent]['properties']);
+                    $listProperties = array_flip($adminMetadata['lists'][$collectionIdent]['properties']);
                     // Replacing values of listProperties from index to actual property values
                     $props = array_replace($listProperties, $props);
                     // Get only the keys that are in listProperties from props
@@ -110,10 +110,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $propertyMetadata = $props[$propertyIdent];
 
             $p = $this->propertyFactory()->get($propertyMetadata['type'], [
-                'logger'=>$this->logger
+                'logger' => $this->logger
             ]);
             $p->setIdent($propertyIdent);
-            $p->set_data($propertyMetadata);
+            $p->setData($propertyMetadata);
 
             $column = [
                 'label' => $p->label()
@@ -136,23 +136,23 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
-        return [
-            // [
-            //     'label' => 'Quick Edit',
-            //     'ident' => 'quick-edit',
-            //     'is_button' => true
-            // ],
-            // [
-            //     'label' => 'Inline Edit',
-            //     'ident' => 'inline-edit',
-            //     'is_button' => true
-            // ],
-            // [
-            //     'label' => 'Delete',
-            //     'ident' => 'delete',
-            //     'is_button' => true
-            // ]
-        ];
+        return [/*
+            [
+                'label'     => 'Quick Edit',
+                'ident'     => 'quick-edit',
+                'is_button' => true
+            ],
+            [
+                'label'     => 'Inline Edit',
+                'ident'     => 'inline-edit',
+                'is_button' => true
+            ],
+            [
+                'label'     => 'Delete',
+                'ident'     => 'delete',
+                'is_button' => true
+            ]
+        */];
     }
 
     /**
@@ -192,12 +192,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         return [
             [
-                'label'=>'Inline Edit',
-                'ident'=>'inline-edit'
+                'label' => 'Inline Edit',
+                'ident' => 'inline-edit'
             ],
             [
-                'label'=>'Delete',
-                'ident'=>'Delete'
+                'label' => 'Delete',
+                'ident' => 'Delete'
             ]
         ];
     }
@@ -224,7 +224,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectEditUrl()
     {
-        return \Charcoal\App\App::instance()->config()->get('URL').'admin/object/edit?obj_type='.$this->obj_type();
+        return \Charcoal\App\App::instance()->config()->get('URL').'admin/object/edit?obj_type='.$this->objType();
     }
 
     /**

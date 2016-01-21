@@ -41,7 +41,7 @@ class FormWidget extends AdminWidget implements FormInterface
         ]);
         $group->setForm($this);
         if ($data) {
-            $group->set_data($data);
+            $group->setData($data);
         }
         return $group;
 

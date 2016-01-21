@@ -24,7 +24,9 @@ use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 /**
  * admin/object/collection template.
  */
-class CollectionTemplate extends AdminTemplate implements CollectionContainerInterface, DashboardContainerInterface
+class CollectionTemplate extends AdminTemplate implements
+    CollectionContainerInterface,
+    DashboardContainerInterface
 {
     use CollectionContainerTrait;
     use DashboardContainerTrait;
@@ -131,7 +133,9 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
 
     private function objCollectionDashboardConfig()
     {
+        $obj = $this->proto();
         $metadata = $obj->metadata();
+
         $dashboardIdent = $this->dashboardIdent();
         $dashboardConfig = $this->dashboardConfig();
 
@@ -143,12 +147,12 @@ class CollectionTemplate extends AdminTemplate implements CollectionContainerInt
         }
 
         if ($dashboardIdent === null || $dashboardIdent === '') {
-            if (!isset($admin_metadata['defaultCollectionDashboard'])) {
+            if (!isset($admin_metadata['default_collection_dashboard'])) {
                 throw new Exception(
                     'No default collection dashboard defined in object admin metadata.'
                 );
             }
-            $dashboardIdent = $admin_metadata['default_collection_d ashboard'];
+            $dashboardIdent = $admin_metadata['default_collection_dashboard'];
         }
         if ($dashboardConfig === null || empty($dashboardConfig)) {
             if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboardIdent])) {

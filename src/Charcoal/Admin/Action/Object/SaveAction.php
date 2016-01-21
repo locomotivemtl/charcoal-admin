@@ -44,9 +44,8 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
      */
     public function setData(array $data)
     {
-
         parent::setData($data);
-        $this->setObjData($data);
+        # $this->setObjData($data);
 
         unset($data['obj_type']);
         $this->setSaveData($data);

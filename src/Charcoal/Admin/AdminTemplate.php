@@ -87,30 +87,6 @@ class AdminTemplate extends AbstractTemplate
 
         // Initialize data with GET
         $this->setData($_GET);
-
-    }
-
-    /**
-     * @var array $data
-     * @return AdminTemplate Chainable
-     */
-    public function setData(array $data)
-    {
-        foreach ($data as $prop => $val) {
-            $func = [$this, 'set_'.$prop];
-
-            if ($val === null) {
-                continue;
-            }
-
-            if (is_callable($func)) {
-                call_user_func($func, $val);
-                unset($data[$prop]);
-            } else {
-                $this->{$prop} = $val;
-            }
-        }
-        return $this;
     }
 
     /**

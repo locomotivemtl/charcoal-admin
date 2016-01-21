@@ -45,8 +45,8 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
      */
     public function setData(array $data)
     {
-        //parent::setData($data);
-        $this->setObjData($data);
+        parent::setData($data);
+        # $this->setObjData($data);
 
         if (isset($data['next_url'])) {
             $this->set_next_url($data['next_url']);
@@ -56,7 +56,6 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
         unset($data['obj_type']);
         unset($data['obj_id']);
         $this->setUpdateData($data);
-
 
         return $this;
     }

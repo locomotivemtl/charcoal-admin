@@ -40,11 +40,13 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         // Needed this to be able to output {{objId}}
         $data = array_merge($_GET, $data);
 
-        $this->setObjData($data);
+        parent::setData($data);
+        # $this->setObjData($data);
 
-        if (isset($data['formIdent']) && $data['formIdent'] !== null) {
-            $this->setFormIdent($data['formIdent']);
-        }
+        /*if (isset($data['form_ident']) && $data['form_ident'] !== null) {
+            $this->setFormIdent($data['form_ident']);
+        }*/
+
         $objData = $this->dataFromObject();
         $data = array_merge_recursive($objData, $data);
 
@@ -132,7 +134,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         $formIdent = $this->formIdent();
         if (!$formIdent) {
-            $formIdent = isset($admin_metadata['defaultForm']) ? $admin_metadata['defaultForm'] : '';
+            $formIdent = isset($admin_metadata['default_form']) ? $admin_metadata['default_form'] : '';
         }
 
         $objFormData = isset($admin_metadata['forms'][$formIdent]) ? $admin_metadata['forms'][$formIdent] : [];

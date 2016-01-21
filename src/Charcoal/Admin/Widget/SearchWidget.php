@@ -91,7 +91,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
         $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
-            $collectionIdent = isset($admin_metadata['defaultList']) ? $admin_metadata['defaultList'] : '';
+            $collectionIdent = isset($admin_metadata['default_list']) ? $admin_metadata['default_list'] : '';
         }
 
         $objListData = isset($admin_metadata['lists'][$collectionIdent]) ? $admin_metadata['lists'][$collectionIdent] : [];

@@ -195,7 +195,7 @@ class FormPropertyWidget extends AdminWidget
             try {
                 $prop = $this->prop();
                 $metadata = $prop->metadata();
-                $inputType = isset($metadata['admin']) ? $metadata['admin']['inputType'] : '';
+                $inputType = isset($metadata['admin']) ? $metadata['admin']['input_type'] : '';
 
             } catch (Exception $e) {
                 $inputType = 'charcoal/admin/property/input/text';

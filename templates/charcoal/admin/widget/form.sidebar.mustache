@@ -1,7 +1,7 @@
  {{!--
 
 --}}
-<aside class="c-aside o-flex_aside" id="{{widget_id}}">
+<aside class="c-aside o-flex_aside" id="{{widgetId}}">
     <div class="o-container -top -right">
         <div class="c-panel -fixed">
             <header class="c-panel_header">
@@ -11,12 +11,12 @@
             <div class="c-panel_main">
                 <p>{{subtitle}}</p>
                 <table class="c-panel_table">
-                    {{#form_properties}}
+                    {{#formProperties}}
                     <tr class="c-panel_table_row">
                         <th class="c-panel_table_header">{{prop.label}}</th>
-                        <td class="c-panel_table_data">{{prop.display_val}}</td>
+                        <td class="c-panel_table_data">{{prop.displayVal}}</td>
                     </tr>
-                    {{/form_properties}}
+                    {{/formProperties}}
 
                 </table>
                 <div class="form-group">
@@ -25,7 +25,7 @@
 
                 {{#actions}}
                 <div class="form-group">
-                    <a href="{{base_url}}{{url}}" class="{{^obj_id}}disabled{{/obj_id}} btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
+                    <a href="{{baseUrl}}{{url}}" class="{{^objId}}disabled{{/objId}} btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
                 </div>
                 {{/actions}}
             </div>
@@ -49,15 +49,15 @@
     </div>
 </aside>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 // Charcoal.Admin.manager().add_widget({
-//     id: '{{widget_id}}',
+//     id: '{{widgetId}}',
 //     type: 'charcoal/admin/widget/form.sidebar',
 //     data: {
-//         obj_type: '{{obj_type}}',
-//         collection_ident: '{{collection_ident}}'
+//         obj_type: '{{objType}}',
+//         collection_ident: '{{collectionIdent}}'
 //     }
 // });
 </script>
-{{/add_js}}
+{{/addJs}}

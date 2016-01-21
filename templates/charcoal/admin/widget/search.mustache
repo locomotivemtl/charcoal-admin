@@ -1,5 +1,5 @@
 
-<div class="o-container_aside" id="{{widget_id}}">
+<div class="o-container_aside" id="{{widgetId}}">
     <div class="input-group">
         <input type="text" class="form-control input-sm" placeholder="Rechercher">
             <span class="input-group-btn">
@@ -13,17 +13,17 @@
     </div>
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widget_id}}',
+    id: '{{widgetId}}',
     type: 'charcoal/admin/widget/search',
     data: {
-        obj_type: '{{obj_type}}',
-        list: {{&json_properties_list}}
+        obj_type: '{{objType}}',
+        list: {{&jsonPropertiesList}}
     }
 });
 </script>
-{{/add_js}}
+{{/addJs}}
 
 

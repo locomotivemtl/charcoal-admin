@@ -6,19 +6,19 @@ Display a property (most likely a `PropertyString`...) as a "text" input.
 `charcoal/admin/property/input/text`
 --}}
 {{#input}}
-<input 
-	type="text" 
-	id="{{input_id}}" 
-	name="{{input_name}}" 
-	class="form-control {{input_class}}" 
+<input
+	type="text"
+	id="{{inputId}}"
+	name="{{inputName}}"
+	class="form-control {{inputClass}}"
 	{{#size}}size="{{size}}"{{/size}}
-	{{#min_length}}minlength="{{min_length}}"{{/min_length}} 
-	{{#max_length}}maxlength="{{max_length}}"{{/max_length}}
+	{{#minLength}}minlength="{{minLength}}"{{/minLength}}
+	{{#maxLength}}maxlength="{{maxLength}}"{{/maxLength}}
 	{{#pattern}}pattern="{{pattern}}"{{/pattern}}
-	{{#placeholder}}placeholer="{{placeholder}}"{{/placeholder}}  
-	{{#read_only}}read_only{{/read_only}} 
-	{{#required}}required{{/required}} 
+	{{#placeholder}}placeholer="{{placeholder}}"{{/placeholder}}
+	{{#readOnly}}read_only{{/readOnly}}
+	{{#required}}required{{/required}}
 	{{#disabled}}disabled{{/disabled}}
-	value="{{input_val}}"
+	value="{{inputVal}}"
 >
 {{/input}}

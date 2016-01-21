@@ -7,7 +7,7 @@ Object Form Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 
 --}}
-<form action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widget_id}}">
+<form action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widgetId}}">
 
     <div class="o-flex">
 
@@ -24,27 +24,27 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
             {{>charcoal/admin/widget/form.sidebar}}
         {{/sidebars}}
 
-        <input type="hidden" name="widget_id" value="{{widget_id}}">
-        <input type="hidden" name="obj_type" value="{{obj_type}}">
-        <input type="hidden" name="obj_id" value="{{obj_id}}">
+        <input type="hidden" name="widget_id" value="{{widgetId}}">
+        <input type="hidden" name="obj_type" value="{{objType}}">
+        <input type="hidden" name="obj_id" value="{{objId}}">
 
-        {{#next_url}}
-        <input type="hidden" name="next_url" value="{{next_url}}">
-        {{/next_url}}
+        {{#nextUrl}}
+        <input type="hidden" name="next_url" value="{{nextUrl}}">
+        {{/nextUrl}}
 
     </div>
 </form>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widget_id}}',
+    id: '{{widgetId}}',
     type: 'charcoal/admin/widget/form',
     data: {
-        form_selector: '#{{widget_id}}',
-        obj_type: '{{obj_type}}',
-        obj_id: '{{obj_id}}'
+        form_selector: '#{{widgetId}}',
+        obj_type: '{{objType}}',
+        obj_id: '{{objId}}'
     }
 });
 </script>
-{{/add_js}}
+{{/addJs}}

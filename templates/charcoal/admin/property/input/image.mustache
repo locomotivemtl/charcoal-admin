@@ -6,17 +6,17 @@ File Property Input
 
 --}}
 
-{{#input_val}}
-    <img src="{{base_url}}{{input_val}}" style="max-width: 100%">
-    <input type="hidden" value="{{input_val}}" name="{{input_name}}">
-{{/input_val}}
+{{#inputVal}}
+    <img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">
+    <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
+{{/inputVal}}
 <input
     type="file"
-    id="{{input_id}}"
-    name="{{input_name}}"
-    class="{{input_class}}"
+    id="{{inputId}}"
+    name="{{inputName}}"
+    class="{{inputClass}}"
     {{#accept}}accept="{{accept}}"{{/accept}}
-    {{#read_only}}read_only{{/read_only}}
+    {{#readOnly}}read_only{{/readOnly}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
 >

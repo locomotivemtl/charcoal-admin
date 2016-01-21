@@ -2,7 +2,7 @@
     Map sidebar
 --}}
 
-<div id="{{widget_id}}">
+<div id="{{widgetId}}">
     <div class="o-container">
         <div class="js-map-maker-map" style="height: 400px; width: 100%;">
 
@@ -10,15 +10,15 @@
     </div>
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widget_id}}',
+    id: '{{widgetId}}',
     type: 'charcoal/admin/widget/map',
     data: {
-        obj_type: '{{obj_type}}'
+        obj_type: '{{objType}}'
     },
     coords : [{{obj.lat}}, {{obj.lng}}]
 });
 </script>
-{{/add_js}}
+{{/addJs}}

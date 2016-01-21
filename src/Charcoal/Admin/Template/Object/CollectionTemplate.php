@@ -45,7 +45,7 @@ class CollectionTemplate extends AdminTemplate implements
         }
         if ($obj->source()->tableExists() === false) {
             $obj->source()->createTable();
-            $this->add_feedback('success', 'A new table was created for object.');
+            $this->addFeedback('success', 'A new table was created for object.');
         }
 
     }
@@ -107,18 +107,18 @@ class CollectionTemplate extends AdminTemplate implements
         $widget = $factory->create('charcoal/admin/widget/search', [
             'logger'=>$this->logger
         ]);
-        $widget->set_objType($this->objType());
+        $widget->setObjType($this->objType());
 
         $obj = $this->proto();
         $metadata = $obj->metadata();
 
-        $admin_metadata = $metadata['admin'];
-        $lists = $admin_metadata['lists'];
+        $adminMetadata = $metadata['admin'];
+        $lists = $adminMetadata['lists'];
 
-        $listIdent = ( isset($admin_metadata['default_search_list']) ) ? $admin_metadata['default_search_list'] : '';
+        $listIdent = ( isset($adminMetadata['default_search_list']) ) ? $adminMetadata['default_search_list'] : '';
 
         if (!$listIdent) {
-            $listIdent = ( isset($admin_metadata['default_list']) ) ? $admin_metadata['default_list'] : '';
+            $listIdent = ( isset($adminMetadata['default_list']) ) ? $adminMetadata['default_list'] : '';
         }
 
         if (!$listIdent) {
@@ -139,28 +139,28 @@ class CollectionTemplate extends AdminTemplate implements
         $dashboardIdent = $this->dashboardIdent();
         $dashboardConfig = $this->dashboardConfig();
 
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        if ($admin_metadata === null) {
+        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        if ($adminMetadata === null) {
             throw new Exception(
                 'No dashboard for object (no admin metadata).'
             );
         }
 
         if ($dashboardIdent === null || $dashboardIdent === '') {
-            if (!isset($admin_metadata['default_collection_dashboard'])) {
+            if (!isset($adminMetadata['default_collection_dashboard'])) {
                 throw new Exception(
                     'No default collection dashboard defined in object admin metadata.'
                 );
             }
-            $dashboardIdent = $admin_metadata['default_collection_dashboard'];
+            $dashboardIdent = $adminMetadata['default_collection_dashboard'];
         }
         if ($dashboardConfig === null || empty($dashboardConfig)) {
-            if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboardIdent])) {
+            if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
                 throw new Exception(
                     'Dashboard config is not defined.'
                 );
             }
-            $dashboardConfig = $admin_metadata['dashboards'][$dashboardIdent];
+            $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
         }
 
         return $dashboardConfig;

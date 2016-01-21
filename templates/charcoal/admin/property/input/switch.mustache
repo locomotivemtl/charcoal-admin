@@ -7,31 +7,31 @@ Switch Property Input
 --}}
 <div>
 <input
-    id="switch_{{input_id}}"
+    id="switch_{{inputId}}"
     type="checkbox"
-    class="form-control {{input_class}}"
-    data-target="{{input_id}}"
+    class="form-control {{inputClass}}"
+    data-target="{{inputId}}"
     {{#checked}}checked{{/checked}}
-    {{#read_only}}read_only{{/read_only}}
+    {{#readOnly}}read_only{{/readOnly}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
 >
 <input type="hidden"
-    id="{{input_id}}"
-    name="{{input_name}}"
+    id="{{inputId}}"
+    name="{{inputName}}"
     value="{{value}}"
 >
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_property_input({
-    id: '{{input_id}}',
+    id: '{{inputId}}',
     type: 'charcoal/admin/property/input/switch',
     data: {
-        input_selector : '#{{input_id}}',
-        switch_selector : '#switch_{{input_id}}'
+        input_selector : '#{{inputId}}',
+        switch_selector : '#switch_{{inputId}}'
     }
 });
 </script>
-{{/add_js}}
+{{/addJs}}

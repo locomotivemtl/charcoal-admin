@@ -25,14 +25,14 @@ Display the "home" dashboard.
                     <a class="c-nav_list_link" href="#">
                         <div class="c-nav_list_link_main">
                             <p class="c-nav_list_link_text -bold">
-                                <svg class="c-nav_list_link_icon" role="img"><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#sort"></use></svg>
+                                <svg class="c-nav_list_link_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#sort"></use></svg>
                                 Réorganiser
                             </p>
                         </div>
                     </a>
                 </div>
             </li>
-            {{#for_loop.6}}
+            {{#forLoop.6}}
             <li class="c-nav_list_item js-accordion-item">
                 <div class="c-nav_list_header js-accordion-header">
                     <a class="c-nav_list_link" href="#">
@@ -46,7 +46,7 @@ Display the "home" dashboard.
                 </div>
                 <div class="c-nav_list_content js-accordion-content">
                     <ul class="c-nav_list -light -secondary">
-                        {{#for_loop.4}}
+                        {{#forLoop.4}}
                         <li class="c-nav_list_item js-accordion-item">
                             <div class="c-nav_list_header js-accordion-header">
                             <a class="c-nav_list_link" href="#">
@@ -60,7 +60,7 @@ Display the "home" dashboard.
                             </div>
                             <div class="c-nav_list_content js-accordion-content">
                             <ul class="c-nav_list -light -secondary">
-                                {{#for_loop.4}}
+                                {{#forLoop.4}}
                                 <li class="c-nav_list_item js-accordion-item">
                                     <div class="c-nav_list_header js-accordion-header">
                                     <a class="c-nav_list_link" href="#">
@@ -72,15 +72,15 @@ Display the "home" dashboard.
                                         </a>
                                     </div>
                                 </li>
-                                {{/for_loop.4}}
+                                {{/forLoop.4}}
                             </ul>
                         </div>
                         </li>
-                        {{/for_loop.4}}
+                        {{/forLoop.4}}
                     </ul>
                 </div>
             </li>
-            {{/for_loop.6}}
+            {{/forLoop.6}}
         </ul>
     </nav>
 
@@ -160,10 +160,10 @@ Display the "home" dashboard.
                 <div class="o-toolbox -left">
                     <div class="o-toolbox_actions">
                         <div class="btn-group-vertical" role="group" aria-label="...">
-                            <button type="button" class="btn btn-default -active"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
-                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
-                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
-                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{base_url}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
+                            <button type="button" class="btn btn-default -active"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg></button>
+                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-path"></use></svg></button>
+                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-region"></use></svg></button>
+                            <button type="button" class="btn btn-default"><svg class="o-toolbox_icon" role="img" title=""><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-area"></use></svg></button>
                         </div>
                     </div>
                     <div class="o-toolbox_content c-map-maker">
@@ -294,13 +294,13 @@ Display the "home" dashboard.
 
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
     $(document).ready(function() {
          $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
-{{/add_js}}
+{{/addJs}}
 
 
 {{>charcoal/admin/template/inc.footer}}

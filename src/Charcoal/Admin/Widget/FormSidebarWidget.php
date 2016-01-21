@@ -29,7 +29,7 @@ class FormSidebarWidget extends AdminWidget
      */
     private $actions;
 
-    protected $sidebar_sidebarProperties = [];
+    protected $sidebarProperties = [];
     protected $priority;
 
     /**

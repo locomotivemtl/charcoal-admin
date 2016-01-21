@@ -16,16 +16,16 @@ This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
 
         <div class="widget widget-{{ident}}">
 
-            {{#show_label}}
+            {{#showLabel}}
                 <span class="title">{{label}}</span>
-            {{/show_label}}
-            {{#show_actions}}
+            {{/showLabel}}
+            {{#showActions}}
                 <div class="widget-actions">
                 {{#actions}}
                     <a href="{{url}}">{{label}}</a>
                 {{/actions}}
                 </div>
-            {{/show_actions}}
+            {{/showActions}}
 
             {{!--
             Include the widget's partial (template).

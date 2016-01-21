@@ -9,12 +9,12 @@ Loop the available feedbacks (the `feedbacks()` method is available for all admi
 This widget expects a `Charcoal\Admin\Template` (or children) model as context.
 
 --}}
+{{#hasFeedbacks}}
 <div class="feedbacks">
-{{#has_feedbacks}}
     {{#feedbacks}}
     <div class="alert alert-{{level}} alert-dismissible" role="alert">
         {{msg}}
     </div>
     {{/feedbacks}}
-{{/has_feedbacks}}
 </div>
+{{/hasFeedbacks}}

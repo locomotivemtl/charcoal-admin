@@ -6,19 +6,19 @@ charcoal/admin/widget/sidemenu
     <header class="o-header">
         <h1 class="c-nav_heading">{{title}}</h1>
     </header>
-    {{#has_links}}
+    {{#hasLinks}}
     <ul class="c-nav_list -light -secondary">
     {{#links}}
         <li class="c-nav_list_item">
             <div class="c-nav_list_header {{#selected}}is-active{{/selected}}">
-                <a class="c-nav_list_link" href="{{admin_url}}{{url}}">
+                <a class="c-nav_list_link" href="{{adminUrl}}{{url}}">
                     <span class="c-nav_list_link_main">
                         <span class="c-nav_list_link_text">
                             {{name}}
                         </span>
                     </span>
                     {{#num}}
-                    <span class="c-nav_list_link_number {{#num_new}}is-new{{/num_new}}">
+                    <span class="c-nav_list_link_number {{#numNew}}is-new{{/numNew}}">
                         {{num}}
                     </span>
                     {{/num}}
@@ -27,9 +27,9 @@ charcoal/admin/widget/sidemenu
         </li>
     {{/links}}
     </ul>
-    {{/has_links}}
+    {{/hasLinks}}
 
-    {{#has_actions}}
+    {{#hasActions}}
     {{!--  --}}
     <div class="btn-group">
         <button type="button" class="btn btn-danger">Nouvelle alerte</button>
@@ -45,6 +45,6 @@ charcoal/admin/widget/sidemenu
             <li><a href="#">Separated link</a></li>
         </ul>
     </div>
-    {{/has_actions}}
+    {{/hasActions}}
 
 </nav>

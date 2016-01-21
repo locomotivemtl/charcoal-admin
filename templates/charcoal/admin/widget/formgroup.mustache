@@ -13,57 +13,57 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 <fieldset>
 
     <header class="o-header -border">
-        {{#show_title}}
+        {{#showTitle}}
         <h2>{{title}}</h2>
-        {{/show_title}}
+        {{/showTitle}}
     </header>
 
-{{#form_properties}}
+{{#formProperties}}
 
     {{#layout}}
 
         {{start}}
-        {{#cell_starts_row}}
+        {{#cellStartsRow}}
 
     <section class="o-section">
         <div class="row">
 
-        {{/cell_starts_row}}
+        {{/cellStartsRow}}
     {{/layout}}
 
-            <div class="col-md-{{layout.cell_span_by12}}">
+            <div class="col-md-{{layout.cellSpanBy12}}">
                  <div class="form-group">
-                    <label for="{{prop.input_id}}">{{prop.label}}</label>
+                    <label for="{{prop.inputId}}">{{prop.label}}</label>
 
-                {{#show_description}}
-                    <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
-                {{/show_description}}
+                    {{#showDescription}}
+                        <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
+                    {{/showDescription}}
 
                     {{#input}}
                         {{!-- PropertyInput --}}
                         {{>$widget_template}}
                     {{/input}}
 
-                {{#show_notes}}
-                    <p class="help-block small">{{notes}}</p>
-                {{/show_notes}}
+                    {{#showNotes}}
+                        <p class="help-block small">{{notes}}</p>
+                    {{/showNotes}}
 
                 </div>
             </div>
 
     {{#layout}}
-        {{#cell_ends_row}}
+        {{#cellEndsRow}}
 
         </div>
     </section>
 
-        {{/cell_ends_row}}
+        {{/cellEndsRow}}
 
         {{!-- Hack: Execute end layout --}}
         {{end}}
     {{/layout}}
 
-{{/form_properties}}
+{{/formProperties}}
 
 </fieldset>
 

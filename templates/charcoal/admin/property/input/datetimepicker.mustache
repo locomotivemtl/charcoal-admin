@@ -7,17 +7,17 @@ DateTime picker Property Input
 --}}
 
 {{#input}}
-<div class="input-group date" id="datetimepicker_{{input_id}}">
+<div class="input-group date" id="datetimepicker_{{inputId}}">
     <input
         type="text"
-        id="{{input_id}}"
-        name="{{input_name}}"
-        class="form-control {{input_class}}"
+        id="{{inputId}}"
+        name="{{inputName}}"
+        class="form-control {{inputClass}}"
         {{#placeholder}}placeholer="{{placeholder}}"{{/placeholder}}
-        {{#read_only}}read_only{{/read_only}}
+        {{#readOnly}}read_only{{/readOnly}}
         {{#required}}required{{/required}}
         {{#disabled}}disabled{{/disabled}}
-        value="{{p.display_val}}"
+        value="{{p.displayVal}}"
     >
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
@@ -25,19 +25,19 @@ DateTime picker Property Input
 </div>
 {{/input}}
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_property_input({
-    id: '{{input_id}}',
+    id: '{{inputId}}',
     type: 'charcoal/admin/property/input/datetimepicker',
     data: {
-        datetimepicker_selector : '#datetimepicker_{{input_id}}',
+        datetimepicker_selector : '#datetimepicker_{{inputId}}',
         datetimepicker_options: {
             // moment.js formatting
             format: 'YYYY-MM-DD HH:mm:ss',
-            defaultDate: '{{p.display_val}}'
+            defaultDate: '{{p.displayVal}}'
         }
     }
 });
 </script>
-{{/add_js}}
+{{/addJs}}

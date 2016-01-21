@@ -9,7 +9,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 --}}
 <div class="form charcoal-admin-widget-form">
 
-    <form id="{{widget_id}}" action="{{admin_url}}{{action}}" method="{{method}}" enctype="multipart/form-data">
+    <form id="{{widgetId}}" action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data">
 
         {{!-- Loop all form groups --}}
         {{#groups}}
@@ -21,13 +21,13 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 
 </div>
 
-{{#add_js}}
+{{#addJs}}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widget_id}}',
+    id: '{{widgetId}}',
     type: 'charcoal/admin/widget/form',
     data: {
     }
 });
 </script>
-{{/add_js}}
+{{/addJs}}

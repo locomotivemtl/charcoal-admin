@@ -177,7 +177,7 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
                 //var_dump($property);
                 if (is_callable([$this->form(), 'obj'])) {
                     $val = $this->form()->obj()->p($property_ident)->val();
-                    $property->setProperty_val($val);
+                    $property->setPropertyVal($val);
                 }
                 yield $property_ident => $property;
             }

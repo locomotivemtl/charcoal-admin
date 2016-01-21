@@ -1,14 +1,14 @@
-<div id="{{widget_id}}" style="height:{{height}}px;"></div>
+<div id="{{widgetId}}" style="height:{{height}}px;"></div>
 
-{{#add_js_requirement}}
-<script src="{{base_url}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
-{{/add_js_requirement}}
+{{#addJsRequirement}}
+<script src="{{baseUrl}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
+{{/addJsRequirement}}
 
-{{#add_js}}
+{{#addJs}}
 <script type="text/javascript">
 require.config({
     paths: {
-        echarts: '{{base_url}}assets/admin/scripts/vendors/echarts/'
+        echarts: '{{baseUrl}}assets/admin/scripts/vendors/echarts/'
     }
 });
 
@@ -18,7 +18,7 @@ require(
         'echarts/chart/pie'
     ],
     function (ec) {
-        var myChart = ec.init(document.getElementById('{{widget_id}}'));
+        var myChart = ec.init(document.getElementById('{{widgetId}}'));
 
         myChart.showLoading({
             text: 'Loading...',
@@ -59,4 +59,4 @@ require(
     }
 );
 </script>
-{{/add_js}}
+{{/addJs}}

@@ -7,6 +7,6 @@ use \Charcoal\Admin\AdminWidget;
 /**
  * Sidemenu Widget
  */
-class SidemenuWidget extends AdminWidget
+class SidemenuWidget extends AdminWidget implements SidemenuWidgetInterface
 {
 }

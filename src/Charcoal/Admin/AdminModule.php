@@ -110,9 +110,10 @@ class AdminModule extends AbstractModule implements
             return $view;
         };
 
-        // Admin module
-        $this->app()->get('/admin', 'charcoal/admin/module:defaultRoute');
-        $this->app()->group('/admin', 'charcoal/admin/module:setupRoutes');
+        $adminPath = '/'.ltrim($container['charcoal/admin/config']->basePath(), '/');
+
+        $this->app()->get($adminPath, 'charcoal/admin/module:defaultRoute');
+        $this->app()->group($adminPath, 'charcoal/admin/module:setupRoutes');
     }
 
     public function createConfig(array $data = null)

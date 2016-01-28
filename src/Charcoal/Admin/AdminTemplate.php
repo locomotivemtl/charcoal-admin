@@ -339,7 +339,9 @@ class AdminTemplate extends AbstractTemplate
      */
     public function adminUrl()
     {
-        return $this->baseUrl().'admin/';
+        $adminPath = $this->app()->getContainer()->get('charcoal/admin/config')->basePath();
+
+        return rtrim($this->baseUrl(), '/').'/'.$adminPath;
     }
 
     /**
@@ -347,7 +349,15 @@ class AdminTemplate extends AbstractTemplate
      */
     public function baseUrl()
     {
-        return $this->app()->config()->get('URL');
+        $appConfig = $this->app()->config();
+
+        if ($appConfig->has('URL')) {
+            return $appConfig->get('URL');
+        } else {
+            $uri = $this->app()->getContainer()->get('request')->getUri();
+
+            return rtrim($uri->getBaseUrl(), '/').'/';
+        }
     }
 
     public function forLoop()

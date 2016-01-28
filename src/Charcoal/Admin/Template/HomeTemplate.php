@@ -19,12 +19,6 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
 {
     use DashboardContainerTrait;
 
-    public function __construct()
-    {
-        header('Location:object/collection?obj_type=alert/alert');
-        die();
-    }
-
     /**
      * @param array $data
      * @return Home Chainable

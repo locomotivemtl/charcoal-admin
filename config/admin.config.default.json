@@ -1,145 +1,99 @@
 {
-	"base_path":"admin",
+  "base_path": "admin",
 
-    "routes":{
-        "templates":{
-            "help":{
-              "ident":"charcoal/admin/template/help"
-            },
-            "home":{
-                "ident":"charcoal/admin/template/home"
-            },
-            "login":{
-                "ident":"charcoal/admin/template/login"
-            },
-            "object/edit":{
-                "ident":"charcoal/admin/template/object/edit"
-            },
-            "object/collection":{
-                "ident":"charcoal/admin/template/object/collection"
-            },
+  "routes": {
+    "templates": {
+      "help": {
+        "ident": "charcoal/admin/template/help"
+      },
+      "home": {
+        "ident": "charcoal/admin/template/home"
+      },
+      "login": {
+        "ident": "charcoal/admin/template/login"
+      },
+      "object/edit": {
+        "ident": "charcoal/admin/template/object/edit"
+      },
+      "object/collection": {
+        "ident": "charcoal/admin/template/object/collection"
+      },
 
-            "contents":{},
-            "envoie":{},
-
-            "messaging/send-sms":{
-              "ident":"charcoal/admin/template/messaging/send-sms"
-            },
-            "messaging/send-voice":{
-              "ident":"charcoal/admin/template/messaging/send-voice"
-            },
-
-            "alert/home":{
-              "ident":"charcoal/admin/template/alert/home"
-            },
-            "alert/test":{
-              "ident":"charcoal/admin/template/alert/test"
-            },
-            "alert/send":{
-              "ident":"charcoal/admin/template/alert/send"
-            },
-            "alert/sent-stats":{
-              "ident":"charcoal/admin/template/alert/sent-stats"
-            },
-            "alert/create":{
-              "ident":"charcoal/admin/template/alert/create"
-            }
-        },
-        "default_view":"home",
-        "actions":{
-            "login":{
-              "ident":"charcoal/admin/action/login"
-            },
-            "object/delete":{
-              "ident":"charcoal/admin/action/object/delete"
-            },
-            "object/save":{
-              "ident":"charcoal/admin/action/object/save"
-            },
-            "object/update":{
-              "ident":"charcoal/admin/action/object/update"
-            },
-            "widget/load":{
-              "ident":"charcoal/admin/action/widget/load"
-            },
-            "widget/table/inline":{
-              "ident":"charcoal/admin/action/widget/table/inline"
-            },
-            "widget/table/inline-multi":{
-              "ident":"charcoal/admin/action/widget/table/inline-multi"
-            },
-
-            "messaging/send-sms":{
-              "ident":"charcoal/admin/action/messaging/send-sms"
-            },
-            "messaging/send-voice":{
-              "ident":"charcoal/admin/action/messaging/send-voice"
-            },
-
-            "alert/import-user-list":{
-              "ident":"charcoal/admin/action/alert/import-user-list"
-            },
-            "alert/send-test-email":{
-              "ident":"charcoal/admin/action/alert/send-test-email"
-            },
-            "alert/send-test-sms":{
-              "ident":"charcoal/admin/action/alert/send-test-sms"
-            },
-            "alert/send-test-voice":{
-              "ident":"charcoal/admin/action/alert/send-test-voice"
-            },
-            "alert/send":{
-              "ident":"charcoal/admin/action/alert/send"
-            }
-        },
-        "default_action":null,
-        "scripts":{
-          "object/create":{
-            "ident":"charcoal/admin/script/object/create"
-          },
-          "object/table/alter":{
-            "ident":"charcoal/admin/script/object/table/alter"
-          },
-          "object/table/create":{
-            "ident":"charcoal/admin/script/object/table/create"
-          },
-          "objects":{
-            "ident":"charcoal/admin/script/objects"
-          },
-          "user/create":{
-            "ident":"charcoal/admin/script/user/create"
-          },
-          "user/reset-password":{
-            "ident":"charcoal/admin/script/user/reset-password"
-          }
-        }
+      "contents": {},
+      "envoie": {}
     },
-
-    "user":{
-        "subscription_email":{
-            "active":true,
-            "template":"charcoal/admin/email/user.subscription",
-            "campaign":"admin.user.subscription",
-            "from":{
-                "name":"Charcoal",
-                "email":"registration@charcoal.locomotive.ca"
-            },
-            "subject":"Your subscription to Charcoal",
-            "log":true,
-            "track":true
-        },
-        "lost_password_email":{
-            "active":true,
-            "template":"charcoal/admin/email/user.lost_password",
-            "campaign":"admin.user.lost_password",
-            "from":{
-                "name":"Charcoal",
-                "email":"registration@charcoal.locomotive.ca"
-            },
-            "subject":"Reset your Charcoal password",
-            "log":true,
-            "track":true
-
-        }
+    "default_view": "home",
+    "actions": {
+      "login": {
+        "ident": "charcoal/admin/action/login"
+      },
+      "object/delete": {
+        "ident": "charcoal/admin/action/object/delete"
+      },
+      "object/save": {
+        "ident": "charcoal/admin/action/object/save"
+      },
+      "object/update": {
+        "ident": "charcoal/admin/action/object/update"
+      },
+      "widget/load": {
+        "ident": "charcoal/admin/action/widget/load"
+      },
+      "widget/table/inline": {
+        "ident": "charcoal/admin/action/widget/table/inline"
+      },
+      "widget/table/inline-multi": {
+        "ident": "charcoal/admin/action/widget/table/inline-multi"
+      }
+    },
+    "default_action": null,
+    "scripts": {
+      "object/create": {
+        "ident": "charcoal/admin/script/object/create"
+      },
+      "object/table/alter": {
+        "ident": "charcoal/admin/script/object/table/alter"
+      },
+      "object/table/create": {
+        "ident": "charcoal/admin/script/object/table/create"
+      },
+      "objects": {
+        "ident": "charcoal/admin/script/objects"
+      },
+      "user/create": {
+        "ident": "charcoal/admin/script/user/create"
+      },
+      "user/reset-password": {
+        "ident": "charcoal/admin/script/user/reset-password"
+      }
     }
+  },
+
+  "user": {
+    "subscription_email": {
+      "active": true,
+      "template": "charcoal/admin/email/user.subscription",
+      "campaign": "admin.user.subscription",
+      "from": {
+        "name": "Charcoal",
+        "email": "registration@charcoal.locomotive.ca"
+      },
+      "subject": "Your subscription to Charcoal",
+      "log": true,
+      "track": true
+    },
+    "lost_password_email": {
+      "active": true,
+      "template": "charcoal/admin/email/user.lost_password",
+      "campaign": "admin.user.lost_password",
+      "from": {
+        "name": "Charcoal",
+        "email": "registration@charcoal.locomotive.ca"
+      },
+      "subject": "Reset your Charcoal password",
+      "log": true,
+      "track": true
+
+    }
+  }
 }

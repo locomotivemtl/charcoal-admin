@@ -225,7 +225,8 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
             $name .= '[]';
         }
         if ($this->p()->l10n()) {
-            $name .= '[fr]';
+            $lang = TranslationConfig::instance()->currentLanguage();
+            $name .= '['.$lang.']';
         }
         return $name;
     }

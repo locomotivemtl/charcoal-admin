@@ -109,7 +109,6 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
 
             if ($ret) {
                 $this->setObj($obj);
-                $this->logObjectSave();
                 $this->setSuccess(true);
                 $this->addFeedback('success', 'Object saved successfully');
                 return $response;

@@ -341,7 +341,7 @@ class AdminTemplate extends AbstractTemplate
     {
         $adminPath = $this->app()->getContainer()->get('charcoal/admin/config')->basePath();
 
-        return rtrim($this->baseUrl(), '/').'/'.$adminPath;
+        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
     }
 
     /**

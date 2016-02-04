@@ -2,11 +2,9 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Exception;
+// Dependencies from `PHP`
 use \InvalidArgumentException;
 
-use \Charcoal\Admin\Ui\FormPropertyInterface;
-use \Charcoal\Admin\Ui\FormPropertyTrait;
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Property\PropertyInputFactory;
 

@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Ui;
 // Dependencies from `PHP`
 use \InvalidArgumentException;
 
-// From `charcoal-core`
-use \Charcoal\Charcoal;
-
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 use \Charcoal\App\Template\WidgetInterface;

@@ -2,18 +2,17 @@
 
 namespace Charcoal\Admin;
 
+// Dependencies from `PHP`
 use \Exception;
 use \InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal;
 use \Charcoal\Translation\TranslationString;
 
 // From `charcoal-app`
-use \Charcoal\App\App as CharcoalApp;
 use \Charcoal\App\Template\AbstractTemplate;
 
-use \Charcoal\Admin\AdminModule;
+// Local namespace dependencies
 use \Charcoal\Admin\User;
 
 /**
@@ -326,7 +325,6 @@ class AdminTemplate extends AbstractTemplate
      */
     private function auth()
     {
-        //$cfg = AdminModule::config();
         $u = User::get_authenticated();
         if ($u === null) {
             header('Location: '.$this->adminUrl().'login');

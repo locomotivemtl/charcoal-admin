@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin;
 
-// Dependencies from `PHP`
-use \Exception;
-
 // Module `charcoal-core` dependencies
 use Charcoal\Charcoal;
 

@@ -9,11 +9,7 @@ use \InvalidArgumentException;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-
-// From `charcoal-core`
-use \Charcoal\Charcoal;
-
-// From `charcoal-admin`
+// From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
 // From `charcoal-admin`

@@ -74,15 +74,15 @@ class AdminModule extends AbstractModule implements
         $container['charcoal/admin/config'] = function($c) {
             $config = new AdminConfig();
 
-            if ($c['charcoal/app/config']->has('admin')) {
-                $config->merge($c['charcoal/app/config']->get('admin'));
+            if ($c['config']->has('admin')) {
+                $config->merge($c['config']->get('admin'));
             }
 
             return $config;
         };
 
         $container['charcoal/view/config'] = function($c) {
-            return new \Charcoal\View\ViewConfig($c['charcoal/app/config']->get('view'));
+            return new \Charcoal\View\ViewConfig($c['config']->get('view'));
         };
 
         $container['charcoal/view/loader'] = function($c) {
@@ -119,7 +119,7 @@ class AdminModule extends AbstractModule implements
     public function createConfig(array $data = null)
     {
         $container = $this->app()->getContainer();
-        $appConfig = $container->get('charcoal/app/config');
+        $appConfig = $container->get('config');
         $config    = new AdminConfig($data);
 
         if ($appConfig->has('admin')) {

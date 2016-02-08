@@ -17,7 +17,7 @@ Color Picker Property Input
     {{#readOnly}}read_only{{/readOnly}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
-    value="#{{inputVal}}"
+    value="{{inputVal}}"
 >
 {{/input}}
 
@@ -26,9 +26,7 @@ Color Picker Property Input
 Charcoal.Admin.manager().add_property_input({
     id: '{{inputId}}',
     type: 'charcoal/admin/property/input/colorpicker',
-    data: {
-
-    }
+    data: {}
 });
 </script>
 {{/addJs}}

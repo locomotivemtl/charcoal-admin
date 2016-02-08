@@ -31,7 +31,9 @@ module.exports = {
             // BB Map
             'bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
             // Bootstrap Select
-            'bower_components/bootstrap-select/dist/js/bootstrap-select.js'
+            'bower_components/bootstrap-select/dist/js/bootstrap-select.js',
+            // Jquery Minicolors
+            'bower_components/jquery-minicolors/jquery.minicolors.min.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"

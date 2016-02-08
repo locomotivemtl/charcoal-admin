@@ -1,0 +1,34 @@
+{{!--
+Color Picker Property Input
+===========================
+
+`charcoal/admin/property/input/choice-picker`
+
+--}}
+
+{{#input}}
+<input
+    type="text"
+    id="{{inputId}}"
+    name="{{inputName}}"
+    class="form-control js-color-picker {{inputClass}}"
+    {{#placeholder}}placeholer="{{placeholder}}"{{/placeholder}}
+    {{#supportAlpha}}data-opacity="{{alpha}}"{{/supportAlpha}}
+    {{#readOnly}}read_only{{/readOnly}}
+    {{#required}}required{{/required}}
+    {{#disabled}}disabled{{/disabled}}
+    value="#{{inputVal}}"
+>
+{{/input}}
+
+{{#addJs}}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id: '{{inputId}}',
+    type: 'charcoal/admin/property/input/colorpicker',
+    data: {
+
+    }
+});
+</script>
+{{/addJs}}

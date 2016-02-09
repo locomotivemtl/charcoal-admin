@@ -2,9 +2,13 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
+// Dependency from 'charcoal-core'
+use \Charcoal\Translation\TranslationString;
+
+// Local dependency
+use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  *
@@ -32,9 +36,9 @@ class TextInput extends AbstractPropertyInput
     private $pattern = '';
 
     /**
-     * @var string $placeholder
+     * @var TranslationStringInterface $placeholder
      */
-    private $placeholder = '';
+    private $placeholder;
 
 
     /**
@@ -126,16 +130,13 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param string $placeholder
+     * @param string|string[]|TranslationStringInterface $placeholder
      * @throws InvalidArgumentException
      * @return Text Chainable
      */
     public function setPlaceholder($placeholder)
     {
-        if (!is_string($placeholder)) {
-            throw new InvalidArgumentException('Accept needs to be a string');
-        }
-        $this->placeholder = $placeholder;
+        $this->placeholder = new TranslationString($placeholder);
         return $this;
     }
 

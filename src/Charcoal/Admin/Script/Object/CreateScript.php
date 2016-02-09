@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Script\Object;
 
-// Dependencies from `PHP`
-use \InvalidArgumentException;
 
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
@@ -11,7 +9,6 @@ use \Psr\Http\Message\ResponseInterface;
 
 // Module `charcoal-core` dependencies
 use \Charcoal\Model\ModelFactory;
-use \Charcoal\Property\PropertyInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;

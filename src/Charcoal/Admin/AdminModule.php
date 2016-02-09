@@ -2,24 +2,9 @@
 
 namespace Charcoal\Admin;
 
-// Dependencies from `PHP`
-use \Exception;
-use \InvalidArgumentException;
-
-// From PSR-7
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
-// From `charcoal-core`
-use \Charcoal\Charcoal;
-use \Charcoal\Model\ModelFactory;
-
 // From `charcoal-app`
-use \Charcoal\App\App as CharcoalApp;
-use \Charcoal\App\Action\ActionFactory;
 use \Charcoal\App\Module\AbstractModule;
 use \Charcoal\App\Module\ModuleInterface;
-use \Charcoal\App\Template\TemplateFactory;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Config as AdminConfig;

@@ -9,7 +9,6 @@ use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal;
 use \Charcoal\Model\ModelFactory;
 
 // Intra-module (`charcoal-admin`) dependencies
@@ -26,6 +25,9 @@ use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
  */
 class InlineAction extends AdminAction
 {
+    /**
+    * @var array $inlineProperties
+    */
     protected $inlineProperties;
 
     /**

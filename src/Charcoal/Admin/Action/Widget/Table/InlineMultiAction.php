@@ -10,12 +10,12 @@ use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
-use \Charcoal\Charcoal as Charcoal;
-use \Charcoal\Model\ModelFactory as ModelFactory;
+use \Charcoal\Model\ModelFactory;
 
-use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\Widget\ObjectForm as ObjectForm;
-use \Charcoal\Admin\Widget\FormProperty as FormProperty;
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\AdminAction;
+use \Charcoal\Admin\Widget\ObjectForm;
+use \Charcoal\Admin\Widget\FormProperty;
 
 /**
  *

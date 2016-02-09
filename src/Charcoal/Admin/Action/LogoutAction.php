@@ -2,19 +2,16 @@
 
 namespace Charcoal\Admin\Action;
 
-// Dependencies from `PHP`
-use \Exception as Exception;
-use \InvalidArgumentException as InvalidArgumentException;
-
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\User as User;
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\AdminAction;
+use \Charcoal\Admin\User;
 
 /**
- *
+ * Logout action
  */
 class LogoutAction extends AdminAction
 {

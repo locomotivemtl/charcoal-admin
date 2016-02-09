@@ -5,7 +5,10 @@ namespace Charcoal\Admin;
 use \Exception;
 
 // Module `charcoal-app` dependencies
-use Charcoal\App\Script\AbstractScript;
+use \Charcoal\App\Script\AbstractScript;
+
+// Module `charcoal-property` dependencies
+use \Charcoal\Property\PropertyInterface;
 
 // Intract-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\User;

@@ -2,12 +2,13 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput as AbstractPropertyInput;
+// Intra module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
- *
+ * Text Input (Base property input).
  */
 class TextInput extends AbstractPropertyInput
 {
@@ -45,7 +46,9 @@ class TextInput extends AbstractPropertyInput
     public function setMinLength($minLength)
     {
         if (!is_integer($minLength)) {
-            throw new InvalidArgumentException('Min length needs to be an integer');
+            throw new InvalidArgumentException(
+                'Min length needs to be an integer'
+            );
         }
         $this->minLength = $minLength;
         return $this;
@@ -67,7 +70,9 @@ class TextInput extends AbstractPropertyInput
     public function setMaxLength($maxLength)
     {
         if (!is_integer($maxLength)) {
-            throw new InvalidArgumentException('Max length needs to be an integer');
+            throw new InvalidArgumentException(
+                'Max length needs to be an integer'
+            );
         }
         $this->maxLength = $maxLength;
         return $this;
@@ -89,7 +94,9 @@ class TextInput extends AbstractPropertyInput
     public function setSize($size)
     {
         if (!is_integer($size)) {
-            throw new InvalidArgumentException('Size needs to be an integer');
+            throw new InvalidArgumentException(
+                'Size needs to be an integer'
+            );
         }
         $this->size = $size;
         return $this;
@@ -111,7 +118,9 @@ class TextInput extends AbstractPropertyInput
     public function setPattern($pattern)
     {
         if (!is_string($pattern)) {
-            throw new InvalidArgumentException('Pattern needs to be a string');
+            throw new InvalidArgumentException(
+                'Pattern needs to be a string'
+            );
         }
         $this->pattern = $pattern;
         return $this;
@@ -133,7 +142,9 @@ class TextInput extends AbstractPropertyInput
     public function setPlaceholder($placeholder)
     {
         if (!is_string($placeholder)) {
-            throw new InvalidArgumentException('Accept needs to be a string');
+            throw new InvalidArgumentException(
+                'Accept needs to be a string'
+            );
         }
         $this->placeholder = $placeholder;
         return $this;

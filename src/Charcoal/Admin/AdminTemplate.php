@@ -3,6 +3,7 @@
 namespace Charcoal\Admin;
 
 // Dependencies from `PHP`
+use \ArrayIterator;
 use \Exception;
 use \InvalidArgumentException;
 
@@ -18,7 +19,7 @@ use \Charcoal\Admin\User;
 /**
  * Base class for all `admin` Templates.
  *
- * An action extends [\
+ * An action extends
  *
  * # Available (mustache) methods
  * - `title` (TranslationString) - The page title
@@ -197,7 +198,7 @@ class AdminTemplate extends AbstractTemplate
 
         return [
             [
-                'active'=>false,
+                'active'=>true,
                 'label'=>'Accueil',
                 'icon'=>'home',
                 'url'=>$this->adminUrl().'home',
@@ -277,7 +278,9 @@ class AdminTemplate extends AbstractTemplate
 
     public function token()
     {
-        throw new \Exception('Function not implemented.');
+        throw new Exception(
+            'Function not implemented.'
+        );
     }
 
     /**
@@ -296,12 +299,18 @@ class AdminTemplate extends AbstractTemplate
         return $this->feedbacks;
     }
 
+    /**
+    * @param string $level
+    * @param mixed $msg
+    * @return AdminTemplate Chainable
+    */
     public function addFeedback($level, $msg)
     {
         $this->feedbacks[] = [
             'msg'=>$msg,
             'level'=>$level
         ];
+        return $this;
     }
 
     /**
@@ -325,7 +334,7 @@ class AdminTemplate extends AbstractTemplate
      */
     private function auth()
     {
-        $u = User::get_authenticated();
+        $u = User::getAuthenticated();
         if ($u === null) {
             header('Location: '.$this->adminUrl().'login');
             exit;
@@ -363,7 +372,7 @@ class AdminTemplate extends AbstractTemplate
         $return = [];
 
         for ($i = 1; $i <= 10; $i++) {
-            $return[$i] = new \ArrayIterator(array_combine(range(1, $i), range(1, $i)));
+            $return[$i] = new ArrayIterator(array_combine(range(1, $i), range(1, $i)));
         }
 
         return $return;

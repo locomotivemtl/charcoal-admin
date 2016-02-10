@@ -68,7 +68,7 @@ trait DashboardTrait
      * @throws InvalidArgumentException
      * @return Dashboard Chainable
      */
-    public function setWidgets($widgets)
+    public function setWidgets(array $widgets)
     {
         if (!is_array($widgets)) {
             throw new InvalidArgumentException(

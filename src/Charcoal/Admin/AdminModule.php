@@ -66,35 +66,6 @@ class AdminModule extends AbstractModule implements
             return $config;
         };
 
-        $container['charcoal/view/config'] = function($c) {
-            return new \Charcoal\View\ViewConfig($c['config']->get('view'));
-        };
-
-        $container['charcoal/view/loader'] = function($c) {
-            $loader = new \Charcoal\View\Mustache\MustacheLoader([
-                'logger' => $c['logger']
-            ]);
-            $loader->set_paths(Charcoal::config()->templates_path());
-            return $loader;
-        };
-
-        $container['charcoal/view/engine'] = function($c) {
-            $engine = new \Charcoal\View\Mustache\MustacheEngine([
-                'logger' => $c['logger'],
-                'loader' =>$c['charcoal/view/loader']
-            ]);
-            return $engine;
-        };
-
-        $container['charcoal/view'] = function($c) {
-            $view = new \Charcoal\View\GenericView([
-                'config' => $c['charcoal/view/config'],
-                'logger' => $c['logger']
-            ]);
-            $view->set_engine($c['charcoal/view/engine']);
-            return $view;
-        };
-
         $adminPath = '/'.ltrim($container['charcoal/admin/config']->basePath(), '/');
 
         $this->app()->get($adminPath, 'charcoal/admin/module:defaultRoute');

@@ -22,7 +22,7 @@ interface FormInterface
     /**
      * @param string $method Either "post" or "get"
      * @throws InvalidArgumentException
-     * @return FormWidget Chainable
+     * @return FormInterface Chainable
      */
     public function setMethod($method);
 
@@ -55,7 +55,7 @@ interface FormInterface
      * @throws InvalidArgumentException
      * @return FormInterface Chainable
      */
-    public function addGroup($group_ident, $group);
+    public function addGroup($groupIdent, $group);
 
     /**
      * Group generator
@@ -64,7 +64,7 @@ interface FormInterface
 
     /**
      * @param array $data
-     * @return FormWidget Chainable
+     * @return FormInterface Chainable
      */
     public function setFormData(array $data);
 
@@ -72,7 +72,7 @@ interface FormInterface
      * @param string $key
      * @param mixed  $val
      * @throws InvalidArgumentException
-     * @return FormWidget Chainable
+     * @return FormInterface Chainable
      */
     public function addFormData($key, $val);
 
@@ -81,19 +81,19 @@ interface FormInterface
      */
     public function formData();
 
-        /**
-         * @param array $properties
-         * @return FormInterface Chainable
-         */
+    /**
+     * @param array $properties
+     * @return FormInterface Chainable
+     */
     public function setFormProperties(array $properties);
 
     /**
-     * @param string                   $property_ident
+     * @param string $propertyIdent
      * @param array|FormPropertyWidget
      * @throws InvalidArgumentException
      * @return FormInterface Chainable
      */
-    public function addFormProperty($property_ident, $property);
+    public function addFormProperty($propertyIdent, $property);
 
     /**
      * @param array|null $data

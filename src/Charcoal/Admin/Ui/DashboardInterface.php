@@ -23,7 +23,7 @@ interface DashboardInterface
      * @param array $widgets
      * @return DashboardInterface Chainable
      */
-    public function setWidgets($widgets);
+    public function setWidgets(array $widgets);
 
     /**
      * @param string                $widget_ident

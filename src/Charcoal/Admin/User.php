@@ -49,4 +49,9 @@ class User extends AbstractUser
         }
         return $group;
     }
+
+    public function createPermission($data = null)
+    {
+        return [];
+    }
 }

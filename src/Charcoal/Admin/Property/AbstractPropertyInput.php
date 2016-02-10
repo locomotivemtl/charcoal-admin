@@ -29,7 +29,6 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
 
     protected $type;
     protected $inputType;
-    protected $input_options;
 
     protected $inputId = null;
     protected $inputClass = '';

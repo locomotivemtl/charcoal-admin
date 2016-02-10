@@ -15,10 +15,13 @@ use Charcoal\App\Action\AbstractAction;
  */
 abstract class AdminAction extends AbstractAction
 {
+    /**
+    * @var array $feedbacks
+    */
     private $feedbacks = [];
 
     /**
-    * @param array $data Optional
+    * @param array $data Optional.
     */
     final public function __construct(array $data = null)
     {
@@ -35,7 +38,7 @@ abstract class AdminAction extends AbstractAction
     /**
      * Authentication is required by default.
      *
-     * Change to false in
+     * Reimplement and change to false in templates that do not require authentication.
      *
      * @return boolean
      */
@@ -51,7 +54,7 @@ abstract class AdminAction extends AbstractAction
     {
         //$cfg = AdminModule::config();
         $u = User::getAuthenticated();
-        if ($u === null) {
+        if ($u === null || !$u->id()) {
             die('Auth required');
         }
     }
@@ -80,16 +83,22 @@ abstract class AdminAction extends AbstractAction
         return $this->feedbacks;
     }
 
+    /**
+    * @param string $level The feedback level.
+    * @param mixed $msg The actual feedback message.
+    * @return AdminAction Chainable
+    */
     public function addFeedback($level, $msg)
     {
         $this->feedbacks[] = [
-            'msg'=>$msg,
-            'level'=>$level
+            'msg'   => $msg,
+            'level' => $level
         ];
+        return $this;
     }
 
     /**
-     * Default response stub
+     * Default response stub.
      *
      * @return array
      */
@@ -98,9 +107,9 @@ abstract class AdminAction extends AbstractAction
         $success = $this->success();
 
         $results = [
-            'success'=>$this->success(),
-            'next_url'=>$this->redirectUrl(),
-            'feedbacks'=>$this->feedbacks()
+            'success'   => $this->success(),
+            'next_url'  => $this->redirectUrl(),
+            'feedbacks' => $this->feedbacks()
         ];
         return $results;
     }

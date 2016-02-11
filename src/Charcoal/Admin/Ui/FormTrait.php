@@ -30,7 +30,7 @@ trait FormTrait
     private $nextUrl = '';
 
     /**
-     * @var array $groups
+     * @var FormGroupInterface[] $groups
      */
     protected $groups = [];
 
@@ -68,6 +68,8 @@ trait FormTrait
     }
 
     /**
+     * Set the method (forcing lowercase) to "post" or "get".
+     *
      * @param string $method Either "post" or "get"
      * @throws InvalidArgumentException
      * @return FormInterface Chainable
@@ -85,7 +87,7 @@ trait FormTrait
     }
 
     /**
-     * @return string Either "post" or "get"
+     * @return string Either "post" or "get".
      */
     public function method()
     {

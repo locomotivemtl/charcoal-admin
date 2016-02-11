@@ -190,59 +190,14 @@ class AdminTemplate extends AbstractTemplate
      */
     public function headerMenu()
     {
-        $obj_type = isset($_GET['obj_type']) ? $_GET['obj_type'] : '';
+        $headerMenu = $this->app()->getContainer()->get('charcoal/admin/config')->get('header_menu');
+        foreach($headerMenu['items'] as $menuItem) {
+            if($menuItem['url'] != '#') {
+                $menuItem['url'] = $this->adminUrl().$menuItem['url'];
+            }
+            yield $menuItem;
+        }
 
-        $alert_selected = in_array($obj_type, ['alert/alert', 'alert/category', 'alert/']);
-        $user_selected = in_array($obj_type, ['alert/user', 'alert/bulkuser']);
-        $content_selected = in_array($obj_type, ['alert/faq', 'alert/text']);
-
-        return [
-            [
-                'active'=>true,
-                'label'=>'Accueil',
-                'icon'=>'home',
-                'url'=>$this->adminUrl().'home',
-                'has_children'=>false
-            ],
-            [
-                'active'=>true,
-                'selected'=>$alert_selected,
-                'label'=>'Alertes',
-                'icon'=>'alerts',
-                'url'=>$this->adminUrl().'object/collection?obj_type=alert/alert',
-                'has_children'=>false
-            ],
-            [
-                'active'=>true,
-                'selected'=>$user_selected,
-                'label'=>'Utilisateurs',
-                'icon'=>'users',
-                'url'=>$this->adminUrl().'object/collection?obj_type=alert/user',
-                'has_children'=>false
-            ],
-            [
-                'active'=>true,
-                'selected'=>$content_selected,
-                'label'=>'Contenus',
-                'icon'=>'contents',
-                'url'=>$this->adminUrl().'object/collection?obj_type=alert/faq',
-                'has_children'=>false
-            ],
-            [
-                'active'=>false,
-                'label'=>'Statistiques',
-                'icon'=>'stats',
-                'url'=>'#',
-                'has_children'=>false
-            ],
-            [
-                'active'=>false,
-                'label'=>'Configuration',
-                'icon'=>'config',
-                'url'=>'#',
-                'has_children'=>false
-            ]
-        ];
     }
 
     /**

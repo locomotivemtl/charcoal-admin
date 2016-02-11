@@ -43,6 +43,8 @@ class LoginAction extends AdminAction
      */
     protected $nextUrl;
 
+    protected $errMsg;
+
     /**
      * Authentication is required by default.
      *
@@ -87,31 +89,28 @@ class LoginAction extends AdminAction
 
         if (!$username || !$password) {
             $this->setSuccess(false);
+            $this->errMsg = 'Empty username or password';
             return $response->withStatus(404);
         }
 
-        $this->logger()->debug(
+        $this->logger->debug(
             sprintf('Admin login attempt: "%s"', $username)
         );
 
         $u = new User([
-            'logger' => $this->logger()
+            'logger' => $this->logger
         ]);
 
-        try {
-            $isAuthenticated = $u->authenticate($username, $password);
-        } catch (Exception $e) {
-            $isAuthenticated = false;
-        }
+        $isAuthenticated = $u->authenticate($username, $password);
 
         if (!$isAuthenticated) {
-            $this->logger()->warning(
+            $this->logger->warning(
                 sprintf('Login attempt failure: "%s"', $username)
             );
             $this->setSuccess(false);
             return $response->withStatus(403);
         } else {
-            $this->logger()->debug(
+            $this->logger->debug(
                 sprintf('Login attempt successful: "%s"', $username)
             );
             $this->setSuccess(true);
@@ -126,7 +125,8 @@ class LoginAction extends AdminAction
     {
         $results = [
             'success'   => $this->success(),
-            'nextUrl'  => 'home'
+            'next_url'  => 'home',
+            'errMsg'    => $this->errMsg
         ];
         return $results;
     }

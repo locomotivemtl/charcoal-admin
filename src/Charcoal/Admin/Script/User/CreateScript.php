@@ -30,7 +30,9 @@ class CreateScript extends AdminScript
             'Create a new Charcoal Administrator'
         );
 
-        $user = new User();
+        $user = new User([
+            'logger' => $this->logger
+        ]);
         $properties = $user->properties();
 
         $shown_props = [
@@ -81,7 +83,9 @@ class CreateScript extends AdminScript
      */
     public function authRequired()
     {
-        $proto = new User();
+        $proto = new User([
+            'logger' => $this->logger
+        ]);
         $source = $proto->source();
         if ($source->table_exists() !== true) {
             return false;

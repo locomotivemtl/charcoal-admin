@@ -50,7 +50,7 @@ abstract class AdminScript extends AbstractScript
     {
         $climate = $this->climate();
 
-        $u = User::get_authenticated();
+        $u = User::getAuthenticated();
         if ($u === null) {
             $climate->yellow()->out(
                 'You need to be logged in into your "admin" account to continue...'
@@ -68,16 +68,16 @@ abstract class AdminScript extends AbstractScript
 
             $climate->br();
 
-            $this->logger()->debug(
+            $this->logger->debug(
                 sprintf('Admin login attempt: "%s"', $username)
             );
 
             try {
                 $u = new User([
-                    'logger' => $this->logger()
+                    'logger' => $this->logger
                 ]);
                 $is_authenticated = $u->authenticate($username, $password);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $climate->dump($e);
                 $is_authenticated = false;
             }
@@ -96,14 +96,14 @@ abstract class AdminScript extends AbstractScript
 
     protected function logFailedAttempt($username)
     {
-        $this->logger()->warning(
+        $this->logger->warning(
             sprintf('Login attempt failure: "%s"', $username)
         );
     }
 
     protected function logSuccessfulLogin($username)
     {
-        $this->logger()->debug(
+        $this->logger->debug(
             sprintf('Login attempt successful: "%s"', $username)
         );
     }

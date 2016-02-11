@@ -83,14 +83,15 @@ class CreateScript extends AdminScript
      */
     public function authRequired()
     {
+        return false;
         $proto = new User([
             'logger' => $this->logger
         ]);
         $source = $proto->source();
-        if ($source->table_exists() !== true) {
+        if ($source->tableExists() !== true) {
             return false;
         }
-        if ($source->table_is_empty() === true) {
+        if ($source->tableIsEmpty() === true) {
             return false;
         }
         return true;

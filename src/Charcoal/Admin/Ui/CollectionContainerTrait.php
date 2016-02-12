@@ -10,6 +10,9 @@ use \Charcoal\Loader\CollectionLoader as CollectionLoader;
 use \Charcoal\Model\Collection as Collection;
 use \Charcoal\Model\ModelFactory as ModelFactory;
 
+use \Charcoal\Property\PropertyFactory;
+use \Charcoal\Admin\Property\PropertyDisplayFactory;
+
 /**
 * Fully implements CollectionContainerInterface
 */
@@ -47,6 +50,13 @@ trait CollectionContainerTrait
     private $collection;
 
     private $modelFactory;
+    private $propertyDisplayFactory;
+
+    /**
+     * In memory copy of the PropertyDisplay object
+     * @var PropertyInputInterface $display
+     */
+    private $display;
 
     /**
      * @param string $objType
@@ -271,7 +281,21 @@ trait CollectionContainerTrait
 
             foreach ($sortedProperties as $propertyIdent => $propertyData) {
                 $property = $object->property($propertyIdent);
-                $propertyValue = $property->displayVal();
+                $meta = $property->metadata();
+
+                $displayType = $property->displayType();
+
+                $this->display = $this->propertyDisplayFactory()->create($displayType, [
+                    'logger' => $this->logger
+                ]);
+                $this->display->setProperty( $property );
+
+                $this->display->setData($meta);
+                $this->display->setData($property->viewOptions($displayType));
+
+                $container = \Charcoal\App\App::instance()->getContainer();
+                $propertyValue = $container['view']->renderTemplate($displayType, $this->display);
+
 
                 $objectProperties[] = [
                     'ident' => $propertyIdent,
@@ -287,6 +311,16 @@ trait CollectionContainerTrait
             yield $row;
         }
     }
+
+
+    private function propertyDisplayFactory()
+    {
+        if ($this->propertyDisplayFactory === null) {
+            $this->propertyDisplayFactory = new PropertyDisplayFactory();
+        }
+        return $this->propertyDisplayFactory;
+    }
+
 
     /**
      * @return boolean

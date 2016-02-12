@@ -102,7 +102,15 @@ class FormSidebarWidget extends AdminWidget
                 continue;
             }
             $label = new TranslationString($action['label']);
-            $url = $this->form()->obj()->render($action['url']);
+            $obj = $this->form()->obj();
+            // Shame: Make sure the view is set before attempt rendering
+            if ($obj->view()) {
+                $url = $obj->render($action['url']);
+            }
+            else {
+                $url = $action['url'];
+            }
+
 
             // Info = default
             // Possible: danger, info

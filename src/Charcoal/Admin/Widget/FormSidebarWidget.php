@@ -106,8 +106,7 @@ class FormSidebarWidget extends AdminWidget
             // Shame: Make sure the view is set before attempt rendering
             if ($obj->view()) {
                 $url = $obj->render($action['url']);
-            }
-            else {
+            } else {
                 $url = $action['url'];
             }
 

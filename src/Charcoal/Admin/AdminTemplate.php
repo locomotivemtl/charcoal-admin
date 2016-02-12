@@ -191,8 +191,8 @@ class AdminTemplate extends AbstractTemplate
     public function headerMenu()
     {
         $headerMenu = $this->app()->getContainer()->get('charcoal/admin/config')->get('header_menu');
-        foreach($headerMenu['items'] as $menuItem) {
-            if($menuItem['url'] != '#') {
+        foreach ($headerMenu['items'] as $menuItem) {
+            if ($menuItem['url'] != '#') {
                 $menuItem['url'] = $this->adminUrl().$menuItem['url'];
             }
             yield $menuItem;

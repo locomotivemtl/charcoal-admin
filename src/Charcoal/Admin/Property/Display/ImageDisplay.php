@@ -35,7 +35,7 @@ class ImageDisplay extends AbstractPropertyDisplay
      * If integer specified, 'px' will be append to it
      * @param mixed $width CSS value
      */
-    public function setWidth($width='auto')
+    public function setWidth($width = 'auto')
     {
         if (is_numeric($width)) {
             $width .= 'px';
@@ -61,7 +61,7 @@ class ImageDisplay extends AbstractPropertyDisplay
      * If integer specified, 'px' will be append to it
      * @param string $height CSS value
      */
-    public function setHeight($height='auto')
+    public function setHeight($height = 'auto')
     {
         if (is_numeric($height)) {
             $height .= 'px';
@@ -88,7 +88,7 @@ class ImageDisplay extends AbstractPropertyDisplay
      * If integer specified, 'px' will be append to it
      * @param string $maxWidth CSS value
      */
-    public function setMaxWidth($maxWidth='none')
+    public function setMaxWidth($maxWidth = 'none')
     {
         if (is_numeric($maxWidth)) {
             $maxWidth .= 'px';
@@ -114,7 +114,7 @@ class ImageDisplay extends AbstractPropertyDisplay
      * If integer specified, 'px' will be append to it
      * @param string $maxHeight CSS value
      */
-    public function setMaxHeight($maxHeight='none')
+    public function setMaxHeight($maxHeight = 'none')
     {
         if (is_numeric($maxHeight)) {
             $maxHeight .= 'px';

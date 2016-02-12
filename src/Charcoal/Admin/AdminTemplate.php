@@ -186,11 +186,17 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
+     * @throws Exception If the menu was not properly configured.
      * @return array
      */
     public function headerMenu()
     {
         $headerMenu = $this->app()->getContainer()->get('charcoal/admin/config')->get('header_menu');
+        if (!isset($headerMenu['items'])) {
+            throw new Exception(
+                'Header menu was not property configured.'
+            );
+        }
         foreach ($headerMenu['items'] as $menuItem) {
             if ($menuItem['url'] != '#') {
                 $menuItem['url'] = $this->adminUrl().$menuItem['url'];

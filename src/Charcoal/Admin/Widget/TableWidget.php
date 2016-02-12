@@ -99,6 +99,79 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
+     * Always return an array
+     * Theses are the properties options used in the list display
+     * @param  string $ident Property ident
+     * @return array         []
+     */
+    public function propertiesOptions()
+    {
+        $collectionMeta = $this->collectionMeta();
+
+        if (empty($collectionMeta)) {
+            return [];
+        }
+
+        if (!isset($collectionMeta['properties_options'])) {
+            return [];
+        }
+
+        return $collectionMeta['properties_options'];
+
+    }
+
+    /**
+     * Get view options for perticular property
+     * @param  string $ident [description]
+     * @return array         [description]
+     */
+    public function viewOptions($ident)
+    {
+        if (!$ident) {
+            return [];
+        }
+
+        $propertiesOptions = $this->propertiesOptions();
+        if (!isset($propertiesOptions[$ident])) {
+            return [];
+        }
+
+        if (!isset($propertiesOptions[$ident]['view_options'])) {
+            return [];
+        }
+
+        return $propertiesOptions[$ident]['view_options'];
+
+    }
+
+    /**
+     * Return the current collection metadata
+     * @return array    metadata()->admin->lists->collectionIdent || []
+     */
+    public function collectionMeta()
+    {
+        $collectionIdent = $this->collectionIdent();
+        if (!$collectionIdent) {
+            return [];
+        }
+
+        $obj = $this->proto();
+        $metadata = $obj->metadata();
+
+        $adminmeta = isset($metadata['admin']) ? $metadata['admin'] : [];
+
+        if (!isset($adminmeta['lists'])) {
+            return [];
+        }
+
+        if (!isset($adminmeta['lists'][$collectionIdent])) {
+            return [];
+        }
+
+        return $adminmeta['lists'][$collectionIdent];
+    }
+
+    /**
      * Properties to display in collection template, and their order, as set in object metadata
      * @return  FormPropertyWidget         Generator function
      */

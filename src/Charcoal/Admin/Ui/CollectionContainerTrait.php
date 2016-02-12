@@ -293,6 +293,11 @@ trait CollectionContainerTrait
                 $this->display->setData($meta);
                 $this->display->setData($property->viewOptions($displayType));
 
+                $listViewOptions = $this->viewOptions($property->ident());
+                if (isset($listViewOptions[$displayType])) {
+                    $this->display->setData($listViewOptions[$displayType]);
+                }
+
                 $container = \Charcoal\App\App::instance()->getContainer();
                 $propertyValue = $container['view']->renderTemplate($displayType, $this->display);
 

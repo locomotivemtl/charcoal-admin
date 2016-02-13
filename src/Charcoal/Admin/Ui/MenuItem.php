@@ -4,7 +4,6 @@ namespace Charcoal\Admin\Ui;
 
 use \InvalidArgumentException;
 
-// From `charcoal-core`
 use \Charcoal\Translation\TranslationString;
 
 /**

@@ -2,18 +2,12 @@
 
 namespace Charcoal\Admin\Property;
 
-// Dependencies from `PHP`
-use \InvalidArgumentException as InvalidArgumentException;
+use \InvalidArgumentException;
 
-// From `charcoal-base`
-use \Charcoal\Property\PropertyFactory as PropertyFactory;
-use \Charcoal\Property\PropertyInterface as PropertyInterface;
-
-// From `charcoal-core`
-use \Charcoal\Translation\TranslationConfig;
-
-// Local namespace dependencies
+use \Charcoal\Property\PropertyFactory;
+use \Charcoal\Property\PropertyInterface;
 use \Charcoal\Admin\Property\PropertyDisplayInterface;
+use \Charcoal\Translation\TranslationConfig;
 
 /**
  *

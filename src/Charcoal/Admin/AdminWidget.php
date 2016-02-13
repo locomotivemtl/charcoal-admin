@@ -2,13 +2,9 @@
 
 namespace Charcoal\Admin;
 
-// Dependencies from `PHP`
 use \InvalidArgumentException;
 
-// From `charcoal-core`
 use \Charcoal\Translation\TranslationString;
-
-// From `charcoal-base`
 use \Charcoal\App\Template\AbstractWidget;
 use \Charcoal\Widget\WidgetView;
 

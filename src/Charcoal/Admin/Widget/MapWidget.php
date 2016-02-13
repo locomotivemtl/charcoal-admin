@@ -3,13 +3,8 @@
 namespace Charcoal\Admin\Widget;
 
 use \Charcoal\Translation\TranslationString;
-
-use \Charcoal\Admin\AdminWidget;
-
-// From `charcoal-base`
 use \Charcoal\Model\ModelFactory;
-
-
+use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormGroupInterface;
 use \Charcoal\Admin\Ui\FormGroupTrait;
 

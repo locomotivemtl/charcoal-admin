@@ -4,11 +4,7 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
-
-// Dependency from 'charcoal-core'
 use \Charcoal\Translation\TranslationString;
-
-// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**

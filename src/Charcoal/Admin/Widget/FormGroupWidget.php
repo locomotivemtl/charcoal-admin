@@ -2,17 +2,12 @@
 
 namespace Charcoal\Admin\Widget;
 
-// Dependencies from `PHP`
 use \InvalidArgumentException;
 
-// Module `charcoal-core` dependencies
 use \Charcoal\Translation\TranslationString;
-
-// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\LayoutWidget;
-
 use \Charcoal\Admin\Ui\FormGroupInterface;
 use \Charcoal\Admin\Ui\FormGroupTrait;
 

@@ -2,18 +2,12 @@
 
 namespace Charcoal\Admin;
 
-// Dependencies from `PHP`
 use \ArrayIterator;
 use \Exception;
 use \InvalidArgumentException;
 
-// From `charcoal-core`
-use \Charcoal\Translation\TranslationString;
-
-// From `charcoal-app`
 use \Charcoal\App\Template\AbstractTemplate;
-
-// Local namespace dependencies
+use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\User;
 
 /**

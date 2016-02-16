@@ -51,14 +51,14 @@ class LoadAction extends AdminAction
         try {
             $widget_factory = new WidgetFactory();
             $widget = $widget_factory->create($widget_type, [
-
+                'logger'=>$this->logger
             ]);
-            $widget->set_view($container['charcoal/view']);
+            $widget->setView($container['view']);
 
             if (is_array($widget_options)) {
-                $widget->set_data($widget_options);
+                $widget->setData($widget_options);
             }
-            $widgetHtml = $widget->render_template($widget_type);
+            $widgetHtml = $widget->renderTemplate($widget_type);
             $widgetId = $widget->widgetId();
 
             $this->setWidgetHtml($widgetHtml);
@@ -66,8 +66,10 @@ class LoadAction extends AdminAction
 
             $this->setSuccess(true);
             return $response;
+
         } catch (Exception $e) {
-            //var_dump($e);
+            $this->addFeedback(sprintf('An error occured trying to reload the widget: "%s"', $e->getMessage()), 'error');
+            $this->addFeedback($e->getMessage(), 'error');
             $this->setSuccess(false);
             return $response->withStatus(404);
         }
@@ -129,10 +131,10 @@ class LoadAction extends AdminAction
         $success = $this->success();
 
         $results = [
-            'success'=>$this->success(),
-            'widgetHtml'=>$this->widgetHtml(),
-            'widgetId'=>$this->widgetId(),
-            'feedbacks'=>$this->feedbacks()
+            'success'       => $this->success(),
+            'widget_html'    => $this->widgetHtml(),
+            'widget_id'      => $this->widgetId(),
+            'feedbacks'     => $this->feedbacks()
         ];
         return $results;
     }

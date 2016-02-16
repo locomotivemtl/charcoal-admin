@@ -70,11 +70,6 @@ trait DashboardTrait
      */
     public function setWidgets(array $widgets)
     {
-        if (!is_array($widgets)) {
-            throw new InvalidArgumentException(
-                'Widgets must be an array'
-            );
-        }
         foreach ($widgets as $widgetIdent => $widget) {
             $this->addWidget($widgetIdent, $widget);
         }

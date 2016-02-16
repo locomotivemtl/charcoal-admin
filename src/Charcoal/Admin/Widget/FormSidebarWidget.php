@@ -106,7 +106,8 @@ class FormSidebarWidget extends AdminWidget
             if ($obj->view()) {
                 $url = $obj->render($action['url']);
             } else {
-                $url = $action['url'];
+                // Shame part 2: force '{{id}}' to use obj_id GET parameter...
+                $url = str_replace('{{id}}', $_GET['obj_id'], $action['url']);
             }
 
 

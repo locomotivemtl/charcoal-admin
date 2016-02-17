@@ -17,12 +17,6 @@ class AdminModule extends AbstractModule implements
 {
 
     /**
-     * @var AdminConfig $config
-     */
-    private $config;
-
-
-    /**
      * Charcoal admin setup.
      *
      * This module is bound to the `/admin` URL.

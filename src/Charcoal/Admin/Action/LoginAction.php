@@ -3,7 +3,6 @@
 namespace Charcoal\Admin\Action;
 
 // Dependencies from `PHP`
-use \Exception;
 use \InvalidArgumentException;
 
 // PSR-7 (http messaging) dependencies

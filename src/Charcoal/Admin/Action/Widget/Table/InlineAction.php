@@ -84,7 +84,7 @@ class InlineAction extends AdminAction
      */
     public function results()
     {
-        $response = [
+        $results = [
             'success'           => $this->success(),
             'inline_properties' => $this->inlineProperties,
             'feedbacks'         => $this->feedbacks()

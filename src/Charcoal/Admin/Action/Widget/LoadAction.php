@@ -128,8 +128,6 @@ class LoadAction extends AdminAction
      */
     public function results()
     {
-        $success = $this->success();
-
         $results = [
             'success'       => $this->success(),
             'widget_html'    => $this->widgetHtml(),

@@ -1,9 +1,6 @@
 <?php
 namespace Charcoal\Admin\Widget;
 
-// From `PHP`
-use \InvalidArgumentException;
-
 // From `charcoal-admin`
 use \Charcoal\Admin\AdminWidget;
 

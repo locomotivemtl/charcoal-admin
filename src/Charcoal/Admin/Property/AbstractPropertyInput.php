@@ -244,9 +244,9 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
             }
         }
 
-        if (!is_scalar($val)) {
-            $val = json_encode($val, true);
-        }
+        // if (!is_scalar($val)) {
+        //     $val = json_encode($val, true);
+        // }
 
         return $val;
     }

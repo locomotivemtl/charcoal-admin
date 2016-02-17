@@ -104,8 +104,6 @@ abstract class AdminAction extends AbstractAction
      */
     public function results()
     {
-        $success = $this->success();
-
         $results = [
             'success'   => $this->success(),
             'next_url'  => $this->redirectUrl(),

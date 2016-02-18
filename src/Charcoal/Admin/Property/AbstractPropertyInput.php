@@ -4,16 +4,31 @@ namespace Charcoal\Admin\Property;
 
 use \InvalidArgumentException;
 
+// PSR-3 logger dependencies
+use \Psr\Log\LoggerAwareInterface;
+use \Psr\Log\LoggerAwareTrait;
+use \Psr\Log\NullLogger;
+
+// Module `charcoal-property` dependencies
 use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
-use \Charcoal\Admin\Property\PropertyInputInterface;
+
+// Module `charcoal-translation` dependencies
 use \Charcoal\Translation\TranslationConfig;
+
+// Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\Property\PropertyInputInterface;
+
 
 /**
  *
  */
-abstract class AbstractPropertyInput implements PropertyInputInterface
+abstract class AbstractPropertyInput implements
+    PropertyInputInterface,
+    LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     private $ident;
 
     private $readOnly;
@@ -30,6 +45,14 @@ abstract class AbstractPropertyInput implements PropertyInputInterface
 
     private $propertyData = [];
     private $property;
+
+    public function __construct($data = null)
+    {
+        if (!isset($data['logger'])) {
+            $data['logger'] = new \Psr\Log\NullLogger();
+        }
+        $this->setLogger($data['logger']);
+    }
 
     /**
      * This function takes an array and fill the model object with its value.

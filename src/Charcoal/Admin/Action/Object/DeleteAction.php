@@ -62,14 +62,16 @@ class DeleteAction extends AdminAction
             return $response->withStatus(404);
         }
 
-        $this->logger()->debug(sprintf('Admin Deleting object "%s" ID %s', $obj_type, $obj_id));
+        $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $obj_type, $obj_id));
 
         try {
-            $model_factory = new ModelFactory();
-            $obj = $model_factory->create($obj_type);
+            $modelFactory = new ModelFactory();
+            $obj = $modelFactory->create($obj_type, [
+                'logger' => $this->logger
+            ]);
             $obj->load($obj_id);
             if (!$obj->id()) {
-                $this->set_success(false);
+                $this->setSuccess(false);
                 return $response->withStatus(404);
             }
             $res = $obj->delete();
@@ -78,7 +80,7 @@ class DeleteAction extends AdminAction
                 return $response;
             }
         } catch (Exception $e) {
-            $this->set_success(false);
+            $this->setSuccess(false);
             return $response->withStatus(500);
         }
 
@@ -90,8 +92,8 @@ class DeleteAction extends AdminAction
     public function results()
     {
         $results = [
-            'success'=>$this->success(),
-            'feedbacks'=> $this->feedbacks()
+            'success'   => $this->success(),
+            'feedbacks' => $this->feedbacks()
         ];
 
         return $results;

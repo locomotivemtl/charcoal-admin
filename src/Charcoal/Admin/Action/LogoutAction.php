@@ -37,7 +37,7 @@ class LogoutAction extends AdminAction
     public function results()
     {
         $results = [
-            'success'   => $this->success()
+            'success' => $this->success()
         ];
         return $results;
     }

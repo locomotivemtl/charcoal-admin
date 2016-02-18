@@ -40,10 +40,10 @@ class InlineMultiAction extends AdminAction
         }
 
         try {
-            $model_factory = new ModelFactory();
+            $modelFactory = new ModelFactory();
             $this->objects = [];
             foreach ($objIds as $objId) {
-                $obj = $model_factory->create($objType);
+                $obj = $modelFactory->create($objType);
                 $obj->load($objId);
                 if (!$obj->id()) {
                     continue;
@@ -85,8 +85,8 @@ class InlineMultiAction extends AdminAction
     public function results()
     {
         $results = [
-            'success' => $this->success(),
-            'objects' => $this->objects,
+            'success'   => $this->success(),
+            'objects'   => $this->objects,
             'feedbacks' => $this->feedbacks()
         ];
         return $results;

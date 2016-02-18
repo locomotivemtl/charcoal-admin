@@ -47,7 +47,9 @@ class InlineAction extends AdminAction
 
         try {
             $modelFactory = new ModelFactory();
-            $obj = $modelFactory->create($objType);
+            $obj = $modelFactory->create($objType, [
+                'logger' => $this->logger
+            ]);
             $obj->load($objId);
             if (!$obj->id()) {
                 $this->setSuccess(false);
@@ -57,8 +59,8 @@ class InlineAction extends AdminAction
             $obj_form = new ObjectFormWidget([
                 'logger' => $this->logger()
             ]);
-            $obj_form->set_objType($objType);
-            $obj_form->set_objId($objId);
+            $obj_form->setObjType($objType);
+            $obj_form->setObjId($objId);
             $formProperties = $obj_form->formProperties();
             foreach ($formProperties as $propertyIdent => $property) {
                 if (!($property instanceof FormPropertyWidget)) {

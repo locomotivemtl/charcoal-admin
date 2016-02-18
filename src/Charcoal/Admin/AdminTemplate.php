@@ -9,6 +9,7 @@ use \InvalidArgumentException;
 use \Charcoal\App\Template\AbstractTemplate;
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\User;
+use \Pimple\Container;
 
 /**
  * Base class for all `admin` Templates.
@@ -27,6 +28,13 @@ use \Charcoal\Admin\User;
  */
 class AdminTemplate extends AbstractTemplate
 {
+    /**
+     * Admin configuration
+     * from main config['admin']
+     * @var array
+     */
+    protected $adminConfig;
+
     /**
      * @var string $ident
      */
@@ -81,6 +89,16 @@ class AdminTemplate extends AbstractTemplate
 
         // Initialize data with GET
         $this->setData($_GET);
+    }
+
+    /**
+     * Dependencies
+     * @param Container $container
+     */
+    public function setDependencies(Container $container)
+    {
+        $baseConfig = $container['config'];
+        $this->adminConfig = $baseConfig['admin'];
     }
 
     /**
@@ -332,4 +350,19 @@ class AdminTemplate extends AbstractTemplate
 
         return $return;
     }
+
+
+    public function headerMenuLogo()
+    {
+        if (!isset($this->adminConfig['menu_logo'])) {
+            return 'assets/admin/images/user_01.jpg';
+        }
+
+        if (!is_string($this->adminConfig['menu_logo'])) {
+            return 'assets/admin/images/user_01.jpg';
+        }
+
+        return $this->adminConfig['menu_logo'];
+    }
+
 }

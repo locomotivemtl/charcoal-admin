@@ -12,14 +12,6 @@ use \Charcoal\Admin\AdminTemplate as AdminTemplate;
  */
 class LoginTemplate extends AdminTemplate
 {
-    private $adminConfig;
-
-    public function setDependencies(Container $container)
-    {
-        $baseConfig = $container['config'];
-        $this->adminConfig = $baseConfig['admin'];
-    }
-
     /**
     * @return string
     */

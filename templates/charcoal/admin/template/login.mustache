@@ -11,7 +11,17 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-background -fixed u-background-lightblue"></div>
+<div class="o-background -fixed u-background-lightblue">
+    {{#backgroundImage}}
+        <img src="{{backgroundImage}}" />
+    {{/backgroundImage}}
+
+    {{#backgroundVideo}}
+    <video class="embedded-video horizontal" muted="" preload="auto" autoplay loop>
+      <source src="{{backgroundVideo}}" type="video/mp4">
+    </video>
+    {{/backgroundVideo}}
+</div>
 
 {{!-- Login form --}}
 

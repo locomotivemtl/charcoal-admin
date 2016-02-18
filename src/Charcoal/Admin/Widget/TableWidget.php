@@ -297,7 +297,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectEditUrl()
     {
-        return \Charcoal\App\App::instance()->config()->get('URL').'admin/object/edit?obj_type='.$this->objType();
+        return 'object/edit?obj_type='.$this->objType();
     }
 
     /**

@@ -97,7 +97,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                         {{#showObjectActions}}
                         <td>
                             <div class="btn-group">
-                                <a href="{{objectEditUrl}}&amp;obj_id={{objectId}}" class="btn btn-primary">Modifier</a>
+                                <a href="{{adminUrl}}{{objectEditUrl}}&amp;obj_id={{objectId}}" class="btn btn-primary">Modifier</a>
                             {{#hasObjectActions}}
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="caret"></span>

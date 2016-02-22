@@ -22,8 +22,8 @@ This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
     <div class="o-flex_main">
         <div class="o-container">
 
-            <h2>{{title}}</h2>
-            <h3>{{subtitle}}</h3>
+            {{#title}}<h2>{{title}}</h2>{{/title}}
+            {{#subtitle}}<h3>{{subtitle}}</h3>{{/subtitle}}
 
             {{!-- Display the object's "edit" dashboard --}}
             {{#dashboard}}

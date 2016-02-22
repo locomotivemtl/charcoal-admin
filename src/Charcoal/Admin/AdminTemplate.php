@@ -38,20 +38,20 @@ class AdminTemplate extends AbstractTemplate
     /**
      * @var string $ident
      */
-    private $ident = '';
+    private $ident;
     /**
      * @var TranslationString $label
      */
-    private $label = '';
+    private $label;
 
     /**
      * @var TranslationString $title
      */
-    private $title = '';
+    private $title;
     /**
      * @var TranslationString $subtitle
      */
-    private $subtitle = '';
+    private $subtitle;
 
     /**
      * @var boolean $showHeaderMenu
@@ -154,7 +154,7 @@ class AdminTemplate extends AbstractTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->title = 'Undefined title';
+            $this->title = 'Undefined Title';
         }
         return $this->title;
     }
@@ -174,9 +174,6 @@ class AdminTemplate extends AbstractTemplate
      */
     public function subtitle()
     {
-        if ($this->subtitle === null) {
-            $this->subtitle = 'Undefined title';
-        }
         return $this->subtitle;
     }
 

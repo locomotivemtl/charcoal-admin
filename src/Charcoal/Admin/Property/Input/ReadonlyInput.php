@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**

@@ -47,6 +47,28 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     private $propertyFactory;
 
     /**
+     * @param PropertyFactory $factory The property factory, to create properties.
+     */
+    public function setPropertyFactory(PropertyFactory $factory)
+    {
+        $this->propertyFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * Safe
+     *
+     * @return PropertyFactory
+     */
+    protected function propertyFactory()
+    {
+        if ($this->propertyFactory === null) {
+            $this->propertyFactory = new PropertyFactory();
+        }
+        return $this->propertyFactory;
+    }
+
+    /**
      * Fetch metadata from current obj_type
      * @return array List of metadata
      */
@@ -54,13 +76,18 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
-        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $collectionIdent = $this->collectionIdent();
-        if (!$collectionIdent) {
-            $collectionIdent = isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '';
+        $adminMeta = isset($metadata['admin']) ? $metadata['admin'] : null;
+
+        if (!isset($adminMeta['lists']) || empty($adminMeta['lists'])) {
+            return [];
         }
 
-        $objListData = isset($adminMetadata['lists'][$collectionIdent]) ? $adminMetadata['lists'][$collectionIdent] : [];
+        $collectionIdent = $this->collectionIdent();
+        if (!$collectionIdent) {
+            $collectionIdent = isset($adminMeta['default_list']) ? $adminMeta['default_list'] : '';
+        }
+
+        $objListData = isset($adminMeta['lists'][$collectionIdent]) ? $adminMeta['lists'][$collectionIdent] : [];
 
         return $objListData;
     }
@@ -122,7 +149,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * Get view options for perticular property
-     * @param  string $ident [description]
+     * @param  string $ident The ident of the view options.
      * @return array         [description]
      */
     public function viewOptions($ident)
@@ -300,14 +327,5 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return 'object/edit?obj_type='.$this->objType();
     }
 
-    /**
-     * @return PropertyFactory
-     */
-    private function propertyFactory()
-    {
-        if ($this->propertyFactory === null) {
-            $this->propertyFactory = new PropertyFactory();
-        }
-        return $this->propertyFactory;
-    }
+
 }

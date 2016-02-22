@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Script\Object;
 
-
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;

@@ -6,6 +6,8 @@ namespace Charcoal\Admin\Template\Object;
 use \Exception;
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
@@ -33,11 +35,15 @@ class CollectionTemplate extends AdminTemplate implements
 
     private $sidemenu;
 
+    private $widgetFactory;
+
     public function __construct(array $data = null)
     {
         parent::__construct($data);
 
-        $this->setData($data);
+        $this->widgetFactory = new WidgetFactory();
+
+//        $this->setData($data);
 
         $obj = $this->proto();
         if (!$obj) {
@@ -46,6 +52,21 @@ class CollectionTemplate extends AdminTemplate implements
         if ($obj->source()->tableExists() === false) {
             $obj->source()->createTable();
             $this->addFeedback('success', 'A new table was created for object.');
+        }
+
+    }
+
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Optional CollectionContainerInterface depeendencies
+        if ($container['model/factory']) {
+            $this->setModelFactory($container['model/factory']);
+        }
+
+        if ($container['model/collection/loader']) {
+            $this->setCollectionLoader($container['model/colletion/loader']);
         }
 
     }
@@ -85,9 +106,8 @@ class CollectionTemplate extends AdminTemplate implements
         $sidemenuConfig = $dashboardConfig['sidemenu'];
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-        $widgetFactory = new WidgetFactory();
         $widgetType = isset($sidemenuConfig['widget_type']) ? $sidemenuConfig['widget_type'] : 'charcoal/admin/widget/sidemenu';
-        $sidemenu = $widgetFactory->create($widgetType, [
+        $sidemenu = $this->widgetFactory->create($widgetType, [
             'logger'=>$this->logger
         ]);
         return $sidemenu;
@@ -103,8 +123,7 @@ class CollectionTemplate extends AdminTemplate implements
      */
     public function searchWidget()
     {
-        $factory = new WidgetFactory();
-        $widget = $factory->create('charcoal/admin/widget/search', [
+        $widget = $this->widgetFactory->create('charcoal/admin/widget/search', [
             'logger'=>$this->logger
         ]);
         $widget->setObjType($this->objType());

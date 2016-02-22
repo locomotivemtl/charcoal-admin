@@ -14,7 +14,7 @@ This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
             {{>charcoal/admin/widget/layout.start}}
         {{/dashboard.layout}}
 
-        <div class="widget widget-{{ident}}">
+        <div class="widget widget-{{ident}} col-md-{{dashboard.layout.cellSpanBy12}}">
 
             {{#showLabel}}
                 <span class="title">{{label}}</span>

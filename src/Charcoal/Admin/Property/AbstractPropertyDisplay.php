@@ -4,6 +4,11 @@ namespace Charcoal\Admin\Property;
 
 use \InvalidArgumentException;
 
+// PSR-3 logger dependencies
+use \Psr\Log\LoggerAwareInterface;
+use \Psr\Log\LoggerAwareTrait;
+use \Psr\Log\NullLogger;
+
 use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
 use \Charcoal\Admin\Property\PropertyDisplayInterface;
@@ -14,6 +19,8 @@ use \Charcoal\Translation\TranslationConfig;
  */
 abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
 {
+    use LoggerAwareTrait;
+
     private $ident;
 
     private $multiple;
@@ -27,6 +34,17 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     private $propertyData = [];
     private $property;
     protected $displayOptions;
+
+    /**
+     * @param array|ArrayAccess $data Optional. Dependencies.
+     */
+    public function __construct($data = null)
+    {
+        if (!isset($data['logger'])) {
+            $data['logger'] = new NullLogger();
+        }
+        $this->setLogger($data['logger']);
+    }
 
     /**
      * This function takes an array and fill the model object with its value.

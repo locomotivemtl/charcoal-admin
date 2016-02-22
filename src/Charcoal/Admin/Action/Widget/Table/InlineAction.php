@@ -26,8 +26,8 @@ use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
 class InlineAction extends AdminAction
 {
     /**
-    * @var array $inlineProperties
-    */
+     * @var array $inlineProperties
+     */
     protected $inlineProperties;
 
     /**

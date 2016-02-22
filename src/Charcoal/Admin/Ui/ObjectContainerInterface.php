@@ -31,14 +31,4 @@ interface ObjectContainerInterface
      * @return ModelInterface
      */
     public function obj();
-
-    /**
-     * @return ModelInterface
-     */
-    public function createObj();
-
-    /**
-     * @return ModelInterface
-     */
-    public function loadObj();
 }

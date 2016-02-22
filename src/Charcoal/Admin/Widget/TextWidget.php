@@ -34,7 +34,7 @@ class TextWidget extends AdminWidget
     protected $notes = '';
 
     /**
-     * @param boolean $show
+     * @param boolean $show The show title flag.
      * @return Text Chainable
      */
     public function setShowTitle($show)
@@ -56,7 +56,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @param boolean $show
+     * @param boolean $show The show subtitle flag.
      * @return Text Chainable
      */
     public function setShowSubtitle($show)
@@ -78,8 +78,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @param boolean $show
-     * @throws InvalidArgumentException
+     * @param boolean $show The show description flag.
      * @return Text Chainable
      */
     public function setShowDescription($show)
@@ -101,18 +100,12 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @param boolean $show
-     * @throws InvalidArgumentException
+     * @param boolean $show The show notes flag
      * @return Text Chainable
      */
     public function setShowNotes($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException(
-                'Show must be a boolean'
-            );
-        }
-        $this->showNotes = $show;
+        $this->showNotes = !!$show;
         return $this;
     }
 

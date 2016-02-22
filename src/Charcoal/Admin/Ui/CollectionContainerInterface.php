@@ -95,6 +95,11 @@ interface CollectionContainerInterface
     public function hasObjects();
 
     /**
+     * @return integer
+     */
+    public function numObjects();
+
+    /**
      * @return object
      */
     public function proto();

@@ -88,7 +88,7 @@ interface FormInterface
     public function setFormProperties(array $properties);
 
     /**
-     * @param string $propertyIdent
+     * @param string                   $propertyIdent
      * @param array|FormPropertyWidget
      * @throws InvalidArgumentException
      * @return FormInterface Chainable

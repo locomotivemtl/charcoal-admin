@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Template;
 
 // Local parent namespace dependencies
-use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+use \Charcoal\Admin\AdminTemplate;
 
 class SystemTemplate extends AdminTemplate
 {

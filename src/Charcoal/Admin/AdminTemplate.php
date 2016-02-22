@@ -97,6 +97,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function setDependencies(Container $container)
     {
+        parent::setDependencies($container);
         $baseConfig = $container['config'];
         $this->adminConfig = $baseConfig['admin'];
     }
@@ -273,10 +274,10 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-    * @param string $level
-    * @param mixed $msg
-    * @return AdminTemplate Chainable
-    */
+     * @param string $level
+     * @param mixed  $msg
+     * @return AdminTemplate Chainable
+     */
     public function addFeedback($level, $msg)
     {
         $this->feedbacks[] = [
@@ -364,5 +365,4 @@ class AdminTemplate extends AbstractTemplate
 
         return $this->adminConfig['menu_logo'];
     }
-
 }

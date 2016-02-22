@@ -1,13 +1,6 @@
 module.exports = {
     src:{
-        dir:[
-            'src/**/*.php'
-        ]
-    },
-    tests: {
-        dir:[
-            'tests/**/*.php'
-        ]
+        src: ['src/**/*.php']
     },
     options: {
         //bin: '<%= directories.composerBin %>/phpcs',

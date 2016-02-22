@@ -56,7 +56,6 @@ class LoginAction extends AdminAction
         return false;
     }
 
-
     /**
      * Assign the next URL.
      *

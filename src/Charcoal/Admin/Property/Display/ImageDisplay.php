@@ -134,6 +134,4 @@ class ImageDisplay extends AbstractPropertyDisplay
         }
         return $this->maxHeight;
     }
-
-
 }

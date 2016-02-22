@@ -2,13 +2,13 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \Exception as Exception;
+use \Exception;
 use \InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Loader\CollectionLoader as CollectionLoader;
-use \Charcoal\Model\Collection as Collection;
-use \Charcoal\Model\ModelFactory as ModelFactory;
+use \Charcoal\Loader\CollectionLoader;
+use \Charcoal\Model\Collection;
+use \Charcoal\Model\ModelFactory;
 
 use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Admin\Property\PropertyDisplayFactory;
@@ -18,6 +18,16 @@ use \Charcoal\Admin\Property\PropertyDisplayFactory;
 */
 trait CollectionContainerTrait
 {
+    /**
+     * @var ModelFactory $modelFactory
+     */
+    private $modelFactory;
+
+    /**
+     * @var CollectionLoader $collectionLoader
+     */
+    private $collectionLoader;
+
     /**
      * @var string $objType
      */
@@ -49,14 +59,63 @@ trait CollectionContainerTrait
      */
     private $collection;
 
-    private $modelFactory;
+
     private $propertyDisplayFactory;
+
+    private $proto;
 
     /**
      * In memory copy of the PropertyDisplay object
      * @var PropertyInputInterface $display
      */
     private $display;
+
+    /**
+     * @param ModelFactory $factory
+     * @return CollectionContainerInterface Chainable
+     */
+    public function setModelFactory(ModelFactory $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return ModelFactory
+     */
+    protected function modelFactory()
+    {
+        if ($this->modelFactory === null) {
+            $this->modelFactory = new ModelFactory();
+        }
+        return $this->modelFactory;
+    }
+
+    /**
+     * @param CollectionLoader $loader
+     * @return CollectionContainerInterface Chainable
+     */
+    public function setCollectionLoader(CollectionLoader $loader)
+    {
+        $this->collectionLoader = $loader;
+        return $this;
+    }
+
+    /**
+     * Save Collection Loader getter.
+     * Create the loader if it was not injected / set.
+     *
+     * @return CollectionLoader
+     */
+    protected function collectionLoader()
+    {
+        if ($this->collectionLoader === null) {
+            $this->collectionLoader = new CollectionLoader([
+                'logger' => $this->logger
+            ]);
+        }
+        return $this->collectionLoader;
+    }
 
     /**
      * @param string $objType
@@ -131,7 +190,7 @@ trait CollectionContainerTrait
      * @param array $data
      * @return mixed
      */
-    public function createCollectionConfig($data = null)
+    protected function createCollectionConfig($data = null)
     {
         unset($data);
         return [];
@@ -231,14 +290,11 @@ trait CollectionContainerTrait
                 __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
             );
         }
-        $factory = $this->modelFactory();
-        $obj = $factory->create($objType, [
+        $obj = $this->modelFactory()->create($objType, [
             'logger' => $this->logger
         ]);
 
-        $loader = new CollectionLoader([
-            'logger' => $this->logger
-        ]);
+        $loader = $this->collectionLoader();
         $loader->setModel($obj);
         $collectionConfig = $this->collectionConfig();
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
@@ -288,7 +344,7 @@ trait CollectionContainerTrait
                 $this->display = $this->propertyDisplayFactory()->create($displayType, [
                     'logger' => $this->logger
                 ]);
-                $this->display->setProperty( $property );
+                $this->display->setProperty($property);
 
                 $this->display->setData($meta);
                 $this->display->setData($property->viewOptions($displayType));
@@ -347,29 +403,19 @@ trait CollectionContainerTrait
      * @throws InvalidArgumentException If the object type is not defined / can not create prototype.
      * @return object
      */
-    public function proto()
+    public function proto($reload = false)
     {
-        $objType = $this->objType();
-        if ($objType === null) {
-            throw new InvalidArgumentException(
-                sprintf('%s Can not create an object prototype: object type is null.', get_class($this))
-            );
+        if ($this->proto === null || $reload) {
+            $objType = $this->objType();
+            if ($objType === null) {
+                throw new InvalidArgumentException(
+                    sprintf('%s Can not create an object prototype: object type is null.', get_class($this))
+                );
+            }
+            $this->proto = $this->modelFactory()->create($objType, [
+                'logger' => $this->logger
+            ]);
         }
-        $factory = $this->modelFactory();
-        $obj = $factory->get($objType, [
-            'logger' => $this->logger
-        ]);
-        return $obj;
-    }
-
-    /**
-     * @return ModelFactory
-     */
-    private function modelFactory()
-    {
-        if ($this->modelFactory === null) {
-            $this->modelFactory = new ModelFactory();
-        }
-        return $this->modelFactory;
+        return $this->proto;
     }
 }

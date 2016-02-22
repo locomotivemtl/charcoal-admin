@@ -57,8 +57,8 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * @param string $collectionIdent
-     * @throws InvalidArgumentException
+     * @param string $collectionIdent The collection identifier.
+     * @throws InvalidArgumentException If the collection ident is not a string.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollectionIdent($collectionIdent)
@@ -82,7 +82,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * Fetch metadata from current obj_type
-     * @return array List of metadata
+     * @return array List of metadata.
      */
     public function dataFromObject()
     {

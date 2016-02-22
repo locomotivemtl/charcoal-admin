@@ -2,16 +2,21 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \Exception as Exception;
-use \InvalidArgumentException as InvalidArgumentException;
+use \Exception;
+use \InvalidArgumentException;
 
-use \Charcoal\Model\ModelFactory as ModelFactory;
+use \Charcoal\Model\ModelFactory;
 
 /**
 * Fully implements ObjectContainerInterface
 */
 trait ObjectContainerTrait
 {
+    /**
+     * @var ModelFactory $modelFactory
+     */
+    private $modelFactory;
+
     /**
      * @var string $objType
      */
@@ -30,6 +35,27 @@ trait ObjectContainerTrait
      * @var Object $obj
      */
     protected $obj;
+
+    /**
+     * @param ModelFactory $factory
+     * @return ObjectContainerInterface Chainable
+     */
+    public function setModelFactory(ModelFactory $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return ModelFactory
+     */
+    protected function modelFactory()
+    {
+        if ($this->modelFactory === null) {
+            $this->modelFactory = new ModelFactory();
+        }
+        return $this->modelFactory;
+    }
 
     /**
      * @param string $objType
@@ -114,40 +140,30 @@ trait ObjectContainerTrait
     public function obj()
     {
         if ($this->obj === null) {
-            $this->obj = $this->createObj();
-        }
-
-        if ($this->objId()) {
-            $this->obj = $this->loadObj();
-        } else if (isset($GET['clone_id'])) {
-            try {
+            if ($this->objId()) {
+                $this->obj = $this->loadObj();
+            } else if (isset($_GET['clone_id'])) {
                 $objClass = getClass($this->obj);
                 $clone = new $objClass([
                     'logger' => $this->logger()
                 ]);
-                $clone->load($GET['clone_id']);
+                $clone->load($_GET['clone_id']);
                 $clone_data =
                 $this->obj->set_data($clone->data());
-            } catch (Exception $e) {
-                $this->logger()->error('Clone error: '.$e->getMessage());
-            }
-        } else if (isset($GET['blueprint_id'])) {
-            try {
-                $model_factory = new ModelFactory();
-                $blueprint = $model_factory->create($this->obj->blueprintType(), [
+
+            } else if (isset($_GET['blueprint_id'])) {
+                $blueprint = $this->modelFactory()->create($this->obj->blueprintType(), [
                     'logger'=>$this->logger()
                 ]);
-                $blueprint->load($GET['blueprint_id']);
+                $blueprint->load($_GET['blueprint_id']);
                 $data = $blueprint->data();
                 unset($data[$blueprint->key()]);
                 $this->obj->set_data($blueprint->data());
-                // Todo: Blueprint feedback.
-            } catch (Exception $e) {
-                $this->logger()->error('Blueprint error: '.$e->getMessage());
-                // Todo: Error feedback
+
+            } else {
+                $this->obj = $this->createObj();
             }
         }
-
         return $this->obj;
     }
 
@@ -155,7 +171,7 @@ trait ObjectContainerTrait
      * @throws Exception
      * @return ModelInterface
      */
-    public function createObj()
+    protected function createObj()
     {
         if (!$this->validateObjType()) {
             throw new Exception(
@@ -165,8 +181,7 @@ trait ObjectContainerTrait
 
         $objType = $this->objType();
 
-        $factory = new ModelFactory();
-        $obj = $factory->create($objType, [
+        $obj = $this->modelFactory()->create($objType, [
             'logger'=>$this->logger
         ]);
 
@@ -177,7 +192,7 @@ trait ObjectContainerTrait
      * @throws Exception
      * @return ModelInterface The loaded object
      */
-    public function loadObj()
+    protected function loadObj()
     {
         if ($this->obj === null) {
             $this->obj = $this->createObj();
@@ -186,9 +201,7 @@ trait ObjectContainerTrait
 
         $objId = $this->objId();
         if (!$objId) {
-            throw new Exception(
-                'Can not load object. Object ID is not defined.'
-            );
+            return $obj;
         }
         $obj->load($objId);
         return $obj;
@@ -202,10 +215,9 @@ trait ObjectContainerTrait
     {
         try {
             $objType = $this->objType();
-            $factory = new ModelFactory();
             // Catch exception to know if the objType is valid
 
-            $obj = $factory->get($objType, [
+            $obj = $this->modelFactory()->get($objType, [
                 'logger'=>$this->logger
             ]);
             if (!$this->validateObjBaseClass($obj)) {

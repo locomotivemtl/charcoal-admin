@@ -6,6 +6,8 @@ namespace Charcoal\Admin\Template\Object;
 use \Exception as Exception;
 use \InvalidArgumentException as InvalidArgumentException;
 
+use \Pimple\Container;
+
 // Module `charcoal-base` dependencies
 use \Charcoal\App\Template\WidgetFactory as WidgetFactory;
 
@@ -18,12 +20,58 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 use \Charcoal\Admin\Widget\DashboardWidget;
 use \Charcoal\Admin\Widget\SidemenuWidget;
 
-class EditTemplate extends ObjectTemplate implements DashboardContainerInterface, ObjectContainerInterface
+/**
+ * Object Edit Template
+ */
+class EditTemplate extends ObjectTemplate implements
+    DashboardContainerInterface,
+    ObjectContainerInterface
 {
     use DashboardContainerTrait;
     //use ObjectContainerTrait;
 
     private $sidemenu;
+
+    /**
+     * @var WidgetFactory $widgetFactory
+     */
+    private $widgetFactory;
+
+    /**
+     * @param Container $container
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required ObjectContainerInterface dependencies
+        $this->setModelFactory($container['model/factory']);
+    }
+
+
+    /**
+     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     */
+    public function setWidgetFactory(WidgetFactory $factory)
+    {
+        $this->widgetFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * Safe Widget Factory getter.
+     * Create the widget factory if it was not preiously injected / set.
+     *
+     * @return WidgetFactory
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            $this->widgetFactory = new WidgetFactory();
+        }
+        return $this->widgetFactory;
+    }
 
     /**
      * @param array $data Optional
@@ -35,8 +83,8 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
     {
         $dashboardConfig = $this->objEditDashboardConfig();
 
-        $dashboard = new DashboardWidget([
-            'logger'=>$this->logger
+        $dashboard = $this->widgetFactory()->create('charcoal/admin/widget/dashboard', [
+            'logger' => $this->logger
         ]);
         if ($data !== null) {
             $dashboard->setData($data);
@@ -60,9 +108,8 @@ class EditTemplate extends ObjectTemplate implements DashboardContainerInterface
         $sidemenuConfig = $dashboardConfig['sidemenu'];
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-        $widgetFactory = new WidgetFactory();
         $widget_type = isset($sidemenuConfig['widget_type']) ? $sidemenuConfig['widget_type'] : 'charcoal/admin/widget/sidemenu';
-        $sidemenu = $widgetFactory->create($widget_type, [
+        $sidemenu = $this->widgetFactory()->create($widget_type, [
             'logger'=>$this->logger
         ]);
         return $sidemenu;

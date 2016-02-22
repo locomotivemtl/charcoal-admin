@@ -9,6 +9,8 @@ use \Exception as Exception;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+use \Pimple\Container;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\Ui\ObjectContainerInterface;
@@ -46,18 +48,23 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     public function setData(array $data)
     {
         parent::setData($data);
-        # $this->setObjData($data);
-
-        if (isset($data['next_url'])) {
-            $this->set_next_url($data['next_url']);
-            unset($data['next_url']);
-        }
 
         unset($data['obj_type']);
         unset($data['obj_id']);
         $this->setUpdateData($data);
 
         return $this;
+    }
+
+    /**
+     * @param Container $container
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setModelFactory($container['model/factory']);
     }
 
     /**
@@ -137,12 +144,11 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
      */
     public function results()
     {
-        $results = [
-            'success'=>$this->success(),
-            'obj_id'=>$this->obj()->id(),
-            'obj'=>$this->obj(),
-            'feedbacks'=>$this->feedbacks()
+        return [
+            'success'   => $this->success(),
+            'obj_id'    => $this->obj()->id(),
+            'obj'       => $this->obj(),
+            'feedbacks' => $this->feedbacks()
         ];
-        return $results;
     }
 }

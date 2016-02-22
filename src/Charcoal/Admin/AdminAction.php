@@ -16,8 +16,8 @@ use Charcoal\App\Action\AbstractAction;
 abstract class AdminAction extends AbstractAction
 {
     /**
-    * @var array $feedbacks
-    */
+     * @var array $feedbacks
+     */
     private $feedbacks = [];
 
     /**
@@ -84,10 +84,10 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
-    * @param string $level The feedback level.
-    * @param mixed $msg The actual feedback message.
-    * @return AdminAction Chainable
-    */
+     * @param string $level The feedback level.
+     * @param mixed  $msg   The actual feedback message.
+     * @return AdminAction Chainable
+     */
     public function addFeedback($level, $msg)
     {
         $this->feedbacks[] = [

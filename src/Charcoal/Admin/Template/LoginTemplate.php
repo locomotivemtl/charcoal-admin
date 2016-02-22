@@ -13,8 +13,10 @@ use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 class LoginTemplate extends AdminTemplate
 {
     /**
-    * @return string
-    */
+     * Get the background image, from admin config.
+     *
+     * @return string
+     */
     public function backgroundImage()
     {
         if (!isset($this->adminConfig['login'])) {
@@ -28,8 +30,10 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-    * @return string
-    */
+     * Get the background video, from admin config.
+     *
+     * @return string
+     */
     public function backgroundVideo()
     {
         if (!isset($this->adminConfig['login'])) {

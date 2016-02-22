@@ -19,7 +19,6 @@ use \Charcoal\Translation\TranslationConfig;
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\PropertyInputInterface;
 
-
 /**
  *
  */
@@ -49,7 +48,7 @@ abstract class AbstractPropertyInput implements
     public function __construct($data = null)
     {
         if (!isset($data['logger'])) {
-            $data['logger'] = new \Psr\Log\NullLogger();
+            $data['logger'] = new NullLogger();
         }
         $this->setLogger($data['logger']);
     }

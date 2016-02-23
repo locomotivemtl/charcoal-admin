@@ -108,8 +108,9 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
 
             // Load (or reload) object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
+            $updateData = array_replace_recursive($obj->data(), $this->updateData());
+            $obj->setData($updateData);
 
-            $obj->setData($this->updateData());
             $valid = $obj->validate();
 
             if (!$valid) {

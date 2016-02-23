@@ -8,8 +8,11 @@ use \InvalidArgumentException as InvalidArgumentException;
 
 use \Pimple\Container;
 
-// Module `charcoal-base` dependencies
-use \Charcoal\App\Template\WidgetFactory as WidgetFactory;
+// Dependency from 'charcoal-base'
+use \Charcoal\App\Template\WidgetFactory;
+
+// Dependency from 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Template\ObjectTemplate;
@@ -147,5 +150,38 @@ class EditTemplate extends ObjectTemplate implements
         }
 
         return $dashboardConfig;
+    }
+
+    /**
+     * @return TranslationString
+     */
+    public function title()
+    {
+        if (empty($this->title)) {
+            $obj      = $this->obj();
+            $objId    = $this->objId();
+            $objLabel = $this->objType();
+            $metadata = $obj->metadata();
+
+            if (isset($metadata['admin'])) {
+                $metadata    = $metadata['admin'];
+                $formIdent   = ( isset($metadata['default_form']) ? $metadata['default_form'] : '' );
+                $objFormData = ( isset($metadata['forms'][$formIdent]) ? $metadata['forms'][$formIdent] : [] );
+
+                if ( isset($objFormData['label']) ) {
+                    $objLabel = new TranslationString($objFormData['label']);
+                }
+            }
+
+            $objLabel = sprintf(
+                '%1$s #%2$s',
+                $objLabel,
+                $objId
+            );
+
+            $this->title = sprintf('Edit Object: %s', $objLabel);
+        }
+
+        return $this->title;
     }
 }

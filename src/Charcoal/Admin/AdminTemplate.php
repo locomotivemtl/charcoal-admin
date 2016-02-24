@@ -6,10 +6,12 @@ use \ArrayIterator;
 use \Exception;
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 use \Charcoal\App\Template\AbstractTemplate;
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\User;
-use \Pimple\Container;
+use \Charcoal\Admin\Object\AuthToken;
 
 /**
  * Base class for all `admin` Templates.
@@ -28,6 +30,7 @@ use \Pimple\Container;
  */
 class AdminTemplate extends AbstractTemplate
 {
+
     /**
      * Admin configuration
      * from main config['admin']
@@ -201,7 +204,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function headerMenu()
     {
-        $headerMenu = $this->app()->getContainer()->get('charcoal/admin/config')->get('header_menu');
+        $headerMenu = $this->adminConfig['header_menu'];
         if (!isset($headerMenu['items'])) {
             throw new Exception(
                 'Header menu was not property configured.'
@@ -297,7 +300,7 @@ class AdminTemplate extends AbstractTemplate
      */
     protected function authRequired()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -306,10 +309,31 @@ class AdminTemplate extends AbstractTemplate
     private function auth()
     {
         $u = User::getAuthenticated();
-        if ($u === null) {
-            header('Location: '.$this->adminUrl().'login');
+        if ($u && $u->id()) {
+            return;
+        }
+
+        $authToken = new AuthToken([
+            'logger' => $this->logger
+        ]);
+        $authCookie = $_COOKIE[$authToken->cookieName()];
+        $vals = explode(';', $authCookie);
+        $username =$authToken->getUsername($vals[0], $vals[1]);
+        if (!$username) {
+             header('Location: '.$this->adminUrl().'login');
             exit;
         }
+
+        $u = new User([
+            'logger' => $this->logger
+        ]);
+        $u->load($username);
+        if ($u->id()) {
+            return;
+        }
+
+        header('Location: '.$this->adminUrl().'login');
+        exit;
     }
 
     /**

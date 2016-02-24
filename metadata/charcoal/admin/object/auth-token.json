@@ -1,0 +1,30 @@
+{
+    "properties":{
+        "ident":{
+            "type":"string",
+            "unique":true
+        },
+        "token":{
+            "type":"string"
+        },
+        "username":{
+            "type":"string"
+        },
+        "expiry":{
+            "type":"datetime"
+        },
+        "created":{
+            "type":"datetime"
+        },
+        "lastModified":{
+            "type":"datetime"
+        }
+    },
+
+    "sources":{
+      "default":{
+        "table":"charcoal_admin_auth_tokens"
+      }
+    },
+    "default_source":"default"
+}

@@ -21,7 +21,8 @@
   "require": {
     "locomotivemtl/charcoal-core": "@dev",
     "locomotivemtl/charcoal-base": "@dev",
-    "locomotivemtl/charcoal-app": "dev-master"
+    "locomotivemtl/charcoal-app": "dev-master",
+    "paragonie/random_compat": "^1.2"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8",

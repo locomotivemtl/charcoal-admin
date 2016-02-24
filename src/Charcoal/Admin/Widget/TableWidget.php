@@ -326,6 +326,4 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         return 'object/edit?obj_type='.$this->objType();
     }
-
-
 }

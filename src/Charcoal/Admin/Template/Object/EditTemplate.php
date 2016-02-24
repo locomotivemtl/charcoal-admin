@@ -168,7 +168,7 @@ class EditTemplate extends ObjectTemplate implements
                 $formIdent   = ( isset($metadata['default_form']) ? $metadata['default_form'] : '' );
                 $objFormData = ( isset($metadata['forms'][$formIdent]) ? $metadata['forms'][$formIdent] : [] );
 
-                if ( isset($objFormData['label']) ) {
+                if (isset($objFormData['label'])) {
                     $objLabel = new TranslationString($objFormData['label']);
                 }
             }

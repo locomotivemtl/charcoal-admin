@@ -11,6 +11,7 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\User;
+use \Charcoal\Admin\Object\AuthToken;
 
 /**
  * Admin Login Action: Attempt to log a user in.
@@ -108,12 +109,32 @@ class LoginAction extends AdminAction
             $this->setSuccess(false);
             return $response->withStatus(403);
         } else {
+
+            $this->setRememberCookie($request, $u);
+
             $this->logger->debug(
                 sprintf('Login attempt successful: "%s"', $username)
             );
             $this->setSuccess(true);
             return $response;
         }
+    }
+
+    public function setRememberCookie(RequestInterface $request, User $u)
+    {
+        $remember = $request->getParam('remember-me');
+        if (!$remember) {
+            return;
+        }
+
+        $authToken = new AuthToken([
+            'logger' => $this->logger
+        ]);
+        $authToken->generate($u->username());
+        $authToken->sendCookie();
+
+        $authToken->save();
+
     }
 
     /**

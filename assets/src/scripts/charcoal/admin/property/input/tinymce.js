@@ -26,7 +26,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
     this.input_id = opts.id || this.input_id;
-    this.editor_options = opts.editor_options || this.editor_options;
+    this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
 
     var default_opts = {
         //language: 'fr_FR',
@@ -88,6 +88,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         // General
         browser_spellcheck: true,
         end_container_on_empty_block: true,
+        entity_encoding:'raw',
 
         // Cleanup / Output
         allow_conditional_comments: true,

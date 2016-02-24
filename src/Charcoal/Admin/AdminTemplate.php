@@ -226,10 +226,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function setShowFooterMenu($show)
     {
-        if (!is_bool($show)) {
-            throw new InvalidArgumentException('Show menu must be a boolean');
-        }
-        $this->showFooterMenu = $show;
+        $this->showFooterMenu = !!$show;
         return $this;
     }
 

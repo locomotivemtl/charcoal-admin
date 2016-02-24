@@ -305,20 +305,46 @@ class AdminTemplate extends AbstractTemplate
      */
     private function auth()
     {
-        $u = User::getAuthenticated();
-        if ($u && $u->id()) {
+        $bySession = $this->authBySession();
+        if($bySession === true) {
             return;
         }
 
+        $byToken = $this->authByToken();
+        if($byToken === true) {
+            return;
+        }
+
+        // Not authenticated. Die.
+        header('Location: '.$this->adminUrl().'login');
+        exit;
+    }
+
+    private function authBySession()
+    {
+        $u = User::getAuthenticated();
+        if ($u && $u->id()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function authByToken()
+    {
         $authToken = new AuthToken([
             'logger' => $this->logger
         ]);
-        $authCookie = $_COOKIE[$authToken->cookieName()];
+
+        if($authToken->metadata()->enabled() !== true) {
+            return false;
+        }
+
+        $authCookie = $_COOKIE[$authToken->metadata()->cookieName()];
         $vals = explode(';', $authCookie);
-        $username =$authToken->getUsername($vals[0], $vals[1]);
+        $username =$authToken->getUserId($vals[0], $vals[1]);
         if (!$username) {
-             header('Location: '.$this->adminUrl().'login');
-            exit;
+            return false;
         }
 
         $u = new User([
@@ -326,11 +352,10 @@ class AdminTemplate extends AbstractTemplate
         ]);
         $u->load($username);
         if ($u->id()) {
-            return;
+            return true;
+        } else {
+            return false;
         }
-
-        header('Location: '.$this->adminUrl().'login');
-        exit;
     }
 
     /**

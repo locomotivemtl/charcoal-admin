@@ -5,7 +5,8 @@ namespace Charcoal\Admin\Template;
 use \Pimple\Container;
 
 // Local parent namespace dependencies
-use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+use \Charcoal\Admin\AdminTemplate;
+use \Charcoal\Admin\Object\AuthToken;
 
 /**
  *
@@ -44,6 +45,33 @@ class LoginTemplate extends AdminTemplate
             return '';
         }
         return $loginConfig['background_video'];
+    }
+
+    private function isHttps()
+    {
+        if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on') {
+            return true;
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            return true;
+        } elseif (isset($_SERVER['HTTP_FRONT_END_HTTPS']) && $_SERVER['HTTP_FRONT_END_HTTPS'] === 'on') {
+            return true;
+        }
+        return false;
+    }
+
+    public function rememberMeEnabled()
+    {
+        $token = new AuthToken([
+            'logger' => $this->logger
+        ]);
+        if($token->metadata()->enabled() === false) {
+            return false;
+        }
+        if($token->metadata()->httpsOnly() === true) {
+            return $this->isHttps();
+        } else {
+            return true;
+        }
     }
 
     /**

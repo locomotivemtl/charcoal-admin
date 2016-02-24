@@ -10,6 +10,11 @@ use \Charcoal\Core\IndexableTrait;
 
 use \Charcoal\Model\AbstractModel;
 
+use \Charcoal\Admin\Object\AuthTokenMetadata;
+
+/**
+ *
+ */
 class AuthToken extends AbstractModel implements IndexableInterface
 {
     use IndexableTrait;
@@ -53,11 +58,6 @@ class AuthToken extends AbstractModel implements IndexableInterface
     public function key()
     {
         return 'ident';
-    }
-
-    public function cookieName()
-    {
-        return 'charcoal_admin_login';
     }
 
     /**
@@ -233,7 +233,7 @@ class AuthToken extends AbstractModel implements IndexableInterface
         $this->setIdent(bin2hex(random_bytes(16)));
         $this->setToken(bin2hex(random_bytes(32)));
         $this->setUsername($username);
-        $this->setExpiry('now + 15 days');
+        $this->setExpiry('now + '.$this->metadata()->cookieDuration());
 
         return $this;
     }
@@ -243,14 +243,12 @@ class AuthToken extends AbstractModel implements IndexableInterface
      */
     public function sendCookie()
     {
-        $name = $this->cookieName();
+        $name = $this->metadata()->cookieName();
         $value = $this->ident().';'.$this->token();
         $expiry = $this->expiry()->getTimestamp();
-        $path = '';
-        $domain = '';
-        $secure = false;
-        $httpOnly = false;
-        setcookie($name, $value, $expiry, $path, $domain, $secure, $httpOnly);
+        $secure = $this->metadata()->httpsOnly();
+
+        setcookie($name, $value, $expiry, '', '', $secure);
 
         return $this;
     }
@@ -289,7 +287,7 @@ class AuthToken extends AbstractModel implements IndexableInterface
     /**
      *
      */
-    public function getUsername($ident, $token)
+    public function getUserId($ident, $token)
     {
         $this->load($ident);
         if (!$this->ident()) {
@@ -297,16 +295,59 @@ class AuthToken extends AbstractModel implements IndexableInterface
             return '';
         }
 
-        if (password_verify($token, $this->token()) !== true) {
-            $this->panic();
+        // Expired cookie
+        $now = new DateTime('now');
+        if (!$this->expiry() || $now > $this->expiry()) {
+            $this->logger->warning('Expired auth token');
+            $this->delete();
             return '';
         }
 
+        // Validate encrypted token
+        if (password_verify($token, $this->token()) !== true) {
+            $this->panic();
+            $this->delete();
+            return '';
+        }
+
+        // Success!
         return $this->username();
     }
 
+    /**
+    * Something is seriously wrong: a cookie ident was in the database but with a tampered token.
+    *
+    * @return void
+    */
     protected function panic()
     {
+        // Todo: delete all user's token.
+        // Gve a strongly-worded error message.
 
+        $this->logger->error(
+            'Possible security breach: an authentication token was found in the database but its token does not match.'
+        );
+
+        if ($this->username) {
+            $table = $this->source()->table();
+            $q = 'delete from '.$table.' where username = :username';
+            $this->source()->dbQuery($q, ['username'=>$this->username()]);
+        }
     }
+
+    /**
+     * DescribableTrait > create_metadata().
+     *
+     * @param array $data Optional data to intialize the Metadata object with.
+     * @return MetadataInterface
+     */
+    protected function createMetadata(array $data = null)
+    {
+        $metadata = new AuthTokenMetadata();
+        if ($data !== null) {
+            $metadata->setData($data);
+        }
+        return $metadata;
+    }
+
 }

@@ -45,6 +45,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                     <input class="form-control" type="password" name="password" id="password" placeholder="{{#_t}}Password{{/_t}}" required>
                 </div>
             </div>
+            {{#rememberMeEnabled}}
             <div class="form-group">
                 <div class="checkbox">
                     <input type="hidden" name="remember-me" value="0">
@@ -54,6 +55,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                     </label>
                 </div>
             </div>
+            {{/rememberMeEnabled}}
             <div class="form-group">
                 <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log in{{/_t}}</button>
             </div>

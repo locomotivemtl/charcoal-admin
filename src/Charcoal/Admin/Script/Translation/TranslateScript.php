@@ -13,7 +13,7 @@ use \Charcoal\Model\ModelFactory;
 use \Charcoal\Admin\AdminScript;
 
 /**
- * Create an object's table (sql source) according to its metadata's properties.
+ * Find all strings to be translated in mustache or php files
  */
 class TranslateScript extends AdminScript
 {
@@ -86,9 +86,10 @@ class TranslateScript extends AdminScript
                 $index = 1;
             break;
             case 'php':
-                $regex = '/_t\(\s*\n*\r*(["\'])((.|\n|\r|\n\r)*?)\1\s*\n*\r*\)/i';
+                $regex = '/([^\d\wA-Za-z])_t\(\s*\n*\r*(["\'])(?<text>(.|\n|\r|\n\r)*?)\2\s*\n*\r*\)/i';
+                // $regex = '/_t\(\s*\n*\r*(["\'])((.|\n|\r|\n\r)*?)\1\s*\n*\r*\)/i';
                 // $regex = '/_t\(\s*\'\s*((.|\n|\r|\n\r)*?)\s*\'\s*\)/i';
-                $index = 2;
+                $index = 'text';
                 $file = '*.php';
             break;
             default:

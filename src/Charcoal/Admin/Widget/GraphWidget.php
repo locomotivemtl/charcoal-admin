@@ -63,7 +63,7 @@ class GraphWidget extends AdminWidget
     public function defaultColors()
     {
         return [
-            '#3498db',
+            '#ed5564',
             '#337ab7',
             '#da70d6',
             '#32cd32',

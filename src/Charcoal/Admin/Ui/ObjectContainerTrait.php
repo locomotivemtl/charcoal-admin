@@ -143,22 +143,24 @@ trait ObjectContainerTrait
             if ($this->objId()) {
                 $this->obj = $this->loadObj();
             } else if (isset($_GET['clone_id'])) {
+                $this->obj = $this->createObj();
                 $objClass = getClass($this->obj);
                 $clone = new $objClass([
-                    'logger' => $this->logger()
+                    'logger' => $this->logger
                 ]);
                 $clone->load($_GET['clone_id']);
                 $clone_data =
                 $this->obj->set_data($clone->data());
 
             } else if (isset($_GET['blueprint_id'])) {
+                $this->obj = $this->createObj();
                 $blueprint = $this->modelFactory()->create($this->obj->blueprintType(), [
-                    'logger'=>$this->logger()
+                    'logger'=>$this->logger
                 ]);
                 $blueprint->load($_GET['blueprint_id']);
                 $data = $blueprint->data();
                 unset($data[$blueprint->key()]);
-                $this->obj->set_data($blueprint->data());
+                $this->obj->setData($blueprint->data());
 
             } else {
                 $this->obj = $this->createObj();

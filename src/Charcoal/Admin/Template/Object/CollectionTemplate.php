@@ -8,6 +8,8 @@ use \InvalidArgumentException;
 
 use \Pimple\Container;
 
+use \Charcoal\Translation\TranslationString;
+
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
@@ -18,10 +20,8 @@ use \Charcoal\Admin\Ui\DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait;
 use \Charcoal\Admin\Widget\DashboardWidget as Dashboard;
 
-
-
 // Local parent namespace dependencies
-use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+use \Charcoal\Admin\AdminTemplate;
 
 /**
  * admin/object/collection template.
@@ -40,8 +40,6 @@ class CollectionTemplate extends AdminTemplate implements
     public function __construct(array $data = null)
     {
         parent::__construct($data);
-
-        $this->widgetFactory = new WidgetFactory();
 
 //        $this->setData($data);
 
@@ -68,7 +66,29 @@ class CollectionTemplate extends AdminTemplate implements
         if ($container['model/collection/loader']) {
             $this->setCollectionLoader($container['model/colletion/loader']);
         }
+    }
 
+    /**
+     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     */
+    public function setWidgetFactory(WidgetFactory $factory)
+    {
+        $this->widgetFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * Safe Widget Factory getter.
+     * Create the widget factory if it was not preiously injected / set.
+     *
+     * @return WidgetFactory
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            $this->widgetFactory = new WidgetFactory();
+        }
+        return $this->widgetFactory;
     }
 
     /**
@@ -107,7 +127,7 @@ class CollectionTemplate extends AdminTemplate implements
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
         $widgetType = isset($sidemenuConfig['widget_type']) ? $sidemenuConfig['widget_type'] : 'charcoal/admin/widget/sidemenu';
-        $sidemenu = $this->widgetFactory->create($widgetType, [
+        $sidemenu = $this->widgetFactory()->create($widgetType, [
             'logger'=>$this->logger
         ]);
         return $sidemenu;
@@ -123,7 +143,7 @@ class CollectionTemplate extends AdminTemplate implements
      */
     public function searchWidget()
     {
-        $widget = $this->widgetFactory->create('charcoal/admin/widget/search', [
+        $widget = $this->widgetFactory()->create('charcoal/admin/widget/search', [
             'logger'=>$this->logger
         ]);
         $widget->setObjType($this->objType());
@@ -150,6 +170,9 @@ class CollectionTemplate extends AdminTemplate implements
         return $widget;
     }
 
+    /**
+     *
+     */
     private function objCollectionDashboardConfig()
     {
         $obj = $this->proto();
@@ -183,5 +206,16 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         return $dashboardConfig;
+    }
+
+    public function title()
+    {
+        $config = $this->objCollectionDashboardConfig();
+
+        if (isset($config['title'])) {
+            return new TranslationString($config['title']);
+        } else {
+            return 'List';
+        }
     }
 }

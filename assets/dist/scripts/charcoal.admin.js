@@ -2487,7 +2487,6 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
 
     $('.js-reset-form').on('click', function (e) {
         e.preventDefault();
-        console.debug(this);
         $(that.form_selector)[0].reset();
     });
 };

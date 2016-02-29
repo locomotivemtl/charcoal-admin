@@ -119,10 +119,16 @@ trait DashboardTrait
      */
     public function createWidget(array $data = null)
     {
-        $widget_type = isset($data['type']) ? $data['type'] : null;
+        if(isset($data['controller'])) {
+            $widgetType = $data['controller'];
+        } elseif (isset($data['type'])) {
+            $widgetType  = $data['type'];
+        } else {
+            $widgetType = null;
+        }
 
-        $this->logger->debug('Creating a new widget: '.$data['type'], $data);
-        $widget = $this->widgetFactory()->create($widget_type, [
+        $this->logger->debug('Creating a new widget: '.$widgetType, $data);
+        $widget = $this->widgetFactory()->create($widgetType, [
             'logger'=>$this->logger
         ]);
         if ($data !== null) {

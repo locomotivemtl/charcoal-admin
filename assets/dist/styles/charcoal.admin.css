@@ -47,7 +47,7 @@ body {
   text-shadow: none; }
 
 th {
-  font-weight: 400; }
+  font-weight: 700; }
 
 td {
   font-size: 0.875rem; }
@@ -1049,7 +1049,8 @@ label {
   vertical-align: middle; }
 
 .table > thead > tr > th {
-  border-bottom-width: 1px; }
+  border-bottom-width: 1px;
+  font-weight: 700; }
 
 .table_checkbox {
   width: 3.125rem;

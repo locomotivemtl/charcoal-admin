@@ -202,4 +202,30 @@ class AdminWidget extends AbstractWidget
         $content = $view->renderTemplate($this->ident());
         return $content;
     }
+
+    /**
+     * @return string
+     */
+    public function adminUrl()
+    {
+        $adminPath = \Charcoal\App\App::instance()->getContainer()->get('charcoal/admin/config')->basePath();
+
+        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
+    }
+
+    /**
+     * @return string
+     */
+    public function baseUrl()
+    {
+        $appConfig = \Charcoal\App\App::instance()->config();
+
+        if ($appConfig->has('URL')) {
+            return $appConfig->get('URL');
+        } else {
+            $uri = \Charcoal\App\App::instance()->getContainer()->get('request')->getUri();
+
+            return rtrim($uri->getBaseUrl(), '/').'/';
+        }
+    }
 }

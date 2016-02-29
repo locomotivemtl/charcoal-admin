@@ -267,6 +267,11 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 
     });
 
+    this.element().on('click', '.js-reset', function (e) {
+        e.preventDefault();
+        that.controller().reset();
+    });
+
     that.controller().on('focus', function (obj) {
         var type = obj.data('type');
 

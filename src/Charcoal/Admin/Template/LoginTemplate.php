@@ -27,7 +27,12 @@ class LoginTemplate extends AdminTemplate
         if (!isset($loginConfig['background_image']) || !is_string($loginConfig['background_image'])) {
             return '';
         }
-        return $loginConfig['background_image'];
+        $bg = $loginConfig['background_image'];
+        if (strstr($bg, 'http')) {
+            return $bg;
+        } else {
+            return $this->baseUrl().$bg;
+        }
     }
 
     /**
@@ -44,7 +49,12 @@ class LoginTemplate extends AdminTemplate
         if (!isset($loginConfig['background_video']) || !is_string($loginConfig['background_video'])) {
             return '';
         }
-        return $loginConfig['background_video'];
+        $bg = $loginConfig['background_video'];
+        if (strstr($bg, 'http')) {
+            return $bg;
+        } else {
+            return $this->baseUrl().$bg;
+        }
     }
 
     private function isHttps()

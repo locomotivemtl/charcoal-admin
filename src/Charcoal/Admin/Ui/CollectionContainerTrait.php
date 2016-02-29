@@ -81,6 +81,9 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Safe Model Factory getter.
+     * Create the factory if it was not set / injected.
+     *
      * @return ModelFactory
      */
     protected function modelFactory()
@@ -102,8 +105,8 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Save Collection Loader getter.
-     * Create the loader if it was not injected / set.
+     * Safe Collection Loader getter.
+     * Create the loader if it was not set / injected.
      *
      * @return CollectionLoader
      */

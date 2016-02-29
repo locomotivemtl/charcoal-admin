@@ -105,6 +105,12 @@ trait DashboardTrait
         }
     }
 
+    /**
+     * Safe Widget Factory getter.
+     * Create a new factory if none was set / injected.
+     *
+     * @return WidgetFactory
+     */
     private function widgetFactory()
     {
         if ($this->widgetFactory === null) {

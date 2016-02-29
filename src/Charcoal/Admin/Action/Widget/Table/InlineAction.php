@@ -8,13 +8,18 @@ use \Exception;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+use \Pimple\Container;
+
 // From `charcoal-core`
 use \Charcoal\Model\ModelFactory;
 
+// Dependency from 'charcoal-app'
+use \Charcoal\App\Template\WidgetFactory;
+
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction as AdminAction;
-use \Charcoal\Admin\Widget\ObjectFormWidget as ObjectFormWidget;
-use \Charcoal\Admin\Widget\FormPropertyWidget as FormPropertyWidget;
+use \Charcoal\Admin\AdminAction;
+use \Charcoal\Admin\Widget\ObjectFormWidget;
+use \Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
  * Inline action: Return the inline edit properties HTML from an object
@@ -29,6 +34,72 @@ class InlineAction extends AdminAction
      * @var array $inlineProperties
      */
     protected $inlineProperties;
+
+    /**
+     * @var ModelFactory $modelFactory
+     */
+    private $modelFactory;
+
+    /**
+     * @var WidgetFactory $widgetFactory
+     */
+    private $widgetFactory;
+
+    /**
+     * @param Container $container
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required ObjectContainerInterface dependencies
+        $this->setModelFactory($container['model/factory']);
+    }
+
+    /**
+     * @param ModelFactory $factory
+     * @return ObjectContainerInterface Chainable
+     */
+    public function setModelFactory(ModelFactory $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return ModelFactory
+     */
+    protected function modelFactory()
+    {
+        if ($this->modelFactory === null) {
+            $this->modelFactory = new ModelFactory();
+        }
+        return $this->modelFactory;
+    }
+
+    /**
+     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     */
+    public function setWidgetFactory(WidgetFactory $factory)
+    {
+        $this->widgetFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * Safe Widget Factory getter.
+     * Create the widget factory if it was not preiously injected / set.
+     *
+     * @return WidgetFactory
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            $this->widgetFactory = new WidgetFactory();
+        }
+        return $this->widgetFactory;
+    }
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -46,8 +117,7 @@ class InlineAction extends AdminAction
         }
 
         try {
-            $modelFactory = new ModelFactory();
-            $obj = $modelFactory->create($objType, [
+            $obj = $this->modelFactory()->create($objType, [
                 'logger' => $this->logger
             ]);
             $obj->load($objId);
@@ -56,16 +126,20 @@ class InlineAction extends AdminAction
                 return $response->withStatus(404);
             }
 
-            $obj_form = new ObjectFormWidget([
-                'logger' => $this->logger()
+            $objForm = $this->widgetFactory()->create('charcoal/admin/widget/object-form', [
+                'logger' => $this->logger
             ]);
-            $obj_form->setObjType($objType);
-            $obj_form->setObjId($objId);
-            $formProperties = $obj_form->formProperties();
+
+            $objForm->setObjType($objType);
+            $objForm->setObjId($objId);
+            $formProperties = $objForm->formProperties();
             foreach ($formProperties as $propertyIdent => $property) {
+
+                // Safeguard type
                 if (!($property instanceof FormPropertyWidget)) {
                     continue;
                 }
+
                 $p = $obj->p($propertyIdent);
                 $property->setPropertyVal($p->val());
                 $property->setProp($p);

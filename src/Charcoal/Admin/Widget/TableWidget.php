@@ -236,23 +236,44 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
-        return [/*
-            [
-                'label'     => 'Quick Edit',
-                'ident'     => 'quick-edit',
-                'is_button' => true
-            ],
-            [
-                'label'     => 'Inline Edit',
-                'ident'     => 'inline-edit',
-                'is_button' => true
-            ],
-            [
-                'label'     => 'Delete',
-                'ident'     => 'delete',
-                'is_button' => true
-            ]
-        */];
+        $obj = $this->proto();
+        $props = $obj->metadata()->properties();
+        $collectionIdent = $this->collectionIdent();
+
+        if(!$collectionIdent) {
+            return [];
+        }
+
+        $metadata = $obj->metadata();
+        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $listOptions = $adminMetadata['lists'][$collectionIdent];
+
+        $objectActions = isset($listOptions['object_actions']) ? $listOptions['object_actions'] : [];
+        foreach($objectActions as &$action) {
+            if(isset($action['url'])) {
+                if ($obj->view() !== null) {
+                    $action['url'] = $obj->render($action['url']);
+                }
+                else {
+                    $action['url'] = str_replace('{{id}}', $this->currentObjId, $action['url']);
+                }
+                $action['url'] = $this->adminUrl().$action['url'];
+            } else {
+                $action['url'] = '#';
+            }
+
+        }
+        return $objectActions;
+
+    }
+
+    public function defaultObjectActions()
+    {
+        return [
+            'label' => new TranslationString('Modifier'),
+            'url'   => $this->objectEditUrl().'&amp;obj_id={{id}}',
+            'ident' => 'edit'
+        ];
     }
 
     /**

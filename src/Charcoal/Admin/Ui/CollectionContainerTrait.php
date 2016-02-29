@@ -62,6 +62,8 @@ trait CollectionContainerTrait
 
     private $propertyDisplayFactory;
 
+    protected $currentObjId;
+
     private $proto;
 
     /**
@@ -372,6 +374,7 @@ trait CollectionContainerTrait
                 'objectProperties' => $objectProperties
             ];
 
+            $this->currentObjId = $object->id();
             yield $row;
         }
     }

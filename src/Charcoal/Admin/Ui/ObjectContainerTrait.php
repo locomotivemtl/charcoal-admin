@@ -142,7 +142,7 @@ trait ObjectContainerTrait
         if ($this->obj === null) {
             if ($this->objId()) {
                 $this->obj = $this->loadObj();
-            } else if (isset($_GET['clone_id'])) {
+            } else if (isset($_GET['clone_id']) && $_GET['clone_id']) {
                 $this->obj = $this->createObj();
                 $objClass = getClass($this->obj);
                 $clone = new $objClass([
@@ -152,7 +152,7 @@ trait ObjectContainerTrait
                 $clone_data =
                 $this->obj->set_data($clone->data());
 
-            } else if (isset($_GET['blueprint_id'])) {
+            } else if (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
                 $this->obj = $this->createObj();
                 $blueprint = $this->modelFactory()->create($this->obj->blueprintType(), [
                     'logger'=>$this->logger

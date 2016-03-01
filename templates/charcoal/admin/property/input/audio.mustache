@@ -47,10 +47,10 @@ Audio Property Input
         </div>
         <div class="o-toolbox_pane js-pane hidden" data-pane="file">
             {{#alert.voiceAudio}}
-            <audio src="/{{alert.voiceAudio}}" controls>
+            <audio src="/{{alert.voice_audio}}" controls>
             {{/alert.voiceAudio}}
             {{^alert.voiceAudio}}
-            <input type="file" name="voiceAudio" class="form-control">
+            <input type="file" name="voice_audio" class="form-control">
             {{/alert.voiceAudio}}
 
         </div>

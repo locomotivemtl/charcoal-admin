@@ -192,12 +192,13 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Stub: reimplement in classes using this trait.
+     *
      * @param array $data
      * @return mixed
      */
-    protected function createCollectionConfig($data = null)
+    protected function createCollectionConfig()
     {
-        unset($data);
         return [];
     }
 
@@ -303,6 +304,7 @@ trait CollectionContainerTrait
         $loader->setModel($obj);
         $collectionConfig = $this->collectionConfig();
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
+            unset($collectionConfig['properties']);
             $loader->setData($collectionConfig);
         }
 

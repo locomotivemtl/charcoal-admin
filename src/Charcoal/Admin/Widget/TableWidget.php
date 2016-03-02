@@ -27,24 +27,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $properties;
 
     /**
-     * @var $propertiesOptions
-     */
-    protected $propertiesOptions;
-
-    /**
-     * @var array $orders
-     */
-    protected $orders;
-
-    /**
-     * @var array $filters
-     */
-    protected $filters;
-
-    /**
      * @var PropertyFactory $propertyFactory
      */
     private $propertyFactory;
+
+    private $adminMetadata;
 
     /**
      * @param PropertyFactory $factory The property factory, to create properties.
@@ -123,6 +110,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $this->properties;
+    }
+
+    protected function createCollectionConfig()
+    {
+        return $this->collectionMeta();
     }
 
     /**
@@ -240,7 +232,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $props = $obj->metadata()->properties();
         $collectionIdent = $this->collectionIdent();
 
-        if(!$collectionIdent) {
+        if (!$collectionIdent) {
             return [];
         }
 
@@ -249,12 +241,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $listOptions = $adminMetadata['lists'][$collectionIdent];
 
         $objectActions = isset($listOptions['object_actions']) ? $listOptions['object_actions'] : [];
-        foreach($objectActions as &$action) {
-            if(isset($action['url'])) {
+        foreach ($objectActions as &$action) {
+            if (isset($action['url'])) {
                 if ($obj->view() !== null) {
                     $action['url'] = $obj->render($action['url']);
-                }
-                else {
+                } else {
                     $action['url'] = str_replace('{{id}}', $this->currentObjId, $action['url']);
                 }
                 $action['url'] = $this->adminUrl().$action['url'];

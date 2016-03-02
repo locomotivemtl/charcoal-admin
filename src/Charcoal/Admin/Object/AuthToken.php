@@ -315,10 +315,10 @@ class AuthToken extends AbstractModel implements IndexableInterface
     }
 
     /**
-    * Something is seriously wrong: a cookie ident was in the database but with a tampered token.
-    *
-    * @return void
-    */
+     * Something is seriously wrong: a cookie ident was in the database but with a tampered token.
+     *
+     * @return void
+     */
     protected function panic()
     {
         // Todo: delete all user's token.
@@ -349,5 +349,4 @@ class AuthToken extends AbstractModel implements IndexableInterface
         }
         return $metadata;
     }
-
 }

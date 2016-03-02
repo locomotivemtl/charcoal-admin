@@ -76,10 +76,10 @@ class LoginTemplate extends AdminTemplate
         $token = new AuthToken([
             'logger' => $this->logger
         ]);
-        if($token->metadata()->enabled() === false) {
+        if ($token->metadata()->enabled() === false) {
             return false;
         }
-        if($token->metadata()->httpsOnly() === true) {
+        if ($token->metadata()->httpsOnly() === true) {
             return $this->isHttps();
         } else {
             return true;

@@ -306,12 +306,12 @@ class AdminTemplate extends AbstractTemplate
     private function auth()
     {
         $bySession = $this->authBySession();
-        if($bySession === true) {
+        if ($bySession === true) {
             return;
         }
 
         $byToken = $this->authByToken();
-        if($byToken === true) {
+        if ($byToken === true) {
             return;
         }
 
@@ -336,7 +336,7 @@ class AdminTemplate extends AbstractTemplate
             'logger' => $this->logger
         ]);
 
-        if($authToken->metadata()->enabled() !== true) {
+        if ($authToken->metadata()->enabled() !== true) {
             return false;
         }
 

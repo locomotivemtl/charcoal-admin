@@ -33,8 +33,8 @@ class AuthTokenMetadata extends ModelMetadata
     private $httpsOnly;
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function defaults()
     {
         $parentDefaults = parent::defaults();
@@ -134,5 +134,4 @@ class AuthTokenMetadata extends ModelMetadata
     {
         return $this->httpsOnly;
     }
-
 }

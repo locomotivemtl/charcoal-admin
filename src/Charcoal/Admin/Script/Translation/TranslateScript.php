@@ -77,26 +77,25 @@ class TranslateScript extends AdminScript
         $path = $this->path();
         $type = $this->fileType();
 
-        switch ($type)
-        {
+        switch ($type) {
             case 'mustache':
                 $regex = '/{{\s*#\s*_t\s*}}((.|\n|\r|\n\r)*?){{\s*\/\s*_t\s*}}/i';
                 // $regex = '/{{#\s*_t\s*}}((.|\n|\r|\n\r)*?){{\/\s*_t\s*}}/i';
                 $file = '*.mustache';
                 $index = 1;
-            break;
+                break;
             case 'php':
                 $regex = '/([^\d\wA-Za-z])_t\(\s*\n*\r*(["\'])(?<text>(.|\n|\r|\n\r)*?)\2\s*\n*\r*\)/i';
                 // $regex = '/_t\(\s*\n*\r*(["\'])((.|\n|\r|\n\r)*?)\1\s*\n*\r*\)/i';
                 // $regex = '/_t\(\s*\'\s*((.|\n|\r|\n\r)*?)\s*\'\s*\)/i';
                 $index = 'text';
                 $file = '*.php';
-            break;
+                break;
             default:
                 $regex = '/{{\s*#\s*_t\s*}}((.|\n|\r|\n\r)*?){{\s*\/\s*_t\s*}}/i';
                 $file = '*.mustache';
                 $index = 1;
-            break;
+                break;
         }
 
         // remove vendor/locomotivemtl/charcoal-app
@@ -129,7 +128,7 @@ class TranslateScript extends AdminScript
                 $i = 0;
                 $t = count($array[$index]);
 
-                for(;$i<$t;$i++) {
+                for (; $i<$t; $i++) {
                     $orig = $array[$index][$i];
                     if (!isset($translations[$orig])) {
                         $translations[$orig] = [
@@ -151,13 +150,12 @@ class TranslateScript extends AdminScript
     /**
      * @see http://in.php.net/manual/en/function.glob.php#106595
      */
-    public function glob_recursive($pattern, $flags=0)
+    public function glob_recursive($pattern, $flags = 0)
     {
         $max = $this->maxRecursiveLevel();
         $i = 1;
         $files = glob($pattern, $flags);
-        foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir)
-        {
+        foreach (glob(dirname($pattern).'/*', (GLOB_ONLYDIR|GLOB_NOSORT)) as $dir) {
             $files = array_merge($files, $this->glob_recursive($dir.'/'.basename($pattern), $flags));
             $i++;
             if ($i >= $max) {
@@ -227,7 +225,7 @@ class TranslateScript extends AdminScript
     {
         $output = $this->file();
         $base = $this->base();
-        $file = fopen($base.$output, "r");
+        $file = fopen($base.$output, 'r');
 
         if (!$file) {
             return [];
@@ -235,7 +233,7 @@ class TranslateScript extends AdminScript
 
         $results = [];
         $row = 0;
-        while ( ($data = fgetcsv($file, 0, ',')) !== false ) {
+        while (($data = fgetcsv($file, 0, ',')) !== false) {
             $row++;
             // Skip column names
             if ($row == 1) {
@@ -273,8 +271,7 @@ class TranslateScript extends AdminScript
         }
         fputcsv($file, $columns, $separator, $enclosure);
 
-        foreach ($translations as $orig => $translation)
-        {
+        foreach ($translations as $orig => $translation) {
             $data = [ $orig, $translation['translation'], $translation['context'] ];
             fputcsv($file, $data, $separator, $enclosure);
         }
@@ -329,7 +326,7 @@ class TranslateScript extends AdminScript
         $opposite = [];
         $orig = $this->origLanguage();
 
-        foreach($languages as $ident => $opts) {
+        foreach ($languages as $ident => $opts) {
             if ($ident != $orig) {
                 $opposite[] = $ident;
             }
@@ -402,5 +399,4 @@ class TranslateScript extends AdminScript
     {
         return 4;
     }
-
 }

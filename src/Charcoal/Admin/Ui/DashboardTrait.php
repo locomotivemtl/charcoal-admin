@@ -125,7 +125,7 @@ trait DashboardTrait
      */
     public function createWidget(array $data = null)
     {
-        if(isset($data['controller'])) {
+        if (isset($data['controller'])) {
             $widgetType = $data['controller'];
         } elseif (isset($data['type'])) {
             $widgetType  = $data['type'];

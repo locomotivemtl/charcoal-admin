@@ -4,6 +4,8 @@ namespace Charcoal\Admin\Template;
 
 use \Pimple\Container;
 
+use \Charcoal\Translation\TranslationString;
+
 // Local parent namespace dependencies
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\Object\AuthToken;
@@ -116,5 +118,13 @@ class LoginTemplate extends AdminTemplate
     public function urlLoginAction()
     {
         return 'action/login';
+    }
+
+    /**
+     * @return TranslationString
+     */
+    public function title()
+    {
+        return new TranslationString('Connexion à Charcoal');
     }
 }

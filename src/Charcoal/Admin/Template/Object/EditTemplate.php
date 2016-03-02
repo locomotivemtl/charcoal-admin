@@ -8,7 +8,7 @@ use \InvalidArgumentException as InvalidArgumentException;
 
 use \Pimple\Container;
 
-// Dependency from 'charcoal-base'
+// Dependency from 'charcoal-app'
 use \Charcoal\App\Template\WidgetFactory;
 
 // Dependency from 'charcoal-translation'

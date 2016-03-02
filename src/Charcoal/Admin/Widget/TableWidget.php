@@ -5,6 +5,7 @@ namespace Charcoal\Admin\Widget;
 use \InvalidArgumentException;
 
 use \Charcoal\Charcoal;
+use \Charcoal\Translation\TranslationString;
 
 use \Charcoal\Admin\AdminWidget;
 
@@ -286,10 +287,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $collectionIdent = $this->collectionIdent();
         if ($collectionIdent) {
                 $metadata = $obj->metadata();
-                $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-                $listOptions = $adminMetadata['lists'][$collectionIdent];
-
-                $listActions = isset($listOptions['list_actions']) ? $listOptions['list_actions'] : [];
+                $adminMetadata = (isset($metadata['admin']) ? $metadata['admin'] : null);
+                $listOptions   = $adminMetadata['lists'][$collectionIdent];
+                $listActions   = (isset($listOptions['list_actions']) ? $listOptions['list_actions'] : []);
+                foreach ($listActions as &$action) {
+                    if (isset($action['label'])) {
+                        $action['label'] = new TranslationString($action['label']);
+                    }
+                }
                 return $listActions;
 
         } else {

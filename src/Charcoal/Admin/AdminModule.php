@@ -2,20 +2,21 @@
 
 namespace Charcoal\Admin;
 
-// From `charcoal-app`
-use \Charcoal\App\Module\AbstractModule;
-use \Charcoal\App\Module\ModuleInterface;
+// Dependencies from PSR-7 (HTTP Messaging)
+use \Psr\Http\Message\RequestInterface;
+use \Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// Dependency from 'charcoal-app'
+use \Charcoal\App\Module\AbstractModule;
+
+// Intra-module ('charcoal-admin') dependencies
 use \Charcoal\Admin\Config as AdminConfig;
 
 /**
  * The base class for the `admin` Module
  */
-class AdminModule extends AbstractModule implements
-    ModuleInterface
+class AdminModule extends AbstractModule
 {
-
     /**
      * Charcoal admin setup.
      *
@@ -60,9 +61,17 @@ class AdminModule extends AbstractModule implements
             return $config;
         };
 
-        $adminPath = '/'.ltrim($container['charcoal/admin/config']->basePath(), '/');
+        $adminConfig = $container['charcoal/admin/config'];
+        $adminPath   = '/'.trim($adminConfig->basePath(), '/');
 
-        $this->app()->get($adminPath, 'charcoal/admin/module:defaultRoute');
+        if (isset($adminConfig['routes']['default_view'])) {
+            $this->app()->get(
+                $adminPath,
+                function (RequestInterface $request, ResponseInterface $response) use ($adminPath, $adminConfig) {
+                    return $response->withRedirect($adminPath . '/' . ltrim($adminConfig['routes']['default_view'], '/'), 303);
+                }
+            );
+        }
         $this->app()->group($adminPath, 'charcoal/admin/module:setupRoutes');
     }
 

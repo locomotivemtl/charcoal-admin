@@ -33,8 +33,14 @@ class CollectionTemplate extends AdminTemplate implements
     use CollectionContainerTrait;
     use DashboardContainerTrait;
 
+    /**
+     * @var SidemenuWidgetInterface $sidemenu
+     */
     private $sidemenu;
 
+    /**
+     * @var WidgetFactory $widgetFactory
+     */
     private $widgetFactory;
 
     public function __construct(array $data = null)
@@ -101,9 +107,10 @@ class CollectionTemplate extends AdminTemplate implements
     {
         $dashboardConfig = $this->objCollectionDashboardConfig();
 
-        $dashboard = new Dashboard([
-            'logger'=>$this->logger
+        $dashboard = $this->widgetFactory()->create('charcoal/admin/widget/dashboard', [
+            'logger' => $this->logger
         ]);
+
         if ($data !== null) {
             $dashboard->setData($data);
         }
@@ -171,7 +178,7 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     *
+     * @return array
      */
     private function objCollectionDashboardConfig()
     {
@@ -208,6 +215,9 @@ class CollectionTemplate extends AdminTemplate implements
         return $dashboardConfig;
     }
 
+    /**
+     * @return string|TranslationString title
+     */
     public function title()
     {
         $config = $this->objCollectionDashboardConfig();

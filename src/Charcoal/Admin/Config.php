@@ -43,13 +43,16 @@ class Config extends AbstractConfig
                 'Path must be a string'
             );
         }
+
         // Can not be empty
         if ($path == '') {
             throw new InvalidArgumentException(
                 'Path can not be empty'
             );
         }
+
         $this->basePath = $path;
+
         return $this;
     }
 
@@ -59,5 +62,28 @@ class Config extends AbstractConfig
     public function basePath()
     {
         return $this->basePath;
+    }
+
+    /**
+     * @param string $path The admin module base path.
+     * @throws InvalidArgumentException
+     * @return Config Chainable
+     */
+    public function setRoutes($routes)
+    {
+        if (!isset($this->routes)) {
+            $this->routes = [];
+        }
+
+        $toIterate = [ 'templates', 'actions', 'scripts' ];
+        foreach ($routes as $key => $val) {
+            if (in_array($key, $toIterate) && isset($this->routes[$key])) {
+                $this->routes[$key] = array_merge($this->routes[$key], $val);
+            } else {
+                $this->routes[$key] = $val;
+            }
+        }
+
+        return $this;
     }
 }

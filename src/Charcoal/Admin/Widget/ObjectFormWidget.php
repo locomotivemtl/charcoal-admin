@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
+use \Exception;
 
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
@@ -157,8 +158,17 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         }
 
         foreach ($props as $propertyIdent => $property) {
+            if (!is_array($property)) {
+                throw new Exception(
+                    sprintf(
+                        'Invalid property data for "%1$s", received %2$s',
+                        $propertyIdent,
+                        (is_object($property) ? get_class($property) : gettype($property))
+                    )
+                );
+            }
             $p = new FormPropertyWidget([
-                'logger'=>$this->logger
+                'logger' => $this->logger
             ]);
             $p->setPropertyIdent($propertyIdent);
             $p->setData($property);

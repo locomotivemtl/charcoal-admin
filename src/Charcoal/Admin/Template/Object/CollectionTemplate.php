@@ -47,7 +47,7 @@ class CollectionTemplate extends AdminTemplate implements
     {
         parent::__construct($data);
 
-//        $this->setData($data);
+        // $this->setData($data);
 
         $obj = $this->proto();
         if (!$obj) {
@@ -216,7 +216,7 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return string|TranslationString title
+     * @return string|TranslationString
      */
     public function title()
     {
@@ -225,7 +225,23 @@ class CollectionTemplate extends AdminTemplate implements
         if (isset($config['title'])) {
             return new TranslationString($config['title']);
         } else {
-            return 'List';
+            $obj      = $this->proto();
+            $objLabel = $this->objType();
+            $metadata = $obj->metadata();
+
+            if (isset($metadata['admin'])) {
+                $metadata    = $metadata['admin'];
+                $formIdent   = ( isset($metadata['default_list']) ? $metadata['default_list'] : '' );
+                $objFormData = ( isset($metadata['lists'][$formIdent]) ? $metadata['lists'][$formIdent] : [] );
+
+                if (isset($objFormData['label'])) {
+                    $objLabel = new TranslationString($objFormData['label']);
+                }
+            }
+
+            $this->title = sprintf('List: %s', $objLabel);
         }
+
+        return $this->title;
     }
 }

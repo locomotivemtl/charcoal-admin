@@ -153,11 +153,15 @@ class EditTemplate extends ObjectTemplate implements
     }
 
     /**
-     * @return TranslationString
+     * @return string|TranslationString
      */
     public function title()
     {
-        if (empty($this->title)) {
+        $config = $this->objEditDashboardConfig();
+
+        if (isset($config['title'])) {
+            return new TranslationString($config['title']);
+        } else {
             $obj      = $this->obj();
             $objId    = $this->objId();
             $objLabel = $this->objType();

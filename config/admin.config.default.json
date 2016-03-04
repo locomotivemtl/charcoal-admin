@@ -36,6 +36,9 @@
       "object/update": {
         "ident": "charcoal/admin/action/object/update"
       },
+      "object/reorder": {
+        "ident": "charcoal/admin/action/object/reorder"
+      },
       "widget/load": {
         "ident": "charcoal/admin/action/widget/load"
       },

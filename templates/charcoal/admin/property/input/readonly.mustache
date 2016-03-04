@@ -1,6 +1,1 @@
-{{#inputVal}}
-	{{inputVal}}
-{{/inputVal}}
-{{^inputVal}}
-	-
-{{/inputVal}}
+<p class="form-control-static">{{# inputVal }}{{& inputVal }}{{/ inputVal }}{{^ inputVal }}—{{/ inputVal }}</p>

@@ -40,12 +40,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-app.git",
-                "reference": "ce5ba28cf0db92cafa028661e311f8991e9f776d"
+                "reference": "ccc83d11b77f7d49a275bdcb848185185343c28b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-app/zipball/ce5ba28cf0db92cafa028661e311f8991e9f776d",
-                "reference": "ce5ba28cf0db92cafa028661e311f8991e9f776d",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-app/zipball/ccc83d11b77f7d49a275bdcb848185185343c28b",
+                "reference": "ccc83d11b77f7d49a275bdcb848185185343c28b",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
             ],
             "description": "Charcoal App, based on Slim 3",
             "homepage": "https://charcoal.locomotive.ca",
-            "time": "2016-02-22 13:43:35"
+            "time": "2016-03-01 18:15:40"
         },
         {
             "name": "locomotivemtl/charcoal-base",
@@ -202,12 +202,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-core.git",
-                "reference": "4f42bfd949fe5920d6b91e1dc5cb4c6c9dd733ec"
+                "reference": "84e9b772ffbff371aedf26549e4552db8e2aa959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-core/zipball/4f42bfd949fe5920d6b91e1dc5cb4c6c9dd733ec",
-                "reference": "4f42bfd949fe5920d6b91e1dc5cb4c6c9dd733ec",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-core/zipball/84e9b772ffbff371aedf26549e4552db8e2aa959",
+                "reference": "84e9b772ffbff371aedf26549e4552db8e2aa959",
                 "shasum": ""
             },
             "require": {
@@ -257,7 +257,7 @@
                 "locomotive",
                 "php"
             ],
-            "time": "2016-02-28 22:02:02"
+            "time": "2016-03-02 21:42:03"
         },
         {
             "name": "locomotivemtl/charcoal-factory",
@@ -362,12 +362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-property.git",
-                "reference": "3b1e0eb0694c0e356d453bcfc439d68ef6ec5b23"
+                "reference": "314ab48645e5059c3808b4d022fa5b0797c6dc5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-property/zipball/3b1e0eb0694c0e356d453bcfc439d68ef6ec5b23",
-                "reference": "3b1e0eb0694c0e356d453bcfc439d68ef6ec5b23",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-property/zipball/314ab48645e5059c3808b4d022fa5b0797c6dc5d",
+                "reference": "314ab48645e5059c3808b4d022fa5b0797c6dc5d",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +403,7 @@
             ],
             "description": "Charcoal Property defines an object (provides metadata)",
             "homepage": "https://charcoal.locomotive.ca",
-            "time": "2016-02-22 20:13:37"
+            "time": "2016-03-01 13:29:33"
         },
         {
             "name": "locomotivemtl/charcoal-view",
@@ -467,12 +467,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fb314292abcbfb61782e065fb9b13d5302ecc9e3"
+                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fb314292abcbfb61782e065fb9b13d5302ecc9e3",
-                "reference": "fb314292abcbfb61782e065fb9b13d5302ecc9e3",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
+                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
                 "shasum": ""
             },
             "require": {
@@ -537,7 +537,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-02-24 18:37:37"
+            "time": "2016-03-01 18:00:40"
         },
         {
             "name": "nikic/fast-route",
@@ -584,16 +584,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "b0e69d10852716b2ccbdff69c75c477637220790"
+                "reference": "f078eba3bcf140fd69b5fcc3ea5ac809abf729dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/b0e69d10852716b2ccbdff69c75c477637220790",
-                "reference": "b0e69d10852716b2ccbdff69c75c477637220790",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/f078eba3bcf140fd69b5fcc3ea5ac809abf729dc",
+                "reference": "f078eba3bcf140fd69b5fcc3ea5ac809abf729dc",
                 "shasum": ""
             },
             "require": {
@@ -628,7 +628,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-02-06 03:52:05"
+            "time": "2016-02-29 17:25:04"
         },
         {
             "name": "pimple/pimple",
@@ -824,12 +824,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/slimphp/Slim.git",
-                "reference": "835425f5945a25509eeab885e80617948e68371d"
+                "reference": "53a4dd576dd3add4efd113ca77c3c21fa559b33e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim/zipball/835425f5945a25509eeab885e80617948e68371d",
-                "reference": "835425f5945a25509eeab885e80617948e68371d",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/53a4dd576dd3add4efd113ca77c3c21fa559b33e",
+                "reference": "53a4dd576dd3add4efd113ca77c3c21fa559b33e",
                 "shasum": ""
             },
             "require": {
@@ -883,7 +883,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2016-02-25 08:15:17"
+            "time": "2016-02-29 21:39:18"
         },
         {
             "name": "tedivm/stash",
@@ -1858,15 +1858,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "be0a7044ec8f664c07f117e86633250122af6dbf"
+                "reference": "63fafe07d6cb8588b787475a3cc041f52b05a4ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/be0a7044ec8f664c07f117e86633250122af6dbf",
-                "reference": "be0a7044ec8f664c07f117e86633250122af6dbf",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/63fafe07d6cb8588b787475a3cc041f52b05a4ac",
+                "reference": "63fafe07d6cb8588b787475a3cc041f52b05a4ac",
                 "shasum": ""
             },
             "require": {
+                "ext-simplexml": "*",
                 "ext-tokenizer": "*",
                 "ext-xmlwriter": "*",
                 "php": ">=5.1.2"
@@ -1927,7 +1928,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-02-25 21:37:34"
+            "time": "2016-03-04 03:28:24"
         },
         {
             "name": "symfony/yaml",
@@ -1935,12 +1936,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "939b8e10c4e0e1135144fb09e12a3d32ff129e4a"
+                "reference": "801d412451594f7c9e7950a016a377798cf9dfa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/939b8e10c4e0e1135144fb09e12a3d32ff129e4a",
-                "reference": "939b8e10c4e0e1135144fb09e12a3d32ff129e4a",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/801d412451594f7c9e7950a016a377798cf9dfa0",
+                "reference": "801d412451594f7c9e7950a016a377798cf9dfa0",
                 "shasum": ""
             },
             "require": {
@@ -1976,7 +1977,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-02-28 10:09:55"
+            "time": "2016-03-04 07:56:56"
         }
     ],
     "aliases": [],

@@ -146,6 +146,7 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
+     * @todo   [mcaskill: 2016-03-04] Move this to a trait `HasInputPlaceholder`
      * @return string
      */
     public function placeholder()

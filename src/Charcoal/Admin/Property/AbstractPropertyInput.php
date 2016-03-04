@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Property;
 
 use \InvalidArgumentException;
+use \Exception;
 
 // PSR-3 logger dependencies
 use \Psr\Log\LoggerAwareInterface;
@@ -247,28 +248,27 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * @uses   AbstractProperty::inputVal() Must handle string sanitization of value.
+     * @throws Exception If the value is invalid.
      * @return string
      */
     public function inputVal()
     {
         $prop = $this->p();
-        $val = $prop->val();
+        $val  = $prop->inputVal();
 
         if ($val === null) {
             return '';
         }
 
-        if ($prop->l10n()) {
-            $lang = TranslationConfig::instance()->currentLanguage();
-
-            if (isset($val[$lang])) {
-                $val = $val[$lang];
-            }
+        if (!is_scalar($val)) {
+            throw new Exception(
+                sprintf(
+                    'Input value must be a string, received %s',
+                    (is_object($val) ? get_class($val) : gettype($val))
+                )
+            );
         }
-
-        // if (!is_scalar($val)) {
-        //     $val = json_encode($val, true);
-        // }
 
         return $val;
     }

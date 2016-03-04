@@ -1,0 +1,28 @@
+{{!--
+URL Input
+
+Display a property (most likely a `PropertyString`...) as a "url" input.
+
+`charcoal/admin/property/input/url`
+
+See also:
+- `charcoal/admin/property/input/tel`
+- `charcoal/admin/property/input/text`
+--}}
+{{#input}}
+<input
+	type="url"
+	id="{{inputId}}"
+	name="{{inputName}}"
+	class="form-control {{inputClass}}"
+	{{#size}}size="{{size}}"{{/size}}
+	{{#minLength}}minlength="{{minLength}}"{{/minLength}}
+	{{#maxLength}}maxlength="{{maxLength}}"{{/maxLength}}
+	{{#pattern}}pattern="{{pattern}}"{{/pattern}}
+	{{#placeholder}}placeholder="{{placeholder}}"{{/placeholder}}
+	{{#readOnly}}read_only{{/readOnly}}
+	{{#required}}required{{/required}}
+	{{#disabled}}disabled{{/disabled}}
+	value="{{inputVal}}"
+>
+{{/input}}

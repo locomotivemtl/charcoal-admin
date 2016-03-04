@@ -9,6 +9,10 @@ input[type="checkbox"]:focus {
    outline: none;
 }
 
+input[type="url"] {
+    font-family: monospace;
+}
+
 label {
     font-weight: $weight-normal;
 }

@@ -27,6 +27,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     protected $properties;
 
+    protected $sortable;
+
     /**
      * @var PropertyFactory $propertyFactory
      */
@@ -111,6 +113,24 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $this->properties;
+    }
+
+    /**
+    * @param boolean $sortable The sortable flag.
+    * @return TableWidget Chainable
+    */
+    public function setSortable($sortable)
+    {
+        $this->sortable = !!$sortable;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function sortable()
+    {
+        return $this->sortable;
     }
 
     protected function createCollectionConfig()

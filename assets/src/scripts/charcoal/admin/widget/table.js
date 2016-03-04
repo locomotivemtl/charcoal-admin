@@ -155,6 +155,46 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             }
         });
     });
+
+    $('tbody.js-sortable').sortable({
+        cursor: 'ns-resize',
+        delay: 150,
+        distance: 5,
+        opacity: 0.75,
+        containment: 'parent',
+        placeholder: 'ui-tablesort-placeholder',
+        helper: function (e, ui) {
+            ui.children().each(function () {
+                $(this).width($(this).width());
+            });
+            return ui;
+        },
+        change: function (e, ui) {
+            // Update UI with position
+            console.debug(e, ui);
+        },
+        update: function (e, ui) {
+            console.debug(e, ui);
+            var rows = $(this).sortable('toArray', {
+                attribute: 'data-id'
+            });
+
+            var data = {
+                obj_type: that.obj_type,
+                obj_orders: rows,
+                starting_order: 1
+            };
+            var url = Charcoal.Admin.admin_url() + 'object/reorder';
+            $.ajax({
+                method: 'POST',
+                url: url,
+                data: data
+            }).done(function (response) {
+                console.debug(response);
+            });
+        }
+    }).disableSelection();
+
 };
 
 Charcoal.Admin.Widget_Table.prototype.sublist = function ()

@@ -7,6 +7,7 @@ Table Widget
 This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 
 --}}
+
 <div class="o-section">
     <div class="charcoal-admin-widget-table" id="{{widgetId}}">
         {{#hasObjects}}
@@ -81,7 +82,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                 </thead>
                 {{/showTableHeader}}
 
-                <tbody>
+                <tbody{{#sortable}} class="js-sortable"{{/sortable}}>
                     {{!-- Loop the list objects (from CollectionContainerTrait) --}}
                     {{#objectRows}}
                     <tr class="js-table-row" data-id="{{objectId}}">
@@ -139,7 +140,18 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
     </div>
 </div>
 
+{{#addCss}}
+<style>
+.ui-tablesort-placeholder{
+    margin: 12px;
+    border: 2px dotted black;
+    height: 5em;
+}
+</style>
+{{/addCss}}
+
 {{#addJs}}
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script>
 Charcoal.Admin.manager().add_widget({
     id: '{{widgetId}}',

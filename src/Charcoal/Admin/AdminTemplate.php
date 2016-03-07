@@ -70,6 +70,16 @@ class AdminTemplate extends AbstractTemplate
      */
     private $feedbacks;
 
+    private $app;
+
+    protected function app()
+    {
+        if ($this->app === null) {
+            $this->app = \Charcoal\App\App::instance();
+        }
+        return $this->app;
+    }
+
     /**
      * Constructor.
      * Ensure authentication before serving the template.

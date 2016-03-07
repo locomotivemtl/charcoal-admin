@@ -9,6 +9,9 @@ use \InvalidArgumentException;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+// From `pimple`
+use \Pimple\Container;
+
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
@@ -30,6 +33,13 @@ class LoadAction extends AdminAction
      */
     protected $widgetHtml = '';
 
+    protected $widgetView;
+
+    public function setDependencies(Container $dependencies)
+    {
+        $this->widgetView = $dependencies['view'];
+    }
+
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
@@ -37,8 +47,6 @@ class LoadAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $app = $this->app();
-        $container = $app->getContainer();
 
         $widget_type = $request->getParam('widget_type');
         $widget_options = $request->getParam('widget_options');
@@ -53,7 +61,7 @@ class LoadAction extends AdminAction
             $widget = $widget_factory->create($widget_type, [
                 'logger'=>$this->logger
             ]);
-            $widget->setView($container['view']);
+            $widget->setView($this->widgetView);
 
             if (is_array($widget_options)) {
                 $widget->setData($widget_options);

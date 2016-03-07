@@ -39,10 +39,10 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     private $saveData = [];
 
     /**
-     * @param array $data
+     * @param array|\ArrayAccess $data
      * @return LoginAction Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         parent::setData($data);
         # $this->setObjData($data);

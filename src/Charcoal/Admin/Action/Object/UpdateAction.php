@@ -42,10 +42,10 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     protected $updateData = [];
 
     /**
-     * @param array $data
+     * @param array|\ArrayAccess $data
      * @return LoginAction Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         parent::setData($data);
 
@@ -64,6 +64,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     {
         parent::setDependencies($container);
 
+        // Fulfills `ObjectContainerTrait` dependencies.
         $this->setModelFactory($container['model/factory']);
     }
 

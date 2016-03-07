@@ -36,7 +36,6 @@ use \Charcoal\Admin\AdminAction;
  *
  * Ident: `charcoal/admin/action/object/delete`
  *
- * @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to read request and set response.
  */
 class DeleteAction extends AdminAction
 {

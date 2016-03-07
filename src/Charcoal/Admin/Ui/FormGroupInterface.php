@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Ui;
 
 // Local namespace dependencies
-use \Charcoal\Admin\Ui\FormInterface;
+use \Charcoal\Ui\Form\FormInterface;
 
 interface FormGroupInterface
 {

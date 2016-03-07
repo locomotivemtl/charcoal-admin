@@ -6,22 +6,25 @@ namespace Charcoal\Admin\Template\Object;
 use \Exception;
 use \InvalidArgumentException;
 
+// Dependencies from `pimple`
 use \Pimple\Container;
 
+// Dependencies from `charcoal-translation`
 use \Charcoal\Translation\TranslationString;
 
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
+// From `charcoal-ui`
+use \Charcoal\Ui\DashboardBuilder;
+
 // Intra-module (`charcoal-admin`) dependencies
+use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
 use \Charcoal\Admin\Ui\DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait;
-use \Charcoal\Admin\Widget\DashboardWidget as Dashboard;
 
-// Local parent namespace dependencies
-use \Charcoal\Admin\AdminTemplate;
 
 /**
  * admin/object/collection template.
@@ -43,6 +46,14 @@ class CollectionTemplate extends AdminTemplate implements
      */
     private $widgetFactory;
 
+    /**
+     * @var DashboardBuilder $dashboardBuilder
+     */
+    private $dashboardBuilder;
+
+    /**
+     * Template constructor.
+     */
     public function __construct(array $data = null)
     {
         parent::__construct($data);
@@ -60,18 +71,23 @@ class CollectionTemplate extends AdminTemplate implements
 
     }
 
+    /**
+     * @param Container $conatainer
+     * @return void
+     */
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 
-        // Optional CollectionContainerInterface depeendencies
-        if ($container['model/factory']) {
-            $this->setModelFactory($container['model/factory']);
+        $this->setModelFactory($container['model/factory']);
+        if ($container['model/collection/loader']) {
+            $this->setCollectionLoader($container['model/collection/loader']);
         }
 
-        if ($container['model/collection/loader']) {
-            $this->setCollectionLoader($container['model/colletion/loader']);
-        }
+        // Required dependencies.
+        $this->setWidgetFactory($container['widget/factory']);
+        $this->dashboardBuilder = $container['dashboard/builder'];
+
     }
 
     /**
@@ -98,6 +114,31 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
+     * @param DashboardBuilder $builder
+     * @return CollectionTemplate Chainable
+     *
+     */
+    public function setDashboardBuilder(DashboardBuilder $builder)
+    {
+        $this->dashboardBuilder = $builder;
+        return $this;
+    }
+
+    /**
+     * @throws Exception If the dashboard builder dependency was not previously set / injected.
+     * @return DashboardBuilder
+     */
+    public function dashboardBuilder()
+    {
+        if ($this->dashboardBuilder === null) {
+            throw new Exception(
+                'Dashboard builder was not set.'
+            );
+        }
+        return $this->dashboardBuilder;
+    }
+
+    /**
      * @param array $data Optional
      * @throws Exception
      * @return Dashboard
@@ -106,16 +147,7 @@ class CollectionTemplate extends AdminTemplate implements
     public function createDashboard(array $data = null)
     {
         $dashboardConfig = $this->objCollectionDashboardConfig();
-
-        $dashboard = $this->widgetFactory()->create('charcoal/admin/widget/dashboard', [
-            'logger' => $this->logger
-        ]);
-
-        if ($data !== null) {
-            $dashboard->setData($data);
-        }
-        $dashboard->setData($dashboardConfig);
-
+        $dashboard = $this->dashboardBuilder->build($dashboardConfig);
         return $dashboard;
     }
 

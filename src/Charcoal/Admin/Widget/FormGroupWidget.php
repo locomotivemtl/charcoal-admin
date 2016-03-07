@@ -4,7 +4,13 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+// Dependencies from `charcoal-translation`
 use \Charcoal\Translation\TranslationString;
+
+// Dependencies from `charcoal-ui`
+//use \Charcoal\Ui\FormGroup\FormGroupInterface;
+//use \Charcoal\Ui\FormGroup\FormGroupTrait;
+
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\LayoutWidget;
@@ -67,10 +73,10 @@ class FormGroupWidget extends AdminWidget implements FormGroupInterface
     private $showFooter = true;
 
     /**
-     * @var string
+     * @param array|ArrayInterface $data
      * @return FormGroupWidget Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         parent::setData($data);
 

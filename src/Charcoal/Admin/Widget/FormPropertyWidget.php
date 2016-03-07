@@ -44,10 +44,10 @@ class FormPropertyWidget extends AdminWidget
     private $propertyInputFactory;
 
     /**
-     * @param array $data
+     * @param array|ArrayInterface $data
      * @return FormProperty Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         parent::setData($data);
 
@@ -233,25 +233,41 @@ class FormPropertyWidget extends AdminWidget
         return $this->property;
     }
 
+    public function langs()
+    {
+        $langs = \Charcoal\Translation\TranslationConfig::instance()->languages();
+        return $langs;
+    }
+
     /**
      * @return PropertyInputInterface
      */
     public function input()
     {
-        if ($this->input !== null) {
-            return $this->input;
-        }
         $prop = $this->prop();
+
         $inputType = $this->inputType();
 
         $this->input = $this->propertyInputFactory()->create($inputType, [
             'logger'=>$this->logger
         ]);
+
         $this->input->setProperty($prop);
         $this->input->setData($this->propertyData);
 
         $GLOBALS['widget_template'] = $inputType;
-        return $this->input;
+
+        yield $this->input;
+
+        // if($prop->l10n()) {
+        //     $langs = $this->langs();
+        //     foreach($langs as $lang) {
+        //         $this->input->setEditLang($lang);
+        //         yield $this->input;
+        //     }
+        // } else {
+        //     yield $this->input;
+        // }
     }
 
     private function propertyFactory()

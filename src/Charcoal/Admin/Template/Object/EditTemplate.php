@@ -3,35 +3,38 @@
 namespace Charcoal\Admin\Template\Object;
 
 // Dependencies from `PHP`
-use \Exception as Exception;
-use \InvalidArgumentException as InvalidArgumentException;
+use \Exception;
+use \InvalidArgumentException;
 
+// Dependency from `pimple`
 use \Pimple\Container;
-
-// Dependency from 'charcoal-app'
-use \Charcoal\App\Template\WidgetFactory;
 
 // Dependency from 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 
+// Dependency from 'charcoal-app'
+use \Charcoal\App\Template\WidgetFactory;
+
+// Dependency from `charcoal-ui`
+use \Charcoal\Ui\DashboardBuilder;
+
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\Template\ObjectTemplate;
+use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\Ui\DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait;
 use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
-use \Charcoal\Admin\Widget\DashboardWidget;
 use \Charcoal\Admin\Widget\SidemenuWidget;
 
 /**
  * Object Edit Template
  */
-class EditTemplate extends ObjectTemplate implements
+class EditTemplate extends AdminTemplate implements
     DashboardContainerInterface,
     ObjectContainerInterface
 {
     use DashboardContainerTrait;
-    //use ObjectContainerTrait;
+    use ObjectContainerTrait;
 
     private $sidemenu;
 
@@ -39,6 +42,11 @@ class EditTemplate extends ObjectTemplate implements
      * @var WidgetFactory $widgetFactory
      */
     private $widgetFactory;
+
+    /**
+     * @var DashboardBuilder $dashboardBuilder
+     */
+    private $dashboardBuilder;
 
     /**
      * @param Container $container
@@ -50,6 +58,11 @@ class EditTemplate extends ObjectTemplate implements
 
         // Required ObjectContainerInterface dependencies
         $this->setModelFactory($container['model/factory']);
+
+        // Required dependencies.
+        $this->setWidgetFactory($container['widget/factory']);
+        $this->dashboardBuilder = $container['dashboard/builder'];
+
     }
 
 
@@ -77,6 +90,32 @@ class EditTemplate extends ObjectTemplate implements
     }
 
     /**
+     * @param DashboardBuilder $builder
+     * @return CollectionTemplate Chainable
+     *
+     */
+    public function setDashboardBuilder(DashboardBuilder $builder)
+    {
+        $this->dashboardBuilder = $builder;
+        return $this;
+    }
+
+    /**
+     * @throws Exception If the dashboard builder dependency was not previously set / injected.
+     * @return DashboardBuilder
+     */
+    public function dashboardBuilder()
+    {
+        if ($this->dashboardBuilder === null) {
+            throw new Exception(
+                'Dashboard builder was not set.'
+            );
+        }
+        return $this->dashboardBuilder;
+    }
+
+
+    /**
      * @param array $data Optional
      * @throws Exception
      * @return Dashboard
@@ -85,15 +124,7 @@ class EditTemplate extends ObjectTemplate implements
     public function createDashboard(array $data = null)
     {
         $dashboardConfig = $this->objEditDashboardConfig();
-
-        $dashboard = $this->widgetFactory()->create('charcoal/admin/widget/dashboard', [
-            'logger' => $this->logger
-        ]);
-        if ($data !== null) {
-            $dashboard->setData($data);
-        }
-        $dashboard->setData($dashboardConfig);
-
+        $dashboard = $this->dashboardBuilder->build($dashboardConfig);
         return $dashboard;
     }
 
@@ -118,6 +149,9 @@ class EditTemplate extends ObjectTemplate implements
         return $sidemenu;
     }
 
+    /**
+     * @return array
+     */
     private function objEditDashboardConfig()
     {
         $obj = $this->obj();

@@ -6,7 +6,7 @@ namespace Charcoal\Admin\Ui;
 use \InvalidArgumentException;
 
 // Local namespace dependencies
-use \Charcoal\Admin\Ui\FormInterface;
+use \Charcoal\Ui\Form\FormInterface;
 
 /**
 * FormGroupTrait with basic methods to make

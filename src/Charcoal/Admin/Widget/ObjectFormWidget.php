@@ -32,10 +32,10 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * @param array $data The widget data
+     * @param array|ArrayInterface $data The widget data
      * @return ObjectForm Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         // @TODO Remove once RequirementContainer is implemented
         // Needed this to be able to output {{objId}}

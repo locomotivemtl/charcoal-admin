@@ -4,11 +4,16 @@ namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException;
 
+use \Pimple\Container;
+
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
+use \Charcoal\Ui\Form\FormInterface;
+//use \Charcoal\Ui\Form\FormTrait;
+
 use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\FormInterface;
+//use \Charcoal\Admin\Ui\FormInterface;
 use \Charcoal\Admin\Ui\FormTrait;
 use \Charcoal\Admin\Ui\FormGroupInterface;
 use \Charcoal\Admin\Widget\LayoutWidget;
@@ -28,6 +33,12 @@ class FormWidget extends AdminWidget implements FormInterface
     protected $sidebars = [];
 
     private $widgetFactory;
+
+    public function setDependencies(Container $container)
+    {
+        //$this->setFormGroupBuilder($container['form/group/builder']);
+        //$this->setLayoutBuilder($container['layout/builder']);
+    }
 
     /**
      * @param array|null $data

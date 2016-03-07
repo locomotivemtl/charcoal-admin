@@ -6,13 +6,13 @@ use \InvalidArgumentException;
 
 // From `charcoal-core`
 use \Charcoal\Charcoal;
-use \Charcoal\Property\PropertyFactory as PropertyFactory;
-use \Charcoal\Property\PropertyInterface as PropertyInterface;
+use \Charcoal\Property\PropertyFactory;
+use \Charcoal\Property\PropertyInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminWidget as AdminWidget;
-use \Charcoal\Admin\Ui\CollectionContainerInterface as CollectionContainerInterface;
-use \Charcoal\Admin\Ui\CollectionContainerTrait as CollectionContainerTrait;
+use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\CollectionContainerInterface;
+use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
  * The table widget displays a collection in a tabular (table) format.
@@ -42,10 +42,10 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     protected $filters;
 
     /**
-     * @param array $data The search widget data.
+     * @param array|ArrayInterface $data The search widget data.
      * @return TableWidget Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
 
         $objData = $this->dataFromObject();

@@ -235,7 +235,8 @@ class FormPropertyWidget extends AdminWidget
 
     public function langs()
     {
-        $langs = \Charcoal\Translation\TranslationConfig::instance()->languages();
+        $langs = \Charcoal\Translation\TranslationConfig::instance()->availableLanguages();
+
         return $langs;
     }
 

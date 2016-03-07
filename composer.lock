@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "34767874c5859b8805bbbf1e03b723a4",
-    "content-hash": "e9d7cd77c77098c45a56b9b0e5266933",
+    "hash": "965ce2628cd94924806b142299864062",
+    "content-hash": "1fd31e5074876f2b9e5e07cfd5acfc01",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -362,12 +362,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/locomotivemtl/charcoal-property.git",
-                "reference": "314ab48645e5059c3808b4d022fa5b0797c6dc5d"
+                "reference": "264a2833065cce0877cee67b952784e1fce8d53a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/locomotivemtl/charcoal-property/zipball/314ab48645e5059c3808b4d022fa5b0797c6dc5d",
-                "reference": "314ab48645e5059c3808b4d022fa5b0797c6dc5d",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-property/zipball/264a2833065cce0877cee67b952784e1fce8d53a",
+                "reference": "264a2833065cce0877cee67b952784e1fce8d53a",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +403,115 @@
             ],
             "description": "Charcoal Property defines an object (provides metadata)",
             "homepage": "https://charcoal.locomotive.ca",
-            "time": "2016-03-01 13:29:33"
+            "time": "2016-03-04 23:23:14"
+        },
+        {
+            "name": "locomotivemtl/charcoal-translation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/locomotivemtl/charcoal-translation.git",
+                "reference": "d7af386a5f6e259be308ed0c94846317ff053c8a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-translation/zipball/d7af386a5f6e259be308ed0c94846317ff053c8a",
+                "reference": "d7af386a5f6e259be308ed0c94846317ff053c8a",
+                "shasum": ""
+            },
+            "require": {
+                "locomotivemtl/charcoal-config": "~0.4",
+                "php": ">=5.5.0",
+                "psr/http-message": "^1.0",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "monolog/monolog": "^1.17",
+                "phpunit/phpunit": "^4.8",
+                "satooshi/php-coveralls": "dev-master",
+                "squizlabs/php_codesniffer": "^2.4"
+            },
+            "suggest": {
+                "Symfony Translation": "For a well made translator."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Charcoal\\": "src/Charcoal/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Ducharme",
+                    "email": "mat@locomotive.ca"
+                },
+                {
+                    "name": "Locomotive",
+                    "homepage": "https://locomotive.ca"
+                }
+            ],
+            "description": "Charcoal Translations & Languages",
+            "homepage": "https://charcoal.locomotive.ca",
+            "time": "2016-02-12 23:27:14"
+        },
+        {
+            "name": "locomotivemtl/charcoal-ui",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/locomotivemtl/charcoal-ui.git",
+                "reference": "68f5da0c2067ec6e393e3882657aa9924069e6f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/locomotivemtl/charcoal-ui/zipball/68f5da0c2067ec6e393e3882657aa9924069e6f6",
+                "reference": "68f5da0c2067ec6e393e3882657aa9924069e6f6",
+                "shasum": ""
+            },
+            "require": {
+                "locomotivemtl/charcoal-config": "^0.5",
+                "locomotivemtl/charcoal-factory": "^0.3",
+                "locomotivemtl/charcoal-translation": "@dev",
+                "locomotivemtl/charcoal-view": "~0.1",
+                "php": ">=5.5.0",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "pimple/pimple": "^3.0",
+                "satooshi/php-coveralls": "dev-master",
+                "squizlabs/php_codesniffer": "^2.4"
+            },
+            "suggest": {
+                "pimple/pimple": "DI Container to register the various Service Providers."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Charcoal\\": "src/Charcoal/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Ducharme",
+                    "email": "mat@locomotive.ca"
+                },
+                {
+                    "name": "Locomotive",
+                    "homepage": "https://locomotive.ca"
+                }
+            ],
+            "description": "Ui tools (Dashboard, Layout, Form and Menu)",
+            "homepage": "https://charcoal.locomotive.ca",
+            "time": "2016-03-07 14:00:27"
         },
         {
             "name": "locomotivemtl/charcoal-view",
@@ -467,12 +575,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc"
+                "reference": "5085630fd606c50d9b09efa0f93c0bdd83603d24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
-                "reference": "e19b764b5c855580e8ffa7e615f72c10fd2f99cc",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5085630fd606c50d9b09efa0f93c0bdd83603d24",
+                "reference": "5085630fd606c50d9b09efa0f93c0bdd83603d24",
                 "shasum": ""
             },
             "require": {
@@ -537,7 +645,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-03-01 18:00:40"
+            "time": "2016-03-07 12:29:57"
         },
         {
             "name": "nikic/fast-route",
@@ -824,12 +932,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/slimphp/Slim.git",
-                "reference": "53a4dd576dd3add4efd113ca77c3c21fa559b33e"
+                "reference": "1d99b8846c784d885201b2b709bfedb63656ed30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slimphp/Slim/zipball/53a4dd576dd3add4efd113ca77c3c21fa559b33e",
-                "reference": "53a4dd576dd3add4efd113ca77c3c21fa559b33e",
+                "url": "https://api.github.com/repos/slimphp/Slim/zipball/1d99b8846c784d885201b2b709bfedb63656ed30",
+                "reference": "1d99b8846c784d885201b2b709bfedb63656ed30",
                 "shasum": ""
             },
             "require": {
@@ -883,7 +991,7 @@
                 "micro",
                 "router"
             ],
-            "time": "2016-02-29 21:39:18"
+            "time": "2016-03-05 19:36:16"
         },
         {
             "name": "tedivm/stash",
@@ -1985,7 +2093,8 @@
     "stability-flags": {
         "locomotivemtl/charcoal-core": 20,
         "locomotivemtl/charcoal-base": 20,
-        "locomotivemtl/charcoal-app": 20
+        "locomotivemtl/charcoal-app": 20,
+        "locomotivemtl/charcoal-ui": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

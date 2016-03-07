@@ -48,6 +48,20 @@ class AdminWidget extends AbstractWidget
      */
     private $showActions;
 
+    /**
+     * @var integer $priority
+     */
+    private $priority;
+
+    /**
+     * Provide a `template()` method to fullfill UIItem interface.
+     *
+     * @return string
+     */
+    public function template()
+    {
+        return $this->type();
+    }
 
     /**
      * @param string $widgetId The widget identifier.
@@ -227,5 +241,23 @@ class AdminWidget extends AbstractWidget
 
             return rtrim($uri->getBaseUrl(), '/').'/';
         }
+    }
+
+    /**
+     * @param integer $priority The widget's sorting priority.
+     * @return AdminWidget Chainable
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = (int)$priority;
+        return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function priority()
+    {
+        return $this->priority;
     }
 }

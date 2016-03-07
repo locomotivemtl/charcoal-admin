@@ -5,6 +5,8 @@ namespace Charcoal\Admin\Object;
 use \DateTime;
 use \DateTimeInterface;
 
+use \InvalidArgumentException;
+
 use \Charcoal\Core\IndexableInterface;
 use \Charcoal\Core\IndexableTrait;
 
@@ -63,9 +65,8 @@ class AuthToken extends AbstractModel implements IndexableInterface
     /**
      * Force a lowercase username
      *
-     * @param string $username The username (also the login name).
-     * @throws InvalidArgumentException If the username is not a string.
-     * @return User Chainable
+     * @param string $ident
+     * @return AuthToken Chainable
      */
     public function setIdent($ident)
     {
@@ -84,9 +85,8 @@ class AuthToken extends AbstractModel implements IndexableInterface
     /**
      * Force a lowercase username
      *
-     * @param string $username The username (also the login name).
-     * @throws InvalidArgumentException If the username is not a string.
-     * @return User Chainable
+     * @param string $token
+     * @return AuthToken Chainable
      */
     public function setToken($token)
     {

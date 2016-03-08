@@ -224,6 +224,9 @@ class AdminTemplate extends AbstractTemplate
             if ($menuItem['url'] != '#') {
                 $menuItem['url'] = $this->adminUrl().$menuItem['url'];
             }
+            if (isset($menuItem['label'])) {
+                $menuItem['label'] = new TranslationString($menuItem['label']);
+            }
             yield $menuItem;
         }
 

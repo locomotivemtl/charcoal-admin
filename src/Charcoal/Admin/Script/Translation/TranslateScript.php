@@ -39,7 +39,7 @@ class TranslateScript extends AdminScript
         $arguments = [
             'path' => [
                 'longPrefix'   => 'path',
-                'description'  => 'Path relative from project root (ex: templates/*/*/)',
+                'description'  => 'Path relative to the project installation (ex: templates/*/*/)',
                 'defaultValue' => ''
             ],
             'type' => [
@@ -48,8 +48,8 @@ class TranslateScript extends AdminScript
                 'defaultValue' => ''
             ],
             'output' => [
-                'longPrefix' => 'output',
-                'description' => 'Output file path',
+                'longPrefix'   => 'output',
+                'description'  => 'Output file path',
                 'defaultValue' => ''
             ]
         ];
@@ -172,7 +172,7 @@ class TranslateScript extends AdminScript
      */
     public function base()
     {
-        return realpath($this->app()->config()->get('ROOT').'../../../').'/';
+        return realpath($this->app()->config()->get('base_path').'../../../').'/';
     }
 
     /**

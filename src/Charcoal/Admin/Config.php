@@ -15,7 +15,9 @@ class Config extends AbstractConfig
     const DEFAULT_BASE_PATH = 'admin';
 
     /**
-     * @var string $_basePath
+     * The base path for the admin module's route group.
+     *
+     * @var string $basePath
      */
     private $basePath = self::DEFAULT_BASE_PATH;
 
@@ -26,14 +28,20 @@ class Config extends AbstractConfig
      */
     public function defaults()
     {
-        $file_content = file_get_contents(realpath(__DIR__.'/../../../config').'/admin.config.default.json');
+        $baseDir = rtrim(realpath(__DIR__.'/../../../'), '/').'/';
+        $confDir = $baseDir.'config/';
+
+        $file_content = file_get_contents($confDir.'admin.config.default.json');
         $config = json_decode($file_content, true);
+
         return $config;
     }
 
     /**
-     * @param string $path The admin module base path.
-     * @throws InvalidArgumentException
+     * Set the admin module's route group.
+     *
+     * @param  string $path The admin module base path.
+     * @throws InvalidArgumentException If the route group is invalid.
      * @return Config Chainable
      */
     public function setBasePath($path)
@@ -57,6 +65,8 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Retrieve the admin module's route group.
+     *
      * @return string
      */
     public function basePath()
@@ -65,8 +75,10 @@ class Config extends AbstractConfig
     }
 
     /**
-     * @param string $path The admin module base path.
-     * @throws InvalidArgumentException
+     * Parse the admin module's route configuration.
+     *
+     * @see    \Charcoal\App\AppConfig::setRoutes() For a similar implementation.
+     * @param  array $routes The route configuration structure to set.
      * @return Config Chainable
      */
     public function setRoutes($routes)

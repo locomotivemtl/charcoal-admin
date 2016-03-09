@@ -237,12 +237,12 @@ abstract class AbstractPropertyInput implements
     public function inputName()
     {
         $name = $this->p()->ident();
-        if ($this->multiple()) {
-            $name .= '[]';
-        }
         if ($this->p()->l10n()) {
             $lang = TranslationConfig::instance()->currentLanguage();
             $name .= '['.$lang.']';
+        }
+        if ($this->multiple()) {
+            $name .= '[]';
         }
         return $name;
     }

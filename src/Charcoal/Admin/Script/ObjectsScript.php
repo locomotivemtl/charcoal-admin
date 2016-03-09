@@ -70,7 +70,6 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         unset($request);
-// Unused
 
         $climate = $this->climate();
 
@@ -87,10 +86,10 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
             'logger' => $this->logger
         ]);
 
-        $loader = new CollectionLoader();
-        $loader->set_model($model);
-        $loader->set_pagination([
-            'page' => $this->page(),
+        $loader = new CollectionLoader([ 'logger' => $this->logger ]);
+        $loader->setModel($model);
+        $loader->setPagination([
+            'page'         => $this->page(),
             'num_per_page' => $this->numPerPage()
         ]);
 
@@ -98,7 +97,7 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
         $collection = $this->collection();
         $table = [];
 
-        $rows = $this->object_rows();
+        $rows = $this->objectRows();
 
         foreach ($collection as $c) {
             $obj = [];

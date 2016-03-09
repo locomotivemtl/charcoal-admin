@@ -42,7 +42,6 @@ class AlterScript extends AdminScript
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         unset($request);
-// Unused
 
         $climate = $this->climate();
 

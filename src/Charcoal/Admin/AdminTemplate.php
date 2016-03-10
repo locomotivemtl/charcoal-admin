@@ -111,8 +111,8 @@ class AdminTemplate extends AbstractTemplate
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
-        $baseConfig = $container['config'];
-        $this->adminConfig = $baseConfig['admin'];
+
+        $this->adminConfig = $container['charcoal/admin/config'];
     }
 
     /**

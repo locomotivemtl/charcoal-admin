@@ -13,12 +13,12 @@ use \Charcoal\App\Module\AbstractModule;
 use \Charcoal\Admin\Config as AdminConfig;
 
 /**
- * The base class for the `admin` Module
+ * Charcoal Administration Module
  */
 class AdminModule extends AbstractModule
 {
     /**
-     * Charcoal admin setup.
+     * Charcoal Administration Setup.
      *
      * This module is bound to the `/admin` URL.
      *
@@ -32,8 +32,7 @@ class AdminModule extends AbstractModule
      * ## Dependencies
      * - `charcoal/config` Provided by \Charcoal\CharcoalModule
      *
-     * @param \Slim\App $app
-     * @return void
+     * @return AdminModule
      */
     public function setup()
     {
@@ -43,15 +42,13 @@ class AdminModule extends AbstractModule
         }
 
         $container = $this->app()->getContainer();
-        $container['charcoal/admin/module'] = function($c) {
-            return new AdminModule([
-                'logger' => $c['logger'],
-                'config' => $c['charcoal/admin/config'],
-                'app'    => $this->app()
-            ]);
+
+        $module = $this;
+        $container['charcoal/admin/module'] = function ($c) use ($module) {
+            return $module;
         };
 
-        $container['charcoal/admin/config'] = function($c) {
+        $container['charcoal/admin/config'] = function ($c) {
             $config = new AdminConfig();
 
             if ($c['config']->has('admin')) {
@@ -61,30 +58,25 @@ class AdminModule extends AbstractModule
             return $config;
         };
 
-        $adminConfig = $container['charcoal/admin/config'];
-        $adminPath   = '/'.trim($adminConfig->basePath(), '/');
+        $config = $container['charcoal/admin/config'];
 
-        if (isset($adminConfig['routes']['default_view'])) {
+        $this->setConfig($config);
+
+        $group = '/'.trim($config['base_path'], '/');
+
+        if (isset($config['routes']['default_view'])) {
             $this->app()->get(
-                $adminPath,
-                function (RequestInterface $request, ResponseInterface $response) use ($adminPath, $adminConfig) {
-                    return $response->withRedirect($adminPath . '/' . ltrim($adminConfig['routes']['default_view'], '/'), 303);
+                $group,
+                function (RequestInterface $request, ResponseInterface $response) use ($group, $config) {
+                    return $response->withRedirect(
+                        $group.'/'.ltrim($config['routes']['default_view'], '/'),
+                        303
+                    );
                 }
             );
         }
-        $this->app()->group($adminPath, 'charcoal/admin/module:setupRoutes');
-    }
+        $this->app()->group($group, 'charcoal/admin/module:setupRoutes');
 
-    public function createConfig(array $data = null)
-    {
-        $container = $this->app()->getContainer();
-        $appConfig = $container->get('config');
-        $config    = new AdminConfig($data);
-
-        if ($appConfig->has('admin')) {
-            $config->merge($appConfig->get('admin'));
-        }
-
-        return $config;
+        return $this;
     }
 }

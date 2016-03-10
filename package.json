@@ -2,7 +2,7 @@
   "private": true,
   "name": "@locomotivemtl/charcoal-admin",
   "devDependencies": {
-    "autoprefixer-core": "^6.0.1",
+    "autoprefixer": "^6.3",
     "glob": "^7.0.3",
     "grunt": "^0.4.5",
     "grunt-browser-sync": "^2.2.0",

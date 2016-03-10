@@ -9,8 +9,11 @@ use \Pimple\Container;
 // From `charcoal-app`
 use \Charcoal\App\Template\WidgetFactory;
 
+/// From `charcoal-ui`
 use \Charcoal\Ui\Form\FormInterface;
 //use \Charcoal\Ui\Form\FormTrait;
+use \Charcoal\Ui\Layout\LayoutAwareInterface;
+use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
 use \Charcoal\Admin\AdminWidget;
 //use \Charcoal\Admin\Ui\FormInterface;
@@ -24,20 +27,24 @@ use \Charcoal\Admin\Widget\FormGroupWidget;
 /**
  *
  */
-class FormWidget extends AdminWidget implements FormInterface
+class FormWidget extends AdminWidget implements
+    FormInterface,
+    LayoutAwareInterface
 {
     use FormTrait;
-
-    protected $layout;
+    use LayoutAwareTrait;
 
     protected $sidebars = [];
 
+    /**
+    * @var WidgetFactory $widgetFactory
+    */
     private $widgetFactory;
 
     public function setDependencies(Container $container)
     {
         //$this->setFormGroupBuilder($container['form/group/builder']);
-        //$this->setLayoutBuilder($container['layout/builder']);
+        $this->setLayoutBuilder($container['layout/builder']);
     }
 
     /**
@@ -71,38 +78,6 @@ class FormWidget extends AdminWidget implements FormInterface
             $p->setData($data);
         }
         return $p;
-    }
-
-    /**
-     * @param LayoutWidget|array
-     * @throws InvalidArgumentException
-     * @return FormWidget Chainable
-     */
-    public function setLayout($layout)
-    {
-        if (($layout instanceof LayoutWidget)) {
-            $this->layout = $layout;
-        } else if (is_array($layout)) {
-            $l = new LayoutWidget([
-                'logger' => $this->logger
-            ]);
-//            $l->set_parent($this);
-            $l->setData($layout);
-            $this->layout = $l;
-        } else {
-            throw new InvalidArgumentException(
-                'Layout must be a LayoutWidget object or an array'
-            );
-        }
-        return $this;
-    }
-
-    /**
-     * @return LayoutWidget|null
-     */
-    public function layout()
-    {
-        return $this->layout;
     }
 
     /**

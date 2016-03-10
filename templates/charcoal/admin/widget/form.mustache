@@ -13,7 +13,18 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 
         {{!-- Loop all form groups --}}
         {{#groups}}
-            {{>$widget_template}}
+            {{form.method}}
+            {{#form.layout}}
+                {{>charcoal/admin/widget/layout.start}}
+            {{/form.layout}}
+
+            <div class="form-group form-group-{{ident}} col-md-{{form.layout.cellSpanBy12}}">
+                {{>$widget_template}}
+            </div>
+
+             {{#form.layout}}
+               {{>charcoal/admin/widget/layout.end}}
+            {{/form.layout}}
         {{/groups}}
 
         <input class="form-submit" type="submit" value="Save">

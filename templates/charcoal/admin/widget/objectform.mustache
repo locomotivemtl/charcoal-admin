@@ -14,7 +14,17 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
         <div class="o-flex_main">
             {{!-- Loop all form groups --}}
             {{#groups}}
-                {{>$widget_template}}
+                 {{#form.layout}}
+                    {{>charcoal/admin/widget/layout.start}}
+                {{/form.layout}}
+
+                <div class="col-md-{{form.layout.cellSpanBy12}}">
+                    {{>$widget_template}}
+                </div>
+
+                 {{#form.layout}}
+                   {{>charcoal/admin/widget/layout.end}}
+                {{/form.layout}}
             {{/groups}}
 
         </div>

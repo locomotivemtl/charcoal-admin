@@ -215,11 +215,13 @@ class AdminTemplate extends AbstractTemplate
     public function headerMenu()
     {
         $headerMenu = $this->adminConfig['header_menu'];
+
         if (!isset($headerMenu['items'])) {
             throw new Exception(
                 'Header menu was not property configured.'
             );
         }
+
         foreach ($headerMenu['items'] as $menuItem) {
             if ($menuItem['url'] != '#') {
                 $menuItem['url'] = $this->adminUrl().$menuItem['url'];
@@ -353,9 +355,15 @@ class AdminTemplate extends AbstractTemplate
             return false;
         }
 
-        $authCookie = $_COOKIE[$authToken->metadata()->cookieName()];
+        $cookieName = $authToken->metadata()->cookieName();
+
+        if (isset($_COOKIE[$cookieName])) {
+            return false;
+        }
+
+        $authCookie = $_COOKIE[$cookieName];
         $vals = explode(';', $authCookie);
-        $username =$authToken->getUserId($vals[0], $vals[1]);
+        $username = $authToken->getUserId($vals[0], $vals[1]);
         if (!$username) {
             return false;
         }
@@ -363,7 +371,9 @@ class AdminTemplate extends AbstractTemplate
         $u = new User([
             'logger' => $this->logger
         ]);
+
         $u->load($username);
+
         if ($u->id()) {
             return true;
         } else {

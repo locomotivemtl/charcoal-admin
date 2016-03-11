@@ -21,7 +21,7 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
      * @param array $data
      * @return Home Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         parent::setData($data);
 

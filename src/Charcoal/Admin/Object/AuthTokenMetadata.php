@@ -40,10 +40,10 @@ class AuthTokenMetadata extends ModelMetadata
         $parentDefaults = parent::defaults();
 
         $defaults = array_replace_recursive($parentDefaults, [
-            'enabled'       => true,
-            'cookie_name'   => 'charcoal_admin_login',
+            'enabled'         => true,
+            'cookie_name'     => 'charcoal_admin_login',
             'cookie_duration' => '15 days',
-            'https_only'    => false
+            'https_only'      => false
         ]);
         return $defaults;
     }

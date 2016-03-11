@@ -357,7 +357,7 @@ class AdminTemplate extends AbstractTemplate
 
         $cookieName = $authToken->metadata()->cookieName();
 
-        if (isset($_COOKIE[$cookieName])) {
+        if (!isset($_COOKIE[$cookieName])) {
             return false;
         }
 

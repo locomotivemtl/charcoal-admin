@@ -35,10 +35,6 @@ require(
             tooltip : {
                 trigger: 'axis'
             },
-            legend: {
-                show: false,
-                data:['Data 1', 'Data 2']
-            },
             toolbox: {
                 show : true
             },
@@ -46,7 +42,7 @@ require(
             xAxis : [
                 {
                     type : 'category',
-                    data : ['J','F','M','A','M','J','J','A','S','O','N','D']
+                    data : {{&categoriesJson}}
                 }
             ],
             yAxis : [
@@ -55,28 +51,10 @@ require(
                     splitArea : {show : true}
                 }
             ],
-            series : [
-                {
-                    name:'Serie 1',
-                    type:'line',
-                    /*itemStyle:{
-                        normal:{
-                            color:'rgba(0, 0, 255, 1)'
-                        }
-                    },*/
-                    data:[12.0, 14.9, 7.0, 23.2, 25.6, 76.7, 135.6, 152.2, 82.6, 40.0, 26.4, 13.3]
-                },
-                {
-                    name:'Serie 2',
-                    type:'line',
-                    /*itemStyle:{
-                        normal:{
-                            color:'rgba(255,0,0, 1)'
-                        }
-                    },*/
-                    data:[12.6, 15.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 88.7, 48.8, 26.0, 12.3]
-                }
-            ]
+            series : {{&seriesJson}}
+        });
+        $(window).on('resize', function() {
+            myChart.resize();
         });
     }
 );

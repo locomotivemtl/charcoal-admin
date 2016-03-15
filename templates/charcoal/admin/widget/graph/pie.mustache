@@ -34,10 +34,6 @@ require(
             tooltip : {
                 trigger: 'item'
             },
-            legend: {
-                show: false,
-                data:['Data 1', 'Data 2']
-            },
             toolbox: {
                 show : true
             },
@@ -55,6 +51,9 @@ require(
                 ]
                 }
             ]
+        });
+        $(window).on('resize', function() {
+            myChart.resize();
         });
     }
 );

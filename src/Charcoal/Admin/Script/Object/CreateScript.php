@@ -66,7 +66,6 @@ class CreateScript extends AdminScript
 
         $vals = [];
         foreach ($properties as $prop) {
-            //$input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
             $input = $this->propertyToInput($prop);
             $vals[$prop->ident()] = $input->prompt();
         }

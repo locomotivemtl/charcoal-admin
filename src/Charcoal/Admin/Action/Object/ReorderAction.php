@@ -26,7 +26,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
-     * @param array $objOrders
+     * @var array $objOrders
      */
     private $objOrders;
 
@@ -36,7 +36,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     private $startingOrder;
 
     /**
-     * @param array $orders
+     * @param array $orders The object orders.
      * @return ReorderAction Chainable
      */
     public function setObjOrders(array $orders)
@@ -54,7 +54,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param integer $order
+     * @param integer $order The starting order.
      * @return ReorderAction Chainable
      */
     public function setStartingOrder($order)
@@ -84,8 +84,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
 
         $objOrders = $this->objOrders();
         $pos = $this->startingOrder();
-        foreach($objOrders as $orderId) {
-
+        foreach ($objOrders as $orderId) {
             $q = 'update `'.$proto->source()->table().'` set `position` = :position where `'.$proto->key().'` = :id';
             $proto->source()->dbQuery($q, [
                 'id' => $orderId,

@@ -10,5 +10,5 @@ use \Charcoal\Admin\Property\Input\FileInput;
  */
 class ImageInput extends FileInput
 {
-    // ...
+    // Use FileInput as-is, for now.
 }

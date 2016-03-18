@@ -22,7 +22,7 @@ class LogoutAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        unset($request);
+        $this->setData($request->getParams());
 
         $user = User::getAuthenticated();
         $res = $user->logout();
@@ -36,9 +36,8 @@ class LogoutAction extends AdminAction
      */
     public function results()
     {
-        $results = [
+        return [
             'success' => $this->success()
         ];
-        return $results;
     }
 }

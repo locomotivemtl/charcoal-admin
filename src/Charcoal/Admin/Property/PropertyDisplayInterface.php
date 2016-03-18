@@ -11,14 +11,13 @@ use \Charcoal\Property\PropertyInterface as PropertyInterface;
 interface PropertyDisplayInterface
 {
     /**
-     * @param array $data
+     * @param array $data The display data.
      * @return Display Chainable
      */
     public function setData(array $data);
 
     /**
-     * @param string $ident
-     * @throws InvalidArgumentException if the ident is not a string
+     * @param string $ident The display identifier.
      * @return PropertyDisplayInterface Chainable
      */
     public function setIdent($ident);
@@ -29,7 +28,7 @@ interface PropertyDisplayInterface
     public function ident();
 
     /**
-     * @param string $displayId
+     * @param string $displayId The display id.
      * @return Display Chainable
      */
     public function setDisplayId($displayId);
@@ -50,14 +49,19 @@ interface PropertyDisplayInterface
     public function displayVal();
 
     /**
-     * @param string $display_type
+     * @param string $displayType The display type.
+     * @return PropertyDisplayInterface Chainable
      */
-    public function setDisplayType($display_type);
+    public function setDisplayType($displayType);
 
+    /**
+     * @return string
+     */
     public function displayType();
 
     /**
-     * @param PropertyInterface $p
+     * @param PropertyInterface $p The property.
+     * @return PropertyDisplayInterface Chainable
      */
     public function setProperty(PropertyInterface $p);
 

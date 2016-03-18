@@ -59,6 +59,9 @@ class LoginTemplate extends AdminTemplate
         }
     }
 
+    /**
+     * @return boolean
+     */
     private function isHttps()
     {
         if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on') {
@@ -71,6 +74,9 @@ class LoginTemplate extends AdminTemplate
         return false;
     }
 
+    /**
+     * @return boolean
+     */
     public function rememberMeEnabled()
     {
         $token = new AuthToken([

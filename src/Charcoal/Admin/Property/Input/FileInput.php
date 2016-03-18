@@ -9,5 +9,5 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
  */
 class FileInput extends AbstractPropertyInput
 {
-    // ...
+    // Nothing to declare.
 }

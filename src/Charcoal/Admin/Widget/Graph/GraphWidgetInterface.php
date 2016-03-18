@@ -9,10 +9,10 @@ namespace Charcoal\Admin\Widget\Graph;
  */
 interface GraphWidgetInterface
 {
-     /**
-      * @param mixed $height
-      * @return GraphWidgetInterface Chainable
-      */
+    /**
+     * @param mixed $height Graph default height (for CSS).
+     * @return GraphWidgetInterface Chainable
+     */
     public function setHeight($height);
 
     /**
@@ -21,18 +21,18 @@ interface GraphWidgetInterface
     public function height();
 
     /**
-     * @param string[] $colors
+     * @param string[] $colors The graph colors (hexadecimal).
      * @return GraphWidgetInterface Chainable
      */
     public function setColors(array $colors);
 
     /**
-     *
+     * @return string[]
      */
     public function colors();
 
     /**
-     * @todo Read from widget metadata
+     * @return string[]
      */
     public function defaultColors();
 

@@ -11,7 +11,6 @@ use Charcoal\App\Action\AbstractAction;
 /**
  * The base class for the `admin` Actions.
  *
- * @see \Charcoal\App\App The `Slim` application inside the core Charcoal object, used to set response.
  */
 abstract class AdminAction extends AbstractAction
 {
@@ -49,10 +48,11 @@ abstract class AdminAction extends AbstractAction
 
     /**
      * Determine if the current user is authenticated. If not it redirects them to the login page.
+     *
+     * @return void
      */
     private function auth()
     {
-        //$cfg = AdminModule::config();
         $u = User::getAuthenticated();
         if ($u === null || !$u->id()) {
             die('Auth required');

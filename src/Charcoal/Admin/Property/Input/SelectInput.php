@@ -9,8 +9,9 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
  */
 class SelectInput extends AbstractPropertyInput
 {
-    // ...
-
+    /**
+     * @return void This method is a generator
+     */
     public function choices()
     {
         $choices = $this->p()->choices();
@@ -30,9 +31,10 @@ class SelectInput extends AbstractPropertyInput
         }
     }
 
-        /**
-         * @return boolean
-         */
+    /**
+     * @param mixed $c The choice to check.
+     * @return boolean
+     */
     public function isChoiceSelected($c)
     {
         $val = $this->p()->val();

@@ -20,29 +20,8 @@ trait DashboardContainerTrait
     protected $dashboard;
 
     /**
-     * @param array $data
-     * @throws InvalidArgumentException
-     * @return DashboardContainerInterface Chainable
-     */
-    public function setDashboardData($data = null)
-    {
-        if (!is_array($data)) {
-            throw new InvalidArgumentException('Data must be an array');
-        }
-
-        if (isset($data['dashboard_ident'])) {
-            $this->setDashboardIdent($data['dashboard_ident']);
-        }
-        if (isset($data['dashboard_config'])) {
-            $this->setDashboardConfig($data['dashboard_config']);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $dashboardIdent
-     * @throws InvalidArgumentException
+     * @param string $dashboardIdent The dashboard identifier.
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return DashboardContainerInterface Chainable
      */
     public function setDashboardIdent($dashboardIdent)
@@ -65,7 +44,7 @@ trait DashboardContainerTrait
     }
 
     /**
-     * @param mixed $dashboardConfig
+     * @param mixed $dashboardConfig The dasboard configuration.
      * @return DashboardContainerInterface Chainable
      */
     public function setDashboardConfig($dashboardConfig)
@@ -85,13 +64,17 @@ trait DashboardContainerTrait
         return $this->dashboardConfig;
     }
 
-    public function createDashboardConfig($data = null)
+    /**
+     * @param array $data Optional dashboard config.
+     * @return null
+     */
+    public function createDashboardConfig(array $data = null)
     {
         return null;
     }
 
     /**
-     * @param Dashboard $dashboard
+     * @param mixed $dashboard The dashboard to set.
      * @return DashboardContainerInterface Chainable
      */
     public function setDashboard($dashboard)
@@ -112,7 +95,7 @@ trait DashboardContainerTrait
     }
 
     /**
-     * @param array $data Optional
+     * @param array $data Optional dashboard data.
      * @return Dashboard
      */
     abstract public function createDashboard(array $data = null);

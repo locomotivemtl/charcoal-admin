@@ -25,9 +25,8 @@ use \Charcoal\Admin\Ui\CollectionContainerTrait;
 use \Charcoal\Admin\Ui\DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait;
 
-
 /**
- * admin/object/collection template.
+ * Object collection template (table with a list of objects).
  */
 class CollectionTemplate extends AdminTemplate implements
     CollectionContainerInterface,
@@ -53,12 +52,12 @@ class CollectionTemplate extends AdminTemplate implements
 
     /**
      * Template constructor.
+     *
+     * @param array $data Optional dependencies.
      */
     public function __construct(array $data = null)
     {
         parent::__construct($data);
-
-        // $this->setData($data);
 
         $obj = $this->proto();
         if (!$obj) {
@@ -72,7 +71,7 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param Container $conatainer
+     * @param Container $container DI Container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -92,6 +91,7 @@ class CollectionTemplate extends AdminTemplate implements
 
     /**
      * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return CollectionTemplate Chainable
      */
     public function setWidgetFactory(WidgetFactory $factory)
     {
@@ -114,7 +114,7 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param DashboardBuilder $builder
+     * @param DashboardBuilder $builder The builder, to create customized dashboard objects.
      * @return CollectionTemplate Chainable
      *
      */
@@ -139,13 +139,13 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param array $data Optional
-     * @throws Exception
+     * @param array $data Optional Dashboard data.
      * @return Dashboard
      * @see DashboardContainerTrait::createDashboard()
      */
     public function createDashboard(array $data = null)
     {
+        unset($data);
         $dashboardConfig = $this->objCollectionDashboardConfig();
         $dashboard = $this->dashboardBuilder->build($dashboardConfig);
         return $dashboard;
@@ -165,7 +165,11 @@ class CollectionTemplate extends AdminTemplate implements
         $sidemenuConfig = $dashboardConfig['sidemenu'];
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-        $widgetType = isset($sidemenuConfig['widget_type']) ? $sidemenuConfig['widget_type'] : 'charcoal/admin/widget/sidemenu';
+        if (isset($sidemenuConfig['widget_type'])) {
+            $widgetType = $sidemenuConfig['widget_type'];
+        } else {
+            $widgetType = 'charcoal/admin/widget/sidemenu';
+        }
         $sidemenu = $this->widgetFactory()->create($widgetType, [
             'logger'=>$this->logger
         ]);
@@ -210,6 +214,7 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
+     * @throws Exception If the dashboard config can not be loaded.
      * @return array
      */
     private function objCollectionDashboardConfig()

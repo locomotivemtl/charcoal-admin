@@ -18,20 +18,30 @@ use \Charcoal\Admin\AdminScript;
 class TranslateScript extends AdminScript
 {
     /**
-     * Used througout the script
      * @var string $fileType
-     * @var string $output
-     * @var string $path
      */
     protected $fileType;
+
+    /**
+     * @var string $output
+     */
     protected $output;
+
+    /**
+     * @var string $path
+     */
     protected $path;
+
+    /**
+     * @var array $locales
+     */
     protected $locales;
 
     /**
      * Valid arguments:
      * - path : path/to/files
      * - type : mustache | php
+     *
      * @return array
      */
     public function defaultArguments()
@@ -80,14 +90,11 @@ class TranslateScript extends AdminScript
         switch ($type) {
             case 'mustache':
                 $regex = '/{{\s*#\s*_t\s*}}((.|\n|\r|\n\r)*?){{\s*\/\s*_t\s*}}/i';
-                // $regex = '/{{#\s*_t\s*}}((.|\n|\r|\n\r)*?){{\/\s*_t\s*}}/i';
                 $file = '*.mustache';
                 $index = 1;
                 break;
             case 'php':
                 $regex = '/([^\d\wA-Za-z])_t\(\s*\n*\r*(["\'])(?<text>(.|\n|\r|\n\r)*?)\2\s*\n*\r*\)/i';
-                // $regex = '/_t\(\s*\n*\r*(["\'])((.|\n|\r|\n\r)*?)\1\s*\n*\r*\)/i';
-                // $regex = '/_t\(\s*\'\s*((.|\n|\r|\n\r)*?)\s*\'\s*\)/i';
                 $index = 'text';
                 $file = '*.php';
                 break;
@@ -100,7 +107,7 @@ class TranslateScript extends AdminScript
 
         // remove vendor/locomotivemtl/charcoal-app
         $base = $this->base();
-        $glob = $this->glob_recursive($base.$path.$file);
+        $glob = $this->globRecursive($base.$path.$file);
 
 
         $input = $climate->confirm(
@@ -148,15 +155,18 @@ class TranslateScript extends AdminScript
     }
 
     /**
+     * @param string  $pattern The pattern to search.
+     * @param integer $flags   The glob flags.
+     * @return array
      * @see http://in.php.net/manual/en/function.glob.php#106595
      */
-    public function glob_recursive($pattern, $flags = 0)
+    public function globRecursive($pattern, $flags = 0)
     {
         $max = $this->maxRecursiveLevel();
         $i = 1;
         $files = glob($pattern, $flags);
         foreach (glob(dirname($pattern).'/*', (GLOB_ONLYDIR|GLOB_NOSORT)) as $dir) {
-            $files = array_merge($files, $this->glob_recursive($dir.'/'.basename($pattern), $flags));
+            $files = array_merge($files, $this->globRecursive($dir.'/'.basename($pattern), $flags));
             $i++;
             if ($i >= $max) {
                 break;
@@ -177,6 +187,7 @@ class TranslateScript extends AdminScript
 
     /**
      * ARGUMENTS
+     * @return TranslateScript Chainable
      */
     public function getPath()
     {
@@ -184,6 +195,10 @@ class TranslateScript extends AdminScript
         $this->path = $path;
         return $this;
     }
+
+    /**
+     * @return string
+     */
     public function path()
     {
         if (!$this->path) {
@@ -191,12 +206,20 @@ class TranslateScript extends AdminScript
         }
         return $this->path;
     }
+
+    /**
+     * @return TranslateScript Chainable
+     */
     public function getFileType()
     {
         $type = $this->argOrInput('type');
         $this->fileType = $type;
         return $this;
     }
+
+    /**
+     * @return string
+     */
     public function fileType()
     {
         if (!$this->fileType) {
@@ -206,6 +229,9 @@ class TranslateScript extends AdminScript
 
     }
 
+    /**
+     * @return string
+     */
     public function file()
     {
         if ($this->output) {
@@ -219,7 +245,8 @@ class TranslateScript extends AdminScript
     /**
      * Returns associative array
      * 'original text' => [ 'translation' => 'translation text', 'context' => 'filename' ]
-     * @return [type] [description]
+     *
+     * @return array
      */
     public function fromCSV()
     {
@@ -251,7 +278,11 @@ class TranslateScript extends AdminScript
         return $results;
     }
 
-    public function toCSV($translations)
+    /**
+     * @param array $translations The translations to save in CSV.
+     * @return TranslateScript Chainable
+     */
+    public function toCSV(array $translations)
     {
         $base = $this->base();
         $output = $this->file();
@@ -268,6 +299,7 @@ class TranslateScript extends AdminScript
         $file = fopen($base.$output, 'w');
         if (!$file) {
             // Wtf happened?
+            return $this;
         }
         fputcsv($file, $columns, $separator, $enclosure);
 
@@ -282,12 +314,14 @@ class TranslateScript extends AdminScript
     }
 
     /**
+     * @param array $data The translation data.
+     * @return array
      * @todo multiple langs
      * data[0] = ORIGINAL
      * data[1] = TRANSLATION
      * data[2] = CONTEXT
      */
-    public function translateCSV($data)
+    public function translateCSV(array $data)
     {
         if (count($data) < 3) {
             return [];
@@ -315,6 +349,7 @@ class TranslateScript extends AdminScript
 
     /**
      * Get opposite languages from DATABASE
+     *
      * @return [type] [description]
      */
     public function oppositeLanguages()
@@ -337,6 +372,7 @@ class TranslateScript extends AdminScript
     /**
      * Locales set in config.json
      * Expects languages | file | default_language
+     *
      * @return array
      */
     public function locales()
@@ -363,6 +399,7 @@ class TranslateScript extends AdminScript
     /**
      * Columns of CSV file
      * This is already built to take multiple languages
+     *
      * @return array
      */
     public function columns()
@@ -372,7 +409,6 @@ class TranslateScript extends AdminScript
 
         $columns = [ $orig ];
 
-        // [ 'en', 'it' ]...
         foreach ($opposites as $lang) {
             $columns[] = $lang;
         }
@@ -384,17 +420,24 @@ class TranslateScript extends AdminScript
     }
 
     /**
-     * UTILS
-     * @todo make those editable
+     * @return string
      */
     public function enclosure()
     {
         return '"';
     }
+
+    /**
+     * @return string
+     */
     public function separator()
     {
         return ',';
     }
+
+    /**
+     * @return integer
+     */
     public function maxRecursiveLevel()
     {
         return 4;

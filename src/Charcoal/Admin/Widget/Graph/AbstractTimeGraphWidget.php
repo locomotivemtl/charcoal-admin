@@ -16,7 +16,10 @@ use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
 use \Charcoal\Amin\Widget\Graph\GraphWidgetInterface;
 
 /**
- * Base Graph widget
+ * Base Time Graph widget.
+ *
+ * This widget implements the core feature to create a specialized
+ * graph widget that is meant to display object data "over" time.
  */
 abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements TimeGraphWidgetInterface
 {
@@ -26,12 +29,14 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     private $dbRows;
 
     /**
+     * The date grouping type can be "hour", "day" or "month".
+     *
      * @var string $groupingType
      */
     private $groupingType;
 
     /**
-     * @var strubg $dateFirnat
+     * @var string $dateFirnat
      */
     private $dateFormat;
 
@@ -58,6 +63,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     /**
      * @param string $type The group type.
      * @throws InvalidArgumentException If the group type is not a valid type.
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setGroupingType($type)
     {
@@ -88,7 +94,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     /**
      * @param string $format The date format.
      * @throws InvalidArgumentException If the format argument is not a string.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setDateFormat($format)
     {
@@ -112,7 +118,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     /**
      * @param string $format The date format.
      * @throws InvalidArgumentException If the format argument is not a string.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setSqlDateFormat($format)
     {
@@ -136,7 +142,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     /**
      * @param string|DateTimeInterface $ts The start date.
      * @throws InvalidArgumentException If the date is not a valid datetime format.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setStartDate($ts)
     {
@@ -169,7 +175,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     /**
      * @param string|DateTimeInterface $ts The end date.
      * @throws InvalidArgumentException If the date is not a valid datetime format.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setEndDate($ts)
     {
@@ -202,7 +208,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     /**
      * @param string|DateInterval $interval The date interval, between "categories".
      * @throws InvalidArgumentException If the argument is not a string or an interval object.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setDateInterval($interval)
     {
@@ -227,7 +233,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     }
 
      /**
-      * @return UserTimeGraphWidget Chainable
+      * @return TimeGraphWidgetInterface Chainable
       */
     protected function setGroupingTypeByHour()
     {
@@ -241,7 +247,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     }
 
     /**
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     protected function setGroupingTypeByDay()
     {
@@ -255,7 +261,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     }
 
     /**
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     protected function setGroupingTypeByMonth()
     {
@@ -341,6 +347,38 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
         }
         ksort($rows);
         return $rows;
+    }
+
+    /**
+     * @return array Categories structure.
+     */
+    public function categories()
+    {
+        $rows = $this->dbRows();
+        $rows = $this->fillRows($rows);
+        return array_keys($rows);
+    }
+
+
+    /**
+     * @return array Series structure.
+     */
+    public function series()
+    {
+        $rows = $this->dbRows();
+        $rows = $this->fillRows($rows);
+
+        $series = [];
+        $options = $this->seriesOptions();
+        foreach ($options as $serieId => $serieOptions) {
+            $series[] = [
+                'name' => (string)$serieOptions['name'],
+                'type' => (string)$serieOptions['type'],
+                'data' => array_column($rows, $serieId)
+            ];
+        }
+
+        return $series;
     }
 
     /**

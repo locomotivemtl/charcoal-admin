@@ -62,20 +62,20 @@ class AdminModule extends AbstractModule
 
         $this->setConfig($config);
 
-        $group = '/'.trim($config['base_path'], '/');
+        $groupIdent = '/'.trim($config['base_path'], '/');
 
         if (isset($config['routes']['default_view'])) {
             $this->app()->get(
-                $group,
-                function (RequestInterface $request, ResponseInterface $response) use ($group, $config) {
+                $groupIdent,
+                function (RequestInterface $request, ResponseInterface $response) use ($groupIdent, $config) {
                     return $response->withRedirect(
-                        $group.'/'.ltrim($config['routes']['default_view'], '/'),
+                        $groupIdent.'/'.ltrim($config['routes']['default_view'], '/'),
                         303
                     );
                 }
             );
         }
-        $this->app()->group($group, 'charcoal/admin/module:setupRoutes');
+        $this->app()->group($groupIdent, 'charcoal/admin/module:setupRoutes');
 
         return $this;
     }

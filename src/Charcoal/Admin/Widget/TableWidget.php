@@ -27,6 +27,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     protected $properties;
 
+    /**
+     * @var boolean $sortable
+     */
     protected $sortable;
 
     /**
@@ -34,10 +37,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     private $propertyFactory;
 
+    /**
+     * @var mixed $adminMetadata
+     */
     private $adminMetadata;
 
     /**
      * @param PropertyFactory $factory The property factory, to create properties.
+     * @return TableWidget Chainable
      */
     public function setPropertyFactory(PropertyFactory $factory)
     {
@@ -116,9 +123,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-    * @param boolean $sortable The sortable flag.
-    * @return TableWidget Chainable
-    */
+     * @param boolean $sortable The sortable flag.
+     * @return TableWidget Chainable
+     */
     public function setSortable($sortable)
     {
         $this->sortable = !!$sortable;
@@ -133,6 +140,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $this->sortable;
     }
 
+    /**
+     * @return mixed
+     */
     protected function createCollectionConfig()
     {
         return $this->collectionMeta();
@@ -141,8 +151,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
      * Always return an array
      * Theses are the properties options used in the list display
-     * @param  string $ident Property ident
-     * @return array         []
+     * @return array
      */
     public function propertiesOptions()
     {
@@ -273,12 +282,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             } else {
                 $action['url'] = '#';
             }
-
         }
         return $objectActions;
 
     }
 
+    /**
+     * @return array
+     */
     public function defaultObjectActions()
     {
         return [
@@ -310,13 +321,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 $adminMetadata = (isset($metadata['admin']) ? $metadata['admin'] : null);
                 $listOptions   = $adminMetadata['lists'][$collectionIdent];
                 $listActions   = (isset($listOptions['list_actions']) ? $listOptions['list_actions'] : []);
-                foreach ($listActions as &$action) {
-                    if (isset($action['label'])) {
-                        $action['label'] = new TranslationString($action['label']);
-                    }
+            foreach ($listActions as &$action) {
+                if (isset($action['label'])) {
+                    $action['label'] = new TranslationString($action['label']);
                 }
+            }
                 return $listActions;
-
         } else {
             return [];
         }

@@ -5,6 +5,9 @@ namespace Charcoal\Admin\Template;
 // Local parent namespace dependencies
 use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
+/**
+ * Admin Lost Password Template
+ */
 class LostPasswordTemplate extends AdminTemplate
 {
     /**

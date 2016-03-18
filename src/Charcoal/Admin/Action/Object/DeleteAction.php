@@ -47,23 +47,23 @@ class DeleteAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-
-        $obj_type = $request->getParam('obj_type');
-        $obj_id = $request->getParam('obj_id');
-
-        if (!$obj_type) {
-            $this->setSuccess(false);
-            return $response->withStatus(404);
-        }
-
-        if (!$obj_id) {
-            $this->setSuccess(false);
-            return $response->withStatus(404);
-        }
-
-        $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $obj_type, $obj_id));
-
         try {
+            $obj_type = $request->getParam('obj_type');
+            $obj_id = $request->getParam('obj_id');
+
+            if (!$obj_type) {
+                $this->setSuccess(false);
+                return $response->withStatus(404);
+            }
+
+            if (!$obj_id) {
+                $this->setSuccess(false);
+                return $response->withStatus(404);
+            }
+
+            $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $obj_type, $obj_id));
+
+
             $modelFactory = new ModelFactory();
             $obj = $modelFactory->create($obj_type, [
                 'logger' => $this->logger

@@ -4,10 +4,13 @@ namespace Charcoal\Admin\Template;
 
 use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
+/**
+ * Admin Help template
+ */
 class HelpTemplate extends AdminTemplate
 {
     /**
-     * Authentication is obviously never required for the login page.
+     * Help is available to all users, no login required.
      *
      * @return boolean
      */

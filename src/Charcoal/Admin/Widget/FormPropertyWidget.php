@@ -24,27 +24,58 @@ class FormPropertyWidget extends AdminWidget
      */
     private $input;
 
+    /**
+     * @var string $type
+     */
     protected $type;
 
+    /**
+     * @var string $inputType
+     */
     protected $inputType;
+    /**
+     * @var array $inputOptions
+     */
     protected $inputOptions;
 
+    /**
+     * @var string $propertyIdent
+     */
     private $propertyIdent;
+
+    /**
+     * @var mixed $propertyVal
+     */
     private $propertyVal;
+
+    /**
+     * @var array $propertyData
+     */
     private $propertyData = [];
+
+    /**
+     * @var PropertyInterface $property
+     */
     private $property;
 
     /**
-     * @param boolean $active
+     * @var boolean $active
      */
     private $active = true;
 
 
+    /**
+     * @var PropertyFactory $factory
+     */
     private $propertyFactory;
+
+    /**
+     * @var PropertyInputFactory $factory
+     */
     private $propertyInputFactory;
 
     /**
-     * @param array|ArrayInterface $data
+     * @param array|ArrayInterface $data The widget AND property data.
      * @return FormProperty Chainable
      */
     public function setData($data)
@@ -58,7 +89,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     * @param boolean $active
+     * @param boolean $active The active flag.
      * @return FormPropertyWidget Chainable
      */
     public function setActive($active)
@@ -76,8 +107,8 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     * @param string $property
-     * @throws InvalidArgumentException
+     * @param string $propertyIdent The property ident.
+     * @throws InvalidArgumentException If the property ident is not a string.
      * @return FormPropertyWidget
      */
     public function setPropertyIdent($propertyIdent)
@@ -92,7 +123,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     *
+     * @return string
      */
     public function propertyIdent()
     {
@@ -100,7 +131,8 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     *
+     * @param mixed $propertyVal The property value.
+     * @return FormPropertyWidget Chainable
      */
     public function setPropertyVal($propertyVal)
     {
@@ -109,7 +141,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     *
+     * @return mixed
      */
     public function propertyVal()
     {
@@ -117,7 +149,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     *
+     * @return boolean
      */
     public function showLabel()
     {
@@ -176,7 +208,8 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     *
+     * @param string $inputType The property input type.
+     * @return FormPropertyWidget Chainable
      */
     public function setInputType($inputType)
     {
@@ -185,7 +218,7 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     *
+     * @return string
      */
     public function inputType()
     {
@@ -203,13 +236,12 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     * @param PropertyInterface $property
+     * @param PropertyInterface $property The property.
      * @return FormProperty Chainable
      */
     public function setProp(PropertyInterface $property)
     {
         $this->property = $property;
-        //$this->property->setVal($this->propertyVal());
         return $this;
     }
 
@@ -233,6 +265,9 @@ class FormPropertyWidget extends AdminWidget
         return $this->property;
     }
 
+    /**
+     * @return array
+     */
     public function langs()
     {
         $langs = \Charcoal\Translation\TranslationConfig::instance()->availableLanguages();
@@ -258,19 +293,22 @@ class FormPropertyWidget extends AdminWidget
 
         $GLOBALS['widget_template'] = $inputType;
 
-        yield $this->input;
-
-        // if($prop->l10n()) {
-        //     $langs = $this->langs();
-        //     foreach($langs as $lang) {
-        //         $this->input->setEditLang($lang);
-        //         yield $this->input;
-        //     }
-        // } else {
-        //     yield $this->input;
-        // }
+        $useL10n = false;
+// Currently disabled.
+        if ($useL10n && $prop->l10n()) {
+            $langs = $this->langs();
+            foreach ($langs as $lang) {
+                $this->input->setEditLang($lang);
+                yield $this->input;
+            }
+        } else {
+            yield $this->input;
+        }
     }
 
+    /**
+     * @return PropertyFactory
+     */
     private function propertyFactory()
     {
         if ($this->propertyFactory === null) {
@@ -279,6 +317,9 @@ class FormPropertyWidget extends AdminWidget
         return $this->propertyFactory;
     }
 
+    /**
+     * @return PropertyInputFactory
+     */
     private function propertyInputFactory()
     {
         if ($this->propertyInputFactory === null) {

@@ -29,23 +29,59 @@ abstract class AbstractPropertyInput implements
 {
     use LoggerAwareTrait;
 
+    /**
+     * @var string $ident
+     */
     private $ident;
 
+    /**
+     * @var boolean $readOnly
+     */
     private $readOnly;
+    /**
+     * @var boolean $required
+     */
     private $required;
+    /**
+     * @var boolean $disabled
+     */
     private $disabled;
+    /**
+     * @var boolean $multiple
+     */
     private $multiple;
 
+    /**
+     * @var string $type
+     */
     protected $type;
+    /**
+     * @var string $inputType
+     */
     protected $inputType;
 
+    /**
+     * @var string $inputId
+     */
     protected $inputId = null;
+    /**
+     * @var string $inputClass
+     */
     protected $inputClass = '';
-    //protected $inputName;
 
+    /**
+     * @var array $propertyData
+     */
     private $propertyData = [];
+
+    /**
+     * @var PropertyInterface $property
+     */
     private $property;
 
+    /**
+     * @param array|\ArrayAccess $data Constructor data.
+     */
     public function __construct($data = null)
     {
         if (!isset($data['logger'])) {
@@ -65,7 +101,7 @@ abstract class AbstractPropertyInput implements
      * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
-     * @param array $data
+     * @param array $data The input data.
      * @return Input Chainable
      */
     public function setData(array $data)
@@ -86,9 +122,9 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $ident
-     * @throws InvalidArgumentException if the ident is not a string
-     * @return Widget (Chainable)
+     * @param string $ident Input identifier.
+     * @throws InvalidArgumentException If the ident is not a string.
+     * @return Widget Chainable
      */
     public function setIdent($ident)
     {
@@ -110,8 +146,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param boolean $readOnly
-     * @throws InvalidArgumentException if the readOnly is not a boolean
+     * @param boolean $readOnly The read-only flag.
      * @return Widget (Chainable)
      */
     public function setReadOnly($readOnly)
@@ -129,7 +164,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param boolean $required
+     * @param boolean $required Required flag.
      * @return Widget (Chainable)
      */
     public function setRequired($required)
@@ -148,7 +183,7 @@ abstract class AbstractPropertyInput implements
 
 
     /**
-     * @param boolean $disabled
+     * @param boolean $disabled Disabled flag.
      * @return Widget (Chainable)
      */
     public function setDisabled($disabled)
@@ -166,7 +201,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param boolean $multiple
+     * @param boolean $multiple Multiple flag.
      * @return Widget (Chainable)
      */
     public function setMultiple($multiple)
@@ -184,7 +219,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $inputId
+     * @param string $inputId HTML input id attribute.
      * @return Input Chainable
      */
     public function setInputId($inputId)
@@ -209,8 +244,8 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $inputClass
-     * @throws InvalidArgumentException
+     * @param string $inputClass The input class attribute.
+     * @throws InvalidArgumentException If the class is not a string.
      * @return AbstractPropertyInput Chainable
      */
     public function setInputClass($inputClass)
@@ -224,6 +259,9 @@ abstract class AbstractPropertyInput implements
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function inputClass()
     {
         return $this->inputClass;
@@ -274,8 +312,8 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $inputType
-     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @param string $inputType The input type.
+     * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return  AbstractPropertyInput Chainable
      */
     public function setInputType($inputType)
@@ -301,7 +339,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param PropertyInterface $p
+     * @param PropertyInterface $p The property.
      * @return AbstractPropertyInput Chainable
      */
     public function setProperty(PropertyInterface $p)

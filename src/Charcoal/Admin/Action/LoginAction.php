@@ -43,6 +43,9 @@ class LoginAction extends AdminAction
      */
     protected $nextUrl;
 
+    /**
+     * @var string $errMsg
+     */
     protected $errMsg;
 
     /**
@@ -62,8 +65,9 @@ class LoginAction extends AdminAction
      *
      * Note that any string is accepted. It should be validated before using this method.
      *
-     * @param string $nextUrl
+     * @param string $nextUrl The next URL.
      * @throws InvalidArgumentException If the $nextUrl parameter is not a string.
+     * @return LoginAction Chainable
      */
     public function setNextUrl($nextUrl)
     {
@@ -109,7 +113,6 @@ class LoginAction extends AdminAction
             $this->setSuccess(false);
             return $response->withStatus(403);
         } else {
-
             $this->setRememberCookie($request, $u);
 
             $this->logger->debug(
@@ -120,6 +123,11 @@ class LoginAction extends AdminAction
         }
     }
 
+    /**
+     * @param RequestInterface $request The request.
+     * @param User             $u       The user.
+     * @return void
+     */
     public function setRememberCookie(RequestInterface $request, User $u)
     {
         $remember = $request->getParam('remember-me');
@@ -142,11 +150,10 @@ class LoginAction extends AdminAction
      */
     public function results()
     {
-        $results = [
+        return [
             'success'   => $this->success(),
             'next_url'  => 'home',
             'errMsg'    => $this->errMsg
         ];
-        return $results;
     }
 }

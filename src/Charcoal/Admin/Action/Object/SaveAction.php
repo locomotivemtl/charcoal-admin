@@ -39,13 +39,12 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     private $saveData = [];
 
     /**
-     * @param array|\ArrayAccess $data
+     * @param array|\ArrayAccess $data The action data.
      * @return LoginAction Chainable
      */
     public function setData($data)
     {
         parent::setData($data);
-        # $this->setObjData($data);
 
         unset($data['obj_type']);
         $this->setSaveData($data);
@@ -54,7 +53,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param array $saveData
+     * @param array $saveData The save data.
      * @return SaveAction Chainable
      */
     public function setSaveData(array $saveData)
@@ -72,7 +71,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param ModelInterface|null $saveData
+     * @param ModelInterface|null $obj The object.
      * @return SaveAction Chainable
      */
     public function setObj($obj)
@@ -118,7 +117,6 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
-            //var_dump($e);
             $this->setObj(null);
             $this->setSuccess(false);
             $this->addFeedback('error', $e->getMessage());
@@ -132,12 +130,11 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
      */
     public function results()
     {
-        $results = [
+        return [
             'success'   => $this->success(),
             'obj_id'    => $this->obj()->id(),
             'obj'       => $this->obj(),
             'feedbacks' => $this->feedbacks()
         ];
-        return $results;
     }
 }

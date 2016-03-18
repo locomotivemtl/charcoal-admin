@@ -28,7 +28,15 @@ class FormSidebarWidget extends AdminWidget
      */
     private $actions;
 
+    /**
+     * @var array $sidebarProperties
+     */
     protected $sidebarProperties = [];
+
+    /**
+     * Priority, or sorting index.
+     * @var integer $priority
+     */
     protected $priority;
 
     /**
@@ -36,18 +44,30 @@ class FormSidebarWidget extends AdminWidget
      */
     protected $title;
 
+
+    /**
+     * @param FormWidget $form The sidebar form widget.
+     * @return FormSidebarWidget Chainable
+     */
     public function setForm(FormWidget $form)
     {
         $this->form = $form;
         return $this;
     }
 
+    /**
+     * @return FormWidget
+     */
     public function form()
     {
         return $this->form;
     }
 
 
+    /**
+     * @param mixed $subtitle The sidebar subtitle.
+     * @return FormSidebarWidget Chainable
+     */
     public function setSubtitle($subtitle)
     {
         if ($subtitle === null) {
@@ -55,19 +75,30 @@ class FormSidebarWidget extends AdminWidget
         } else {
             $this->title = new TranslationString($subtitle);
         }
+        return $this;
     }
 
+    /**
+     * @param mixed $properties The sidebar properties.
+     * @return FormSidebarWidget Chainable
+     */
     public function setSidebarProperties($properties)
     {
         $this->sidebarProperties = $properties;
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function sidebarProperties()
     {
         return $this->sidebarProperties;
     }
 
+    /**
+     * @return void This method is a generator.
+     */
     public function formProperties()
     {
         $sidebarProperties = $this->sidebarProperties();
@@ -85,8 +116,8 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * Defined the form actions
-     * @param object $actions
+     * Defined the form actions.
+     * @param object $actions The sidebar actions.
      * @return FormGroupWidget Chainable
      */
     public function setActions($actions)
@@ -136,13 +167,13 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * @var integer $priority
-     * @throws InvalidArgumentException
+     * @param integer $priority The priority, or sorting index.
+     * @throws InvalidArgumentException If the priority is not a number.
      * @return FormGroupWidget Chainable
      */
     public function setPriority($priority)
     {
-        if (!is_int($priority)) {
+        if (!is_numeric($priority)) {
             throw new InvalidArgumentException(
                 'Priority must be an integer'
             );
@@ -161,7 +192,7 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * @param mixed $title
+     * @param mixed $title The sidebar title.
      * @return FormSidebarWidget Chainable
      */
     public function setTitle($title)
@@ -174,10 +205,13 @@ class FormSidebarWidget extends AdminWidget
         return $this;
     }
 
+    /**
+     * @return TranslationString
+     */
     public function title()
     {
         if ($this->title === null) {
-            $this->set_title('Actions');
+            $this->setTitle('Actions');
         }
         return $this->title;
     }

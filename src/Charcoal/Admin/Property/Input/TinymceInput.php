@@ -19,7 +19,7 @@ class TinymceInput extends AbstractPropertyInput
     private $editorOptions = [];
 
     /**
-     * @param array $opts
+     * @param array $opts The editor options.
      * @return Tinymce Chainable
      */
     public function setEditorOptions(array $opts)
@@ -46,19 +46,19 @@ class TinymceInput extends AbstractPropertyInput
     }
 
     /**
-     * @param string $opt_ident
-     * @param array  $opt_val
-     * @throws InvalidArgumentException
+     * @param string $optIdent The option ident.
+     * @param array  $optVal   The option value.
+     * @throws InvalidArgumentException If the ident is not a string.
      * @return Tinymce Chainable
      */
-    public function addEditorOption($opt_ident, $opt_val)
+    public function addEditorOption($optIdent, array $optVal)
     {
-        if (!is_string($opt_ident)) {
+        if (!is_string($optIdent)) {
             throw new InvalidArgumentException(
                 'Option ident must be a string.'
             );
         }
-        $this->editorOptions[$opt_ident] = $opt_val;
+        $this->editorOptions[$optIdent] = $optVal;
         return $this;
     }
 }

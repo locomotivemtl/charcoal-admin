@@ -59,11 +59,19 @@ trait CollectionContainerTrait
      */
     private $collection;
 
-
+    /**
+     * @var PropertyDisplayFactory $propertyDisplayFactory
+     */
     private $propertyDisplayFactory;
 
+    /**
+     * @var mixed $currentObjId
+     */
     protected $currentObjId;
 
+    /**
+     * @var ModelInterface $proto
+     */
     private $proto;
 
     /**
@@ -73,7 +81,7 @@ trait CollectionContainerTrait
     private $display;
 
     /**
-     * @param ModelFactory $factory
+     * @param ModelFactory $factory The model factory, to create model objects.
      * @return CollectionContainerInterface Chainable
      */
     public function setModelFactory(ModelFactory $factory)
@@ -97,7 +105,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param CollectionLoader $loader
+     * @param CollectionLoader $loader The collection loader.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollectionLoader(CollectionLoader $loader)
@@ -123,8 +131,8 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param string $objType
-     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @param string $objType The collection's object type.
+     * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return CollectionContainerInterface Chainable
      */
     public function setObjType($objType)
@@ -147,8 +155,8 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param string $collectionIdent
-     * @throws InvalidArgumentException
+     * @param string $collectionIdent The collection identifier.
+     * @throws InvalidArgumentException If the ident argument is not a string.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollectionIdent($collectionIdent)
@@ -171,7 +179,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param mixed $collectionConfig
+     * @param mixed $collectionConfig The collection configuration.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollectionConfig($collectionConfig)
@@ -194,7 +202,6 @@ trait CollectionContainerTrait
     /**
      * Stub: reimplement in classes using this trait.
      *
-     * @param array $data
      * @return mixed
      */
     protected function createCollectionConfig()
@@ -203,13 +210,13 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param integer $page
-     * @throws InvalidArgumentException
+     * @param integer $page The page number, of the items to load.
+     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
      * @return CollectionContainerInterface Chainable
      */
     public function setPage($page)
     {
-        if (!is_int($page)) {
+        if (!is_numeric($page)) {
             throw new InvalidArgumentException(
                 'Page must be an integer value.'
             );
@@ -219,7 +226,7 @@ trait CollectionContainerTrait
                 'Page must be 1 or greater.'
             );
         }
-        $this->page = $page;
+        $this->page = (int)$page;
         return $this;
     }
 
@@ -232,13 +239,13 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param integer $numPerPage
-     * @throws InvalidArgumentException
+     * @param integer $numPerPage The number of items per page to load.
+     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
      * @return CollectionContainerInterface Chainable
      */
     public function setNumPerPage($numPerPage)
     {
-        if (!is_int($numPerPage)) {
+        if (!is_numeric($numPerPage)) {
             throw new InvalidArgumentException(
                 'Num per page must be an integer value.'
             );
@@ -248,7 +255,7 @@ trait CollectionContainerTrait
                 'Num per page must be 1 or greater.'
             );
         }
-        $this->numPerPage = $numPerPage;
+        $this->numPerPage = (int)$numPerPage;
         return $this;
     }
 
@@ -261,7 +268,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param mixed $collection
+     * @param mixed $collection The collection.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollection($collection)
@@ -283,8 +290,8 @@ trait CollectionContainerTrait
 
     /**
      * @todo Integrate $data; merge with $collectionConfig
-     * @param array $data Optional
-     * @throws Exception
+     * @param array $data Optional collection data.
+     * @throws Exception If the object type of the colletion has not been set.
      * @return CollectionLoader
      */
     public function createCollection(array $data = null)
@@ -327,8 +334,9 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Supplies properties for objects in table template specific to object configuration
-     * @return  Generator
+     * Supplies properties for objects in table template specific to object configuration.
+     *
+     * @return  void This metod is a generator.
      */
     public function objectRows()
     {
@@ -381,7 +389,9 @@ trait CollectionContainerTrait
         }
     }
 
-
+    /**
+     * @return PropertyDisplayFactory
+     */
     private function propertyDisplayFactory()
     {
         if ($this->propertyDisplayFactory === null) {
@@ -389,7 +399,6 @@ trait CollectionContainerTrait
         }
         return $this->propertyDisplayFactory;
     }
-
 
     /**
      * @return boolean
@@ -408,6 +417,7 @@ trait CollectionContainerTrait
     }
 
     /**
+     * @param boolean $reload If true, reload will be forced.
      * @throws InvalidArgumentException If the object type is not defined / can not create prototype.
      * @return object
      */

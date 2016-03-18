@@ -6,23 +6,15 @@ use InvalidArgumentException;
 
 use \Pimple\Container;
 
-// From `charcoal-app`
-use \Charcoal\App\Template\WidgetFactory;
-
 /// From `charcoal-ui`
 use \Charcoal\Ui\Form\FormInterface;
-//use \Charcoal\Ui\Form\FormTrait;
+use \Charcoal\Ui\Form\FormTrait;
+use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
+// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminWidget;
-//use \Charcoal\Admin\Ui\FormInterface;
-use \Charcoal\Admin\Ui\FormTrait;
-use \Charcoal\Admin\Ui\FormGroupInterface;
-use \Charcoal\Admin\Widget\LayoutWidget;
-
-// Local namespace dependencies
-use \Charcoal\Admin\Widget\FormGroupWidget;
 
 /**
  *
@@ -34,39 +26,28 @@ class FormWidget extends AdminWidget implements
     use FormTrait;
     use LayoutAwareTrait;
 
+    /**
+     * @var array $sidebars
+     */
     protected $sidebars = [];
 
     /**
-    * @var WidgetFactory $widgetFactory
-    */
-    private $widgetFactory;
-
+     * @param Container $container The DI container.
+     * @return void
+     */
     public function setDependencies(Container $container)
     {
-        //$this->setFormGroupBuilder($container['form/group/builder']);
+        parent::setDependencies($container);
+
+        // Fill FormInterface dependencies
+        $this->setFormGroupBuilder($container['form/group/builder']);
+
+        // Fill LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
     }
 
     /**
-     * @param array|null $data
-     * @return FormGroupInterface
-     */
-    public function createGroup(array $data = null)
-    {
-        $widget_type = (isset($data['widget_type']) ? $data['widget_type'] : 'charcoal/admin/widget/formGroup');
-        $group = $this->widgetFactory()->create($widget_type, [
-            'logger' => $this->logger
-        ]);
-        $group->setForm($this);
-        if ($data) {
-            $group->setData($data);
-        }
-        return $group;
-
-    }
-
-    /**
-     * @param array $data
+     * @param array $data Optional. The form property data to set.
      * @return FormPropertyInterface
      */
     public function createFormProperty(array $data = null)
@@ -81,7 +62,8 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     *
+     * @param array $sidebars The form sidebars.
+     * @return FormWidget Chainable
      */
     public function setSidebars(array $sidebars)
     {
@@ -93,8 +75,9 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param array|FormSidebarWidget $sidebar
-     * @throws InvalidArgumentException
+     * @param string                  $sidebarIdent The sidebar identifier.
+     * @param array|FormSidebarWidget $sidebar      The sidebar data or object.
+     * @throws InvalidArgumentException If the ident is not a string or the sidebar is not valid.
      * @return FormWidget Chainable
      */
     public function addSidebar($sidebarIdent, $sidebar)
@@ -106,7 +89,7 @@ class FormWidget extends AdminWidget implements
         }
         if (($sidebar instanceof FormSidebarWidget)) {
             $this->sidebars[$sidebarIdent] = $sidebar;
-        } else if (is_array($sidebar)) {
+        } elseif (is_array($sidebar)) {
             $s = new FormSidebarWidget([
                 'logger'=>$this->logger
             ]);
@@ -132,11 +115,6 @@ class FormWidget extends AdminWidget implements
         } else {
             uasort($sidebars, ['self', 'sortSidebarsByPriority']);
             foreach ($sidebars as $sidebar) {
-                /*if ($sidebar->widget_type() != '') {
-                    $GLOBALS['widget_template'] = $sidebar->widget_type();
-                } else {
-                    $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
-                }*/
                 $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
                 yield $sidebar->ident() => $sidebar;
             }
@@ -155,22 +133,77 @@ class FormWidget extends AdminWidget implements
         $a = $a->priority();
         $b = $b->priority();
 
-        if ($a == $b) {
-            return 1;
-// Should be 0?
-        }
-
         return ($a < $b) ? (-1) : 1;
     }
 
     /**
-     * @return WidgetFactory
+     * @param array $properties The form properties.
+     * @return FormInterface Chainable
      */
-    private function widgetFactory()
+    public function setFormProperties(array $properties)
     {
-        if ($this->widgetFactory === null) {
-            $this->widgetFactory = new WidgetFactory();
+        $this->formProperties = [];
+        foreach ($properties as $propertyIdent => $property) {
+            $this->addFormProperty($propertyIdent, $property);
         }
-        return $this->widgetFactory;
+        return $this;
+    }
+
+    /**
+     * @param string                      $propertyIdent The property identifier.
+     * @param array|FormPropertyInterface $property      The property object or structure.
+     * @throws InvalidArgumentException If the ident is not a string or the property not a valid object or structure.
+     * @return FormInterface Chainable
+     */
+    public function addFormProperty($propertyIdent, $property)
+    {
+        if (!is_string($propertyIdent)) {
+            throw new InvalidArgumentException(
+                'Property ident must be a string'
+            );
+        }
+
+        if (($property instanceof FormPropertyInterface)) {
+            $this->formProperties[$propertyIdent] = $property;
+        } elseif (is_array($property)) {
+            $p = $this->createFormProperty($property);
+            $p->setPropertyIdent($propertyIdent);
+            $this->formProperties[$propertyIdent] = $p;
+        } else {
+            throw new InvalidArgumentException(
+                'Property must be a FormProperty object or an array'
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Properties generator
+     *
+     * @return void This method is a generator.
+     */
+    public function formProperties()
+    {
+        $sidebars = $this->sidebars;
+        if (!is_array($this->sidebars)) {
+            yield null;
+        } else {
+            foreach ($this->formProperties as $prop) {
+                if ($prop->active() === false) {
+                    continue;
+                }
+                $GLOBALS['widget_template'] = $prop->inputType();
+                yield $prop->propertyIdent() => $prop;
+            }
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultGroupType()
+    {
+        return 'charcoal/admin/widget/form-group-widget';
     }
 }

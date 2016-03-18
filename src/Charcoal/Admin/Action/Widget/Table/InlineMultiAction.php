@@ -22,6 +22,9 @@ use \Charcoal\Admin\Widget\FormProperty;
  */
 class InlineMultiAction extends AdminAction
 {
+    /**
+     * @var array $objects
+     */
     protected $objects;
 
     /**
@@ -72,7 +75,6 @@ class InlineMultiAction extends AdminAction
             }
             $this->setSuccess(true);
             return $response;
-
         } catch (Exception $e) {
             $this->setSuccess(false);
             return $response->withStatus(404);

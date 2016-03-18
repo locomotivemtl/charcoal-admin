@@ -2,22 +2,20 @@
 
 namespace Charcoal\Admin\Widget;
 
-// From `charcoal-base`
-use \Charcoal\Widget\WidgetFactory;
-use \Charcoal\Widget\WidgetInterface;
-
+// Module `charcoal-ui` dependencies
+use \Charcoal\Ui\Dashboard\DashboardInterface;
+use \Charcoal\Ui\Dashboard\DashboardTrait;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
-use \Charcoal\Admin\Ui\DashboardInterface;
-use \Charcoal\Admin\Ui\DashboardTrait;
 use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Widget\LayoutWidget;
 
 /**
- *
+ * The dashboard widget is a simple dashboard interface / layout aware object.
  */
-class DashboardWidget extends AdminWidget implements DashboardInterface, LayoutAwareInterface
+class DashboardWidget extends AdminWidget implements
+    DashboardInterface,
+    LayoutAwareInterface
 {
     use DashboardTrait;
     use LayoutAwareTrait;

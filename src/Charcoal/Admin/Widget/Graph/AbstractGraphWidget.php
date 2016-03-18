@@ -16,13 +16,14 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
      * @var mixed $height
      */
     protected $height = 400;
+
     /**
      * @var array $colors
      */
     protected $colors;
 
     /**
-     * @param mixed $height
+     * @param mixed $height The graph height (for CSS).
      * @return GraphWidgetInterface Chainable
      */
     public function setHeight($height)
@@ -40,7 +41,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     }
 
     /**
-     * @param string[] $colors
+     * @param string[] $colors The graph colors.
      * @return GraphWidgetInterface Chainable
      */
     public function setColors(array $colors)
@@ -50,7 +51,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     }
 
     /**
-     *
+     * @return string[]
      */
     public function colors()
     {
@@ -62,6 +63,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
 
     /**
      * @todo Read from widget metadata
+     * @return string[]
      */
     public function defaultColors()
     {

@@ -8,6 +8,11 @@ use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormGroupInterface;
 use \Charcoal\Admin\Ui\FormGroupTrait;
 
+/**
+ * Map Widget displays a google map widget, with UI to add polygons, lines and points.
+ *
+ * Most of this widget functionalities are in javascript.
+ */
 class MapWidget extends AdminWidget implements FormGroupInterface
 {
     use FormGroupTrait;
@@ -17,7 +22,16 @@ class MapWidget extends AdminWidget implements FormGroupInterface
      */
     private $styles;
 
+    /**
+     * The ident of the object's property for the latitude.
+     * @var string $latProperty
+     */
     private $latProperty;
+
+     /**
+      * The ident of the object's property for the longitude.
+      * @var string $latProperty
+      */
     private $lonProperty;
 
     /**
@@ -56,6 +70,10 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         return $this->lonProperty;
     }
 
+    /**
+     * Get the latitude, from the object's lat property.
+     * @return float
+     */
     public function lat()
     {
         if (!$this->obj() || !$this->latProperty()) {
@@ -65,6 +83,10 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         return call_user_func([$obj, $this->latProperty()]);
     }
 
+    /**
+     * Get the longitude, from the object's lon property.
+     * @return float
+     */
     public function lon()
     {
         if (!$this->obj() || !$this->lonProperty()) {
@@ -72,23 +94,6 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         }
         $obj = $this->obj();
         return call_user_func([$obj, $this->lonProperty()]);
-    }
-
-    /**
-     * Styles
-     */
-    public function styles()
-    {
-
-    }
-
-    public function setStyles($styles)
-    {
-        if (!$styles) {
-            return $this;
-        }
-
-        return $this;
     }
 
     /**

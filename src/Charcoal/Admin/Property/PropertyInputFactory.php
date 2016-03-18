@@ -6,13 +6,13 @@ namespace Charcoal\Admin\Property;
 use \Charcoal\Factory\ResolverFactory;
 
 /**
- *
+ * Property Input Factory.
  */
 class PropertyInputFactory extends ResolverFactory
 {
 
     /**
-     * @param array $data
+     * @return string
      */
     public function baseClass()
     {

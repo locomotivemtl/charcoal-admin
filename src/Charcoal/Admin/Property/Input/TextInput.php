@@ -39,18 +39,18 @@ class TextInput extends AbstractPropertyInput
 
 
     /**
-     * @param integer $minLength
-     * @throws InvalidArgumentException
+     * @param integer $minLength The min length.
+     * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
     public function setMinLength($minLength)
     {
-        if (!is_integer($minLength)) {
+        if (!is_numeric($minLength)) {
             throw new InvalidArgumentException(
                 'Min length needs to be an integer'
             );
         }
-        $this->minLength = $minLength;
+        $this->minLength = (int)$minLength;
         return $this;
     }
 
@@ -63,18 +63,18 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $maxLength
-     * @throws InvalidArgumentException
+     * @param integer $maxLength The max length.
+     * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
     public function setMaxLength($maxLength)
     {
-        if (!is_integer($maxLength)) {
+        if (!is_numeric($maxLength)) {
             throw new InvalidArgumentException(
                 'Max length needs to be an integer'
             );
         }
-        $this->maxLength = $maxLength;
+        $this->maxLength = (int)$maxLength;
         return $this;
     }
 
@@ -87,18 +87,18 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $size
-     * @throws InvalidArgumentException
+     * @param integer $size The text size.
+     * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
     public function setSize($size)
     {
-        if (!is_integer($size)) {
+        if (!is_numeric($size)) {
             throw new InvalidArgumentException(
                 'Size needs to be an integer'
             );
         }
-        $this->size = $size;
+        $this->size = (int)$size;
         return $this;
     }
 
@@ -110,11 +110,11 @@ class TextInput extends AbstractPropertyInput
         return $this->size;
     }
 
-        /**
-         * @param string $pattern
-         * @throws InvalidArgumentException
-         * @return Text Chainable
-         */
+    /**
+     * @param string $pattern The pattern.
+     * @throws InvalidArgumentException If the argument is not a string.
+     * @return Text Chainable
+     */
     public function setPattern($pattern)
     {
         if (!is_string($pattern)) {
@@ -135,8 +135,7 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param string|string[]|TranslationStringInterface $placeholder
-     * @throws InvalidArgumentException
+     * @param mixed $placeholder The placeholder attribute.
      * @return Text Chainable
      */
     public function setPlaceholder($placeholder)

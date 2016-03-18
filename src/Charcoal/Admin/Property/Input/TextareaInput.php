@@ -21,18 +21,18 @@ class TextareaInput extends AbstractPropertyInput
     private $rows;
 
     /**
-     * @param integer $cols
-     * @throws InvalidArgumentException
+     * @param integer $cols The number of columns (html cols attribute).
+     * @throws InvalidArgumentException  If the argument is not a number.
      * @return Text Chainable
      */
     public function setCols($cols)
     {
-        if (!is_integer($cols)) {
+        if (!is_numeric($cols)) {
             throw new InvalidArgumentException(
                 'Accept needs to be a string'
             );
         }
-        $this->cols = $cols;
+        $this->cols = (int)$cols;
         return $this;
     }
 
@@ -45,18 +45,18 @@ class TextareaInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $rows
-     * @throws InvalidArgumentException
+     * @param integer $rows The number of rows (html rows attribute).
+     * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
     public function setRows($rows)
     {
-        if (!is_integer($rows)) {
+        if (!is_numeric($rows)) {
             throw new InvalidArgumentException(
                 'Accept needs to be a string'
             );
         }
-        $this->rows = $rows;
+        $this->rows = (int)$rows;
         return $this;
     }
 

@@ -46,7 +46,7 @@ class InlineAction extends AdminAction
     private $widgetFactory;
 
     /**
-     * @param Container $container
+     * @param Container $container DI container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -58,7 +58,7 @@ class InlineAction extends AdminAction
     }
 
     /**
-     * @param ModelFactory $factory
+     * @param ModelFactory $factory Model factory, to create model objects.
      * @return ObjectContainerInterface Chainable
      */
     public function setModelFactory(ModelFactory $factory)
@@ -80,6 +80,7 @@ class InlineAction extends AdminAction
 
     /**
      * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return InlineAction Chainable
      */
     public function setWidgetFactory(WidgetFactory $factory)
     {
@@ -134,7 +135,6 @@ class InlineAction extends AdminAction
             $objForm->setObjId($objId);
             $formProperties = $objForm->formProperties();
             foreach ($formProperties as $propertyIdent => $property) {
-
                 // Safeguard type
                 if (!($property instanceof FormPropertyWidget)) {
                     continue;
@@ -148,7 +148,6 @@ class InlineAction extends AdminAction
             }
             $this->setSuccess(true);
             return $response;
-
         } catch (Exception $e) {
             $this->setSuccess(false);
             return $response->withStatus(404);
@@ -160,11 +159,10 @@ class InlineAction extends AdminAction
      */
     public function results()
     {
-        $results = [
+        return [
             'success'           => $this->success(),
             'inline_properties' => $this->inlineProperties,
             'feedbacks'         => $this->feedbacks()
         ];
-        return $results;
     }
 }

@@ -21,6 +21,7 @@ trait ObjectContainerTrait
      * @var string $objType
      */
     protected $objType;
+
     /**
      * @var string $objId
      */
@@ -37,7 +38,7 @@ trait ObjectContainerTrait
     protected $obj;
 
     /**
-     * @param ModelFactory $factory
+     * @param ModelFactory $factory The model factory, to create objects.
      * @return ObjectContainerInterface Chainable
      */
     public function setModelFactory(ModelFactory $factory)
@@ -58,8 +59,8 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @param string $objType
-     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @param string $objType The object type.
+     * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjType($objType)
@@ -82,8 +83,8 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @param string|numeric $objId
-     * @throws InvalidArgumentException if provided argument is not of type 'scalar'.
+     * @param string|numeric $objId The object id to load.
+     * @throws InvalidArgumentException If provided argument is not of type 'scalar'.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjId($objId)
@@ -108,8 +109,8 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @param string $objBaseClass
-     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @param string $objBaseClass The base class.
+     * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjBaseClass($objBaseClass)
@@ -142,7 +143,7 @@ trait ObjectContainerTrait
         if ($this->obj === null) {
             if ($this->objId()) {
                 $this->obj = $this->loadObj();
-            } else if (isset($_GET['clone_id']) && $_GET['clone_id']) {
+            } elseif (isset($_GET['clone_id']) && $_GET['clone_id']) {
                 $this->obj = $this->createObj();
                 $objClass = getClass($this->obj);
                 $clone = new $objClass([
@@ -151,8 +152,7 @@ trait ObjectContainerTrait
                 $clone->load($_GET['clone_id']);
                 $clone_data =
                 $this->obj->set_data($clone->data());
-
-            } else if (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
+            } elseif (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
                 $this->obj = $this->createObj();
                 $blueprint = $this->modelFactory()->create($this->obj->blueprintType(), [
                     'logger'=>$this->logger
@@ -161,7 +161,6 @@ trait ObjectContainerTrait
                 $data = $blueprint->data();
                 unset($data[$blueprint->key()]);
                 $this->obj->setData($blueprint->data());
-
             } else {
                 $this->obj = $this->createObj();
             }
@@ -170,7 +169,7 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @throws Exception
+     * @throws Exception If the object is not valid.
      * @return ModelInterface
      */
     protected function createObj()
@@ -191,7 +190,6 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @throws Exception
      * @return ModelInterface The loaded object
      */
     protected function loadObj()
@@ -210,7 +208,7 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @throws Exception
+     * @throws Exception If the object is invalid.
      * @return boolean
      */
     protected function validateObjType()
@@ -234,6 +232,7 @@ trait ObjectContainerTrait
     }
 
     /**
+     * @param mixed $obj Object to validate.
      * @return boolean
      */
     protected function validateObjBaseClass($obj)

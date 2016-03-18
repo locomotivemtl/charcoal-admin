@@ -11,16 +11,18 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
 class MapWidgetInput extends AbstractPropertyInput
 {
     /**
-     *
+     * @var array $mapOptions
      */
     private $mapOptions = [];
 
     /**
-     * @param array $mapOptions
+     * @param array $mapOptions The map options.
+     * @return MapWidgetInput Chainable
      */
     public function setMapOptions(array $mapOptions)
     {
         $this->mapOptions = $mapOptions;
+        return $this;
     }
 
     /**

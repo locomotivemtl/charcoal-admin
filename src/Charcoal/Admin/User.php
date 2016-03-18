@@ -50,8 +50,13 @@ class User extends AbstractUser
         return $group;
     }
 
-    public function createPermission($data = null)
+    /**
+     * @param array $data Optional permission data.
+     * @return array
+     */
+    public function createPermission(array $data = null)
     {
+        unset($data);
         return [];
     }
 }

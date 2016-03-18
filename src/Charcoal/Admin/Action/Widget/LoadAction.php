@@ -33,40 +33,47 @@ class LoadAction extends AdminAction
      */
     protected $widgetHtml = '';
 
+    /**
+     * @var ViewInterface $widgetView
+     */
     protected $widgetView;
 
+    /**
+     * @param Container $dependencies The DI container.
+     * @return void
+     */
     public function setDependencies(Container $dependencies)
     {
         $this->widgetView = $dependencies['view'];
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
+     * @param ServerRequestInterface $request  PSR7 Request.
+     * @param ResponseInterface      $response PSR7 Response.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
 
-        $widget_type = $request->getParam('widget_type');
-        $widget_options = $request->getParam('widget_options');
+        $widgetType = $request->getParam('widget_type');
+        $widgetOptions = $request->getParam('widget_options');
 
-        if (!$widget_type) {
+        if (!$widgetType) {
             $this->setSuccess(false);
             return $response->withStatus(404);
         }
 
         try {
             $widget_factory = new WidgetFactory();
-            $widget = $widget_factory->create($widget_type, [
+            $widget = $widget_factory->create($widgetType, [
                 'logger'=>$this->logger
             ]);
             $widget->setView($this->widgetView);
 
-            if (is_array($widget_options)) {
-                $widget->setData($widget_options);
+            if (is_array($widgetOptions)) {
+                $widget->setData($widgetOptions);
             }
-            $widgetHtml = $widget->renderTemplate($widget_type);
+            $widgetHtml = $widget->renderTemplate($widgetType);
             $widgetId = $widget->widgetId();
 
             $this->setWidgetHtml($widgetHtml);
@@ -74,9 +81,8 @@ class LoadAction extends AdminAction
 
             $this->setSuccess(true);
             return $response;
-
         } catch (Exception $e) {
-            $this->addFeedback(sprintf('An error occured trying to reload the widget: "%s"', $e->getMessage()), 'error');
+            $this->addFeedback(sprintf('An error occured reloading the widget: "%s"', $e->getMessage()), 'error');
             $this->addFeedback($e->getMessage(), 'error');
             $this->setSuccess(false);
             return $response->withStatus(404);
@@ -84,8 +90,8 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * @param string $widgetId
-     * @throws InvalidArgumentException
+     * @param string $id The widget ID.
+     * @throws InvalidArgumentException If the widget ID argument is not a string.
      * @return LoadAction Chainable
      */
     public function setWidgetId($id)
@@ -108,8 +114,8 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * @param string $widgetHtml
-     * @throws InvalidArgumentException
+     * @param string $html The widget HTML.
+     * @throws InvalidArgumentException If the widget HTML is not a string.
      * @return LoadAction Chainable
      */
     public function setWidgetHtml($html)
@@ -136,12 +142,11 @@ class LoadAction extends AdminAction
      */
     public function results()
     {
-        $results = [
+        return [
             'success'       => $this->success(),
-            'widget_html'    => $this->widgetHtml(),
-            'widget_id'      => $this->widgetId(),
+            'widget_html'   => $this->widgetHtml(),
+            'widget_id'     => $this->widgetId(),
             'feedbacks'     => $this->feedbacks()
         ];
-        return $results;
     }
 }

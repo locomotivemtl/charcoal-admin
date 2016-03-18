@@ -115,15 +115,12 @@ class AuthTokenMetadata extends ModelMetadata
     }
 
     /**
-     * @param boolean $enabled The enabled flag.
+     * @param boolean $httpsOnly The "https only" flag.
      * @return AuthTokenMetadata Chainable
      */
     public function setHttpsOnly($httpsOnly)
     {
         $this->httpsOnly = !!$httpsOnly;
-        if ($this->httpsOnly === false) {
-            //$this->logger->debug('Warning: setting the "https only" flag to false for auth token is a serious security issue.');
-        }
         return $this;
     }
 

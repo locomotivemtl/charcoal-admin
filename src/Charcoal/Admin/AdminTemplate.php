@@ -70,8 +70,14 @@ class AdminTemplate extends AbstractTemplate
      */
     private $feedbacks;
 
+    /**
+     * @var \Charcoal\App\App $app
+     */
     private $app;
 
+    /**
+     * @return \Charcoal\App\App
+     */
     protected function app()
     {
         if ($this->app === null) {
@@ -85,7 +91,7 @@ class AdminTemplate extends AbstractTemplate
      * Ensure authentication before serving the template.
      * @todo Check permissions
      *
-     * @param arrray $data
+     * @param array $data The template data.
      */
     public function __construct(array $data = null)
     {
@@ -106,7 +112,8 @@ class AdminTemplate extends AbstractTemplate
 
     /**
      * Dependencies
-     * @param Container $container
+     * @param Container $container DI Container.
+     * @return void
      */
     public function setDependencies(Container $container)
     {
@@ -116,7 +123,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param mixed $ident
+     * @param mixed $ident Template identifier.
      * @return AdminTemplate Chainable
      */
     public function setIdent($ident)
@@ -126,7 +133,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param string
+     * @return string
      */
     public function ident()
     {
@@ -134,7 +141,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param mixed $label
+     * @param mixed $label Template label.
      * @return AdminTemplate Chainable
      */
     public function setLabel($label)
@@ -152,7 +159,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param mixed $title
+     * @param mixed $title Template title.
      * @return AdminTemplate Chainable
      */
     public function setTitle($title)
@@ -173,7 +180,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param mixed $subtitle
+     * @param mixed $subtitle Template subtitle.
      * @return AdminTemplate Chainable
      */
     public function setSubtitle($subtitle)
@@ -191,7 +198,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param boolean $show
+     * @param boolean $show The show header menu flag.
      * @return AdminTemplate Chainable
      */
     public function setShowHeaderMenu($show)
@@ -210,7 +217,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
      * @throws Exception If the menu was not properly configured.
-     * @return array
+     * @return void This method is a generator.
      */
     public function headerMenu()
     {
@@ -235,8 +242,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param boolean $show
-     * @throws InvalidArgumentException
+     * @param boolean $show The show footer menu flag.
      * @return AdminTemplate Chainable
      */
     public function setShowFooterMenu($show)
@@ -258,15 +264,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function footerMenu()
     {
-        // @todo
         return [];
-    }
-
-    public function token()
-    {
-        throw new Exception(
-            'Function not implemented.'
-        );
     }
 
     /**
@@ -286,8 +284,8 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param string $level
-     * @param mixed  $msg
+     * @param string $level The feedback level.
+     * @param mixed  $msg   The feedback message.
      * @return AdminTemplate Chainable
      */
     public function addFeedback($level, $msg)
@@ -317,6 +315,8 @@ class AdminTemplate extends AbstractTemplate
 
     /**
      * Determine if the current user is authenticated. If not it redirects them to the login page.
+     *
+     * @return void
      */
     private function auth()
     {
@@ -335,6 +335,9 @@ class AdminTemplate extends AbstractTemplate
         exit;
     }
 
+    /**
+     * @return boolean
+     */
     private function authBySession()
     {
         $u = User::getAuthenticated();
@@ -345,6 +348,9 @@ class AdminTemplate extends AbstractTemplate
         }
     }
 
+    /**
+     * @return boolean
+     */
     private function authByToken()
     {
         $authToken = new AuthToken([
@@ -407,18 +413,9 @@ class AdminTemplate extends AbstractTemplate
         }
     }
 
-    public function forLoop()
-    {
-        $return = [];
-
-        for ($i = 1; $i <= 10; $i++) {
-            $return[$i] = new ArrayIterator(array_combine(range(1, $i), range(1, $i)));
-        }
-
-        return $return;
-    }
-
-
+    /**
+     * @return string
+     */
     public function headerMenuLogo()
     {
         if (!isset($this->adminConfig['menu_logo'])) {

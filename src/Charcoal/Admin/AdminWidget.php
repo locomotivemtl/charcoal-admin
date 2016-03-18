@@ -85,8 +85,8 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-     * @param string $type
-     * @throws InvalidArgumentException
+     * @param string $type The widget type.
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return AdminWidget Chainable
      */
     public function setType($type)
@@ -109,8 +109,8 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-     * @param string $ident
-     * @throws InvalidArgumentException if the ident is not a string
+     * @param string $ident The widget ident.
+     * @throws InvalidArgumentException If the ident is not a string.
      * @return AdminWidget (Chainable)
      */
     public function setIdent($ident)
@@ -133,7 +133,7 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-     * @param mixed $label
+     * @param mixed $label The label.
      * @return AdminWidget Chainable
      */
     public function setLabel($label)
@@ -155,13 +155,16 @@ class AdminWidget extends AbstractWidget
         return $this->label;
     }
 
+    /**
+     * @return array
+     */
     public function actions()
     {
         return [];
     }
 
     /**
-     * @param boolean $show
+     * @param boolean $show The show actions flag.
      * @return AdminWidget Chainable
      */
     public function setShowActions($show)
@@ -183,7 +186,7 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-     * @param boolean $show
+     * @param boolean $show The show label flag.
      * @return AdminWidget Chainable
      */
     public function setShowLabel($show)
@@ -204,18 +207,6 @@ class AdminWidget extends AbstractWidget
         }
     }
 
-    /**
-     * @param mixed $template Unused
-     * @return string
-     */
-    public function render($template = null)
-    {
-        unset($template);
-        $view = new WidgetView();
-        $view->set_context($this);
-        $content = $view->renderTemplate($this->ident());
-        return $content;
-    }
 
     /**
      * @return string

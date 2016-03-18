@@ -42,7 +42,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     protected $updateData = [];
 
     /**
-     * @param array|\ArrayAccess $data
+     * @param array|\ArrayAccess $data The update action data.
      * @return LoginAction Chainable
      */
     public function setData($data)
@@ -57,7 +57,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param Container $container
+     * @param Container $container A DI Container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -69,7 +69,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param array $updateData
+     * @param array $updateData The update data.
      * @return SaveAction Chainable
      */
     public function setUpdateData(array $updateData)
@@ -87,12 +87,12 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param ModelInterface|null $saveData
+     * @param ModelInterface|null $obj The object.
      * @return SaveAction Chainable
      */
     public function setObj($obj)
     {
-        $this->Obj = $obj;
+        $this->obj = $obj;
         return $this;
     }
 
@@ -104,10 +104,9 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $params = $request->getParams();
-            $this->setData($params);
+            $this->setData($request->getParams());
 
-            // Load (or reload) object (From `ObjectContainerTrait`)
+            // Load or reload object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
             $updateData = array_replace_recursive($obj->data(), $this->updateData());
             $obj->setData($updateData);

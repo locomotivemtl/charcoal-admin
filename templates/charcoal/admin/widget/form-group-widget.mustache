@@ -12,12 +12,19 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
 <fieldset>
 
+    {{#showHeader}}
     <header class="o-header -border">
         {{#showTitle}}
         <h2>{{title}}</h2>
         {{/showTitle}}
-    </header>
 
+        {{#showDescription}}
+            <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
+        {{/showDescription}}
+    </header>
+    {{/showHeader}}
+
+{{!-- Loop form properties (typically `FormPropertyWidget`) --}}
 {{#formProperties}}
 
     {{#layout}}
@@ -40,7 +47,7 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                     {{/showDescription}}
 
                     {{#input}}
-                        {{!-- PropertyInput --}}
+                        {{!-- The actual property control (typically `PropertyInput`) --}}
                         {{>$widget_template}}
                     {{/input}}
 
@@ -64,6 +71,10 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
     {{/layout}}
 
 {{/formProperties}}
+
+{{#showNotes}}
+    <p class="help-block small">{{notes}}</p>
+{{/showNotes}}
 
 </fieldset>
 

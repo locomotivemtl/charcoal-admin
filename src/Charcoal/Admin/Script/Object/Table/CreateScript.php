@@ -90,7 +90,7 @@ class CreateScript extends AdminScript
                 sprintf('The table "%s" already exists. This script can only create new tables.', $table)
             );
             $climate->darkGray()->out(
-                'If you want to alter the table with the latest object\'s metadata, run the `admin/object/table/alter` script.'
+                'If you want to alter the table, run the `admin/object/table/alter` script.'
             );
             return $response;
         }

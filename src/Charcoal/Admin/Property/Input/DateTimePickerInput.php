@@ -17,8 +17,7 @@ class DateTimePickerInput extends AbstractPropertyInput
     private $placeholder;
 
     /**
-     * @param string|string[]|TranslationStringInterface $placeholder
-     * @throws InvalidArgumentException
+     * @param mixed $placeholder The placeholder attriubute.
      * @return Text Chainable
      */
     public function setPlaceholder($placeholder)

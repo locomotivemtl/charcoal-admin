@@ -263,7 +263,8 @@
     <!-- Disallow inline IF DISABLED -->
     <!--<rule ref="Squiz.PHP.DisallowInlineIf" />-->
 
-    <rule ref="Squiz.PHP.DisallowMultipleAssignments" />
+    <!-- Disabled: CSV reading is best done with assigment on while... -->
+    <!--<rule ref="Squiz.PHP.DisallowMultipleAssignments" />-->
     <rule ref="Squiz.PHP.DisallowObEndFlush" />
     <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops" />
     <!-- @todo Doc me -->

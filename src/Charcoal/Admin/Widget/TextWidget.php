@@ -100,7 +100,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @param boolean $show The show notes flag
+     * @param boolean $show The "show notes" flag.
      * @return Text Chainable
      */
     public function setShowNotes($show)

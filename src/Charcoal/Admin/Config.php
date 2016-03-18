@@ -81,13 +81,13 @@ class Config extends AbstractConfig
      * @param  array $routes The route configuration structure to set.
      * @return Config Chainable
      */
-    public function setRoutes($routes)
+    public function setRoutes(array $routes)
     {
         if (!isset($this->routes)) {
             $this->routes = [];
         }
 
-        $toIterate = [ 'templates', 'actions', 'scripts' ];
+        $toIterate = ['templates', 'actions', 'scripts'];
         foreach ($routes as $key => $val) {
             if (in_array($key, $toIterate) && isset($this->routes[$key])) {
                 $this->routes[$key] = array_merge($this->routes[$key], $val);

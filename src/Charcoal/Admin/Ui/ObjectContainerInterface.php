@@ -2,11 +2,14 @@
 
 namespace Charcoal\Admin\Ui;
 
+/**
+ * The Object Container Interface.
+ */
 interface ObjectContainerInterface
 {
 
     /**
-     * @param string $objType
+     * @param string $objType The object type.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjType($objType);
@@ -17,7 +20,7 @@ interface ObjectContainerInterface
     public function objType();
 
     /**
-     * @param mixed $objId
+     * @param mixed $objId The object id, to load.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjId($objId);

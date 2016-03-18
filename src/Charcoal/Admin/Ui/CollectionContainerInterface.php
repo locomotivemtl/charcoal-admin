@@ -8,7 +8,7 @@ namespace Charcoal\Admin\Ui;
 interface CollectionContainerInterface
 {
     /**
-     * @param string $objType
+     * @param string $objType The object type.
      * @return CollectionContainerInterface Chainable
      */
     public function setObjType($objType);
@@ -19,8 +19,7 @@ interface CollectionContainerInterface
     public function objType();
 
     /**
-     * @param string $collectionIdent
-     * @throws InvalidArgumentException
+     * @param string $collectionIdent The collection identifier.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollectionIdent($collectionIdent);
@@ -31,10 +30,10 @@ interface CollectionContainerInterface
     public function collectionIdent();
 
     /**
-     * @param mixed $dashboardConfig
+     * @param mixed $collectionConfig The collection config.
      * @return CollectionContainerInterface Chainable
      */
-    public function setCollectionConfig($dashboardConfig);
+    public function setCollectionConfig($collectionConfig);
 
     /**
      * @return mixed
@@ -42,16 +41,7 @@ interface CollectionContainerInterface
     public function collectionConfig();
 
     /**
-     * @param array $data
-     * @return mixed
-     */
-    //public function createCollectionConfig($data = null);
-
-
-
-    /**
-     * @param integer $page
-     * @throws InvalidArgumentException
+     * @param integer $page The page number.
      * @return CollectionContainerInterface Chainable
      */
     public function setPage($page);
@@ -62,8 +52,7 @@ interface CollectionContainerInterface
     public function page();
 
     /**
-     * @param integer $numPerPage
-     * @throws InvalidArgumentException
+     * @param integer $numPerPage The number of items per page.
      * @return CollectionContainerInterface Chainable
      */
     public function setNumPerPage($numPerPage);
@@ -74,7 +63,7 @@ interface CollectionContainerInterface
     public function numPerPage();
 
     /**
-     * @param mixed $collection
+     * @param mixed $collection The collection stucture or object.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollection($collection);

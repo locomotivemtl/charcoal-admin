@@ -63,9 +63,7 @@ class AuthToken extends AbstractModel implements IndexableInterface
     }
 
     /**
-     * Force a lowercase username
-     *
-     * @param string $ident
+     * @param string $ident The token ident.
      * @return AuthToken Chainable
      */
     public function setIdent($ident)
@@ -83,9 +81,7 @@ class AuthToken extends AbstractModel implements IndexableInterface
     }
 
     /**
-     * Force a lowercase username
-     *
-     * @param string $token
+     * @param string $token The token.
      * @return AuthToken Chainable
      */
     public function setToken($token)
@@ -285,7 +281,9 @@ class AuthToken extends AbstractModel implements IndexableInterface
     }
 
     /**
-     *
+     * @param mixed  $ident The user ident.
+     * @param string $token The token.
+     * @return mixed The user id.
      */
     public function getUserId($ident, $token)
     {

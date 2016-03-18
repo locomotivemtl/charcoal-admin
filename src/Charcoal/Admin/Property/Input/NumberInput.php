@@ -11,10 +11,11 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
  */
 class NumberInput extends AbstractPropertyInput
 {
-     /**
-      * @var integer $min
-      */
+    /**
+     * @var integer $min
+     */
     private $min = 0;
+
     /**
      * @var integer $max
      */
@@ -26,18 +27,18 @@ class NumberInput extends AbstractPropertyInput
     private $step = 0;
 
     /**
-     * @param integer $min
-     * @throws InvalidArgumentException
+     * @param integer $min The minimum.
+     * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
     public function setMin($min)
     {
-        if (!is_integer($min)) {
+        if (!is_numeric($min)) {
             throw new InvalidArgumentException(
                 'Min length needs to be an integer'
             );
         }
-        $this->min = $min;
+        $this->min = (int)$min;
         return $this;
     }
 
@@ -50,18 +51,18 @@ class NumberInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $max
-     * @throws InvalidArgumentException
+     * @param integer $max The maximum.
+     * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
     public function setMax($max)
     {
-        if (!is_integer($max)) {
+        if (!is_numeric($max)) {
             throw new InvalidArgumentException(
                 'Max length needs to be an integer'
             );
         }
-        $this->max = $max;
+        $this->max = (int)$max;
         return $this;
     }
 
@@ -74,18 +75,18 @@ class NumberInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $step
-     * @throws InvalidArgumentException
+     * @param integer $step The step attribute.
+     * @throws InvalidArgumentException If the value is not a number.
      * @return Text Chainable
      */
     public function setStep($step)
     {
-        if (!is_float($step)) {
+        if (!is_numeric($step)) {
             throw new InvalidArgumentException(
                 'Step size needs to be a float'
             );
         }
-        $this->step = $step;
+        $this->step = (float)$step;
         return $this;
     }
 

@@ -11,7 +11,7 @@ use \Charcoal\Admin\AdminScript;
 use \Charcoal\Admin\User;
 
 /**
- *
+ * Create user script.
  */
 class CreateScript extends AdminScript
 {
@@ -38,9 +38,7 @@ class CreateScript extends AdminScript
         $shown_props = [
             'username',
             'email',
-            'password',
-            //'groups',
-            //'permissions'
+            'password'
         ];
 
         $vals = [];
@@ -48,7 +46,6 @@ class CreateScript extends AdminScript
             if (!in_array($prop->ident(), $shown_props)) {
                 continue;
             }
-            //$climate->dump($prop->type());
             if ($prop->type() == 'password') {
                  $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
             } else {
@@ -71,7 +68,6 @@ class CreateScript extends AdminScript
         if ($ret) {
             $climate->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
         } else {
-            //$climate->dump($user->validator()->error_results());
             $climate->red()->out("\nError. Object could not be created.");
         }
 
@@ -84,16 +80,5 @@ class CreateScript extends AdminScript
     public function authRequired()
     {
         return false;
-        $proto = new User([
-            'logger' => $this->logger
-        ]);
-        $source = $proto->source();
-        if ($source->tableExists() !== true) {
-            return false;
-        }
-        if ($source->tableIsEmpty() === true) {
-            return false;
-        }
-        return true;
     }
 }

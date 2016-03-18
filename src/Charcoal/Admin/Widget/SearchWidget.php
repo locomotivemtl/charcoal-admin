@@ -88,15 +88,18 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
-            $collectionIdent = isset($admin_metadata['default_list']) ? $admin_metadata['default_list'] : '';
+            $collectionIdent = isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '';
         }
 
-        $objListData = isset($admin_metadata['lists'][$collectionIdent]) ? $admin_metadata['lists'][$collectionIdent] : [];
 
-        return $objListData;
+        if (isset($adminMetadata['lists'][$collectionIdent])) {
+            return $adminMetadata['lists'][$collectionIdent];
+        } else {
+            return [];
+        }
     }
 
     /**
@@ -114,11 +117,11 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
 
             if ($collectionIdent) {
                 $metadata = $obj->metadata();
-                $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+                $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
 
-                if (isset($admin_metadata['lists'][$collectionIdent]['properties'])) {
+                if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
                     // Flipping to have property ident as key
-                    $listProperties = array_flip($admin_metadata['lists'][$collectionIdent]['properties']);
+                    $listProperties = array_flip($adminMetadata['lists'][$collectionIdent]['properties']);
                     // Replacing values of listProperties from index to actual property values
                     $props = array_replace($listProperties, $props);
                     // Get only the keys that are in listProperties from props
@@ -140,11 +143,11 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         $collectionIdent = $this->collectionIdent();
 
-        if (isset($admin_metadata['lists'][$collectionIdent]['properties'])) {
-            $props = $admin_metadata['lists'][$collectionIdent]['properties'];
+        if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
+            $props = $adminMetadata['lists'][$collectionIdent]['properties'];
         }
         return json_encode($props);
     }

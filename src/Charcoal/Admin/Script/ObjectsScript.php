@@ -109,7 +109,6 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
                 $obj[$label] = $val;
             }
             $table[] = $obj;
-
         }
         $climate->table($table);
 

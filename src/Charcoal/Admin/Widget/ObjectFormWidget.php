@@ -32,7 +32,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * @param array|ArrayInterface $data The widget data
+     * @param array|ArrayInterface $data The widget data.
      * @return ObjectForm Chainable
      */
     public function setData($data)
@@ -42,11 +42,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         $data = array_merge($_GET, $data);
 
         parent::setData($data);
-        # $this->setObjData($data);
-
-        /*if (isset($data['form_ident']) && $data['form_ident'] !== null) {
-            $this->setFormIdent($data['form_ident']);
-        }*/
 
         $objData = $this->dataFromObject();
         $data = array_merge_recursive($objData, $data);
@@ -58,7 +53,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 
      /**
       * @param string $url The next URL.
-      * @throws InvalidArgumentException if success is not a boolean
+      * @throws InvalidArgumentException If argument is not a string.
       * @return ActionInterface Chainable
       */
     public function setNextUrl($url)
@@ -101,7 +96,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 
     /**
      * @param string $formIdent The form ident.
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return ObjectForm Chainable
      */
     public function setFormIdent($formIdent)
@@ -145,7 +140,9 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     /**
      * FormProperty Generator
      *
-     * @todo Merge with property_options
+     * @param array $group An optional group to use.
+     * @throws Exception If a property data is invalid.
+     * @return void This is a generator.
      */
     public function formProperties(array $group = null)
     {

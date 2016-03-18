@@ -11,6 +11,7 @@ interface TimeGraphWidgetInterface extends GraphWidgetInterface
 {
     /**
      * @param string $type The group type.
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setGroupingType($type);
 
@@ -21,7 +22,7 @@ interface TimeGraphWidgetInterface extends GraphWidgetInterface
 
     /**
      * @param string $format The date format.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setDateFormat($format);
 
@@ -32,7 +33,7 @@ interface TimeGraphWidgetInterface extends GraphWidgetInterface
 
     /**
      * @param string $format The date format.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setSqlDateFormat($format);
 
@@ -43,7 +44,7 @@ interface TimeGraphWidgetInterface extends GraphWidgetInterface
 
     /**
      * @param string|DateTimeInterface $ts The start date.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setStartDate($ts);
 
@@ -54,7 +55,7 @@ interface TimeGraphWidgetInterface extends GraphWidgetInterface
 
     /**
      * @param string|DateTimeInterface $ts The end date.
-     * @return UserTimeGraphWidget Chainable
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setEndDate($ts);
 
@@ -64,8 +65,8 @@ interface TimeGraphWidgetInterface extends GraphWidgetInterface
     public function endDate();
 
     /**
-     * @param string|DateInterval $interval
-     * @return UserTimeGraphWidget Chainable
+     * @param string|DateInterval $interval The interval between each "category".
+     * @return TimeGraphWidgetInterface Chainable
      */
     public function setDateInterval($interval);
 

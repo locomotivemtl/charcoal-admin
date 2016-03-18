@@ -11,14 +11,13 @@ use \Charcoal\Property\PropertyInterface as PropertyInterface;
 interface PropertyInputInterface
 {
     /**
-     * @param array $data
+     * @param array $data The object (input) data.
      * @return Input Chainable
      */
     public function setData(array $data);
 
     /**
-     * @param string $ident
-     * @throws InvalidArgumentException if the ident is not a string
+     * @param string $ident The input identifier.
      * @return PropertyInputInterface Chainable
      */
     public function setIdent($ident);
@@ -29,8 +28,7 @@ interface PropertyInputInterface
     public function ident();
 
     /**
-     * @param boolean $readOnly
-     * @throws InvalidArgumentException if the readOnly is not a string
+     * @param boolean $readOnly The readonly flag.
      * @return PropertyInputInterface Chainable
      */
     public function setReadOnly($readOnly);
@@ -41,8 +39,7 @@ interface PropertyInputInterface
     public function readOnly();
 
     /**
-     * @param boolean $required
-     * @throws InvalidArgumentException if the required is not a string
+     * @param boolean $required The required flag.
      * @return PropertyInputInterface Chainable
      */
     public function setRequired($required);
@@ -54,8 +51,7 @@ interface PropertyInputInterface
 
 
     /**
-     * @param boolean $disabled
-     * @throws InvalidArgumentException if the disabled is not a string
+     * @param boolean $disabled The disabled flag.
      * @return PropertyInputInterface Chainable
      */
     public function setDisabled($disabled);
@@ -66,7 +62,7 @@ interface PropertyInputInterface
     public function disabled();
 
     /**
-     * @param string $inputId
+     * @param string $inputId The input id.
      * @return Input Chainable
      */
     public function setInputId($inputId);
@@ -87,14 +83,19 @@ interface PropertyInputInterface
     public function inputVal();
 
     /**
-     * @param string $input_type
+     * @param string $inputType The input type.
+     * @return PropertyInputInterface Chainable
      */
-    public function setInputType($input_type);
+    public function setInputType($inputType);
 
+    /**
+     * @return string
+     */
     public function inputType();
 
     /**
-     * @param PropertyInterface $p
+     * @param PropertyInterface $p The property.
+     * @return PropertyInputInterface Chainable
      */
     public function setProperty(PropertyInterface $p);
 

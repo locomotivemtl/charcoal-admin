@@ -17,22 +17,53 @@ use \Charcoal\Translation\TranslationConfig;
 /**
  *
  */
-abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
+abstract class AbstractPropertyDisplay implements
+    PropertyDisplayInterface,
+    LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    /**
+     * @var string $ident
+     */
     private $ident;
 
+    /**
+     * @var boolean $multiple
+     */
     private $multiple;
 
+    /**
+     * @var string $type
+     */
     protected $type;
+    /**
+     * @var string $displayType
+     */
     protected $displayType;
 
+    /**
+     * @var string $displayId
+     */
     protected $displayId = null;
+    /**
+     * @var string $displayClass
+     */
     protected $displayClass = '';
 
+    /**
+     * @var array $propertyData
+     */
     private $propertyData = [];
+
+    /**
+     * @var PropertyInterface $property
+     */
     private $property;
+
+    /**
+     * @var mixed $displayOptions
+     */
     protected $displayOptions;
 
     /**
@@ -57,7 +88,7 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
      * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
-     * @param array $data
+     * @param array $data The display data.
      * @return Display Chainable
      */
     public function setData(array $data)
@@ -78,9 +109,9 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     }
 
     /**
-     * @param string $ident
-     * @throws InvalidArgumentException if the ident is not a string
-     * @return Widget (Chainable)
+     * @param string $ident Display identifier.
+     * @throws InvalidArgumentException If the ident is not a string.
+     * @return Widget Chainable
      */
     public function setIdent($ident)
     {
@@ -102,7 +133,7 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     }
 
     /**
-     * @param boolean $multiple
+     * @param boolean $multiple Multiple flag.
      * @return Widget (Chainable)
      */
     public function setMultiple($multiple)
@@ -120,7 +151,7 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     }
 
     /**
-     * @param string $displayId
+     * @param string $displayId HTML id attribute.
      * @return Display Chainable
      */
     public function setDisplayId($displayId)
@@ -145,8 +176,8 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     }
 
     /**
-     * @param string $displayClass
-     * @throws InvalidArgumentException
+     * @param string $displayClass The display class attribute.
+     * @throws InvalidArgumentException If the class is not a string.
      * @return AbstractPropertyDisplay Chainable
      */
     public function setDisplayClass($displayClass)
@@ -160,6 +191,9 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function displayClass()
     {
         return $this->displayClass;
@@ -193,8 +227,8 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     }
 
     /**
-     * @param string $displayType
-     * @throws InvalidArgumentException if provided argument is not of type 'string'.
+     * @param string $displayType The display type.
+     * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return  AbstractPropertyDisplay Chainable
      */
     public function setDisplayType($displayType)
@@ -220,7 +254,7 @@ abstract class AbstractPropertyDisplay implements PropertyDisplayInterface
     }
 
     /**
-     * @param PropertyInterface $p
+     * @param PropertyInterface $p The property.
      * @return AbstractPropertyDisplay Chainable
      */
     public function setProperty(PropertyInterface $p)

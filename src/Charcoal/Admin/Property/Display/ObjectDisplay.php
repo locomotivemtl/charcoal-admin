@@ -9,5 +9,5 @@ use \Charcoal\Admin\Property\AbstractPropertyDisplay;
  */
 class ObjectDisplay
 {
-    protected $pattern;
+    // Nothing to do.
 }

@@ -36,6 +36,9 @@ class EditTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
     use ObjectContainerTrait;
 
+    /**
+     * @var SideMenuWidgetInterface $sidemenu
+     */
     private $sidemenu;
 
     /**
@@ -49,7 +52,7 @@ class EditTemplate extends AdminTemplate implements
     private $dashboardBuilder;
 
     /**
-     * @param Container $container
+     * @param Container $container DI container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -68,6 +71,7 @@ class EditTemplate extends AdminTemplate implements
 
     /**
      * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return EditTemplate Chainable
      */
     public function setWidgetFactory(WidgetFactory $factory)
     {
@@ -90,7 +94,7 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param DashboardBuilder $builder
+     * @param DashboardBuilder $builder A builder to create customized Dashboard objects.
      * @return CollectionTemplate Chainable
      *
      */
@@ -116,13 +120,13 @@ class EditTemplate extends AdminTemplate implements
 
 
     /**
-     * @param array $data Optional
-     * @throws Exception
+     * @param array $data Optional dashboard data.
      * @return Dashboard
      * @see DashboardContainerTrait::createDashboard()
      */
     public function createDashboard(array $data = null)
     {
+        unset($data);
         $dashboardConfig = $this->objEditDashboardConfig();
         $dashboard = $this->dashboardBuilder->build($dashboardConfig);
         return $dashboard;
@@ -142,14 +146,19 @@ class EditTemplate extends AdminTemplate implements
         $sidemenuConfig = $dashboardConfig['sidemenu'];
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-        $widget_type = isset($sidemenuConfig['widget_type']) ? $sidemenuConfig['widget_type'] : 'charcoal/admin/widget/sidemenu';
-        $sidemenu = $this->widgetFactory()->create($widget_type, [
+        if (isset($sidemenuConfig['widget_type'])) {
+            $widgetType = $sidemenuConfig['widget_type'];
+        } else {
+            $widgetType = 'charcoal/admin/widget/sidemenu';
+        }
+        $sidemenu = $this->widgetFactory()->create($widgetType, [
             'logger'=>$this->logger
         ]);
         return $sidemenu;
     }
 
     /**
+     * @throws Exception If the dashboard config can not be loaded.
      * @return array
      */
     private function objEditDashboardConfig()

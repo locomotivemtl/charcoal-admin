@@ -18,20 +18,7 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     use DashboardContainerTrait;
 
     /**
-     * @param array $data
-     * @return Home Chainable
-     */
-    public function setData($data)
-    {
-        parent::setData($data);
-
-        $this->setDashboardData($data);
-
-        return $this;
-    }
-
-    /**
-     * @param array $data Optional
+     * @param array $data Optional dashboard data.
      * @return Dashboard
      */
     public function createDashboard(array $data = null)
@@ -44,7 +31,7 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
         $dashboard = new DashboardWidget();
         if (is_array($data)) {
             $dashboard->setData($data);
-        } else if (isset($metadata['dashboard'])) {
+        } elseif (isset($metadata['dashboard'])) {
             $dashboard->setData($metadata['dashboard']);
         }
 

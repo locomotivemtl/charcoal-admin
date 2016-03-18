@@ -35,9 +35,9 @@ class AdminServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        /*$this->registerModule($container);
-        $this->registerHandlerServices($container);
-        $this->registerRequestControllerServices($container);*/
+        //$this->registerModule($container);
+        //$this->registerHandlerServices($container);
+        //$this->registerRequestControllerServices($container);
     }
 
     /**

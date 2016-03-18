@@ -12,7 +12,6 @@ use \Charcoal\Ui\Layout\LayoutTrait;
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminWidget;
 
-
 /**
  * Layout Widget Controller
  */

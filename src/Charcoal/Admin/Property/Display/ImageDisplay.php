@@ -9,38 +9,50 @@ use \Charcoal\Admin\Property\AbstractPropertyDisplay;
  */
 class ImageDisplay extends AbstractPropertyDisplay
 {
-    protected $val;
     /**
-     * Width and height of the image
-     * Default to: auto
+     * @var mixed $val
+     */
+    protected $val;
+
+    /**
+     * Width of the image
      * @var string $width (ex: 100px)
+     */
+    protected $width = 'auto';
+
+    /**
+     * Height of the image
      * @var string $height (ex: 100px)
      */
-    protected $width;
-    protected $height;
+    protected $height = 'auto';
 
     /**
-     * Max-width and max-height of the image
+     * Max-width of the image
      * Default: none
      * @var string $maxWidth (ex:100px)
+     */
+    protected $maxWidth = 'none';
+
+    /**
+     * Max-height of the image
+     * Default: none
      * @var string $maxHeight (ex:100px)
      */
-    protected $maxWidth;
-    protected $maxHeight;
-
-
+    protected $maxHeight = 'none';
 
     /**
      * Width setter
      * If integer specified, 'px' will be append to it
-     * @param mixed $width CSS value
+     * @param mixed $width CSS value.
+     * @return ImageDisplay Chainable
      */
-    public function setWidth($width = 'auto')
+    public function setWidth($width)
     {
         if (is_numeric($width)) {
             $width .= 'px';
         }
         $this->width = $width;
+        return $this;
     }
 
     /**
@@ -50,23 +62,22 @@ class ImageDisplay extends AbstractPropertyDisplay
      */
     public function width()
     {
-        if (!$this->width) {
-            $this->setWidth();
-        }
         return $this->width;
     }
 
     /**
      * Height setter
      * If integer specified, 'px' will be append to it
-     * @param string $height CSS value
+     * @param string $height CSS value.
+     * @return ImageDisplay Chainable
      */
-    public function setHeight($height = 'auto')
+    public function setHeight($height)
     {
         if (is_numeric($height)) {
             $height .= 'px';
         }
         $this->height = $height;
+        return $this;
     }
 
     /**
@@ -76,9 +87,6 @@ class ImageDisplay extends AbstractPropertyDisplay
      */
     public function height()
     {
-        if (!$this->height) {
-            $this->setHeight();
-        }
         return $this->height;
     }
 
@@ -86,14 +94,16 @@ class ImageDisplay extends AbstractPropertyDisplay
     /**
      * Width setter
      * If integer specified, 'px' will be append to it
-     * @param string $maxWidth CSS value
+     * @param string $maxWidth CSS value.
+     * @return ImageDisplay Chainable
      */
-    public function setMaxWidth($maxWidth = 'none')
+    public function setMaxWidth($maxWidth)
     {
         if (is_numeric($maxWidth)) {
             $maxWidth .= 'px';
         }
         $this->maxWidth = $maxWidth;
+        return $this;
     }
 
     /**
@@ -103,23 +113,22 @@ class ImageDisplay extends AbstractPropertyDisplay
      */
     public function maxWidth()
     {
-        if (!$this->maxWidth) {
-            $this->setMaxWidth();
-        }
         return $this->maxWidth;
     }
 
     /**
      * Height setter
      * If integer specified, 'px' will be append to it
-     * @param string $maxHeight CSS value
+     * @param string $maxHeight CSS value.
+     * @return ImageDisplay Chainable
      */
-    public function setMaxHeight($maxHeight = 'none')
+    public function setMaxHeight($maxHeight)
     {
         if (is_numeric($maxHeight)) {
             $maxHeight .= 'px';
         }
         $this->maxHeight = $maxHeight;
+        return $this;
     }
 
     /**
@@ -129,9 +138,6 @@ class ImageDisplay extends AbstractPropertyDisplay
      */
     public function maxHeight()
     {
-        if (!$this->maxHeight) {
-            $this->setMaxHeight();
-        }
         return $this->maxHeight;
     }
 }

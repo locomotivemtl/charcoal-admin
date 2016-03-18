@@ -19,6 +19,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
+    "php": ">=5.5.0",
     "locomotivemtl/charcoal-core": "dev-master",
     "locomotivemtl/charcoal-base": "dev-master",
     "locomotivemtl/charcoal-app": "dev-master",
@@ -33,5 +34,15 @@
     "psr-4": {
       "Charcoal\\Admin\\": "src/Charcoal/Admin"
     }
+  },
+  "scripts": {
+    "test": [
+      "find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
+      "php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;php vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/",
+      "php vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-text"
+    ],
+    "phplint": "find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
+    "phpunit": "php vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-text",
+    "phpcs": "php vendor/bin/phpcs -ps --colors --standard=phpcs.xml --config-set ignore_warnings_on_exit 1 src/"
   }
 }

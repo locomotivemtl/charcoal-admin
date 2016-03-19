@@ -3,12 +3,13 @@ Textarea Property Input
 =======================
 -- }}
 <textarea
-	id="{{inputId}}"
-	name="{{inputName}}"
-	class="form-control {{inputClass}}"
-	cols="{{cols}}"
-	rows="{{rows}}"
-	{{#readOnly}}read_only{{/readOnly}}
-	{{#required}}required{{/required}}
-	{{#disabled}}disabled{{/disabled}}
+    id="{{inputId}}"
+    name="{{inputName}}"
+    class="form-control {{inputClass}}"
+    cols="{{cols}}"
+    rows="{{rows}}"
+    {{#placeholder}}placeholder="{{placeholder}}"{{/placeholder}}
+    {{#readOnly}}read_only{{/readOnly}}
+    {{#required}}required{{/required}}
+    {{#disabled}}disabled{{/disabled}}
 >{{&inputVal}}</textarea>

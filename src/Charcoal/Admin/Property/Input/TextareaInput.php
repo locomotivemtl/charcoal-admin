@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
+use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
@@ -15,10 +16,16 @@ class TextareaInput extends AbstractPropertyInput
      * @var integer $cols
      */
     private $cols;
+
     /**
      * @var integer $rows
      */
     private $rows;
+
+    /**
+     * @var TranslationStringInterface $placeholder
+     */
+    private $placeholder;
 
     /**
      * @param integer $cols The number of columns (html cols attribute).
@@ -66,5 +73,26 @@ class TextareaInput extends AbstractPropertyInput
     public function rows()
     {
         return $this->rows;
+    }
+
+    /**
+     * @param string|string[]|TranslationStringInterface $placeholder
+     * @throws InvalidArgumentException
+     * @return Text Chainable
+     */
+    public function setPlaceholder($placeholder)
+    {
+        $this->placeholder = new TranslationString($placeholder);
+
+        return $this;
+    }
+
+    /**
+     * @todo   [mcaskill: 2016-03-04] Move this to a trait `HasInputPlaceholder`
+     * @return string
+     */
+    public function placeholder()
+    {
+        return $this->placeholder;
     }
 }

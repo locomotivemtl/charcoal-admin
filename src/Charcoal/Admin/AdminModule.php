@@ -6,7 +6,11 @@ namespace Charcoal\Admin;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+// Dependency from Pimple
+use \Pimple\Container;
+
 // Dependency from 'charcoal-app'
+use \Charcoal\App\Handler\HandlerInterface;
 use \Charcoal\App\Module\AbstractModule;
 
 // Intra-module ('charcoal-admin') dependencies
@@ -64,10 +68,17 @@ class AdminModule extends AbstractModule
 
         $groupIdent = '/'.trim($config['base_path'], '/');
 
+        // Add the group's index route
         if (isset($config['routes']['default_view'])) {
             $this->app()->get(
                 $groupIdent,
-                function (RequestInterface $request, ResponseInterface $response) use ($groupIdent, $config) {
+                function (
+                    RequestInterface $request,
+                    ResponseInterface $response
+                ) use (
+                    $groupIdent,
+                    $config
+                ) {
                     return $response->withRedirect(
                         $groupIdent.'/'.ltrim($config['routes']['default_view'], '/'),
                         303
@@ -75,8 +86,112 @@ class AdminModule extends AbstractModule
                 }
             );
         }
-        $this->app()->group($groupIdent, 'charcoal/admin/module:setupRoutes');
+
+        // Add the route group
+        $this->app()->group($groupIdent, 'charcoal/admin/module:setupRoutes')
+                    ->add('charcoal/admin/module:setupHandlers');
 
         return $this;
+    }
+
+    /**
+     * Set up the module's handlers, via group middleware.
+     *
+     * @param  RequestInterface  $request  A PSR7 request object.
+     * @param  ResponseInterface $response A PSR7 response object.
+     * @param  callable          $next     The next callable middleware.
+     * @return ResponseInterface A PSR7 response object.
+     */
+    public function setupHandlers(RequestInterface $request, ResponseInterface $response, callable $next)
+    {
+        $config    = $this->config();
+        $container = $this->app()->getContainer();
+        $baseUrl   = $container['request']->getUri()->getBaseUrl();
+        $adminUrl  = rtrim($baseUrl, '/\\').'/'.trim($config['base_path'], '/\\');
+
+        if (isset($config['handlers'])) {
+
+            /**
+             * HTTP 404 (Not Found) handler.
+             *
+             * @param  object|HandlerInterface $handler   An error handler instance.
+             * @param  Container               $container A container instance.
+             * @return HandlerInterface
+             */
+            $container->extend('notFoundHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
+                    $handler->config()->merge($config['handlers.defaults']);
+                    $handler->setBaseUrl($adminUrl);
+                }
+
+                return $handler;
+            });
+
+            /**
+             * HTTP 405 (Not Allowed) handler.
+             *
+             * @param  object|HandlerInterface $handler   An error handler instance.
+             * @param  Container               $container A container instance.
+             * @return HandlerInterface
+             */
+            $container->extend('notAllowedHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
+                    $handler->config()->merge($config['handlers.defaults']);
+                    $handler->setBaseUrl($adminUrl);
+                }
+
+                return $handler;
+            });
+
+            /**
+             * HTTP 500 (Error) handler for PHP 7+ Throwables.
+             *
+             * @param  object|HandlerInterface $handler   An error handler instance.
+             * @param  Container               $container A container instance.
+             * @return HandlerInterface
+             */
+            $container->extend('phpErrorHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
+                    $handler->config()->merge($config['handlers.defaults']);
+                    $handler->setBaseUrl($adminUrl);
+                }
+
+                return $handler;
+            });
+
+            /**
+             * HTTP 500 (Error) handler.
+             *
+             * @param  object|HandlerInterface $handler   An error handler instance.
+             * @param  Container               $container A container instance.
+             * @return HandlerInterface
+             */
+            $container->extend('errorHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
+                    $handler->config()->merge($config['handlers.defaults']);
+                    $handler->setBaseUrl($adminUrl);
+                }
+
+                return $handler;
+            });
+
+            /**
+             * HTTP 503 (Service Unavailable) handler.
+             *
+             * @param  object|HandlerInterface $handler   An error handler instance.
+             * @param  Container               $container A container instance.
+             * @return HandlerInterface
+             */
+            $container->extend('shutdownHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
+                    $handler->config()->merge($config['handlers.defaults']);
+                    $handler->setBaseUrl($adminUrl);
+                }
+
+                return $handler;
+            });
+        }
+
+        return $next($request, $response);
     }
 }

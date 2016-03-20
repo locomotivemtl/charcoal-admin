@@ -212,7 +212,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function showHeaderMenu()
     {
-        return $this->showHeaderMenu;
+        return ($this->isAuthenticated() && $this->showHeaderMenu);
     }
 
     /**
@@ -256,7 +256,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function showFooterMenu()
     {
-        return $this->showFooterMenu;
+        return ($this->isAuthenticated() && $this->showFooterMenu);
     }
 
     /**
@@ -314,25 +314,30 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * Determine if the current user is authenticated. If not it redirects them to the login page.
+     * Determine if the current user is authenticated.
+     * If not it redirects them to the login page.
      *
      * @return void
      */
     private function auth()
     {
-        $bySession = $this->authBySession();
-        if ($bySession === true) {
-            return;
-        }
-
-        $byToken = $this->authByToken();
-        if ($byToken === true) {
+        if ($this->isAuthenticated()) {
             return;
         }
 
         // Not authenticated. Die.
         header('Location: '.$this->adminUrl().'login');
         exit;
+    }
+
+    /**
+     * Determine if the current user is authenticated.
+     *
+     * @return boolean
+     */
+    protected function isAuthenticated()
+    {
+        return ($this->authBySession() || $this->authByToken());
     }
 
     /**

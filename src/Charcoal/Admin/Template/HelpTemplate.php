@@ -18,20 +18,4 @@ class HelpTemplate extends AdminTemplate
     {
         return false;
     }
-
-    /**
-     * @return boolean
-     */
-    public function showHeaderMenu()
-    {
-        return false;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showFooterMenu()
-    {
-        return false;
-    }
 }

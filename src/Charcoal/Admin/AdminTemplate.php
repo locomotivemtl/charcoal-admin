@@ -347,6 +347,7 @@ class AdminTemplate extends AbstractTemplate
     {
         $u = User::getAuthenticated();
         if ($u && $u->id()) {
+            $u->saveToSession();
             return true;
         } else {
             return false;
@@ -386,6 +387,7 @@ class AdminTemplate extends AbstractTemplate
         $u->load($username);
 
         if ($u->id()) {
+            $u->saveToSession();
             return true;
         } else {
             return false;

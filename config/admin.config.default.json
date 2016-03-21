@@ -12,6 +12,9 @@
       "login": {
         "ident": "charcoal/admin/template/login"
       },
+      "logout": {
+        "ident": "charcoal/admin/template/logout"
+      },
       "object/edit": {
         "ident": "charcoal/admin/template/object/edit"
       },

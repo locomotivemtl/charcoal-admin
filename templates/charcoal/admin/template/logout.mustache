@@ -1,0 +1,31 @@
+{{!--
+Logout template
+===============
+
+--}}
+{{>charcoal/admin/template/inc.header}}
+
+<div class="o-background -fixed u-background-lightblue" {{#backgroundImage}}style="background-image:url({{backgroundImage}});"{{/backgroundImage}}>
+    {{#backgroundVideo}}
+    <video class="embedded-video horizontal" muted="" preload="auto" autoplay loop>
+      <source src="{{backgroundVideo}}" type="video/mp4">
+    </video>
+    {{/backgroundVideo}}
+</div>
+
+<div class="c-login">
+    <div class="c-login_panel">
+        <div class="c-login_header">
+            <div class="c-login_avatar">
+                <img class="c-login_avatar_image" src="{{baseUrl}}assets/admin/images/avatar.jpg">
+            </div>
+        </div>
+        <div class="text-center">
+            <h2>{{#_t}}Déconnexion{{/_t}}</h2>
+            <p>Vous avez quitté Charcoal de façon sécuritaire.</p>
+            <a href="login" class="btn btn-default">Se reconnecter</a>
+        </div>
+    </div>
+</div>
+
+{{>charcoal/admin/template/inc.footer}}

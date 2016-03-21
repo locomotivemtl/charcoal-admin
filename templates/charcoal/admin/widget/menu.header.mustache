@@ -89,7 +89,7 @@ Header menu Widget
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="{{baseUrl}}admin/messaging/send-sms">
                     <span class="c-nav_list_link_text">
-                        Tester les SMS
+                        {{#_t}}Tester les SMS{{/_t}}
                     </span>
                 </a>
             </div>
@@ -98,7 +98,7 @@ Header menu Widget
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="{{baseUrl}}admin/messaging/send-voice">
                     <span class="c-nav_list_link_text">
-                        Tester les messages vocaux
+                        {{#_t}}Tester les messages vocaux{{/_t}}
                     </span>
                 </a>
             </div>
@@ -107,14 +107,14 @@ Header menu Widget
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="help">
                     <span class="c-nav_list_link_text">
-                        Aide
+                        {{#_t}}Aide{{/_t}}
                     </span>
                 </a>
             </div>
         </li>
         <li class="c-nav_list_item">
     </ul>
-    <button type="button" class="btn btn-danger">Déconnexion</button>
+    <button type="button" class="btn btn-danger" id="btn-logout">{{#_t}}Déconnexion{{/_t}}</button>
 </nav>
 {{/showHeaderMenu}}
 
@@ -122,6 +122,10 @@ Header menu Widget
 <script>
     $(document).ready(function() {
         var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
+
+        $('#btn-logout').on('click', function() {
+            window.location.href = '{{adminUrl}}logout';
+        })
     });
 </script>
 {{/addJs}}

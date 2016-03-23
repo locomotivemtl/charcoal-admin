@@ -38,7 +38,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Set the handler's error message.
      *
-     * @param  mixed $message
+     * @param  mixed $message The error message.
      * @return self
      */
     public function setErrorMessage($message)
@@ -61,7 +61,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Set the handler's error title.
      *
-     * @param  mixed $title
+     * @param  mixed $title The error title.
      * @return self
      */
     public function setErrorTitle($title)

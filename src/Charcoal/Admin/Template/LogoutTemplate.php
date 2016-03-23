@@ -5,7 +5,6 @@ namespace Charcoal\Admin\Template;
 // Local parent namespace dependencies
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\User;
-
 use \Charcoal\Admin\Object\AuthToken;
 
 /**
@@ -15,12 +14,12 @@ class LogoutTemplate extends AdminTemplate
 {
 
     /**
-     * @param array|\ArayAccess $data
+     * @param array|\ArayAccess $data Class dependencies.
      */
     public function __construct($data)
     {
         $user = User::getAuthenticated();
-        if($user) {
+        if ($user) {
             $user->logout();
             $this->deleteUserAuthTokens($user);
         }
@@ -29,10 +28,10 @@ class LogoutTemplate extends AdminTemplate
     }
 
     /**
-     * @param UserInterface $user
+     * @param User $user The user to clear auth tokens for.
      * @return LogoutTemplate Chainable
      */
-    private function deleteUserAuthTokens($user)
+    private function deleteUserAuthTokens(User $user)
     {
         $token = new AuthToken([
             'logger' => $this->logger

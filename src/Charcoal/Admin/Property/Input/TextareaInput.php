@@ -76,19 +76,16 @@ class TextareaInput extends AbstractPropertyInput
     }
 
     /**
-     * @param string|string[]|TranslationStringInterface $placeholder
-     * @throws InvalidArgumentException
+     * @param mixed $placeholder Textarea placeholder.
      * @return Text Chainable
      */
     public function setPlaceholder($placeholder)
     {
         $this->placeholder = new TranslationString($placeholder);
-
         return $this;
     }
 
     /**
-     * @todo   [mcaskill: 2016-03-04] Move this to a trait `HasInputPlaceholder`
      * @return string
      */
     public function placeholder()

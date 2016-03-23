@@ -107,7 +107,7 @@ class FormGroupWidget extends AbstractUiItem implements
             if (in_array($property_ident, $groupProperties)) {
                 if (is_callable([$this->form(), 'obj'])) {
                     $obj = $this->form()->obj();
-                    $val = $obj[$property_ident];//->p($property_ident)->val();
+                    $val = $obj[$property_ident];
                     $property->setPropertyVal($val);
                 }
                 yield $property_ident => $property;

@@ -78,6 +78,9 @@ abstract class AbstractPropertyInput implements
      */
     private $propertyData = [];
 
+    /**
+     * @var mixed $propertyVal
+     */
     private $propertyVal;
 
     /**
@@ -127,19 +130,27 @@ abstract class AbstractPropertyInput implements
         return $this;
     }
 
+    /**
+     * @param mixed $val The property value.
+     * @return PropertyInputInterface Chainable
+     */
     public function setPropertyVal($val)
     {
         $this->propertyVal = $val;
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function propertyVal()
     {
         return $this->propertyVal;
     }
 
     /**
-     * @
+     * @param string $lang The language code / ident.
+     * @return PropertyInputInterface Chainable
      */
     public function setLang($lang)
     {
@@ -147,6 +158,10 @@ abstract class AbstractPropertyInput implements
         return $this;
     }
 
+    /**
+     * Get the input language
+     * @return string
+     */
     public function lang()
     {
         if ($this->lang === null) {

@@ -4,6 +4,9 @@ use \Charcoal\App\App;
 use \Charcoal\App\AppConfig;
 use \Charcoal\App\AppContainer;
 
+use \Charcoal\Admin\Config as AdminConfig;
+
+session_start();
 
 // Composer autoloader for Charcoal's psr4-compliant Unit Tests
 $autoloader = require __DIR__.'/../vendor/autoload.php';
@@ -19,9 +22,14 @@ $config = new AppConfig([
 
     ]
 ]);
+
+$adminConfig = new AdminConfig();
+
 $GLOBALS['container'] = new AppContainer([
-    'config' => $config
+    'config' => $config,
+    'charcoal/admin/config' => $adminConfig
 ]);
+
 
 // Charcoal / Slim is the main app
 $GLOBALS['app'] = App::instance($GLOBALS['container']);

@@ -429,9 +429,7 @@ trait CollectionContainerTrait
                     sprintf('%s Can not create an object prototype: object type is null.', get_class($this))
                 );
             }
-            $this->proto = $this->modelFactory()->create($objType, [
-                'logger' => $this->logger
-            ]);
+            $this->proto = $this->modelFactory()->create($objType);
         }
         return $this->proto;
     }

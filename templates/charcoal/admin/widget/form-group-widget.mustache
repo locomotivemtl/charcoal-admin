@@ -48,7 +48,9 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
                     {{#input}}
                         {{!-- The actual property control (typically `PropertyInput`) --}}
-                        {{>$widget_template}}
+                        <div data-lang="{{lang}}">
+                            {{>$widget_template}}
+                        </div>
                     {{/input}}
 
                     {{#showNotes}}

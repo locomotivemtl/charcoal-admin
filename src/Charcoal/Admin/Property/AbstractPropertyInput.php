@@ -11,7 +11,6 @@ use \Psr\Log\LoggerAwareTrait;
 use \Psr\Log\NullLogger;
 
 // Module `charcoal-property` dependencies
-use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
 
 // Module `charcoal-translation` dependencies
@@ -28,6 +27,11 @@ abstract class AbstractPropertyInput implements
     LoggerAwareInterface
 {
     use LoggerAwareTrait;
+
+    /**
+     * @var string $lang
+     */
+    private $lang;
 
     /**
      * @var string $ident
@@ -63,7 +67,7 @@ abstract class AbstractPropertyInput implements
     /**
      * @var string $inputId
      */
-    protected $inputId = null;
+    protected $inputId;
     /**
      * @var string $inputClass
      */
@@ -73,6 +77,8 @@ abstract class AbstractPropertyInput implements
      * @var array $propertyData
      */
     private $propertyData = [];
+
+    private $propertyVal;
 
     /**
      * @var PropertyInterface $property
@@ -119,6 +125,34 @@ abstract class AbstractPropertyInput implements
         $this->propertyData = $data;
 
         return $this;
+    }
+
+    public function setPropertyVal($val)
+    {
+        $this->propertyVal = $val;
+        return $this;
+    }
+
+    public function propertyVal()
+    {
+        return $this->propertyVal;
+    }
+
+    /**
+     * @
+     */
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+        return $this;
+    }
+
+    public function lang()
+    {
+        if ($this->lang === null) {
+            return TranslationConfig::instance()->currentLanguage();
+        }
+        return $this->lang;
     }
 
     /**
@@ -276,8 +310,7 @@ abstract class AbstractPropertyInput implements
     {
         $name = $this->p()->ident();
         if ($this->p()->l10n()) {
-            $lang = TranslationConfig::instance()->currentLanguage();
-            $name .= '['.$lang.']';
+            $name .= '['.$this->lang().']';
         }
         if ($this->multiple()) {
             $name .= '[]';
@@ -293,7 +326,7 @@ abstract class AbstractPropertyInput implements
     public function inputVal()
     {
         $prop = $this->p();
-        $val  = $prop->inputVal();
+        $val  = $prop->inputVal($this->propertyVal(), ['lang'=>$this->lang()]);
 
         if ($val === null) {
             return '';
@@ -353,13 +386,6 @@ abstract class AbstractPropertyInput implements
      */
     public function property()
     {
-        if ($this->property === null) {
-            $propertyFactory = new PropertyFactory();
-            $this->property = $propertyFactory->create($this->inputType(), [
-                'logger'=>$this->logger
-            ]);
-            $this->property->setData($this->propertyData);
-        }
         return $this->property;
     }
 

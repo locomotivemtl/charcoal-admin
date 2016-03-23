@@ -283,22 +283,24 @@ class FormPropertyWidget extends AdminWidget
         $prop = $this->prop();
 
         $inputType = $this->inputType();
-
         $this->input = $this->propertyInputFactory()->create($inputType, [
             'logger'=>$this->logger
         ]);
 
         $this->input->setProperty($prop);
+        $this->input->setPropertyVal($this->propertyVal);
         $this->input->setData($this->propertyData);
 
         $GLOBALS['widget_template'] = $inputType;
 
-        $useL10n = false;
-// Currently disabled.
-        if ($useL10n && $prop->l10n()) {
+        // Currently disabled.
+        $loopL10n = false;
+
+        $res = [];
+        if ($loopL10n && $prop->l10n()) {
             $langs = $this->langs();
             foreach ($langs as $lang) {
-                $this->input->setEditLang($lang);
+                $this->input->setLang($lang);
                 yield $this->input;
             }
         } else {

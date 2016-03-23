@@ -86,7 +86,10 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
             'logger' => $this->logger
         ]);
 
-        $loader = new CollectionLoader([ 'logger' => $this->logger ]);
+        $loader = new CollectionLoader([
+            'logger'    => $this->logger,
+            'factory'   => $modelFactory
+        ]);
         $loader->setModel($model);
         $loader->setPagination([
             'page'         => $this->page(),

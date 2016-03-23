@@ -52,9 +52,6 @@ trait ObjectContainerTrait
      */
     protected function modelFactory()
     {
-        if ($this->modelFactory === null) {
-            $this->modelFactory = new ModelFactory();
-        }
         return $this->modelFactory;
     }
 
@@ -154,9 +151,7 @@ trait ObjectContainerTrait
                 $this->obj->set_data($clone->data());
             } elseif (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
                 $this->obj = $this->createObj();
-                $blueprint = $this->modelFactory()->create($this->obj->blueprintType(), [
-                    'logger'=>$this->logger
-                ]);
+                $blueprint = $this->modelFactory()->create($this->obj->blueprintType());
                 $blueprint->load($_GET['blueprint_id']);
                 $data = $blueprint->data();
                 unset($data[$blueprint->key()]);
@@ -181,10 +176,7 @@ trait ObjectContainerTrait
         }
 
         $objType = $this->objType();
-
-        $obj = $this->modelFactory()->create($objType, [
-            'logger'=>$this->logger
-        ]);
+        $obj = $this->modelFactory()->create($objType);
 
         return $obj;
     }
@@ -217,9 +209,7 @@ trait ObjectContainerTrait
             $objType = $this->objType();
             // Catch exception to know if the objType is valid
 
-            $obj = $this->modelFactory()->get($objType, [
-                'logger'=>$this->logger
-            ]);
+            $obj = $this->modelFactory()->get($objType);
             if (!$this->validateObjBaseClass($obj)) {
                 throw Exception(
                     'Can not create object, type is not an instance of objBaseClass'

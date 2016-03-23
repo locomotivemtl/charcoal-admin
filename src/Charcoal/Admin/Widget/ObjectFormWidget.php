@@ -5,6 +5,8 @@ namespace Charcoal\Admin\Widget;
 use \InvalidArgumentException;
 use \Exception;
 
+use \Pimple\Container;
+
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
 
@@ -22,6 +24,18 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      * @var string
      */
     protected $formIdent;
+
+    /**
+     * @param Container $container The DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Fill ObjectContainerInterface dependencies
+        $this->setModelFactory($container['model/factory']);
+    }
 
     /**
      * @return string

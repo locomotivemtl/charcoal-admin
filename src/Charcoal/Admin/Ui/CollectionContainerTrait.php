@@ -124,7 +124,8 @@ trait CollectionContainerTrait
     {
         if ($this->collectionLoader === null) {
             $this->collectionLoader = new CollectionLoader([
-                'logger' => $this->logger
+                'logger' => $this->logger,
+                'factory' => $this->modelFactory()
             ]);
         }
         return $this->collectionLoader;
@@ -303,9 +304,7 @@ trait CollectionContainerTrait
                 __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
             );
         }
-        $obj = $this->modelFactory()->create($objType, [
-            'logger' => $this->logger
-        ]);
+        $obj = $this->modelFactory()->create($objType);
 
         $loader = $this->collectionLoader();
         $loader->setModel($obj);

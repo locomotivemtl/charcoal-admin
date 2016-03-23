@@ -100,7 +100,9 @@ class AdminTemplate extends AbstractTemplate
             session_start();
         }
 
-        parent::setData($data);
+        if ($data) {
+            parent::setData($data);
+        }
 
         if ($this->authRequired() !== false) {
             $this->auth();

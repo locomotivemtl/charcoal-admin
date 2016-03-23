@@ -62,8 +62,6 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         //$this->assertEquals($struct, $obj->structure());
 
-        $this->setExpectedException('\InvalidArgumentException');
-        $obj->setStructure([]);
     }
 
     public function testNumRows()

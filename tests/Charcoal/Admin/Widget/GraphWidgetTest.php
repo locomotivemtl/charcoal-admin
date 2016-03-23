@@ -2,16 +2,16 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
-use \Charcoal\Admin\Widget\GraphWidget;
+use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
 
 class GraphWidgetTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $logger = new \Psr\Log\NullLogger();
-        $this->obj = new GraphWidget([
+        $this->obj = $this->getMockForAbstractClass('\Charcoal\Admin\Widget\Graph\AbstractGraphWidget', [[
             'logger'=>$logger
-        ]);
+        ]]);
     }
 
     public function testSetData()
@@ -47,8 +47,5 @@ class GraphWidgetTest extends \PHPUnit_Framework_TestCase
         $ret = $obj->setColors(['#fff', '#000']);
         $this->assertSame($ret, $obj);
         $this->assertEquals(['#fff', '#000'], $obj->colors());
-
-        $this->setExpectedException('\InvalidArgumentException');
-        $obj->setColors('#fff');
     }
 }

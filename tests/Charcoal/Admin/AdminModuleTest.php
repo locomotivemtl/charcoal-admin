@@ -13,7 +13,7 @@ class AdminModuleTest extends \PHPUnit_Framework_TestCase
     {
         $obj = new AdminModule([
             'config'=>null,
-            'app'=>null
+            'app'=>$GLOBALS['app']
         ]);
         $this->assertInstanceOf('\Charcoal\Admin\AdminModule', $obj);
     }

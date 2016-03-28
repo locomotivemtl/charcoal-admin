@@ -3,8 +3,9 @@
 
   "routes": {
     "templates": {
-      "help": {
-        "ident": "charcoal/admin/template/help"
+      "home": {
+        "ident": "charcoal/admin/template/home",
+        "route": "[/[home]]"
       },
       "home": {
         "ident": "charcoal/admin/template/home"
@@ -25,7 +26,6 @@
       "contents": {},
       "envoie": {}
     },
-    "default_view": "home",
     "actions": {
       "login": {
         "ident": "charcoal/admin/action/login"
@@ -52,7 +52,6 @@
         "ident": "charcoal/admin/action/widget/table/inline-multi"
       }
     },
-    "default_action": null,
     "scripts": {
       "object/create": {
         "ident": "charcoal/admin/script/object/create"

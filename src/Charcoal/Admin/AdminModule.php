@@ -68,25 +68,6 @@ class AdminModule extends AbstractModule
 
         $groupIdent = '/'.trim($config['base_path'], '/');
 
-        // Add the group's index route
-        if (isset($config['routes']['default_view'])) {
-            $this->app()->get(
-                $groupIdent,
-                function (
-                    RequestInterface $request,
-                    ResponseInterface $response
-                ) use (
-                    $groupIdent,
-                    $config
-                ) {
-                    return $response->withRedirect(
-                        $groupIdent.'/'.ltrim($config['routes']['default_view'], '/'),
-                        303
-                    );
-                }
-            );
-        }
-
         // Add the route group
         $this->app()->group($groupIdent, 'charcoal/admin/module:setupRoutes')
                     ->add('charcoal/admin/module:setupHandlers');
@@ -177,6 +158,8 @@ class AdminModule extends AbstractModule
 
             /**
              * HTTP 503 (Service Unavailable) handler.
+             *
+             * This handler is not part of Slim.
              *
              * @param  object|HandlerInterface $handler   An error handler instance.
              * @param  Container               $container A container instance.

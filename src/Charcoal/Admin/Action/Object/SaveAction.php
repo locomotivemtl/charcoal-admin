@@ -53,6 +53,18 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
+     * @param Container $container A DI Container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Fulfills `ObjectContainerTrait` dependencies.
+        $this->setModelFactory($container['model/factory']);
+    }
+
+    /**
      * @param array $saveData The save data.
      * @return SaveAction Chainable
      */

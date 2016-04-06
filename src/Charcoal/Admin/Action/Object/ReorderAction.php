@@ -2,12 +2,14 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-// Dependencies from `PHP`
 use \Exception;
 
-// PSR-7 (http messaging) dependencies
+// Dependencies from PSR-7 (HTTP Messaging)
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
+
+// Dependency from Pimple
+use \Pimple\Container;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
@@ -34,6 +36,18 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
      * @var integer $startingOrder
      */
     private $startingOrder;
+
+    /**
+     * @param Container $container A DI Container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Fulfills `ObjectContainerTrait` dependencies.
+        $this->setModelFactory($container['model/factory']);
+    }
 
     /**
      * @param array $orders The object orders.

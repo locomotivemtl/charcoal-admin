@@ -2,8 +2,10 @@
 
 namespace Charcoal\Admin\Property;
 
-// From `charcoal-base`
-use \Charcoal\Property\PropertyInterface as PropertyInterface;
+use \Traversable;
+
+// Dependency from 'charcoal-base'
+use \Charcoal\Property\PropertyInterface;
 
 /**
  *
@@ -11,10 +13,10 @@ use \Charcoal\Property\PropertyInterface as PropertyInterface;
 interface PropertyDisplayInterface
 {
     /**
-     * @param array $data The display data.
+     * @param array|Traversable $data The display data.
      * @return Display Chainable
      */
-    public function setData(array $data);
+    public function setData($data);
 
     /**
      * @param string $ident The display identifier.

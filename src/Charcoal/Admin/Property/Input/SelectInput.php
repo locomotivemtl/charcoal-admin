@@ -15,6 +15,18 @@ class SelectInput extends AbstractPropertyInput
     public function choices()
     {
         $choices = $this->p()->choices();
+
+        if ($this->p()->allowNull() && !$this->p()->multiple()) {
+            $prepend = [
+                'value'   => '',
+                'label'   => $this->placeholder(),
+                'title'   => $this->placeholder(),
+                'subtext' => ''
+            ];
+
+            yield $prepend;
+        }
+
         foreach ($choices as $choiceIdent => $choice) {
             if (!isset($choice['value'])) {
                 $choice['value'] = $choiceIdent;

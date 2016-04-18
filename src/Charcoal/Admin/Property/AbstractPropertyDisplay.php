@@ -2,25 +2,38 @@
 
 namespace Charcoal\Admin\Property;
 
+use \Traversable;
+use \Exception;
 use \InvalidArgumentException;
 
-// PSR-3 logger dependencies
+// Dependencies from PSR-3 (Logger)
 use \Psr\Log\LoggerAwareInterface;
 use \Psr\Log\LoggerAwareTrait;
 use \Psr\Log\NullLogger;
 
-use \Charcoal\Property\PropertyFactory;
-use \Charcoal\Property\PropertyInterface;
-use \Charcoal\Admin\Property\PropertyDisplayInterface;
+// Dependencies from 'charcoal-core'
+use \Charcoal\Model\DescribableInterface;
+use \Charcoal\Model\DescribableTrait;
+
+// Dependency from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
+
+// Dependency from 'charcoal-admin'
+use \Charcoal\Admin\Property\PropertyDisplayInterface;
+
+// Local namespace dependencies
+use \Charcoal\Property\PropertyInterface;
+use \Charcoal\Property\PropertyMetadata;
 
 /**
  *
  */
 abstract class AbstractPropertyDisplay implements
+    DescribableInterface,
     PropertyDisplayInterface,
     LoggerAwareInterface
 {
+    use DescribableTrait;
     use LoggerAwareTrait;
 
     /**
@@ -88,10 +101,10 @@ abstract class AbstractPropertyDisplay implements
      * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
-     * @param array $data The display data.
+     * @param array|Traversable $data The display data.
      * @return Display Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         foreach ($data as $prop => $val) {
             $func = [$this, $this->setter($prop)];
@@ -106,6 +119,19 @@ abstract class AbstractPropertyDisplay implements
         $this->propertyData = $data;
 
         return $this;
+    }
+
+    /**
+     * @param array $data Optional. Metadata data.
+     * @return PropertyMetadata
+     */
+    protected function createMetadata(array $data = null)
+    {
+        $metadata = new PropertyMetadata();
+        if (is_array($data)) {
+            $metadata->setData($data);
+        }
+        return $metadata;
     }
 
     /**

@@ -2,30 +2,40 @@
 
 namespace Charcoal\Admin\Property;
 
-use \InvalidArgumentException;
+use \Traversable;
 use \Exception;
+use \InvalidArgumentException;
 
-// PSR-3 logger dependencies
+// Dependencies from PSR-3 (Logger)
 use \Psr\Log\LoggerAwareInterface;
 use \Psr\Log\LoggerAwareTrait;
 use \Psr\Log\NullLogger;
 
-// Module `charcoal-property` dependencies
-use \Charcoal\Property\PropertyInterface;
+// Dependencies from 'charcoal-core'
+use \Charcoal\Model\DescribableInterface;
+use \Charcoal\Model\DescribableTrait;
 
-// Module `charcoal-translation` dependencies
+// Dependencies from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
+use \Charcoal\Translation\TranslationString;
+use \Charcoal\Translation\TranslationStringInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// Dependency from 'charcoal-admin'
 use \Charcoal\Admin\Property\PropertyInputInterface;
+
+// Local namespace dependencies
+use \Charcoal\Property\PropertyInterface;
+use \Charcoal\Property\PropertyMetadata;
 
 /**
  *
  */
 abstract class AbstractPropertyInput implements
+    DescribableInterface,
     PropertyInputInterface,
     LoggerAwareInterface
 {
+    use DescribableTrait;
     use LoggerAwareTrait;
 
     /**
@@ -74,6 +84,11 @@ abstract class AbstractPropertyInput implements
     protected $inputClass = '';
 
     /**
+     * @var TranslationStringInterface $placeholder
+     */
+    private $placeholder;
+
+    /**
      * @var array $propertyData
      */
     private $propertyData = [];
@@ -110,10 +125,10 @@ abstract class AbstractPropertyInput implements
      * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
-     * @param array $data The input data.
+     * @param array|Traversable $data The input data.
      * @return Input Chainable
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         foreach ($data as $prop => $val) {
             $func = [$this, $this->setter($prop)];
@@ -128,6 +143,19 @@ abstract class AbstractPropertyInput implements
         $this->propertyData = $data;
 
         return $this;
+    }
+
+    /**
+     * @param array $data Optional. Metadata data.
+     * @return PropertyMetadata
+     */
+    protected function createMetadata(array $data = null)
+    {
+        $metadata = new PropertyMetadata();
+        if (is_array($data)) {
+            $metadata->setData($data);
+        }
+        return $metadata;
     }
 
     /**
@@ -265,6 +293,32 @@ abstract class AbstractPropertyInput implements
     public function multiple()
     {
         return $this->multiple;
+    }
+
+    /**
+     * @param mixed $placeholder The placeholder attribute.
+     * @return Text Chainable
+     */
+    public function setPlaceholder($placeholder)
+    {
+        $this->placeholder = new TranslationString($placeholder);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function placeholder()
+    {
+        if ($this->placeholder === null) {
+            $metadata = $this->metadata();
+
+            if (isset($metadata['data']['placeholder'])) {
+                $this->setPlaceholder($metadata['data']['placeholder']);
+            }
+        }
+
+        return $this->placeholder;
     }
 
     /**

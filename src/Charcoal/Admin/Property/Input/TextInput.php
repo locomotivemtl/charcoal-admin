@@ -4,7 +4,6 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
-use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
@@ -26,17 +25,10 @@ class TextInput extends AbstractPropertyInput
      */
     private $maxLength = 0;
 
-
     /**
      * @var string $pattern
      */
     private $pattern = '';
-
-    /**
-     * @var TranslationStringInterface $placeholder
-     */
-    private $placeholder;
-
 
     /**
      * @param integer $minLength The min length.
@@ -132,24 +124,5 @@ class TextInput extends AbstractPropertyInput
     public function pattern()
     {
         return $this->pattern;
-    }
-
-    /**
-     * @param mixed $placeholder The placeholder attribute.
-     * @return Text Chainable
-     */
-    public function setPlaceholder($placeholder)
-    {
-        $this->placeholder = new TranslationString($placeholder);
-        return $this;
-    }
-
-    /**
-     * @todo   [mcaskill: 2016-03-04] Move this to a trait `HasInputPlaceholder`
-     * @return string
-     */
-    public function placeholder()
-    {
-        return $this->placeholder;
     }
 }

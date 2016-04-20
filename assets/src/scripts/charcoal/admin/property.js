@@ -111,3 +111,13 @@ Charcoal.Admin.Property.prototype.save = function ()
     // Default action = nothing
     return this;
 };
+
+/**
+ * Error handling
+ * @param  {Mixed} data  Could be a simple message, an array, wtv.
+ * @return {thisArg}     Chainable.
+ */
+Charcoal.Admin.Property.prototype.error = function (data)
+{
+    window.console.error(data);
+};

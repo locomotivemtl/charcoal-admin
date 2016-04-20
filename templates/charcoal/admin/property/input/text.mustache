@@ -24,3 +24,40 @@ See also:
 	{{#disabled}}disabled{{/disabled}}
 	value="{{inputVal}}"
 >
+
+
+{{#addJs}}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id: '{{inputId}}',
+    type: 'charcoal/admin/property/input/text',
+    data: {
+        input_name : "{{inputName}}"
+        ,input_val : "{{inputVal}}"
+        {{#multiple}}
+        ,multiple : true
+        ,multiple_separator : "{{property.multipleSeparator}}"
+        {{/multiple}}
+        {{#l10n}}
+        ,l10n : true
+        {{/l10n}}
+        {{#minLength}}
+        ,min_length : {{.}}
+        {{/minLength}}
+        {{#maxLength}}
+        ,max_length : {{.}}
+        {{/maxLength}}
+        {{#required}}
+        ,required : true
+        {{/required}}
+        {{#readOnly}}
+        ,readonly : true
+        {{/readOnly}}
+        {{#size}}
+        ,size : {{.}}
+        {{/size}}
+    }
+});
+</script>
+{{/addJs}}
+

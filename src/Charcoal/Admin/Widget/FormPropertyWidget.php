@@ -302,7 +302,7 @@ class FormPropertyWidget extends AdminWidget
             foreach ($langs as $lang) {
                 // Will automatically generate a new uniq_id
                 // Not optimal.
-                $this->input->setInputId(NULL);
+                $this->input->setInputId(null);
                 $this->input->setLang($lang);
                 yield $this->input;
             }

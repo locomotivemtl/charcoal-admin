@@ -300,6 +300,9 @@ class FormPropertyWidget extends AdminWidget
         if ($loopL10n && $prop->l10n()) {
             $langs = $this->langs();
             foreach ($langs as $lang) {
+                // Will automatically generate a new uniq_id
+                // Not optimal.
+                $this->input->setInputId(NULL);
                 $this->input->setLang($lang);
                 yield $this->input;
             }

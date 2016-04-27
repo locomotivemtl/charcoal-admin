@@ -199,6 +199,19 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * @return boolean
+     */
+    public function hidden()
+    {
+        if ($this->p()->l10n()) {
+            if ($this->lang() != TranslationConfig::instance()->currentLanguage()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string $ident Input identifier.
      * @throws InvalidArgumentException If the ident is not a string.
      * @return Widget Chainable

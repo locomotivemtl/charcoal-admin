@@ -63,6 +63,10 @@ class FormPropertyWidget extends AdminWidget
      */
     private $active = true;
 
+    /**
+     * @var string $l10nMode
+     */
+    private $l10nMode;
 
     /**
      * @var PropertyFactory $factory
@@ -276,6 +280,33 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
+     * @param string $mode The l10n mode.
+     * @return FormGroupInterface Chainable
+     */
+    public function setL10nMode($mode)
+    {
+        $this->l10nMode = $mode;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function l10nMode()
+    {
+        return $this->l10nMode;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function loopL10n()
+    {
+        return ($this->l10nMode() == 'loop_inputs');
+    }
+
+    /**
      * @return PropertyInputInterface
      */
     public function input()
@@ -293,16 +324,13 @@ class FormPropertyWidget extends AdminWidget
 
         $GLOBALS['widget_template'] = $inputType;
 
-        // Currently disabled.
-        $loopL10n = false;
-
         $res = [];
-        if ($loopL10n && $prop->l10n()) {
+        if ($this->loopL10n() && $prop->l10n()) {
             $langs = $this->langs();
+            $inputId = $this->input->inputId();
             foreach ($langs as $lang) {
-                // Will automatically generate a new uniq_id
-                // Not optimal.
-                $this->input->setInputId(null);
+                // Set a unique input ID for language.
+                $this->input->setInputId($inputId.'_'.$lang);
                 $this->input->setLang($lang);
                 yield $this->input;
             }

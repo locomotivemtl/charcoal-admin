@@ -110,6 +110,9 @@ class FormGroupWidget extends AbstractUiItem implements
                     $val = $obj[$property_ident];
                     $property->setPropertyVal($val);
                 }
+                if (!$property->l10nMode()) {
+                    $property->setL10nMode($this->l10nMode());
+                }
                 yield $property_ident => $property;
             }
         }

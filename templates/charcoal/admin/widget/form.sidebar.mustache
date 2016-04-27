@@ -10,6 +10,15 @@
 
             <div class="c-panel_main">
                 <p>{{subtitle}}</p>
+
+                {{#showLanguageSwitch}}
+                <div id="lang-switch" class="btn-group" role="group" aria-label="{{#_t}}Language switcher{{/_t}}">
+                    {{#languages}}
+                        <button type="button" data-lang-switch="{{ident}}" class="btn {{current}}btn-primary{{current}}">{{name}}</button>
+                    {{/languages}}
+                </div>
+                {{/showLanguageSwitch}}
+
                 <table class="c-panel_table">
                     {{#formProperties}}
                     <tr class="c-panel_table_row">
@@ -51,6 +60,15 @@
 
 {{#addJs}}
 <script>
+
+$('#lang-switch button').on('click', function(el) {
+    var lang = $(this).attr('data-lang-switch');
+    $('[data-lang][data-lang!='+lang+']').addClass('hidden');
+    $('[data-lang][data-lang='+lang+']').removeClass('hidden');
+    $('[data-lang-switch][data-lang-switch!='+lang+']').removeClass('btn-primary');
+    $(this).addClass('btn-primary');
+});
+
 // Charcoal.Admin.manager().add_widget({
 //     id: '{{widgetId}}',
 //     type: 'charcoal/admin/widget/form.sidebar',

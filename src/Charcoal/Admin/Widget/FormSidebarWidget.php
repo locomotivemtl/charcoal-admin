@@ -5,6 +5,7 @@ namespace Charcoal\Admin\Widget;
 use \InvalidArgumentException;
 
 use \Charcoal\Translation\TranslationString;
+use \Charcoal\Translation\TranslationConfig;
 use \Charcoal\Admin\AdminWidget;
 
 /**
@@ -214,5 +215,31 @@ class FormSidebarWidget extends AdminWidget
             $this->setTitle('Actions');
         }
         return $this->title;
+    }
+
+    /**
+    * @return boolean
+    */
+    public function showLanguageSwitch()
+    {
+        return true;
+    }
+
+    /**
+    * Active languages generator, formatted for the sidebar language-switcher.
+    *
+    * @return void This is a generator.
+    */
+    public function languages()
+    {
+        $curLang = TranslationConfig::instance()->currentLanguage();
+        $langs = TranslationConfig::instance()->languages();
+        foreach($langs as $lang) {
+            yield [
+                'ident' => $lang->ident(),
+                'name'  => $lang->name(),
+                'current' => ($lang->ident() == $curLang)
+            ];
+        }
     }
 }

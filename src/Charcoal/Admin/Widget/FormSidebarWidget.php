@@ -218,23 +218,23 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-    * @return boolean
-    */
+     * @return boolean
+     */
     public function showLanguageSwitch()
     {
         return true;
     }
 
     /**
-    * Active languages generator, formatted for the sidebar language-switcher.
-    *
-    * @return void This is a generator.
-    */
+     * Active languages generator, formatted for the sidebar language-switcher.
+     *
+     * @return void This is a generator.
+     */
     public function languages()
     {
         $curLang = TranslationConfig::instance()->currentLanguage();
         $langs = TranslationConfig::instance()->languages();
-        foreach($langs as $lang) {
+        foreach ($langs as $lang) {
             yield [
                 'ident' => $lang->ident(),
                 'name'  => $lang->name(),

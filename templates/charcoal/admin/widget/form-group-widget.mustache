@@ -42,6 +42,15 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                  <div class="form-group">
                     <label for="{{prop.inputId}}">{{prop.label}}</label>
 
+
+                    {{#l10n}}
+                    <span class="pull-right">
+                        {{#languages}}
+                            <span aria-label="{{name}}" data-lang="{{ident}}" class=" small text-uppercase text-muted {{^current}}hidden{{/current}}">{{ident}}</span>
+                        {{/languages}}
+                    </span>
+                    {{/l10n}}
+
                     {{#showDescription}}
                         <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
                     {{/showDescription}}

@@ -41,21 +41,9 @@ interface CollectionContainerInterface
     public function collectionConfig();
 
     /**
-     * @param integer $page The page number.
-     * @return CollectionContainerInterface Chainable
-     */
-    public function setPage($page);
-
-    /**
      * @return integer
      */
     public function page();
-
-    /**
-     * @param integer $numPerPage The number of items per page.
-     * @return CollectionContainerInterface Chainable
-     */
-    public function setNumPerPage($numPerPage);
 
     /**
      * @return integer

@@ -44,15 +44,9 @@ trait CollectionContainerTrait
     private $collectionConfig;
 
     /**
-     * @var integer $page
+     * @var integer $numTotal
      */
-    private $page = 1;
-
-    /**
-     * @var integer $numPerPage
-     */
-    private $numPerPage = 50;
-
+    private $numTotal;
 
     /**
      * @var Collection $collection
@@ -210,54 +204,17 @@ trait CollectionContainerTrait
         return [];
     }
 
-    /**
-     * @param integer $page The page number, of the items to load.
-     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
-     * @return CollectionContainerInterface Chainable
-     */
-    public function setPage($page)
-    {
-        if (!is_numeric($page)) {
-            throw new InvalidArgumentException(
-                'Page must be an integer value.'
-            );
-        }
-        if ($page < 1) {
-            throw new InvalidArgumentException(
-                'Page must be 1 or greater.'
-            );
-        }
-        $this->page = (int)$page;
-        return $this;
-    }
 
     /**
      * @return integer
      */
     public function page()
     {
-        return $this->page;
-    }
-
-    /**
-     * @param integer $numPerPage The number of items per page to load.
-     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
-     * @return CollectionContainerInterface Chainable
-     */
-    public function setNumPerPage($numPerPage)
-    {
-        if (!is_numeric($numPerPage)) {
-            throw new InvalidArgumentException(
-                'Num per page must be an integer value.'
-            );
+        $collectionConfig = $this->collectionConfig();
+        if (isset($collectionConfig['pagination'])) {
+            return isset($collectionConfig['pagination']['page']) ? $collectionConfig['pagination']['page'] : 1;
         }
-        if ($numPerPage < 1) {
-            throw new InvalidArgumentException(
-                'Num per page must be 1 or greater.'
-            );
-        }
-        $this->numPerPage = (int)$numPerPage;
-        return $this;
+        return 1;
     }
 
     /**
@@ -265,7 +222,11 @@ trait CollectionContainerTrait
      */
     public function numPerPage()
     {
-        return $this->numPerPage;
+        $collectionConfig = $this->collectionConfig();
+        if (isset($collectionConfig['pagination'])) {
+            return isset($collectionConfig['pagination']['num_per_page']) ? $collectionConfig['pagination']['num_per_page'] : 0;
+        }
+        return 0;
     }
 
     /**
@@ -308,16 +269,12 @@ trait CollectionContainerTrait
 
         $loader = $this->collectionLoader();
         $loader->setModel($obj);
+
         $collectionConfig = $this->collectionConfig();
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
             unset($collectionConfig['properties']);
             $loader->setData($collectionConfig);
         }
-
-        $loader->setPagination([
-            'page'       => $this->page(),
-            'numPerPage' => $this->numPerPage()
-        ]);
 
         $collection = $loader->load();
         return $collection;
@@ -413,6 +370,33 @@ trait CollectionContainerTrait
     public function numObjects()
     {
         return count($this->objects());
+    }
+
+    /**
+     * @return integer
+     */
+    public function numTotal()
+    {
+        if (!$this->numTotal) {
+            $objType = $this->objType();
+            if (!$objType) {
+                throw new Exception(
+                    __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
+                );
+            }
+            $obj = $this->modelFactory()->create($objType);
+
+            $loader = $this->collectionLoader();
+            $loader->setModel($obj);
+            $collectionConfig = $this->collectionConfig();
+            if (is_array($collectionConfig) && !empty($collectionConfig)) {
+                unset($collectionConfig['properties']);
+                $loader->setData($collectionConfig);
+            }
+
+            $this->numTotal = $loader->loadCount();
+        }
+        return $this->numTotal;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \InvalidArgumentException;
+
 use \Charcoal\Admin\AdminWidget;
 
 /**
@@ -12,12 +14,12 @@ class PaginationWidget extends AdminWidget
     /**
      * @var integer $page
      */
-    private $page;
+    private $page = 1;
 
     /**
      * @var integer $numPerPage
      */
-    private $numPerPage;
+    private $numPerPage = 0;
 
     /**
      * @var integer $numTotal
@@ -50,7 +52,7 @@ class PaginationWidget extends AdminWidget
      */
     public function page()
     {
-        return $this->page;
+        return (int)$this->page;
     }
 
     /**
@@ -78,7 +80,7 @@ class PaginationWidget extends AdminWidget
     {
         if (!is_numeric($numPerPage)) {
             throw new InvalidArgumentException(
-                'Num per page must be an integer value.'
+                sprintf('Num per page must be a numeric value. (%s sent)', gettype($numPerPage))
             );
         }
         if ($numPerPage < 1) {
@@ -95,7 +97,7 @@ class PaginationWidget extends AdminWidget
      */
     public function numPerPage()
     {
-        return $this->numPerPage;
+        return (int)$this->numPerPage;
     }
 
     /**

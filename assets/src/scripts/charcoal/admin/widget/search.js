@@ -108,6 +108,10 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
         return this;
     }
 
+    if (typeof widget.pagination !== 'undefined') {
+        widget.pagination.page = 1;
+    }
+
     var $input = this.element().find('input');
     var val = $input.val();
 

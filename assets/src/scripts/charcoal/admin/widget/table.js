@@ -19,7 +19,7 @@ Charcoal.Admin.Widget_Table = function ()
     this.table_selector = null;
     // this.properties = null;
     this.properties_options = null;
-    this.filters = [];
+    this.filters = {};
     this.orders = [];
     this.pagination = {
         page: 1,

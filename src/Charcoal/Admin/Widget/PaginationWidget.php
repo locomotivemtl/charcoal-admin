@@ -141,6 +141,9 @@ class PaginationWidget extends AdminWidget
      */
     public function numPages()
     {
+        if ($this->numPerPage() == 0) {
+            return 1;
+        }
         return ceil($this->numTotal() / $this->numPerPage());
     }
 

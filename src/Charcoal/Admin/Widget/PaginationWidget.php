@@ -83,11 +83,6 @@ class PaginationWidget extends AdminWidget
                 sprintf('Num per page must be a numeric value. (%s sent)', gettype($numPerPage))
             );
         }
-        if ($numPerPage < 1) {
-            throw new InvalidArgumentException(
-                'Num per page must be 1 or greater.'
-            );
-        }
         $this->numPerPage = (int)$numPerPage;
         return $this;
     }
@@ -110,11 +105,6 @@ class PaginationWidget extends AdminWidget
         if (!is_numeric($num)) {
             throw new InvalidArgumentException(
                 'Num total must be an integer value.'
-            );
-        }
-        if ($num < 1) {
-            throw new InvalidArgumentException(
-                'Num total must be 1 or greater.'
             );
         }
         $this->numTotal = (int)$num;

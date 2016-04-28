@@ -77,12 +77,6 @@ class PaginationWidgetTest extends \PHPUnit_Framework_TestCase
         $this->obj->setNumPerPage('foobar');
     }
 
-    public function testSetNumPerPageNegativeThrowsException()
-    {
-        $this->setExpectedException('\InvalidArgumentException');
-        $this->obj->setNumPerPage(-1);
-    }
-
     public function testSetNumTotal()
     {
         $ret = $this->obj->setNumTotal(42);
@@ -93,9 +87,4 @@ class PaginationWidgetTest extends \PHPUnit_Framework_TestCase
         $this->obj->setNumTotal('foobar');
     }
 
-    public function testSetNumTotalNegativeThrowsException()
-    {
-        $this->setExpectedException('\InvalidArgumentException');
-        $this->obj->setNumTotal(-1);
-    }
 }

@@ -13,6 +13,8 @@ use \Charcoal\Ui\FormGroup\FormGroupTrait;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
+use \Charcoal\Translation\TranslationConfig;
+
 /**
  * Form Group Widget Controller
  */
@@ -115,6 +117,24 @@ class FormGroupWidget extends AbstractUiItem implements
                 }
                 yield $property_ident => $property;
             }
+        }
+    }
+
+        /**
+     * Active languages generator, formatted for the sidebar language-switcher.
+     *
+     * @return void This is a generator.
+     */
+    public function languages()
+    {
+        $curLang = TranslationConfig::instance()->currentLanguage();
+        $langs = TranslationConfig::instance()->languages();
+        foreach ($langs as $lang) {
+            yield [
+                'ident' => $lang->ident(),
+                'name'  => $lang->name(),
+                'current' => ($lang->ident() == $curLang)
+            ];
         }
     }
 }

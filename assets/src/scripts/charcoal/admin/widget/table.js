@@ -19,7 +19,7 @@ Charcoal.Admin.Widget_Table = function ()
     this.table_selector = null;
     // this.properties = null;
     this.properties_options = null;
-    this.filters = null;
+    this.filters = [];
     this.orders = [];
     this.pagination = {
         page: 1,
@@ -194,6 +194,15 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             });
         }
     }).disableSelection();
+
+    $('.js-page-switch').on('click', function (e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var page_num = $this.data('page-num');
+        that.pagination.page = page_num;
+        that.reload();
+    });
 
 };
 

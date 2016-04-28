@@ -51,10 +51,20 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
         that.delete_object(this);
     });
 
+    // Reset button
     $('.js-reset-form').on('click', function (e) {
         e.preventDefault();
         $(that.form_selector)[0].reset();
     });
+
+    // Language switcher
+    $('.js-lang-switch button').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var lang = $this.attr('data-lang-switch');
+        that.switch_language(lang);
+    });
+
 };
 
 Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
@@ -173,4 +183,15 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
         }
     });
 
+};
+
+/**
+* Switch languages for all l10n elements in the form
+*/
+Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang)
+{
+    $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
+    $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
+    $('[data-lang-switch][data-lang-switch!=' + lang + ']').removeClass('btn-primary');
+    $('[data-lang-switch][data-lang-switch=' + lang + ']').addClass('btn-primary');
 };

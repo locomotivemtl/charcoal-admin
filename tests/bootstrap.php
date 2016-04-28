@@ -14,7 +14,7 @@ $autoloader->add('Charcoal\\Admin\\', __DIR__.'/../src/');
 $autoloader->add('Charcoal\\Admin\\Tests\\', __DIR__);
 
 $config = new AppConfig([
-    'base_path' => (dirname(__DIR__) . '/'),
+    'base_path' => (dirname(__DIR__).'/'),
     'modules'=>[
         'admin'=>[]
     ],
@@ -34,4 +34,3 @@ $GLOBALS['container'] = new AppContainer([
 // Charcoal / Slim is the main app
 $GLOBALS['app'] = App::instance($GLOBALS['container']);
 $GLOBALS['app']->setLogger(new \Psr\Log\NullLogger());
-

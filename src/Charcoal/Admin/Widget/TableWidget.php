@@ -332,6 +332,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
     }
 
+    /**
+     * @return PaginationWidget
+     */
     public function paginationWidget()
     {
         $pagination = new PaginationWidget();

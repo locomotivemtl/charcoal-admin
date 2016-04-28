@@ -121,10 +121,10 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
         /**
-     * Active languages generator, formatted for the sidebar language-switcher.
-     *
-     * @return void This is a generator.
-     */
+         * Active languages generator, formatted for the sidebar language-switcher.
+         *
+         * @return void This is a generator.
+         */
     public function languages()
     {
         $curLang = TranslationConfig::instance()->currentLanguage();

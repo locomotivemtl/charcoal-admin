@@ -25,10 +25,10 @@ class PaginationWidget extends AdminWidget
     private $numTotal;
 
         /**
-     * @param integer $page The page number, of the items to load.
-     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
-     * @return PaginationWidget Chainable
-     */
+         * @param integer $page The page number, of the items to load.
+         * @throws InvalidArgumentException If the argument is not a number or lower than 0.
+         * @return PaginationWidget Chainable
+         */
     public function setPage($page)
     {
         if (!is_numeric($page)) {
@@ -129,11 +129,13 @@ class PaginationWidget extends AdminWidget
 
     /**
      * Page generator
+     *
+     * @return void This is a generator
      */
     public function pages()
     {
         $i = 1;
-        while($i <= $this->numPages()) {
+        while ($i <= $this->numPages()) {
             yield [
                 'active' => ($i == $this->page()),
                 'num' => $i

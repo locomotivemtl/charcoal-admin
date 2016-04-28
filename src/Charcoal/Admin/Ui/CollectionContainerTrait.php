@@ -373,6 +373,7 @@ trait CollectionContainerTrait
     }
 
     /**
+     * @throws Exception If obj type was not set.
      * @return integer
      */
     public function numTotal()

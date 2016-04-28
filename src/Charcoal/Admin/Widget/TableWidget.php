@@ -332,6 +332,17 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
     }
 
+    public function paginationWidget()
+    {
+        $pagination = new PaginationWidget();
+        $pagination->setData([
+            'page' => $this->page(),
+            'num_per_page' => $this->numPerPage(),
+            'num_total' => $this->numTotal()
+        ]);
+        return $pagination;
+    }
+
     /**
      * @return array
      */

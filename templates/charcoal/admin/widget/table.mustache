@@ -124,6 +124,15 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                 </tfoot>
                 {{/showTableFooter}}
             </table>
+
+            {{#paginationWidget}}
+                {{#showPagination}}
+                <div class="pull-right">
+                    {{>charcoal/admin/widget/pagination}}
+                </div>
+                {{/showPagination}}
+            {{/paginationWidget}}
+
         {{/hasObjects}}
         {{^hasObjects}}
             <div class="alert alert-danger" role="alert">
@@ -158,7 +167,11 @@ Charcoal.Admin.manager().add_widget({
     type: 'charcoal/admin/widget/table',
     data: {
         obj_type: '{{objType}}',
-        collection_ident: '{{collectionIdent}}'
+        collection_ident: '{{collectionIdent}}',
+        pagination: {
+            page: {{page}},
+            num_per_page: {{numPerPage}}
+        }
     }
 });
 </script>

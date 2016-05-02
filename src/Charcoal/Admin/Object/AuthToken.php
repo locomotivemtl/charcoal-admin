@@ -7,9 +7,6 @@ use \DateTimeInterface;
 
 use \InvalidArgumentException;
 
-use \Charcoal\Core\IndexableInterface;
-use \Charcoal\Core\IndexableTrait;
-
 use \Charcoal\Model\AbstractModel;
 
 use \Charcoal\Admin\Object\AuthTokenMetadata;
@@ -17,9 +14,8 @@ use \Charcoal\Admin\Object\AuthTokenMetadata;
 /**
  *
  */
-class AuthToken extends AbstractModel implements IndexableInterface
+class AuthToken extends AbstractModel
 {
-    use IndexableTrait;
 
     /**
      * @var string $ident

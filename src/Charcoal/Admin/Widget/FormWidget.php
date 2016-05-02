@@ -48,7 +48,7 @@ class FormWidget extends AdminWidget implements
 
     /**
      * @param array $data Optional. The form property data to set.
-     * @return FormPropertyInterface
+     * @return FormPropertyWidget
      */
     public function createFormProperty(array $data = null)
     {
@@ -163,7 +163,7 @@ class FormWidget extends AdminWidget implements
             );
         }
 
-        if (($property instanceof FormPropertyInterface)) {
+        if (($property instanceof FormPropertyWidget)) {
             $this->formProperties[$propertyIdent] = $property;
         } elseif (is_array($property)) {
             $p = $this->createFormProperty($property);

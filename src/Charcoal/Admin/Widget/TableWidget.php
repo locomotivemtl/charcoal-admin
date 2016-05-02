@@ -337,7 +337,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function paginationWidget()
     {
-        $pagination = new PaginationWidget();
+        $pagination = new PaginationWidget([
+            'logger'=>$this->logger
+        ]);
         $pagination->setData([
             'page' => $this->page(),
             'num_per_page' => $this->numPerPage(),

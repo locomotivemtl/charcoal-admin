@@ -18,12 +18,16 @@ use \Charcoal\Model\DescribableTrait;
 // Dependency from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
 
-// Dependency from 'charcoal-admin'
-use \Charcoal\Admin\Property\PropertyDisplayInterface;
 
-// Local namespace dependencies
+// Dependencies from 'charcoal-property'
+use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
 use \Charcoal\Property\PropertyMetadata;
+
+// Local dependencies
+use \Charcoal\Admin\Property\PropertyDisplayInterface;
+
+
 
 /**
  *

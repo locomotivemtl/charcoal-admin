@@ -44,6 +44,7 @@ class LoadAction extends AdminAction
      */
     public function setDependencies(Container $dependencies)
     {
+        $this->widgetFactory = $dependencies['widget/factory'];
         $this->widgetView = $dependencies['view'];
     }
 
@@ -54,7 +55,6 @@ class LoadAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-
         $widgetType = $request->getParam('widget_type');
         $widgetOptions = $request->getParam('widget_options');
 
@@ -64,10 +64,8 @@ class LoadAction extends AdminAction
         }
 
         try {
-            $widget_factory = new WidgetFactory();
-            $widget = $widget_factory->create($widgetType, [
-                'logger'=>$this->logger
-            ]);
+            $widget = $this->widgetFactory->create($widgetType);
+
             $widget->setView($this->widgetView);
 
             if (is_array($widgetOptions)) {

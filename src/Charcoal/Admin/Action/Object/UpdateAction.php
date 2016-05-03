@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Action\Object;
 
 // Dependencies from `PHP`
-use \Exception as Exception;
+use \Exception;
 
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
@@ -108,8 +108,7 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
 
             // Load or reload object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
-            $updateData = array_replace_recursive($obj->data(), $this->updateData());
-            $obj->setData($updateData);
+            $obj->mergeData($this->updateData());
 
             $valid = $obj->validate();
 

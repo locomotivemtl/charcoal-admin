@@ -27,8 +27,6 @@ use \Charcoal\Property\PropertyMetadata;
 // Local dependencies
 use \Charcoal\Admin\Property\PropertyDisplayInterface;
 
-
-
 /**
  *
  */

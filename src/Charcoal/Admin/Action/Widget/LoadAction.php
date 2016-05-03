@@ -39,6 +39,11 @@ class LoadAction extends AdminAction
     protected $widgetView;
 
     /**
+     * @var WidgetFactory $widgetFactory
+     */
+    protected $widgetFactory;
+
+    /**
      * @param Container $dependencies The DI container.
      * @return void
      */

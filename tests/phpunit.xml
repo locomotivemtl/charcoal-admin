@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit 
+<phpunit
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
-	backupGlobals="false" 
-	backupStaticAttributes="false" 
-	bootstrap="bootstrap.php" 
+	backupGlobals="false"
+	backupStaticAttributes="false"
+	bootstrap="bootstrap.php"
 	convertErrorsToExceptions="true"
-	colors="true" 
+	colors="true"
 	verbose="true"
 >
 	<testsuites>
@@ -14,9 +14,14 @@
 			<directory>Charcoal/Admin/</directory>
 		</testsuite>
 	</testsuites>
+    <filter>
+    <whitelist>
+        <directory suffix=".php">../src/Charcoal/Admin</directory>
+    </whitelist>
+    </filter>
 	<logging>
 		<log type="coverage-html" target="tmp/report" charset="UTF-8" highlight="true" lowUpperBound="45" highLowerBound="60" showUncoveredFiles="false"/>
-		<!--<log type="coverage-clover" target="tmp/coverage.xml"/>-->
+		<log type="coverage-clover" target="tmp/coverage.xml"/>
 		<!--<log type="coverage-php" target="tmp/coverage.serialized"/>-->
 		<!--<log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>-->
 		<!--<log type="json" target="tmp/logfile.json"/>-->

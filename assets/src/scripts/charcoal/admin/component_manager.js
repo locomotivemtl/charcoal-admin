@@ -89,6 +89,12 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 */
 Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
 {
+    this.prepare_inputs();
+    this.prepare_widgets();
+    return true;
+};
+Charcoal.Admin.ComponentManager.prototype.prepare_inputs = function ()
+{
     // Get inputs
     var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
 
@@ -121,4 +127,41 @@ Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
     }
 
     return true;
+};
+
+Charcoal.Admin.ComponentManager.prototype.prepare_widgets = function ()
+{
+    // Get inputs
+    var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
+
+    if (!widgets.length) {
+        // No inputs? Move on
+        return true;
+    }
+
+    var length = widgets.length;
+    var widget;
+
+    // Loop for validation
+    var k = 0;
+    for (; k < length; k++) {
+        widget = widgets[ k ];
+        if (typeof widget.validate === 'function') {
+            widget.validate();
+        }
+    }
+
+    // We should add a check if the validation passed right here, before saving
+
+    // Loop for save
+    var i = 0;
+    for (; i < length; i++) {
+        widget = widgets[ i ];
+        if (typeof widget.save === 'function') {
+            widget.save();
+        }
+    }
+
+    return true;
+
 };

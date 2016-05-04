@@ -194,6 +194,12 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 */
 Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
 {
+    this.prepare_inputs();
+    this.prepare_widgets();
+    return true;
+};
+Charcoal.Admin.ComponentManager.prototype.prepare_inputs = function ()
+{
     // Get inputs
     var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
 
@@ -226,6 +232,43 @@ Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
     }
 
     return true;
+};
+
+Charcoal.Admin.ComponentManager.prototype.prepare_widgets = function ()
+{
+    // Get inputs
+    var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
+
+    if (!widgets.length) {
+        // No inputs? Move on
+        return true;
+    }
+
+    var length = widgets.length;
+    var widget;
+
+    // Loop for validation
+    var k = 0;
+    for (; k < length; k++) {
+        widget = widgets[ k ];
+        if (typeof widget.validate === 'function') {
+            widget.validate();
+        }
+    }
+
+    // We should add a check if the validation passed right here, before saving
+
+    // Loop for save
+    var i = 0;
+    for (; i < length; i++) {
+        widget = widgets[ i ];
+        if (typeof widget.save === 'function') {
+            widget.save();
+        }
+    }
+
+    return true;
+
 };
 ;/**
 * charcoal/admin/feedback
@@ -2649,6 +2692,8 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 * It is still possible to add a widget without passing
 * throught this class, but not suggested
 *
+* @see Component_Manager.render() for automatic call to widget constructor
+*
 * Interface:
 * ## Setters
 * - `set_opts`
@@ -2783,13 +2828,59 @@ Charcoal.Admin.Widget.prototype.element = function ()
     return this._element;
 };
 
+/**
+* Default widget options
+* Can be overwritten by widget
+* @return {Object}
+*/
+Charcoal.Admin.Widget.prototype.widget_options = function ()
+{
+    return this.opts();
+};
+
+/**
+* Default widget type
+* Can be overwritten by widget
+* @return {String}
+*/
+Charcoal.Admin.Widget.prototype.widget_type = function ()
+{
+    return this.type();
+};
+
+/**
+ * Called upon save by the component manager
+ *
+ * @return {boolean} Default action is set to true.
+ */
+Charcoal.Admin.Widget.prototype.save = function ()
+{
+    return true;
+};
+
+/**
+ * Animate the widget out on reload
+ * Use callback to define what to do after the animation.
+ *
+ * @param  {Function} callback What to do after the anim_out?
+ * @return {thisArg}           Chainable
+ */
+Charcoal.Admin.Widget.prototype.anim_out = function (callback)
+{
+    if (typeof callback !== 'function') {
+        callback = function () {};
+    }
+    this.element().fadeOut(400, callback);
+    return this;
+};
+
 Charcoal.Admin.Widget.prototype.reload = function (cb)
 {
     var that = this;
 
     var url = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
-        widget_type:    that.widget_type,
+        widget_type:    that.type(),
         widget_options: that.widget_options()
     };
 
@@ -2799,18 +2890,19 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
     $.post(url, data, function (response) {
         if (typeof response.widget_id === 'string') {
             that.set_id(response.widget_id);
-            that.element().fadeOut();
-            setTimeout(function () {
+            that.anim_out(function () {
                 that.element().replaceWith(response.widget_html);
                 that.set_element($('#' + that.id()));
 
                 // Pure dompe.
                 that.element().hide().fadeIn();
                 that.init();
-            }, 600);
+            });
         }
         // Callback
-        cb(response);
+        if (typeof cb === 'function') {
+            cb(response);
+        }
     });
 
 };
@@ -2855,6 +2947,138 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
         }
 
     });
+};
+;/**
+* Attachment widget
+* You can associate a perticular object to another
+* using this widget.
+*
+* @see widget.js (Charcoal.Admin.Widget
+*/
+Charcoal.Admin.Widget_Attachment = function ()
+{
+    return this;
+};
+
+Charcoal.Admin.Widget_Attachment.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Attachment.prototype.constructor = Charcoal.Admin.Widget_Attachment;
+Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.prototype;
+
+/**
+ * Called upon creation
+ * Use as constructor
+ * Access available configurations with `this.opts()`
+ * Encapsulate all events within the current widget
+ * element: `this.element()`.
+ *
+ *
+ * @see Component_Manager.render()
+ * @return {thisArg} Chainable
+ */
+Charcoal.Admin.Widget_Attachment.prototype.init = function ()
+{
+    // Necessary assets.
+    if (typeof $.fn.sortable !== 'function') {
+        var that = this;
+        this.load_assets(function () {
+            that.init();
+        });
+        return this;
+    }
+    // var config = this.opts();
+    this.element().find('.js-attachment-sortable').sortable({
+        connectWith: '.js-attachment-sortable'
+    }).disableSelection();
+    return this;
+};
+
+Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
+{
+    $.getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
+    function () {
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
+    return this;
+};
+
+/**
+ * Bind listeners
+ *
+ * @return {thisArg} Chainable
+ */
+Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
+{
+    // Scope
+    var that = this;
+
+    // Jquery element
+    // var el = this.element();
+
+    // Prevent multiple binds
+    this.element().off('click');
+
+    this.element().on('click', '.js-attachments-manager .js-attachment', function (e)
+    {
+        e.preventDefault();
+        that.select_attachment($(this));
+    });
+};
+
+/**
+ * Select an attachment from the list
+ *
+ * @param  {jQuery Object} elem Clicked element
+ * @return {thisArg}            (Chainable)
+ */
+Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
+{
+    if (!elem.data('id') || !elem.data('type')) {
+        // Invalid
+        return this;
+    }
+
+    // var id = elem.data('id'),
+    //     type = elem.data('type');
+
+    var clone = elem.clone();
+    this.element().find('.js-attachment-container').append(clone);
+
+};
+
+Charcoal.Admin.Widget_Attachment.prototype.save = function ()
+{
+    // Scope
+    var that = this;
+
+    var opts = that.opts();
+    var data = {
+        obj_type: opts.data.obj_type,
+        obj_id: opts.data.obj_id,
+        attachments: []
+    };
+
+    this.element().find('.js-attachment-container').find('.js-attachment').each(function (i)
+    {
+        var $this = $(this);
+        var id = $this.data('id');
+        var type = $this.data('type');
+
+        data.attachments.push({
+            attachment_id: id,
+            attachment_type: type, // Further use.
+            position: i
+        });
+    });
+
+    $.post('join', data, function (response)
+    {
+        if (response.success) {
+            window.alert('yay!');
+        }
+    });
+
 };
 ;/**
 * Form widget that manages data sending
@@ -3275,6 +3499,10 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
         return this;
     }
 
+    if (typeof widget.pagination !== 'undefined') {
+        widget.pagination.page = 1;
+    }
+
     var $input = this.element().find('input');
     var val = $input.val();
 
@@ -3322,7 +3550,7 @@ Charcoal.Admin.Widget_Table = function ()
     this.table_selector = null;
     // this.properties = null;
     this.properties_options = null;
-    this.filters = [];
+    this.filters = {};
     this.orders = [];
     this.pagination = {
         page: 1,

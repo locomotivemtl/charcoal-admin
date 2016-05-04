@@ -8,6 +8,8 @@ use \DateTimeInterface;
 use \InvalidArgumentException;
 use \PDO;
 
+use \Pimple\Container;
+
 // Dependencies from `charcoal-core`
 use \Charcoal\Model\ModelFactory;
 
@@ -284,9 +286,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
                 'logger' => $this->logger
             ]);
 
-            $model = $factory->create($this->objType(), [
-                'logger' => $this->logger
-            ]);
+            $model = $factory->create($this->objType());
 
             $sql = [];
             $seriesOptions = $this->seriesOptions();

@@ -4,6 +4,8 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 // From `charcoal-core`
 use \Charcoal\Charcoal;
 use \Charcoal\Property\PropertyFactory;
@@ -40,6 +42,15 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
      * @var array $filters
      */
     protected $filters;
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->setModelFactory($container['model/factory']);
+    }
 
     /**
      * @param array|ArrayInterface $data The search widget data.

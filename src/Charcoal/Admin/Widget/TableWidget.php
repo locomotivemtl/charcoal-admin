@@ -4,6 +4,8 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 use \Charcoal\Charcoal;
 use \Charcoal\Translation\TranslationString;
 
@@ -43,6 +45,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     private $adminMetadata;
 
     /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->setModelFactory($container['model/factory']);
+        $this->setPropertyFactory($container['model/dependency/property/factory']);
+    }
+
+    /**
      * @param PropertyFactory $factory The property factory, to create properties.
      * @return TableWidget Chainable
      */
@@ -60,7 +72,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function propertyFactory()
     {
         if ($this->propertyFactory === null) {
-            $this->propertyFactory = new PropertyFactory();
+            throw new Exception(
+                'Property factory is not set for table widget'
+            );
         }
         return $this->propertyFactory;
     }

@@ -52,14 +52,17 @@ abstract class AbstractPropertyInput implements
      * @var boolean $readOnly
      */
     private $readOnly;
+
     /**
      * @var boolean $required
      */
     private $required;
+
     /**
      * @var boolean $disabled
      */
     private $disabled;
+
     /**
      * @var boolean $multiple
      */
@@ -69,6 +72,7 @@ abstract class AbstractPropertyInput implements
      * @var string $type
      */
     protected $type;
+
     /**
      * @var string $inputType
      */
@@ -78,6 +82,7 @@ abstract class AbstractPropertyInput implements
      * @var string $inputId
      */
     protected $inputId;
+
     /**
      * @var string $inputClass
      */
@@ -112,6 +117,7 @@ abstract class AbstractPropertyInput implements
             $data['logger'] = new NullLogger();
         }
         $this->setLogger($data['logger']);
+        $this->setMetadataLoader($data['metadata_loader']);
     }
 
     /**

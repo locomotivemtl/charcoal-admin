@@ -4,12 +4,16 @@ namespace Charcoal\Admin\Widget;
 
 // Dependencies from `PHP`
 use \InvalidArgumentException;
+use \Exception;
+
+use \Pimple\Container;
 
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Property\PropertyInputFactory;
 
+use \Charcoal\Factory\FactoryInterface;
+
 // From `charcoal-core`
-use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
 
 /**
@@ -77,6 +81,64 @@ class FormPropertyWidget extends AdminWidget
      * @var PropertyInputFactory $factory
      */
     private $propertyInputFactory;
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->setPropertyFactory($container['property/factory']);
+        $this->setPropertyInputFactory($container['property/input/factory']);
+    }
+
+    /**
+     * @param FactoryInterface $factory The property factory, used to create properties.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @throws Exception If the property factory dependency was not set / injected.
+     * @return FactoryInterface
+     */
+    protected function propertyFactory()
+    {
+        if ($this->propertyFactory === null) {
+            throw new Exception(
+                'Property factory was not set'
+            );
+        }
+        return $this->propertyFactory;
+    }
+
+    /**
+     * @param FactoryInterface $factory The property input factory, used to create property inputs.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setPropertyInputFactory(FactoryInterface $factory)
+    {
+        $this->propertyInputFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @throws Exception If the property input factory dependency was not set / injected.
+     * @return PropertyInputFactory
+     */
+    protected function propertyInputFactory()
+    {
+        if ($this->propertyInputFactory === null) {
+            throw new Exception(
+                'Property input factory was not set'
+            );
+        }
+        return $this->propertyInputFactory;
+    }
 
     /**
      * @param array|ArrayInterface $data The widget AND property data.
@@ -255,9 +317,7 @@ class FormPropertyWidget extends AdminWidget
     public function prop()
     {
         if ($this->property === null) {
-            $p = $this->propertyFactory()->get($this->type(), [
-                'logger'=>$this->logger
-            ]);
+            $p = $this->propertyFactory()->create($this->type());
 
 
             $p->setIdent($this->propertyIdent());
@@ -314,9 +374,7 @@ class FormPropertyWidget extends AdminWidget
         $prop = $this->prop();
 
         $inputType = $this->inputType();
-        $this->input = $this->propertyInputFactory()->create($inputType, [
-            'logger'=>$this->logger
-        ]);
+        $this->input = $this->propertyInputFactory()->create($inputType);
 
         $this->input->setProperty($prop);
         $this->input->setPropertyVal($this->propertyVal);
@@ -339,25 +397,5 @@ class FormPropertyWidget extends AdminWidget
         }
     }
 
-    /**
-     * @return PropertyFactory
-     */
-    private function propertyFactory()
-    {
-        if ($this->propertyFactory === null) {
-            $this->propertyFactory = new PropertyFactory();
-        }
-        return $this->propertyFactory;
-    }
 
-    /**
-     * @return PropertyInputFactory
-     */
-    private function propertyInputFactory()
-    {
-        if ($this->propertyInputFactory === null) {
-            $this->propertyInputFactory = new PropertyInputFactory();
-        }
-        return $this->propertyInputFactory;
-    }
 }

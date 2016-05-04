@@ -79,9 +79,7 @@ class CollectionTemplate extends AdminTemplate implements
         parent::setDependencies($container);
 
         $this->setModelFactory($container['model/factory']);
-        if ($container['model/collection/loader']) {
-            $this->setCollectionLoader($container['model/collection/loader']);
-        }
+        $this->setCollectionLoader($container['model/collection/loader']);
 
         // Required dependencies.
         $this->setWidgetFactory($container['widget/factory']);
@@ -103,12 +101,15 @@ class CollectionTemplate extends AdminTemplate implements
      * Safe Widget Factory getter.
      * Create the widget factory if it was not preiously injected / set.
      *
+     * @throws Exception If the widget factory dependency was not previously set / injected.
      * @return WidgetFactory
      */
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            $this->widgetFactory = new WidgetFactory();
+            throw new Exception(
+                'Widget factory was not set.'
+            );
         }
         return $this->widgetFactory;
     }
@@ -170,9 +171,7 @@ class CollectionTemplate extends AdminTemplate implements
         } else {
             $widgetType = 'charcoal/admin/widget/sidemenu';
         }
-        $sidemenu = $this->widgetFactory()->create($widgetType, [
-            'logger'=>$this->logger
-        ]);
+        $sidemenu = $this->widgetFactory()->create($widgetType);
         return $sidemenu;
     }
 
@@ -186,9 +185,7 @@ class CollectionTemplate extends AdminTemplate implements
      */
     public function searchWidget()
     {
-        $widget = $this->widgetFactory()->create('charcoal/admin/widget/search', [
-            'logger'=>$this->logger
-        ]);
+        $widget = $this->widgetFactory()->create('charcoal/admin/widget/search');
         $widget->setObjType($this->objType());
 
         $obj = $this->proto();

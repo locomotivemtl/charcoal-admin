@@ -25,25 +25,14 @@ class DashboardWidget extends AdminWidget implements
     use UiItemTrait;
 
     /**
-     * @param array|\ArrayAccess $data Dependencies.
-     */
-    public function __construct($data)
-    {
-        parent::__construct($data);
-
-        // Set up layout builder (to fulfill LayoutAware Interface)
-        if (isset($data['layout_builder'])) {
-            $this->setLayoutBuilder($data['layout_builder']);
-        }
-
-    }
-
-    /**
      * @param Container $container The DI container.
      * @return void
      */
     public function setDependencies(Container $container)
     {
+        // Fill DashboardInterface dependencies
+        $this->setWidgetBuilder($container['widget/builder']);
+
         // Fill LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
     }

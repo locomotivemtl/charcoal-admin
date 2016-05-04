@@ -2,9 +2,13 @@
 
 namespace Charcoal\Admin\Widget;
 
-use InvalidArgumentException;
+use \Exception;
+use \InvalidArgumentException;
 
 use \Pimple\Container;
+
+// From `charcoal-app`
+use \Charcoal\App\Template\WidgetFactory;
 
 /// From `charcoal-ui`
 use \Charcoal\Ui\Form\FormInterface;
@@ -32,6 +36,11 @@ class FormWidget extends AdminWidget implements
     protected $sidebars = [];
 
     /**
+     * @var WidgetFactory $widgetFactory
+     */
+    private $widgetFactory;
+
+    /**
      * @param Container $container The DI container.
      * @return void
      */
@@ -44,6 +53,36 @@ class FormWidget extends AdminWidget implements
 
         // Fill LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
+
+        // Required Dependencies
+        $this->setWidgetFactory($container['widget/factory']);
+    }
+
+        /**
+         * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+         * @return CollectionTemplate Chainable
+         */
+    public function setWidgetFactory(WidgetFactory $factory)
+    {
+        $this->widgetFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * Safe Widget Factory getter.
+     * Create the widget factory if it was not preiously injected / set.
+     *
+     * @throws Exception If the widget factory was not set / injected.
+     * @return WidgetFactory
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new Exception(
+                'Widget factory was not set on form widget.'
+            );
+        }
+        return $this->widgetFactory;
     }
 
     /**
@@ -52,9 +91,7 @@ class FormWidget extends AdminWidget implements
      */
     public function createFormProperty(array $data = null)
     {
-        $p = new FormPropertyWidget([
-            'logger'=>$this->logger
-        ]);
+        $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
         if ($data !== null) {
             $p->setData($data);
         }
@@ -90,9 +127,7 @@ class FormWidget extends AdminWidget implements
         if (($sidebar instanceof FormSidebarWidget)) {
             $this->sidebars[$sidebarIdent] = $sidebar;
         } elseif (is_array($sidebar)) {
-            $s = new FormSidebarWidget([
-                'logger'=>$this->logger
-            ]);
+            $s = $this->widgetFactory()->create('charcoal/admin/widget/form-sidebar');
             $s->setForm($this);
             $s->setData($sidebar);
             $this->sidebars[$sidebarIdent] = $s;

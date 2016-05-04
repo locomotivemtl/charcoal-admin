@@ -80,15 +80,15 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * Safe Widget Factory getter.
-     * Create the widget factory if it was not preiously injected / set.
-     *
+     * @throws Exception If the widget factory was not set before being accessed.
      * @return WidgetFactory
      */
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            $this->widgetFactory = new WidgetFactory();
+            throw new Exception(
+                'Model factory not set'
+            );
         }
         return $this->widgetFactory;
     }
@@ -117,7 +117,6 @@ class EditTemplate extends AdminTemplate implements
         }
         return $this->dashboardBuilder;
     }
-
 
     /**
      * @param array $data Optional dashboard data.
@@ -151,9 +150,7 @@ class EditTemplate extends AdminTemplate implements
         } else {
             $widgetType = 'charcoal/admin/widget/sidemenu';
         }
-        $sidemenu = $this->widgetFactory()->create($widgetType, [
-            'logger'=>$this->logger
-        ]);
+        $sidemenu = $this->widgetFactory()->create($widgetType);
         return $sidemenu;
     }
 

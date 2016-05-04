@@ -48,10 +48,16 @@ trait ObjectContainerTrait
     }
 
     /**
+     * @throws Exception If the model factory was not set before being accessed.
      * @return ModelFactory
      */
     protected function modelFactory()
     {
+        if ($this->modelFactory === null) {
+            throw new Exception(
+                'Model factory not set'
+            );
+        }
         return $this->modelFactory;
     }
 

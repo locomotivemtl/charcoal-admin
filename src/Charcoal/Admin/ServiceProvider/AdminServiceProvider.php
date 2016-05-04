@@ -10,8 +10,11 @@ use \Pimple\ServiceProviderInterface;
 use \Charcoal\App\Template\WidgetFactory;
 
 // Local Dependencies
+
 use \Charcoal\Admin\AdminModule;
 use \Charcoal\Admin\Config as AdminConfig;
+use \Charcoal\Admin\Property\PropertyInputFactory;
+use \Charcoal\Admin\Property\PropertyDisplayFactory;
 
 /**
  * Charcoal Administration Service Provider
@@ -35,73 +38,34 @@ class AdminServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        //$this->registerModule($container);
-        //$this->registerHandlerServices($container);
-        //$this->registerRequestControllerServices($container);
+        $this->registerUtilities($container);
     }
 
     /**
-     * Registers the module.
+     * Registers the admin factories
      *
      * @param  Container $container The DI container.
      * @return void
      */
-    protected function registerModule(Container $container)
+    protected function registerUtilities(Container $container)
     {
-        /**
-         * @param Container $container A container instance.
-         * @return RouteFactory
-         */
-        $container['charcoal/admin/module'] = function(Container $container) {
-            return new AdminModule([
-                'logger' => $container['logger'],
-                'config' => $container['charcoal/admin/config'],
-                'app'    => $this->app()
+        $container['property/input/factory'] = function (Container $container) {
+            $propertyInputFactory = new PropertyInputFactory();
+            $propertyInputFactory->setArguments([
+                'logger'            => $container['logger'],
+                'metadata_loader'   => $container['metadata/loader']
             ]);
+            return $propertyInputFactory;
         };
 
-        /**
-         * @param Container $container A container instance.
-         * @return RouteFactory
-         */
-        $container['charcoal/admin/config'] = function(Container $container) {
-            $config = new AdminConfig();
-
-            if ($container['config']->has('admin')) {
-                $config->merge($container['config']->get('admin'));
-            }
-
-            return $config;
+        $container['property/display/factory'] = function (Container $container) {
+            $propertyInputFactory = new PropertyDisplayFactory();
+            $propertyInputFactory->setArguments([
+                'logger'            => $container['logger'],
+                'metadata_loader'   => $container['metadata/loader']
+            ]);
+            return $propertyDisplayFactory;
         };
     }
 
-    /**
-     * Registers handlers for the module.
-     *
-     * @todo   Implement Admin-specific error handlers.
-     * @param  Container $container The DI container.
-     * @return void
-     */
-    protected function registerHandlerServices(Container $container)
-    {
-    }
-
-    /**
-     * Registers request controllers for the module.
-     *
-     * @param  Container $container The DI container.
-     * @return void
-     */
-    protected function registerRequestControllerServices(Container $container)
-    {
-        /**
-         * @param Container $container A container instance.
-         * @return WidgetFactory
-         */
-        $container['admin/widget/factory'] = function (Container $container) {
-            $widgetFactory = new WidgetFactory();
-
-            return $widgetFactory;
-        };
-    }
 }

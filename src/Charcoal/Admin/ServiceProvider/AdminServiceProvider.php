@@ -67,5 +67,4 @@ class AdminServiceProvider implements ServiceProviderInterface
             return $propertyDisplayFactory;
         };
     }
-
 }

@@ -396,6 +396,4 @@ class FormPropertyWidget extends AdminWidget
             yield $this->input;
         }
     }
-
-
 }

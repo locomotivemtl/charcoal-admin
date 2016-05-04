@@ -65,8 +65,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Safe
-     *
+     * @throws Exception If the property factory was not previously set / injected.
      * @return PropertyFactory
      */
     protected function propertyFactory()

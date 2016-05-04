@@ -6,10 +6,21 @@ use \Charcoal\Admin\Property\Input\TextInput;
 
 class TextInputTest extends \PHPUnit_Framework_TestCase
 {
+    private $obj;
+
+    public function setUp()
+    {
+        $this->obj = new TextInput([
+            'logger' => new \Psr\Log\NullLogger(),
+            'metadata_loader' => new \Charcoal\Model\MetadataLoader([
+                'logger' => new \Psr\Log\NullLogger()
+            ])
+        ]);
+    }
 
     public function testSetData()
     {
-        $obj = new TextInput();
+        $obj = $this->obj;
         $ret = $obj->setData([
             'size'=>42,
             'min_length'=>10,
@@ -27,7 +38,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSize()
     {
-        $obj = new TextInput();
+        $obj = $this->obj;
         $ret = $obj->setSize(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->size());
@@ -39,7 +50,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMinLength()
     {
-        $obj = new TextInput();
+        $obj = $this->obj;
         $ret = $obj->setMinLength(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->minLength());
@@ -51,7 +62,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMaxLength()
     {
-        $obj = new TextInput();
+        $obj = $this->obj;
         $ret = $obj->setMaxLength(42);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->maxLength());
@@ -63,7 +74,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPattern()
     {
-        $obj = new TextInput();
+        $obj = $this->obj;
         $ret = $obj->setPattern('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->pattern());
@@ -75,7 +86,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPlaceholder()
     {
-        $obj = new TextInput();
+        $obj = $this->obj;
         $ret = $obj->setPlaceholder('foo');
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->placeholder());

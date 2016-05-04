@@ -7,9 +7,19 @@ use \Charcoal\Admin\Property\Input\TextareaInput;
 class TextareaInputTest extends \PHPUnit_Framework_TestCase
 {
 
+     public function setUp()
+    {
+        $this->obj = new TextareaInput([
+            'logger' => new \Psr\Log\NullLogger(),
+            'metadata_loader' => new \Charcoal\Model\MetadataLoader([
+                'logger' => new \Psr\Log\NullLogger()
+            ])
+        ]);
+    }
+
     public function testSetData()
     {
-        $obj = new TextareaInput();
+        $obj = $this->obj;
         $ret = $obj->setData([
             'cols'=>42,
             'rows'=>84
@@ -21,7 +31,7 @@ class TextareaInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCols()
     {
-        $obj = new TextareaInput();
+        $obj = $this->obj;
         $ret = $obj->setCols(42);
 
         $this->assertSame($ret, $obj);
@@ -33,7 +43,7 @@ class TextareaInputTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRows()
     {
-        $obj = new TextareaInput();
+        $obj = $this->obj;
         $ret = $obj->setRows(42);
 
         $this->assertSame($ret, $obj);

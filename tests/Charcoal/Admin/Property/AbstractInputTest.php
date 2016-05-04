@@ -8,7 +8,14 @@ class AbstractInputTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->obj = $this->getMockForAbstractClass('\Charcoal\Admin\Property\AbstractPropertyInput');
+        $this->obj = $this->getMockForAbstractClass('\Charcoal\Admin\Property\AbstractPropertyInput', [
+            [
+                'logger' => new \Psr\Log\NullLogger(),
+                'metadata_loader' => new \Charcoal\Model\MetadataLoader([
+                    'logger' => new \Psr\Log\NullLogger()
+                ])
+            ]
+        ]);
     }
 
     public function testSetData()

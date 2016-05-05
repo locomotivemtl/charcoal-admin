@@ -1,0 +1,51 @@
+{{!--
+Object Form Widget
+===========
+
+`charcoal/admin/widget/form`
+
+This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
+
+--}}
+<form action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widgetId}}">
+
+    <div class="o-flex">
+
+        <div class="o-flex_main" style="min-height: 0;">
+            {{!-- Loop all form groups --}}
+            {{#groups}}
+                 {{#form.layout}}
+                    {{>charcoal/admin/widget/layout.start}}
+                {{/form.layout}}
+
+                <div class="col-md-{{form.layout.cellSpanBy12}}">
+                    {{>$widget_template}}
+                </div>
+
+                 {{#form.layout}}
+                   {{>charcoal/admin/widget/layout.end}}
+                {{/form.layout}}
+            {{/groups}}
+
+        </div>
+
+        <input type="hidden" name="widget_id" value="{{widgetId}}">
+        <input type="hidden" name="obj_type" value="{{objType}}">
+        <input type="hidden" name="obj_id" value="{{objId}}">
+    </div>
+    <input type="submit" class="btn o-btn" value="Soumettre" />
+</form>
+
+{{#addJs}}
+<script>
+Charcoal.Admin.manager().add_widget({
+    id: '{{widgetId}}',
+    type: 'charcoal/admin/widget/form',
+    "form_ident": "default",
+    data: {
+        obj_type: '{{objType}}',
+        obj_id: '{{objId}}'
+    }
+});
+</script>
+{{/addJs}}

@@ -159,10 +159,32 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 {
 
     for (var component_type in this.components) {
+        var super_class = Charcoal;
+
+        switch (component_type)
+        {
+            case 'widgets' :
+                super_class = Charcoal.Admin.Widget;
+            break;
+
+            case 'property_inputs' :
+                super_class = Charcoal.Admin.Property;
+            break;
+
+            case 'templates' :
+                super_class = Charcoal.Admin.Template;
+            break;
+
+        }
 
         for (var i = 0, len = this.components[component_type].length; i < len; i++) {
 
             var component_data = this.components[component_type][i];
+
+            // If we are already dealing with a full on component
+            if (component_data instanceof super_class) {
+                continue;
+            }
 
             try {
                 var component = new Charcoal.Admin[component_data.ident](component_data);
@@ -2730,6 +2752,7 @@ Charcoal.Admin.Widget = function (opts)
 
     if (typeof opts.type === 'string') {
         this.set_type(opts.type);
+        this.widget_type = opts.type;
     }
 
     this.set_opts(opts);
@@ -2818,6 +2841,15 @@ Charcoal.Admin.Widget.prototype.set_element = function (elem)
     this._element = elem;
 
     return this;
+};
+
+/**
+ * Default behavior
+ * @return {[type]} [description]
+ */
+Charcoal.Admin.Widget.prototype.widget_options = function ()
+{
+    return this.opts();
 };
 
 /**
@@ -2910,7 +2942,7 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 /**
 * Load the widget into a dialog
 */
-Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
 {
     //var that = this;
 
@@ -2922,12 +2954,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
         type: type,
         nl2br: false,
         message: function (dialog) {
-            console.debug(dialog);
             var url = Charcoal.Admin.admin_url() + 'widget/load',
-                data = {
-                    widget_type:    dialog_opts.widget_type//that.widget_type//,
-                    //widget_options: that.widget_options()
-                },
+                data = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
             $.ajax({
@@ -2935,9 +2963,11 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
                 url: url,
                 data: data
             }).done(function (response) {
-                console.debug(response);
                 if (response.success) {
                     dialog.setMessage(response.widget_html);
+                    if (typeof callback === 'function') {
+                        callback(response);
+                    }
                 } else {
                     dialog.setType(BootstrapDialog.TYPE_DANGER);
                     dialog.setMessage('Error');
@@ -2989,6 +3019,11 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     this.element().find('.js-attachment-sortable').sortable({
         connectWith: '.js-attachment-sortable'
     }).disableSelection();
+<<<<<<< HEAD
+=======
+
+    this.listeners();
+>>>>>>> Quick edit form. Attachment widget JS with support for the quickform
     return this;
 };
 
@@ -3018,6 +3053,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 
     // Prevent multiple binds
     this.element().off('click');
+<<<<<<< HEAD
 
     this.element().on('click', '.js-attachments-manager .js-attachment', function (e)
     {
@@ -3047,6 +3083,65 @@ Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
 
 };
 
+=======
+    this.element().on('click', '.js-add-attachment', function (e)
+    {
+        e.preventDefault();
+        var type = $(this).data('type');
+        if (!type) {
+            return false;
+        }
+        that.create_attachment(type);
+    });
+};
+
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type)
+{
+    // Scope
+    var that = this;
+
+    var data = {
+        widget_type: 'charcoal/admin/widget/quickForm',
+        form_ident: 'quick',
+        widget_options: {
+            obj_type: type,
+            obj_id: 0
+        }
+    };
+    this.dialog(data, function (response) {
+        if (response.success) {
+            // Call the quickForm widget js.
+            // Really not a good place to do that.
+            if (!response.widget_id) {
+                return false;
+            }
+
+            Charcoal.Admin.manager().add_widget({
+                id: response.widget_id,
+                type: 'charcoal/admin/widget/quick-form',
+                data: {
+                    obj_type: type,
+                    obj_id: 0
+                },
+                save_callback: function (response) {
+                    if (response.success) {
+                        BootstrapDialog.closeAll();
+                        that.reload();
+                    }
+                }
+            });
+            // Re render.
+            // This is not good.
+            Charcoal.Admin.manager().render();
+        }
+    });
+};
+
+/**
+ * [save description]
+ * @return {[type]} [description]
+ */
+>>>>>>> Quick edit form. Attachment widget JS with support for the quickform
 Charcoal.Admin.Widget_Attachment.prototype.save = function ()
 {
     // Scope
@@ -3072,6 +3167,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
         });
     });
 
+<<<<<<< HEAD
     $.post('join', data, function (response)
     {
         if (response.success) {
@@ -3080,6 +3176,22 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     });
 
 };
+=======
+    $.post('join', data, function ()
+    {
+    });
+
+};
+
+/**
+ * Widget options as output by the widget itself.
+ * @return {[type]} [description]
+ */
+Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
+{
+    return this.opts('widget_options');
+};
+>>>>>>> Quick edit form. Attachment widget JS with support for the quickform
 ;/**
 * Form widget that manages data sending
 * charcoal/admin/widget/form
@@ -3388,6 +3500,109 @@ Charcoal.Admin.Widget_Map.prototype.controller = function ()
 Charcoal.Admin.Widget_Map.prototype.coords = function ()
 {
     return this.opts('coords');
+};
+;/**
+ * Quick form is called by JS and must be
+ * added in the component manager manually.
+ *
+ * @param {Object} opts Widget options
+ * @return {thisArg}
+ */
+Charcoal.Admin.Widget_Quick_Form = function (opts)
+{
+    this.widget_type = 'charcoal/admin/widget/quick-form';
+    this.save_callback = opts.save_callback || '';
+
+    return this;
+};
+Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
+Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.init = function ()
+{
+    this.bind_events();
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function ()
+{
+    var that = this;
+    this.element().on('submit', function (e)
+    {
+        e.preventDefault();
+        that.submit_form(this);
+    });
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
+{
+    // Let the component manager prepare the submit first
+    // Calls the save function on each properties
+    Charcoal.Admin.manager().prepare_submit();
+
+    var that = this,
+        form_data = new FormData(form),
+        url,
+        is_new_object;
+
+    if (that.obj_id) {
+        url = Charcoal.Admin.admin_url() + 'object/update';
+        is_new_object = false;
+    } else {
+        url = Charcoal.Admin.admin_url() + 'object/save';
+        is_new_object = true;
+    }
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data: form_data,
+        success: function (response) {
+            if (response.success) {
+
+                // Default, add feedback to list
+                Charcoal.Admin.feedback().add_data(response.feedbacks);
+
+                if (response.next_url) {
+                    // @todo "dynamise" the label
+                    Charcoal.Admin.feedback().add_action({
+                        label: 'Continuer',
+                        callback: function () {
+                            window.location.href =
+                                Charcoal.Admin.admin_url() +
+                                response.next_url;
+                        }
+                    });
+                }
+
+                if (typeof that.save_callback === 'function') {
+                    that.save_callback(response);
+                }
+
+                // Charcoal.Admin.feedback().call();
+
+            } else {
+                Charcoal.Admin.feedback().add_data(
+                    [{
+                        level: 'An error occurred and the object could not be saved.',
+                        msg: 'error'
+                    }]
+                );
+                Charcoal.Admin.feedback().call();
+            }
+        },
+        error: function () {
+            Charcoal.Admin.feedback().add_data(
+                [{
+                    level: 'An error occurred and the object could not be saved.',
+                    msg: 'error'
+                }]
+            );
+            Charcoal.Admin.feedback().call();
+        }
+    });
 };
 ;/**
 * Search widget used for filtering a list

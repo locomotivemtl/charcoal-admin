@@ -42,6 +42,7 @@ Charcoal.Admin.Widget = function (opts)
 
     if (typeof opts.type === 'string') {
         this.set_type(opts.type);
+        this.widget_type = opts.type;
     }
 
     this.set_opts(opts);
@@ -130,6 +131,15 @@ Charcoal.Admin.Widget.prototype.set_element = function (elem)
     this._element = elem;
 
     return this;
+};
+
+/**
+ * Default behavior
+ * @return {[type]} [description]
+ */
+Charcoal.Admin.Widget.prototype.widget_options = function ()
+{
+    return this.opts();
 };
 
 /**
@@ -222,7 +232,7 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 /**
 * Load the widget into a dialog
 */
-Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
 {
     //var that = this;
 
@@ -234,12 +244,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
         type: type,
         nl2br: false,
         message: function (dialog) {
-            console.debug(dialog);
             var url = Charcoal.Admin.admin_url() + 'widget/load',
-                data = {
-                    widget_type:    dialog_opts.widget_type//that.widget_type//,
-                    //widget_options: that.widget_options()
-                },
+                data = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
             $.ajax({
@@ -247,9 +253,11 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts)
                 url: url,
                 data: data
             }).done(function (response) {
-                console.debug(response);
                 if (response.success) {
                     dialog.setMessage(response.widget_html);
+                    if (typeof callback === 'function') {
+                        callback(response);
+                    }
                 } else {
                     dialog.setType(BootstrapDialog.TYPE_DANGER);
                     dialog.setMessage('Error');

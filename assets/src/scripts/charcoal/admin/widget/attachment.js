@@ -39,6 +39,11 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     this.element().find('.js-attachment-sortable').sortable({
         connectWith: '.js-attachment-sortable'
     }).disableSelection();
+<<<<<<< HEAD
+=======
+
+    this.listeners();
+>>>>>>> Quick edit form. Attachment widget JS with support for the quickform
     return this;
 };
 
@@ -68,6 +73,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 
     // Prevent multiple binds
     this.element().off('click');
+<<<<<<< HEAD
 
     this.element().on('click', '.js-attachments-manager .js-attachment', function (e)
     {
@@ -97,6 +103,65 @@ Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
 
 };
 
+=======
+    this.element().on('click', '.js-add-attachment', function (e)
+    {
+        e.preventDefault();
+        var type = $(this).data('type');
+        if (!type) {
+            return false;
+        }
+        that.create_attachment(type);
+    });
+};
+
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type)
+{
+    // Scope
+    var that = this;
+
+    var data = {
+        widget_type: 'charcoal/admin/widget/quickForm',
+        form_ident: 'quick',
+        widget_options: {
+            obj_type: type,
+            obj_id: 0
+        }
+    };
+    this.dialog(data, function (response) {
+        if (response.success) {
+            // Call the quickForm widget js.
+            // Really not a good place to do that.
+            if (!response.widget_id) {
+                return false;
+            }
+
+            Charcoal.Admin.manager().add_widget({
+                id: response.widget_id,
+                type: 'charcoal/admin/widget/quick-form',
+                data: {
+                    obj_type: type,
+                    obj_id: 0
+                },
+                save_callback: function (response) {
+                    if (response.success) {
+                        BootstrapDialog.closeAll();
+                        that.reload();
+                    }
+                }
+            });
+            // Re render.
+            // This is not good.
+            Charcoal.Admin.manager().render();
+        }
+    });
+};
+
+/**
+ * [save description]
+ * @return {[type]} [description]
+ */
+>>>>>>> Quick edit form. Attachment widget JS with support for the quickform
 Charcoal.Admin.Widget_Attachment.prototype.save = function ()
 {
     // Scope
@@ -122,6 +187,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
         });
     });
 
+<<<<<<< HEAD
     $.post('join', data, function (response)
     {
         if (response.success) {
@@ -130,3 +196,19 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     });
 
 };
+=======
+    $.post('join', data, function ()
+    {
+    });
+
+};
+
+/**
+ * Widget options as output by the widget itself.
+ * @return {[type]} [description]
+ */
+Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
+{
+    return this.opts('widget_options');
+};
+>>>>>>> Quick edit form. Attachment widget JS with support for the quickform

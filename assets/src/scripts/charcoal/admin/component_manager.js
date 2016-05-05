@@ -54,10 +54,32 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 {
 
     for (var component_type in this.components) {
+        var super_class = Charcoal;
+
+        switch (component_type)
+        {
+            case 'widgets' :
+                super_class = Charcoal.Admin.Widget;
+            break;
+
+            case 'property_inputs' :
+                super_class = Charcoal.Admin.Property;
+            break;
+
+            case 'templates' :
+                super_class = Charcoal.Admin.Template;
+            break;
+
+        }
 
         for (var i = 0, len = this.components[component_type].length; i < len; i++) {
 
             var component_data = this.components[component_type][i];
+
+            // If we are already dealing with a full on component
+            if (component_data instanceof super_class) {
+                continue;
+            }
 
             try {
                 var component = new Charcoal.Admin[component_data.ident](component_data);

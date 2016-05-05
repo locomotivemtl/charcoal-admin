@@ -3019,11 +3019,8 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     this.element().find('.js-attachment-sortable').sortable({
         connectWith: '.js-attachment-sortable'
     }).disableSelection();
-<<<<<<< HEAD
-=======
 
     this.listeners();
->>>>>>> Quick edit form. Attachment widget JS with support for the quickform
     return this;
 };
 
@@ -3053,12 +3050,15 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 
     // Prevent multiple binds
     this.element().off('click');
-<<<<<<< HEAD
 
-    this.element().on('click', '.js-attachments-manager .js-attachment', function (e)
+    this.element().on('click', '.js-add-attachment', function (e)
     {
         e.preventDefault();
-        that.select_attachment($(this));
+        var type = $(this).data('type');
+        if (!type) {
+            return false;
+        }
+        that.create_attachment(type);
     });
 };
 
@@ -3074,25 +3074,6 @@ Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
         // Invalid
         return this;
     }
-
-    // var id = elem.data('id'),
-    //     type = elem.data('type');
-
-    var clone = elem.clone();
-    this.element().find('.js-attachment-container').append(clone);
-
-};
-
-=======
-    this.element().on('click', '.js-add-attachment', function (e)
-    {
-        e.preventDefault();
-        var type = $(this).data('type');
-        if (!type) {
-            return false;
-        }
-        that.create_attachment(type);
-    });
 };
 
 Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type)
@@ -3141,7 +3122,6 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type)
  * [save description]
  * @return {[type]} [description]
  */
->>>>>>> Quick edit form. Attachment widget JS with support for the quickform
 Charcoal.Admin.Widget_Attachment.prototype.save = function ()
 {
     // Scope
@@ -3167,19 +3147,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
         });
     });
 
-<<<<<<< HEAD
-    $.post('join', data, function (response)
-    {
-        if (response.success) {
-            window.alert('yay!');
-        }
-    });
-
-};
-=======
-    $.post('join', data, function ()
-    {
-    });
+    $.post('join', data, function () {});
 
 };
 
@@ -3191,7 +3159,6 @@ Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
 {
     return this.opts('widget_options');
 };
->>>>>>> Quick edit form. Attachment widget JS with support for the quickform
 ;/**
 * Form widget that manages data sending
 * charcoal/admin/widget/form

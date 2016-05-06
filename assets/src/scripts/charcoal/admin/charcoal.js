@@ -41,6 +41,15 @@ Charcoal.Admin = (function ()
     };
 
     /**
+    * Returns the base_url of the project
+    * @return  {string}  URL for admin section
+    */
+    Admin.base_url = function ()
+    {
+        return options.base_url;
+    };
+
+    /**
     * Provides an access to our instanciated ComponentManager
     * @return  {object}  ComponentManager instance
     */

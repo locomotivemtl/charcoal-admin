@@ -1,0 +1,68 @@
+{{!--
+Table Widget
+============
+
+`charcoal/admin/widget/table`
+
+This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
+
+--}}
+
+<div class="js-grid-container" id="{{widgetId}}">
+{{#hasObjects}}
+    {{#objectRows}}
+    <div class="col-xs-6 col-md-2">
+        <a class="thumbnail js-attachment" href="#" data-id="{{objId}}" data-type="{{objType}}">
+        {{#objectProperties}}
+            {{&val}}
+        {{/objectProperties}}
+        </a>
+    </div>
+    {{/objectRows}}
+
+    {{#paginationWidget}}
+        {{#showPagination}}
+        <div class="pull-right">
+            {{>charcoal/admin/widget/pagination}}
+        </div>
+        {{/showPagination}}
+    {{/paginationWidget}}
+{{/hasObjects}}
+
+{{^hasObjects}}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">{{#_t}}Erreurs:{{/_t}}</span>
+        Aucun objet de type "{{objType}}" n'existe.
+    </div>
+
+{{/hasObjects}}
+</div>
+
+{{#addCss}}
+<style>
+.ui-tablesort-placeholder{
+    margin: 12px;
+    border: 2px dotted black;
+    height: 5em;
+}
+</style>
+{{/addCss}}
+
+{{#addJs}}
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script>
+Charcoal.Admin.manager().add_widget({
+    id: '{{widgetId}}',
+    type: 'charcoal/admin/widget/table',
+    data: {
+        obj_type: '{{objType}}',
+        collection_ident: '{{collectionIdent}}',
+        pagination: {
+            page: {{page}},
+            num_per_page: {{numPerPage}}
+        }
+    }
+});
+</script>
+{{/addJs}}

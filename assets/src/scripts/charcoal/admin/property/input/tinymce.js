@@ -174,5 +174,26 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 {
-    window.tinymce.init(this.editor_options);
+    if (typeof window.tinyMCE !== 'object') {
+        var that = this;
+        this.load_assets(function () {
+            that.create_tinymce();
+        });
+        return this;
+    }
+
+    window.tinyMCE.init(this.editor_options);
+};
+
+Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
+{
+    var url = Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/tinymce.min.js';
+
+    $.getScript(url,
+    function () {
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
+    return this;
 };

@@ -36,8 +36,8 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
         return this;
     }
     // var config = this.opts();
-    this.element().find('.js-attachment-sortable').sortable({
-        connectWith: '.js-attachment-sortable'
+    this.element().find('.js-attachment-sortable').find('.js-grid-container').sortable({
+        connectWith: '.js-grid-container'
     }).disableSelection();
 
     this.listeners();

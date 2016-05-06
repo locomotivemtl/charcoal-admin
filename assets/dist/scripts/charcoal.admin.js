@@ -41,6 +41,15 @@ Charcoal.Admin = (function ()
     };
 
     /**
+    * Returns the base_url of the project
+    * @return  {string}  URL for admin section
+    */
+    Admin.base_url = function ()
+    {
+        return options.base_url;
+    };
+
+    /**
     * Provides an access to our instanciated ComponentManager
     * @return  {object}  ComponentManager instance
     */
@@ -2611,7 +2620,28 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 {
-    window.tinymce.init(this.editor_options);
+    if (typeof window.tinyMCE !== 'object') {
+        var that = this;
+        this.load_assets(function () {
+            that.create_tinymce();
+        });
+        return this;
+    }
+
+    window.tinyMCE.init(this.editor_options);
+};
+
+Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
+{
+    var url = Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/tinymce.min.js';
+
+    $.getScript(url,
+    function () {
+        if (typeof cb === 'function') {
+            cb();
+        }
+    });
+    return this;
 };
 ;/**
 * charcoal/admin/template
@@ -3016,8 +3046,8 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
         return this;
     }
     // var config = this.opts();
-    this.element().find('.js-attachment-sortable').sortable({
-        connectWith: '.js-attachment-sortable'
+    this.element().find('.js-attachment-sortable').find('.js-grid-container').sortable({
+        connectWith: '.js-grid-container'
     }).disableSelection();
 
     this.listeners();

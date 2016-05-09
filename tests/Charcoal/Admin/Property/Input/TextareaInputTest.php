@@ -7,13 +7,13 @@ use \Charcoal\Admin\Property\Input\TextareaInput;
 class TextareaInputTest extends \PHPUnit_Framework_TestCase
 {
 
-     public function setUp()
+    public function setUp()
     {
         $this->obj = new TextareaInput([
-            'logger' => new \Psr\Log\NullLogger(),
-            'metadata_loader' => new \Charcoal\Model\MetadataLoader([
-                'logger' => new \Psr\Log\NullLogger()
-            ])
+          'logger' => new \Psr\Log\NullLogger(),
+          'metadata_loader' => new \Charcoal\Model\MetadataLoader([
+              'logger' => new \Psr\Log\NullLogger()
+          ])
         ]);
     }
 

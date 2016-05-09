@@ -1155,3 +1155,6 @@ a:focus {
 
 .u-background-lightblue {
   background-color: #eaf2f4; }
+
+.u-resize-vertical {
+  resize: vertical; }

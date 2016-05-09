@@ -12,7 +12,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
 {{#hasObjects}}
     {{#objectRows}}
     <div class="col-xs-6 col-md-2">
-        <a class="thumbnail js-attachment" href="#" data-id="{{objId}}" data-type="{{objType}}">
+        <a class="thumbnail js-attachment" href="#" data-id="{{currentObjId}}" data-type="{{objType}}">
         {{#objectProperties}}
             {{&val}}
         {{/objectProperties}}

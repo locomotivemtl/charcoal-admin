@@ -7,9 +7,6 @@
         "ident": "charcoal/admin/template/home",
         "route": "[/[home]]"
       },
-      "home": {
-        "ident": "charcoal/admin/template/home"
-      },
       "login": {
         "ident": "charcoal/admin/template/login"
       },

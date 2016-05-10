@@ -5820,7 +5820,7 @@ button.close {
 
 .fa {
   display: inline-block;
-  font: normal normal normal 14px / 1 FontAwesome;
+  font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -9194,8 +9194,6 @@ select.mobile-device {
   border: solid 1px #CCC;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   z-index: 99999;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box;
   display: none; }
 
@@ -9302,8 +9300,6 @@ select.mobile-device {
   height: 8px;
   border-radius: 8px;
   border: solid 2px white;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box; }
 
 .minicolors-picker {
@@ -9315,8 +9311,6 @@ select.mobile-device {
   background: white;
   border: solid 1px black;
   margin-top: -2px;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box; }
 
 /* Swatches */
@@ -9438,3 +9432,12 @@ select.mobile-device {
 .input-group .minicolors-theme-bootstrap:not(:first-child) .minicolors-input {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0; }
+
+/* Semantic Ui theme */
+.minicolors-theme-semanticui .minicolors-swatch {
+  top: 0;
+  left: 0;
+  padding: 18px; }
+
+.minicolors-theme-semanticui input {
+  text-indent: 30px; }

@@ -53,6 +53,9 @@ class SelectInput extends AbstractPropertyInput
         if ($val === null) {
             return false;
         }
+
+        $val = $this->p()->parseVal($val);
+
         if ($this->p()->multiple()) {
             return in_array($c, $val);
         } else {

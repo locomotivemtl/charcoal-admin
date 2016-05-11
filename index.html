@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Charcoal-admin by locomotivemtl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Charcoal-admin</h1>
+      <h2 class="project-tagline">The admin (Backend Dashboard) for Charcoal</h2>
+      <a href="https://github.com/locomotivemtl/charcoal-admin" class="btn">View on GitHub</a>
+      <a href="https://github.com/locomotivemtl/charcoal-admin/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/locomotivemtl/charcoal-admin/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="charcoal-admin-module" class="anchor" href="#charcoal-admin-module" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Charcoal Admin Module</h1>
+
+<p>The standard Charcoal Admin Panel (Backend Dashboard).</p>
+
+<h1>
+<a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to install</h1>
+
+<p>The preferred (and only supported) way of installing charcoal-admin is with <strong>composer</strong>:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ composer require locomotivemtl/charcoal-admin</pre></div>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>
+<a href="https://github.com/locomotivemtl/charcoal-core">locomotivemtl/charcoal-core</a>
+
+<ul>
+<li>The framework classes. (Cache, Model, Metadata, View, Property, source, etc.)</li>
+<li>It brings the following dependencies:
+
+<ul>
+<li>
+<a href="https://github.com/locomotivemtl/charcoal-config">locomotivemtl/charcoal-config</a>
+
+<ul>
+<li>The configuration container for all things Charcoal.</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/locomotivemtl/charcoal-view">locomotivemtl/charcoal-view</a>
+
+<ul>
+<li>The view / templating engines. Mustache is the default engine.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/locomotivemtl/charcoal-base">locomotivemtl/charcoal-base</a>
+
+<ul>
+<li>Base project classes: Assets, Objects, Properties, Templates and Widgets</li>
+<li>It brings the additional charcoal dependencies:
+
+<ul>
+<li>
+<a href="https://github.com/locomotivemtl/charcoal-image">locomotivemtl/charcoal-image</a>
+
+<ul>
+<li>Image manipulation.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<blockquote>
+<p><g-emoji alias="point_right" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f449.png">👉</g-emoji> Development dependencies are described in the <em>Development</em> section of this README file.</p>
+</blockquote>
+
+<p>Which, in turn, require:</p>
+
+<ul>
+<li>
+<code>PHP 5.5+</code>
+
+<ul>
+<li>Older versions of PHP are deprecated, therefore not supported.</li>
+<li>
+<code>ext-fileinfo</code> File / MIME identification.</li>
+<li>
+<code>ext-mbstring</code> Multi-bytes string support.</li>
+<li>
+<code>ext-pdo</code> PDO Database driver.</li>
+</ul>
+</li>
+<li>MySQL
+
+<ul>
+<li>Other databases (<em>postgresql</em>, <em>sqlite</em>) should work but are not supported.</li>
+</ul>
+</li>
+<li>Apache with <code>mod_rewrite</code>
+
+<ul>
+<li>Other HTTP servers (<em>IIS</em>, _nginx) should work but are not supported.</li>
+</ul>
+</li>
+<li>
+<code>pimple/pimple</code> for dependency injection container.</li>
+<li>
+<code>slim/slim</code> for the routing engine and HTTP handling.</li>
+<li>
+<code>mustache/mustache</code> for the template engine.</li>
+<li>
+<code>phpmailer</code> to send emails.</li>
+<li>
+<code>league/climate</code> for CLI utilities.</li>
+<li>
+<code>monolog/monolog</code> for (<em>PSR-3</em>) logging.</li>
+</ul>
+
+<h1>
+<a id="core-concepts" class="anchor" href="#core-concepts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Core concepts</h1>
+
+<p><strong>todo</strong></p>
+
+<h1>
+<a id="whats-inside-this-module" class="anchor" href="#whats-inside-this-module" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What's inside this module?</h1>
+
+<p>Like all Charcoal projects / modules, the main components are:</p>
+
+<ul>
+<li>
+<strong>Autoloader</strong>
+
+<ul>
+<li>
+<em>PSR-4</em>, Provided by Composer.</li>
+</ul>
+</li>
+<li>
+<strong>Config</strong>
+
+<ul>
+<li>As JSON or PHP files in the <a href="config/">config/</a> directory.</li>
+</ul>
+</li>
+<li>
+<strong>Front Controller</strong>
+
+<ul>
+<li>The admin front controller is handled in the <code>\Charcoal\Admin\Module</code> class.</li>
+</ul>
+</li>
+<li>
+<strong>Objects</strong>
+
+<ul>
+<li>Typically  into <code>\Charcoal\Object\Content</code> and <code>\Charcoal\Object\UserData</code>
+</li>
+<li>Extends <code>\Charcoal\Model\AbstractModel</code>, which implements the following interface:
+
+<ul>
+<li><code>\Charcoal\Model\ModelInterface</code></li>
+<li><code>\Charcoal\Core\IndexableInterface</code></li>
+<li><code>\Charcoal\Metadata\DescribableInterface</code></li>
+<li><code>\Charcoal\Source\StorableInterface</code></li>
+<li><code>\Charcoal\Validator\ValidatableInterface</code></li>
+<li><code>\Charcaol\View\ViewableInterface</code></li>
+</ul>
+</li>
+<li>PHP Models in <code>src/Charcoal/Boilerplate/</code>
+</li>
+<li>JSON metadata in <code>metadata/charcoal/boilerplate/</code>
+</li>
+</ul>
+</li>
+<li>
+<strong>Templates</strong>
+
+<ul>
+<li>Templates are specialized Model which acts as View / Controller</li>
+<li>Split in <code>Templates</code>, <code>Widgets</code> and <code>PropertyInput</code>
+
+<ul>
+<li>All defined in the <code>charcoal-base</code> module</li>
+<li>All those classes extend <code>\Charcoal\Model\AbstractModel</code>
+</li>
+</ul>
+</li>
+<li>PHP Models in <code>src/Charcoal/Boilerplate/Template/</code>
+</li>
+<li>Mustache views (templates) in <code>templates/boilerplate/</code>
+</li>
+<li>Optionnally, templates metadata in <code>metdata/boilerplate/template/</code>
+</li>
+</ul>
+</li>
+<li>
+<strong>Actions</strong>
+
+<ul>
+<li>Actions handle input and provide a response to a request</li>
+<li>The PHP classes in <code>src/Charcoal/Boilerplate/Action</code>
+</li>
+</ul>
+</li>
+<li>
+<strong>Assets</strong>
+
+<ul>
+<li>Assets are files required to be on the webserver root</li>
+<li>Scripts, in <code>src/scripts/</code> and compiled in <code>www/assets/scripts/</code>
+</li>
+<li>Styles , with SASS in <code>src/styles/</code> and compiled CSS in <code>www/assets/styles/</code>
+</li>
+<li>Images, in <code>www/assets/images/</code>
+</li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Objects</h2>
+
+<h2>
+<a id="users" class="anchor" href="#users" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Users</h2>
+
+<p>Authentication is done through the <code>Charcoal\Admin\User</code> class.</p>
+
+<h1>
+<a id="ui-elements" class="anchor" href="#ui-elements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>UI Elements</h1>
+
+<p>User-Interface Elements, in charcoal-admin (or any other Charcoal modules, in fact), are composed of:</p>
+
+<ul>
+<li>A PHP Controller, in <em>src/Charcoal/Admin/{{type}}/{{ident}}</em>
+</li>
+<li>A mustache templates, in <em>templates/charcoal/admin/{{type}}/{{ident}}</em>
+</li>
+<li>Optional additional metadata, in <em>metadata/charcoal/admin/{{type}}/{{ident}}</em>
+</li>
+</ul>
+
+<p>There are 3 main types of UI Elements: <em>Templates</em>, <em>Widgets</em> and <em>Property Inputs</em>.</p>
+
+<h2>
+<a id="templates" class="anchor" href="#templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Templates</h2>
+
+<p>See the <a href="src/Charcoal/Admin/Template">src/Charcoal/Admin/Templates</a> directory for the list of available Templates in this module. Note that the template views themselves (the mustache templates) are located in <a href="templates/charcoal/admin/template/">templates/charcoal/admin/template/</a> directory.</p>
+
+<p>In addition to being standard Template Models (controllers), all <em>Template</em> of the admin module also implements the <code>\Charcoal\Admin\Template</code> class.</p>
+
+<p>This class provides additional controls to all templates:</p>
+
+<ul>
+<li>
+<code>has_feedbacks</code> and <code>feedbacks</code>
+</li>
+<li>
+<code>title</code>, <code>subtitle</code>, <code>show_title</code> and <code>show_subtitle</code>
+</li>
+<li>
+<code>auth_required</code>
+
+<ul>
+<li>Protected, true by default. Set to false for templates that do not require an authenticated admin user.</li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="widgets" class="anchor" href="#widgets" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Widgets</h2>
+
+<p>The following base widgets are available to build the various <em>admin</em> templates:</p>
+
+<ul>
+<li><code>Dashboard</code></li>
+<li><code>Feedbacks</code></li>
+<li><code>Form</code></li>
+<li><code>FormGroup</code></li>
+<li><code>FormProperty</code></li>
+<li><code>Graph/Bar</code></li>
+<li><code>Graph/Line</code></li>
+<li><code>Graph/Pie</code></li>
+<li>Layout</li>
+<li>MapWidget</li>
+<li>Table</li>
+<li>TableProperty</li>
+</ul>
+
+<h2>
+<a id="property-inputs" class="anchor" href="#property-inputs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Property Inputs</h2>
+
+<p>Similar to other UI elements, <em>Inputs</em> are specialized widgets that are meant to display a "form element" for a <code>Property</code>.</p>
+
+<p>The following property inputs are available  to build forms in the <em>admin</em> module:</p>
+
+<ul>
+<li>
+<code>Audio</code>
+
+<ul>
+<li>A special HTML5 widget to record an audio file from the microphone.</li>
+</ul>
+</li>
+<li><code>Checkbox</code></li>
+<li>
+<code>DateTimePicker</code>
+
+<ul>
+<li>A date-time picker widget.</li>
+<li>Requires the ``</li>
+</ul>
+</li>
+<li>
+<code>File</code>
+
+<ul>
+<li>A default <code>&lt;input type="file"&gt;</code> that can be used as a base for all <em>File</em> properties.</li>
+</ul>
+</li>
+<li>
+<code>Image</code>
+
+<ul>
+<li>A specialized file input meant for uploading / previewing images.</li>
+</ul>
+</li>
+<li>
+<code>MapWidget</code>
+
+<ul>
+<li>A specialized widget to edit a point on a map.</li>
+<li>Requires google-map.</li>
+</ul>
+</li>
+<li><code>Number</code></li>
+<li><code>Radio</code></li>
+<li><code>Readonly</code></li>
+<li><code>Select</code></li>
+<li>
+<code>Switch</code>
+
+<ul>
+<li>A specialized <em>Checkbox</em> meant to be displayed as an on/off switch.</li>
+</ul>
+</li>
+<li>
+<code>Text</code>
+
+<ul>
+<li>A default <code>&lt;input type="text"&gt;</code> that can be used with most property types.</li>
+</ul>
+</li>
+<li>
+<code>Textarea</code>
+
+<ul>
+<li>A default <code>&lt;textarea&gt;</code> editor that can be used with most textual property types.</li>
+</ul>
+</li>
+<li>
+<code>Tinymce</code>
+
+<ul>
+<li>A specialized <em>Textarea</em> wysiwyg editor.</li>
+<li>Requires the <code>tinymce</code> javascript library.</li>
+</ul>
+</li>
+</ul>
+
+<h1>
+<a id="actions" class="anchor" href="#actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Actions</h1>
+
+<p>See the <a href="src/Charcoal/Admin/Action/">src/Charcoal/Admin/Action/</a> directory for the list of availables Actions in this module.</p>
+
+<p>In addition to being standard Action Models (controllers), all <em>Action</em> of the admin module also implements the <code>\Charcoal\Admin\Action</code> class.</p>
+
+<h2>
+<a id="post-actions" class="anchor" href="#post-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Post Actions</h2>
+
+<ul>
+<li><code>admin/login</code></li>
+<li><code>admin/object/delete</code></li>
+<li><code>admin/object/save</code></li>
+<li><code>admin/object/update</code></li>
+<li><code>admin/widget/load</code></li>
+<li><code>admin/widget/table/inline</code></li>
+<li><code>admin/widget/table/inlinue-multi</code></li>
+</ul>
+
+<h2>
+<a id="cli-actions" class="anchor" href="#cli-actions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cli Actions</h2>
+
+<p>See the <a href="src/Charcoal/Admin/Action/Cli/">src/Charcoal/Admin/Action/Cli/</a> directory for the list of all available Cli Actions in this module.</p>
+
+<p><em>Cli Actions</em> are specialized action meant to be run, interactively, from the Command Line Interface. With the Cli Actions in this module, it becomes quick and easy to manage a Charcoal project directly from a Terminal.</p>
+
+<blockquote>
+<p><g-emoji alias="point_right" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f449.png">👉</g-emoji> The <a href="https://github.com/locomotivemtl/charcoal-project-boilerplate/blob/master/charcoal-cli.php">charcoal-cli</a> tool, available from <code>charcoal-project-boilerplate</code>, is the perfect tool to call the CLI Actions. Make sure it stays outside the document root!</p>
+</blockquote>
+
+<ul>
+<li>
+<code>admin/objects</code>
+
+<ul>
+<li>List the object of a certain <code>obj-type</code>.</li>
+</ul>
+</li>
+<li>
+<code>admin/object/create</code>
+
+<ul>
+<li>Create a new object (and save it to storage) of a certain <code>obj-type</code> according to its metadata's properties.</li>
+</ul>
+</li>
+<li>
+<code>admin/object/table/alter</code>
+
+<ul>
+<li>Alter the existing database table of <code>obj-type</code> according to its metadata's properties.</li>
+</ul>
+</li>
+<li>
+<code>admin/object/table/create</code>
+
+<ul>
+<li>Create the database table for <code>obj-type</code> according to its metadata's properties.</li>
+</ul>
+</li>
+<li><code>admin/user/create</code></li>
+</ul>
+
+<h1>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development</h1>
+
+<h2>
+<a id="coding-style" class="anchor" href="#coding-style" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Coding style</h2>
+
+<p>The Charcoal-Admin module follows the Charcoal coding-style:</p>
+
+<ul>
+<li>
+<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md"><em>PSR-1</em></a>, except for
+
+<ul>
+<li>Method names MUST be declared in <code>snake_case</code>.</li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md"><em>PSR-2</em></a>, except for the PSR-1 requirement.q</li>
+<li>
+<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md"><em>PSR-4</em></a>, autoloading is therefore provided by <em>Composer</em>
+</li>
+<li>
+<a href="http://phpdoc.org/"><em>phpDocumentor</em></a>
+
+<ul>
+<li>Add DocBlocks for all classes, methods, and functions;</li>
+<li>For type-hinting, use <code>boolean</code> (instead of <code>bool</code>), <code>integer</code> (instead of <code>int</code>), <code>float</code> (instead of <code>double</code> or <code>real</code>);</li>
+<li>Omit the <code>@return</code> tag if the method does not return anything.</li>
+</ul>
+</li>
+<li>Naming conventions
+
+<ul>
+<li>Read the <a href="phpcs.xml">phpcs.xml</a> file for all the details.</li>
+</ul>
+</li>
+</ul>
+
+<blockquote>
+<p>Coding style validation / enforcement can be performed with <code>grunt phpcs</code>. An auto-fixer is also available with <code>grunt phpcbf</code>.</p>
+</blockquote>
+
+<p>For Javascript, the following coding style is enforced:</p>
+
+<ul>
+<li><strong>todo</strong></li>
+</ul>
+
+<p>Every classes, methods and functions should be covered by unit tests. PHP code can be tested with <em>PHPUnit</em> and Javascript code with <em>QUnit</em>.</p>
+
+<h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors</h2>
+
+<ul>
+<li>Mathieu Ducharme <a href="mailto:mat@locomotive.ca">mat@locomotive.ca</a>
+</li>
+<li>Benjamin Roch <a href="mailto:benjamin@locomotive.ca">benjamin@locomotive.ca</a>
+</li>
+<li>Dominic Lord <a href="mailto:dom@locomotive.ca">dom@locomotive.ca</a>
+</li>
+<li>Chauncey McAskill <a href="mailto:chauncey@locomotive.ca">chauncey@locomotive.ca</a>
+</li>
+<li>Antoine Boulanger <a href="mailto:antoine@locomotive.ca">antoine@locomotive.ca</a>
+</li>
+</ul>
+
+<h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changelog</h2>
+
+<h3>
+<a id="01" class="anchor" href="#01" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>0.1</h3>
+
+<p><em>Unreleased</em></p>
+
+<ul>
+<li>Initial release</li>
+</ul>
+
+<h2>
+<a id="todos" class="anchor" href="#todos" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODOs</h2>
+
+<ul>
+<li>Unit test coverage</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/locomotivemtl/charcoal-admin">Charcoal-admin</a> is maintained by <a href="https://github.com/locomotivemtl">locomotivemtl</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>

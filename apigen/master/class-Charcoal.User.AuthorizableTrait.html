@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Trait Charcoal\User\AuthorizableTrait</title>
+
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+				<li class="active">
+					<a href="namespace-Charcoal.html">
+						Charcoal<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Charcoal.Object.html">
+						Object					</a>
+
+						</li>
+				<li class="active">
+					<a href="namespace-Charcoal.User.html">
+						User					</a>
+
+						</li>
+							</ul></li>
+			</ul>
+		</div>
+
+		<hr>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Charcoal.User.AbstractUser.html">AbstractUser</a></li>
+				<li><a href="class-Charcoal.User.AbstractUserGroup.html">AbstractUserGroup</a></li>
+				<li><a href="class-Charcoal.User.AbstractUserPermission.html">AbstractUserPermission</a></li>
+				<li><a href="class-Charcoal.User.UserConfig.html">UserConfig</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Charcoal.User.AuthenticatableInterface.html">AuthenticatableInterface</a></li>
+				<li><a href="class-Charcoal.User.AuthorizableInterface.html">AuthorizableInterface</a></li>
+				<li><a href="class-Charcoal.User.GroupableInterface.html">GroupableInterface</a></li>
+				<li><a href="class-Charcoal.User.UserGroupInterface.html">UserGroupInterface</a></li>
+				<li><a href="class-Charcoal.User.UserInterface.html">UserInterface</a></li>
+				<li><a href="class-Charcoal.User.UserPermissionInterface.html">UserPermissionInterface</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li class="active"><a href="class-Charcoal.User.AuthorizableTrait.html">AuthorizableTrait</a></li>
+				<li><a href="class-Charcoal.User.GroupableTrait.html">GroupableTrait</a></li>
+			</ul>
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-Charcoal.User.html" title="Summary of Charcoal\User"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Trait AuthorizableTrait</h1>
+
+
+	<div class="description">
+	<p>The <code>Authorizable</code> Trait / Interface provides authorization logic and control access to user models.</p>
+
+<p>The trait implements the <code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code>.</p>
+	</div>
+
+
+
+
+
+
+
+	<div>
+		<h4>Direct Known Users</h4>
+			<a href="class-Charcoal.User.AbstractUser.html">Charcoal\User\AbstractUser</a>
+	</div>
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.User.html">User</a><br>
+		
+
+			<b>Located at</b> <a href="source-class-Charcoal.User.AuthorizableTrait.html#5-98" title="Go to source code">Charcoal/User/AuthorizableTrait.php</a>
+		<br>
+	</div>
+
+
+
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="setPermissions" id="_setPermissions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setPermissions">#</a>
+		<code><a href="source-class-Charcoal.User.AuthorizableTrait.html#19-36" title="Go to source code">setPermissions</a>( <span>array|null <var>$permissions</var></span> )</code>
+
+		<div class="description short">
+			<p>Set user permissions.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set user permissions.</p>
+
+<p>Existing permissions will be lost; to append more permissions use <a href="self::addPermissions()">self::addPermissions()</a>.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$permissions</var></dt>
+					<dd>The user permissions to set. Either as array or UserPermission objects.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addPermissions" id="_addPermissions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addPermissions">#</a>
+		<code><a href="source-class-Charcoal.User.AuthorizableTrait.html#38-51" title="Go to source code">addPermissions</a>( <span>array <var>$permissions</var></span> )</code>
+
+		<div class="description short">
+			<p>Add user permissions.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add user permissions.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$permissions</var></dt>
+					<dd>The user permissions to set. Either as array or UserPermission objects.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addPermission" id="_addPermission">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addPermission">#</a>
+		<code><a href="source-class-Charcoal.User.AuthorizableTrait.html#53-72" title="Go to source code">addPermission</a>( <span>string|array|<code><a href="class-Charcoal.User.UserPermissionInterface.html">Charcoal\User\UserPermissionInterface</a></code> <var>$ability</var></span>, <span>array|<code><a href="class-Charcoal.User.UserPermissionInterface.html">Charcoal\User\UserPermissionInterface</a></code> <var>$arguments</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Add a user permission.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add a user permission.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$ability</var></dt>
+					<dd>The permission identifier, array, or object.</dd>
+					<dt><var>$arguments</var></dt>
+					<dd>The user permission object/array to add.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.User.AuthorizableInterface.html">Charcoal\User\AuthorizableInterface</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="permissions" id="_permissions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.User.UserPermissionInterface.html">Charcoal\User\UserPermissionInterface</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_permissions">#</a>
+		<code><a href="source-class-Charcoal.User.AuthorizableTrait.html#74-82" title="Go to source code">permissions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve user permissions.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve user permissions.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.User.UserPermissionInterface.html">Charcoal\User\UserPermissionInterface</a>[]</code><br>The UserPermission list (array) attached to this user.
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isAllowed" id="_isAllowed">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isAllowed">#</a>
+		<code><a href="source-class-Charcoal.User.AuthorizableTrait.html#84-97" title="Go to source code">isAllowed</a>( <span>string|<code><a href="class-Charcoal.User.UserPermissionInterface.html">Charcoal\User\UserPermissionInterface</a></code> <var>$permission</var></span>, <span>mixed <var>$arguments</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Determine if the entity has a given permission.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the entity has a given permission.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$permission</var></dt>
+					<dd>The desired permission.</dd>
+					<dt><var>$arguments</var></dt>
+					<dd>Options or model(s) related to the tested permission.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean<br>Returns TRUE if the permission is granted, FALSE if denied.
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

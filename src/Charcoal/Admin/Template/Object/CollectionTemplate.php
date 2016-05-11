@@ -51,26 +51,6 @@ class CollectionTemplate extends AdminTemplate implements
     private $dashboardBuilder;
 
     /**
-     * Template constructor.
-     *
-     * @param array $data Optional dependencies.
-     */
-    public function __construct(array $data = null)
-    {
-        parent::__construct($data);
-
-        $obj = $this->proto();
-        if (!$obj) {
-            return;
-        }
-        if ($obj->source()->tableExists() === false) {
-            $obj->source()->createTable();
-            $this->addFeedback('success', 'A new table was created for object.');
-        }
-
-    }
-
-    /**
      * @param Container $container DI Container.
      * @return void
      */
@@ -85,6 +65,21 @@ class CollectionTemplate extends AdminTemplate implements
         $this->setWidgetFactory($container['widget/factory']);
         $this->dashboardBuilder = $container['dashboard/builder'];
 
+    }
+
+    /**
+     * @return void
+     */
+    public function createObjTable()
+    {
+        $obj = $this->proto();
+        if (!$obj) {
+            return;
+        }
+        if ($obj->source()->tableExists() === false) {
+            $obj->source()->createTable();
+            $this->addFeedback('success', 'A new table was created for object.');
+        }
     }
 
     /**

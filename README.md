@@ -11,6 +11,11 @@ The preferred (and only supported) way of installing charcoal-admin is with **co
 $ composer require locomotivemtl/charcoal-admin
 ```
 
+> Note that charcoal-admin is intended to be run along a `charcoal-app` based project. To start from a boilerplate:
+>
+> ```shell
+> $ composer create-project locomotivemtl/charcoal-project-boilerplate
+
 ## Dependencies
 
 - [locomotivemtl/charcoal-core](https://github.com/locomotivemtl/charcoal-core)
@@ -204,6 +209,24 @@ _Cli Actions_ are specialized action meant to be run, interactively, from the Co
 
 # Development
 
+To install the development environment:
+
+```shell
+$ composer install --prefer-source
+```
+
+To run the tests:
+
+```shell
+$ composer test
+```
+
+## API documentation
+
+- The auto-generated `phpDocumentor` API documentation is available at [https://locomotivemtl.github.io/charcoal-admin/docs/master/](https://locomotivemtl.github.io/charcoal-admin/docs/master/)
+- The auto-generated `apigen` API documentation is available at [https://codedoc.pub/locomotivemtl/charcoal-admin/master/](https://codedoc.pub/locomotivemtl/charcoal-admin/master/index.html)
+
+
 ## Coding style
 
 The Charcoal-Admin module follows the Charcoal coding-style:
@@ -245,3 +268,16 @@ _Unreleased_
 ## TODOs
 
 - Unit test coverage
+
+# License
+
+**The MIT License (MIT)**
+
+_Copyright © 2016 Locomotive inc._
+> See [Authors](#authors).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

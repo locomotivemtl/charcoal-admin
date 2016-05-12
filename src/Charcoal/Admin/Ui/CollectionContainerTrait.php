@@ -85,9 +85,9 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Safe Model Factory getter.
-     * Create the factory if it was not set / injected.
+     * Model Factory getter.
      *
+     * @throws Exception If the model factory was not previously set.
      * @return ModelFactory
      */
     protected function modelFactory()

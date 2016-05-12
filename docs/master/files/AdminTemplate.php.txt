@@ -11,6 +11,8 @@ use \Psr\Http\Message\RequestInterface;
 
 use \Pimple\Container;
 
+use \Charcoal\Factory\FactoryInterface;
+
 use \Charcoal\App\Template\AbstractTemplate;
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\User;
@@ -78,6 +80,9 @@ class AdminTemplate extends AbstractTemplate
      */
     private $app;
 
+    /**
+     * @var FactoryInterface $modelFactory
+     */
     private $modelFactory;
 
     /**
@@ -93,7 +98,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @param RequestInterfae $request The request to initialize.
+     * @param RequestInterface $request The request to initialize.
      * @return boolean
      */
     public function init(RequestInterface $request)

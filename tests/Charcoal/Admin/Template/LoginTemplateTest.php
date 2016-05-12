@@ -5,6 +5,15 @@ use \Charcoal\Admin\Template\LoginTemplate;
 
 class LoginTemplateTest extends \PHPUnit_Framework_TestCase
 {
+    public $obj;
+
+    public function setUp()
+    {
+        $this->obj = new LoginTemplate([
+            'logger' => new \Psr\Log\NullLogger()
+        ]);
+    }
+
     public static function getMethod($obj, $name)
     {
         $class = new \ReflectionClass($obj);
@@ -13,31 +22,24 @@ class LoginTemplateTest extends \PHPUnit_Framework_TestCase
         return $method;
     }
 
-    public function testConstructor()
-    {
-        $obj = new LoginTemplate();
-        $this->assertInstanceOf('\Charcoal\Admin\Template\LoginTemplate', $obj);
-    }
-
     public function testAuthRequiredIsFalse()
     {
-        $obj = new LoginTemplate();
-        $foo = self::getMethod($obj, 'authRequired');
-        $res = $foo->invoke($obj);
+
+        $foo = self::getMethod($this->obj, 'authRequired');
+        $res = $foo->invoke($this->obj);
         $this->assertNotTrue($res);
     }
 
     public function testShowHeaderMenuIsFalse()
     {
-        $obj = new LoginTemplate();
-        $ret = $obj->showHeaderMenu();
+
+        $ret = $this->obj->showHeaderMenu();
         $this->assertNotTrue($ret);
     }
 
     public function testShowFooterMenuIsFalse()
     {
-        $obj = new LoginTemplate();
-        $ret = $obj->showFooterMenu();
+        $ret = $this->obj->showFooterMenu();
         $this->assertNotTrue($ret);
     }
 }

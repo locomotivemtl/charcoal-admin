@@ -22,8 +22,8 @@
     "php": ">=5.5.0",
     "locomotivemtl/charcoal-core": "dev-master",
     "locomotivemtl/charcoal-base": "dev-master",
-    "locomotivemtl/charcoal-app": "~0.1",
-    "locomotivemtl/charcoal-ui": "dev-master",
+    "locomotivemtl/charcoal-app": "~0.2",
+    "locomotivemtl/charcoal-ui": "~0.1",
     "paragonie/random_compat": "^1.2"
   },
   "require-dev": {

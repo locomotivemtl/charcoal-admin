@@ -259,7 +259,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminTemplate.html#16-440" title="Go to source code">Charcoal/Admin/AdminTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminTemplate.html#19-438" title="Go to source code">Charcoal/Admin/AdminTemplate.php</a>
 		<br>
 	</div>
 
@@ -279,7 +279,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_app">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#78-87" title="Go to source code">app</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#83-93" title="Go to source code">app</a>( )</code>
 
 		<div class="description short">
 			
@@ -301,36 +301,38 @@ Charcoal\App\Template\AbstractTemplate
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="__construct" id="___construct">
+	<tr data-order="init" id="_init">
 
 		<td class="attributes"><code>
 			 public 
 
-			
+			boolean
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#89-113" title="Go to source code">__construct</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
+		<a class="anchor" href="#_init">#</a>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#95-114" title="Go to source code">init</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
 
 		<div class="description short">
-			<p>Constructor.
-Ensure authentication before serving the template.</p>
+			
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Constructor.
-Ensure authentication before serving the template.</p>
+			
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$data</var></dt>
-					<dd>The template data.</dd>
+					<dt><var>$request</var></dt>
+					<dd>The request to initialize.</dd>
 				</dl></div>
 
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
 
 
 
@@ -350,7 +352,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#115-125" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#116-127" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Dependencies</p>
@@ -385,7 +387,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#127-135" title="Go to source code">setIdent</a>( <span>mixed <var>$ident</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#129-137" title="Go to source code">setIdent</a>( <span>mixed <var>$ident</var></span> )</code>
 
 		<div class="description short">
 			
@@ -424,7 +426,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_ident">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#137-143" title="Go to source code">ident</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#139-145" title="Go to source code">ident</a>( )</code>
 
 		<div class="description short">
 			
@@ -458,7 +460,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setLabel">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#145-153" title="Go to source code">setLabel</a>( <span>mixed <var>$label</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#147-155" title="Go to source code">setLabel</a>( <span>mixed <var>$label</var></span> )</code>
 
 		<div class="description short">
 			
@@ -497,7 +499,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_label">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#155-161" title="Go to source code">label</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#157-163" title="Go to source code">label</a>( )</code>
 
 		<div class="description short">
 			
@@ -531,7 +533,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setTitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#163-171" title="Go to source code">setTitle</a>( <span>mixed <var>$title</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#165-173" title="Go to source code">setTitle</a>( <span>mixed <var>$title</var></span> )</code>
 
 		<div class="description short">
 			
@@ -570,7 +572,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_title">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#173-182" title="Go to source code">title</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#175-184" title="Go to source code">title</a>( )</code>
 
 		<div class="description short">
 			
@@ -604,7 +606,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSubtitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#184-192" title="Go to source code">setSubtitle</a>( <span>mixed <var>$subtitle</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#186-194" title="Go to source code">setSubtitle</a>( <span>mixed <var>$subtitle</var></span> )</code>
 
 		<div class="description short">
 			
@@ -643,7 +645,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_subtitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#194-200" title="Go to source code">subtitle</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#196-202" title="Go to source code">subtitle</a>( )</code>
 
 		<div class="description short">
 			
@@ -677,7 +679,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setShowHeaderMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#202-210" title="Go to source code">setShowHeaderMenu</a>( <span>boolean <var>$show</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#204-212" title="Go to source code">setShowHeaderMenu</a>( <span>boolean <var>$show</var></span> )</code>
 
 		<div class="description short">
 			
@@ -716,7 +718,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showHeaderMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#212-218" title="Go to source code">showHeaderMenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#214-220" title="Go to source code">showHeaderMenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -750,7 +752,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_headerMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#220-244" title="Go to source code">headerMenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#222-246" title="Go to source code">headerMenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -788,7 +790,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setShowFooterMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#246-254" title="Go to source code">setShowFooterMenu</a>( <span>boolean <var>$show</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#248-256" title="Go to source code">setShowFooterMenu</a>( <span>boolean <var>$show</var></span> )</code>
 
 		<div class="description short">
 			
@@ -827,7 +829,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showFooterMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#256-262" title="Go to source code">showFooterMenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#258-264" title="Go to source code">showFooterMenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -861,7 +863,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_footerMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#264-270" title="Go to source code">footerMenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#266-272" title="Go to source code">footerMenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -895,7 +897,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFeedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#272-278" title="Go to source code">hasFeedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#274-280" title="Go to source code">hasFeedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -929,7 +931,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_feedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#280-286" title="Go to source code">feedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#282-288" title="Go to source code">feedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -963,7 +965,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addFeedback">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#288-300" title="Go to source code">addFeedback</a>( <span>string <var>$level</var></span>, <span>mixed <var>$msg</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#290-302" title="Go to source code">addFeedback</a>( <span>string <var>$level</var></span>, <span>mixed <var>$msg</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1004,7 +1006,7 @@ Ensure authentication before serving the template.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_authRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#302-316" title="Go to source code">authRequired</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#304-318" title="Go to source code">authRequired</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if user authentication is required.</p>
@@ -1044,7 +1046,7 @@ should return <code>FALSE</code>.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isAuthenticated">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#335-343" title="Go to source code">isAuthenticated</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#337-345" title="Go to source code">isAuthenticated</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the current user is authenticated.</p>
@@ -1078,7 +1080,7 @@ should return <code>FALSE</code>.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_adminUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#399-407" title="Go to source code">adminUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#397-405" title="Go to source code">adminUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -1112,7 +1114,7 @@ should return <code>FALSE</code>.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_baseUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#409-423" title="Go to source code">baseUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#407-421" title="Go to source code">baseUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -1146,7 +1148,7 @@ should return <code>FALSE</code>.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_headerMenuLogo">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#425-439" title="Go to source code">headerMenuLogo</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#423-437" title="Go to source code">headerMenuLogo</a>( )</code>
 
 		<div class="description short">
 			
@@ -1190,7 +1192,7 @@ should return <code>FALSE</code>.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.AdminTemplate.html#34-39" title="Go to source code"><var>$adminConfig</var></a>
+				<a href="source-class-Charcoal.Admin.AdminTemplate.html#37-42" title="Go to source code"><var>$adminConfig</var></a>
 
 			<div class="description short">
 				<p>Admin configuration

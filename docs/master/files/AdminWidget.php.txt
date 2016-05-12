@@ -5,6 +5,7 @@ namespace Charcoal\Admin;
 use \InvalidArgumentException;
 
 use \Charcoal\Translation\TranslationString;
+use \Charcoal\App\App;
 use \Charcoal\App\Template\AbstractWidget;
 use \Charcoal\Widget\WidgetView;
 
@@ -213,7 +214,7 @@ class AdminWidget extends AbstractWidget
      */
     public function adminUrl()
     {
-        $adminPath = \Charcoal\App\App::instance()->getContainer()->get('charcoal/admin/config')->basePath();
+        $adminPath = App::instance()->getContainer()->get('charcoal/admin/config')->basePath();
 
         return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
     }
@@ -223,12 +224,12 @@ class AdminWidget extends AbstractWidget
      */
     public function baseUrl()
     {
-        $appConfig = \Charcoal\App\App::instance()->config();
+        $appConfig = App::instance()->config();
 
         if ($appConfig->has('URL')) {
             return $appConfig->get('URL');
         } else {
-            $uri = \Charcoal\App\App::instance()->getContainer()->get('request')->getUri();
+            $uri = App::instance()->getContainer()->get('request')->getUri();
 
             return rtrim($uri->getBaseUrl(), '/').'/';
         }

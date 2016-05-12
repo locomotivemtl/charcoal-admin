@@ -93,10 +93,9 @@ trait CollectionContainerTrait
     protected function modelFactory()
     {
         if ($this->modelFactory === null) {
-            $this->logger->warning(
-                sprintf('Creating a model factory for collection container trait %s', get_class($this))
+            throw new Exception(
+                sprintf('Model Factory is not defined for "%s"', get_class($this))
             );
-            $this->modelFactory = new ModelFactory();
         }
         return $this->modelFactory;
     }
@@ -120,9 +119,6 @@ trait CollectionContainerTrait
     protected function collectionLoader()
     {
         if ($this->collectionLoader === null) {
-            $this->logger->warning(
-                sprintf('Creating a collection loader for collection container trait %s', get_class($this))
-            );
             $this->collectionLoader = new CollectionLoader([
                 'logger' => $this->logger,
                 'factory' => $this->modelFactory()
@@ -318,9 +314,7 @@ trait CollectionContainerTrait
 
                 $displayType = $property->displayType();
 
-                $this->display = $this->propertyDisplayFactory()->create($displayType, [
-                    'logger' => $this->logger
-                ]);
+                $this->display = $this->propertyDisplayFactory()->create($displayType);
                 $this->display->setProperty($property);
 
                 $this->display->setData($meta);

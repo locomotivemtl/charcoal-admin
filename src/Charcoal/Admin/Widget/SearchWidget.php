@@ -49,7 +49,9 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function setDependencies(Container $container)
     {
+        // Collection container dependencies
         $this->setModelFactory($container['model/factory']);
+        parent::setDependencies($container);
     }
 
     /**

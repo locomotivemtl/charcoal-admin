@@ -6,6 +6,9 @@ use \ArrayIterator;
 use \Exception;
 use \InvalidArgumentException;
 
+// PSR-7 (HTTP Messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+
 use \Pimple\Container;
 
 use \Charcoal\App\Template\AbstractTemplate;
@@ -75,33 +78,29 @@ class AdminTemplate extends AbstractTemplate
      */
     private $app;
 
+    private $modelFactory;
+
     /**
      * @return \Charcoal\App\App
      */
     protected function app()
     {
         if ($this->app === null) {
+            $this->logger->notice('App from singleton');
             $this->app = \Charcoal\App\App::instance();
         }
         return $this->app;
     }
 
     /**
-     * Constructor.
-     * Ensure authentication before serving the template.
-     * @todo Check permissions
-     *
-     * @param array $data The template data.
+     * @param RequestInterfae $request The request to initialize.
+     * @return boolean
      */
-    public function __construct(array $data = null)
+    public function init(RequestInterface $request)
     {
         if (!session_id()) {
             session_cache_limiter(false);
             session_start();
-        }
-
-        if ($data) {
-            parent::setData($data);
         }
 
         if ($this->authRequired() !== false) {
@@ -109,7 +108,9 @@ class AdminTemplate extends AbstractTemplate
         }
 
         // Initialize data with GET
-        $this->setData($_GET);
+        $this->setData($request->getParams());
+
+        return parent::init($request);
     }
 
     /**
@@ -122,6 +123,7 @@ class AdminTemplate extends AbstractTemplate
         parent::setDependencies($container);
 
         $this->adminConfig = $container['charcoal/admin/config'];
+        $this->modelFactory = $container['model/factory'];
     }
 
     /**
@@ -347,7 +349,7 @@ class AdminTemplate extends AbstractTemplate
      */
     private function authBySession()
     {
-        $u = User::getAuthenticated();
+        $u = User::getAuthenticated($this->modelFactory);
         if ($u && $u->id()) {
             $u->saveToSession();
             return true;
@@ -361,9 +363,7 @@ class AdminTemplate extends AbstractTemplate
      */
     private function authByToken()
     {
-        $authToken = new AuthToken([
-            'logger' => $this->logger
-        ]);
+        $authToken = $this->modelFactory->create('charcoal/admin/object/auth-token');
 
         if ($authToken->metadata()->enabled() !== true) {
             return false;
@@ -382,9 +382,7 @@ class AdminTemplate extends AbstractTemplate
             return false;
         }
 
-        $u = new User([
-            'logger' => $this->logger
-        ]);
+        $u = $this->modelFactory->create('charcoal/admin/user');
 
         $u->load($username);
 
@@ -401,7 +399,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function adminUrl()
     {
-        $adminPath = $this->app()->getContainer()->get('charcoal/admin/config')->basePath();
+        $adminPath = $this->adminConfig['base_path'];
 
         return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
     }

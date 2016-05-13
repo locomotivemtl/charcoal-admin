@@ -344,30 +344,27 @@
 </span><span id="57" class="l"><a href="#57">57: </a>
 </span><span id="58" class="l"><a href="#58">58: </a>        <span class="php-var">$objType</span> = <span class="php-var">$this</span>-&gt;argOrInput(<span class="php-quote">'obj-type'</span>);
 </span><span id="59" class="l"><a href="#59">59: </a>
-</span><span id="60" class="l"><a href="#60">60: </a>        <span class="php-var">$model_factory</span> = <span class="php-keyword1">new</span> ModelFactory();
-</span><span id="61" class="l"><a href="#61">61: </a>        <span class="php-var">$obj</span> = <span class="php-var">$model_factory</span>-&gt;create(<span class="php-var">$objType</span>, [
-</span><span id="62" class="l"><a href="#62">62: </a>            <span class="php-quote">'logger'</span>=&gt;<span class="php-var">$this</span>-&gt;logger
-</span><span id="63" class="l"><a href="#63">63: </a>        ]);
-</span><span id="64" class="l"><a href="#64">64: </a>
-</span><span id="65" class="l"><a href="#65">65: </a>        <span class="php-var">$properties</span> = <span class="php-var">$obj</span>-&gt;properties();
-</span><span id="66" class="l"><a href="#66">66: </a>
-</span><span id="67" class="l"><a href="#67">67: </a>        <span class="php-var">$vals</span> = [];
-</span><span id="68" class="l"><a href="#68">68: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$properties</span> <span class="php-keyword1">as</span> <span class="php-var">$prop</span>) {
-</span><span id="69" class="l"><a href="#69">69: </a>            <span class="php-var">$input</span> = <span class="php-var">$this</span>-&gt;propertyToInput(<span class="php-var">$prop</span>);
-</span><span id="70" class="l"><a href="#70">70: </a>            <span class="php-var">$vals</span>[<span class="php-var">$prop</span>-&gt;ident()] = <span class="php-var">$input</span>-&gt;prompt();
-</span><span id="71" class="l"><a href="#71">71: </a>        }
+</span><span id="60" class="l"><a href="#60">60: </a>        <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;modelFactory-&gt;create(<span class="php-var">$objType</span>);
+</span><span id="61" class="l"><a href="#61">61: </a>
+</span><span id="62" class="l"><a href="#62">62: </a>        <span class="php-var">$properties</span> = <span class="php-var">$obj</span>-&gt;properties();
+</span><span id="63" class="l"><a href="#63">63: </a>
+</span><span id="64" class="l"><a href="#64">64: </a>        <span class="php-var">$vals</span> = [];
+</span><span id="65" class="l"><a href="#65">65: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$properties</span> <span class="php-keyword1">as</span> <span class="php-var">$prop</span>) {
+</span><span id="66" class="l"><a href="#66">66: </a>            <span class="php-var">$input</span> = <span class="php-var">$this</span>-&gt;propertyToInput(<span class="php-var">$prop</span>);
+</span><span id="67" class="l"><a href="#67">67: </a>            <span class="php-var">$vals</span>[<span class="php-var">$prop</span>-&gt;ident()] = <span class="php-var">$input</span>-&gt;prompt();
+</span><span id="68" class="l"><a href="#68">68: </a>        }
+</span><span id="69" class="l"><a href="#69">69: </a>
+</span><span id="70" class="l"><a href="#70">70: </a>        <span class="php-var">$obj</span>-&gt;setFlatData(<span class="php-var">$vals</span>);
+</span><span id="71" class="l"><a href="#71">71: </a>        <span class="php-var">$ret</span> = <span class="php-var">$obj</span>-&gt;save();
 </span><span id="72" class="l"><a href="#72">72: </a>
-</span><span id="73" class="l"><a href="#73">73: </a>        <span class="php-var">$obj</span>-&gt;setFlatData(<span class="php-var">$vals</span>);
-</span><span id="74" class="l"><a href="#74">74: </a>        <span class="php-var">$ret</span> = <span class="php-var">$obj</span>-&gt;save();
-</span><span id="75" class="l"><a href="#75">75: </a>
-</span><span id="76" class="l"><a href="#76">76: </a>        <span class="php-var">$climate</span>-&gt;green()-&gt;out(
-</span><span id="77" class="l"><a href="#77">77: </a>            <span class="php-quote">&quot;\n&quot;</span>.<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Success! Object &quot;%s&quot; created.'</span>, <span class="php-var">$ret</span>)
-</span><span id="78" class="l"><a href="#78">78: </a>        );
-</span><span id="79" class="l"><a href="#79">79: </a>
-</span><span id="80" class="l"><a href="#80">80: </a>        <span class="php-keyword1">return</span> <span class="php-var">$response</span>;
-</span><span id="81" class="l"><a href="#81">81: </a>    }
-</span><span id="82" class="l"><a href="#82">82: </a>}
-</span><span id="83" class="l"><a href="#83">83: </a></span></code></pre>
+</span><span id="73" class="l"><a href="#73">73: </a>        <span class="php-var">$climate</span>-&gt;green()-&gt;out(
+</span><span id="74" class="l"><a href="#74">74: </a>            <span class="php-quote">&quot;\n&quot;</span>.<span class="php-keyword2">sprintf</span>(<span class="php-quote">'Success! Object &quot;%s&quot; created.'</span>, <span class="php-var">$ret</span>)
+</span><span id="75" class="l"><a href="#75">75: </a>        );
+</span><span id="76" class="l"><a href="#76">76: </a>
+</span><span id="77" class="l"><a href="#77">77: </a>        <span class="php-keyword1">return</span> <span class="php-var">$response</span>;
+</span><span id="78" class="l"><a href="#78">78: </a>    }
+</span><span id="79" class="l"><a href="#79">79: </a>}
+</span><span id="80" class="l"><a href="#80">80: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

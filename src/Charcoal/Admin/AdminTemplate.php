@@ -143,6 +143,7 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
+     * @throws Exception If the factory is not set.
      * @return FactoryInterface The model factory.
      */
     protected function modelFactory()

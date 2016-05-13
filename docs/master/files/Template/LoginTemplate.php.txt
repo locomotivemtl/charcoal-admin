@@ -79,9 +79,8 @@ class LoginTemplate extends AdminTemplate
      */
     public function rememberMeEnabled()
     {
-        $token = new AuthToken([
-            'logger' => $this->logger
-        ]);
+        $token = $this->modelFactory()->create('charcoal/admin/object/auth-token');
+
         if ($token->metadata()->enabled() === false) {
             return false;
         }

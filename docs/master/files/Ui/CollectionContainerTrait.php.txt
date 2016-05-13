@@ -5,10 +5,12 @@ namespace Charcoal\Admin\Ui;
 use \Exception;
 use \InvalidArgumentException;
 
+// From `charcoal-factory'
+use \Charcoal\Factory\FactoryInterface;
+
 // From `charcoal-core`
 use \Charcoal\Loader\CollectionLoader;
 use \Charcoal\Model\Collection;
-use \Charcoal\Model\ModelFactory;
 
 use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Admin\Property\PropertyDisplayFactory;
@@ -19,7 +21,7 @@ use \Charcoal\Admin\Property\PropertyDisplayFactory;
 trait CollectionContainerTrait
 {
     /**
-     * @var ModelFactory $modelFactory
+     * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
 
@@ -75,10 +77,10 @@ trait CollectionContainerTrait
     private $display;
 
     /**
-     * @param ModelFactory $factory The model factory, to create model objects.
+     * @param FactoryInterface $factory The model factory, to create model objects.
      * @return CollectionContainerInterface Chainable
      */
-    public function setModelFactory(ModelFactory $factory)
+    public function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
         return $this;
@@ -88,7 +90,7 @@ trait CollectionContainerTrait
      * Model Factory getter.
      *
      * @throws Exception If the model factory was not previously set.
-     * @return ModelFactory
+     * @return FactoryInterface
      */
     protected function modelFactory()
     {

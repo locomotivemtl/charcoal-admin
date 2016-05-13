@@ -100,9 +100,7 @@ class LoginAction extends AdminAction
             sprintf('Admin login attempt: "%s"', $username)
         );
 
-        $u = new User([
-            'logger' => $this->logger
-        ]);
+        $u = $this->modelFactory()->create('charcoal/admin/user');
 
         $isAuthenticated = $u->authenticate($username, $password);
 

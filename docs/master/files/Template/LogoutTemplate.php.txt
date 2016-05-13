@@ -18,7 +18,7 @@ class LogoutTemplate extends AdminTemplate
      */
     public function __construct($data)
     {
-        $user = User::getAuthenticated();
+        $user = User::getAuthenticated($this->modelFactory());
         if ($user) {
             $user->logout();
             $this->deleteUserAuthTokens($user);
@@ -33,9 +33,7 @@ class LogoutTemplate extends AdminTemplate
      */
     private function deleteUserAuthTokens(User $user)
     {
-        $token = new AuthToken([
-            'logger' => $this->logger
-        ]);
+        $token = $this->modelFactory()->create('charcoal/admin/object/auth-token');
 
         $table = $token->source()->table();
         $q = 'delete from '.$table.' where username = :username';

@@ -51,7 +51,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function setDependencies(Container $container)
     {
         $this->setModelFactory($container['model/factory']);
-        $this->setPropertyFactory($container['model/dependency/property/factory']);
+        $this->setPropertyFactory($container['property/factory']);
     }
 
     /**

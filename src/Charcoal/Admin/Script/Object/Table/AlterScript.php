@@ -49,12 +49,9 @@ class AlterScript extends AdminScript
             'Alter object table from metadata'
         );
 
-        $obj_type = $this->argOrInput('obj-type');
+        $objType = $this->argOrInput('obj-type');
 
-        $model_factory = new ModelFactory();
-        $obj = $model_factory->create($obj_type, [
-            'logger'=>$this->logger
-        ]);
+        $obj = $this->modelFactory->create($objType);
 
         $source = $obj->source();
 

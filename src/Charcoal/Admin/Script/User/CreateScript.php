@@ -6,6 +6,8 @@ namespace Charcoal\Admin\Script\User;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
 use \Charcoal\Admin\User;
@@ -15,6 +17,7 @@ use \Charcoal\Admin\User;
  */
 class CreateScript extends AdminScript
 {
+
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param ResponseInterface $response A PSR-7 compatible Response instance.
@@ -30,9 +33,7 @@ class CreateScript extends AdminScript
             'Create a new Charcoal Administrator'
         );
 
-        $user = new User([
-            'logger' => $this->logger
-        ]);
+        $user = $this->modelFactory()->create('charcoal/admin/user');
         $properties = $user->properties();
 
         $shown_props = [

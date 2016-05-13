@@ -4,6 +4,12 @@ namespace Charcoal\Admin;
 
 use \Exception;
 
+// Module `pimple/pimple` dependencies
+use \Pimple\Container;
+
+// Module `charcoal-factory` dependencies
+use \Charcoal\Factory\FactoryInterface;
+
 // Module `charcoal-app` dependencies
 use \Charcoal\App\Script\AbstractScript;
 
@@ -15,6 +21,38 @@ use \Charcoal\Property\PropertyInterface;
  */
 abstract class AdminScript extends AbstractScript
 {
+    /**
+     * @var FactoryInterface $modelFactory
+     */
+    private $modelFactory;
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->modelFactory = $container['model/factory'];
+        parent::setDependencies($container);
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return AdminScript Chainable
+     */
+    protected function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        return $this->modelFactory;
+    }
 
     /**
      * @param PropertyInterface $prop The property to retrieve input from.

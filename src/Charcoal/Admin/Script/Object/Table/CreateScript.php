@@ -50,13 +50,9 @@ class CreateScript extends AdminScript
             'Create object table from metadata'
         );
 
+        $objType = $this->argOrInput('obj-type');
 
-        $obj_type = $this->argOrInput('obj-type');
-
-        $model_factory = new ModelFactory();
-        $obj = $model_factory->create($obj_type, [
-            'logger'=>$this->logger
-        ]);
+        $obj = $this->modelFactory->create($objType);
 
         $source = $obj->source();
 

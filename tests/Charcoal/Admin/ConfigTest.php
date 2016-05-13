@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Charcoal\Admin\Config as Config;
+use \Charcoal\Admin\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

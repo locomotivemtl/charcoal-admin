@@ -32,7 +32,7 @@ class ResetPasswordScript extends AdminScript
 
         $username = $this->argOrInput('username');
 
-        $user = new User();
+        $user = $this->modelFactory()->create('charcoal/admin/user');
         $user->load($username);
 
         $climate->red()->out(

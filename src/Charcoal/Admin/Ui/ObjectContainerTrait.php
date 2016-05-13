@@ -5,6 +5,8 @@ namespace Charcoal\Admin\Ui;
 use \Exception;
 use \InvalidArgumentException;
 
+use \Charcoal\Factory\FactoryInterface;
+
 use \Charcoal\Model\ModelFactory;
 
 /**
@@ -13,7 +15,7 @@ use \Charcoal\Model\ModelFactory;
 trait ObjectContainerTrait
 {
     /**
-     * @var ModelFactory $modelFactory
+     * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
 
@@ -38,10 +40,10 @@ trait ObjectContainerTrait
     protected $obj;
 
     /**
-     * @param ModelFactory $factory The model factory, to create objects.
+     * @param FactoryInterface $factory The model factory, to create objects.
      * @return ObjectContainerInterface Chainable
      */
-    public function setModelFactory(ModelFactory $factory)
+    public function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
         return $this;
@@ -49,13 +51,13 @@ trait ObjectContainerTrait
 
     /**
      * @throws Exception If the model factory was not set before being accessed.
-     * @return ModelFactory
+     * @return FactoryInterface
      */
     protected function modelFactory()
     {
         if ($this->modelFactory === null) {
             throw new Exception(
-                'Model factory not set'
+                sprintf('Model factory not set for %s', get_class($this))
             );
         }
         return $this->modelFactory;

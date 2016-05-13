@@ -6,6 +6,8 @@ namespace Charcoal\Admin\Action;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\User;
@@ -24,7 +26,7 @@ class LogoutAction extends AdminAction
     {
         $this->setData($request->getParams());
 
-        $user = User::getAuthenticated();
+        $user = User::getAuthenticated($this->modelFactory());
         $res = $user->logout();
         $this->setSuccess($res);
 

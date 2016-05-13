@@ -2,8 +2,10 @@
 
 namespace Charcoal\Admin;
 
-// Module `charcoal-core` dependencies
-use Charcoal\Charcoal;
+use \Pimple\Container;
+
+// Module `charcoal-factory` dependencies
+use \Charcoal\Factory\FactoryInterface;
 
 // Module `charcoal-app` dependencies
 use Charcoal\App\Action\AbstractAction;
@@ -20,6 +22,11 @@ abstract class AdminAction extends AbstractAction
     private $feedbacks = [];
 
     /**
+     * @var FactoryInterface $modelFactory
+     */
+    private $modelFactory;
+
+    /**
     * @param array $data Optional.
     */
     final public function __construct(array $data = null)
@@ -33,6 +40,37 @@ abstract class AdminAction extends AbstractAction
             $this->auth();
         }
     }
+
+    /**
+     * Dependencies
+     * @param Container $container DI Container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setModelFactory($container['model/factory']);
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return AdminScript Chainable
+     */
+    protected function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        return $this->modelFactory;
+    }
+
 
     /**
      * Authentication is required by default.

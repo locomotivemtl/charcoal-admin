@@ -11,6 +11,7 @@ use \Psr\Http\Message\RequestInterface;
 
 use \Pimple\Container;
 
+// Module `charcoal-factory` dependencies
 use \Charcoal\Factory\FactoryInterface;
 
 use \Charcoal\App\Template\AbstractTemplate;
@@ -128,7 +129,30 @@ class AdminTemplate extends AbstractTemplate
         parent::setDependencies($container);
 
         $this->adminConfig = $container['charcoal/admin/config'];
-        $this->modelFactory = $container['model/factory'];
+        $this->setModelFactory($container['model/factory']);
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return AdminScript Chainable
+     */
+    protected function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        if (!$this->modelFactory) {
+            throw new Exception(
+                sprintf('Model factory is not set for template "%s".', get_class($this))
+            );
+        }
+        return $this->modelFactory;
     }
 
     /**
@@ -354,7 +378,7 @@ class AdminTemplate extends AbstractTemplate
      */
     private function authBySession()
     {
-        $u = User::getAuthenticated($this->modelFactory);
+        $u = User::getAuthenticated($this->modelFactory());
         if ($u && $u->id()) {
             $u->saveToSession();
             return true;

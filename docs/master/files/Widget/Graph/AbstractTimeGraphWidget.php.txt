@@ -282,11 +282,7 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
     protected function dbRows()
     {
         if ($this->dbRows === null) {
-            $factory = new ModelFactory([
-                'logger' => $this->logger
-            ]);
-
-            $model = $factory->create($this->objType());
+            $model = $this->modelFactory()->create($this->objType());
 
             $sql = [];
             $seriesOptions = $this->seriesOptions();

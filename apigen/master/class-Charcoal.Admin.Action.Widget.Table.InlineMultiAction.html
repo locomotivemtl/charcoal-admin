@@ -230,7 +230,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a>\<a href="namespace-Charcoal.Admin.Action.Widget.html">Widget</a>\<a href="namespace-Charcoal.Admin.Action.Widget.Table.html">Table</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#20-96" title="Go to source code">Charcoal/Admin/Action/Widget/Table/InlineMultiAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#21-134" title="Go to source code">Charcoal/Admin/Action/Widget/Table/InlineMultiAction.php</a>
 		<br>
 	</div>
 
@@ -238,6 +238,120 @@ Charcoal\App\Action\AbstractAction
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="setDependencies" id="_setDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#36-46" title="Go to source code">setDependencies</a>( <span>Charcoal\Admin\Action\Widget\Table\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>DI container.</dd>
+				</dl></div>
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_setDependencies">Charcoal\Admin\AdminAction::setDependencies()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Action.Widget.Table.InlineAction.html">Charcoal\Admin\Action\Widget\Table\InlineAction</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setWidgetFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#48-56" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\App\Template\WidgetFactory <var>$factory</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd>The widget factory, to create the dashboard and sidemenu widgets.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Action.Widget.Table.InlineAction.html">Charcoal\Admin\Action\Widget\Table\InlineAction</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="widgetFactory" id="_widgetFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			Charcoal\App\Template\WidgetFactory
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_widgetFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#58-70" title="Go to source code">widgetFactory</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\App\Template\WidgetFactory
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					Exception<br>If the factory is not set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="run" id="_run">
 
 		<td class="attributes"><code>
@@ -250,7 +364,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_run">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#30-82" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#72-121" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
 
 		<div class="description short">
 			
@@ -291,7 +405,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_results">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#84-95" title="Go to source code">results</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#123-133" title="Go to source code">results</a>( )</code>
 
 		<div class="description short">
 			
@@ -328,7 +442,6 @@ Charcoal\App\Action\AbstractAction
 			<a href="class-Charcoal.Admin.AdminAction.html#_hasFeedbacks">hasFeedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_modelFactory">modelFactory()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_numFeedbacks">numFeedbacks()</a>, 
-			<a href="class-Charcoal.Admin.AdminAction.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_setModelFactory">setModelFactory()</a>
 		</code></td>
 	</tr>
@@ -353,7 +466,7 @@ Charcoal\App\Action\AbstractAction
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#25-28" title="Go to source code"><var>$objects</var></a>
+				<a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html#26-29" title="Go to source code"><var>$objects</var></a>
 
 			<div class="description short">
 				<p>$objects</p>

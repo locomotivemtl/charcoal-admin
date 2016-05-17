@@ -368,44 +368,41 @@
 </span><span id="81" class="l"><a href="#81"> 81: </a>            <span class="php-quote">'num_per_page'</span>  =&gt; <span class="php-var">$climate</span>-&gt;arguments-&gt;get(<span class="php-quote">'num'</span>)
 </span><span id="82" class="l"><a href="#82"> 82: </a>        ]);
 </span><span id="83" class="l"><a href="#83"> 83: </a>
-</span><span id="84" class="l"><a href="#84"> 84: </a>        <span class="php-var">$modelFactory</span> = <span class="php-keyword1">new</span> ModelFactory();
-</span><span id="85" class="l"><a href="#85"> 85: </a>        <span class="php-var">$model</span> = <span class="php-var">$modelFactory</span>-&gt;create(<span class="php-var">$this</span>-&gt;objType(), [
-</span><span id="86" class="l"><a href="#86"> 86: </a>            <span class="php-quote">'logger'</span> =&gt; <span class="php-var">$this</span>-&gt;logger
-</span><span id="87" class="l"><a href="#87"> 87: </a>        ]);
-</span><span id="88" class="l"><a href="#88"> 88: </a>
-</span><span id="89" class="l"><a href="#89"> 89: </a>        <span class="php-var">$loader</span> = <span class="php-keyword1">new</span> CollectionLoader([
-</span><span id="90" class="l"><a href="#90"> 90: </a>            <span class="php-quote">'logger'</span>    =&gt; <span class="php-var">$this</span>-&gt;logger,
-</span><span id="91" class="l"><a href="#91"> 91: </a>            <span class="php-quote">'factory'</span>   =&gt; <span class="php-var">$modelFactory</span>
-</span><span id="92" class="l"><a href="#92"> 92: </a>        ]);
-</span><span id="93" class="l"><a href="#93"> 93: </a>        <span class="php-var">$loader</span>-&gt;setModel(<span class="php-var">$model</span>);
-</span><span id="94" class="l"><a href="#94"> 94: </a>        <span class="php-var">$loader</span>-&gt;setPagination([
-</span><span id="95" class="l"><a href="#95"> 95: </a>            <span class="php-quote">'page'</span>         =&gt; <span class="php-var">$this</span>-&gt;page(),
-</span><span id="96" class="l"><a href="#96"> 96: </a>            <span class="php-quote">'num_per_page'</span> =&gt; <span class="php-var">$this</span>-&gt;numPerPage()
-</span><span id="97" class="l"><a href="#97"> 97: </a>        ]);
-</span><span id="98" class="l"><a href="#98"> 98: </a>
-</span><span id="99" class="l"><a href="#99"> 99: </a>        <span class="php-var">$collection</span> = <span class="php-var">$loader</span>-&gt;load();
-</span><span id="100" class="l"><a href="#100">100: </a>        <span class="php-var">$collection</span> = <span class="php-var">$this</span>-&gt;collection();
-</span><span id="101" class="l"><a href="#101">101: </a>        <span class="php-var">$table</span> = [];
-</span><span id="102" class="l"><a href="#102">102: </a>
-</span><span id="103" class="l"><a href="#103">103: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;objectRows();
-</span><span id="104" class="l"><a href="#104">104: </a>
-</span><span id="105" class="l"><a href="#105">105: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$collection</span> <span class="php-keyword1">as</span> <span class="php-var">$c</span>) {
-</span><span id="106" class="l"><a href="#106">106: </a>            <span class="php-var">$obj</span> = [];
-</span><span id="107" class="l"><a href="#107">107: </a>            <span class="php-var">$props</span> = <span class="php-var">$model</span>-&gt;properties();
-</span><span id="108" class="l"><a href="#108">108: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$props</span> <span class="php-keyword1">as</span> <span class="php-var">$property_ident</span> =&gt; <span class="php-var">$unused</span>) {
-</span><span id="109" class="l"><a href="#109">109: </a>                <span class="php-var">$prop</span> = <span class="php-var">$c</span>-&gt;p(<span class="php-var">$property_ident</span>);
-</span><span id="110" class="l"><a href="#110">110: </a>                <span class="php-var">$label</span> = (string)<span class="php-var">$prop</span>-&gt;label();
-</span><span id="111" class="l"><a href="#111">111: </a>                <span class="php-var">$val</span> = (string)<span class="php-var">$prop</span>-&gt;displayVal();
-</span><span id="112" class="l"><a href="#112">112: </a>                <span class="php-var">$obj</span>[<span class="php-var">$label</span>] = <span class="php-var">$val</span>;
-</span><span id="113" class="l"><a href="#113">113: </a>            }
-</span><span id="114" class="l"><a href="#114">114: </a>            <span class="php-var">$table</span>[] = <span class="php-var">$obj</span>;
-</span><span id="115" class="l"><a href="#115">115: </a>        }
-</span><span id="116" class="l"><a href="#116">116: </a>        <span class="php-var">$climate</span>-&gt;table(<span class="php-var">$table</span>);
-</span><span id="117" class="l"><a href="#117">117: </a>
-</span><span id="118" class="l"><a href="#118">118: </a>        <span class="php-keyword1">return</span> <span class="php-var">$response</span>;
-</span><span id="119" class="l"><a href="#119">119: </a>    }
-</span><span id="120" class="l"><a href="#120">120: </a>}
-</span><span id="121" class="l"><a href="#121">121: </a></span></code></pre>
+</span><span id="84" class="l"><a href="#84"> 84: </a>        <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;modelFactory()-&gt;create(<span class="php-var">$this</span>-&gt;objType());
+</span><span id="85" class="l"><a href="#85"> 85: </a>
+</span><span id="86" class="l"><a href="#86"> 86: </a>        <span class="php-var">$loader</span> = <span class="php-keyword1">new</span> CollectionLoader([
+</span><span id="87" class="l"><a href="#87"> 87: </a>            <span class="php-quote">'logger'</span>    =&gt; <span class="php-var">$this</span>-&gt;logger,
+</span><span id="88" class="l"><a href="#88"> 88: </a>            <span class="php-quote">'factory'</span>   =&gt; <span class="php-var">$this</span>-&gt;modelFactory()
+</span><span id="89" class="l"><a href="#89"> 89: </a>        ]);
+</span><span id="90" class="l"><a href="#90"> 90: </a>        <span class="php-var">$loader</span>-&gt;setModel(<span class="php-var">$model</span>);
+</span><span id="91" class="l"><a href="#91"> 91: </a>        <span class="php-var">$loader</span>-&gt;setPagination([
+</span><span id="92" class="l"><a href="#92"> 92: </a>            <span class="php-quote">'page'</span>         =&gt; <span class="php-var">$this</span>-&gt;page(),
+</span><span id="93" class="l"><a href="#93"> 93: </a>            <span class="php-quote">'num_per_page'</span> =&gt; <span class="php-var">$this</span>-&gt;numPerPage()
+</span><span id="94" class="l"><a href="#94"> 94: </a>        ]);
+</span><span id="95" class="l"><a href="#95"> 95: </a>
+</span><span id="96" class="l"><a href="#96"> 96: </a>        <span class="php-var">$collection</span> = <span class="php-var">$loader</span>-&gt;load();
+</span><span id="97" class="l"><a href="#97"> 97: </a>        <span class="php-var">$collection</span> = <span class="php-var">$this</span>-&gt;collection();
+</span><span id="98" class="l"><a href="#98"> 98: </a>        <span class="php-var">$table</span> = [];
+</span><span id="99" class="l"><a href="#99"> 99: </a>
+</span><span id="100" class="l"><a href="#100">100: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;objectRows();
+</span><span id="101" class="l"><a href="#101">101: </a>
+</span><span id="102" class="l"><a href="#102">102: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$collection</span> <span class="php-keyword1">as</span> <span class="php-var">$c</span>) {
+</span><span id="103" class="l"><a href="#103">103: </a>            <span class="php-var">$obj</span> = [];
+</span><span id="104" class="l"><a href="#104">104: </a>            <span class="php-var">$props</span> = <span class="php-var">$model</span>-&gt;properties();
+</span><span id="105" class="l"><a href="#105">105: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$props</span> <span class="php-keyword1">as</span> <span class="php-var">$property_ident</span> =&gt; <span class="php-var">$unused</span>) {
+</span><span id="106" class="l"><a href="#106">106: </a>                <span class="php-var">$prop</span> = <span class="php-var">$c</span>-&gt;p(<span class="php-var">$property_ident</span>);
+</span><span id="107" class="l"><a href="#107">107: </a>                <span class="php-var">$label</span> = (string)<span class="php-var">$prop</span>-&gt;label();
+</span><span id="108" class="l"><a href="#108">108: </a>                <span class="php-var">$val</span> = (string)<span class="php-var">$prop</span>-&gt;displayVal();
+</span><span id="109" class="l"><a href="#109">109: </a>                <span class="php-var">$obj</span>[<span class="php-var">$label</span>] = <span class="php-var">$val</span>;
+</span><span id="110" class="l"><a href="#110">110: </a>            }
+</span><span id="111" class="l"><a href="#111">111: </a>            <span class="php-var">$table</span>[] = <span class="php-var">$obj</span>;
+</span><span id="112" class="l"><a href="#112">112: </a>        }
+</span><span id="113" class="l"><a href="#113">113: </a>        <span class="php-var">$climate</span>-&gt;table(<span class="php-var">$table</span>);
+</span><span id="114" class="l"><a href="#114">114: </a>
+</span><span id="115" class="l"><a href="#115">115: </a>        <span class="php-keyword1">return</span> <span class="php-var">$response</span>;
+</span><span id="116" class="l"><a href="#116">116: </a>    }
+</span><span id="117" class="l"><a href="#117">117: </a>}
+</span><span id="118" class="l"><a href="#118">118: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

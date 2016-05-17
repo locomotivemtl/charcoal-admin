@@ -240,7 +240,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a>\<a href="namespace-Charcoal.Admin.Action.Widget.html">Widget</a>\<a href="namespace-Charcoal.Admin.Action.Widget.Table.html">Table</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#24-168" title="Go to source code">Charcoal/Admin/Action/Widget/Table/InlineAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#21-135" title="Go to source code">Charcoal/Admin/Action/Widget/Table/InlineAction.php</a>
 		<br>
 	</div>
 
@@ -260,7 +260,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#48-58" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#40-50" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -285,87 +285,10 @@ Charcoal\App\Action\AbstractAction
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="setModelFactory" id="_setModelFactory">
-
-		<td class="attributes"><code>
-			 public 
-
-			ObjectContainerInterface
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setModelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#60-68" title="Go to source code">setModelFactory</a>( <span>Charcoal\Model\ModelFactory <var>$factory</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$factory</var></dt>
-					<dd>Model factory, to create model objects.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					ObjectContainerInterface<br>Chainable
-				</div>
-
-
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_setModelFactory">Charcoal\Admin\AdminAction::setModelFactory()</a></code></div>
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="modelFactory" id="_modelFactory">
-
-		<td class="attributes"><code>
-			 protected 
-
-			Charcoal\Model\ModelFactory
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_modelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#70-79" title="Go to source code">modelFactory</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					Charcoal\Model\ModelFactory
-				</div>
-
-
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_modelFactory">Charcoal\Admin\AdminAction::modelFactory()</a></code></div>
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
 			<code><a href="class-Charcoal.Admin.Action.Widget.Table.InlineAction.html">Charcoal\Admin\Action\Widget\Table\InlineAction</a></code>
 			
@@ -374,7 +297,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setWidgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#81-89" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\App\Template\WidgetFactory <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#52-60" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\App\Template\WidgetFactory <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -413,16 +336,14 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_widgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#91-103" title="Go to source code">widgetFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#62-74" title="Go to source code">widgetFactory</a>( )</code>
 
 		<div class="description short">
-			<p>Safe Widget Factory getter.
-Create the widget factory if it was not preiously injected / set.</p>
+			
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Safe Widget Factory getter.
-Create the widget factory if it was not preiously injected / set.</p>
+			
 
 
 
@@ -431,6 +352,10 @@ Create the widget factory if it was not preiously injected / set.</p>
 					Charcoal\App\Template\WidgetFactory
 				</div>
 
+				<h4>Throws</h4>
+				<div class="list">
+					Exception<br>If the factory is not set.
+				</div>
 
 
 
@@ -449,7 +374,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_run">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#105-155" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#76-122" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
 
 		<div class="description short">
 			
@@ -490,7 +415,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_results">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#157-167" title="Go to source code">results</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#124-134" title="Go to source code">results</a>( )</code>
 
 		<div class="description short">
 			
@@ -525,7 +450,9 @@ Create the widget factory if it was not preiously injected / set.</p>
 			<a href="class-Charcoal.Admin.AdminAction.html#_authRequired">authRequired()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_feedbacks">feedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_hasFeedbacks">hasFeedbacks()</a>, 
-			<a href="class-Charcoal.Admin.AdminAction.html#_numFeedbacks">numFeedbacks()</a>
+			<a href="class-Charcoal.Admin.AdminAction.html#_modelFactory">modelFactory()</a>, 
+			<a href="class-Charcoal.Admin.AdminAction.html#_numFeedbacks">numFeedbacks()</a>, 
+			<a href="class-Charcoal.Admin.AdminAction.html#_setModelFactory">setModelFactory()</a>
 		</code></td>
 	</tr>
 	</table>
@@ -549,7 +476,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#33-36" title="Go to source code"><var>$inlineProperties</var></a>
+				<a href="source-class-Charcoal.Admin.Action.Widget.Table.InlineAction.html#30-33" title="Go to source code"><var>$inlineProperties</var></a>
 
 			<div class="description short">
 				<p>$inlineProperties</p>

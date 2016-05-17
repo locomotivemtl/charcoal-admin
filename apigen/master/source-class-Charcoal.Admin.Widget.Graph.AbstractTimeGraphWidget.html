@@ -569,121 +569,117 @@
 </span><span id="282" class="l"><a href="#282">282: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> dbRows()
 </span><span id="283" class="l"><a href="#283">283: </a>    {
 </span><span id="284" class="l"><a href="#284">284: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;dbRows === <span class="php-keyword1">null</span>) {
-</span><span id="285" class="l"><a href="#285">285: </a>            <span class="php-var">$factory</span> = <span class="php-keyword1">new</span> ModelFactory([
-</span><span id="286" class="l"><a href="#286">286: </a>                <span class="php-quote">'logger'</span> =&gt; <span class="php-var">$this</span>-&gt;logger
-</span><span id="287" class="l"><a href="#287">287: </a>            ]);
-</span><span id="288" class="l"><a href="#288">288: </a>
-</span><span id="289" class="l"><a href="#289">289: </a>            <span class="php-var">$model</span> = <span class="php-var">$factory</span>-&gt;create(<span class="php-var">$this</span>-&gt;objType());
-</span><span id="290" class="l"><a href="#290">290: </a>
-</span><span id="291" class="l"><a href="#291">291: </a>            <span class="php-var">$sql</span> = [];
-</span><span id="292" class="l"><a href="#292">292: </a>            <span class="php-var">$seriesOptions</span> = <span class="php-var">$this</span>-&gt;seriesOptions();
-</span><span id="293" class="l"><a href="#293">293: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$seriesOptions</span> <span class="php-keyword1">as</span> <span class="php-var">$serieId</span> =&gt; <span class="php-var">$serieOpts</span>) {
-</span><span id="294" class="l"><a href="#294">294: </a>                <span class="php-var">$sql</span>[] = <span class="php-var">$serieOpts</span>[<span class="php-quote">'function'</span>].<span class="php-quote">' as '</span>.<span class="php-var">$serieId</span>;
-</span><span id="295" class="l"><a href="#295">295: </a>            }
-</span><span id="296" class="l"><a href="#296">296: </a>
-</span><span id="297" class="l"><a href="#297">297: </a>            <span class="php-var">$q</span> = <span class="php-keyword2">sprintf</span>(
-</span><span id="298" class="l"><a href="#298">298: </a>                <span class="php-quote">'
-</span></span><span id="299" class="l"><a href="#299">299: </a><span class="php-quote">                SELECT
-</span></span><span id="300" class="l"><a href="#300">300: </a><span class="php-quote">                    %1$s as x,
-</span></span><span id="301" class="l"><a href="#301">301: </a><span class="php-quote">                    '</span>.<span class="php-keyword2">implode</span>(
-</span><span id="302" class="l"><a href="#302">302: </a>                    <span class="php-quote">', '</span>,
-</span><span id="303" class="l"><a href="#303">303: </a>                    <span class="php-var">$sql</span>
-</span><span id="304" class="l"><a href="#304">304: </a>                ).<span class="php-quote">'
-</span></span><span id="305" class="l"><a href="#305">305: </a><span class="php-quote">                FROM
-</span></span><span id="306" class="l"><a href="#306">306: </a><span class="php-quote">                    %2$s
-</span></span><span id="307" class="l"><a href="#307">307: </a><span class="php-quote">                WHERE
-</span></span><span id="308" class="l"><a href="#308">308: </a><span class="php-quote">                    %1$s BETWEEN  :start_date AND :end_date
-</span></span><span id="309" class="l"><a href="#309">309: </a><span class="php-quote">                GROUP BY
-</span></span><span id="310" class="l"><a href="#310">310: </a><span class="php-quote">                    %1$s
-</span></span><span id="311" class="l"><a href="#311">311: </a><span class="php-quote">                ORDER BY
-</span></span><span id="312" class="l"><a href="#312">312: </a><span class="php-quote">                    %1$s ASC'</span>,
-</span><span id="313" class="l"><a href="#313">313: </a>                <span class="php-var">$this</span>-&gt;categoryFunction(),
-</span><span id="314" class="l"><a href="#314">314: </a>                <span class="php-var">$model</span>-&gt;source()-&gt;table()
-</span><span id="315" class="l"><a href="#315">315: </a>            );
-</span><span id="316" class="l"><a href="#316">316: </a>            <span class="php-var">$res</span> = <span class="php-var">$model</span>-&gt;source()-&gt;dbQuery(<span class="php-var">$q</span>, [
-</span><span id="317" class="l"><a href="#317">317: </a>                <span class="php-quote">'start_date'</span>    =&gt; <span class="php-var">$this</span>-&gt;startDate()-&gt;format(<span class="php-var">$this</span>-&gt;dateFormat()),
-</span><span id="318" class="l"><a href="#318">318: </a>                <span class="php-quote">'end_date'</span>      =&gt; <span class="php-var">$this</span>-&gt;endDate()-&gt;format(<span class="php-var">$this</span>-&gt;dateFormat())
-</span><span id="319" class="l"><a href="#319">319: </a>            ]);
-</span><span id="320" class="l"><a href="#320">320: </a>            <span class="php-var">$this</span>-&gt;dbRows = <span class="php-var">$res</span>-&gt;fetchAll((PDO::FETCH_GROUP|PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC));
-</span><span id="321" class="l"><a href="#321">321: </a>        }
-</span><span id="322" class="l"><a href="#322">322: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;dbRows;
-</span><span id="323" class="l"><a href="#323">323: </a>    }
-</span><span id="324" class="l"><a href="#324">324: </a>
-</span><span id="325" class="l"><a href="#325">325: </a>    <span class="php-comment">/**
-</span></span><span id="326" class="l"><a href="#326">326: </a><span class="php-comment">     * Fill all rows with 0 value for all series, when it is unset.
-</span></span><span id="327" class="l"><a href="#327">327: </a><span class="php-comment">     *
-</span></span><span id="328" class="l"><a href="#328">328: </a><span class="php-comment">     * @param array $rows The row structure to fill.
-</span></span><span id="329" class="l"><a href="#329">329: </a><span class="php-comment">     * @return array
-</span></span><span id="330" class="l"><a href="#330">330: </a><span class="php-comment">     */</span>
-</span><span id="331" class="l"><a href="#331">331: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> fillRows(<span class="php-keyword1">array</span> <span class="php-var">$rows</span>)
-</span><span id="332" class="l"><a href="#332">332: </a>    {
-</span><span id="333" class="l"><a href="#333">333: </a>        <span class="php-var">$row</span> = [];
-</span><span id="334" class="l"><a href="#334">334: </a>        <span class="php-var">$seriesOptions</span> = <span class="php-var">$this</span>-&gt;seriesOptions();
-</span><span id="335" class="l"><a href="#335">335: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$seriesOptions</span> <span class="php-keyword1">as</span> <span class="php-var">$serieId</span> =&gt; <span class="php-var">$serieOpts</span>) {
-</span><span id="336" class="l"><a href="#336">336: </a>            <span class="php-var">$row</span>[<span class="php-var">$serieId</span>] = <span class="php-quote">'0'</span>;
-</span><span id="337" class="l"><a href="#337">337: </a>        }
-</span><span id="338" class="l"><a href="#338">338: </a>
-</span><span id="339" class="l"><a href="#339">339: </a>        <span class="php-var">$starts</span> = <span class="php-keyword1">clone</span>(<span class="php-var">$this</span>-&gt;startDate());
-</span><span id="340" class="l"><a href="#340">340: </a>        <span class="php-var">$ends</span> = <span class="php-var">$this</span>-&gt;endDate();
-</span><span id="341" class="l"><a href="#341">341: </a>        <span class="php-keyword1">while</span> (<span class="php-var">$starts</span> &lt; <span class="php-var">$ends</span>) {
-</span><span id="342" class="l"><a href="#342">342: </a>            <span class="php-var">$x</span> = <span class="php-var">$starts</span>-&gt;format(<span class="php-var">$this</span>-&gt;dateFormat());
-</span><span id="343" class="l"><a href="#343">343: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$rows</span>[<span class="php-var">$x</span>])) {
-</span><span id="344" class="l"><a href="#344">344: </a>                <span class="php-var">$rows</span>[<span class="php-var">$x</span>] = <span class="php-var">$row</span>;
-</span><span id="345" class="l"><a href="#345">345: </a>            }
-</span><span id="346" class="l"><a href="#346">346: </a>            <span class="php-var">$starts</span>-&gt;add(<span class="php-var">$this</span>-&gt;dateInterval());
-</span><span id="347" class="l"><a href="#347">347: </a>        }
-</span><span id="348" class="l"><a href="#348">348: </a>        <span class="php-keyword2">ksort</span>(<span class="php-var">$rows</span>);
-</span><span id="349" class="l"><a href="#349">349: </a>        <span class="php-keyword1">return</span> <span class="php-var">$rows</span>;
-</span><span id="350" class="l"><a href="#350">350: </a>    }
-</span><span id="351" class="l"><a href="#351">351: </a>
-</span><span id="352" class="l"><a href="#352">352: </a>    <span class="php-comment">/**
-</span></span><span id="353" class="l"><a href="#353">353: </a><span class="php-comment">     * @return array Categories structure.
-</span></span><span id="354" class="l"><a href="#354">354: </a><span class="php-comment">     */</span>
-</span><span id="355" class="l"><a href="#355">355: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> categories()
-</span><span id="356" class="l"><a href="#356">356: </a>    {
-</span><span id="357" class="l"><a href="#357">357: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;dbRows();
-</span><span id="358" class="l"><a href="#358">358: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;fillRows(<span class="php-var">$rows</span>);
-</span><span id="359" class="l"><a href="#359">359: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">array_keys</span>(<span class="php-var">$rows</span>);
-</span><span id="360" class="l"><a href="#360">360: </a>    }
-</span><span id="361" class="l"><a href="#361">361: </a>
-</span><span id="362" class="l"><a href="#362">362: </a>
-</span><span id="363" class="l"><a href="#363">363: </a>    <span class="php-comment">/**
-</span></span><span id="364" class="l"><a href="#364">364: </a><span class="php-comment">     * @return array Series structure.
-</span></span><span id="365" class="l"><a href="#365">365: </a><span class="php-comment">     */</span>
-</span><span id="366" class="l"><a href="#366">366: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> series()
-</span><span id="367" class="l"><a href="#367">367: </a>    {
-</span><span id="368" class="l"><a href="#368">368: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;dbRows();
-</span><span id="369" class="l"><a href="#369">369: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;fillRows(<span class="php-var">$rows</span>);
-</span><span id="370" class="l"><a href="#370">370: </a>
-</span><span id="371" class="l"><a href="#371">371: </a>        <span class="php-var">$series</span> = [];
-</span><span id="372" class="l"><a href="#372">372: </a>        <span class="php-var">$options</span> = <span class="php-var">$this</span>-&gt;seriesOptions();
-</span><span id="373" class="l"><a href="#373">373: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$options</span> <span class="php-keyword1">as</span> <span class="php-var">$serieId</span> =&gt; <span class="php-var">$serieOptions</span>) {
-</span><span id="374" class="l"><a href="#374">374: </a>            <span class="php-var">$series</span>[] = [
-</span><span id="375" class="l"><a href="#375">375: </a>                <span class="php-quote">'name'</span> =&gt; (string)<span class="php-var">$serieOptions</span>[<span class="php-quote">'name'</span>],
-</span><span id="376" class="l"><a href="#376">376: </a>                <span class="php-quote">'type'</span> =&gt; (string)<span class="php-var">$serieOptions</span>[<span class="php-quote">'type'</span>],
-</span><span id="377" class="l"><a href="#377">377: </a>                <span class="php-quote">'data'</span> =&gt; array_column(<span class="php-var">$rows</span>, <span class="php-var">$serieId</span>)
-</span><span id="378" class="l"><a href="#378">378: </a>            ];
-</span><span id="379" class="l"><a href="#379">379: </a>        }
-</span><span id="380" class="l"><a href="#380">380: </a>
-</span><span id="381" class="l"><a href="#381">381: </a>        <span class="php-keyword1">return</span> <span class="php-var">$series</span>;
-</span><span id="382" class="l"><a href="#382">382: </a>    }
-</span><span id="383" class="l"><a href="#383">383: </a>
-</span><span id="384" class="l"><a href="#384">384: </a>    <span class="php-comment">/**
-</span></span><span id="385" class="l"><a href="#385">385: </a><span class="php-comment">     * @return string
-</span></span><span id="386" class="l"><a href="#386">386: </a><span class="php-comment">     */</span>
-</span><span id="387" class="l"><a href="#387">387: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> objType();
-</span><span id="388" class="l"><a href="#388">388: </a>
-</span><span id="389" class="l"><a href="#389">389: </a>    <span class="php-comment">/**
-</span></span><span id="390" class="l"><a href="#390">390: </a><span class="php-comment">     * @return array
-</span></span><span id="391" class="l"><a href="#391">391: </a><span class="php-comment">     */</span>
-</span><span id="392" class="l"><a href="#392">392: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> seriesOptions();
-</span><span id="393" class="l"><a href="#393">393: </a>
-</span><span id="394" class="l"><a href="#394">394: </a>        <span class="php-comment">/**
-</span></span><span id="395" class="l"><a href="#395">395: </a><span class="php-comment">         * @return string
-</span></span><span id="396" class="l"><a href="#396">396: </a><span class="php-comment">         */</span>
-</span><span id="397" class="l"><a href="#397">397: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> categoryFunction();
-</span><span id="398" class="l"><a href="#398">398: </a>}
-</span><span id="399" class="l"><a href="#399">399: </a></span></code></pre>
+</span><span id="285" class="l"><a href="#285">285: </a>            <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;modelFactory()-&gt;create(<span class="php-var">$this</span>-&gt;objType());
+</span><span id="286" class="l"><a href="#286">286: </a>
+</span><span id="287" class="l"><a href="#287">287: </a>            <span class="php-var">$sql</span> = [];
+</span><span id="288" class="l"><a href="#288">288: </a>            <span class="php-var">$seriesOptions</span> = <span class="php-var">$this</span>-&gt;seriesOptions();
+</span><span id="289" class="l"><a href="#289">289: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$seriesOptions</span> <span class="php-keyword1">as</span> <span class="php-var">$serieId</span> =&gt; <span class="php-var">$serieOpts</span>) {
+</span><span id="290" class="l"><a href="#290">290: </a>                <span class="php-var">$sql</span>[] = <span class="php-var">$serieOpts</span>[<span class="php-quote">'function'</span>].<span class="php-quote">' as '</span>.<span class="php-var">$serieId</span>;
+</span><span id="291" class="l"><a href="#291">291: </a>            }
+</span><span id="292" class="l"><a href="#292">292: </a>
+</span><span id="293" class="l"><a href="#293">293: </a>            <span class="php-var">$q</span> = <span class="php-keyword2">sprintf</span>(
+</span><span id="294" class="l"><a href="#294">294: </a>                <span class="php-quote">'
+</span></span><span id="295" class="l"><a href="#295">295: </a><span class="php-quote">                SELECT
+</span></span><span id="296" class="l"><a href="#296">296: </a><span class="php-quote">                    %1$s as x,
+</span></span><span id="297" class="l"><a href="#297">297: </a><span class="php-quote">                    '</span>.<span class="php-keyword2">implode</span>(
+</span><span id="298" class="l"><a href="#298">298: </a>                    <span class="php-quote">', '</span>,
+</span><span id="299" class="l"><a href="#299">299: </a>                    <span class="php-var">$sql</span>
+</span><span id="300" class="l"><a href="#300">300: </a>                ).<span class="php-quote">'
+</span></span><span id="301" class="l"><a href="#301">301: </a><span class="php-quote">                FROM
+</span></span><span id="302" class="l"><a href="#302">302: </a><span class="php-quote">                    %2$s
+</span></span><span id="303" class="l"><a href="#303">303: </a><span class="php-quote">                WHERE
+</span></span><span id="304" class="l"><a href="#304">304: </a><span class="php-quote">                    %1$s BETWEEN  :start_date AND :end_date
+</span></span><span id="305" class="l"><a href="#305">305: </a><span class="php-quote">                GROUP BY
+</span></span><span id="306" class="l"><a href="#306">306: </a><span class="php-quote">                    %1$s
+</span></span><span id="307" class="l"><a href="#307">307: </a><span class="php-quote">                ORDER BY
+</span></span><span id="308" class="l"><a href="#308">308: </a><span class="php-quote">                    %1$s ASC'</span>,
+</span><span id="309" class="l"><a href="#309">309: </a>                <span class="php-var">$this</span>-&gt;categoryFunction(),
+</span><span id="310" class="l"><a href="#310">310: </a>                <span class="php-var">$model</span>-&gt;source()-&gt;table()
+</span><span id="311" class="l"><a href="#311">311: </a>            );
+</span><span id="312" class="l"><a href="#312">312: </a>            <span class="php-var">$res</span> = <span class="php-var">$model</span>-&gt;source()-&gt;dbQuery(<span class="php-var">$q</span>, [
+</span><span id="313" class="l"><a href="#313">313: </a>                <span class="php-quote">'start_date'</span>    =&gt; <span class="php-var">$this</span>-&gt;startDate()-&gt;format(<span class="php-var">$this</span>-&gt;dateFormat()),
+</span><span id="314" class="l"><a href="#314">314: </a>                <span class="php-quote">'end_date'</span>      =&gt; <span class="php-var">$this</span>-&gt;endDate()-&gt;format(<span class="php-var">$this</span>-&gt;dateFormat())
+</span><span id="315" class="l"><a href="#315">315: </a>            ]);
+</span><span id="316" class="l"><a href="#316">316: </a>            <span class="php-var">$this</span>-&gt;dbRows = <span class="php-var">$res</span>-&gt;fetchAll((PDO::FETCH_GROUP|PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC));
+</span><span id="317" class="l"><a href="#317">317: </a>        }
+</span><span id="318" class="l"><a href="#318">318: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;dbRows;
+</span><span id="319" class="l"><a href="#319">319: </a>    }
+</span><span id="320" class="l"><a href="#320">320: </a>
+</span><span id="321" class="l"><a href="#321">321: </a>    <span class="php-comment">/**
+</span></span><span id="322" class="l"><a href="#322">322: </a><span class="php-comment">     * Fill all rows with 0 value for all series, when it is unset.
+</span></span><span id="323" class="l"><a href="#323">323: </a><span class="php-comment">     *
+</span></span><span id="324" class="l"><a href="#324">324: </a><span class="php-comment">     * @param array $rows The row structure to fill.
+</span></span><span id="325" class="l"><a href="#325">325: </a><span class="php-comment">     * @return array
+</span></span><span id="326" class="l"><a href="#326">326: </a><span class="php-comment">     */</span>
+</span><span id="327" class="l"><a href="#327">327: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> fillRows(<span class="php-keyword1">array</span> <span class="php-var">$rows</span>)
+</span><span id="328" class="l"><a href="#328">328: </a>    {
+</span><span id="329" class="l"><a href="#329">329: </a>        <span class="php-var">$row</span> = [];
+</span><span id="330" class="l"><a href="#330">330: </a>        <span class="php-var">$seriesOptions</span> = <span class="php-var">$this</span>-&gt;seriesOptions();
+</span><span id="331" class="l"><a href="#331">331: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$seriesOptions</span> <span class="php-keyword1">as</span> <span class="php-var">$serieId</span> =&gt; <span class="php-var">$serieOpts</span>) {
+</span><span id="332" class="l"><a href="#332">332: </a>            <span class="php-var">$row</span>[<span class="php-var">$serieId</span>] = <span class="php-quote">'0'</span>;
+</span><span id="333" class="l"><a href="#333">333: </a>        }
+</span><span id="334" class="l"><a href="#334">334: </a>
+</span><span id="335" class="l"><a href="#335">335: </a>        <span class="php-var">$starts</span> = <span class="php-keyword1">clone</span>(<span class="php-var">$this</span>-&gt;startDate());
+</span><span id="336" class="l"><a href="#336">336: </a>        <span class="php-var">$ends</span> = <span class="php-var">$this</span>-&gt;endDate();
+</span><span id="337" class="l"><a href="#337">337: </a>        <span class="php-keyword1">while</span> (<span class="php-var">$starts</span> &lt; <span class="php-var">$ends</span>) {
+</span><span id="338" class="l"><a href="#338">338: </a>            <span class="php-var">$x</span> = <span class="php-var">$starts</span>-&gt;format(<span class="php-var">$this</span>-&gt;dateFormat());
+</span><span id="339" class="l"><a href="#339">339: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$rows</span>[<span class="php-var">$x</span>])) {
+</span><span id="340" class="l"><a href="#340">340: </a>                <span class="php-var">$rows</span>[<span class="php-var">$x</span>] = <span class="php-var">$row</span>;
+</span><span id="341" class="l"><a href="#341">341: </a>            }
+</span><span id="342" class="l"><a href="#342">342: </a>            <span class="php-var">$starts</span>-&gt;add(<span class="php-var">$this</span>-&gt;dateInterval());
+</span><span id="343" class="l"><a href="#343">343: </a>        }
+</span><span id="344" class="l"><a href="#344">344: </a>        <span class="php-keyword2">ksort</span>(<span class="php-var">$rows</span>);
+</span><span id="345" class="l"><a href="#345">345: </a>        <span class="php-keyword1">return</span> <span class="php-var">$rows</span>;
+</span><span id="346" class="l"><a href="#346">346: </a>    }
+</span><span id="347" class="l"><a href="#347">347: </a>
+</span><span id="348" class="l"><a href="#348">348: </a>    <span class="php-comment">/**
+</span></span><span id="349" class="l"><a href="#349">349: </a><span class="php-comment">     * @return array Categories structure.
+</span></span><span id="350" class="l"><a href="#350">350: </a><span class="php-comment">     */</span>
+</span><span id="351" class="l"><a href="#351">351: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> categories()
+</span><span id="352" class="l"><a href="#352">352: </a>    {
+</span><span id="353" class="l"><a href="#353">353: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;dbRows();
+</span><span id="354" class="l"><a href="#354">354: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;fillRows(<span class="php-var">$rows</span>);
+</span><span id="355" class="l"><a href="#355">355: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">array_keys</span>(<span class="php-var">$rows</span>);
+</span><span id="356" class="l"><a href="#356">356: </a>    }
+</span><span id="357" class="l"><a href="#357">357: </a>
+</span><span id="358" class="l"><a href="#358">358: </a>
+</span><span id="359" class="l"><a href="#359">359: </a>    <span class="php-comment">/**
+</span></span><span id="360" class="l"><a href="#360">360: </a><span class="php-comment">     * @return array Series structure.
+</span></span><span id="361" class="l"><a href="#361">361: </a><span class="php-comment">     */</span>
+</span><span id="362" class="l"><a href="#362">362: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> series()
+</span><span id="363" class="l"><a href="#363">363: </a>    {
+</span><span id="364" class="l"><a href="#364">364: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;dbRows();
+</span><span id="365" class="l"><a href="#365">365: </a>        <span class="php-var">$rows</span> = <span class="php-var">$this</span>-&gt;fillRows(<span class="php-var">$rows</span>);
+</span><span id="366" class="l"><a href="#366">366: </a>
+</span><span id="367" class="l"><a href="#367">367: </a>        <span class="php-var">$series</span> = [];
+</span><span id="368" class="l"><a href="#368">368: </a>        <span class="php-var">$options</span> = <span class="php-var">$this</span>-&gt;seriesOptions();
+</span><span id="369" class="l"><a href="#369">369: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$options</span> <span class="php-keyword1">as</span> <span class="php-var">$serieId</span> =&gt; <span class="php-var">$serieOptions</span>) {
+</span><span id="370" class="l"><a href="#370">370: </a>            <span class="php-var">$series</span>[] = [
+</span><span id="371" class="l"><a href="#371">371: </a>                <span class="php-quote">'name'</span> =&gt; (string)<span class="php-var">$serieOptions</span>[<span class="php-quote">'name'</span>],
+</span><span id="372" class="l"><a href="#372">372: </a>                <span class="php-quote">'type'</span> =&gt; (string)<span class="php-var">$serieOptions</span>[<span class="php-quote">'type'</span>],
+</span><span id="373" class="l"><a href="#373">373: </a>                <span class="php-quote">'data'</span> =&gt; array_column(<span class="php-var">$rows</span>, <span class="php-var">$serieId</span>)
+</span><span id="374" class="l"><a href="#374">374: </a>            ];
+</span><span id="375" class="l"><a href="#375">375: </a>        }
+</span><span id="376" class="l"><a href="#376">376: </a>
+</span><span id="377" class="l"><a href="#377">377: </a>        <span class="php-keyword1">return</span> <span class="php-var">$series</span>;
+</span><span id="378" class="l"><a href="#378">378: </a>    }
+</span><span id="379" class="l"><a href="#379">379: </a>
+</span><span id="380" class="l"><a href="#380">380: </a>    <span class="php-comment">/**
+</span></span><span id="381" class="l"><a href="#381">381: </a><span class="php-comment">     * @return string
+</span></span><span id="382" class="l"><a href="#382">382: </a><span class="php-comment">     */</span>
+</span><span id="383" class="l"><a href="#383">383: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> objType();
+</span><span id="384" class="l"><a href="#384">384: </a>
+</span><span id="385" class="l"><a href="#385">385: </a>    <span class="php-comment">/**
+</span></span><span id="386" class="l"><a href="#386">386: </a><span class="php-comment">     * @return array
+</span></span><span id="387" class="l"><a href="#387">387: </a><span class="php-comment">     */</span>
+</span><span id="388" class="l"><a href="#388">388: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> seriesOptions();
+</span><span id="389" class="l"><a href="#389">389: </a>
+</span><span id="390" class="l"><a href="#390">390: </a>        <span class="php-comment">/**
+</span></span><span id="391" class="l"><a href="#391">391: </a><span class="php-comment">         * @return string
+</span></span><span id="392" class="l"><a href="#392">392: </a><span class="php-comment">         */</span>
+</span><span id="393" class="l"><a href="#393">393: </a>    <span class="php-keyword1">abstract</span> <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> categoryFunction();
+</span><span id="394" class="l"><a href="#394">394: </a>}
+</span><span id="395" class="l"><a href="#395">395: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

@@ -81,11 +81,14 @@ class ObjectsScript extends AdminScript implements CollectionContainerInterface
             'num_per_page'  => $climate->arguments->get('num')
         ]);
 
-        $model = $this->modelFactory()->create($this->objType());
+        $modelFactory = new ModelFactory();
+        $model = $modelFactory->create($this->objType(), [
+            'logger' => $this->logger
+        ]);
 
         $loader = new CollectionLoader([
             'logger'    => $this->logger,
-            'factory'   => $this->modelFactory()
+            'factory'   => $modelFactory
         ]);
         $loader->setModel($model);
         $loader->setPagination([

@@ -9,8 +9,9 @@ use \Exception;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-// From `charcoal-core`
-use \Charcoal\Model\ModelFactory;
+// Dependency from 'charcoal-app'
+use \Charcoal\App\Template\WidgetFactory;
+
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
@@ -26,6 +27,49 @@ class InlineMultiAction extends AdminAction
      * @var array $objects
      */
     protected $objects;
+
+        /**
+     * @var WidgetFactory $widgetFactory
+     */
+    private $widgetFactory;
+
+    /**
+     * @param Container $container DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required ObjectContainerInterface dependencies
+        $this->setWidgetFactory($container['widget/factory']);
+    }
+
+    /**
+     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return InlineAction Chainable
+     */
+    protected function setWidgetFactory(WidgetFactory $factory)
+    {
+        $this->widgetFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * Safe Widget Factory getter.
+     * Create the widget factory if it was not preiously injected / set.
+     *
+     * @return WidgetFactory
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new Exception(
+                'Widget factory is not set on inline action widget.'
+            );
+        }
+        return $this->widgetFactory;
+    }
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -43,10 +87,9 @@ class InlineMultiAction extends AdminAction
         }
 
         try {
-            $modelFactory = new ModelFactory();
             $this->objects = [];
             foreach ($objIds as $objId) {
-                $obj = $modelFactory->create($objType);
+                $obj = $this->modelFactory()->create($objType);
                 $obj->load($objId);
                 if (!$obj->id()) {
                     continue;
@@ -55,9 +98,7 @@ class InlineMultiAction extends AdminAction
                 $o = [];
                 $o['id'] = $obj->id();
 
-                $objForm = new ObjectForm([
-                    'logger' => $this->logger()
-                ]);
+                $objForm = $this->widgetFactory()->create('charcoal/admin/widget/object-form');
                 $objForm->set_objType($objType);
                 $objForm->set_objId($objId);
                 $formProperties = $objForm->formProperties();
@@ -86,11 +127,10 @@ class InlineMultiAction extends AdminAction
      */
     public function results()
     {
-        $results = [
+        return [
             'success'   => $this->success(),
             'objects'   => $this->objects,
             'feedbacks' => $this->feedbacks()
         ];
-        return $results;
     }
 }

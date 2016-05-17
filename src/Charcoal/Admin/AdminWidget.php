@@ -4,6 +4,8 @@ namespace Charcoal\Admin;
 
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\App\App;
 use \Charcoal\App\Template\AbstractWidget;
@@ -53,6 +55,39 @@ class AdminWidget extends AbstractWidget
      * @var integer $priority
      */
     private $priority;
+
+    /**
+     * @var FactoryInterface $modelFactory
+     */
+    private $modelFactory;
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->modelFactory = $container['model/factory'];
+        parent::setDependencies($container);
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return AdminScript Chainable
+     */
+    protected function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        return $this->modelFactory;
+    }
 
     /**
      * Provide a `template()` method to fullfill UIItem interface.

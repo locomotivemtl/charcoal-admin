@@ -65,9 +65,7 @@ class DeleteAction extends AdminAction
 
 
             $modelFactory = new ModelFactory();
-            $obj = $modelFactory->create($obj_type, [
-                'logger' => $this->logger
-            ]);
+            $obj = $this->modelFactory()->create($obj_type);
             $obj->load($obj_id);
             if (!$obj->id()) {
                 $this->setSuccess(false);

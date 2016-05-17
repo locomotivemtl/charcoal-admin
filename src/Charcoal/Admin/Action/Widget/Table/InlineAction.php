@@ -60,9 +60,7 @@ class InlineAction extends AdminAction
     }
 
     /**
-     * Safe Widget Factory getter.
-     * Create the widget factory if it was not preiously injected / set.
-     *
+     * @throws Exception If the factory is not set.
      * @return WidgetFactory
      */
     protected function widgetFactory()

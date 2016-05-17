@@ -6,6 +6,8 @@ use \InvalidArgumentException;
 
 use \Pimple\Container;
 
+use \Charcoal\Factory\FactoryInterface;
+
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\App\App;
 use \Charcoal\App\Template\AbstractWidget;

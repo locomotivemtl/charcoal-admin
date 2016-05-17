@@ -29,8 +29,8 @@ class InlineMultiAction extends AdminAction
     protected $objects;
 
         /**
-     * @var WidgetFactory $widgetFactory
-     */
+         * @var WidgetFactory $widgetFactory
+         */
     private $widgetFactory;
 
     /**
@@ -56,9 +56,7 @@ class InlineMultiAction extends AdminAction
     }
 
     /**
-     * Safe Widget Factory getter.
-     * Create the widget factory if it was not preiously injected / set.
-     *
+     * @throws Exception If the factory is not set.
      * @return WidgetFactory
      */
     protected function widgetFactory()

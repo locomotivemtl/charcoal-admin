@@ -57,18 +57,6 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param Container $container A DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Fulfills `ObjectContainerTrait` dependencies.
-        $this->setModelFactory($container['model/factory']);
-    }
-
-    /**
      * @param array $updateData The update data.
      * @return SaveAction Chainable
      */

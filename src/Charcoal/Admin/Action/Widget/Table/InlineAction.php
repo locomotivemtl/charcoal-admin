@@ -10,9 +10,6 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Pimple\Container;
 
-// From `charcoal-core`
-use \Charcoal\Model\ModelFactory;
-
 // Dependency from 'charcoal-app'
 use \Charcoal\App\Template\WidgetFactory;
 
@@ -36,11 +33,6 @@ class InlineAction extends AdminAction
     protected $inlineProperties;
 
     /**
-     * @var ModelFactory $modelFactory
-     */
-    private $modelFactory;
-
-    /**
      * @var WidgetFactory $widgetFactory
      */
     private $widgetFactory;
@@ -54,35 +46,14 @@ class InlineAction extends AdminAction
         parent::setDependencies($container);
 
         // Required ObjectContainerInterface dependencies
-        $this->setModelFactory($container['model/factory']);
-    }
-
-    /**
-     * @param ModelFactory $factory Model factory, to create model objects.
-     * @return ObjectContainerInterface Chainable
-     */
-    public function setModelFactory(ModelFactory $factory)
-    {
-        $this->modelFactory = $factory;
-        return $this;
-    }
-
-    /**
-     * @return ModelFactory
-     */
-    protected function modelFactory()
-    {
-        if ($this->modelFactory === null) {
-            $this->modelFactory = new ModelFactory();
-        }
-        return $this->modelFactory;
+        $this->setWidgetFactory($container['widget/factory']);
     }
 
     /**
      * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return InlineAction Chainable
      */
-    public function setWidgetFactory(WidgetFactory $factory)
+    protected function setWidgetFactory(WidgetFactory $factory)
     {
         $this->widgetFactory = $factory;
         return $this;
@@ -97,7 +68,9 @@ class InlineAction extends AdminAction
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            $this->widgetFactory = new WidgetFactory();
+            throw new Exception(
+                'Widget factory is not set on inline action widget.'
+            );
         }
         return $this->widgetFactory;
     }
@@ -118,18 +91,14 @@ class InlineAction extends AdminAction
         }
 
         try {
-            $obj = $this->modelFactory()->create($objType, [
-                'logger' => $this->logger
-            ]);
+            $obj = $this->modelFactory()->create($objType);
             $obj->load($objId);
             if (!$obj->id()) {
                 $this->setSuccess(false);
                 return $response->withStatus(404);
             }
 
-            $objForm = $this->widgetFactory()->create('charcoal/admin/widget/object-form', [
-                'logger' => $this->logger
-            ]);
+            $objForm = $this->widgetFactory()->create('charcoal/admin/widget/object-form');
 
             $objForm->setObjType($objType);
             $objForm->setObjId($objId);

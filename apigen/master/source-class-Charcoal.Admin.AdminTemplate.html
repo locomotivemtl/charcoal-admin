@@ -680,7 +680,7 @@
 </span></span><span id="393" class="l"><a href="#393">393: </a><span class="php-comment">     */</span>
 </span><span id="394" class="l"><a href="#394">394: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> authByToken()
 </span><span id="395" class="l"><a href="#395">395: </a>    {
-</span><span id="396" class="l"><a href="#396">396: </a>        <span class="php-var">$authToken</span> = <span class="php-var">$this</span>-&gt;modelFactory-&gt;create(<span class="php-quote">'charcoal/admin/object/auth-token'</span>);
+</span><span id="396" class="l"><a href="#396">396: </a>        <span class="php-var">$authToken</span> = <span class="php-var">$this</span>-&gt;modelFactory()-&gt;create(<span class="php-quote">'charcoal/admin/object/auth-token'</span>);
 </span><span id="397" class="l"><a href="#397">397: </a>
 </span><span id="398" class="l"><a href="#398">398: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$authToken</span>-&gt;metadata()-&gt;enabled() !== <span class="php-keyword1">true</span>) {
 </span><span id="399" class="l"><a href="#399">399: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
@@ -699,7 +699,7 @@
 </span><span id="412" class="l"><a href="#412">412: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
 </span><span id="413" class="l"><a href="#413">413: </a>        }
 </span><span id="414" class="l"><a href="#414">414: </a>
-</span><span id="415" class="l"><a href="#415">415: </a>        <span class="php-var">$u</span> = <span class="php-var">$this</span>-&gt;modelFactory-&gt;create(<span class="php-quote">'charcoal/admin/user'</span>);
+</span><span id="415" class="l"><a href="#415">415: </a>        <span class="php-var">$u</span> = <span class="php-var">$this</span>-&gt;modelFactory()-&gt;create(<span class="php-quote">'charcoal/admin/user'</span>);
 </span><span id="416" class="l"><a href="#416">416: </a>
 </span><span id="417" class="l"><a href="#417">417: </a>        <span class="php-var">$u</span>-&gt;load(<span class="php-var">$username</span>);
 </span><span id="418" class="l"><a href="#418">418: </a>

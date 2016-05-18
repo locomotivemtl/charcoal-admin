@@ -11,7 +11,6 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\User;
-use \Charcoal\Admin\Object\AuthToken;
 
 /**
  * Admin Login Action: Attempt to log a user in.
@@ -133,14 +132,11 @@ class LoginAction extends AdminAction
             return;
         }
 
-        $authToken = new AuthToken([
-            'logger' => $this->logger
-        ]);
+        $authToken = $this->modelFactory()->create('charcoal/admin/object/auth-token');
         $authToken->generate($u->username());
         $authToken->sendCookie();
 
         $authToken->save();
-
     }
 
     /**

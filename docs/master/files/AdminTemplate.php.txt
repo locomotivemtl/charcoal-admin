@@ -393,7 +393,7 @@ class AdminTemplate extends AbstractTemplate
      */
     private function authByToken()
     {
-        $authToken = $this->modelFactory->create('charcoal/admin/object/auth-token');
+        $authToken = $this->modelFactory()->create('charcoal/admin/object/auth-token');
 
         if ($authToken->metadata()->enabled() !== true) {
             return false;
@@ -412,7 +412,7 @@ class AdminTemplate extends AbstractTemplate
             return false;
         }
 
-        $u = $this->modelFactory->create('charcoal/admin/user');
+        $u = $this->modelFactory()->create('charcoal/admin/user');
 
         $u->load($username);
 

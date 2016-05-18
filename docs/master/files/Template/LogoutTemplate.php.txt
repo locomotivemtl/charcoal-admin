@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Template;
 
+// PSR-7 (HTTP Messaging) dependencies
+use \Psr\Http\Message\RequestInterface;
+
 // Local parent namespace dependencies
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\User;

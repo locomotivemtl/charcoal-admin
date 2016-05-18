@@ -51,7 +51,7 @@ class AlterScript extends AdminScript
 
         $objType = $this->argOrInput('obj-type');
 
-        $obj = $this->modelFactory->create($objType);
+        $obj = $this->modelFactory()->create($objType);
 
         $source = $obj->source();
 

@@ -12,19 +12,20 @@ use \Charcoal\Admin\Object\AuthToken;
  */
 class LogoutTemplate extends AdminTemplate
 {
-
     /**
-     * @param array|\ArayAccess $data Class dependencies.
+     * @param RequestInterface $request The request to initialize.
+     * @return boolean
      */
-    public function __construct($data)
+    public function init(RequestInterface $request)
     {
         $user = User::getAuthenticated($this->modelFactory());
+
         if ($user) {
             $user->logout();
             $this->deleteUserAuthTokens($user);
         }
 
-        parent::__construct($data);
+        return parent::init($request);
     }
 
     /**
@@ -35,9 +36,12 @@ class LogoutTemplate extends AdminTemplate
     {
         $token = $this->modelFactory()->create('charcoal/admin/object/auth-token');
 
-        $table = $token->source()->table();
-        $q = 'delete from '.$table.' where username = :username';
-        $token->source()->dbQuery($q, ['username'=>$user->username()]);
+        if ($token->source()->tableExists()) {
+            $table = $token->source()->table();
+            $q = 'DELETE FROM '.$table.' WHERE username = :username';
+            $token->source()->dbQuery($q, [ 'username'=>$user->username() ]);
+        }
+
         return $this;
     }
 

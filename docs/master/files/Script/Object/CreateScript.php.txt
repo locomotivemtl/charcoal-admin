@@ -57,7 +57,7 @@ class CreateScript extends AdminScript
 
         $objType = $this->argOrInput('obj-type');
 
-        $obj = $this->modelFactory->create($objType);
+        $obj = $this->modelFactory()->create($objType);
 
         $properties = $obj->properties();
 

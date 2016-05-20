@@ -174,13 +174,21 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 {
+    // Scope
+    var that = this;
     if (typeof window.tinyMCE !== 'object') {
-        var that = this;
         this.load_assets(function () {
             that.create_tinymce();
         });
         return this;
     }
+
+    // This would allow us to have custom features to each tinyMCEs instances
+    //
+    // window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
+    //     that.set_editor(editor);
+    // });
+    // this.editor_options.plugins.push(this.input_id);
 
     window.tinyMCE.init(this.editor_options);
 };
@@ -197,3 +205,25 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
     });
     return this;
 };
+
+/**
+ * Sets the editor into the current object
+ * Might be usefull.
+ * @param {TinyMCE Editor} editor The tinymce object.
+ * @return {thisArg} Chainable
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
+{
+    this.editor = editor;
+    return this;
+};
+
+/**
+ * Returns the editor object
+ * @return {TinyMCE Editor} editor The tinymce object.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
+{
+    return this.editor;
+};
+

@@ -158,6 +158,9 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.add = function (obj)
         case 'charcoal/cms/attachment/image':
             this.add_image(obj);
         break;
+        case 'charcoal/cms/attachment/video':
+            this.add_video(obj);
+        break;
     }
 };
 
@@ -166,6 +169,15 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.add_image = function (obj)
     var template = this.element().find('.js-templates').find('.js-template-image').clone();
     template.find('.js-attachment').data('id', obj.id).data('type', obj.type);
     template.find('img').attr('src', Charcoal.Admin.base_url() + obj.file);
+
+    this.element().find('.js-attachment-sortable').find('.js-grid-container').append(template);
+    return this;
+};
+
+Charcoal.Admin.Widget_Add_Attachment.prototype.add_video = function (obj)
+{
+    var template = this.element().find('.js-templates').find('.js-template-video').clone();
+    template.find('.js-attachment').data('id', obj.id).data('type', obj.type).append($(obj.embed));
 
     this.element().find('.js-attachment-sortable').find('.js-grid-container').append(template);
     return this;

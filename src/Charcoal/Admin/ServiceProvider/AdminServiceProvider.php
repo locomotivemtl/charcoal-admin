@@ -6,9 +6,6 @@ namespace Charcoal\Admin\ServiceProvider;
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
 
-// Dependency from `charcoal-app`
-use \Charcoal\App\Template\WidgetFactory;
-
 // Local Dependencies
 
 use \Charcoal\Admin\AdminModule;

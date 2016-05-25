@@ -12,8 +12,8 @@ use \Pimple\Container;
 // Dependencies from `charcoal-translation`
 use \Charcoal\Translation\TranslationString;
 
-// From `charcoal-app`
-use \Charcoal\App\Template\WidgetFactory;
+// From `charcoal-factory`
+use \Charcoal\Factory\FactoryInterface;
 
 // From `charcoal-ui`
 use \Charcoal\Ui\DashboardBuilder;
@@ -41,7 +41,7 @@ class CollectionTemplate extends AdminTemplate implements
     private $sidemenu;
 
     /**
-     * @var WidgetFactory $widgetFactory
+     * @var FactoryInterface $widgetFactory
      */
     private $widgetFactory;
 
@@ -83,10 +83,10 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return CollectionTemplate Chainable
      */
-    public function setWidgetFactory(WidgetFactory $factory)
+    protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
         return $this;
@@ -97,7 +97,7 @@ class CollectionTemplate extends AdminTemplate implements
      * Create the widget factory if it was not preiously injected / set.
      *
      * @throws Exception If the widget factory dependency was not previously set / injected.
-     * @return WidgetFactory
+     * @return FactoryInterface
      */
     protected function widgetFactory()
     {

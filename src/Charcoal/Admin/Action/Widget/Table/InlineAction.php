@@ -10,8 +10,8 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Pimple\Container;
 
-// Dependency from 'charcoal-app'
-use \Charcoal\App\Template\WidgetFactory;
+// Dependency from 'charcoal-factory'
+use \Charcoal\Factory\FactoryInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
@@ -33,7 +33,7 @@ class InlineAction extends AdminAction
     protected $inlineProperties;
 
     /**
-     * @var WidgetFactory $widgetFactory
+     * @var FactoryInterface $widgetFactory
      */
     private $widgetFactory;
 
@@ -50,10 +50,10 @@ class InlineAction extends AdminAction
     }
 
     /**
-     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return InlineAction Chainable
      */
-    protected function setWidgetFactory(WidgetFactory $factory)
+    protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
         return $this;
@@ -61,7 +61,7 @@ class InlineAction extends AdminAction
 
     /**
      * @throws Exception If the factory is not set.
-     * @return WidgetFactory
+     * @return FactoryInterface
      */
     protected function widgetFactory()
     {
@@ -72,7 +72,6 @@ class InlineAction extends AdminAction
         }
         return $this->widgetFactory;
     }
-
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param ResponseInterface $response A PSR-7 compatible Response instance.

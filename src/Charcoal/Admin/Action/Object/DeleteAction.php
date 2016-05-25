@@ -63,8 +63,6 @@ class DeleteAction extends AdminAction
 
             $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $obj_type, $obj_id));
 
-
-            $modelFactory = new ModelFactory();
             $obj = $this->modelFactory()->create($obj_type);
             $obj->load($obj_id);
             if (!$obj->id()) {

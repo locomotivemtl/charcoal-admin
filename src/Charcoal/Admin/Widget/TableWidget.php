@@ -9,9 +9,10 @@ use \Pimple\Container;
 use \Charcoal\Charcoal;
 use \Charcoal\Translation\TranslationString;
 
+use \Charcoal\Factory\FactoryInterface;
+
 use \Charcoal\Admin\AdminWidget;
 
-use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
 
 use \Charcoal\Admin\Ui\CollectionContainerInterface;
@@ -35,7 +36,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $sortable;
 
     /**
-     * @var PropertyFactory $propertyFactory
+     * @var FactoryInterface $propertyFactory
      */
     private $propertyFactory;
 
@@ -55,10 +56,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * @param PropertyFactory $factory The property factory, to create properties.
+     * @param FactoryInterface $factory The property factory, to create properties.
      * @return TableWidget Chainable
      */
-    public function setPropertyFactory(PropertyFactory $factory)
+    public function setPropertyFactory(FactoryInterface $factory)
     {
         $this->propertyFactory = $factory;
         return $this;
@@ -66,7 +67,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * @throws Exception If the property factory was not previously set / injected.
-     * @return PropertyFactory
+     * @return FactoryInterface
      */
     protected function propertyFactory()
     {

@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \Exception;
 use \InvalidArgumentException;
 
 use \Pimple\Container;

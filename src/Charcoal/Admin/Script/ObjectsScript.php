@@ -7,7 +7,6 @@ use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
 // Module `charcoal-core` dependencies
-use \Charcoal\Model\ModelFactory;
 use \Charcoal\Loader\CollectionLoader;
 
 // Intra-module (`charcoal-admin`) dependencies

@@ -5,13 +5,11 @@ namespace Charcoal\Admin\Widget\Graph;
 use \DateInterval;
 use \DateTime;
 use \DateTimeInterface;
+use \Exception;
 use \InvalidArgumentException;
 use \PDO;
 
 use \Pimple\Container;
-
-// Dependencies from `charcoal-core`
-use \Charcoal\Model\ModelFactory;
 
 // From `charcoal-admin`
 use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;

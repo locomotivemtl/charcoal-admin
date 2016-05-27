@@ -9,7 +9,6 @@ use \Pimple\ServiceProviderInterface;
 // Dependencies from `charcoal-factory`
 use \Charcoal\Factory\GenericFactory as Factory;
 
-
 /**
  * Charcoal Administration Service Provider
  *

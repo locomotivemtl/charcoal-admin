@@ -9,7 +9,6 @@ use \Exception;
 use \Pimple\Container;
 
 use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Property\PropertyInputFactory;
 
 use \Charcoal\Factory\FactoryInterface;
 
@@ -78,7 +77,7 @@ class FormPropertyWidget extends AdminWidget
     private $propertyFactory;
 
     /**
-     * @var PropertyInputFactory $factory
+     * @var FactoryInterface $factory
      */
     private $propertyInputFactory;
 
@@ -128,7 +127,7 @@ class FormPropertyWidget extends AdminWidget
 
     /**
      * @throws Exception If the property input factory dependency was not set / injected.
-     * @return PropertyInputFactory
+     * @return FactoryInterface
      */
     protected function propertyInputFactory()
     {

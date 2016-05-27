@@ -314,7 +314,7 @@ Charcoal\App\Template\AbstractWidget
 	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
 			CollectionTemplate
 			
@@ -323,7 +323,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setWidgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#61-69" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\App\Template\WidgetFactory <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#61-69" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -355,7 +355,7 @@ Charcoal\App\Template\AbstractWidget
 		<td class="attributes"><code>
 			 protected 
 
-			Charcoal\App\Template\WidgetFactory
+			Charcoal\Factory\FactoryInterface
 			
 			</code>
 		</td>
@@ -377,7 +377,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 				<h4>Returns</h4>
 				<div class="list">
-					Charcoal\App\Template\WidgetFactory
+					Charcoal\Factory\FactoryInterface
 				</div>
 
 				<h4>Throws</h4>

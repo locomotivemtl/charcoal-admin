@@ -6,12 +6,9 @@ namespace Charcoal\Admin\ServiceProvider;
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
 
-// Local Dependencies
+// Dependencies from `charcoal-factory`
+use \Charcoal\Factory\GenericFactory as Factory;
 
-use \Charcoal\Admin\AdminModule;
-use \Charcoal\Admin\Config as AdminConfig;
-use \Charcoal\Admin\Property\PropertyInputFactory;
-use \Charcoal\Admin\Property\PropertyDisplayFactory;
 
 /**
  * Charcoal Administration Service Provider
@@ -46,22 +43,38 @@ class AdminServiceProvider implements ServiceProviderInterface
      */
     protected function registerUtilities(Container $container)
     {
+        /**
+         * @param Container $container Pimple DI container.
+         * @return FactoryInterface
+         */
         $container['property/input/factory'] = function (Container $container) {
-            $propertyInputFactory = new PropertyInputFactory();
-            $propertyInputFactory->setArguments([
-                'logger'            => $container['logger'],
-                'metadata_loader'   => $container['metadata/loader']
+            return new Factory([
+                'base_class' => '\Charcoal\Admin\Property\PropertyInputInterface',
+                'arguments' => [[
+                    'logger'            => $container['logger'],
+                    'metadata_loader'   => $container['metadata/loader']
+                ]],
+                'resolver_options' => [
+                    'suffix' => 'Input'
+                ]
             ]);
-            return $propertyInputFactory;
         };
 
+        /**
+         * @param Container $container Pimple DI container.
+         * @return FactoryInterface
+         */
         $container['property/display/factory'] = function (Container $container) {
-            $propertyInputFactory = new PropertyDisplayFactory();
-            $propertyInputFactory->setArguments([
-                'logger'            => $container['logger'],
-                'metadata_loader'   => $container['metadata/loader']
+            return new Factory([
+                'base_class' => '\Charcoal\Admin\Property\PropertyDisplayInterface',
+                'arguments' => [[
+                    'logger'            => $container['logger'],
+                    'metadata_loader'   => $container['metadata/loader']
+                ]],
+                'resolver_options' => [
+                    'suffix' => 'Display'
+                ]
             ]);
-            return $propertyDisplayFactory;
         };
     }
 }

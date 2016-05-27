@@ -12,8 +12,6 @@ use \Charcoal\Factory\FactoryInterface;
 use \Charcoal\Loader\CollectionLoader;
 use \Charcoal\Model\Collection;
 
-use \Charcoal\Property\PropertyFactory;
-use \Charcoal\Admin\Property\PropertyDisplayFactory;
 
 /**
 * Fully implements CollectionContainerInterface
@@ -56,7 +54,7 @@ trait CollectionContainerTrait
     private $collection;
 
     /**
-     * @var PropertyDisplayFactory $propertyDisplayFactory
+     * @var FactoryInterface $propertyDisplayFactory
      */
     private $propertyDisplayFactory;
 
@@ -348,12 +346,22 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @return PropertyDisplayFactory
+     * @param FactoryInterface $factory The property display factory.
+     * @return CollectionContainerInterface Chainable
+     */
+    private function setPropertyDisplayFactory(FactoryInterface $factory)
+    {
+        $this->propertyDisplayFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface
      */
     private function propertyDisplayFactory()
     {
         if ($this->propertyDisplayFactory === null) {
-            $this->propertyDisplayFactory = new PropertyDisplayFactory();
+            throw new Exception('No property display factory. '.get_class($this));
         }
         return $this->propertyDisplayFactory;
     }

@@ -53,6 +53,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $this->setModelFactory($container['model/factory']);
         $this->setPropertyFactory($container['property/factory']);
+        $this->setPropertyDisplayFactory($container['property/display/factory']);
     }
 
     /**

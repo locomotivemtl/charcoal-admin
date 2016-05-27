@@ -8,7 +8,7 @@ use \InvalidArgumentException;
 use \Pimple\Container;
 
 // From `charcoal-app`
-use \Charcoal\App\Template\WidgetFactory;
+use \Charcoal\Factory\FactoryInterface;
 
 /// From `charcoal-ui`
 use \Charcoal\Ui\Form\FormInterface;
@@ -36,7 +36,7 @@ class FormWidget extends AdminWidget implements
     protected $sidebars = [];
 
     /**
-     * @var WidgetFactory $widgetFactory
+     * @var FactoryInterface $widgetFactory
      */
     private $widgetFactory;
 
@@ -58,11 +58,11 @@ class FormWidget extends AdminWidget implements
         $this->setWidgetFactory($container['widget/factory']);
     }
 
-        /**
-         * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
-         * @return CollectionTemplate Chainable
-         */
-    public function setWidgetFactory(WidgetFactory $factory)
+    /**
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return CollectionTemplate Chainable
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
         return $this;
@@ -73,7 +73,7 @@ class FormWidget extends AdminWidget implements
      * Create the widget factory if it was not preiously injected / set.
      *
      * @throws Exception If the widget factory was not set / injected.
-     * @return WidgetFactory
+     * @return FactoryInterface
      */
     protected function widgetFactory()
     {

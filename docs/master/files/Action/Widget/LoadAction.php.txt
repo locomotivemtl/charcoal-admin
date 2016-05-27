@@ -12,9 +12,6 @@ use \Psr\Http\Message\ResponseInterface;
 // From `pimple`
 use \Pimple\Container;
 
-// From `charcoal-app`
-use \Charcoal\App\Template\WidgetFactory;
-
 // From `charcoal-admin`
 use \Charcoal\Admin\AdminAction;
 
@@ -39,7 +36,7 @@ class LoadAction extends AdminAction
     protected $widgetView;
 
     /**
-     * @var WidgetFactory $widgetFactory
+     * @var \Charcoal\Factory\FactoryInterface $widgetFactory
      */
     protected $widgetFactory;
 

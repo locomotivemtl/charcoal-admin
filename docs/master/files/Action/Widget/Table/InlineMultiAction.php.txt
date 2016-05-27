@@ -9,9 +9,8 @@ use \Exception;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-// Dependency from 'charcoal-app'
-use \Charcoal\App\Template\WidgetFactory;
-
+// Dependency from 'charcoal-factory'
+use \Charcoal\Factory\FactoryInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
@@ -28,9 +27,9 @@ class InlineMultiAction extends AdminAction
      */
     protected $objects;
 
-        /**
-         * @var WidgetFactory $widgetFactory
-         */
+    /**
+     * @var FactoryInterface $widgetFactory
+     */
     private $widgetFactory;
 
     /**
@@ -46,10 +45,10 @@ class InlineMultiAction extends AdminAction
     }
 
     /**
-     * @param WidgetFactory $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return InlineAction Chainable
      */
-    protected function setWidgetFactory(WidgetFactory $factory)
+    protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
         return $this;
@@ -57,7 +56,7 @@ class InlineMultiAction extends AdminAction
 
     /**
      * @throws Exception If the factory is not set.
-     * @return WidgetFactory
+     * @return FactoryInterface
      */
     protected function widgetFactory()
     {

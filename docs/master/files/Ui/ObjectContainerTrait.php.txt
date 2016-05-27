@@ -7,8 +7,6 @@ use \InvalidArgumentException;
 
 use \Charcoal\Factory\FactoryInterface;
 
-use \Charcoal\Model\ModelFactory;
-
 /**
 * Fully implements ObjectContainerInterface
 */

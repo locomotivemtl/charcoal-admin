@@ -5,6 +5,9 @@ namespace Charcoal\Admin\Action\Widget\Table;
 // Dependencies from `PHP`
 use \Exception;
 
+// Dependencies from `pimple/pimple`
+use \Pimple\Container;
+
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;

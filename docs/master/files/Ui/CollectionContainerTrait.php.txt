@@ -12,7 +12,6 @@ use \Charcoal\Factory\FactoryInterface;
 use \Charcoal\Loader\CollectionLoader;
 use \Charcoal\Model\Collection;
 
-
 /**
 * Fully implements CollectionContainerInterface
 */
@@ -356,6 +355,7 @@ trait CollectionContainerTrait
     }
 
     /**
+     * @throws Exception If the property display factory was not previously injected / set.
      * @return FactoryInterface
      */
     private function propertyDisplayFactory()

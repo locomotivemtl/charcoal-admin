@@ -122,7 +122,7 @@ class PaginationWidget extends AdminWidget
     /**
      * Page generator
      *
-     * @return void This is a generator
+     * @return array This is a generator
      */
     public function pages()
     {

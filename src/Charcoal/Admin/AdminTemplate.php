@@ -99,8 +99,30 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
+     * Dependencies
+     * @param Container $container DI Container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->adminConfig = $container['charcoal/admin/config'];
+        $this->setModelFactory($container['model/factory']);
+    }
+
+    /**
+     * Template's init method is called automatically from `charcoal-app`'s Template Route.
+     *
+     * For admin templates, initializations is:
+     *
+     * - to start a session, if necessary
+     * - to authenticate
+     * - to initialize the template data with `$_GET`
+     *
      * @param RequestInterface $request The request to initialize.
      * @return boolean
+     * @see \Charcoal\App\Route\TemplateRoute::__invoke()
      */
     public function init(RequestInterface $request)
     {
@@ -120,19 +142,8 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * Dependencies
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->adminConfig = $container['charcoal/admin/config'];
-        $this->setModelFactory($container['model/factory']);
-    }
-
-    /**
+     * As a convenience, all admin templates have a model factory to easily create objects.
+     *
      * @param FactoryInterface $factory The factory used to create models.
      * @return AdminScript Chainable
      */
@@ -251,7 +262,7 @@ class AdminTemplate extends AbstractTemplate
 
     /**
      * @throws Exception If the menu was not properly configured.
-     * @return void This method is a generator.
+     * @return array This method is a generator.
      */
     public function headerMenu()
     {
@@ -338,7 +349,7 @@ class AdminTemplate extends AbstractTemplate
      * replace this method in the inherited template class.
      *
      * For example, the "Login" / "Reset Password" templates
-     * should return `FALSE`.
+     * should return `false`.
      *
      * @return boolean
      */
@@ -407,7 +418,7 @@ class AdminTemplate extends AbstractTemplate
 
         $authCookie = $_COOKIE[$cookieName];
         $vals = explode(';', $authCookie);
-        $username = $authToken->getUserId($vals[0], $vals[1]);
+        $username = $authToken->getUsernameFromToken($vals[0], $vals[1]);
         if (!$username) {
             return false;
         }

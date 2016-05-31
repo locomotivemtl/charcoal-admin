@@ -293,7 +293,7 @@ trait CollectionContainerTrait
     /**
      * Supplies properties for objects in table template specific to object configuration.
      *
-     * @return  void This metod is a generator.
+     * @return array This metod is a generator.
      */
     public function objectRows()
     {

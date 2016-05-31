@@ -216,7 +216,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Properties generator
      *
-     * @return void This method is a generator.
+     * @return FormPropertyWidget[] This method is a generator.
      */
     public function formProperties()
     {

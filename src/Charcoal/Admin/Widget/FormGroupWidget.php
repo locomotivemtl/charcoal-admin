@@ -97,7 +97,7 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
-     * @return void This method is a generator.
+     * @return mixed This method is a generator.
      */
     public function formProperties()
     {
@@ -120,11 +120,11 @@ class FormGroupWidget extends AbstractUiItem implements
         }
     }
 
-        /**
-         * Active languages generator, formatted for the sidebar language-switcher.
-         *
-         * @return void This is a generator.
-         */
+    /**
+     * Active languages generator, formatted for the sidebar language-switcher.
+     *
+     * @return array This is a generator.
+     */
     public function languages()
     {
         $curLang = TranslationConfig::instance()->currentLanguage();

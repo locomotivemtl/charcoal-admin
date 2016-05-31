@@ -10,7 +10,7 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
 class SelectInput extends AbstractPropertyInput
 {
     /**
-     * @return void This method is a generator
+     * @return array This method is a generator
      */
     public function choices()
     {

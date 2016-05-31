@@ -223,7 +223,7 @@ Charcoal\Model\AbstractModel
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Object.html">Object</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Object.AuthToken.html#14-346" title="Go to source code">Charcoal/Admin/Object/AuthToken.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Object.AuthToken.html#14-356" title="Go to source code">Charcoal/Admin/Object/AuthToken.php</a>
 		<br>
 	</div>
 
@@ -877,7 +877,7 @@ Charcoal\Model\AbstractModel
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getUserId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#279-309" title="Go to source code">getUserId</a>( <span>mixed <var>$ident</var></span>, <span>string <var>$token</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#279-287" title="Go to source code">getUserId</a>( <span>mixed <var>$ident</var></span>, <span>string <var>$token</var></span> )</code>
 
 		<div class="description short">
 			
@@ -890,14 +890,55 @@ Charcoal\Model\AbstractModel
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$ident</var></dt>
-					<dd>The user ident.</dd>
+					<dd>The auth-token identifier.</dd>
 					<dt><var>$token</var></dt>
-					<dd>The token.</dd>
+					<dd>The token key to validate against.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
 					mixed<br>The user id.
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getUsernameFromToken" id="_getUsernameFromToken">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getUsernameFromToken">#</a>
+		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#289-319" title="Go to source code">getUsernameFromToken</a>( <span>mixed <var>$ident</var></span>, <span>string <var>$token</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$ident</var></dt>
+					<dd>The user identifier (username).</dd>
+					<dt><var>$token</var></dt>
+					<dd>The token to validate against.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed<br>The user id. An empty string if no token match.
 				</div>
 
 
@@ -918,7 +959,7 @@ Charcoal\Model\AbstractModel
 
 		<td class="name"><div>
 		<a class="anchor" href="#_panic">#</a>
-		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#311-330" title="Go to source code">panic</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#321-340" title="Go to source code">panic</a>( )</code>
 
 		<div class="description short">
 			<p>Something is seriously wrong: a cookie ident was in the database but with a tampered token.</p>
@@ -948,7 +989,7 @@ Charcoal\Model\AbstractModel
 
 		<td class="name"><div>
 		<a class="anchor" href="#_createMetadata">#</a>
-		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#332-345" title="Go to source code">createMetadata</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Object.AuthToken.html#342-355" title="Go to source code">createMetadata</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			<p>DescribableTrait > create_metadata().</p>

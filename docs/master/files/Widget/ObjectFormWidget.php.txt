@@ -156,7 +156,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      *
      * @param array $group An optional group to use.
      * @throws Exception If a property data is invalid.
-     * @return void This is a generator.
+     * @return FormPropertyWidget[] This is a generator.
      */
     public function formProperties(array $group = null)
     {

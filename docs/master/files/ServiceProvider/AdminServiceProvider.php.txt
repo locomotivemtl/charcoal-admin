@@ -9,6 +9,8 @@ use \Pimple\ServiceProviderInterface;
 // Dependencies from `charcoal-factory`
 use \Charcoal\Factory\GenericFactory as Factory;
 
+use \Charcoal\Admin\Config as AdminConfig;
+
 /**
  * Charcoal Administration Service Provider
  *
@@ -31,7 +33,18 @@ class AdminServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
+        /**
+         * @param Container $container Pimple DI Container.
+         * @return \Charcoal\Config\ConfigInterface
+         */
+        $container['admin/config'] = function (Container $container) {
+            $appConfig = $container['config'];
+            return new AdminConfig($appConfig['admin']);
+        };
         $this->registerUtilities($container);
+
+        // Register Access-Control-List (acl)
+        $container->register(new AclServiceProvider());
     }
 
     /**
@@ -75,6 +88,7 @@ class AdminServiceProvider implements ServiceProviderInterface
                 ]
             ]);
         };
+
     }
 }
 

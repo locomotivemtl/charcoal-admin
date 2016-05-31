@@ -98,7 +98,7 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * @return void This method is a generator.
+     * @return mixed This method is a generator.
      */
     public function formProperties()
     {
@@ -233,7 +233,7 @@ class FormSidebarWidget extends AdminWidget
     /**
      * Active languages generator, formatted for the sidebar language-switcher.
      *
-     * @return void This is a generator.
+     * @return array This is a generator.
      */
     public function languages()
     {

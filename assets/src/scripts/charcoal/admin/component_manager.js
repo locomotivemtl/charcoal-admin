@@ -78,6 +78,10 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 
             // If we are already dealing with a full on component
             if (component_data instanceof super_class) {
+                if (typeof component_data.destroy === 'function') {
+                    component_data.destroy();
+                    component_data.init();
+                }
                 continue;
             }
 

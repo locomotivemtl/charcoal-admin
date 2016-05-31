@@ -16,12 +16,22 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
     // Property_Input_Tinymce properties
     this.input_id = null;
     this.editor_options = null;
+    this._editor = null;
 
-    this.set_properties(opts).create_tinymce();
+    this.set_properties(opts).init();
 };
 Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
 Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property.prototype;
+
+/**
+ * Init plugin
+ * @return {thisArg} Chainable.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
+{
+    this.create_tinymce();
+};
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
@@ -185,10 +195,13 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 
     // This would allow us to have custom features to each tinyMCEs instances
     //
-    // window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
-    //     that.set_editor(editor);
-    // });
-    // this.editor_options.plugins.push(this.input_id);
+    if (!window.tinyMCE.PluginManager.get(this.input_id)) {
+        // Means we need to instanciate the self plugin now.
+        window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
+            that.set_editor(editor);
+        });
+        this.editor_options.plugins.push(this.input_id);
+    }
 
     window.tinyMCE.init(this.editor_options);
 };
@@ -214,7 +227,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
  */
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
 {
-    this.editor = editor;
+    this._editor = editor;
     return this;
 };
 
@@ -224,6 +237,19 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
  */
 Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
 {
-    return this.editor;
+    return this._editor;
+};
+
+/**
+ * Destroy what needs to be destroyed
+ * @return {TinyMCE Editor} editor The tinymce object.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function ()
+{
+    var editor = this.editor();
+
+    if (editor) {
+        editor.remove();
+    }
 };
 

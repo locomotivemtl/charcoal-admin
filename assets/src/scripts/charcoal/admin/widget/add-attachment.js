@@ -125,7 +125,6 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
                     obj_id: 0
                 },
                 save_callback: function (response) {
-                    console.log(response);
                     if (response.success) {
                         that.add(response.obj);
                         that.save(function () {

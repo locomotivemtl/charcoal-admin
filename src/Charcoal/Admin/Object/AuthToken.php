@@ -277,11 +277,21 @@ class AuthToken extends AbstractModel
     }
 
     /**
-     * @param mixed  $ident The user ident.
-     * @param string $token The token.
+     * @param mixed  $ident The auth-token identifier.
+     * @param string $token The token key to validate against.
      * @return mixed The user id.
      */
     public function getUserId($ident, $token)
+    {
+        return $this->getUsernameFromToken($ident, $token);
+    }
+
+    /**
+     * @param mixed  $ident The user identifier (username).
+     * @param string $token The token to validate against.
+     * @return mixed The user id. An empty string if no token match.
+     */
+    public function getUsernameFromToken($ident, $token)
     {
         $this->load($ident);
         if (!$this->ident()) {

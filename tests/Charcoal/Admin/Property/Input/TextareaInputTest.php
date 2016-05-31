@@ -9,13 +9,10 @@ class TextareaInputTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $container = $GLOBALS['container'];
         $this->obj = new TextareaInput([
-          'logger' => new \Psr\Log\NullLogger(),
-          'metadata_loader' => new \Charcoal\Model\MetadataLoader([
-              'logger' => new \Psr\Log\NullLogger(),
-              'cache' => null,
-              'config' => new \Charcoal\App\AppConfig()
-          ])
+            'logger' => new \Psr\Log\NullLogger(),
+            'metadata_loader' => $container['metadata/loader']
         ]);
     }
 

@@ -11,9 +11,11 @@ class UserGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
+        $container = $GLOBALS['container'];
         $logger = new \Psr\Log\NullLogger();
         $obj = new UserGroup([
-            'logger'=>$logger
+            'logger'=>$logger,
+            'metadata_loader' => $container['metadata/loader']
         ]);
         $this->assertInstanceOf('\Charcoal\Admin\UserGroup', $obj);
     }

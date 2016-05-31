@@ -32,14 +32,11 @@ class LoginTemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testShowHeaderMenuIsFalse()
     {
-
-        $ret = $this->obj->showHeaderMenu();
-        $this->assertNotTrue($ret);
+        $this->assertNotTrue($this->obj->showHeaderMenu());
     }
 
     public function testShowFooterMenuIsFalse()
     {
-        $ret = $this->obj->showFooterMenu();
-        $this->assertNotTrue($ret);
+        $this->assertNotTrue($this->obj->showHeaderMenu());
     }
 }

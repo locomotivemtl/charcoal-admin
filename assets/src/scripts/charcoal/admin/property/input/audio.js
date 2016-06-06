@@ -86,6 +86,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
     this.file_properties.$file_audio = $('.js-file-audio', this.element());
     this.file_properties.$file_reset = $('.js-file-reset', this.element());
     this.file_properties.$file_input = $('.js-file-input', this.element());
+    this.file_properties.$file_input_hiden = $('.js-file-input-hidden', this.element());
     this.file_properties.reset_button_class = 'js-file-reset';
 
     //var current_value = this.element().find('input[type=hidden]').val();
@@ -235,7 +236,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.file_bind_events = function ()
 Charcoal.Admin.Property_Input_Audio.prototype.file_reset_input = function () {
     this.file_properties.$file_audio.attr('src', '').addClass('hide');
     this.file_properties.$file_reset.addClass('hide');
-    this.file_properties.$file_input.removeClass('hide').val('');
+    this.file_properties.$file_input
+        .removeClass('hide')
+        .wrap('<form>').closest('form').get(0).reset();
+    this.file_properties.$file_input.unwrap();
+    this.file_properties.$file_input_hiden.val('');
 };
 
 /**

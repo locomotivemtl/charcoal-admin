@@ -192,6 +192,10 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 
             // If we are already dealing with a full on component
             if (component_data instanceof super_class) {
+                if (typeof component_data.destroy === 'function') {
+                    component_data.destroy();
+                    component_data.init();
+                }
                 continue;
             }
 
@@ -702,7 +706,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
 
     // File properties
     // ====================
-    //
+    // Elements
+    this.file_properties.$file_audio = $('.js-file-audio', this.element());
+    this.file_properties.$file_reset = $('.js-file-reset', this.element());
+    this.file_properties.$file_input = $('.js-file-input', this.element());
+    this.file_properties.reset_button_class = 'js-file-reset';
 
     //var current_value = this.element().find('input[type=hidden]').val();
 
@@ -819,6 +827,39 @@ Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input,
         .replace(tags, function ($0, $1) {
             return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
         });
+};
+
+/**
+ * Mainly allows us to bind reset click
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.init_file = function () {
+    // Don't reinitialized this pane
+    if (this.initialized_types.indexOf('file') !== -1) {
+        return;
+    }
+    this.initialized_types.push('file');
+    this.file_bind_events();
+};
+
+/**
+ * Bind file events
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.file_bind_events = function ()
+{
+
+    var that = this;
+    that.element().on('click', '.' + that.file_properties.reset_button_class, function () {
+        that.file_reset_input();
+    });
+};
+
+/**
+ * Reset the file input
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.file_reset_input = function () {
+    this.file_properties.$file_audio.attr('src', '').addClass('hide');
+    this.file_properties.$file_reset.addClass('hide');
+    this.file_properties.$file_input.removeClass('hide').val('');
 };
 
 /**
@@ -2462,12 +2503,22 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
     // Property_Input_Tinymce properties
     this.input_id = null;
     this.editor_options = null;
+    this._editor = null;
 
-    this.set_properties(opts).create_tinymce();
+    this.set_properties(opts).init();
 };
 Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
 Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property.prototype;
+
+/**
+ * Init plugin
+ * @return {thisArg} Chainable.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
+{
+    this.create_tinymce();
+};
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
@@ -2631,10 +2682,13 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 
     // This would allow us to have custom features to each tinyMCEs instances
     //
-    // window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
-    //     that.set_editor(editor);
-    // });
-    // this.editor_options.plugins.push(this.input_id);
+    if (!window.tinyMCE.PluginManager.get(this.input_id)) {
+        // Means we need to instanciate the self plugin now.
+        window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
+            that.set_editor(editor);
+        });
+        this.editor_options.plugins.push(this.input_id);
+    }
 
     window.tinyMCE.init(this.editor_options);
 };
@@ -2660,7 +2714,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
  */
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
 {
-    this.editor = editor;
+    this._editor = editor;
     return this;
 };
 
@@ -2670,7 +2724,20 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
  */
 Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
 {
-    return this.editor;
+    return this._editor;
+};
+
+/**
+ * Destroy what needs to be destroyed
+ * @return {TinyMCE Editor} editor The tinymce object.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function ()
+{
+    var editor = this.editor();
+
+    if (editor) {
+        editor.remove();
+    }
 };
 
 ;/**
@@ -3165,7 +3232,6 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
                     obj_id: 0
                 },
                 save_callback: function (response) {
-                    console.log(response);
                     if (response.success) {
                         that.add(response.obj);
                         that.save(function () {
@@ -3216,7 +3282,6 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.add_image = function (obj)
 
 Charcoal.Admin.Widget_Add_Attachment.prototype.add_video = function (obj)
 {
-    console.log(obj);
     var template = this.element().find('.js-templates').find('.js-template-video').clone();
     template.find('.js-attachment').data('id', obj.id).data('type', obj.type).append($(obj.embed));
 

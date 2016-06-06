@@ -82,7 +82,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
 
     // File properties
     // ====================
-    //
+    // Elements
+    this.file_properties.$file_audio = $('.js-file-audio', this.element());
+    this.file_properties.$file_reset = $('.js-file-reset', this.element());
+    this.file_properties.$file_input = $('.js-file-input', this.element());
+    this.file_properties.reset_button_class = 'js-file-reset';
 
     //var current_value = this.element().find('input[type=hidden]').val();
 
@@ -199,6 +203,39 @@ Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input,
         .replace(tags, function ($0, $1) {
             return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
         });
+};
+
+/**
+ * Mainly allows us to bind reset click
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.init_file = function () {
+    // Don't reinitialized this pane
+    if (this.initialized_types.indexOf('file') !== -1) {
+        return;
+    }
+    this.initialized_types.push('file');
+    this.file_bind_events();
+};
+
+/**
+ * Bind file events
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.file_bind_events = function ()
+{
+
+    var that = this;
+    that.element().on('click', '.' + that.file_properties.reset_button_class, function () {
+        that.file_reset_input();
+    });
+};
+
+/**
+ * Reset the file input
+ */
+Charcoal.Admin.Property_Input_Audio.prototype.file_reset_input = function () {
+    this.file_properties.$file_audio.attr('src', '').addClass('hide');
+    this.file_properties.$file_reset.addClass('hide');
+    this.file_properties.$file_input.removeClass('hide').val('');
 };
 
 /**

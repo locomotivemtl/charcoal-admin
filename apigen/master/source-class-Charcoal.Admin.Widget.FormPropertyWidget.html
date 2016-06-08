@@ -574,115 +574,121 @@
 </span><span id="288" class="l"><a href="#288">288: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> inputType()
 </span><span id="289" class="l"><a href="#289">289: </a>    {
 </span><span id="290" class="l"><a href="#290">290: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;inputType === <span class="php-keyword1">null</span>) {
-</span><span id="291" class="l"><a href="#291">291: </a>            <span class="php-var">$prop</span> = <span class="php-var">$this</span>-&gt;prop();
+</span><span id="291" class="l"><a href="#291">291: </a>            <span class="php-var">$prop</span>     = <span class="php-var">$this</span>-&gt;prop();
 </span><span id="292" class="l"><a href="#292">292: </a>            <span class="php-var">$metadata</span> = <span class="php-var">$prop</span>-&gt;metadata();
-</span><span id="293" class="l"><a href="#293">293: </a>            <span class="php-var">$inputType</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>]) ? <span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>][<span class="php-quote">'input_type'</span>] : <span class="php-quote">''</span>;
-</span><span id="294" class="l"><a href="#294">294: </a>
-</span><span id="295" class="l"><a href="#295">295: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$inputType</span>) {
-</span><span id="296" class="l"><a href="#296">296: </a>                <span class="php-var">$inputType</span> = <span class="php-quote">'charcoal/admin/property/input/text'</span>;
-</span><span id="297" class="l"><a href="#297">297: </a>            }
-</span><span id="298" class="l"><a href="#298">298: </a>            <span class="php-var">$this</span>-&gt;inputType = <span class="php-var">$inputType</span>;
-</span><span id="299" class="l"><a href="#299">299: </a>        }
-</span><span id="300" class="l"><a href="#300">300: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;inputType;
-</span><span id="301" class="l"><a href="#301">301: </a>    }
-</span><span id="302" class="l"><a href="#302">302: </a>
-</span><span id="303" class="l"><a href="#303">303: </a>    <span class="php-comment">/**
-</span></span><span id="304" class="l"><a href="#304">304: </a><span class="php-comment">     * @param PropertyInterface $property The property.
-</span></span><span id="305" class="l"><a href="#305">305: </a><span class="php-comment">     * @return FormProperty Chainable
-</span></span><span id="306" class="l"><a href="#306">306: </a><span class="php-comment">     */</span>
-</span><span id="307" class="l"><a href="#307">307: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setProp(PropertyInterface <span class="php-var">$property</span>)
-</span><span id="308" class="l"><a href="#308">308: </a>    {
-</span><span id="309" class="l"><a href="#309">309: </a>        <span class="php-var">$this</span>-&gt;property = <span class="php-var">$property</span>;
-</span><span id="310" class="l"><a href="#310">310: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-</span><span id="311" class="l"><a href="#311">311: </a>    }
-</span><span id="312" class="l"><a href="#312">312: </a>
-</span><span id="313" class="l"><a href="#313">313: </a>    <span class="php-comment">/**
-</span></span><span id="314" class="l"><a href="#314">314: </a><span class="php-comment">     * @return PropertyInterface
-</span></span><span id="315" class="l"><a href="#315">315: </a><span class="php-comment">     */</span>
-</span><span id="316" class="l"><a href="#316">316: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> prop()
-</span><span id="317" class="l"><a href="#317">317: </a>    {
-</span><span id="318" class="l"><a href="#318">318: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;property === <span class="php-keyword1">null</span>) {
-</span><span id="319" class="l"><a href="#319">319: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;propertyFactory()-&gt;create(<span class="php-var">$this</span>-&gt;type());
-</span><span id="320" class="l"><a href="#320">320: </a>
-</span><span id="321" class="l"><a href="#321">321: </a>
-</span><span id="322" class="l"><a href="#322">322: </a>            <span class="php-var">$p</span>-&gt;setIdent(<span class="php-var">$this</span>-&gt;propertyIdent());
-</span><span id="323" class="l"><a href="#323">323: </a>            <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$this</span>-&gt;propertyData);
-</span><span id="324" class="l"><a href="#324">324: </a>
-</span><span id="325" class="l"><a href="#325">325: </a>            <span class="php-var">$this</span>-&gt;property = <span class="php-var">$p</span>;
-</span><span id="326" class="l"><a href="#326">326: </a>        }
-</span><span id="327" class="l"><a href="#327">327: </a>        <span class="php-var">$this</span>-&gt;property-&gt;setVal(<span class="php-var">$this</span>-&gt;propertyVal());
-</span><span id="328" class="l"><a href="#328">328: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;property;
-</span><span id="329" class="l"><a href="#329">329: </a>    }
+</span><span id="293" class="l"><a href="#293">293: </a>
+</span><span id="294" class="l"><a href="#294">294: </a>            <span class="php-var">$inputType</span> = (<span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>]) ? <span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>][<span class="php-quote">'input_type'</span>] : <span class="php-quote">''</span>);
+</span><span id="295" class="l"><a href="#295">295: </a>
+</span><span id="296" class="l"><a href="#296">296: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$inputType</span>) {
+</span><span id="297" class="l"><a href="#297">297: </a>                <span class="php-var">$inputType</span> = <span class="php-quote">'charcoal/admin/property/input/text'</span>;
+</span><span id="298" class="l"><a href="#298">298: </a>            }
+</span><span id="299" class="l"><a href="#299">299: </a>
+</span><span id="300" class="l"><a href="#300">300: </a>            <span class="php-var">$this</span>-&gt;inputType = <span class="php-var">$inputType</span>;
+</span><span id="301" class="l"><a href="#301">301: </a>        }
+</span><span id="302" class="l"><a href="#302">302: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;inputType;
+</span><span id="303" class="l"><a href="#303">303: </a>    }
+</span><span id="304" class="l"><a href="#304">304: </a>
+</span><span id="305" class="l"><a href="#305">305: </a>    <span class="php-comment">/**
+</span></span><span id="306" class="l"><a href="#306">306: </a><span class="php-comment">     * @param PropertyInterface $property The property.
+</span></span><span id="307" class="l"><a href="#307">307: </a><span class="php-comment">     * @return FormProperty Chainable
+</span></span><span id="308" class="l"><a href="#308">308: </a><span class="php-comment">     */</span>
+</span><span id="309" class="l"><a href="#309">309: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setProp(PropertyInterface <span class="php-var">$property</span>)
+</span><span id="310" class="l"><a href="#310">310: </a>    {
+</span><span id="311" class="l"><a href="#311">311: </a>        <span class="php-var">$this</span>-&gt;property = <span class="php-var">$property</span>;
+</span><span id="312" class="l"><a href="#312">312: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+</span><span id="313" class="l"><a href="#313">313: </a>    }
+</span><span id="314" class="l"><a href="#314">314: </a>
+</span><span id="315" class="l"><a href="#315">315: </a>    <span class="php-comment">/**
+</span></span><span id="316" class="l"><a href="#316">316: </a><span class="php-comment">     * @return PropertyInterface
+</span></span><span id="317" class="l"><a href="#317">317: </a><span class="php-comment">     */</span>
+</span><span id="318" class="l"><a href="#318">318: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> prop()
+</span><span id="319" class="l"><a href="#319">319: </a>    {
+</span><span id="320" class="l"><a href="#320">320: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;property === <span class="php-keyword1">null</span>) {
+</span><span id="321" class="l"><a href="#321">321: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;propertyFactory()-&gt;create(<span class="php-var">$this</span>-&gt;type());
+</span><span id="322" class="l"><a href="#322">322: </a>
+</span><span id="323" class="l"><a href="#323">323: </a>            <span class="php-var">$p</span>-&gt;setIdent(<span class="php-var">$this</span>-&gt;propertyIdent());
+</span><span id="324" class="l"><a href="#324">324: </a>            <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$this</span>-&gt;propertyData);
+</span><span id="325" class="l"><a href="#325">325: </a>
+</span><span id="326" class="l"><a href="#326">326: </a>            <span class="php-var">$this</span>-&gt;property = <span class="php-var">$p</span>;
+</span><span id="327" class="l"><a href="#327">327: </a>        }
+</span><span id="328" class="l"><a href="#328">328: </a>
+</span><span id="329" class="l"><a href="#329">329: </a>        <span class="php-var">$this</span>-&gt;property-&gt;setVal(<span class="php-var">$this</span>-&gt;propertyVal());
 </span><span id="330" class="l"><a href="#330">330: </a>
-</span><span id="331" class="l"><a href="#331">331: </a>    <span class="php-comment">/**
-</span></span><span id="332" class="l"><a href="#332">332: </a><span class="php-comment">     * @return array
-</span></span><span id="333" class="l"><a href="#333">333: </a><span class="php-comment">     */</span>
-</span><span id="334" class="l"><a href="#334">334: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> langs()
-</span><span id="335" class="l"><a href="#335">335: </a>    {
-</span><span id="336" class="l"><a href="#336">336: </a>        <span class="php-var">$langs</span> = \Charcoal\Translation\TranslationConfig::instance()-&gt;availableLanguages();
-</span><span id="337" class="l"><a href="#337">337: </a>
-</span><span id="338" class="l"><a href="#338">338: </a>        <span class="php-keyword1">return</span> <span class="php-var">$langs</span>;
-</span><span id="339" class="l"><a href="#339">339: </a>    }
+</span><span id="331" class="l"><a href="#331">331: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;property;
+</span><span id="332" class="l"><a href="#332">332: </a>    }
+</span><span id="333" class="l"><a href="#333">333: </a>
+</span><span id="334" class="l"><a href="#334">334: </a>    <span class="php-comment">/**
+</span></span><span id="335" class="l"><a href="#335">335: </a><span class="php-comment">     * @return array
+</span></span><span id="336" class="l"><a href="#336">336: </a><span class="php-comment">     */</span>
+</span><span id="337" class="l"><a href="#337">337: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> langs()
+</span><span id="338" class="l"><a href="#338">338: </a>    {
+</span><span id="339" class="l"><a href="#339">339: </a>        <span class="php-var">$langs</span> = \Charcoal\Translation\TranslationConfig::instance()-&gt;availableLanguages();
 </span><span id="340" class="l"><a href="#340">340: </a>
-</span><span id="341" class="l"><a href="#341">341: </a>    <span class="php-comment">/**
-</span></span><span id="342" class="l"><a href="#342">342: </a><span class="php-comment">     * @param string $mode The l10n mode.
-</span></span><span id="343" class="l"><a href="#343">343: </a><span class="php-comment">     * @return FormGroupInterface Chainable
-</span></span><span id="344" class="l"><a href="#344">344: </a><span class="php-comment">     */</span>
-</span><span id="345" class="l"><a href="#345">345: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setL10nMode(<span class="php-var">$mode</span>)
-</span><span id="346" class="l"><a href="#346">346: </a>    {
-</span><span id="347" class="l"><a href="#347">347: </a>        <span class="php-var">$this</span>-&gt;l10nMode = <span class="php-var">$mode</span>;
-</span><span id="348" class="l"><a href="#348">348: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-</span><span id="349" class="l"><a href="#349">349: </a>    }
-</span><span id="350" class="l"><a href="#350">350: </a>
-</span><span id="351" class="l"><a href="#351">351: </a>    <span class="php-comment">/**
-</span></span><span id="352" class="l"><a href="#352">352: </a><span class="php-comment">     * @return string
-</span></span><span id="353" class="l"><a href="#353">353: </a><span class="php-comment">     */</span>
-</span><span id="354" class="l"><a href="#354">354: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> l10nMode()
-</span><span id="355" class="l"><a href="#355">355: </a>    {
-</span><span id="356" class="l"><a href="#356">356: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;l10nMode;
-</span><span id="357" class="l"><a href="#357">357: </a>    }
-</span><span id="358" class="l"><a href="#358">358: </a>
-</span><span id="359" class="l"><a href="#359">359: </a>
-</span><span id="360" class="l"><a href="#360">360: </a>    <span class="php-comment">/**
-</span></span><span id="361" class="l"><a href="#361">361: </a><span class="php-comment">     * @return boolean
-</span></span><span id="362" class="l"><a href="#362">362: </a><span class="php-comment">     */</span>
-</span><span id="363" class="l"><a href="#363">363: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> loopL10n()
-</span><span id="364" class="l"><a href="#364">364: </a>    {
-</span><span id="365" class="l"><a href="#365">365: </a>        <span class="php-keyword1">return</span> (<span class="php-var">$this</span>-&gt;l10nMode() == <span class="php-quote">'loop_inputs'</span>);
-</span><span id="366" class="l"><a href="#366">366: </a>    }
-</span><span id="367" class="l"><a href="#367">367: </a>
-</span><span id="368" class="l"><a href="#368">368: </a>    <span class="php-comment">/**
-</span></span><span id="369" class="l"><a href="#369">369: </a><span class="php-comment">     * @return PropertyInputInterface
-</span></span><span id="370" class="l"><a href="#370">370: </a><span class="php-comment">     */</span>
-</span><span id="371" class="l"><a href="#371">371: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> input()
-</span><span id="372" class="l"><a href="#372">372: </a>    {
-</span><span id="373" class="l"><a href="#373">373: </a>        <span class="php-var">$prop</span> = <span class="php-var">$this</span>-&gt;prop();
-</span><span id="374" class="l"><a href="#374">374: </a>
-</span><span id="375" class="l"><a href="#375">375: </a>        <span class="php-var">$inputType</span> = <span class="php-var">$this</span>-&gt;inputType();
-</span><span id="376" class="l"><a href="#376">376: </a>        <span class="php-var">$this</span>-&gt;input = <span class="php-var">$this</span>-&gt;propertyInputFactory()-&gt;create(<span class="php-var">$inputType</span>);
+</span><span id="341" class="l"><a href="#341">341: </a>        <span class="php-keyword1">return</span> <span class="php-var">$langs</span>;
+</span><span id="342" class="l"><a href="#342">342: </a>    }
+</span><span id="343" class="l"><a href="#343">343: </a>
+</span><span id="344" class="l"><a href="#344">344: </a>    <span class="php-comment">/**
+</span></span><span id="345" class="l"><a href="#345">345: </a><span class="php-comment">     * @param string $mode The l10n mode.
+</span></span><span id="346" class="l"><a href="#346">346: </a><span class="php-comment">     * @return FormGroupInterface Chainable
+</span></span><span id="347" class="l"><a href="#347">347: </a><span class="php-comment">     */</span>
+</span><span id="348" class="l"><a href="#348">348: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setL10nMode(<span class="php-var">$mode</span>)
+</span><span id="349" class="l"><a href="#349">349: </a>    {
+</span><span id="350" class="l"><a href="#350">350: </a>        <span class="php-var">$this</span>-&gt;l10nMode = <span class="php-var">$mode</span>;
+</span><span id="351" class="l"><a href="#351">351: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+</span><span id="352" class="l"><a href="#352">352: </a>    }
+</span><span id="353" class="l"><a href="#353">353: </a>
+</span><span id="354" class="l"><a href="#354">354: </a>    <span class="php-comment">/**
+</span></span><span id="355" class="l"><a href="#355">355: </a><span class="php-comment">     * @return string
+</span></span><span id="356" class="l"><a href="#356">356: </a><span class="php-comment">     */</span>
+</span><span id="357" class="l"><a href="#357">357: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> l10nMode()
+</span><span id="358" class="l"><a href="#358">358: </a>    {
+</span><span id="359" class="l"><a href="#359">359: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;l10nMode;
+</span><span id="360" class="l"><a href="#360">360: </a>    }
+</span><span id="361" class="l"><a href="#361">361: </a>
+</span><span id="362" class="l"><a href="#362">362: </a>
+</span><span id="363" class="l"><a href="#363">363: </a>    <span class="php-comment">/**
+</span></span><span id="364" class="l"><a href="#364">364: </a><span class="php-comment">     * @return boolean
+</span></span><span id="365" class="l"><a href="#365">365: </a><span class="php-comment">     */</span>
+</span><span id="366" class="l"><a href="#366">366: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> loopL10n()
+</span><span id="367" class="l"><a href="#367">367: </a>    {
+</span><span id="368" class="l"><a href="#368">368: </a>        <span class="php-keyword1">return</span> (<span class="php-var">$this</span>-&gt;l10nMode() == <span class="php-quote">'loop_inputs'</span>);
+</span><span id="369" class="l"><a href="#369">369: </a>    }
+</span><span id="370" class="l"><a href="#370">370: </a>
+</span><span id="371" class="l"><a href="#371">371: </a>    <span class="php-comment">/**
+</span></span><span id="372" class="l"><a href="#372">372: </a><span class="php-comment">     * @return PropertyInputInterface
+</span></span><span id="373" class="l"><a href="#373">373: </a><span class="php-comment">     */</span>
+</span><span id="374" class="l"><a href="#374">374: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> input()
+</span><span id="375" class="l"><a href="#375">375: </a>    {
+</span><span id="376" class="l"><a href="#376">376: </a>        <span class="php-var">$prop</span> = <span class="php-var">$this</span>-&gt;prop();
 </span><span id="377" class="l"><a href="#377">377: </a>
-</span><span id="378" class="l"><a href="#378">378: </a>        <span class="php-var">$this</span>-&gt;input-&gt;setProperty(<span class="php-var">$prop</span>);
-</span><span id="379" class="l"><a href="#379">379: </a>        <span class="php-var">$this</span>-&gt;input-&gt;setPropertyVal(<span class="php-var">$this</span>-&gt;propertyVal);
-</span><span id="380" class="l"><a href="#380">380: </a>        <span class="php-var">$this</span>-&gt;input-&gt;setData(<span class="php-var">$this</span>-&gt;propertyData);
-</span><span id="381" class="l"><a href="#381">381: </a>
-</span><span id="382" class="l"><a href="#382">382: </a>        <span class="php-var">$GLOBALS</span>[<span class="php-quote">'widget_template'</span>] = <span class="php-var">$inputType</span>;
+</span><span id="378" class="l"><a href="#378">378: </a>        <span class="php-comment">/** @todo Needs fix. Must be manually triggered after setting data for metadata to work */</span>
+</span><span id="379" class="l"><a href="#379">379: </a>        <span class="php-var">$prop</span>-&gt;metadata();
+</span><span id="380" class="l"><a href="#380">380: </a>
+</span><span id="381" class="l"><a href="#381">381: </a>        <span class="php-var">$inputType</span> = <span class="php-var">$this</span>-&gt;inputType();
+</span><span id="382" class="l"><a href="#382">382: </a>        <span class="php-var">$this</span>-&gt;input = <span class="php-var">$this</span>-&gt;propertyInputFactory()-&gt;create(<span class="php-var">$inputType</span>);
 </span><span id="383" class="l"><a href="#383">383: </a>
-</span><span id="384" class="l"><a href="#384">384: </a>        <span class="php-var">$res</span> = [];
-</span><span id="385" class="l"><a href="#385">385: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;loopL10n() &amp;&amp; <span class="php-var">$prop</span>-&gt;l10n()) {
-</span><span id="386" class="l"><a href="#386">386: </a>            <span class="php-var">$langs</span> = <span class="php-var">$this</span>-&gt;langs();
-</span><span id="387" class="l"><a href="#387">387: </a>            <span class="php-var">$inputId</span> = <span class="php-var">$this</span>-&gt;input-&gt;inputId();
-</span><span id="388" class="l"><a href="#388">388: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$langs</span> <span class="php-keyword1">as</span> <span class="php-var">$lang</span>) {
-</span><span id="389" class="l"><a href="#389">389: </a>                <span class="php-comment">// Set a unique input ID for language.</span>
-</span><span id="390" class="l"><a href="#390">390: </a>                <span class="php-var">$this</span>-&gt;input-&gt;setInputId(<span class="php-var">$inputId</span>.<span class="php-quote">'_'</span>.<span class="php-var">$lang</span>);
-</span><span id="391" class="l"><a href="#391">391: </a>                <span class="php-var">$this</span>-&gt;input-&gt;setLang(<span class="php-var">$lang</span>);
-</span><span id="392" class="l"><a href="#392">392: </a>                yield <span class="php-var">$this</span>-&gt;input;
-</span><span id="393" class="l"><a href="#393">393: </a>            }
-</span><span id="394" class="l"><a href="#394">394: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="395" class="l"><a href="#395">395: </a>            yield <span class="php-var">$this</span>-&gt;input;
-</span><span id="396" class="l"><a href="#396">396: </a>        }
-</span><span id="397" class="l"><a href="#397">397: </a>    }
-</span><span id="398" class="l"><a href="#398">398: </a>}
-</span><span id="399" class="l"><a href="#399">399: </a></span></code></pre>
+</span><span id="384" class="l"><a href="#384">384: </a>        <span class="php-var">$this</span>-&gt;input-&gt;setProperty(<span class="php-var">$prop</span>);
+</span><span id="385" class="l"><a href="#385">385: </a>        <span class="php-var">$this</span>-&gt;input-&gt;setPropertyVal(<span class="php-var">$this</span>-&gt;propertyVal);
+</span><span id="386" class="l"><a href="#386">386: </a>        <span class="php-var">$this</span>-&gt;input-&gt;setData(<span class="php-var">$prop</span>-&gt;data());
+</span><span id="387" class="l"><a href="#387">387: </a>
+</span><span id="388" class="l"><a href="#388">388: </a>        <span class="php-var">$GLOBALS</span>[<span class="php-quote">'widget_template'</span>] = <span class="php-var">$inputType</span>;
+</span><span id="389" class="l"><a href="#389">389: </a>
+</span><span id="390" class="l"><a href="#390">390: </a>        <span class="php-var">$res</span> = [];
+</span><span id="391" class="l"><a href="#391">391: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;loopL10n() &amp;&amp; <span class="php-var">$prop</span>-&gt;l10n()) {
+</span><span id="392" class="l"><a href="#392">392: </a>            <span class="php-var">$langs</span> = <span class="php-var">$this</span>-&gt;langs();
+</span><span id="393" class="l"><a href="#393">393: </a>            <span class="php-var">$inputId</span> = <span class="php-var">$this</span>-&gt;input-&gt;inputId();
+</span><span id="394" class="l"><a href="#394">394: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$langs</span> <span class="php-keyword1">as</span> <span class="php-var">$lang</span>) {
+</span><span id="395" class="l"><a href="#395">395: </a>                <span class="php-comment">// Set a unique input ID for language.</span>
+</span><span id="396" class="l"><a href="#396">396: </a>                <span class="php-var">$this</span>-&gt;input-&gt;setInputId(<span class="php-var">$inputId</span>.<span class="php-quote">'_'</span>.<span class="php-var">$lang</span>);
+</span><span id="397" class="l"><a href="#397">397: </a>                <span class="php-var">$this</span>-&gt;input-&gt;setLang(<span class="php-var">$lang</span>);
+</span><span id="398" class="l"><a href="#398">398: </a>                yield <span class="php-var">$this</span>-&gt;input;
+</span><span id="399" class="l"><a href="#399">399: </a>            }
+</span><span id="400" class="l"><a href="#400">400: </a>        } <span class="php-keyword1">else</span> {
+</span><span id="401" class="l"><a href="#401">401: </a>            yield <span class="php-var">$this</span>-&gt;input;
+</span><span id="402" class="l"><a href="#402">402: </a>        }
+</span><span id="403" class="l"><a href="#403">403: </a>    }
+</span><span id="404" class="l"><a href="#404">404: </a>}
+</span><span id="405" class="l"><a href="#405">405: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

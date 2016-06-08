@@ -355,8 +355,8 @@
 </span></span><span id="69" class="l"><a href="#69"> 69: </a><span class="php-comment">     */</span>
 </span><span id="70" class="l"><a href="#70"> 70: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setDependencies(Container <span class="php-var">$container</span>)
 </span><span id="71" class="l"><a href="#71"> 71: </a>    {
-</span><span id="72" class="l"><a href="#72"> 72: </a>        <span class="php-var">$this</span>-&gt;modelFactory = <span class="php-var">$container</span>[<span class="php-quote">'model/factory'</span>];
-</span><span id="73" class="l"><a href="#73"> 73: </a>        parent::setDependencies(<span class="php-var">$container</span>);
+</span><span id="72" class="l"><a href="#72"> 72: </a>        parent::setDependencies(<span class="php-var">$container</span>);
+</span><span id="73" class="l"><a href="#73"> 73: </a>        <span class="php-var">$this</span>-&gt;setModelFactory(<span class="php-var">$container</span>[<span class="php-quote">'model/factory'</span>]);
 </span><span id="74" class="l"><a href="#74"> 74: </a>    }
 </span><span id="75" class="l"><a href="#75"> 75: </a>
 </span><span id="76" class="l"><a href="#76"> 76: </a>    <span class="php-comment">/**

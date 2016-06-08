@@ -69,8 +69,8 @@ class AdminWidget extends AbstractWidget
      */
     public function setDependencies(Container $container)
     {
-        $this->modelFactory = $container['model/factory'];
         parent::setDependencies($container);
+        $this->setModelFactory($container['model/factory']);
     }
 
     /**

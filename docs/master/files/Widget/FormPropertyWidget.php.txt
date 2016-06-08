@@ -288,13 +288,15 @@ class FormPropertyWidget extends AdminWidget
     public function inputType()
     {
         if ($this->inputType === null) {
-            $prop = $this->prop();
+            $prop     = $this->prop();
             $metadata = $prop->metadata();
-            $inputType = isset($metadata['admin']) ? $metadata['admin']['input_type'] : '';
+
+            $inputType = (isset($metadata['admin']) ? $metadata['admin']['input_type'] : '');
 
             if (!$inputType) {
                 $inputType = 'charcoal/admin/property/input/text';
             }
+
             $this->inputType = $inputType;
         }
         return $this->inputType;
@@ -318,13 +320,14 @@ class FormPropertyWidget extends AdminWidget
         if ($this->property === null) {
             $p = $this->propertyFactory()->create($this->type());
 
-
             $p->setIdent($this->propertyIdent());
             $p->setData($this->propertyData);
 
             $this->property = $p;
         }
+
         $this->property->setVal($this->propertyVal());
+
         return $this->property;
     }
 
@@ -372,12 +375,15 @@ class FormPropertyWidget extends AdminWidget
     {
         $prop = $this->prop();
 
+        /** @todo Needs fix. Must be manually triggered after setting data for metadata to work */
+        $prop->metadata();
+
         $inputType = $this->inputType();
         $this->input = $this->propertyInputFactory()->create($inputType);
 
         $this->input->setProperty($prop);
         $this->input->setPropertyVal($this->propertyVal);
-        $this->input->setData($this->propertyData);
+        $this->input->setData($prop->data());
 
         $GLOBALS['widget_template'] = $inputType;
 

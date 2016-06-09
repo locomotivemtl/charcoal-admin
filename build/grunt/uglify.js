@@ -10,7 +10,12 @@ module.exports = {
     },
     vendors: {
         files: {
-            'assets/dist/scripts/charcoal.admin.vendors.min.js': ['<%= concat.vendors.dest %>']
+            'assets/dist/scripts/vendors/tinymce/plugins/charcoal/plugin.min.js': [
+                'assets/src/scripts/charcoal/admin/tinymce/plugins/charcoal/plugin.js'
+            ],
+            'assets/dist/scripts/charcoal.admin.vendors.min.js': [
+                '<%= concat.vendors.dest %>'
+            ]
         }
     }
 };

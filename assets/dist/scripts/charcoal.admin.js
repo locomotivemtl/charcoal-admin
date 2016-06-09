@@ -2541,6 +2541,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
             'autoresize',
             //'autosave',
             //'bbcode',
+            'charcoal',
             'charmap',
             'code',
             'colorpicker',

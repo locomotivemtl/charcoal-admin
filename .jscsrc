@@ -128,7 +128,7 @@
   },
   "requireSpacesInsideObjectBrackets": "allButNested",
 
-  "safeContextKeyword": "that",
+  "safeContextKeyword": [ "that", "ctrl", "plugin" ],
 
   "validateIndentation": 4,
   "validateLineBreaks": "LF",

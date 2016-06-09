@@ -3190,7 +3190,8 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.listeners = function ()
         if (!type) {
             return false;
         }
-        that.create_attachment(type);
+        var title = $(this).data('title') || 'Content Element';
+        that.create_attachment(type, title);
     });
 };
 
@@ -3208,12 +3209,13 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.select_attachment = function (ele
     }
 };
 
-Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (type)
+Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (type, title)
 {
     // Scope
     var that = this;
 
     var data = {
+        title: title,
         widget_type: 'charcoal/admin/widget/quickForm',
         form_ident: 'quick',
         widget_options: {
@@ -3419,7 +3421,8 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         if (!type) {
             return false;
         }
-        that.create_attachment(type);
+        var title = $(this).data('title') || 'Content Element';
+        that.create_attachment(type, title);
     });
 };
 
@@ -3437,12 +3440,13 @@ Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
     }
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type)
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, title)
 {
     // Scope
     var that = this;
 
     var data = {
+        title: title,
         widget_type: 'charcoal/admin/widget/quickForm',
         form_ident: 'quick',
         widget_options: {

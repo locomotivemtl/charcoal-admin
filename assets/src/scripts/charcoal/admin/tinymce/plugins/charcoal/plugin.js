@@ -117,6 +117,8 @@
                     dom.setAttrib(doc.documentElement, 'dir', 'rtl');
                 }
 
+                dom.setAttrib(doc.documentElement, 'lang', editor.getParam('root_lang_attr'));
+
                 if (env.ie) {
                     if (parseInt(env.ie, 10) === 9) {
                         body_class.push('lt-ie10');

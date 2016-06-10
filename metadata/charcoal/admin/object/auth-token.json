@@ -11,13 +11,13 @@
             "type":"string"
         },
         "expiry":{
-            "type":"datetime"
+            "type":"date-time"
         },
         "created":{
-            "type":"datetime"
+            "type":"date-time"
         },
         "lastModified":{
-            "type":"datetime"
+            "type":"date-time"
         }
     },
 

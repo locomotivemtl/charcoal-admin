@@ -2648,6 +2648,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //save_enablewhendirty: true,
         //save_onsavecallback: function() { },
         //save_oncancelcallback: function() { },
+        root_lang_attr: $('#'+this.input_id).closest('[data-lang]').data('lang'),
         //table_clone_elements: "",
         table_grid: true,
         table_tab_navigation: true,

@@ -19,7 +19,7 @@ Header menu Widget
             {{#_t}}Besoin d’aide ?{{/_t}}
         </span>
     </a>
-    {{#showHeaderMenu}}
+    {{#showTopHeaderMenu}}
     <button class="c-header-main_user js-toggle-class" type="button" data-target="body" data-class="has-nav-user">
         <span class="c-header-main_user_name">Bienvenue sur memo</span>
         <span class="c-header-main_user_icon">
@@ -28,7 +28,13 @@ Header menu Widget
             <span class="c-header-main_user_icon_dot"></span>
         </span>
     </button>
-    {{/showHeaderMenu}}
+    {{/showTopHeaderMenu}}
+
+    {{^showTopHeaderMenu}}
+        {{#isAuthenticated}}
+    <button type="button" class="c-header-main_user btn btn-danger" id="btn-logout">{{#_t}}Déconnexion{{/_t}}</button>
+        {{/isAuthenticated}}
+    {{/showTopHeaderMenu}}
 </header>
 
 {{#showHeaderMenu}}

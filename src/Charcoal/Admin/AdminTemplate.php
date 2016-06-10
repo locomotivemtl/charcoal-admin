@@ -70,6 +70,14 @@ class AdminTemplate extends AbstractTemplate
      * @var boolean $showFooterMenu
      */
     private $showFooterMenu = true;
+    /**
+     * @var boolean $showTopHeaderMenu
+     */
+    private $showTopHeaderMenu;
+    /**
+     * @var boolean $headerMenu
+     */
+    private $headerMenu;
 
     /**
      * @var array $feedbacks
@@ -261,6 +269,49 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
+     * Display or not the top right header menu.
+     * @todo This is NOT used yet.
+     * @param boolean $bool Display or not.
+     * @return AdminTemplate Chainable.
+     */
+    public function setShowTopHeaderMenu($bool)
+    {
+        $this->showTopHeaderMenu = $bool;
+        return $this;
+    }
+
+    /**
+     * @todo Don't take the admin configuration that way...
+     * @return boolean Show the top header menu or not.
+     */
+    public function showTopHeaderMenu()
+    {
+        $showTopHeaderMenu = $this->adminConfig['show_top_header_menu'];
+        return $showTopHeaderMenu;
+    }
+
+    /**
+     * Sets the top right header menu.
+     * @param array $menu Menu as link and labels.
+     * @return AdminTemplate Chainable.
+     */
+    public function setTopHeaderMenu(array $menu)
+    {
+        $this->topHeaderMenu = $menu;
+        return $this;
+    }
+
+    /**
+     * Header menu links and labels.
+     * @todo To Do.
+     * @return array The menu.
+     */
+    public function topHeaderMenu()
+    {
+        return [];
+    }
+
+    /**
      * @throws Exception If the menu was not properly configured.
      * @return array This method is a generator.
      */
@@ -380,7 +431,7 @@ class AdminTemplate extends AbstractTemplate
      *
      * @return boolean
      */
-    protected function isAuthenticated()
+    public function isAuthenticated()
     {
         return ($this->authBySession() || $this->authByToken());
     }

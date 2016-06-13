@@ -12,6 +12,9 @@ use \Charcoal\Factory\FactoryInterface;
 use \Charcoal\Loader\CollectionLoader;
 use \Charcoal\Model\Collection;
 
+// From `charcoal-view`
+use \Charcoal\View\ViewInterface;
+
 /**
 * Fully implements CollectionContainerInterface
 */
@@ -71,7 +74,36 @@ trait CollectionContainerTrait
      * In memory copy of the PropertyDisplay object
      * @var PropertyInputInterface $display
      */
-    private $display;
+    protected $display;
+
+    /**
+     * @var ViewInterface $view
+     */
+    private $view;
+
+    /**
+     * @param ViewInterface|array $view
+     * @return ViewableInterface Chainable
+     */
+    public function setView(ViewInterface $view)
+    {
+        $this->view = $view;
+        return $this;
+    }
+
+    /**
+     * @throws Exception If the view instance is not previously set / injected.
+     * @return ViewInterface The object's View.
+     */
+    public function view()
+    {
+        if ($this->view === null) {
+            throw new Exception(
+                'View instance is not set for table widget'
+            );
+        }
+        return $this->view;
+    }
 
     /**
      * @param FactoryInterface $factory The model factory, to create model objects.
@@ -97,6 +129,28 @@ trait CollectionContainerTrait
             );
         }
         return $this->modelFactory;
+    }
+
+    /**
+     * @param FactoryInterface $factory The property display factory.
+     * @return CollectionContainerInterface Chainable
+     */
+    private function setPropertyDisplayFactory(FactoryInterface $factory)
+    {
+        $this->propertyDisplayFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @throws Exception If the property display factory was not previously injected / set.
+     * @return FactoryInterface
+     */
+    private function propertyDisplayFactory()
+    {
+        if ($this->propertyDisplayFactory === null) {
+            throw new Exception('No property display factory. '.get_class($this));
+        }
+        return $this->propertyDisplayFactory;
     }
 
     /**
@@ -175,6 +229,28 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Return the current collection metadata.
+     *
+     * @return array
+     */
+    public function collectionMeta()
+    {
+        $collectionIdent = $this->collectionIdent();
+
+        if (!$collectionIdent) {
+            return [];
+        }
+
+        $objMeta = $this->proto()->metadata();
+
+        if (isset($objMeta['admin']['lists'][$collectionIdent])) {
+            return $objMeta['admin']['lists'][$collectionIdent];
+        } else {
+            return [];
+        }
+    }
+
+    /**
      * @param mixed $collectionConfig The collection configuration.
      * @return CollectionContainerInterface Chainable
      */
@@ -202,9 +278,8 @@ trait CollectionContainerTrait
      */
     protected function createCollectionConfig()
     {
-        return [];
+        return $this->collectionMeta();
     }
-
 
     /**
      * @return integer
@@ -263,7 +338,10 @@ trait CollectionContainerTrait
         $objType = $this->objType();
         if (!$objType) {
             throw new Exception(
-                __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
+                sprintf(
+                    '%1$s cannot create collection. Object type is not defined.',
+                    get_class($this)
+                )
             );
         }
         $obj = $this->modelFactory()->create($objType);
@@ -291,6 +369,30 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Sort the objects before they are displayed as rows.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @return array
+     */
+    public function sortObjects()
+    {
+        return $this->objects();
+    }
+
+    /**
+     * Sort the properties before they are displayed as columns.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @return array
+     */
+    public function sortProperties()
+    {
+        return $this->properties();
+    }
+
+    /**
      * Supplies properties for objects in table template specific to object configuration.
      *
      * @return array This metod is a generator.
@@ -298,72 +400,99 @@ trait CollectionContainerTrait
     public function objectRows()
     {
         // Get properties as defined in object's list metadata
-        $sortedProperties = $this->properties();
+        $properties = $this->sortProperties();
 
         // Collection objects
-        $objects = $this->objects();
+        $objects = $this->sortObjects();
 
         // Go through each object to generate an array of properties listed in object's list metadata
         foreach ($objects as $object) {
             $objectProperties = [];
 
-            foreach ($sortedProperties as $propertyIdent => $propertyData) {
+            foreach ($properties as $propertyIdent => $propertyData) {
                 $property = $object->property($propertyIdent);
-                $meta = $property->metadata();
 
-                $displayType = $property->displayType();
-
-                $this->display = $this->propertyDisplayFactory()->create($displayType);
-                $this->display->setProperty($property);
-
-                $this->display->setData($meta);
-                $this->display->setData($property->viewOptions($displayType));
-
-                $listViewOptions = $this->viewOptions($property->ident());
-                if (isset($listViewOptions[$displayType])) {
-                    $this->display->setData($listViewOptions[$displayType]);
+                $propertiesOptions = $this->propertiesOptions();
+                if (isset($propertiesOptions[$propertyIdent])) {
+                    $property->setData($propertiesOptions[$propertyIdent]);
                 }
 
-                $container = \Charcoal\App\App::instance()->getContainer();
-                $propertyValue = $container['view']->renderTemplate($displayType, $this->display);
+                $this->setupDisplayPropertyValue($object, $property);
 
+                $displayType = $this->display->displayType();
 
-                $objectProperties[] = [
-                    'ident' => $propertyIdent,
-                    'val'   => $propertyValue
-                ];
+                $propertyValue = $this->view()->renderTemplate($displayType, $this->display);
+
+                $objectProperties[] = $this->parsePropertyCell($object, $property, $propertyValue);
             };
 
-            $row = [
-                'objectId' => $object->id(),
-                'objectProperties' => $objectProperties
-            ];
+            $row = $this->parseObjectRow($object, $objectProperties);
 
             $this->currentObjId = $object->id();
+
             yield $row;
         }
     }
 
     /**
-     * @param FactoryInterface $factory The property display factory.
-     * @return CollectionContainerInterface Chainable
+     * Setup the property's display value before its assigned to the object row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface    $object   The current row's object.
+     * @param  PropertyInterface $property The current property.
+     * @return void
      */
-    private function setPropertyDisplayFactory(FactoryInterface $factory)
+    protected function setupDisplayPropertyValue($object, $property)
     {
-        $this->propertyDisplayFactory = $factory;
-        return $this;
+        unset($object);
+
+        $metadata = $property->metadata();
+
+        $displayType = $property->displayType();
+
+        $this->display = $this->propertyDisplayFactory()->create($displayType);
+        $this->display->setProperty($property);
+
+        $this->display->setData($metadata);
+        $this->display->setData($property->viewOptions($displayType));
     }
 
     /**
-     * @throws Exception If the property display factory was not previously injected / set.
-     * @return FactoryInterface
+     * Filter the property before its assigned to the object row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface    $object        The current row's object.
+     * @param  PropertyInterface $property      The current property.
+     * @param  string            $propertyValue The property $key's display value.
+     * @return array
      */
-    private function propertyDisplayFactory()
+    protected function parsePropertyCell($object, $property, $propertyValue)
     {
-        if ($this->propertyDisplayFactory === null) {
-            throw new Exception('No property display factory. '.get_class($this));
-        }
-        return $this->propertyDisplayFactory;
+        unset($object);
+
+        return [
+            'ident' => $property->ident(),
+            'val'   => $propertyValue
+        ];
+    }
+
+    /**
+     * Filter the object before its assigned to the row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface $object           The current row's object.
+     * @param  array          $objectProperties The $object's display properties.
+     * @return array
+     */
+    protected function parseObjectRow($object, $objectProperties)
+    {
+        return [
+            'objectId'         => $object->id(),
+            'objectProperties' => $objectProperties
+        ];
     }
 
     /**

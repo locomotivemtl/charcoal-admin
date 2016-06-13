@@ -1,15 +1,13 @@
 <?php
-/**
- * TextDisplay class
- * Default display for most properties
- * Only output displayVal()
- */
+
 namespace Charcoal\Admin\Property\Display;
 
 use \Charcoal\Admin\Property\AbstractPropertyDisplay;
 
 /**
- * Audio Property Input
+ * Textual Display Property
+ *
+ * The default display for most properties; only output {@see AbstractProperty::displayVal()}.
  */
 class TextDisplay extends AbstractPropertyDisplay
 {

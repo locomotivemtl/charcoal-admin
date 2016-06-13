@@ -7,7 +7,6 @@ use \InvalidArgumentException;
 
 use \Pimple\Container;
 
-use \Charcoal\Charcoal;
 use \Charcoal\Translation\TranslationString;
 
 use \Charcoal\Factory\FactoryInterface;
@@ -52,7 +51,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function setDependencies(Container $container)
     {
-        $this->setModelFactory($container['model/factory']);
+        parent::setDependencies($container);
+
+        $this->setView($container['view']);
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyDisplayFactory($container['property/display/factory']);
     }
@@ -89,7 +90,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $obj = $this->proto();
         $metadata = $obj->metadata();
-        $adminMeta = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $adminMeta = (isset($metadata['admin']) ? $metadata['admin'] : null);
 
         if (!isset($adminMeta['lists']) || empty($adminMeta['lists'])) {
             return [];
@@ -97,10 +98,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
-            $collectionIdent = isset($adminMeta['default_list']) ? $adminMeta['default_list'] : '';
+            $collectionIdent = (isset($adminMeta['default_list']) ? $adminMeta['default_list'] : '');
         }
 
-        $objListData = isset($adminMeta['lists'][$collectionIdent]) ? $adminMeta['lists'][$collectionIdent] : [];
+        $objListData = (isset($adminMeta['lists'][$collectionIdent]) ? $adminMeta['lists'][$collectionIdent] : []);
 
         return $objListData;
     }
@@ -157,32 +158,23 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * @return mixed
-     */
-    protected function createCollectionConfig()
-    {
-        return $this->collectionMeta();
-    }
-
-    /**
      * Always return an array
      * Theses are the properties options used in the list display
      * @return array
      */
     public function propertiesOptions()
     {
-        $collectionMeta = $this->collectionMeta();
+        $collectionConfig = $this->collectionConfig();
 
-        if (empty($collectionMeta)) {
+        if (empty($collectionConfig)) {
             return [];
         }
 
-        if (!isset($collectionMeta['properties_options'])) {
+        if (!isset($collectionConfig['properties_options'])) {
             return [];
         }
 
-        return $collectionMeta['properties_options'];
-
+        return $collectionConfig['properties_options'];
     }
 
     /**
@@ -197,43 +189,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         $propertiesOptions = $this->propertiesOptions();
-        if (!isset($propertiesOptions[$ident])) {
+
+        if (isset($propertiesOptions[$ident]['view_options'])) {
+            return $propertiesOptions[$ident]['view_options'];
+        } else {
             return [];
         }
-
-        if (!isset($propertiesOptions[$ident]['view_options'])) {
-            return [];
-        }
-
-        return $propertiesOptions[$ident]['view_options'];
-
-    }
-
-    /**
-     * Return the current collection metadata
-     * @return array    metadata()->admin->lists->collectionIdent || []
-     */
-    public function collectionMeta()
-    {
-        $collectionIdent = $this->collectionIdent();
-        if (!$collectionIdent) {
-            return [];
-        }
-
-        $obj = $this->proto();
-        $metadata = $obj->metadata();
-
-        $adminmeta = isset($metadata['admin']) ? $metadata['admin'] : [];
-
-        if (!isset($adminmeta['lists'])) {
-            return [];
-        }
-
-        if (!isset($adminmeta['lists'][$collectionIdent])) {
-            return [];
-        }
-
-        return $adminmeta['lists'][$collectionIdent];
     }
 
     /**
@@ -300,7 +261,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
         }
         return $objectActions;
-
     }
 
     /**

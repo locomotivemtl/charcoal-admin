@@ -5,7 +5,7 @@ namespace Charcoal\Admin\Property\Display;
 use \Charcoal\Admin\Property\AbstractPropertyDisplay;
 
 /**
- * Audio Property Input
+ * Image Display Property
  */
 class ImageDisplay extends AbstractPropertyDisplay
 {

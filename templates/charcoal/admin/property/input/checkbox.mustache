@@ -5,7 +5,8 @@ Checkbox Property Input
 `charcoal/admin/property/input/checkbox`
 
 --}}
-<div class="checkbox">
+{{#choices}}
+<label class="checkbox-inline">
     <input
         type="checkbox"
         id="{{inputId}}"
@@ -15,6 +16,8 @@ Checkbox Property Input
         {{#readOnly}}readonly{{/readOnly}}
         {{#required}}required{{/required}}
         {{#disabled}}disabled{{/disabled}}
+        value="{{value}}"
     >
-    <label></label>
-</div>
+    <span>{{title}}</span>
+</label>
+{{/choices}}

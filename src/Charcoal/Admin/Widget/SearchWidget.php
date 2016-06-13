@@ -44,53 +44,17 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     protected $filters;
 
     /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        // Collection container dependencies
-        $this->setModelFactory($container['model/factory']);
-        parent::setDependencies($container);
-    }
-
-    /**
      * @param array|ArrayInterface $data The search widget data.
      * @return TableWidget Chainable
      */
     public function setData($data)
     {
-
         $objData = $this->dataFromObject();
         $data = array_merge_recursive($objData, $data);
 
         parent::setData($data);
 
         return $this;
-    }
-
-    /**
-     * @param string $collectionIdent The collection identifier.
-     * @throws InvalidArgumentException If the collection ident is not a string.
-     * @return CollectionContainerInterface Chainable
-     */
-    public function setCollectionIdent($collectionIdent)
-    {
-        if (!is_string($collectionIdent)) {
-            throw new InvalidArgumentException(
-                'Collection ident must be a string'
-            );
-        }
-        $this->collectionIdent = $collectionIdent;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function collectionIdent()
-    {
-        return $this->collectionIdent;
     }
 
     /**
@@ -106,7 +70,6 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
         if (!$collectionIdent) {
             $collectionIdent = isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '';
         }
-
 
         if (isset($adminMetadata['lists'][$collectionIdent])) {
             return $adminMetadata['lists'][$collectionIdent];

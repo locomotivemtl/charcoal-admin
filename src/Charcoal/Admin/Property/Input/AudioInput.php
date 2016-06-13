@@ -40,36 +40,83 @@ class AudioInput extends AbstractPropertyInput
      */
     private $audio_file;
 
+    /**
+     * @return boolean
+     */
     public function displayAudioWidget()
     {
         return $this->textEnabled() || $this->recordingEnabled() || $this->fileEnabled();
     }
 
-    /** Setters */
+    /**
+     * @param mixed $message The audio message.
+     * @return AudioInput Chainable
+     */
     public function setMessage($message)
     {
         $this->message = $message;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function message()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param boolean $textEnabled If TTS is enabled or not for this widget.
+     * @return AudioInput Chainable
+     */
     public function setTextEnabled($textEnabled)
     {
-        $this->textEnabled = $textEnabled;
-        return $this;
-    }
-    public function setRecordingEnabled($recordingEnabled)
-    {
-        $this->recordingEnabled = $recordingEnabled;
-        return $this;
-    }
-    public function setFileEnabled($fileEnabled)
-    {
-        $this->fileEnabled = $fileEnabled;
+        $this->textEnabled = !!$textEnabled;
         return $this;
     }
 
-    /** Getters */
-    public function message() { return $this->message; }
-    public function textEnabled() { return $this->textEnabled; }
-    public function recordingEnabled() { return $this->recordingEnabled; }
-    public function fileEnabled() { return $this->fileEnabled; }
+    /**
+     * @return boolean
+     */
+    public function textEnabled()
+    {
+        return $this->textEnabled;
+    }
+
+    /**
+     * @param boolean $recordingEnabled If recording is enabled or not for this widget.
+     * @return AudioInput Chainable
+     */
+    public function setRecordingEnabled($recordingEnabled)
+    {
+        $this->recordingEnabled = !!$recordingEnabled;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function recordingEnabled()
+    {
+        return $this->recordingEnabled;
+    }
+
+     /**
+      * @param boolean $fileEnabled If file upload is enabled or not for this widget.
+      * @return AudioInput Chainable
+      */
+    public function setFileEnabled($fileEnabled)
+    {
+        $this->fileEnabled = !!$fileEnabled;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function fileEnabled()
+    {
+        return $this->fileEnabled;
+    }
 }

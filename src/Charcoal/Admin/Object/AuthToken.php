@@ -287,7 +287,7 @@ class AuthToken extends AbstractModel
     }
 
     /**
-     * @param mixed  $ident The user identifier (username).
+     * @param mixed  $ident The auth-token identifier (username).
      * @param string $token The token to validate against.
      * @return mixed The user id. An empty string if no token match.
      */

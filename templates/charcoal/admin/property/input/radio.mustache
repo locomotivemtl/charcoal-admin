@@ -8,17 +8,17 @@ Radio Property Input
 <div>
 {{#choices}}
     <label class="checkbox-inline">
-    	<input
-    		type="radio"
-    		id="{{inputId}}"
-    		name="{{inputName}}"
-    		class="{{inputClass}}"
-    		{{#selected}}checked{{/selected}}
-    		{{#readOnly}}read_only{{/readOnly}}
-    		{{#required}}required{{/required}}
-    		{{#disabled}}disabled{{/disabled}}
-    		value="{{value}}"
-    	>
+        <input
+            type="radio"
+            id="{{inputId}}"
+            name="{{inputName}}"
+            class="{{inputClass}}"
+            {{#selected}}checked{{/selected}}
+            {{#readOnly}}readonly{{/readOnly}}
+            {{#required}}required{{/required}}
+            {{#disabled}}disabled{{/disabled}}
+            value="{{value}}"
+        >
         <span>{{title}}</span>
     </label>
 {{/choices}}

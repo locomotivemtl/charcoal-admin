@@ -177,7 +177,11 @@ trait ObjectContainerTrait
     {
         if (!$this->validateObjType()) {
             throw new Exception(
-                sprintf('Can not create object, Invalid object type. Object type is : %1', $this->objType())
+                sprintf(
+                    '%1$s cannot create object. Invalid object type: "%2$s"',
+                    get_class($this),
+                    $this->objType()
+                )
             );
         }
 

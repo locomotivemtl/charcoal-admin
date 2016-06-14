@@ -151,6 +151,10 @@ class EditTemplate extends AdminTemplate implements
             $widgetType = 'charcoal/admin/widget/sidemenu';
         }
         $sidemenu = $this->widgetFactory()->create($widgetType);
+
+        if (isset($sidemenuConfig['widget_options'])) {
+            $sidemenu->setData($sidemenuConfig['widget_options']);
+        }
         return $sidemenu;
     }
 

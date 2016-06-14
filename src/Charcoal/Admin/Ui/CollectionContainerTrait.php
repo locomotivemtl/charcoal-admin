@@ -11,6 +11,10 @@ use \Charcoal\Factory\FactoryInterface;
 // From `charcoal-core`
 use \Charcoal\Loader\CollectionLoader;
 use \Charcoal\Model\Collection;
+use \Charcoal\Model\ModelInterface;
+
+// From `charcoal-property`
+use \Charcoal\Property\PropertyInterface;
 
 // From `charcoal-view`
 use \Charcoal\View\ViewInterface;
@@ -82,8 +86,8 @@ trait CollectionContainerTrait
     private $view;
 
     /**
-     * @param ViewInterface|array $view
-     * @return ViewableInterface Chainable
+     * @param ViewInterface|array $view The view instance.
+     * @return CollectionContainerInterface Chainable
      */
     public function setView(ViewInterface $view)
     {
@@ -93,7 +97,7 @@ trait CollectionContainerTrait
 
     /**
      * @throws Exception If the view instance is not previously set / injected.
-     * @return ViewInterface The object's View.
+     * @return ViewInterface The object's view.
      */
     public function view()
     {
@@ -287,8 +291,8 @@ trait CollectionContainerTrait
     public function page()
     {
         $collectionConfig = $this->collectionConfig();
-        if (isset($collectionConfig['pagination'])) {
-            return isset($collectionConfig['pagination']['page']) ? $collectionConfig['pagination']['page'] : 1;
+        if (isset($collectionConfig['pagination']['page'])) {
+            return $collectionConfig['pagination']['page'];
         }
         return 1;
     }
@@ -299,8 +303,8 @@ trait CollectionContainerTrait
     public function numPerPage()
     {
         $collectionConfig = $this->collectionConfig();
-        if (isset($collectionConfig['pagination'])) {
-            return isset($collectionConfig['pagination']['num_per_page']) ? $collectionConfig['pagination']['num_per_page'] : 0;
+        if (isset($collectionConfig['pagination']['num_per_page'])) {
+            return $collectionConfig['pagination']['num_per_page'];
         }
         return 0;
     }
@@ -443,7 +447,7 @@ trait CollectionContainerTrait
      * @param  PropertyInterface $property The current property.
      * @return void
      */
-    protected function setupDisplayPropertyValue($object, $property)
+    protected function setupDisplayPropertyValue(ModelInterface $object, PropertyInterface $property)
     {
         unset($object);
 
@@ -468,7 +472,7 @@ trait CollectionContainerTrait
      * @param  string            $propertyValue The property $key's display value.
      * @return array
      */
-    protected function parsePropertyCell($object, $property, $propertyValue)
+    protected function parsePropertyCell(ModelInterface $object, PropertyInterface $property, $propertyValue)
     {
         unset($object);
 
@@ -487,7 +491,7 @@ trait CollectionContainerTrait
      * @param  array          $objectProperties The $object's display properties.
      * @return array
      */
-    protected function parseObjectRow($object, $objectProperties)
+    protected function parseObjectRow(ModelInterface $object, array $objectProperties)
     {
         return [
             'objectId'         => $object->id(),

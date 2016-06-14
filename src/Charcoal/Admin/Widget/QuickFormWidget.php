@@ -12,18 +12,10 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
- * Quick form
- * Created to have a quick form to edit on the go.
- * Developped at first for the attachment concept,
- * should be usable at all time calling the widget
- * load action.
- *
- * @author Mathieu Ducharme <mat@locomotive.ca>
- * @author Bene Roch <ben@locomotive.ca>
+ * The quick form widget for editing objects on the go.
  */
 class QuickFormWidget extends ObjectFormWidget
 {
-
     /**
      * @param array|ArrayInterface $data The widget data.
      * @return ObjectForm Chainable

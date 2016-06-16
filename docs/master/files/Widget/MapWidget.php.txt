@@ -5,8 +5,8 @@ namespace Charcoal\Admin\Widget;
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\Model\ModelFactory;
 use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\FormGroupInterface;
-use \Charcoal\Admin\Ui\FormGroupTrait;
+use \Charcoal\Ui\FormGroup\FormGroupInterface;
+use \Charcoal\Ui\FormGroup\FormGroupTrait;
 
 /**
  * Map Widget displays a google map widget, with UI to add polygons, lines and points.

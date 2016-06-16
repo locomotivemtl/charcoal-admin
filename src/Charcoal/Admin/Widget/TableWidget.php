@@ -208,9 +208,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         foreach ($props as $propertyIdent => $property) {
             $propertyMetadata = $props[$propertyIdent];
 
-            $p = $this->propertyFactory()->get($propertyMetadata['type'], [
-                'logger' => $this->logger
-            ]);
+            $p = $this->propertyFactory()->create($propertyMetadata['type']);
             $p->setIdent($propertyIdent);
             $p->setData($propertyMetadata);
 

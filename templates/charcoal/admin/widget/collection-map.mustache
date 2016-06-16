@@ -1,0 +1,107 @@
+{{!--
+Collection Map Widget
+=====================
+
+`charcoal/admin/widget/alert/collection-map`
+--}}
+
+<div id="{{widget_id}}" style="width:100%;height:50em;">
+
+</div>
+
+{{#show_infobox}}
+    <div style="display:none;">
+    {{#map_objects}}
+    <div id="{{widget_id}}_infowindow_{{id}}">
+        {{>$widget_template}}
+    </div>
+    {{/map_objects}}
+    </div>
+{{/show_infobox}}
+
+{{#addJs}}
+<script>
+
+function load_collection_map() {
+    var default_styles = {
+        strokeColor: '#000000',
+        strokeOpacity: 0.8,
+        strokeWeight: 3,
+        fillColor: '#ffffff',
+        fillOpacity: 0.35,
+        hover: {
+            strokeColor: '#000000',
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            fillColor: '#ffffff',
+            fillOpacity: 0.5
+        },
+        focused: {
+            fillOpacity: 0.8
+        }
+    };
+
+    var map_options = {
+        default_styles: default_styles,
+        use_clusterer: true,
+        map: {
+            center: {
+                x:45.3752754,
+                y:-73.5884044
+            },
+            zoom: 13,
+            mapType: 'roadmap',
+            coordsType: 'inpage', // array, json? (vs ul li)
+            map_mode: 'default'
+        },
+        places: {
+        {{#map_objects}}
+            "{{id}}": {
+                type: 'marker',
+                coords: [{{lat}}, {{lng}}],
+                {{#show_infobox}}
+                onclick: function(){
+                    BootstrapDialog.show({
+                        nl2br: false,
+                        message: $('#{{widget_id}}_infowindow_{{id}}').html()
+                    });
+                }
+                {{/show_infobox}}
+            },
+        {{/map_objects}}
+        }
+    };
+
+    MapController =  new window.BB.gmap.controller(
+        document.getElementById('{{widget_id}}'),
+        map_options
+    );
+
+    MapController.init().ready(function() {
+        MapController.fit_bounds();
+    });
+    console.debug(MapController);
+    return MapController;
+}
+
+var map_controller;
+
+if (typeof google === 'undefined') {
+    // If google is undefined,
+    window._tmp_google_onload_function = function () {
+        map_controller = load_collection_map();
+    };
+
+    $.getScript(
+        'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
+        '&language=fr&callback=_tmp_google_onload_function',
+        function () {}
+    );
+}
+else {
+    map_controller = load_collection_map();
+}
+
+
+</script>
+{{/addJs}}

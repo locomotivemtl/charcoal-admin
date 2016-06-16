@@ -56,18 +56,47 @@ function load_collection_map() {
         },
         places: {
         {{#map_objects}}
-            "{{id}}": {
+        {{#mapShowMarker}}
+            "marker_{{id}}": {
                 type: 'marker',
-                coords: [{{lat}}, {{lng}}],
+                coords: [{{mapLat}}, {{mapLon}}],
                 {{#show_infobox}}
                 onclick: function(){
                     BootstrapDialog.show({
                         nl2br: false,
-                        message: $('#{{widget_id}}_infowindow_{{id}}').html()
+                        message: $('#{{widget_id}}_infowindow_{{id}}').html(),
+                        buttons: [{
+                            label: 'Modifier',
+                            action: function(dialog) {
+                                window.location.href = '{{baseUrl}}/admin/object/edit?obj_type={{obj_type}}&obj_id={{id}}'
+                            }
+                        }]
                     });
                 }
                 {{/show_infobox}}
             },
+        {{/mapShowMarker}}
+        {{#mapShowPolygon}}
+            "polygon_{{id}}": {
+                type: 'polygon',
+                paths: {{mapPolygon}},
+                {{#show_infobox}}
+                onclick: function(){
+                    BootstrapDialog.show({
+                        nl2br: false,
+                        message: $('#{{widget_id}}_infowindow_{{id}}').html(),
+                        buttons: [{
+                            label: 'Modifier',
+                            action: function(dialog) {
+                                window.location.href = '{{baseUrl}}/admin/object/edit?obj_type={{obj_type}}&obj_id={{id}}'
+                            }
+                        }]
+                    });
+                }
+                {{/show_infobox}}
+
+            },
+        {{/mapShowPolygon}}
         {{/map_objects}}
         }
     };
@@ -80,7 +109,6 @@ function load_collection_map() {
     MapController.init().ready(function() {
         MapController.fit_bounds();
     });
-    console.debug(MapController);
     return MapController;
 }
 

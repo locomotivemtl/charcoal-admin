@@ -15,7 +15,14 @@ use \Charcoal\Presenter\Presenter;
  */
 class CollectionMapWidget extends AdminWidget
 {
+    /**
+     * @var \Charcoal\Model\AbsractModel[] $mapObjects
+     */
     private $mapObjects;
+
+    /**
+     * @var \Charcoal\Model\AbsractModel $objProto
+     */
     private $objProto;
 
     /**
@@ -24,16 +31,24 @@ class CollectionMapWidget extends AdminWidget
      */
     private $latProperty;
 
-     /**
-      * The ident of the object's property for the longitude.
-      * @var string $latProperty
-      */
+    /**
+     * The ident of the object's property for the longitude.
+     * @var string $latProperty
+     */
     private $lonProperty;
 
+    /**
+     * @var string $polygonProperty
+     */
+    private $polygonProperty;
+
+    /**
+     * @var string $infoboxTemplate
+     */
     public $infoboxTemplate = '';
 
     /**
-     * @return \Alert\User
+     * @return \Charcoal\Model\AbsractModel
      */
     private function objProto()
     {
@@ -61,10 +76,10 @@ class CollectionMapWidget extends AdminWidget
         return $this->latProperty;
     }
 
-     /**
-      * @param string $p The longitude property ident.
-      * @return MapWidget Chainable
-      */
+    /**
+     * @param string $p The longitude property ident.
+     * @return MapWidget Chainable
+     */
     public function setLonProperty($p)
     {
         $this->lonProperty = $p;
@@ -79,12 +94,37 @@ class CollectionMapWidget extends AdminWidget
         return $this->lonProperty;
     }
 
+    /**
+     * @param string $p The polygon property ident.
+     * @return MapWidget Chainable
+     */
+    public function setPolygonProperty($p)
+    {
+        $this->polygonProperty = $p;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function polygonProperty()
+    {
+        return $this->polygonProperty;
+    }
+
+    /**
+     * @param string $template The infobox template ident.
+     * @return CollectionMapWidget Chainable
+     */
     public function setInfoboxTemplate($template)
     {
         $this->infoboxTemplate = $template;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function infoboxTemplate()
     {
         return $this->infoboxTemplate;
@@ -104,23 +144,63 @@ class CollectionMapWidget extends AdminWidget
             ]);
             $loader->setModel($this->objProto());
 
-            $infoboxTemplate = $this->infoboxTemplate();
-            $loader->setCallback(function($obj) use ($infoboxTemplate) {
-                $obj->infoboxTemplate = $infoboxTemplate;
+            $that = $this;
+            $loader->setCallback(function($obj) use ($that) {
+                $obj->mapInfoboxTemplate = $that->infoboxTemplate();
+
+                if ($that->latProperty() && $that->latProperty()) {
+                    $obj->mapShowMarker = true;
+                    $obj->mapLat = call_user_func([$obj, $that->latProperty()]);
+                    $obj->mapLon = call_user_func([$obj, $that->lonProperty()]);
+                } else {
+                    $obj->mapShowMarker = false;
+                }
+
+                if ($that->polygonProperty()) {
+                    $mapPolygon = call_user_func([$obj, $that->polygonProperty()]);
+                    if ($mapPolygon) {
+                        $obj->mapShowPolygon = true;
+                        $obj->mapPolygon = $that->formatPolygon($mapPolygon);
+                    } else {
+                        $obj->mapShowPolygon = false;
+                    }
+                }
             });
 
             $this->mapObjects = $loader->load();
         }
 
-        foreach($this->mapObjects as $obj) {
-            $GLOBALS['widget_template'] = $obj->infoboxTemplate;
+        foreach ($this->mapObjects as $obj) {
+            $GLOBALS['widget_template'] = $obj->mapInfoboxTemplate;
             yield $obj;
         }
     }
 
+    /**
+     * @return boolean
+     */
     public function showInfobox()
     {
         return ($this->infoboxTemplate != '');
+    }
+
+    /**
+     * @param mixed $rawPolygon The polygon information.
+     * @return string
+     */
+    private function formatPolygon($rawPolygon)
+    {
+        if (is_string($rawPolygon)) {
+            $polygon = explode(' ', $rawPolygon);
+            $ret = [];
+            foreach ($polygon as $poly) {
+                $coords = explode(',', $poly);
+                $ret[] = [(float)$coords[0], (float)$coords[1]];
+            }
+        } else {
+            $ret = $rawPolygon;
+        }
+        return json_encode($ret, true);
     }
 }
 

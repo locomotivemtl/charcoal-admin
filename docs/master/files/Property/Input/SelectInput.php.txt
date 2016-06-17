@@ -2,20 +2,24 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use \Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
+ * Select Options Input Property
  *
+ * > The HTML _select_ (`<select>`) element represents a control that presents a menu of options.
+ * — {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select}
  */
-class SelectInput extends AbstractPropertyInput
+class SelectInput extends AbstractSelectableInput
 {
     /**
-     * @return array This method is a generator
+     * Retrieve the selectable options.
+     *
+     * @todo [1]: With PHP7 we can simply do `yield from $choices;`.
+     * @return Generator|array
      */
     public function choices()
     {
-        $choices = $this->p()->choices();
-
         if ($this->p()->allowNull() && !$this->p()->multiple()) {
             $prepend = [
                 'value'   => '',
@@ -27,39 +31,11 @@ class SelectInput extends AbstractPropertyInput
             yield $prepend;
         }
 
-        foreach ($choices as $choiceIdent => $choice) {
-            if (!isset($choice['value'])) {
-                $choice['value'] = $choiceIdent;
-            }
-            if (!isset($choice['label'])) {
-                $choice['label'] = ucwords(strtolower(str_replace('_', ' ', $choiceIdent)));
-            }
-            if (!isset($choice['title'])) {
-                $choice['title'] = $choice['label'];
-            }
-            $choice['selected'] = $this->isChoiceSelected($choiceIdent);
+        $choices = parent::choices();
 
+        /* [^1] */
+        foreach ($choices as $choice) {
             yield $choice;
-        }
-    }
-
-    /**
-     * @param mixed $c The choice to check.
-     * @return boolean
-     */
-    public function isChoiceSelected($c)
-    {
-        $val = $this->p()->val();
-        if ($val === null) {
-            return false;
-        }
-
-        $val = $this->p()->parseVal($val);
-
-        if ($this->p()->multiple()) {
-            return in_array($c, $val);
-        } else {
-            return $c == $val;
         }
     }
 }

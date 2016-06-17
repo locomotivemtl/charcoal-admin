@@ -360,9 +360,19 @@ abstract class AbstractPropertyInput implements
     public function inputId()
     {
         if (!$this->inputId) {
-            $this->inputId = 'input_'.uniqid();
+            $this->inputId = $this->generateInputId();
         }
         return $this->inputId;
+    }
+
+    /**
+     * Generate a unique input ID.
+     *
+     * @return string
+     */
+    protected function generateInputId()
+    {
+        return 'input_'.uniqid();
     }
 
     /**

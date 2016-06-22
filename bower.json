@@ -20,7 +20,8 @@
     "fontawesome": "~4.3.0",
     "summernote": "~0.6.13",
     "tinymce": "~4.3.11",
-    "jquery-minicolors": "^2.2.3"
+    "jquery-minicolors": "^2.2.3",
+    "multiselect": "multiselect-two-sides#^2.2.7"
   },
   "devDependencies": {
     "qunit": "~1.18.0"

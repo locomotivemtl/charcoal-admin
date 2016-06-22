@@ -91,7 +91,9 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+
         try {
+            error_log(var_export($request->getParams(), true));
             $this->setData($request->getParams());
 
             // Load or reload object (From `ObjectContainerTrait`)

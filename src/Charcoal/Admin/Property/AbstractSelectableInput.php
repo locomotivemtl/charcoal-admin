@@ -24,7 +24,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
                 continue;
             }
 
-            yield $choice;
+            yield $ident => $choice;
         }
     }
 

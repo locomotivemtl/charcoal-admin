@@ -33,7 +33,9 @@ module.exports = {
             // Bootstrap Select
             'bower_components/bootstrap-select/dist/js/bootstrap-select.js',
             // Jquery Minicolors
-            'bower_components/jquery-minicolors/jquery.minicolors.min.js'
+            'bower_components/jquery-minicolors/jquery.minicolors.min.js',
+            // Multiselect Two-sides
+            'bower_components/multiselect/js/multiselect.min.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"

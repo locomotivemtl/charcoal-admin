@@ -22,14 +22,20 @@ DualSelect Options Property Input
     </div>
 
     <div class="col-xs-2">
-        <div class="col-xs-6">
-            <button type="button" id="{{inputId}}_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
-            <button type="button" id="{{inputId}}_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
-        </div>
-        <div class="col-xs-6">
-            <button type="button" id="{{inputId}}_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
-            <button type="button" id="{{inputId}}_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
-        </div>
+        <button type="button" id="{{inputId}}_undo" class="btn btn-info btn-block">undo</button>
+        <button type="button" id="{{inputId}}_rightAll" class="btn btn-default btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+        <button type="button" id="{{inputId}}_rightSelected" class="btn btn-default btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+        <button type="button" id="{{inputId}}_leftSelected" class="btn btn-default btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+        <button type="button" id="{{inputId}}_leftAll" class="btn btn-default btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+        <button type="button" id="{{inputId}}_redo" class="btn btn-warning btn-block">redo</button>
+        <!--<div class="col-xs-6">-->
+            <!--<button type="button" id="{{inputId}}_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>-->
+            <!--<button type="button" id="{{inputId}}_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>-->
+        <!--</div>-->
+        <!--<div class="col-xs-6">-->
+            <!--<button type="button" id="{{inputId}}_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>-->
+            <!--<button type="button" id="{{inputId}}_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>-->
+        <!--</div>-->
     </div>
 
     <div class="col-xs-5">

@@ -1729,7 +1729,7 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
 
         $.getScript(
             'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
-            '&language=fr&callback=_tmp_google_onload_function',
+            '&language=fr&callback=_tmp_google_onload_function&key='+this.data.data.api_key,
             function () {}
         );
     } else {
@@ -2648,7 +2648,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //save_enablewhendirty: true,
         //save_onsavecallback: function() { },
         //save_oncancelcallback: function() { },
-        root_lang_attr: $('#'+this.input_id).closest('[data-lang]').data('lang'),
+        root_lang_attr: $('#' + this.input_id).closest('[data-lang]').data('lang'),
         //table_clone_elements: "",
         table_grid: true,
         table_tab_navigation: true,

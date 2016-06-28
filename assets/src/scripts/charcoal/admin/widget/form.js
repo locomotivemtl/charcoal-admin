@@ -91,6 +91,7 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         type: 'POST',
         processData: false,
         contentType: false,
+        dataType: 'json',
         data: form_data,
         success: function (response) {
             if (response.success) {
@@ -169,7 +170,8 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
                 $.ajax({
                     method: 'POST',
                     url: url,
-                    data: data
+                    data: data,
+                    dataType: 'json'
                 }).done(function (response) {
                     console.debug(response);
                     if (response.success) {

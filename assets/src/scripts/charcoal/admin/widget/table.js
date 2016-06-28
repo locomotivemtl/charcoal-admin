@@ -100,7 +100,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                 dlg.setType(BootstrapDialog.TYPE_DANGER);
                 dlg.setMessage('Error');
             }
-        });
+        }, 'json');
 
     });
 
@@ -134,7 +134,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                     }
                 }
             }
-        });
+        }, 'json');
 
     });
 
@@ -188,7 +188,8 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             $.ajax({
                 method: 'POST',
                 url: url,
-                data: data
+                data: data,
+                dataType: 'json'
             }).done(function (response) {
                 console.debug(response);
             });
@@ -334,7 +335,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                 $.ajax({
                     method: 'POST',
                     url: url,
-                    data: data
+                    data: data,
+                    dataType: 'json'
                 }).done(function (response) {
                     console.debug(response);
                     if (response.success) {
@@ -409,7 +411,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
             dlg.setType(BootstrapDialog.TYPE_DANGER);
             dlg.setMessage('Error');
         }
-    });
+    }, 'json');
 };
 
 Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
@@ -431,7 +433,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
                 td.html(inline_properties[p]);
             }
         }
-    });
+    }, 'json');
 };
 
 Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
@@ -451,7 +453,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
             } else {
                 window.alert('Delete failed.');
             }
-        });
+        }, 'json');
     }
 };
 

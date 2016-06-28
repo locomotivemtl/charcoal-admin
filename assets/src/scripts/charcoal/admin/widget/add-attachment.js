@@ -217,7 +217,7 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.save = function (cb)
         if (typeof cb === 'function') {
             cb();
         }
-    });
+    }, 'json');
 
 };
 

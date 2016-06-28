@@ -225,7 +225,7 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
         if (typeof cb === 'function') {
             cb(response);
         }
-    });
+    }, 'json');
 
 };
 
@@ -251,7 +251,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
             $.ajax({
                 method: 'POST',
                 url: url,
-                data: data
+                data: data,
+                dataType: 'json'
             }).done(function (response) {
                 if (response.success) {
                     dialog.setMessage(response.widget_html);

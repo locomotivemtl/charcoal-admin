@@ -169,7 +169,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
         });
     });
 
-    $.post('join', data, function () {});
+    $.post('join', data, function () {}, 'json');
 
 };
 

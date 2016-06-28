@@ -1729,7 +1729,7 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
 
         $.getScript(
             'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
-            '&language=fr&callback=_tmp_google_onload_function&key='+this.data.data.api_key,
+            '&language=fr&callback=_tmp_google_onload_function&key=' + this.data.data.api_key,
             function () {}
         );
     } else {
@@ -2805,7 +2805,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
                     type: BootstrapDialog.TYPE_DANGER
                 });
             }
-        }).fail(function () {
+        }, 'json').fail(function () {
             //window.alert('Error');
             BootstrapDialog.show({
                 title: 'Login error',
@@ -3069,7 +3069,7 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
         if (typeof cb === 'function') {
             cb(response);
         }
-    });
+    }, 'json');
 
 };
 
@@ -3095,7 +3095,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
             $.ajax({
                 method: 'POST',
                 url: url,
-                data: data
+                data: data,
+                dataType: 'json'
             }).done(function (response) {
                 if (response.success) {
                     dialog.setMessage(response.widget_html);
@@ -3331,7 +3332,7 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.save = function (cb)
         if (typeof cb === 'function') {
             cb();
         }
-    });
+    }, 'json');
 
 };
 
@@ -3514,7 +3515,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
         });
     });
 
-    $.post('join', data, function () {});
+    $.post('join', data, function () {}, 'json');
 
 };
 
@@ -3619,6 +3620,7 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         type: 'POST',
         processData: false,
         contentType: false,
+        dataType: 'json',
         data: form_data,
         success: function (response) {
             if (response.success) {
@@ -3697,7 +3699,8 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
                 $.ajax({
                     method: 'POST',
                     url: url,
-                    data: data
+                    data: data,
+                    dataType: 'json'
                 }).done(function (response) {
                     console.debug(response);
                     if (response.success) {
@@ -3892,6 +3895,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
         type: 'POST',
         processData: false,
         contentType: false,
+        dataType: 'json',
         data: form_data,
         success: function (response) {
             if (response.success) {
@@ -4180,7 +4184,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                 dlg.setType(BootstrapDialog.TYPE_DANGER);
                 dlg.setMessage('Error');
             }
-        });
+        }, 'json');
 
     });
 
@@ -4214,7 +4218,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                     }
                 }
             }
-        });
+        }, 'json');
 
     });
 
@@ -4268,7 +4272,8 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             $.ajax({
                 method: 'POST',
                 url: url,
-                data: data
+                data: data,
+                dataType: 'json'
             }).done(function (response) {
                 console.debug(response);
             });
@@ -4414,7 +4419,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                 $.ajax({
                     method: 'POST',
                     url: url,
-                    data: data
+                    data: data,
+                    dataType: 'json'
                 }).done(function (response) {
                     console.debug(response);
                     if (response.success) {
@@ -4489,7 +4495,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
             dlg.setType(BootstrapDialog.TYPE_DANGER);
             dlg.setMessage('Error');
         }
-    });
+    }, 'json');
 };
 
 Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
@@ -4511,7 +4517,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
                 td.html(inline_properties[p]);
             }
         }
-    });
+    }, 'json');
 };
 
 Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
@@ -4531,7 +4537,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
             } else {
                 window.alert('Delete failed.');
             }
-        });
+        }, 'json');
     }
 };
 

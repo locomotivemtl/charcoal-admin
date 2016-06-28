@@ -48,7 +48,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
                     type: BootstrapDialog.TYPE_DANGER
                 });
             }
-        }).fail(function () {
+        }, 'json').fail(function () {
             //window.alert('Error');
             BootstrapDialog.show({
                 title: 'Login error',

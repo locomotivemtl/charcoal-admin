@@ -55,6 +55,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
         type: 'POST',
         processData: false,
         contentType: false,
+        dataType: 'json',
         data: form_data,
         success: function (response) {
             if (response.success) {

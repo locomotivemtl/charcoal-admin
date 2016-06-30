@@ -3560,6 +3560,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
     this.obj_type = opts.data.obj_type || this.obj_type;
     this.obj_id = opts.data.obj_id || this.obj_id;
     this.form_selector = opts.data.form_selector || this.form_selector;
+    this.isTab = opts.data.tab;
 
     return this;
 };
@@ -3593,6 +3594,16 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
         var lang = $this.attr('data-lang-switch');
         that.switch_language(lang);
     });
+
+    if (that.isTab) {
+        $(that.form_selector).on('click', '.js-group-tabs', function (e) {
+            e.preventDefault();
+            var href = $(this).attr('href');
+            $(that.form_selector).find('.js-group-tab').addClass('hidden');
+            $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
+            $(this).parent().addClass('active').siblings('.active').removeClass('active');
+        });
+    }
 
 };
 

@@ -9,6 +9,14 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 --}}
 <form action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widgetId}}">
 
+    {{#isTab}}
+        <ul class="nav nav-tabs">
+        {{#groups}}
+            <li{{^isHidden}} class="active"{{/isHidden}}><a href="{{ident}}" class="js-group-tabs">{{title}}</a></li>
+        {{/groups}}
+        </ul>
+    {{/isTab}}
+
     <div class="o-flex">
 
         <div class="o-flex_main">
@@ -18,7 +26,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
                     {{>charcoal/admin/widget/layout.start}}
                 {{/form.layout}}
 
-                <div class="col-md-{{form.layout.cellSpanBy12}}">
+                <div class="col-md-{{form.layout.cellSpanBy12}} js-group-tab {{ident}}{{#isHidden}} hidden{{/isHidden}}">
                     {{>$widget_template}}
                 </div>
 
@@ -53,7 +61,8 @@ Charcoal.Admin.manager().add_widget({
     data: {
         form_selector: '#{{widgetId}}',
         obj_type: '{{objType}}',
-        obj_id: '{{objId}}'
+        obj_id: '{{objId}}',
+        tab: {{isTab}}
     }
 });
 </script>

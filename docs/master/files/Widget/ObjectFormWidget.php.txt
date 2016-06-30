@@ -26,6 +26,11 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     protected $formIdent;
 
     /**
+     * @var string
+     */
+    protected $groupDisplayMode;
+
+    /**
      * @param Container $container The DI container.
      * @return void
      */
@@ -130,6 +135,36 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     public function formIdent()
     {
         return $this->formIdent;
+    }
+
+    /**
+     * Group display mode. Could be "tab" or nothing.
+     * @param string $mode Group display mode.
+     * @return ObjectFormWidget Chainable.
+     */
+    public function setGroupDisplayMode($mode)
+    {
+        $this->groupDisplayMode = $mode;
+        return $this;
+    }
+
+    /**
+     * Group display mode.
+     * @return string Group display mode.
+     */
+    public function groupDisplayMode()
+    {
+        return $this->groupDisplayMode;
+    }
+
+    /**
+     * Used in mustache templates to define if we're in
+     * tab display mode or not.
+     * @return boolean Tab display mode or not.
+     */
+    public function isTab()
+    {
+        return ( $this->groupDisplayMode() == 'tab' );
     }
 
     /**

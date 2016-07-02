@@ -164,7 +164,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      */
     public function isTab()
     {
-        return ( $this->groupDisplayMode() == 'tab' );
+        return ( $this->groupDisplayMode() === 'tab' );
     }
 
     /**

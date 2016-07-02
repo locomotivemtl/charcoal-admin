@@ -62,7 +62,7 @@ Charcoal.Admin.manager().add_widget({
         form_selector: '#{{widgetId}}',
         obj_type: '{{objType}}',
         obj_id: '{{objId}}',
-        tab: {{isTab}}
+        tab: {{#isTab}}true{{/isTab}}{{^isTab}}false{{/isTab}}
     }
 });
 </script>

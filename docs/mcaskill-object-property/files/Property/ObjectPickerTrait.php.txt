@@ -1,0 +1,40 @@
+<?php
+
+namespace Charcoal\Admin\Property;
+
+// Dependency from 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
+/**
+ * Object Picker Input Property
+ */
+trait ObjectPickerTrait
+{
+    /**
+     * @param mixed $label The "Add Object" label.
+     * @return Text Chainable
+     */
+    public function setAddObjectLabel($label)
+    {
+        $this->addObjectLabel = new TranslationString($label);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function addObjectLabel()
+    {
+        if ($this->addObjectLabel === null) {
+            $metadata = $this->metadata();
+
+            if (isset($metadata['data']['add_object_label'])) {
+                $this->setAddObjectLabel($metadata['data']['add_object_label']);
+            }
+        }
+
+        return $this->addObjectLabel;
+    }
+}
+

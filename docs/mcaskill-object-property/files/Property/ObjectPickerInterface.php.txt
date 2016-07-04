@@ -1,0 +1,22 @@
+<?php
+
+namespace Charcoal\Admin\Property;
+
+/**
+ * Defines an input property for dynamically adding objects
+ * to a list of choices.
+ */
+interface ObjectPickerInterface
+{
+    /**
+     * @param mixed $label The "Add Object" label.
+     * @return Text Chainable
+     */
+    public function setAddObjectLabel($label);
+
+    /**
+     * @return string
+     */
+    public function addObjectLabel();
+}
+

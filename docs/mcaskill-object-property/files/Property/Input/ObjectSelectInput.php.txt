@@ -1,0 +1,16 @@
+<?php
+
+namespace Charcoal\Admin\Property\Input;
+
+use \Charcoal\Admin\Property\ObjectPickerInterface;
+use \Charcoal\Admin\Property\ObjectPickerTrait;
+
+/**
+ * Object Select Options Input Property
+ */
+class ObjectSelectInput extends SelectInput implements
+    ObjectPickerInterface
+{
+    use ObjectPickerTrait;
+}
+

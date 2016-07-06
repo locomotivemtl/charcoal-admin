@@ -70,6 +70,30 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         return $this;
     }
 
+    /**
+     * @param string $formIdent The form ident.
+     * @throws InvalidArgumentException If the argument is not a string.
+     * @return ObjectForm Chainable
+     */
+    public function setFormIdent($formIdent)
+    {
+        if (!is_string($formIdent)) {
+            throw new InvalidArgumentException(
+                'Form ident must be a string'
+            );
+        }
+        $this->formIdent = $formIdent;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function formIdent()
+    {
+        return $this->formIdent;
+    }
+
      /**
       * @param string $url The next URL.
       * @throws InvalidArgumentException If argument is not a string.
@@ -113,29 +137,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         }
     }
 
-    /**
-     * @param string $formIdent The form ident.
-     * @throws InvalidArgumentException If the argument is not a string.
-     * @return ObjectForm Chainable
-     */
-    public function setFormIdent($formIdent)
-    {
-        if (!is_string($formIdent)) {
-            throw new InvalidArgumentException(
-                'Form ident must be a string'
-            );
-        }
-        $this->formIdent = $formIdent;
-        return $this;
-    }
 
-    /**
-     * @return string
-     */
-    public function formIdent()
-    {
-        return $this->formIdent;
-    }
 
     /**
      * Group display mode. Could be "tab" or nothing.

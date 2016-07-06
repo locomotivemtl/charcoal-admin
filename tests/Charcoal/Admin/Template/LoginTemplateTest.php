@@ -1,4 +1,5 @@
 <?php
+
 namespace Charcoal\Admin\Tests\Template;
 
 use \Charcoal\Admin\Template\LoginTemplate;

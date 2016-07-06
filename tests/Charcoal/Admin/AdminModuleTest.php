@@ -2,7 +2,8 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Charcoal\Admin\AdminModule as AdminModule;
+use \Psr\Log\NullLogger;
+use \Charcoal\Admin\AdminModule;
 
 class AdminModuleTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +13,7 @@ class AdminModuleTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $obj = new AdminModule([
-            'logger'    => new \Psr\Log\NullLogger(),
+            'logger'    => new NullLogger(),
             'config'    => null,
             'app'       => $GLOBALS['app']
         ]);

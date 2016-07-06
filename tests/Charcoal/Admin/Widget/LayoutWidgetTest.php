@@ -2,13 +2,15 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
-use \Charcoal\Admin\Widget\LayoutWidget as LayoutWidget;
+use \Psr\Log\NullLogger;
+
+use \Charcoal\Admin\Widget\LayoutWidget;
 
 class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $logger = new \Psr\Log\NullLogger();
+        $logger = new NullLogger();
         $this->obj = new LayoutWidget([
             'logger' => $logger
         ]);

@@ -127,6 +127,11 @@
 
 						</li>
 				<li>
+					<a href="namespace-Charcoal.Admin.User.html">
+						User					</a>
+
+						</li>
+				<li>
 					<a href="namespace-Charcoal.Admin.Widget.html">
 						Widget<span></span>
 					</a>
@@ -135,6 +140,11 @@
 				<li>
 					<a href="namespace-Charcoal.Admin.Widget.Dialog.html">
 						Dialog					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">
+						FormGroup					</a>
 
 						</li>
 				<li>
@@ -230,7 +240,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.ServiceProvider.html">ServiceProvider</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#14-93" title="Go to source code">Charcoal/Admin/ServiceProvider/AdminServiceProvider.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#17-122" title="Go to source code">Charcoal/Admin/ServiceProvider/AdminServiceProvider.php</a>
 		<br>
 	</div>
 
@@ -250,7 +260,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_register">#</a>
-		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#25-48" title="Go to source code">register</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#28-54" title="Go to source code">register</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Registers services on the given container.</p>
@@ -261,6 +271,41 @@
 
 <p>This method should only be used to configure services and parameters.
 It should not get services.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>The DI container.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="registerAuthenticator" id="_registerAuthenticator">
+
+		<td class="attributes"><code>
+			 protected 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_registerAuthenticator">#</a>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#56-77" title="Go to source code">registerAuthenticator</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			<p>Registers the authenticator object.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Registers the authenticator object.</p>
 
 
 				<h4>Parameters</h4>
@@ -288,14 +333,14 @@ It should not get services.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_registerUtilities">#</a>
-		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#50-92" title="Go to source code">registerUtilities</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#79-121" title="Go to source code">registerUtilities</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
-			<p>Registers the admin factories</p>
+			<p>Registers the admin factories.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Registers the admin factories</p>
+			<p>Registers the admin factories.</p>
 
 
 				<h4>Parameters</h4>

@@ -128,6 +128,11 @@
 
 						</li>
 				<li>
+					<a href="namespace-Charcoal.Admin.User.html">
+						User					</a>
+
+						</li>
+				<li>
 					<a href="namespace-Charcoal.Admin.Widget.html">
 						Widget<span></span>
 					</a>
@@ -136,6 +141,11 @@
 				<li>
 					<a href="namespace-Charcoal.Admin.Widget.Dialog.html">
 						Dialog					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">
+						FormGroup					</a>
 
 						</li>
 				<li>
@@ -211,11 +221,15 @@
 				<li><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.Object.EditTemplate.html">Charcoal\Admin\Template\Object\EditTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.User.html">Charcoal\Admin\User</a></li>
+				<li><a href="class-Charcoal.Admin.User.AclRole.html">Charcoal\Admin\User\AclRole</a></li>
+				<li><a href="class-Charcoal.Admin.User.Permission.html">Charcoal\Admin\User\Permission</a></li>
+				<li><a href="class-Charcoal.Admin.User.PermissionCategory.html">Charcoal\Admin\User\PermissionCategory</a></li>
 				<li><a href="class-Charcoal.Admin.UserConfig.html">Charcoal\Admin\UserConfig</a></li>
 				<li><a href="class-Charcoal.Admin.UserGroup.html">Charcoal\Admin\UserGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.CollectionMapWidget.html">Charcoal\Admin\Widget\CollectionMapWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.DashboardWidget.html">Charcoal\Admin\Widget\DashboardWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.Dialog.ImportlistWidget.html">Charcoal\Admin\Widget\Dialog\ImportlistWidget</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">Charcoal\Admin\Widget\FormGroup\AclPermissions</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></li>
@@ -434,104 +448,100 @@
 </span><span id="145" class="l"><a href="#145">145: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> sidebars()
 </span><span id="146" class="l"><a href="#146">146: </a>    {
 </span><span id="147" class="l"><a href="#147">147: </a>        <span class="php-var">$sidebars</span> = <span class="php-var">$this</span>-&gt;sidebars;
-</span><span id="148" class="l"><a href="#148">148: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$this</span>-&gt;sidebars)) {
-</span><span id="149" class="l"><a href="#149">149: </a>            yield <span class="php-keyword1">null</span>;
-</span><span id="150" class="l"><a href="#150">150: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="151" class="l"><a href="#151">151: </a>            <span class="php-keyword2">uasort</span>(<span class="php-var">$sidebars</span>, [<span class="php-quote">'self'</span>, <span class="php-quote">'sortSidebarsByPriority'</span>]);
-</span><span id="152" class="l"><a href="#152">152: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$sidebars</span> <span class="php-keyword1">as</span> <span class="php-var">$sidebar</span>) {
-</span><span id="153" class="l"><a href="#153">153: </a>                <span class="php-var">$GLOBALS</span>[<span class="php-quote">'widget_template'</span>] = <span class="php-quote">'charcoal/admin/widget/form.sidebar'</span>;
-</span><span id="154" class="l"><a href="#154">154: </a>                yield <span class="php-var">$sidebar</span>-&gt;ident() =&gt; <span class="php-var">$sidebar</span>;
-</span><span id="155" class="l"><a href="#155">155: </a>            }
-</span><span id="156" class="l"><a href="#156">156: </a>        }
-</span><span id="157" class="l"><a href="#157">157: </a>    }
-</span><span id="158" class="l"><a href="#158">158: </a>
-</span><span id="159" class="l"><a href="#159">159: </a>    <span class="php-comment">/**
-</span></span><span id="160" class="l"><a href="#160">160: </a><span class="php-comment">     * To be called with uasort().
-</span></span><span id="161" class="l"><a href="#161">161: </a><span class="php-comment">     *
-</span></span><span id="162" class="l"><a href="#162">162: </a><span class="php-comment">     * @param FormGroupInterface $a Item &quot;a&quot; to compare, for sorting.
-</span></span><span id="163" class="l"><a href="#163">163: </a><span class="php-comment">     * @param FormGroupInterface $b Item &quot;b&quot; to compaer, for sorting.
-</span></span><span id="164" class="l"><a href="#164">164: </a><span class="php-comment">     * @return integer Sorting value: -1, 0, or 1
-</span></span><span id="165" class="l"><a href="#165">165: </a><span class="php-comment">     */</span>
-</span><span id="166" class="l"><a href="#166">166: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> sortSidebarsByPriority(FormGroupInterface <span class="php-var">$a</span>, FormGroupInterface <span class="php-var">$b</span>)
-</span><span id="167" class="l"><a href="#167">167: </a>    {
-</span><span id="168" class="l"><a href="#168">168: </a>        <span class="php-var">$a</span> = <span class="php-var">$a</span>-&gt;priority();
-</span><span id="169" class="l"><a href="#169">169: </a>        <span class="php-var">$b</span> = <span class="php-var">$b</span>-&gt;priority();
-</span><span id="170" class="l"><a href="#170">170: </a>
-</span><span id="171" class="l"><a href="#171">171: </a>        <span class="php-keyword1">return</span> (<span class="php-var">$a</span> &lt; <span class="php-var">$b</span>) ? (-<span class="php-num">1</span>) : <span class="php-num">1</span>;
-</span><span id="172" class="l"><a href="#172">172: </a>    }
-</span><span id="173" class="l"><a href="#173">173: </a>
-</span><span id="174" class="l"><a href="#174">174: </a>    <span class="php-comment">/**
-</span></span><span id="175" class="l"><a href="#175">175: </a><span class="php-comment">     * @param array $properties The form properties.
-</span></span><span id="176" class="l"><a href="#176">176: </a><span class="php-comment">     * @return FormInterface Chainable
-</span></span><span id="177" class="l"><a href="#177">177: </a><span class="php-comment">     */</span>
-</span><span id="178" class="l"><a href="#178">178: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setFormProperties(<span class="php-keyword1">array</span> <span class="php-var">$properties</span>)
-</span><span id="179" class="l"><a href="#179">179: </a>    {
-</span><span id="180" class="l"><a href="#180">180: </a>        <span class="php-var">$this</span>-&gt;formProperties = [];
-</span><span id="181" class="l"><a href="#181">181: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$properties</span> <span class="php-keyword1">as</span> <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$property</span>) {
-</span><span id="182" class="l"><a href="#182">182: </a>            <span class="php-var">$this</span>-&gt;addFormProperty(<span class="php-var">$propertyIdent</span>, <span class="php-var">$property</span>);
-</span><span id="183" class="l"><a href="#183">183: </a>        }
-</span><span id="184" class="l"><a href="#184">184: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-</span><span id="185" class="l"><a href="#185">185: </a>    }
-</span><span id="186" class="l"><a href="#186">186: </a>
-</span><span id="187" class="l"><a href="#187">187: </a>    <span class="php-comment">/**
-</span></span><span id="188" class="l"><a href="#188">188: </a><span class="php-comment">     * @param string                      $propertyIdent The property identifier.
-</span></span><span id="189" class="l"><a href="#189">189: </a><span class="php-comment">     * @param array|FormPropertyInterface $property      The property object or structure.
-</span></span><span id="190" class="l"><a href="#190">190: </a><span class="php-comment">     * @throws InvalidArgumentException If the ident is not a string or the property not a valid object or structure.
-</span></span><span id="191" class="l"><a href="#191">191: </a><span class="php-comment">     * @return FormInterface Chainable
-</span></span><span id="192" class="l"><a href="#192">192: </a><span class="php-comment">     */</span>
-</span><span id="193" class="l"><a href="#193">193: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> addFormProperty(<span class="php-var">$propertyIdent</span>, <span class="php-var">$property</span>)
-</span><span id="194" class="l"><a href="#194">194: </a>    {
-</span><span id="195" class="l"><a href="#195">195: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_string</span>(<span class="php-var">$propertyIdent</span>)) {
-</span><span id="196" class="l"><a href="#196">196: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> InvalidArgumentException(
-</span><span id="197" class="l"><a href="#197">197: </a>                <span class="php-quote">'Property ident must be a string'</span>
-</span><span id="198" class="l"><a href="#198">198: </a>            );
-</span><span id="199" class="l"><a href="#199">199: </a>        }
-</span><span id="200" class="l"><a href="#200">200: </a>
-</span><span id="201" class="l"><a href="#201">201: </a>        <span class="php-keyword1">if</span> ((<span class="php-var">$property</span> <span class="php-keyword1">instanceof</span> FormPropertyWidget)) {
-</span><span id="202" class="l"><a href="#202">202: </a>            <span class="php-var">$this</span>-&gt;formProperties[<span class="php-var">$propertyIdent</span>] = <span class="php-var">$property</span>;
-</span><span id="203" class="l"><a href="#203">203: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-keyword2">is_array</span>(<span class="php-var">$property</span>)) {
-</span><span id="204" class="l"><a href="#204">204: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;createFormProperty(<span class="php-var">$property</span>);
-</span><span id="205" class="l"><a href="#205">205: </a>            <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
-</span><span id="206" class="l"><a href="#206">206: </a>            <span class="php-var">$this</span>-&gt;formProperties[<span class="php-var">$propertyIdent</span>] = <span class="php-var">$p</span>;
-</span><span id="207" class="l"><a href="#207">207: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="208" class="l"><a href="#208">208: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> InvalidArgumentException(
-</span><span id="209" class="l"><a href="#209">209: </a>                <span class="php-quote">'Property must be a FormProperty object or an array'</span>
-</span><span id="210" class="l"><a href="#210">210: </a>            );
-</span><span id="211" class="l"><a href="#211">211: </a>        }
-</span><span id="212" class="l"><a href="#212">212: </a>
-</span><span id="213" class="l"><a href="#213">213: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-</span><span id="214" class="l"><a href="#214">214: </a>    }
-</span><span id="215" class="l"><a href="#215">215: </a>
-</span><span id="216" class="l"><a href="#216">216: </a>    <span class="php-comment">/**
-</span></span><span id="217" class="l"><a href="#217">217: </a><span class="php-comment">     * Properties generator
-</span></span><span id="218" class="l"><a href="#218">218: </a><span class="php-comment">     *
-</span></span><span id="219" class="l"><a href="#219">219: </a><span class="php-comment">     * @return FormPropertyWidget[] This method is a generator.
-</span></span><span id="220" class="l"><a href="#220">220: </a><span class="php-comment">     */</span>
-</span><span id="221" class="l"><a href="#221">221: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formProperties()
-</span><span id="222" class="l"><a href="#222">222: </a>    {
-</span><span id="223" class="l"><a href="#223">223: </a>        <span class="php-var">$sidebars</span> = <span class="php-var">$this</span>-&gt;sidebars;
-</span><span id="224" class="l"><a href="#224">224: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$this</span>-&gt;sidebars)) {
-</span><span id="225" class="l"><a href="#225">225: </a>            yield <span class="php-keyword1">null</span>;
-</span><span id="226" class="l"><a href="#226">226: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="227" class="l"><a href="#227">227: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;formProperties <span class="php-keyword1">as</span> <span class="php-var">$prop</span>) {
-</span><span id="228" class="l"><a href="#228">228: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$prop</span>-&gt;active() === <span class="php-keyword1">false</span>) {
-</span><span id="229" class="l"><a href="#229">229: </a>                    <span class="php-keyword1">continue</span>;
-</span><span id="230" class="l"><a href="#230">230: </a>                }
-</span><span id="231" class="l"><a href="#231">231: </a>                <span class="php-var">$GLOBALS</span>[<span class="php-quote">'widget_template'</span>] = <span class="php-var">$prop</span>-&gt;inputType();
-</span><span id="232" class="l"><a href="#232">232: </a>                yield <span class="php-var">$prop</span>-&gt;propertyIdent() =&gt; <span class="php-var">$prop</span>;
-</span><span id="233" class="l"><a href="#233">233: </a>            }
-</span><span id="234" class="l"><a href="#234">234: </a>        }
-</span><span id="235" class="l"><a href="#235">235: </a>    }
-</span><span id="236" class="l"><a href="#236">236: </a>
-</span><span id="237" class="l"><a href="#237">237: </a>    <span class="php-comment">/**
-</span></span><span id="238" class="l"><a href="#238">238: </a><span class="php-comment">     * @return string
-</span></span><span id="239" class="l"><a href="#239">239: </a><span class="php-comment">     */</span>
-</span><span id="240" class="l"><a href="#240">240: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> defaultGroupType()
-</span><span id="241" class="l"><a href="#241">241: </a>    {
-</span><span id="242" class="l"><a href="#242">242: </a>        <span class="php-keyword1">return</span> <span class="php-quote">'charcoal/admin/widget/form-group-widget'</span>;
-</span><span id="243" class="l"><a href="#243">243: </a>    }
-</span><span id="244" class="l"><a href="#244">244: </a>}
-</span><span id="245" class="l"><a href="#245">245: </a></span></code></pre>
+</span><span id="148" class="l"><a href="#148">148: </a>        <span class="php-keyword2">uasort</span>(<span class="php-var">$sidebars</span>, [<span class="php-quote">'self'</span>, <span class="php-quote">'sortSidebarsByPriority'</span>]);
+</span><span id="149" class="l"><a href="#149">149: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$sidebars</span> <span class="php-keyword1">as</span> <span class="php-var">$sidebarIdent</span> =&gt; <span class="php-var">$sidebar</span>) {
+</span><span id="150" class="l"><a href="#150">150: </a>            <span class="php-var">$GLOBALS</span>[<span class="php-quote">'widget_template'</span>] = <span class="php-quote">'charcoal/admin/widget/form.sidebar'</span>;
+</span><span id="151" class="l"><a href="#151">151: </a>            yield <span class="php-var">$sidebarIdent</span> =&gt; <span class="php-var">$sidebar</span>;
+</span><span id="152" class="l"><a href="#152">152: </a>        }
+</span><span id="153" class="l"><a href="#153">153: </a>    }
+</span><span id="154" class="l"><a href="#154">154: </a>
+</span><span id="155" class="l"><a href="#155">155: </a>    <span class="php-comment">/**
+</span></span><span id="156" class="l"><a href="#156">156: </a><span class="php-comment">     * To be called with uasort().
+</span></span><span id="157" class="l"><a href="#157">157: </a><span class="php-comment">     *
+</span></span><span id="158" class="l"><a href="#158">158: </a><span class="php-comment">     * @param FormGroupInterface $a Item &quot;a&quot; to compare, for sorting.
+</span></span><span id="159" class="l"><a href="#159">159: </a><span class="php-comment">     * @param FormGroupInterface $b Item &quot;b&quot; to compaer, for sorting.
+</span></span><span id="160" class="l"><a href="#160">160: </a><span class="php-comment">     * @return integer Sorting value: -1, 0, or 1
+</span></span><span id="161" class="l"><a href="#161">161: </a><span class="php-comment">     */</span>
+</span><span id="162" class="l"><a href="#162">162: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> sortSidebarsByPriority(FormGroupInterface <span class="php-var">$a</span>, FormGroupInterface <span class="php-var">$b</span>)
+</span><span id="163" class="l"><a href="#163">163: </a>    {
+</span><span id="164" class="l"><a href="#164">164: </a>        <span class="php-var">$a</span> = <span class="php-var">$a</span>-&gt;priority();
+</span><span id="165" class="l"><a href="#165">165: </a>        <span class="php-var">$b</span> = <span class="php-var">$b</span>-&gt;priority();
+</span><span id="166" class="l"><a href="#166">166: </a>
+</span><span id="167" class="l"><a href="#167">167: </a>        <span class="php-keyword1">return</span> (<span class="php-var">$a</span> &lt; <span class="php-var">$b</span>) ? (-<span class="php-num">1</span>) : <span class="php-num">1</span>;
+</span><span id="168" class="l"><a href="#168">168: </a>    }
+</span><span id="169" class="l"><a href="#169">169: </a>
+</span><span id="170" class="l"><a href="#170">170: </a>    <span class="php-comment">/**
+</span></span><span id="171" class="l"><a href="#171">171: </a><span class="php-comment">     * @param array $properties The form properties.
+</span></span><span id="172" class="l"><a href="#172">172: </a><span class="php-comment">     * @return FormInterface Chainable
+</span></span><span id="173" class="l"><a href="#173">173: </a><span class="php-comment">     */</span>
+</span><span id="174" class="l"><a href="#174">174: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setFormProperties(<span class="php-keyword1">array</span> <span class="php-var">$properties</span>)
+</span><span id="175" class="l"><a href="#175">175: </a>    {
+</span><span id="176" class="l"><a href="#176">176: </a>        <span class="php-var">$this</span>-&gt;formProperties = [];
+</span><span id="177" class="l"><a href="#177">177: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$properties</span> <span class="php-keyword1">as</span> <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$property</span>) {
+</span><span id="178" class="l"><a href="#178">178: </a>            <span class="php-var">$this</span>-&gt;addFormProperty(<span class="php-var">$propertyIdent</span>, <span class="php-var">$property</span>);
+</span><span id="179" class="l"><a href="#179">179: </a>        }
+</span><span id="180" class="l"><a href="#180">180: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+</span><span id="181" class="l"><a href="#181">181: </a>    }
+</span><span id="182" class="l"><a href="#182">182: </a>
+</span><span id="183" class="l"><a href="#183">183: </a>    <span class="php-comment">/**
+</span></span><span id="184" class="l"><a href="#184">184: </a><span class="php-comment">     * @param string                      $propertyIdent The property identifier.
+</span></span><span id="185" class="l"><a href="#185">185: </a><span class="php-comment">     * @param array|FormPropertyInterface $property      The property object or structure.
+</span></span><span id="186" class="l"><a href="#186">186: </a><span class="php-comment">     * @throws InvalidArgumentException If the ident is not a string or the property not a valid object or structure.
+</span></span><span id="187" class="l"><a href="#187">187: </a><span class="php-comment">     * @return FormInterface Chainable
+</span></span><span id="188" class="l"><a href="#188">188: </a><span class="php-comment">     */</span>
+</span><span id="189" class="l"><a href="#189">189: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> addFormProperty(<span class="php-var">$propertyIdent</span>, <span class="php-var">$property</span>)
+</span><span id="190" class="l"><a href="#190">190: </a>    {
+</span><span id="191" class="l"><a href="#191">191: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_string</span>(<span class="php-var">$propertyIdent</span>)) {
+</span><span id="192" class="l"><a href="#192">192: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> InvalidArgumentException(
+</span><span id="193" class="l"><a href="#193">193: </a>                <span class="php-quote">'Property ident must be a string'</span>
+</span><span id="194" class="l"><a href="#194">194: </a>            );
+</span><span id="195" class="l"><a href="#195">195: </a>        }
+</span><span id="196" class="l"><a href="#196">196: </a>
+</span><span id="197" class="l"><a href="#197">197: </a>        <span class="php-keyword1">if</span> ((<span class="php-var">$property</span> <span class="php-keyword1">instanceof</span> FormPropertyWidget)) {
+</span><span id="198" class="l"><a href="#198">198: </a>            <span class="php-var">$this</span>-&gt;formProperties[<span class="php-var">$propertyIdent</span>] = <span class="php-var">$property</span>;
+</span><span id="199" class="l"><a href="#199">199: </a>        } <span class="php-keyword1">elseif</span> (<span class="php-keyword2">is_array</span>(<span class="php-var">$property</span>)) {
+</span><span id="200" class="l"><a href="#200">200: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;createFormProperty(<span class="php-var">$property</span>);
+</span><span id="201" class="l"><a href="#201">201: </a>            <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
+</span><span id="202" class="l"><a href="#202">202: </a>            <span class="php-var">$this</span>-&gt;formProperties[<span class="php-var">$propertyIdent</span>] = <span class="php-var">$p</span>;
+</span><span id="203" class="l"><a href="#203">203: </a>        } <span class="php-keyword1">else</span> {
+</span><span id="204" class="l"><a href="#204">204: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> InvalidArgumentException(
+</span><span id="205" class="l"><a href="#205">205: </a>                <span class="php-quote">'Property must be a FormProperty object or an array'</span>
+</span><span id="206" class="l"><a href="#206">206: </a>            );
+</span><span id="207" class="l"><a href="#207">207: </a>        }
+</span><span id="208" class="l"><a href="#208">208: </a>
+</span><span id="209" class="l"><a href="#209">209: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+</span><span id="210" class="l"><a href="#210">210: </a>    }
+</span><span id="211" class="l"><a href="#211">211: </a>
+</span><span id="212" class="l"><a href="#212">212: </a>    <span class="php-comment">/**
+</span></span><span id="213" class="l"><a href="#213">213: </a><span class="php-comment">     * Properties generator
+</span></span><span id="214" class="l"><a href="#214">214: </a><span class="php-comment">     *
+</span></span><span id="215" class="l"><a href="#215">215: </a><span class="php-comment">     * @return FormPropertyWidget[] This method is a generator.
+</span></span><span id="216" class="l"><a href="#216">216: </a><span class="php-comment">     */</span>
+</span><span id="217" class="l"><a href="#217">217: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formProperties()
+</span><span id="218" class="l"><a href="#218">218: </a>    {
+</span><span id="219" class="l"><a href="#219">219: </a>        <span class="php-var">$sidebars</span> = <span class="php-var">$this</span>-&gt;sidebars;
+</span><span id="220" class="l"><a href="#220">220: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$this</span>-&gt;sidebars)) {
+</span><span id="221" class="l"><a href="#221">221: </a>            yield <span class="php-keyword1">null</span>;
+</span><span id="222" class="l"><a href="#222">222: </a>        } <span class="php-keyword1">else</span> {
+</span><span id="223" class="l"><a href="#223">223: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;formProperties <span class="php-keyword1">as</span> <span class="php-var">$prop</span>) {
+</span><span id="224" class="l"><a href="#224">224: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$prop</span>-&gt;active() === <span class="php-keyword1">false</span>) {
+</span><span id="225" class="l"><a href="#225">225: </a>                    <span class="php-keyword1">continue</span>;
+</span><span id="226" class="l"><a href="#226">226: </a>                }
+</span><span id="227" class="l"><a href="#227">227: </a>                <span class="php-var">$GLOBALS</span>[<span class="php-quote">'widget_template'</span>] = <span class="php-var">$prop</span>-&gt;inputType();
+</span><span id="228" class="l"><a href="#228">228: </a>                yield <span class="php-var">$prop</span>-&gt;propertyIdent() =&gt; <span class="php-var">$prop</span>;
+</span><span id="229" class="l"><a href="#229">229: </a>            }
+</span><span id="230" class="l"><a href="#230">230: </a>        }
+</span><span id="231" class="l"><a href="#231">231: </a>    }
+</span><span id="232" class="l"><a href="#232">232: </a>
+</span><span id="233" class="l"><a href="#233">233: </a>    <span class="php-comment">/**
+</span></span><span id="234" class="l"><a href="#234">234: </a><span class="php-comment">     * @return string
+</span></span><span id="235" class="l"><a href="#235">235: </a><span class="php-comment">     */</span>
+</span><span id="236" class="l"><a href="#236">236: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> defaultGroupType()
+</span><span id="237" class="l"><a href="#237">237: </a>    {
+</span><span id="238" class="l"><a href="#238">238: </a>        <span class="php-keyword1">return</span> <span class="php-quote">'charcoal/admin/widget/form-group-widget'</span>;
+</span><span id="239" class="l"><a href="#239">239: </a>    }
+</span><span id="240" class="l"><a href="#240">240: </a>}
+</span><span id="241" class="l"><a href="#241">241: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
@@ -539,6 +549,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?c087bca8053d3f6653d08bde7ef19f5cc5bbdd70"></script>
+<script src="elementlist.js?d3bb867ce05ba6418df02f6bb5706dd8518383e5"></script>
 </body>
 </html>

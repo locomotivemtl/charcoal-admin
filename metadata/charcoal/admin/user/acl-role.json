@@ -1,0 +1,116 @@
+{
+    "properties":{
+        "parent":{
+            "obj_type":"charcoal/admin/user/acl-role"
+        }
+    },
+
+    "sources":{
+        "default":{
+            "table":"charcoal_admin_acl_roles"
+        }
+    },
+    "default_source":"default",
+
+    "admin":{
+        "lists":{
+            "default":{
+                "properties":[
+                    "ident",
+                    "parent"
+                ]
+            }
+        },
+        "default_list":"default",
+
+        "forms":{
+            "default":{
+                "groups":{
+                    "info":{
+                        "title":"Informations",
+                        "properties":[
+                            "ident",
+                            "parent",
+                            "superuser"
+                        ],
+                        "priority":10
+                    },
+                    "permissions":{
+                        "title":"Permissions",
+                        "layout": {
+                            "structure": [
+                                { "columns": [ 1, 1 ] }
+                            ]
+                        },
+                        "properties":[
+                            "allowed",
+                            "denied"
+                        ],
+                        "priority":15
+                    },
+                    "permissions2":{
+                        "title":{
+                            "en":"Permissions",
+                            "fr":"Permissions"
+                        },
+                        "template":"charcoal/admin/widget/form-group/acl-permissions",
+                        "type":"charcoal/admin/widget/form-group/acl-permissions",
+                        "priority":20
+                    }
+                },
+                "sidebars":{
+                    "actions":{}
+                }
+            }
+        },
+        "default_form":"default",
+
+        "dashboards": {
+            "admin.edit": {
+                "title":{
+                    "en":"Role",
+                    "fr":"Rôle"
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/objectForm",
+                        "form_ident": "default",
+                        "obj_type": "charcoal/admin/user/acl-role"
+                    }
+                },
+                "sidemenu":{
+                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/map"
+                }
+            },
+            "admin.table": {
+                "title": {
+                    "en":"Roles list",
+                    "fr":"Liste des rôles"
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/table",
+                        "collection_ident": "default",
+                        "obj_type": "charcoal/admin/user/acl-role"
+                    }
+                },
+                "sidemenu":{
+                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/map"
+                }
+            }
+        },
+        "default_create_dashboard": "admin.edit",
+        "default_edit_dashboard": "admin.edit",
+        "default_collection_dashboard": "admin.table"
+    }
+}

@@ -6,8 +6,11 @@ namespace Charcoal\Admin\ServiceProvider;
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
 
-// Dependencies from `charcoal-factory`
+// Module `charcoal-factory` dependencies
 use \Charcoal\Factory\GenericFactory as Factory;
+
+// Modeul `charcoal-base` dependencies
+use \Charcoal\User\Authenticator;
 
 use \Charcoal\Admin\Config as AdminConfig;
 
@@ -41,14 +44,40 @@ class AdminServiceProvider implements ServiceProviderInterface
             $appConfig = $container['config'];
             return new AdminConfig($appConfig['admin']);
         };
+
+        $this->registerAuthenticator($container);
         $this->registerUtilities($container);
+
 
         // Register Access-Control-List (acl)
         $container->register(new AclServiceProvider());
     }
 
     /**
-     * Registers the admin factories
+     * Registers the authenticator object.
+     *
+     * @param  Container $container The DI container.
+     * @return void
+     */
+    protected function registerAuthenticator(Container $container)
+    {
+        /**
+         * @param Container $container Pimple DI Container.
+         * @return \Charcoal\User\Authenticator
+         */
+        $container['admin/authenticator'] = function (Container $container) {
+            return new Authenticator([
+                'logger'        => $container['logger'],
+                'user_type'     => 'charcoal/admin/user',
+                'user_factory'  => $container['model/factory'],
+                'token_type'    => 'charcoal/admin/object/auth-token',
+                'token_factory' => $container['model/factory']
+            ]);
+        };
+    }
+
+    /**
+     * Registers the admin factories.
      *
      * @param  Container $container The DI container.
      * @return void

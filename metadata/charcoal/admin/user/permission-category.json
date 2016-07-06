@@ -1,0 +1,92 @@
+{
+    "category_item_type":"charcoal/admin/user/permission",
+
+    "sources":{
+        "default":{
+            "table":"charcoal_admin_permissions_categories"
+        }
+    },
+    "default_source":"default",
+
+    "admin":{
+        "lists":{
+            "default":{
+                "properties":[
+                    "name"
+                ],
+                "orders":[{
+                    "property":"position",
+                    "mode":"asc"
+                }],
+                "list_actions":[{
+                    "label":{
+                        "en":"New cateogry",
+                        "fr":"Nouvelle catégorie de contact"
+                    },
+                    "ident":"create",
+                    "url":"object/edit?obj_type=charcoal/user/permission-category"
+                }]
+            }
+        },
+        "default_list":"default",
+
+        "forms":{
+            "default":{
+                "label":{
+
+                },
+                "groups":{
+                    "info":{
+                        "title":"Informations",
+                        "properties":[
+                            "name"
+                        ]
+                    }
+                },
+                "sidebars":{
+                    "actions":{}
+                }
+            }
+        },
+        "default_form":"default",
+
+        "dashboards": {
+            "admin.edit": {
+                "title":"Catégorie de permissions",
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/objectForm",
+                        "form_ident": "default",
+                        "obj_type": "charcoal/admin/user/permission-category"
+                    }
+                }
+            },
+            "admin.table": {
+                "title": "Liste des catégories de permissions",
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/table",
+                        "collection_ident": "default",
+                        "obj_type": "charcoal/admin/user/permission-category"
+                    }
+                },
+                "sidemenu":{
+                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/contact"
+                }
+            }
+        },
+        "default_create_dashboard": "admin.edit",
+        "default_edit_dashboard": "admin.edit",
+        "default_collection_dashboard": "admin.table"
+    }
+}

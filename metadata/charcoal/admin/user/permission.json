@@ -1,0 +1,94 @@
+{
+    "properties":{
+        "category":{
+            "obj_type":"charcoal/admin/user/permission-category"
+        }
+    },
+
+    "sources":{
+        "default":{
+            "table":"charcoal_admin_permissions"
+        }
+    },
+    "default_source":"default",
+
+    "admin":{
+        "lists":{
+            "default":{
+                "properties":[
+                    "category",
+                    "ident",
+                    "name"
+                ]
+            }
+        },
+        "default_list":"default",
+
+        "forms":{
+            "default":{
+                "groups":{
+                    "info":{
+                        "title":"Informations",
+                        "properties":[
+                            "category",
+                            "ident",
+                            "name"
+                        ]
+                    }
+                },
+                "sidebars":{
+                    "actions":{}
+                }
+            }
+        },
+        "default_form":"default",
+
+        "dashboards": {
+            "admin.edit": {
+                "title":{
+                    "en":"Permission",
+                    "fr":"Permission"
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/objectForm",
+                        "form_ident": "default",
+                        "obj_type": "charcoal/admin/user/permission"
+                    }
+                },
+                "sidemenu":{
+                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/map"
+                }
+            },
+            "admin.table": {
+                "title": {
+                    "en":"Permissions list",
+                    "fr":"Liste des permissions"
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/table",
+                        "collection_ident": "default",
+                        "obj_type": "charcoal/admin/user/permission"
+                    }
+                },
+                "sidemenu":{
+                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/map"
+                }
+            }
+        },
+        "default_create_dashboard": "admin.edit",
+        "default_edit_dashboard": "admin.edit",
+        "default_collection_dashboard": "admin.table"
+    }
+}

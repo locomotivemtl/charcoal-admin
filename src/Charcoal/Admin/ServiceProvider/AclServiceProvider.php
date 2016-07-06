@@ -11,16 +11,23 @@ use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
 
 // Dependencies from `zendframework/zend-permissions`
-use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+use \Zend\Permissions\Acl\Acl;
+use \Zend\Permissions\Acl\Role\GenericRole as Role;
+use \Zend\Permissions\Acl\Resource\GenericResource as Resource;
 
 /**
- * Admin ACL (Access-Control-List) provider
+ * Admin ACL (Access-Control-List) provider.
+ *
+ * Like all service providers, this class is intended to be registered on a (Pimple) container.
  *
  * ## Services
  *
  * - `admin/acl` A Zend ACL instance containing the admin resources / permissions.
+ *
+ * ## Helpers
+ *
+ * - `admin/acl/roles`
+ * - `admin/acl/permissions`
  */
 class AclServiceProvider implements ServiceProviderInterface
 {
@@ -139,7 +146,5 @@ class AclServiceProvider implements ServiceProviderInterface
 
             return $acl;
         };
-
-        $acl = $container['admin/acl'];
     }
 }

@@ -269,3 +269,35 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
 
     });
 };
+
+Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts,confirmed_callback,cancel_callback)
+{
+    var defaults = {
+        title: 'Voulez-vous vraiment effectuer cette action?',
+        confirm_label: 'Oui',
+        cancel_label: 'Non'
+    };
+
+    var opts = $.extend(defaults, dialog_opts);
+
+    BootstrapDialog.show({
+        title: opts.title,
+        buttons: [{
+            label: opts.cancel_label,
+            action: function (dialog) {
+                if (typeof cancel_callback === 'function') {
+                    cancel_callback();
+                }
+                dialog.close();
+            }
+        },{
+            label: opts.confirm_label,
+            action: function (dialog) {
+                if (typeof confirmed_callback === 'function') {
+                    confirmed_callback();
+                }
+                dialog.close();
+            }
+        }]
+    });
+};

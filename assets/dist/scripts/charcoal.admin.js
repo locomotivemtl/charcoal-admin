@@ -3113,6 +3113,38 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
 
     });
 };
+
+Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts,confirmed_callback,cancel_callback)
+{
+    var defaults = {
+        title: 'Voulez-vous vraiment effectuer cette action?',
+        confirm_label: 'Oui',
+        cancel_label: 'Non'
+    };
+
+    var opts = $.extend(defaults, dialog_opts);
+
+    BootstrapDialog.show({
+        title: opts.title,
+        buttons: [{
+            label: opts.cancel_label,
+            action: function (dialog) {
+                if (typeof cancel_callback === 'function') {
+                    cancel_callback();
+                }
+                dialog.close();
+            }
+        },{
+            label: opts.confirm_label,
+            action: function (dialog) {
+                if (typeof confirmed_callback === 'function') {
+                    confirmed_callback();
+                }
+                dialog.close();
+            }
+        }]
+    });
+};
 ;/**
 * Attachment widget
 * You can associate a perticular object to another
@@ -3353,6 +3385,15 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.widget_options = function ()
 */
 Charcoal.Admin.Widget_Attachment = function ()
 {
+    this.glyphs = {
+        video: 'glyphicon-facetime-video',
+        image: 'glyphicon-picture',
+        file: 'glyphicon-file',
+        text: 'glyphicon-font',
+        gallery: 'glyphicon-duplicate'
+    };
+
+    this.dirty = false;
     return this;
 };
 
@@ -3383,13 +3424,18 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     }
     // var config = this.opts();
     this.element().find('.js-attachment-sortable').find('.js-grid-container').sortable({
-        connectWith: '.js-grid-container'
+        // connectWith: '.js-grid-container'
     }).disableSelection();
 
     this.listeners();
     return this;
 };
 
+/**
+ * Load necessary assets
+ * @param  {Function} cb Callback after load.
+ * @return {Widget_Attachment}      Chainable.
+ */
 Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
 {
     $.getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
@@ -3398,6 +3444,27 @@ Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
             cb();
         }
     });
+    return this;
+};
+
+/**
+ * Check if the widget has something a dirty state that needs to be saved.
+ * @return Boolean     Widget dirty of not.
+ */
+Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function ()
+{
+    return this.dirty;
+};
+
+/**
+ * Set the widget to dirty or not to prevent unnecessary save
+ * action.
+ * @param Boolean bool Self explanatory.
+ * @return Add_Attachment_Widget Chainable.
+ */
+Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool)
+{
+    this.dirty = bool;
     return this;
 };
 
@@ -3411,9 +3478,6 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
     // Scope
     var that = this;
 
-    // Jquery element
-    // var el = this.element();
-
     // Prevent multiple binds
     this.element().off('click');
 
@@ -3426,6 +3490,30 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         }
         var title = $(this).data('title') || 'Content Element';
         that.create_attachment(type, title);
+    });
+
+    this.element().on('click', '.js-attachment-actions a', function (e) {
+        var _this = $(this);
+        if (!_this.data('action')) {
+            return ;
+        }
+
+        e.preventDefault();
+        var action = _this.data('action');
+        switch (action) {
+            case 'delete':
+                if (!_this.data('id')) {
+                    break;
+                }
+                that.confirm({
+                    title: 'Voulez-vous vraiment supprimer cet item?'
+                }, function () {
+                    that.remove_join(_this.data('id'), function () {
+                        that.reload();
+                    });
+                });
+            break;
+        }
     });
 };
 
@@ -3474,11 +3562,15 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
                 },
                 save_callback: function (response) {
                     if (response.success) {
+                        that.add(response.obj);
+                        that.join(function () {
+                            that.reload();
+                        });
                         BootstrapDialog.closeAll();
-                        that.reload();
                     }
                 }
             });
+
             // Re render.
             // This is not good.
             Charcoal.Admin.manager().render();
@@ -3487,10 +3579,41 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
 };
 
 /**
+ * This should use mustache templating. That'd be great.
+ * @return {[type]} [description]
+ */
+Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
+{
+    if (!obj) {
+        return false;
+    }
+
+    // There is something to save.
+    this.set_dirty_state(true);
+
+    var template = this.element().find('.js-attachment-template').clone();
+    template.find('.js-attachment').data('id', obj.id).data('type', obj.type);
+    this.element().find('.js-attachment-sortable').find('.js-grid-container').append(template);
+
+    return this;
+
+};
+
+/**
  * [save description]
  * @return {[type]} [description]
  */
 Charcoal.Admin.Widget_Attachment.prototype.save = function ()
+{
+    if (this.is_dirty()) {
+        return false;
+    }
+
+    // Create join from current list.
+    this.join();
+};
+
+Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
 {
     // Scope
     var that = this;
@@ -3499,7 +3622,8 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     var data = {
         obj_type: opts.data.obj_type,
         obj_id: opts.data.obj_id,
-        attachments: []
+        attachments: [],
+        group: opts.data.group
     };
 
     this.element().find('.js-attachment-container').find('.js-attachment').each(function (i)
@@ -3515,8 +3639,43 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
         });
     });
 
-    $.post('join', data, function () {}, 'json');
+    $.post('join', data, function () {
+        if (typeof cb === 'function') {
+            cb();
+        }
+        that.set_dirty_state(false);
+    }, 'json');
+};
 
+/**
+ * [remove_join description]
+ * @param  {Function} cb [description]
+ * @return {[type]}      [description]
+ */
+Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb)
+{
+    if (!id) {
+        // How could this possibly be!
+        return false;
+    }
+
+    // Scope
+    var that = this;
+
+    var opts = that.opts();
+    var data = {
+        obj_type: opts.data.obj_type,
+        obj_id: opts.data.obj_id,
+        attachment_id: id,
+        group: opts.data.group
+    };
+
+    $.post('remove-join', data, function () {
+        if (typeof cb === 'function') {
+            cb();
+        }
+        that.set_dirty_state(false);
+    }, 'json');
 };
 
 /**

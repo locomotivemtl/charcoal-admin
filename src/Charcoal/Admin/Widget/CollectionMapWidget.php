@@ -16,12 +16,12 @@ use \Charcoal\Presenter\Presenter;
 class CollectionMapWidget extends AdminWidget
 {
     /**
-     * @var \Charcoal\Model\AbsractModel[] $mapObjects
+     * @var \Charcoal\Model\AbstractModel[] $mapObjects
      */
     private $mapObjects;
 
     /**
-     * @var \Charcoal\Model\AbsractModel $objProto
+     * @var \Charcoal\Model\AbstractModel $objProto
      */
     private $objProto;
 
@@ -48,7 +48,7 @@ class CollectionMapWidget extends AdminWidget
     public $infoboxTemplate = '';
 
     /**
-     * @return \Charcoal\Model\AbsractModel
+     * @return \Charcoal\Model\AbstractModel
      */
     private function objProto()
     {

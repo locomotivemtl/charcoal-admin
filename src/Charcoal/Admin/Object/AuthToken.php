@@ -4,7 +4,6 @@ namespace Charcoal\Admin\Object;
 
 use \DateTime;
 use \DateTimeInterface;
-
 use \InvalidArgumentException;
 
 use \Charcoal\Model\AbstractModel;
@@ -12,7 +11,7 @@ use \Charcoal\Model\AbstractModel;
 use \Charcoal\Admin\Object\AuthTokenMetadata;
 
 /**
- *
+ * Authorization token; to keep a user logged in
  */
 class AuthToken extends AbstractModel
 {
@@ -235,12 +234,12 @@ class AuthToken extends AbstractModel
      */
     public function sendCookie()
     {
-        $name = $this->metadata()->cookieName();
+        $cookieName = $this->metadata()->cookieName();
         $value = $this->ident().';'.$this->token();
         $expiry = $this->expiry()->getTimestamp();
         $secure = $this->metadata()->httpsOnly();
 
-        setcookie($name, $value, $expiry, '', '', $secure);
+        setcookie($cookieName, $value, $expiry, '', '', $secure);
 
         return $this;
     }
@@ -274,6 +273,29 @@ class AuthToken extends AbstractModel
         $this->setLastModified('now');
 
         return true;
+    }
+
+    /**
+     * @return array `['ident'=>'', 'token'=>'']
+     */
+    public function getTokenDataFromCookie()
+    {
+        $cookieName = $this->metadata()->cookieName();
+
+        if (!isset($_COOKIE[$cookieName])) {
+            return null;
+        }
+
+        $authCookie = $_COOKIE[$cookieName];
+        $vals = explode(';', $authCookie);
+        if (!isset($vals[0]) || !isset($vals[1])) {
+            return null;
+        }
+
+        return [
+            'ident' => $vals[0],
+            'token' => $vals[1]
+        ];
     }
 
     /**

@@ -14,10 +14,13 @@ use \Pimple\Container;
 // Module `charcoal-factory` dependencies
 use \Charcoal\Factory\FactoryInterface;
 
+// Module `charcoal-base` dependencies
+use \Charcoal\User\Authenticator;
+
 use \Charcoal\App\Template\AbstractTemplate;
 use \Charcoal\Translation\TranslationString;
+
 use \Charcoal\Admin\User;
-use \Charcoal\Admin\Object\AuthToken;
 
 /**
  * Base class for all `admin` Templates.
@@ -95,9 +98,14 @@ class AdminTemplate extends AbstractTemplate
     private $modelFactory;
 
     /**
+     * @var Authenticator $authenticator
+     */
+    private $authenticator;
+
+    /**
      * @return \Charcoal\App\App
      */
-    protected function app()
+    private function app()
     {
         if ($this->app === null) {
             $this->logger->notice('App from singleton');
@@ -107,7 +115,8 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * Dependencies
+     * Set common dependencies (services) used in all admin templates.
+     *
      * @param Container $container DI Container.
      * @return void
      */
@@ -117,6 +126,7 @@ class AdminTemplate extends AbstractTemplate
 
         $this->adminConfig = $container['charcoal/admin/config'];
         $this->setModelFactory($container['model/factory']);
+        $this->setAuthenticator($container['admin/authenticator']);
     }
 
     /**
@@ -153,12 +163,11 @@ class AdminTemplate extends AbstractTemplate
      * As a convenience, all admin templates have a model factory to easily create objects.
      *
      * @param FactoryInterface $factory The factory used to create models.
-     * @return AdminScript Chainable
+     * @return void
      */
     protected function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
-        return $this;
     }
 
     /**
@@ -173,6 +182,23 @@ class AdminTemplate extends AbstractTemplate
             );
         }
         return $this->modelFactory;
+    }
+
+    /**
+     * @param Authenticator $authenticator The authentication service.
+     * @return void
+     */
+    protected function setAuthenticator(Authenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
+    }
+
+    /**
+     * @return Authenticator
+     */
+    protected function authenticator()
+    {
+        return $this->authenticator;
     }
 
     /**
@@ -428,62 +454,13 @@ class AdminTemplate extends AbstractTemplate
 
     /**
      * Determine if the current user is authenticated.
+     * Uses the Authenticator service.
      *
      * @return boolean
      */
     public function isAuthenticated()
     {
-        return ($this->authBySession() || $this->authByToken());
-    }
-
-    /**
-     * @return boolean
-     */
-    private function authBySession()
-    {
-        $u = User::getAuthenticated($this->modelFactory());
-        if ($u && $u->id()) {
-            $u->saveToSession();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return boolean
-     */
-    private function authByToken()
-    {
-        $authToken = $this->modelFactory()->create('charcoal/admin/object/auth-token');
-
-        if ($authToken->metadata()->enabled() !== true) {
-            return false;
-        }
-
-        $cookieName = $authToken->metadata()->cookieName();
-
-        if (!isset($_COOKIE[$cookieName])) {
-            return false;
-        }
-
-        $authCookie = $_COOKIE[$cookieName];
-        $vals = explode(';', $authCookie);
-        $username = $authToken->getUsernameFromToken($vals[0], $vals[1]);
-        if (!$username) {
-            return false;
-        }
-
-        $u = $this->modelFactory()->create('charcoal/admin/user');
-
-        $u->load($username);
-
-        if ($u->id()) {
-            $u->saveToSession();
-            return true;
-        } else {
-            return false;
-        }
+        return !!$this->authenticator->authenticate();
     }
 
     /**

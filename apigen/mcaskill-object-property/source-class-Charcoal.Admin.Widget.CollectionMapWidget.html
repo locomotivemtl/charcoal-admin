@@ -128,6 +128,11 @@
 
 						</li>
 				<li>
+					<a href="namespace-Charcoal.Admin.User.html">
+						User					</a>
+
+						</li>
+				<li>
 					<a href="namespace-Charcoal.Admin.Widget.html">
 						Widget<span></span>
 					</a>
@@ -136,6 +141,11 @@
 				<li>
 					<a href="namespace-Charcoal.Admin.Widget.Dialog.html">
 						Dialog					</a>
+
+						</li>
+				<li>
+					<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">
+						FormGroup					</a>
 
 						</li>
 				<li>
@@ -180,6 +190,7 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxInput.html">Charcoal\Admin\Property\Input\CheckboxInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">Charcoal\Admin\Property\Input\ColorPickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">Charcoal\Admin\Property\Input\DualSelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.FileInput.html">Charcoal\Admin\Property\Input\FileInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ImageInput.html">Charcoal\Admin\Property\Input\ImageInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></li>
@@ -212,11 +223,15 @@
 				<li><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.Object.EditTemplate.html">Charcoal\Admin\Template\Object\EditTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.User.html">Charcoal\Admin\User</a></li>
+				<li><a href="class-Charcoal.Admin.User.AclRole.html">Charcoal\Admin\User\AclRole</a></li>
+				<li><a href="class-Charcoal.Admin.User.Permission.html">Charcoal\Admin\User\Permission</a></li>
+				<li><a href="class-Charcoal.Admin.User.PermissionCategory.html">Charcoal\Admin\User\PermissionCategory</a></li>
 				<li><a href="class-Charcoal.Admin.UserConfig.html">Charcoal\Admin\UserConfig</a></li>
 				<li><a href="class-Charcoal.Admin.UserGroup.html">Charcoal\Admin\UserGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.CollectionMapWidget.html">Charcoal\Admin\Widget\CollectionMapWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.DashboardWidget.html">Charcoal\Admin\Widget\DashboardWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.Dialog.ImportlistWidget.html">Charcoal\Admin\Widget\Dialog\ImportlistWidget</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">Charcoal\Admin\Widget\FormGroup\AclPermissions</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></li>
@@ -308,12 +323,12 @@
 </span><span id="16" class="l"><a href="#16"> 16: </a><span class="php-keyword1">class</span> CollectionMapWidget <span class="php-keyword1">extends</span> AdminWidget
 </span><span id="17" class="l"><a href="#17"> 17: </a>{
 </span><span id="18" class="l"><a href="#18"> 18: </a>    <span class="php-comment">/**
-</span></span><span id="19" class="l"><a href="#19"> 19: </a><span class="php-comment">     * @var \Charcoal\Model\AbsractModel[] $mapObjects
+</span></span><span id="19" class="l"><a href="#19"> 19: </a><span class="php-comment">     * @var \Charcoal\Model\AbstractModel[] $mapObjects
 </span></span><span id="20" class="l"><a href="#20"> 20: </a><span class="php-comment">     */</span>
 </span><span id="21" class="l"><a href="#21"> 21: </a>    <span class="php-keyword1">private</span> <span class="php-var">$mapObjects</span>;
 </span><span id="22" class="l"><a href="#22"> 22: </a>
 </span><span id="23" class="l"><a href="#23"> 23: </a>    <span class="php-comment">/**
-</span></span><span id="24" class="l"><a href="#24"> 24: </a><span class="php-comment">     * @var \Charcoal\Model\AbsractModel $objProto
+</span></span><span id="24" class="l"><a href="#24"> 24: </a><span class="php-comment">     * @var \Charcoal\Model\AbstractModel $objProto
 </span></span><span id="25" class="l"><a href="#25"> 25: </a><span class="php-comment">     */</span>
 </span><span id="26" class="l"><a href="#26"> 26: </a>    <span class="php-keyword1">private</span> <span class="php-var">$objProto</span>;
 </span><span id="27" class="l"><a href="#27"> 27: </a>
@@ -340,7 +355,7 @@
 </span><span id="48" class="l"><a href="#48"> 48: </a>    <span class="php-keyword1">public</span> <span class="php-var">$infoboxTemplate</span> = <span class="php-quote">''</span>;
 </span><span id="49" class="l"><a href="#49"> 49: </a>
 </span><span id="50" class="l"><a href="#50"> 50: </a>    <span class="php-comment">/**
-</span></span><span id="51" class="l"><a href="#51"> 51: </a><span class="php-comment">     * @return \Charcoal\Model\AbsractModel
+</span></span><span id="51" class="l"><a href="#51"> 51: </a><span class="php-comment">     * @return \Charcoal\Model\AbstractModel
 </span></span><span id="52" class="l"><a href="#52"> 52: </a><span class="php-comment">     */</span>
 </span><span id="53" class="l"><a href="#53"> 53: </a>    <span class="php-keyword1">private</span> <span class="php-keyword1">function</span> objProto()
 </span><span id="54" class="l"><a href="#54"> 54: </a>    {
@@ -503,6 +518,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?9855195560e2535c36e14b156790a68185a1c0d6"></script>
+<script src="elementlist.js?7e221b8f2e833c3de48aab15eef17bc421b2a57d"></script>
 </body>
 </html>

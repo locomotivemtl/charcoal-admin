@@ -111,7 +111,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             return false;
         }
         var title = $(this).data('title') || 'Content Element';
-        that.create_attachment(type, title);
+        that.create_attachment(type, title, 0, function (response) {
+            if (response.success) {
+                that.add(response.obj);
+                that.join(function () {
+                    that.reload();
+                });
+            }
+        });
     });
 
     this.element().on('click', '.js-attachment-actions a', function (e) {
@@ -123,6 +130,21 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         e.preventDefault();
         var action = _this.data('action');
         switch (action) {
+            case 'edit' :
+                var type = _this.data('type');
+                var id = _this.data('id');
+                if (!type || !id) {
+                    break;
+                }
+                var title = _this.data('title') || 'Édition';
+                that.create_attachment(type, title, id, function (response) {
+                    if (response.success) {
+                        that.reload();
+                    }
+                });
+
+            break;
+
             case 'delete':
                 if (!_this.data('id')) {
                     break;
@@ -134,6 +156,25 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         that.reload();
                     });
                 });
+            break;
+
+            case 'add-image':
+                var gallery_type = _this.data('type');
+                var gallery_id = _this.data('id');
+                var gallery_title = 'Ajout d\'une image';
+                var gallery_attachment = _this.data('attachment');
+                that.create_attachment(gallery_attachment, gallery_title, 0, function (response) {
+                    if (response.success) {
+                        that.add_image_to_gallery({
+                            id: response.obj.id,
+                            type: response.obj.type
+                        },{
+                            id: gallery_id,
+                            type: gallery_type
+                        });
+                    }
+                });
+
             break;
         }
     });
@@ -153,10 +194,12 @@ Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
     }
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, title)
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, title, id, cb)
 {
-    // Scope
-    var that = this;
+    // Id = EDIT mod.
+    if (!id) {
+        id = 0;
+    }
 
     var data = {
         title: title,
@@ -164,7 +207,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
         form_ident: 'quick',
         widget_options: {
             obj_type: type,
-            obj_id: 0
+            obj_id: id
         }
     };
     this.dialog(data, function (response) {
@@ -179,17 +222,12 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
                 id: response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
                 data: {
-                    obj_type: type,
-                    obj_id: 0
+                    obj_type: type
                 },
+                obj_id: id,
                 save_callback: function (response) {
-                    if (response.success) {
-                        that.add(response.obj);
-                        that.join(function () {
-                            that.reload();
-                        });
-                        BootstrapDialog.closeAll();
-                    }
+                    cb(response);
+                    BootstrapDialog.closeAll();
                 }
             });
 
@@ -198,6 +236,37 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
             Charcoal.Admin.manager().render();
         }
     });
+};
+
+/**
+ * Add an image to an existing gallery.
+ * @param {[type]} image   [description]
+ * @param {[type]} gallery [description]
+ */
+Charcoal.Admin.Widget_Attachment.prototype.add_image_to_gallery = function (image, gallery)
+{
+    // Scope.
+    var that = this;
+
+    var type = gallery.type;
+    var id = gallery.id;
+
+    var data = {
+        obj_type: type,
+        obj_id: id,
+        attachments: [
+            {
+                attachment_id:image.id,
+                attachment_type:image.type,
+                position:0
+            }
+        ],
+        group: 'inception-gallery'
+    };
+
+    $.post('add-join', data, function () {
+        that.reload();
+    }, 'json');
 };
 
 /**

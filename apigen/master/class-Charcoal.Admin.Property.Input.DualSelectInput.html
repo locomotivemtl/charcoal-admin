@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Property\Input\MapWidgetInput</title>
+	<title>Class Charcoal\Admin\Property\Input\DualSelectInput</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -166,10 +166,10 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxInput.html">CheckboxInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
-				<li><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.FileInput.html">FileInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ImageInput.html">ImageInput</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.NumberInput.html">NumberInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.PhoneInput.html">PhoneInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
@@ -218,9 +218,17 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class MapWidgetInput</h1>
+	<h1>Class DualSelectInput</h1>
 
 
+	<div class="description">
+	<p>Select Options Input Property</p>
+
+<blockquote>
+  <p>The HTML <em>select</em> (<code>&lt;select&gt;</code>) element represents a control that presents a menu of options.
+  — <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select</a></p>
+</blockquote>
+	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -243,8 +251,20 @@
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Property\Input\MapWidgetInput</span></b>			
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html"><span>Charcoal\Admin\Property\AbstractSelectableInput</span></a>
 			
+			 implements 
+				<a href="class-Charcoal.Admin.Property.SelectableInputInterface.html"><span>Charcoal\Admin\Property\SelectableInputInterface</span></a>
+			
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Charcoal\Admin\Property\Input\DualSelectInput</span></b>			
+			
+			 uses 
+					Mmes\Support\Traits\ParsableValueTrait (not available)
+
 			
 		</dd>
 	</dl>
@@ -262,7 +282,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#8-49" title="Go to source code">Charcoal/Admin/Property/Input/MapWidgetInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#9-163" title="Go to source code">Charcoal/Admin/Property/Input/DualSelectInput.php</a>
 		<br>
 	</div>
 
@@ -270,19 +290,185 @@
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="setMapOptions" id="_setMapOptions">
+	<tr data-order="unselectedChoices" id="_unselectedChoices">
 
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code>
+			Generator|array
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setMapOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#18-27" title="Go to source code">setMapOptions</a>( <span>array <var>$mapOptions</var></span> )</code>
+		<a class="anchor" href="#_unselectedChoices">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#26-41" title="Go to source code">unselectedChoices</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the unselected options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the unselected options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Generator|array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="selectedChoices" id="_selectedChoices">
+
+		<td class="attributes"><code>
+			 public 
+
+			Generator|array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_selectedChoices">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#43-69" title="Go to source code">selectedChoices</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the selectable options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the selectable options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Generator|array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="options" id="_options">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_options">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#71-86" title="Go to source code">options</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="searchable" id="_searchable">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_searchable">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#91-139" title="Go to source code">searchable</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="dualSelectOptions" id="_dualSelectOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_dualSelectOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#141-147" title="Go to source code">dualSelectOptions</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setDualSelectOptions" id="_setDualSelectOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">Charcoal\Admin\Property\Input\DualSelectInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDualSelectOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#153-161" title="Go to source code">setDualSelectOptions</a>( <span>mixed <var>$dualSelectOptions</var></span> )</code>
 
 		<div class="description short">
 			
@@ -294,81 +480,13 @@
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$mapOptions</var></dt>
-					<dd>The map options.</dd>
+					<dt><var>$dualSelectOptions</var></dt>
+					<dd></dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code><br>Chainable
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="mapOptions" id="_mapOptions">
-
-		<td class="attributes"><code>
-			 public 
-
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_mapOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#29-37" title="Go to source code">mapOptions</a>( )</code>
-
-		<div class="description short">
-			<p>Get the map options as JSON-encoded string.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Get the map options as JSON-encoded string.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="mapApiKey" id="_mapApiKey">
-
-		<td class="attributes"><code>
-			 public 
-
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_mapApiKey">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#39-48" title="Go to source code">mapApiKey</a>( )</code>
-
-		<div class="description short">
-			<p>Map api key for google maps.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Map api key for google maps.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string<br>Map api key.
+					<code><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">Charcoal\Admin\Property\Input\DualSelectInput</a></code>
 				</div>
 
 
@@ -379,6 +497,16 @@
 	</tr>
 	</table>
 
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#methods">Charcoal\Admin\Property\AbstractSelectableInput</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_choices">choices()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_isChoiceSelected">isChoiceSelected()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_parseChoice">parseChoice()</a>
+		</code></td>
+	</tr>
+	</table>
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#methods">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>
 	<tr>
@@ -431,6 +559,84 @@
 
 
 
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="searchable" id="$searchable">
+		<td class="attributes"><code>
+			protected  
+			
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#19" title="Go to source code"><var>$searchable</var></a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$searchable" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="options" id="$options">
+		<td class="attributes"><code>
+			protected  
+			
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#20" title="Go to source code"><var>$options</var></a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$options" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="dualSelectOptions" id="$dualSelectOptions">
+		<td class="attributes"><code>
+			protected  
+			
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#21" title="Go to source code"><var>$dualSelectOptions</var></a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$dualSelectOptions" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#properties">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>

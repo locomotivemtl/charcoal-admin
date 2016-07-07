@@ -12,26 +12,45 @@ use \Charcoal\Translation\TranslationString;
  */
 class TextWidget extends AdminWidget
 {
+    /**
+     * @var boolean $showTitle
+     */
+    private $showTitle = true;
+
+    /**
+     * @var boolean $showSubtitle
+     */
+    private $showSubtitle = true;
+
+    /**
+     * @var boolean $showDescription
+     */
+    private $showDescription = true;
+
+    /**
+     * @var boolean $showNotes
+     */
+    private $showNotes = true;
 
     /**
      * @var string $title
      */
-    protected $title = '';
+    private $title = '';
 
     /**
      * @var string $subtitle
      */
-    protected $subtitle = '';
+    private $subtitle = '';
 
     /**
      * @var string $description
      */
-    protected $description = '';
+    private $description = '';
 
     /**
      * @var string $notes
      */
-    protected $notes = '';
+    private $notes = '';
 
     /**
      * @param boolean $show The show title flag.

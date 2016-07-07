@@ -145,14 +145,10 @@ class FormWidget extends AdminWidget implements
     public function sidebars()
     {
         $sidebars = $this->sidebars;
-        if (!is_array($this->sidebars)) {
-            yield null;
-        } else {
-            uasort($sidebars, ['self', 'sortSidebarsByPriority']);
-            foreach ($sidebars as $sidebar) {
-                $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
-                yield $sidebar->ident() => $sidebar;
-            }
+        uasort($sidebars, ['self', 'sortSidebarsByPriority']);
+        foreach ($sidebars as $sidebarIdent => $sidebar) {
+            $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
+            yield $sidebarIdent => $sidebar;
         }
     }
 

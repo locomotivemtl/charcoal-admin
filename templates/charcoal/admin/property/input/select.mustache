@@ -18,3 +18,9 @@ Select Options Property Input
     <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}"{{#selected}} selected{{/selected}}>{{title}}</option>
     {{/choices}}
 </select>
+
+{{#addJs}}
+<script>
+    $('#{{inputId}}').selectpicker({});
+</script>
+{{/addJs}}

@@ -8,32 +8,31 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
 
 --}}
 <form action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widgetId}}">
-
-    {{#isTab}}
-        <ul class="nav nav-tabs">
-        {{#groups}}
-            <li{{^isHidden}} class="active"{{/isHidden}}><a href="{{ident}}" class="js-group-tabs">{{title}}</a></li>
-        {{/groups}}
-        </ul>
-    {{/isTab}}
-
     <div class="o-flex">
-
         <div class="o-flex_main">
-            {{!-- Loop all form groups --}}
+
+        {{#isTab}}
+            <ul class="nav nav-tabs">
             {{#groups}}
-                 {{#form.layout}}
-                    {{>charcoal/admin/widget/layout.start}}
-                {{/form.layout}}
-
-                <div class="col-md-{{form.layout.cellSpanBy12}} js-group-tab {{ident}}{{#isHidden}} hidden{{/isHidden}}">
-                    {{>$widget_template}}
-                </div>
-
-                 {{#form.layout}}
-                   {{>charcoal/admin/widget/layout.end}}
-                {{/form.layout}}
+                <li{{^isHidden}} class="active"{{/isHidden}}><a href="{{ident}}" class="js-group-tabs">{{title}}</a></li>
             {{/groups}}
+            </ul>
+        {{/isTab}}
+
+        {{!-- Loop all form groups --}}
+        {{#groups}}
+             {{#form.layout}}
+                {{>charcoal/admin/widget/layout.start}}
+            {{/form.layout}}
+
+            <div class="col-md-{{form.layout.cellSpanBy12}} js-group-tab {{ident}}{{#isHidden}} hidden{{/isHidden}}">
+                {{>$widget_template}}
+            </div>
+
+             {{#form.layout}}
+               {{>charcoal/admin/widget/layout.end}}
+            {{/form.layout}}
+        {{/groups}}
 
         </div>
 

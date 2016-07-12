@@ -10,6 +10,8 @@ use \Charcoal\Admin\AdminWidget;
 
 use \Charcoal\Presenter\Presenter;
 
+use \Charcoal\App\App;
+
 /**
  *
  */
@@ -201,5 +203,17 @@ class CollectionMapWidget extends AdminWidget
             $ret = $rawPolygon;
         }
         return json_encode($ret, true);
+    }
+
+    /**
+     * Google maps api key.
+     * @return string Google maps api key.
+     */
+    public function gmapApiKey()
+    {
+        $appConfig = App::instance()->config();
+        $key = $appConfig->get('apis.google.map.key');
+
+        return $key ? : null;
     }
 }

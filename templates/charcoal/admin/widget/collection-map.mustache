@@ -122,7 +122,7 @@ if (typeof google === 'undefined') {
 
     $.getScript(
         'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
-        '&language=fr&callback=_tmp_google_onload_function',
+        '&key={{gmapApiKey}}&language=fr&callback=_tmp_google_onload_function',
         function () {}
     );
 }

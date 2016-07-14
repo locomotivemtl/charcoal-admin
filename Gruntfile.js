@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
     // Register tasks
     grunt.registerTask('default', [
-        'copy',
+        'copy:vendors',
         'concat',
         'jscs',
         'jshint',
@@ -40,6 +40,7 @@ module.exports = function(grunt) {
         //'phpunit',
         'uglify',
         //'phplint' // To slow for default
+        'copy:admin'
     ]);
     grunt.registerTask('sync', ['browserSync', 'watch', 'notify:watch']);
     grunt.registerTask('tests', [

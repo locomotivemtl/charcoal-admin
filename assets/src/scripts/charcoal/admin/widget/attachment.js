@@ -110,7 +110,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         if (!type) {
             return false;
         }
-        var title = $(this).data('title') || 'Content Element';
+        var title = $(this).data('title') || 'Edit';
         that.create_attachment(type, title, 0, function (response) {
             if (response.success) {
                 that.add(response.obj);

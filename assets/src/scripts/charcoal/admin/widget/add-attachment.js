@@ -78,7 +78,7 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.listeners = function ()
         if (!type) {
             return false;
         }
-        var title = $(this).data('title') || 'Content Element';
+        var title = $(this).data('title') || 'Edit';
         that.create_attachment(type, title);
     });
 };

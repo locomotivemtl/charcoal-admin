@@ -3329,7 +3329,7 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.listeners = function ()
         if (!type) {
             return false;
         }
-        var title = $(this).data('title') || 'Content Element';
+        var title = $(this).data('title') || 'Edit';
         that.create_attachment(type, title);
     });
 };
@@ -3592,7 +3592,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         if (!type) {
             return false;
         }
-        var title = $(this).data('title') || 'Content Element';
+        var title = $(this).data('title') || 'Edit';
         that.create_attachment(type, title, 0, function (response) {
             if (response.success) {
                 that.add(response.obj);
@@ -4208,8 +4208,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.init = function ()
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function ()
 {
     var that = this;
-    this.element().on('submit', function (e)
-    {
+    $(document).on('submit', '#' + this.id(), function (e) {
         e.preventDefault();
         that.submit_form(this);
     });

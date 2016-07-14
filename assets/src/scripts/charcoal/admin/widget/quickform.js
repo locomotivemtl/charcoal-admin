@@ -25,8 +25,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.init = function ()
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function ()
 {
     var that = this;
-    this.element().on('submit', function (e)
-    {
+    $(document).on('submit', '#' + this.id(), function (e) {
         e.preventDefault();
         that.submit_form(this);
     });

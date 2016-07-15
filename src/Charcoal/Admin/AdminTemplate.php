@@ -360,7 +360,6 @@ class AdminTemplate extends AbstractTemplate
             }
             yield $menuItem;
         }
-
     }
 
     /**

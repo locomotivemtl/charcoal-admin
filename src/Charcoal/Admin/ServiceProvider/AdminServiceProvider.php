@@ -117,6 +117,5 @@ class AdminServiceProvider implements ServiceProviderInterface
                 ]
             ]);
         };
-
     }
 }

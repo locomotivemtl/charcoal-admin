@@ -519,7 +519,6 @@ abstract class AbstractPropertyInput implements
     {
         $setter = 'set_'.$key;
         return $this->camelize($setter);
-
     }
 
     /**

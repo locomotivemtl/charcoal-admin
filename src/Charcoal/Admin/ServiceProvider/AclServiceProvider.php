@@ -65,7 +65,6 @@ class AclServiceProvider implements ServiceProviderInterface
             }
 
             return $roles;
-
         };
 
         /**

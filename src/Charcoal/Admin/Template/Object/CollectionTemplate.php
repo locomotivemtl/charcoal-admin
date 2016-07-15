@@ -64,7 +64,6 @@ class CollectionTemplate extends AdminTemplate implements
         // Required dependencies.
         $this->setWidgetFactory($container['widget/factory']);
         $this->dashboardBuilder = $container['dashboard/builder'];
-
     }
 
     /**

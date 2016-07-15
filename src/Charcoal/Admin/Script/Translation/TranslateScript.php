@@ -223,7 +223,6 @@ class TranslateScript extends AdminScript
             $this->getFileType();
         }
         return $this->fileType;
-
     }
 
     /**

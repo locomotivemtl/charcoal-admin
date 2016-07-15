@@ -125,7 +125,6 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
             $this->addFeedback('error', $e->getMessage());
             return $response->withStatus(404);
         }
-
     }
 
     /**

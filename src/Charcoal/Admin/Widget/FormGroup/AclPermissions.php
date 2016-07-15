@@ -163,6 +163,5 @@ class AclPermissions extends AdminWidget implements
         }
 
         return $ret;
-
     }
 }

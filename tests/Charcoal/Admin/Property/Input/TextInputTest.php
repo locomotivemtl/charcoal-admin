@@ -44,7 +44,6 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\InvalidArgumentException');
         $obj->setSize(false);
-
     }
 
     public function testSetMinLength()
@@ -56,7 +55,6 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\InvalidArgumentException');
         $obj->setMinLength(false);
-
     }
 
     public function testSetMaxLength()
@@ -68,7 +66,6 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\InvalidArgumentException');
         $obj->setMaxLength(false);
-
     }
 
     public function testSetPattern()
@@ -80,7 +77,6 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\InvalidArgumentException');
         $obj->setPattern(false);
-
     }
 
     public function testSetPlaceholder()
@@ -92,6 +88,5 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\InvalidArgumentException');
         $obj->setPlaceholder(false);
-
     }
 }

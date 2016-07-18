@@ -40,7 +40,6 @@ class FormGroupWidget extends AbstractUiItem implements
 
         // Set up layout builder (to fulfill LayoutAware Interface)
         $this->setLayoutBuilder($data['layout_builder']);
-
     }
 
     /**
@@ -93,7 +92,6 @@ class FormGroupWidget extends AbstractUiItem implements
     public function groupProperties()
     {
         return $this->groupProperties;
-
     }
 
     /**

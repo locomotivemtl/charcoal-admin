@@ -9,6 +9,7 @@ use \InvalidArgumentException;
 // PSR-7 (HTTP Messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 
+// Dependency from `pimple/pimple` (Symfony DI Container)
 use \Pimple\Container;
 
 // Module `charcoal-factory` dependencies
@@ -16,10 +17,12 @@ use \Charcoal\Factory\FactoryInterface;
 
 // Module `charcoal-base` dependencies
 use \Charcoal\User\Authenticator;
+use \Charcoal\User\Authorizer;
 
 use \Charcoal\App\Template\AbstractTemplate;
 use \Charcoal\Translation\TranslationString;
 
+// Intra-module (`charcoal-admin`) dependency
 use \Charcoal\Admin\User;
 
 /**
@@ -103,6 +106,11 @@ class AdminTemplate extends AbstractTemplate
     private $authenticator;
 
     /**
+     * @var Authorizer $authorizer
+     */
+    private $authorizer;
+
+    /**
      * @return \Charcoal\App\App
      */
     private function app()
@@ -127,6 +135,7 @@ class AdminTemplate extends AbstractTemplate
         $this->adminConfig = $container['charcoal/admin/config'];
         $this->setModelFactory($container['model/factory']);
         $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
     }
 
     /**
@@ -150,13 +159,40 @@ class AdminTemplate extends AbstractTemplate
         }
 
         if ($this->authRequired() !== false) {
-            $this->auth();
+
+            // This can reset headers / die if unauthorized.
+            if (!$this->authenticator->authenticate()) {
+                header('HTTP/1.0 403 Forbidden');
+                header('Location: '.$this->adminUrl().'login');
+                exit;
+            }
+
+            // Initialize data with GET
+            $this->setData($request->getParams());
+
+            // Test template vs. ACL roles
+            $authUser = $this->authenticator()->authenticate();
+            if (!$this->authorizer()->userAllowed($authUser, $this->requiredAclPermissions())) {
+                header('HTTP/1.0 403 Forbidden');
+                header('Location: '.$this->adminUrl().'login');
+                exit;
+            }
+        } else {
+            // Initialize data with GET
+            $this->setData($request->getParams());
         }
 
-        // Initialize data with GET
-        $this->setData($request->getParams());
-
         return parent::init($request);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function requiredAclPermissions()
+    {
+        return [
+            'template'
+        ];
     }
 
     /**
@@ -199,6 +235,23 @@ class AdminTemplate extends AbstractTemplate
     protected function authenticator()
     {
         return $this->authenticator;
+    }
+
+    /**
+     * @param Authorizer $authorizer The authorization service.
+     * @return void
+     */
+    protected function setAuthorizer(Authorizer $authorizer)
+    {
+        $this->authorizer = $authorizer;
+    }
+
+    /**
+     * @return Authorizer
+     */
+    protected function authorizer()
+    {
+        return $this->authorizer;
     }
 
     /**
@@ -360,7 +413,6 @@ class AdminTemplate extends AbstractTemplate
             }
             yield $menuItem;
         }
-
     }
 
     /**
@@ -433,23 +485,6 @@ class AdminTemplate extends AbstractTemplate
     protected function authRequired()
     {
         return true;
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     * If not it redirects them to the login page.
-     *
-     * @return void
-     */
-    private function auth()
-    {
-        if ($this->isAuthenticated()) {
-            return;
-        }
-
-        // Not authenticated. Die.
-        header('Location: '.$this->adminUrl().'login');
-        exit;
     }
 
     /**

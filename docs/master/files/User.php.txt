@@ -6,7 +6,6 @@ namespace Charcoal\Admin;
 use \Charcoal\User\AbstractUser;
 
 // Local namespace dependencies
-use \Charcoal\Admin\UserConfig;
 use \Charcoal\Admin\UserGroup;
 
 /**
@@ -23,21 +22,6 @@ class User extends AbstractUser
     }
 
     /**
-     * ConfigurableInterface > createConfig()
-     *
-     * @param array|null $data Optional. User config data.
-     * @return UserConfig
-     */
-    public function createConfig(array $data = null)
-    {
-        $config = new UserConfig();
-        if ($data !== null) {
-            $config->merge($data);
-        }
-        return $config;
-    }
-
-    /**
      * @param array|null $data Optional. Default usergroup data.
      * @return UserGroup
      */
@@ -50,14 +34,5 @@ class User extends AbstractUser
         return $group;
     }
 
-    /**
-     * @param array $data Optional permission data.
-     * @return array
-     */
-    public function createPermission(array $data = null)
-    {
-        unset($data);
-        return [];
-    }
 }
 

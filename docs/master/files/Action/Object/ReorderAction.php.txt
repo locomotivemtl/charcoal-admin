@@ -109,7 +109,6 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
 
         $this->setSuccess(true);
         return $response;
-
     }
 
     /**

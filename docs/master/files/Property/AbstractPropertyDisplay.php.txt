@@ -338,7 +338,6 @@ abstract class AbstractPropertyDisplay implements
     {
         $setter = 'set_'.$key;
         return $this->camelize($setter);
-
     }
 
     /**

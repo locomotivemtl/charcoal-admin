@@ -75,7 +75,6 @@ class DeleteAction extends AdminAction
             $this->setSuccess(false);
             return $response->withStatus(500);
         }
-
     }
 
     /**

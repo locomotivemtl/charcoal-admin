@@ -9,6 +9,12 @@ use \InvalidArgumentException;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+use \Pimple\Container;
+
+// Dependency from `charcoal-base`
+use \Charcoal\User\Authenticator;
+
+// Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\User;
 
@@ -38,6 +44,11 @@ use \Charcoal\Admin\User;
 class LoginAction extends AdminAction
 {
     /**
+     * @var Authenticator $authenticator
+     */
+    private $authenticator;
+
+    /**
      * @var string $nextUrl
      */
     protected $nextUrl;
@@ -46,6 +57,16 @@ class LoginAction extends AdminAction
      * @var string $errMsg
      */
     protected $errMsg;
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->authenticator = $container['admin/authenticator'];
+        parent::setDependencies($container);
+    }
 
     /**
      * Authentication is required by default.
@@ -99,18 +120,16 @@ class LoginAction extends AdminAction
             sprintf('Admin login attempt: "%s"', $username)
         );
 
-        $u = $this->modelFactory()->create('charcoal/admin/user');
+        $authUser = $this->authenticator->authenticateByPassword($username, $password);
 
-        $isAuthenticated = $u->authenticate($username, $password);
-
-        if (!$isAuthenticated) {
+        if ($authUser === null) {
             $this->logger->warning(
                 sprintf('Login attempt failure: "%s"', $username)
             );
             $this->setSuccess(false);
             return $response->withStatus(403);
         } else {
-            $this->setRememberCookie($request, $u);
+            $this->setRememberCookie($request, $authUser);
 
             $this->logger->debug(
                 sprintf('Login attempt successful: "%s"', $username)

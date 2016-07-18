@@ -159,7 +159,6 @@ class AdminTemplate extends AbstractTemplate
         }
 
         if ($this->authRequired() !== false) {
-
             // This can reset headers / die if unauthorized.
             if (!$this->authenticator->authenticate()) {
                 header('HTTP/1.0 403 Forbidden');

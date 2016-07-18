@@ -51,7 +51,9 @@ class AclServiceProvider implements ServiceProviderInterface
                 `ident`,
                 `parent`
             from
-                `charcoal_admin_acl_roles`';
+                `charcoal_admin_acl_roles`
+            order by
+                `position` asc';
 
             $container['logger']->debug($q);
 
@@ -82,7 +84,9 @@ class AclServiceProvider implements ServiceProviderInterface
                 `allowed`,
                 `superuser`
             from
-                `charcoal_admin_acl_roles`';
+                `charcoal_admin_acl_roles`
+            order by
+                `position` asc';
 
             $container['logger']->debug($q);
 
@@ -121,7 +125,12 @@ class AclServiceProvider implements ServiceProviderInterface
             // Add roles
             $roles = $container['admin/acl/roles'];
             foreach ($roles as $role => $parentRole) {
-                $acl->addRole(new Role($role), $parentRole);
+                if($parentRole) {
+                    $acl->addRole(new Role($role), $parentRole);
+                } else {
+                    $acl->addRole(new Role($role));
+                }
+
             }
 
             // Add resources

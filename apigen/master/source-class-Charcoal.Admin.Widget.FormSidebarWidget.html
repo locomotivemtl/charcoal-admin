@@ -524,33 +524,38 @@
 </span></span><span id="222" class="l"><a href="#222">222: </a><span class="php-comment">     */</span>
 </span><span id="223" class="l"><a href="#223">223: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> showLanguageSwitch()
 </span><span id="224" class="l"><a href="#224">224: </a>    {
-</span><span id="225" class="l"><a href="#225">225: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;form()-&gt;formProperties() <span class="php-keyword1">as</span> <span class="php-var">$prop</span>) {
-</span><span id="226" class="l"><a href="#226">226: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$prop</span>-&gt;prop()-&gt;l10n()) {
-</span><span id="227" class="l"><a href="#227">227: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
-</span><span id="228" class="l"><a href="#228">228: </a>            }
-</span><span id="229" class="l"><a href="#229">229: </a>        }
-</span><span id="230" class="l"><a href="#230">230: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
-</span><span id="231" class="l"><a href="#231">231: </a>    }
-</span><span id="232" class="l"><a href="#232">232: </a>
-</span><span id="233" class="l"><a href="#233">233: </a>    <span class="php-comment">/**
-</span></span><span id="234" class="l"><a href="#234">234: </a><span class="php-comment">     * Active languages generator, formatted for the sidebar language-switcher.
-</span></span><span id="235" class="l"><a href="#235">235: </a><span class="php-comment">     *
-</span></span><span id="236" class="l"><a href="#236">236: </a><span class="php-comment">     * @return array This is a generator.
-</span></span><span id="237" class="l"><a href="#237">237: </a><span class="php-comment">     */</span>
-</span><span id="238" class="l"><a href="#238">238: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> languages()
-</span><span id="239" class="l"><a href="#239">239: </a>    {
-</span><span id="240" class="l"><a href="#240">240: </a>        <span class="php-var">$curLang</span> = TranslationConfig::instance()-&gt;currentLanguage();
-</span><span id="241" class="l"><a href="#241">241: </a>        <span class="php-var">$langs</span> = TranslationConfig::instance()-&gt;languages();
-</span><span id="242" class="l"><a href="#242">242: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$langs</span> <span class="php-keyword1">as</span> <span class="php-var">$lang</span>) {
-</span><span id="243" class="l"><a href="#243">243: </a>            yield [
-</span><span id="244" class="l"><a href="#244">244: </a>                <span class="php-quote">'ident'</span> =&gt; <span class="php-var">$lang</span>-&gt;ident(),
-</span><span id="245" class="l"><a href="#245">245: </a>                <span class="php-quote">'name'</span>  =&gt; <span class="php-var">$lang</span>-&gt;name(),
-</span><span id="246" class="l"><a href="#246">246: </a>                <span class="php-quote">'current'</span> =&gt; (<span class="php-var">$lang</span>-&gt;ident() == <span class="php-var">$curLang</span>)
-</span><span id="247" class="l"><a href="#247">247: </a>            ];
-</span><span id="248" class="l"><a href="#248">248: </a>        }
-</span><span id="249" class="l"><a href="#249">249: </a>    }
-</span><span id="250" class="l"><a href="#250">250: </a>}
-</span><span id="251" class="l"><a href="#251">251: </a></span></code></pre>
+</span><span id="225" class="l"><a href="#225">225: </a>        <span class="php-var">$languages</span> = <span class="php-keyword2">iterator_to_array</span>(<span class="php-var">$this</span>-&gt;languages());
+</span><span id="226" class="l"><a href="#226">226: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">count</span>(<span class="php-var">$languages</span>) &lt;= <span class="php-num">1</span>) {
+</span><span id="227" class="l"><a href="#227">227: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+</span><span id="228" class="l"><a href="#228">228: </a>        }
+</span><span id="229" class="l"><a href="#229">229: </a>
+</span><span id="230" class="l"><a href="#230">230: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$this</span>-&gt;form()-&gt;formProperties() <span class="php-keyword1">as</span> <span class="php-var">$prop</span>) {
+</span><span id="231" class="l"><a href="#231">231: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$prop</span>-&gt;prop()-&gt;l10n()) {
+</span><span id="232" class="l"><a href="#232">232: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+</span><span id="233" class="l"><a href="#233">233: </a>            }
+</span><span id="234" class="l"><a href="#234">234: </a>        }
+</span><span id="235" class="l"><a href="#235">235: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+</span><span id="236" class="l"><a href="#236">236: </a>    }
+</span><span id="237" class="l"><a href="#237">237: </a>
+</span><span id="238" class="l"><a href="#238">238: </a>    <span class="php-comment">/**
+</span></span><span id="239" class="l"><a href="#239">239: </a><span class="php-comment">     * Active languages generator, formatted for the sidebar language-switcher.
+</span></span><span id="240" class="l"><a href="#240">240: </a><span class="php-comment">     *
+</span></span><span id="241" class="l"><a href="#241">241: </a><span class="php-comment">     * @return array This is a generator.
+</span></span><span id="242" class="l"><a href="#242">242: </a><span class="php-comment">     */</span>
+</span><span id="243" class="l"><a href="#243">243: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> languages()
+</span><span id="244" class="l"><a href="#244">244: </a>    {
+</span><span id="245" class="l"><a href="#245">245: </a>        <span class="php-var">$curLang</span> = TranslationConfig::instance()-&gt;currentLanguage();
+</span><span id="246" class="l"><a href="#246">246: </a>        <span class="php-var">$langs</span> = TranslationConfig::instance()-&gt;languages();
+</span><span id="247" class="l"><a href="#247">247: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$langs</span> <span class="php-keyword1">as</span> <span class="php-var">$lang</span>) {
+</span><span id="248" class="l"><a href="#248">248: </a>            yield [
+</span><span id="249" class="l"><a href="#249">249: </a>                <span class="php-quote">'ident'</span> =&gt; <span class="php-var">$lang</span>-&gt;ident(),
+</span><span id="250" class="l"><a href="#250">250: </a>                <span class="php-quote">'name'</span>  =&gt; <span class="php-var">$lang</span>-&gt;name(),
+</span><span id="251" class="l"><a href="#251">251: </a>                <span class="php-quote">'current'</span> =&gt; (<span class="php-var">$lang</span>-&gt;ident() == <span class="php-var">$curLang</span>)
+</span><span id="252" class="l"><a href="#252">252: </a>            ];
+</span><span id="253" class="l"><a href="#253">253: </a>        }
+</span><span id="254" class="l"><a href="#254">254: </a>    }
+</span><span id="255" class="l"><a href="#255">255: </a>}
+</span><span id="256" class="l"><a href="#256">256: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

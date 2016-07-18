@@ -205,6 +205,6 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang)
 {
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
-    $('[data-lang-switch][data-lang-switch!=' + lang + ']').removeClass('btn-primary');
-    $('[data-lang-switch][data-lang-switch=' + lang + ']').addClass('btn-primary');
+    $('[data-lang-switch][data-lang-switch!=' + lang + ']').removeClass('btn-info');
+    $('[data-lang-switch][data-lang-switch=' + lang + ']').addClass('btn-info');
 };

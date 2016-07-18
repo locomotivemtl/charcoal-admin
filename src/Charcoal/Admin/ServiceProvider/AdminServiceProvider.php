@@ -11,6 +11,7 @@ use \Charcoal\Factory\GenericFactory as Factory;
 
 // Modeul `charcoal-base` dependencies
 use \Charcoal\User\Authenticator;
+use \Charcoal\User\Authorizer;
 
 use \Charcoal\Admin\Config as AdminConfig;
 
@@ -31,13 +32,13 @@ class AdminServiceProvider implements ServiceProviderInterface
      * This method should only be used to configure services and parameters.
      * It should not get services.
      *
-     * @param  Container $container The DI container.
+     * @param  Container $container The Pimple DI container.
      * @return void
      */
     public function register(Container $container)
     {
         /**
-         * @param Container $container Pimple DI Container.
+         * @param Container $container The Pimple DI Container.
          * @return \Charcoal\Config\ConfigInterface
          */
         $container['admin/config'] = function (Container $container) {
@@ -46,6 +47,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         };
 
         $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
         $this->registerUtilities($container);
 
 
@@ -54,16 +56,16 @@ class AdminServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * Registers the authenticator object.
+     * Registers the authenticator object in `admin/authenticator`.
      *
-     * @param  Container $container The DI container.
+     * @param  Container $container The Pimple DI container.
      * @return void
      */
     protected function registerAuthenticator(Container $container)
     {
         /**
-         * @param Container $container Pimple DI Container.
-         * @return \Charcoal\User\Authenticator
+         * @param Container $container The Pimple DI Container.
+         * @return Authenticator
          */
         $container['admin/authenticator'] = function (Container $container) {
             return new Authenticator([
@@ -77,15 +79,35 @@ class AdminServiceProvider implements ServiceProviderInterface
     }
 
     /**
+     * Registers the authorizer object in `admin/authorizer`.
+     *
+     * @param Container $container The Pimple DI Container.
+     */
+    protected function registerAuthorizer(Container $container)
+    {
+        /**
+         * @param Container $container The Pimple DI container.
+         * @return Authorizer
+         */
+        $container['admin/authorizer'] = function (Container $container) {
+            return new Authorizer([
+                'logger'    => $container['logger'],
+                'acl'       => $container['admin/acl'],
+                'resource'  => 'admin'
+            ]);
+        };
+    }
+
+    /**
      * Registers the admin factories.
      *
-     * @param  Container $container The DI container.
+     * @param  Container $container The Pimple DI container.
      * @return void
      */
     protected function registerUtilities(Container $container)
     {
         /**
-         * @param Container $container Pimple DI container.
+         * @param Container $container The Pimple DI container.
          * @return FactoryInterface
          */
         $container['property/input/factory'] = function (Container $container) {
@@ -102,7 +124,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         };
 
         /**
-         * @param Container $container Pimple DI container.
+         * @param Container $container The Pimple DI container.
          * @return FactoryInterface
          */
         $container['property/display/factory'] = function (Container $container) {

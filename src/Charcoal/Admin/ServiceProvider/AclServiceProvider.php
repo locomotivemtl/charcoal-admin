@@ -122,19 +122,32 @@ class AclServiceProvider implements ServiceProviderInterface
         $container['admin/acl'] = function (Container $container) {
             $acl = new Acl();
 
+            // Default role, which will contain default permissions
+            $acl->addRole(new Role('default'));
+
             // Add roles
             $roles = $container['admin/acl/roles'];
             foreach ($roles as $role => $parentRole) {
                 if($parentRole) {
                     $acl->addRole(new Role($role), $parentRole);
                 } else {
-                    $acl->addRole(new Role($role));
+                    $acl->addRole(new Role($role), 'default');
                 }
 
             }
 
             // Add resources
             $acl->addResource(new Resource('admin'));
+
+            // Setup default permissions (from admin config)
+            $adminConfig = $container['admin/config'];
+            $defaultPermissions = $adminConfig['acl.default_permissions'];
+            foreach ($defaultPermissions['allowed'] as $allowed) {
+                $acl->allow('default', 'admin', $allowed);
+            }
+            foreach ($defaultPermissions['denied'] as $denied) {
+                $acl->deny('default', 'admin', $denied);
+            }
 
             // Add permissions
             $permissions = $container['admin/acl/permissions'];

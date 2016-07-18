@@ -222,6 +222,11 @@ class FormSidebarWidget extends AdminWidget
      */
     public function showLanguageSwitch()
     {
+        $languages = iterator_to_array($this->languages());
+        if (count($languages) <= 1) {
+            return false;
+        }
+
         foreach ($this->form()->formProperties() as $prop) {
             if ($prop->prop()->l10n()) {
                 return true;

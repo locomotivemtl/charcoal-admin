@@ -20,16 +20,10 @@
 			"allow_null":false,
 			"allow_empty":false
 		},
-		"groups":{
-			"type":"object",
-			"obj_type":"charcoal/admin/user-group",
-			"multiple":true
-		},
-		"permissions":{
-			"type":"structure",
-			"multiple":true,
-			"input_type":"charcoal/admin/property/input/textarea"
-		},
+        "roles":{
+            "type":"string",
+            "multiple":true
+        },
 		"last_login_date":{
 			"type": "date-time"
 		},
@@ -63,7 +57,7 @@
 				"properties":[
 					"username",
 					"email",
-					"groups",
+					"roles",
 					"last_login_date"
 				]
 			}
@@ -100,8 +94,7 @@
 							"access":{
 								"label":"Access levels",
 								"properties":[
-									"groups",
-									"permissions"
+									"roles"
 								]
 							}
 						}

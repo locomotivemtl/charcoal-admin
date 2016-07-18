@@ -104,5 +104,16 @@
       "track": true
 
     }
+  },
+
+  "acl":{
+      "default_permissions":{
+        "allowed":[
+            "action",
+            "template",
+            "template.charcoal/admin/home"
+        ],
+        "denied":[]
+      }
   }
 }

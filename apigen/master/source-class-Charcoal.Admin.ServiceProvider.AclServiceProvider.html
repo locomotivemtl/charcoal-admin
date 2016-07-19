@@ -229,6 +229,7 @@
 				<li><a href="class-Charcoal.Admin.Widget.DashboardWidget.html">Charcoal\Admin\Widget\DashboardWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.Dialog.ImportlistWidget.html">Charcoal\Admin\Widget\Dialog\ImportlistWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">Charcoal\Admin\Widget\FormGroup\AclPermissions</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">Charcoal\Admin\Widget\FormGroup\GenericFormGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></li>
@@ -430,48 +431,47 @@
 </span><span id="128" class="l"><a href="#128">128: </a>            <span class="php-comment">// Add roles</span>
 </span><span id="129" class="l"><a href="#129">129: </a>            <span class="php-var">$roles</span> = <span class="php-var">$container</span>[<span class="php-quote">'admin/acl/roles'</span>];
 </span><span id="130" class="l"><a href="#130">130: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$roles</span> <span class="php-keyword1">as</span> <span class="php-var">$role</span> =&gt; <span class="php-var">$parentRole</span>) {
-</span><span id="131" class="l"><a href="#131">131: </a>                <span class="php-keyword1">if</span>(<span class="php-var">$parentRole</span>) {
+</span><span id="131" class="l"><a href="#131">131: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$parentRole</span>) {
 </span><span id="132" class="l"><a href="#132">132: </a>                    <span class="php-var">$acl</span>-&gt;addRole(<span class="php-keyword1">new</span> Role(<span class="php-var">$role</span>), <span class="php-var">$parentRole</span>);
 </span><span id="133" class="l"><a href="#133">133: </a>                } <span class="php-keyword1">else</span> {
 </span><span id="134" class="l"><a href="#134">134: </a>                    <span class="php-var">$acl</span>-&gt;addRole(<span class="php-keyword1">new</span> Role(<span class="php-var">$role</span>), <span class="php-quote">'default'</span>);
 </span><span id="135" class="l"><a href="#135">135: </a>                }
-</span><span id="136" class="l"><a href="#136">136: </a>
-</span><span id="137" class="l"><a href="#137">137: </a>            }
-</span><span id="138" class="l"><a href="#138">138: </a>
-</span><span id="139" class="l"><a href="#139">139: </a>            <span class="php-comment">// Add resources</span>
-</span><span id="140" class="l"><a href="#140">140: </a>            <span class="php-var">$acl</span>-&gt;addResource(<span class="php-keyword1">new</span> Resource(<span class="php-quote">'admin'</span>));
-</span><span id="141" class="l"><a href="#141">141: </a>
-</span><span id="142" class="l"><a href="#142">142: </a>            <span class="php-comment">// Setup default permissions (from admin config)</span>
-</span><span id="143" class="l"><a href="#143">143: </a>            <span class="php-var">$adminConfig</span> = <span class="php-var">$container</span>[<span class="php-quote">'admin/config'</span>];
-</span><span id="144" class="l"><a href="#144">144: </a>            <span class="php-var">$defaultPermissions</span> = <span class="php-var">$adminConfig</span>[<span class="php-quote">'acl.default_permissions'</span>];
-</span><span id="145" class="l"><a href="#145">145: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$defaultPermissions</span>[<span class="php-quote">'allowed'</span>] <span class="php-keyword1">as</span> <span class="php-var">$allowed</span>) {
-</span><span id="146" class="l"><a href="#146">146: </a>                <span class="php-var">$acl</span>-&gt;allow(<span class="php-quote">'default'</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$allowed</span>);
-</span><span id="147" class="l"><a href="#147">147: </a>            }
-</span><span id="148" class="l"><a href="#148">148: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$defaultPermissions</span>[<span class="php-quote">'denied'</span>] <span class="php-keyword1">as</span> <span class="php-var">$denied</span>) {
-</span><span id="149" class="l"><a href="#149">149: </a>                <span class="php-var">$acl</span>-&gt;deny(<span class="php-quote">'default'</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$denied</span>);
-</span><span id="150" class="l"><a href="#150">150: </a>            }
-</span><span id="151" class="l"><a href="#151">151: </a>
-</span><span id="152" class="l"><a href="#152">152: </a>            <span class="php-comment">// Add permissions</span>
-</span><span id="153" class="l"><a href="#153">153: </a>            <span class="php-var">$permissions</span> = <span class="php-var">$container</span>[<span class="php-quote">'admin/acl/permissions'</span>];
-</span><span id="154" class="l"><a href="#154">154: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$permissions</span> <span class="php-keyword1">as</span> <span class="php-var">$role</span> =&gt; <span class="php-var">$permissions</span>) {
-</span><span id="155" class="l"><a href="#155">155: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$permissions</span> === <span class="php-quote">'superuser'</span>) {
-</span><span id="156" class="l"><a href="#156">156: </a>                    <span class="php-comment">// Allow all</span>
-</span><span id="157" class="l"><a href="#157">157: </a>                    <span class="php-var">$acl</span>-&gt;allow(<span class="php-var">$role</span>);
-</span><span id="158" class="l"><a href="#158">158: </a>                } <span class="php-keyword1">else</span> {
-</span><span id="159" class="l"><a href="#159">159: </a>                    <span class="php-keyword1">foreach</span> (<span class="php-var">$permissions</span>[<span class="php-quote">'allow'</span>] <span class="php-keyword1">as</span> <span class="php-var">$allowed</span>) {
-</span><span id="160" class="l"><a href="#160">160: </a>                        <span class="php-var">$acl</span>-&gt;allow(<span class="php-var">$role</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$allowed</span>);
-</span><span id="161" class="l"><a href="#161">161: </a>                    }
-</span><span id="162" class="l"><a href="#162">162: </a>                    <span class="php-keyword1">foreach</span> (<span class="php-var">$permissions</span>[<span class="php-quote">'deny'</span>] <span class="php-keyword1">as</span> <span class="php-var">$denied</span>) {
-</span><span id="163" class="l"><a href="#163">163: </a>                        <span class="php-var">$acl</span>-&gt;deny(<span class="php-var">$role</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$denied</span>);
-</span><span id="164" class="l"><a href="#164">164: </a>                    }
-</span><span id="165" class="l"><a href="#165">165: </a>                }
-</span><span id="166" class="l"><a href="#166">166: </a>            }
-</span><span id="167" class="l"><a href="#167">167: </a>
-</span><span id="168" class="l"><a href="#168">168: </a>            <span class="php-keyword1">return</span> <span class="php-var">$acl</span>;
-</span><span id="169" class="l"><a href="#169">169: </a>        };
-</span><span id="170" class="l"><a href="#170">170: </a>    }
-</span><span id="171" class="l"><a href="#171">171: </a>}
-</span><span id="172" class="l"><a href="#172">172: </a></span></code></pre>
+</span><span id="136" class="l"><a href="#136">136: </a>            }
+</span><span id="137" class="l"><a href="#137">137: </a>
+</span><span id="138" class="l"><a href="#138">138: </a>            <span class="php-comment">// Add resources</span>
+</span><span id="139" class="l"><a href="#139">139: </a>            <span class="php-var">$acl</span>-&gt;addResource(<span class="php-keyword1">new</span> Resource(<span class="php-quote">'admin'</span>));
+</span><span id="140" class="l"><a href="#140">140: </a>
+</span><span id="141" class="l"><a href="#141">141: </a>            <span class="php-comment">// Setup default permissions (from admin config)</span>
+</span><span id="142" class="l"><a href="#142">142: </a>            <span class="php-var">$adminConfig</span> = <span class="php-var">$container</span>[<span class="php-quote">'admin/config'</span>];
+</span><span id="143" class="l"><a href="#143">143: </a>            <span class="php-var">$defaultPermissions</span> = <span class="php-var">$adminConfig</span>[<span class="php-quote">'acl.default_permissions'</span>];
+</span><span id="144" class="l"><a href="#144">144: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$defaultPermissions</span>[<span class="php-quote">'allowed'</span>] <span class="php-keyword1">as</span> <span class="php-var">$allowed</span>) {
+</span><span id="145" class="l"><a href="#145">145: </a>                <span class="php-var">$acl</span>-&gt;allow(<span class="php-quote">'default'</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$allowed</span>);
+</span><span id="146" class="l"><a href="#146">146: </a>            }
+</span><span id="147" class="l"><a href="#147">147: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$defaultPermissions</span>[<span class="php-quote">'denied'</span>] <span class="php-keyword1">as</span> <span class="php-var">$denied</span>) {
+</span><span id="148" class="l"><a href="#148">148: </a>                <span class="php-var">$acl</span>-&gt;deny(<span class="php-quote">'default'</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$denied</span>);
+</span><span id="149" class="l"><a href="#149">149: </a>            }
+</span><span id="150" class="l"><a href="#150">150: </a>
+</span><span id="151" class="l"><a href="#151">151: </a>            <span class="php-comment">// Add permissions</span>
+</span><span id="152" class="l"><a href="#152">152: </a>            <span class="php-var">$permissions</span> = <span class="php-var">$container</span>[<span class="php-quote">'admin/acl/permissions'</span>];
+</span><span id="153" class="l"><a href="#153">153: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$permissions</span> <span class="php-keyword1">as</span> <span class="php-var">$role</span> =&gt; <span class="php-var">$permissions</span>) {
+</span><span id="154" class="l"><a href="#154">154: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$permissions</span> === <span class="php-quote">'superuser'</span>) {
+</span><span id="155" class="l"><a href="#155">155: </a>                    <span class="php-comment">// Allow all</span>
+</span><span id="156" class="l"><a href="#156">156: </a>                    <span class="php-var">$acl</span>-&gt;allow(<span class="php-var">$role</span>);
+</span><span id="157" class="l"><a href="#157">157: </a>                } <span class="php-keyword1">else</span> {
+</span><span id="158" class="l"><a href="#158">158: </a>                    <span class="php-keyword1">foreach</span> (<span class="php-var">$permissions</span>[<span class="php-quote">'allow'</span>] <span class="php-keyword1">as</span> <span class="php-var">$allowed</span>) {
+</span><span id="159" class="l"><a href="#159">159: </a>                        <span class="php-var">$acl</span>-&gt;allow(<span class="php-var">$role</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$allowed</span>);
+</span><span id="160" class="l"><a href="#160">160: </a>                    }
+</span><span id="161" class="l"><a href="#161">161: </a>                    <span class="php-keyword1">foreach</span> (<span class="php-var">$permissions</span>[<span class="php-quote">'deny'</span>] <span class="php-keyword1">as</span> <span class="php-var">$denied</span>) {
+</span><span id="162" class="l"><a href="#162">162: </a>                        <span class="php-var">$acl</span>-&gt;deny(<span class="php-var">$role</span>, <span class="php-quote">'admin'</span>, <span class="php-var">$denied</span>);
+</span><span id="163" class="l"><a href="#163">163: </a>                    }
+</span><span id="164" class="l"><a href="#164">164: </a>                }
+</span><span id="165" class="l"><a href="#165">165: </a>            }
+</span><span id="166" class="l"><a href="#166">166: </a>
+</span><span id="167" class="l"><a href="#167">167: </a>            <span class="php-keyword1">return</span> <span class="php-var">$acl</span>;
+</span><span id="168" class="l"><a href="#168">168: </a>        };
+</span><span id="169" class="l"><a href="#169">169: </a>    }
+</span><span id="170" class="l"><a href="#170">170: </a>}
+</span><span id="171" class="l"><a href="#171">171: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
@@ -479,6 +479,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?95ffb5b8e406b429a162fac38b39e3cc8f03a677"></script>
+<script src="elementlist.js?06e9e2a6cf3f0ff16b255f96c3f8694d09beb97e"></script>
 </body>
 </html>

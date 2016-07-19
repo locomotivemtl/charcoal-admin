@@ -229,6 +229,7 @@
 				<li><a href="class-Charcoal.Admin.Widget.DashboardWidget.html">Charcoal\Admin\Widget\DashboardWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.Dialog.ImportlistWidget.html">Charcoal\Admin\Widget\Dialog\ImportlistWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">Charcoal\Admin\Widget\FormGroup\AclPermissions</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">Charcoal\Admin\Widget\FormGroup\GenericFormGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></li>
@@ -351,7 +352,7 @@
 </span><span id="49" class="l"><a href="#49"> 49: </a>        parent::setDependencies(<span class="php-var">$container</span>);
 </span><span id="50" class="l"><a href="#50"> 50: </a>
 </span><span id="51" class="l"><a href="#51"> 51: </a>        <span class="php-comment">// Fill FormInterface dependencies</span>
-</span><span id="52" class="l"><a href="#52"> 52: </a>        <span class="php-var">$this</span>-&gt;setFormGroupBuilder(<span class="php-var">$container</span>[<span class="php-quote">'form/group/builder'</span>]);
+</span><span id="52" class="l"><a href="#52"> 52: </a>        <span class="php-var">$this</span>-&gt;setFormGroupFactory(<span class="php-var">$container</span>[<span class="php-quote">'form/group/factory'</span>]);
 </span><span id="53" class="l"><a href="#53"> 53: </a>
 </span><span id="54" class="l"><a href="#54"> 54: </a>        <span class="php-comment">// Fill LayoutAwareInterface dependencies</span>
 </span><span id="55" class="l"><a href="#55"> 55: </a>        <span class="php-var">$this</span>-&gt;setLayoutBuilder(<span class="php-var">$container</span>[<span class="php-quote">'layout/builder'</span>]);
@@ -537,7 +538,7 @@
 </span></span><span id="235" class="l"><a href="#235">235: </a><span class="php-comment">     */</span>
 </span><span id="236" class="l"><a href="#236">236: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> defaultGroupType()
 </span><span id="237" class="l"><a href="#237">237: </a>    {
-</span><span id="238" class="l"><a href="#238">238: </a>        <span class="php-keyword1">return</span> <span class="php-quote">'charcoal/admin/widget/form-group-widget'</span>;
+</span><span id="238" class="l"><a href="#238">238: </a>        <span class="php-keyword1">return</span> <span class="php-quote">'charcoal/admin/widget/form-group/generic'</span>;
 </span><span id="239" class="l"><a href="#239">239: </a>    }
 </span><span id="240" class="l"><a href="#240">240: </a>}
 </span><span id="241" class="l"><a href="#241">241: </a></span></code></pre>
@@ -548,6 +549,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?95ffb5b8e406b429a162fac38b39e3cc8f03a677"></script>
+<script src="elementlist.js?06e9e2a6cf3f0ff16b255f96c3f8694d09beb97e"></script>
 </body>
 </html>

@@ -128,12 +128,11 @@ class AclServiceProvider implements ServiceProviderInterface
             // Add roles
             $roles = $container['admin/acl/roles'];
             foreach ($roles as $role => $parentRole) {
-                if($parentRole) {
+                if ($parentRole) {
                     $acl->addRole(new Role($role), $parentRole);
                 } else {
                     $acl->addRole(new Role($role), 'default');
                 }
-
             }
 
             // Add resources

@@ -82,6 +82,7 @@ class AdminServiceProvider implements ServiceProviderInterface
      * Registers the authorizer object in `admin/authorizer`.
      *
      * @param Container $container The Pimple DI Container.
+     * @return void
      */
     protected function registerAuthorizer(Container $container)
     {

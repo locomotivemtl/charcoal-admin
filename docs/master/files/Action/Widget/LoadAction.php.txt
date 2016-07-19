@@ -46,6 +46,7 @@ class LoadAction extends AdminAction
      */
     public function setDependencies(Container $dependencies)
     {
+        parent::setdependencies($dependencies);
         $this->widgetFactory = $dependencies['widget/factory'];
         $this->widgetView = $dependencies['view'];
     }

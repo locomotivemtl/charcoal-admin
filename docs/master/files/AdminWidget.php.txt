@@ -29,6 +29,11 @@ class AdminWidget extends AbstractWidget
     private $type;
 
     /**
+     * @var string $template
+     */
+    private $template;
+
+    /**
      * @var string $ident
      */
     private $ident = '';
@@ -92,13 +97,30 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-     * Provide a `template()` method to fullfill UIItem interface.
-     *
+     * @param string $template The UI item's template (identifier).
+     * @throws InvalidArgumentException If the template identifier is not a string.
+     * @return UiItemInterface Chainable
+     */
+    public function setTemplate($template)
+    {
+        if (!is_string($template)) {
+            throw new InvalidArgumentException(
+                'Can not set UI Item\'s template: template identifier must be a string'
+            );
+        }
+        $this->template = $template;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function template()
     {
-        return $this->type();
+        if ($this->template === null) {
+            return $this->type();
+        }
+        return $this->template;
     }
 
     /**

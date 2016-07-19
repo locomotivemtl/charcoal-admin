@@ -207,13 +207,14 @@ class CollectionMapWidget extends AdminWidget
 
     /**
      * Google maps api key.
-     * @return string Google maps api key.
+     *
+     * @return string|null Google maps api key.
      */
     public function gmapApiKey()
     {
         $appConfig = App::instance()->config();
         $key = $appConfig->get('apis.google.map.key');
 
-        return $key ? : null;
+        return ($key) ? $key : null;
     }
 }

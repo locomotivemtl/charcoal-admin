@@ -14,12 +14,20 @@ use Charcoal\Translation\TranslationString;
 class DualSelectInput extends AbstractSelectableInput
 {
 
+    /**
+     * @var boolean $searchable
+     */
     protected $searchable;
-    protected $options;
-    protected $dualSelectOptions;
 
-    // FUNCTIONS
-    // ==========================================================================
+    /**
+     * @var array $options
+     */
+    protected $options;
+
+    /**
+     * @var array $dualSelectOptions
+     */
+    protected $dualSelectOptions;
 
     /**
      * Retrieve the unselected options.
@@ -48,7 +56,6 @@ class DualSelectInput extends AbstractSelectableInput
         $val = $this->p()->val();
 
         if ($val !== null) {
-
             $val = $this->p()->parseVal($val);
 
             if (!$this->p()->multiple()) {
@@ -66,13 +73,16 @@ class DualSelectInput extends AbstractSelectableInput
         }
     }
 
+    /**
+     * @return array
+     */
     public function options()
     {
         $opts = $this->dualSelectOptions;
 
         $optionName = array_keys($opts);
 
-        foreach( $optionName as $optName ) {
+        foreach ($optionName as $optName) {
             $this->options[$optName] = $opts[$optName];
         }
 
@@ -83,9 +93,6 @@ class DualSelectInput extends AbstractSelectableInput
         }
     }
 
-    // GETTERS
-    // ==========================================================================
-
     /**
      * @return mixed
      */
@@ -94,25 +101,22 @@ class DualSelectInput extends AbstractSelectableInput
         $this->searchable = $this->dualSelectOptions['searchable'];
 
         $placeholder = new TranslationString([
-            "en" => "Search...",
-            "fr" => "Recherche..."
+            'en' => 'Search...',
+            'fr' => 'Recherche...'
         ]);
 
         $defaultOptions = [
-            "left"  => [
-                "placeholder" => $placeholder
+            'left'  => [
+                'placeholder' => $placeholder
             ],
-            "right" => [
-                "placeholder" => $placeholder
+            'right' => [
+                'placeholder' => $placeholder
             ]
         ];
 
         if (is_bool($this->searchable) && $this->searchable) {
-
             $this->searchable = $defaultOptions;
-
-        } else if (is_array($this->searchable)) {
-
+        } elseif (is_array($this->searchable)) {
             if (isset($this->searchable['left']['placeholder'])) {
                 $this->searchable['left']['placeholder'] = $this->parseTranslatable($this->searchable['left']['placeholder']);
             } elseif (isset($this->searchable['placeholder'])) {
@@ -128,7 +132,6 @@ class DualSelectInput extends AbstractSelectableInput
             } else {
                 $this->searchable['right']['placeholder'] = $placeholder;
             }
-
         } else {
             $this->searchable = false;
         }
@@ -144,12 +147,8 @@ class DualSelectInput extends AbstractSelectableInput
         return $this->dualSelectOptions;
     }
 
-    // SETTERS
-    // ==========================================================================
-
-
     /**
-     * @param mixed $dualSelectOptions
+     * @param mixed $dualSelectOptions The dual-select options.
      * @return DualSelectInput
      */
     public function setDualSelectOptions($dualSelectOptions)
@@ -157,5 +156,4 @@ class DualSelectInput extends AbstractSelectableInput
         $this->dualSelectOptions = $dualSelectOptions;
         return $this;
     }
-
 }

@@ -31,6 +31,8 @@ abstract class AdminAction extends AbstractAction
     */
     final public function __construct(array $data = null)
     {
+        parent::__construct($data);
+
         if ($data !== null) {
             $this->setData($data);
         }

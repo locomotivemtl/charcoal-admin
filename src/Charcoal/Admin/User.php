@@ -33,5 +33,4 @@ class User extends AbstractUser
         }
         return $group;
     }
-
 }

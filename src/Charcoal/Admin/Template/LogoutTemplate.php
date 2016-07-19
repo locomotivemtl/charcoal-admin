@@ -37,7 +37,7 @@ class LogoutTemplate extends AdminTemplate
      */
     private function deleteUserAuthTokens(User $user)
     {
-        $token = $this->modelFactory()->create('charcoal/admin/object/auth-token');
+        $token = $this->modelFactory()->create(AuthToken::class);
 
         if ($token->source()->tableExists()) {
             $table = $token->source()->table();

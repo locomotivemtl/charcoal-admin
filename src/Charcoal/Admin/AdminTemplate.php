@@ -2,9 +2,7 @@
 
 namespace Charcoal\Admin;
 
-use \ArrayIterator;
 use \Exception;
-use \InvalidArgumentException;
 
 // PSR-7 (HTTP Messaging) dependencies
 use \Psr\Http\Message\RequestInterface;

@@ -7,7 +7,7 @@ use \Charcoal\Admin\Property\AbstractPropertyDisplay;
 /**
  * Object display
  */
-class ObjectDisplay
+class ObjectDisplay extends AbstractPropertyDisplay
 {
     // Nothing to do.
 }

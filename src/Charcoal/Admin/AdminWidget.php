@@ -11,7 +11,6 @@ use \Charcoal\Factory\FactoryInterface;
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\App\App;
 use \Charcoal\App\Template\AbstractWidget;
-use \Charcoal\Widget\WidgetView;
 
 /**
  * The base Widget for the `admin` module.

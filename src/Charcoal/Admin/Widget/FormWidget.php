@@ -49,7 +49,7 @@ class FormWidget extends AdminWidget implements
         parent::setDependencies($container);
 
         // Fill FormInterface dependencies
-        $this->setFormGroupBuilder($container['form/group/builder']);
+        $this->setFormGroupFactory($container['form/group/factory']);
 
         // Fill LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
@@ -235,6 +235,6 @@ class FormWidget extends AdminWidget implements
      */
     public function defaultGroupType()
     {
-        return 'charcoal/admin/widget/form-group-widget';
+        return 'charcoal/admin/widget/form-group/generic';
     }
 }

@@ -25,6 +25,8 @@ class FormGroupWidget extends AbstractUiItem implements
     use FormGroupTrait;
     use LayoutAwareTrait;
 
+    private $widgetId;
+
     /**
      * @var array $groupProperties
      */
@@ -35,7 +37,9 @@ class FormGroupWidget extends AbstractUiItem implements
      */
     public function __construct($data)
     {
-        $this->setForm($data['form']);
+        if (isset($data['form'])) {
+            $this->setForm($data['form']);
+        }
         $this->setFormInputBuilder($data['form_input_builder']);
 
         // Set up layout builder (to fulfill LayoutAware Interface)
@@ -48,6 +52,8 @@ class FormGroupWidget extends AbstractUiItem implements
      */
     public function setDependencies(Container $container)
     {
+        parent::setDependencies($container);
+
         // Fill LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
     }
@@ -73,6 +79,27 @@ class FormGroupWidget extends AbstractUiItem implements
     public function type()
     {
         return 'charcoal/admin/widget/form-group-widget';
+    }
+
+    /**
+     * @param string $widgetId The widget identifier.
+     * @return AdminWidget Chainable
+     */
+    public function setWidgetId($widgetId)
+    {
+        $this->widgetId = $widgetId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function widgetId()
+    {
+        if (!$this->widgetId) {
+            $this->widgetId = 'widget_'.uniqid();
+        }
+        return $this->widgetId;
     }
 
 

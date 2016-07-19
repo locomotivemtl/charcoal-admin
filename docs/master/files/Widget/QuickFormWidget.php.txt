@@ -2,14 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
-use \Exception;
-
-use \Pimple\Container;
-
 use \Charcoal\Admin\Widget\ObjectFormWidget;
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
  * The quick form widget for editing objects on the go.

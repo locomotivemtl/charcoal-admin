@@ -95,7 +95,7 @@ class InlineAction extends AdminAction
                 return $response->withStatus(404);
             }
 
-            $objForm = $this->widgetFactory()->create('charcoal/admin/widget/object-form');
+            $objForm = $this->widgetFactory()->create(ObjectFormWidget::class);
 
             $objForm->setObjType($objType);
             $objForm->setObjId($objId);

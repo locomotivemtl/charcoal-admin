@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
-
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Translation\TranslationString;
 

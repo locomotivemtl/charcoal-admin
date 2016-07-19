@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin;
 
-use \Exception;
-
 // Module `pimple/pimple` dependencies
 use \Pimple\Container;
 

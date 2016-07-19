@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Template;
 
-use \Pimple\Container;
-
 use \Charcoal\Translation\TranslationString;
 
 // Local parent namespace dependencies
@@ -79,7 +77,7 @@ class LoginTemplate extends AdminTemplate
      */
     public function rememberMeEnabled()
     {
-        $token = $this->modelFactory()->create('charcoal/admin/object/auth-token');
+        $token = $this->modelFactory()->create(AuthToken::class);
 
         if ($token->metadata()->enabled() === false) {
             return false;

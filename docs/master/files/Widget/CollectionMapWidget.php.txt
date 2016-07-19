@@ -2,13 +2,9 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Factory\FactoryInterface;
-
 use \Charcoal\Loader\CollectionLoader;
 
 use \Charcoal\Admin\AdminWidget;
-
-use \Charcoal\Presenter\Presenter;
 
 use \Charcoal\App\App;
 

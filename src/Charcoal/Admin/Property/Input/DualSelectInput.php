@@ -4,7 +4,6 @@ namespace Charcoal\Admin\Property\Input;
 
 use \Charcoal\Admin\Property\AbstractSelectableInput;
 use Charcoal\Translation\TranslationString;
-use Mmes\Support\Traits\ParsableValueTrait;
 
 /**
  * Select Options Input Property
@@ -14,7 +13,6 @@ use Mmes\Support\Traits\ParsableValueTrait;
  */
 class DualSelectInput extends AbstractSelectableInput
 {
-    use ParsableValueTrait;
 
     protected $searchable;
     protected $options;

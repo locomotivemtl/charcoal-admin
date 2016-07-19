@@ -14,7 +14,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
         {{#isTab}}
             <ul class="nav nav-tabs">
             {{#groups}}
-                <li{{^isHidden}} class="active"{{/isHidden}}><a href="{{ident}}" class="js-group-tabs">{{title}}</a></li>
+                <li{{^isHidden}} class="active"{{/isHidden}}><a href="{{widgetId}}" class="js-group-tabs">{{title}}</a></li>
             {{/groups}}
             </ul>
         {{/isTab}}
@@ -25,7 +25,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Fo
                 {{>charcoal/admin/widget/layout.start}}
             {{/form.layout}}
 
-            <div class="col-md-{{form.layout.cellSpanBy12}} js-group-tab {{ident}}{{#isHidden}} hidden{{/isHidden}}">
+            <div class="col-md-{{form.layout.cellSpanBy12}} js-group-tab {{widgetId}}{{#isHidden}} hidden{{/isHidden}}">
                 {{>$widget_template}}
             </div>
 

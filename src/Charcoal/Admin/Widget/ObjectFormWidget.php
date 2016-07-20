@@ -215,9 +215,12 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
                     )
                 );
             }
+
             $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+            $p->setViewController($this->viewController());
             $p->setPropertyIdent($propertyIdent);
             $p->setData($property);
+
             yield $propertyIdent => $p;
         }
     }

@@ -17,6 +17,10 @@ use \Psr\Log\NullLogger;
 use \Charcoal\Model\DescribableInterface;
 use \Charcoal\Model\DescribableTrait;
 
+// Dependencies from 'charcoal-view'
+use \Charcoal\View\ViewableInterface;
+use \Charcoal\View\ViewableTrait;
+
 // Dependencies from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
 use \Charcoal\Translation\TranslationString;
@@ -35,10 +39,12 @@ use \Charcoal\Property\PropertyMetadata;
 abstract class AbstractPropertyInput implements
     DescribableInterface,
     PropertyInputInterface,
-    LoggerAwareInterface
+    LoggerAwareInterface,
+    ViewableInterface
 {
     use DescribableTrait;
     use LoggerAwareTrait;
+    use ViewableTrait;
 
     /**
      * @var string $lang
@@ -138,6 +144,7 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
+        $this->setView($container['view']);
         $this->setMetadataLoader($container['metadata/loader']);
     }
 

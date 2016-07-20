@@ -343,17 +343,25 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * Set the form control's placeholder.
+     *
+     * A placeholder is a hint to the user of what can be entered
+     * in the property control.
+     *
      * @param mixed $placeholder The placeholder attribute.
-     * @return Text Chainable
+     * @return AbstractPropertyInput Chainable
      */
     public function setPlaceholder($placeholder)
     {
         $this->placeholder = new TranslationString($placeholder);
+        $this->placeholder->isRendered = false;
 
         return $this;
     }
 
     /**
+     * Retrieve the placeholder.
+     *
      * @return string
      */
     public function placeholder()
@@ -366,7 +374,32 @@ abstract class AbstractPropertyInput implements
             }
         }
 
+        if (!$this->placeholder->isRendered) {
+            $this->renderPlaceholder();
+        }
+
         return $this->placeholder;
+    }
+
+    /**
+     * Render the placeholders.
+     *
+     * @todo Implement data presenter as a better alternative.
+     * @return AbstractPropertyInput Chainable
+     */
+    protected function renderPlaceholder()
+    {
+        if ($this->placeholder instanceof TranslationString) {
+            foreach ($this->placeholder->all() as $lang => $value) {
+                if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
+                    $this->placeholder[$lang] = $this->view()->render($value, $this->viewController());
+                }
+            }
+
+            $this->placeholder->isRendered = true;
+        }
+
+        return $this;
     }
 
     /**

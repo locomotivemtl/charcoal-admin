@@ -22,7 +22,12 @@ class ObjectFormWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $this->obj);
         $this->assertEquals('foobar', $this->obj->formIdent());
 
-        $this->setExpectedException('\Throwable');
-        $this->obj->setormIdent(false);
+        if (class_exists('\Throwable', false)) {
+            $this->setExpectedException('\Throwable');
+        } else {
+            $this->setExpectedException('\Exception');
+        }
+
+        $this->obj->setFormIdent(false);
     }
 }

@@ -236,7 +236,7 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * Active languages generator, formatted for the sidebar language-switcher.
+     * Retrieve the available languages, formatted for the sidebar language-switcher.
      *
      * @return array This is a generator.
      */

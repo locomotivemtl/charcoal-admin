@@ -15,7 +15,7 @@ class SelectInput extends AbstractSelectableInput
     /**
      * Retrieve the selectable options.
      *
-     * @todo [1]: With PHP7 we can simply do `yield from $choices;`.
+     * @todo [^1]: With PHP7 we can simply do `yield from $choices;`.
      * @return Generator|array
      */
     public function choices()
@@ -33,7 +33,7 @@ class SelectInput extends AbstractSelectableInput
 
         $choices = parent::choices();
 
-        /* [^1] */
+        /* Pass along the Generator from the parent method [^1] */
         foreach ($choices as $choice) {
             yield $choice;
         }

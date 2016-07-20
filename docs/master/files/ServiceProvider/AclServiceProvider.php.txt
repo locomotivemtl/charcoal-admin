@@ -47,13 +47,13 @@ class AclServiceProvider implements ServiceProviderInterface
             $db = $container['database'];
 
             $q = '
-            select
-                `ident`,
-                `parent`
-            from
-                `charcoal_admin_acl_roles`
-            order by
-                `position` asc';
+                SELECT
+                    `ident`,
+                    `parent`
+                FROM
+                    `charcoal_admin_acl_roles`
+                ORDER BY
+                    `position` ASC';
 
             $container['logger']->debug($q);
 
@@ -78,15 +78,15 @@ class AclServiceProvider implements ServiceProviderInterface
             $db = $container['database'];
 
             $q = '
-            select
-                `ident`,
-                `denied`,
-                `allowed`,
-                `superuser`
-            from
-                `charcoal_admin_acl_roles`
-            order by
-                `position` asc';
+                SELECT
+                    `ident`,
+                    `denied`,
+                    `allowed`,
+                    `superuser`
+                FROM
+                    `charcoal_admin_acl_roles`
+                ORDER BY
+                    `position` ASC';
 
             $container['logger']->debug($q);
 

@@ -115,8 +115,8 @@ class AdminServiceProvider implements ServiceProviderInterface
             return new Factory([
                 'base_class' => '\Charcoal\Admin\Property\PropertyInputInterface',
                 'arguments' => [[
-                    'logger'            => $container['logger'],
-                    'metadata_loader'   => $container['metadata/loader']
+                    'container' => $container,
+                    'logger'    => $container['logger']
                 ]],
                 'resolver_options' => [
                     'suffix' => 'Input'
@@ -132,8 +132,8 @@ class AdminServiceProvider implements ServiceProviderInterface
             return new Factory([
                 'base_class' => '\Charcoal\Admin\Property\PropertyDisplayInterface',
                 'arguments' => [[
-                    'logger'            => $container['logger'],
-                    'metadata_loader'   => $container['metadata/loader']
+                    'container' => $container,
+                    'logger'    => $container['logger']
                 ]],
                 'resolver_options' => [
                     'suffix' => 'Display'

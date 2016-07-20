@@ -6,6 +6,8 @@ use \Traversable;
 use \Exception;
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 // Dependencies from PSR-3 (Logger)
 use \Psr\Log\LoggerAwareInterface;
 use \Psr\Log\LoggerAwareTrait;
@@ -117,7 +119,26 @@ abstract class AbstractPropertyInput implements
             $data['logger'] = new NullLogger();
         }
         $this->setLogger($data['logger']);
-        $this->setMetadataLoader($data['metadata_loader']);
+
+        if (isset($data['metadata_loader'])) {
+            $this->setMetadataLoader($data['metadata_loader']);
+        }
+
+        // DI Container can optionally be set in property constructor.
+        if (isset($data['container'])) {
+            $this->setDependencies($data['container']);
+        }
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->setMetadataLoader($container['metadata/loader']);
     }
 
     /**
@@ -321,6 +342,7 @@ abstract class AbstractPropertyInput implements
     public function setPlaceholder($placeholder)
     {
         $this->placeholder = new TranslationString($placeholder);
+
         return $this;
     }
 

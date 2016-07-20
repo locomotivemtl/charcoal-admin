@@ -11,13 +11,15 @@ use \Psr\Log\LoggerAwareInterface;
 use \Psr\Log\LoggerAwareTrait;
 use \Psr\Log\NullLogger;
 
+// Dependency from Pimple
+use \Pimple\Container;
+
 // Dependencies from 'charcoal-core'
 use \Charcoal\Model\DescribableInterface;
 use \Charcoal\Model\DescribableTrait;
 
 // Dependency from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
-
 
 // Dependencies from 'charcoal-property'
 use \Charcoal\Property\PropertyFactory;
@@ -90,6 +92,22 @@ abstract class AbstractPropertyDisplay implements
             $data['logger'] = new NullLogger();
         }
         $this->setLogger($data['logger']);
+
+        // DI Container can optionally be set in property constructor.
+        if (isset($data['container'])) {
+            $this->setDependencies($data['container']);
+        }
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        // This method is a stub. Reimplement in children method
     }
 
     /**

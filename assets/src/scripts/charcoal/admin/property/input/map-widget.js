@@ -283,15 +283,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         switch (type) {
             case 'marker' :
                 that.element().find('.js-display-marker-toolbox').addClass('-active');
-            break;
+                break;
 
             case 'polygon' :
                 that.element().find('.js-add-polygon').addClass('-active');
-            break;
+                break;
 
             case 'line' :
                 that.element().find('.js-add-line').addClass('-active');
-            break;
+                break;
         }
     });
 

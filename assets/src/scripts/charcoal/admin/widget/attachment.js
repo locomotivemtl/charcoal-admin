@@ -143,7 +143,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     }
                 });
 
-            break;
+                break;
 
             case 'delete':
                 if (!_this.data('id')) {
@@ -156,7 +156,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         that.reload();
                     });
                 });
-            break;
+                break;
 
             case 'add-image':
                 var gallery_type = _this.data('type');
@@ -175,7 +175,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     }
                 });
 
-            break;
+                break;
         }
     });
 };

@@ -6,12 +6,14 @@ module.exports = {
             }),
         ]
     },
-    files: [
-        {
-            src : ['assets/dist/styles/*.css'],
-            dest : 'assets/dist/styles/',
-            expand : true,
-            flatten : true
-        }
-    ]
+    charcoal: {
+        files  : [
+            {
+                src    : ['assets/dist/styles/*.css'],
+                dest   : 'assets/dist/styles/',
+                expand : true,
+                flatten: true
+            }
+        ]
+    }
 };

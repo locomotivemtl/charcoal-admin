@@ -172,19 +172,19 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 
         switch (component_type)
         {
-            case 'widgets' :
-                super_class = Charcoal.Admin.Widget;
+        case 'widgets' :
+            super_class = Charcoal.Admin.Widget;
             break;
 
-            case 'property_inputs' :
-                super_class = Charcoal.Admin.Property;
+        case 'property_inputs' :
+            super_class = Charcoal.Admin.Property;
             break;
 
-            case 'templates' :
-                super_class = Charcoal.Admin.Template;
+        case 'templates' :
+            super_class = Charcoal.Admin.Template;
             break;
 
-        }
+    }
 
         for (var i = 0, len = this.components[component_type].length; i < len; i++) {
 
@@ -209,7 +209,7 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
                         // Automatic call on superclass
                         Charcoal.Admin.Widget.call(component, component_data);
                         component.init();
-                    break;
+                        break;
                 }
 
             } catch (error) {
@@ -1024,7 +1024,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-        break;
+            break;
 
         case 'pause_recording' :
             /**
@@ -1050,7 +1050,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-        break;
+            break;
 
         case 'stop_recording' :
             /**
@@ -1075,7 +1075,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-        break;
+            break;
 
         case 'start_playback' :
             /**
@@ -1092,7 +1092,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              * Reset button
              */
 
-        break;
+            break;
 
         case 'pause_playback' :
             /**
@@ -1109,7 +1109,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              * Reset button
              */
 
-        break;
+            break;
 
         case 'reset' :
             /**
@@ -1136,7 +1136,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',true);
 
-        break;
+            break;
     }
 };
 
@@ -1353,11 +1353,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = functio
         case 'waves':
             this.recording_properties.$analyser_canvas.addClass('hidden');
             this.recording_properties.$waves_canvas.removeClass('hidden');
-        break;
+            break;
         default:
             this.recording_properties.$analyser_canvas.removeClass('hidden');
             this.recording_properties.$waves_canvas.addClass('hidden');
-        break;
+            break;
     }
 };
 
@@ -2090,15 +2090,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         switch (type) {
             case 'marker' :
                 that.element().find('.js-display-marker-toolbox').addClass('-active');
-            break;
+                break;
 
             case 'polygon' :
                 that.element().find('.js-add-polygon').addClass('-active');
-            break;
+                break;
 
             case 'line' :
                 that.element().find('.js-add-line').addClass('-active');
-            break;
+                break;
         }
     });
 
@@ -3409,10 +3409,10 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.add = function (obj)
     switch (type) {
         case 'charcoal/cms/attachment/image':
             this.add_image(obj);
-        break;
+            break;
         case 'charcoal/cms/attachment/video':
             this.add_video(obj);
-        break;
+            break;
     }
 };
 
@@ -3625,7 +3625,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     }
                 });
 
-            break;
+                break;
 
             case 'delete':
                 if (!_this.data('id')) {
@@ -3638,7 +3638,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         that.reload();
                     });
                 });
-            break;
+                break;
 
             case 'add-image':
                 var gallery_type = _this.data('type');
@@ -3657,7 +3657,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     }
                 });
 
-            break;
+                break;
         }
     });
 };
@@ -4066,8 +4066,8 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang)
 {
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
-    $('[data-lang-switch][data-lang-switch!=' + lang + ']').removeClass('btn-primary');
-    $('[data-lang-switch][data-lang-switch=' + lang + ']').addClass('btn-primary');
+    $('[data-lang-switch][data-lang-switch!=' + lang + ']').removeClass('btn-info');
+    $('[data-lang-switch][data-lang-switch=' + lang + ']').addClass('btn-info');
 };
 ;/**
 * Map sidebar

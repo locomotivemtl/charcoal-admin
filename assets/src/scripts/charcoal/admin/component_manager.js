@@ -58,19 +58,19 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
 
         switch (component_type)
         {
-            case 'widgets' :
-                super_class = Charcoal.Admin.Widget;
+        case 'widgets' :
+            super_class = Charcoal.Admin.Widget;
             break;
 
-            case 'property_inputs' :
-                super_class = Charcoal.Admin.Property;
+        case 'property_inputs' :
+            super_class = Charcoal.Admin.Property;
             break;
 
-            case 'templates' :
-                super_class = Charcoal.Admin.Template;
+        case 'templates' :
+            super_class = Charcoal.Admin.Template;
             break;
 
-        }
+    }
 
         for (var i = 0, len = this.components[component_type].length; i < len; i++) {
 
@@ -95,7 +95,7 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
                         // Automatic call on superclass
                         Charcoal.Admin.Widget.call(component, component_data);
                         component.init();
-                    break;
+                        break;
                 }
 
             } catch (error) {

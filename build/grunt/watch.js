@@ -37,6 +37,7 @@ module.exports = {
         files: ['assets/src/styles/**/*.scss'],
         tasks: [
             'sass',
+            'postcss',
             'notify:sass'
         ],
         options: {

@@ -33,6 +33,8 @@ module.exports = function(grunt) {
     // Register tasks
     grunt.registerTask('default', [
         'copy:vendors',
+        'sass',
+        'postcss',
         'concat',
         'jscs',
         'jshint',

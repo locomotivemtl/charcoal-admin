@@ -158,10 +158,10 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.add = function (obj)
     switch (type) {
         case 'charcoal/cms/attachment/image':
             this.add_image(obj);
-        break;
+            break;
         case 'charcoal/cms/attachment/video':
             this.add_video(obj);
-        break;
+            break;
     }
 };
 

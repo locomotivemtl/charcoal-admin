@@ -320,7 +320,7 @@
 </span><span id="15" class="l"><a href="#15">15: </a>    <span class="php-comment">/**
 </span></span><span id="16" class="l"><a href="#16">16: </a><span class="php-comment">     * Retrieve the selectable options.
 </span></span><span id="17" class="l"><a href="#17">17: </a><span class="php-comment">     *
-</span></span><span id="18" class="l"><a href="#18">18: </a><span class="php-comment">     * @todo [1]: With PHP7 we can simply do `yield from $choices;`.
+</span></span><span id="18" class="l"><a href="#18">18: </a><span class="php-comment">     * @todo [^1]: With PHP7 we can simply do `yield from $choices;`.
 </span></span><span id="19" class="l"><a href="#19">19: </a><span class="php-comment">     * @return Generator|array
 </span></span><span id="20" class="l"><a href="#20">20: </a><span class="php-comment">     */</span>
 </span><span id="21" class="l"><a href="#21">21: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> choices()
@@ -338,7 +338,7 @@
 </span><span id="33" class="l"><a href="#33">33: </a>
 </span><span id="34" class="l"><a href="#34">34: </a>        <span class="php-var">$choices</span> = parent::choices();
 </span><span id="35" class="l"><a href="#35">35: </a>
-</span><span id="36" class="l"><a href="#36">36: </a>        <span class="php-comment">/* [^1] */</span>
+</span><span id="36" class="l"><a href="#36">36: </a>        <span class="php-comment">/* Pass along the Generator from the parent method [^1] */</span>
 </span><span id="37" class="l"><a href="#37">37: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$choices</span> <span class="php-keyword1">as</span> <span class="php-var">$choice</span>) {
 </span><span id="38" class="l"><a href="#38">38: </a>            yield <span class="php-var">$choice</span>;
 </span><span id="39" class="l"><a href="#39">39: </a>        }

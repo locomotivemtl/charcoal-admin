@@ -222,16 +222,16 @@ class FormSidebarWidget extends AdminWidget
      */
     public function showLanguageSwitch()
     {
-        $languages = iterator_to_array($this->languages());
-        if (count($languages) <= 1) {
-            return false;
-        }
+        $trans = TranslationConfig::instance();
 
-        foreach ($this->form()->formProperties() as $prop) {
-            if ($prop->prop()->l10n()) {
-                return true;
+        if ($trans->isMultilingual()) {
+            foreach ($this->form()->formProperties() as $prop) {
+                if ($prop->prop()->l10n()) {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 
@@ -242,13 +242,15 @@ class FormSidebarWidget extends AdminWidget
      */
     public function languages()
     {
-        $curLang = TranslationConfig::instance()->currentLanguage();
-        $langs = TranslationConfig::instance()->languages();
+        $trans   = TranslationConfig::instance();
+        $curLang = $trans->currentLanguage();
+        $langs   = $trans->languages();
+
         foreach ($langs as $lang) {
             yield [
-                'ident' => $lang->ident(),
-                'name'  => $lang->name(),
-                'current' => ($lang->ident() == $curLang)
+                'ident'   => $lang->ident(),
+                'name'    => $lang->name(),
+                'current' => ($lang->ident() === $curLang)
             ];
         }
     }

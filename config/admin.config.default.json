@@ -39,6 +39,9 @@
       "object/reorder": {
         "ident": "charcoal/admin/action/object/reorder"
       },
+      "object/revert-revision":{
+        "ident": "charcoal/admin/action/object/revert-revision"
+      },
       "widget/load": {
         "ident": "charcoal/admin/action/widget/load"
       },

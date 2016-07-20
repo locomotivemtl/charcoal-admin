@@ -1,0 +1,98 @@
+{{!--
+
+--}}
+
+<fieldset>
+
+    {{#showHeader}}
+    <header class="o-header -border">
+        {{#showTitle}}
+        <h2>{{title}}</h2>
+        {{/showTitle}}
+
+        {{#showDescription}}
+            <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
+        {{/showDescription}}
+    </header>
+    {{/showHeader}}
+
+    <table class="table table-bordered table-hover">
+    <thead>
+        <th>#&nbsp;Rév.</th>
+        <th>Date</th>
+        <th>Changements</th>
+        <th>Options</th>
+    </thead>
+    <tbody>
+        {{#objectRevisions}}
+        <tr class="js-table-row">
+            <td>{{revNum}}</td>
+            <td>{{revTsDisplay}}</td>
+            <td>{{changedProperties}}</td>
+            <td>{{#allowRevert}}<a class="js-obj-revert btn btn-default" data-rev-num="{{revNum}}">Retourner à #{{revNum}}</a>{{/allowRevert}}</td>
+        </tr>
+        {{/objectRevisions}}
+    </tbody>
+    </table>
+
+    {{#showNotes}}
+        <div class="help-block small">{{&notes}}</div>
+    {{/showNotes}}
+
+</fieldset>
+
+{{#addJs}}
+<script>
+$(document).ready(function() {
+    $('.js-obj-revert').on('click', function(event) {
+        event.preventDefault();
+
+        var url = Charcoal.Admin.admin_url() + 'object/revert-revision';
+        var data = {
+            obj_type: "{{objType}}",
+            obj_id: "{{objId}}",
+            rev_num: $(this).attr('data-rev-num')
+        };
+        console.debug(data);
+        BootstrapDialog.show({
+            title: 'Retourner à une révision',
+            message: 'Êtes-vous surs de vouloir retourner à cette révision? Tous les changements effectués depuis cette révision seront annulés.',
+            buttons: [{
+                id: 'ok-btn',
+                label: 'Revert',
+                action: function(dialog) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data:data,
+                        success: function (response) {
+                            if (response.success) {
+                                window.location.reload();
+                            }
+                            else {
+                                Charcoal.Admin.feedback().add_data(
+                                    [{
+                                        msg: 'Erreur: impossible de retourner à une révision.',
+                                        level: 'error'
+                                    }]
+                                );
+                                Charcoal.Admin.feedback().call();
+                            }
+                        },
+                        error: function() {
+                            Charcoal.Admin.feedback().add_data(
+                                [{
+                                    msg: 'Erreur: impossible de retourner à une révision.',
+                                    levell: 'error'
+                                }]
+                            );
+                            Charcoal.Admin.feedback().call();
+                        }
+                    })
+                }
+            }]
+         });
+    });
+});
+</script>
+{{/addJs}}

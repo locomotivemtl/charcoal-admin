@@ -25,6 +25,9 @@ class FormGroupWidget extends AbstractUiItem implements
     use FormGroupTrait;
     use LayoutAwareTrait;
 
+    /**
+     * @var string $widgetId
+     */
     private $widgetId;
 
     /**

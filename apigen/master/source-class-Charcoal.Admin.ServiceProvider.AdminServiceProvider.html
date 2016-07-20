@@ -420,8 +420,8 @@
 </span><span id="115" class="l"><a href="#115">115: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> Factory([
 </span><span id="116" class="l"><a href="#116">116: </a>                <span class="php-quote">'base_class'</span> =&gt; <span class="php-quote">'\Charcoal\Admin\Property\PropertyInputInterface'</span>,
 </span><span id="117" class="l"><a href="#117">117: </a>                <span class="php-quote">'arguments'</span> =&gt; [[
-</span><span id="118" class="l"><a href="#118">118: </a>                    <span class="php-quote">'logger'</span>            =&gt; <span class="php-var">$container</span>[<span class="php-quote">'logger'</span>],
-</span><span id="119" class="l"><a href="#119">119: </a>                    <span class="php-quote">'metadata_loader'</span>   =&gt; <span class="php-var">$container</span>[<span class="php-quote">'metadata/loader'</span>]
+</span><span id="118" class="l"><a href="#118">118: </a>                    <span class="php-quote">'container'</span> =&gt; <span class="php-var">$container</span>,
+</span><span id="119" class="l"><a href="#119">119: </a>                    <span class="php-quote">'logger'</span>    =&gt; <span class="php-var">$container</span>[<span class="php-quote">'logger'</span>]
 </span><span id="120" class="l"><a href="#120">120: </a>                ]],
 </span><span id="121" class="l"><a href="#121">121: </a>                <span class="php-quote">'resolver_options'</span> =&gt; [
 </span><span id="122" class="l"><a href="#122">122: </a>                    <span class="php-quote">'suffix'</span> =&gt; <span class="php-quote">'Input'</span>
@@ -437,8 +437,8 @@
 </span><span id="132" class="l"><a href="#132">132: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> Factory([
 </span><span id="133" class="l"><a href="#133">133: </a>                <span class="php-quote">'base_class'</span> =&gt; <span class="php-quote">'\Charcoal\Admin\Property\PropertyDisplayInterface'</span>,
 </span><span id="134" class="l"><a href="#134">134: </a>                <span class="php-quote">'arguments'</span> =&gt; [[
-</span><span id="135" class="l"><a href="#135">135: </a>                    <span class="php-quote">'logger'</span>            =&gt; <span class="php-var">$container</span>[<span class="php-quote">'logger'</span>],
-</span><span id="136" class="l"><a href="#136">136: </a>                    <span class="php-quote">'metadata_loader'</span>   =&gt; <span class="php-var">$container</span>[<span class="php-quote">'metadata/loader'</span>]
+</span><span id="135" class="l"><a href="#135">135: </a>                    <span class="php-quote">'container'</span> =&gt; <span class="php-var">$container</span>,
+</span><span id="136" class="l"><a href="#136">136: </a>                    <span class="php-quote">'logger'</span>    =&gt; <span class="php-var">$container</span>[<span class="php-quote">'logger'</span>]
 </span><span id="137" class="l"><a href="#137">137: </a>                ]],
 </span><span id="138" class="l"><a href="#138">138: </a>                <span class="php-quote">'resolver_options'</span> =&gt; [
 </span><span id="139" class="l"><a href="#139">139: </a>                    <span class="php-quote">'suffix'</span> =&gt; <span class="php-quote">'Display'</span>

@@ -494,15 +494,15 @@
 </span><span id="189" class="l"><a href="#189">189: </a>    }
 </span><span id="190" class="l"><a href="#190">190: </a>
 </span><span id="191" class="l"><a href="#191">191: </a>    <span class="php-comment">/**
-</span></span><span id="192" class="l"><a href="#192">192: </a><span class="php-comment">     * FormProperty Generator
+</span></span><span id="192" class="l"><a href="#192">192: </a><span class="php-comment">     * Retrieve the object's properties as form controls.
 </span></span><span id="193" class="l"><a href="#193">193: </a><span class="php-comment">     *
 </span></span><span id="194" class="l"><a href="#194">194: </a><span class="php-comment">     * @param array $group An optional group to use.
 </span></span><span id="195" class="l"><a href="#195">195: </a><span class="php-comment">     * @throws Exception If a property data is invalid.
-</span></span><span id="196" class="l"><a href="#196">196: </a><span class="php-comment">     * @return FormPropertyWidget[] This is a generator.
+</span></span><span id="196" class="l"><a href="#196">196: </a><span class="php-comment">     * @return FormPropertyWidget[]|Generator
 </span></span><span id="197" class="l"><a href="#197">197: </a><span class="php-comment">     */</span>
 </span><span id="198" class="l"><a href="#198">198: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formProperties(<span class="php-keyword1">array</span> <span class="php-var">$group</span> = <span class="php-keyword1">null</span>)
 </span><span id="199" class="l"><a href="#199">199: </a>    {
-</span><span id="200" class="l"><a href="#200">200: </a>        <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;obj();
+</span><span id="200" class="l"><a href="#200">200: </a>        <span class="php-var">$obj</span>   = <span class="php-var">$this</span>-&gt;obj();
 </span><span id="201" class="l"><a href="#201">201: </a>        <span class="php-var">$props</span> = <span class="php-var">$obj</span>-&gt;metadata()-&gt;properties();
 </span><span id="202" class="l"><a href="#202">202: </a>
 </span><span id="203" class="l"><a href="#203">203: </a>        <span class="php-comment">// We need to sort form properties by form group property order if a group exists</span>
@@ -520,24 +520,27 @@
 </span><span id="215" class="l"><a href="#215">215: </a>                    )
 </span><span id="216" class="l"><a href="#216">216: </a>                );
 </span><span id="217" class="l"><a href="#217">217: </a>            }
-</span><span id="218" class="l"><a href="#218">218: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;widgetFactory()-&gt;create(<span class="php-quote">'charcoal/admin/widget/form-property'</span>);
-</span><span id="219" class="l"><a href="#219">219: </a>            <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
-</span><span id="220" class="l"><a href="#220">220: </a>            <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$property</span>);
-</span><span id="221" class="l"><a href="#221">221: </a>            yield <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$p</span>;
-</span><span id="222" class="l"><a href="#222">222: </a>        }
-</span><span id="223" class="l"><a href="#223">223: </a>    }
-</span><span id="224" class="l"><a href="#224">224: </a>
-</span><span id="225" class="l"><a href="#225">225: </a>    <span class="php-comment">/**
-</span></span><span id="226" class="l"><a href="#226">226: </a><span class="php-comment">     * @return array
-</span></span><span id="227" class="l"><a href="#227">227: </a><span class="php-comment">     */</span>
-</span><span id="228" class="l"><a href="#228">228: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formData()
-</span><span id="229" class="l"><a href="#229">229: </a>    {
-</span><span id="230" class="l"><a href="#230">230: </a>        <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;obj();
-</span><span id="231" class="l"><a href="#231">231: </a>        <span class="php-var">$formData</span> = <span class="php-var">$obj</span>-&gt;data();
-</span><span id="232" class="l"><a href="#232">232: </a>        <span class="php-keyword1">return</span> <span class="php-var">$formData</span>;
-</span><span id="233" class="l"><a href="#233">233: </a>    }
-</span><span id="234" class="l"><a href="#234">234: </a>}
-</span><span id="235" class="l"><a href="#235">235: </a></span></code></pre>
+</span><span id="218" class="l"><a href="#218">218: </a>
+</span><span id="219" class="l"><a href="#219">219: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;widgetFactory()-&gt;create(<span class="php-quote">'charcoal/admin/widget/form-property'</span>);
+</span><span id="220" class="l"><a href="#220">220: </a>            <span class="php-var">$p</span>-&gt;setViewController(<span class="php-var">$this</span>-&gt;viewController());
+</span><span id="221" class="l"><a href="#221">221: </a>            <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
+</span><span id="222" class="l"><a href="#222">222: </a>            <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$property</span>);
+</span><span id="223" class="l"><a href="#223">223: </a>
+</span><span id="224" class="l"><a href="#224">224: </a>            yield <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$p</span>;
+</span><span id="225" class="l"><a href="#225">225: </a>        }
+</span><span id="226" class="l"><a href="#226">226: </a>    }
+</span><span id="227" class="l"><a href="#227">227: </a>
+</span><span id="228" class="l"><a href="#228">228: </a>    <span class="php-comment">/**
+</span></span><span id="229" class="l"><a href="#229">229: </a><span class="php-comment">     * @return array
+</span></span><span id="230" class="l"><a href="#230">230: </a><span class="php-comment">     */</span>
+</span><span id="231" class="l"><a href="#231">231: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formData()
+</span><span id="232" class="l"><a href="#232">232: </a>    {
+</span><span id="233" class="l"><a href="#233">233: </a>        <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;obj();
+</span><span id="234" class="l"><a href="#234">234: </a>        <span class="php-var">$formData</span> = <span class="php-var">$obj</span>-&gt;data();
+</span><span id="235" class="l"><a href="#235">235: </a>        <span class="php-keyword1">return</span> <span class="php-var">$formData</span>;
+</span><span id="236" class="l"><a href="#236">236: </a>    }
+</span><span id="237" class="l"><a href="#237">237: </a>}
+</span><span id="238" class="l"><a href="#238">238: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

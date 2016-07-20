@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Widget\FormGroup\AclPermissions</title>
+	<title>Class Charcoal\Admin\Widget\FormGroup\ObjectRevisionsFormGroup</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -162,9 +162,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li class="active"><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">AclPermissions</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">AclPermissions</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">GenericFormGroup</a></li>
-				<li><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">ObjectRevisionsFormGroup</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">ObjectRevisionsFormGroup</a></li>
 			</ul>
 
 
@@ -203,35 +203,20 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class AclPermissions</h1>
+	<h1>Class ObjectRevisionsFormGroup</h1>
 
 
-	<div class="description">
-	<p>ACL Permissions Widget (Form Group)</p>
-	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
-Charcoal\App\Template\AbstractWidget
+Charcoal\Ui\FormGroup\AbstractFormGroup
 			
 			
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-			<a href="class-Charcoal.Admin.AdminWidget.html"><span>Charcoal\Admin\AdminWidget</span></a>
+<b><span>Charcoal\Admin\Widget\FormGroup\ObjectRevisionsFormGroup</span></b>			
 			
-			
-			
-		</dd>
-		<dd style="padding-left:60px">
-			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Widget\FormGroup\AclPermissions</span></b>			
-			 implements 
-<span>Charcoal\Ui\FormGroup\FormGroupInterface</span>
-			
-			 uses 
-					Charcoal\Ui\FormGroup\FormGroupTrait (not available)
-
 			
 		</dd>
 	</dl>
@@ -249,7 +234,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a>\<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">FormGroup</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html#18-167" title="Go to source code">Charcoal/Admin/Widget/FormGroup/AclPermissions.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html#13-84" title="Go to source code">Charcoal/Admin/Widget/FormGroup/ObjectRevisionsFormGroup.php</a>
 		<br>
 	</div>
 
@@ -257,7 +242,42 @@ Charcoal\App\Template\AbstractWidget
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="objId" id="_objId">
+	<tr data-order="setDependencies" id="_setDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html#23-32" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>Pimple DI Container.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="objType" id="_objType">
 
 		<td class="attributes"><code>
 			 public 
@@ -268,8 +288,8 @@ Charcoal\App\Template\AbstractWidget
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_objId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html#41-47" title="Go to source code">objId</a>( )</code>
+		<a class="anchor" href="#_objType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html#34-40" title="Go to source code">objType</a>( )</code>
 
 		<div class="description short">
 			
@@ -291,19 +311,19 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="adminAcl" id="_adminAcl">
+	<tr data-order="objId" id="_objId">
 
 		<td class="attributes"><code>
-			 protected 
+			 public 
 
-			Zend\Permissions\Acl\Acl
+			string
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_adminAcl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html#49-55" title="Go to source code">adminAcl</a>( )</code>
+		<a class="anchor" href="#_objId">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html#42-48" title="Go to source code">objId</a>( )</code>
 
 		<div class="description short">
 			
@@ -316,7 +336,7 @@ Charcoal\App\Template\AbstractWidget
 
 				<h4>Returns</h4>
 				<div class="list">
-					Zend\Permissions\Acl\Acl
+					string
 				</div>
 
 
@@ -325,41 +345,7 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="roleAcl" id="_roleAcl">
-
-		<td class="attributes"><code>
-			 protected 
-
-			Zend\Permissions\Acl\Acl
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_roleAcl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html#57-94" title="Go to source code">roleAcl</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					Zend\Permissions\Acl\Acl
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="permissionCategories" id="_permissionCategories">
+	<tr data-order="objectRevisions" id="_objectRevisions">
 
 		<td class="attributes"><code>
 			 public 
@@ -370,8 +356,8 @@ Charcoal\App\Template\AbstractWidget
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_permissionCategories">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html#96-120" title="Go to source code">permissionCategories</a>( )</code>
+		<a class="anchor" href="#_objectRevisions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html#50-83" title="Go to source code">objectRevisions</a>( )</code>
 
 		<div class="description short">
 			
@@ -395,35 +381,6 @@ Charcoal\App\Template\AbstractWidget
 	</tr>
 	</table>
 
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-Charcoal.Admin.AdminWidget.html#methods">Charcoal\Admin\AdminWidget</a></caption>
-	<tr>
-		<td><code>
-			<a href="class-Charcoal.Admin.AdminWidget.html#_actions">actions()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_adminUrl">adminUrl()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_baseUrl">baseUrl()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_ident">ident()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_label">label()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_modelFactory">modelFactory()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_priority">priority()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setDependencies">setDependencies()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setIdent">setIdent()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setLabel">setLabel()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setModelFactory">setModelFactory()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setPriority">setPriority()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setShowActions">setShowActions()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setShowLabel">setShowLabel()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setTemplate">setTemplate()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setType">setType()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setWidgetId">setWidgetId()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_showActions">showActions()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_showLabel">showLabel()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_template">template()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_type">type()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_widgetId">widgetId()</a>
-		</code></td>
-	</tr>
-	</table>
 
 
 
@@ -436,14 +393,6 @@ Charcoal\App\Template\AbstractWidget
 
 
 
-	<table class="summary inherited">
-	<caption>Properties inherited from <a href="class-Charcoal.Admin.AdminWidget.html#properties">Charcoal\Admin\AdminWidget</a></caption>
-	<tr>
-		<td><code>
-			<a href="class-Charcoal.Admin.AdminWidget.html#$widgetId"><var>$widgetId</var></a>
-		</code></td>
-	</tr>
-	</table>
 
 
 

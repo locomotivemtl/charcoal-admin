@@ -172,7 +172,9 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     * @param string $propertyIdent The property ident.
+     * Set the form's property identifier.
+     *
+     * @param string $propertyIdent The property identifier.
      * @throws InvalidArgumentException If the property ident is not a string.
      * @return FormPropertyWidget
      */
@@ -180,14 +182,18 @@ class FormPropertyWidget extends AdminWidget
     {
         if (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
-                'Property ident must be a string'
+                'Property identifier must be a string'
             );
         }
+
         $this->propertyIdent = $propertyIdent;
+
         return $this;
     }
 
     /**
+     * Retrieve the form's property identifier.
+     *
      * @return string
      */
     public function propertyIdent()
@@ -378,12 +384,13 @@ class FormPropertyWidget extends AdminWidget
         /** @todo Needs fix. Must be manually triggered after setting data for metadata to work */
         $prop->metadata();
 
-        $inputType = $this->inputType();
+        $inputType   = $this->inputType();
         $this->input = $this->propertyInputFactory()->create($inputType);
 
         $this->input->setProperty($prop);
         $this->input->setPropertyVal($this->propertyVal);
         $this->input->setData($prop->data());
+        $this->input->setViewController($this->viewController());
 
         $GLOBALS['widget_template'] = $inputType;
 

@@ -107,7 +107,7 @@ class InlineMultiAction extends AdminAction
                         continue;
                     }
                     $p = $obj->p($propertyIdent);
-                    $property->setProperty_val($p->val());
+                    $property->setPropertyVal($p->val());
                     $property->setProp($p);
                     $inputType = $property->inputType();
                     $o['inlineProperties'][$propertyIdent] = $property->renderTemplate($inputType);

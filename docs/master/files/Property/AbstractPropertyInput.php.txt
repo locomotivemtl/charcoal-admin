@@ -6,6 +6,8 @@ use \Traversable;
 use \Exception;
 use \InvalidArgumentException;
 
+use \Pimple\Container;
+
 // Dependencies from PSR-3 (Logger)
 use \Psr\Log\LoggerAwareInterface;
 use \Psr\Log\LoggerAwareTrait;
@@ -14,6 +16,10 @@ use \Psr\Log\NullLogger;
 // Dependencies from 'charcoal-core'
 use \Charcoal\Model\DescribableInterface;
 use \Charcoal\Model\DescribableTrait;
+
+// Dependencies from 'charcoal-view'
+use \Charcoal\View\ViewableInterface;
+use \Charcoal\View\ViewableTrait;
 
 // Dependencies from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
@@ -33,10 +39,12 @@ use \Charcoal\Property\PropertyMetadata;
 abstract class AbstractPropertyInput implements
     DescribableInterface,
     PropertyInputInterface,
-    LoggerAwareInterface
+    LoggerAwareInterface,
+    ViewableInterface
 {
     use DescribableTrait;
     use LoggerAwareTrait;
+    use ViewableTrait;
 
     /**
      * @var string $lang
@@ -117,7 +125,27 @@ abstract class AbstractPropertyInput implements
             $data['logger'] = new NullLogger();
         }
         $this->setLogger($data['logger']);
-        $this->setMetadataLoader($data['metadata_loader']);
+
+        if (isset($data['metadata_loader'])) {
+            $this->setMetadataLoader($data['metadata_loader']);
+        }
+
+        // DI Container can optionally be set in property constructor.
+        if (isset($data['container'])) {
+            $this->setDependencies($data['container']);
+        }
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->setView($container['view']);
+        $this->setMetadataLoader($container['metadata/loader']);
     }
 
     /**
@@ -315,16 +343,25 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * Set the form control's placeholder.
+     *
+     * A placeholder is a hint to the user of what can be entered
+     * in the property control.
+     *
      * @param mixed $placeholder The placeholder attribute.
-     * @return Text Chainable
+     * @return AbstractPropertyInput Chainable
      */
     public function setPlaceholder($placeholder)
     {
         $this->placeholder = new TranslationString($placeholder);
+        $this->placeholder->isRendered = false;
+
         return $this;
     }
 
     /**
+     * Retrieve the placeholder.
+     *
      * @return string
      */
     public function placeholder()
@@ -337,7 +374,32 @@ abstract class AbstractPropertyInput implements
             }
         }
 
+        if (!$this->placeholder->isRendered) {
+            $this->renderPlaceholder();
+        }
+
         return $this->placeholder;
+    }
+
+    /**
+     * Render the placeholders.
+     *
+     * @todo Implement data presenter as a better alternative.
+     * @return AbstractPropertyInput Chainable
+     */
+    protected function renderPlaceholder()
+    {
+        if ($this->placeholder instanceof TranslationString) {
+            foreach ($this->placeholder->all() as $lang => $value) {
+                if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
+                    $this->placeholder[$lang] = $this->view()->render($value, $this->viewController());
+                }
+            }
+
+            $this->placeholder->isRendered = true;
+        }
+
+        return $this;
     }
 
     /**

@@ -26,7 +26,9 @@ class FormGroupWidget extends AbstractUiItem implements
     use LayoutAwareTrait;
 
     /**
-     * @var string $widgetId
+     * The widget identifier.
+     *
+     * @var string
      */
     private $widgetId;
 
@@ -125,25 +127,29 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
-     * @return mixed This method is a generator.
+     * Retrieve the object's properties from the form.
+     *
+     * @return mixed|Generator
      */
     public function formProperties()
     {
         $groupProperties = $this->groupProperties();
-        $formProperties = $this->form()->formProperties($groupProperties);
+        $formProperties  = $this->form()->formProperties($groupProperties);
 
         $ret = [];
-        foreach ($formProperties as $property_ident => $property) {
-            if (in_array($property_ident, $groupProperties)) {
+        foreach ($formProperties as $propertyIdent => $property) {
+            if (in_array($propertyIdent, $groupProperties)) {
                 if (is_callable([$this->form(), 'obj'])) {
                     $obj = $this->form()->obj();
-                    $val = $obj[$property_ident];
+                    $val = $obj[$propertyIdent];
                     $property->setPropertyVal($val);
                 }
+
                 if (!$property->l10nMode()) {
                     $property->setL10nMode($this->l10nMode());
                 }
-                yield $property_ident => $property;
+
+                yield $propertyIdent => $property;
             }
         }
     }
@@ -151,7 +157,7 @@ class FormGroupWidget extends AbstractUiItem implements
     /**
      * Retrieve the available languages, formatted for the sidebar language-switcher.
      *
-     * @return array This is a generator.
+     * @return array|Generator
      */
     public function languages()
     {

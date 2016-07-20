@@ -22,7 +22,7 @@ class FormSidebarWidget extends AdminWidget
     /**
      * @var string
      */
-    private $widget_type = 'properties';
+    private $widgetType = 'properties';
 
     /**
      * @var Object $actions
@@ -98,20 +98,24 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * @return mixed This method is a generator.
+     * Retrieve the object's properties from the form.
+     *
+     * @return mixed|Generator
      */
     public function formProperties()
     {
         $sidebarProperties = $this->sidebarProperties();
         $formProperties = $this->form()->formProperties($sidebarProperties);
         $ret = [];
-        foreach ($formProperties as $property_ident => $property) {
-            if (in_array($property_ident, $sidebarProperties)) {
+        foreach ($formProperties as $propertyIdent => $property) {
+            if (in_array($propertyIdent, $sidebarProperties)) {
                 if (is_callable([$this->form(), 'obj'])) {
-                    $val = $this->form()->obj()->p($property_ident)->val();
+                    $obj = $this->form()->obj();
+                    $val = $obj[$propertyIdent];
                     $property->setPropertyVal($val);
                 }
-                yield $property_ident => $property;
+
+                yield $propertyIdent => $property;
             }
         }
     }
@@ -238,7 +242,7 @@ class FormSidebarWidget extends AdminWidget
     /**
      * Retrieve the available languages, formatted for the sidebar language-switcher.
      *
-     * @return array This is a generator.
+     * @return array|Generator
      */
     public function languages()
     {

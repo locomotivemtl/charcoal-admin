@@ -189,15 +189,15 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * FormProperty Generator
+     * Retrieve the object's properties as form controls.
      *
      * @param array $group An optional group to use.
      * @throws Exception If a property data is invalid.
-     * @return FormPropertyWidget[] This is a generator.
+     * @return FormPropertyWidget[]|Generator
      */
     public function formProperties(array $group = null)
     {
-        $obj = $this->obj();
+        $obj   = $this->obj();
         $props = $obj->metadata()->properties();
 
         // We need to sort form properties by form group property order if a group exists

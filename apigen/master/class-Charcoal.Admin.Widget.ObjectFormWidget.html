@@ -284,7 +284,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#16-237" title="Go to source code">Charcoal/Admin/Widget/ObjectFormWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#16-287" title="Go to source code">Charcoal/Admin/Widget/ObjectFormWidget.php</a>
 		<br>
 	</div>
 
@@ -677,7 +677,7 @@ tab display mode or not.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dataFromObject">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#172-189" title="Go to source code">dataFromObject</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#172-202" title="Go to source code">dataFromObject</a>( )</code>
 
 		<div class="description short">
 			<p>Set the data from an object.</p>
@@ -711,7 +711,7 @@ tab display mode or not.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#191-226" title="Go to source code">formProperties</a>( <span>array <var>$group</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#204-239" title="Go to source code">formProperties</a>( <span>array <var>$group</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			<p>Retrieve the object's properties as form controls.</p>
@@ -744,6 +744,50 @@ tab display mode or not.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="formProperty" id="_formProperty">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_formProperty">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#241-276" title="Go to source code">formProperty</a>( <span>string <var>$propertyIdent</var></span> )</code>
+
+		<div class="description short">
+			<p>Retrieve an object property as a form control.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve an object property as a form control.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$propertyIdent</var></dt>
+					<dd>An optional group to use.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the property identifier is not a string.<br>
+					Exception<br>If a property data is invalid.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="formData" id="_formData">
 
 		<td class="attributes"><code>
@@ -756,7 +800,7 @@ tab display mode or not.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#228-236" title="Go to source code">formData</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#278-286" title="Go to source code">formData</a>( )</code>
 
 		<div class="description short">
 			

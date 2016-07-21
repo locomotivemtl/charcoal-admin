@@ -1,0 +1,157 @@
+<?php
+
+namespace Charcoal\Admin\Widget\FormGroup;
+
+use \RuntimeException;
+
+// Dependency from Pimple
+use \Pimple\Container;
+
+// Dependency from 'charcoal-core'
+use \Charcoal\Loader\CollectionLoader;
+
+// Dependency from 'charcoal-base'
+use \Charcoal\Object\RoutableInterface;
+use \Charcoal\Object\ObjectRouteInterface;
+
+// Dependency from 'charcoal-ui'
+use \Charcoal\Ui\FormGroup\AbstractFormGroup;
+
+/**
+ * For viewing & editing the object's route.
+ */
+class RoutableObjectFormGroup extends AbstractFormGroup
+{
+    /**
+     * The current routable object.
+     *
+     * @var RoutableInterface
+     */
+    protected $obj;
+
+    /**
+     * Store the routable object's property form control.
+     *
+     * @var FormPropertyWidget
+     */
+    private $editableRouteProperty;
+
+    /**
+     * Store the factory instance for the current class.
+     *
+     * @var FactoryInterface
+     */
+    private $modelFactory;
+
+    /**
+     * The base URL for the Charcoal application.
+     *
+     * @var string|UriInterface
+     */
+    protected $baseUrl;
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->baseUrl = $container['base-url'];
+        $this->modelFactory = $container['model/factory'];
+    }
+
+    /**
+     * Retrieve the current routable object type from the GET parameters.
+     *
+     * @return string
+     */
+    public function objType()
+    {
+        return $_GET['obj_type'];
+    }
+
+    /**
+     * Retrieve the current routable object ID from the GET parameters.
+     *
+     * @return string
+     */
+    public function objId()
+    {
+        return $_GET['obj_id'];
+    }
+
+    /**
+     * Create or load the routable object.
+     *
+     * @return ModelInterface
+     */
+    public function obj()
+    {
+        if ($this->obj === null) {
+            if (!$this->objType()) {
+                return $this->obj = false;
+            }
+
+            $obj = $this->modelFactory->create($this->objType());
+            if (!$obj instanceof RoutableInterface) {
+                throw new RuntimeException(
+                    sprintf(
+                        '%s must implement %s to use the routable object form group.',
+                        get_class($obj),
+                        RoutableInterface::class
+                    )
+                );
+            }
+
+            $this->obj = $obj->load($this->objId());
+        }
+
+        return $this->obj;
+    }
+
+    /**
+     * Retrieve an abridged variant to the current object's route.
+     *
+     * @return string
+     */
+    public function objBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * Retrieve an abridged variant to the current object's route.
+     *
+     * @return string
+     */
+    public function abridgedObjSlug()
+    {
+        $slug = ltrim($this->obj()->uri(), '/');
+
+        if (mb_strlen($slug) > 30) {
+            $slug = mb_substr($slug, 0, 12).'&hellip;'/*.'…'*/.mb_substr($slug, -12);
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Retrieve the object's slug property form control.
+     *
+     * @return FormProperty
+     */
+    public function editableRouteProperty()
+    {
+        if ($this->editableRouteProperty === null) {
+            $this->editableRouteProperty = $this->form()->formProperty('slug');
+            $this->editableRouteProperty->setInputType('charcoal/admin/property/input/hidden');
+        }
+
+        return $this->editableRouteProperty;
+    }
+}
+

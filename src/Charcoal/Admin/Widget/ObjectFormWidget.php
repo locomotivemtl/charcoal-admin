@@ -226,6 +226,43 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
+     * Retrieve an object property as a form control.
+     *
+     * @param string $propertyIdent An optional group to use.
+     * @throws InvalidArgumentException If the property identifier is not a string.
+     * @throws Exception If a property data is invalid.
+     * @return FormPropertyWidget
+     */
+    public function formProperty($propertyIdent)
+    {
+        if (!is_string($propertyIdent)) {
+            throw new InvalidArgumentException(
+                'Property ident must be a string'
+            );
+        }
+
+        $obj = $this->obj();
+        $property = $obj->metadata()->property($propertyIdent);
+
+        if (!is_array($property)) {
+            throw new Exception(
+                sprintf(
+                    'Invalid property data for "%1$s", received %2$s',
+                    $propertyIdent,
+                    (is_object($property) ? get_class($property) : gettype($property))
+                )
+            );
+        }
+
+        $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+        $p->setViewController($this->viewController());
+        $p->setPropertyIdent($propertyIdent);
+        $p->setData($property);
+
+        return $p;
+    }
+
+    /**
      * @return array
      */
     public function formData()

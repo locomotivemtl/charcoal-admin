@@ -19,6 +19,9 @@
       "object/collection": {
         "ident": "charcoal/admin/template/object/collection"
       },
+      "elfinder":{
+        "ident":"charcoal/admin/template/elfinder"
+      },
 
       "contents": {},
       "envoie": {}
@@ -50,6 +53,10 @@
       },
       "widget/table/inline-multi": {
         "ident": "charcoal/admin/action/widget/table/inline-multi"
+      },
+      "elfinder-connector":{
+        "methods":["GET", "POST"],
+        "ident": "charcoal/admin/action/elfinder-connector"
       }
     },
     "scripts": {

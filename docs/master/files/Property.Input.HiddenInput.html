@@ -21,7 +21,55 @@
     <script src="../js/jquery.smooth-scroll.js"></script>
     <script src="../js/prism.min.js"></script>
     <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
-    
+        <script type="text/javascript">
+        function loadExternalCodeSnippets() {
+            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+                var src = pre.getAttribute('data-src');
+                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+                var language = 'php';
+
+                var code = document.createElement('code');
+                code.className = 'language-' + language;
+
+                pre.textContent = '';
+
+                code.textContent = 'Loading…';
+
+                pre.appendChild(code);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', src, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+
+                            Prism.highlightElement(code);
+                        }
+                        else if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                        }
+                        else {
+                            code.textContent = '✖ Error: File does not exist or is empty';
+                        }
+                    }
+                };
+
+                xhr.send(null);
+            });
+        }
+
+        $(document).ready(function(){
+            loadExternalCodeSnippets();
+        });
+        $('#source-view').on('shown', function () {
+            loadExternalCodeSnippets();
+        })
+    </script>
+
     <link rel="shortcut icon" href="../images/favicon.ico"/>
     <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
     <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
@@ -96,46 +144,46 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-982227461"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-503916839"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-982227461" class="accordion-body collapse in">
+            <div id="namespace-503916839" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1764939741"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-794815293"></a>
                                 <a href="../namespaces/Charcoal.html" style="margin-left: 30px; padding-left: 0">Charcoal</a>
             </div>
-            <div id="namespace-1764939741" class="accordion-body collapse ">
+            <div id="namespace-794815293" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-731946792"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1826079984"></a>
                                 <a href="../namespaces/Charcoal.Admin.html" style="margin-left: 30px; padding-left: 0">Admin</a>
             </div>
-            <div id="namespace-731946792" class="accordion-body collapse ">
+            <div id="namespace-1826079984" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-866450248"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2053117882"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.html" style="margin-left: 30px; padding-left: 0">Action</a>
             </div>
-            <div id="namespace-866450248" class="accordion-body collapse ">
+            <div id="namespace-2053117882" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-439398337"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-771918387"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-439398337" class="accordion-body collapse ">
+            <div id="namespace-771918387" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -154,19 +202,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2002335459"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1599533533"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
             </div>
-            <div id="namespace-2002335459" class="accordion-body collapse ">
+            <div id="namespace-1599533533" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-853386845"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-352233018"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.Widget.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
             </div>
-            <div id="namespace-853386845" class="accordion-body collapse ">
+            <div id="namespace-352233018" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -201,10 +249,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1226809120"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1309279141"></a>
                                 <a href="../namespaces/Charcoal.Admin.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-1226809120" class="accordion-body collapse ">
+            <div id="namespace-1309279141" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -220,19 +268,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1480983995"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-430288390"></a>
                                 <a href="../namespaces/Charcoal.Admin.Property.html" style="margin-left: 30px; padding-left: 0">Property</a>
             </div>
-            <div id="namespace-1480983995" class="accordion-body collapse ">
+            <div id="namespace-430288390" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-387519737"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-156523800"></a>
                                 <a href="../namespaces/Charcoal.Admin.Property.Display.html" style="margin-left: 30px; padding-left: 0">Display</a>
             </div>
-            <div id="namespace-387519737" class="accordion-body collapse ">
+            <div id="namespace-156523800" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -249,10 +297,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1950701849"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1972969171"></a>
                                 <a href="../namespaces/Charcoal.Admin.Property.Input.html" style="margin-left: 30px; padding-left: 0">Input</a>
             </div>
-            <div id="namespace-1950701849" class="accordion-body collapse ">
+            <div id="namespace-1972969171" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -298,28 +346,28 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1567757237"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-287159813"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.html" style="margin-left: 30px; padding-left: 0">Script</a>
             </div>
-            <div id="namespace-1567757237" class="accordion-body collapse ">
+            <div id="namespace-287159813" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1560062836"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-11005746"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-1560062836" class="accordion-body collapse ">
+            <div id="namespace-11005746" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1448980059"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1966205429"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.Object.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
             </div>
-            <div id="namespace-1448980059" class="accordion-body collapse ">
+            <div id="namespace-1966205429" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -344,10 +392,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1879511400"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-279417407"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.Translation.html" style="margin-left: 30px; padding-left: 0">Translation</a>
             </div>
-            <div id="namespace-1879511400" class="accordion-body collapse ">
+            <div id="namespace-279417407" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -362,10 +410,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1979318134"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1559970026"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.User.html" style="margin-left: 30px; padding-left: 0">User</a>
             </div>
-            <div id="namespace-1979318134" class="accordion-body collapse ">
+            <div id="namespace-1559970026" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -390,10 +438,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-34706631"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-531103576"></a>
                                 <a href="../namespaces/Charcoal.Admin.ServiceProvider.html" style="margin-left: 30px; padding-left: 0">ServiceProvider</a>
             </div>
-            <div id="namespace-34706631" class="accordion-body collapse ">
+            <div id="namespace-531103576" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -409,19 +457,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1126860626"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1767030966"></a>
                                 <a href="../namespaces/Charcoal.Admin.Template.html" style="margin-left: 30px; padding-left: 0">Template</a>
             </div>
-            <div id="namespace-1126860626" class="accordion-body collapse ">
+            <div id="namespace-1767030966" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1720162276"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1124599302"></a>
                                 <a href="../namespaces/Charcoal.Admin.Template.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-1720162276" class="accordion-body collapse ">
+            <div id="namespace-1124599302" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -451,10 +499,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2121803423"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-328931260"></a>
                                 <a href="../namespaces/Charcoal.Admin.Ui.html" style="margin-left: 30px; padding-left: 0">Ui</a>
             </div>
-            <div id="namespace-2121803423" class="accordion-body collapse ">
+            <div id="namespace-328931260" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -474,10 +522,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1616922864"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1473267298"></a>
                                 <a href="../namespaces/Charcoal.Admin.User.html" style="margin-left: 30px; padding-left: 0">User</a>
             </div>
-            <div id="namespace-1616922864" class="accordion-body collapse ">
+            <div id="namespace-1473267298" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -494,19 +542,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1308326348"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1306201724"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
             </div>
-            <div id="namespace-1308326348" class="accordion-body collapse ">
+            <div id="namespace-1306201724" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-14362939"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-973981127"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.Dialog.html" style="margin-left: 30px; padding-left: 0">Dialog</a>
             </div>
-            <div id="namespace-14362939" class="accordion-body collapse ">
+            <div id="namespace-973981127" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -521,10 +569,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-817383974"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1263434524"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.FormGroup.html" style="margin-left: 30px; padding-left: 0">FormGroup</a>
             </div>
-            <div id="namespace-817383974" class="accordion-body collapse ">
+            <div id="namespace-1263434524" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -541,10 +589,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-358502783"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1683667159"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.Graph.html" style="margin-left: 30px; padding-left: 0">Graph</a>
             </div>
-            <div id="namespace-358502783" class="accordion-body collapse ">
+            <div id="namespace-1683667159" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -621,32 +669,38 @@
     <section class="row-fluid">
         <div class="span10 offset2">
             <div class="row-fluid">
-                <div class="span8 content namespace">
+                <div class="span8 content file">
                     <nav>
-                                                <a href="../namespaces/default.html">\</a>
-                                            </nav>
-                    <h1><small>\</small>Charcoal</h1>
+                                                                    </nav>
 
-                                        <h2>Namespaces</h2>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+                    <h1><small>Property/Input</small>HiddenInput.php</h1>
+                    <p><em></em></p>
+                    
+
+                    
+                    
+                                        <h2>Classes</h2>
                     <table class="table table-hover">
-                                                    <tr>
-                                <td><a href="../namespaces/Charcoal.Admin.html">Admin</a></td>
-                            </tr>
-                                            </table>
-                    
-                    
-                    
+                                            <tr>
+                            <td><a href="../classes/Charcoal.Admin.Property.Input.HiddenInput.html">HiddenInput</a></td>
+                            <td><em>Hidden Input Property</em></td>
+                        </tr>
+                                        </table>
                                     </div>
 
                 <aside class="span4 detailsbar">
                     <dl>
-                        <dt>Namespace hierarchy</dt>
-                        <dd class="hierarchy">
-                                                                                                                                                                                                                                                                
-                                    <div class="namespace-wrapper"><a href="../namespaces/default.html">\</a></div>
-                                                                                        <div class="namespace-wrapper">\Charcoal</div>
-                        </dd>
+                                                    <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">\Default</div></dd>
+                        
+                        
                     </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                                            </table>
+
                 </aside>
             </div>
 
@@ -654,6 +708,16 @@
             
         </div>
     </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label"></h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Property/Input/HiddenInput.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
 
     <footer class="row-fluid">
         <section class="span10 offset2">

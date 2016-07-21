@@ -16,12 +16,16 @@ use \Charcoal\Admin\Widget\TableWidget;
 class ObjectRevisionsFormGroup extends AbstractFormGroup
 {
     /**
-     * @var FactoryInterface $modelFactory
+     * Store the factory instance for the current class.
+     *
+     * @var FactoryInterface
      */
     private $modelFatory;
 
     /**
-     * @param Container $container Pimple DI Container.
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -32,6 +36,8 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     }
 
     /**
+     * Retrieve the current object type from the GET parameters.
+     *
      * @return string
      */
     public function objType()
@@ -40,6 +46,8 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     }
 
     /**
+     * Retrieve the current object ID from the GET parameters.
+     *
      * @return string
      */
     public function objId()

@@ -122,11 +122,13 @@ class DualSelectInput extends AbstractSelectableInput
 
             foreach ($lists as $ident) {
                 if (isset($this->searchable[$ident]['placeholder'])) {
-                    $placeholder = $this->translatable($this->searchable[$ident]['placeholder']);
-                    $this->searchable[$ident]['placeholder'] = $placeholder;
+                    $placeholder = $this->searchable[$ident]['placeholder']);
                 } elseif (isset($this->searchable['placeholder'])) {
-                    $placeholder = $this->translatable($this->searchable['placeholder']);
-                    $this->searchable[$ident]['placeholder'] = $placeholder;
+                    $placeholder = $this->searchable['placeholder']);
+                }
+
+                if (isset($placeholder) && TranslationString::isTranslatable($placeholder)) {
+                    $this->searchable[$ident]['placeholder'] = new TranslationString($placeholder);
                 } else {
                     $this->searchable[$ident]['placeholder'] = $label;
                 }
@@ -154,22 +156,5 @@ class DualSelectInput extends AbstractSelectableInput
     {
         $this->dualSelectOptions = $dualSelectOptions;
         return $this;
-    }
-
-    /**
-     * Parse the property value as a "L10N" value type.
-     *
-     * @param  mixed $val The value being localized.
-     * @return TranslationString|null
-     */
-    public function translatable($val)
-    {
-        if (!isset($val) ||
-            (is_string($val) && !strlen(trim($val))) ||
-            (is_array($val) && !count(array_filter($val, 'strlen')))) {
-            return null;
-        }
-
-        return new TranslationString($val);
     }
 }

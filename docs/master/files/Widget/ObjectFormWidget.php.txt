@@ -176,15 +176,28 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      */
     public function dataFromObject()
     {
-        $obj = $this->obj();
-        $metadata = $obj->metadata();
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $formIdent = $this->formIdent();
+        $objMetadata   = $this->obj()->metadata();
+        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
+        $formIdent     = $this->formIdent();
         if (!$formIdent) {
-            $formIdent = isset($admin_metadata['default_form']) ? $admin_metadata['default_form'] : '';
+            $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
         }
 
-        $objFormData = isset($admin_metadata['forms'][$formIdent]) ? $admin_metadata['forms'][$formIdent] : [];
+        $objFormData = (isset($adminMetadata['forms'][$formIdent]) ? $adminMetadata['forms'][$formIdent] : []);
+
+        if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
+            $extraFormGroups = array_intersect(
+                array_keys($adminMetadata['form_groups']),
+                array_keys($objFormData['groups'])
+            );
+            foreach ($extraFormGroups as $groupIdent) {
+                $objFormData['groups'][$groupIdent] = array_merge(
+                    $adminMetadata['form_groups'][$groupIdent],
+                    $objFormData['groups'][$groupIdent]
+                );
+            }
+        }
+
         return $objFormData;
     }
 
@@ -223,6 +236,43 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
 
             yield $propertyIdent => $p;
         }
+    }
+
+    /**
+     * Retrieve an object property as a form control.
+     *
+     * @param string $propertyIdent An optional group to use.
+     * @throws InvalidArgumentException If the property identifier is not a string.
+     * @throws Exception If a property data is invalid.
+     * @return FormPropertyWidget
+     */
+    public function formProperty($propertyIdent)
+    {
+        if (!is_string($propertyIdent)) {
+            throw new InvalidArgumentException(
+                'Property ident must be a string'
+            );
+        }
+
+        $obj = $this->obj();
+        $property = $obj->metadata()->property($propertyIdent);
+
+        if (!is_array($property)) {
+            throw new Exception(
+                sprintf(
+                    'Invalid property data for "%1$s", received %2$s',
+                    $propertyIdent,
+                    (is_object($property) ? get_class($property) : gettype($property))
+                )
+            );
+        }
+
+        $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+        $p->setViewController($this->viewController());
+        $p->setPropertyIdent($propertyIdent);
+        $p->setData($property);
+
+        return $p;
     }
 
     /**

@@ -374,7 +374,7 @@ abstract class AbstractPropertyInput implements
             }
         }
 
-        if (!$this->placeholder->isRendered) {
+        if (isset($this->placeholder->isRendered) && !$this->placeholder->isRendered) {
             $this->renderPlaceholder();
         }
 

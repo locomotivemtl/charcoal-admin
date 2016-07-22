@@ -5,18 +5,40 @@ File Property Input
 `charcoal/admin/property/input/image`
 
 --}}
+<div id="{{inputId}}">
+    {{#inputVal}}
+    <div>
+        <img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">
+    </div>
+    <div>
+        <a href="#" class="js-remove-image btn btn-default">
+            Retirer l'image
+        </a>
+    </div>
 
-{{#inputVal}}
-    <img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">
-    <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
-{{/inputVal}}
-<input
-    type="file"
-    id="{{inputId}}"
-    name="{{inputName}}"
-    class="{{inputClass}}"
-    {{#accept}}accept="{{accept}}"{{/accept}}
-    {{#readOnly}}readonly{{/readOnly}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
->
+        <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
+    {{/inputVal}}
+    <input
+        type="file"
+        name="{{inputName}}"
+        class="{{inputClass}}"
+        {{#accept}}accept="{{accept}}"{{/accept}}
+        {{#readOnly}}readonly{{/readOnly}}
+        {{#required}}required{{/required}}
+        {{#disabled}}disabled{{/disabled}}
+    >
+</div>
+
+{{#addJs}}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id: '{{inputId}}',
+    type: 'charcoal/admin/property/input/image',
+    data: {
+        input_name : "{{inputName}}"
+        ,input_val : "{{inputVal}}"
+    }
+});
+</script>
+{{/addJs}}
+

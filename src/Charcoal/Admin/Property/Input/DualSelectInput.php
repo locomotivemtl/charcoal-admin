@@ -122,9 +122,9 @@ class DualSelectInput extends AbstractSelectableInput
 
             foreach ($lists as $ident) {
                 if (isset($this->searchable[$ident]['placeholder'])) {
-                    $placeholder = $this->searchable[$ident]['placeholder']);
+                    $placeholder = $this->searchable[$ident]['placeholder'];
                 } elseif (isset($this->searchable['placeholder'])) {
-                    $placeholder = $this->searchable['placeholder']);
+                    $placeholder = $this->searchable['placeholder'];
                 }
 
                 if (isset($placeholder) && TranslationString::isTranslatable($placeholder)) {

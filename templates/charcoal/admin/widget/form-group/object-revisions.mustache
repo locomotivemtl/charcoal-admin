@@ -10,9 +10,7 @@
         <h2>{{title}}</h2>
         {{/showTitle}}
 
-        {{#showDescription}}
-            <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
-        {{/showDescription}}
+        {{> charcoal/admin/template/inc.description }}
     </header>
     {{/showHeader}}
 
@@ -35,9 +33,7 @@
     </tbody>
     </table>
 
-    {{#showNotes}}
-        <div class="help-block small">{{&notes}}</div>
-    {{/showNotes}}
+    {{> charcoal/admin/template/inc.notes }}
 
 </fieldset>
 

@@ -4,12 +4,12 @@
 <aside class="c-aside o-flex_aside" id="{{widgetId}}">
     <div class="o-container -top -right">
         <div class="c-panel -fixed">
-            <header class="c-panel_header">
-                {{title}}
-            </header>
+            <header class="c-panel_header">{{title}}</header>
 
             <div class="c-panel_main">
+                {{#subtitle}}
                 <p>{{subtitle}}</p>
+                {{/subtitle}}
 
                 {{#showLanguageSwitch}}
                 <div class="js-lang-switch" class="btn-group" role="group" aria-label="{{#_t}}Language switcher{{/_t}}">

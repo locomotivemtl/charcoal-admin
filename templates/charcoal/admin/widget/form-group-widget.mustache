@@ -18,9 +18,7 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
         <h2>{{title}}</h2>
         {{/showTitle}}
 
-        {{#showDescription}}
-            <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
-        {{/showDescription}}
+        {{> charcoal/admin/template/inc.description }}
     </header>
     {{/showHeader}}
 
@@ -51,20 +49,16 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                     </span>
                     {{/l10n}}
 
-                    {{#showDescription}}
-                        <span class="c-info" data-toggle="tooltip" data-placement="top" title="{{description}}">?</span>
-                    {{/showDescription}}
+                    {{> charcoal/admin/template/inc.description }}
 
                     {{#input}}
                         {{!-- The actual property control (typically `PropertyInput`) --}}
-                        <div {{#l10n}}data-lang="{{lang}}"{{/l10n}} {{#hidden}}class="hidden"{{/hidden}}>
+                        <div{{#l10n}} data-lang="{{lang}}"{{/l10n}}{{#hidden}} class="hidden"{{/hidden}}>
                             {{>$widget_template}}
                         </div>
                     {{/input}}
 
-                    {{#showNotes}}
-                        <div class="help-block small">{{&notes}}</div>
-                    {{/showNotes}}
+                    {{> charcoal/admin/template/inc.notes }}
 
                 </div>
             </div>
@@ -83,9 +77,7 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
 {{/formProperties}}
 
-{{#showNotes}}
-    <div class="help-block small">{{&notes}}</div>
-{{/showNotes}}
+{{> charcoal/admin/template/inc.notes }}
 
 </fieldset>
 

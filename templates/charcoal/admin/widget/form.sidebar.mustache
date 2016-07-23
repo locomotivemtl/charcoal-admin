@@ -19,6 +19,7 @@
                 </div>
                 {{/showLanguageSwitch}}
 
+                {{#hasSidebarProperties}}
                 <table class="c-panel_table">
                     {{#formProperties}}
                     <tr class="c-panel_table_row">
@@ -26,8 +27,8 @@
                         <td class="c-panel_table_data">{{prop.displayVal}}</td>
                     </tr>
                     {{/formProperties}}
-
                 </table>
+                {{/hasSidebarProperties}}
                 <div class="form-group">
                     <button type="submit" class="btn btn-info btn-lg btn-block" value="Save">Sauvegarder</button>
                 </div>

@@ -45,6 +45,20 @@ class FormSidebarWidget extends AdminWidget
      */
     protected $title;
 
+    /**
+     * @param array|ArrayInterface $data Class data.
+     * @return FormGroupWidget Chainable
+     */
+    public function setData($data)
+    {
+        parent::setData($data);
+
+        if (isset($data['properties']) && $data['properties'] !== null) {
+            $this->setSidebarProperties($data['properties']);
+        }
+
+        return $this;
+    }
 
     /**
      * @param FormWidget $form The sidebar form widget.
@@ -95,6 +109,26 @@ class FormSidebarWidget extends AdminWidget
     public function sidebarProperties()
     {
         return $this->sidebarProperties;
+    }
+
+    /**
+     * Determine if the form has any groups.
+     *
+     * @return boolean
+     */
+    public function hasSidebarProperties()
+    {
+        return ($this->numSidebarProperties() > 0);
+    }
+
+    /**
+     * Count the number of form groups.
+     *
+     * @return integer
+     */
+    public function numSidebarProperties()
+    {
+        return count($this->sidebarProperties());
     }
 
     /**

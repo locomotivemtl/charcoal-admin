@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Widget\FormGroup\RoutableObjectFormGroup</title>
+	<title>Class Charcoal\Admin\Widget\FormGroup\ObjectRouteFormGroup</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -165,7 +165,7 @@
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">AclPermissions</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">GenericFormGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">ObjectRevisionsFormGroup</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html">RoutableObjectFormGroup</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html">ObjectRouteFormGroup</a></li>
 			</ul>
 
 
@@ -204,7 +204,7 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class RoutableObjectFormGroup</h1>
+	<h1>Class ObjectRouteFormGroup</h1>
 
 
 	<div class="description">
@@ -219,7 +219,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Widget\FormGroup\RoutableObjectFormGroup</span></b>			
+<b><span>Charcoal\Admin\Widget\FormGroup\ObjectRouteFormGroup</span></b>			
 			
 			
 		</dd>
@@ -238,7 +238,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a>\<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">FormGroup</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#20-156" title="Go to source code">Charcoal/Admin/Widget/FormGroup/RoutableObjectFormGroup.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#20-157" title="Go to source code">Charcoal/Admin/Widget/FormGroup/ObjectRouteFormGroup.php</a>
 		<br>
 	</div>
 
@@ -258,7 +258,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#53-65" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#53-65" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Inject dependencies from a DI Container.</p>
@@ -293,7 +293,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#67-75" title="Go to source code">objType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#67-75" title="Go to source code">objType</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current routable object type from the GET parameters.</p>
@@ -327,7 +327,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#77-85" title="Go to source code">objId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#77-85" title="Go to source code">objId</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current routable object ID from the GET parameters.</p>
@@ -361,7 +361,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_obj">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#87-114" title="Go to source code">obj</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#87-115" title="Go to source code">obj</a>( )</code>
 
 		<div class="description short">
 			<p>Create or load the routable object.</p>
@@ -377,6 +377,10 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 					ModelInterface
 				</div>
 
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the current object isn't routable.
+				</div>
 
 
 
@@ -395,7 +399,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objBaseUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#116-124" title="Go to source code">objBaseUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#117-125" title="Go to source code">objBaseUrl</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve an abridged variant to the current object's route.</p>
@@ -429,7 +433,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_abridgedObjSlug">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#126-140" title="Go to source code">abridgedObjSlug</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#127-141" title="Go to source code">abridgedObjSlug</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve an abridged variant to the current object's route.</p>
@@ -463,7 +467,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 
 		<td class="name"><div>
 		<a class="anchor" href="#_editableRouteProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#142-155" title="Go to source code">editableRouteProperty</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#143-156" title="Go to source code">editableRouteProperty</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the object's slug property form control.</p>
@@ -507,7 +511,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#25-30" title="Go to source code"><var>$obj</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#25-30" title="Go to source code"><var>$obj</var></a>
 
 			<div class="description short">
 				<p>The current routable object.</p>
@@ -532,7 +536,7 @@ Charcoal\Ui\FormGroup\AbstractFormGroup
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html#46-51" title="Go to source code"><var>$baseUrl</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html#46-51" title="Go to source code"><var>$baseUrl</var></a>
 
 			<div class="description short">
 				<p>The base URL for the Charcoal application.</p>

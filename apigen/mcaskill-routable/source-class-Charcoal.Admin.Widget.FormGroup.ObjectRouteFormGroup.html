@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex">
 
-	<title>File Charcoal/Admin/Widget/FormGroup/RoutableObjectFormGroup.php</title>
+	<title>File Charcoal/Admin/Widget/FormGroup/ObjectRouteFormGroup.php</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -233,7 +233,7 @@
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">Charcoal\Admin\Widget\FormGroup\AclPermissions</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">Charcoal\Admin\Widget\FormGroup\GenericFormGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">Charcoal\Admin\Widget\FormGroup\ObjectRevisionsFormGroup</a></li>
-				<li><a href="class-Charcoal.Admin.Widget.FormGroup.RoutableObjectFormGroup.html">Charcoal\Admin\Widget\FormGroup\RoutableObjectFormGroup</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRouteFormGroup.html">Charcoal\Admin\Widget\FormGroup\ObjectRouteFormGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormPropertyWidget.html">Charcoal\Admin\Widget\FormPropertyWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></li>
@@ -327,7 +327,7 @@
 </span><span id="20" class="l"><a href="#20"> 20: </a><span class="php-comment">/**
 </span></span><span id="21" class="l"><a href="#21"> 21: </a><span class="php-comment"> * For viewing &amp; editing the object's route.
 </span></span><span id="22" class="l"><a href="#22"> 22: </a><span class="php-comment"> */</span>
-</span><span id="23" class="l"><a href="#23"> 23: </a><span class="php-keyword1">class</span> RoutableObjectFormGroup <span class="php-keyword1">extends</span> AbstractFormGroup
+</span><span id="23" class="l"><a href="#23"> 23: </a><span class="php-keyword1">class</span> ObjectRouteFormGroup <span class="php-keyword1">extends</span> AbstractFormGroup
 </span><span id="24" class="l"><a href="#24"> 24: </a>{
 </span><span id="25" class="l"><a href="#25"> 25: </a>    <span class="php-comment">/**
 </span></span><span id="26" class="l"><a href="#26"> 26: </a><span class="php-comment">     * The current routable object.
@@ -394,74 +394,75 @@
 </span><span id="87" class="l"><a href="#87"> 87: </a>    <span class="php-comment">/**
 </span></span><span id="88" class="l"><a href="#88"> 88: </a><span class="php-comment">     * Create or load the routable object.
 </span></span><span id="89" class="l"><a href="#89"> 89: </a><span class="php-comment">     *
-</span></span><span id="90" class="l"><a href="#90"> 90: </a><span class="php-comment">     * @return ModelInterface
-</span></span><span id="91" class="l"><a href="#91"> 91: </a><span class="php-comment">     */</span>
-</span><span id="92" class="l"><a href="#92"> 92: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> obj()
-</span><span id="93" class="l"><a href="#93"> 93: </a>    {
-</span><span id="94" class="l"><a href="#94"> 94: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;obj === <span class="php-keyword1">null</span>) {
-</span><span id="95" class="l"><a href="#95"> 95: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;objType()) {
-</span><span id="96" class="l"><a href="#96"> 96: </a>                <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;obj = <span class="php-keyword1">false</span>;
-</span><span id="97" class="l"><a href="#97"> 97: </a>            }
-</span><span id="98" class="l"><a href="#98"> 98: </a>
-</span><span id="99" class="l"><a href="#99"> 99: </a>            <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;modelFactory-&gt;create(<span class="php-var">$this</span>-&gt;objType());
-</span><span id="100" class="l"><a href="#100">100: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$obj</span> <span class="php-keyword1">instanceof</span> RoutableInterface) {
-</span><span id="101" class="l"><a href="#101">101: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(
-</span><span id="102" class="l"><a href="#102">102: </a>                    <span class="php-keyword2">sprintf</span>(
-</span><span id="103" class="l"><a href="#103">103: </a>                        <span class="php-quote">'%s must implement %s to use the routable object form group.'</span>,
-</span><span id="104" class="l"><a href="#104">104: </a>                        <span class="php-keyword2">get_class</span>(<span class="php-var">$obj</span>),
-</span><span id="105" class="l"><a href="#105">105: </a>                        RoutableInterface::<span class="php-keyword1">class</span>
-</span><span id="106" class="l"><a href="#106">106: </a>                    )
-</span><span id="107" class="l"><a href="#107">107: </a>                );
-</span><span id="108" class="l"><a href="#108">108: </a>            }
-</span><span id="109" class="l"><a href="#109">109: </a>
-</span><span id="110" class="l"><a href="#110">110: </a>            <span class="php-var">$this</span>-&gt;obj = <span class="php-var">$obj</span>-&gt;load(<span class="php-var">$this</span>-&gt;objId());
-</span><span id="111" class="l"><a href="#111">111: </a>        }
-</span><span id="112" class="l"><a href="#112">112: </a>
-</span><span id="113" class="l"><a href="#113">113: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;obj;
-</span><span id="114" class="l"><a href="#114">114: </a>    }
-</span><span id="115" class="l"><a href="#115">115: </a>
-</span><span id="116" class="l"><a href="#116">116: </a>    <span class="php-comment">/**
-</span></span><span id="117" class="l"><a href="#117">117: </a><span class="php-comment">     * Retrieve an abridged variant to the current object's route.
-</span></span><span id="118" class="l"><a href="#118">118: </a><span class="php-comment">     *
-</span></span><span id="119" class="l"><a href="#119">119: </a><span class="php-comment">     * @return string
-</span></span><span id="120" class="l"><a href="#120">120: </a><span class="php-comment">     */</span>
-</span><span id="121" class="l"><a href="#121">121: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> objBaseUrl()
-</span><span id="122" class="l"><a href="#122">122: </a>    {
-</span><span id="123" class="l"><a href="#123">123: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;baseUrl;
-</span><span id="124" class="l"><a href="#124">124: </a>    }
-</span><span id="125" class="l"><a href="#125">125: </a>
-</span><span id="126" class="l"><a href="#126">126: </a>    <span class="php-comment">/**
-</span></span><span id="127" class="l"><a href="#127">127: </a><span class="php-comment">     * Retrieve an abridged variant to the current object's route.
-</span></span><span id="128" class="l"><a href="#128">128: </a><span class="php-comment">     *
-</span></span><span id="129" class="l"><a href="#129">129: </a><span class="php-comment">     * @return string
-</span></span><span id="130" class="l"><a href="#130">130: </a><span class="php-comment">     */</span>
-</span><span id="131" class="l"><a href="#131">131: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> abridgedObjSlug()
-</span><span id="132" class="l"><a href="#132">132: </a>    {
-</span><span id="133" class="l"><a href="#133">133: </a>        <span class="php-var">$slug</span> = <span class="php-keyword2">ltrim</span>(<span class="php-var">$this</span>-&gt;obj()-&gt;uri(), <span class="php-quote">'/'</span>);
-</span><span id="134" class="l"><a href="#134">134: </a>
-</span><span id="135" class="l"><a href="#135">135: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">mb_strlen</span>(<span class="php-var">$slug</span>) &gt; <span class="php-num">30</span>) {
-</span><span id="136" class="l"><a href="#136">136: </a>            <span class="php-var">$slug</span> = <span class="php-keyword2">mb_substr</span>(<span class="php-var">$slug</span>, <span class="php-num">0</span>, <span class="php-num">12</span>).<span class="php-quote">'&amp;hellip;'</span><span class="php-comment">/*.'…'*/</span>.<span class="php-keyword2">mb_substr</span>(<span class="php-var">$slug</span>, -<span class="php-num">12</span>);
-</span><span id="137" class="l"><a href="#137">137: </a>        }
-</span><span id="138" class="l"><a href="#138">138: </a>
-</span><span id="139" class="l"><a href="#139">139: </a>        <span class="php-keyword1">return</span> <span class="php-var">$slug</span>;
-</span><span id="140" class="l"><a href="#140">140: </a>    }
-</span><span id="141" class="l"><a href="#141">141: </a>
-</span><span id="142" class="l"><a href="#142">142: </a>    <span class="php-comment">/**
-</span></span><span id="143" class="l"><a href="#143">143: </a><span class="php-comment">     * Retrieve the object's slug property form control.
-</span></span><span id="144" class="l"><a href="#144">144: </a><span class="php-comment">     *
-</span></span><span id="145" class="l"><a href="#145">145: </a><span class="php-comment">     * @return FormProperty
-</span></span><span id="146" class="l"><a href="#146">146: </a><span class="php-comment">     */</span>
-</span><span id="147" class="l"><a href="#147">147: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> editableRouteProperty()
-</span><span id="148" class="l"><a href="#148">148: </a>    {
-</span><span id="149" class="l"><a href="#149">149: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;editableRouteProperty === <span class="php-keyword1">null</span>) {
-</span><span id="150" class="l"><a href="#150">150: </a>            <span class="php-var">$this</span>-&gt;editableRouteProperty = <span class="php-var">$this</span>-&gt;form()-&gt;formProperty(<span class="php-quote">'slug'</span>);
-</span><span id="151" class="l"><a href="#151">151: </a>            <span class="php-var">$this</span>-&gt;editableRouteProperty-&gt;setInputType(<span class="php-quote">'charcoal/admin/property/input/hidden'</span>);
-</span><span id="152" class="l"><a href="#152">152: </a>        }
-</span><span id="153" class="l"><a href="#153">153: </a>
-</span><span id="154" class="l"><a href="#154">154: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;editableRouteProperty;
-</span><span id="155" class="l"><a href="#155">155: </a>    }
-</span><span id="156" class="l"><a href="#156">156: </a>}
-</span><span id="157" class="l"><a href="#157">157: </a></span></code></pre>
+</span></span><span id="90" class="l"><a href="#90"> 90: </a><span class="php-comment">     * @throws RuntimeException If the current object isn't routable.
+</span></span><span id="91" class="l"><a href="#91"> 91: </a><span class="php-comment">     * @return ModelInterface
+</span></span><span id="92" class="l"><a href="#92"> 92: </a><span class="php-comment">     */</span>
+</span><span id="93" class="l"><a href="#93"> 93: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> obj()
+</span><span id="94" class="l"><a href="#94"> 94: </a>    {
+</span><span id="95" class="l"><a href="#95"> 95: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;obj === <span class="php-keyword1">null</span>) {
+</span><span id="96" class="l"><a href="#96"> 96: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;objType()) {
+</span><span id="97" class="l"><a href="#97"> 97: </a>                <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;obj = <span class="php-keyword1">false</span>;
+</span><span id="98" class="l"><a href="#98"> 98: </a>            }
+</span><span id="99" class="l"><a href="#99"> 99: </a>
+</span><span id="100" class="l"><a href="#100">100: </a>            <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;modelFactory-&gt;create(<span class="php-var">$this</span>-&gt;objType());
+</span><span id="101" class="l"><a href="#101">101: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$obj</span> <span class="php-keyword1">instanceof</span> RoutableInterface) {
+</span><span id="102" class="l"><a href="#102">102: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> RuntimeException(
+</span><span id="103" class="l"><a href="#103">103: </a>                    <span class="php-keyword2">sprintf</span>(
+</span><span id="104" class="l"><a href="#104">104: </a>                        <span class="php-quote">'%s must implement %s to use the routable object form group.'</span>,
+</span><span id="105" class="l"><a href="#105">105: </a>                        <span class="php-keyword2">get_class</span>(<span class="php-var">$obj</span>),
+</span><span id="106" class="l"><a href="#106">106: </a>                        RoutableInterface::<span class="php-keyword1">class</span>
+</span><span id="107" class="l"><a href="#107">107: </a>                    )
+</span><span id="108" class="l"><a href="#108">108: </a>                );
+</span><span id="109" class="l"><a href="#109">109: </a>            }
+</span><span id="110" class="l"><a href="#110">110: </a>
+</span><span id="111" class="l"><a href="#111">111: </a>            <span class="php-var">$this</span>-&gt;obj = <span class="php-var">$obj</span>-&gt;load(<span class="php-var">$this</span>-&gt;objId());
+</span><span id="112" class="l"><a href="#112">112: </a>        }
+</span><span id="113" class="l"><a href="#113">113: </a>
+</span><span id="114" class="l"><a href="#114">114: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;obj;
+</span><span id="115" class="l"><a href="#115">115: </a>    }
+</span><span id="116" class="l"><a href="#116">116: </a>
+</span><span id="117" class="l"><a href="#117">117: </a>    <span class="php-comment">/**
+</span></span><span id="118" class="l"><a href="#118">118: </a><span class="php-comment">     * Retrieve an abridged variant to the current object's route.
+</span></span><span id="119" class="l"><a href="#119">119: </a><span class="php-comment">     *
+</span></span><span id="120" class="l"><a href="#120">120: </a><span class="php-comment">     * @return string
+</span></span><span id="121" class="l"><a href="#121">121: </a><span class="php-comment">     */</span>
+</span><span id="122" class="l"><a href="#122">122: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> objBaseUrl()
+</span><span id="123" class="l"><a href="#123">123: </a>    {
+</span><span id="124" class="l"><a href="#124">124: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;baseUrl;
+</span><span id="125" class="l"><a href="#125">125: </a>    }
+</span><span id="126" class="l"><a href="#126">126: </a>
+</span><span id="127" class="l"><a href="#127">127: </a>    <span class="php-comment">/**
+</span></span><span id="128" class="l"><a href="#128">128: </a><span class="php-comment">     * Retrieve an abridged variant to the current object's route.
+</span></span><span id="129" class="l"><a href="#129">129: </a><span class="php-comment">     *
+</span></span><span id="130" class="l"><a href="#130">130: </a><span class="php-comment">     * @return string
+</span></span><span id="131" class="l"><a href="#131">131: </a><span class="php-comment">     */</span>
+</span><span id="132" class="l"><a href="#132">132: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> abridgedObjSlug()
+</span><span id="133" class="l"><a href="#133">133: </a>    {
+</span><span id="134" class="l"><a href="#134">134: </a>        <span class="php-var">$slug</span> = <span class="php-keyword2">ltrim</span>(<span class="php-var">$this</span>-&gt;obj()-&gt;uri(), <span class="php-quote">'/'</span>);
+</span><span id="135" class="l"><a href="#135">135: </a>
+</span><span id="136" class="l"><a href="#136">136: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">mb_strlen</span>(<span class="php-var">$slug</span>) &gt; <span class="php-num">30</span>) {
+</span><span id="137" class="l"><a href="#137">137: </a>            <span class="php-var">$slug</span> = <span class="php-keyword2">mb_substr</span>(<span class="php-var">$slug</span>, <span class="php-num">0</span>, <span class="php-num">12</span>).<span class="php-quote">'&amp;hellip;'</span>.<span class="php-keyword2">mb_substr</span>(<span class="php-var">$slug</span>, -<span class="php-num">12</span>);
+</span><span id="138" class="l"><a href="#138">138: </a>        }
+</span><span id="139" class="l"><a href="#139">139: </a>
+</span><span id="140" class="l"><a href="#140">140: </a>        <span class="php-keyword1">return</span> <span class="php-var">$slug</span>;
+</span><span id="141" class="l"><a href="#141">141: </a>    }
+</span><span id="142" class="l"><a href="#142">142: </a>
+</span><span id="143" class="l"><a href="#143">143: </a>    <span class="php-comment">/**
+</span></span><span id="144" class="l"><a href="#144">144: </a><span class="php-comment">     * Retrieve the object's slug property form control.
+</span></span><span id="145" class="l"><a href="#145">145: </a><span class="php-comment">     *
+</span></span><span id="146" class="l"><a href="#146">146: </a><span class="php-comment">     * @return FormProperty
+</span></span><span id="147" class="l"><a href="#147">147: </a><span class="php-comment">     */</span>
+</span><span id="148" class="l"><a href="#148">148: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> editableRouteProperty()
+</span><span id="149" class="l"><a href="#149">149: </a>    {
+</span><span id="150" class="l"><a href="#150">150: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;editableRouteProperty === <span class="php-keyword1">null</span>) {
+</span><span id="151" class="l"><a href="#151">151: </a>            <span class="php-var">$this</span>-&gt;editableRouteProperty = <span class="php-var">$this</span>-&gt;form()-&gt;formProperty(<span class="php-quote">'slug'</span>);
+</span><span id="152" class="l"><a href="#152">152: </a>            <span class="php-var">$this</span>-&gt;editableRouteProperty-&gt;setInputType(<span class="php-quote">'charcoal/admin/property/input/hidden'</span>);
+</span><span id="153" class="l"><a href="#153">153: </a>        }
+</span><span id="154" class="l"><a href="#154">154: </a>
+</span><span id="155" class="l"><a href="#155">155: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;editableRouteProperty;
+</span><span id="156" class="l"><a href="#156">156: </a>    }
+</span><span id="157" class="l"><a href="#157">157: </a>}
+</span><span id="158" class="l"><a href="#158">158: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
@@ -469,6 +470,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?a0c79774c8db4ddbe367a671d104d7b53c9da4c1"></script>
+<script src="elementlist.js?acbfcc5e02606106b5d5a5f539ec1994b155141a"></script>
 </body>
 </html>

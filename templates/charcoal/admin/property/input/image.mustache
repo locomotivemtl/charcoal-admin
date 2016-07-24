@@ -6,10 +6,12 @@ File Property Input
 
 --}}
 <div id="{{inputId}}">
-    {{#inputVal}}
-    <div>
+    <div class="js-preview">
+        {{#inputVal}}
         <img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">
+        {{/inputVal}}
     </div>
+    {{#inputVal}}
     <div>
         <a href="#" class="js-remove-image btn btn-default">
             Retirer l'image
@@ -18,6 +20,7 @@ File Property Input
 
         <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
     {{/inputVal}}
+
     <input
         type="file"
         name="{{inputName}}"

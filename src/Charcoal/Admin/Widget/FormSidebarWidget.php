@@ -171,9 +171,14 @@ class FormSidebarWidget extends AdminWidget
                 continue;
             }
             $label = new TranslationString($action['label']);
+            $active = ( isset($action['active']) ? $action['active'] : true );
+
             $obj = $this->form()->obj();
             // Shame: Make sure the view is set before attempt rendering
             if ($obj->view()) {
+                if (!is_bool($active)) {
+                    $active = $obj->render($active);
+                }
                 $url = $obj->render($action['url']);
             } else {
                 // Shame part 2: force '{{id}}' to use obj_id GET parameter...
@@ -188,9 +193,8 @@ class FormSidebarWidget extends AdminWidget
             // Info = default
             // Possible: danger, info
             $btn = isset($action['type']) ? $action['type'] : 'info';
-            $this->actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn ];
+            $this->actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn, 'active' => $active ];
         }
-
         return $this;
     }
 

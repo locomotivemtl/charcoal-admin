@@ -21,34 +21,41 @@
 
                 {{#hasSidebarProperties}}
                 <table class="c-panel_table">
-                    {{#formProperties}}
+                {{#formProperties}}
+                    {{#prop.displayVal}}
                     <tr class="c-panel_table_row">
                         <th class="c-panel_table_header">{{prop.label}}</th>
                         <td class="c-panel_table_data">{{prop.displayVal}}</td>
                     </tr>
-                    {{/formProperties}}
+                    {{/prop.displayVal}}
+                {{/formProperties}}
                 </table>
                 {{/hasSidebarProperties}}
+
+                {{#actions}}
+                    {{#active}}
+                    <div class="form-group">
+                        <a href="{{baseUrl}}{{url}}" class="btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
+                    </div>
+                    {{/active}}
+                {{/actions}}
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-info btn-lg btn-block" value="Save">Sauvegarder</button>
                 </div>
-
-                {{#actions}}
-                <div class="form-group">
-                    <a href="{{baseUrl}}{{url}}" class="{{^objId}}disabled{{/objId}} btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
-                </div>
-                {{/actions}}
             </div>
 
             <footer class="c-panel_footer">
                 {{!--
                 @todo Only show the "delete" button if there's an object's ID.
                 }}
+                {{#objId}}
                 <div class="c-panel_footer_item -red">
                     <span class="js-obj-delete">
                        <i class="fa fa-trash-o"></i> Effacer
                     </span>
                 </div>
+                {{/objId}}
                 <div class="c-panel_footer_item -blue">
                     <span class="js-reset-form">
                         <i class="fa fa-refresh"></i> Réinitialiser

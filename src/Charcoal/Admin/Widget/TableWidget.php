@@ -46,6 +46,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     private $adminMetadata;
 
     /**
+     * @var array $listActions
+     */
+    private $listActions;
+
+    /**
      * @param Container $container Pimple DI container.
      * @return void
      */
@@ -287,24 +292,48 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function listActions()
     {
-        $obj = $this->proto();
-        $props = $obj->metadata()->properties();
-        $collectionIdent = $this->collectionIdent();
-        if ($collectionIdent) {
-                $metadata = $obj->metadata();
-                $adminMetadata = (isset($metadata['admin']) ? $metadata['admin'] : null);
-                $listOptions   = $adminMetadata['lists'][$collectionIdent];
-                $listActions   = (isset($listOptions['list_actions']) ? $listOptions['list_actions'] : []);
+        if (!$this->listActions) {
+            $this->listActions = $this->createListActions();
+        }
+        return $this->listActions;
+    }
+
+    /**
+     * Set list actions
+     * @param array $listActions List actions.
+     */
+    public function setListActions($listActions)
+    {
+        $this->listActions = $listActions;
+        return $this;
+    }
+
+    /**
+     * Default list actions behavior.
+     * List actions should come from the collection data
+     * pointed out by the collectionIdent.
+     * It is still possible to completly override those
+     * externally by setting the listActions with the
+     * setListActions setter.
+     *
+     * @return array List actions.
+     */
+    public function createListActions()
+    {
+        $collectionConfig = $this->collectionConfig();
+        if ($collectionConfig) {
+            $listActions   = (isset($collectionConfig['list_actions']) ? $collectionConfig['list_actions'] : []);
             foreach ($listActions as &$action) {
                 if (isset($action['label'])) {
                     $action['label'] = new TranslationString($action['label']);
                 }
             }
-                return $listActions;
+            return $listActions;
         } else {
             return [];
         }
     }
+
 
     /**
      * @return PaginationWidget

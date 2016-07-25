@@ -30,6 +30,8 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      */
     protected $groupDisplayMode;
 
+    protected $formData;
+
     /**
      * @param Container $container The DI container.
      * @return void
@@ -276,12 +278,49 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * @return array
+     * Not really a SETTER, but using the setter
+     * to pass by the $_GET var (@see setData()).
+     * @param array $data Data.
+     */
+    public function setFormData(array $data)
+    {
+        $objData = $this->objData();
+        $merged = array_replace_recursive($objData, $data);
+
+        // Remove null values
+        $merged = array_filter($merged, function ($val) {
+            if ($val === null) {
+                return false;
+            }
+            return true;
+        });
+
+        $this->formData = $merged;
+        $this->obj()->setData($merged);
+        return $this;
+    }
+
+    /**
+     * Object data merged with whatever data were set
+     * in the process.
+     * This appears to be unused.
+     * @return array Object data.
      */
     public function formData()
     {
-        $obj = $this->obj();
-        $formData = $obj->data();
-        return $formData;
+        if (!$this->formData) {
+            $this->formData = $this->objData();
+        }
+        return $this->formData;
     }
+
+    /**
+     * Object data.
+     * @return array Object data.
+     */
+    public function objData()
+    {
+        return $this->obj()->data();
+    }
+
 }

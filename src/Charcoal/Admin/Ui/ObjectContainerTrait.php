@@ -153,8 +153,7 @@ trait ObjectContainerTrait
                     'logger' => $this->logger
                 ]);
                 $clone->load($_GET['clone_id']);
-                $clone_data =
-                $this->obj->set_data($clone->data());
+                $this->obj->setData($clone->data());
             } elseif (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
                 $this->obj = $this->createObj();
                 $blueprint = $this->modelFactory()->create($this->obj->blueprintType());

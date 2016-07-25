@@ -31,7 +31,6 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
-
         $this->modelFactory = $container['model/factory'];
     }
 
@@ -52,7 +51,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
      */
     public function objId()
     {
-        return $_GET['obj_id'];
+        return ( isset($_GET['obj_id']) ? $_GET['obj_id'] : null );
     }
 
     /**

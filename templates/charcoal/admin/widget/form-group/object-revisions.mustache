@@ -4,15 +4,15 @@
 
 <fieldset>
 
-    {{#showHeader}}
+    {{# showHeader }}
     <header class="o-header -border">
-        {{#showTitle}}
-        <h2>{{title}}</h2>
-        {{/showTitle}}
+        {{# showTitle }}
+        <h2>{{ title }}</h2>
+        {{/ showTitle }}
 
         {{> charcoal/admin/template/inc.description }}
     </header>
-    {{/showHeader}}
+    {{/ showHeader }}
 
     <table class="table table-bordered table-hover">
     <thead>
@@ -22,14 +22,19 @@
         <th>Options</th>
     </thead>
     <tbody>
-        {{#objectRevisions}}
+        {{# objectRevisions }}
         <tr class="js-table-row">
-            <td>{{revNum}}</td>
-            <td>{{revTsDisplay}}</td>
-            <td>{{changedProperties}}</td>
-            <td>{{#allowRevert}}<a class="js-obj-revert btn btn-default" data-rev-num="{{revNum}}">Retourner à #{{revNum}}</a>{{/allowRevert}}</td>
+            <td>{{ revNum }}</td>
+            <td>{{ revTsDisplay }}</td>
+            <td>{{ changedProperties }}</td>
+            <td>{{# allowRevert }}<a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">Retourner à #{{ revNum }}</a>{{/ allowRevert }}</td>
         </tr>
-        {{/objectRevisions}}
+        {{/ objectRevisions }}
+        {{^ objectRevisions }}
+        <tr class="js-table-row">
+            <td colspan="5" class="text-center">Aucun historique de changements</td>
+        </tr>
+        {{/ objectRevisions }}
     </tbody>
     </table>
 
@@ -37,7 +42,7 @@
 
 </fieldset>
 
-{{#addJs}}
+{{# addJs }}
 <script>
 $(document).ready(function() {
     $('.js-obj-revert').on('click', function(event) {
@@ -45,8 +50,8 @@ $(document).ready(function() {
 
         var url = Charcoal.Admin.admin_url() + 'object/revert-revision';
         var data = {
-            obj_type: "{{objType}}",
-            obj_id: "{{objId}}",
+            obj_type: "{{ objType }}",
+            obj_id: "{{ objId }}",
             rev_num: $(this).attr('data-rev-num')
         };
         console.debug(data);
@@ -91,4 +96,4 @@ $(document).ready(function() {
     });
 });
 </script>
-{{/addJs}}
+{{/ addJs }}

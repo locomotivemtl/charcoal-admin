@@ -35,13 +35,21 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     }
 
     /**
+     * @return boolean
+     */
+    public function active()
+    {
+        return parent::active() && $this->objType() && $this->objId();
+    }
+
+    /**
      * Retrieve the current object type from the GET parameters.
      *
      * @return string
      */
     public function objType()
     {
-        return $_GET['obj_type'];
+        return (isset($_GET['obj_type']) ? $_GET['obj_type'] : null);
     }
 
     /**
@@ -51,7 +59,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
      */
     public function objId()
     {
-        return ( isset($_GET['obj_id']) ? $_GET['obj_id'] : null );
+        return (isset($_GET['obj_id']) ? $_GET['obj_id'] : null);
     }
 
     /**

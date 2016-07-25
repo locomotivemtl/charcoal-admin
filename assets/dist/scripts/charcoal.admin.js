@@ -184,7 +184,7 @@ Charcoal.Admin.ComponentManager.prototype.render = function ()
             super_class = Charcoal.Admin.Template;
             break;
 
-        }
+    }
 
         for (var i = 0, len = this.components[component_type].length; i < len; i++) {
 
@@ -1842,6 +1842,8 @@ Charcoal.Admin.Property_Input_Image.prototype.init = function ()
 
     // OG element.
     this.$input = $('#' + this.input_id);
+    this.$file = this.$input.find('[type=file]');
+    this.$preview = this.$input.find('.js-preview');
 
     this.set_listeners();
 };
@@ -1853,13 +1855,26 @@ Charcoal.Admin.Property_Input_Image.prototype.set_listeners = function ()
         return this;
     }
 
-    window.alert('fafdads');
     var that = this;
     this.$input.on('click', '.js-remove-image', function (e) {
         e.preventDefault();
 
         that.$input.find('input[type=hidden]').val('');
         that.$input.find('img').remove();
+    });
+
+    this.$file.on('change', function (event) {
+        var img = new Image();
+
+        if (that.$preview.children('img').length) {
+            that.$preview.children('img').remove();
+        }
+
+        var target = event.dataTransfer || event.target;
+        var file = target && target.files && target.files[0];
+        var s = URL.createObjectURL(file);
+        img.src = s;
+        that.$preview.append(img);
     });
 };
 

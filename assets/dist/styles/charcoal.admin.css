@@ -1255,6 +1255,9 @@ a:focus {
     .table-header .btn:first-child, .table-header .btn-group:first-child {
       margin-left: 0; }
 
+.nav-tabs {
+  margin-bottom: 2.5rem; }
+
 .note-editor {
   border-color: #ccc;
   border-radius: 4px; }

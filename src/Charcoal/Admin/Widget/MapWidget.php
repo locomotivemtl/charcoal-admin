@@ -124,11 +124,10 @@ class MapWidget extends AdminWidget implements FormGroupInterface
      */
     public function setSubtitle($subtitle)
     {
-        if ($subtitle === null) {
-            $this->title = null;
-        } else {
+        if (TranslationString::isTranslatable($subtitle)) {
             $this->title = new TranslationString($subtitle);
         }
+
         return $this;
     }
 
@@ -146,11 +145,10 @@ class MapWidget extends AdminWidget implements FormGroupInterface
      */
     public function setTitle($title)
     {
-        if ($title === null) {
-            $this->title = null;
-        } else {
+        if (TranslationString::isTranslatable($title)) {
             $this->title = new TranslationString($title);
         }
+
         return $this;
     }
 
@@ -160,8 +158,9 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     public function title()
     {
         if ($this->title === null) {
-            return new TranslationString('Actions');
+            $this->setTitle('Actions');
         }
+
         return $this->title;
     }
 

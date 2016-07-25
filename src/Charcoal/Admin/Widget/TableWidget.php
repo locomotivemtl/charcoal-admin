@@ -325,7 +325,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         if ($collectionConfig) {
             $listActions   = (isset($collectionConfig['list_actions']) ? $collectionConfig['list_actions'] : []);
             foreach ($listActions as &$action) {
-                if (isset($action['label'])) {
+                if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
                     $action['label'] = new TranslationString($action['label']);
                 }
             }

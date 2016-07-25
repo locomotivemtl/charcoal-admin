@@ -353,8 +353,10 @@ abstract class AbstractPropertyInput implements
      */
     public function setPlaceholder($placeholder)
     {
-        $this->placeholder = new TranslationString($placeholder);
-        $this->placeholder->isRendered = false;
+        if (TranslationString::isTranslatable($placeholder)) {
+            $this->placeholder = new TranslationString($placeholder);
+            $this->placeholder->isRendered = false;
+        }
 
         return $this;
     }

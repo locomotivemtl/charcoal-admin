@@ -85,11 +85,10 @@ class FormSidebarWidget extends AdminWidget
      */
     public function setSubtitle($subtitle)
     {
-        if ($subtitle === null) {
-            $this->title = null;
-        } else {
+        if (TranslationString::isTranslatable($subtitle)) {
             $this->title = new TranslationString($subtitle);
         }
+
         return $this;
     }
 
@@ -170,8 +169,13 @@ class FormSidebarWidget extends AdminWidget
             if (!isset($action['url']) || !isset($action['label'])) {
                 continue;
             }
-            $label = new TranslationString($action['label']);
-            $active = ( isset($action['active']) ? $action['active'] : true );
+
+            if (!TranslationString::isTranslatable($action['label'])) {
+                continue;
+            }
+
+            $label  = new TranslationString($action['label']);
+            $active = (isset($action['active']) ? $action['active'] : true);
 
             $obj = $this->form()->obj();
             // Shame: Make sure the view is set before attempt rendering
@@ -189,11 +193,15 @@ class FormSidebarWidget extends AdminWidget
                 }
             }
 
-
             // Info = default
             // Possible: danger, info
-            $btn = isset($action['type']) ? $action['type'] : 'info';
-            $this->actions[] = [ 'label' => $label, 'url' => $url, 'btn' => $btn, 'active' => $active ];
+            $btn = (isset($action['type']) ? $action['type'] : 'info');
+            $this->actions[] = [
+                'label'  => $label,
+                'url'    => $url,
+                'btn'    => $btn,
+                'active' => $active
+            ];
         }
         return $this;
     }
@@ -240,11 +248,10 @@ class FormSidebarWidget extends AdminWidget
      */
     public function setTitle($title)
     {
-        if ($title === null) {
-            $this->title = null;
-        } else {
+        if (TranslationString::isTranslatable($title)) {
             $this->title = new TranslationString($title);
         }
+
         return $this;
     }
 

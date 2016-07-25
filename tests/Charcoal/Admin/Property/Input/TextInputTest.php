@@ -86,7 +86,7 @@ class TextInputTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->placeholder());
 
-        $this->setExpectedException('\InvalidArgumentException');
         $obj->setPlaceholder(false);
+        $this->assertEquals('foo', $obj->placeholder());
     }
 }

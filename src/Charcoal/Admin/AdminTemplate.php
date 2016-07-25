@@ -275,7 +275,10 @@ class AdminTemplate extends AbstractTemplate
      */
     public function setLabel($label)
     {
-        $this->label = new TranslationString($label);
+        if (TranslationString::isTranslatable($label)) {
+            $this->label = new TranslationString($label);
+        }
+
         return $this;
     }
 
@@ -293,7 +296,10 @@ class AdminTemplate extends AbstractTemplate
      */
     public function setTitle($title)
     {
-        $this->title = new TranslationString($title);
+        if (TranslationString::isTranslatable($title)) {
+            $this->title = new TranslationString($title);
+        }
+
         return $this;
     }
 
@@ -314,7 +320,10 @@ class AdminTemplate extends AbstractTemplate
      */
     public function setSubtitle($subtitle)
     {
-        $this->subtitle = new TranslationString($subtitle);
+        if (TranslationString::isTranslatable($subtitle)) {
+            $this->subtitle = new TranslationString($subtitle);
+        }
+
         return $this;
     }
 
@@ -405,9 +414,11 @@ class AdminTemplate extends AbstractTemplate
             if ($menuItem['url'] != '#') {
                 $menuItem['url'] = $this->adminUrl().$menuItem['url'];
             }
-            if (isset($menuItem['label'])) {
+
+            if (isset($menuItem['label']) && TranslationString::isTranslatable($menuItem['label'])) {
                 $menuItem['label'] = new TranslationString($menuItem['label']);
             }
+
             yield $menuItem;
         }
     }

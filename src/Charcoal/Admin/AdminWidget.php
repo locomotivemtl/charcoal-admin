@@ -197,7 +197,10 @@ class AdminWidget extends AbstractWidget
      */
     public function setLabel($label)
     {
-        $this->label = new TranslationString($label);
+        if (TranslationString::isTranslatable($label)) {
+            $this->label = new TranslationString($label);
+        }
+
         return $this;
     }
 
@@ -209,8 +212,9 @@ class AdminWidget extends AbstractWidget
         if ($this->label === null) {
             // Generate label from ident
             $label = ucwords(str_replace(['_', '.', '/'], ' ', $this->ident()));
-            $this->label = new TranslationString($label);
+            $this->setLabel($label);
         }
+
         return $this->label;
     }
 

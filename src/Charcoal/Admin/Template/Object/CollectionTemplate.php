@@ -266,7 +266,7 @@ class CollectionTemplate extends AdminTemplate implements
                 $formIdent   = ( isset($metadata['default_list']) ? $metadata['default_list'] : '' );
                 $objFormData = ( isset($metadata['lists'][$formIdent]) ? $metadata['lists'][$formIdent] : [] );
 
-                if (isset($objFormData['label'])) {
+                if (isset($objFormData['label']) && TranslationString::isTranslatable($objFormData['label'])) {
                     $objLabel = new TranslationString($objFormData['label']);
                 }
             }

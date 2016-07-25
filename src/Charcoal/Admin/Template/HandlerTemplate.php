@@ -43,7 +43,9 @@ class HandlerTemplate extends AdminTemplate
      */
     public function setErrorMessage($message)
     {
-        $this->errorMessage = new TranslationString($message);
+        if (TranslationString::isTranslatable($message)) {
+            $this->errorMessage = new TranslationString($message);
+        }
 
         return $this;
     }
@@ -66,7 +68,9 @@ class HandlerTemplate extends AdminTemplate
      */
     public function setErrorTitle($title)
     {
-        $this->errorTitle = new TranslationString($title);
+        if (TranslationString::isTranslatable($title)) {
+            $this->errorTitle = new TranslationString($title);
+        }
 
         return $this;
     }

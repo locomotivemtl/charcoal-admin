@@ -301,8 +301,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
      * Set list actions
      * @param array $listActions List actions.
+     * @return TableWidget Chainable.
      */
-    public function setListActions($listActions)
+    public function setListActions(array $listActions)
     {
         $this->listActions = $listActions;
         return $this;

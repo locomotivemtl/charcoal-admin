@@ -30,6 +30,9 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      */
     protected $groupDisplayMode;
 
+    /**
+     * @var array
+     */
     protected $formData;
 
     /**
@@ -281,6 +284,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      * Not really a SETTER, but using the setter
      * to pass by the $_GET var (@see setData()).
      * @param array $data Data.
+     * @return ObjectFormWidget Chainable.
      */
     public function setFormData(array $data)
     {
@@ -322,5 +326,4 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     {
         return $this->obj()->data();
     }
-
 }

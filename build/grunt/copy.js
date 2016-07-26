@@ -16,6 +16,18 @@ module.exports = {
             },
             {
                 expand: true,
+                cwd: 'bower_components/elfinder/',
+                src: ['css/*', 'img/*', 'js/*', 'js/**/*', 'sounds/*'],
+                dest: 'assets/dist/elfinder/'
+            },
+            {
+                expand: true,
+                cwd: 'bower_components/elfinder-theme-moono/',
+                src: ['**/*.css'],
+                dest: 'assets/dist/elfinder/themes/'
+            },
+            {
+                expand: true,
                 cwd: 'bower_components/jquery/dist/',
                 src: ['jquery.*'],
                 dest: 'assets/dist/scripts/vendors/jquery/'

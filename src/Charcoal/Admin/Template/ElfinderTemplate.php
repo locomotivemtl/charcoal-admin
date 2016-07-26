@@ -17,6 +17,11 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function elfinderUrl()
     {
-        return $this->baseUrl().'elfinder/';
+        return $this->baseUrl().'assets/admin/elfinder/';
+    }
+
+    public function elfinderCallback()
+    {
+        return isset($_GET['callback']) ? $_GET['callback'] : '';
     }
 }

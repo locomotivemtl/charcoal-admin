@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Action\LoginAction</title>
+	<title>Class Charcoal\Admin\Action\ElfinderConnectorAction</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -162,8 +162,8 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li><a href="class-Charcoal.Admin.Action.ElfinderConnectorAction.html">ElfinderConnectorAction</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Action.LoginAction.html">LoginAction</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Action.ElfinderConnectorAction.html">ElfinderConnectorAction</a></li>
+				<li><a href="class-Charcoal.Admin.Action.LoginAction.html">LoginAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.LogoutAction.html">LogoutAction</a></li>
 			</ul>
 
@@ -203,35 +203,11 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class LoginAction</h1>
+	<h1>Class ElfinderConnectorAction</h1>
 
 
 	<div class="description">
-	<p>Admin Login Action: Attempt to log a user in.</p>
-
-<h2>Parameters</h2>
-
-<p><strong>Required parameters</strong>
-- <code>username</code>
-- <code>password</code>
-<strong>Optional parameters</strong>
-- <code>nextUrl</code></p>
-
-<h2>Response</h2>
-
-<ul>
-<li><code>success</code> true if login was successful, false otherwise. - Failure should also send a different HTTP code: see below.</li>
-<li><code>feedbacks</code> (Optional) operation feedbacks, if any.</li>
-<li><code>nextUrl</code> Redirect URL, in case of successfull login. - This is the <code>nextUrl</code> parameter if it was set, or the default admin URL if not</li>
-</ul>
-
-<h2>HTTP Codes</h2>
-
-<ul>
-<li><code>200</code> in case of a successful login</li>
-<li><code>403</code> in case of wrong credentials</li>
-<li><code>404</code> if a required parameter is missing</li>
-</ul>
+	<p>Elfinder connector</p>
 	</div>
 
 	<dl class="tree">
@@ -249,7 +225,7 @@ Charcoal\App\Action\AbstractAction
 		</dd>
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Action\LoginAction</span></b>			
+<b><span>Charcoal\Admin\Action\ElfinderConnectorAction</span></b>			
 			
 			
 		</dd>
@@ -268,7 +244,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.LoginAction.html#21-172" title="Go to source code">Charcoal/Admin/Action/LoginAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#20-64" title="Go to source code">Charcoal/Admin/Action/ElfinderConnectorAction.php</a>
 		<br>
 	</div>
 
@@ -288,7 +264,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.LoginAction.html#61-69" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#25-32" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -313,89 +289,6 @@ Charcoal\App\Action\AbstractAction
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="authRequired" id="_authRequired">
-
-		<td class="attributes"><code>
-			 public 
-
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_authRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.LoginAction.html#71-81" title="Go to source code">authRequired</a>( )</code>
-
-		<div class="description short">
-			<p>Authentication is required by default.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Authentication is required by default.</p>
-
-<p>Change to false in</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					boolean
-				</div>
-
-
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_authRequired">Charcoal\Admin\AdminAction::authRequired()</a></code></div>
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setNextUrl" id="_setNextUrl">
-
-		<td class="attributes"><code>
-			 public 
-
-			<code><a href="class-Charcoal.Admin.Action.LoginAction.html">Charcoal\Admin\Action\LoginAction</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setNextUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.LoginAction.html#83-101" title="Go to source code">setNextUrl</a>( <span>string <var>$nextUrl</var></span> )</code>
-
-		<div class="description short">
-			<p>Assign the next URL.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Assign the next URL.</p>
-
-<p>Note that any string is accepted. It should be validated before using this method.</p>
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$nextUrl</var></dt>
-					<dd>The next URL.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><a href="class-Charcoal.Admin.Action.LoginAction.html">Charcoal\Admin\Action\LoginAction</a></code><br>Chainable
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					InvalidArgumentException<br>If the $nextUrl parameter is not a string.
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="run" id="_run">
 
 		<td class="attributes"><code>
@@ -408,7 +301,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_run">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.LoginAction.html#103-140" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#34-63" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
 
 		<div class="description short">
 			
@@ -437,79 +330,6 @@ Charcoal\App\Action\AbstractAction
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="setRememberCookie" id="_setRememberCookie">
-
-		<td class="attributes"><code>
-			 public 
-
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setRememberCookie">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.LoginAction.html#142-159" title="Go to source code">setRememberCookie</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span><code><a href="class-Charcoal.Admin.User.html">Charcoal\Admin\User</a></code> <var>$u</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$request</var></dt>
-					<dd>The request.</dd>
-					<dt><var>$u</var></dt>
-					<dd>The user.</dd>
-				</dl></div>
-
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="results" id="_results">
-
-		<td class="attributes"><code>
-			 public 
-
-			array
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_results">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.LoginAction.html#161-171" title="Go to source code">results</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					array
-				</div>
-
-
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_results">Charcoal\Admin\AdminAction::results()</a></code></div>
-
-		</div>
-		</div></td>
-	</tr>
 	</table>
 
 	<table class="summary inherited">
@@ -518,10 +338,12 @@ Charcoal\App\Action\AbstractAction
 		<td><code>
 			<a href="class-Charcoal.Admin.AdminAction.html#___construct">__construct()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_addFeedback">addFeedback()</a>, 
+			<a href="class-Charcoal.Admin.AdminAction.html#_authRequired">authRequired()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_feedbacks">feedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_hasFeedbacks">hasFeedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_modelFactory">modelFactory()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_numFeedbacks">numFeedbacks()</a>, 
+			<a href="class-Charcoal.Admin.AdminAction.html#_results">results()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_setModelFactory">setModelFactory()</a>
 		</code></td>
 	</tr>
@@ -537,59 +359,6 @@ Charcoal\App\Action\AbstractAction
 
 
 
-	<table class="summary properties" id="properties">
-	<caption>Properties summary</caption>
-	<tr data-order="nextUrl" id="$nextUrl">
-		<td class="attributes"><code>
-			protected  
-			string
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.LoginAction.html#51-54" title="Go to source code"><var>$nextUrl</var></a>
-
-			<div class="description short">
-				<p>$nextUrl</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>$nextUrl</p>
-
-			</div>
-		</td>
-		<td class="value">
-			<div>
-				<a href="#$nextUrl" class="anchor">#</a>
-				<code></code>
-			</div>
-		</td>
-	</tr>
-	<tr data-order="errMsg" id="$errMsg">
-		<td class="attributes"><code>
-			protected  
-			string
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.LoginAction.html#56-59" title="Go to source code"><var>$errMsg</var></a>
-
-			<div class="description short">
-				<p>$errMsg</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>$errMsg</p>
-
-			</div>
-		</td>
-		<td class="value">
-			<div>
-				<a href="#$errMsg" class="anchor">#</a>
-				<code></code>
-			</div>
-		</td>
-	</tr>
-	</table>
 
 
 

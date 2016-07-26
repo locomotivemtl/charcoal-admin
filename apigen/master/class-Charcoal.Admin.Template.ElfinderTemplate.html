@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Template\LostPasswordTemplate</title>
+	<title>Class Charcoal\Admin\Template\ElfinderTemplate</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -162,13 +162,13 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">ElfinderTemplate</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">ElfinderTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.HandlerTemplate.html">HandlerTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.HelpTemplate.html">HelpTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.HomeTemplate.html">HomeTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.LoginTemplate.html">LoginTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.LogoutTemplate.html">LogoutTemplate</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Template.LostPasswordTemplate.html">LostPasswordTemplate</a></li>
+				<li><a href="class-Charcoal.Admin.Template.LostPasswordTemplate.html">LostPasswordTemplate</a></li>
 			</ul>
 
 
@@ -207,12 +207,9 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class LostPasswordTemplate</h1>
+	<h1>Class ElfinderTemplate</h1>
 
 
-	<div class="description">
-	<p>Admin Lost Password Template</p>
-	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -229,7 +226,7 @@ Charcoal\App\Template\AbstractTemplate
 		</dd>
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Template\LostPasswordTemplate</span></b>			
+<b><span>Charcoal\Admin\Template\ElfinderTemplate</span></b>			
 			
 			
 		</dd>
@@ -248,7 +245,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Template.html">Template</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.LostPasswordTemplate.html#8-38" title="Go to source code">Charcoal/Admin/Template/LostPasswordTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#10-27" title="Go to source code">Charcoal/Admin/Template/ElfinderTemplate.php</a>
 		<br>
 	</div>
 
@@ -256,55 +253,19 @@ Charcoal\App\Template\AbstractTemplate
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="authRequired" id="_authRequired">
-
-		<td class="attributes"><code>
-			 protected 
-
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_authRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LostPasswordTemplate.html#13-21" title="Go to source code">authRequired</a>( )</code>
-
-		<div class="description short">
-			<p>Authentication is obviously never required for the lost-password page.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Authentication is obviously never required for the lost-password page.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					boolean
-				</div>
-
-
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminTemplate.html#_authRequired">Charcoal\Admin\AdminTemplate::authRequired()</a></code></div>
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="showHeaderMenu" id="_showHeaderMenu">
+	<tr data-order="elfinderUrl" id="_elfinderUrl">
 
 		<td class="attributes"><code>
 			 public 
 
-			boolean
+			string
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_showHeaderMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LostPasswordTemplate.html#23-29" title="Go to source code">showHeaderMenu</a>( )</code>
+		<a class="anchor" href="#_elfinderUrl">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#15-21" title="Go to source code">elfinderUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -317,30 +278,28 @@ Charcoal\App\Template\AbstractTemplate
 
 				<h4>Returns</h4>
 				<div class="list">
-					boolean
+					string
 				</div>
 
 
 
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminTemplate.html#_showHeaderMenu">Charcoal\Admin\AdminTemplate::showHeaderMenu()</a></code></div>
 
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="showFooterMenu" id="_showFooterMenu">
+	<tr data-order="elfinderCallback" id="_elfinderCallback">
 
 		<td class="attributes"><code>
 			 public 
 
-			boolean
+			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_showFooterMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LostPasswordTemplate.html#31-37" title="Go to source code">showFooterMenu</a>( )</code>
+		<a class="anchor" href="#_elfinderCallback">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#23-26" title="Go to source code">elfinderCallback</a>( )</code>
 
 		<div class="description short">
 			
@@ -351,15 +310,9 @@ Charcoal\App\Template\AbstractTemplate
 
 
 
-				<h4>Returns</h4>
-				<div class="list">
-					boolean
-				</div>
 
 
 
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.AdminTemplate.html#_showFooterMenu">Charcoal\Admin\AdminTemplate::showFooterMenu()</a></code></div>
 
 		</div>
 		</div></td>
@@ -372,6 +325,7 @@ Charcoal\App\Template\AbstractTemplate
 		<td><code>
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_addFeedback">addFeedback()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_adminUrl">adminUrl()</a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#_authRequired">authRequired()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_authenticator">authenticator()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_authorizer">authorizer()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_baseUrl">baseUrl()</a>, 
@@ -398,6 +352,8 @@ Charcoal\App\Template\AbstractTemplate
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setSubtitle">setSubtitle()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setTitle">setTitle()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setTopHeaderMenu">setTopHeaderMenu()</a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#_showFooterMenu">showFooterMenu()</a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#_showHeaderMenu">showHeaderMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_showTopHeaderMenu">showTopHeaderMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_subtitle">subtitle()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_title">title()</a>, 

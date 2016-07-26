@@ -23,6 +23,15 @@ use \Charcoal\Admin\AdminAction;
 class ElfinderConnectorAction extends AdminAction
 {
     /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        $this->appConfig = $container['config'];
+    }
+
+    /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -37,7 +46,7 @@ class ElfinderConnectorAction extends AdminAction
                 [
                     'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
                     'path'          => 'uploads/',                 // path to files (REQUIRED)
-                    'URL'           => dirname($_SERVER['PHP_SELF']) . '/uploads', // URL to files (REQUIRED)
+                    'URL'           => $this->appConfig['URL'] . 'uploads', // URL to files (REQUIRED)
                     'uploadDeny'    => ['all'],                // All Mimetypes not allowed to upload
                     'uploadAllow'   => ['image', 'text/plain'],// Mimetype `image` and `text/plain` allowed to upload
                     'uploadOrder'   => ['deny', 'allow'],      // allowed Mimetype `image` and `text/plain` only

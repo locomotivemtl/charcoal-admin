@@ -2720,7 +2720,8 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
     this.editor_options = null;
     this._editor = null;
 
-    this.set_properties(opts).init();
+    this.set_properties(opts);
+    this.init();
 };
 Charcoal.Admin.Property_Input_Tinymce.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Tinymce.prototype.constructor = Charcoal.Admin.Property_Input_Tinymce;
@@ -2737,7 +2738,9 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
-    this.input_id = opts.id || this.input_id;
+    console.debug(opts);
+    this.input_id = opts.input_id || this.input_id;
+    console.debug(this.input_id);
     this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
 
     var default_opts = {
@@ -2828,6 +2831,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //code_dialog_width: '400px',
         //code_dialog_height: '400px',
         contextmenu: 'link image inserttable | cell row column deletetable',
+
+        file_picker_callback: this.elfinder_browser,
         //image_list: [],
         image_advtab: true,
         //image_class_list: [],
@@ -2908,6 +2913,49 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
     }
 
     window.tinyMCE.init(this.editor_options);
+};
+
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (callback, value, meta)
+{
+    console.debug(this);
+    console.debug(this.input_id);
+    window.tinyMCE.activeEditor.windowManager.open({
+        file: Charcoal.Admin.admin_url() + 'elfinder?callback=' + this.input_id,// use an absolute path!
+        title: 'File Manager',
+        width: 900,
+        height: 450,
+        resizable: 'yes'
+    }, {
+        oninsert: function (file, elf) {
+            var url, reg, info;
+
+            // URL normalization
+            url = file.url;
+            reg = /\/[^/]+?\/\.\.\//;
+            while (url.match(reg)) {
+                url = url.replace(reg, '/');
+            }
+
+            // Make file info
+            info = file.name + ' (' + elf.formatSize(file.size) + ')';
+
+            // Provide file and text for the link dialog
+            if (meta.filetype === 'file') {
+                callback(url, { text: info, title: info });
+            }
+
+            // Provide image and alt text for the image dialog
+            if (meta.filetype === 'image') {
+                callback(url, { alt: info });
+            }
+
+            // Provide alternative source and posted for the media dialog
+            if (meta.filetype === 'media') {
+                callback(url);
+            }
+        }
+    });
+    return false;
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)

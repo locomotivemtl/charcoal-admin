@@ -67,7 +67,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @param FactoryInterface $factory The property factory, to create properties.
      * @return TableWidget Chainable
      */
-    public function setPropertyFactory(FactoryInterface $factory)
+    protected function setPropertyFactory(FactoryInterface $factory)
     {
         $this->propertyFactory = $factory;
         return $this;
@@ -77,7 +77,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @throws Exception If the property factory was not previously set / injected.
      * @return FactoryInterface
      */
-    protected function propertyFactory()
+    public function propertyFactory()
     {
         if ($this->propertyFactory === null) {
             throw new Exception(

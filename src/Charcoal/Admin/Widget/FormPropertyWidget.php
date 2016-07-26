@@ -95,7 +95,7 @@ class FormPropertyWidget extends AdminWidget
      * @param FactoryInterface $factory The property factory, used to create properties.
      * @return FormPropertyWidget Chainable
      */
-    public function setPropertyFactory(FactoryInterface $factory)
+    protected function setPropertyFactory(FactoryInterface $factory)
     {
         $this->propertyFactory = $factory;
         return $this;
@@ -105,7 +105,7 @@ class FormPropertyWidget extends AdminWidget
      * @throws Exception If the property factory dependency was not set / injected.
      * @return FactoryInterface
      */
-    protected function propertyFactory()
+    public function propertyFactory()
     {
         if ($this->propertyFactory === null) {
             throw new Exception(
@@ -119,7 +119,7 @@ class FormPropertyWidget extends AdminWidget
      * @param FactoryInterface $factory The property input factory, used to create property inputs.
      * @return FormPropertyWidget Chainable
      */
-    public function setPropertyInputFactory(FactoryInterface $factory)
+    protected function setPropertyInputFactory(FactoryInterface $factory)
     {
         $this->propertyInputFactory = $factory;
         return $this;
@@ -129,7 +129,7 @@ class FormPropertyWidget extends AdminWidget
      * @throws Exception If the property input factory dependency was not set / injected.
      * @return FactoryInterface
      */
-    protected function propertyInputFactory()
+    public function propertyInputFactory()
     {
         if ($this->propertyInputFactory === null) {
             throw new Exception(

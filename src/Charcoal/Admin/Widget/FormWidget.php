@@ -127,7 +127,16 @@ class FormWidget extends AdminWidget implements
         if (($sidebar instanceof FormSidebarWidget)) {
             $this->sidebars[$sidebarIdent] = $sidebar;
         } elseif (is_array($sidebar)) {
-            $s = $this->widgetFactory()->create('charcoal/admin/widget/form-sidebar');
+
+            if (isset($sidebar['widget_type'])) {
+                $s = $this->widgetFactory()->create($sidebar['widget_type']);
+                $s->setTemplate($sidebar['widget_type']);
+            }
+
+            if (!isset($s) || !($s instanceof FormSidebarWidget)) {
+                $s = $this->widgetFactory()->create('charcoal/admin/widget/form-sidebar');
+            }
+
             $s->setForm($this);
             $s->setData($sidebar);
             $this->sidebars[$sidebarIdent] = $s;
@@ -147,7 +156,8 @@ class FormWidget extends AdminWidget implements
         $sidebars = $this->sidebars;
         uasort($sidebars, ['self', 'sortSidebarsByPriority']);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
-            $GLOBALS['widget_template'] = 'charcoal/admin/widget/form.sidebar';
+            $template = $sidebar->template() ? : 'charcoal/admin/widget/form.sidebar';
+            $GLOBALS['widget_template'] = $template;
             yield $sidebarIdent => $sidebar;
         }
     }

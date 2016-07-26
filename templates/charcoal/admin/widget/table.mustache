@@ -132,20 +132,20 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                 </div>
                 {{/showPagination}}
             {{/paginationWidget}}
+        </div>
 
         {{/hasObjects}}
         {{^hasObjects}}
-            <div class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span class="sr-only">{{#_t}}Erreurs:{{/_t}}</span>
-                Aucun objet de type "{{objType}}" n'existe.
-                <div class="btn-group" role="group" aria-label="...">
-                    <a class="btn btn-info" href="{{adminUrl}}{{objectEditUrl}}">{{#_t}}Créer un nouvel objet{{/_t}}</a>
-                </div>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">{{#_t}}Erreurs:{{/_t}}</span>
+            Aucun objet de type "{{objType}}" n'existe.
+            <div class="btn-group" role="group" aria-label="...">
+                <a class="btn btn-info" href="{{adminUrl}}{{objectEditUrl}}">{{#_t}}Créer un nouvel objet{{/_t}}</a>
             </div>
+        </div>
 
         {{/hasObjects}}
-        </div>
     </div>
 </div>
 

@@ -157,10 +157,16 @@ trait ObjectContainerTrait
             } elseif (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
                 $this->obj = $this->createObj();
                 $blueprint = $this->modelFactory()->create($this->obj->blueprintType());
+
                 $blueprint->load($_GET['blueprint_id']);
                 $data = $blueprint->data();
                 unset($data[$blueprint->key()]);
-                $this->obj->setData($blueprint->data());
+
+                // This is the actual key we want to remove.
+                unset($data[$this->obj->key()]);
+
+                // Set the right data
+                $this->obj->setData($data);
             } else {
                 $this->obj = $this->createObj();
             }

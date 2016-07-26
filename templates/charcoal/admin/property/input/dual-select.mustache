@@ -13,7 +13,7 @@ DualSelect Options Property Input
 
         <select name="[]" id="{{inputId}}" class="form-control {{inputClass}}" size="8" multiple="multiple">
             {{# unselectedChoices }}
-                <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}">{{ title }}</option>
+                <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}">{{& title }}</option>
             {{/ unselectedChoices }}
         </select>
     </div>
@@ -35,7 +35,7 @@ DualSelect Options Property Input
         <input type="hidden" name="{{inputName}}" value="">
         <select name="{{inputName}}" id="{{inputId}}_to" class="form-control" size="8" multiple="multiple">
             {{# selectedChoices }}
-                <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}">{{ title }}</option>
+                <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}">{{& title }}</option>
             {{/ selectedChoices}}
         </select>
     </div>

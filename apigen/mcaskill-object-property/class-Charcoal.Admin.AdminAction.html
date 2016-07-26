@@ -169,8 +169,6 @@
 				<li><a href="class-Charcoal.Admin.AdminWidget.html">AdminWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Config.html">Config</a></li>
 				<li><a href="class-Charcoal.Admin.User.html">User</a></li>
-				<li><a href="class-Charcoal.Admin.UserConfig.html">UserConfig</a></li>
-				<li><a href="class-Charcoal.Admin.UserGroup.html">UserGroup</a></li>
 			</ul>
 
 
@@ -237,6 +235,7 @@ Charcoal\App\Action\AbstractAction
 			<a href="class-Charcoal.Admin.Action.LogoutAction.html">Charcoal\Admin\Action\LogoutAction</a>, 
 			<a href="class-Charcoal.Admin.Action.Object.DeleteAction.html">Charcoal\Admin\Action\Object\DeleteAction</a>, 
 			<a href="class-Charcoal.Admin.Action.Object.ReorderAction.html">Charcoal\Admin\Action\Object\ReorderAction</a>, 
+			<a href="class-Charcoal.Admin.Action.Object.RevertRevisionAction.html">Charcoal\Admin\Action\Object\RevertRevisionAction</a>, 
 			<a href="class-Charcoal.Admin.Action.Object.SaveAction.html">Charcoal\Admin\Action\Object\SaveAction</a>, 
 			<a href="class-Charcoal.Admin.Action.Object.UpdateAction.html">Charcoal\Admin\Action\Object\UpdateAction</a>, 
 			<a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a>, 
@@ -255,7 +254,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminAction.html#13-152" title="Go to source code">Charcoal/Admin/AdminAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminAction.html#13-154" title="Go to source code">Charcoal/Admin/AdminAction.php</a>
 		<br>
 	</div>
 
@@ -275,7 +274,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#29-42" title="Go to source code">__construct</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#29-44" title="Go to source code">__construct</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -310,7 +309,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#44-54" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#46-56" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Dependencies</p>
@@ -345,7 +344,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setModelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#56-64" title="Go to source code">setModelFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#58-66" title="Go to source code">setModelFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -384,7 +383,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_modelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#66-72" title="Go to source code">modelFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#68-74" title="Go to source code">modelFactory</a>( )</code>
 
 		<div class="description short">
 			
@@ -418,7 +417,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_authRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#75-85" title="Go to source code">authRequired</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#77-87" title="Go to source code">authRequired</a>( )</code>
 
 		<div class="description short">
 			<p>Authentication is required by default.</p>
@@ -454,7 +453,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFeedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#100-106" title="Go to source code">hasFeedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#102-108" title="Go to source code">hasFeedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -488,7 +487,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_numFeedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#108-114" title="Go to source code">numFeedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#110-116" title="Go to source code">numFeedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -522,7 +521,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_feedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#116-122" title="Go to source code">feedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#118-124" title="Go to source code">feedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -556,7 +555,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addFeedback">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#124-136" title="Go to source code">addFeedback</a>( <span>string <var>$level</var></span>, <span>mixed <var>$msg</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#126-138" title="Go to source code">addFeedback</a>( <span>string <var>$level</var></span>, <span>mixed <var>$msg</var></span> )</code>
 
 		<div class="description short">
 			
@@ -597,7 +596,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_results">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminAction.html#138-151" title="Go to source code">results</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminAction.html#140-153" title="Go to source code">results</a>( )</code>
 
 		<div class="description short">
 			<p>Default response stub.</p>

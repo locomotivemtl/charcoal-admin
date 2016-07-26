@@ -168,10 +168,10 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
 				<li class="active"><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.FileInput.html">FileInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.HiddenInput.html">HiddenInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ImageInput.html">ImageInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.NumberInput.html">NumberInput</a></li>
-				<li><a href="class-Charcoal.Admin.Property.Input.ObjectSelectInput.html">ObjectSelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.PhoneInput.html">PhoneInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ReadonlyInput.html">ReadonlyInput</a></li>
@@ -223,12 +223,12 @@
 
 
 	<div class="description">
-	<p>Select Options Input Property</p>
+	<p>List Builder Input Property</p>
 
-<blockquote>
-  <p>The HTML <em>select</em> (<code>&lt;select&gt;</code>) element represents a control that presents a menu of options.
-  — <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select</a></p>
-</blockquote>
+<p>Represents a control of selectable values that can be moved between two list boxes,
+one representing selected values and the other representing unselected ones.</p>
+
+<p>Learn more about <a href="https://en.wikipedia.org/wiki/List_builder">List builder</a> control.</p>
 	</div>
 
 	<dl class="tree">
@@ -240,13 +240,18 @@
 			
 				<a href="class-Charcoal.Admin.Property.PropertyInputInterface.html"><span>Charcoal\Admin\Property\PropertyInputInterface</span></a>, 
 			
-<span>Psr\Log\LoggerAwareInterface</span>
+<span>Psr\Log\LoggerAwareInterface</span>, 
+			
+<span>Charcoal\View\ViewableInterface</span>
 			
 			 uses 
 					Charcoal\Model\DescribableTrait (not available)
 
 			
 					Psr\Log\LoggerAwareTrait (not available)
+
+			
+					Charcoal\View\ViewableTrait (not available)
 
 			
 		</dd>
@@ -263,9 +268,6 @@
 			<img src="resources/inherit.png" alt="Extended by">
 <b><span>Charcoal\Admin\Property\Input\DualSelectInput</span></b>			
 			
-			 uses 
-					Mmes\Support\Traits\ParsableValueTrait (not available)
-
 			
 		</dd>
 	</dl>
@@ -283,7 +285,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#9-163" title="Go to source code">Charcoal/Admin/Property/Input/DualSelectInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#8-160" title="Go to source code">Charcoal/Admin/Property/Input/DualSelectInput.php</a>
 		<br>
 	</div>
 
@@ -303,7 +305,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_unselectedChoices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#26-41" title="Go to source code">unselectedChoices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#33-48" title="Go to source code">unselectedChoices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the unselected options.</p>
@@ -337,7 +339,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_selectedChoices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#43-69" title="Go to source code">selectedChoices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#50-75" title="Go to source code">selectedChoices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectable options.</p>
@@ -364,14 +366,14 @@
 		<td class="attributes"><code>
 			 public 
 
-			
+			array
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_options">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#71-86" title="Go to source code">options</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#77-95" title="Go to source code">options</a>( )</code>
 
 		<div class="description short">
 			
@@ -382,6 +384,10 @@
 
 
 
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
 
 
 
@@ -401,7 +407,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_searchable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#91-139" title="Go to source code">searchable</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#97-141" title="Go to source code">searchable</a>( )</code>
 
 		<div class="description short">
 			
@@ -435,7 +441,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dualSelectOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#141-147" title="Go to source code">dualSelectOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#143-149" title="Go to source code">dualSelectOptions</a>( )</code>
 
 		<div class="description short">
 			
@@ -469,7 +475,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDualSelectOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#153-161" title="Go to source code">setDualSelectOptions</a>( <span>mixed <var>$dualSelectOptions</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#151-159" title="Go to source code">setDualSelectOptions</a>( <span>mixed <var>$dualSelectOptions</var></span> )</code>
 
 		<div class="description short">
 			
@@ -482,7 +488,7 @@
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$dualSelectOptions</var></dt>
-					<dd></dd>
+					<dd>The dual-select options.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -531,8 +537,10 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_property">property()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyVal">propertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_readOnly">readOnly()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_required">required()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setData">setData()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDisabled">setDisabled()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
@@ -565,18 +573,18 @@
 	<tr data-order="searchable" id="$searchable">
 		<td class="attributes"><code>
 			protected  
-			
+			boolean
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#19" title="Go to source code"><var>$searchable</var></a>
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#18-21" title="Go to source code"><var>$searchable</var></a>
 
 			<div class="description short">
-				
+				<p>$searchable</p>
 			</div>
 
 			<div class="description detailed hidden">
-				
+				<p>$searchable</p>
 
 			</div>
 		</td>
@@ -590,18 +598,18 @@
 	<tr data-order="options" id="$options">
 		<td class="attributes"><code>
 			protected  
-			
+			array
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#20" title="Go to source code"><var>$options</var></a>
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#23-26" title="Go to source code"><var>$options</var></a>
 
 			<div class="description short">
-				
+				<p>$options</p>
 			</div>
 
 			<div class="description detailed hidden">
-				
+				<p>$options</p>
 
 			</div>
 		</td>
@@ -615,18 +623,18 @@
 	<tr data-order="dualSelectOptions" id="$dualSelectOptions">
 		<td class="attributes"><code>
 			protected  
-			
+			array
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#21" title="Go to source code"><var>$dualSelectOptions</var></a>
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#28-31" title="Go to source code"><var>$dualSelectOptions</var></a>
 
 			<div class="description short">
-				
+				<p>$dualSelectOptions</p>
 			</div>
 
 			<div class="description detailed hidden">
-				
+				<p>$dualSelectOptions</p>
 
 			</div>
 		</td>

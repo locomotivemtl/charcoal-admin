@@ -240,7 +240,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.ServiceProvider.html">ServiceProvider</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#17-122" title="Go to source code">Charcoal/Admin/ServiceProvider/AdminServiceProvider.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#18-144" title="Go to source code">Charcoal/Admin/ServiceProvider/AdminServiceProvider.php</a>
 		<br>
 	</div>
 
@@ -260,7 +260,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_register">#</a>
-		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#28-54" title="Go to source code">register</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#29-56" title="Go to source code">register</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Registers services on the given container.</p>
@@ -276,7 +276,7 @@ It should not get services.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$container</var></dt>
-					<dd>The DI container.</dd>
+					<dd>The Pimple DI container.</dd>
 				</dl></div>
 
 
@@ -298,20 +298,55 @@ It should not get services.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_registerAuthenticator">#</a>
-		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#56-77" title="Go to source code">registerAuthenticator</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#58-79" title="Go to source code">registerAuthenticator</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
-			<p>Registers the authenticator object.</p>
+			<p>Registers the authenticator object in <code>admin/authenticator</code>.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Registers the authenticator object.</p>
+			<p>Registers the authenticator object in <code>admin/authenticator</code>.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$container</var></dt>
-					<dd>The DI container.</dd>
+					<dd>The Pimple DI container.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="registerAuthorizer" id="_registerAuthorizer">
+
+		<td class="attributes"><code>
+			 protected 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_registerAuthorizer">#</a>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#81-100" title="Go to source code">registerAuthorizer</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			<p>Registers the authorizer object in <code>admin/authorizer</code>.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Registers the authorizer object in <code>admin/authorizer</code>.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>The Pimple DI Container.</dd>
 				</dl></div>
 
 
@@ -333,7 +368,7 @@ It should not get services.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_registerUtilities">#</a>
-		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#79-121" title="Go to source code">registerUtilities</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html#102-143" title="Go to source code">registerUtilities</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Registers the admin factories.</p>
@@ -346,7 +381,7 @@ It should not get services.</p>
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$container</var></dt>
-					<dd>The DI container.</dd>
+					<dd>The Pimple DI container.</dd>
 				</dl></div>
 
 

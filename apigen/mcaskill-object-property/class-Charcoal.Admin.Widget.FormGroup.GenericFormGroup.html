@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\UserConfig</title>
+	<title>Class Charcoal\Admin\Widget\FormGroup\GenericFormGroup</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -131,7 +131,7 @@
 						User					</a>
 
 						</li>
-				<li>
+				<li class="active">
 					<a href="namespace-Charcoal.Admin.Widget.html">
 						Widget<span></span>
 					</a>
@@ -142,7 +142,7 @@
 						Dialog					</a>
 
 						</li>
-				<li>
+				<li class="active">
 					<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">
 						FormGroup					</a>
 
@@ -162,15 +162,9 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li><a href="class-Charcoal.Admin.AdminAction.html">AdminAction</a></li>
-				<li><a href="class-Charcoal.Admin.AdminModule.html">AdminModule</a></li>
-				<li><a href="class-Charcoal.Admin.AdminScript.html">AdminScript</a></li>
-				<li><a href="class-Charcoal.Admin.AdminTemplate.html">AdminTemplate</a></li>
-				<li><a href="class-Charcoal.Admin.AdminWidget.html">AdminWidget</a></li>
-				<li><a href="class-Charcoal.Admin.Config.html">Config</a></li>
-				<li><a href="class-Charcoal.Admin.User.html">User</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.UserConfig.html">UserConfig</a></li>
-				<li><a href="class-Charcoal.Admin.UserGroup.html">UserGroup</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.AclPermissions.html">AclPermissions</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">GenericFormGroup</a></li>
+				<li><a href="class-Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">ObjectRevisionsFormGroup</a></li>
 			</ul>
 
 
@@ -197,7 +191,7 @@
 				<a href="index.html" title="Overview"><span>Overview</span></a>
 			</li>
 			<li>
-				<a href="namespace-Charcoal.Admin.html" title="Summary of Charcoal\Admin"><span>Namespace</span></a>
+				<a href="namespace-Charcoal.Admin.Widget.FormGroup.html" title="Summary of Charcoal\Admin\Widget\FormGroup"><span>Namespace</span></a>
 			</li>
 			<li class="active">
 <span>Class</span>			</li>
@@ -209,22 +203,36 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class UserConfig</h1>
+	<h1>Class GenericFormGroup</h1>
 
 
-	<div class="description">
-	<p>Admin User Config. Unused.</p>
-	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
-Charcoal\Config\AbstractConfig
+Charcoal\Ui\AbstractUiItem
 			
 			
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\UserConfig</span></b>			
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html"><span>Charcoal\Admin\Widget\FormGroupWidget</span></a>
+			
+			 implements 
+<span>Charcoal\Ui\FormGroup\FormGroupInterface</span>, 
+			
+<span>Charcoal\Ui\Layout\LayoutAwareInterface</span>
+			
+			 uses 
+					Charcoal\Ui\FormGroup\FormGroupTrait (not available)
+
+			
+					Charcoal\Ui\Layout\LayoutAwareTrait (not available)
+
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Charcoal\Admin\Widget\FormGroup\GenericFormGroup</span></b>			
 			
 			
 		</dd>
@@ -240,16 +248,33 @@ Charcoal\Config\AbstractConfig
 	<div class="info">
 		
 		
-		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a><br>
+		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a>\<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">FormGroup</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.UserConfig.html#8-15" title="Go to source code">Charcoal/Admin/UserConfig.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html#7-13" title="Go to source code">Charcoal/Admin/Widget/FormGroup/GenericFormGroup.php</a>
 		<br>
 	</div>
 
 
 
 
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#methods">Charcoal\Admin\Widget\FormGroupWidget</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#___construct">__construct()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_formProperties">formProperties()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_groupProperties">groupProperties()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_languages">languages()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_setData">setData()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_setDependencies">setDependencies()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_setGroupProperties">setGroupProperties()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_setWidgetId">setWidgetId()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_type">type()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormGroupWidget.html#_widgetId">widgetId()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 

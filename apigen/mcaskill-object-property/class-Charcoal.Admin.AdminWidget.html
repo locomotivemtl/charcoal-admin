@@ -169,8 +169,6 @@
 				<li class="active"><a href="class-Charcoal.Admin.AdminWidget.html">AdminWidget</a></li>
 				<li><a href="class-Charcoal.Admin.Config.html">Config</a></li>
 				<li><a href="class-Charcoal.Admin.User.html">User</a></li>
-				<li><a href="class-Charcoal.Admin.UserConfig.html">UserConfig</a></li>
-				<li><a href="class-Charcoal.Admin.UserGroup.html">UserGroup</a></li>
 			</ul>
 
 
@@ -269,7 +267,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminWidget.html#16-292" title="Go to source code">Charcoal/Admin/AdminWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminWidget.html#15-317" title="Go to source code">Charcoal/Admin/AdminWidget.php</a>
 		<br>
 	</div>
 
@@ -289,7 +287,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#66-74" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#70-78" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -324,7 +322,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setModelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#76-84" title="Go to source code">setModelFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#80-88" title="Go to source code">setModelFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -363,7 +361,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_modelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#86-92" title="Go to source code">modelFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#90-96" title="Go to source code">modelFactory</a>( )</code>
 
 		<div class="description short">
 			
@@ -385,6 +383,49 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setTemplate" id="_setTemplate">
+
+		<td class="attributes"><code>
+			 public 
+
+			UiItemInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setTemplate">#</a>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#98-112" title="Go to source code">setTemplate</a>( <span>string <var>$template</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$template</var></dt>
+					<dd>The UI item's template (identifier).</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					UiItemInterface<br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the template identifier is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="template" id="_template">
 
 		<td class="attributes"><code>
@@ -397,14 +438,14 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_template">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#94-102" title="Go to source code">template</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#114-123" title="Go to source code">template</a>( )</code>
 
 		<div class="description short">
-			<p>Provide a <code>template()</code> method to fullfill UIItem interface.</p>
+			
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Provide a <code>template()</code> method to fullfill UIItem interface.</p>
+			
 
 
 
@@ -431,7 +472,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setWidgetId">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#104-112" title="Go to source code">setWidgetId</a>( <span>string <var>$widgetId</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#125-133" title="Go to source code">setWidgetId</a>( <span>string <var>$widgetId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -470,7 +511,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_widgetId">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#114-123" title="Go to source code">widgetId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#135-144" title="Go to source code">widgetId</a>( )</code>
 
 		<div class="description short">
 			
@@ -504,7 +545,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setType">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#125-139" title="Go to source code">setType</a>( <span>string <var>$type</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#146-160" title="Go to source code">setType</a>( <span>string <var>$type</var></span> )</code>
 
 		<div class="description short">
 			
@@ -547,7 +588,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_type">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#141-147" title="Go to source code">type</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#162-168" title="Go to source code">type</a>( )</code>
 
 		<div class="description short">
 			
@@ -581,7 +622,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#149-163" title="Go to source code">setIdent</a>( <span>string <var>$ident</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#170-184" title="Go to source code">setIdent</a>( <span>string <var>$ident</var></span> )</code>
 
 		<div class="description short">
 			
@@ -624,7 +665,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_ident">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#165-171" title="Go to source code">ident</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#186-192" title="Go to source code">ident</a>( )</code>
 
 		<div class="description short">
 			
@@ -658,7 +699,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setLabel">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#173-181" title="Go to source code">setLabel</a>( <span>mixed <var>$label</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#194-205" title="Go to source code">setLabel</a>( <span>mixed <var>$label</var></span> )</code>
 
 		<div class="description short">
 			
@@ -697,7 +738,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_label">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#183-194" title="Go to source code">label</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#207-219" title="Go to source code">label</a>( )</code>
 
 		<div class="description short">
 			
@@ -731,7 +772,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_actions">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#196-202" title="Go to source code">actions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#221-227" title="Go to source code">actions</a>( )</code>
 
 		<div class="description short">
 			
@@ -765,7 +806,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setShowActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#204-212" title="Go to source code">setShowActions</a>( <span>boolean <var>$show</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#229-237" title="Go to source code">setShowActions</a>( <span>boolean <var>$show</var></span> )</code>
 
 		<div class="description short">
 			
@@ -804,7 +845,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#214-224" title="Go to source code">showActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#239-249" title="Go to source code">showActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -838,7 +879,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setShowLabel">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#226-234" title="Go to source code">setShowLabel</a>( <span>boolean <var>$show</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#251-259" title="Go to source code">setShowLabel</a>( <span>boolean <var>$show</var></span> )</code>
 
 		<div class="description short">
 			
@@ -877,7 +918,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showLabel">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#236-246" title="Go to source code">showLabel</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#261-271" title="Go to source code">showLabel</a>( )</code>
 
 		<div class="description short">
 			
@@ -911,7 +952,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_adminUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#249-257" title="Go to source code">adminUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#274-282" title="Go to source code">adminUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -945,7 +986,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_baseUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#259-273" title="Go to source code">baseUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#284-298" title="Go to source code">baseUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -979,7 +1020,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPriority">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#275-283" title="Go to source code">setPriority</a>( <span>integer <var>$priority</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#300-308" title="Go to source code">setPriority</a>( <span>integer <var>$priority</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1018,7 +1059,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_priority">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#285-291" title="Go to source code">priority</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminWidget.html#310-316" title="Go to source code">priority</a>( )</code>
 
 		<div class="description short">
 			
@@ -1062,7 +1103,7 @@ Charcoal\App\Template\AbstractWidget
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.AdminWidget.html#21-24" title="Go to source code"><var>$widgetId</var></a>
+				<a href="source-class-Charcoal.Admin.AdminWidget.html#20-23" title="Go to source code"><var>$widgetId</var></a>
 
 			<div class="description short">
 				<p>$widgetId</p>

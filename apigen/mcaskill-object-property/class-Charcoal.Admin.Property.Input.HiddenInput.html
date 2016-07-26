@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Property\Input\ObjectSelectInput</title>
+	<title>Class Charcoal\Admin\Property\Input\HiddenInput</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -168,10 +168,10 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.FileInput.html">FileInput</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Property.Input.HiddenInput.html">HiddenInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ImageInput.html">ImageInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.NumberInput.html">NumberInput</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Property.Input.ObjectSelectInput.html">ObjectSelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.PhoneInput.html">PhoneInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ReadonlyInput.html">ReadonlyInput</a></li>
@@ -219,11 +219,11 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class ObjectSelectInput</h1>
+	<h1>Class HiddenInput</h1>
 
 
 	<div class="description">
-	<p>Object Select Options Input Property</p>
+	<p>Hidden Input Property</p>
 	</div>
 
 	<dl class="tree">
@@ -235,7 +235,9 @@
 			
 				<a href="class-Charcoal.Admin.Property.PropertyInputInterface.html"><span>Charcoal\Admin\Property\PropertyInputInterface</span></a>, 
 			
-<span>Psr\Log\LoggerAwareInterface</span>
+<span>Psr\Log\LoggerAwareInterface</span>, 
+			
+<span>Charcoal\View\ViewableInterface</span>
 			
 			 uses 
 					Charcoal\Model\DescribableTrait (not available)
@@ -244,31 +246,21 @@
 					Psr\Log\LoggerAwareTrait (not available)
 
 			
+					Charcoal\View\ViewableTrait (not available)
+
+			
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html"><span>Charcoal\Admin\Property\AbstractSelectableInput</span></a>
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html"><span>Charcoal\Admin\Property\Input\TextInput</span></a>
 			
-			 implements 
-				<a href="class-Charcoal.Admin.Property.SelectableInputInterface.html"><span>Charcoal\Admin\Property\SelectableInputInterface</span></a>
 			
 			
 		</dd>
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
-			<a href="class-Charcoal.Admin.Property.Input.SelectInput.html"><span>Charcoal\Admin\Property\Input\SelectInput</span></a>
+<b><span>Charcoal\Admin\Property\Input\HiddenInput</span></b>			
 			
-			
-			
-		</dd>
-		<dd style="padding-left:90px">
-			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Property\Input\ObjectSelectInput</span></b>			
-			 implements 
-				<a href="class-Charcoal.Admin.Property.ObjectPickerInterface.html"><span>Charcoal\Admin\Property\ObjectPickerInterface</span></a>
-			
-			 uses 
-					<a href="class-Charcoal.Admin.Property.ObjectPickerTrait.html"><span>Charcoal\Admin\Property\ObjectPickerTrait</span></a>
 			
 		</dd>
 	</dl>
@@ -286,7 +278,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.ObjectSelectInput.html#8-15" title="Go to source code">Charcoal/Admin/Property/Input/ObjectSelectInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.HiddenInput.html#7-12" title="Go to source code">Charcoal/Admin/Property/Input/HiddenInput.php</a>
 		<br>
 	</div>
 
@@ -294,19 +286,17 @@
 
 
 	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.Input.SelectInput.html#methods">Charcoal\Admin\Property\Input\SelectInput</a></caption>
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.Input.TextInput.html#methods">Charcoal\Admin\Property\Input\TextInput</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-Charcoal.Admin.Property.Input.SelectInput.html#_choices">choices()</a>
-		</code></td>
-	</tr>
-	</table>
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#methods">Charcoal\Admin\Property\AbstractSelectableInput</a></caption>
-	<tr>
-		<td><code>
-			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_isChoiceSelected">isChoiceSelected()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_parseChoice">parseChoice()</a>
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_maxLength">maxLength()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_minLength">minLength()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_pattern">pattern()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_setMaxLength">setMaxLength()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_setMinLength">setMinLength()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_setPattern">setPattern()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_setSize">setSize()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.TextInput.html#_size">size()</a>
 		</code></td>
 	</tr>
 	</table>
@@ -333,8 +323,10 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_property">property()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyVal">propertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_readOnly">readOnly()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_required">required()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setData">setData()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDisabled">setDisabled()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
@@ -351,25 +343,7 @@
 		</code></td>
 	</tr>
 	</table>
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.ObjectPickerInterface.html#methods">Charcoal\Admin\Property\ObjectPickerInterface</a></caption>
-	<tr>
-		<td><code>
-			<a href="class-Charcoal.Admin.Property.ObjectPickerInterface.html#_addObjectLabel">addObjectLabel()</a>, 
-			<a href="class-Charcoal.Admin.Property.ObjectPickerInterface.html#_setAddObjectLabel">setAddObjectLabel()</a>
-		</code></td>
-	</tr>
-	</table>
 
-	<table class="summary used">
-	<caption>Methods used from <a href="class-Charcoal.Admin.Property.ObjectPickerTrait.html#methods">Charcoal\Admin\Property\ObjectPickerTrait</a></caption>
-	<tr>
-		<td><code>
-			<a href="class-Charcoal.Admin.Property.ObjectPickerTrait.html#_addObjectLabel">addObjectLabel()</a>, 
-			<a href="class-Charcoal.Admin.Property.ObjectPickerTrait.html#_setAddObjectLabel">setAddObjectLabel()</a>
-		</code></td>
-	</tr>
-	</table>
 
 
 

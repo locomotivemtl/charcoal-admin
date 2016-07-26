@@ -61,8 +61,10 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
     // Language switcher
     $('.js-lang-switch button').on('click', function (e) {
         e.preventDefault();
-        var $this = $(this);
-        var lang = $this.attr('data-lang-switch');
+
+        var $this = $(this),
+            lang  = $this.attr('data-lang-switch');
+
         that.switch_language(lang);
     });
 
@@ -205,6 +207,12 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang)
 {
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
-    $('[data-lang-switch][data-lang-switch!=' + lang + ']').removeClass('btn-info');
-    $('[data-lang-switch][data-lang-switch=' + lang + ']').addClass('btn-info');
+
+    $('[data-lang-switch][data-lang-switch!=' + lang + ']')
+        .removeClass('btn-info')
+        .addClass('btn-default');
+
+    $('[data-lang-switch][data-lang-switch=' + lang + ']')
+        .removeClass('btn-default')
+        .addClass('btn-info');
 };

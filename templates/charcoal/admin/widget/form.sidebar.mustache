@@ -12,15 +12,17 @@
                 {{/subtitle}}
 
                 {{#showLanguageSwitch}}
-                <div class="js-lang-switch" class="btn-group" role="group" aria-label="{{#_t}}Language switcher{{/_t}}">
+                <div class="btn-group btn-group-justified form-group js-lang-switch" role="group" aria-label="{{#_t}}Language switcher{{/_t}}">
                     {{#languages}}
-                        <button type="button" data-lang-switch="{{ident}}" class="btn {{#current}}btn-info{{/current}}">{{name}}</button>
+                    <div class="btn-group" role="group">
+                        <button type="button" data-lang-switch="{{ident}}" class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">{{name}}</button>
+                    </div>
                     {{/languages}}
                 </div>
                 {{/showLanguageSwitch}}
 
                 {{#hasSidebarProperties}}
-                <table class="c-panel_table">
+                <table class="c-panel_table form-group">
                 {{#formProperties}}
                     {{#prop.displayVal}}
                     <tr class="c-panel_table_row">

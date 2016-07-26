@@ -66,12 +66,14 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                 {{#showTableHeader}}
                 <thead>
                     <tr>
-                        <!--<th class="table_checkbox">
+                        {{!--
+                        <th class="table_checkbox">
                             <div class="checkbox -nolabel">
                                 <input type="checkbox" class="select-all" id="checkboxall">
                                 <label for="checkboxall"></label>
                             </div>
-                        </th>-->
+                        </th>
+                        --}}
                         {{#collectionProperties}}
                         <th>{{label}}</td>
                         {{/collectionProperties}}
@@ -86,12 +88,14 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                     {{!-- Loop the list objects (from CollectionContainerTrait) --}}
                     {{#objectRows}}
                     <tr class="js-table-row" data-id="{{objectId}}">
-                        <!--<td class="table_checkbox">
+                        {{!--
+                        <td class="table_checkbox">
                             <div class="checkbox -nolabel">
-                                <input type="checkbox" class="select-row" id="checkbox{{objectId}}">
-                                <label for="checkbox{{objectId}}"></label>
+                                <input type="checkbox" class="select-row" id="checkbox[[objectId]]">
+                                <label for="checkbox[[objectId]]"></label>
                             </div>
-                        </td>-->
+                        </td>
+                        --}}
                         {{#objectProperties}}
                         <td class="property-{{ident}}">{{&val}}</td>
                         {{/objectProperties}}

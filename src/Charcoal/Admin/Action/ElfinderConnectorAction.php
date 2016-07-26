@@ -38,19 +38,28 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         // Documentation for connector options:
         // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         $opts = [
-            // 'debug' => true,
+            'debug' => false,
             'roots' => [
                 [
-                    'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-                    'path'          => 'uploads/',                 // path to files (REQUIRED)
-                    'URL'           => $this->appConfig['URL'] . 'uploads', // URL to files (REQUIRED)
-                    'uploadDeny'    => ['all'],                // All Mimetypes not allowed to upload
-                    'uploadAllow'   => ['image', 'text/plain'],// Mimetype `image` and `text/plain` allowed to upload
-                    'uploadOrder'   => ['deny', 'allow'],      // allowed Mimetype `image` and `text/plain` only
-                    'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
+                    // Driver for accessing file system (REQUIRED)
+                    'driver'        => 'LocalFileSystem',
+                    // Path to files (REQUIRED)
+                    'path'          => 'uploads/',
+                    // URL to files (REQUIRED)
+                    'URL'           => $this->appConfig['URL'].'uploads',
+                    // All MIME types not allowed to upload
+                    'uploadDeny'    => [ 'all' ],
+                    // MIME type `image` and `text/plain` allowed to upload
+                    'uploadAllow'   => [ 'image', 'text/plain' ],
+                    // Allowed MIME type `image` and `text/plain` only
+                    'uploadOrder'   => [ 'deny', 'allow' ],
+                    // Disable and hide dot starting files (OPTIONAL)
+                    'accessControl' => 'access'
                 ]
             ]
         ];

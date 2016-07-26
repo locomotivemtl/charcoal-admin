@@ -127,7 +127,6 @@ class FormWidget extends AdminWidget implements
         if (($sidebar instanceof FormSidebarWidget)) {
             $this->sidebars[$sidebarIdent] = $sidebar;
         } elseif (is_array($sidebar)) {
-
             if (isset($sidebar['widget_type'])) {
                 $s = $this->widgetFactory()->create($sidebar['widget_type']);
                 $s->setTemplate($sidebar['widget_type']);

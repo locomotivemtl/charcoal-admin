@@ -1,0 +1,16 @@
+{{!--
+    File Property Input
+    ===================
+
+    `charcoal/admin/property/input/file`
+--}}
+{{# showFilePreview }}
+<figure class="thumbnail hide-if-no-file{{^ inputVal }} hidden{{/ inputVal }}">
+    <div class="js-preview">{{& filePreview }}</div>
+    {{! @see charcoal/admin/property/input/readonly }}
+    <figcaption class="caption">
+        <p><samp class="form-control-static">{{& inputVal }}</samp></p>
+        <button type="button" class="btn btn-danger js-remove-file">{{ removeButtonLabel }}</button>
+    </figcaption>
+</figure>
+{{/ showFilePreview }}

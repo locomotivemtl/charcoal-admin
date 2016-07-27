@@ -1,0 +1,26 @@
+{{!--
+    File Property Input
+    ===================
+
+    `charcoal/admin/property/input/file`
+--}}
+<div class="form-group">
+    <input type="hidden" name="{{ inputName }}" value="{{ inputVal }}">
+{{# showFileUpload }}
+    <input
+        type="file"
+        name="{{ inputName }}"
+        class="{{ inputClass }}"
+        {{# accept }}accept="{{ . }}"{{/ accept }}
+        {{# readOnly }}readonly{{/ readOnly }}
+        {{# required }}required{{/ required }}
+        {{# disabled }}disabled{{/ disabled }}
+    >
+{{/ showFileUpload }}
+{{# showFilePicker }}
+    <button type="button" class="btn btn-default js-elfinder">{{ chooseButtonLabel }}</button>
+{{/ showFilePicker }}
+{{^ showFilePreview }}
+    <button type="button" class="btn btn-link js-remove-file hide-if-no-file{{^ inputVal }} hidden{{/ inputVal }}">{{ removeButtonLabel }}</button>
+{{/ showFilePreview }}
+</div>

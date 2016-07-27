@@ -1,17 +1,12 @@
 /**
-* Switch looking input that manages boolean properties
-* charcoal/admin/property/input/switch
-*
-* Require:
-* - jQuery
-* - bootstrapSwitch
-*
-* @param  {Object}  opts Options for input property
-*/
+ * Upload Image Property Control
+ */
 
 Charcoal.Admin.Property_Input_Image = function (opts)
 {
+    this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
+
     this.opts = opts;
     this.data = opts.data;
 
@@ -20,87 +15,61 @@ Charcoal.Admin.Property_Input_Image = function (opts)
 
     // Run the plugin or whatever is necessary
     this.init();
+
     return this;
 };
-Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Property.prototype);
+
+Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
 Charcoal.Admin.Property_Input_Image.prototype.constructor = Charcoal.Admin.Property_Input_Image;
 Charcoal.Admin.Property_Input_Image.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Image.prototype.init = function ()
+Charcoal.Admin.Property_Input_Image.prototype.remove_file = function (event)
 {
-    // Impossible!
-    if (!this.input_id) {
-        return this;
+    // console.log('Remove Image');
+
+    event.preventDefault();
+
+    this.$hidden.val('');
+    this.$preview.empty();
+    this.$input.find('.form-control-static').empty();
+    this.$input.find('.hide-if-no-file').addClass('hidden');
+};
+
+Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
+{
+    // console.log('Change Image');
+
+    var img, target, file, src;
+
+    img = new File();
+
+    target = event.dataTransfer || event.target;
+    file   = target && target.files && target.files[0];
+    src    = URL.createObjectURL(file);
+
+    img.src = src;
+
+    this.$input.find('.hide-if-no-file').removeClass('hidden');
+    this.$input.find('.form-control-static').html(file);
+    this.$preview.empty().append(img);
+};
+
+Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file/*, elf */)
+{
+    // console.group('elFinder Callback (Image)');
+    // console.log('elFinder', elf);
+    // console.log('Selected File', file);
+
+    if (this.dialog) {
+        this.dialog.close();
     }
 
-    // OG element.
-    this.$input = $('#' + this.input_id);
-    this.$file = this.$input.find('[type=file]');
-    this.$preview = this.$input.find('.js-preview');
+    if (file && file.path) {
+        var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
 
-    this.set_listeners();
-};
-
-Charcoal.Admin.Property_Input_Image.prototype.set_listeners = function ()
-{
-    // window.alert('test');
-    if (typeof this.$input === 'undefined') {
-        return this;
+        this.$input.find('.hide-if-no-file').removeClass('hidden');
+        this.$input.find('.form-control-static').html(file.name);
+        this.$hidden.val(file.path);
+        this.$preview.empty().append($img);
     }
-
-    var that = this;
-    this.$input.on('click', '.js-remove-image', function (e) {
-        e.preventDefault();
-
-        that.$input.find('input[type=hidden]').val('');
-        that.$input.find('img').remove();
-    });
-
-    this.$file.on('change', function (event) {
-        var img = new Image();
-
-        if (that.$preview.children('img').length) {
-            that.$preview.children('img').remove();
-        }
-
-        var target = event.dataTransfer || event.target;
-        var file = target && target.files && target.files[0];
-        var s = URL.createObjectURL(file);
-        img.src = s;
-        that.$preview.append(img);
-    });
-};
-
-/**
- * SETTERS
- */
-/**
- * Set input id
- * @param {string} input_id ID of the input.
- * @return {thisArg} Chainable
- */
-Charcoal.Admin.Property_Input_Image.prototype.set_input_id = function (input_id)
-{
-    this.input_id = input_id;
-    return this;
-};
-/**
- * Required
- * @param {String} input_name Name of the current input
- * @return {thisArg} Chainable
- */
-Charcoal.Admin.Property_Input_Image.prototype.set_input_name = function (input_name)
-{
-    this.input_name = input_name;
-    return this;
-};
-/**
- * Required
- * @param {String} input_val Value of the current input
- * @return {thisArg} Chainable
- */
-Charcoal.Admin.Property_Input_Image.prototype.set_input_val = function (input_val)
-{
-    this.input_val = input_val;
-    return this;
 };

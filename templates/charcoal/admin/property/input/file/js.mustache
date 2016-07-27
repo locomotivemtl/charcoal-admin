@@ -1,0 +1,21 @@
+{{!--
+    File Property Input
+    ===================
+
+    `charcoal/admin/property/input/file`
+--}}
+{{# addJs }}
+<script>
+var elFinderCallback = window.elFinderCallback || {};
+
+Charcoal.Admin.manager().add_property_input({
+    id:   '{{ inputId }}',
+    type: '{{ inputType }}',
+    data: {
+        input_name:   "{{ inputName }}",
+        input_val:    "{{ inputVal }}",
+        dialog_title: "{{ dialogTitle }}",
+    }
+});
+</script>
+{{/ addJs }}

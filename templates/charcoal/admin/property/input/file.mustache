@@ -1,18 +1,12 @@
 {{!--
-File Property Input
-===================
+    File Property Input
+    ===================
 
-`charcoal/admin/property/input/file`
-
+    `charcoal/admin/property/input/file`
 --}}
-<input
-    type="file"
-    id="{{inputId}}"
-    name="{{inputName}}"
-    class="{{inputClass}}"
-    {{#accept}}accept="{{accept}}"{{/accept}}
-    {{#readOnly}}readonly{{/readOnly}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
->
-{{inputVal}}
+<div id="{{ inputId }}">
+    {{> charcoal/admin/property/input/file/control }}
+    {{> charcoal/admin/property/input/file/preview }}
+</div>
+
+{{> charcoal/admin/property/input/file/js }}

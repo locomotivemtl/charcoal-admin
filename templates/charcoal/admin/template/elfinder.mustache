@@ -5,37 +5,45 @@
         <title>elFinder</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
 
-        {{#elfinderAssets}}
+        {{# elfinderAssets }}
         <link rel="stylesheet" type="text/css" media="screen" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
-        <link rel="stylesheet" type="text/css" media="screen" href="{{elfinder_url}}css/elfinder.min.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="{{elfinder_url}}css/theme.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}css/elfinder.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}css/theme.css">
 
         {{!-- Optional moono theme. Must be installed separately --}}
         {{!-- https://github.com/lokothodida/elfinder-theme-moono --}}
-        <link rel="stylesheet" type="text/css" media="screen" href="{{elfinder_url}}themes/moono/css/theme.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}themes/moono/css/theme.css">
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
-        <script src="{{elfinder_url}}js/elfinder.min.js"></script>
+        <script src="{{ elfinder_url }}js/elfinder.min.js"></script>
 
         {{!-- elFinder translation (OPTIONAL) --}}
         {{!--<script src="js/i18n/elfinder.fr.js"></script>--}}
-        {{/elfinderAssets}}
+        {{/ elfinderAssets }}
 
         <script>
             // Documentation for client options:
             // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
             $(document).ready(function() {
-                var elf = $('#elfinder').elfinder({
-                    url: '{{admin_url}}elfinder-connector',
-                    getFileCallback: function(file) {
-                        if (typeof(parent.elFinderCallback['{{elfinderCallback}}']) === 'function') {
-                            parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
-                        }
+                var elf, defaults, settings = {};
+
+                defaults = {
+                  url: '{{ admin_url }}elfinder-connector',
+                  getFileCallback: function(file) {
+                    if (typeof(parent.elFinderCallback['{{elfinderCallback}}']) === 'function') {
+                        parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
                     }
-                }).elfinder('instance');
+                  }
+                };
+
+                $.extend(settings, defaults, {{& elfinderPropertyConfig }})
+
+                elf = $('#elfinder')
+                    .elfinder(settings)
+                    .elfinder('instance');
             });
         </script>
     </head>

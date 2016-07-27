@@ -35,41 +35,43 @@ Image Property Input
 
 </div>
 
-{{#addJs}}
+{{#addJsRequirement}}
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{base_url}}elfinder/css/elfinder.min.css">
-<link rel="stylesheet" type="text/css" href="{{base_url}}elfinder/css/theme.css">
-<link rel="stylesheet" type="text/css" media="screen" href="{{base_url}}elfinder/themes/moono/css/theme.css">
-<script src="{{base_url}}elfinder/js/elfinder.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{baseUrl}}assets/admin/elfinder/css/elfinder.min.css">
+<link rel="stylesheet" type="text/css" href="{{baseUrl}}assets/admin/elfinder/css/theme.css">
+<link rel="stylesheet" type="text/css" media="screen" href="{{baseUrl}}assets/admin/elfinder/themes/moono/css/theme.css">
+<script src="{{baseUrl}}assets/admin/elfinder/js/elfinder.min.js"></script>
+{{/addJsRequirement}}
 
+{{#addJs}}
 <script>
+$(document).ready(function(){
+    var inputDialog;
 
-var inputDialog;
+    var elFinderCallback = elFinderCallback ? elFinderCallback : {};
 
-var elFinderCallback = elFinderCallback ? elFinderCallback : {};
+    elFinderCallback['{{inputId}}'] = function (file, elf) {
+        console.debug(file);
+        inputDialog.close();
+    };
 
-elFinderCallback['{{inputId}}'] = function (file, elf) {
-    console.debug(file);
-    inputDialog.close();
-};
+    $('.js-elfinder').on('click', function(event) {
+        event.preventDefault();
+        inputDialog = BootstrapDialog.show({
+            title: "File manager",
+            size: BootstrapDialog.SIZE_WIDE,
+            message: $('<div></div>').load('{{admin_url}}elfinder?callback={{inputId}}')
+        });
+    });
 
-$('.js-elfinder').on('click', function(event) {
-    event.preventDefault();
-    inputDialog = BootstrapDialog.show({
-        title: "File manager",
-        size: BootstrapDialog.SIZE_WIDE,
-        message: $('<div></div>').load('{{admin_url}}elfinder?callback={{inputId}}')
+    Charcoal.Admin.manager().add_property_input({
+        id: '{{inputId}}',
+        type: 'charcoal/admin/property/input/image',
+        data: {
+            input_name : "{{inputName}}",
+            input_val : "{{inputVal}}"
+        }
     });
 });
-
-Charcoal.Admin.manager().add_property_input({
-    id: '{{inputId}}',
-    type: 'charcoal/admin/property/input/image',
-    data: {
-        input_name : "{{inputName}}",
-        input_val : "{{inputVal}}"
-    }
-});
-
 </script>
 {{/addJs}}

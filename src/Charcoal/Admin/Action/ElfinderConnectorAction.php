@@ -2,15 +2,16 @@
 
 namespace Charcoal\Admin\Action;
 
-// Dependencies from `PHP`
 use \InvalidArgumentException;
 
-// PSR-7 (http messaging) dependencies
+// Dependencies from PSR-7 (HTTP Messaging)
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+// Dependency from Pimple
 use \Pimple\Container;
 
+// Dependencies from elFinder
 use \elFinderConnector;
 use \elFinder;
 
@@ -55,7 +56,7 @@ class ElfinderConnectorAction extends AdminAction
                     // All MIME types not allowed to upload
                     'uploadDeny'    => [ 'all' ],
                     // MIME type `image` and `text/plain` allowed to upload
-                    'uploadAllow'   => [ 'image', 'text/plain' ],
+                    'uploadAllow'   => [ 'image', 'application/pdf', 'text/plain' ],
                     // Allowed MIME type `image` and `text/plain` only
                     'uploadOrder'   => [ 'deny', 'allow' ],
                     // Disable and hide dot starting files (OPTIONAL)

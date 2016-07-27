@@ -6,21 +6,15 @@ Image Property Input
 
 --}}
 <div id="{{inputId}}">
-    <div class="js-preview">
-        {{#inputVal}}
-        <img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">
-        {{/inputVal}}
-    </div>
+    <div class="js-preview">{{#inputVal}}<img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">{{/inputVal}}</div>
     {{#inputVal}}
     <div>
-        <a href="#" class="js-remove-image btn btn-default">
-            Retirer l'image
-        </a>
+        <button type="button" class="btn btn-default js-remove-image">{{# _t }}Retirer l'image{{/ _t }}</button>
     </div>
 
-        <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
-    {{/inputVal}}
+    <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
 
+    {{/inputVal}}
     <input
         type="file"
         name="{{inputName}}"
@@ -31,7 +25,7 @@ Image Property Input
         {{#disabled}}disabled{{/disabled}}
     >
 
-    <a class="btn btn-default js-elfinder">Select...</a>
+    <button type="button" class="btn btn-default js-elfinder">{{# _t }}Choisissez une image…{{/ _t }}</button>
 
 </div>
 
@@ -45,31 +39,38 @@ Image Property Input
 
 {{#addJs}}
 <script>
-$(document).ready(function(){
-    var inputDialog;
+var inputDialog = inputDialog || null;
+    elFinderCallback = elFinderCallback || {};
 
-    var elFinderCallback = elFinderCallback ? elFinderCallback : {};
+elFinderCallback['{{inputId}}'] = function (file, elf) {
+    console.debug('Selected File', file);
 
-    elFinderCallback['{{inputId}}'] = function (file, elf) {
-        console.debug(file);
+    if (inputDialog) {
         inputDialog.close();
-    };
+    }
 
-    $('.js-elfinder').on('click', function(event) {
+    if (file && file.path) {
+        // $('input[type="file"]', '#{{inputId}}').val(file.path);
+    }
+};
+
+$(document).ready(function(){
+    $('#{{inputId}}').on('click.charcoal.elfinder', '.js-elfinder', function(event) {
         event.preventDefault();
+
         inputDialog = BootstrapDialog.show({
-            title: "File manager",
-            size: BootstrapDialog.SIZE_WIDE,
+            title:   '{{# _t }}Librairie de fichiers{{/ _t }}',
+            size:    BootstrapDialog.SIZE_WIDE,
             message: $('<div></div>').load('{{admin_url}}elfinder?callback={{inputId}}')
         });
     });
 
     Charcoal.Admin.manager().add_property_input({
-        id: '{{inputId}}',
+        id:   '{{inputId}}',
         type: 'charcoal/admin/property/input/image',
         data: {
-            input_name : "{{inputName}}",
-            input_val : "{{inputVal}}"
+            input_name: "{{inputName}}",
+            input_val:  "{{inputVal}}"
         }
     });
 });

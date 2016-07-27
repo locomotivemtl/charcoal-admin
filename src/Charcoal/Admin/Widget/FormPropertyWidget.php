@@ -387,6 +387,7 @@ class FormPropertyWidget extends AdminWidget
         $inputType   = $this->inputType();
         $this->input = $this->propertyInputFactory()->create($inputType);
 
+        $this->input->setInputType($inputType);
         $this->input->setProperty($prop);
         $this->input->setPropertyVal($this->propertyVal);
         $this->input->setData($prop->data());

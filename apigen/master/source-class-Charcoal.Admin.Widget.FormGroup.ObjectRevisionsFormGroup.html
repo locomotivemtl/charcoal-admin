@@ -392,7 +392,7 @@
 </span><span id="82" class="l"><a href="#82"> 82: </a>            <span class="php-var">$obj</span>-&gt;numDiff = <span class="php-keyword2">count</span>(<span class="php-var">$dataDiff</span>);
 </span><span id="83" class="l"><a href="#83"> 83: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$dataDiff</span>[<span class="php-num">0</span>])) {
 </span><span id="84" class="l"><a href="#84"> 84: </a>                <span class="php-var">$props</span> = <span class="php-keyword2">array_keys</span>(<span class="php-var">$dataDiff</span>[<span class="php-num">0</span>]);
-</span><span id="85" class="l"><a href="#85"> 85: </a>                <span class="php-var">$props</span> = <span class="php-keyword2">array_diff</span>(<span class="php-var">$props</span>, [<span class="php-quote">'last_modified'</span>]);
+</span><span id="85" class="l"><a href="#85"> 85: </a>                <span class="php-var">$props</span> = <span class="php-keyword2">array_diff</span>(<span class="php-var">$props</span>, [<span class="php-quote">'last_modified'</span>, <span class="php-quote">'last_modified_by'</span>]);
 </span><span id="86" class="l"><a href="#86"> 86: </a>                <span class="php-var">$propNames</span> = [];
 </span><span id="87" class="l"><a href="#87"> 87: </a>                <span class="php-keyword1">foreach</span> (<span class="php-var">$props</span> <span class="php-keyword1">as</span> <span class="php-var">$p</span>) {
 </span><span id="88" class="l"><a href="#88"> 88: </a>                    <span class="php-var">$propNames</span>[] = <span class="php-var">$target</span>-&gt;p(<span class="php-var">$p</span>)-&gt;label();

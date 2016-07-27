@@ -21,6 +21,14 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * @return string
      */
+    public function elfinderAssets()
+    {
+        return isset($_GET['assets']) ? (bool)$_GET['assets'] : true;
+    }
+
+    /**
+     * @return string
+     */
     public function elfinderCallback()
     {
         return isset($_GET['callback']) ? $_GET['callback'] : '';

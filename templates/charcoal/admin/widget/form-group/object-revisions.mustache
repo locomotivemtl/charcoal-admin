@@ -18,6 +18,7 @@
     <thead>
         <th>#&nbsp;Rév.</th>
         <th>Date</th>
+        <th>Auteur</th>
         <th>Changements</th>
         <th>Options</th>
     </thead>
@@ -26,6 +27,7 @@
         <tr class="js-table-row">
             <td>{{ revNum }}</td>
             <td>{{ revTsDisplay }}</td>
+            <td>{{ revUser }}</td>
             <td>{{ changedProperties }}</td>
             <td>{{# allowRevert }}<a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">Retourner à #{{ revNum }}</a>{{/ allowRevert }}</td>
         </tr>

@@ -460,11 +460,30 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Generate URL for editing object
+     * Generate URL for editing an object
      * @return string
      */
     public function objectEditUrl()
     {
         return 'object/edit?obj_type='.$this->objType();
+    }
+
+    /**
+     * Generate URL for creating an object
+     * @return string
+     */
+    public function objectCreateUrl()
+    {
+        $actions = $this->listActions();
+
+        if ($actions) {
+            foreach ($actions as $action) {
+                if (isset($action['ident']) && $action['ident'] === 'create') {
+                    return $action['url'];
+                }
+            }
+        }
+
+        return $this->objectEditUrl();
     }
 }

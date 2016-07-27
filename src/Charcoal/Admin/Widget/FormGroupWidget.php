@@ -38,6 +38,11 @@ class FormGroupWidget extends AbstractUiItem implements
     private $groupProperties = [];
 
     /**
+     * @var array $propertiesOptions
+     */
+    private $propertiesOptions = [];
+
+    /**
      * @param array|\ArrayAccess $data Dependencies.
      */
     public function __construct($data)
@@ -107,7 +112,6 @@ class FormGroupWidget extends AbstractUiItem implements
         return $this->widgetId;
     }
 
-
     /**
      * @param array $properties The group properties.
      * @return FormGroupWidget Chainable
@@ -115,6 +119,7 @@ class FormGroupWidget extends AbstractUiItem implements
     public function setGroupProperties(array $properties)
     {
         $this->groupProperties = $properties;
+
         return $this;
     }
 
@@ -127,6 +132,25 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
+     * @param array $properties The options to customize the group properties.
+     * @return FormGroupWidget Chainable
+     */
+    public function setPropertiesOptions(array $properties)
+    {
+        $this->propertiesOptions = $properties;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function propertiesOptions()
+    {
+        return $this->propertiesOptions;
+    }
+
+    /**
      * Retrieve the object's properties from the form.
      *
      * @return mixed|Generator
@@ -135,10 +159,19 @@ class FormGroupWidget extends AbstractUiItem implements
     {
         $groupProperties = $this->groupProperties();
         $formProperties  = $this->form()->formProperties($groupProperties);
+        $propOptions     = $this->propertiesOptions();
 
         $ret = [];
         foreach ($formProperties as $propertyIdent => $property) {
             if (in_array($propertyIdent, $groupProperties)) {
+                if (!empty($propOptions[$propertyIdent])) {
+                    $propertyOptions = $propOptions[$propertyIdent];
+
+                    if (is_array($propertyOptions)) {
+                        $property->setData($propertyOptions);
+                    }
+                }
+
                 if (is_callable([$this->form(), 'obj'])) {
                     $obj = $this->form()->obj();
                     $val = $obj[$propertyIdent];

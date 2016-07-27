@@ -382,7 +382,7 @@ class FormPropertyWidget extends AdminWidget
         $prop = $this->prop();
 
         /** @todo Needs fix. Must be manually triggered after setting data for metadata to work */
-        $prop->metadata();
+        $metadata = $prop->metadata();
 
         $inputType   = $this->inputType();
         $this->input = $this->propertyInputFactory()->create($inputType);
@@ -392,6 +392,10 @@ class FormPropertyWidget extends AdminWidget
         $this->input->setPropertyVal($this->propertyVal);
         $this->input->setData($prop->data());
         $this->input->setViewController($this->viewController());
+
+        if (isset($metadata['admin'])) {
+            $this->input->setData($metadata['admin']);
+        }
 
         $GLOBALS['widget_template'] = $inputType;
 

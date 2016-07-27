@@ -11,6 +11,9 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Pimple\Container;
 
+// From `charcoal-base`
+use \Charcoal\User\authenticator;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\Ui\ObjectContainerInterface;
@@ -34,6 +37,11 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 class SaveAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
+
+    /**
+     * @var Authenticator $authenticator
+     */
+    private $authenticator;
 
     /**
      * @var array $saveData
@@ -62,8 +70,16 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     {
         parent::setDependencies($container);
 
-        // Fulfills `ObjectContainerTrait` dependencies.
-        $this->setModelFactory($container['model/factory']);
+        $this->setAuthenticator($container['admin/authenticator']);
+    }
+
+    /**
+     * @param Authenticator $authenticator
+     * @return void
+     */
+    private function setAuthenticator(Authenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
     }
 
     /**
@@ -104,8 +120,14 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         try {
             $this->setData($request->getParams());
 
+            $authorIdent = $this->authorIdent();
+
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
+
+            $saveData = $this->saveData();
+            $saveData['created_by'] = $authorIdent;
+            $saveData['last_modifided_by'] = $authorIdent;
 
             $obj->setFlatData($this->saveData());
             $valid = $obj->validate();
@@ -136,6 +158,15 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
             $this->addFeedback('error', $e->getMessage());
             return $response->withStatus(404);
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function authorIdent()
+    {
+        $author = $this->authenticator->authenticate();
+        return (string)$author->id();
     }
 
     /**

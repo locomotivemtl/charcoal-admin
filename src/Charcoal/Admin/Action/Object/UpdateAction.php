@@ -11,6 +11,9 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Pimple\Container;
 
+// From `charcoal-base`
+use \Charcoal\User\authenticator;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\Ui\ObjectContainerInterface;
@@ -37,9 +40,35 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
+     * @var Authenticator $authenticator
+     */
+    private $authenticator;
+
+    /**
      * @var array $updateData
      */
     protected $updateData = [];
+
+    /**
+     * @param Container $container A DI Container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setAuthenticator($container['admin/authenticator']);
+    }
+
+    /**
+     * @param Authenticator $authenticator
+     * @return void
+     */
+    private function setAuthenticator(Authenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
+    }
+
 
     /**
      * @param array|\ArrayAccess $data The update action data.
@@ -95,8 +124,15 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
         try {
             $this->setData($request->getParams());
 
+
+            $authorIdent = $this->authorIdent();
+
             // Load or reload object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
+
+            $updateData = $this->updateData();
+            $updateData['last_modified_by'] = $authorIdent;
+
             $obj->mergeData($this->updateData());
 
             $valid = $obj->validate();
@@ -107,6 +143,11 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
                 $this->setSuccess(false);
                 $this->addFeedback('error', 'Failed to update object: validation error(s).');
                 return $response->withStatus(404);
+            }
+
+            $author = $this->authenticator->authenticate();
+            if (!$obj->lastModifiedBy()) {
+                $obj->setLastModifiedBy($author->id());
             }
 
             $ret = $obj->update();
@@ -125,6 +166,15 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
             $this->addFeedback('error', $e->getMessage());
             return $response->withStatus(404);
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function authorIdent()
+    {
+        $author = $this->authenticator->authenticate();
+        return (string)$author->id();
     }
 
     /**

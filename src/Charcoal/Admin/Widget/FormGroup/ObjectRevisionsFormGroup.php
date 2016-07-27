@@ -82,7 +82,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
             $obj->numDiff = count($dataDiff);
             if (isset($dataDiff[0])) {
                 $props = array_keys($dataDiff[0]);
-                $props = array_diff($props, ['last_modified']);
+                $props = array_diff($props, ['last_modified', 'last_modified_by']);
                 $propNames = [];
                 foreach ($props as $p) {
                     $propNames[] = $target->p($p)->label();

@@ -29,12 +29,12 @@
             // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
             $(document).ready(function() {
                 var elf = $('#elfinder').elfinder({
-                  url: '{{admin_url}}elfinder-connector',
-                  getFileCallback: function(file) {
-                    if (typeof(parent.elFinderCallback['{{elfinderCallback}}']) === 'function') {
-                        parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
+                    url: '{{admin_url}}elfinder-connector',
+                    getFileCallback: function(file) {
+                        if (typeof(parent.elFinderCallback['{{elfinderCallback}}']) === 'function') {
+                            parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
+                        }
                     }
-                  }
                 }).elfinder('instance');
             });
         </script>

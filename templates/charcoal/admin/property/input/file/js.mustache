@@ -12,9 +12,10 @@ Charcoal.Admin.manager().add_property_input({
     id:   '{{ inputId }}',
     type: '{{ inputType }}',
     data: {
-        input_name:   "{{ inputName }}",
-        input_val:    "{{ inputVal }}",
-        dialog_title: "{{ dialogTitle }}",
+        input_name:   '{{ inputName }}',
+        input_val:    '{{ inputVal }}',
+        dialog_title: '{{ dialogTitle }}',
+        elfinder_url: '{{ admin_url }}elfinder?obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}'
     }
 });
 </script>

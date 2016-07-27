@@ -1903,7 +1903,7 @@ Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
         size:    BootstrapDialog.SIZE_WIDE,
         message: $(
             '<iframe name="' + this.input_id + '-elfinder" width="100%" height="400px" frameborder="0" ' +
-            'src="' + Charcoal.Admin.admin_url() + 'elfinder?callback=' + this.input_id + '"></iframe>'
+            'src="' + this.data.elfinder_url + '"></iframe>'
         )
     });
 };

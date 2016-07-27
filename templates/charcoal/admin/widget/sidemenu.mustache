@@ -33,7 +33,7 @@ charcoal/admin/widget/sidemenu
     {{#mainAction}}
     <div class="btn-group">
         <div class="btn-group">
-            <a href="{{url}}" class="btn btn-danger">{{label}}</a>
+            <a href="{{url}}" class="btn btn-danger {{classname}}">{{label}}</a>
             {{#hasActions}}
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
@@ -50,3 +50,23 @@ charcoal/admin/widget/sidemenu
     {{/mainAction}}
 
 </nav>
+
+{{!-- TODO: This does not belong here. --}}
+{{#addJs}}
+<script>
+$('.js-filemanager-btn').on('click', function(e) {
+    e.preventDefault();
+
+    BootstrapDialog.show({
+        title:   '{{# _t }}Librairie de fichiers{{/ _t }}',
+        size:    BootstrapDialog.SIZE_WIDE,
+        message: $(
+            '<iframe width="100%" height="400px" frameborder="0" ' +
+            'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
+        )
+    });
+
+});
+</script>
+{{/addJs}}
+

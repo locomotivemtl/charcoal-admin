@@ -74,7 +74,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param Authenticator $authenticator
+     * @param Authenticator $authenticator The authenticator service.
      * @return void
      */
     private function setAuthenticator(Authenticator $authenticator)

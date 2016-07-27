@@ -31,7 +31,7 @@ $config = new AppConfig([
 
 $appEnv = getenv('APPLICATION_ENV');
 if ($appEnv !== 'testing') {
-    $configPath = realpath(__DIR__ . '/../../../../config/config.php');
+    $configPath = realpath(__DIR__.'/../../../../config/config.php');
 
     if (file_exists($configPath)) {
         $localConfig = new GenericConfig($configPath);

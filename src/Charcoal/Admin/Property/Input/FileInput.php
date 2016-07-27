@@ -34,7 +34,7 @@ class FileInput extends AbstractPropertyInput
      * @param boolean $show The show file preview flag.
      * @return FileInput Chainable
      */
-    public function setShowFilePreview()
+    public function setShowFilePreview($show)
     {
         $this->showFilePreview = !!$show;
         return $this;
@@ -52,7 +52,7 @@ class FileInput extends AbstractPropertyInput
      * @param boolean $show The show file upload flag.
      * @return FileInput Chainable
      */
-    public function setShowFileUpload()
+    public function setShowFileUpload($show)
     {
         $this->showFileUpload = !!$show;
         return $this;
@@ -70,7 +70,7 @@ class FileInput extends AbstractPropertyInput
      * @param boolean $show The show file picker flag.
      * @return FileInput Chainable
      */
-    public function setShowFilePicker()
+    public function setShowFilePicker($show)
     {
         $this->showFilePicker = !!$show;
         return $this;

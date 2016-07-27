@@ -9,6 +9,8 @@ use \Pimple\Container;
 
 use \Charcoal\Translation\TranslationString;
 
+use \Charcoal\Model\ModelInterface;
+
 use \Charcoal\Factory\FactoryInterface;
 
 use \Charcoal\Admin\AdminWidget;
@@ -23,7 +25,9 @@ use \Charcoal\Admin\Ui\CollectionContainerTrait;
  */
 class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
-    use CollectionContainerTrait;
+    use CollectionContainerTrait {
+        CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
+    }
 
     /**
      * @var array $properties
@@ -204,6 +208,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * Properties to display in collection template, and their order, as set in object metadata
+     *
      * @return  FormPropertyWidget         Generator function
      */
     public function collectionProperties()
@@ -218,11 +223,80 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $p->setData($propertyMetadata);
 
             $column = [
-                'label' => $p->label()
+                'label' => trim($p->label())
             ];
+
+            $column['classes'] = $this->parsePropertyCellClasses($p);
+            if (is_array($column['classes'])) {
+                $column['classes'] = implode(' ', array_unique($column['classes']));
+            }
+
+            if (empty($column['classes'])) {
+                unset($column['classes']);
+            }
 
             yield $column;
         }
+    }
+
+    /**
+     * Filter the property before its assigned to the object row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface    $object        The current row's object.
+     * @param  PropertyInterface $property      The current property.
+     * @param  string            $propertyValue The property $key's display value.
+     * @return array
+     */
+    protected function parsePropertyCell(
+        ModelInterface $object,
+        PropertyInterface $property,
+        $propertyValue
+    ) {
+        $cell = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
+
+        $cell['classes'] = $this->parsePropertyCellClasses($property, $object);
+        if (is_array($cell['classes'])) {
+            $cell['classes'] = implode(' ', array_unique($cell['classes']));
+        }
+
+        if (empty($cell['classes'])) {
+            unset($cell['classes']);
+        }
+
+        return $cell;
+    }
+
+    /**
+     * Filter the table cell's CSS classes before the property is assigned
+     * to the object row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  PropertyInterface   $property The current property.
+     * @param  ModelInterface|null $object   Optional. The current row's object.
+     * @return array
+     */
+    protected function parsePropertyCellClasses(
+        PropertyInterface $property,
+        ModelInterface $object = null
+    ) {
+        unset($object);
+
+        $ident   = $property->ident();
+        $classes = [ sprintf('property-%s', $ident) ];
+        $options = $this->viewOptions($ident);
+
+        if (isset($options['classes'])) {
+            if (is_array($options['classes'])) {
+                $classes = array_merge($classes, $options['classes']);
+            } else {
+                $classes[] = $options['classes'];
+            }
+        }
+
+        return $classes;
     }
 
     /**

@@ -75,7 +75,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                         </th>
                         --}}
                         {{#collectionProperties}}
-                        <th>{{label}}</td>
+                        <th{{#classes}} class="{{.}}"{{/classes}}>{{label}}</td>
                         {{/collectionProperties}}
                         {{#showObjectActions}}
                         <th>Actions</th>
@@ -97,7 +97,7 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
                         </td>
                         --}}
                         {{#objectProperties}}
-                        <td class="property-{{ident}}">{{&val}}</td>
+                        <td{{#classes}} class="{{.}}"{{/classes}}>{{&val}}</td>
                         {{/objectProperties}}
                         {{#showObjectActions}}
                         <td>

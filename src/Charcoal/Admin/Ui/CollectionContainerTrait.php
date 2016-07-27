@@ -456,6 +456,7 @@ trait CollectionContainerTrait
         $displayType = $property->displayType();
 
         $this->display = $this->propertyDisplayFactory()->create($displayType);
+        $this->display->setDisplayType($displayType);
         $this->display->setProperty($property);
 
         $this->display->setData($metadata);
@@ -472,13 +473,16 @@ trait CollectionContainerTrait
      * @param  string            $propertyValue The property $key's display value.
      * @return array
      */
-    protected function parsePropertyCell(ModelInterface $object, PropertyInterface $property, $propertyValue)
-    {
+    protected function parsePropertyCell(
+        ModelInterface $object,
+        PropertyInterface $property,
+        $propertyValue
+    ) {
         unset($object);
 
         return [
             'ident' => $property->ident(),
-            'val'   => $propertyValue
+            'val'   => trim($propertyValue)
         ];
     }
 

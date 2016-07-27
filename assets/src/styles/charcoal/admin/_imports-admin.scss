@@ -11,6 +11,7 @@
 
 // Core variables
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/labels";
 // Charcoal variables
 @import "settings/settings";
 // Core variables overwrites
@@ -64,6 +65,8 @@
 
 // Bootstrap overwrites
 // ==========================================================================
+@import "bootstrap/badges";
+@import "bootstrap/navs";
 @import "bootstrap/forms";
 @import "bootstrap/tables";
 @import "bootstrap/buttons";
@@ -72,7 +75,6 @@
 // Bootstrap custom components
 // ==========================================================================
 @import "bootstrap-custom/table-header";
-@import "bootstrap-custom/navs";
 
 
 // Vendors

@@ -245,7 +245,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Template.html">Template</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#8-36" title="Go to source code">Charcoal/Admin/Template/ElfinderTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#19-187" title="Go to source code">Charcoal/Admin/Template/ElfinderTemplate.php</a>
 		<br>
 	</div>
 
@@ -253,6 +253,121 @@ Charcoal\App\Template\AbstractTemplate
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="setDependencies" id="_setDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#38-49" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			<p>Inject dependencies from a DI Container.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inject dependencies from a DI Container.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>A dependencies container instance.</dd>
+				</dl></div>
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminTemplate.html#_setDependencies">Charcoal\Admin\AdminTemplate::setDependencies()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setPropertyFactory" id="_setPropertyFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setPropertyFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#51-63" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+
+		<div class="description short">
+			<p>Set a property factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set a property factory.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd><p>The property factory,
+    to createable property values.</p></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="propertyFactory" id="_propertyFactory">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Factory\FactoryInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_propertyFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#65-80" title="Go to source code">propertyFactory</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the property factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the property factory.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Factory\FactoryInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the property factory was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="elfinderUrl" id="_elfinderUrl">
 
 		<td class="attributes"><code>
@@ -265,7 +380,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_elfinderUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#13-19" title="Go to source code">elfinderUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#82-88" title="Go to source code">elfinderUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -299,7 +414,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_elfinderAssets">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#21-27" title="Go to source code">elfinderAssets</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#90-96" title="Go to source code">elfinderAssets</a>( )</code>
 
 		<div class="description short">
 			
@@ -333,7 +448,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_elfinderCallback">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#29-35" title="Go to source code">elfinderCallback</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#98-104" title="Go to source code">elfinderCallback</a>( )</code>
 
 		<div class="description short">
 			
@@ -347,6 +462,176 @@ Charcoal\App\Template\AbstractTemplate
 				<h4>Returns</h4>
 				<div class="list">
 					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="objType" id="_objType">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_objType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#106-114" title="Go to source code">objType</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the current object type from the GET parameters.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the current object type from the GET parameters.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="objId" id="_objId">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_objId">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#116-124" title="Go to source code">objId</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the current object ID from the GET parameters.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the current object ID from the GET parameters.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="propertyIdent" id="_propertyIdent">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_propertyIdent">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#126-134" title="Go to source code">propertyIdent</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the current object's property identifier from the GET parameters.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the current object's property identifier from the GET parameters.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="formProperty" id="_formProperty">
+
+		<td class="attributes"><code>
+			 public 
+
+			PropertyInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_formProperty">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#136-166" title="Go to source code">formProperty</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the current property.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the current property.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					PropertyInterface
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="elfinderPropertyConfig" id="_elfinderPropertyConfig">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_elfinderPropertyConfig">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#168-186" title="Go to source code">elfinderPropertyConfig</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the current property's elFinder settings.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the current property's elFinder settings.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>Returns data serialized with json_encode().
 				</div>
 
 
@@ -380,7 +665,6 @@ Charcoal\App\Template\AbstractTemplate
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_requiredAclPermissions">requiredAclPermissions()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setAuthenticator">setAuthenticator()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setAuthorizer">setAuthorizer()</a>, 
-			<a href="class-Charcoal.Admin.AdminTemplate.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setLabel">setLabel()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setModelFactory">setModelFactory()</a>, 

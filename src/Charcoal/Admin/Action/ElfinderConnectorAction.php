@@ -59,7 +59,18 @@ class ElfinderConnectorAction extends AdminAction
                     // Allowed MIME type `image` and `text/plain` only
                     'uploadOrder'   => [ 'deny', 'allow' ],
                     // Disable and hide dot starting files (OPTIONAL)
-                    'accessControl' => 'access'
+                    'accessControl' => 'access',
+                    // File permission attributes
+                    'attributes'    => [
+                        [
+                            // Block access to all hidden files and directories (anything starting with ".")
+                            'pattern' => '!(?:^|/)\..+$!',
+                            'read'    => false,
+                            'write'   => false,
+                            'hidden'  => true,
+                            'locked'  => false
+                        ]
+                    ]
                 ]
             ]
         ];

@@ -6,6 +6,7 @@ Image Property Input
 
 --}}
 <div id="{{inputId}}">
+{{#showFilePreview}}
     <div class="js-preview">{{#inputVal}}<img src="{{baseUrl}}{{inputVal}}" style="max-width: 100%">{{/inputVal}}</div>
     {{#inputVal}}
     <div>
@@ -15,6 +16,9 @@ Image Property Input
     <input type="hidden" value="{{inputVal}}" name="{{inputName}}">
 
     {{/inputVal}}
+{{/showFilePreview}}
+
+{{#showFileUpload}}
     <input
         type="file"
         name="{{inputName}}"
@@ -24,9 +28,11 @@ Image Property Input
         {{#required}}required{{/required}}
         {{#disabled}}disabled{{/disabled}}
     >
+{{/showFileUpload}}
 
+{{#showFilePicker}}
     <button type="button" class="btn btn-default js-elfinder">{{# _t }}Choisissez une image…{{/ _t }}</button>
-
+{{/showFilePicker}}
 </div>
 
 {{#addJsRequirement}}
@@ -40,7 +46,7 @@ Image Property Input
 {{#addJs}}
 <script>
 var inputDialog = inputDialog || null;
-    elFinderCallback = elFinderCallback || {};
+var elFinderCallback = elFinderCallback || {};
 
 elFinderCallback['{{inputId}}'] = function (file, elf) {
     console.debug('Selected File', file);

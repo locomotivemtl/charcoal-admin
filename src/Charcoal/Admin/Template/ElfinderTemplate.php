@@ -182,6 +182,6 @@ class ElfinderTemplate extends AdminTemplate
             $settings['onlyMimes'] = $property->acceptedMimetypes();
         }
 
-        return json_encode($settings, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+        return json_encode($settings, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
     }
 }

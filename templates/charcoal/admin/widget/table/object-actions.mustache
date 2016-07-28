@@ -1,9 +1,20 @@
 {{!--
-    Table Widget \ Table Body \ Row Actions
+    Table Widget \ Object Actions
     =======================================
 
     @used-by `charcoal/admin/widget/tbody-row`
 --}}
-<td class="table-row-actions">
-    {{> charcoal/admin/widget/table/object-actions }}
-</td>
+<div class="btn-group">
+    <a href="{{adminUrl}}{{objectEditUrl}}&amp;obj_id={{objectId}}" class="btn btn-primary">{{#_t}}Modifier{{/_t}}</a>
+    {{#hasObjectActions}}
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret" aria-hidden="true"></span>
+        <span class="sr-only">{{#_t}}Toggle Dropdown{{/_t}}</span>
+    </button>
+    <ul class="dropdown-menu">
+    {{#objectActions}}
+        <li><a class="js-obj-{{ident}}" href="{{url}}">{{label}}</a></li>
+    {{/objectActions}}
+    </ul>
+    {{/hasObjectActions}}
+</div>

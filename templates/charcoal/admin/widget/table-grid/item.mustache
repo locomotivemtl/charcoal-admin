@@ -1,0 +1,18 @@
+{{!--
+    Table Grid Widget \ Grid Item
+    =============================
+
+    @used-by `charcoal/admin/widget/table-grid`
+--}}
+<div class="col-xs-6 col-md-2">
+    <div class="thumbnail">
+        <a class="js-attachment" href="{{ adminUrl }}{{ objectEditUrl }}&amp;obj_id={{ objectId }}" data-id="{{ currentObjId }}" data-type="{{ objType }}">
+        {{# objectProperties }}
+            <p>{{& val }}</p>
+        {{/ objectProperties }}
+        </a>
+        {{# showObjectActions }}
+        {{> charcoal/admin/widget/table/object-actions }}
+        {{/ showObjectActions }}
+    </div>
+</div>

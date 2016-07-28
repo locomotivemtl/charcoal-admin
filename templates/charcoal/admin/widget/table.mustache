@@ -1,61 +1,16 @@
 {{!--
-Table Widget
-============
+    Table Widget Body
+    =================
 
-`charcoal/admin/widget/table`
+    @see `charcoal/admin/widget/table`
 
-This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
-
+    This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 --}}
 
 <div class="o-section">
-    <div class="charcoal-admin-widget-table" id="{{widgetId}}">
-        {{#hasObjects}}
-        <div class="table-header clearfix">
-            <div class="pull-left">
-                {{!--
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary">Actions</button>
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        [[#sublistActions]]
-                            <li><a href="#0" class="sublist-[[ident]]">[[label]]</a></li>
-                        [[/sublistActions]]
-                    </ul>
-                </div>
-                --}}
-                {{#listActions}}
-                    {{#isButton}}
-                    <button class="btn btn-info js-list-{{ident}}" data-widget-type="{{widgetType}}">{{label}}</button>
-                    {{/isButton}}
-                    {{^isButton}}
-                    <a class="btn btn-info js-list-{{ident}}" href="{{adminUrl}}{{url}}" data-widget-type="{{widgetType}}">{{label}}</a>
-                    {{/isButton}}
-                {{/listActions}}
-            </div>
-            {{!--
-            <div class="pull-right">
-                <strong>Filtres</strong>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-info">Les plus récentes alertes</button>
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </div>
-            </div>
-            --}}
-        </div>
+    <div class="charcoal-admin-widget-table" id="{{ widgetId }}">
+        {{# hasObjects }}
+        {{> charcoal/admin/widget/table/header }}
 
         {{!--
         @TODO Implement a better responsive table solution (Tablesaw?)
@@ -63,123 +18,26 @@ This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Ta
         --}}
         <div class="table-container">
             <table class="table table-bordered table-hover">
-                {{#showTableHeader}}
-                <thead>
-                    <tr>
-                        {{!--
-                        <th class="table_checkbox">
-                            <div class="checkbox -nolabel">
-                                <input type="checkbox" class="select-all" id="checkboxall">
-                                <label for="checkboxall"></label>
-                            </div>
-                        </th>
-                        --}}
-                        {{#collectionProperties}}
-                        <th{{#classes}} class="{{.}}"{{/classes}}>{{label}}</td>
-                        {{/collectionProperties}}
-                        {{#showObjectActions}}
-                        <th>Actions</th>
-                        {{/showObjectActions}}
-                    </tr>
-                </thead>
-                {{/showTableHeader}}
-
-                <tbody{{#sortable}} class="js-sortable"{{/sortable}}>
-                    {{!-- Loop the list objects (from CollectionContainerTrait) --}}
-                    {{#objectRows}}
-                    <tr class="js-table-row" data-id="{{objectId}}">
-                        {{!--
-                        <td class="table_checkbox">
-                            <div class="checkbox -nolabel">
-                                <input type="checkbox" class="select-row" id="checkbox[[objectId]]">
-                                <label for="checkbox[[objectId]]"></label>
-                            </div>
-                        </td>
-                        --}}
-                        {{#objectProperties}}
-                        <td{{#classes}} class="{{.}}"{{/classes}}>{{&val}}</td>
-                        {{/objectProperties}}
-                        {{#showObjectActions}}
-                        <td>
-                            <div class="btn-group">
-                                <a href="{{adminUrl}}{{objectEditUrl}}&amp;obj_id={{objectId}}" class="btn btn-primary">{{#_t}}Modifier{{/_t}}</a>
-                            {{#hasObjectActions}}
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">{{#_t}}Toggle Dropdown{{/_t}}</span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    {{#objectActions}}
-                                    <li><a class="js-obj-{{ident}}" href="{{url}}">{{label}}</a></li>
-                                    {{/objectActions}}
-                                </ul>
-                            {{/hasObjectActions}}
-                            </div>
-                        </td>
-                        {{/showObjectActions}}
-                    </tr>
-                    {{/objectRows}}
-                </tbody>
-                {{#showTableFooter}}
-                <tfoot>
-                    <tr>
-
-                    </tr>
-                </tfoot>
-                {{/showTableFooter}}
+                {{# showTableHeader }}
+                {{> charcoal/admin/widget/table/thead }}
+                {{/ showTableHeader }}
+                {{> charcoal/admin/widget/table/tbody }}
+                {{# showTableFooter }}
+                {{> charcoal/admin/widget/table/tfoot }}
+                {{/ showTableFooter }}
             </table>
 
-            {{#paginationWidget}}
-                {{#showPagination}}
-                <div class="pull-right">
-                    {{>charcoal/admin/widget/pagination}}
-                </div>
-                {{/showPagination}}
-            {{/paginationWidget}}
+            {{# paginationWidget }}
+            {{> charcoal/admin/widget/table/pagination }}
+            {{/ paginationWidget }}
         </div>
 
-        {{/hasObjects}}
-        {{^hasObjects}}
-        <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">{{#_t}}Erreurs:{{/_t}}</span>
-            Aucun objet de type "{{objType}}" n'existe.
-            <div class="btn-group" role="group" aria-label="...">
-                <a class="btn btn-info" href="{{adminUrl}}{{objectCreateUrl}}">{{#_t}}Créer un nouvel objet{{/_t}}</a>
-            </div>
-        </div>
-
-        {{/hasObjects}}
+        {{/ hasObjects }}
+        {{^ hasObjects }}
+        {{> charcoal/admin/widget/table/empty }}
+        {{/ hasObjects }}
     </div>
 </div>
 
-{{#addCss}}
-<style>
-.ui-tablesort-placeholder{
-    margin: 12px;
-    border: 2px dotted black;
-    height: 5em;
-}
-</style>
-{{/addCss}}
-
-{{#addJsRequirement}}
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-{{/addJsRequirement}}
-
-{{#addJs}}
-<script>
-Charcoal.Admin.manager().add_widget({
-    id: '{{widgetId}}',
-    type: 'charcoal/admin/widget/table',
-    data: {
-        obj_type: '{{objType}}',
-        collection_ident: '{{collectionIdent}}',
-        pagination: {
-            page: {{page}},
-            num_per_page: {{numPerPage}}
-        }
-    }
-});
-</script>
-{{/addJs}}
+{{> charcoal/admin/widget/table/css }}
+{{> charcoal/admin/widget/table/js }}

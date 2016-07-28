@@ -1,0 +1,14 @@
+{{!--
+    Table Widget \ Empty State
+    ==========================
+
+    @used-by `charcoal/admin/widget/table`
+--}}
+<div class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">{{# _t }}Erreurs:{{/ _t }}</span>
+    Aucun objet de type "{{ objType }}" n'existe.
+    <div class="btn-group" role="group">
+        <a class="btn btn-info" href="{{ adminUrl }}{{ objectCreateUrl }}">{{# _t }}Créer un nouvel objet{{/ _t }}</a>
+    </div>
+</div>

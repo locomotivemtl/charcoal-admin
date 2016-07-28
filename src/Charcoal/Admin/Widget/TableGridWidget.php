@@ -9,5 +9,4 @@ use \Charcoal\Admin\Widget\TableWidget;
  */
 class TableGridWidget extends TableWidget
 {
-
 }

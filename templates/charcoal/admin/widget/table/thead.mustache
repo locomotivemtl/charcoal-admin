@@ -1,0 +1,24 @@
+{{!--
+    Table Widget \ Table Header
+    ===========================
+
+    @used-by `charcoal/admin/widget/table`
+--}}
+<thead>
+    <tr>
+        {{!--
+        <th class="table_checkbox">
+            <div class="checkbox -nolabel">
+                <input type="checkbox" class="select-all" id="checkboxall">
+                <label for="checkboxall"></label>
+            </div>
+        </th>
+        --}}
+        {{# collectionProperties }}
+        {{> charcoal/admin/widget/table/thead-col }}
+        {{/ collectionProperties }}
+        {{# showObjectActions }}
+        <th>{{# _t }}Actions{{/ _t }}</th>
+        {{/ showObjectActions }}
+    </tr>
+</thead>

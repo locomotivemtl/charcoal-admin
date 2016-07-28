@@ -1,0 +1,12 @@
+{{!--
+    Table Widget \ Table Body
+    =========================
+
+    @used-by `charcoal/admin/widget/table`
+--}}
+<tbody{{# sortable }} class="js-sortable"{{/ sortable }}>
+    {{!-- Loop the list objects (from CollectionContainerTrait) --}}
+    {{# objectRows }}
+    {{> charcoal/admin/widget/table/tbody-row }}
+    {{/ objectRows }}
+</tbody>

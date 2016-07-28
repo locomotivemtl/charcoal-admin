@@ -1,0 +1,15 @@
+{{!--
+    Table Widget \ Table Body \ Row
+    ===============================
+
+    @used-by `charcoal/admin/widget/tbody`
+--}}
+<tr class="js-table-row" data-id="{{ objectId }}" data-type="{{ objType }}">
+    {{> charcoal/admin/widget/table/tbody-row-select }}
+    {{# objectProperties }}
+    {{> charcoal/admin/widget/table/tbody-col }}
+    {{/ objectProperties }}
+    {{# showObjectActions }}
+    {{> charcoal/admin/widget/table/tbody-row-actions }}
+    {{/ showObjectActions }}
+</tr>

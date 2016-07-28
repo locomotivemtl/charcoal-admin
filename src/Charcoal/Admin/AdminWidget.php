@@ -270,7 +270,6 @@ class AdminWidget extends AbstractWidget
         }
     }
 
-
     /**
      * @return string
      */

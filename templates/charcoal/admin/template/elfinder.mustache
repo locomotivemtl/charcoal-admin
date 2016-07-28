@@ -65,14 +65,37 @@
                             parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
                         }
                     }
-                };
 
                 $.extend(settings, defaults, {{& elfinderPropertyConfig }});
 
-                elf = $('#elfinder').elfinder(settings).elfinder('instance');
+                var elfInit = function (settings) {
+                    $().ready(function() {
+                        elf = $('#elfinder')
+                            .elfinder(settings)
+                            .elfinder('instance');
+                    });
+                };
+
+                if (settings.lang != 'en') {
+                    $.ajax({
+                        url : '{{elfinder_url}}js/i18n/elfinder.'+settings.lang+'.js',
+                        cache : true,
+                        dataType : 'script'
+                    })
+                    .done(function() {
+                        elfInit(settings);
+                    })
+                    .fail(function() {
+                        settings.lang = 'en';
+                        elfInit(settings);
+                    });
+                } else {
+                    elfInit(settings);
+                }
             });
         </script>
     </head>
+
     <body>
         <div id="elfinder"></div>
     </body>

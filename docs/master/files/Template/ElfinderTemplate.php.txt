@@ -166,7 +166,7 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
-     * Retrieve the current property's elFinder settings.
+     * Retrieve the current property's client-side settings for elFinder.
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */

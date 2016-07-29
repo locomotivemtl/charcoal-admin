@@ -46,6 +46,11 @@ class FormSidebarWidget extends AdminWidget
     protected $title;
 
     /**
+     * @var boolean
+     */
+    protected $showFooter = true;
+
+    /**
      * @param array|ArrayInterface $data Class data.
      * @return FormGroupWidget Chainable
      */
@@ -264,6 +269,24 @@ class FormSidebarWidget extends AdminWidget
             $this->setTitle('Actions');
         }
         return $this->title;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showFooter()
+    {
+        return $this->showFooter;
+    }
+
+    /**
+     * @param mixed $showFooter The show footer flag.
+     * @return FormSidebarWidget
+     */
+    public function setShowFooter($showFooter)
+    {
+        $this->showFooter = !!$showFooter;
+        return $this;
     }
 
     /**

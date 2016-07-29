@@ -47,10 +47,11 @@
                 </div>
             </div>
 
+            {{# showFooter }}
             <footer class="c-panel_footer">
-                {{!--
-                @todo Only show the "delete" button if there's an object's ID.
-                }}
+            {{!--
+            @todo Only show the "delete" button if there's an object's ID.
+            --}}
                 {{#objId}}
                 <div class="c-panel_footer_item -red">
                     <span class="js-obj-delete">
@@ -64,6 +65,7 @@
                     </span>
                 </div>
             </footer>
+            {{/ showFooter }}
         </div>
     </div>
 </aside>

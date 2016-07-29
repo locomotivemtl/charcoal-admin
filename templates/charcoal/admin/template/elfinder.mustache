@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>elFinder</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
+<head>
+    <meta charset="utf-8">
+    <title>elFinder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 
-        {{# elfinderAssets }}
-        <link rel="stylesheet" type="text/css" media="screen" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    {{# elfinderAssets }}
+        <link rel="stylesheet" type="text/css" media="screen"
+              href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
         <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}css/elfinder.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}css/theme.css">
@@ -20,35 +21,46 @@
 
         <script src="{{ elfinder_url }}js/elfinder.min.js"></script>
 
-        {{!-- elFinder translation (OPTIONAL) --}}
-        {{!--<script src="js/i18n/elfinder.fr.js"></script>--}}
-        {{/ elfinderAssets }}
+    {{!-- elFinder translation (OPTIONAL) --}}
+    {{!--<script src="js/i18n/elfinder.fr.js"></script>--}}
+    {{/ elfinderAssets }}
 
-        <script>
-            // Documentation for client options:
-            // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
-            $(document).ready(function() {
-                var elf, defaults, settings = {};
+    <script>
+        // Documentation for client options:
+        // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
+        $(document).ready(function () {
+            var elf, defaults, settings = {};
 
-                defaults = {
-                  url: '{{ admin_url }}elfinder-connector',
-                  getFileCallback: function(file) {
+            defaults = {
+                url: '{{ admin_url }}elfinder-connector',
+                getFileCallback: function (file) {
+                    if (elf.option('separator') === '\\') {
+                        var separator = /\\/g;
+                        if ($.isArray(file)) {
+                            file = $.map(file, function (f) {
+                                return f.path.replace(separator, '/');
+                            });
+                        } else {
+                            file.path = file.path.replace(separator, '/');
+                        }
+                    }
+
                     if (typeof(parent.elFinderCallback['{{elfinderCallback}}']) === 'function') {
                         parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
                     }
-                  }
-                };
+                }
+            };
 
-                $.extend(settings, defaults, {{& elfinderPropertyConfig }})
+            $.extend(settings, defaults, {{& elfinderPropertyConfig }})
 
-                elf = $('#elfinder')
+            elf = $('#elfinder')
                     .elfinder(settings)
                     .elfinder('instance');
-            });
-        </script>
-    </head>
+        });
+    </script>
+</head>
 
-    <body>
-        <div id="elfinder"></div>
-    </body>
+<body>
+<div id="elfinder"></div>
+</body>
 </html>

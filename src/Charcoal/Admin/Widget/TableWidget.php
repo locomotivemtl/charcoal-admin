@@ -391,16 +391,30 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * externally by setting the listActions with the
      * setListActions setter.
      *
+     * @todo Convert to Charcoal\Ui\Menu\GenericMenu
      * @return array List actions.
      */
     public function createListActions()
     {
         $collectionConfig = $this->collectionConfig();
         if ($collectionConfig) {
-            $listActions   = (isset($collectionConfig['list_actions']) ? $collectionConfig['list_actions'] : []);
+            $listActions = (isset($collectionConfig['list_actions']) ? $collectionConfig['list_actions'] : []);
             foreach ($listActions as &$action) {
                 if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
                     $action['label'] = new TranslationString($action['label']);
+                }
+
+                if (isset($action['is_button'])) {
+                    $action['isButton'] = $action['is_button'];
+                    unset($action['is_button']);
+                }
+
+                if (!isset($action['button_type'])) {
+                    if (isset($action['ident']) && $action['ident'] === 'create') {
+                        $action['button_type'] = 'info';
+                    } else {
+                        $action['button_type'] = 'default';
+                    }
                 }
             }
             return $listActions;
@@ -416,12 +430,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function paginationWidget()
     {
         $pagination = new PaginationWidget([
-            'logger'=>$this->logger
+            'logger' => $this->logger
         ]);
         $pagination->setData([
-            'page' => $this->page(),
+            'page'         => $this->page(),
             'num_per_page' => $this->numPerPage(),
-            'num_total' => $this->numTotal()
+            'num_total'    => $this->numTotal()
         ]);
         return $pagination;
     }

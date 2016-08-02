@@ -20,9 +20,9 @@
 --}}
 {{# listActions }}
     {{# isButton }}
-    <button class="btn btn-info js-list-{{ ident }}" data-widget-type="{{ widgetType }}">{{ label }}</button>
+    <button class="btn btn-{{ button_type }} js-list-{{ ident }}" data-widget-type="{{ widgetType }}">{{ label }}</button>
     {{/ isButton }}
     {{^ isButton }}
-    <a class="btn btn-info js-list-{{ ident }}" href="{{ adminUrl }}{{ url }}" data-widget-type="{{ widgetType }}">{{ label }}</a>
+    <a class="btn btn-{{ button_type }} js-list-{{ ident }}" href="{{ adminUrl }}{{ url }}" data-widget-type="{{ widgetType }}">{{ label }}</a>
     {{/ isButton }}
 {{/ listActions }}

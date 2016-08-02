@@ -61,18 +61,73 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      */
     public function setData($data)
     {
-        // @TODO Remove once RequirementContainer is implemented
-        // Needed this to be able to output {{objId}}
-        $data = array_merge($_GET, $data);
-
         parent::setData($data);
 
-        $objData = $this->dataFromObject();
-        $data = array_merge_recursive($objData, $data);
+        $fromRequest = $this->dataFromRequest();
+        if ($fromRequest) {
+            parent::setData($fromRequest);
+        }
 
-        parent::setData($data);
+        $fromModel = $this->dataFromObject();
+        if ($fromModel) {
+            $data = array_merge_recursive($fromModel, $data);
+            parent::setData($data);
+        }
 
         return $this;
+    }
+
+    /**
+     * Fetch metadata from the current request.
+     *
+     *
+     * @return array
+     */
+    public function dataFromRequest()
+    {
+        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
+    }
+
+    /**
+     * Retrieve the accepted metadata from the current request.
+     *
+     * @return array
+     */
+    public function acceptedRequestData()
+    {
+        return [ 'obj_type','obj_id', 'template', 'form_data', 'next_url', 'l10n_mode', 'group_display_mode' ];
+    }
+
+    /**
+     * Fetch metadata from the current object type.
+     *
+     * @return array
+     */
+    public function dataFromObject()
+    {
+        $objMetadata   = $this->obj()->metadata();
+        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
+        $formIdent     = $this->formIdent();
+        if (!$formIdent) {
+            $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+        }
+
+        $objFormData = (isset($adminMetadata['forms'][$formIdent]) ? $adminMetadata['forms'][$formIdent] : []);
+
+        if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
+            $extraFormGroups = array_intersect(
+                array_keys($adminMetadata['form_groups']),
+                array_keys($objFormData['groups'])
+            );
+            foreach ($extraFormGroups as $groupIdent) {
+                $objFormData['groups'][$groupIdent] = array_merge(
+                    $adminMetadata['form_groups'][$groupIdent],
+                    $objFormData['groups'][$groupIdent]
+                );
+            }
+        }
+
+        return $objFormData;
     }
 
     /**
@@ -172,38 +227,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     public function isTab()
     {
         return ( $this->groupDisplayMode() === 'tab' );
-    }
-
-    /**
-     * Set the data from an object.
-     *
-     * @return array
-     */
-    public function dataFromObject()
-    {
-        $objMetadata   = $this->obj()->metadata();
-        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
-        $formIdent     = $this->formIdent();
-        if (!$formIdent) {
-            $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
-        }
-
-        $objFormData = (isset($adminMetadata['forms'][$formIdent]) ? $adminMetadata['forms'][$formIdent] : []);
-
-        if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
-            $extraFormGroups = array_intersect(
-                array_keys($adminMetadata['form_groups']),
-                array_keys($objFormData['groups'])
-            );
-            foreach ($extraFormGroups as $groupIdent) {
-                $objFormData['groups'][$groupIdent] = array_merge(
-                    $adminMetadata['form_groups'][$groupIdent],
-                    $objFormData['groups'][$groupIdent]
-                );
-            }
-        }
-
-        return $objFormData;
     }
 
     /**

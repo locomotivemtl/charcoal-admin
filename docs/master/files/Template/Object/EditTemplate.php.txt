@@ -164,32 +164,46 @@ class EditTemplate extends AdminTemplate implements
     private function objEditDashboardConfig()
     {
         $obj = $this->obj();
-        $metadata = $obj->metadata();
-        $dashboardIdent = $this->dashboardIdent();
+
+        $objMetadata     = $obj->metadata();
+        $dashboardIdent  = $this->dashboardIdent();
         $dashboardConfig = $this->dashboardConfig();
 
-        $admin_metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        if ($admin_metadata === null) {
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
+        if ($adminMetadata === null) {
             throw new Exception(
-                'No dashboard for object'
+                sprintf(
+                    'No dashboard for %s (no admin metadata).',
+                    $obj->type()
+                )
             );
         }
 
-        if ($dashboardIdent === null || $dashboardIdent === '') {
-            if (!isset($admin_metadata['default_edit_dashboard'])) {
+        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
+            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        }
+
+        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
+            if (!isset($adminMetadata['default_edit_dashboard'])) {
                 throw new Exception(
-                    'No default edit dashboard defined in object admin metadata'
+                    sprintf(
+                        'No default edit dashboard defined in admin metadata for %s',
+                        $obj->type()
+                    )
                 );
             }
-            $dashboardIdent = $admin_metadata['default_edit_dashboard'];
+
+            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
         }
-        if ($dashboardConfig === null || empty($dashboardConfig)) {
-            if (!isset($admin_metadata['dashboards']) || !isset($admin_metadata['dashboards'][$dashboardIdent])) {
+
+        if (empty($dashboardConfig)) {
+            if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
                 throw new Exception(
                     'Dashboard config is not defined.'
                 );
             }
-            $dashboardConfig = $admin_metadata['dashboards'][$dashboardIdent];
+
+            $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
         }
 
         return $dashboardConfig;

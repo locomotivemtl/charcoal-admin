@@ -215,32 +215,45 @@ class CollectionTemplate extends AdminTemplate implements
     private function objCollectionDashboardConfig()
     {
         $obj = $this->proto();
-        $metadata = $obj->metadata();
 
-        $dashboardIdent = $this->dashboardIdent();
+        $objMetadata     = $obj->metadata();
+        $dashboardIdent  = $this->dashboardIdent();
         $dashboardConfig = $this->dashboardConfig();
 
-        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
         if ($adminMetadata === null) {
             throw new Exception(
-                'No dashboard for object (no admin metadata).'
+                sprintf(
+                    'No dashboard for %s (no admin metadata).',
+                    $obj->type()
+                )
             );
         }
 
-        if ($dashboardIdent === null || $dashboardIdent === '') {
+        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
+            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        }
+
+        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
             if (!isset($adminMetadata['default_collection_dashboard'])) {
                 throw new Exception(
-                    'No default collection dashboard defined in object admin metadata.'
+                    sprintf(
+                        'No default collection dashboard defined in admin metadata for %s.',
+                        $obj->type()
+                    )
                 );
             }
+
             $dashboardIdent = $adminMetadata['default_collection_dashboard'];
         }
-        if ($dashboardConfig === null || empty($dashboardConfig)) {
+
+        if (empty($dashboardConfig)) {
             if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
                 throw new Exception(
                     'Dashboard config is not defined.'
                 );
             }
+
             $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
         }
 

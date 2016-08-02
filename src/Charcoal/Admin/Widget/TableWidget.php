@@ -92,25 +92,65 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Fetch metadata from current obj_type
-     * @return array List of metadata
+     * @param array|ArrayInterface $data The widget data.
+     * @return TableWidget Chainable
+     */
+    public function setData($data)
+    {
+        parent::setData($data);
+
+        $fromRequest = $this->dataFromRequest();
+        if ($fromRequest) {
+            parent::setData($fromRequest);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Fetch metadata from the current request.
+     *
+     * @return array
+     */
+    public function dataFromRequest()
+    {
+        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
+    }
+
+    /**
+     * Retrieve the accepted metadata from the current request.
+     *
+     * @return array
+     */
+    public function acceptedRequestData()
+    {
+        return [ 'obj_type','obj_id', 'collection_ident', 'template', 'sortable' ];
+    }
+
+    /**
+     * Fetch metadata from the current object type.
+     *
+     * @return array
      */
     public function dataFromObject()
     {
-        $obj = $this->proto();
-        $metadata = $obj->metadata();
-        $adminMeta = (isset($metadata['admin']) ? $metadata['admin'] : null);
+        $objMetadata   = $this->proto()->metadata();
+        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
 
-        if (!isset($adminMeta['lists']) || empty($adminMeta['lists'])) {
+        if (empty($adminMetadata['lists'])) {
             return [];
         }
 
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
-            $collectionIdent = (isset($adminMeta['default_list']) ? $adminMeta['default_list'] : '');
+            $collectionIdent = (isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '');
         }
 
-        $objListData = (isset($adminMeta['lists'][$collectionIdent]) ? $adminMeta['lists'][$collectionIdent] : []);
+        if (isset($adminMetadata['lists'][$collectionIdent])) {
+            $objListData = $adminMetadata['lists'][$collectionIdent];
+        } else {
+            $objListData = [];
+        }
 
         return $objListData;
     }

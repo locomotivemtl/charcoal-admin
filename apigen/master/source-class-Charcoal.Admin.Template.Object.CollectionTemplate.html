@@ -575,32 +575,69 @@
 </span></span><span id="265" class="l"><a href="#265">265: </a><span class="php-comment">     */</span>
 </span><span id="266" class="l"><a href="#266">266: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> title()
 </span><span id="267" class="l"><a href="#267">267: </a>    {
-</span><span id="268" class="l"><a href="#268">268: </a>        <span class="php-var">$config</span> = <span class="php-var">$this</span>-&gt;objCollectionDashboardConfig();
-</span><span id="269" class="l"><a href="#269">269: </a>
-</span><span id="270" class="l"><a href="#270">270: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$config</span>[<span class="php-quote">'title'</span>])) {
-</span><span id="271" class="l"><a href="#271">271: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> TranslationString(<span class="php-var">$config</span>[<span class="php-quote">'title'</span>]);
-</span><span id="272" class="l"><a href="#272">272: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="273" class="l"><a href="#273">273: </a>            <span class="php-var">$obj</span>      = <span class="php-var">$this</span>-&gt;proto();
-</span><span id="274" class="l"><a href="#274">274: </a>            <span class="php-var">$objLabel</span> = <span class="php-var">$this</span>-&gt;objType();
-</span><span id="275" class="l"><a href="#275">275: </a>            <span class="php-var">$metadata</span> = <span class="php-var">$obj</span>-&gt;metadata();
+</span><span id="268" class="l"><a href="#268">268: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;title)) {
+</span><span id="269" class="l"><a href="#269">269: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;title;
+</span><span id="270" class="l"><a href="#270">270: </a>        }
+</span><span id="271" class="l"><a href="#271">271: </a>
+</span><span id="272" class="l"><a href="#272">272: </a>        <span class="php-var">$config</span> = <span class="php-var">$this</span>-&gt;objCollectionDashboardConfig();
+</span><span id="273" class="l"><a href="#273">273: </a>
+</span><span id="274" class="l"><a href="#274">274: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$config</span>[<span class="php-quote">'title'</span>])) {
+</span><span id="275" class="l"><a href="#275">275: </a>            <span class="php-var">$this</span>-&gt;title = <span class="php-keyword1">new</span> TranslationString(<span class="php-var">$config</span>[<span class="php-quote">'title'</span>]);
 </span><span id="276" class="l"><a href="#276">276: </a>
-</span><span id="277" class="l"><a href="#277">277: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>])) {
-</span><span id="278" class="l"><a href="#278">278: </a>                <span class="php-var">$metadata</span>    = <span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>];
-</span><span id="279" class="l"><a href="#279">279: </a>                <span class="php-var">$formIdent</span>   = ( <span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'default_list'</span>]) ? <span class="php-var">$metadata</span>[<span class="php-quote">'default_list'</span>] : <span class="php-quote">''</span> );
-</span><span id="280" class="l"><a href="#280">280: </a>                <span class="php-var">$objFormData</span> = ( <span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'lists'</span>][<span class="php-var">$formIdent</span>]) ? <span class="php-var">$metadata</span>[<span class="php-quote">'lists'</span>][<span class="php-var">$formIdent</span>] : [] );
-</span><span id="281" class="l"><a href="#281">281: </a>
-</span><span id="282" class="l"><a href="#282">282: </a>                <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$objFormData</span>[<span class="php-quote">'label'</span>]) &amp;&amp; TranslationString::isTranslatable(<span class="php-var">$objFormData</span>[<span class="php-quote">'label'</span>])) {
-</span><span id="283" class="l"><a href="#283">283: </a>                    <span class="php-var">$objLabel</span> = <span class="php-keyword1">new</span> TranslationString(<span class="php-var">$objFormData</span>[<span class="php-quote">'label'</span>]);
-</span><span id="284" class="l"><a href="#284">284: </a>                }
-</span><span id="285" class="l"><a href="#285">285: </a>            }
-</span><span id="286" class="l"><a href="#286">286: </a>
-</span><span id="287" class="l"><a href="#287">287: </a>            <span class="php-var">$this</span>-&gt;title = <span class="php-keyword2">sprintf</span>(<span class="php-quote">'List: %s'</span>, <span class="php-var">$objLabel</span>);
-</span><span id="288" class="l"><a href="#288">288: </a>        }
-</span><span id="289" class="l"><a href="#289">289: </a>
-</span><span id="290" class="l"><a href="#290">290: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;title;
-</span><span id="291" class="l"><a href="#291">291: </a>    }
-</span><span id="292" class="l"><a href="#292">292: </a>}
-</span><span id="293" class="l"><a href="#293">293: </a></span></code></pre>
+</span><span id="277" class="l"><a href="#277">277: </a>            <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;title;
+</span><span id="278" class="l"><a href="#278">278: </a>        }
+</span><span id="279" class="l"><a href="#279">279: </a>
+</span><span id="280" class="l"><a href="#280">280: </a>        <span class="php-var">$model</span>    = <span class="php-var">$this</span>-&gt;proto();
+</span><span id="281" class="l"><a href="#281">281: </a>        <span class="php-var">$metadata</span> = <span class="php-var">$model</span>-&gt;metadata();
+</span><span id="282" class="l"><a href="#282">282: </a>        <span class="php-var">$objLabel</span> = <span class="php-keyword1">null</span>;
+</span><span id="283" class="l"><a href="#283">283: </a>
+</span><span id="284" class="l"><a href="#284">284: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$objLabel</span> &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>][<span class="php-quote">'lists'</span>])) {
+</span><span id="285" class="l"><a href="#285">285: </a>            <span class="php-var">$adminMetadata</span> = <span class="php-var">$metadata</span>[<span class="php-quote">'admin'</span>];
+</span><span id="286" class="l"><a href="#286">286: </a>            <span class="php-var">$listIdent</span>     = <span class="php-keyword2">filter_input</span>(INPUT_GET, <span class="php-quote">'collection_ident'</span>, FILTER_SANITIZE_STRING);
+</span><span id="287" class="l"><a href="#287">287: </a>
+</span><span id="288" class="l"><a href="#288">288: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$listIdent</span> === <span class="php-keyword1">false</span> || <span class="php-var">$listIdent</span> === <span class="php-keyword1">null</span> || <span class="php-var">$listIdent</span> === <span class="php-quote">''</span>) {
+</span><span id="289" class="l"><a href="#289">289: </a>                <span class="php-var">$listIdent</span> = (<span class="php-keyword1">isset</span>(<span class="php-var">$adminMetadata</span>[<span class="php-quote">'default_list'</span>]) ? <span class="php-var">$adminMetadata</span>[<span class="php-quote">'default_list'</span>] : <span class="php-quote">''</span>);
+</span><span id="290" class="l"><a href="#290">290: </a>            }
+</span><span id="291" class="l"><a href="#291">291: </a>
+</span><span id="292" class="l"><a href="#292">292: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$adminMetadata</span>[<span class="php-quote">'lists'</span>][<span class="php-var">$listIdent</span>][<span class="php-quote">'label'</span>])) {
+</span><span id="293" class="l"><a href="#293">293: </a>                <span class="php-var">$objLabel</span> = <span class="php-var">$adminMetadata</span>[<span class="php-quote">'lists'</span>][<span class="php-var">$listIdent</span>][<span class="php-quote">'label'</span>];
+</span><span id="294" class="l"><a href="#294">294: </a>
+</span><span id="295" class="l"><a href="#295">295: </a>                <span class="php-keyword1">if</span> (TranslationString::isTranslatable(<span class="php-var">$objLabel</span>)) {
+</span><span id="296" class="l"><a href="#296">296: </a>                    <span class="php-var">$objLabel</span> = <span class="php-keyword1">new</span> TranslationString(<span class="php-var">$objLabel</span>);
+</span><span id="297" class="l"><a href="#297">297: </a>                }
+</span><span id="298" class="l"><a href="#298">298: </a>            }
+</span><span id="299" class="l"><a href="#299">299: </a>        }
+</span><span id="300" class="l"><a href="#300">300: </a>
+</span><span id="301" class="l"><a href="#301">301: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$objLabel</span> &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'labels'</span>][<span class="php-quote">'all_items'</span>])) {
+</span><span id="302" class="l"><a href="#302">302: </a>            <span class="php-var">$objLabel</span> = <span class="php-var">$metadata</span>[<span class="php-quote">'labels'</span>][<span class="php-quote">'all_items'</span>];
+</span><span id="303" class="l"><a href="#303">303: </a>
+</span><span id="304" class="l"><a href="#304">304: </a>            <span class="php-keyword1">if</span> (TranslationString::isTranslatable(<span class="php-var">$objLabel</span>)) {
+</span><span id="305" class="l"><a href="#305">305: </a>                <span class="php-var">$objLabel</span> = <span class="php-keyword1">new</span> TranslationString(<span class="php-var">$objLabel</span>);
+</span><span id="306" class="l"><a href="#306">306: </a>            }
+</span><span id="307" class="l"><a href="#307">307: </a>        }
+</span><span id="308" class="l"><a href="#308">308: </a>
+</span><span id="309" class="l"><a href="#309">309: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$objLabel</span>) {
+</span><span id="310" class="l"><a href="#310">310: </a>            <span class="php-var">$objType</span> = (<span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'labels'</span>][<span class="php-quote">'name'</span>]) ? <span class="php-var">$metadata</span>[<span class="php-quote">'labels'</span>][<span class="php-quote">'name'</span>] : <span class="php-keyword1">null</span> );
+</span><span id="311" class="l"><a href="#311">311: </a>            <span class="php-keyword1">if</span> (TranslationString::isTranslatable(<span class="php-var">$objType</span>)) {
+</span><span id="312" class="l"><a href="#312">312: </a>                <span class="php-var">$objType</span> = <span class="php-keyword1">new</span> TranslationString(<span class="php-var">$objType</span>);
+</span><span id="313" class="l"><a href="#313">313: </a>            }
+</span><span id="314" class="l"><a href="#314">314: </a>
+</span><span id="315" class="l"><a href="#315">315: </a>            <span class="php-var">$objLabel</span> = <span class="php-keyword1">new</span> TranslationString([
+</span><span id="316" class="l"><a href="#316">316: </a>                <span class="php-quote">'en'</span> =&gt; <span class="php-quote">'List: {{objType}}'</span>,
+</span><span id="317" class="l"><a href="#317">317: </a>                <span class="php-quote">'fr'</span> =&gt; <span class="php-quote">'Liste : {{objType}}'</span>
+</span><span id="318" class="l"><a href="#318">318: </a>            ]);
+</span><span id="319" class="l"><a href="#319">319: </a>
+</span><span id="320" class="l"><a href="#320">320: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$objType</span>) {
+</span><span id="321" class="l"><a href="#321">321: </a>                <span class="php-var">$objLabel</span> = <span class="php-keyword2">sprintf</span>(<span class="php-keyword2">str_replace</span>(<span class="php-quote">'{{objType}}'</span>, <span class="php-quote">'%s'</span>, <span class="php-var">$objLabel</span>), <span class="php-var">$objType</span>);
+</span><span id="322" class="l"><a href="#322">322: </a>            }
+</span><span id="323" class="l"><a href="#323">323: </a>        }
+</span><span id="324" class="l"><a href="#324">324: </a>
+</span><span id="325" class="l"><a href="#325">325: </a>        <span class="php-var">$this</span>-&gt;title = <span class="php-var">$model</span>-&gt;render((string)<span class="php-var">$objLabel</span>, <span class="php-var">$model</span>);
+</span><span id="326" class="l"><a href="#326">326: </a>
+</span><span id="327" class="l"><a href="#327">327: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;title;
+</span><span id="328" class="l"><a href="#328">328: </a>    }
+</span><span id="329" class="l"><a href="#329">329: </a>}
+</span><span id="330" class="l"><a href="#330">330: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

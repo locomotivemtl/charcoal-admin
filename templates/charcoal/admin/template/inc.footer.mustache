@@ -8,8 +8,11 @@
     {{&cssRequirements}}
     {{&css}}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    {{# addJsRequirement }}
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    {{/ addJsRequirement }}
+
+    {{&jsRequirements}}
 
     <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.vendors.js"></script>
     <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.js"></script>
@@ -30,7 +33,6 @@
     </script>
 
     {{!-- Scripts from widgets & templates --}}
-    {{&jsRequirements}}
     {{&js}}
 
 </body>

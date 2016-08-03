@@ -8,8 +8,11 @@ Open the HTML document and include meta tags and required external resources.
 
 Based on the HTML5 boilerplate.
 
---}}<!doctype html>
-<html lang="">
+--}}
+{{# addJsRequirement }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+{{/ addJsRequirement }}<!doctype html>
+<html lang="{{currentLanguage}}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +35,6 @@ Based on the HTML5 boilerplate.
     <link href="{{baseUrl}}assets/admin/styles/charcoal.admin.css" rel="stylesheet" type="text/css">
 </head>
 <body {{#showHeaderMenu}}class="has-nav-main"{{/showHeaderMenu}}>
-
 
     {{>charcoal/admin/widget/menu.header}}
 

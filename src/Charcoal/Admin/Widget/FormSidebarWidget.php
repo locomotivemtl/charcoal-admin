@@ -192,7 +192,7 @@ class FormSidebarWidget extends AdminWidget
             } else {
                 // Shame part 2: force '{{id}}' to use obj_id GET parameter...
                 if (isset($_GET['obj_id'])) {
-                    $url = str_replace('{{id}}', $_GET['obj_id'], $action['url']);
+                    $url = preg_replace('\{\{\s+(obj_)?id\s+\}\}', $_GET['obj_id'], $action['url']);
                 } else {
                     $url = $action['url'];
                 }
@@ -202,10 +202,10 @@ class FormSidebarWidget extends AdminWidget
             // Possible: danger, info
             $btn = (isset($action['type']) ? $action['type'] : 'info');
             $this->actions[] = [
-                'label'  => $label,
-                'url'    => $url,
-                'btn'    => $btn,
-                'active' => $active
+                'label'       => $label,
+                'url'         => $url,
+                'button_type' => $btn,
+                'active'      => $active
             ];
         }
         return $this;

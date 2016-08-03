@@ -8,7 +8,7 @@
 
             <div class="c-panel_main">
                 {{#subtitle}}
-                <p>{{subtitle}}</p>
+                <p>{{.}}</p>
                 {{/subtitle}}
 
                 {{#showLanguageSwitch}}
@@ -37,13 +37,13 @@
                 {{#actions}}
                     {{#active}}
                     <div class="form-group">
-                        <a href="{{baseUrl}}{{url}}" class="btn btn-{{btn}} btn-lg btn-block">{{label}}</a>
+                        <a href="{{baseUrl}}{{url}}" class="btn btn-{{button_type}} btn-lg btn-block">{{label}}</a>
                     </div>
                     {{/active}}
                 {{/actions}}
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-info btn-lg btn-block" value="Save">Sauvegarder</button>
+                    <button type="submit" class="btn btn-info btn-lg btn-block">Sauvegarder</button>
                 </div>
             </div>
 
@@ -54,14 +54,14 @@
             --}}
                 {{#objId}}
                 <div class="c-panel_footer_item -red">
-                    <span class="js-obj-delete">
-                       <i class="fa fa-trash-o"></i> Effacer
+                    <span role="button" class="js-obj-delete">
+                       <span class="fa fa-trash-o"></span> Effacer
                     </span>
                 </div>
                 {{/objId}}
                 <div class="c-panel_footer_item -blue">
-                    <span class="js-reset-form">
-                        <i class="fa fa-refresh"></i> Réinitialiser
+                    <span role="button" class="js-reset-form">
+                        <span class="fa fa-refresh"></span> Réinitialiser
                     </span>
                 </div>
             </footer>
@@ -70,15 +70,17 @@
     </div>
 </aside>
 
-{{#addJs}}
+{{!--
+[[#addJs]]
 <script>
-// Charcoal.Admin.manager().add_widget({
-//     id: '{{widgetId}}',
-//     type: 'charcoal/admin/widget/form.sidebar',
-//     data: {
-//         obj_type: '{{objType}}',
-//         collection_ident: '{{collectionIdent}}'
-//     }
-// });
+Charcoal.Admin.manager().add_widget({
+    id: '[[widgetId]]',
+    type: 'charcoal/admin/widget/form.sidebar',
+    data: {
+        obj_type: '[[objType]]',
+        collection_ident: '[[collectionIdent]]'
+    }
+});
 </script>
-{{/addJs}}
+[[/addJs]]
+--}}

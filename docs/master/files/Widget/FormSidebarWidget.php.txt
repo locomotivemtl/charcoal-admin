@@ -192,7 +192,7 @@ class FormSidebarWidget extends AdminWidget
             } else {
                 // Shame part 2: force '{{id}}' to use obj_id GET parameter...
                 if (isset($_GET['obj_id'])) {
-                    $url = str_replace('{{id}}', $_GET['obj_id'], $action['url']);
+                    $url = preg_replace('\{\{\s+(obj_)?id\s+\}\}', $_GET['obj_id'], $action['url']);
                 } else {
                     $url = $action['url'];
                 }
@@ -202,10 +202,10 @@ class FormSidebarWidget extends AdminWidget
             // Possible: danger, info
             $btn = (isset($action['type']) ? $action['type'] : 'info');
             $this->actions[] = [
-                'label'  => $label,
-                'url'    => $url,
-                'btn'    => $btn,
-                'active' => $active
+                'label'       => $label,
+                'url'         => $url,
+                'button_type' => $btn,
+                'active'      => $active
             ];
         }
         return $this;
@@ -220,6 +220,40 @@ class FormSidebarWidget extends AdminWidget
     public function actions()
     {
         return $this->actions;
+    }
+
+    /**
+     * Determine if the object can be deleted.
+     *
+     * @return boolean
+     */
+    public function isObjDeletable()
+    {
+        $obj    = $this->form()->obj();
+        $method = [ $obj, 'isDeletable' ];
+
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return !!$obj->id();
+    }
+
+    /**
+     * Determine if the object can be resettable.
+     *
+     * @return boolean
+     */
+    public function isObjResettable()
+    {
+        $obj    = $this->form()->obj();
+        $method = [ $obj, 'isResettable' ];
+
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
     }
 
     /**

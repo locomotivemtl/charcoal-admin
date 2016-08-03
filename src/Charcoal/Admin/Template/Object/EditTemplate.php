@@ -214,34 +214,73 @@ class EditTemplate extends AdminTemplate implements
      */
     public function title()
     {
+        if (isset($this->title)) {
+            return $this->title;
+        }
+
         $config = $this->objEditDashboardConfig();
 
         if (isset($config['title'])) {
-            return new TranslationString($config['title']);
-        } else {
-            $obj      = $this->obj();
-            $objId    = $this->objId();
-            $objLabel = $this->objType();
-            $metadata = $obj->metadata();
+            $this->title = new TranslationString($config['title']);
 
-            if (isset($metadata['admin'])) {
-                $metadata    = $metadata['admin'];
-                $formIdent   = ( isset($metadata['default_form']) ? $metadata['default_form'] : '' );
-                $objFormData = ( isset($metadata['forms'][$formIdent]) ? $metadata['forms'][$formIdent] : [] );
+            return $this->title;
+        }
 
-                if (isset($objFormData['label']) && TranslationString::isTranslatable($objFormData['label'])) {
-                    $objLabel = new TranslationString($objFormData['label']);
-                }
+        $obj      = $this->obj();
+        $objId    = $this->objId();
+        $objType  = $this->objType();
+        $metadata = $obj->metadata();
+        $objLabel = null;
+
+        if (!$objLabel && isset($metadata['admin']['forms'])) {
+            $adminMetadata  = $metadata['admin'];
+            $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
+
+            if ($formIdent === false || $formIdent === null || $formIdent === '') {
+                $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
             }
 
-            $objLabel = sprintf(
-                '%1$s #%2$s',
-                $objLabel,
-                $objId
-            );
+            if (isset($adminMetadata['forms'][$formIdent]['label'])) {
+                $objLabel = $adminMetadata['forms'][$formIdent]['label'];
 
-            $this->title = sprintf('Edit Object: %s', $objLabel);
+                if (TranslationString::isTranslatable($objLabel)) {
+                    $objLabel = new TranslationString($objLabel);
+                }
+            }
         }
+
+        if (!$objLabel && isset($metadata['labels']['edit_item'])) {
+            $objLabel = $metadata['labels']['edit_item'];
+
+            if (TranslationString::isTranslatable($objLabel)) {
+                $objLabel = new TranslationString($objLabel);
+            }
+        }
+
+        if (!$objLabel) {
+            $objType = (isset($metadata['labels']['singular_name']) ? $metadata['labels']['singular_name'] : null );
+            if (TranslationString::isTranslatable($objType)) {
+                $objType = new TranslationString($objType);
+            }
+
+            if ($objId) {
+                $objLabel = new TranslationString([
+                    'en' => 'Edit: {{objType}} #{{id}}',
+                    'fr' => 'Modifier : {{objType}} #{{id}}'
+                ]);
+            } else {
+                $objLabel = new TranslationString([
+                    'en' => 'Create: {{objType}}',
+                    'fr' => 'Créer : {{objType}}'
+                ]);
+            }
+
+            if ($objType) {
+                $objLabel = sprintf(str_replace('{{objType}}', '%s', $objLabel), $objType);
+            }
+        }
+
+        $this->title = $obj->render((string)$objLabel, $obj);
 
         return $this->title;
     }

@@ -265,27 +265,64 @@ class CollectionTemplate extends AdminTemplate implements
      */
     public function title()
     {
+        if (isset($this->title)) {
+            return $this->title;
+        }
+
         $config = $this->objCollectionDashboardConfig();
 
         if (isset($config['title'])) {
-            return new TranslationString($config['title']);
-        } else {
-            $obj      = $this->proto();
-            $objLabel = $this->objType();
-            $metadata = $obj->metadata();
+            $this->title = new TranslationString($config['title']);
 
-            if (isset($metadata['admin'])) {
-                $metadata    = $metadata['admin'];
-                $formIdent   = ( isset($metadata['default_list']) ? $metadata['default_list'] : '' );
-                $objFormData = ( isset($metadata['lists'][$formIdent]) ? $metadata['lists'][$formIdent] : [] );
+            return $this->title;
+        }
 
-                if (isset($objFormData['label']) && TranslationString::isTranslatable($objFormData['label'])) {
-                    $objLabel = new TranslationString($objFormData['label']);
-                }
+        $model    = $this->proto();
+        $metadata = $model->metadata();
+        $objLabel = null;
+
+        if (!$objLabel && isset($metadata['admin']['lists'])) {
+            $adminMetadata = $metadata['admin'];
+            $listIdent     = filter_input(INPUT_GET, 'collection_ident', FILTER_SANITIZE_STRING);
+
+            if ($listIdent === false || $listIdent === null || $listIdent === '') {
+                $listIdent = (isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '');
             }
 
-            $this->title = sprintf('List: %s', $objLabel);
+            if (isset($adminMetadata['lists'][$listIdent]['label'])) {
+                $objLabel = $adminMetadata['lists'][$listIdent]['label'];
+
+                if (TranslationString::isTranslatable($objLabel)) {
+                    $objLabel = new TranslationString($objLabel);
+                }
+            }
         }
+
+        if (!$objLabel && isset($metadata['labels']['all_items'])) {
+            $objLabel = $metadata['labels']['all_items'];
+
+            if (TranslationString::isTranslatable($objLabel)) {
+                $objLabel = new TranslationString($objLabel);
+            }
+        }
+
+        if (!$objLabel) {
+            $objType = (isset($metadata['labels']['name']) ? $metadata['labels']['name'] : null );
+            if (TranslationString::isTranslatable($objType)) {
+                $objType = new TranslationString($objType);
+            }
+
+            $objLabel = new TranslationString([
+                'en' => 'List: {{objType}}',
+                'fr' => 'Liste : {{objType}}'
+            ]);
+
+            if ($objType) {
+                $objLabel = sprintf(str_replace('{{objType}}', '%s', $objLabel), $objType);
+            }
+        }
+
+        $this->title = $model->render((string)$objLabel, $model);
 
         return $this->title;
     }

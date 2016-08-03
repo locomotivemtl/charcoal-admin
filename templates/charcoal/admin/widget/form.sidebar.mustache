@@ -52,18 +52,20 @@
             {{!--
             @todo Only show the "delete" button if there's an object's ID.
             --}}
-                {{#objId}}
+                {{#isObjDeletable}}
                 <div class="c-panel_footer_item -red">
                     <span role="button" class="js-obj-delete">
                        <span class="fa fa-trash-o"></span> Effacer
                     </span>
                 </div>
-                {{/objId}}
+                {{/isObjDeletable}}
+                {{#isObjResettable}}
                 <div class="c-panel_footer_item -blue">
                     <span role="button" class="js-reset-form">
                         <span class="fa fa-refresh"></span> Réinitialiser
                     </span>
                 </div>
+                {{/isObjResettable}}
             </footer>
             {{/ showFooter }}
         </div>

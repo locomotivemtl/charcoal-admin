@@ -223,6 +223,40 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
+     * Determine if the object can be deleted.
+     *
+     * @return boolean
+     */
+    public function isObjDeletable()
+    {
+        $obj    = $this->form()->obj();
+        $method = [ $obj, 'isDeletable' ];
+
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return !!$obj->id();
+    }
+
+    /**
+     * Determine if the object can be resettable.
+     *
+     * @return boolean
+     */
+    public function isObjResettable()
+    {
+        $obj    = $this->form()->obj();
+        $method = [ $obj, 'isResettable' ];
+
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
+    }
+
+    /**
      * @param integer $priority The priority, or sorting index.
      * @throws InvalidArgumentException If the priority is not a number.
      * @return FormGroupWidget Chainable

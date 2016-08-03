@@ -85,10 +85,10 @@
   },
 
   "handlers": {
-      "defaults"  : {
-          "template": "charcoal/admin/template/handler",
-          "controller": "charcoal/admin/template/handler"
-      }
+    "defaults": {
+      "template": "charcoal/admin/template/handler",
+      "controller": "charcoal/admin/template/handler"
+    }
   },
 
   "user": {

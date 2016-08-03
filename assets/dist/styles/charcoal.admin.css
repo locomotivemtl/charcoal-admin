@@ -277,6 +277,13 @@ td {
           align-items: center;
   z-index: 99;
   line-height: 1; }
+  .c-header-main .btn-link {
+    opacity: 0.5;
+    color: white; }
+    .c-header-main .btn-link:focus, .c-header-main .btn-link:hover {
+      opacity: 1;
+      color: white;
+      text-decoration: none; }
 
 .c-header-main_button {
   width: 45px;
@@ -337,9 +344,7 @@ td {
       margin: 0 1.25rem; } }
 
 .c-header-main_help {
-  font-size: 0.75rem;
-  opacity: 0.37;
-  color: #ffffff; }
+  font-size: 0.75rem; }
   @media (max-width: 1199px) {
     .c-header-main_help {
       margin: 0 2px; } }
@@ -989,7 +994,10 @@ td {
   height: 3.125rem;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
 
 .c-panel_footer_item {
   width: 50%;

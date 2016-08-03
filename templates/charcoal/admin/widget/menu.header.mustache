@@ -14,11 +14,18 @@ Header menu Widget
     <a class="c-header-main_link" href="{{adminUrl}}home">
         <svg class="c-header-main_logo_img" role="img" title="Charcoal"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
     </a>
-    <!--<a class="c-header-main_link" href="{{adminUrl}}help">
+    {{#baseUrl}}
+    <a class="btn btn-link" href="{{baseUrl}}">
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span> {{#_t}}Aller sur le site{{/_t}}
+    </a>
+    {{/baseUrl}}
+    {{!--
+    <a class="btn btn-link" href="[[adminUrl]]help">
         <span class="c-header-main_help">
-            {{#_t}}Besoin d’aide ?{{/_t}}
+            [[#_t]]Besoin d’aide ?[[/_t]]
         </span>
-    </a>-->
+    </a>
+    --}}
     {{#showTopHeaderMenu}}
     <button class="c-header-main_user js-toggle-class" type="button" data-target="body" data-class="has-nav-user">
         <span class="c-header-main_user_name">Bienvenue sur memo</span>

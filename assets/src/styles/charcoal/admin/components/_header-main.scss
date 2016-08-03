@@ -14,6 +14,18 @@
     align-items: center;
     z-index: 99;
     line-height: 1;
+
+    .btn-link {
+        opacity: 0.5;
+        color: white;
+
+        &:focus,
+        &:hover {
+            opacity: 1;
+            color: white;
+            text-decoration: none;
+        }
+    }
 }
 
 .c-header-main_button {
@@ -82,8 +94,6 @@
 
 .c-header-main_help {
     font-size: rem(12px);
-    opacity: 0.37;
-    color: $white;
 
     @media (max-width: $to-large) {
         margin: 0 2px;

@@ -41,6 +41,8 @@ class ElfinderConnectorAction extends AdminAction
      */
     private $formProperty;
 
+    private $appConfig;
+
     /**
      * @param Container $container Pimple DI container.
      * @return void
@@ -124,6 +126,11 @@ class ElfinderConnectorAction extends AdminAction
 
                     // URL to files (REQUIRED)
                     'URL'           => $this->appConfig['URL'].'uploads',
+
+                    'tmbURL'        => $this->appConfig['URL'].'uploads/.tmb',
+                    'tmbPath'        => 'uploads/.tmb',
+                    'tmbSize'       => 200,
+                    'tmbBgColor' => 'transparent',
                     // All MIME types not allowed to upload
                     'uploadDeny'    => [ 'all' ],
                     // MIME type `image` and `text/plain` allowed to upload

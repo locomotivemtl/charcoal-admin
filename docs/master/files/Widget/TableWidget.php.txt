@@ -101,7 +101,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         $fromRequest = $this->dataFromRequest();
         if ($fromRequest) {
-            parent::setData($fromRequest);
+            // parent::setData($fromRequest);
         }
 
         return $this;

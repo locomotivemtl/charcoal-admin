@@ -15,6 +15,8 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
 
     // Property_Input_Tinymce properties
     this.input_id = null;
+    this.data = opts.data;
+
     this.editor_options = null;
     this._editor = null;
 
@@ -36,9 +38,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
-    console.debug(opts);
     this.input_id = opts.input_id || this.input_id;
-    console.debug(this.input_id);
     this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
 
     var default_opts = {
@@ -130,7 +130,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //code_dialog_height: '400px',
         contextmenu: 'link image inserttable | cell row column deletetable',
 
-        file_picker_callback: this.elfinder_browser,
+        file_picker_callback: this.elfinder_browser.bind(this),
         //image_list: [],
         image_advtab: true,
         //image_class_list: [],
@@ -215,11 +215,9 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (callback, value, meta)
 {
-    console.debug(this);
-    console.debug(this.input_id);
     window.tinyMCE.activeEditor.windowManager.open({
-        file: Charcoal.Admin.admin_url() + 'elfinder?callback=' + this.input_id,// use an absolute path!
-        title: 'File Manager',
+        file: this.data.elfinder_url + '&' + $.param(meta),
+        title: this.data.dialog_title || '',
         width: 900,
         height: 450,
         resizable: 'yes'

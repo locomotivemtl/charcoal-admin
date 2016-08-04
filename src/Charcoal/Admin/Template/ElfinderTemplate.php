@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Template;
 
+use Charcoal\Property\FileProperty;
 use \RuntimeException;
 
 // Dependency from Pimple
@@ -178,8 +179,16 @@ class ElfinderTemplate extends AdminTemplate
         if ($property) {
             $translator = TranslationConfig::instance();
 
-            $settings['lang']      = $translator->currentLanguage();
-            $settings['onlyMimes'] = $property->acceptedMimetypes();
+            $settings['lang'] = $translator->currentLanguage();
+
+            if($property instanceof FileProperty) {
+                $settings['onlyMimes'] = $property->acceptedMimetypes();
+            } elseif (isset($_GET['filetype'])) {
+                $settings['onlyMimes'] = (array)filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
+            }
+
+            $settings['rememberLastDir'] = !($property instanceof FileProperty);
+
         }
 
         return json_encode($settings, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));

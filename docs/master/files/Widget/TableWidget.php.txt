@@ -437,30 +437,41 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function createListActions()
     {
         $collectionConfig = $this->collectionConfig();
-        if ($collectionConfig) {
-            $listActions = (isset($collectionConfig['list_actions']) ? $collectionConfig['list_actions'] : []);
-            foreach ($listActions as &$action) {
+        $listActions = [];
+
+        if (isset($collectionConfig['list_actions'])) {
+            foreach ($collectionConfig['list_actions'] as $action) {
+                if (isset($action['ident'])) {
+                    if ($action['ident'] === 'create' && !$this->isObjCreatable()) {
+                        continue;
+                    }
+                } else {
+                    $action['ident'] = null;
+                }
+
                 if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
                     $action['label'] = new TranslationString($action['label']);
+                } elseif ($action['ident']) {
+                    $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
+                } else {
+                    continue;
                 }
 
                 if (isset($action['is_button'])) {
-                    $action['isButton'] = $action['is_button'];
-                    unset($action['is_button']);
+                    $action['isButton'] = !!$action['is_button'];
+                } elseif (isset($action['isButton'])) {
+                    $action['is_button'] = !!$action['isButton'];
                 }
 
                 if (!isset($action['button_type'])) {
-                    if (isset($action['ident']) && $action['ident'] === 'create') {
-                        $action['button_type'] = 'info';
-                    } else {
-                        $action['button_type'] = 'default';
-                    }
+                    $action['button_type'] = ($action['ident'] === 'create') ? 'info' : 'default';
                 }
+
+                $listActions[] = $action;
             }
-            return $listActions;
-        } else {
-            return [];
         }
+
+        return $listActions;
     }
 
 
@@ -539,6 +550,26 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $this->objectEditUrl();
+    }
+
+    /**
+     * Determine if the object can be created.
+     *
+     * If TRUE, the "Create" button is shown. Objects can still be
+     * inserted programmatically or via direct action on the database.
+     *
+     * @return boolean
+     */
+    public function isObjCreatable()
+    {
+        $model  = $this->proto();
+        $method = [ $model, 'isCreatable' ];
+
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
     }
 }
 

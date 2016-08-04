@@ -225,6 +225,9 @@ class FormSidebarWidget extends AdminWidget
     /**
      * Determine if the object can be deleted.
      *
+     * If TRUE, the "Delete" button is shown. The object can still be
+     * deleted programmatically or via direct action on the database.
+     *
      * @return boolean
      */
     public function isObjDeletable()
@@ -240,7 +243,11 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * Determine if the object can be resettable.
+     * Determine if the object can be reset.
+     *
+     * If TRUE, the "Reset" button is shown. The object can still be
+     * reset to its default values programmatically or emptied via direct
+     * action on the database.
      *
      * @return boolean
      */

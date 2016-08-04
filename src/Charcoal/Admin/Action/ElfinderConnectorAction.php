@@ -31,11 +31,11 @@ use \Charcoal\Admin\AdminAction;
 class ElfinderConnectorAction extends AdminAction
 {
     /**
-     * The Charcoal application configuration.
+     * The base URI for the Charcoal application.
      *
-     * @var \Charcoal\Config\ConfigInterface
+     * @var string|\Psr\Http\Message\UriInterface
      */
-    private $appConfig;
+    public $baseUrl;
 
     /**
      * Store the factory instance for the current class.
@@ -61,7 +61,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         parent::setDependencies($container);
 
-        $this->appConfig = $container['config'];
+        $this->baseUrl = $container['base-url'];
         $this->setPropertyFactory($container['property/factory']);
     }
 
@@ -130,12 +130,12 @@ class ElfinderConnectorAction extends AdminAction
                     'startPath'     => $startPath,
 
                     // URL to files (REQUIRED)
-                    'URL'           => $this->appConfig['URL'].'uploads',
+                    'URL'           => $this->baseUrl.'/uploads',
 
-                    'tmbURL'        => $this->appConfig['URL'].'uploads/.tmb',
-                    'tmbPath'        => 'uploads/.tmb',
+                    'tmbURL'        => $this->baseUrl.'/uploads/.tmb',
+                    'tmbPath'       => 'uploads/.tmb',
                     'tmbSize'       => 200,
-                    'tmbBgColor' => 'transparent',
+                    'tmbBgColor'    => 'transparent',
                     // All MIME types not allowed to upload
                     'uploadDeny'    => [ 'all' ],
                     // MIME type `image` and `text/plain` allowed to upload

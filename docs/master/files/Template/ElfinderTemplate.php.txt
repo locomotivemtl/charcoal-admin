@@ -95,7 +95,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function elfinderAssets()
     {
-        $flag = filter_input(INPUT_GET, 'assets', (FILTER_VALIDATE_BOOLEAN|FILTER_NULL_ON_FAILURE));
+        $flag = filter_input(INPUT_GET, 'assets', FILTER_VALIDATE_BOOLEAN);
 
         if ($flag === null) {
             return true;

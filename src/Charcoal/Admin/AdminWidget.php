@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin;
 
+use \RuntimeException;
 use \InvalidArgumentException;
 
 use \Pimple\Container;
@@ -17,6 +18,9 @@ use \Charcoal\App\Template\AbstractWidget;
  */
 class AdminWidget extends AbstractWidget
 {
+    const DATA_SOURCE_REQUEST = 'request';
+    const DATA_SOURCE_OBJECT  = 'object';
+
     /**
      * The admin module's configuration.
      *
@@ -68,6 +72,20 @@ class AdminWidget extends AbstractWidget
      * @var integer $priority
      */
     private $priority;
+
+    /**
+     * Extra data sources to merge when setting data on an entity.
+     *
+     * @var array
+     */
+    private $dataSources;
+
+    /**
+     * Associative array of source identifiers and options to apply when merging.
+     *
+     * @var array
+     */
+    private $dataSourceFilters = [];
 
     /**
      * @var FactoryInterface $modelFactory
@@ -199,6 +217,214 @@ class AdminWidget extends AbstractWidget
     public function ident()
     {
         return $this->ident;
+    }
+
+    /**
+     * Set extra data sources to merge when setting data on an entity.
+     *
+     * @param mixed $sources One or more data source identifiers to merge data from.
+     *     Pass NULL to reset the entity back to default sources.
+     *     Pass FALSE, an empty string or array to disable extra sources.
+     * @return AdminWidget Chainable
+     */
+    public function setDataSources($sources)
+    {
+        if ($sources === null) {
+            $this->dataSources = null;
+
+            return $this;
+        }
+
+
+        if (!is_array($sources)) {
+            $sources = [ $sources ];
+        }
+
+        foreach ($sources as $ident => $filter) {
+            $this->addDataSources($ident, $filter);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set extra data sources to merge when setting data on an entity.
+     *
+     * @param mixed $sourceIdent  The data source identifier.
+     * @param mixed $sourceFilter Optional filter to apply to the source's data.
+     * @throws InvalidArgumentException If the data source is invalid.
+     * @return AdminWidget Chainable
+     */
+    protected function addDataSources($sourceIdent, $sourceFilter = null)
+    {
+        $validSources = $this->acceptedDataSources();
+
+        if (is_numeric($sourceIdent) && is_string($sourceFilter)) {
+            $sourceIdent   = $sourceFilter;
+            $sourceFilter = null;
+        }
+
+        if (!is_string($sourceIdent)) {
+            throw new InvalidArgumentException('Data source identifier must be a string');
+        }
+
+        if (!in_array($sourceIdent, $validSources)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Invalid data source. Must be one of %s',
+                    implode(', ', $validSources)
+                )
+            );
+        }
+
+        if ($this->dataSources === null) {
+            $this->dataSources = [];
+        }
+
+        $this->dataSources[] = $sourceIdent;
+        $this->dataSourceFilters[$sourceIdent] = $this->resolveDataSourceFilter($sourceFilter);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the extra data sources to merge when setting data on an entity.
+     *
+     * @return string[]
+     */
+    public function dataSources()
+    {
+        if ($this->dataSources === null) {
+            return $this->defaultDataSources();
+        }
+
+        return $this->dataSources;
+    }
+
+    /**
+     * Retrieve the available data sources (when setting data on an entity).
+     *
+     * @return string[]
+     */
+    protected function acceptedDataSources()
+    {
+        return [ self::DATA_SOURCE_REQUEST, self::DATA_SOURCE_OBJECT ];
+    }
+
+    /**
+     * Retrieve the default data sources (when setting data on an entity).
+     *
+     * @return string[]
+     */
+    protected function defaultDataSources()
+    {
+        return [];
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * @return array
+     */
+    protected function defaultDataSourceFilters()
+    {
+        return [];
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * Note: Adapted from {@see \Slim\CallableResolver}.
+     *
+     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
+     * @param  mixed $toResolve A callable used when merging data.
+     * @return callable|null
+     */
+    protected function resolveDataSourceFilter($toResolve)
+    {
+        if (is_callable($toResolve)) {
+            return $toResolve;
+        }
+
+        $resolved = $toResolve;
+
+        if (is_string($toResolve)) {
+            // check for slim callable as "class:method"
+            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+            if (preg_match($callablePattern, $toResolve, $matches)) {
+                $class  = $matches[1];
+                $method = $matches[2];
+
+                if ($class === 'parent') {
+                    $resolved = [ $this, $class.'::'.$method ];
+                } else {
+                    if (!class_exists($class)) {
+                        return null;
+                    }
+                    $resolved = [ $class, $method ];
+                }
+            } else {
+                $resolved = [ $this, $toResolve ];
+            }
+        }
+
+        if (!is_callable($resolved)) {
+            return null;
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * Retrieve the callable filter for the given data source.
+     *
+     * @param string $sourceIdent A data source identifier.
+     * @throws InvalidArgumentException If the data source is invalid.
+     * @return callable|null Returns a callable variable.
+     */
+    public function dataSourceFilter($sourceIdent)
+    {
+        if (!is_string($sourceIdent)) {
+            throw new InvalidArgumentException('Data source identifier must be a string');
+        }
+
+        $filters = array_merge($this->defaultDataSourceFilters(), $this->dataSourceFilters);
+
+        if (isset($filters[$sourceIdent])) {
+            return $filters[$sourceIdent];
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieve the available data sources (when setting data on an entity).
+     *
+     * @param array|ArrayInterface $dataset The entity data.
+     * @return AdminWidget Chainable
+     */
+    protected function mergeDataSources($dataset = null)
+    {
+        $sources = $this->dataSources();
+        foreach ($sources as $sourceIdent) {
+            $filter = $this->dataSourceFilter($sourceIdent);
+            $getter = $this->camelize('data_from_'.$sourceIdent);
+            $method = [ $this, $getter ];
+
+            if (is_callable($method)) {
+                $data = call_user_func($method);
+
+                if ($data) {
+                    if ($filter && $dataset) {
+                        $data = call_user_func($filter, $data, $dataset);
+                    }
+
+                    parent::setData($data);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**

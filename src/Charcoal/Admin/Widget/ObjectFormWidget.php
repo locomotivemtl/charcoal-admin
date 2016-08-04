@@ -59,18 +59,65 @@ class ObjectFormWidget extends FormWidget implements
     {
         parent::setData($data);
 
-        $fromRequest = $this->dataFromRequest();
-        if ($fromRequest) {
-            parent::setData($fromRequest);
-        }
-
-        $fromModel = $this->dataFromObject();
-        if ($fromModel) {
-            $data = array_merge_recursive($fromModel, $data);
-            parent::setData($data);
-        }
+        $this->mergeDataSources($data);
 
         return $this;
+    }
+
+    /**
+     * Retrieve the default data sources (when setting data on an entity).
+     *
+     * @return string[]
+     */
+    protected function defaultDataSources()
+    {
+        return [ 'request', 'object' ];
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * @return array
+     */
+    protected function defaultDataSourceFilters()
+    {
+        return [
+            'request' => null,
+            'object'  => 'array_merge_recursive'
+        ];
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * Note: Adapted from {@see \Slim\CallableResolver}.
+     *
+     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
+     * @param  mixed $toResolve A callable used when merging data.
+     * @return callable|null
+     */
+    protected function resolveDataSourceFilter($toResolve)
+    {
+        if (is_string($toResolve)) {
+            $obj = $this->obj();
+
+            $resolved = [ $obj, $toResolve ];
+
+            // check for slim callable as "class:method"
+            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+            if (preg_match($callablePattern, $toResolve, $matches)) {
+                $class  = $matches[1];
+                $method = $matches[2];
+
+                if ($class === 'parent') {
+                    $resolved = [ $obj, $class.'::'.$method ];
+                }
+            }
+
+            $toResolve = $resolved;
+        }
+
+        return parent::resolveDataSourceFilter($toResolve);
     }
 
     /**

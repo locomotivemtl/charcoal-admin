@@ -8,9 +8,9 @@
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span class="sr-only">{{# _t }}Erreurs:{{/ _t }}</span>
     Aucun objet de type "{{ objType }}" n'existe.
-    {{# objectCreateUrl }}
+    {{# isObjCreatable }}
     <div class="btn-group" role="group">
         <a class="btn btn-info" href="{{ adminUrl }}{{ objectCreateUrl }}">{{# _t }}Créer un nouvel objet{{/ _t }}</a>
     </div>
-    {{/ objectCreateUrl }}
+    {{/ isObjCreatable }}
 </div>

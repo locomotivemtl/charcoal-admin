@@ -2,14 +2,16 @@
 
 namespace Charcoal\Admin\Template;
 
-use Charcoal\Property\FileProperty;
 use \RuntimeException;
 
 // Dependency from Pimple
 use \Pimple\Container;
 
-// Dependency from 'charcoal-core'
+// Dependency from 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
+
+// Dependency from 'charcoal-property'
+use Charcoal\Property\FileProperty;
 
 // Dependency from 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
@@ -93,45 +95,53 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function elfinderAssets()
     {
-        return isset($_GET['assets']) ? (bool)$_GET['assets'] : true;
+        $flag = filter_input(INPUT_GET, 'assets', (FILTER_VALIDATE_BOOLEAN|FILTER_NULL_ON_FAILURE));
+
+        if ($flag === null) {
+            return true;
+        }
+
+        return $flag;
     }
 
     /**
-     * @return string
+     * Retrieve the current elFinder callback ID from the GET parameters.
+     *
+     * @return string|null
      */
     public function elfinderCallback()
     {
-        return isset($_GET['callback']) ? $_GET['callback'] : '';
+        return filter_input(INPUT_GET, 'callback', FILTER_SANITIZE_STRING);
     }
 
     /**
      * Retrieve the current object type from the GET parameters.
      *
-     * @return string
+     * @return string|null
      */
     public function objType()
     {
-        return (isset($_GET['obj_type']) ? $_GET['obj_type'] : null);
+        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
     }
 
     /**
      * Retrieve the current object ID from the GET parameters.
      *
-     * @return string
+     * @return string|null
      */
     public function objId()
     {
-        return (isset($_GET['obj_id']) ? $_GET['obj_id'] : null);
+        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
     }
 
     /**
      * Retrieve the current object's property identifier from the GET parameters.
      *
-     * @return string
+     * @return string|null
      */
     public function propertyIdent()
     {
-        return (isset($_GET['property']) ? $_GET['property'] : null);
+        return filter_input(INPUT_GET, 'property', FILTER_SANITIZE_STRING);
     }
 
     /**
@@ -181,14 +191,14 @@ class ElfinderTemplate extends AdminTemplate
 
             $settings['lang'] = $translator->currentLanguage();
 
-            if($property instanceof FileProperty) {
+            $mimeTypes = filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
+            if ($mimeTypes) {
+                $settings['onlyMimes'] = (array)$mimeTypes;
+            } elseif ($property instanceof FileProperty) {
                 $settings['onlyMimes'] = $property->acceptedMimetypes();
-            } elseif (isset($_GET['filetype'])) {
-                $settings['onlyMimes'] = (array)filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
             }
 
             $settings['rememberLastDir'] = !($property instanceof FileProperty);
-
         }
 
         return json_encode($settings, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));

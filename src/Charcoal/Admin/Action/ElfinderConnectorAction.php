@@ -2,8 +2,7 @@
 
 namespace Charcoal\Admin\Action;
 
-use Charcoal\Factory\FactoryInterface;
-use Charcoal\Property\PropertyInterface;
+use \RuntimeException;
 use \InvalidArgumentException;
 
 // Dependencies from PSR-7 (HTTP Messaging)
@@ -17,15 +16,26 @@ use \Pimple\Container;
 use \elFinderConnector;
 use \elFinder;
 
+// Dependency from 'charcoal-factory'
+use \Charcoal\Factory\FactoryInterface;
+
+// Dependency from 'charcoal-property'
+use Charcoal\Property\PropertyInterface;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
-use SebastianBergmann\PHPLOC\RuntimeException;
 
 /**
- * Elfinder connector
+ * elFinder Connector
  */
 class ElfinderConnectorAction extends AdminAction
 {
+    /**
+     * The Charcoal application configuration.
+     *
+     * @var \Charcoal\Config\ConfigInterface
+     */
+    private $appConfig;
 
     /**
      * Store the factory instance for the current class.
@@ -41,10 +51,10 @@ class ElfinderConnectorAction extends AdminAction
      */
     private $formProperty;
 
-    private $appConfig;
-
     /**
-     * @param Container $container Pimple DI container.
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -93,26 +103,21 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $startPath = 'uploads/';
+        unset($request);
 
-        $formData = $request->getParams();
+        $startPath    = 'uploads/';
+        $formProperty = $this->formProperty();
 
-        $formProperty = $this->formProperty($formData);
-
-        error_log(var_export($formProperty['uploadPath'], true));
-
-        if(isset($formProperty['uploadPath'])) {
-            $startPath = $formProperty['uploadPath'];
+        if (isset($formProperty['upload_path'])) {
+            $startPath = $formProperty['upload_path'];
 
             if (!file_exists($startPath)) {
                 mkdir($startPath, 0777, true);
             }
         }
 
-        error_log(var_export($startPath, true));
-
-            // Documentation for connector options:
-            // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+        // Documentation for connector options:
+        // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         $opts = [
             'debug' => false,
             'roots' => [
@@ -164,51 +169,47 @@ class ElfinderConnectorAction extends AdminAction
     /**
      * Retrieve the current object type from the GET parameters.
      *
-     * @param $formData
-     * @return string
+     * @return string|null
      */
-    public function objType($formData)
+    public function objType()
     {
-        return (isset($formData['obj_type']) ? $formData['obj_type'] : null);
+        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
     }
 
     /**
      * Retrieve the current object ID from the GET parameters.
      *
-     * @param $formData
-     * @return string
+     * @return string|null
      */
-    public function objId($formData)
+    public function objId()
     {
-        return (isset($formData['obj_id']) ? $formData['obj_id'] : null);
+        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
     }
 
     /**
      * Retrieve the current object's property identifier from the GET parameters.
      *
-     * @param $formData
-     * @return string
+     * @return string|null
      */
-    public function propertyIdent($formData)
+    public function propertyIdent()
     {
-        return (isset($formData['property']) ? $formData['property'] : null);
+        return filter_input(INPUT_GET, 'property', FILTER_SANITIZE_STRING);
     }
 
     /**
      * Retrieve the current property.
      *
-     * @param $formData
      * @return PropertyInterface
      */
-    public function formProperty($formData)
+    public function formProperty()
     {
         if ($this->formProperty === null) {
             $this->formProperty = false;
 
-            if ($this->objType($formData) && $this->propertyIdent($formData)) {
-                $propertyIdent = $this->propertyIdent($formData);
+            if ($this->objType() && $this->propertyIdent()) {
+                $propertyIdent = $this->propertyIdent();
 
-                $model = $this->modelFactory()->create($this->objType($formData));
+                $model = $this->modelFactory()->create($this->objType());
                 $props = $model->metadata()->properties();
 
                 if (isset($props[$propertyIdent])) {

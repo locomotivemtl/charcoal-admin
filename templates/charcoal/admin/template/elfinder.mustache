@@ -31,12 +31,11 @@
             $(document).ready(function () {
                 var elf, defaults, actionUri, settings = {};
 
-                actionUri  = '{{ admin_url }}elfinder-connector' +
-                             '?obj_type={{ objType }}' +
-                             '&obj_id={{ objId }}' +
-                             '&property={{ propertyIdent }}';
-                <!--var prop = {{ propertyIdent }};-->
-                <!--console.log("prop : ", {{ propertyIdent }});-->
+                actionUri = '{{ admin_url }}elfinder-connector' +
+                            '?obj_type={{ objType }}' +
+                            '&obj_id={{ objId }}' +
+                            '&property={{ propertyIdent }}';
+
                 defaults = {
                     url: actionUri,
                     getFileCallback: function (file) {

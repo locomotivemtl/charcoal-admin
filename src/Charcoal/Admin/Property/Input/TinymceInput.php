@@ -4,6 +4,9 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
+// Dependency from 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
@@ -17,6 +20,13 @@ class TinymceInput extends AbstractPropertyInput
      * @var array $editorOptions
      */
     private $editorOptions = [];
+
+    /**
+     * Label for the file picker dialog.
+     *
+     * @var TranslationString|string
+     */
+    private $dialogTitle;
 
     /**
      * @param array $opts The editor options.
@@ -60,5 +70,49 @@ class TinymceInput extends AbstractPropertyInput
         }
         $this->editorOptions[$optIdent] = $optVal;
         return $this;
+    }
+
+    /**
+     * Set the title for the file picker dialog.
+     *
+     * @param  string|string[] $title The dialog title.
+     * @return self
+     */
+    public function setDialogTitle($title)
+    {
+        if (TranslationString::isTranslatable($title)) {
+            $this->dialogTitle = new TranslationString($title);
+        } else {
+            $this->dialogTitle = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the default title for the file picker dialog.
+     *
+     * @return string[]
+     */
+    protected function defaultDialogTitle()
+    {
+        return [
+            'en' => 'Media Library',
+            'fr' => 'Bibliothèque de médias'
+        ];
+    }
+
+    /**
+     * Retrieve the title for the file picker dialog.
+     *
+     * @return TranslationString|string|null
+     */
+    public function dialogTitle()
+    {
+        if ($this->dialogTitle === null) {
+            $this->setDialogTitle($this->defaultDialogTitle());
+        }
+
+        return $this->dialogTitle;
     }
 }

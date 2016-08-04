@@ -1296,6 +1296,17 @@ a:focus {
     .table-header .btn:first-child, .table-header .btn-group:first-child {
       margin-left: 0; }
 
+.bootstrap-dialog.-elfinder .modal-header {
+  border-bottom: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0; }
+
+.bootstrap-dialog.-elfinder .modal-body {
+  padding: 0; }
+
+.bootstrap-dialog.-elfinder iframe {
+  display: block; }
+
 .note-editor {
   border-color: #ccc;
   border-radius: 4px; }

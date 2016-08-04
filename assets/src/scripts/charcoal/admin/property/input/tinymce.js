@@ -216,10 +216,10 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (callback, value, meta)
 {
     window.tinyMCE.activeEditor.windowManager.open({
-        file: this.data.elfinder_url + '&' + $.param(meta),
-        title: this.data.dialog_title || '',
-        width: 900,
-        height: 450,
+        file:      this.data.elfinder_url + '&' + $.param(meta),
+        title:     this.data.dialog_title || '',
+        width:     900,
+        height:    450,
         resizable: 'yes'
     }, {
         oninsert: function (file, elf) {

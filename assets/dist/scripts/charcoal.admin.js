@@ -1899,9 +1899,10 @@ Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
     event.preventDefault();
 
     this.dialog = BootstrapDialog.show({
-        title:   this.data.dialog_title || '',
-        size:    BootstrapDialog.SIZE_WIDE,
-        message: $(
+        title:      this.data.dialog_title || '',
+        size:       BootstrapDialog.SIZE_WIDE,
+        cssClass:  '-elfinder',
+        message:   $(
             '<iframe name="' + this.input_id + '-elfinder" width="100%" height="400px" frameborder="0" ' +
             'src="' + this.data.elfinder_url + '"></iframe>'
         )
@@ -3042,10 +3043,10 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (callback, value, meta)
 {
     window.tinyMCE.activeEditor.windowManager.open({
-        file: this.data.elfinder_url + '&' + $.param(meta),
-        title: this.data.dialog_title || '',
-        width: 900,
-        height: 450,
+        file:      this.data.elfinder_url + '&' + $.param(meta),
+        title:     this.data.dialog_title || '',
+        width:     900,
+        height:    450,
         resizable: 'yes'
     }, {
         oninsert: function (file, elf) {

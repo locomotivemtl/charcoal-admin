@@ -92,9 +92,10 @@ Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
     event.preventDefault();
 
     this.dialog = BootstrapDialog.show({
-        title:   this.data.dialog_title || '',
-        size:    BootstrapDialog.SIZE_WIDE,
-        message: $(
+        title:      this.data.dialog_title || '',
+        size:       BootstrapDialog.SIZE_WIDE,
+        cssClass:  '-elfinder',
+        message:   $(
             '<iframe name="' + this.input_id + '-elfinder" width="100%" height="400px" frameborder="0" ' +
             'src="' + this.data.elfinder_url + '"></iframe>'
         )

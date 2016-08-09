@@ -1,4 +1,4 @@
-{{!--
+{{!
 charcoal/admin/widget/sidemenu
 }}
 
@@ -29,6 +29,33 @@ charcoal/admin/widget/sidemenu
     </ul>
     {{/hasLinks}}
 
+    {{#hasLinksGroups}}
+        {{# groups }}
+        <header class="o-header">
+        <h2 class="c-nav_heading">{{title}}</h2>
+        </header>
+        <ul class="c-nav_list -light -secondary">
+            {{#links}}
+                <li class="c-nav_list_item">
+                    <div class="c-nav_list_header {{#selected}}is-active{{/selected}}">
+                        <a class="c-nav_list_link" href="{{adminUrl}}{{url}}">
+                    <span class="c-nav_list_link_main">
+                        <span class="c-nav_list_link_text">
+                            {{name}}
+                        </span>
+                    </span>
+                            {{#num}}
+                                <span class="c-nav_list_link_number {{#numNew}}is-new{{/numNew}}">
+                                    {{num}}
+                                </span>
+                            {{/num}}
+                        </a>
+                    </div>
+                </li>
+            {{/links}}
+        </ul>
+        {{/ groups }}
+    {{/hasLinksGroups}}
 
     {{#mainAction}}
     <div class="btn-group">

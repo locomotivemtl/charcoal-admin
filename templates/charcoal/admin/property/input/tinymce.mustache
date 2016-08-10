@@ -18,7 +18,7 @@ Tinymce Property Input
 >{{&inputVal}}</textarea>
 
 {{#addJs}}
-    <script src="{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js"></script>
+    <script>window.tinyMCE || document.write('<script src="{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js"><\/script>')</script>
     <script>
 
         var elFinderCallback = window.elFinderCallback || {};

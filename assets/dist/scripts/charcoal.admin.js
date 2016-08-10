@@ -3470,10 +3470,12 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 */
 Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
 {
-    var title    = dialog_opts.title || '',
-        type     = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
-        size     = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
-        cssClass = dialog_opts.cssClass || '';
+    var title      = dialog_opts.title || '',
+        type       = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
+        size       = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
+        cssClass   = dialog_opts.cssClass || '',
+        showHeader = dialog_opts.showHeader || true,
+        showFooter = dialog_opts.showFooter || true;
 
     delete dialog_opts.title;
     delete dialog_opts.type;
@@ -3492,7 +3494,15 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
                 data     = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
-            dialog.$modalBody.on(
+            if (!showHeader) {
+                dialog.getModalHeader().addClass('hidden');
+            }
+
+            if (!showFooter) {
+                dialog.getModalFooter().addClass('hidden');
+            }
+
+            dialog.getModalBody().on(
                 'click.charcoal.bs.dialog',
                 '[data-dismiss="dialog"]',
                 { dialog: dialog },
@@ -4896,7 +4906,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                     nl2br:   false
                 });
 
-            dlg.$modalBody.on(
+            dlg.getModalBody().on(
                 'click.charcoal.bs.dialog',
                 '[data-dismiss="dialog"]',
                 { dialog: dlg },
@@ -5144,7 +5154,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                 },
                 $message = $('<div>Loading…</div>');
 
-            dialog.$modalBody.on(
+            dialog.getModalBody().on(
                 'click.charcoal.bs.dialog',
                 '[data-dismiss="dialog"]',
                 { dialog: dialog },
@@ -5227,7 +5237,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
             nl2br:   false
         });
 
-        dlg.$modalBody.on(
+        dlg.getModalBody().on(
             'click.charcoal.bs.dialog',
             '[data-dismiss="dialog"]',
             { dialog: dlg },

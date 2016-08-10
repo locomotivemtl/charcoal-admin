@@ -7,6 +7,30 @@
         display: block;
     }
 
+    .bootstrap-dialog-close-button > .close {
+        width: 24px;
+        margin-right: -6px;
+    }
+
+    .bootstrap-dialog-message .alert:last-child {
+        margin-bottom: 0;
+    }
+
+    .modal-body .nav-tabs {
+        margin-left:   -15px;
+        margin-right:  -15px;
+        padding-left:  15px;
+        padding-right: 15px;
+    }
+
+    .modal-header.hidden + .modal-body .nav-tabs {
+        padding-right: (15px * 2) + 18px;
+    }
+
+    .modal-body .nav-tabs.bootstrap-dialog-title {
+        display: block;
+    }
+
     .modal-body .modal-footer {
         margin: 0 -15px -15px;
     }

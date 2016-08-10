@@ -234,10 +234,12 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 */
 Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
 {
-    var title    = dialog_opts.title || '',
-        type     = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
-        size     = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
-        cssClass = dialog_opts.cssClass || '';
+    var title      = dialog_opts.title || '',
+        type       = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
+        size       = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
+        cssClass   = dialog_opts.cssClass || '',
+        showHeader = dialog_opts.showHeader || true,
+        showFooter = dialog_opts.showFooter || true;
 
     delete dialog_opts.title;
     delete dialog_opts.type;
@@ -256,7 +258,15 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
                 data     = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
-            dialog.$modalBody.on(
+            if (!showHeader) {
+                dialog.getModalHeader().addClass('hidden');
+            }
+
+            if (!showFooter) {
+                dialog.getModalFooter().addClass('hidden');
+            }
+
+            dialog.getModalBody().on(
                 'click.charcoal.bs.dialog',
                 '[data-dismiss="dialog"]',
                 { dialog: dialog },

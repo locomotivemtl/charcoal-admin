@@ -96,7 +96,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                     nl2br:   false
                 });
 
-            dlg.$modalBody.on(
+            dlg.getModalBody().on(
                 'click.charcoal.bs.dialog',
                 '[data-dismiss="dialog"]',
                 { dialog: dlg },
@@ -344,7 +344,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                 },
                 $message = $('<div>Loading…</div>');
 
-            dialog.$modalBody.on(
+            dialog.getModalBody().on(
                 'click.charcoal.bs.dialog',
                 '[data-dismiss="dialog"]',
                 { dialog: dialog },
@@ -427,7 +427,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
             nl2br:   false
         });
 
-        dlg.$modalBody.on(
+        dlg.getModalBody().on(
             'click.charcoal.bs.dialog',
             '[data-dismiss="dialog"]',
             { dialog: dlg },

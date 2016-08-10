@@ -284,7 +284,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#16-352" title="Go to source code">Charcoal/Admin/Widget/ObjectFormWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#16-336" title="Go to source code">Charcoal/Admin/Widget/ObjectFormWidget.php</a>
 		<br>
 	</div>
 
@@ -304,7 +304,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#38-48" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#34-44" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -341,7 +341,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_widgetType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#50-56" title="Go to source code">widgetType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#46-52" title="Go to source code">widgetType</a>( )</code>
 
 		<div class="description short">
 			
@@ -375,7 +375,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#58-78" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#54-74" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
 
 		<div class="description short">
 			
@@ -402,44 +402,10 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="dataFromRequest" id="_dataFromRequest">
-
-		<td class="attributes"><code>
-			 public 
-
-			array
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_dataFromRequest">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#80-89" title="Go to source code">dataFromRequest</a>( )</code>
-
-		<div class="description short">
-			<p>Fetch metadata from the current request.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Fetch metadata from the current request.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					array
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="acceptedRequestData" id="_acceptedRequestData">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
 			array
 			
@@ -448,7 +414,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_acceptedRequestData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#91-99" title="Go to source code">acceptedRequestData</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#76-87" title="Go to source code">acceptedRequestData</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the accepted metadata from the current request.</p>
@@ -466,6 +432,8 @@ Charcoal\App\Template\AbstractWidget
 
 
 
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Widget.FormWidget.html#_acceptedRequestData">Charcoal\Admin\Widget\FormWidget::acceptedRequestData()</a></code></div>
 
 		</div>
 		</div></td>
@@ -473,7 +441,7 @@ Charcoal\App\Template\AbstractWidget
 	<tr data-order="dataFromObject" id="_dataFromObject">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
 			array
 			
@@ -482,7 +450,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dataFromObject">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#101-131" title="Go to source code">dataFromObject</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#89-119" title="Go to source code">dataFromObject</a>( )</code>
 
 		<div class="description short">
 			<p>Fetch metadata from the current object type.</p>
@@ -516,20 +484,20 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setFormIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#133-147" title="Go to source code">setFormIdent</a>( <span>string <var>$formIdent</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#121-139" title="Go to source code">setFormIdent</a>( <span>string <var>$formIdent</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the identifier of the form to use.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the identifier of the form to use.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$formIdent</var></dt>
-					<dd>The form ident.</dd>
+					<dd>The form identifier.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -541,6 +509,40 @@ Charcoal\App\Template\AbstractWidget
 				<div class="list">
 					InvalidArgumentException<br>If the argument is not a string.
 				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="formIdentFallback" id="_formIdentFallback">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_formIdentFallback">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#141-159" title="Go to source code">formIdentFallback</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the identifier of the form to use, or its fallback.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the identifier of the form to use, or its fallback.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
 
 
 
@@ -559,14 +561,14 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#149-155" title="Go to source code">formIdent</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#161-169" title="Go to source code">formIdent</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the identifier of the form to use.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the identifier of the form to use.</p>
 
 
 
@@ -593,7 +595,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setNextUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#157-177" title="Go to source code">setNextUrl</a>( <span>string <var>$url</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#171-191" title="Go to source code">setNextUrl</a>( <span>string <var>$url</var></span> )</code>
 
 		<div class="description short">
 			
@@ -636,7 +638,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_action">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#179-198" title="Go to source code">action</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#193-212" title="Go to source code">action</a>( )</code>
 
 		<div class="description short">
 			<p>Form action (target URL)</p>
@@ -658,115 +660,6 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="setGroupDisplayMode" id="_setGroupDisplayMode">
-
-		<td class="attributes"><code>
-			 public 
-
-			<code><a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html">Charcoal\Admin\Widget\ObjectFormWidget</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setGroupDisplayMode">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#202-211" title="Go to source code">setGroupDisplayMode</a>( <span>string <var>$mode</var></span> )</code>
-
-		<div class="description short">
-			<p>Group display mode. Could be "tab" or nothing.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Group display mode. Could be "tab" or nothing.</p>
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$mode</var></dt>
-					<dd>Group display mode.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html">Charcoal\Admin\Widget\ObjectFormWidget</a></code><br>Chainable.
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="groupDisplayMode" id="_groupDisplayMode">
-
-		<td class="attributes"><code>
-			 public 
-
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_groupDisplayMode">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#213-220" title="Go to source code">groupDisplayMode</a>( )</code>
-
-		<div class="description short">
-			<p>Group display mode.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Group display mode.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string<br>Group display mode.
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="isTab" id="_isTab">
-
-		<td class="attributes"><code>
-			 public 
-
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_isTab">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#222-230" title="Go to source code">isTab</a>( )</code>
-
-		<div class="description short">
-			<p>Used in mustache templates to define if we're in
-tab display mode or not.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Used in mustache templates to define if we're in
-tab display mode or not.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					boolean<br>Tab display mode or not.
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="formProperties" id="_formProperties">
 
 		<td class="attributes"><code>
@@ -779,7 +672,7 @@ tab display mode or not.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#232-267" title="Go to source code">formProperties</a>( <span>array <var>$group</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#214-249" title="Go to source code">formProperties</a>( <span>array <var>$group</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			<p>Retrieve the object's properties as form controls.</p>
@@ -824,7 +717,7 @@ tab display mode or not.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#269-304" title="Go to source code">formProperty</a>( <span>string <var>$propertyIdent</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#251-286" title="Go to source code">formProperty</a>( <span>string <var>$propertyIdent</var></span> )</code>
 
 		<div class="description short">
 			<p>Retrieve an object property as a form control.</p>
@@ -868,16 +761,17 @@ tab display mode or not.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setFormData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#306-328" title="Go to source code">setFormData</a>( <span>array <var>$data</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#288-313" title="Go to source code">setFormData</a>( <span>array <var>$data</var></span> )</code>
 
 		<div class="description short">
-			<p>Not really a SETTER, but using the setter
-to pass by the $_GET var (@see setData()).</p>
+			<p>Set the form's auxiliary data.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Not really a SETTER, but using the setter
-to pass by the $_GET var (@see setData()).</p>
+			<p>Set the form's auxiliary data.</p>
+
+<p>This method is called via <a href="self::setData()">self::setData()</a> if a "form_data" parameter
+is present on the HTTP request.</p>
 
 
 				<h4>Parameters</h4>
@@ -909,24 +803,20 @@ to pass by the $_GET var (@see setData()).</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#330-342" title="Go to source code">formData</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#315-326" title="Go to source code">formData</a>( )</code>
 
 		<div class="description short">
-			<p>Object data merged with whatever data were set
-in the process.
-This appears to be unused.</p>
+			<p>Retrieve the form's auxiliary  data.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Object data merged with whatever data were set
-in the process.
-This appears to be unused.</p>
+			<p>Retrieve the form's auxiliary  data.</p>
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					array<br>Object data.
+					array
 				</div>
 
 
@@ -947,7 +837,7 @@ This appears to be unused.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#344-351" title="Go to source code">objData</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#328-335" title="Go to source code">objData</a>( )</code>
 
 		<div class="description short">
 			<p>Object data.</p>
@@ -978,8 +868,11 @@ This appears to be unused.</p>
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_addFormProperty">addFormProperty()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_addSidebar">addSidebar()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_createFormProperty">createFormProperty()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_dataFromRequest">dataFromRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_defaultGroupType">defaultGroupType()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_httpRequest">httpRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setFormProperties">setFormProperties()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setHttpRequest">setHttpRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setSidebars">setSidebars()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setWidgetFactory">setWidgetFactory()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_sidebars">sidebars()</a>, 
@@ -1068,7 +961,7 @@ This appears to be unused.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#23-26" title="Go to source code"><var>$formIdent</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#24-27" title="Go to source code"><var>$formIdent</var></a>
 
 			<div class="description short">
 				
@@ -1086,31 +979,6 @@ This appears to be unused.</p>
 			</div>
 		</td>
 	</tr>
-	<tr data-order="groupDisplayMode" id="$groupDisplayMode">
-		<td class="attributes"><code>
-			protected  
-			string
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#28-31" title="Go to source code"><var>$groupDisplayMode</var></a>
-
-			<div class="description short">
-				
-			</div>
-
-			<div class="description detailed hidden">
-				
-
-			</div>
-		</td>
-		<td class="value">
-			<div>
-				<a href="#$groupDisplayMode" class="anchor">#</a>
-				<code></code>
-			</div>
-		</td>
-	</tr>
 	<tr data-order="formData" id="$formData">
 		<td class="attributes"><code>
 			protected  
@@ -1118,7 +986,7 @@ This appears to be unused.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#33-36" title="Go to source code"><var>$formData</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.ObjectFormWidget.html#29-32" title="Go to source code"><var>$formData</var></a>
 
 			<div class="description short">
 				

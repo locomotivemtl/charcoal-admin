@@ -277,7 +277,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormWidget.html#23-249" title="Go to source code">Charcoal/Admin/Widget/FormWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormWidget.html#27-322" title="Go to source code">Charcoal/Admin/Widget/FormWidget.php</a>
 		<br>
 	</div>
 
@@ -297,7 +297,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#43-59" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#58-76" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -322,37 +322,114 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setHttpRequest" id="_setHttpRequest">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setHttpRequest">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#78-89" title="Go to source code">setHttpRequest</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
+
+		<div class="description short">
+			<p>Set an HTTP request object.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set an HTTP request object.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$request</var></dt>
+					<dd>A PSR-7 compatible Request instance.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="httpRequest" id="_httpRequest">
+
+		<td class="attributes"><code>
+			 public 
+
+			Psr\Http\Message\RequestInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_httpRequest">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#91-106" title="Go to source code">httpRequest</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the HTTP request object.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the HTTP request object.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Psr\Http\Message\RequestInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If an HTTP request was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
 
 		<td class="attributes"><code>
 			 protected 
 
-			CollectionTemplate
+			<code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setWidgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#61-69" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#108-119" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set an widget factory.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set an widget factory.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$factory</var></dt>
-					<dd>The widget factory, to create the dashboard and sidemenu widgets.</dd>
+					<dd>The factory to create widgets.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					CollectionTemplate<br>Chainable
+					<code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code>
 				</div>
 
 
@@ -373,16 +450,14 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_widgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#71-86" title="Go to source code">widgetFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#121-136" title="Go to source code">widgetFactory</a>( )</code>
 
 		<div class="description short">
-			<p>Safe Widget Factory getter.
-Create the widget factory if it was not preiously injected / set.</p>
+			<p>Retrieve the widget factory.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Safe Widget Factory getter.
-Create the widget factory if it was not preiously injected / set.</p>
+			<p>Retrieve the widget factory.</p>
 
 
 
@@ -393,7 +468,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 				<h4>Throws</h4>
 				<div class="list">
-					Exception<br>If the widget factory was not set / injected.
+					RuntimeException<br>If the widget factory was not previously set.
 				</div>
 
 
@@ -413,7 +488,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_createFormProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#88-99" title="Go to source code">createFormProperty</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#138-149" title="Go to source code">createFormProperty</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -440,6 +515,74 @@ Create the widget factory if it was not preiously injected / set.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="dataFromRequest" id="_dataFromRequest">
+
+		<td class="attributes"><code>
+			 protected 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_dataFromRequest">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#151-162" title="Go to source code">dataFromRequest</a>( )</code>
+
+		<div class="description short">
+			<p>Fetch metadata from the current request.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Fetch metadata from the current request.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="acceptedRequestData" id="_acceptedRequestData">
+
+		<td class="attributes"><code>
+			 protected 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_acceptedRequestData">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#164-172" title="Go to source code">acceptedRequestData</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the accepted metadata from the current request.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the accepted metadata from the current request.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setSidebars" id="_setSidebars">
 
 		<td class="attributes"><code>
@@ -452,7 +595,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSidebars">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#101-112" title="Go to source code">setSidebars</a>( <span>array <var>$sidebars</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#174-185" title="Go to source code">setSidebars</a>( <span>array <var>$sidebars</var></span> )</code>
 
 		<div class="description short">
 			
@@ -491,7 +634,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addSidebar">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#114-148" title="Go to source code">addSidebar</a>( <span>string <var>$sidebarIdent</var></span>, <span>array|<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code> <var>$sidebar</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#187-221" title="Go to source code">addSidebar</a>( <span>string <var>$sidebarIdent</var></span>, <span>array|<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code> <var>$sidebar</var></span> )</code>
 
 		<div class="description short">
 			
@@ -536,7 +679,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_sidebars">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#150-162" title="Go to source code">sidebars</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#223-235" title="Go to source code">sidebars</a>( )</code>
 
 		<div class="description short">
 			
@@ -570,7 +713,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_sortSidebarsByPriority">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#164-177" title="Go to source code">sortSidebarsByPriority</a>( <span>Charcoal\Ui\FormGroup\FormGroupInterface <var>$a</var></span>, <span>Charcoal\Ui\FormGroup\FormGroupInterface <var>$b</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#237-250" title="Go to source code">sortSidebarsByPriority</a>( <span>Charcoal\Ui\FormGroup\FormGroupInterface <var>$a</var></span>, <span>Charcoal\Ui\FormGroup\FormGroupInterface <var>$b</var></span> )</code>
 
 		<div class="description short">
 			<p>To be called with uasort().</p>
@@ -611,7 +754,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setFormProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#179-190" title="Go to source code">setFormProperties</a>( <span>array <var>$properties</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#252-263" title="Go to source code">setFormProperties</a>( <span>array <var>$properties</var></span> )</code>
 
 		<div class="description short">
 			
@@ -650,7 +793,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addFormProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#192-219" title="Go to source code">addFormProperty</a>( <span>string <var>$propertyIdent</var></span>, <span>array|FormPropertyInterface <var>$property</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#265-292" title="Go to source code">addFormProperty</a>( <span>string <var>$propertyIdent</var></span>, <span>array|FormPropertyInterface <var>$property</var></span> )</code>
 
 		<div class="description short">
 			
@@ -695,7 +838,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#221-240" title="Go to source code">formProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#294-313" title="Go to source code">formProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Properties generator</p>
@@ -729,7 +872,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_defaultGroupType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#242-248" title="Go to source code">defaultGroupType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormWidget.html#315-321" title="Go to source code">defaultGroupType</a>( )</code>
 
 		<div class="description short">
 			
@@ -801,14 +944,14 @@ Create the widget factory if it was not preiously injected / set.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormWidget.html#33-36" title="Go to source code"><var>$sidebars</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormWidget.html#37-42" title="Go to source code"><var>$sidebars</var></a>
 
 			<div class="description short">
-				<p>$sidebars</p>
+				<p>The form's sidebars.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$sidebars</p>
+				<p>The form's sidebars.</p>
 
 			</div>
 		</td>

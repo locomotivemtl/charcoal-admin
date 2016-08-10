@@ -245,7 +245,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Template.html">Template</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#24-265" title="Go to source code">Charcoal/Admin/Template/ElfinderTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#27-449" title="Go to source code">Charcoal/Admin/Template/ElfinderTemplate.php</a>
 		<br>
 	</div>
 
@@ -265,7 +265,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_init">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#69-100" title="Go to source code">init</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#79-110" title="Go to source code">init</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
 
 		<div class="description short">
 			<p>Retrieve options from Request's parameters (GET).</p>
@@ -306,7 +306,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#102-113" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#112-123" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Inject dependencies from a DI Container.</p>
@@ -343,7 +343,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#115-127" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#125-137" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			<p>Set a property factory.</p>
@@ -383,7 +383,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#129-144" title="Go to source code">propertyFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#139-154" title="Go to source code">propertyFactory</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the property factory.</p>
@@ -409,7 +409,301 @@ Charcoal\App\Template\AbstractTemplate
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="elfinderUrl" id="_elfinderUrl">
+	<tr data-order="setLocalizations" id="_setLocalizations">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setLocalizations">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#156-171" title="Go to source code">setLocalizations</a>( <span>array <var>$localizations</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the custom localization messages.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the custom localization messages.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$localizations</var></dt>
+					<dd>An associative array of localizations.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addLocalization" id="_addLocalization">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addLocalization">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#173-203" title="Go to source code">addLocalization</a>( <span>string <var>$ident</var></span>, <span>mixed <var>$translations</var></span> )</code>
+
+		<div class="description short">
+			<p>Add a custom localization message.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add a custom localization message.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$ident</var></dt>
+					<dd>The message ID.</dd>
+					<dt><var>$translations</var></dt>
+					<dd>The message translations.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="removeLocalization" id="_removeLocalization">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_removeLocalization">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#205-225" title="Go to source code">removeLocalization</a>( <span>string <var>$ident</var></span> )</code>
+
+		<div class="description short">
+			<p>Remove the translations for the given message ID.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Remove the translations for the given message ID.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$ident</var></dt>
+					<dd>The message ID to remove.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultLocalizations" id="_defaultLocalizations">
+
+		<td class="attributes"><code>
+			 protected 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultLocalizations">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#227-244" title="Go to source code">defaultLocalizations</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default custom localizations.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default custom localizations.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="numLocalizations" id="_numLocalizations">
+
+		<td class="attributes"><code>
+			 public 
+
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_numLocalizations">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#246-254" title="Go to source code">numLocalizations</a>( )</code>
+
+		<div class="description short">
+			<p>Count the number of localizations.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Count the number of localizations.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					integer
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasLocalizations" id="_hasLocalizations">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasLocalizations">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#256-264" title="Go to source code">hasLocalizations</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if there are any localizations.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if there are any localizations.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="localizations" id="_localizations">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Translation\TranslationString|Traversable|array|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_localizations">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#266-278" title="Go to source code">localizations</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the localizations.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the localizations.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Translation\TranslationString|Traversable|array|null
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="localization" id="_localization">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Translation\TranslationString|string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_localization">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#280-302" title="Go to source code">localization</a>( <span>string <var>$ident</var></span> )</code>
+
+		<div class="description short">
+			<p>Retrieve the translations for the given message ID.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the translations for the given message ID.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$ident</var></dt>
+					<dd>The message ID to lookup.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Translation\TranslationString|string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="elfinderLocalizationsAsJson" id="_elfinderLocalizationsAsJson">
 
 		<td class="attributes"><code>
 			 public 
@@ -420,8 +714,76 @@ Charcoal\App\Template\AbstractTemplate
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_elfinderUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#146-152" title="Go to source code">elfinderUrl</a>( )</code>
+		<a class="anchor" href="#_elfinderLocalizationsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#304-320" title="Go to source code">elfinderLocalizationsAsJson</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the custom localizations for elFinder.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the custom localizations for elFinder.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>Returns data serialized with json_encode().
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="adminAssetsUrl" id="_adminAssetsUrl">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_adminAssetsUrl">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#322-328" title="Go to source code">adminAssetsUrl</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="elfinderAssetsUrl" id="_elfinderAssetsUrl">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_elfinderAssetsUrl">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#330-336" title="Go to source code">elfinderAssetsUrl</a>( )</code>
 
 		<div class="description short">
 			
@@ -455,7 +817,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_elfinderAssets">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#154-160" title="Go to source code">elfinderAssets</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#338-344" title="Go to source code">elfinderAssets</a>( )</code>
 
 		<div class="description short">
 			
@@ -489,7 +851,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_elfinderCallback">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#162-170" title="Go to source code">elfinderCallback</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#346-354" title="Go to source code">elfinderCallback</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current elFinder callback ID from the GET parameters.</p>
@@ -523,7 +885,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#172-180" title="Go to source code">objType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#356-364" title="Go to source code">objType</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object type from the GET parameters.</p>
@@ -557,7 +919,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#182-190" title="Go to source code">objId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#366-374" title="Go to source code">objId</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object ID from the GET parameters.</p>
@@ -591,7 +953,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#192-200" title="Go to source code">propertyIdent</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#376-384" title="Go to source code">propertyIdent</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object's property identifier from the GET parameters.</p>
@@ -625,7 +987,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#202-232" title="Go to source code">formProperty</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#386-416" title="Go to source code">formProperty</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current property.</p>
@@ -647,7 +1009,7 @@ Charcoal\App\Template\AbstractTemplate
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="elfinderPropertyConfig" id="_elfinderPropertyConfig">
+	<tr data-order="elfinderConfigAsJson" id="_elfinderConfigAsJson">
 
 		<td class="attributes"><code>
 			 public 
@@ -658,8 +1020,8 @@ Charcoal\App\Template\AbstractTemplate
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_elfinderPropertyConfig">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#234-264" title="Go to source code">elfinderPropertyConfig</a>( )</code>
+		<a class="anchor" href="#_elfinderConfigAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.ElfinderTemplate.html#418-448" title="Go to source code">elfinderConfigAsJson</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current property's client-side settings for elFinder.</p>

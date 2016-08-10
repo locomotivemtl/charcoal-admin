@@ -393,8 +393,8 @@
 </span><span id="83" class="l"><a href="#83"> 83: </a>            <span class="php-var">$this</span>-&gt;setSuccess(<span class="php-keyword1">true</span>);
 </span><span id="84" class="l"><a href="#84"> 84: </a>            <span class="php-keyword1">return</span> <span class="php-var">$response</span>;
 </span><span id="85" class="l"><a href="#85"> 85: </a>        } <span class="php-keyword1">catch</span> (Exception <span class="php-var">$e</span>) {
-</span><span id="86" class="l"><a href="#86"> 86: </a>            <span class="php-var">$this</span>-&gt;addFeedback(<span class="php-keyword2">sprintf</span>(<span class="php-quote">'An error occured reloading the widget: &quot;%s&quot;'</span>, <span class="php-var">$e</span>-&gt;getMessage()), <span class="php-quote">'error'</span>);
-</span><span id="87" class="l"><a href="#87"> 87: </a>            <span class="php-var">$this</span>-&gt;addFeedback(<span class="php-var">$e</span>-&gt;getMessage(), <span class="php-quote">'error'</span>);
+</span><span id="86" class="l"><a href="#86"> 86: </a>            <span class="php-var">$this</span>-&gt;addFeedback(<span class="php-quote">'error'</span>, <span class="php-keyword2">sprintf</span>(<span class="php-quote">'An error occured reloading the widget: &quot;%s&quot;'</span>, <span class="php-var">$e</span>-&gt;getMessage()));
+</span><span id="87" class="l"><a href="#87"> 87: </a>            <span class="php-var">$this</span>-&gt;addFeedback(<span class="php-quote">'error'</span>, <span class="php-var">$e</span>-&gt;getMessage());
 </span><span id="88" class="l"><a href="#88"> 88: </a>            <span class="php-var">$this</span>-&gt;setSuccess(<span class="php-keyword1">false</span>);
 </span><span id="89" class="l"><a href="#89"> 89: </a>            <span class="php-keyword1">return</span> <span class="php-var">$response</span>-&gt;withStatus(<span class="php-num">404</span>);
 </span><span id="90" class="l"><a href="#90"> 90: </a>        }

@@ -783,82 +783,83 @@
 </span><span id="473" class="l"><a href="#473">473: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> addFeedback(<span class="php-var">$level</span>, <span class="php-var">$msg</span>)
 </span><span id="474" class="l"><a href="#474">474: </a>    {
 </span><span id="475" class="l"><a href="#475">475: </a>        <span class="php-var">$this</span>-&gt;feedbacks[] = [
-</span><span id="476" class="l"><a href="#476">476: </a>            <span class="php-quote">'msg'</span>=&gt;<span class="php-var">$msg</span>,
-</span><span id="477" class="l"><a href="#477">477: </a>            <span class="php-quote">'level'</span>=&gt;<span class="php-var">$level</span>
-</span><span id="478" class="l"><a href="#478">478: </a>        ];
-</span><span id="479" class="l"><a href="#479">479: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-</span><span id="480" class="l"><a href="#480">480: </a>    }
-</span><span id="481" class="l"><a href="#481">481: </a>
-</span><span id="482" class="l"><a href="#482">482: </a>    <span class="php-comment">/**
-</span></span><span id="483" class="l"><a href="#483">483: </a><span class="php-comment">     * Determine if user authentication is required.
-</span></span><span id="484" class="l"><a href="#484">484: </a><span class="php-comment">     *
-</span></span><span id="485" class="l"><a href="#485">485: </a><span class="php-comment">     * Authentication is required by default. If unnecessary,
-</span></span><span id="486" class="l"><a href="#486">486: </a><span class="php-comment">     * replace this method in the inherited template class.
-</span></span><span id="487" class="l"><a href="#487">487: </a><span class="php-comment">     *
-</span></span><span id="488" class="l"><a href="#488">488: </a><span class="php-comment">     * For example, the &quot;Login&quot; / &quot;Reset Password&quot; templates
-</span></span><span id="489" class="l"><a href="#489">489: </a><span class="php-comment">     * should return `false`.
-</span></span><span id="490" class="l"><a href="#490">490: </a><span class="php-comment">     *
-</span></span><span id="491" class="l"><a href="#491">491: </a><span class="php-comment">     * @return boolean
-</span></span><span id="492" class="l"><a href="#492">492: </a><span class="php-comment">     */</span>
-</span><span id="493" class="l"><a href="#493">493: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> authRequired()
-</span><span id="494" class="l"><a href="#494">494: </a>    {
-</span><span id="495" class="l"><a href="#495">495: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
-</span><span id="496" class="l"><a href="#496">496: </a>    }
-</span><span id="497" class="l"><a href="#497">497: </a>
-</span><span id="498" class="l"><a href="#498">498: </a>    <span class="php-comment">/**
-</span></span><span id="499" class="l"><a href="#499">499: </a><span class="php-comment">     * Determine if the current user is authenticated.
-</span></span><span id="500" class="l"><a href="#500">500: </a><span class="php-comment">     * Uses the Authenticator service.
-</span></span><span id="501" class="l"><a href="#501">501: </a><span class="php-comment">     *
-</span></span><span id="502" class="l"><a href="#502">502: </a><span class="php-comment">     * @return boolean
-</span></span><span id="503" class="l"><a href="#503">503: </a><span class="php-comment">     */</span>
-</span><span id="504" class="l"><a href="#504">504: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isAuthenticated()
-</span><span id="505" class="l"><a href="#505">505: </a>    {
-</span><span id="506" class="l"><a href="#506">506: </a>        <span class="php-keyword1">return</span> !!<span class="php-var">$this</span>-&gt;authenticator-&gt;authenticate();
-</span><span id="507" class="l"><a href="#507">507: </a>    }
-</span><span id="508" class="l"><a href="#508">508: </a>
-</span><span id="509" class="l"><a href="#509">509: </a>    <span class="php-comment">/**
-</span></span><span id="510" class="l"><a href="#510">510: </a><span class="php-comment">     * @return string
-</span></span><span id="511" class="l"><a href="#511">511: </a><span class="php-comment">     */</span>
-</span><span id="512" class="l"><a href="#512">512: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> adminUrl()
-</span><span id="513" class="l"><a href="#513">513: </a>    {
-</span><span id="514" class="l"><a href="#514">514: </a>        <span class="php-var">$adminPath</span> = <span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'base_path'</span>];
-</span><span id="515" class="l"><a href="#515">515: </a>
-</span><span id="516" class="l"><a href="#516">516: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">rtrim</span>(<span class="php-var">$this</span>-&gt;baseUrl(), <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>.<span class="php-keyword2">rtrim</span>(<span class="php-var">$adminPath</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>;
-</span><span id="517" class="l"><a href="#517">517: </a>    }
-</span><span id="518" class="l"><a href="#518">518: </a>
-</span><span id="519" class="l"><a href="#519">519: </a>    <span class="php-comment">/**
-</span></span><span id="520" class="l"><a href="#520">520: </a><span class="php-comment">     * @return string
-</span></span><span id="521" class="l"><a href="#521">521: </a><span class="php-comment">     */</span>
-</span><span id="522" class="l"><a href="#522">522: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> baseUrl()
-</span><span id="523" class="l"><a href="#523">523: </a>    {
-</span><span id="524" class="l"><a href="#524">524: </a>        <span class="php-var">$appConfig</span> = <span class="php-var">$this</span>-&gt;app()-&gt;config();
-</span><span id="525" class="l"><a href="#525">525: </a>
-</span><span id="526" class="l"><a href="#526">526: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$appConfig</span>-&gt;has(<span class="php-quote">'URL'</span>)) {
-</span><span id="527" class="l"><a href="#527">527: </a>            <span class="php-keyword1">return</span> <span class="php-var">$appConfig</span>-&gt;get(<span class="php-quote">'URL'</span>);
-</span><span id="528" class="l"><a href="#528">528: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="529" class="l"><a href="#529">529: </a>            <span class="php-var">$uri</span> = <span class="php-var">$this</span>-&gt;app()-&gt;getContainer()-&gt;get(<span class="php-quote">'request'</span>)-&gt;getUri();
-</span><span id="530" class="l"><a href="#530">530: </a>
-</span><span id="531" class="l"><a href="#531">531: </a>            <span class="php-keyword1">return</span> <span class="php-keyword2">rtrim</span>(<span class="php-var">$uri</span>-&gt;getBaseUrl(), <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>;
-</span><span id="532" class="l"><a href="#532">532: </a>        }
-</span><span id="533" class="l"><a href="#533">533: </a>    }
-</span><span id="534" class="l"><a href="#534">534: </a>
-</span><span id="535" class="l"><a href="#535">535: </a>    <span class="php-comment">/**
-</span></span><span id="536" class="l"><a href="#536">536: </a><span class="php-comment">     * @return string
-</span></span><span id="537" class="l"><a href="#537">537: </a><span class="php-comment">     */</span>
-</span><span id="538" class="l"><a href="#538">538: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> headerMenuLogo()
-</span><span id="539" class="l"><a href="#539">539: </a>    {
-</span><span id="540" class="l"><a href="#540">540: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'menu_logo'</span>])) {
-</span><span id="541" class="l"><a href="#541">541: </a>            <span class="php-keyword1">return</span> <span class="php-quote">'assets/admin/images/user_01.jpg'</span>;
-</span><span id="542" class="l"><a href="#542">542: </a>        }
-</span><span id="543" class="l"><a href="#543">543: </a>
-</span><span id="544" class="l"><a href="#544">544: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_string</span>(<span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'menu_logo'</span>])) {
-</span><span id="545" class="l"><a href="#545">545: </a>            <span class="php-keyword1">return</span> <span class="php-quote">'assets/admin/images/user_01.jpg'</span>;
-</span><span id="546" class="l"><a href="#546">546: </a>        }
-</span><span id="547" class="l"><a href="#547">547: </a>
-</span><span id="548" class="l"><a href="#548">548: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'menu_logo'</span>];
-</span><span id="549" class="l"><a href="#549">549: </a>    }
-</span><span id="550" class="l"><a href="#550">550: </a>}
-</span><span id="551" class="l"><a href="#551">551: </a></span></code></pre>
+</span><span id="476" class="l"><a href="#476">476: </a>            <span class="php-quote">'msg'</span>     =&gt; <span class="php-var">$msg</span>,
+</span><span id="477" class="l"><a href="#477">477: </a>            <span class="php-quote">'message'</span> =&gt; <span class="php-var">$msg</span>,
+</span><span id="478" class="l"><a href="#478">478: </a>            <span class="php-quote">'level'</span>   =&gt; <span class="php-var">$level</span>
+</span><span id="479" class="l"><a href="#479">479: </a>        ];
+</span><span id="480" class="l"><a href="#480">480: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+</span><span id="481" class="l"><a href="#481">481: </a>    }
+</span><span id="482" class="l"><a href="#482">482: </a>
+</span><span id="483" class="l"><a href="#483">483: </a>    <span class="php-comment">/**
+</span></span><span id="484" class="l"><a href="#484">484: </a><span class="php-comment">     * Determine if user authentication is required.
+</span></span><span id="485" class="l"><a href="#485">485: </a><span class="php-comment">     *
+</span></span><span id="486" class="l"><a href="#486">486: </a><span class="php-comment">     * Authentication is required by default. If unnecessary,
+</span></span><span id="487" class="l"><a href="#487">487: </a><span class="php-comment">     * replace this method in the inherited template class.
+</span></span><span id="488" class="l"><a href="#488">488: </a><span class="php-comment">     *
+</span></span><span id="489" class="l"><a href="#489">489: </a><span class="php-comment">     * For example, the &quot;Login&quot; / &quot;Reset Password&quot; templates
+</span></span><span id="490" class="l"><a href="#490">490: </a><span class="php-comment">     * should return `false`.
+</span></span><span id="491" class="l"><a href="#491">491: </a><span class="php-comment">     *
+</span></span><span id="492" class="l"><a href="#492">492: </a><span class="php-comment">     * @return boolean
+</span></span><span id="493" class="l"><a href="#493">493: </a><span class="php-comment">     */</span>
+</span><span id="494" class="l"><a href="#494">494: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> authRequired()
+</span><span id="495" class="l"><a href="#495">495: </a>    {
+</span><span id="496" class="l"><a href="#496">496: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+</span><span id="497" class="l"><a href="#497">497: </a>    }
+</span><span id="498" class="l"><a href="#498">498: </a>
+</span><span id="499" class="l"><a href="#499">499: </a>    <span class="php-comment">/**
+</span></span><span id="500" class="l"><a href="#500">500: </a><span class="php-comment">     * Determine if the current user is authenticated.
+</span></span><span id="501" class="l"><a href="#501">501: </a><span class="php-comment">     * Uses the Authenticator service.
+</span></span><span id="502" class="l"><a href="#502">502: </a><span class="php-comment">     *
+</span></span><span id="503" class="l"><a href="#503">503: </a><span class="php-comment">     * @return boolean
+</span></span><span id="504" class="l"><a href="#504">504: </a><span class="php-comment">     */</span>
+</span><span id="505" class="l"><a href="#505">505: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isAuthenticated()
+</span><span id="506" class="l"><a href="#506">506: </a>    {
+</span><span id="507" class="l"><a href="#507">507: </a>        <span class="php-keyword1">return</span> !!<span class="php-var">$this</span>-&gt;authenticator-&gt;authenticate();
+</span><span id="508" class="l"><a href="#508">508: </a>    }
+</span><span id="509" class="l"><a href="#509">509: </a>
+</span><span id="510" class="l"><a href="#510">510: </a>    <span class="php-comment">/**
+</span></span><span id="511" class="l"><a href="#511">511: </a><span class="php-comment">     * @return string
+</span></span><span id="512" class="l"><a href="#512">512: </a><span class="php-comment">     */</span>
+</span><span id="513" class="l"><a href="#513">513: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> adminUrl()
+</span><span id="514" class="l"><a href="#514">514: </a>    {
+</span><span id="515" class="l"><a href="#515">515: </a>        <span class="php-var">$adminPath</span> = <span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'base_path'</span>];
+</span><span id="516" class="l"><a href="#516">516: </a>
+</span><span id="517" class="l"><a href="#517">517: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">rtrim</span>(<span class="php-var">$this</span>-&gt;baseUrl(), <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>.<span class="php-keyword2">rtrim</span>(<span class="php-var">$adminPath</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>;
+</span><span id="518" class="l"><a href="#518">518: </a>    }
+</span><span id="519" class="l"><a href="#519">519: </a>
+</span><span id="520" class="l"><a href="#520">520: </a>    <span class="php-comment">/**
+</span></span><span id="521" class="l"><a href="#521">521: </a><span class="php-comment">     * @return string
+</span></span><span id="522" class="l"><a href="#522">522: </a><span class="php-comment">     */</span>
+</span><span id="523" class="l"><a href="#523">523: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> baseUrl()
+</span><span id="524" class="l"><a href="#524">524: </a>    {
+</span><span id="525" class="l"><a href="#525">525: </a>        <span class="php-var">$appConfig</span> = <span class="php-var">$this</span>-&gt;app()-&gt;config();
+</span><span id="526" class="l"><a href="#526">526: </a>
+</span><span id="527" class="l"><a href="#527">527: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$appConfig</span>-&gt;has(<span class="php-quote">'URL'</span>)) {
+</span><span id="528" class="l"><a href="#528">528: </a>            <span class="php-keyword1">return</span> <span class="php-var">$appConfig</span>-&gt;get(<span class="php-quote">'URL'</span>);
+</span><span id="529" class="l"><a href="#529">529: </a>        } <span class="php-keyword1">else</span> {
+</span><span id="530" class="l"><a href="#530">530: </a>            <span class="php-var">$uri</span> = <span class="php-var">$this</span>-&gt;app()-&gt;getContainer()-&gt;get(<span class="php-quote">'request'</span>)-&gt;getUri();
+</span><span id="531" class="l"><a href="#531">531: </a>
+</span><span id="532" class="l"><a href="#532">532: </a>            <span class="php-keyword1">return</span> <span class="php-keyword2">rtrim</span>(<span class="php-var">$uri</span>-&gt;getBaseUrl(), <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>;
+</span><span id="533" class="l"><a href="#533">533: </a>        }
+</span><span id="534" class="l"><a href="#534">534: </a>    }
+</span><span id="535" class="l"><a href="#535">535: </a>
+</span><span id="536" class="l"><a href="#536">536: </a>    <span class="php-comment">/**
+</span></span><span id="537" class="l"><a href="#537">537: </a><span class="php-comment">     * @return string
+</span></span><span id="538" class="l"><a href="#538">538: </a><span class="php-comment">     */</span>
+</span><span id="539" class="l"><a href="#539">539: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> headerMenuLogo()
+</span><span id="540" class="l"><a href="#540">540: </a>    {
+</span><span id="541" class="l"><a href="#541">541: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'menu_logo'</span>])) {
+</span><span id="542" class="l"><a href="#542">542: </a>            <span class="php-keyword1">return</span> <span class="php-quote">'assets/admin/images/user_01.jpg'</span>;
+</span><span id="543" class="l"><a href="#543">543: </a>        }
+</span><span id="544" class="l"><a href="#544">544: </a>
+</span><span id="545" class="l"><a href="#545">545: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_string</span>(<span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'menu_logo'</span>])) {
+</span><span id="546" class="l"><a href="#546">546: </a>            <span class="php-keyword1">return</span> <span class="php-quote">'assets/admin/images/user_01.jpg'</span>;
+</span><span id="547" class="l"><a href="#547">547: </a>        }
+</span><span id="548" class="l"><a href="#548">548: </a>
+</span><span id="549" class="l"><a href="#549">549: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;adminConfig[<span class="php-quote">'menu_logo'</span>];
+</span><span id="550" class="l"><a href="#550">550: </a>    }
+</span><span id="551" class="l"><a href="#551">551: </a>}
+</span><span id="552" class="l"><a href="#552">552: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

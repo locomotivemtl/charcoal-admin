@@ -290,7 +290,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.QuickFormWidget.html#7-23" title="Go to source code">Charcoal/Admin/Widget/QuickFormWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.QuickFormWidget.html#7-32" title="Go to source code">Charcoal/Admin/Widget/QuickFormWidget.php</a>
 		<br>
 	</div>
 
@@ -298,43 +298,42 @@ Charcoal\App\Template\AbstractWidget
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="setData" id="_setData">
+	<tr data-order="formIdentFallback" id="_formIdentFallback">
 
 		<td class="attributes"><code>
 			 public 
 
-			ObjectForm
+			string
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.QuickFormWidget.html#12-22" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
+		<a class="anchor" href="#_formIdentFallback">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.QuickFormWidget.html#12-31" title="Go to source code">formIdentFallback</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the identifier of the form to use, or its fallback.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the identifier of the form to use, or its fallback.</p>
 
 
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$data</var></dt>
-					<dd>The widget data.</dd>
-				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					ObjectForm<br>Chainable
+					string
 				</div>
 
 
+				<h4>See</h4>
+				<div class="list">
+						<code><a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_formIdentFallback">Charcoal\Admin\Widget\ObjectFormWidget::formIdentFallback()</a></code><br>
+				</div>
 
 				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setData">Charcoal\Admin\Widget\ObjectFormWidget::setData()</a></code></div>
+				<div class="list"><code><a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_formIdentFallback">Charcoal\Admin\Widget\ObjectFormWidget::formIdentFallback()</a></code></div>
 
 		</div>
 		</div></td>
@@ -348,18 +347,15 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_acceptedRequestData">acceptedRequestData()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_action">action()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_dataFromObject">dataFromObject()</a>, 
-			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_dataFromRequest">dataFromRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_formData">formData()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_formIdent">formIdent()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_formProperties">formProperties()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_formProperty">formProperty()</a>, 
-			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_groupDisplayMode">groupDisplayMode()</a>, 
-			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_isTab">isTab()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_objData">objData()</a>, 
+			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setData">setData()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setFormData">setFormData()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setFormIdent">setFormIdent()</a>, 
-			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setGroupDisplayMode">setGroupDisplayMode()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_setNextUrl">setNextUrl()</a>, 
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#_widgetType">widgetType()</a>
 		</code></td>
@@ -372,8 +368,11 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_addFormProperty">addFormProperty()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_addSidebar">addSidebar()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_createFormProperty">createFormProperty()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_dataFromRequest">dataFromRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_defaultGroupType">defaultGroupType()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_httpRequest">httpRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setFormProperties">setFormProperties()</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setHttpRequest">setHttpRequest()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setSidebars">setSidebars()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_setWidgetFactory">setWidgetFactory()</a>, 
 			<a href="class-Charcoal.Admin.Widget.FormWidget.html#_sidebars">sidebars()</a>, 
@@ -459,8 +458,7 @@ Charcoal\App\Template\AbstractWidget
 	<tr>
 		<td><code>
 			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#$formData"><var>$formData</var></a>, 
-			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#$formIdent"><var>$formIdent</var></a>, 
-			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#$groupDisplayMode"><var>$groupDisplayMode</var></a>
+			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html#$formIdent"><var>$formIdent</var></a>
 		</code></td>
 	</tr>
 	</table>

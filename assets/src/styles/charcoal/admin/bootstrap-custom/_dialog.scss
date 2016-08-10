@@ -2,18 +2,24 @@
 // Dialog
 // ==========================================================================
 
-.bootstrap-dialog.-elfinder {
-    .modal-header {
-        border-bottom: none;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
-
-    .modal-body {
-        padding: 0;
-    }
-
+.bootstrap-dialog {
     iframe {
         display: block;
+    }
+
+    .modal-body .modal-footer {
+        margin: 0 -15px -15px;
+    }
+
+    &.-elfinder {
+        .modal-header {
+            border-bottom: none;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
     }
 }

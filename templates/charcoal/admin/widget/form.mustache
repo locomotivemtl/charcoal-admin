@@ -1,43 +1,32 @@
 {{!--
-Form Widget
-===========
+    Form Widget
+    ===========
 
-`charcoal/admin/widget/form`
+    @see charcoal/admin/widget/form
 
-This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
-
+    This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 --}}
 <div class="form charcoal-admin-widget-form">
+    <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
 
-    <form id="{{widgetId}}" action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data">
+        {{# isTabbable }}
+        {{> charcoal/admin/template/form/nav-tabs }}
+        {{/ isTabbable }}
 
-        {{!-- Loop all form groups --}}
-        {{#groups}}
-            {{#form.layout}}
-                {{>charcoal/admin/widget/layout.start}}
-            {{/form.layout}}
+        {{# hasGroups }}
+        {{> charcoal/admin/template/form/groups }}
+        {{/ hasGroups }}
 
-            <div class="form-group form-group-{{ident}} col-md-{{form.layout.cellSpanBy12}}">
-                {{>$widget_template}}
-            </div>
-
-             {{#form.layout}}
-               {{>charcoal/admin/widget/layout.end}}
-            {{/form.layout}}
-        {{/groups}}
-
-        <input class="form-submit" type="submit" value="Save">
+        <button type="submit" class="btn btn-info">{{# _t }}Sauvegarder{{/ _t }}</button>
     </form>
-
 </div>
 
-{{#addJs}}
+{{# addJs }}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widgetId}}',
+    id:   '{{ widgetId }}',
     type: 'charcoal/admin/widget/form',
-    data: {
-    }
+    data: {}
 });
 </script>
-{{/addJs}}
+{{/ addJs }}

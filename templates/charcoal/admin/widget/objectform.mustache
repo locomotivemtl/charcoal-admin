@@ -1,68 +1,35 @@
 {{!--
-Object Form Widget
-===========
+    Object Form Widget
+    ==================
 
-`charcoal/admin/widget/form`
+    @see charcoal/admin/widget/object-form
 
-This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
-
+    This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 --}}
-<form action="{{adminUrl}}{{action}}" method="{{method}}" enctype="multipart/form-data" id="{{widgetId}}">
+<form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
     <div class="o-flex">
         <div class="o-flex_main">
+            {{# isTabbable }}
+            {{> charcoal/admin/template/form/nav-tabs }}
+            {{/ isTabbable }}
 
-        {{#isTab}}
-            <ul class="nav nav-tabs">
-            {{#groups}}
-                <li{{^isHidden}} class="active"{{/isHidden}}><a href="{{widgetId}}" class="js-group-tabs">{{title}}</a></li>
-            {{/groups}}
-            </ul>
-        {{/isTab}}
-
-        {{!-- Loop all form groups --}}
-        {{#groups}}
-             {{#form.layout}}
-                {{>charcoal/admin/widget/layout.start}}
-            {{/form.layout}}
-
-            <div class="col-md-{{form.layout.cellSpanBy12}} js-group-tab {{widgetId}}{{#isHidden}} hidden{{/isHidden}}">
-                {{>$widget_template}}
-            </div>
-
-             {{#form.layout}}
-               {{>charcoal/admin/widget/layout.end}}
-            {{/form.layout}}
-        {{/groups}}
-
+            {{# hasGroups }}
+            {{> charcoal/admin/template/form/groups }}
+            {{/ hasGroups }}
         </div>
 
         {{!-- Get the FormSidebarWidget object --}}
-        {{#sidebars}}
-            {{>$widget_template}}
-        {{/sidebars}}
+        {{# sidebars }}
+            {{> $widget_template }}
+        {{/ sidebars }}
 
-        <input type="hidden" name="widget_id" value="{{widgetId}}">
-        <input type="hidden" name="obj_type" value="{{objType}}">
-        <input type="hidden" name="obj_id" value="{{objId}}">
-
-        {{#nextUrl}}
-        <input type="hidden" name="next_url" value="{{nextUrl}}">
-        {{/nextUrl}}
-
+        <input type="hidden" name="widget_id" value="{{ widgetId }}">
+        <input type="hidden" name="obj_type" value="{{ objType }}">
+        <input type="hidden" name="obj_id" value="{{ objId }}">
+        {{# nextUrl }}
+        <input type="hidden" name="next_url" value="{{ nextUrl }}">
+        {{/ nextUrl }}
     </div>
 </form>
 
-{{#addJs}}
-<script>
-Charcoal.Admin.manager().add_widget({
-    id: '{{widgetId}}',
-    type: 'charcoal/admin/widget/form',
-    data: {
-        form_selector: '#{{widgetId}}',
-        obj_type: '{{objType}}',
-        obj_id: '{{objId}}',
-        tab: {{#isTab}}true{{/isTab}}{{^isTab}}false{{/isTab}}
-    }
-});
-</script>
-{{/addJs}}
+{{> charcoal/admin/template/form/js }}

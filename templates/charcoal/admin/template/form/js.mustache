@@ -1,0 +1,22 @@
+{{!--
+    Form Widget \ JS Component
+    ===========================
+
+    @used-by `charcoal/admin/widget/object-form`
+    @used-by `charcoal/admin/widget/quick-form`
+--}}
+{{# addJs }}
+<script>
+Charcoal.Admin.manager().add_widget({
+    id:         '{{ widgetId }}',
+    type:       'charcoal/admin/widget/form',
+    form_ident: '{{ formIdent }}',
+    data: {
+        form_selector: '#{{ widgetId }}',
+        obj_type:      '{{ objType }}',
+        obj_id:        '{{ objId }}',
+        tab:           {{# isTabbable }}true{{/ isTabbable }}{{^ isTabbable }}false{{/ isTabbable }}
+    }
+});
+</script>
+{{/ addJs }}

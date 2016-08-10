@@ -1,0 +1,13 @@
+{{!--
+    Togglable Tabs
+    ==============
+
+    @used-by charcoal/admin/template/object-form
+    @used-by charcoal/admin/template/quick-form
+--}}
+<ul class="nav nav-tabs" role="tablist">
+{{# groups }}
+    <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation"><a href="#form_group_{{ widgetId }}" aria-controls="form_group_{{ widgetId }}" class="js-group-tabs"
+     role="tab" data-toggle="tab">{{ title }}</a></li>
+{{/ groups }}
+</ul>

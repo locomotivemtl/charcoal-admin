@@ -79,7 +79,7 @@ class ElfinderTemplate extends AdminTemplate
         if (isset($params['obj_type'])) {
             $this->objType = filter_var($params['obj_type'], FILTER_SANITIZE_STRING);
         }
-        if (isset($params['obj_id'])( {
+        if (isset($params['obj_id'])) {
             $this->objId = filter_var($params['obj_id'], FILTER_SANITIZE_STRING);
         }
         if (isset($params['property'])) {

@@ -3487,8 +3487,9 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
         cssClass: cssClass,
         nl2br:    false,
         message:  function (dialog) {
-            var url  = Charcoal.Admin.admin_url() + 'widget/load',
-                data = dialog_opts,
+            var xhr,
+                url      = Charcoal.Admin.admin_url() + 'widget/load',
+                data     = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
             dialog.$modalBody.on(
@@ -3500,24 +3501,66 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
                 }
             );
 
-            $.ajax({
+            xhr = $.ajax({
                 method:   'POST',
                 url:      url,
                 data:     data,
                 dataType: 'json'
-            }).done(function (response) {
-                if (response.success) {
+            });
+
+            xhr.then(function (response, textStatus, jqXHR) {
+                    if (!response || !response.success) {
+                        if (response.feedbacks) {
+                            return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                        } else {
+                            return $.Deferred().reject(jqXHR, textStatus, 'An unknown error occurred.');
+                        }
+                    }
+
+                    return $.Deferred().resolve(response, textStatus, jqXHR);
+                })
+                .done(function (response/*, textStatus, jqXHR*/) {
                     dialog.setMessage(response.widget_html);
+
                     if (typeof callback === 'function') {
                         callback(response);
                     }
-                } else {
-                    dialog.setType(BootstrapDialog.TYPE_DANGER);
-                    dialog.setMessage('Error');
-                }
 
-                $('[data-toggle="tooltip"]', dialog.$modalBody).tooltip();
-            });
+                    $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    dialog.setType(BootstrapDialog.TYPE_DANGER);
+                    dialog.setMessage('<div class="alert alert-danger" role="alert">An unknown error occurred.</div>');
+
+                    var errorHtml = '';
+
+                    if ($.type(errorThrown) === 'string') {
+                        if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
+                            errorThrown = jqXHR.responseJSON.feedbacks;
+                        }
+                    }
+
+                    if ($.isArray(errorThrown)) {
+                        $.each(errorThrown, function (i, error) {
+                            if (error.message) {
+                                if (error.level === 'error') {
+                                    error.level = 'danger';
+                                }
+                                errorHtml += '<div class="alert alert-' + error.level + '" role="alert">' +
+                                                error.message +
+                                            '</div>';
+                            }
+                        });
+                    } else if ($.type(errorThrown) === 'string') {
+                        errorHtml = '<div class="alert alert-danger" role="alert">' + errorThrown + '</div>';
+                    }
+
+                    if (errorHtml) {
+                        dialog.setMessage(errorHtml);
+                    }
+
+                    $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
+                });
 
             return $message;
         }

@@ -7,14 +7,14 @@ Dashboard Widget
 This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
 
 --}}
-<div class="dashboard dashboard-{{ident}}">
+<div class="dashboard{{# ident }} dashboard-{{ . }}{{/ ident }}">
 
     {{#widgets}}
         {{#dashboard.layout}}
             {{>charcoal/admin/widget/layout.start}}
         {{/dashboard.layout}}
 
-        <div class="widget widget-{{ident}} col-md-{{dashboard.layout.cellSpanBy12}}">
+        <div class="widget{{# ident }} widget-{{ . }}{{/ ident }}{{# form.layout.cellSpanBy12 }} col-md-{{ . }}{{/ form.layout.cellSpanBy12 }}">
 
             {{#showLabel}}
                 <span class="title">{{label}}</span>

@@ -159,7 +159,7 @@ class ElfinderTemplate extends AdminTemplate
      * @param  array $localizations An associative array of localizations.
      * @return self
      */
-    public function setLocalizations($localizations)
+    public function setLocalizations(array $localizations)
     {
         $this->localizations = new ArrayIterator();
 
@@ -175,6 +175,7 @@ class ElfinderTemplate extends AdminTemplate
      *
      * @param  string $ident        The message ID.
      * @param  mixed  $translations The message translations.
+     * @throws InvalidArgumentException If the message ID is not a string or the translations are invalid.
      * @return self
      */
     public function addLocalization($ident, $translations)
@@ -206,6 +207,7 @@ class ElfinderTemplate extends AdminTemplate
      * Remove the translations for the given message ID.
      *
      * @param  string $ident The message ID to remove.
+     * @throws InvalidArgumentException If the message ID is not a string.
      * @return self
      */
     public function removeLocalization($ident)
@@ -281,6 +283,7 @@ class ElfinderTemplate extends AdminTemplate
      * Retrieve the translations for the given message ID.
      *
      * @param  string $ident The message ID to lookup.
+     * @throws InvalidArgumentException If the message ID is not a string.
      * @return TranslationString[]|string
      */
     public function localization($ident)

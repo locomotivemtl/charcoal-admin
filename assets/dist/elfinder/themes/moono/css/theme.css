@@ -537,7 +537,7 @@
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file *,
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file .elfinder-cwd-filename,
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file .elfinder-cwd-file-wrapper {
-  background: none;
+  /*background: none;*/
   cursor: pointer;
   color: #000;
 }

@@ -83,8 +83,8 @@ class LoadAction extends AdminAction
             $this->setSuccess(true);
             return $response;
         } catch (Exception $e) {
-            $this->addFeedback(sprintf('An error occured reloading the widget: "%s"', $e->getMessage()), 'error');
-            $this->addFeedback($e->getMessage(), 'error');
+            $this->addFeedback('error', sprintf('An error occured reloading the widget: "%s"', $e->getMessage()));
+            $this->addFeedback('error', $e->getMessage());
             $this->setSuccess(false);
             return $response->withStatus(404);
         }

@@ -3,22 +3,25 @@
 namespace Charcoal\Admin\Template;
 
 use \RuntimeException;
+use \InvalidArgumentException;
+use \ArrayIterator;
 
 use \Psr\Http\Message\RequestInterface;
 
-// Dependency from Pimple
+// From Pimple
 use \Pimple\Container;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// Dependency from 'charcoal-property'
+// From 'charcoal-property'
 use Charcoal\Property\FileProperty;
 
-// Dependency from 'charcoal-translation'
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
+use \Charcoal\Translation\TranslationString;
 
-// Local parent namespace dependencies
+// Intra-module dependency
 use \Charcoal\Admin\AdminTemplate;
 
 /**
@@ -59,6 +62,13 @@ class ElfinderTemplate extends AdminTemplate
      * @var boolean $showAssets
      */
     private $showAssets = true;
+
+    /**
+     * Custom localization messages.
+     *
+     * @var TranslationString[]|Traversable|array
+     */
+    private $localizations;
 
     /**
      * @var string $callbackIdent
@@ -144,9 +154,183 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
+     * Set the custom localization messages.
+     *
+     * @param  array $localizations An associative array of localizations.
+     * @return self
+     */
+    public function setLocalizations($localizations)
+    {
+        $this->localizations = new ArrayIterator();
+
+        foreach ($localizations as $ident => $translations) {
+            $this->addLocalization($ident, $translations);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a custom localization message.
+     *
+     * @param  string $ident        The message ID.
+     * @param  mixed  $translations The message translations.
+     * @return self
+     */
+    public function addLocalization($ident, $translations)
+    {
+        if (!is_string($ident)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Translation key must be a string, received %s',
+                    (is_object($ident) ? get_class($ident) : gettype($ident))
+                )
+            );
+        }
+
+        if (!TranslationString::isTranslatable($translations)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Invalid translations, received %s',
+                    (is_object($ident) ? get_class($ident) : gettype($ident))
+                )
+            );
+        }
+
+        $this->localizations[$ident] = new TranslationString($translations);
+
+        return $this;
+    }
+
+    /**
+     * Remove the translations for the given message ID.
+     *
+     * @param  string $ident The message ID to remove.
+     * @return self
+     */
+    public function removeLocalization($ident)
+    {
+        if (!is_string($ident)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Translation key must be a string, received %s',
+                    (is_object($ident) ? get_class($ident) : gettype($ident))
+                )
+            );
+        }
+
+        unset($this->localizations[$ident]);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the default custom localizations.
+     *
+     * @return array
+     */
+    protected function defaultLocalizations()
+    {
+        return [
+            'folder_uploads' => [
+                'en' => 'Library',
+                'fr' => 'Bibliothèque'
+            ],
+            'folder_media' => [
+                'en' => 'Media',
+                'fr' => 'Médias'
+            ]
+        ];
+    }
+
+    /**
+     * Count the number of localizations.
+     *
+     * @return integer
+     */
+    public function numLocalizations()
+    {
+        return count($this->localizations());
+    }
+
+    /**
+     * Determine if there are any localizations.
+     *
+     * @return boolean
+     */
+    public function hasLocalizations()
+    {
+        return !!$this->numLocalizations();
+    }
+
+    /**
+     * Retrieve the localizations.
+     *
+     * @return TranslationString[]|Traversable|array|null
+     */
+    public function localizations()
+    {
+        if ($this->localizations === null) {
+            $this->setLocalizations($this->defaultLocalizations());
+        }
+
+        return $this->localizations;
+    }
+
+    /**
+     * Retrieve the translations for the given message ID.
+     *
+     * @param  string $ident The message ID to lookup.
+     * @return TranslationString[]|string
+     */
+    public function localization($ident)
+    {
+        if (!is_string($ident)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Translation key must be a string, received %s',
+                    (is_object($ident) ? get_class($ident) : gettype($ident))
+                )
+            );
+        }
+
+        if (isset($this->localizations[$ident])) {
+            return $this->localizations[$ident];
+        }
+
+        return $ident;
+    }
+
+    /**
+     * Retrieve the custom localizations for elFinder.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function elfinderLocalizationsAsJson()
+    {
+        $i18n = [];
+
+        foreach ($this->localizations() as $id => $translations) {
+            foreach ($translations->all() as $language => $message) {
+                $i18n[$language][$id] = $message;
+            }
+        }
+
+        return json_encode($i18n, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
      * @return string
      */
-    public function elfinderUrl()
+    public function adminAssetsUrl()
+    {
+        return $this->baseUrl().'assets/admin/';
+    }
+
+    /**
+     * @return string
+     */
+    public function elfinderAssetsUrl()
     {
         return $this->baseUrl().'assets/admin/elfinder/';
     }
@@ -236,7 +420,7 @@ class ElfinderTemplate extends AdminTemplate
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */
-    public function elfinderPropertyConfig()
+    public function elfinderConfigAsJson()
     {
         $property = $this->formProperty();
         $settings = [];

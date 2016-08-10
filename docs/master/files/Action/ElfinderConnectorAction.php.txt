@@ -5,24 +5,24 @@ namespace Charcoal\Admin\Action;
 use \RuntimeException;
 use \InvalidArgumentException;
 
-// Dependencies from PSR-7 (HTTP Messaging)
+// From PSR-7 (HTTP Messaging)
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-// Dependency from Pimple
+// From Pimple
 use \Pimple\Container;
 
-// Dependencies from elFinder
+// From elFinder
 use \elFinderConnector;
 use \elFinder;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// Dependency from 'charcoal-property'
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// Intra-module ('charcoal-admin') dependencies
 use \Charcoal\Admin\AdminAction;
 
 /**
@@ -116,6 +116,8 @@ class ElfinderConnectorAction extends AdminAction
             }
         }
 
+        $baseUrl = rtrim((string)$this->baseUrl, '/');
+
         // Documentation for connector options:
         // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         $opts = [
@@ -123,31 +125,28 @@ class ElfinderConnectorAction extends AdminAction
             'roots' => [
                 [
                     // Driver for accessing file system (REQUIRED)
-                    'driver'        => 'LocalFileSystem',
-                    // Displayed string for this filesystem
-                    'alias'         => 'Contenu',
+                    'driver'         => 'LocalFileSystem',
                     // Path to files (REQUIRED)
-                    'path'          => 'uploads/',
-
-                    'startPath'     => $startPath,
-
+                    'path'           => 'uploads/',
+                    'startPath'      => $startPath,
+                    // Enable localized folder names
+                    'i18nFolderName' => true,
                     // URL to files (REQUIRED)
-                    'URL'           => $this->baseUrl.'/uploads',
-
-                    'tmbURL'        => $this->baseUrl.'/uploads/.tmb',
-                    'tmbPath'       => 'uploads/.tmb',
-                    'tmbSize'       => 200,
-                    'tmbBgColor'    => 'transparent',
+                    'URL'            => $baseUrl.'/uploads',
+                    'tmbURL'         => $baseUrl.'/uploads/.tmb',
+                    'tmbPath'        => 'uploads/.tmb',
+                    'tmbSize'        => 200,
+                    'tmbBgColor'     => 'transparent',
                     // All MIME types not allowed to upload
-                    'uploadDeny'    => [ 'all' ],
+                    'uploadDeny'     => [ 'all' ],
                     // MIME type `image` and `text/plain` allowed to upload
-                    'uploadAllow'   => $this->defaultUploadAllow(),
+                    'uploadAllow'    => $this->defaultUploadAllow(),
                     // Allowed MIME type `image` and `text/plain` only
-                    'uploadOrder'   => [ 'deny', 'allow' ],
+                    'uploadOrder'    => [ 'deny', 'allow' ],
                     // Disable and hide dot starting files (OPTIONAL)
-                    'accessControl' => 'access',
+                    'accessControl'  => 'access',
                     // File permission attributes
-                    'attributes'    => [
+                    'attributes'     => [
                         $this->attributeHideHiddenFiles()
                     ]
                 ]

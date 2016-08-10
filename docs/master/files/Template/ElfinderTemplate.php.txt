@@ -4,6 +4,8 @@ namespace Charcoal\Admin\Template;
 
 use \RuntimeException;
 
+use \Psr\Http\Message\RequestInterface;
+
 // Dependency from Pimple
 use \Pimple\Container;
 
@@ -27,16 +29,71 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Store the factory instance for the current class.
      *
-     * @var FactoryInterface
+     * @var FactoryInterface $propertyFactory
      */
     private $propertyFactory;
 
     /**
      * Store the current property instance for the current class.
      *
-     * @var PropertyInterface
+     * @var PropertyInterface $formProperty
      */
     private $formProperty;
+
+    /**
+     * @var string $objType
+     */
+    private $objType;
+
+    /**
+     * @var string $objId
+     */
+    private $objId;
+
+    /**
+     * @var string $propertyIdent
+     */
+    private $propertyIdent;
+
+    /**
+     * @var boolean $showAssets
+     */
+    private $showAssets = true;
+
+    /**
+     * @var string $callbackIdent
+     */
+    private $callbackIdent = '';
+
+
+    /**
+     * Retrieve options from Request's parameters (GET).
+     *
+     * @param RequestInterface $request The PSR7 request.
+     * @return boolean
+     */
+    public function init(RequestInterface $request)
+    {
+        $params = $request->getParams();
+
+        if (isset($params['obj_type'])) {
+            $this->objType = filter_var($params['obj_type'], FILTER_SANITIZE_STRING);
+        }
+        if (isset($params['obj_id'])( {
+            $this->objId = filter_var($params['obj_id'], FILTER_SANITIZE_STRING);
+        }
+        if (isset($params['property'])) {
+            $this->propertyIdent = filter_var($params['property'], FILTER_SANITIZE_STRING);
+        }
+        if (isset($params['assets'])) {
+            $this->showAssets = !!$params['assets'];
+        }
+        if ($this->params['callback']) {
+            $this->callbackIdent = filter_var($params['callback'], FILTER_SANITIZE_STRING);
+        }
+
+        return true;
+    }
 
     /**
      * Inject dependencies from a DI Container.
@@ -95,13 +152,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function elfinderAssets()
     {
-        $flag = filter_input(INPUT_GET, 'assets', FILTER_VALIDATE_BOOLEAN);
-
-        if ($flag === null) {
-            return true;
-        }
-
-        return $flag;
+        return $this->showAssets;
     }
 
     /**
@@ -111,7 +162,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function elfinderCallback()
     {
-        return filter_input(INPUT_GET, 'callback', FILTER_SANITIZE_STRING);
+        return $this->callbackIdent;
     }
 
     /**
@@ -121,7 +172,8 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function objType()
     {
-        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+
+        return $this->objType;
     }
 
     /**
@@ -131,7 +183,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function objId()
     {
-        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
+        return $this->objId;
     }
 
     /**
@@ -141,7 +193,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function propertyIdent()
     {
-        return filter_input(INPUT_GET, 'property', FILTER_SANITIZE_STRING);
+        return $this->propertyIdent;
     }
 
     /**
@@ -186,12 +238,12 @@ class ElfinderTemplate extends AdminTemplate
         $property = $this->formProperty();
         $settings = [];
 
+        $translator = TranslationConfig::instance();
+        $settings['lang'] = $translator->currentLanguage();
+
         if ($property) {
-            $translator = TranslationConfig::instance();
-
-            $settings['lang'] = $translator->currentLanguage();
-
             $mimeTypes = filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
+
             if ($mimeTypes) {
                 $settings['onlyMimes'] = (array)$mimeTypes;
             } elseif ($property instanceof FileProperty) {

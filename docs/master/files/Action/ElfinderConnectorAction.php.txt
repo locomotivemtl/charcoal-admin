@@ -124,6 +124,8 @@ class ElfinderConnectorAction extends AdminAction
                 [
                     // Driver for accessing file system (REQUIRED)
                     'driver'        => 'LocalFileSystem',
+                    // Displayed string for this filesystem
+                    'alias'         => 'Contenu',
                     // Path to files (REQUIRED)
                     'path'          => 'uploads/',
 
@@ -139,21 +141,14 @@ class ElfinderConnectorAction extends AdminAction
                     // All MIME types not allowed to upload
                     'uploadDeny'    => [ 'all' ],
                     // MIME type `image` and `text/plain` allowed to upload
-                    'uploadAllow'   => [ 'image', 'application/pdf', 'text/plain' ],
+                    'uploadAllow'   => $this->defaultUploadAllow(),
                     // Allowed MIME type `image` and `text/plain` only
                     'uploadOrder'   => [ 'deny', 'allow' ],
                     // Disable and hide dot starting files (OPTIONAL)
                     'accessControl' => 'access',
                     // File permission attributes
                     'attributes'    => [
-                        [
-                            // Block access to all hidden files and directories (anything starting with ".")
-                            'pattern' => '!(?:^|/)\..+$!',
-                            'read'    => false,
-                            'write'   => false,
-                            'hidden'  => true,
-                            'locked'  => false
-                        ]
+                        $this->attributeHideHiddenFiles()
                     ]
                 ]
             ]
@@ -226,6 +221,34 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         return $this->formProperty;
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultUploadAllow()
+    {
+        // By default, all images, pdf and plaintext files are allowed.
+        return [
+            'image',
+            'application/pdf',
+            'text/plain'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function attributeHideHiddenFiles()
+    {
+        return [
+            // Block access to all hidden files and directories (anything starting with ".")
+            'pattern' => '!(?:^|/)\..+$!',
+            'read'    => false,
+            'write'   => false,
+            'hidden'  => true,
+            'locked'  => false
+        ];
     }
 }
 

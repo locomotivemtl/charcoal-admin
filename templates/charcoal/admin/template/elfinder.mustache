@@ -9,17 +9,14 @@
         <link rel="stylesheet" type="text/css" media="screen"
               href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}css/elfinder.min.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}css/theme.css">
-
-        {{!-- Optional moono theme. Must be installed separately --}}
-        {{!-- https://github.com/lokothodida/elfinder-theme-moono --}}
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_url }}themes/moono/css/theme.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_assets_url }}css/elfinder.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_assets_url }}css/theme.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ admin_assets_url }}styles/vendors/elfinder.css">
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
-        <script src="{{ elfinder_url }}js/elfinder.min.js"></script>
+        <script src="{{ elfinder_assets_url }}js/elfinder.min.js"></script>
 
         {{!-- elFinder translation (OPTIONAL) --}}
         {{!--<script src="js/i18n/elfinder.fr.js"></script>--}}
@@ -40,7 +37,47 @@
             // Documentation for client options:
             // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
             $(document).ready(function () {
-                var elf, defaults, actionUri, settings = {};
+                var elf, defaults, actionUri, i18nMsgs, settings = {}, $window = $(window);
+
+                if (!$.fn.smartresize) {
+                    // debouncing function from John Hann
+                    // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+                    var debounce = function(func, threshold, execAsap) {
+                        var timeout;
+
+                        return function debounced() {
+                            var obj = this,
+                                args = arguments;
+
+                            function delayed() {
+                                if (!execAsap)
+                                    func.apply(obj, args);
+                                timeout = null;
+                            };
+
+                            if (timeout)
+                                clearTimeout(timeout);
+                            else if (execAsap)
+                                func.apply(obj, args);
+
+                            timeout = setTimeout(delayed, threshold || 100);
+                        };
+                    };
+
+                    $.fn.smartresize = function(fn) {
+                        return fn ? this.bind('resize', debounce(fn)) : this.trigger('smartresize');
+                    };
+                }
+
+                $window.smartresize(function(){
+                    if (elf) {
+                        var height = $window.height();
+
+                        if (elf.options.height != height) {
+                            elf.resize('auto', height);
+                        }
+                    }
+                });
 
                 actionUri = '{{ admin_url }}elfinder-connector' +
                             '?obj_type={{ objType }}' +
@@ -48,7 +85,14 @@
                             '&property={{ propertyIdent }}';
 
                 defaults = {
-                    url: actionUri,
+                    url       : actionUri,
+                    resizable : false,
+                    height    : $window.height(),
+                    handlers  : {
+                        init  : function(event, elf) {
+                            $.extend(elf.messages, i18nMsgs.en || {}, i18nMsgs[elf.lang] || {});
+                        }
+                    },
                     getFileCallback: function (file) {
                         if (elf.option('separator') === '\\') {
                             var separator = /\\/g;
@@ -61,8 +105,8 @@
                             }
                         }
 
-                        if (typeof(parent.elFinderCallback['{{elfinderCallback}}']) === 'function') {
-                            parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
+                        if (typeof(parent.elFinderCallback['{{ elfinderCallback }}']) === 'function') {
+                            parent.elFinderCallback['{{ elFinderCallback }}'](file, elf);
                         }
                     }
                 };
@@ -70,8 +114,10 @@
                 $.extend(
                     settings,
                     defaults,
-                    {{& elfinderPropertyConfig }}
+                    {{& elfinderConfigAsJson }}
                 );
+
+                i18nMsgs = {{& elfinderLocalizationsAsJson }};
 
                 var elfInit = function (settings) {
                     $().ready(function() {
@@ -83,15 +129,14 @@
 
                 if (settings.lang != 'en') {
                     $.ajax({
-                        url : '{{elfinder_url}}js/i18n/elfinder.'+settings.lang+'.js',
-                        cache : true,
-                        dataType : 'script'
-                    })
-                    .done(function() {
-                        elfInit(settings);
+                        url:      '{{elfinder_assets_url}}js/i18n/elfinder.'+settings.lang+'.js',
+                        cache:    true,
+                        dataType: 'script'
                     })
                     .fail(function() {
                         settings.lang = 'en';
+                    })
+                    .always(function() {
                         elfInit(settings);
                     });
                 } else {

@@ -11,6 +11,10 @@ module.exports = {
         files: {
             'assets/dist/styles/charcoal.admin.vendors.css': 'assets/src/styles/**/charcoal.admin.vendors.scss'
         }
+    },
+    elfinder: {
+        files: {
+            'assets/dist/styles/vendors/elfinder.css': 'assets/src/styles/**/elfinder.scss'
+        }
     }
-
 };

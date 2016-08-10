@@ -60,12 +60,19 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
  */
 Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
 {
-    $.getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-    function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
+    if (jQuery.ui) {
+        cb();
+    } else {
+        $.getScript(
+            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
+            function () {
+                if (typeof cb === 'function') {
+                    cb();
+                }
+            }
+        );
+    }
+
     return this;
 };
 

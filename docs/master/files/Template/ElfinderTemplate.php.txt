@@ -79,16 +79,20 @@ class ElfinderTemplate extends AdminTemplate
         if (isset($params['obj_type'])) {
             $this->objType = filter_var($params['obj_type'], FILTER_SANITIZE_STRING);
         }
+
         if (isset($params['obj_id'])) {
             $this->objId = filter_var($params['obj_id'], FILTER_SANITIZE_STRING);
         }
+
         if (isset($params['property'])) {
             $this->propertyIdent = filter_var($params['property'], FILTER_SANITIZE_STRING);
         }
+
         if (isset($params['assets'])) {
             $this->showAssets = !!$params['assets'];
         }
-        if ($this->params['callback']) {
+
+        if (isset($params['callback'])) {
             $this->callbackIdent = filter_var($params['callback'], FILTER_SANITIZE_STRING);
         }
 
@@ -172,7 +176,6 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function objType()
     {
-
         return $this->objType;
     }
 
@@ -245,6 +248,10 @@ class ElfinderTemplate extends AdminTemplate
             $mimeTypes = filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
 
             if ($mimeTypes) {
+                if ($mimeTypes === 'file') {
+                    $mimeTypes = [];
+                }
+
                 $settings['onlyMimes'] = (array)$mimeTypes;
             } elseif ($property instanceof FileProperty) {
                 $settings['onlyMimes'] = $property->acceptedMimetypes();

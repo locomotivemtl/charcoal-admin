@@ -16,7 +16,8 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 /**
  *
  */
-class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
+class ObjectFormWidget extends FormWidget implements
+    ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
@@ -24,11 +25,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      * @var string
      */
     protected $formIdent;
-
-    /**
-     * @var string
-     */
-    protected $groupDisplayMode;
 
     /**
      * @var array
@@ -78,24 +74,16 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * Fetch metadata from the current request.
-     *
-     *
-     * @return array
-     */
-    public function dataFromRequest()
-    {
-        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
-    }
-
-    /**
      * Retrieve the accepted metadata from the current request.
      *
      * @return array
      */
     public function acceptedRequestData()
     {
-        return [ 'obj_type','obj_id', 'template', 'form_data', 'next_url', 'l10n_mode', 'group_display_mode' ];
+        return array_merge(
+            parent::acceptedRequestData(),
+            [ 'obj_type','obj_id', 'template' ]
+        );
     }
 
     /**
@@ -221,38 +209,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         } else {
             return $action;
         }
-    }
-
-
-
-    /**
-     * Group display mode. Could be "tab" or nothing.
-     * @param string $mode Group display mode.
-     * @return ObjectFormWidget Chainable.
-     */
-    public function setGroupDisplayMode($mode)
-    {
-        $this->groupDisplayMode = $mode;
-        return $this;
-    }
-
-    /**
-     * Group display mode.
-     * @return string Group display mode.
-     */
-    public function groupDisplayMode()
-    {
-        return $this->groupDisplayMode;
-    }
-
-    /**
-     * Used in mustache templates to define if we're in
-     * tab display mode or not.
-     * @return boolean Tab display mode or not.
-     */
-    public function isTab()
-    {
-        return ( $this->groupDisplayMode() === 'tab' );
     }
 
     /**

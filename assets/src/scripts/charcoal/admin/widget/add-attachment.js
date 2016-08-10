@@ -110,12 +110,13 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
     var that = this;
 
     var data = {
-        title: title,
-        widget_type: 'charcoal/admin/widget/quickForm',
-        form_ident: 'quick',
+        title:          title,
+        size:           BootstrapDialog.SIZE_WIDE,
+        cssClass:       '-quick-form',
+        widget_type:    'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type: type,
-            obj_id: 0
+            obj_type:   type,
+            obj_id:     0
         }
     };
     this.dialog(data, function (response) {
@@ -127,11 +128,11 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
             }
 
             Charcoal.Admin.manager().add_widget({
-                id: response.widget_id,
+                id:   response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
                 data: {
                     obj_type: type,
-                    obj_id: 0
+                    obj_id:   0
                 },
                 save_callback: function (response) {
                     if (response.success) {
@@ -140,7 +141,7 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
                             that.reload();
                         });
                         BootstrapDialog.closeAll();
-                        //     that.reload();
+                        // that.reload();
                     }
                 }
             });
@@ -202,8 +203,8 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.save = function (cb)
 
     var opts = that.opts();
     var data = {
-        obj_type: opts.data.obj_type,
-        obj_id: opts.data.obj_id,
+        obj_type:    opts.data.obj_type,
+        obj_id:      opts.data.obj_id,
         attachments: []
     };
 

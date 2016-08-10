@@ -8,10 +8,10 @@
 Charcoal.Admin.Widget_Attachment = function ()
 {
     this.glyphs = {
-        video: 'glyphicon-facetime-video',
-        image: 'glyphicon-picture',
-        file: 'glyphicon-file',
-        text: 'glyphicon-font',
+        video:   'glyphicon-facetime-video',
+        image:   'glyphicon-picture',
+        file:    'glyphicon-file',
+        text:    'glyphicon-font',
         gallery: 'glyphicon-duplicate'
     };
 
@@ -209,12 +209,13 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
     }
 
     var data = {
-        title: title,
-        widget_type: 'charcoal/admin/widget/quickForm',
-        form_ident: 'quick',
+        title:          title,
+        size:           BootstrapDialog.SIZE_WIDE,
+        cssClass:       '-quick-form',
+        widget_type:    'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type: type,
-            obj_id: id
+            obj_type:   type,
+            obj_id:     id
         }
     };
     this.dialog(data, function (response) {
@@ -226,7 +227,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
             }
 
             Charcoal.Admin.manager().add_widget({
-                id: response.widget_id,
+                id:   response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
                 data: {
                     obj_type: type

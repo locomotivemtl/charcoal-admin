@@ -82,18 +82,29 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         e.preventDefault();
         var url = Charcoal.Admin.admin_url() + 'widget/load',
             data = {
-                widget_type: 'charcoal/admin/widget/objectform',
+                widget_type: 'charcoal/admin/widget/objectForm',
                 widget_options: {
                     obj_type: that.obj_type,
                     obj_id: 0
                 }
             };
+
         $.post(url, data, function (response) {
             var dlg = BootstrapDialog.show({
-                    title: 'Quick Create',
-                    message: '...',
-                    nl2br: false
+                    title:   'Quick Create',
+                    message: '…',
+                    nl2br:   false
                 });
+
+            dlg.$modalBody.on(
+                'click.charcoal.bs.dialog',
+                '[data-dismiss="dialog"]',
+                { dialog: dlg },
+                function (event) {
+                    event.data.dialog.close();
+                }
+            );
+
             if (response.success) {
                 dlg.setMessage(response.widget_html);
             } else {
@@ -310,9 +321,10 @@ Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
 Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
 {
     //return new Charcoal.Admin.Widget(opts).dialog(opts);
-    var title = opts.title || '',
-        type = opts.type || BootstrapDialog.TYPE_PRIMARY,
-        widget_type = opts.widget_type,
+    var title          = opts.title || '',
+        type           = opts.type || BootstrapDialog.TYPE_PRIMARY,
+        size           = opts.size || BootstrapDialog.SIZE_NORMAL,
+        widget_type    = opts.widget_type,
         widget_options = opts.widget_options || {};
 
     if (!widget_type) {
@@ -320,36 +332,45 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
     }
 
     BootstrapDialog.show({
-            title: title,
-            type: type,
-            nl2br: false,
-            message: function (dialog) {
-                console.debug(dialog);
-                var url = Charcoal.Admin.admin_url() + 'widget/load',
-                    data = {
-                        widget_type: widget_type,
-                        widget_options: widget_options
-                    },
-                    $message = $('<div>Loading...</div>');
+        title:   title,
+        type:    type,
+        size:    size,
+        nl2br:   false,
+        message: function (dialog) {
+            var url  = Charcoal.Admin.admin_url() + 'widget/load',
+                data = {
+                    widget_type: widget_type,
+                    widget_options: widget_options
+                },
+                $message = $('<div>Loading…</div>');
 
-                $.ajax({
-                    method: 'POST',
-                    url: url,
-                    data: data,
-                    dataType: 'json'
-                }).done(function (response) {
-                    console.debug(response);
-                    if (response.success) {
-                        dialog.setMessage(response.widget_html);
-                    } else {
-                        dialog.setType(BootstrapDialog.TYPE_DANGER);
-                        dialog.setMessage('Error');
-                    }
-                });
-                return $message;
-            }
+            dialog.$modalBody.on(
+                'click.charcoal.bs.dialog',
+                '[data-dismiss="dialog"]',
+                { dialog: dialog },
+                function (event) {
+                    event.data.dialog.close();
+                }
+            );
 
-        });
+            $.ajax({
+                method:   'POST',
+                url:      url,
+                data:     data,
+                dataType: 'json'
+            }).done(function (response) {
+                console.debug(response);
+                if (response.success) {
+                    dialog.setMessage(response.widget_html);
+                } else {
+                    dialog.setType(BootstrapDialog.TYPE_DANGER);
+                    dialog.setMessage('Error');
+                }
+            });
+
+            return $message;
+        }
+    });
 };
 
 /**
@@ -392,19 +413,29 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.bind_events = function ()
 Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
 {
     var data = {
-        widget_type: 'charcoal/admin/widget/objectForm',
+        widget_type:    'charcoal/admin/widget/objectForm',
         widget_options: {
-            obj_type: this.obj_type,
-            obj_id: this.obj_id
+            obj_type:   this.obj_type,
+            obj_id:     this.obj_id
         }
     };
 
     $.post(this.load_url, data, function (response) {
         var dlg = BootstrapDialog.show({
-            title: 'Quick Edit',
-            message: '...',
-            nl2br: false
+            title:   'Quick Edit',
+            message: '…',
+            nl2br:   false
         });
+
+        dlg.$modalBody.on(
+            'click.charcoal.bs.dialog',
+            '[data-dismiss="dialog"]',
+            { dialog: dlg },
+            function (event) {
+                event.data.dialog.close();
+            }
+        );
+
         if (response.success) {
             dlg.setMessage(response.widget_html);
         } else {

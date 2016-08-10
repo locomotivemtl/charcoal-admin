@@ -232,26 +232,42 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 /**
 * Load the widget into a dialog
 */
-Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
 {
-    //var that = this;
+    var title    = dialog_opts.title || '',
+        type     = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
+        size     = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
+        cssClass = dialog_opts.cssClass || '';
 
-    var title = dialog_opts.title || '',
-        type = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT;
+    delete dialog_opts.title;
+    delete dialog_opts.type;
+    delete dialog_opts.size;
+    delete dialog_opts.cssClass;
 
     BootstrapDialog.show({
-        title: title,
-        type: type,
-        nl2br: false,
-        message: function (dialog) {
-            var url = Charcoal.Admin.admin_url() + 'widget/load',
+        title:    title,
+        type:     type,
+        size:     size,
+        cssClass: cssClass,
+        nl2br:    false,
+        message:  function (dialog) {
+            var url  = Charcoal.Admin.admin_url() + 'widget/load',
                 data = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
+            dialog.$modalBody.on(
+                'click.charcoal.bs.dialog',
+                '[data-dismiss="dialog"]',
+                { dialog: dialog },
+                function (event) {
+                    event.data.dialog.close();
+                }
+            );
+
             $.ajax({
-                method: 'POST',
-                url: url,
-                data: data,
+                method:   'POST',
+                url:      url,
+                data:     data,
                 dataType: 'json'
             }).done(function (response) {
                 if (response.success) {
@@ -263,10 +279,12 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
                     dialog.setType(BootstrapDialog.TYPE_DANGER);
                     dialog.setMessage('Error');
                 }
+
+                $('[data-toggle="tooltip"]', dialog.$modalBody).tooltip();
             });
+
             return $message;
         }
-
     });
 };
 

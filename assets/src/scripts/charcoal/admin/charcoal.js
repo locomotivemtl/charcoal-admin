@@ -109,6 +109,17 @@ Charcoal.Admin = (function ()
 
         return name;
     };
+
+    Admin.filterNumeric = function (value) {
+        var re = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
+
+        if (re.test(value)) {
+            return Number(value);
+        }
+
+        return value;
+    };
+
     return Admin;
 
 }());

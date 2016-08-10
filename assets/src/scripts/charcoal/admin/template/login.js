@@ -43,17 +43,17 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
             } else {
                 //window.alert('Error');
                 BootstrapDialog.show({
-                    title: 'Login error',
+                    title:   'Login error',
                     message: 'Authentication failed. Please try again.',
-                    type: BootstrapDialog.TYPE_DANGER
+                    type:    BootstrapDialog.TYPE_DANGER
                 });
             }
         }, 'json').fail(function () {
             //window.alert('Error');
             BootstrapDialog.show({
-                title: 'Login error',
+                title:   'Login error',
                 message: 'Authentication failed. Please try again.',
-                type: BootstrapDialog.TYPE_DANGER
+                type:    BootstrapDialog.TYPE_DANGER
             });
         });
     });

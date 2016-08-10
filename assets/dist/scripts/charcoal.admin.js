@@ -109,6 +109,17 @@ Charcoal.Admin = (function ()
 
         return name;
     };
+
+    Admin.filterNumeric = function (value) {
+        var re = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
+
+        if (re.test(value)) {
+            return Number(value);
+        }
+
+        return value;
+    };
+
     return Admin;
 
 }());
@@ -476,9 +487,9 @@ Charcoal.Admin.Feedback.prototype.call = function ()
         }
 
         BootstrapDialog.show({
-            title: this.context_definitions[ level ].title,
+            title:   this.context_definitions[ level ].title,
             message: ret[ level ].join('<br/>'),
-            type: this.context_definitions[ level ].type,
+            type:    this.context_definitions[ level ].type,
             buttons: buttons
         });
 
@@ -3181,17 +3192,17 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
             } else {
                 //window.alert('Error');
                 BootstrapDialog.show({
-                    title: 'Login error',
+                    title:   'Login error',
                     message: 'Authentication failed. Please try again.',
-                    type: BootstrapDialog.TYPE_DANGER
+                    type:    BootstrapDialog.TYPE_DANGER
                 });
             }
         }, 'json').fail(function () {
             //window.alert('Error');
             BootstrapDialog.show({
-                title: 'Login error',
+                title:   'Login error',
                 message: 'Authentication failed. Please try again.',
-                type: BootstrapDialog.TYPE_DANGER
+                type:    BootstrapDialog.TYPE_DANGER
             });
         });
     });
@@ -3457,26 +3468,42 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 /**
 * Load the widget into a dialog
 */
-Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
 {
-    //var that = this;
+    var title    = dialog_opts.title || '',
+        type     = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
+        size     = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
+        cssClass = dialog_opts.cssClass || '';
 
-    var title = dialog_opts.title || '',
-        type = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT;
+    delete dialog_opts.title;
+    delete dialog_opts.type;
+    delete dialog_opts.size;
+    delete dialog_opts.cssClass;
 
     BootstrapDialog.show({
-        title: title,
-        type: type,
-        nl2br: false,
-        message: function (dialog) {
-            var url = Charcoal.Admin.admin_url() + 'widget/load',
+        title:    title,
+        type:     type,
+        size:     size,
+        cssClass: cssClass,
+        nl2br:    false,
+        message:  function (dialog) {
+            var url  = Charcoal.Admin.admin_url() + 'widget/load',
                 data = dialog_opts,
                 $message = $('<div>Loading...</div>');
 
+            dialog.$modalBody.on(
+                'click.charcoal.bs.dialog',
+                '[data-dismiss="dialog"]',
+                { dialog: dialog },
+                function (event) {
+                    event.data.dialog.close();
+                }
+            );
+
             $.ajax({
-                method: 'POST',
-                url: url,
-                data: data,
+                method:   'POST',
+                url:      url,
+                data:     data,
                 dataType: 'json'
             }).done(function (response) {
                 if (response.success) {
@@ -3488,10 +3515,12 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts,callback)
                     dialog.setType(BootstrapDialog.TYPE_DANGER);
                     dialog.setMessage('Error');
                 }
+
+                $('[data-toggle="tooltip"]', dialog.$modalBody).tooltip();
             });
+
             return $message;
         }
-
     });
 };
 
@@ -3574,12 +3603,19 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.init = function ()
 
 Charcoal.Admin.Widget_Add_Attachment.prototype.load_assets = function (cb)
 {
-    $.getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-    function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
+    if (jQuery.ui) {
+        cb();
+    } else {
+        $.getScript(
+            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
+            function () {
+                if (typeof cb === 'function') {
+                    cb();
+                }
+            }
+        );
+    }
+
     return this;
 };
 
@@ -3631,12 +3667,13 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
     var that = this;
 
     var data = {
-        title: title,
-        widget_type: 'charcoal/admin/widget/quickForm',
-        form_ident: 'quick',
+        title:          title,
+        size:           BootstrapDialog.SIZE_WIDE,
+        cssClass:       '-quick-form',
+        widget_type:    'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type: type,
-            obj_id: 0
+            obj_type:   type,
+            obj_id:     0
         }
     };
     this.dialog(data, function (response) {
@@ -3648,11 +3685,11 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
             }
 
             Charcoal.Admin.manager().add_widget({
-                id: response.widget_id,
+                id:   response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
                 data: {
                     obj_type: type,
-                    obj_id: 0
+                    obj_id:   0
                 },
                 save_callback: function (response) {
                     if (response.success) {
@@ -3661,7 +3698,7 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.create_attachment = function (typ
                             that.reload();
                         });
                         BootstrapDialog.closeAll();
-                        //     that.reload();
+                        // that.reload();
                     }
                 }
             });
@@ -3723,8 +3760,8 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.save = function (cb)
 
     var opts = that.opts();
     var data = {
-        obj_type: opts.data.obj_type,
-        obj_id: opts.data.obj_id,
+        obj_type:    opts.data.obj_type,
+        obj_id:      opts.data.obj_id,
         attachments: []
     };
 
@@ -3767,10 +3804,10 @@ Charcoal.Admin.Widget_Add_Attachment.prototype.widget_options = function ()
 Charcoal.Admin.Widget_Attachment = function ()
 {
     this.glyphs = {
-        video: 'glyphicon-facetime-video',
-        image: 'glyphicon-picture',
-        file: 'glyphicon-file',
-        text: 'glyphicon-font',
+        video:   'glyphicon-facetime-video',
+        image:   'glyphicon-picture',
+        file:    'glyphicon-file',
+        text:    'glyphicon-font',
         gallery: 'glyphicon-duplicate'
     };
 
@@ -3819,12 +3856,19 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
  */
 Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
 {
-    $.getScript('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-    function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
+    if (jQuery.ui) {
+        cb();
+    } else {
+        $.getScript(
+            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
+            function () {
+                if (typeof cb === 'function') {
+                    cb();
+                }
+            }
+        );
+    }
+
     return this;
 };
 
@@ -3961,12 +4005,13 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
     }
 
     var data = {
-        title: title,
-        widget_type: 'charcoal/admin/widget/quickForm',
-        form_ident: 'quick',
+        title:          title,
+        size:           BootstrapDialog.SIZE_WIDE,
+        cssClass:       '-quick-form',
+        widget_type:    'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type: type,
-            obj_id: id
+            obj_type:   type,
+            obj_id:     id
         }
     };
     this.dialog(data, function (response) {
@@ -3978,7 +4023,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
             }
 
             Charcoal.Admin.manager().add_widget({
-                id: response.widget_id,
+                id:   response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
                 data: {
                     obj_type: type
@@ -4165,11 +4210,11 @@ Charcoal.Admin.Widget_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
 {
-    this.widget_id = opts.id || this.widget_id;
-    this.obj_type = opts.data.obj_type || this.obj_type;
-    this.obj_id = opts.data.obj_id || this.obj_id;
+    this.widget_id     = opts.id || this.widget_id;
+    this.obj_type      = opts.data.obj_type || this.obj_type;
+    this.obj_id        = Charcoal.Admin.filterNumeric(opts.data.obj_id || this.obj_id);
     this.form_selector = opts.data.form_selector || this.form_selector;
-    this.isTab = opts.data.tab;
+    this.isTab         = opts.data.tab;
 
     return this;
 };
@@ -4206,7 +4251,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
         that.switch_language(lang);
     });
 
-    if (that.isTab) {
+    /*if (that.isTab) {
         $(that.form_selector).on('click', '.js-group-tabs', function (e) {
             e.preventDefault();
             var href = $(this).attr('href');
@@ -4214,7 +4259,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
             $(this).parent().addClass('active').siblings('.active').removeClass('active');
         });
-    }
+    }*/
 
 };
 
@@ -4475,9 +4520,9 @@ Charcoal.Admin.Widget_Map.prototype.coords = function ()
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts)
 {
-    this.widget_type = 'charcoal/admin/widget/quick-form';
+    this.widget_type   = 'charcoal/admin/widget/quick-form';
     this.save_callback = opts.save_callback || '';
-    this.obj_id = opts.obj_id || 0;
+    this.obj_id        = Charcoal.Admin.filterNumeric(opts.obj_id) || 0;
 
     return this;
 };
@@ -4794,18 +4839,29 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         e.preventDefault();
         var url = Charcoal.Admin.admin_url() + 'widget/load',
             data = {
-                widget_type: 'charcoal/admin/widget/objectform',
+                widget_type: 'charcoal/admin/widget/objectForm',
                 widget_options: {
                     obj_type: that.obj_type,
                     obj_id: 0
                 }
             };
+
         $.post(url, data, function (response) {
             var dlg = BootstrapDialog.show({
-                    title: 'Quick Create',
-                    message: '...',
-                    nl2br: false
+                    title:   'Quick Create',
+                    message: '…',
+                    nl2br:   false
                 });
+
+            dlg.$modalBody.on(
+                'click.charcoal.bs.dialog',
+                '[data-dismiss="dialog"]',
+                { dialog: dlg },
+                function (event) {
+                    event.data.dialog.close();
+                }
+            );
+
             if (response.success) {
                 dlg.setMessage(response.widget_html);
             } else {
@@ -5022,9 +5078,10 @@ Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
 Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
 {
     //return new Charcoal.Admin.Widget(opts).dialog(opts);
-    var title = opts.title || '',
-        type = opts.type || BootstrapDialog.TYPE_PRIMARY,
-        widget_type = opts.widget_type,
+    var title          = opts.title || '',
+        type           = opts.type || BootstrapDialog.TYPE_PRIMARY,
+        size           = opts.size || BootstrapDialog.SIZE_NORMAL,
+        widget_type    = opts.widget_type,
         widget_options = opts.widget_options || {};
 
     if (!widget_type) {
@@ -5032,36 +5089,45 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
     }
 
     BootstrapDialog.show({
-            title: title,
-            type: type,
-            nl2br: false,
-            message: function (dialog) {
-                console.debug(dialog);
-                var url = Charcoal.Admin.admin_url() + 'widget/load',
-                    data = {
-                        widget_type: widget_type,
-                        widget_options: widget_options
-                    },
-                    $message = $('<div>Loading...</div>');
+        title:   title,
+        type:    type,
+        size:    size,
+        nl2br:   false,
+        message: function (dialog) {
+            var url  = Charcoal.Admin.admin_url() + 'widget/load',
+                data = {
+                    widget_type: widget_type,
+                    widget_options: widget_options
+                },
+                $message = $('<div>Loading…</div>');
 
-                $.ajax({
-                    method: 'POST',
-                    url: url,
-                    data: data,
-                    dataType: 'json'
-                }).done(function (response) {
-                    console.debug(response);
-                    if (response.success) {
-                        dialog.setMessage(response.widget_html);
-                    } else {
-                        dialog.setType(BootstrapDialog.TYPE_DANGER);
-                        dialog.setMessage('Error');
-                    }
-                });
-                return $message;
-            }
+            dialog.$modalBody.on(
+                'click.charcoal.bs.dialog',
+                '[data-dismiss="dialog"]',
+                { dialog: dialog },
+                function (event) {
+                    event.data.dialog.close();
+                }
+            );
 
-        });
+            $.ajax({
+                method:   'POST',
+                url:      url,
+                data:     data,
+                dataType: 'json'
+            }).done(function (response) {
+                console.debug(response);
+                if (response.success) {
+                    dialog.setMessage(response.widget_html);
+                } else {
+                    dialog.setType(BootstrapDialog.TYPE_DANGER);
+                    dialog.setMessage('Error');
+                }
+            });
+
+            return $message;
+        }
+    });
 };
 
 /**
@@ -5104,19 +5170,29 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.bind_events = function ()
 Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
 {
     var data = {
-        widget_type: 'charcoal/admin/widget/objectForm',
+        widget_type:    'charcoal/admin/widget/objectForm',
         widget_options: {
-            obj_type: this.obj_type,
-            obj_id: this.obj_id
+            obj_type:   this.obj_type,
+            obj_id:     this.obj_id
         }
     };
 
     $.post(this.load_url, data, function (response) {
         var dlg = BootstrapDialog.show({
-            title: 'Quick Edit',
-            message: '...',
-            nl2br: false
+            title:   'Quick Edit',
+            message: '…',
+            nl2br:   false
         });
+
+        dlg.$modalBody.on(
+            'click.charcoal.bs.dialog',
+            '[data-dismiss="dialog"]',
+            { dialog: dlg },
+            function (event) {
+                event.data.dialog.close();
+            }
+        );
+
         if (response.success) {
             dlg.setMessage(response.widget_html);
         } else {

@@ -27,11 +27,11 @@ Charcoal.Admin.Widget_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
 {
-    this.widget_id = opts.id || this.widget_id;
-    this.obj_type = opts.data.obj_type || this.obj_type;
-    this.obj_id = opts.data.obj_id || this.obj_id;
+    this.widget_id     = opts.id || this.widget_id;
+    this.obj_type      = opts.data.obj_type || this.obj_type;
+    this.obj_id        = Charcoal.Admin.filterNumeric(opts.data.obj_id || this.obj_id);
     this.form_selector = opts.data.form_selector || this.form_selector;
-    this.isTab = opts.data.tab;
+    this.isTab         = opts.data.tab;
 
     return this;
 };
@@ -68,7 +68,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
         that.switch_language(lang);
     });
 
-    if (that.isTab) {
+    /*if (that.isTab) {
         $(that.form_selector).on('click', '.js-group-tabs', function (e) {
             e.preventDefault();
             var href = $(this).attr('href');
@@ -76,7 +76,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
             $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
             $(this).parent().addClass('active').siblings('.active').removeClass('active');
         });
-    }
+    }*/
 
 };
 

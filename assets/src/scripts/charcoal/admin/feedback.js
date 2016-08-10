@@ -169,9 +169,9 @@ Charcoal.Admin.Feedback.prototype.call = function ()
         }
 
         BootstrapDialog.show({
-            title: this.context_definitions[ level ].title,
+            title:   this.context_definitions[ level ].title,
             message: ret[ level ].join('<br/>'),
-            type: this.context_definitions[ level ].type,
+            type:    this.context_definitions[ level ].type,
             buttons: buttons
         });
 

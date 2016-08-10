@@ -109,7 +109,7 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
         $formIdent     = $this->formIdent();
         if (!$formIdent) {
-            $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+            $formIdent = $this->formIdentFallback();
         }
 
         $objFormData = (isset($adminMetadata['forms'][$formIdent]) ? $adminMetadata['forms'][$formIdent] : []);
@@ -131,7 +131,9 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * @param string $formIdent The form ident.
+     * Set the identifier of the form to use.
+     *
+     * @param string $formIdent The form identifier.
      * @throws InvalidArgumentException If the argument is not a string.
      * @return ObjectForm Chainable
      */
@@ -139,14 +141,38 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     {
         if (!is_string($formIdent)) {
             throw new InvalidArgumentException(
-                'Form ident must be a string'
+                'Form identifier must be a string'
             );
         }
+
         $this->formIdent = $formIdent;
+
         return $this;
     }
 
     /**
+     * Retrieve the identifier of the form to use, or its fallback.
+     *
+     * @return string
+     */
+    public function formIdentFallback()
+    {
+        $metadata = $this->obj()->metadata();
+
+        if (isset($metadata['admin'])) {
+            $metadata = $metadata['admin'];
+
+            if (isset($metadata['default_form'])) {
+                return $metadata['default_form'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Retrieve the identifier of the form to use.
+     *
      * @return string
      */
     public function formIdent()

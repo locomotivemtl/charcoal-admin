@@ -22,6 +22,10 @@
       "elfinder":{
         "ident":"charcoal/admin/template/elfinder"
       },
+      "media":{
+        "template":"charcoal/admin/template/media",
+        "controller": "charcoal/admin/template/home"
+      },
 
       "contents": {},
       "envoie": {}

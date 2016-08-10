@@ -1,0 +1,34 @@
+{{!--
+Charcoal Admin Home Template
+============================
+
+`charcoal/admin/template/home`
+
+Display the "home" dashboard.
+--}}
+{{>charcoal/admin/template/inc.header}}
+
+<div class="o-flex">
+
+    {{#sidemenu}}
+        {{>charcoal/admin/widget/sidemenu}}
+    {{/sidemenu}}
+
+    {{>charcoal/admin/widget/feedbacks}}
+
+    <script language="javascript" type="text/javascript">
+        function resizeIframe(obj) {
+            var ele = document.getElementsByClassName('c-header-main');
+
+            obj.style.height = window.innerHeight - ele[0].clientHeight + 'px';
+            obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';
+        }
+    </script>
+
+    {{!-- Object edit section --}}
+    <iframe width="100%" height="auto" frameborder="0" src="elfinder" onload='javascript:resizeIframe(this);'></iframe>
+
+
+</div>
+
+{{>charcoal/admin/template/inc.footer}}

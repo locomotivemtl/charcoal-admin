@@ -31,6 +31,12 @@
             transform: translateX(100%);
         }
     }
+
+    .panel{
+        &.-light{
+            background-color: lighten($charcoal-lightblue, 3%);
+        }
+    }
 }
 
 .c-nav-seconday_heading {

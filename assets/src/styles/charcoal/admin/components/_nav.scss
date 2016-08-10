@@ -41,15 +41,54 @@
     }
 }
 
+.c-nav_header_arrow {
+
+    position: relative;
+    &::after {
+        right: 10px;
+        top: 50%;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        transform: translate(-50%, 0);
+        border-left:  solid transparent;
+        border-right: solid transparent;
+        border-top: solid $blue;
+
+        border-width: 5px;
+
+        @media (min-width: $from-small) and (max-width: $to-large) {
+            right: -1px;
+        }
+    }
+
+    &[aria-expanded=true],
+    &.in{
+        &::after {
+            border-bottom: solid $blue;
+            border-width: 5px;
+            border-top: none;
+        }
+    }
+}
+
 // Nav list
 // ==========================================================================
 .c-nav_list {
     list-style: none;
     margin: 0;
     padding: 0;
+
     border-bottom-width: 1px;
     border-bottom-style: solid;
     margin-bottom: rem(30px);
+
+    .panel-body &{
+        border-bottom: none;
+        margin-bottom: 0;
+    }
 
     &.-light {
         border-color: $gray-light;
@@ -82,6 +121,10 @@
     border-top-width: 1px;
     border-top-style: solid;
 
+    .panel .c-nav_list_item:first-child &{
+        border: none;
+    }
+
     .c-nav_list.-light & {
         color: $charcoal-darkblue;
         border-top-color: $gray-light;
@@ -111,6 +154,10 @@
             &::after {
                 right: rem(-20px);
                 border-right-color: $white;
+
+                .panel &{
+                    right: rem(-36px);
+                }
             }
         }
     }
@@ -137,6 +184,17 @@
     &:hover {
         text-decoration: none;
     }
+
+    .panel-heading &{
+
+        color: $gray-dark;
+        transition: color 0.2s;
+
+        &:hover {
+            color: $blue;
+        }
+    }
+
 }
 
 .c-nav_list_link_main {

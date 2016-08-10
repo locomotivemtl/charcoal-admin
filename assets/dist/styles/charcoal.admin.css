@@ -508,6 +508,31 @@ td {
     .c-nav_arrow::after, .c-nav_list.-secondary .c-nav_list_header.is-active::after, .c-nav-main_link.is-active::after {
       right: -1px; } }
 
+.c-nav_header_arrow {
+  position: relative; }
+  .c-nav_header_arrow::after {
+    right: 10px;
+    top: 50%;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    -webkit-transform: translate(-50%, 0);
+        -ms-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+    border-left: solid transparent;
+    border-right: solid transparent;
+    border-top: solid #3498db;
+    border-width: 5px; }
+    @media (min-width: 700px) and (max-width: 1199px) {
+      .c-nav_header_arrow::after {
+        right: -1px; } }
+  .c-nav_header_arrow[aria-expanded=true]::after, .c-nav_header_arrow.in::after {
+    border-bottom: solid #3498db;
+    border-width: 5px;
+    border-top: none; }
+
 .c-nav_list {
   list-style: none;
   margin: 0;
@@ -515,6 +540,9 @@ td {
   border-bottom-width: 1px;
   border-bottom-style: solid;
   margin-bottom: 1.875rem; }
+  .panel-body .c-nav_list {
+    border-bottom: none;
+    margin-bottom: 0; }
   .c-nav_list.-light {
     border-color: #cccccc; }
   .c-nav_list.-dark {
@@ -540,6 +568,8 @@ td {
   transition: background-color 0.3s;
   border-top-width: 1px;
   border-top-style: solid; }
+  .panel .c-nav_list_item:first-child .c-nav_list_header {
+    border: none; }
   .c-nav_list.-light .c-nav_list_header {
     color: #080909;
     border-top-color: #cccccc; }
@@ -553,6 +583,8 @@ td {
   .c-nav_list.-secondary .c-nav_list_header.is-active::after {
     right: -1.25rem;
     border-right-color: #ffffff; }
+    .panel .c-nav_list.-secondary .c-nav_list_header.is-active::after {
+      right: -2.25rem; }
   .c-nav_list .c-nav_list .c-nav_list_item:first-child > .c-nav_list_header {
     border-top: none; }
 
@@ -573,6 +605,12 @@ td {
     color: #ffffff; }
   .c-nav_list_link:hover {
     text-decoration: none; }
+  .panel-heading .c-nav_list_link {
+    color: #262626;
+    -webkit-transition: color 0.2s;
+    transition: color 0.2s; }
+    .panel-heading .c-nav_list_link:hover {
+      color: #3498db; }
 
 .c-nav_list_link_main {
   -webkit-box-flex: 1;
@@ -827,6 +865,8 @@ td {
         -webkit-transform: translateX(100%);
             -ms-transform: translateX(100%);
                 transform: translateX(100%); } }
+  .c-nav-secondary .panel.-light {
+    background-color: #f4f8f9; }
 
 .c-nav-seconday_heading {
   margin: 0; }

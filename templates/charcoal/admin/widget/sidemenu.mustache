@@ -2,38 +2,11 @@
 charcoal/admin/widget/sidemenu
 }}
 
-<nav class="c-nav-secondary o-flex_aside">
+<nav class="c-nav-secondary o-flex_aside" id="collapsibleParent">
     <header class="o-header">
         <h1 class="c-nav_heading">{{title}}</h1>
     </header>
     {{#hasLinks}}
-    <ul class="c-nav_list -light -secondary">
-    {{#links}}
-        <li class="c-nav_list_item">
-            <div class="c-nav_list_header {{#selected}}is-active{{/selected}}">
-                <a class="c-nav_list_link" href="{{adminUrl}}{{url}}">
-                    <span class="c-nav_list_link_main">
-                        <span class="c-nav_list_link_text">
-                            {{name}}
-                        </span>
-                    </span>
-                    {{#num}}
-                    <span class="c-nav_list_link_number {{#numNew}}is-new{{/numNew}}">
-                        {{num}}
-                    </span>
-                    {{/num}}
-                </a>
-            </div>
-        </li>
-    {{/links}}
-    </ul>
-    {{/hasLinks}}
-
-    {{#hasLinksGroups}}
-        {{# groups }}
-        <header class="o-header">
-        <h2 class="c-nav_heading">{{title}}</h2>
-        </header>
         <ul class="c-nav_list -light -secondary">
             {{#links}}
                 <li class="c-nav_list_item">
@@ -54,46 +27,89 @@ charcoal/admin/widget/sidemenu
                 </li>
             {{/links}}
         </ul>
+    {{/hasLinks}}
+
+    {{#hasLinksGroups}}
+        {{# groups }}
+            <div class="{{# collapsible }}panel panel-default -light{{/ collapsible }}">
+                <div class="{{# collapsible }}panel-heading{{/ collapsible }} {{^ collapsible }}o-section{{/ collapsible }}">
+                    {{# collapsible }}
+                    <a class="c-nav_list_link {{# collapsible }}c-nav_header_arrow{{/ collapsible }} " href="#{{ toggle }}" data-toggle="collapse"
+                       {{# parented }}data-parent="#collapsibleParent"{{/ parented }}>
+                    {{/ collapsible }}
+                    <h2 class="c-nav_heading">{{title}}</h2>
+                    {{# collapsible }}
+                    </a>
+                    {{/ collapsible }}
+                </div>
+                <div id="{{toggle}}" class="{{# collapsible }}collapse panel-collapse{{/ collapsible }}
+                    {{# collapsed }}in{{/ collapsed }}
+                    ">
+                    <div class="{{# collapsible }}panel-body{{/ collapsible }}">
+                        <ul class="c-nav_list -light -secondary -inpanel">
+                            {{#links}}
+                                <li class="c-nav_list_item">
+                                    <div class="c-nav_list_header {{#selected}}is-active{{/selected}}">
+                                        <a class="c-nav_list_link" href="{{adminUrl}}{{url}}">
+                                                            <span class="c-nav_list_link_main">
+                                                                <span class="c-nav_list_link_text">
+                                                                    {{name}}
+                                                                </span>
+                                                            </span>
+                                            {{#num}}
+                                                <span class="c-nav_list_link_number {{#numNew}}is-new{{/numNew}}">
+                                                    {{num}}
+                                                </span>
+                                            {{/num}}
+                                        </a>
+                                    </div>
+                                </li>
+                            {{/links}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         {{/ groups }}
     {{/hasLinksGroups}}
 
     {{#mainAction}}
-    <div class="btn-group">
         <div class="btn-group">
-            <a href="{{url}}" class="btn btn-danger {{classname}}">{{label}}</a>
-            {{#hasActions}}
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <ul class="dropdown-menu">
-                {{#actions}}
-                    <li><a href="{{url}}">{{label}}</a>
-                {{/actions}}
-                </ul>
-            {{/hasActions}}
+            <div class="btn-group">
+                <a href="{{url}}" class="btn btn-danger {{classname}}">{{label}}</a>
+                {{#hasActions}}
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{#actions}}
+                        <li><a href="{{url}}">{{label}}</a>
+                        {{/actions}}
+                    </ul>
+                {{/hasActions}}
+            </div>
         </div>
-    </div>
     {{/mainAction}}
 
 </nav>
 
 {{!-- TODO: This does not belong here. --}}
 {{#addJs}}
-<script>
-$('.js-filemanager-btn').on('click', function(e) {
-    e.preventDefault();
+    <script>
+        $('.js-filemanager-btn').on('click', function (e) {
+            e.preventDefault();
 
-    BootstrapDialog.show({
-        title:   '{{# _t }}Librairie de fichiers{{/ _t }}',
-        size:    BootstrapDialog.SIZE_WIDE,
-        message: $(
-            '<iframe width="100%" height="400px" frameborder="0" ' +
-            'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
-        )
-    });
+            BootstrapDialog.show({
+                title  : '{{# _t }}Librairie de fichiers{{/ _t }}',
+                size   : BootstrapDialog.SIZE_WIDE,
+                message: $(
+                        '<iframe width="100%" height="400px" frameborder="0" ' +
+                        'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
+                )
+            });
 
-});
-</script>
+        });
+    </script>
 {{/addJs}}
 

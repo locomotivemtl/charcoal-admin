@@ -10,20 +10,6 @@ use \Charcoal\Admin\Widget\ObjectFormWidget;
 class QuickFormWidget extends ObjectFormWidget
 {
     /**
-     * @param array|ArrayInterface $data The widget data.
-     * @return QuickFormWidget Chainable
-     */
-    public function setData($data)
-    {
-        $data = array_merge($_GET, $data);
-        $data = array_merge($_POST, $data);
-
-        parent::setData($data);
-
-        return $this;
-    }
-
-    /**
      * Retrieve the identifier of the form to use, or its fallback.
      *
      * @see    ObjectFormWidget::formIdentFallback()

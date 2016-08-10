@@ -78,7 +78,7 @@ class ObjectFormWidget extends FormWidget implements
      *
      * @return array
      */
-    public function acceptedRequestData()
+    protected function acceptedRequestData()
     {
         return array_merge(
             parent::acceptedRequestData(),
@@ -91,7 +91,7 @@ class ObjectFormWidget extends FormWidget implements
      *
      * @return array
      */
-    public function dataFromObject()
+    protected function dataFromObject()
     {
         $objMetadata   = $this->obj()->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
@@ -286,8 +286,11 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * Not really a SETTER, but using the setter
-     * to pass by the $_GET var (@see setData()).
+     * Set the form's auxiliary data.
+     *
+     * This method is called via {@see self::setData()} if a "form_data" parameter
+     * is present on the HTTP request.
+     *
      * @param array $data Data.
      * @return ObjectFormWidget Chainable.
      */
@@ -310,10 +313,9 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * Object data merged with whatever data were set
-     * in the process.
-     * This appears to be unused.
-     * @return array Object data.
+     * Retrieve the form's auxiliary  data.
+     *
+     * @return array
      */
     public function formData()
     {

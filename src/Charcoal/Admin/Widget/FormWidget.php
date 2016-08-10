@@ -5,7 +5,11 @@ namespace Charcoal\Admin\Widget;
 use \Exception;
 use \InvalidArgumentException;
 
+// From Pimple
 use \Pimple\Container;
+
+// From PSR-7 (HTTP Messaging)
+use \Psr\Http\Message\RequestInterface;
 
 // From `charcoal-app`
 use \Charcoal\Factory\FactoryInterface;
@@ -31,12 +35,23 @@ class FormWidget extends AdminWidget implements
     use LayoutAwareTrait;
 
     /**
-     * @var array $sidebars
+     * The form's sidebars.
+     *
+     * @var array
      */
     protected $sidebars = [];
 
     /**
-     * @var FactoryInterface $widgetFactory
+     * Store the HTTP request object.
+     *
+     * @var RequestInterface
+     */
+    private $httpRequest;
+
+    /**
+     * Store the factory instance for the current class.
+     *
+     * @var FactoryInterface
      */
     private $widgetFactory;
 
@@ -47,6 +62,8 @@ class FormWidget extends AdminWidget implements
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        $this->setHttpRequest($container['request']);
 
         // Fill FormInterface dependencies
         $this->setFormGroupFactory($container['form/group/factory']);
@@ -59,29 +76,62 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
-     * @return CollectionTemplate Chainable
+     * Set an HTTP request object.
+     *
+     * @param RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
      */
-    protected function setWidgetFactory(FactoryInterface $factory)
+    protected function setHttpRequest(RequestInterface $request)
     {
-        $this->widgetFactory = $factory;
+        $this->httpRequest = $request;
+
         return $this;
     }
 
     /**
-     * Safe Widget Factory getter.
-     * Create the widget factory if it was not preiously injected / set.
+     * Retrieve the HTTP request object.
      *
-     * @throws Exception If the widget factory was not set / injected.
+     * @throws RuntimeException If an HTTP request was not previously set.
+     * @return RequestInterface
+     */
+    public function httpRequest()
+    {
+        if (!isset($this->httpRequest)) {
+            throw new RuntimeException(
+                sprintf('A PSR-7 Request instance is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->httpRequest;
+    }
+
+    /**
+     * Set an widget factory.
+     *
+     * @param FactoryInterface $factory The factory to create widgets.
+     * @return self
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the widget factory.
+     *
+     * @throws RuntimeException If the widget factory was not previously set.
      * @return FactoryInterface
      */
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            throw new Exception(
-                'Widget factory was not set on form widget.'
+            throw new RuntimeException(
+                sprintf('Widget Factory is not defined for "%s"', get_class($this))
             );
         }
+
         return $this->widgetFactory;
     }
 
@@ -96,6 +146,29 @@ class FormWidget extends AdminWidget implements
             $p->setData($data);
         }
         return $p;
+    }
+
+    /**
+     * Fetch metadata from the current request.
+     *
+     *
+     * @return array
+     */
+    protected function dataFromRequest()
+    {
+        $request = $this->httpRequest();
+
+        return array_intersect_key($request->getParams(), array_flip($this->acceptedRequestData()));
+    }
+
+    /**
+     * Retrieve the accepted metadata from the current request.
+     *
+     * @return array
+     */
+    protected function acceptedRequestData()
+    {
+        return [ 'next_url', 'form_data', 'l10n_mode', 'group_display_mode' ];
     }
 
     /**

@@ -65,8 +65,13 @@
                             parent.elFinderCallback['{{elFinderCallback}}'](file, elf);
                         }
                     }
+                };
 
-                $.extend(settings, defaults, {{& elfinderPropertyConfig }});
+                $.extend(
+                    settings,
+                    defaults,
+                    {{& elfinderPropertyConfig }}
+                );
 
                 var elfInit = function (settings) {
                     $().ready(function() {

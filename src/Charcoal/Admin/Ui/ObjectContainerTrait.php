@@ -136,42 +136,97 @@ trait ObjectContainerTrait
     }
 
     /**
-     * Create or load the object.
-     *
+     * Retrieve the object.
      *
      * @return ModelInterface
      */
     public function obj()
     {
         if ($this->obj === null) {
-            if ($this->objId()) {
-                $this->obj = $this->loadObj();
-            } elseif (isset($_GET['clone_id']) && $_GET['clone_id']) {
-                $this->obj = $this->createObj();
-                $objClass = getClass($this->obj);
-                $clone = new $objClass([
-                    'logger' => $this->logger
-                ]);
-                $clone->load($_GET['clone_id']);
-                $this->obj->setData($clone->data());
-            } elseif (isset($_GET['blueprint_id']) && $_GET['blueprint_id']) {
-                $this->obj = $this->createObj();
-                $blueprint = $this->modelFactory()->create($this->obj->blueprintType());
-
-                $blueprint->load($_GET['blueprint_id']);
-                $data = $blueprint->data();
-                unset($data[$blueprint->key()]);
-
-                // This is the actual key we want to remove.
-                unset($data[$this->obj->key()]);
-
-                // Set the right data
-                $this->obj->setData($data);
-            } else {
-                $this->obj = $this->createObj();
-            }
+            $this->obj = $this->createOrLoadObj();
         }
+
         return $this->obj;
+    }
+
+    /**
+     * Create or load the object.
+     *
+     * @return ModelInterface
+     */
+    protected function createOrLoadObj()
+    {
+        if ($this->objId()) {
+            return $this->loadObj();
+        } elseif (!empty($_GET['clone_id'])) {
+            return $this->cloneObj();
+        } elseif (!empty($_GET['blueprint_id'])) {
+            return $this->createObjFromBluePrint();
+        } else {
+            return $this->createObj();
+        }
+    }
+
+    /**
+     * @throws Exception If the object is not valid.
+     * @return ModelInterface
+     */
+    protected function cloneObj()
+    {
+        if (empty($_GET['clone_id'])) {
+            throw new Exception(
+                sprintf(
+                    '%1$s cannot clone object. Clone ID missing from request.',
+                    get_class($this)
+                )
+            );
+        }
+
+        $obj   = $this->createObj();
+        $clone = $this->createObj()->load($_GET['clone_id']);
+
+        $data = $clone->data();
+        unset($data[$clone->key()]);
+
+        // This is the actual key we want to remove.
+        unset($data[$obj->key()]);
+
+        // Set the right data
+        $obj->setData($data);
+
+        return $obj;
+    }
+
+    /**
+     * @throws Exception If the object is not valid.
+     * @return ModelInterface
+     */
+    protected function createObjFromBluePrint()
+    {
+        if (empty($_GET['blueprint_id'])) {
+            throw new Exception(
+                sprintf(
+                    '%1$s cannot create object from blueprint. Blueprint ID missing from request.',
+                    get_class($this)
+                )
+            );
+        }
+
+        $obj = $this->createObj();
+
+        $blueprint = $this->modelFactory()->create($obj->blueprintType());
+        $blueprint->load($_GET['blueprint_id']);
+
+        $data = $blueprint->data();
+        unset($data[$blueprint->key()]);
+
+        // This is the actual key we want to remove.
+        unset($data[$obj->key()]);
+
+        // Set the right data
+        $obj->setData($data);
+
+        return $obj;
     }
 
     /**

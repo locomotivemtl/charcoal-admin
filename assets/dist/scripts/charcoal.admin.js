@@ -2968,7 +2968,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //code_dialog_height: '400px',
         contextmenu: 'link image inserttable | cell row column deletetable',
 
-        file_picker_callback: this.elfinder_browser.bind(this),
+        file_picker_callback: $.proxy(this.elfinder_browser, null, this),
         //image_list: [],
         image_advtab: true,
         //image_class_list: [],
@@ -3051,36 +3051,44 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
     window.tinyMCE.init(this.editor_options);
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (callback, value, meta)
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta)
 {
+    var editor = this;
+
     window.tinyMCE.activeEditor.windowManager.open({
-        file:      this.data.elfinder_url + '&' + $.param(meta),
-        title:     this.data.dialog_title || '',
+        file:      control.data.elfinder_url + '&' + $.param(meta),
+        title:     control.data.dialog_title || '',
         width:     900,
         height:    450,
         resizable: 'yes'
     }, {
         oninsert: function (file, elf) {
-            var url, reg, info;
+            var url, regex, alias, selected;
 
             // URL normalization
             url = file.url;
-            reg = /\/[^/]+?\/\.\.\//;
-            while (url.match(reg)) {
-                url = url.replace(reg, '/');
+            regex = /\/[^/]+?\/\.\.\//;
+            while (url.match(regex)) {
+                url = url.replace(regex, '/');
             }
 
-            // Make file info
-            info = file.name + ' (' + elf.formatSize(file.size) + ')';
+            selected = editor.selection.getContent();
+
+            if (selected.length === 0 && editor.selection.getNode().nodeName === 'A') {
+                selected = editor.selection.getNode().textContent;
+            }
+
+            // Generate a nice file info
+            alias = file.name + ' (' + elf.formatSize(file.size) + ')';
 
             // Provide file and text for the link dialog
             if (meta.filetype === 'file') {
-                callback(url, { text: info, title: info });
+                callback(url, { text: (selected || alias), title: alias });
             }
 
             // Provide image and alt text for the image dialog
             if (meta.filetype === 'image') {
-                callback(url, { alt: info });
+                callback(url, { alt: alias });
             }
 
             // Provide alternative source and posted for the media dialog

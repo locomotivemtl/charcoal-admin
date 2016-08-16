@@ -9,7 +9,8 @@ module.exports = {
             'jscs',
             'concat',
             'uglify',
-            'notify:javascript'
+            'notify:javascript',
+            'copy:admin'
         ]
     },
     json: {

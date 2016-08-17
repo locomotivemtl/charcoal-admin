@@ -3,6 +3,8 @@
     ========================
 
     @see charcoal/admin/widget/quick-form
+
+    Expects JS initialization of this component to be handled by the dialog manager.
 --}}
 <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
     <div class="o-flex">
@@ -25,8 +27,6 @@
         <button type="submit" class="btn btn-info">{{# _t }}Sauvegarder{{/ _t }}</button>
     </div>
 </form>
-
-{{> charcoal/admin/template/form/js }}
 
     {{& jsRequirements }}
     {{& js }}

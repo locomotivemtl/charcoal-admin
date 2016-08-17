@@ -319,22 +319,22 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
 
     var opts = that.opts();
     var data = {
-        obj_type: opts.data.obj_type,
-        obj_id: opts.data.obj_id,
+        obj_type:    opts.data.obj_type,
+        obj_id:      opts.data.obj_id,
         attachments: [],
-        group: opts.data.group
+        group:       opts.data.group
     };
 
     this.element().find('.js-attachment-container').find('.js-attachment').each(function (i)
     {
         var $this = $(this);
-        var id = $this.data('id');
-        var type = $this.data('type');
+        var id    = $this.data('id');
+        var type  = $this.data('type');
 
         data.attachments.push({
-            attachment_id: id,
+            attachment_id:   id,
             attachment_type: type, // Further use.
-            position: i
+            position:        i
         });
     });
 
@@ -363,10 +363,10 @@ Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb)
 
     var opts = that.opts();
     var data = {
-        obj_type: opts.data.obj_type,
-        obj_id: opts.data.obj_id,
+        obj_type:      opts.data.obj_type,
+        obj_id:        opts.data.obj_id,
         attachment_id: id,
-        group: opts.data.group
+        group:         opts.data.group
     };
 
     $.post('remove-join', data, function () {

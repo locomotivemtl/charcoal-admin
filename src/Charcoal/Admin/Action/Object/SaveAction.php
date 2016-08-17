@@ -106,7 +106,7 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
      */
     public function setObj($obj)
     {
-        $this->Obj = $obj;
+        $this->obj = $obj;
         return $this;
     }
 

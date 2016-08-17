@@ -23,6 +23,7 @@ use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\FormSidebarInterface;
 
 /**
  *
@@ -185,8 +186,8 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string                  $sidebarIdent The sidebar identifier.
-     * @param array|FormSidebarWidget $sidebar      The sidebar data or object.
+     * @param string                     $sidebarIdent The sidebar identifier.
+     * @param array|FormSidebarInterface $sidebar      The sidebar data or object.
      * @throws InvalidArgumentException If the ident is not a string or the sidebar is not valid.
      * @return FormWidget Chainable
      */
@@ -197,7 +198,7 @@ class FormWidget extends AdminWidget implements
                 'Sidebar ident must be a string'
             );
         }
-        if (($sidebar instanceof FormSidebarWidget)) {
+        if (($sidebar instanceof FormSidebarInterface)) {
             $this->sidebars[$sidebarIdent] = $sidebar;
         } elseif (is_array($sidebar)) {
             if (isset($sidebar['widget_type'])) {
@@ -205,7 +206,7 @@ class FormWidget extends AdminWidget implements
                 $s->setTemplate($sidebar['widget_type']);
             }
 
-            if (!isset($s) || !($s instanceof FormSidebarWidget)) {
+            if (!isset($s) || !($s instanceof FormSidebarInterface)) {
                 $s = $this->widgetFactory()->create('charcoal/admin/widget/form-sidebar');
             }
 
@@ -221,7 +222,7 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @return FormSidebarWidget
+     * @return FormSidebarInterface[]|Generator
      */
     public function sidebars()
     {
@@ -237,11 +238,11 @@ class FormWidget extends AdminWidget implements
     /**
      * To be called with uasort().
      *
-     * @param FormGroupInterface $a Item "a" to compare, for sorting.
-     * @param FormGroupInterface $b Item "b" to compaer, for sorting.
+     * @param FormSidebarInterface $a Item "a" to compare, for sorting.
+     * @param FormSidebarInterface $b Item "b" to compaer, for sorting.
      * @return integer Sorting value: -1, 0, or 1
      */
-    protected static function sortSidebarsByPriority(FormGroupInterface $a, FormGroupInterface $b)
+    protected static function sortSidebarsByPriority(FormSidebarInterface $a, FormSidebarInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();

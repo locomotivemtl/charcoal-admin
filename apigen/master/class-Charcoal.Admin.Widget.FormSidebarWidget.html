@@ -224,6 +224,9 @@
 	<h1>Class FormSidebarWidget</h1>
 
 
+	<div class="description">
+	<p>Form Sidebar Widget</p>
+	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -241,6 +244,8 @@ Charcoal\App\Template\AbstractWidget
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
 <b><span>Charcoal\Admin\Widget\FormSidebarWidget</span></b>			
+			 implements 
+				<a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html"><span>Charcoal\Admin\Ui\FormSidebarInterface</span></a>
 			
 			
 		</dd>
@@ -259,7 +264,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#11-370" title="Go to source code">Charcoal/Admin/Widget/FormSidebarWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#18-387" title="Go to source code">Charcoal/Admin/Widget/FormSidebarWidget.php</a>
 		<br>
 	</div>
 
@@ -272,14 +277,14 @@ Charcoal\App\Template\AbstractWidget
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></code>
+			<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#53-66" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#62-75" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
 
 		<div class="description short">
 			
@@ -297,7 +302,7 @@ Charcoal\App\Template\AbstractWidget
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></code><br>Chainable
+					<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code><br>Chainable
 				</div>
 
 
@@ -318,20 +323,20 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setForm">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#68-76" title="Go to source code">setForm</a>( <span><code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code> <var>$form</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#77-87" title="Go to source code">setForm</a>( <span>Charcoal\Ui\Form\FormInterface <var>$form</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the form widget the sidebar belongs to.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the form widget the sidebar belongs to.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$form</var></dt>
-					<dd>The sidebar form widget.</dd>
+					<dd>The related form widget.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -342,6 +347,8 @@ Charcoal\App\Template\AbstractWidget
 
 
 
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#_setForm">Charcoal\Admin\Ui\FormSidebarInterface::setForm()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -350,32 +357,34 @@ Charcoal\App\Template\AbstractWidget
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code>
+			Charcoal\Ui\Form\FormInterface
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_form">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#78-84" title="Go to source code">form</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#89-97" title="Go to source code">form</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the form widget the sidebar belongs to.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the form widget the sidebar belongs to.</p>
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a></code>
+					Charcoal\Ui\Form\FormInterface
 				</div>
 
 
 
 
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#_form">Charcoal\Admin\Ui\FormSidebarInterface::form()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -391,7 +400,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSubtitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#87-98" title="Go to source code">setSubtitle</a>( <span>mixed <var>$subtitle</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#99-110" title="Go to source code">setSubtitle</a>( <span>mixed <var>$subtitle</var></span> )</code>
 
 		<div class="description short">
 			
@@ -430,7 +439,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSidebarProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#100-108" title="Go to source code">setSidebarProperties</a>( <span>mixed <var>$properties</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#112-120" title="Go to source code">setSidebarProperties</a>( <span>mixed <var>$properties</var></span> )</code>
 
 		<div class="description short">
 			
@@ -469,7 +478,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_sidebarProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#110-116" title="Go to source code">sidebarProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#122-128" title="Go to source code">sidebarProperties</a>( )</code>
 
 		<div class="description short">
 			
@@ -503,7 +512,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasSidebarProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#118-126" title="Go to source code">hasSidebarProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#130-138" title="Go to source code">hasSidebarProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the form has any groups.</p>
@@ -537,7 +546,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_numSidebarProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#128-136" title="Go to source code">numSidebarProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#140-148" title="Go to source code">numSidebarProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Count the number of form groups.</p>
@@ -571,7 +580,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#138-159" title="Go to source code">formProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#150-171" title="Go to source code">formProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the object's properties from the form.</p>
@@ -598,14 +607,14 @@ Charcoal\App\Template\AbstractWidget
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></code>
+			<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#161-212" title="Go to source code">setActions</a>( <span>object <var>$actions</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#173-224" title="Go to source code">setActions</a>( <span>object <var>$actions</var></span> )</code>
 
 		<div class="description short">
 			<p>Defined the form actions.</p>
@@ -623,7 +632,7 @@ Charcoal\App\Template\AbstractWidget
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></code><br>Chainable
+					<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code><br>Chainable
 				</div>
 
 
@@ -644,7 +653,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_actions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#214-223" title="Go to source code">actions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#226-235" title="Go to source code">actions</a>( )</code>
 
 		<div class="description short">
 			<p>Returns the actions as an ArrayIterator
@@ -686,7 +695,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isObjDeletable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#225-243" title="Go to source code">isObjDeletable</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#237-255" title="Go to source code">isObjDeletable</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the object can be deleted.</p>
@@ -723,7 +732,7 @@ deleted programmatically or via direct action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isObjResettable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#245-264" title="Go to source code">isObjResettable</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#257-276" title="Go to source code">isObjResettable</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the object can be reset.</p>
@@ -754,32 +763,32 @@ action on the database.</p>
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></code>
+			<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPriority">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#266-281" title="Go to source code">setPriority</a>( <span>integer <var>$priority</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#278-296" title="Go to source code">setPriority</a>( <span>integer <var>$priority</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the widget's priority or sorting index.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the widget's priority or sorting index.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$priority</var></dt>
-					<dd>The priority, or sorting index.</dd>
+					<dd>An index, for sorting.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Widget.FormGroupWidget.html">Charcoal\Admin\Widget\FormGroupWidget</a></code><br>Chainable
+					<code><a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a></code><br>Chainable
 				</div>
 
 				<h4>Throws</h4>
@@ -791,6 +800,8 @@ action on the database.</p>
 				<h4>Overrides</h4>
 				<div class="list"><code><a href="class-Charcoal.Admin.AdminWidget.html#_setPriority">Charcoal\Admin\AdminWidget::setPriority()</a></code></div>
 
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#_setPriority">Charcoal\Admin\Ui\FormSidebarInterface::setPriority()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -806,14 +817,14 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_priority">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#283-289" title="Go to source code">priority</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#298-306" title="Go to source code">priority</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the widget's priority or sorting index.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the widget's priority or sorting index.</p>
 
 
 
@@ -827,6 +838,8 @@ action on the database.</p>
 				<h4>Overrides</h4>
 				<div class="list"><code><a href="class-Charcoal.Admin.AdminWidget.html#_priority">Charcoal\Admin\AdminWidget::priority()</a></code></div>
 
+				<h4>Implementation of</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#_priority">Charcoal\Admin\Ui\FormSidebarInterface::priority()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -842,7 +855,7 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setTitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#291-302" title="Go to source code">setTitle</a>( <span>mixed <var>$title</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#308-319" title="Go to source code">setTitle</a>( <span>mixed <var>$title</var></span> )</code>
 
 		<div class="description short">
 			
@@ -881,7 +894,7 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_title">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#304-313" title="Go to source code">title</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#321-330" title="Go to source code">title</a>( )</code>
 
 		<div class="description short">
 			
@@ -915,7 +928,7 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showFooter">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#315-321" title="Go to source code">showFooter</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#332-338" title="Go to source code">showFooter</a>( )</code>
 
 		<div class="description short">
 			
@@ -949,7 +962,7 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setShowFooter">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#323-331" title="Go to source code">setShowFooter</a>( <span>mixed <var>$showFooter</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#340-348" title="Go to source code">setShowFooter</a>( <span>mixed <var>$showFooter</var></span> )</code>
 
 		<div class="description short">
 			
@@ -988,7 +1001,7 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showLanguageSwitch">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#333-349" title="Go to source code">showLanguageSwitch</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#350-366" title="Go to source code">showLanguageSwitch</a>( )</code>
 
 		<div class="description short">
 			
@@ -1022,7 +1035,7 @@ action on the database.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_languages">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#351-369" title="Go to source code">languages</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#368-386" title="Go to source code">languages</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the available languages, formatted for the sidebar language-switcher.</p>
@@ -1072,6 +1085,15 @@ action on the database.</p>
 		</code></td>
 	</tr>
 	</table>
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#methods">Charcoal\Admin\Ui\FormSidebarInterface</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#_active">active()</a>, 
+			<a href="class-Charcoal.Admin.Ui.FormSidebarInterface.html#_setActive">setActive()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -1092,7 +1114,7 @@ action on the database.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#32-35" title="Go to source code"><var>$sidebarProperties</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#41-44" title="Go to source code"><var>$sidebarProperties</var></a>
 
 			<div class="description short">
 				<p>$sidebarProperties</p>
@@ -1117,7 +1139,7 @@ action on the database.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#37-41" title="Go to source code"><var>$priority</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#46-50" title="Go to source code"><var>$priority</var></a>
 
 			<div class="description short">
 				<p>Priority, or sorting index.</p>
@@ -1142,7 +1164,7 @@ action on the database.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#43-46" title="Go to source code"><var>$title</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#52-55" title="Go to source code"><var>$title</var></a>
 
 			<div class="description short">
 				<p>$title</p>
@@ -1167,7 +1189,7 @@ action on the database.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#48-51" title="Go to source code"><var>$showFooter</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormSidebarWidget.html#57-60" title="Go to source code"><var>$showFooter</var></a>
 
 			<div class="description short">
 				

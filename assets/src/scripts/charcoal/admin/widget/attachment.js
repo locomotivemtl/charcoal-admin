@@ -45,8 +45,21 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
         return this;
     }
     // var config = this.opts();
-    this.element().find('.js-attachment-sortable').find('.js-grid-container').sortable({
-        // connectWith: '.js-grid-container'
+    var $container = this.element().find('.js-attachment-sortable .js-grid-container');
+
+    this.element().on('hide.bs.collapse', '[data-toggle="collapse"]', function () {
+        $container.sortable('refreshPositions');
+    });
+
+    $container.sortable({
+        handle:      '.panel-heading',
+        placeholder: 'panel js-attachment-placeholder',
+        start:       function (event, ui) {
+            var $collapsible = ui.item.children('.panel-heading').find('[data-toggle="collapse"]');
+            if (!$collapsible.hasClass('.collapsed')) {
+                ui.item.children('.panel-collapse').collapse('hide');
+            }
+        }
     }).disableSelection();
 
     this.listeners();
@@ -110,8 +123,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
     // Prevent multiple binds
     this.element().off('click');
 
-    this.element().on('click', '.js-add-attachment', function (e)
-    {
+    this.element().on('click', '.js-add-attachment', function (e) {
         e.preventDefault();
         var type = $(this).data('type');
         if (!type) {

@@ -11,6 +11,7 @@
 
 // Core variables
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/border-radius";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/labels";
 // Charcoal variables
 @import "settings/settings";
@@ -62,6 +63,7 @@
 @import "components/audio-player";
 @import "components/map-maker";
 @import "components/stats";
+@import "components/attachment";
 
 // Bootstrap overwrites
 // ==========================================================================

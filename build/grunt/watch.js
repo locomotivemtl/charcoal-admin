@@ -39,7 +39,8 @@ module.exports = {
         tasks: [
             'sass',
             'postcss',
-            'notify:sass'
+            'notify:sass',
+            'copy:admin'
         ],
         options: {
             spawn: false,

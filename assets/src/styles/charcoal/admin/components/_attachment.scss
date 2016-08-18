@@ -1,0 +1,80 @@
+/**
+ * Attachment Widget
+ */
+
+$c-attachment-panel-width:  84%;
+$c-attachment-aside-width:  14%;
+$c-attachment-gutter-width: 2%;
+
+$c-attachment-pv: (nth($panel-heading-padding, 1) + 2px);
+$c-attachment-ph: nth($panel-heading-padding, 2);
+
+.c-attachments {
+
+    .ui-sortable-helper {
+        cursor: move;
+    }
+
+    .panel-group {
+        width: $c-attachment-panel-width;
+    }
+
+    .panel {
+        position: relative;
+
+        &.ui-sortable-helper {
+            height: auto !important;
+        }
+    }
+
+    .panel-heading {
+        .glyphicon {
+            margin:  (-$c-attachment-pv) $c-attachment-ph (-$c-attachment-pv) (-$c-attachment-ph);
+            padding: $c-attachment-pv $c-attachment-ph;
+            border-right: 1px solid #ddd;
+        }
+    }
+
+    .panel-title {
+        font-size: $font-size;
+    }
+
+    .panel-body {
+        font-family: $font-family-base;
+        font-size:   $font-size-base;
+        line-height: $line-height-base;
+
+        > :first-child {
+            margin-top: 0;
+        }
+
+        > :last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .panel-actions {
+        position: absolute;
+        top:      ceil($font-size * 0.25);
+        left:     100% + $c-attachment-gutter-width;
+        width:    $c-attachment-aside-width;
+    }
+
+}
+
+.c-attachments_header {
+    margin-bottom: 2em;
+}
+
+.js-attachment-container .js-grid-container {
+    min-height: 100px;
+}
+
+.js-attachment-placeholder {
+    height:           ceil(($font-size * 1.1) + (nth($panel-heading-padding, 1) * 2)) + 2px;
+    padding:          $panel-heading-padding;
+    border-color:     #BBB;
+    border-style:     dashed;
+    box-shadow:       none;
+    background-color: transparent;
+}

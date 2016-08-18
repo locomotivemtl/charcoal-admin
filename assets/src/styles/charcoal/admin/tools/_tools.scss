@@ -3,7 +3,51 @@
 // ==========================================================================
 
 @mixin ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include u-truncate;
+}
+
+// Text Truncation =============================================================
+
+// Prevent text from wrapping onto multiple lines,
+// and truncate with an ellipsis.
+//
+// 1. Ensure that the node has a maximum width after which
+//    truncation can occur.
+// 2. Fix for IE 8/9 if `word-wrap: break-word` is in effect
+//    on ancestor nodes.
+//
+// @see  inuitcss/utils-text
+
+@mixin u-truncate( $truncation-boundary: 100% )
+{
+    @if $truncation-boundary {
+        max-width: $truncation-boundary; /* [1] */
+    }
+    word-wrap     : normal;  /* [2] */
+    white-space   : nowrap;
+    overflow      : hidden;
+    text-overflow : ellipsis;
+}
+
+// Contain Floats ==============================================================
+
+// Micro clearfix, as per {@link css-101.org/articles/clearfix/latest-new-clearfix-so-far.php CSS Mojo}
+//
+// Make an element expand to contain floated children.
+// Uses pseudo-elements (micro clearfix).
+//
+// 1. The space content is one way to avoid an Opera bug when the
+//    `contenteditable` attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of the
+//    element.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `::before` to contain the top-margins of child elements.
+
+@mixin u-clearfix
+{
+    &::after {
+        content : ""; // [1]
+        display : table; // [2]
+        clear   : both;
+    }
 }

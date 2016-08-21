@@ -14,6 +14,8 @@ use \Charcoal\User\Authenticator;
 use \Charcoal\User\Authorizer;
 
 use \Charcoal\Admin\Config as AdminConfig;
+use \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
+use \Charcoal\Admin\Ui\Sidemenu\GenericSidemenuGroup;
 
 /**
  * Charcoal Administration Service Provider
@@ -137,6 +139,26 @@ class AdminServiceProvider implements ServiceProviderInterface
                 ]],
                 'resolver_options' => [
                     'suffix' => 'Display'
+                ]
+            ]);
+        };
+
+        /**
+         * @param Container $container A Pimple DI container.
+         * @return \Charcoal\Factory\FactoryInterface
+         */
+        $container['sidemenu/group/factory'] = function(Container $container) {
+            return new Factory([
+                'base_class'    => SidemenuGroupInterface::class,
+                'default_class' => GenericSidemenuGroup::class,
+                'arguments'     => [[
+                    'container'      => $container,
+                    'logger'         => $container['logger'],
+                    'view'           => $container['view'],
+                    'layout_builder' => $container['layout/builder']
+                ]],
+                'resolver_options' => [
+                    'suffix' => 'SidemenuGroup'
                 ]
             ]);
         };

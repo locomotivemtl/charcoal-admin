@@ -152,7 +152,7 @@ class CollectionTemplate extends AdminTemplate implements
     public function sidemenu()
     {
         $dashboardConfig = $this->objCollectionDashboardConfig();
-        ;
+
         if (!isset($dashboardConfig['sidemenu'])) {
             return null;
         }
@@ -160,16 +160,19 @@ class CollectionTemplate extends AdminTemplate implements
         $sidemenuConfig = $dashboardConfig['sidemenu'];
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
+
         if (isset($sidemenuConfig['widget_type'])) {
             $widgetType = $sidemenuConfig['widget_type'];
         } else {
             $widgetType = 'charcoal/admin/widget/sidemenu';
         }
+
         $sidemenu = $this->widgetFactory()->create($widgetType);
 
         if (isset($sidemenuConfig['widget_options'])) {
             $sidemenu->setData($sidemenuConfig['widget_options']);
         }
+
         return $sidemenu;
     }
 

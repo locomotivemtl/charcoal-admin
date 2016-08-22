@@ -18,6 +18,13 @@ use \Charcoal\App\Template\AbstractWidget;
 class AdminWidget extends AbstractWidget
 {
     /**
+     * The admin module's configuration.
+     *
+     * @var \Charcoal\Admin\Config
+     */
+    protected $adminConfig;
+
+    /**
      * @var string $widgetId
      */
     public $widgetId;
@@ -74,6 +81,9 @@ class AdminWidget extends AbstractWidget
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        $this->adminConfig = $container['admin/config'];
+
         $this->setModelFactory($container['model/factory']);
     }
 

@@ -520,8 +520,8 @@
 </span><span id="198" class="l"><a href="#198">198: </a>    <span class="php-comment">/**
 </span></span><span id="199" class="l"><a href="#199">199: </a><span class="php-comment">     * Set the sidemenu links.
 </span></span><span id="200" class="l"><a href="#200">200: </a><span class="php-comment">     *
-</span></span><span id="201" class="l"><a href="#201">201: </a><span class="php-comment">     * @param string $linkIdent The link identifier.
-</span></span><span id="202" class="l"><a href="#202">202: </a><span class="php-comment">     * @param array|object $link The link object or structure.
+</span></span><span id="201" class="l"><a href="#201">201: </a><span class="php-comment">     * @param string       $linkIdent The link identifier.
+</span></span><span id="202" class="l"><a href="#202">202: </a><span class="php-comment">     * @param array|object $link      The link object or structure.
 </span></span><span id="203" class="l"><a href="#203">203: </a><span class="php-comment">     * @throws InvalidArgumentException If the link is invalid.
 </span></span><span id="204" class="l"><a href="#204">204: </a><span class="php-comment">     * @return self
 </span></span><span id="205" class="l"><a href="#205">205: </a><span class="php-comment">     */</span>
@@ -654,11 +654,11 @@
 </span><span id="332" class="l"><a href="#332">332: </a>    {
 </span><span id="333" class="l"><a href="#333">333: </a>        <span class="php-var">$collapsed</span> = <span class="php-var">$this</span>-&gt;collapsible();
 </span><span id="334" class="l"><a href="#334">334: </a>
-</span><span id="335" class="l"><a href="#335">335: </a>        <span class="php-keyword1">if</span>(<span class="php-keyword2">is_bool</span>(<span class="php-var">$this</span>-&gt;collapsed)) {
+</span><span id="335" class="l"><a href="#335">335: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_bool</span>(<span class="php-var">$this</span>-&gt;collapsed)) {
 </span><span id="336" class="l"><a href="#336">336: </a>            <span class="php-var">$collapsed</span> = <span class="php-var">$this</span>-&gt;collapsed;
 </span><span id="337" class="l"><a href="#337">337: </a>        }
 </span><span id="338" class="l"><a href="#338">338: </a>
-</span><span id="339" class="l"><a href="#339">339: </a>        <span class="php-keyword1">if</span>(<span class="php-keyword2">is_bool</span>(<span class="php-var">$this</span>-&gt;isSelected())) {
+</span><span id="339" class="l"><a href="#339">339: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_bool</span>(<span class="php-var">$this</span>-&gt;isSelected())) {
 </span><span id="340" class="l"><a href="#340">340: </a>            <span class="php-var">$collapsed</span> = !<span class="php-var">$this</span>-&gt;isSelected;
 </span><span id="341" class="l"><a href="#341">341: </a>        }
 </span><span id="342" class="l"><a href="#342">342: </a>

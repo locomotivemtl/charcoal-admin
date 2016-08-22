@@ -251,7 +251,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#28-313" title="Go to source code">Charcoal/Admin/Action/ElfinderConnectorAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#28-278" title="Go to source code">Charcoal/Admin/Action/ElfinderConnectorAction.php</a>
 		<br>
 	</div>
 
@@ -427,7 +427,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_defaultConnectorOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#142-222" title="Go to source code">defaultConnectorOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#142-187" title="Go to source code">defaultConnectorOptions</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the default elFinder Connector options.</p>
@@ -446,45 +446,13 @@ Charcoal\App\Action\AbstractAction
 
 				<h4>Link</h4>
 				<div class="list">
-						<a href="https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options">Documentation for connector options.
-
-The Connector can be customized by defining a &quot;elfinder&quot; structure in
-your application&#039;s admin configuration. For example:
-
-```
-&quot;admin&quot;: {
-    &quot;elfinder&quot;: {
-        &quot;bind&quot;: {
-            &quot;upload.pre mkdir.pre mkfile.pre rename.pre archive.pre ls.pre&quot;: [
-                &quot;Plugin.Normalizer.cmdPreprocess&quot;,
-                &quot;Plugin.Sanitizer.cmdPreprocess&quot;
-            ],
-            &quot;ls&quot;: [
-                &quot;Plugin.Normalizer.cmdPostprocess&quot;,
-                &quot;Plugin.Sanitizer.cmdPostprocess&quot;
-            ],
-            &quot;upload.presave&quot;: [
-                &quot;Plugin.Normalizer.onUpLoadPreSave&quot;,
-                &quot;Plugin.Sanitizer.onUpLoadPreSave&quot;
-            ]
-        },
-        &quot;plugin&quot;: {
-            &quot;Normalizer&quot;: {
-                &quot;enable&quot;: true,
-                &quot;nfc&quot;: true,
-                &quot;nfkc&quot;: true,
-                &quot;lowercase&quot;: false,
-                &quot;convmap&quot;: []
-            },
-            &quot;Sanitizer&quot;: {
-                &quot;enable&quot;: true,
-                &quot;targets&quot;: [ &quot; &quot;, &quot;\\&quot;, &quot;/&quot;, &quot;:&quot;, &quot;*&quot;, &quot;?&quot;, &quot;&#039;&quot;, &quot;\&quot;&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;|&quot; ],
-                &quot;replace&quot;: &quot;_&quot;
-            }
-        }
-    }
-}
-```</a><br>
+						<a href="https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options">Documentation for connector options.</a><br>
+				</div>
+				<h4>Example</h4>
+				<div class="list">
+						<p>https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
+    The Connector can be customized by defining a "elfinder" structure in
+    your application's admin configuration.</p><br>
 				</div>
 
 
@@ -503,7 +471,7 @@ your application&#039;s admin configuration. For example:
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#224-232" title="Go to source code">objType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#189-197" title="Go to source code">objType</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object type from the GET parameters.</p>
@@ -537,7 +505,7 @@ your application&#039;s admin configuration. For example:
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#234-242" title="Go to source code">objId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#199-207" title="Go to source code">objId</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object ID from the GET parameters.</p>
@@ -571,7 +539,7 @@ your application&#039;s admin configuration. For example:
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#244-252" title="Go to source code">propertyIdent</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#209-217" title="Go to source code">propertyIdent</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object's property identifier from the GET parameters.</p>
@@ -605,7 +573,7 @@ your application&#039;s admin configuration. For example:
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#254-284" title="Go to source code">formProperty</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#219-249" title="Go to source code">formProperty</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current property.</p>

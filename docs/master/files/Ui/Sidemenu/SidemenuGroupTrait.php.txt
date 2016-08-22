@@ -56,7 +56,7 @@ trait SidemenuGroupTrait
      *
      * @var boolean
      */
-    private $collapsed = false;
+    private $collapsed;
 
     /**
      * Whether the group has siblings or not.
@@ -198,8 +198,8 @@ trait SidemenuGroupTrait
     /**
      * Set the sidemenu links.
      *
-     * @param string       $linkIdent The link identifier.
-     * @param array|object $link      The link object or structure.
+     * @param string $linkIdent The link identifier.
+     * @param array|object $link The link object or structure.
      * @throws InvalidArgumentException If the link is invalid.
      * @return self
      */
@@ -215,7 +215,7 @@ trait SidemenuGroupTrait
 
         if (is_array($link)) {
             $name = null;
-            $url  = null;
+            $url = null;
 
             if (isset($link['name']) && TranslationString::isTranslatable($link['name'])) {
                 $name = new TranslationString($link['name']);
@@ -231,7 +231,9 @@ trait SidemenuGroupTrait
 
             $isSelected = ($linkIdent === $objType);
 
-            $this->isSelected($isSelected);
+            if ($isSelected) {
+                $this->isSelected(true);
+            }
 
             $this->links[$linkIdent] = [
                 'name'     => $name,
@@ -328,7 +330,17 @@ trait SidemenuGroupTrait
      */
     public function collapsed()
     {
-        return $this->collapsible() && $this->collapsed;
+        $collapsed = $this->collapsible();
+
+        if(is_bool($this->collapsed)) {
+            $collapsed = $this->collapsed;
+        }
+
+        if(is_bool($this->isSelected())) {
+            $collapsed = !$this->isSelected;
+        }
+
+        return $collapsed;
     }
 
     /**

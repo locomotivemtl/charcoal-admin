@@ -457,6 +457,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                     continue;
                 }
 
+                if (isset($action['url']) && TranslationString::isTranslatable($action['url'])) {
+                    $action['url'] = new TranslationString($action['url']);
+                    foreach ($action['url']->all() as $lang => $value) {
+                        $action['url'][$lang] = $this->render($value);
+                    }
+                }
+
                 if (isset($action['is_button'])) {
                     $action['isButton'] = !!$action['is_button'];
                 } elseif (isset($action['isButton'])) {

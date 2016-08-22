@@ -144,44 +144,9 @@ class ElfinderConnectorAction extends AdminAction
      *
      * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
      *     Documentation for connector options.
-     *
-     * The Connector can be customized by defining a "elfinder" structure in
-     * your application's admin configuration. For example:
-     *
-     * ```
-     * "admin": {
-     *     "elfinder": {
-     *         "bind": {
-     *             "upload.pre mkdir.pre mkfile.pre rename.pre archive.pre ls.pre": [
-     *                 "Plugin.Normalizer.cmdPreprocess",
-     *                 "Plugin.Sanitizer.cmdPreprocess"
-     *             ],
-     *             "ls": [
-     *                 "Plugin.Normalizer.cmdPostprocess",
-     *                 "Plugin.Sanitizer.cmdPostprocess"
-     *             ],
-     *             "upload.presave": [
-     *                 "Plugin.Normalizer.onUpLoadPreSave",
-     *                 "Plugin.Sanitizer.onUpLoadPreSave"
-     *             ]
-     *         },
-     *         "plugin": {
-     *             "Normalizer": {
-     *                 "enable": true,
-     *                 "nfc": true,
-     *                 "nfkc": true,
-     *                 "lowercase": false,
-     *                 "convmap": []
-     *             },
-     *             "Sanitizer": {
-     *                 "enable": true,
-     *                 "targets": [ " ", "\\", "/", ":", "*", "?", "'", "\"", "<", ">", "|" ],
-     *                 "replace": "_"
-     *             }
-     *         }
-     *     }
-     * }
-     * ```
+     * @example https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
+     *     The Connector can be customized by defining a "elfinder" structure in
+     *     your application's admin configuration.
      *
      * @return array
      */

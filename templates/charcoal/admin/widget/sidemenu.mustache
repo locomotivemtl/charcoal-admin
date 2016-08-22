@@ -27,7 +27,7 @@
                {{# parented }} data-parent="#{{ widget_id }}"{{/ parented }}
                >{{/ collapsible }}<h2 class="c-nav_heading">{{title}}</h2>{{# collapsible }}</a>{{/ collapsible }}
         </div>
-        <div id="{{ groupId }}" class="{{# collapsible }}collapse panel-collapse{{/ collapsible }}{{# collapsed }} in{{/ collapsed }}">
+        <div id="{{ groupId }}" class="{{# collapsible }}collapse panel-collapse{{/ collapsible }}{{^ collapsed }} in{{/ collapsed }}">
             <div class="{{# collapsible }}panel-body{{/ collapsible }}">
                 <ul class="c-nav_list -light -secondary -inpanel">
                     {{#links}}

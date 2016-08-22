@@ -375,7 +375,7 @@ class SidemenuWidget extends AdminWidget implements
     {
         return [
             'parented'  => false,
-            'collapsed' => false
+            'collapsed' => $this->collapsible()
         ];
     }
 
@@ -461,6 +461,8 @@ class SidemenuWidget extends AdminWidget implements
             if (!isset($group['display_type'])) {
                 $group['display_type'] = $this->displayType();
             }
+
+            error_log(var_export($group, true));
 
             $collapsible = ($group['display_type'] === 'collapsible');
 

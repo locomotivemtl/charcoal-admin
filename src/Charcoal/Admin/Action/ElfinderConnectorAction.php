@@ -113,19 +113,6 @@ class ElfinderConnectorAction extends AdminAction
     {
         unset($request);
 
-        $startPath    = 'uploads/';
-        $formProperty = $this->formProperty();
-
-        if (isset($formProperty['upload_path'])) {
-            $startPath = $formProperty['upload_path'];
-
-            if (!file_exists($startPath)) {
-                mkdir($startPath, 0777, true);
-            }
-        }
-
-        $baseUrl = rtrim((string)$this->baseUrl, '/');
-
         $opts = $this->defaultConnectorOptions();
 
         if (isset($this->adminConfig['elfinder'])) {
@@ -152,6 +139,19 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function defaultConnectorOptions()
     {
+        $startPath    = 'uploads/';
+        $formProperty = $this->formProperty();
+
+        if (isset($formProperty['upload_path'])) {
+            $startPath = $formProperty['upload_path'];
+
+            if (!file_exists($startPath)) {
+                mkdir($startPath, 0777, true);
+            }
+        }
+
+        $baseUrl = rtrim((string)$this->baseUrl, '/');
+
         return [
             'debug' => false,
             'roots' => [

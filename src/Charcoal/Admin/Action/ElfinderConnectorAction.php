@@ -38,6 +38,13 @@ class ElfinderConnectorAction extends AdminAction
     public $baseUrl;
 
     /**
+     * Store a reference to the admin configuration.
+     *
+     * @var \Charcoal\Admin\AdminConfig
+     */
+    private $adminConfig;
+
+    /**
      * Store the factory instance for the current class.
      *
      * @var FactoryInterface
@@ -62,6 +69,7 @@ class ElfinderConnectorAction extends AdminAction
         parent::setDependencies($container);
 
         $this->baseUrl = $container['base-url'];
+        $this->adminConfig = $container['admin/config'];
         $this->setPropertyFactory($container['property/factory']);
     }
 
@@ -118,12 +126,71 @@ class ElfinderConnectorAction extends AdminAction
 
         $baseUrl = rtrim((string)$this->baseUrl, '/');
 
-        // Documentation for connector options:
-        // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
-        $opts = [
+        $opts = $this->defaultConnectorOptions();
+
+        if (isset($this->adminConfig['elfinder'])) {
+            $opts = array_merge_recursive($opts, $this->adminConfig['elfinder']);
+        }
+
+        // Run elFinder
+        $connector = new elFinderConnector(new elFinder($opts));
+        $connector->run();
+
+        return $response;
+    }
+
+    /**
+     * Retrieve the default elFinder Connector options.
+     *
+     * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+     *     Documentation for connector options.
+     *
+     * The Connector can be customized by defining a "elfinder" structure in
+     * your application's admin configuration. For example:
+     *
+     * ```
+     * "admin": {
+     *     "elfinder": {
+     *         "bind": {
+     *             "upload.pre mkdir.pre mkfile.pre rename.pre archive.pre ls.pre": [
+     *                 "Plugin.Normalizer.cmdPreprocess",
+     *                 "Plugin.Sanitizer.cmdPreprocess"
+     *             ],
+     *             "ls": [
+     *                 "Plugin.Normalizer.cmdPostprocess",
+     *                 "Plugin.Sanitizer.cmdPostprocess"
+     *             ],
+     *             "upload.presave": [
+     *                 "Plugin.Normalizer.onUpLoadPreSave",
+     *                 "Plugin.Sanitizer.onUpLoadPreSave"
+     *             ]
+     *         },
+     *         "plugin": {
+     *             "Normalizer": {
+     *                 "enable": true,
+     *                 "nfc": true,
+     *                 "nfkc": true,
+     *                 "lowercase": false,
+     *                 "convmap": []
+     *             },
+     *             "Sanitizer": {
+     *                 "enable": true,
+     *                 "targets": [ " ", "\\", "/", ":", "*", "?", "'", "\"", "<", ">", "|" ],
+     *                 "replace": "_"
+     *             }
+     *         }
+     *     }
+     * }
+     * ```
+     *
+     * @return array
+     */
+    public function defaultConnectorOptions()
+    {
+        return [
             'debug' => false,
             'roots' => [
-                [
+                'default' => [
                     // Driver for accessing file system (REQUIRED)
                     'driver'         => 'LocalFileSystem',
                     // Path to files (REQUIRED)
@@ -152,12 +219,6 @@ class ElfinderConnectorAction extends AdminAction
                 ]
             ]
         ];
-
-        // run elFinder
-        $connector = new elFinderConnector(new elFinder($opts));
-        $connector->run();
-
-        return $response;
     }
 
     /**

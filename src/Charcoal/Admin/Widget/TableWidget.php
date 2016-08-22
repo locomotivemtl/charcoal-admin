@@ -352,26 +352,27 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
-        $obj = $this->proto();
-        $props = $obj->metadata()->properties();
+        $model = $this->proto();
+        $props = $model->metadata()->properties();
         $collectionIdent = $this->collectionIdent();
 
         if (!$collectionIdent) {
             return [];
         }
 
-        $metadata = $obj->metadata();
+        $metadata = $model->metadata();
         $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         $listOptions = $adminMetadata['lists'][$collectionIdent];
 
         $objectActions = isset($listOptions['object_actions']) ? $listOptions['object_actions'] : [];
         foreach ($objectActions as &$action) {
             if (isset($action['url'])) {
-                if ($obj->view() !== null) {
-                    $action['url'] = $obj->render($action['url']);
+                if ($model->view() !== null) {
+                    $action['url'] = $model->render($action['url']);
                 } else {
-                    $action['url'] = str_replace('{{id}}', $this->currentObjId, $action['url']);
+                    $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
                 }
+
                 $action['url'] = $this->adminUrl().$action['url'];
             } else {
                 $action['url'] = '#';
@@ -551,7 +552,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         if ($actions) {
             foreach ($actions as $action) {
                 if (isset($action['ident']) && $action['ident'] === 'create') {
-                    return $action['url'];
+                    if (isset($action['url'])) {
+                        $model = $this->proto();
+                        if ($model->view() !== null) {
+                            $action['url'] = $model->render($action['url']);
+                        } else {
+                            $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
+                        }
+
+                        $action['url'] = $this->adminUrl().$action['url'];
+                    }
                 }
             }
         }

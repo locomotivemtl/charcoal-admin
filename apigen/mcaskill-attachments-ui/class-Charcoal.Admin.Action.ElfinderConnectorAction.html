@@ -123,9 +123,16 @@
 							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.Ui.html">
-						Ui					</a>
+						Ui<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Charcoal.Admin.Ui.Sidemenu.html">
+						Sidemenu					</a>
 
 						</li>
+							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.User.html">
 						User					</a>
@@ -244,7 +251,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#28-252" title="Go to source code">Charcoal/Admin/Action/ElfinderConnectorAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#28-313" title="Go to source code">Charcoal/Admin/Action/ElfinderConnectorAction.php</a>
 		<br>
 	</div>
 
@@ -264,7 +271,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#54-66" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#61-74" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Inject dependencies from a DI Container.</p>
@@ -301,7 +308,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#68-80" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#76-88" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			<p>Set a property factory.</p>
@@ -341,7 +348,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#82-97" title="Go to source code">propertyFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#90-105" title="Go to source code">propertyFactory</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the property factory.</p>
@@ -379,7 +386,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_run">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#99-161" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#107-140" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
 
 		<div class="description short">
 			
@@ -408,6 +415,82 @@ Charcoal\App\Action\AbstractAction
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="defaultConnectorOptions" id="_defaultConnectorOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultConnectorOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#142-222" title="Go to source code">defaultConnectorOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default elFinder Connector options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default elFinder Connector options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options">Documentation for connector options.
+
+The Connector can be customized by defining a &quot;elfinder&quot; structure in
+your application&#039;s admin configuration. For example:
+
+```
+&quot;admin&quot;: {
+    &quot;elfinder&quot;: {
+        &quot;bind&quot;: {
+            &quot;upload.pre mkdir.pre mkfile.pre rename.pre archive.pre ls.pre&quot;: [
+                &quot;Plugin.Normalizer.cmdPreprocess&quot;,
+                &quot;Plugin.Sanitizer.cmdPreprocess&quot;
+            ],
+            &quot;ls&quot;: [
+                &quot;Plugin.Normalizer.cmdPostprocess&quot;,
+                &quot;Plugin.Sanitizer.cmdPostprocess&quot;
+            ],
+            &quot;upload.presave&quot;: [
+                &quot;Plugin.Normalizer.onUpLoadPreSave&quot;,
+                &quot;Plugin.Sanitizer.onUpLoadPreSave&quot;
+            ]
+        },
+        &quot;plugin&quot;: {
+            &quot;Normalizer&quot;: {
+                &quot;enable&quot;: true,
+                &quot;nfc&quot;: true,
+                &quot;nfkc&quot;: true,
+                &quot;lowercase&quot;: false,
+                &quot;convmap&quot;: []
+            },
+            &quot;Sanitizer&quot;: {
+                &quot;enable&quot;: true,
+                &quot;targets&quot;: [ &quot; &quot;, &quot;\\&quot;, &quot;/&quot;, &quot;:&quot;, &quot;*&quot;, &quot;?&quot;, &quot;&#039;&quot;, &quot;\&quot;&quot;, &quot;&lt;&quot;, &quot;&gt;&quot;, &quot;|&quot; ],
+                &quot;replace&quot;: &quot;_&quot;
+            }
+        }
+    }
+}
+```</a><br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="objType" id="_objType">
 
 		<td class="attributes"><code>
@@ -420,7 +503,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#163-171" title="Go to source code">objType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#224-232" title="Go to source code">objType</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object type from the GET parameters.</p>
@@ -454,7 +537,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#173-181" title="Go to source code">objId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#234-242" title="Go to source code">objId</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object ID from the GET parameters.</p>
@@ -488,7 +571,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#183-191" title="Go to source code">propertyIdent</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#244-252" title="Go to source code">propertyIdent</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current object's property identifier from the GET parameters.</p>
@@ -522,7 +605,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#193-223" title="Go to source code">formProperty</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.ElfinderConnectorAction.html#254-284" title="Go to source code">formProperty</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the current property.</p>

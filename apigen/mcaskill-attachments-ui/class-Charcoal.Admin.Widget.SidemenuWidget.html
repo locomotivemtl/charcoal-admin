@@ -123,9 +123,16 @@
 							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.Ui.html">
-						Ui					</a>
+						Ui<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Charcoal.Admin.Ui.Sidemenu.html">
+						Sidemenu					</a>
 
 						</li>
+							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.User.html">
 						User					</a>
@@ -225,7 +232,7 @@
 
 
 	<div class="description">
-	<p>Sidemenu Widget</p>
+	<p>Admin Sidemenu Widget</p>
 	</div>
 
 	<dl class="tree">
@@ -264,25 +271,1092 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#7-12" title="Go to source code">Charcoal/Admin/Widget/SidemenuWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#21-600" title="Go to source code">Charcoal/Admin/Widget/SidemenuWidget.php</a>
 		<br>
 	</div>
 
 
 
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="setDependencies" id="_setDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#83-94" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			<p>Inject dependencies from a DI Container.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inject dependencies from a DI Container.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>A dependencies container instance.</dd>
+				</dl></div>
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminWidget.html#_setDependencies">Charcoal\Admin\AdminWidget::setDependencies()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setSidemenuGroupFactory" id="_setSidemenuGroupFactory">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setSidemenuGroupFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#96-107" title="Go to source code">setSidemenuGroupFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+
+		<div class="description short">
+			<p>Set an sidemenu group factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set an sidemenu group factory.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd>The group factory, to create objects.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="sidemenuGroupFactory" id="_sidemenuGroupFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			Charcoal\Factory\FactoryInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_sidemenuGroupFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#109-124" title="Go to source code">sidemenuGroupFactory</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the sidemenu group factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the sidemenu group factory.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Factory\FactoryInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the sidemenu group factory was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="adminSidemenu" id="_adminSidemenu">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_adminSidemenu">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#126-134" title="Go to source code">adminSidemenu</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the metadata for the sidemenu.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the metadata for the sidemenu.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="objType" id="_objType">
+
+		<td class="attributes"><code>
+			 public 
+
+			string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_objType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#136-144" title="Go to source code">objType</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the current object type from the GET parameters.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the current object type from the GET parameters.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string|null
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setTitle" id="_setTitle">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setTitle">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#146-161" title="Go to source code">setTitle</a>( <span>mixed <var>$title</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the title of the sidemenu.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the title of the sidemenu.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$title</var></dt>
+					<dd>A title for the sidemenu.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="title" id="_title">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Translation\TranslationString|string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_title">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#163-184" title="Go to source code">title</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the title of the sidemenu.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the title of the sidemenu.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Translation\TranslationString|string|null
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setLinks" id="_setLinks">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setLinks">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#186-201" title="Go to source code">setLinks</a>( <span>array <var>$links</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the sidemenu links.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the sidemenu links.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$links</var></dt>
+					<dd>A collection of link objects.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addLink" id="_addLink">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addLink">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#203-253" title="Go to source code">addLink</a>( <span>string <var>$linkIdent</var></span>, <span>array|object <var>$link</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the sidemenu links.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the sidemenu links.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$linkIdent</var></dt>
+					<dd>The link identifier.</dd>
+					<dt><var>$link</var></dt>
+					<dd>The link object or structure.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the link is invalid.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="links" id="_links">
+
+		<td class="attributes"><code>
+			 public 
+
+			ArrayIterator
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_links">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#255-276" title="Go to source code">links</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the sidemenu links.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the sidemenu links.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					ArrayIterator
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setDisplayType" id="_setDisplayType">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDisplayType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#278-294" title="Go to source code">setDisplayType</a>( <span>mixed <var>$type</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the display type of the sidemenu's contents.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the display type of the sidemenu's contents.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$type</var></dt>
+					<dd>The display type.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the display type is invalid.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="displayType" id="_displayType">
+
+		<td class="attributes"><code>
+			 public 
+
+			string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_displayType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#296-315" title="Go to source code">displayType</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the display type of the sidemenu's contents.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the display type of the sidemenu's contents.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string|null
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="collapsible" id="_collapsible">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_collapsible">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#317-325" title="Go to source code">collapsible</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if the display type is "collapsible".</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the display type is "collapsible".</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setDisplayOptions" id="_setDisplayOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDisplayOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#327-339" title="Go to source code">setDisplayOptions</a>( <span>array <var>$options</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the display options for the sidemenu.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the display options for the sidemenu.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$options</var></dt>
+					<dd>Display configuration.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the display options are not an associative array.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="displayOptions" id="_displayOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_displayOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#341-367" title="Go to source code">displayOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the display options for the sidemenu.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the display options for the sidemenu.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the display options are not an associative array.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultDisplayOptions" id="_defaultDisplayOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultDisplayOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#369-380" title="Go to source code">defaultDisplayOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default display options for the sidemenu.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default display options for the sidemenu.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="parented" id="_parented">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parented">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#382-392" title="Go to source code">parented</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="collapsed" id="_collapsed">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_collapsed">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#394-404" title="Go to source code">collapsed</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setGroups" id="_setGroups">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setGroups">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#406-423" title="Go to source code">setGroups</a>( <span>array <var>$groups</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the sidemenu's groups.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the sidemenu's groups.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$groups</var></dt>
+					<dd>A collection of group structures.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addGroup" id="_addGroup">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addGroup">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#425-489" title="Go to source code">addGroup</a>( <span>string <var>$groupIdent</var></span>, <span>array|<code><a href="class-Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface</a></code> <var>$group</var></span> )</code>
+
+		<div class="description short">
+			<p>Add a sidemenu group.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add a sidemenu group.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$groupIdent</var></dt>
+					<dd>The group identifier.</dd>
+					<dt><var>$group</var></dt>
+					<dd>The group object or structure.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Widget.SidemenuWidget.html">Charcoal\Admin\Widget\SidemenuWidget</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the identifier is not a string or the group is invalid.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="groups" id="_groups">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface</a>[]</code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_groups">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#491-512" title="Go to source code">groups</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the sidemenu groups.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the sidemenu groups.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface</a>[]</code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultGroupType" id="_defaultGroupType">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultGroupType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#514-522" title="Go to source code">defaultGroupType</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default sidemenu group class name.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default sidemenu group class name.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="sortGroupsByPriority" id="_sortGroupsByPriority">
+
+		<td class="attributes"><code>
+			 protected static
+
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_sortGroupsByPriority">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#524-539" title="Go to source code">sortGroupsByPriority</a>( <span><code><a href="class-Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface</a></code> <var>$a</var></span>, <span><code><a href="class-Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface</a></code> <var>$b</var></span> )</code>
+
+		<div class="description short">
+			<p>To be called with uasort()</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>To be called with uasort()</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$a</var></dt>
+					<dd>First group object to sort.</dd>
+					<dt><var>$b</var></dt>
+					<dd>Second group object to sort.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					integer
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasLinks" id="_hasLinks">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasLinks">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#541-549" title="Go to source code">hasLinks</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if the sidemenu has any links.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the sidemenu has any links.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="numLinks" id="_numLinks">
+
+		<td class="attributes"><code>
+			 public 
+
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_numLinks">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#551-559" title="Go to source code">numLinks</a>( )</code>
+
+		<div class="description short">
+			<p>Count the number of sidemenu links.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Count the number of sidemenu links.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					integer
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasGroups" id="_hasGroups">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasGroups">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#561-569" title="Go to source code">hasGroups</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if the sidemenu has any groups of links.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the sidemenu has any groups of links.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="numGroups" id="_numGroups">
+
+		<td class="attributes"><code>
+			 public 
+
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_numGroups">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#571-579" title="Go to source code">numGroups</a>( )</code>
+
+		<div class="description short">
+			<p>Count the number of sidemenu groups.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Count the number of sidemenu groups.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					integer
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="hasActions" id="_hasActions">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_hasActions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#581-589" title="Go to source code">hasActions</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if the sidemenu has any actions.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the sidemenu has any actions.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="actions" id="_actions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_actions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#591-599" title="Go to source code">actions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the sidemenu's actions.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the sidemenu's actions.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminWidget.html#_actions">Charcoal\Admin\AdminWidget::actions()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.AdminWidget.html#methods">Charcoal\Admin\AdminWidget</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-Charcoal.Admin.AdminWidget.html#_actions">actions()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_adminUrl">adminUrl()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_baseUrl">baseUrl()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_ident">ident()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_label">label()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_modelFactory">modelFactory()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_priority">priority()</a>, 
-			<a href="class-Charcoal.Admin.AdminWidget.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_setLabel">setLabel()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_setModelFactory">setModelFactory()</a>, 
@@ -311,11 +1385,165 @@ Charcoal\App\Template\AbstractWidget
 
 
 
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="displayType" id="$displayType">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#27-32" title="Go to source code"><var>$displayType</var></a>
+
+			<div class="description short">
+				<p>The sidemenu's display type.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The sidemenu's display type.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$displayType" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="displayOptions" id="$displayOptions">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#34-39" title="Go to source code"><var>$displayOptions</var></a>
+
+			<div class="description short">
+				<p>The sidemenu's display options.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The sidemenu's display options.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$displayOptions" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="title" id="$title">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#55-60" title="Go to source code"><var>$title</var></a>
+
+			<div class="description short">
+				<p>The sidemenu's title.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The sidemenu's title.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$title" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="links" id="$links">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#62-67" title="Go to source code"><var>$links</var></a>
+
+			<div class="description short">
+				<p>The sidemenu's links.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The sidemenu's links.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$links" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="groups" id="$groups">
+		<td class="attributes"><code>
+			protected  
+			<code><a href="class-Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface</a>[]</code>
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#69-74" title="Go to source code"><var>$groups</var></a>
+
+			<div class="description short">
+				<p>The sidemenu's groups.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The sidemenu's groups.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$groups" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="sidemenuGroupFactory" id="$sidemenuGroupFactory">
+		<td class="attributes"><code>
+			protected  
+			Charcoal\Factory\FactoryInterface
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.SidemenuWidget.html#76-81" title="Go to source code"><var>$sidemenuGroupFactory</var></a>
+
+			<div class="description short">
+				<p>Store the factory instance for the current class.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Store the factory instance for the current class.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$sidemenuGroupFactory" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.AdminWidget.html#properties">Charcoal\Admin\AdminWidget</a></caption>
 	<tr>
 		<td><code>
+			<a href="class-Charcoal.Admin.AdminWidget.html#$adminConfig"><var>$adminConfig</var></a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#$widgetId"><var>$widgetId</var></a>
 		</code></td>
 	</tr>

@@ -198,8 +198,8 @@ trait SidemenuGroupTrait
     /**
      * Set the sidemenu links.
      *
-     * @param string $linkIdent The link identifier.
-     * @param array|object $link The link object or structure.
+     * @param string       $linkIdent The link identifier.
+     * @param array|object $link      The link object or structure.
      * @throws InvalidArgumentException If the link is invalid.
      * @return self
      */
@@ -332,11 +332,11 @@ trait SidemenuGroupTrait
     {
         $collapsed = $this->collapsible();
 
-        if(is_bool($this->collapsed)) {
+        if (is_bool($this->collapsed)) {
             $collapsed = $this->collapsed;
         }
 
-        if(is_bool($this->isSelected())) {
+        if (is_bool($this->isSelected())) {
             $collapsed = !$this->isSelected;
         }
 

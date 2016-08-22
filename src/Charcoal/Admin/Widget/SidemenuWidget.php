@@ -428,7 +428,7 @@ class SidemenuWidget extends AdminWidget implements
      * @param string                       $groupIdent The group identifier.
      * @param array|SidemenuGroupInterface $group      The group object or structure.
      * @throws InvalidArgumentException If the identifier is not a string or the group is invalid.
-     * @return FormInterface Chainable
+     * @return self
      */
     public function addGroup($groupIdent, $group)
     {
@@ -462,8 +462,6 @@ class SidemenuWidget extends AdminWidget implements
                 $group['display_type'] = $this->displayType();
             }
 
-            error_log(var_export($group, true));
-
             $collapsible = ($group['display_type'] === 'collapsible');
 
             if ($collapsible) {
@@ -476,7 +474,7 @@ class SidemenuWidget extends AdminWidget implements
 
             $this->groups[] = $g;
         } elseif ($group === false || $group === null) {
-            continue;
+            return $this;
         } else {
             throw new InvalidArgumentException(
                 sprintf(

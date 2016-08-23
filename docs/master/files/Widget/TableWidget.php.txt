@@ -368,7 +368,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         foreach ($objectActions as &$action) {
             if (isset($action['url'])) {
                 if ($model->view() !== null) {
-                    $action['url'] = $model->render($action['url']);
+                    $action['url'] = $model->render((string)$action['url']);
                 } else {
                     $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
                 }
@@ -555,7 +555,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                     if (isset($action['url'])) {
                         $model = $this->proto();
                         if ($model->view() !== null) {
-                            $action['url'] = $model->render($action['url']);
+                            $action['url'] = $model->render((string)$action['url']);
                         } else {
                             $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
                         }

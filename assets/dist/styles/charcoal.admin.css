@@ -1276,7 +1276,7 @@ td {
   list-style: none; }
 
 .c-attachments .panel-group {
-  width: 84%; }
+  width: 85%; }
 
 .c-attachments .panel {
   position: relative; }
@@ -1287,6 +1287,9 @@ td {
   margin: -12px 15px -12px -15px;
   padding: 12px 15px;
   border-right: 1px solid #ddd; }
+
+.c-attachments .panel-heading.sr-only ~ .panel-collapse > .panel-body, .c-attachments .panel-heading.hidden ~ .panel-collapse > .panel-body {
+  border-top: 0; }
 
 .c-attachments .panel-title {
   font-size: 16px; }
@@ -1304,7 +1307,9 @@ td {
   position: absolute;
   top: 4px;
   left: 102%;
-  width: 14%; }
+  width: 16%; }
+  .c-attachments .panel-actions .glyphicon {
+    vertical-align: text-top; }
 
 .c-attachments_header {
   margin-bottom: 2em; }

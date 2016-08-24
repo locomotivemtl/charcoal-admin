@@ -2,8 +2,8 @@
  * Attachment Widget
  */
 
-$c-attachment-panel-width:  84%;
-$c-attachment-aside-width:  14%;
+$c-attachment-panel-width:  85%;
+$c-attachment-aside-width:  16%;
 $c-attachment-gutter-width: 2%;
 
 $c-attachment-pv: (nth($panel-heading-padding, 1) + 2px);
@@ -51,6 +51,13 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
             padding: $c-attachment-pv $c-attachment-ph;
             border-right: 1px solid #ddd;
         }
+
+        &.sr-only,
+        &.hidden {
+            ~ .panel-collapse > .panel-body {
+                border-top: 0;
+            }
+        }
     }
 
     .panel-title {
@@ -76,6 +83,10 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         top:      ceil($font-size * 0.25);
         left:     100% + $c-attachment-gutter-width;
         width:    $c-attachment-aside-width;
+
+        .glyphicon {
+            vertical-align: text-top;
+        }
     }
 
 }

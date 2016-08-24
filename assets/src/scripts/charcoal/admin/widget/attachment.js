@@ -47,16 +47,18 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     // var config = this.opts();
     var $container = this.element().find('.js-attachment-sortable .js-grid-container');
 
-    this.element().on('hide.bs.collapse', '[data-toggle="collapse"]', function () {
+    this.element().on('hidden.bs.collapse', '[data-toggle="collapse"]', function () {
         $container.sortable('refreshPositions');
     });
 
     $container.sortable({
-        handle:      '.panel-heading',
+        handle:      '[draggable="true"]',
         placeholder: 'panel js-attachment-placeholder',
         start:       function (event, ui) {
-            var $collapsible = ui.item.children('.panel-heading').find('[data-toggle="collapse"]');
-            if (!$collapsible.hasClass('.collapsed')) {
+            var $heading     = ui.item.children('.panel-heading'),
+                $collapsible = $heading.find('[data-toggle="collapse"]');
+
+            if (!$collapsible.hasClass('collapsed')) {
                 ui.item.children('.panel-collapse').collapse('hide');
             }
         }
@@ -118,85 +120,103 @@ Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool)
 Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 {
     // Scope
-    var that = this;
+    var that = this,
+        $container = this.element().find('.js-attachment-sortable .js-grid-container');
 
     // Prevent multiple binds
-    this.element().off('click');
+    this.element()
+        .off('click')
+        .on('click.charcoal.attachments', '.js-attachments-collapse', function () {
+            var $attachments = $container.children('.js-attachment');
 
-    this.element().on('click', '.js-add-attachment', function (e) {
-        e.preventDefault();
-        var type = $(this).data('type');
-        if (!type) {
-            return false;
-        }
-        var title = $(this).data('title') || 'Edit';
-        that.create_attachment(type, title, 0, function (response) {
-            if (response.success) {
-                that.add(response.obj);
-                that.join(function () {
-                    that.reload();
-                });
+            if ($container.hasClass('js-attachment-preview-only')) {
+                $attachments.children('.panel-heading.sr-only').removeClass('sr-only').addClass('sr-only-off');
             }
-        });
-    });
 
-    this.element().on('click', '.js-attachment-actions a', function (e) {
-        var _this = $(this);
-        if (!_this.data('action')) {
-            return ;
-        }
+            $attachments.children('.panel-collapse.in').collapse('hide');
+        })
+        .on('click.charcoal.attachments', '.js-attachments-expand', function () {
+            var $attachments = $container.children('.js-attachment');
 
-        e.preventDefault();
-        var action = _this.data('action');
-        switch (action) {
-            case 'edit' :
-                var type = _this.data('type');
-                var id = _this.data('id');
-                if (!type || !id) {
-                    break;
-                }
-                var title = _this.data('title') || 'Édition';
-                that.create_attachment(type, title, id, function (response) {
-                    if (response.success) {
-                        that.reload();
-                    }
-                });
+            if ($container.hasClass('js-attachment-preview-only')) {
+                $attachments.children('.panel-heading.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
+            }
 
-                break;
-
-            case 'delete':
-                if (!_this.data('id')) {
-                    break;
-                }
-                that.confirm({
-                    title: 'Voulez-vous vraiment supprimer cet item?'
-                }, function () {
-                    that.remove_join(_this.data('id'), function () {
+            $attachments.children('.panel-collapse:not(.in)').collapse('show');
+        })
+        .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
+            e.preventDefault();
+            var type = $(this).data('type');
+            if (!type) {
+                return false;
+            }
+            var title = $(this).data('title') || 'Edit';
+            that.create_attachment(type, title, 0, function (response) {
+                if (response.success) {
+                    that.add(response.obj);
+                    that.join(function () {
                         that.reload();
                     });
-                });
-                break;
+                }
+            });
+        })
+        .on('click.charcoal.attachments', '.js-attachment-actions a', function (e) {
+            var _this = $(this);
+            if (!_this.data('action')) {
+                return ;
+            }
 
-            case 'add-object':
-                var gallery_type = _this.data('type');
-                var gallery_id = _this.data('id');
-                var gallery_title = _this.data('title');
-                var gallery_attachment = _this.data('attachment');
-                that.create_attachment(gallery_attachment, gallery_title, 0, function (response) {
-                    if (response.success) {
-                        that.add_object_to_container({
-                            id: response.obj.id,
-                            type: response.obj.type
-                        },{
-                            id: gallery_id,
-                            type: gallery_type
-                        });
+            e.preventDefault();
+            var action = _this.data('action');
+            switch (action) {
+                case 'edit' :
+                    var type = _this.data('type');
+                    var id = _this.data('id');
+                    if (!type || !id) {
+                        break;
                     }
-                });
+                    var title = _this.data('title') || 'Édition';
+                    that.create_attachment(type, title, id, function (response) {
+                        if (response.success) {
+                            that.reload();
+                        }
+                    });
 
-                break;
-        }
-    });
+                    break;
+
+                case 'delete':
+                    if (!_this.data('id')) {
+                        break;
+                    }
+                    that.confirm({
+                        title: 'Voulez-vous vraiment supprimer cet item?'
+                    }, function () {
+                        that.remove_join(_this.data('id'), function () {
+                            that.reload();
+                        });
+                    });
+                    break;
+
+                case 'add-object':
+                    var gallery_type = _this.data('type');
+                    var gallery_id = _this.data('id');
+                    var gallery_title = _this.data('title');
+                    var gallery_attachment = _this.data('attachment');
+                    that.create_attachment(gallery_attachment, gallery_title, 0, function (response) {
+                        if (response.success) {
+                            that.add_object_to_container({
+                                id: response.obj.id,
+                                type: response.obj.type
+                            },{
+                                id: gallery_id,
+                                type: gallery_type
+                            });
+                        }
+                    });
+
+                    break;
+            }
+        });
 };
 
 /**

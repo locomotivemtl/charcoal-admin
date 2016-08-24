@@ -1260,6 +1260,21 @@ td {
 .c-attachments .ui-sortable-helper {
   cursor: move; }
 
+.c-attachments .thumbnail img,
+.c-attachments img.thumbnail {
+  max-width: 200px; }
+
+.c-attachments img.thumbnail {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto; }
+
+.c-attachments .gallery-list {
+  padding: 0;
+  list-style: none; }
+
 .c-attachments .panel-group {
   width: 84%; }
 

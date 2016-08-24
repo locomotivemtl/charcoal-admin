@@ -177,14 +177,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                 });
                 break;
 
-            case 'add-image':
+            case 'add-object':
                 var gallery_type = _this.data('type');
                 var gallery_id = _this.data('id');
-                var gallery_title = 'Ajout d\'une image';
+                var gallery_title = _this.data('title');
                 var gallery_attachment = _this.data('attachment');
                 that.create_attachment(gallery_attachment, gallery_title, 0, function (response) {
                     if (response.success) {
-                        that.add_image_to_gallery({
+                        that.add_object_to_container({
                             id: response.obj.id,
                             type: response.obj.type
                         },{
@@ -263,7 +263,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
  * @param {[type]} image   [description]
  * @param {[type]} gallery [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.add_image_to_gallery = function (image, gallery)
+Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (image, gallery)
 {
     // Scope.
     var that = this;

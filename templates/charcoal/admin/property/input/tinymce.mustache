@@ -18,7 +18,18 @@ Tinymce Property Input
 >{{&inputVal}}</textarea>
 
 {{#addJs}}
-    <script>window.tinyMCE || document.write('<script src="{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js"><\/script>')</script>
+    <script>
+        // "You can't use document.write once the document has completed loading. If you do, the browser will open a new document that replaces the current."
+        // http://stackoverflow.com/questions/2360076/javascript-document-write-replaces-all-body-content-when-using-ajax
+        var _testTinymce = window.tinyMCE || false;
+
+        if (!_testTinymce) {
+            var _script = document.createElement('script');
+            _script.src = '{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js';
+            document.querySelector('body').appendChild(script);
+        }
+    </script>
+
     <script>
 
         var elFinderCallback = window.elFinderCallback || {};

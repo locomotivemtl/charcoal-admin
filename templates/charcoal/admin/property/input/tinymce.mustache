@@ -23,10 +23,15 @@ Tinymce Property Input
         // http://stackoverflow.com/questions/2360076/javascript-document-write-replaces-all-body-content-when-using-ajax
         var _testTinymce = window.tinyMCE || false;
 
+
         if (!_testTinymce) {
-            var _script = document.createElement('script');
-            _script.src = '{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js';
-            document.querySelector('body').appendChild(_script);
+            if (document.readyState !== 'complete') {
+                document.write('<script src="{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js"><\/script>')
+            } else {
+                var _script = document.createElement('script');
+                _script.src = '{{baseUrl}}assets/admin/scripts/vendors/tinymce/tinymce.min.js';
+                document.querySelector('head').appendChild(_script);
+            }
         }
     </script>
 

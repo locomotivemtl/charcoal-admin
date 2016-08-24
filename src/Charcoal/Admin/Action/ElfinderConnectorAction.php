@@ -179,7 +179,7 @@ class ElfinderConnectorAction extends AdminAction
                     'accessControl'  => 'access',
                     // File permission attributes
                     'attributes'     => [
-                        $this->attributeHideHiddenFiles()
+                        $this->attributesForHiddenFiles()
                     ]
                 ]
             ]
@@ -264,7 +264,7 @@ class ElfinderConnectorAction extends AdminAction
     /**
      * @return array
      */
-    private function attributeHideHiddenFiles()
+    private function attributesForHiddenFiles()
     {
         return [
             // Block access to all hidden files and directories (anything starting with ".")

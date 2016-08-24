@@ -204,7 +204,7 @@ class FormSidebarWidget extends AdminWidget implements
             } else {
                 // Shame part 2: force '{{id}}' to use obj_id GET parameter...
                 if (isset($_GET['obj_id'])) {
-                    $url = preg_replace('\{\{\s+(obj_)?id\s+\}\}', $_GET['obj_id'], $action['url']);
+                    $url = preg_replace('~\{\{\s*(obj_)?id\s*\}\}~', $_GET['obj_id'], $action['url']);
                 } else {
                     $url = $action['url'];
                 }

@@ -20,6 +20,10 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
         foreach ($choices as $ident => $choice) {
             $choice = $this->parseChoice($ident, $choice);
 
+            if (isset($choice['active']) && $choice['active'] === false) {
+                continue;
+            }
+
             if (!is_array($choice)) {
                 continue;
             }

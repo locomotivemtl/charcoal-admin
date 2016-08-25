@@ -123,9 +123,16 @@
 							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.Ui.html">
-						Ui					</a>
+						Ui<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-Charcoal.Admin.Ui.Sidemenu.html">
+						Sidemenu					</a>
 
 						</li>
+							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.User.html">
 						User					</a>
@@ -268,7 +275,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#10-64" title="Go to source code">Charcoal/Admin/Property/Input/TinymceInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#13-118" title="Go to source code">Charcoal/Admin/Property/Input/TinymceInput.php</a>
 		<br>
 	</div>
 
@@ -288,7 +295,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setEditorOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#21-29" title="Go to source code">setEditorOptions</a>( <span>array <var>$opts</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#31-39" title="Go to source code">setEditorOptions</a>( <span>array <var>$opts</var></span> )</code>
 
 		<div class="description short">
 			
@@ -327,7 +334,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_editorOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#31-37" title="Go to source code">editorOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#41-47" title="Go to source code">editorOptions</a>( )</code>
 
 		<div class="description short">
 			
@@ -361,7 +368,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_editorOptionsJson">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#39-46" title="Go to source code">editorOptionsJson</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#49-56" title="Go to source code">editorOptionsJson</a>( )</code>
 
 		<div class="description short">
 			<p>Get the editor options as a JSON string</p>
@@ -395,7 +402,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addEditorOption">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#48-63" title="Go to source code">addEditorOption</a>( <span>string <var>$optIdent</var></span>, <span>array <var>$optVal</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#58-73" title="Go to source code">addEditorOption</a>( <span>string <var>$optIdent</var></span>, <span>array <var>$optVal</var></span> )</code>
 
 		<div class="description short">
 			
@@ -422,6 +429,113 @@
 				<div class="list">
 					InvalidArgumentException<br>If the ident is not a string.
 				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setDialogTitle" id="_setDialogTitle">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.TinymceInput.html">Charcoal\Admin\Property\Input\TinymceInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDialogTitle">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#75-90" title="Go to source code">setDialogTitle</a>( <span>string|string[] <var>$title</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the title for the file picker dialog.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the title for the file picker dialog.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$title</var></dt>
+					<dd>The dialog title.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.TinymceInput.html">Charcoal\Admin\Property\Input\TinymceInput</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultDialogTitle" id="_defaultDialogTitle">
+
+		<td class="attributes"><code>
+			 protected 
+
+			string[]
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultDialogTitle">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#92-103" title="Go to source code">defaultDialogTitle</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default title for the file picker dialog.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default title for the file picker dialog.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string[]
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="dialogTitle" id="_dialogTitle">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Translation\TranslationString|string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_dialogTitle">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#105-117" title="Go to source code">dialogTitle</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the title for the file picker dialog.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the title for the file picker dialog.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Translation\TranslationString|string|null
+				</div>
+
 
 
 

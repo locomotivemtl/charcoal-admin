@@ -16,7 +16,8 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 /**
  *
  */
-class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
+class ObjectFormWidget extends FormWidget implements
+    ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
@@ -24,11 +25,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      * @var string
      */
     protected $formIdent;
-
-    /**
-     * @var string
-     */
-    protected $groupDisplayMode;
 
     /**
      * @var array
@@ -125,24 +121,16 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * Fetch metadata from the current request.
-     *
-     *
-     * @return array
-     */
-    public function dataFromRequest()
-    {
-        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
-    }
-
-    /**
      * Retrieve the accepted metadata from the current request.
      *
      * @return array
      */
-    public function acceptedRequestData()
+    protected function acceptedRequestData()
     {
-        return [ 'obj_type','obj_id', 'template', 'form_data', 'next_url', 'l10n_mode', 'group_display_mode' ];
+        return array_merge(
+            parent::acceptedRequestData(),
+            [ 'obj_type','obj_id', 'template' ]
+        );
     }
 
     /**
@@ -150,13 +138,13 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
      *
      * @return array
      */
-    public function dataFromObject()
+    protected function dataFromObject()
     {
         $objMetadata   = $this->obj()->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
         $formIdent     = $this->formIdent();
         if (!$formIdent) {
-            $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+            $formIdent = $this->formIdentFallback();
         }
 
         $objFormData = (isset($adminMetadata['forms'][$formIdent]) ? $adminMetadata['forms'][$formIdent] : []);
@@ -178,7 +166,9 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * @param string $formIdent The form ident.
+     * Set the identifier of the form to use.
+     *
+     * @param string $formIdent The form identifier.
      * @throws InvalidArgumentException If the argument is not a string.
      * @return ObjectForm Chainable
      */
@@ -186,14 +176,38 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     {
         if (!is_string($formIdent)) {
             throw new InvalidArgumentException(
-                'Form ident must be a string'
+                'Form identifier must be a string'
             );
         }
+
         $this->formIdent = $formIdent;
+
         return $this;
     }
 
     /**
+     * Retrieve the identifier of the form to use, or its fallback.
+     *
+     * @return string
+     */
+    public function formIdentFallback()
+    {
+        $metadata = $this->obj()->metadata();
+
+        if (isset($metadata['admin'])) {
+            $metadata = $metadata['admin'];
+
+            if (isset($metadata['default_form'])) {
+                return $metadata['default_form'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Retrieve the identifier of the form to use.
+     *
      * @return string
      */
     public function formIdent()
@@ -242,38 +256,6 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
         } else {
             return $action;
         }
-    }
-
-
-
-    /**
-     * Group display mode. Could be "tab" or nothing.
-     * @param string $mode Group display mode.
-     * @return ObjectFormWidget Chainable.
-     */
-    public function setGroupDisplayMode($mode)
-    {
-        $this->groupDisplayMode = $mode;
-        return $this;
-    }
-
-    /**
-     * Group display mode.
-     * @return string Group display mode.
-     */
-    public function groupDisplayMode()
-    {
-        return $this->groupDisplayMode;
-    }
-
-    /**
-     * Used in mustache templates to define if we're in
-     * tab display mode or not.
-     * @return boolean Tab display mode or not.
-     */
-    public function isTab()
-    {
-        return ( $this->groupDisplayMode() === 'tab' );
     }
 
     /**
@@ -351,8 +333,11 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * Not really a SETTER, but using the setter
-     * to pass by the $_GET var (@see setData()).
+     * Set the form's auxiliary data.
+     *
+     * This method is called via {@see self::setData()} if a "form_data" parameter
+     * is present on the HTTP request.
+     *
      * @param array $data Data.
      * @return ObjectFormWidget Chainable.
      */
@@ -375,10 +360,9 @@ class ObjectFormWidget extends FormWidget implements ObjectContainerInterface
     }
 
     /**
-     * Object data merged with whatever data were set
-     * in the process.
-     * This appears to be unused.
-     * @return array Object data.
+     * Retrieve the form's auxiliary  data.
+     *
+     * @return array
      */
     public function formData()
     {

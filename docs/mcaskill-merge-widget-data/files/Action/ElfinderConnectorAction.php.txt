@@ -5,24 +5,24 @@ namespace Charcoal\Admin\Action;
 use \RuntimeException;
 use \InvalidArgumentException;
 
-// Dependencies from PSR-7 (HTTP Messaging)
+// From PSR-7 (HTTP Messaging)
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-// Dependency from Pimple
+// From Pimple
 use \Pimple\Container;
 
-// Dependencies from elFinder
+// From elFinder
 use \elFinderConnector;
 use \elFinder;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// Dependency from 'charcoal-property'
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// Intra-module ('charcoal-admin') dependencies
 use \Charcoal\Admin\AdminAction;
 
 /**
@@ -31,11 +31,18 @@ use \Charcoal\Admin\AdminAction;
 class ElfinderConnectorAction extends AdminAction
 {
     /**
-     * The Charcoal application configuration.
+     * The base URI for the Charcoal application.
      *
-     * @var \Charcoal\Config\ConfigInterface
+     * @var string|\Psr\Http\Message\UriInterface
      */
-    private $appConfig;
+    public $baseUrl;
+
+    /**
+     * Store a reference to the admin configuration.
+     *
+     * @var \Charcoal\Admin\AdminConfig
+     */
+    private $adminConfig;
 
     /**
      * Store the factory instance for the current class.
@@ -61,7 +68,8 @@ class ElfinderConnectorAction extends AdminAction
     {
         parent::setDependencies($container);
 
-        $this->appConfig = $container['config'];
+        $this->baseUrl = $container['base-url'];
+        $this->adminConfig = $container['admin/config'];
         $this->setPropertyFactory($container['property/factory']);
     }
 
@@ -105,6 +113,32 @@ class ElfinderConnectorAction extends AdminAction
     {
         unset($request);
 
+        $opts = $this->defaultConnectorOptions();
+
+        if (isset($this->adminConfig['elfinder'])) {
+            $opts = array_merge_recursive($opts, $this->adminConfig['elfinder']);
+        }
+
+        // Run elFinder
+        $connector = new elFinderConnector(new elFinder($opts));
+        $connector->run();
+
+        return $response;
+    }
+
+    /**
+     * Retrieve the default elFinder Connector options.
+     *
+     * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+     *     Documentation for connector options.
+     * @example https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
+     *     The Connector can be customized by defining a "elfinder" structure in
+     *     your application's admin configuration.
+     *
+     * @return array
+     */
+    public function defaultConnectorOptions()
+    {
         $startPath    = 'uploads/';
         $formProperty = $this->formProperty();
 
@@ -116,54 +150,40 @@ class ElfinderConnectorAction extends AdminAction
             }
         }
 
-        // Documentation for connector options:
-        // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
-        $opts = [
+        $baseUrl = rtrim((string)$this->baseUrl, '/');
+
+        return [
             'debug' => false,
             'roots' => [
-                [
+                'default' => [
                     // Driver for accessing file system (REQUIRED)
-                    'driver'        => 'LocalFileSystem',
+                    'driver'         => 'LocalFileSystem',
                     // Path to files (REQUIRED)
-                    'path'          => 'uploads/',
-
-                    'startPath'     => $startPath,
-
+                    'path'           => 'uploads/',
+                    'startPath'      => $startPath,
+                    // Enable localized folder names
+                    'i18nFolderName' => true,
                     // URL to files (REQUIRED)
-                    'URL'           => $this->appConfig['URL'].'uploads',
-
-                    'tmbURL'        => $this->appConfig['URL'].'uploads/.tmb',
+                    'URL'            => $baseUrl.'/uploads',
+                    'tmbURL'         => $baseUrl.'/uploads/.tmb',
                     'tmbPath'        => 'uploads/.tmb',
-                    'tmbSize'       => 200,
-                    'tmbBgColor' => 'transparent',
+                    'tmbSize'        => 200,
+                    'tmbBgColor'     => 'transparent',
                     // All MIME types not allowed to upload
-                    'uploadDeny'    => [ 'all' ],
+                    'uploadDeny'     => [ 'all' ],
                     // MIME type `image` and `text/plain` allowed to upload
-                    'uploadAllow'   => [ 'image', 'application/pdf', 'text/plain' ],
+                    'uploadAllow'    => $this->defaultUploadAllow(),
                     // Allowed MIME type `image` and `text/plain` only
-                    'uploadOrder'   => [ 'deny', 'allow' ],
+                    'uploadOrder'    => [ 'deny', 'allow' ],
                     // Disable and hide dot starting files (OPTIONAL)
-                    'accessControl' => 'access',
+                    'accessControl'  => 'access',
                     // File permission attributes
-                    'attributes'    => [
-                        [
-                            // Block access to all hidden files and directories (anything starting with ".")
-                            'pattern' => '!(?:^|/)\..+$!',
-                            'read'    => false,
-                            'write'   => false,
-                            'hidden'  => true,
-                            'locked'  => false
-                        ]
+                    'attributes'     => [
+                        $this->attributesForHiddenFiles()
                     ]
                 ]
             ]
         ];
-
-        // run elFinder
-        $connector = new elFinderConnector(new elFinder($opts));
-        $connector->run();
-
-        return $response;
     }
 
     /**
@@ -226,6 +246,34 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         return $this->formProperty;
+    }
+
+    /**
+     * @return array
+     */
+    private function defaultUploadAllow()
+    {
+        // By default, all images, pdf and plaintext files are allowed.
+        return [
+            'image',
+            'application/pdf',
+            'text/plain'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function attributesForHiddenFiles()
+    {
+        return [
+            // Block access to all hidden files and directories (anything starting with ".")
+            'pattern' => '!(?:^|/)\..+$!',
+            'read'    => false,
+            'write'   => false,
+            'hidden'  => true,
+            'locked'  => false
+        ];
     }
 }
 

@@ -120,10 +120,8 @@ class UpdateAction extends AdminAction implements ObjectContainerInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-
         try {
             $this->setData($request->getParams());
-
 
             $authorIdent = $this->authorIdent();
 

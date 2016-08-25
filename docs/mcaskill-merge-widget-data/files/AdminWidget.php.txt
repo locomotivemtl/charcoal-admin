@@ -22,6 +22,13 @@ class AdminWidget extends AbstractWidget
     const DATA_SOURCE_OBJECT  = 'object';
 
     /**
+     * The admin module's configuration.
+     *
+     * @var \Charcoal\Admin\Config
+     */
+    protected $adminConfig;
+
+    /**
      * @var string $widgetId
      */
     public $widgetId;
@@ -92,6 +99,9 @@ class AdminWidget extends AbstractWidget
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        $this->adminConfig = $container['admin/config'];
+
         $this->setModelFactory($container['model/factory']);
     }
 

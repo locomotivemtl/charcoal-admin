@@ -4,18 +4,27 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 use \Charcoal\Translation\TranslationConfig;
+
+// From 'charcoal-ui'
+use \Charcoal\Ui\Form\FormInterface;
+
+// Intra-module dependencies
 use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\FormSidebarInterface;
 
 /**
- *
+ * Form Sidebar Widget
  */
-class FormSidebarWidget extends AdminWidget
+class FormSidebarWidget extends AdminWidget implements
+    FormSidebarInterface
 {
     /**
-     * In-memory copy of the parent form widget.
-     * @var FormWidget $form
+     * Store a reference to the parent form widget.
+     *
+     * @var FormInterface
      */
     private $form;
 
@@ -52,7 +61,7 @@ class FormSidebarWidget extends AdminWidget
 
     /**
      * @param array|ArrayInterface $data Class data.
-     * @return FormGroupWidget Chainable
+     * @return FormSidebarWidget Chainable
      */
     public function setData($data)
     {
@@ -66,23 +75,26 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * @param FormWidget $form The sidebar form widget.
+     * Set the form widget the sidebar belongs to.
+     *
+     * @param FormInterface $form The related form widget.
      * @return FormSidebarWidget Chainable
      */
-    public function setForm(FormWidget $form)
+    public function setForm(FormInterface $form)
     {
         $this->form = $form;
         return $this;
     }
 
     /**
-     * @return FormWidget
+     * Retrieve the form widget the sidebar belongs to.
+     *
+     * @return FormInterface
      */
     public function form()
     {
         return $this->form;
     }
-
 
     /**
      * @param mixed $subtitle The sidebar subtitle.
@@ -161,7 +173,7 @@ class FormSidebarWidget extends AdminWidget
     /**
      * Defined the form actions.
      * @param object $actions The sidebar actions.
-     * @return FormGroupWidget Chainable
+     * @return FormSidebarWidget Chainable
      */
     public function setActions($actions)
     {
@@ -192,7 +204,7 @@ class FormSidebarWidget extends AdminWidget
             } else {
                 // Shame part 2: force '{{id}}' to use obj_id GET parameter...
                 if (isset($_GET['obj_id'])) {
-                    $url = preg_replace('\{\{\s+(obj_)?id\s+\}\}', $_GET['obj_id'], $action['url']);
+                    $url = preg_replace('~\{\{\s*(obj_)?id\s*\}\}~', $_GET['obj_id'], $action['url']);
                 } else {
                     $url = $action['url'];
                 }
@@ -264,9 +276,11 @@ class FormSidebarWidget extends AdminWidget
     }
 
     /**
-     * @param integer $priority The priority, or sorting index.
+     * Set the widget's priority or sorting index.
+     *
+     * @param integer $priority An index, for sorting.
      * @throws InvalidArgumentException If the priority is not a number.
-     * @return FormGroupWidget Chainable
+     * @return FormSidebarWidget Chainable
      */
     public function setPriority($priority)
     {
@@ -275,12 +289,15 @@ class FormSidebarWidget extends AdminWidget
                 'Priority must be an integer'
             );
         }
-        $priority = (int)$priority;
-        $this->priority = $priority;
+
+        $this->priority = (int)$priority;
+
         return $this;
     }
 
     /**
+     * Retrieve the widget's priority or sorting index.
+     *
      * @return integer
      */
     public function priority()

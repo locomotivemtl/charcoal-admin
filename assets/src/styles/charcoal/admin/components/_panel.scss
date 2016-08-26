@@ -56,17 +56,36 @@
     font-size: rem(13px);
 }
 
+ol.c-panel_table,
+ul.c-panel_table {
+    padding-left: 0;
+    list-style: none;
+}
+
 .c-panel_table_row {
     border-top: 1px solid $gray-light;
     border-bottom: 1px solid $gray-light;
+
+    :not(table) &:not(:last-child) {
+        border-bottom: 0;
+    }
+
+    > p {
+        margin: 0;
+    }
+}
+
+.c-panel_table_header,
+.c-panel_table_data {
+    padding: rem(8px) 0;
 }
 
 .c-panel_table_header {
     opacity: 0.4;
-}
 
-.c-panel_table_header, .c-panel_table_data {
-    padding: rem(8px) 0;
+    :not(table) & {
+        padding-bottom: 0;
+    }
 }
 
 // Footer

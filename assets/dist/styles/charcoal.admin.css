@@ -1030,15 +1030,27 @@ td {
   margin-bottom: 1.5625rem;
   font-size: 0.8125rem; }
 
+ol.c-panel_table,
+ul.c-panel_table {
+  padding-left: 0;
+  list-style: none; }
+
 .c-panel_table_row {
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc; }
+  :not(table) .c-panel_table_row:not(:last-child) {
+    border-bottom: 0; }
+  .c-panel_table_row > p {
+    margin: 0; }
+
+.c-panel_table_header,
+.c-panel_table_data {
+  padding: 0.5rem 0; }
 
 .c-panel_table_header {
   opacity: 0.4; }
-
-.c-panel_table_header, .c-panel_table_data {
-  padding: 0.5rem 0; }
+  :not(table) .c-panel_table_header {
+    padding-bottom: 0; }
 
 .c-panel_footer {
   background-color: #d9e5e8;

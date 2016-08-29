@@ -11,15 +11,16 @@ use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
- *
+ * TinyMCE Rich-Text Input Property
  */
 class TinymceInput extends AbstractPropertyInput
 {
     /**
-     * The TinyMCE options
-     * @var array $editorOptions
+     * The TinyMCE editor settigns.
+     *
+     * @var array
      */
-    private $editorOptions = [];
+    private $editorOptions;
 
     /**
      * Label for the file picker dialog.
@@ -29,47 +30,97 @@ class TinymceInput extends AbstractPropertyInput
     private $dialogTitle;
 
     /**
+     * Set the editor's options.
+     *
+     * This method overwrites existing helpers.
+     *
      * @param array $opts The editor options.
      * @return Tinymce Chainable
      */
     public function setEditorOptions(array $opts)
     {
         $this->editorOptions = $opts;
+
         return $this;
     }
 
     /**
+     * Merge (replacing or adding) editor options.
+     *
+     * @param array $opts The editor options.
+     * @return Tinymce Chainable
+     */
+    public function mergeEditorOptions(array $opts)
+    {
+        $this->editorOptions = array_merge($this->editorOptions, $opts);
+
+        return $this;
+    }
+
+    /**
+     * Add (or replace) an editor option.
+     *
+     * @param string $optIdent The setting to add/replace.
+     * @param mixed  $optVal   The setting's value to apply.
+     * @throws InvalidArgumentException If the identifier is not a string.
+     * @return Tinymce Chainable
+     */
+    public function addEditorOption($optIdent, $optVal)
+    {
+        if (!is_string($optIdent)) {
+            throw new InvalidArgumentException(
+                'Option identifier must be a string.'
+            );
+        }
+
+        // Make sure default options are loaded.
+        if ($this->editorOptions === null) {
+            $this->editorOptions();
+        }
+
+        $this->editorOptions[$optIdent] = $optVal;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the editor's options.
+     *
      * @return array
      */
     public function editorOptions()
     {
+        if ($this->editorOptions === null) {
+            $this->setEditorOptions($this->defaultEditorOptions());
+        }
+
         return $this->editorOptions;
     }
 
     /**
-     * Get the editor options as a JSON string
-     * @return string
+     * Retrieve the default editor options.
+     *
+     * @return array
+     */
+    public function defaultEditorOptions()
+    {
+        $metadata = $this->metadata();
+
+        if (isset($metadata['data']['editor_options'])) {
+            return $metadata['data']['editor_options'];
+        }
+
+        return [];
+    }
+
+    /**
+     * Retrieve the editor's options as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
      */
     public function editorOptionsJson()
     {
         return json_encode($this->editorOptions());
-    }
-
-    /**
-     * @param string $optIdent The option ident.
-     * @param array  $optVal   The option value.
-     * @throws InvalidArgumentException If the ident is not a string.
-     * @return Tinymce Chainable
-     */
-    public function addEditorOption($optIdent, array $optVal)
-    {
-        if (!is_string($optIdent)) {
-            throw new InvalidArgumentException(
-                'Option ident must be a string.'
-            );
-        }
-        $this->editorOptions[$optIdent] = $optVal;
-        return $this;
     }
 
     /**

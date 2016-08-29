@@ -7,7 +7,7 @@ use \InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
- *
+ * Multi-Line Text Input Property
  */
 class TextareaInput extends AbstractPropertyInput
 {

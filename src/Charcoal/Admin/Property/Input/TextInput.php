@@ -7,7 +7,7 @@ use \InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
- * Text Input (Base property input).
+ * Single-Line Text Input Property
  */
 class TextInput extends AbstractPropertyInput
 {
@@ -29,6 +29,19 @@ class TextInput extends AbstractPropertyInput
      * @var string $pattern
      */
     private $pattern = '';
+
+    /**
+     * Retrieve the value for the input form control.
+     *
+     * Note: line-breaks are automatically removed from the input value.
+     *
+     * @see    AbstractPropertyInput::inputVal()
+     * @return string
+     */
+    public function inputVal()
+    {
+        return preg_replace('~[\n\r]~', '', parent::inputVal());
+    }
 
     /**
      * @param integer $minLength The min length.

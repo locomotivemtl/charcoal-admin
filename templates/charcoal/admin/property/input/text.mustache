@@ -14,11 +14,11 @@ See also:
     id="{{inputId}}"
     name="{{inputName}}"
     class="form-control {{inputClass}}"
-    {{#size}}size="{{size}}"{{/size}}
-    {{#minLength}}minlength="{{minLength}}"{{/minLength}}
-    {{#maxLength}}maxlength="{{maxLength}}"{{/maxLength}}
-    {{#pattern}}pattern="{{pattern}}"{{/pattern}}
-    {{#placeholder}}placeholder="{{placeholder}}"{{/placeholder}}
+    {{#size}}size="{{.}}"{{/size}}
+    {{#minLength}}minlength="{{.}}"{{/minLength}}
+    {{#maxLength}}maxlength="{{.}}"{{/maxLength}}
+    {{#pattern}}pattern="{{.}}"{{/pattern}}
+    {{#placeholder}}placeholder="{{.}}"{{/placeholder}}
     {{#readOnly}}readonly{{/readOnly}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
@@ -29,32 +29,32 @@ See also:
 {{#addJs}}
 <script>
 Charcoal.Admin.manager().add_property_input({
-    id: '{{inputId}}',
+    id:   '{{inputId}}',
     type: 'charcoal/admin/property/input/text',
     data: {
-        input_name : "{{inputName}}"
-        ,input_val : "{{inputVal}}"
+          input_name: '{{inputName}}'
+        , input_val:  "{{inputVal}}"
         {{#multiple}}
-        ,multiple : true
-        ,multiple_separator : "{{property.multipleSeparator}}"
+        , multiple: true
+        , multiple_separator: "{{property.multipleSeparator}}"
         {{/multiple}}
         {{#l10n}}
-        ,l10n : true
+        , l10n: true
         {{/l10n}}
         {{#minLength}}
-        ,min_length : {{.}}
+        , min_length: {{.}}
         {{/minLength}}
         {{#maxLength}}
-        ,max_length : {{.}}
+        , max_length: {{.}}
         {{/maxLength}}
         {{#required}}
-        ,required : true
+        , required: true
         {{/required}}
         {{#readOnly}}
-        ,readonly : true
+        , readonly: true
         {{/readOnly}}
         {{#size}}
-        ,size : {{.}}
+        , size: {{.}}
         {{/size}}
     }
 });

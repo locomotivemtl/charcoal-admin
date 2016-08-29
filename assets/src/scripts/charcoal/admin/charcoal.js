@@ -24,6 +24,13 @@ Charcoal.Admin = (function ()
     }
 
     /**
+     * Simple cache store.
+     *
+     * @type {Object}
+     */
+    Admin.cachePool = {};
+
+    /**
      * Set data that can be used by public methods
      * @param  {object}  data  Object containing data that needs to be set
      */
@@ -124,6 +131,49 @@ Charcoal.Admin = (function ()
         }
 
         return value;
+    };
+
+    /**
+     * Load Script
+     *
+     * @param   {string}    src      - Full path to a script file.
+     * @param   {function}  callback - Fires multiple times
+     */
+    Admin.loadScript = function (src, callback)
+    {
+        this.cache(src, function (defer) {
+            $.ajax({
+                url:      src,
+                dataType: 'script',
+                success:  defer.resolve,
+                error:    defer.reject
+            });
+        }).then(callback);
+    };
+
+    /**
+     * Retrieve or cache a value shared across all instances.
+     *
+     * @param   {string}    key      - The key for the cached value.
+     * @param   {function}  value    - The value to store. If a function, fires once when promise is completed.
+     * @param   {function}  callback - Fires multiple times.
+     * @return  {mixed}     Returns the stored value.
+     */
+    Admin.cache = function (key, value, callback)
+    {
+        if (!this.cachePool[key]) {
+            if (typeof value === 'function') {
+                this.cachePool[key] = $.Deferred(function (defer) {
+                    value(defer);
+                }).promise();
+            }
+        }
+
+        if (typeof this.cachePool[key] === 'function') {
+            return this.cachePool[key].done(callback);
+        }
+
+        return this.cachePool[key];
     };
 
     return Admin;

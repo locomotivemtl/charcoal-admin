@@ -36,6 +36,15 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
     this.create_tinymce();
 };
 
+/**
+ * Init plugin
+ * @return {thisArg} Chainable.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function ()
+{
+    return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/';
+};
+
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
     this.input_id = opts.input_id || this.input_id;
@@ -193,12 +202,18 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 {
     // Scope
     var that = this;
+
     if (typeof window.tinyMCE !== 'object') {
-        this.load_assets(function () {
-            that.create_tinymce();
-        });
+        var url = this.base_url() + 'tinymce.min.js';
+        Charcoal.Admin.loadScript(url, this.create_tinymce.bind(this));
+
         return this;
     }
+
+    window.tinyMCE.dom.Event.domLoaded = true;
+    window.tinyMCE.baseURI = new window.tinyMCE.util.URI(this.base_url());
+    window.tinyMCE.baseURL = this.base_url();
+    window.tinyMCE.suffix  = '.min';
 
     // This would allow us to have custom features to each tinyMCEs instances
     //
@@ -259,20 +274,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (con
             }
         }
     });
+
     return false;
-};
-
-Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
-{
-    var url = Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/tinymce.min.js';
-
-    $.getScript(url,
-    function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
-    return this;
 };
 
 /**

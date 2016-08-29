@@ -38,10 +38,9 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 {
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
-        var that = this;
-        this.load_assets(function () {
-            that.init();
-        });
+        var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
+        Charcoal.Admin.loadScript(url, this.init.bind(this));
+
         return this;
     }
     // var config = this.opts();
@@ -65,29 +64,6 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     }).disableSelection();
 
     this.listeners();
-    return this;
-};
-
-/**
- * Load necessary assets
- * @param  {Function} cb Callback after load.
- * @return {Widget_Attachment}      Chainable.
- */
-Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
-{
-    if (jQuery.ui) {
-        cb();
-    } else {
-        $.getScript(
-            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-            function () {
-                if (typeof cb === 'function') {
-                    cb();
-                }
-            }
-        );
-    }
-
     return this;
 };
 

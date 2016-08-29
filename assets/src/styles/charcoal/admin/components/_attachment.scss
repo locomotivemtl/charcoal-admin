@@ -77,6 +77,12 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         > :last-child {
             margin-bottom: 0;
         }
+
+        img,
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
     }
 
     .panel-actions {

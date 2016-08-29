@@ -1315,6 +1315,10 @@ ul.c-panel_table {
     margin-top: 0; }
   .c-attachments .panel-body > :last-child {
     margin-bottom: 0; }
+  .c-attachments .panel-body img,
+  .c-attachments .panel-body svg {
+    max-width: 100%;
+    height: auto; }
 
 .c-attachments .panel-actions {
   position: absolute;

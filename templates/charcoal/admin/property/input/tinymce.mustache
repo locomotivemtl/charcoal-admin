@@ -7,11 +7,11 @@ Tinymce Property Input
 --}}
 
 <textarea
-        id="{{inputId}}"
-        name="{{inputName}}"
-        class="form-control {{inputClass}}"
-        cols="{{cols}}"
-        rows="{{rows}}"
+    id="{{inputId}}"
+    name="{{inputName}}"
+    class="form-control {{inputClass}}"
+    cols="{{cols}}"
+    rows="{{rows}}"
     {{#readOnly}}readonly{{/readOnly}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
@@ -19,15 +19,6 @@ Tinymce Property Input
 
 {{#addJs}}
 <script>
-    var elFinderCallback = window.elFinderCallback || {};
-
-    elFinderCallback['{{inputId}}'] = function (file, elf) {
-        // pass selected file data to TinyMCE
-        parent.tinyMCE.activeEditor.windowManager.getParams().oninsert(file, elf);
-        // close popup window
-        parent.tinyMCE.activeEditor.windowManager.close();
-    };
-
     Charcoal.Admin.manager().add_property_input({
         id      : '{{inputId}}',
         input_id: '{{inputId}}',

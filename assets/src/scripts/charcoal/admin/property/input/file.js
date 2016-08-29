@@ -39,6 +39,10 @@ Charcoal.Admin.Property_Input_File.prototype.init = function ()
     this.$hidden  = this.$input.find('input[type="hidden"]');
     this.$preview = this.$input.find('.js-preview');
 
+    if (!window.elFinderCallback) {
+        window.elFinderCallback = {};
+    }
+
     this.set_listeners();
 };
 

@@ -1,58 +1,66 @@
 var Charcoal = Charcoal || {};
+
 /**
-* Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
-* It gives access to private properties and public methods
-* @return  {object}  Charcoal.Admin
-*/
+ * Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
+ * It gives access to private properties and public methods
+ * @return  {object}  Charcoal.Admin
+ */
 Charcoal.Admin = (function ()
 {
     'use strict';
 
-    var options = {
-            base_url: null,
-            admin_path: null,
-        },
-        manager,
-        feedback;
+    var options, manager, feedback;
+
+    options = {
+        base_url:   null,
+        admin_path: null,
+    };
 
     /**
-    * Object function that acts as a container for public methods
-    */
+     * Object function that acts as a container for public methods
+     */
     function Admin()
     {
     }
 
     /**
-    * Set data that can be used by public methods
-    * @param  {object}  data  Object containing data that needs to be set
-    */
+     * Simple cache store.
+     *
+     * @type {Object}
+     */
+    Admin.cachePool = {};
+
+    /**
+     * Set data that can be used by public methods
+     * @param  {object}  data  Object containing data that needs to be set
+     */
     Admin.set_data = function (data)
     {
         options = $.extend(true, options, data);
     };
 
     /**
-    * Generates the admin URL used by forms and other objects
-    * @return  {string}  URL for admin section
-    */
+     * Generates the admin URL used by forms and other objects
+     * @return  {string}  URL for admin section
+     */
     Admin.admin_url = function ()
     {
         return options.base_url + options.admin_path + '/';
     };
 
     /**
-    * Returns the base_url of the project
-    * @return  {string}  URL for admin section
-    */
+     * Returns the base_url of the project
+     * @return  {string}  URL for admin section
+     */
     Admin.base_url = function ()
     {
         return options.base_url;
     };
 
     /**
-    * Provides an access to our instanciated ComponentManager
-    * @return  {object}  ComponentManager instance
-    */
+     * Provides an access to our instanciated ComponentManager
+     * @return  {object}  ComponentManager instance
+     */
     Admin.manager = function ()
     {
         if (typeof(manager) === 'undefined') {
@@ -63,10 +71,10 @@ Charcoal.Admin = (function ()
     };
 
     /**
-    * Provides an access to our instanciated Feedback object
-    * You can set the data already in as a parameter when necessary.
-    * @return {Object} Feedback instance
-    */
+     * Provides an access to our instanciated Feedback object
+     * You can set the data already in as a parameter when necessary.
+     * @return {Object} Feedback instance
+     */
     Admin.feedback = function (data)
     {
         if (typeof feedback === 'undefined') {
@@ -78,11 +86,10 @@ Charcoal.Admin = (function ()
     };
 
     /**
-    * Convert an object namespace string into a usable object name
-    * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
-    * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
-    */
-
+     * Convert an object namespace string into a usable object name
+     * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
+     * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+     */
     Admin.get_object_name = function (name)
     {
         // Getting rid of Charcoal.Admin namespacing
@@ -110,7 +117,13 @@ Charcoal.Admin = (function ()
         return name;
     };
 
-    Admin.filterNumeric = function (value) {
+    /**
+     * Get the numeric value of a variable.
+     *
+     * @param   {string|number}  value - The value to parse.
+     * @return  {string|number}  Returns a numeric value if one was detected otherwise a string.
+     */
+    Admin.parseNumber = function (value) {
         var re = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
 
         if (re.test(value)) {
@@ -118,6 +131,49 @@ Charcoal.Admin = (function ()
         }
 
         return value;
+    };
+
+    /**
+     * Load Script
+     *
+     * @param   {string}    src      - Full path to a script file.
+     * @param   {function}  callback - Fires multiple times
+     */
+    Admin.loadScript = function (src, callback)
+    {
+        this.cache(src, function (defer) {
+            $.ajax({
+                url:      src,
+                dataType: 'script',
+                success:  defer.resolve,
+                error:    defer.reject
+            });
+        }).then(callback);
+    };
+
+    /**
+     * Retrieve or cache a value shared across all instances.
+     *
+     * @param   {string}    key      - The key for the cached value.
+     * @param   {function}  value    - The value to store. If a function, fires once when promise is completed.
+     * @param   {function}  callback - Fires multiple times.
+     * @return  {mixed}     Returns the stored value.
+     */
+    Admin.cache = function (key, value, callback)
+    {
+        if (!this.cachePool[key]) {
+            if (typeof value === 'function') {
+                this.cachePool[key] = $.Deferred(function (defer) {
+                    value(defer);
+                }).promise();
+            }
+        }
+
+        if (typeof this.cachePool[key] === 'function') {
+            return this.cachePool[key].done(callback);
+        }
+
+        return this.cachePool[key];
     };
 
     return Admin;
@@ -1857,6 +1913,10 @@ Charcoal.Admin.Property_Input_File.prototype.init = function ()
     this.$hidden  = this.$input.find('input[type="hidden"]');
     this.$preview = this.$input.find('.js-preview');
 
+    if (!window.elFinderCallback) {
+        window.elFinderCallback = {};
+    }
+
     this.set_listeners();
 };
 
@@ -2858,6 +2918,10 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
     this.editor_options = null;
     this._editor = null;
 
+    if (!window.elFinderCallback) {
+        window.elFinderCallback = {};
+    }
+
     this.set_properties(opts);
     this.init();
 };
@@ -2874,10 +2938,21 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
     this.create_tinymce();
 };
 
+/**
+ * Init plugin
+ * @return {thisArg} Chainable.
+ */
+Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function ()
+{
+    return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/';
+};
+
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
     this.input_id = opts.input_id || this.input_id;
     this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
+
+    window.elFinderCallback[this.input_id] = this.elfinder_callback.bind(this);
 
     var default_opts = {
         //language: 'fr_FR',
@@ -2957,7 +3032,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
         // URL
         allow_script_urls: false,
-        document_base_url: '{{base_url}}',
+        document_base_url: Charcoal.Admin.base_url(),
         relative_urls: true,
         remove_script_host: false,
 
@@ -3011,7 +3086,6 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //templates: [].
         //textpattern_patterns: [],
         visualblocks_default_state: false
-
     };
 
     this.editor_options = $.extend({}, default_opts, this.editor_options);
@@ -3031,12 +3105,18 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
 {
     // Scope
     var that = this;
+
     if (typeof window.tinyMCE !== 'object') {
-        this.load_assets(function () {
-            that.create_tinymce();
-        });
+        var url = this.base_url() + 'tinymce.min.js';
+        Charcoal.Admin.loadScript(url, this.create_tinymce.bind(this));
+
         return this;
     }
+
+    window.tinyMCE.dom.Event.domLoaded = true;
+    window.tinyMCE.baseURI = new window.tinyMCE.util.URI(this.base_url());
+    window.tinyMCE.baseURL = this.base_url();
+    window.tinyMCE.suffix  = '.min';
 
     // This would allow us to have custom features to each tinyMCEs instances
     //
@@ -3045,10 +3125,22 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
         window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
             that.set_editor(editor);
         });
+
+        if ($.type(this.editor_options.plugins) !== 'array') {
+            this.editor_options.plugins = [];
+        }
+
         this.editor_options.plugins.push(this.input_id);
     }
 
     window.tinyMCE.init(this.editor_options);
+};
+
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf)
+{
+    // pass selected file data to TinyMCE
+    parent.tinyMCE.activeEditor.windowManager.getParams().oninsert(file, elf);
+    parent.tinyMCE.activeEditor.windowManager.close();
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta)
@@ -3097,20 +3189,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (con
             }
         }
     });
+
     return false;
-};
-
-Charcoal.Admin.Property_Input_Tinymce.prototype.load_assets = function (cb)
-{
-    var url = Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/tinymce.min.js';
-
-    $.getScript(url,
-    function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
-    });
-    return this;
 };
 
 /**
@@ -3656,10 +3736,9 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 {
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
-        var that = this;
-        this.load_assets(function () {
-            that.init();
-        });
+        var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
+        Charcoal.Admin.loadScript(url, this.init.bind(this));
+
         return this;
     }
     // var config = this.opts();
@@ -3683,29 +3762,6 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
     }).disableSelection();
 
     this.listeners();
-    return this;
-};
-
-/**
- * Load necessary assets
- * @param  {Function} cb Callback after load.
- * @return {Widget_Attachment}      Chainable.
- */
-Charcoal.Admin.Widget_Attachment.prototype.load_assets = function (cb)
-{
-    if (jQuery.ui) {
-        cb();
-    } else {
-        $.getScript(
-            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js',
-            function () {
-                if (typeof cb === 'function') {
-                    cb();
-                }
-            }
-        );
-    }
-
     return this;
 };
 
@@ -4066,7 +4122,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
 {
     this.widget_id     = opts.id || this.widget_id;
     this.obj_type      = opts.data.obj_type || this.obj_type;
-    this.obj_id        = Charcoal.Admin.filterNumeric(opts.data.obj_id || this.obj_id);
+    this.obj_id        = Charcoal.Admin.parseNumber(opts.data.obj_id || this.obj_id);
     this.form_selector = opts.data.form_selector || this.form_selector;
     this.isTab         = opts.data.tab;
 
@@ -4376,7 +4432,7 @@ Charcoal.Admin.Widget_Quick_Form = function (opts)
 {
     this.widget_type   = 'charcoal/admin/widget/quick-form';
     this.save_callback = opts.save_callback || '';
-    this.obj_id        = Charcoal.Admin.filterNumeric(opts.obj_id) || 0;
+    this.obj_id        = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 
     return this;
 };

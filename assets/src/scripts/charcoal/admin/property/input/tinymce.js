@@ -20,6 +20,10 @@ Charcoal.Admin.Property_Input_Tinymce = function (opts)
     this.editor_options = null;
     this._editor = null;
 
+    if (!window.elFinderCallback) {
+        window.elFinderCallback = {};
+    }
+
     this.set_properties(opts);
     this.init();
 };
@@ -49,6 +53,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 {
     this.input_id = opts.input_id || this.input_id;
     this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
+
+    window.elFinderCallback[this.input_id] = this.elfinder_callback.bind(this);
 
     var default_opts = {
         //language: 'fr_FR',
@@ -128,7 +134,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
         // URL
         allow_script_urls: false,
-        document_base_url: '{{base_url}}',
+        document_base_url: Charcoal.Admin.base_url(),
         relative_urls: true,
         remove_script_host: false,
 
@@ -182,7 +188,6 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //templates: [].
         //textpattern_patterns: [],
         visualblocks_default_state: false
-
     };
 
     this.editor_options = $.extend({}, default_opts, this.editor_options);
@@ -222,10 +227,22 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
         window.tinyMCE.PluginManager.add(this.input_id, function (editor) {
             that.set_editor(editor);
         });
+
+        if ($.type(this.editor_options.plugins) !== 'array') {
+            this.editor_options.plugins = [];
+        }
+
         this.editor_options.plugins.push(this.input_id);
     }
 
     window.tinyMCE.init(this.editor_options);
+};
+
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf)
+{
+    // pass selected file data to TinyMCE
+    parent.tinyMCE.activeEditor.windowManager.getParams().oninsert(file, elf);
+    parent.tinyMCE.activeEditor.windowManager.close();
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta)

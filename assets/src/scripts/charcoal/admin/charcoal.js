@@ -1,58 +1,59 @@
 var Charcoal = Charcoal || {};
+
 /**
-* Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
-* It gives access to private properties and public methods
-* @return  {object}  Charcoal.Admin
-*/
+ * Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
+ * It gives access to private properties and public methods
+ * @return  {object}  Charcoal.Admin
+ */
 Charcoal.Admin = (function ()
 {
     'use strict';
 
-    var options = {
-            base_url: null,
-            admin_path: null,
-        },
-        manager,
-        feedback;
+    var options, manager, feedback;
+
+    options = {
+        base_url:   null,
+        admin_path: null,
+    };
 
     /**
-    * Object function that acts as a container for public methods
-    */
+     * Object function that acts as a container for public methods
+     */
     function Admin()
     {
     }
 
     /**
-    * Set data that can be used by public methods
-    * @param  {object}  data  Object containing data that needs to be set
-    */
+     * Set data that can be used by public methods
+     * @param  {object}  data  Object containing data that needs to be set
+     */
     Admin.set_data = function (data)
     {
         options = $.extend(true, options, data);
     };
 
     /**
-    * Generates the admin URL used by forms and other objects
-    * @return  {string}  URL for admin section
-    */
+     * Generates the admin URL used by forms and other objects
+     * @return  {string}  URL for admin section
+     */
     Admin.admin_url = function ()
     {
         return options.base_url + options.admin_path + '/';
     };
 
     /**
-    * Returns the base_url of the project
-    * @return  {string}  URL for admin section
-    */
+     * Returns the base_url of the project
+     * @return  {string}  URL for admin section
+     */
     Admin.base_url = function ()
     {
         return options.base_url;
     };
 
     /**
-    * Provides an access to our instanciated ComponentManager
-    * @return  {object}  ComponentManager instance
-    */
+     * Provides an access to our instanciated ComponentManager
+     * @return  {object}  ComponentManager instance
+     */
     Admin.manager = function ()
     {
         if (typeof(manager) === 'undefined') {
@@ -63,10 +64,10 @@ Charcoal.Admin = (function ()
     };
 
     /**
-    * Provides an access to our instanciated Feedback object
-    * You can set the data already in as a parameter when necessary.
-    * @return {Object} Feedback instance
-    */
+     * Provides an access to our instanciated Feedback object
+     * You can set the data already in as a parameter when necessary.
+     * @return {Object} Feedback instance
+     */
     Admin.feedback = function (data)
     {
         if (typeof feedback === 'undefined') {
@@ -78,11 +79,10 @@ Charcoal.Admin = (function ()
     };
 
     /**
-    * Convert an object namespace string into a usable object name
-    * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
-    * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
-    */
-
+     * Convert an object namespace string into a usable object name
+     * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
+     * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+     */
     Admin.get_object_name = function (name)
     {
         // Getting rid of Charcoal.Admin namespacing
@@ -110,6 +110,12 @@ Charcoal.Admin = (function ()
         return name;
     };
 
+    /**
+     * Get the numeric value of a variable.
+     *
+     * @param   {string|number}  value - The value to parse.
+     * @return  {string|number}  Returns a numeric value if one was detected otherwise a string.
+     */
     Admin.parseNumber = function (value) {
         var re = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
 

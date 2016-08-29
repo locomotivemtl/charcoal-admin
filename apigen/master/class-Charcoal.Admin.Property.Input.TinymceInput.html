@@ -229,6 +229,9 @@
 	<h1>Class TinymceInput</h1>
 
 
+	<div class="description">
+	<p>TinyMCE Rich-Text Input Property</p>
+	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -275,7 +278,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#13-118" title="Go to source code">Charcoal/Admin/Property/Input/TinymceInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#13-169" title="Go to source code">Charcoal/Admin/Property/Input/TinymceInput.php</a>
 		<br>
 	</div>
 
@@ -295,14 +298,16 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setEditorOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#31-39" title="Go to source code">setEditorOptions</a>( <span>array <var>$opts</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#32-45" title="Go to source code">setEditorOptions</a>( <span>array <var>$opts</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the editor's options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the editor's options.</p>
+
+<p>This method overwrites existing helpers.</p>
 
 
 				<h4>Parameters</h4>
@@ -322,6 +327,90 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="mergeEditorOptions" id="_mergeEditorOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			Tinymce
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mergeEditorOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#47-58" title="Go to source code">mergeEditorOptions</a>( <span>array <var>$opts</var></span> )</code>
+
+		<div class="description short">
+			<p>Merge (replacing or adding) editor options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Merge (replacing or adding) editor options.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$opts</var></dt>
+					<dd>The editor options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Tinymce<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addEditorOption" id="_addEditorOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			Tinymce
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addEditorOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#60-84" title="Go to source code">addEditorOption</a>( <span>string <var>$optIdent</var></span>, <span>mixed <var>$optVal</var></span> )</code>
+
+		<div class="description short">
+			<p>Add (or replace) an editor option.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add (or replace) an editor option.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$optIdent</var></dt>
+					<dd>The setting to add/replace.</dd>
+					<dt><var>$optVal</var></dt>
+					<dd>The setting's value to apply.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Tinymce<br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the identifier is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="editorOptions" id="_editorOptions">
 
 		<td class="attributes"><code>
@@ -334,14 +423,48 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_editorOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#41-47" title="Go to source code">editorOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#86-98" title="Go to source code">editorOptions</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the editor's options.</p>
 		</div>
 
 		<div class="description detailed hidden">
+			<p>Retrieve the editor's options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultEditorOptions" id="_defaultEditorOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
 			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultEditorOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#100-114" title="Go to source code">defaultEditorOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default editor options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default editor options.</p>
 
 
 
@@ -368,67 +491,22 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_editorOptionsJson">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#49-56" title="Go to source code">editorOptionsJson</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#116-124" title="Go to source code">editorOptionsJson</a>( )</code>
 
 		<div class="description short">
-			<p>Get the editor options as a JSON string</p>
+			<p>Retrieve the editor's options as a JSON string.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Get the editor options as a JSON string</p>
+			<p>Retrieve the editor's options as a JSON string.</p>
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					string
+					string<br>Returns data serialized with json_encode().
 				</div>
 
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="addEditorOption" id="_addEditorOption">
-
-		<td class="attributes"><code>
-			 public 
-
-			Tinymce
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_addEditorOption">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#58-73" title="Go to source code">addEditorOption</a>( <span>string <var>$optIdent</var></span>, <span>array <var>$optVal</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$optIdent</var></dt>
-					<dd>The option ident.</dd>
-					<dt><var>$optVal</var></dt>
-					<dd>The option value.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Tinymce<br>Chainable
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					InvalidArgumentException<br>If the ident is not a string.
-				</div>
 
 
 
@@ -447,7 +525,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDialogTitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#75-90" title="Go to source code">setDialogTitle</a>( <span>string|string[] <var>$title</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#126-141" title="Go to source code">setDialogTitle</a>( <span>string|string[] <var>$title</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the title for the file picker dialog.</p>
@@ -486,7 +564,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_defaultDialogTitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#92-103" title="Go to source code">defaultDialogTitle</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#143-154" title="Go to source code">defaultDialogTitle</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the default title for the file picker dialog.</p>
@@ -520,7 +598,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dialogTitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#105-117" title="Go to source code">dialogTitle</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.TinymceInput.html#156-168" title="Go to source code">dialogTitle</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the title for the file picker dialog.</p>

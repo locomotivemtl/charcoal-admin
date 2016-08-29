@@ -29,7 +29,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
 {
     this.widget_id     = opts.id || this.widget_id;
     this.obj_type      = opts.data.obj_type || this.obj_type;
-    this.obj_id        = Charcoal.Admin.filterNumeric(opts.data.obj_id || this.obj_id);
+    this.obj_id        = Charcoal.Admin.parseNumber(opts.data.obj_id || this.obj_id);
     this.form_selector = opts.data.form_selector || this.form_selector;
     this.isTab         = opts.data.tab;
 

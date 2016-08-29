@@ -9,7 +9,7 @@ Charcoal.Admin.Widget_Quick_Form = function (opts)
 {
     this.widget_type   = 'charcoal/admin/widget/quick-form';
     this.save_callback = opts.save_callback || '';
-    this.obj_id        = Charcoal.Admin.filterNumeric(opts.obj_id) || 0;
+    this.obj_id        = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 
     return this;
 };

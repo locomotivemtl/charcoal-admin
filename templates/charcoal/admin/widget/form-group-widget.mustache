@@ -12,70 +12,75 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
 <fieldset>
 
-    {{#showHeader}}
+    {{# showHeader }}
     <header class="o-header -border">
-        {{#showTitle}}
-        <h2>{{title}}</h2>
-        {{/showTitle}}
+        {{# showTitle }}
+        <h2>{{ title }}</h2>
+        {{/ showTitle }}
 
         {{> charcoal/admin/template/inc.description }}
     </header>
-    {{/showHeader}}
+    {{/ showHeader }}
+    {{^ showHeader }}
+    {{# showDescription }}
+    <div class="help-block o-section">{{& description }}</div>
+    {{/ showDescription }}
+    {{/ showHeader }}
 
 {{!-- Loop form properties (typically `FormPropertyWidget`) --}}
-{{#formProperties}}
+{{# formProperties }}
 
-    {{#layout}}
+    {{# layout }}
 
-        {{start}}
-        {{#cellStartsRow}}
+        {{ start }}
+        {{# cellStartsRow }}
 
     <section class="o-section">
         <div class="row">
 
-        {{/cellStartsRow}}
-    {{/layout}}
+        {{/ cellStartsRow }}
+    {{/ layout }}
 
-            <div class="col-md-{{layout.cellSpanBy12}}">
+            <div class="col-md-{{ layout.cellSpanBy12 }}">
                  <div class="form-group">
-                    <label for="{{prop.inputId}}">{{prop.label}}{{#prop.required}}<span class="text-danger">*</span>{{/prop.required}}</label>
+                    <label for="{{ prop.inputId }}">{{ prop.label }}{{# prop.required }}<span class="text-danger">*</span>{{/ prop.required }}</label>
 
 
-                    {{#l10n}}
+                    {{# l10n }}
                     <span class="pull-right">
-                        {{#languages}}
-                            <span aria-label="{{name}}" data-lang="{{ident}}" class=" small text-uppercase text-muted {{^current}}hidden{{/current}}">{{ident}}</span>
-                        {{/languages}}
+                        {{# languages }}
+                            <span aria-label="{{ name }}" data-lang="{{ ident }}" class="small text-uppercase text-muted{{^ current }} hidden{{/ current }}">{{ ident }}</span>
+                        {{/ languages }}
                     </span>
-                    {{/l10n}}
+                    {{/ l10n }}
 
                     {{> charcoal/admin/template/inc.description }}
 
-                    {{#input}}
+                    {{# input }}
                         {{!-- The actual property control (typically `PropertyInput`) --}}
-                        <div{{#l10n}} data-lang="{{lang}}"{{/l10n}}{{#hidden}} class="hidden"{{/hidden}}>
-                            {{>$widget_template}}
+                        <div{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}{{# hidden }} class="hidden"{{/ hidden }}>
+                            {{> $widget_template }}
                         </div>
-                    {{/input}}
+                    {{/ input }}
 
                     {{> charcoal/admin/template/inc.notes }}
 
                 </div>
             </div>
 
-    {{#layout}}
-        {{#cellEndsRow}}
+    {{# layout }}
+        {{# cellEndsRow }}
 
         </div>
     </section>
 
-        {{/cellEndsRow}}
+        {{/ cellEndsRow }}
 
         {{!-- Hack: Execute end layout --}}
-        {{end}}
-    {{/layout}}
+        {{ end }}
+    {{/ layout }}
 
-{{/formProperties}}
+{{/ formProperties }}
 
 {{> charcoal/admin/template/inc.notes }}
 

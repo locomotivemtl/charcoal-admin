@@ -6,6 +6,8 @@ use \Pimple\Container;
 
 use \Charcoal\Loader\CollectionLoader;
 
+use \Charcoal\Translation\TranslationString;
+
 use \Charcoal\Ui\FormGroup\AbstractFormGroup;
 
 use \Charcoal\Admin\Widget\TableWidget;
@@ -75,22 +77,35 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
         $target->setId($this->objId());
 
         $lastRevision = $target->latestRevision();
+        $propLabel    = '<span title="%1$s">%2$s</code>';
 
-        $callback = function(&$obj) use ($lastRevision, $target) {
+        $callback = function(&$obj) use ($lastRevision, $target, $propLabel) {
             $dataDiff = $obj->dataDiff();
             $obj->revTsDisplay = $obj->revTs()->format('Y-m-d H:i:s');
             $obj->numDiff = count($dataDiff);
+
             if (isset($dataDiff[0])) {
                 $props = array_keys($dataDiff[0]);
-                $props = array_diff($props, ['last_modified', 'last_modified_by']);
-                $propNames = [];
+                $props = array_diff($props, [ 'last_modified', 'last_modified_by' ]);
+
+                $changedProps = [];
+                $droppedProps = [];
                 foreach ($props as $p) {
-                    $propNames[] = $target->p($p)->label();
+                    if ($target->hasProperty($p)) {
+                        $label = $target->p($p)->label();
+                        $changedProps[] = sprintf($propLabel, $p, $label);
+                    } else {
+                        $label = ucwords(str_replace([ '.', '_' ], ' ', $p));
+                        $droppedProps[] = sprintf($propLabel, $p, $label);
+                    }
                 }
-                $obj->changedProperties = implode(', ', $propNames);
+                $obj->changedProperties = implode(', ', $changedProps);
+                $obj->droppedProperties = implode(', ', $droppedProps);
             } else {
                 $obj->changedProperties = '';
+                $obj->droppedProperties = '';
             }
+
             $obj->allowRevert = ($lastRevision->revNum() != $obj->revNum());
         };
 

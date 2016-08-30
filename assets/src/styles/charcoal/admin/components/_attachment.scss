@@ -45,8 +45,8 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         }
     }
 
-    .panel-heading .glyphicon,
-    .list-group-item > .glyphicon {
+    .panel-title-icon,
+    .list-group-item-icon {
         margin:  (-$c-attachment-pv) $c-attachment-ph (-$c-attachment-pv) (-$c-attachment-ph);
         padding: $c-attachment-pv $c-attachment-ph;
         border-right: 1px solid #ddd;

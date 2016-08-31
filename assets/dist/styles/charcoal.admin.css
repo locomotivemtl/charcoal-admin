@@ -1301,8 +1301,14 @@ ul.c-panel_table {
   padding: 12px 15px;
   border-right: 1px solid #ddd; }
 
+.c-attachments .panel-headless-title {
+  display: none; }
+
 .c-attachments .panel-heading.sr-only ~ .panel-collapse > .panel-body, .c-attachments .panel-heading.hidden ~ .panel-collapse > .panel-body {
   border-top: 0; }
+
+.c-attachments .panel-heading.sr-only ~ .panel-collapse .panel-headless-title, .c-attachments .panel-heading.hidden ~ .panel-collapse .panel-headless-title {
+  display: block; }
 
 .c-attachments .panel-title {
   font-size: 16px; }

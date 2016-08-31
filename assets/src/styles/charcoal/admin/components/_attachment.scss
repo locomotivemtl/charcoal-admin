@@ -52,11 +52,21 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         border-right: 1px solid #ddd;
     }
 
+    .panel-headless-title {
+        display: none;
+    }
+
     .panel-heading {
         &.sr-only,
         &.hidden {
-            ~ .panel-collapse > .panel-body {
-                border-top: 0;
+            ~ .panel-collapse {
+                > .panel-body {
+                    border-top: 0;
+                }
+
+                .panel-headless-title {
+                    display: block;
+                }
             }
         }
     }

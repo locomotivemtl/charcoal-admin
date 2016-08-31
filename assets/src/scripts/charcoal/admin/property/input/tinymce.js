@@ -46,7 +46,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
  */
 Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function ()
 {
-    return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce/';
+    return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce';
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
@@ -160,8 +160,6 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //importcss_groups: [],
         // importcss_merge_classes: false,
         media_alt_source: false,
-        media_poster: true,
-        media_dimensions: true,
         //media_filter_html: false,
         nonbreaking_force_tab: false,
         //pagebreak_separator: ""
@@ -209,7 +207,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
     var that = this;
 
     if (typeof window.tinyMCE !== 'object') {
-        var url = this.base_url() + 'tinymce.min.js';
+        var url = this.base_url() + '/tinymce.min.js';
         Charcoal.Admin.loadScript(url, this.create_tinymce.bind(this));
 
         return this;

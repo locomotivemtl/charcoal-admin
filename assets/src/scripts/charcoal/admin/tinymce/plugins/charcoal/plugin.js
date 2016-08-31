@@ -164,9 +164,8 @@
                 });
             }
 
-            // IF the img_dimensions options is set to FALSE
-            if (!editor.getParam('img_dimensions')) {
-                // Remove IMGS
+            // Prevent resizing of images if the 'image_dimensions' setting is set to FALSE
+            if (editor.getParam('image_dimensions') === false) {
                 editor.on('NodeChange', function (event) {
                     if (event && event.element.nodeName.toLowerCase() === 'img') {
                         tinymce.DOM.setAttribs(event.element, { width: null, height: null });

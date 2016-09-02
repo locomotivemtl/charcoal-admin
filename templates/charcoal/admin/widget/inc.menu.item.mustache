@@ -1,16 +1,13 @@
 {{!--
-Menu item partial
-=================
-
-
+    Primary Menu \ Item
+    ===================
 --}}
-{{#active}}
-    <li class="c-nav-main_item">
-        <a class="c-nav-main_link {{#selected}}is-active{{/selected}}" href="{{url}}">
-            <span class="c-nav-main_link_wrap">
-                <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-{{icon}}"></use></svg>
-                <span class="c-nav-main_link_text">{{label}}</span>
-            </span>
-        </a>
-    </li>
-{{/active}}
+<li class="c-nav-main_item">
+    <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
+        <span class="c-nav-main_link_wrap">
+            {{# svg }}<svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>{{/ svg }}
+            {{# icon }}<img class="c-nav-main_link_icon" src="{{ . }}">{{/ icon }}
+            {{# label }}<span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>{{/ label }}
+        </span>
+    </a>
+</li>

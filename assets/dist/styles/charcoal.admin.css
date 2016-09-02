@@ -769,18 +769,19 @@ td {
   -webkit-transition: background-color 0.3s, color 0.3s;
   transition: background-color 0.3s, color 0.3s; }
   .c-nav-main_link:focus {
-    color: #6c6c6c; }
-  .c-nav-main_link:hover, .c-nav-main_link.is-active {
-    color: #3498db;
+    color: #ffffff; }
+  .c-nav-main_link:hover, .c-nav-main_link:active, .c-nav-main_link.is-active {
+    color: #3498db; }
+  .c-nav-main_link:focus, .c-nav-main_link:hover, .c-nav-main_link:active, .c-nav-main_link.is-active {
     text-decoration: none; }
-    .c-nav-main_link:hover:before, .c-nav-main_link.is-active:before {
+    .c-nav-main_link:focus::before, .c-nav-main_link:hover::before, .c-nav-main_link:active::before, .c-nav-main_link.is-active::before {
       -webkit-transform: translateX(100%);
           -ms-transform: translateX(100%);
               transform: translateX(100%); }
-  .c-nav-main_link:before {
+  .c-nav-main_link::before {
     content: "";
     position: absolute;
-    background-color: #3498db;
+    background-color: currentColor;
     top: 0;
     bottom: 0;
     -webkit-transform: translateX(0);
@@ -791,30 +792,28 @@ td {
     transition: transform 0.3s;
     transition: transform 0.3s, -webkit-transform 0.3s; }
     @media (max-width: 699px) {
-      .c-nav-main_link:before {
+      .c-nav-main_link::before {
         width: 3px;
         left: -3px; } }
     @media (min-width: 700px) {
-      .c-nav-main_link:before {
+      .c-nav-main_link::before {
         width: 0.3125rem;
         left: -0.3125rem; } }
   .c-nav-main_link.is-active {
     background-color: #000000; }
-    .c-nav-main_link.is-active:after {
+    .c-nav-main_link.is-active::after {
       border-right-color: #eaf2f4; }
-    .c-nav-main_list:hover .c-nav-main_link.is-active:before {
+    .c-nav-main_list:hover .c-nav-main_link.is-active::before {
       -webkit-transform: translateX(0);
           -ms-transform: translateX(0);
               transform: translateX(0); }
-    .c-nav-main_list:hover .c-nav-main_link.is-active:hover:before {
+    .c-nav-main_list:hover .c-nav-main_link.is-active:focus::before, .c-nav-main_list:hover .c-nav-main_link.is-active:hover::before {
       -webkit-transform: translateX(100%);
           -ms-transform: translateX(100%);
               transform: translateX(100%); }
 
 .c-nav-main_link_icon {
-  fill: #6c6c6c;
-  -webkit-transition: fill 0.3s;
-  transition: fill 0.3s; }
+  fill: currentColor; }
   @media (max-width: 699px) {
     .c-nav-main_link_icon {
       width: 21px;
@@ -822,10 +821,7 @@ td {
   @media (min-width: 700px) {
     .c-nav-main_link_icon {
       width: 2.1875rem;
-      height: 2.1875rem;
-      margin-bottom: 0.4375rem; } }
-  .c-nav-main_link:hover .c-nav-main_link_icon, .c-nav-main_link.is-active .c-nav-main_link_icon {
-    fill: #3498db; }
+      height: 2.1875rem; } }
 
 @media (max-width: 699px) {
   .c-nav-main_link_text {
@@ -834,6 +830,10 @@ td {
 @media (min-width: 700px) {
   .c-nav-main_link_text {
     display: block; } }
+
+@media (min-width: 700px) {
+  .c-nav-main_link_icon + .c-nav-main_link_text {
+    margin-bottom: 0.4375rem; } }
 
 @media (min-width: 1200px) {
   .c-nav-main-overlay {

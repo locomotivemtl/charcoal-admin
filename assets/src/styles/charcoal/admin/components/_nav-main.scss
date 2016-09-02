@@ -68,22 +68,30 @@
     transition: background-color $speed, color $speed;
 
     &:focus {
-        color: $gray;
+        color: $white;
     }
 
-    &:hover, &.is-active {
+    &:hover,
+    &:active,
+    &.is-active {
         color: $blue;
+    }
+
+    &:focus,
+    &:hover,
+    &:active,
+    &.is-active {
         text-decoration: none;
 
-        &:before {
+        &::before {
             transform: translateX(100%);
         }
     }
 
-    &:before {
+    &::before {
         content: "";
         position: absolute;
-        background-color: $blue;
+        background-color: currentColor;
         top: 0;
         bottom: 0;
         transform: translateX(0);
@@ -104,17 +112,18 @@
         @extend .c-nav_arrow;
         background-color: $black;
 
-        &:after {
+        &::after {
             border-right-color: $charcoal-lightblue;
         }
 
         .c-nav-main_list:hover & {
-            &:before {
+            &::before {
                 transform: translateX(0);
             }
 
+            &:focus,
             &:hover {
-                &:before {
+                &::before {
                     transform: translateX(100%);
                 }
             }
@@ -127,22 +136,16 @@
 }
 
 .c-nav-main_link_icon {
-    fill: $gray;
-    transition: fill $speed;
+    fill: currentColor;
 
     @media (max-width: $to-small) {
-        width: 21px;
+        width:  21px;
         height: 21px;
     }
 
     @media (min-width: $from-small) {
-        width: rem(35px);
+        width:  rem(35px);
         height: rem(35px);
-        margin-bottom: rem(7px);
-    }
-
-    .c-nav-main_link:hover &, .c-nav-main_link.is-active & {
-        fill: $blue;
     }
 }
 
@@ -153,6 +156,12 @@
 
     @media (min-width: $from-small) {
         display: block;
+    }
+
+    .c-nav-main_link_icon + & {
+        @media (min-width: $from-small) {
+            margin-bottom: rem(7px);
+        }
     }
 }
 

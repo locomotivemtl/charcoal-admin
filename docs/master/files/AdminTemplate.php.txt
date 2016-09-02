@@ -410,14 +410,50 @@ class AdminTemplate extends AbstractTemplate
             );
         }
 
-        foreach ($headerMenu['items'] as $menuItem) {
-            if ($menuItem['url'] != '#') {
-                $menuItem['url'] = $this->adminUrl().$menuItem['url'];
+        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
+        foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
+            if (isset($menuItem['active']) && $menuItem['active'] === false) {
+                continue;
+            }
+
+            if (!isset($menuItem['ident'])) {
+                $menuItem['ident'] = $menuIdent;
+            }
+
+            if (!empty($menuItem['url'])) {
+                $url = $menuItem['url'];
+                if (strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                    $url = $this->adminUrl().$url;
+                }
+            } else {
+                $url = '';
+            }
+            $menuItem['url'] = $url;
+
+            if (isset($menuItem['icon'])) {
+                $icon = $menuItem['icon'];
+                if ($icon && strpos($icon, ':') === false && !in_array($icon[0], [ '/', '#', '?' ])) {
+                    $icon = $svgUri.$icon;
+                }
+            } else {
+                $icon = $svgUri.'contents';
+            }
+
+            if (is_string($icon) && strpos($icon, '.svg') > 0) {
+                unset($menuItem['icon']);
+                $menuItem['svg'] = $icon;
+            } else {
+                unset($menuItem['svg']);
+                $menuItem['icon'] = $icon;
             }
 
             if (isset($menuItem['label']) && TranslationString::isTranslatable($menuItem['label'])) {
                 $menuItem['label'] = new TranslationString($menuItem['label']);
             }
+
+            $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
+
+            $menuItem['selected'] = ($menuItem['ident'] === filter_input(INPUT_GET, 'main_menu'));
 
             yield $menuItem;
         }

@@ -1595,6 +1595,31 @@ a:focus {
 .bootstrap-dialog.-elfinder .modal-body {
   padding: 0; }
 
+.form-control.minicolors-input {
+  padding-left: 48px; }
+  .form-control.minicolors-input + .minicolors-swatch {
+    top: 7px;
+    left: 7px;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px; }
+  .form-control.minicolors-input.input-lg {
+    padding-left: 46px; }
+    .form-control.minicolors-input.input-lg + .minicolors-swatch {
+      top: 11px;
+      left: 11px;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px; }
+  .form-control.minicolors-input.input-sm {
+    padding-left: 38px; }
+    .form-control.minicolors-input.input-sm + .minicolors-swatch {
+      top: 6px;
+      left: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 3px; }
+
 .note-editor {
   border-color: #ccc;
   border-radius: 4px; }

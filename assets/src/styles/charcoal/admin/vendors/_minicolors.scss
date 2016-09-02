@@ -1,0 +1,39 @@
+// ==========================================================================
+// jQuery Mini Colors
+// ==========================================================================
+
+.form-control.minicolors-input {
+    padding-left: $input-height-base;
+
+    + .minicolors-swatch {
+        top:           $padding-base-vertical + 1px;
+        left:          $padding-base-vertical + 1px;
+        width:         $input-height-base - ($padding-base-vertical * 2) - 2px;
+        height:        $input-height-base - ($padding-base-vertical * 2) - 2px;
+        border-radius: $input-border-radius;
+    }
+
+    &.input-lg {
+        padding-left: $input-height-large;
+
+        + .minicolors-swatch {
+            top:           $padding-large-vertical + 1px;
+            left:          $padding-large-vertical + 1px;
+            width:         $input-height-large - ($padding-large-vertical * 2) - 2px;
+            height:        $input-height-large - ($padding-large-vertical * 2) - 2px;
+            border-radius: $input-border-radius-large;
+        }
+    }
+
+    &.input-sm {
+        padding-left: $input-height-small;
+
+        + .minicolors-swatch {
+            top:           $padding-small-vertical + 1px;
+            left:          $padding-small-vertical + 1px;
+            width:         $input-height-small - ($padding-small-vertical * 2) - 2px;
+            height:        $input-height-small - ($padding-small-vertical * 2) - 2px;
+            border-radius: $input-border-radius-small;
+        }
+    }
+}

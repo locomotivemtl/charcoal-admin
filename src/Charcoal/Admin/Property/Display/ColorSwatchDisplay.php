@@ -5,8 +5,8 @@ namespace Charcoal\Admin\Property\Display;
 use \Charcoal\Admin\Property\AbstractPropertyDisplay;
 
 /**
- * Object Display Property
+ * Color Swatch Display Property
  */
-class ObjectDisplay extends AbstractPropertyDisplay
+class ColorSwatchDisplay extends AbstractPropertyDisplay
 {
 }

@@ -21,54 +21,54 @@
     <script src="../js/jquery.smooth-scroll.js"></script>
     <script src="../js/prism.min.js"></script>
     <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
-        <script type="text/javascript">
-        function loadExternalCodeSnippets() {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
-                var src = pre.getAttribute('data-src');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
 
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
 
-                pre.textContent = '';
+            pre.textContent = '';
 
-                code.textContent = 'Loading…';
+            code.textContent = 'Loading…';
 
-                pre.appendChild(code);
+            pre.appendChild(code);
 
-                var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest();
 
-                xhr.open('GET', src, true);
+            xhr.open('GET', src, true);
 
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
 
-                        if (xhr.status < 400 && xhr.responseText) {
-                            code.textContent = xhr.responseText;
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
 
-                            Prism.highlightElement(code);
-                        }
-                        else if (xhr.status >= 400) {
-                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                        }
-                        else {
-                            code.textContent = '✖ Error: File does not exist or is empty';
-                        }
+                        Prism.highlightElement(code);
                     }
-                };
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
 
-                xhr.send(null);
-            });
-        }
-
-        $(document).ready(function(){
-            loadExternalCodeSnippets();
+            xhr.send(null);
         });
-        $('#source-view').on('shown', function () {
-            loadExternalCodeSnippets();
-        })
-    </script>
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
 
     <link rel="shortcut icon" href="../images/favicon.ico"/>
     <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
@@ -144,46 +144,46 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-731168204"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-230431797"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-731168204" class="accordion-body collapse in">
+            <div id="namespace-230431797" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-577000217"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-415768446"></a>
                                 <a href="../namespaces/Charcoal.html" style="margin-left: 30px; padding-left: 0">Charcoal</a>
             </div>
-            <div id="namespace-577000217" class="accordion-body collapse ">
+            <div id="namespace-415768446" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1143545460"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1091105463"></a>
                                 <a href="../namespaces/Charcoal.Admin.html" style="margin-left: 30px; padding-left: 0">Admin</a>
             </div>
-            <div id="namespace-1143545460" class="accordion-body collapse ">
+            <div id="namespace-1091105463" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-276194703"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1671271985"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.html" style="margin-left: 30px; padding-left: 0">Action</a>
             </div>
-            <div id="namespace-276194703" class="accordion-body collapse ">
+            <div id="namespace-1671271985" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-30155184"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1510303678"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-30155184" class="accordion-body collapse ">
+            <div id="namespace-1510303678" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -202,19 +202,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-241000374"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1006113239"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
             </div>
-            <div id="namespace-241000374" class="accordion-body collapse ">
+            <div id="namespace-1006113239" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1660037539"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1718529644"></a>
                                 <a href="../namespaces/Charcoal.Admin.Action.Widget.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
             </div>
-            <div id="namespace-1660037539" class="accordion-body collapse ">
+            <div id="namespace-1718529644" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -250,10 +250,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1363268727"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-847236035"></a>
                                 <a href="../namespaces/Charcoal.Admin.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-1363268727" class="accordion-body collapse ">
+            <div id="namespace-847236035" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -269,19 +269,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1705425699"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-343844084"></a>
                                 <a href="../namespaces/Charcoal.Admin.Property.html" style="margin-left: 30px; padding-left: 0">Property</a>
             </div>
-            <div id="namespace-1705425699" class="accordion-body collapse ">
+            <div id="namespace-343844084" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2059909814"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-92717848"></a>
                                 <a href="../namespaces/Charcoal.Admin.Property.Display.html" style="margin-left: 30px; padding-left: 0">Display</a>
             </div>
-            <div id="namespace-2059909814" class="accordion-body collapse ">
+            <div id="namespace-92717848" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -300,10 +300,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1907334036"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-740709627"></a>
                                 <a href="../namespaces/Charcoal.Admin.Property.Input.html" style="margin-left: 30px; padding-left: 0">Input</a>
             </div>
-            <div id="namespace-1907334036" class="accordion-body collapse ">
+            <div id="namespace-740709627" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -350,28 +350,28 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-539811386"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1020101751"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.html" style="margin-left: 30px; padding-left: 0">Script</a>
             </div>
-            <div id="namespace-539811386" class="accordion-body collapse ">
+            <div id="namespace-1020101751" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1674272438"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-396843662"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-1674272438" class="accordion-body collapse ">
+            <div id="namespace-396843662" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1718120900"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1215142262"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.Object.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
             </div>
-            <div id="namespace-1718120900" class="accordion-body collapse ">
+            <div id="namespace-1215142262" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -397,10 +397,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-617818820"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-313090131"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.Translation.html" style="margin-left: 30px; padding-left: 0">Translation</a>
             </div>
-            <div id="namespace-617818820" class="accordion-body collapse ">
+            <div id="namespace-313090131" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -415,10 +415,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-226185226"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1326748530"></a>
                                 <a href="../namespaces/Charcoal.Admin.Script.User.html" style="margin-left: 30px; padding-left: 0">User</a>
             </div>
-            <div id="namespace-226185226" class="accordion-body collapse ">
+            <div id="namespace-1326748530" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -443,10 +443,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1948771919"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-770826672"></a>
                                 <a href="../namespaces/Charcoal.Admin.ServiceProvider.html" style="margin-left: 30px; padding-left: 0">ServiceProvider</a>
             </div>
-            <div id="namespace-1948771919" class="accordion-body collapse ">
+            <div id="namespace-770826672" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -462,19 +462,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1692806983"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1680355327"></a>
                                 <a href="../namespaces/Charcoal.Admin.Template.html" style="margin-left: 30px; padding-left: 0">Template</a>
             </div>
-            <div id="namespace-1692806983" class="accordion-body collapse ">
+            <div id="namespace-1680355327" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-860237607"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-987119074"></a>
                                 <a href="../namespaces/Charcoal.Admin.Template.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
             </div>
-            <div id="namespace-860237607" class="accordion-body collapse ">
+            <div id="namespace-987119074" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -505,19 +505,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1655321869"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-527608168"></a>
                                 <a href="../namespaces/Charcoal.Admin.Ui.html" style="margin-left: 30px; padding-left: 0">Ui</a>
             </div>
-            <div id="namespace-1655321869" class="accordion-body collapse ">
+            <div id="namespace-527608168" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-174804513"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1225926897"></a>
                                 <a href="../namespaces/Charcoal.Admin.Ui.Sidemenu.html" style="margin-left: 30px; padding-left: 0">Sidemenu</a>
             </div>
-            <div id="namespace-174804513" class="accordion-body collapse ">
+            <div id="namespace-1225926897" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -550,10 +550,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-266372995"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1799527731"></a>
                                 <a href="../namespaces/Charcoal.Admin.User.html" style="margin-left: 30px; padding-left: 0">User</a>
             </div>
-            <div id="namespace-266372995" class="accordion-body collapse ">
+            <div id="namespace-1799527731" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -570,19 +570,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1405470338"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1697733002"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
             </div>
-            <div id="namespace-1405470338" class="accordion-body collapse ">
+            <div id="namespace-1697733002" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-689320958"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-941953833"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.Dialog.html" style="margin-left: 30px; padding-left: 0">Dialog</a>
             </div>
-            <div id="namespace-689320958" class="accordion-body collapse ">
+            <div id="namespace-941953833" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -597,10 +597,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-23474657"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-953743534"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.FormGroup.html" style="margin-left: 30px; padding-left: 0">FormGroup</a>
             </div>
-            <div id="namespace-23474657" class="accordion-body collapse ">
+            <div id="namespace-953743534" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -617,10 +617,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2054296217"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-809848154"></a>
                                 <a href="../namespaces/Charcoal.Admin.Widget.Graph.html" style="margin-left: 30px; padding-left: 0">Graph</a>
             </div>
-            <div id="namespace-2054296217" class="accordion-body collapse ">
+            <div id="namespace-809848154" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -699,68 +699,109 @@
             <div class="row-fluid">
                 <div class="span8 content class">
                     <nav>
-                                                <a href="../namespaces/Charcoal.Admin.Widget.Graph.html">\Charcoal\Admin\Widget\Graph</a>
+                                                <a href="../namespaces/Charcoal.Admin.Property.Display.html">\Charcoal\Admin\Property\Display</a> <i class="icon-level-up"></i>
                                             </nav>
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-                    <h1><small>\Charcoal\Admin\Widget\Graph</small>GraphWidgetInterface</h1>
-                    <p><em>Graph Widget Interface</em></p>
+                    <h1><small>\Charcoal\Admin\Property\Display</small>ColorSwatchDisplay</h1>
+                    <p><em>Color Swatch Display Property</em></p>
                     
-
+                    
+                                        
                     <section id="summary">
                         <h2>Summary</h2>
                         <section class="row-fluid heading">
-                            <section class="span6">
+                            <section class="span4">
                                 <a href="#methods">Methods</a>
                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
                                 <a href="#constants">Constants</a>
                             </section>
                         </section>
                         <section class="row-fluid public">
-                            <section class="span6">
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_setHeight">setHeight()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_height">height()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_setColors">setColors()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_colors">colors()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_defaultColors">defaultColors()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_categories">categories()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_categoriesJson">categoriesJson()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_series">series()</a><br />
-                                                                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html#method_seriesJson">seriesJson()</a><br />
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setDependencies" class="">setDependencies()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setData" class="">setData()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setIdent" class="">setIdent()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_ident" class="">ident()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setMultiple" class="">setMultiple()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_multiple" class="">multiple()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setDisplayId" class="">setDisplayId()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_displayId" class="">displayId()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setDisplayClass" class="">setDisplayClass()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_displayClass" class="">displayClass()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_displayName" class="">displayName()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_displayVal" class="">displayVal()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setDisplayType" class="">setDisplayType()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_displayType" class="">displayType()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setProperty" class="">setProperty()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_property" class="">property()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_p" class="">p()</a><br />
                                                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
                                                                     <em>No constants found</em>
                                                             </section>
                         </section>
                         <section class="row-fluid protected">
-                            <section class="span6">
-                                                                    <em>No protected methods found</em>
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_createMetadata" class="">createMetadata()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_getter" class="">getter()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_setter" class="">setter()</a><br />
                                                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_type" class="">$type</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_displayType" class="">$displayType</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_displayId" class="">$displayId</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_displayClass" class="">$displayClass</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_displayOptions" class="">$displayOptions</a><br />
+                                                            </section>
+                            <section class="span4">
                                 <em>N/A</em>
                             </section>
                         </section>
                         <section class="row-fluid private">
-                            <section class="span6">
-                                                                    <em>No private methods found</em>
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#method_camelize" class="">camelize()</a><br />
                                                             </section>
-                            <section class="span6">
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_ident" class="">$ident</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_multiple" class="">$multiple</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_propertyData" class="">$propertyData</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html#property_property" class="">$property</a><br />
+                                                            </section>
+                            <section class="span4">
                                 <em>N/A</em>
                             </section>
                         </section>
                     </section>
                 </div>
                 <aside class="span4 detailsbar">
-                                        <dl>
+                                        
+                    
+                    <dl>
                         <dt>File</dt>
-                            <dd>
-                                <a href="../files/Widget.Graph.GraphWidgetInterface.html"><div class="path-wrapper">Widget/Graph/GraphWidgetInterface.php</div></a>
-                            </dd>
+                            <dd><a href="../files/Property.Display.ColorSwatchDisplay.html"><div class="path-wrapper">Property/Display/ColorSwatchDisplay.php</div></a></dd>
                                                 <dt>Package</dt>
-                            <dd><div class="namespace-wrapper">\Default</div></dd>
-                                                
-                                            </dl>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper"><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html">\Charcoal\Admin\Property\AbstractPropertyDisplay</a></div>
+                                                                                                    <div class="namespace-wrapper">\Charcoal\Admin\Property\Display\ColorSwatchDisplay</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
                     <h2>Tags</h2>
                     <table class="table table-condensed">
                                             <tr><td colspan="2"><em>None found</em></td></tr>
@@ -768,36 +809,354 @@
                 </aside>
             </div>
 
-            
-                        <div class="row-fluid">
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
                 <div class="span8 content class">
-                    <h2>Methods</h2>
+                    <h2>Properties</h2>
                 </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_type" name="property_type" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$type</h3>
+                <pre class="signature">$type : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_displayType" name="property_displayType" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$displayType</h3>
+                <pre class="signature">$displayType : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_displayId" name="property_displayId" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$displayId</h3>
+                <pre class="signature">$displayId : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_displayClass" name="property_displayClass" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$displayClass</h3>
+                <pre class="signature">$displayClass : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_displayOptions" name="property_displayOptions" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$displayOptions</h3>
+                <pre class="signature">$displayOptions : mixed</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                mixed
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_ident" name="property_ident" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$ident</h3>
+                <pre class="signature">$ident : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_multiple" name="property_multiple" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$multiple</h3>
+                <pre class="signature">$multiple : boolean</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_propertyData" name="property_propertyData" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$propertyData</h3>
+                <pre class="signature">$propertyData : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_property" name="property_property" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$property</h3>
+                <pre class="signature">$property : \Charcoal\Property\PropertyInterface</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                \Charcoal\Property\PropertyInterface
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
                 <aside class="span4 detailsbar"></aside>
             </div>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_setHeight" name="method_setHeight" class="anchor"></a>
+            <a id="method___construct" name="method___construct" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">setHeight()</h3>
+                <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setHeight(mixed  <span class="argument">$height</span>) : \Charcoal\Admin\Widget\Graph\GraphWidgetInterface</pre>
+                <pre class="signature" style="margin-right: 54px;">__construct(array|\Charcoal\Admin\Property\ArrayAccess  <span class="argument">$data = null</span>) </pre>
                 <p><em></em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>mixed</td>
-                                <td>$height </td>
-                                <td><p>Graph default height (for CSS).</p></td>
+                                <td>array|\Charcoal\Admin\Property\ArrayAccess</td>
+                                <td>$data </td>
+                                <td><p>Optional. Dependencies.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setDependencies" name="method_setDependencies" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setDependencies()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setDependencies(\Pimple\Container  <span class="argument">$container</span>) : void</pre>
+                <p><em>Inject dependencies from a DI Container.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Pimple\Container</td>
+                                <td>$container </td>
+                                <td><p>A dependencies container instance.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setData" name="method_setData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setData(array|\Traversable  <span class="argument">$data</span>) : \Charcoal\Admin\Property\Display</pre>
+                <p><em>This function takes an array and fill the model object with its value.</em></p>
+                <p>This method either calls a setter for each key (<code>set_{$key}()</code>) or sets a public member.</p>
+<p>For example, calling with <code>setData(['properties'=&gt;$properties])</code> would call
+<code>setProperties($properties)</code>, becasue <code>setProperties()</code> exists.</p>
+<p>But calling with <code>setData(['foobar'=&gt;$foo])</code> would set the <code>$foobar</code> member
+on the metadata object, because the method <code>set_foobar()</code> does not exist.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array|\Traversable</td>
+                                <td>$data </td>
+                                <td><p>The display data.</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html">\Charcoal\Admin\Widget\Graph\GraphWidgetInterface</a>
+                    \Charcoal\Admin\Property\Display
                                             &mdash; <p>Chainable</p>
                                     				
                             </article>
@@ -805,7 +1164,9 @@
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -815,54 +1176,31 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_height" name="method_height" class="anchor"></a>
+            <a id="method_setIdent" name="method_setIdent" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">height()</h3>
+                <h3 class="public ">setIdent()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">height() : mixed</pre>
-                <p><em></em></p>
-                
-
-                
-                
-                                    <h4>Returns</h4>
-                    mixed
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_setColors" name="method_setColors" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">setColors()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setColors(array&lt;mixed,string&gt;  <span class="argument">$colors</span>) : \Charcoal\Admin\Widget\Graph\GraphWidgetInterface</pre>
+                <pre class="signature" style="margin-right: 54px;">setIdent(string  <span class="argument">$ident</span>) : \Charcoal\Admin\Property\Widget</pre>
                 <p><em></em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>array&lt;mixed,string&gt;</td>
-                                <td>$colors </td>
-                                <td><p>The graph colors (hexadecimal).</p></td>
+                                <td>string</td>
+                                <td>$ident </td>
+                                <td><p>Display identifier.</p></td>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If the ident is not a string.</p></dd>
+                                                                    </dl>
                 
                                     <h4>Returns</h4>
-                    <a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html">\Charcoal\Admin\Widget\Graph\GraphWidgetInterface</a>
+                    \Charcoal\Admin\Property\Widget
                                             &mdash; <p>Chainable</p>
                                     				
                             </article>
@@ -870,7 +1208,9 @@
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -880,96 +1220,11 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_colors" name="method_colors" class="anchor"></a>
+            <a id="method_ident" name="method_ident" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">colors()</h3>
+                <h3 class="public ">ident()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">colors() : array&lt;mixed,string&gt;</pre>
-                <p><em></em></p>
-                
-
-                
-                
-                                    <h4>Returns</h4>
-                    array&lt;mixed,string&gt;
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_defaultColors" name="method_defaultColors" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">defaultColors()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">defaultColors() : array&lt;mixed,string&gt;</pre>
-                <p><em></em></p>
-                
-
-                
-                
-                                    <h4>Returns</h4>
-                    array&lt;mixed,string&gt;
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_categories" name="method_categories" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">categories()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">categories() : array</pre>
-                <p><em></em></p>
-                
-
-                
-                
-                                    <h4>Returns</h4>
-                    array
-                                            &mdash; <p>Categories structure.</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_categoriesJson" name="method_categoriesJson" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">categoriesJson()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">categoriesJson() : string</pre>
+                <pre class="signature" style="margin-right: 54px;">ident() : string</pre>
                 <p><em></em></p>
                 
 
@@ -977,14 +1232,15 @@
                 
                                     <h4>Returns</h4>
                     string
-                                            &mdash; <p>JSONified categories structure.</p>
                                     				
                             </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -994,26 +1250,66 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_series" name="method_series" class="anchor"></a>
+            <a id="method_setMultiple" name="method_setMultiple" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">series()</h3>
+                <h3 class="public ">setMultiple()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">series() : array</pre>
+                <pre class="signature" style="margin-right: 54px;">setMultiple(boolean  <span class="argument">$multiple</span>) : \Charcoal\Admin\Property\Widget</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$multiple </td>
+                                <td><p>Multiple flag.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Admin\Property\Widget
+                                            &mdash; <p>(Chainable)</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_multiple" name="method_multiple" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">multiple()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">multiple() : boolean</pre>
                 <p><em></em></p>
                 
 
                 
                 
                                     <h4>Returns</h4>
-                    array
-                                            &mdash; <p>Series structure.</p>
+                    boolean
                                     				
                             </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -1023,11 +1319,124 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_seriesJson" name="method_seriesJson" class="anchor"></a>
+            <a id="method_setDisplayId" name="method_setDisplayId" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">seriesJson()</h3>
+                <h3 class="public ">setDisplayId()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">seriesJson() : string</pre>
+                <pre class="signature" style="margin-right: 54px;">setDisplayId(string  <span class="argument">$displayId</span>) : \Charcoal\Admin\Property\Display</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$displayId </td>
+                                <td><p>HTML id attribute.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Admin\Property\Display
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_displayId" name="method_displayId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">displayId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">displayId() : string</pre>
+                <p><em>Get the display ID.</em></p>
+                <p>If none was previously set, than a unique random one will be generated.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setDisplayClass" name="method_setDisplayClass" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setDisplayClass()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setDisplayClass(string  <span class="argument">$displayClass</span>) : \Charcoal\Admin\Property\AbstractPropertyDisplay</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$displayClass </td>
+                                <td><p>The display class attribute.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If the class is not a string.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html">\Charcoal\Admin\Property\AbstractPropertyDisplay</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_displayClass" name="method_displayClass" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">displayClass()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">displayClass() : string</pre>
                 <p><em></em></p>
                 
 
@@ -1035,14 +1444,15 @@
                 
                                     <h4>Returns</h4>
                     string
-                                            &mdash; <p>JSONified series structure.</p>
                                     				
                             </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
                                                             <dl>
-                                                                            </dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
                                     <tr><td colspan="2"><em>None found</em></td></tr>
@@ -1050,16 +1460,404 @@
         </aside>
     </div>
 
-                                                                    </div>
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_displayName" name="method_displayName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">displayName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">displayName() : string</pre>
+                <p><em>The display name should always be the property&#039;s ident.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_displayVal" name="method_displayVal" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">displayVal()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">displayVal() : string</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setDisplayType" name="method_setDisplayType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setDisplayType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setDisplayType(string  <span class="argument">$displayType</span>) : \Charcoal\Admin\Property\AbstractPropertyDisplay</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$displayType </td>
+                                <td><p>The display type.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If provided argument is not of type 'string'.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html">\Charcoal\Admin\Property\AbstractPropertyDisplay</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_displayType" name="method_displayType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">displayType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">displayType() : string</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setProperty" name="method_setProperty" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setProperty()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setProperty(\Charcoal\Property\PropertyInterface  <span class="argument">$p</span>) : \Charcoal\Admin\Property\AbstractPropertyDisplay</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Charcoal\Property\PropertyInterface</td>
+                                <td>$p </td>
+                                <td><p>The property.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html">\Charcoal\Admin\Property\AbstractPropertyDisplay</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_property" name="method_property" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">property()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">property() : \Charcoal\Property\PropertyInterface</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Property\PropertyInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_p" name="method_p" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">p()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">p() : \Charcoal\Property\PropertyInterface</pre>
+                <p><em>Alias of the `property` method.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Property\PropertyInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createMetadata" name="method_createMetadata" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">createMetadata()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createMetadata(array  <span class="argument">$data = null</span>) : \Charcoal\Property\PropertyMetadata</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>Optional. Metadata data.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Property\PropertyMetadata
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getter" name="method_getter" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getter(string  <span class="argument">$key</span>) : string</pre>
+                <p><em>Allow an object to define how the key getter are called.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The key to get the getter from.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The getter method name, for a given key.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setter" name="method_setter" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">setter()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setter(string  <span class="argument">$key</span>) : string</pre>
+                <p><em>Allow an object to define how the key setter are called.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The key to get the setter from.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The setter method name, for a given key.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_camelize" name="method_camelize" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">camelize()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">camelize(string  <span class="argument">$str</span>) : string</pre>
+                <p><em>Transform a snake_case string to camelCase.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$str </td>
+                                <td><p>The snake_case string to camelize.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The camelCase string.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html"><div class="path-wrapper">\Charcoal\Admin\Property\AbstractPropertyDisplay</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
     </section>
 
     <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="source-view-label">GraphWidgetInterface.php</h3>
+            <h3 id="source-view-label">ColorSwatchDisplay.php</h3>
         </div>
         <div class="modal-body">
-            <pre data-src="../files/Widget/Graph/GraphWidgetInterface.php.txt" class="language-php"></pre>
+            <pre data-src="../files/Property/Display/ColorSwatchDisplay.php.txt" class="language-php line-numbers"></pre>
         </div>
     </div>
 

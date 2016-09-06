@@ -1,0 +1,11 @@
+{{!--
+    Select \ JS Component
+    =====================
+
+    @used-by `charcoal/admin/property/input/select`
+--}}
+{{# addJs }}
+<script>
+    $('#{{ inputId }}').selectpicker({{& selectOptionsAsJson }});
+</script>
+{{/ addJs }}

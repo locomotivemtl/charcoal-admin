@@ -1,25 +1,20 @@
  {{!--
-Select Options Property Input
-=============================
+    Select Options Property Input
+    =============================
 
-`charcoal/admin/property/input/select`
+    `charcoal/admin/property/input/select`
 --}}
 <select
     id="{{inputId}}"
     name="{{inputName}}"
-    class="selectpicker {{inputClass}}"
-    {{#multiple}}multiple data-max-options=""{{/multiple}}
+    class="{{inputClass}}"
+    {{#multiple}}multiple{{/multiple}}
     {{#required}}required{{/required}}
     {{#disabled}}disabled{{/disabled}}
-    {{#header}}data-header="Test"{{/header}}
 >
     {{#choices}}
-    <option value="{{value}}" label="{{label}}" data-subtext="{{subtext}}" data-icon="{{icon}}"{{#selected}} selected{{/selected}}>{{&title}}</option>
+    {{> charcoal/admin/property/input/select/option }}
     {{/choices}}
 </select>
 
-{{#addJs}}
-<script>
-    $('#{{inputId}}').selectpicker({});
-</script>
-{{/addJs}}
+{{> charcoal/admin/property/input/select/js }}

@@ -21,12 +21,7 @@ class SelectInput extends AbstractSelectableInput
     public function choices()
     {
         if ($this->p()->allowNull() && !$this->p()->multiple()) {
-            $prepend = [
-                'value'   => '',
-                'label'   => $this->placeholder(),
-                'title'   => $this->placeholder(),
-                'subtext' => ''
-            ];
+            $prepend = $this->emptyChoice();
 
             yield $prepend;
         }
@@ -38,4 +33,20 @@ class SelectInput extends AbstractSelectableInput
             yield $choice;
         }
     }
+
+    /**
+     * Retrieve a blank choice.
+     *
+     * @return array
+     */
+    protected function emptyChoice()
+    {
+        $label = $this->placeholder();
+
+        return [
+            'value'   => '',
+            'label'   => $label,
+            'title'   => $label,
+            'subtext' => ''
+        ];
 }

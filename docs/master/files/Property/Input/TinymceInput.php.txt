@@ -118,7 +118,7 @@ class TinymceInput extends AbstractPropertyInput
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */
-    public function editorOptionsJson()
+    public function editorOptionsAsJson()
     {
         return json_encode($this->editorOptions());
     }

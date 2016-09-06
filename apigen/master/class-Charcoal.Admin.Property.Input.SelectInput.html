@@ -292,7 +292,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#7-41" title="Go to source code">Charcoal/Admin/Property/Input/SelectInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#7-155" title="Go to source code">Charcoal/Admin/Property/Input/SelectInput.php</a>
 		<br>
 	</div>
 
@@ -312,7 +312,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_choices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#15-40" title="Go to source code">choices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#23-43" title="Go to source code">choices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectable options.</p>
@@ -332,6 +332,267 @@
 
 				<h4>Overrides</h4>
 				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_choices">Charcoal\Admin\Property\AbstractSelectableInput::choices()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="emptyChoice" id="_emptyChoice">
+
+		<td class="attributes"><code>
+			 protected 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_emptyChoice">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#45-60" title="Go to source code">emptyChoice</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve a blank choice.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve a blank choice.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setSelectOptions" id="_setSelectOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			Tinymce
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setSelectOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#62-75" title="Go to source code">setSelectOptions</a>( <span>array <var>$opts</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the select picker's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the select picker's options.</p>
+
+<p>This method overwrites existing helpers.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$opts</var></dt>
+					<dd>The select picker options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Tinymce<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mergeSelectOptions" id="_mergeSelectOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			Tinymce
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mergeSelectOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#77-88" title="Go to source code">mergeSelectOptions</a>( <span>array <var>$opts</var></span> )</code>
+
+		<div class="description short">
+			<p>Merge (replacing or adding) select picker options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Merge (replacing or adding) select picker options.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$opts</var></dt>
+					<dd>The select picker options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Tinymce<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addSelectOption" id="_addSelectOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			Tinymce
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addSelectOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#90-114" title="Go to source code">addSelectOption</a>( <span>string <var>$optIdent</var></span>, <span>mixed <var>$optVal</var></span> )</code>
+
+		<div class="description short">
+			<p>Add (or replace) an select picker option.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add (or replace) an select picker option.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$optIdent</var></dt>
+					<dd>The setting to add/replace.</dd>
+					<dt><var>$optVal</var></dt>
+					<dd>The setting's value to apply.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Tinymce<br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the identifier is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="selectOptions" id="_selectOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_selectOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#116-128" title="Go to source code">selectOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the select picker's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the select picker's options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultSelectOptions" id="_defaultSelectOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultSelectOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#130-144" title="Go to source code">defaultSelectOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default select picker options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default select picker options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="selectOptionsAsJson" id="_selectOptionsAsJson">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_selectOptionsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SelectInput.html#146-154" title="Go to source code">selectOptionsAsJson</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the select picker's options as a JSON string.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the select picker's options as a JSON string.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>Returns data serialized with json_encode().
+				</div>
+
+
+
 
 		</div>
 		</div></td>

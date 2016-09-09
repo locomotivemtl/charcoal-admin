@@ -219,8 +219,13 @@ class SidemenuWidget extends AdminWidget implements
         $objType = $this->objType();
 
         if (is_array($link)) {
-            $name = null;
-            $url  = null;
+            $active = true;
+            $name   = null;
+            $url    = null;
+
+            if (isset($link['active'])) {
+                $active = !!$link['active'];
+            }
 
             if (isset($link['name']) && TranslationString::isTranslatable($link['name'])) {
                 $name = new TranslationString($link['name']);
@@ -235,6 +240,7 @@ class SidemenuWidget extends AdminWidget implements
             }
 
             $this->links[$linkIdent] = [
+                'active'   => $active,
                 'name'     => $name,
                 'url'      => $url,
                 'selected' => ($linkIdent === $objType)
@@ -255,7 +261,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu links.
      *
-     * @return ArrayIterator
+     * @return ArrayIterator|Generator
      */
     public function links()
     {
@@ -272,7 +278,13 @@ class SidemenuWidget extends AdminWidget implements
             }
         }
 
-        return $this->links;
+        foreach ($this->links as $link) {
+            if (isset($link['active']) && !$link['active']) {
+                continue;
+            }
+
+            yield $link;
+        }
     }
 
     /**
@@ -491,7 +503,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu groups.
      *
-     * @return SidemenuGroupInterface[]
+     * @return SidemenuGroupInterface[]|Generator
      */
     public function groups()
     {
@@ -508,7 +520,13 @@ class SidemenuWidget extends AdminWidget implements
             }
         }
 
-        return $this->groups;
+        foreach ($this->groups as $group) {
+            if (!$group->active()) {
+                continue;
+            }
+
+            yield $group;
+        }
     }
 
     /**

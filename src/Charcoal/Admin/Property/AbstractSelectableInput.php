@@ -53,7 +53,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             $choice['title'] = $choice['label'];
         }
 
-        $choice['checked']  = $this->isChoiceSelected($ident);
+        $choice['checked']  = $this->isChoiceSelected($choice);
         $choice['selected'] = $choice['checked'];
 
         return $choice;

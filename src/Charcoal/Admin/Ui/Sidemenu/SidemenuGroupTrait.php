@@ -214,8 +214,13 @@ trait SidemenuGroupTrait
         $objType = $this->sidemenu()->objType();
 
         if (is_array($link)) {
+            $active = true;
             $name = null;
             $url = null;
+
+            if (isset($link['active'])) {
+                $active = !!$link['active'];
+            }
 
             if (isset($link['name']) && TranslationString::isTranslatable($link['name'])) {
                 $name = new TranslationString($link['name']);
@@ -236,6 +241,7 @@ trait SidemenuGroupTrait
             }
 
             $this->links[$linkIdent] = [
+                'active'   => $active,
                 'name'     => $name,
                 'url'      => $url,
                 'selected' => $isSelected
@@ -256,11 +262,21 @@ trait SidemenuGroupTrait
     /**
      * Retrieve the sidemenu links.
      *
-     * @return ArrayIterator
+     * @return ArrayIterator|Generator
      */
     public function links()
     {
-        return $this->links;
+        if (!is_array($this->links) && !($this->links instanceof \Traversable)) {
+            $this->links = [];
+        }
+
+        foreach ($this->links as $link) {
+            if (isset($link['active']) && !$link['active']) {
+                continue;
+            }
+
+            yield $link;
+        }
     }
 
     /**

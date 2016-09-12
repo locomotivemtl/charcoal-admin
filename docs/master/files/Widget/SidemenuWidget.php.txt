@@ -511,6 +511,7 @@ class SidemenuWidget extends AdminWidget implements
             $ident    = $this->ident();
             $metadata = $this->adminSidemenu();
 
+            $this->groups = [];
             if (isset($metadata[$ident]['groups'])) {
                 $groups = $metadata[$ident]['groups'];
 

@@ -269,6 +269,7 @@ class SidemenuWidget extends AdminWidget implements
             $ident    = $this->ident();
             $metadata = $this->adminSidemenu();
 
+            $this->links = [];
             if (isset($metadata[$ident]['links'])) {
                 $links = $metadata[$ident]['links'];
 

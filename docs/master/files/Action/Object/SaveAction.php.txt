@@ -12,7 +12,7 @@ use \Psr\Http\Message\ResponseInterface;
 use \Pimple\Container;
 
 // From `charcoal-base`
-use \Charcoal\User\authenticator;
+use \Charcoal\User\Authenticator;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;

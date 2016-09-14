@@ -152,7 +152,9 @@ trait CollectionContainerTrait
     private function propertyDisplayFactory()
     {
         if ($this->propertyDisplayFactory === null) {
-            throw new Exception('No property display factory. '.get_class($this));
+            throw new Exception(
+                'No property display factory. '.get_class($this)
+            );
         }
         return $this->propertyDisplayFactory;
     }
@@ -424,6 +426,7 @@ trait CollectionContainerTrait
                 $this->setupDisplayPropertyValue($object, $property);
 
                 $displayType = $this->display->displayType();
+                $this->display->setPropertyVal($object->propertyValue($propertyIdent));
 
                 $propertyValue = $this->view()->renderTemplate($displayType, $this->display);
 

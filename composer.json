@@ -25,8 +25,8 @@
         "paragonie/random_compat": "^1.2",
         "zendframework/zend-permissions-acl": "^2.6",
         "studio-42/elfinder": "2.1.x@dev",
-        "locomotivemtl/charcoal-core": "dev-master",
-        "locomotivemtl/charcoal-base": "dev-master",
+        "locomotivemtl/charcoal-core": "^0.1",
+        "locomotivemtl/charcoal-base": "^0.1",
         "locomotivemtl/charcoal-app": "~0.2",
         "locomotivemtl/charcoal-ui": "~0.1"
     },

@@ -1,123 +1,122 @@
 {
-	"parent":"charcoal/object/content",
+    "parent": "charcoal/object/content",
 
-	"properties":{
-		"username":{
-			"type":"string",
-			"unique":true,
-            "required":true,
-			"allow_null":false
-		},
-		"email":{
-			"type":"email",
-            "required":true,
-			"allow_empty":false,
-			"allow_null":false
-		},
-		"password":{
-			"type":"password",
-            "required":true,
-			"allow_null":false,
-			"allow_empty":false
-		},
-        "roles":{
-            "type":"string",
-            "multiple":true
+    "properties": {
+        "username": {
+            "type": "string",
+            "unique": true,
+            "required": true,
+            "allow_null": false
         },
-		"last_login_date":{
-			"type": "date-time"
-		},
-		"last_login_ip":{
-			"type":"ip"
-		},
-		"last_password_date":{
-			"type": "date-time",
-			"description":"Date of the last password modification."
-		},
-		"last_password_ip":{
-			"type":"ip"
-		},
-		"login_token":{
-			"type":"string"
-		}
-	},
+        "email": {
+            "type": "email",
+            "required": true,
+            "allow_empty": false,
+            "allow_null": false
+        },
+        "password": {
+            "type": "password",
+            "required": true,
+            "allow_null": false,
+            "allow_empty": false
+        },
+        "roles": {
+            "type": "string",
+            "multiple": true
+        },
+        "last_login_date": {
+            "type": "date-time"
+        },
+        "last_login_ip": {
+            "type": "ip"
+        },
+        "last_password_date": {
+            "type": "date-time",
+            "description": "Date of the last password modification."
+        },
+        "last_password_ip": {
+            "type": "ip"
+        },
+        "login_token": {
+            "type": "string"
+        }
+    },
 
-	"key":"username",
+    "key": "username",
 
-	"sources":{
-		"default":{
-			"table":"charcoal_admin_users"
-		}
-	},
-	"default_source":"default",
+    "sources": {
+        "default": {
+            "table": "charcoal_admin_users"
+        }
+    },
+    "default_source": "default",
 
-	"admin":{
-		"lists":{
-			"default":{
-				"properties":[
-					"username",
-					"email",
-					"roles",
-					"last_login_date"
-				]
-			}
-		},
-		"default_list":"default",
+    "admin": {
+        "lists": {
+            "default": {
+                "properties": [
+                    "username",
+                    "email",
+                    "roles",
+                    "last_login_date"
+                ]
+            }
+        },
+        "default_list": "default",
 
-		"forms":{
+        "forms": {
+        },
+        "default_form": "default",
 
-		},
-		"default_form":"default",
-
-		"dashboards":{
-			"admin.edit":{
-				"layout":{
-					"structure":[{
-						"num_columns":3,
-						"columns":[2, 1]
-					}]
-				},
-				"widgets":{
-					"form":{
-						"type":"charcoal/admin/widget/objectForm",
-						"label":"Admin User Form",
-						"obj_type":"charcoal/admin/user",
-						"groups":{
-							"main":{
-								"label":"Information",
-								"properties":[
-									"username",
-									"email",
-									"password"
-								]
-							},
-							"access":{
-								"label":"Access levels",
-								"properties":[
-									"roles"
-								]
-							}
-						}
-					}
-				}
-			},
-			"admin.collection":{
-				"layout":{
-					"structure":[{
-						"num_columns":1,
-						"columns":[1]
-					}]
-				},
-				"widgets":{
-					"list":{
-						"type":"charcoal/admin/widget/table",
-						"label":"Admin user list",
-						"obj_type":"charcoal/admin/user"
-					}
-				}
-			}
-		},
-		"default_edit_dashboard":"admin.edit",
-		"default_collection_dashboard":"admin.collection"
-	}
+        "dashboards": {
+            "admin.edit": {
+                "layout": {
+                    "structure": [{
+                        "num_columns": 3,
+                        "columns": [ 2, 1 ]
+                    }]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/objectForm",
+                        "label": "Admin User Form",
+                        "obj_type": "charcoal/admin/user",
+                        "groups": {
+                            "main": {
+                                "label": "Information",
+                                "properties": [
+                                    "username",
+                                    "email",
+                                    "password"
+                                ]
+                            },
+                            "access": {
+                                "label": "Access levels",
+                                "properties": [
+                                    "roles"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "admin.collection": {
+                "layout": {
+                    "structure": [{
+                        "num_columns": 1,
+                        "columns": [ 1 ]
+                    }]
+                },
+                "widgets": {
+                    "list": {
+                        "type": "charcoal/admin/widget/table",
+                        "label": "Admin user list",
+                        "obj_type": "charcoal/admin/user"
+                    }
+                }
+            }
+        },
+        "default_edit_dashboard": "admin.edit",
+        "default_collection_dashboard": "admin.collection"
+    }
 }

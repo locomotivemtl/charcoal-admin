@@ -1,3 +1,3 @@
 module.exports = {
-    all: ['assets/tests/**/*.html']
+    all: [ 'assets/tests/**/*.html' ]
 };

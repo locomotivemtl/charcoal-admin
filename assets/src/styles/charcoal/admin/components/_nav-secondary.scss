@@ -4,7 +4,7 @@
 
 .c-nav-secondary {
     @extend .c-nav;
-	background-color: $charcoal-lightblue;
+    background-color: $charcoal-lightblue;
     padding-bottom: rem($unit);
 
     @media (max-width: $to-small) {
@@ -40,5 +40,5 @@
 }
 
 .c-nav-seconday_heading {
-	margin: 0;
+    margin: 0;
 }

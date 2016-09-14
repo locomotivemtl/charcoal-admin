@@ -1,5 +1,5 @@
 module.exports = {
     options: {
-        glob: ".travis.yml"
+        glob: '.travis.yml'
     }
 };

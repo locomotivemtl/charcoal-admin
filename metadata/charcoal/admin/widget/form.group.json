@@ -1,44 +1,44 @@
 {
-	"parent":"charcoal/admin/widget",
+    "parent": "charcoal/admin/widget",
 
-	"properties":{
-		"priority":{
-			"type":"integer"
-		},
-		"widget_type":{
-			"type":"string"
-		},
-		"properties":{
-			"type":"string",
-			"multiple":true
-		},
-		"show_title":{
-			"type":"boolean"
-		},
-		"show_description":{
-			"type":"boolean"
-		},
-		"show_header":{
-			"type":"boolean"
-		},
-		"show_footer":{
-			"type":"boolean"
-		},
-		"show_notes":{
-			"type":true
-		},
+    "properties": {
+        "priority": {
+            "type": "integer"
+        },
+        "widget_type": {
+            "type": "string"
+        },
+        "properties": {
+            "type": "string",
+            "multiple": true
+        },
+        "show_title": {
+            "type": "boolean"
+        },
+        "show_description": {
+            "type": "boolean"
+        },
+        "show_header": {
+            "type": "boolean"
+        },
+        "show_footer": {
+            "type": "boolean"
+        },
+        "show_notes": {
+            "type": true
+        },
 
-		"title":{
-			"type":"string",
-			"l10n":true
-		},
-		"description":{
-			"type":"string",
-			"l10n":true
-		},
-		"notes":{
-			"type":"string",
-			"l10n":true
-		}
-	}
+        "title": {
+            "type": "string",
+            "l10n": true
+        },
+        "description": {
+            "type": "string",
+            "l10n": true
+        },
+        "notes": {
+            "type": "string",
+            "l10n": true
+        }
+    }
 }

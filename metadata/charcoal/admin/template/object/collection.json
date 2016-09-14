@@ -1,7 +1,5 @@
 {
-	"parent":"charcoal/admin/template/object",
+    "parent": "charcoal/admin/template/object",
 
-	"properties":{
-		
-	}
+    "properties": {}
 }

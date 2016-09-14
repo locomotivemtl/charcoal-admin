@@ -1,49 +1,49 @@
 language: php
 
 php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-  - nightly
+    - 5.5
+    - 5.6
+    - 7.0
+    - hhvm
+    - nightly
 
 env:
-  global:
-    - secure: "crga7zT9MxrZW9xdPGN6EQk6PkYBgUrYC8Ufvfai/GLns4C5q+NMR19BBvOWapjR52HACfGzq/nweMLaxOJKdtMbqqUUClOSvR5yqzypDItBK1yq40eBHZBlxMG2PtY+DrP9Do83mZUKtctyark9ad2du1haZtaxY4cjgCBzHSha3lcbCYtJ7AuwXTSSt8isyqShLVXPW5Cvbi7RU6/LEOQRXg/+1Nv+gjx7G5qSN+Jfhw78xw789v1JTOrTlub8rmiyQAodrVC0LTblgI8R77ICIjef6hheTuFiz0JsAdUrilau90noyooSoiwHdoNxwCZ20ASPmAAYmW2rdWUJspWUIrzrtgkJAaGxAd3ZXydMpx0UD+x7n/4Rw3aAQy+NpJ0+bnnpMMwZOOYiW+LFspd8ej9OVnmDE4LjAJ5/IJPPOR4CSc9MLTz2yklg7fvS2pOYRHY5Rnp0BTKotm3cex8CtkYHxatrrgahMdNZrLRW826zqn6ZlHTt0ZXFujcLAxToLnj+hkUGHsYZKDgfjIO89W3eKBCl5w/RtidlCu5nPMjEH4DWqNUYbkbcqxNVoEAeaNySjDWgwkDNpJtIkM1W+6Iu57a1FMgnJ38zzxwwCLC5LNoQIovxL84tSRwS46G8Ya5xJpARF3jPhaFLHw9bfgwbA7doyesiDEpL6NI="
-    - GH_REPO: github.com/locomotivemtl/charcoal-admin.git
-    - APPLICATION_ENV: testing
+    global:
+        - secure: "crga7zT9MxrZW9xdPGN6EQk6PkYBgUrYC8Ufvfai/GLns4C5q+NMR19BBvOWapjR52HACfGzq/nweMLaxOJKdtMbqqUUClOSvR5yqzypDItBK1yq40eBHZBlxMG2PtY+DrP9Do83mZUKtctyark9ad2du1haZtaxY4cjgCBzHSha3lcbCYtJ7AuwXTSSt8isyqShLVXPW5Cvbi7RU6/LEOQRXg/+1Nv+gjx7G5qSN+Jfhw78xw789v1JTOrTlub8rmiyQAodrVC0LTblgI8R77ICIjef6hheTuFiz0JsAdUrilau90noyooSoiwHdoNxwCZ20ASPmAAYmW2rdWUJspWUIrzrtgkJAaGxAd3ZXydMpx0UD+x7n/4Rw3aAQy+NpJ0+bnnpMMwZOOYiW+LFspd8ej9OVnmDE4LjAJ5/IJPPOR4CSc9MLTz2yklg7fvS2pOYRHY5Rnp0BTKotm3cex8CtkYHxatrrgahMdNZrLRW826zqn6ZlHTt0ZXFujcLAxToLnj+hkUGHsYZKDgfjIO89W3eKBCl5w/RtidlCu5nPMjEH4DWqNUYbkbcqxNVoEAeaNySjDWgwkDNpJtIkM1W+6Iu57a1FMgnJ38zzxwwCLC5LNoQIovxL84tSRwS46G8Ya5xJpARF3jPhaFLHw9bfgwbA7doyesiDEpL6NI="
+        - GH_REPO: github.com/locomotivemtl/charcoal-admin.git
+        - APPLICATION_ENV: testing
 
 matrix:
-  allow_failures:
-    - php: 7.0
-    - php: hhvm
-    - php: nightly
+    allow_failures:
+        - php: 7.0
+        - php: hhvm
+        - php: nightly
 
 before_script:
-  ## Create Database
-  - mysql -e 'CREATE DATABASE charcoal_test;'
-  ## Init Composer
-  - composer selfupdate --quiet
-  - composer install -n --dev
+    ## Create Database
+    - mysql -e 'CREATE DATABASE charcoal_test;'
+    ## Init Composer
+    - composer selfupdate --quiet
+    - composer install -n --dev
 
-  ## Create temporary folders
-  - mkdir -p build/logs
+    ## Create temporary folders
+    - mkdir -p build/logs
 
 script:
-  ## Lint PHP Files
-  - find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1
+    ## Lint PHP Files
+    - find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1
 
-  ## PHP Code Sniffer
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then ./vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;./vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/; fi
+    ## PHP Code Sniffer
+    - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then ./vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;./vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/; fi
 
-  ## Run PHPUnit Tests
-  - phpunit --configuration ./tests/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml
+    ## Run PHPUnit Tests
+    - phpunit --configuration ./tests/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml
 
 after_script:
-  - php vendor/bin/coveralls -v
-  - bash build/travis/phpdoc_ghpages.sh
-  - bash build/travis/apigen_ghpages.sh
+    - php vendor/bin/coveralls -v
+    - bash build/travis/phpdoc_ghpages.sh
+    - bash build/travis/apigen_ghpages.sh
 
 notifications:
-  slack: locomotivemtl:d9h8ZWwTZ6b3WUsSP9s26nb1
-  email: charcoal@locomotive.ca
+    slack: locomotivemtl:d9h8ZWwTZ6b3WUsSP9s26nb1
+    email: charcoal@locomotive.ca

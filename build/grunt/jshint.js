@@ -1,5 +1,5 @@
 module.exports = {
-    files:[
+    files: [
         'assets/src/scripts/**/*.js',
         'grunt_tasks/*.js'
     ],

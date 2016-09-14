@@ -1,11 +1,11 @@
 module.exports = {
-    src:{
-        src: ['src/**/*.php']
+    src: {
+        src: [ 'src/**/*.php' ]
     },
     options: {
-        //bin: '<%= directories.composerBin %>/phpcs',
+        // bin: '<%= directories.composerBin %>/phpcs',
         standard: 'phpcs.xml',
-        //ignore: 'database',
+        // ignore: 'database',
         extensions: 'php',
         showSniffCodes: true
     }

@@ -1,7 +1,9 @@
 /**
-* Gruntfile.js
-* Charcoal-Admin configuration for grunt. (The JavaScript Task Runner)
-*/
+ * Grunt Task Wrangler
+ *
+ * @copyright Copyright © 2016 Locomotive
+ * @license   Licensed under the MIT license.
+ */
 
 module.exports = function(grunt) {
     "use strict";
@@ -44,7 +46,7 @@ module.exports = function(grunt) {
         //'phplint' // To slow for default
         'copy:admin'
     ]);
-    grunt.registerTask('sync', ['browserSync', 'watch', 'notify:watch']);
+    grunt.registerTask('sync', [ 'browserSync', 'watch', 'notify:watch' ]);
     grunt.registerTask('tests', [
         'phpunit',
         'phplint'

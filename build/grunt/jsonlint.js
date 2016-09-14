@@ -1,16 +1,16 @@
 module.exports = {
-    meta:{
-        src:[
+    meta: {
+        src: [
             '*.json'
         ]
     },
-    config:{
-        src:[
+    config: {
+        src: [
             'config/**/*.json'
         ]
     },
-    metadata:{
-        src:[
+    metadata: {
+        src: [
             'metadata/**/*.json'
         ]
     }

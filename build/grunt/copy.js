@@ -4,44 +4,44 @@ module.exports = {
             {
                 expand: true,
                 cwd: 'bower_components/bootstrap-sass/assets/fonts/bootstrap/',
-                src: ['**', '*'],
+                src: [ '**', '*' ],
                 dest: 'assets/dist/fonts/'
             },
             {
                 expand: true,
                 cwd: 'bower_components/echarts/build/dist',
-                //src: ['echarts.js'],
-                src: ['**/*.*', '*/*.*', '*.*'],
+                // src: ['echarts.js'],
+                src: [ '**/*.*', '*/*.*', '*.*' ],
                 dest: 'assets/dist/scripts/vendors/echarts/'
             },
             {
                 expand: true,
                 cwd: 'bower_components/elfinder/',
-                src: ['css/*', 'img/*', 'js/*', 'js/**/*', 'sounds/*'],
+                src: [ 'css/*', 'img/*', 'js/*', 'js/**/*', 'sounds/*' ],
                 dest: 'assets/dist/elfinder/'
             },
             {
                 expand: true,
                 cwd: 'bower_components/elfinder-theme-moono/',
-                src: ['**/*.css'],
+                src: [ '**/*.css' ],
                 dest: 'assets/dist/elfinder/themes/'
             },
             {
                 expand: true,
                 cwd: 'bower_components/jquery/dist/',
-                src: ['jquery.*'],
+                src: [ 'jquery.*' ],
                 dest: 'assets/dist/scripts/vendors/jquery/'
             },
             {
                 expand: true,
                 cwd: 'bower_components/tinymce/',
-                src: ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/modern/theme.min.js', 'tinymce.min.js'],
+                src: [ 'skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/modern/theme.min.js', 'tinymce.min.js' ],
                 dest: 'assets/dist/scripts/vendors/tinymce/'
             },
             {
                 expand: true,
                 cwd: 'bower_components/bb-gmap/assets/scripts/dist/min/',
-                src: ['*.js'],
+                src: [ '*.js' ],
                 dest: 'assets/dist/scripts/vendors/bb-gmap/'
             }
         ]
@@ -49,7 +49,7 @@ module.exports = {
     admin: {
         expand: true,
         cwd: 'assets/dist/',
-        src: ['**', '*'],
+        src: [ '**', '*' ],
         dest: '../../../www/assets/admin/'
     }
 };

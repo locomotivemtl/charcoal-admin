@@ -1,22 +1,22 @@
 {
-    "properties":{
-    	"ident":{
-    		"type":"string"
-    	},
-    	"read_only":{
-    		"type":"boolean"
-    	},
-    	"required":{
-    		"type":"boolean"
-    	},
-    	"disabled":{
-    		"type":"boolean"
-    	},
-    	"type":{
-    		"type":"string"
-    	},
-    	"input_type":{
-    		"type":"string"
-    	}
+    "properties": {
+        "ident": {
+            "type": "string"
+        },
+        "read_only": {
+            "type": "boolean"
+        },
+        "required": {
+            "type": "boolean"
+        },
+        "disabled": {
+            "type": "boolean"
+        },
+        "type": {
+            "type": "string"
+        },
+        "input_type": {
+            "type": "string"
+        }
     }
 }

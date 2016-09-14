@@ -7,5 +7,3 @@ Every javascript files in this folder (all `.js` files) are available to the `gr
 
 ### `phpcs` and `phpcbf`
 Both those tasks share the same config files: `../phpcs.xml`.
-
-### 

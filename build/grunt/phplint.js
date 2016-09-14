@@ -1,7 +1,7 @@
 module.exports = {
     options: {
         swapPath: '/tmp',
-        phpArgs : {
+        phpArgs: {
             // add -f for fatal errors
             '-lf': null
         }

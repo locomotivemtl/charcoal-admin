@@ -1,27 +1,27 @@
 {
-  "parent":"charcoal/admin/property/input",
+    "parent": "charcoal/admin/property/input",
 
-  "properties":{
-    "size":{
-      "type":"integer"
+    "properties": {
+        "size": {
+            "type": "integer"
+        },
+        "min_length": {
+            "type": "integer"
+        },
+        "max_length": {
+            "type": "integer"
+        },
+        "pattern": {
+            "type": "string"
+        },
+        "placeholder": {
+            "type": "string"
+        }
     },
-    "min_length":{
-      "type":"integer"
-    },
-    "max_length":{
-      "type":"integer"
-    },
-    "pattern":{
-      "type":"string"
-    },
-    "placeholder":{
-      "type":"string"
+    "data": {
+        "placeholder": {
+            "en": "Select…",
+            "fr": "Choisir…"
+        }
     }
-  },
-  "data": {
-    "placeholder": {
-      "en": "Select…",
-      "fr": "Choisir…"
-    }
-  }
 }

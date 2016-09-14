@@ -1,9 +1,9 @@
 module.exports = {
-    src:{
-        src:['src/**/*.php']
+    src: {
+        src: [ 'src/**/*.php' ]
     },
     tests: {
-        src:['tests/**/*.php']
+        src: [ 'tests/**/*.php' ]
     },
     options: {
         standard: 'phpcs.xml',

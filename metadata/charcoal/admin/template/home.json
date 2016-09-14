@@ -1,76 +1,76 @@
 {
-    "dashboard":{
-        "layout":{
-            "structure":[
+    "dashboard": {
+        "layout": {
+            "structure": [
                 {
-                    "columns":[1]
+                    "columns": [ 1 ]
                 },
                 {
-                    "columns":[1,1,1]
+                    "columns": [ 1, 1, 1 ]
                 },
                 {
-                    "columns":[2, 1]
+                    "columns": [ 2, 1 ]
                 }
             ]
         },
-        "widgets":{
-            "bargraph":{
-                 "type":"charcoal/admin/widget/graph/line",
-                 "height":500
+        "widgets": {
+            "bargraph": {
+                 "type": "charcoal/admin/widget/graph/line",
+                 "height": 500
             },
-            "graph1":{
-                "type":"charcoal/admin/widget/graph/pie",
-                "height":240
+            "graph1": {
+                "type": "charcoal/admin/widget/graph/pie",
+                "height": 240
             },
-            "graph2":{
-                "type":"charcoal/admin/widget/graph/bar",
-                "height":240
+            "graph2": {
+                "type": "charcoal/admin/widget/graph/bar",
+                "height": 240
             },
-            "graph3":{
-                "type":"charcoal/admin/widget/graph/bar",
-                "height":240
+            "graph3": {
+                "type": "charcoal/admin/widget/graph/bar",
+                "height": 240
             },
-            "reference":{
-                "type":"charcoal/admin/widget/form",
-                "label":"Form label",
-                "form_properties":{
-                    "foo":{
-                        "label":"Foo property",
-                        "type":"string",
-                        "active":true
+            "reference": {
+                "type": "charcoal/admin/widget/form",
+                "label": "Form label",
+                "form_properties": {
+                    "foo": {
+                        "label": "Foo property",
+                        "type": "string",
+                        "active": true
                     },
-                    "bar":{
-                        "label":"Bar property",
-                        "type":"string",
-                        "input_type":"charcoal/admin/property/input/textarea",
-                        "active":true
+                    "bar": {
+                        "label": "Bar property",
+                        "type": "string",
+                        "input_type": "charcoal/admin/property/input/textarea",
+                        "active": true
                     }
                 },
-                "groups":{
-                    "main":{
-                        "label":"Group 1 label",
-                        "title":"Group 1 title",
-                        "properties":[
+                "groups": {
+                    "main": {
+                        "label": "Group 1 label",
+                        "title": "Group 1 title",
+                        "properties": [
                             "foo",
                             "bar"
                         ]
                     },
-                    "second":{
-                        "type":"widget",
-                        "widget_type":"charcoal/admin/widget/text",
-                        "title":"Group 2 title",
-                        "subtitle":"Group 2 subtitle",
-                        "description":"Foo bar",
-                        "notes":"Notes notes notes"
+                    "second": {
+                        "type": "widget",
+                        "widget_type": "charcoal/admin/widget/text",
+                        "title": "Group 2 title",
+                        "subtitle": "Group 2 subtitle",
+                        "description": "Foo bar",
+                        "notes": "Notes notes notes"
                     }
                 }
             },
-            "test":{
-                "type":"charcoal/admin/widget/text",
-                "title":"Text Title",
-                "subtitle":"Text subtitle",
-                "description":"Text description",
-                "notes":"Text notes"
+            "test": {
+                "type": "charcoal/admin/widget/text",
+                "title": "Text Title",
+                "subtitle": "Text subtitle",
+                "description": "Text description",
+                "notes": "Text notes"
             }
         }
     }

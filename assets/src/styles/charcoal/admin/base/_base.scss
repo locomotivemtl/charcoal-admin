@@ -11,19 +11,19 @@ html {
         font-size: 13px;
     }
 
-	@media (min-width: $from-large) and (max-width: $to-huge) {
-		font-size: 12px;
-	}
+    @media (min-width: $from-large) and (max-width: $to-huge) {
+        font-size: 12px;
+    }
 
-	@media (min-width: $from-huge) {
-		font-size: $font-size;
-	}
+    @media (min-width: $from-huge) {
+        font-size: $font-size;
+    }
 }
 
 body {
     font-family: $font-family;
     font-size: 1rem;
-	padding-top: rem($unit);
+    padding-top: rem($unit);
 
     &.has-nav-main {
         @media (min-width: $from-large) {

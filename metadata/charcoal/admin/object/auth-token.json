@@ -1,30 +1,30 @@
 {
-    "properties":{
-        "ident":{
-            "type":"string",
-            "unique":true
+    "properties": {
+        "ident": {
+            "type": "string",
+            "unique": true
         },
-        "token":{
-            "type":"string"
+        "token": {
+            "type": "string"
         },
-        "username":{
-            "type":"string"
+        "username": {
+            "type": "string"
         },
-        "expiry":{
-            "type":"date-time"
+        "expiry": {
+            "type": "date-time"
         },
-        "created":{
-            "type":"date-time"
+        "created": {
+            "type": "date-time"
         },
-        "lastModified":{
-            "type":"date-time"
+        "lastModified": {
+            "type": "date-time"
         }
     },
 
-    "sources":{
-      "default":{
-        "table":"charcoal_admin_auth_tokens"
+    "sources": {
+      "default": {
+        "table": "charcoal_admin_auth_tokens"
       }
     },
-    "default_source":"default"
+    "default_source": "default"
 }

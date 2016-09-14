@@ -1,53 +1,53 @@
 {
-    "properties":{
-        "category":{
-            "obj_type":"charcoal/admin/user/permission-category"
+    "properties": {
+        "category": {
+            "obj_type": "charcoal/admin/user/permission-category"
         }
     },
 
-    "sources":{
-        "default":{
-            "table":"charcoal_admin_permissions"
+    "sources": {
+        "default": {
+            "table": "charcoal_admin_permissions"
         }
     },
-    "default_source":"default",
+    "default_source": "default",
 
-    "admin":{
-        "lists":{
-            "default":{
-                "properties":[
+    "admin": {
+        "lists": {
+            "default": {
+                "properties": [
                     "category",
                     "ident",
                     "name"
                 ]
             }
         },
-        "default_list":"default",
+        "default_list": "default",
 
-        "forms":{
-            "default":{
-                "groups":{
-                    "info":{
-                        "title":"Informations",
-                        "properties":[
+        "forms": {
+            "default": {
+                "groups": {
+                    "info": {
+                        "title": "Informations",
+                        "properties": [
                             "category",
                             "ident",
                             "name"
                         ]
                     }
                 },
-                "sidebars":{
-                    "actions":{}
+                "sidebars": {
+                    "actions": {}
                 }
             }
         },
-        "default_form":"default",
+        "default_form": "default",
 
         "dashboards": {
             "admin.edit": {
-                "title":{
-                    "en":"Permission",
-                    "fr":"Permission"
+                "title": {
+                    "en": "Permission",
+                    "fr": "Permission"
                 },
                 "layout": {
                     "structure": [
@@ -61,14 +61,14 @@
                         "obj_type": "charcoal/admin/user/permission"
                     }
                 },
-                "sidemenu":{
-                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/map"
+                "sidemenu": {
+                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/map"
                 }
             },
             "admin.table": {
                 "title": {
-                    "en":"Permissions list",
-                    "fr":"Liste des permissions"
+                    "en": "Permissions list",
+                    "fr": "Liste des permissions"
                 },
                 "layout": {
                     "structure": [
@@ -82,8 +82,8 @@
                         "obj_type": "charcoal/admin/user/permission"
                     }
                 },
-                "sidemenu":{
-                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/map"
+                "sidemenu": {
+                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/map"
                 }
             }
         },

@@ -1,13 +1,13 @@
 module.exports = {
     dev: {
         bsFiles: {
-            src : [
+            src: [
                 'templates/charcoal/admin/**/*',
                 '../../../www/assets/admin/**/*'
             ]
         },
         options: {
-            proxy: "localhost",
+            proxy: 'localhost',
             watchTask: true,
             notify: false
         }

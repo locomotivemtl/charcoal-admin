@@ -1,136 +1,136 @@
 {
-  "base_path": "admin",
+    "base_path": "admin",
 
-  "routes": {
-    "templates": {
-      "home": {
-        "ident": "charcoal/admin/template/home",
-        "route": "[/[home]]"
-      },
-      "login": {
-        "ident": "charcoal/admin/template/login"
-      },
-      "logout": {
-        "ident": "charcoal/admin/template/logout"
-      },
-      "object/edit": {
-        "ident": "charcoal/admin/template/object/edit"
-      },
-      "object/collection": {
-        "ident": "charcoal/admin/template/object/collection"
-      },
-      "elfinder":{
-        "ident":"charcoal/admin/template/elfinder"
-      },
-      "media":{
-        "template":"charcoal/admin/template/media",
-        "controller": "charcoal/admin/template/home"
-      },
+    "routes": {
+        "templates": {
+            "home": {
+                "ident": "charcoal/admin/template/home",
+                "route": "[/[home]]"
+            },
+            "login": {
+                "ident": "charcoal/admin/template/login"
+            },
+            "logout": {
+                "ident": "charcoal/admin/template/logout"
+            },
+            "object/edit": {
+                "ident": "charcoal/admin/template/object/edit"
+            },
+            "object/collection": {
+                "ident": "charcoal/admin/template/object/collection"
+            },
+            "elfinder": {
+                "ident": "charcoal/admin/template/elfinder"
+            },
+            "media": {
+                "template": "charcoal/admin/template/media",
+                "controller": "charcoal/admin/template/home"
+            },
 
-      "contents": {},
-      "envoie": {}
+            "contents": {},
+            "envoie": {}
+        },
+        "actions": {
+            "login": {
+                "ident": "charcoal/admin/action/login"
+            },
+            "object/delete": {
+                "ident": "charcoal/admin/action/object/delete"
+            },
+            "object/save": {
+                "ident": "charcoal/admin/action/object/save"
+            },
+            "object/update": {
+                "ident": "charcoal/admin/action/object/update"
+            },
+            "object/reorder": {
+                "ident": "charcoal/admin/action/object/reorder"
+            },
+            "object/revert-revision": {
+                "ident": "charcoal/admin/action/object/revert-revision"
+            },
+            "widget/load": {
+                "ident": "charcoal/admin/action/widget/load"
+            },
+            "widget/table/inline": {
+                "ident": "charcoal/admin/action/widget/table/inline"
+            },
+            "widget/table/inline-multi": {
+                "ident": "charcoal/admin/action/widget/table/inline-multi"
+            },
+            "elfinder-connector": {
+                "methods": [ "GET", "POST" ],
+                "ident": "charcoal/admin/action/elfinder-connector"
+            }
+        },
+        "scripts": {
+            "object/create": {
+                "ident": "charcoal/admin/script/object/create"
+            },
+            "object/table/alter": {
+                "ident": "charcoal/admin/script/object/table/alter"
+            },
+            "object/table/create": {
+                "ident": "charcoal/admin/script/object/table/create"
+            },
+            "object/process-schedules": {
+                "ident": "charcoal/admin/script/object/process-schedules"
+            },
+            "objects": {
+                "ident": "charcoal/admin/script/objects"
+            },
+            "user/create": {
+                "ident": "charcoal/admin/script/user/create"
+            },
+            "user/reset-password": {
+                "ident": "charcoal/admin/script/user/reset-password"
+            }
+        }
     },
-    "actions": {
-      "login": {
-        "ident": "charcoal/admin/action/login"
-      },
-      "object/delete": {
-        "ident": "charcoal/admin/action/object/delete"
-      },
-      "object/save": {
-        "ident": "charcoal/admin/action/object/save"
-      },
-      "object/update": {
-        "ident": "charcoal/admin/action/object/update"
-      },
-      "object/reorder": {
-        "ident": "charcoal/admin/action/object/reorder"
-      },
-      "object/revert-revision":{
-        "ident": "charcoal/admin/action/object/revert-revision"
-      },
-      "widget/load": {
-        "ident": "charcoal/admin/action/widget/load"
-      },
-      "widget/table/inline": {
-        "ident": "charcoal/admin/action/widget/table/inline"
-      },
-      "widget/table/inline-multi": {
-        "ident": "charcoal/admin/action/widget/table/inline-multi"
-      },
-      "elfinder-connector":{
-        "methods":["GET", "POST"],
-        "ident": "charcoal/admin/action/elfinder-connector"
-      }
+
+    "handlers": {
+        "defaults": {
+            "template": "charcoal/admin/template/handler",
+            "controller": "charcoal/admin/template/handler"
+        }
     },
-    "scripts": {
-      "object/create": {
-        "ident": "charcoal/admin/script/object/create"
-      },
-      "object/table/alter": {
-        "ident": "charcoal/admin/script/object/table/alter"
-      },
-      "object/table/create": {
-        "ident": "charcoal/admin/script/object/table/create"
-      },
-      "object/process-schedules": {
-        "ident": "charcoal/admin/script/object/process-schedules"
-      },
-      "objects": {
-        "ident": "charcoal/admin/script/objects"
-      },
-      "user/create": {
-        "ident": "charcoal/admin/script/user/create"
-      },
-      "user/reset-password": {
-        "ident": "charcoal/admin/script/user/reset-password"
-      }
-    }
-  },
 
-  "handlers": {
-    "defaults": {
-      "template": "charcoal/admin/template/handler",
-      "controller": "charcoal/admin/template/handler"
-    }
-  },
+    "user": {
+        "subscription_email": {
+            "active": true,
+            "template": "charcoal/admin/email/user.subscription",
+            "campaign": "admin.user.subscription",
+            "from": {
+                "name": "Charcoal",
+                "email": "registration@charcoal.locomotive.ca"
+            },
+            "subject": "Your subscription to Charcoal",
+            "log": true,
+            "track": true
+        },
+        "lost_password_email": {
+            "active": true,
+            "template": "charcoal/admin/email/user.lost_password",
+            "campaign": "admin.user.lost_password",
+            "from": {
+                "name": "Charcoal",
+                "email": "registration@charcoal.locomotive.ca"
+            },
+            "subject": "Reset your Charcoal password",
+            "log": true,
+            "track": true
 
-  "user": {
-    "subscription_email": {
-      "active": true,
-      "template": "charcoal/admin/email/user.subscription",
-      "campaign": "admin.user.subscription",
-      "from": {
-        "name": "Charcoal",
-        "email": "registration@charcoal.locomotive.ca"
-      },
-      "subject": "Your subscription to Charcoal",
-      "log": true,
-      "track": true
+        }
     },
-    "lost_password_email": {
-      "active": true,
-      "template": "charcoal/admin/email/user.lost_password",
-      "campaign": "admin.user.lost_password",
-      "from": {
-        "name": "Charcoal",
-        "email": "registration@charcoal.locomotive.ca"
-      },
-      "subject": "Reset your Charcoal password",
-      "log": true,
-      "track": true
 
+    "acl": {
+        "default_permissions": {
+            "allowed": [
+                "action",
+                "template",
+                "template.charcoal/admin/home"
+            ],
+            "denied": []
+        }
     }
-  },
-
-  "acl":{
-      "default_permissions":{
-        "allowed":[
-            "action",
-            "template",
-            "template.charcoal/admin/home"
-        ],
-        "denied":[]
-      }
-  }
 }

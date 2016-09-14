@@ -1,6 +1,6 @@
 module.exports = {
-    options:{
-        separator:';'
+    options: {
+        separator: ';'
     },
     admin: {
         src: [

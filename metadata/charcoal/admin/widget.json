@@ -1,24 +1,24 @@
 {
-	"properties":{
-		"type":{
-			"type":"string"
-		},
-		"ident":{
-			"type":"string"
-		},
-		"label":{
-			"type":"string",
-			"l10n":true
-		},
-		"actions":{
-			"type":"structure",
-			"multiple":true
-		},
-		"show_label":{
-			"type":"boolean"
-		},
-		"show_actions":{
-			"type":"boolean"
-		}
-	}
+    "properties": {
+        "type": {
+            "type": "string"
+        },
+        "ident": {
+            "type": "string"
+        },
+        "label": {
+            "type": "string",
+            "l10n": true
+        },
+        "actions": {
+            "type": "structure",
+            "multiple": true
+        },
+        "show_label": {
+            "type": "boolean"
+        },
+        "show_actions": {
+            "type": "boolean"
+        }
+    }
 }

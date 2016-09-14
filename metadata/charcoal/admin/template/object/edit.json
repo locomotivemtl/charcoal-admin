@@ -1,9 +1,9 @@
 {
-	"parent":"charcoal/admin/template/object",
+    "parent": "charcoal/admin/template/object",
 
-	"properties":{
-		"dashboard_ident":{
-			"type":"string"
-		}
-	}
+    "properties": {
+        "dashboard_ident": {
+            "type": "string"
+        }
+    }
 }

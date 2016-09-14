@@ -1,52 +1,54 @@
 {
-  "name": "locomotivemtl/charcoal-admin",
-  "description": "The administration dashboard / backend for Charcoal",
-  "homepage": "https://charcoal.locomotive.ca",
-  "license": "MIT",
-  "support": {
-    "issues": "https://github.com/locomotivemtl/charcoal-admin/issues",
-    "source": "https://github.com/locomotivemtl/charcoal-admin"
-  },
-  "authors": [
-    {
-      "name": "Mathieu Ducharme",
-      "email": "mat@locomotive.ca"
+    "name": "locomotivemtl/charcoal-admin",
+    "description": "The administration dashboard / backend for Charcoal",
+    "homepage": "https://charcoal.locomotive.ca",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/locomotivemtl/charcoal-admin/issues",
+        "source": "https://github.com/locomotivemtl/charcoal-admin"
     },
-    {
-      "name": "Locomotive",
-      "homepage": "https://locomotive.ca"
-    }
-  ],
-  "minimum-stability": "dev",
-  "require": {
-    "php": ">=5.5.0",
-    "locomotivemtl/charcoal-core": "dev-master",
-    "locomotivemtl/charcoal-base": "dev-master",
-    "locomotivemtl/charcoal-app": "~0.2",
-    "locomotivemtl/charcoal-ui": "~0.1",
-    "paragonie/random_compat": "^1.2",
-    "zendframework/zend-permissions-acl": "^2.6",
-    "studio-42/elfinder": "2.1.x@dev"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^4.8",
-    "squizlabs/php_codesniffer": "^2.4",
-    "satooshi/php-coveralls":"~1.0.1"
-  },
-  "autoload": {
-    "psr-4": {
-      "Charcoal\\Admin\\": "src/Charcoal/Admin"
-    }
-  },
-  "scripts": {
-    "test": [
-      "@phplint",
-      "@phpcs",
-      "@phpunit"
+    "authors": [
+        {
+            "name": "Mathieu Ducharme",
+            "email": "mat@locomotive.ca"
+        },
+        {
+            "name": "Locomotive",
+            "homepage": "https://locomotive.ca"
+        }
     ],
-    "phplint": "find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
-    "phpunit": "php vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-text",
-    "phpcs": "php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;php vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/",
-    "phpcbf": "php vendor/bin/phpcbf -ps --colors --standard=phpcs.xml src/ tests/"
-  }
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5.0",
+        "psr/log": "^1.0",
+        "psr/http-message": "^1.0",
+        "paragonie/random_compat": "^1.2",
+        "zendframework/zend-permissions-acl": "^2.6",
+        "studio-42/elfinder": "2.1.x@dev",
+        "locomotivemtl/charcoal-core": "dev-master",
+        "locomotivemtl/charcoal-base": "dev-master",
+        "locomotivemtl/charcoal-app": "~0.2",
+        "locomotivemtl/charcoal-ui": "~0.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "squizlabs/php_codesniffer": "^2.4",
+        "satooshi/php-coveralls": "~1.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Charcoal\\Admin\\": "src/Charcoal/Admin"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@phplint",
+            "@phpcs",
+            "@phpunit"
+        ],
+        "phplint": "find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
+        "phpunit": "php vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-text",
+        "phpcs": "php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;php vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/",
+        "phpcbf": "php vendor/bin/phpcbf -ps --colors --standard=phpcs.xml src/ tests/"
+    }
 }

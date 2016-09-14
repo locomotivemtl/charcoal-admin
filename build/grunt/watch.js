@@ -25,7 +25,7 @@ module.exports = {
         ]
     },
     php: {
-        files :[
+        files: [
             'src/**/*.php',
             'tests/**/*.php',
         ],
@@ -35,7 +35,7 @@ module.exports = {
         ]
     },
     sass: {
-        files: ['assets/src/styles/**/*.scss'],
+        files: [ 'assets/src/styles/**/*.scss' ],
         tasks: [
             'sass',
             'postcss',
@@ -48,21 +48,21 @@ module.exports = {
         }
     },
     svg: {
-        files: ['assets/src/images/**/*.svg'],
+        files: [ 'assets/src/images/**/*.svg' ],
         tasks: [
             'svgstore',
             'notify:svg'
         ]
     },
     dist: {
-        files: ['assets/dist/**/*'],
+        files: [ 'assets/dist/**/*' ],
         tasks: [
             'copy:admin',
             'notify:copy'
         ]
     },
     tasks: {
-        files: ['grunt_tasks/*.js'],
+        files: [ 'grunt_tasks/*.js' ],
         options: {
             reload: true
         }

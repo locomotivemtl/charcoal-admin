@@ -1,58 +1,58 @@
 {
-    "category_item_type":"charcoal/admin/user/permission",
+    "category_item_type": "charcoal/admin/user/permission",
 
-    "sources":{
-        "default":{
-            "table":"charcoal_admin_permissions_categories"
+    "sources": {
+        "default": {
+            "table": "charcoal_admin_permissions_categories"
         }
     },
-    "default_source":"default",
+    "default_source": "default",
 
-    "admin":{
-        "lists":{
-            "default":{
-                "properties":[
+    "admin": {
+        "lists": {
+            "default": {
+                "properties": [
                     "name"
                 ],
-                "orders":[{
-                    "property":"position",
-                    "mode":"asc"
+                "orders": [{
+                    "property": "position",
+                    "mode": "asc"
                 }],
-                "list_actions":[{
-                    "label":{
-                        "en":"New cateogry",
-                        "fr":"Nouvelle catégorie de contact"
+                "list_actions": [{
+                    "label": {
+                        "en": "New cateogry",
+                        "fr": "Nouvelle catégorie de contact"
                     },
-                    "ident":"create",
-                    "url":"object/edit?obj_type=charcoal/user/permission-category"
+                    "ident": "create",
+                    "url": "object/edit?obj_type=charcoal/user/permission-category"
                 }]
             }
         },
-        "default_list":"default",
+        "default_list": "default",
 
-        "forms":{
-            "default":{
-                "label":{
+        "forms": {
+            "default": {
+                "label": {
 
                 },
-                "groups":{
-                    "info":{
-                        "title":"Informations",
-                        "properties":[
+                "groups": {
+                    "info": {
+                        "title": "Informations",
+                        "properties": [
                             "name"
                         ]
                     }
                 },
-                "sidebars":{
-                    "actions":{}
+                "sidebars": {
+                    "actions": {}
                 }
             }
         },
-        "default_form":"default",
+        "default_form": "default",
 
         "dashboards": {
             "admin.edit": {
-                "title":"Catégorie de permissions",
+                "title": "Catégorie de permissions",
                 "layout": {
                     "structure": [
                         { "columns": [ 1 ] }
@@ -80,8 +80,8 @@
                         "obj_type": "charcoal/admin/user/permission-category"
                     }
                 },
-                "sidemenu":{
-                    "widget_type":"charcoal/admin/widget/saintconstant/sidemenu/contact"
+                "sidemenu": {
+                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/contact"
                 }
             }
         },

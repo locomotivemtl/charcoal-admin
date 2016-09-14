@@ -74,6 +74,11 @@ abstract class AbstractPropertyDisplay implements
     private $propertyData = [];
 
     /**
+     * @var mixed $propertyVal
+     */
+    private $propertyVal;
+
+    /**
      * @var PropertyInterface $property
      */
     private $property;
@@ -152,6 +157,24 @@ abstract class AbstractPropertyDisplay implements
             $metadata->setData($data);
         }
         return $metadata;
+    }
+
+    /**
+     * @param mixed $val The property value.
+     * @return PropertyDisplayInterface Chainable
+     */
+    public function setPropertyVal($val)
+    {
+        $this->propertyVal = $val;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function propertyVal()
+    {
+        return $this->propertyVal;
     }
 
     /**
@@ -269,7 +292,7 @@ abstract class AbstractPropertyDisplay implements
     public function displayVal()
     {
         $prop = $this->p();
-        return $prop->displayVal();
+        return $prop->displayVal($this->propertyVal());
     }
 
     /**
@@ -315,15 +338,9 @@ abstract class AbstractPropertyDisplay implements
      */
     public function property()
     {
-        if ($this->property === null) {
-            $propertyFactory = new PropertyFactory();
-            $this->property = $propertyFactory->create($this->displayType(), [
-                'logger'=>$this->logger
-            ]);
-            $this->property->setData($this->propertyData);
-        }
         return $this->property;
     }
+
     /**
      * Alias of the `property` method.
      *

@@ -15,7 +15,7 @@ DateTime picker Property Input
         {{#readOnly}}readonly{{/readOnly}}
         {{#required}}required{{/required}}
         {{#disabled}}disabled{{/disabled}}
-        value="{{p.inputVal}}"
+        value="{{inputVal}}"
     >
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
@@ -32,7 +32,7 @@ Charcoal.Admin.manager().add_property_input({
         datetimepicker_options: {
             // moment.js formatting
             format: 'YYYY-MM-DD HH:mm:ss',
-            defaultDate: '{{p.inputVal}}'
+            defaultDate: '{{inputVal}}'
         }
     }
 });

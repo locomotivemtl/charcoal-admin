@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Script\User;
+namespace Charcoal\Admin\Script\User\AclRole;
 
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
@@ -8,7 +8,7 @@ use \Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
-use \Charcoal\Admin\User;
+use \Charcoal\Admin\User\AclRole;
 
 /**
  * Create user script.
@@ -28,28 +28,24 @@ class CreateScript extends AdminScript
         $climate = $this->climate();
 
         $climate->underline()->out(
-            'Create a new Charcoal Administrator'
+            'Create a new Acl Role'
         );
 
-        $user = $this->modelFactory()->create('charcoal/admin/user');
-        $properties = $user->properties();
+        $role = $this->modelFactory()->create('charcoal/admin/user/acl-role');
+        $properties = $role->properties();
 
         $shown_props = [
-            'username',
-            'email',
-            'roles',
-            'password'
+            'ident',
+            'parent',
+            'allowed',
+            'denied',
+            'superuser'
         ];
 
         $vals = [];
         foreach ($properties as $prop) {
             if (!in_array($prop->ident(), $shown_props)) {
                 continue;
-            }
-            if ($prop->type() == 'password') {
-                 $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
-            } else {
-                $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
             }
             $input = $this->propertyToInput($prop);
             $v = $input->prompt();
@@ -59,14 +55,11 @@ class CreateScript extends AdminScript
             $vals[$prop->ident()] = $v;
         }
 
-        $user->resetPassword($vals['password']);
-        unset($vals['password']);
+        $role->setFlatData($vals);
 
-        $user->setFlatData($vals);
-
-        $ret = $user->save();
+        $ret = $role->save();
         if ($ret) {
-            $climate->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
+            $climate->green()->out("\n".sprintf('Success! Role "%s" created.', $ret));
         } else {
             $climate->red()->out("\nError. Object could not be created.");
         }

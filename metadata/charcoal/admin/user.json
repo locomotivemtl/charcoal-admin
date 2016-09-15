@@ -14,15 +14,15 @@
             "allow_empty": false,
             "allow_null": false
         },
+        "roles": {
+            "type": "string",
+            "multiple": true
+        },
         "password": {
             "type": "password",
             "required": true,
             "allow_null": false,
             "allow_empty": false
-        },
-        "roles": {
-            "type": "string",
-            "multiple": true
         },
         "last_login_date": {
             "type": "date-time"

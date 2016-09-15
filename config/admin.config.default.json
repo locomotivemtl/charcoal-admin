@@ -82,6 +82,9 @@
             "user/create": {
                 "ident": "charcoal/admin/script/user/create"
             },
+            "user/role/create": {
+                "ident": "charcoal/admin/script/user/acl-role/create"
+            },
             "user/reset-password": {
                 "ident": "charcoal/admin/script/user/reset-password"
             }

@@ -37,6 +37,7 @@ class CreateScript extends AdminScript
         $shown_props = [
             'username',
             'email',
+            'roles',
             'password'
         ];
 

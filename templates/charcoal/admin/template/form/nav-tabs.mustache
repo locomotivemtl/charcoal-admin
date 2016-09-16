@@ -7,7 +7,12 @@
 --}}
 <ul class="nav nav-tabs{{^ showHeader }} bootstrap-dialog-title{{/ showHeader }}" role="tablist">
 {{# groups }}
-    <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation"><a href="#form_group_{{ widgetId }}" aria-controls="form_group_{{ widgetId }}" class="js-group-tabs"
-     role="tab" data-toggle="tab">{{ title }}</a></li>
+    <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation">
+        <a href="#form_group_{{ widgetId }}" aria-controls="form_group_{{ widgetId }}" class="js-group-tabs"
+     role="tab" data-toggle="tab">
+            {{# icon }}<i class="fa fa-{{.}}" aria-hidden="true"></i>{{/ icon }}
+            <div class="{{^showTitle}}-hide-tab-title{{/ showTitle}}"><span>{{ title }}</span></div>
+        </a>
+    </li>
 {{/ groups }}
 </ul>

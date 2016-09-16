@@ -5,3 +5,51 @@
 .nav-tabs {
     margin-bottom: rem(40px);
 }
+
+.nav-tabs > li a {
+    position: relative;
+    i {
+        display: inline-block;
+        vertical-align: center;
+
+        ~ div {
+            padding-left: rem(10px);
+        }
+    }
+    div {
+        display: inline-block;
+    }
+}
+
+.nav-tabs > li:not(.active) a {
+    .-hide-tab-title {
+        display: inline-block;
+        pointer-events: none;
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        opacity: 0;
+        transform: translateY(-50%);
+        transition: opacity 0.1s ease-out, left 0.15s ease-out;
+        white-space: nowrap;
+        background-color: #eeeeee;
+        border: #eee 1px solid;
+        border-bottom-color: #ddd;
+        height: 100%;
+        box-sizing: content-box;
+        z-index: 50;
+
+        @include vertical-center;
+
+        > span {
+            left: -15px;
+            position: relative;
+        }
+    }
+    &:hover {
+        .-hide-tab-title {
+            left: 100%;
+            opacity: 1;
+        }
+    }
+}

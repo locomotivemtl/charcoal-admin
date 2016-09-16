@@ -15,31 +15,31 @@
     {{/ showHeader }}
 
     <table class="table table-bordered table-hover">
-    <thead>
-        <th class="text-center">#<span class="sr-only">&nbsp;Révision</span></th>
-        <th>Date</th>
-        <th>Auteur</th>
-        <th>Changements</th>
-        <th>Options</th>
-    </thead>
-    <tbody>
+        <thead>
+            <th class="text-center">#<span class="sr-only">&nbsp;Révision</span></th>
+            <th>Date</th>
+            <th>Auteur</th>
+            <th>Changements</th>
+            <th>Options</th>
+        </thead>
+        <tbody>
         {{# objectRevisions }}
-        <tr class="js-table-row">
-            <td class="text-center">{{ revNum }}</td>
-            <td>{{ revTsDisplay }}</td>
-            <td>{{ revUser }}</td>
-            <td>{{& changedProperties }}{{# droppedProperties }}<br><strong>Discontinué</strong>: {{& . }}{{/ droppedProperties }}</td>
-            <td>{{# allowRevert }}
-                <a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">Retourner à #{{ revNum }}</a>
-            {{/ allowRevert }}</td>
-        </tr>
+            <tr class="js-table-row">
+                <td class="text-center">{{ revNum }}</td>
+                <td>{{ revTsDisplay }}</td>
+                <td>{{ revUser }}</td>
+                <td>{{& changedProperties }}{{# droppedProperties }}<br><strong>Discontinué</strong>: {{& . }}{{/ droppedProperties }}</td>
+                <td>{{# allowRevert }}
+                    <a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">Retourner à #{{ revNum }}</a>
+                {{/ allowRevert }}</td>
+            </tr>
+            {{/ objectRevisions }}
+            {{^ objectRevisions }}
+            <tr class="js-table-row">
+                <td colspan="5" class="text-center">Aucun historique de changements</td>
+            </tr>
         {{/ objectRevisions }}
-        {{^ objectRevisions }}
-        <tr class="js-table-row">
-            <td colspan="5" class="text-center">Aucun historique de changements</td>
-        </tr>
-        {{/ objectRevisions }}
-    </tbody>
+        </tbody>
     </table>
 
     {{> charcoal/admin/template/inc.notes }}

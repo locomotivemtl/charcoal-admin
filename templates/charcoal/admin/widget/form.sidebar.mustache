@@ -43,7 +43,10 @@
                 {{/actions}}
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-info btn-lg btn-block">{{# _t }}Sauvegarder{{/ _t }}</button>
+                    <button type="submit" class="btn btn-info btn-lg btn-block">
+                        <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
+                        <span class="btn-label">{{# _t }}Sauvegarder{{/ _t }}</span>
+                    </button>
                 </div>
             </div>
 
@@ -55,14 +58,16 @@
                 {{#isObjDeletable}}
                 <div class="c-panel_footer_item -red">
                     <span role="button" class="js-obj-delete">
-                       <span class="fa fa-trash-o"></span> Effacer
+                       <span class="fa fa-trash-o"></span>
+                       <span class="btn-label">Effacer</span>
                     </span>
                 </div>
                 {{/isObjDeletable}}
                 {{#isObjResettable}}
                 <div class="c-panel_footer_item -blue">
                     <span role="button" class="js-reset-form">
-                        <span class="fa fa-refresh"></span> Réinitialiser
+                        <span class="fa fa-refresh"></span>
+                        <span class="btn-label">Réinitialiser</span>
                     </span>
                 </div>
                 {{/isObjResettable}}

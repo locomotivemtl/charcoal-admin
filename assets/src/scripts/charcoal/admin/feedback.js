@@ -23,6 +23,11 @@ Charcoal.Admin.Feedback = function ()
             title: 'Succès!',
             type: BootstrapDialog.TYPE_SUCCESS
         },
+        info: {
+            title: 'Information!',
+            type: BootstrapDialog.TYPE_INFO,
+            alias: ['notice']
+        },
         warning: {
             title: 'Attention!',
             type: BootstrapDialog.TYPE_WARNING
@@ -32,6 +37,11 @@ Charcoal.Admin.Feedback = function ()
             type: BootstrapDialog.TYPE_DANGER
         }
     };
+
+    this.context_aliases = {
+        notice: 'info'
+    };
+
     return this;
 };
 
@@ -116,6 +126,20 @@ Charcoal.Admin.Feedback.prototype.add_context = function (context) {
 };
 
 /**
+* A an alias to an existing context
+* @return this
+*/
+Charcoal.Admin.Feedback.prototype.add_context_alias = function (alias, context) {
+    if (!alias || !context || !this.context_definitions[ context ]) {
+        return this;
+    }
+
+    this.context_aliases[ alias ] = context;
+
+    return this;
+};
+
+/**
 * Actions in the dialog box
 */
 Charcoal.Admin.Feedback.prototype.add_action = function (opts)
@@ -150,6 +174,10 @@ Charcoal.Admin.Feedback.prototype.call = function ()
     }
 
     for (var level in ret) {
+        if (typeof this.context_aliases[ level ] === 'string') {
+            level = this.context_aliases[ level ];
+        }
+
         if (typeof this.context_definitions[ level ] === 'undefined') {
             continue;
         }
@@ -162,7 +190,7 @@ Charcoal.Admin.Feedback.prototype.call = function ()
             for (; k < count; k++) {
                 var action = this.actions[ k ];
                 buttons.push({
-                    label: action.label,
+                    label:  action.label,
                     action: action.callback
                 });
             }
@@ -170,7 +198,7 @@ Charcoal.Admin.Feedback.prototype.call = function ()
 
         BootstrapDialog.show({
             title:   this.context_definitions[ level ].title,
-            message: ret[ level ].join('<br/>'),
+            message: '<p>' + ret[ level ].join('</p><p>') + '</p>',
             type:    this.context_definitions[ level ].type,
             buttons: buttons
         });

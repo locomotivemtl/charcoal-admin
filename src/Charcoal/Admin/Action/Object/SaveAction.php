@@ -2,25 +2,17 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-// Dependencies from `PHP`
 use \Exception;
 
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-use \Pimple\Container;
-
-// From `charcoal-base`
-use \Charcoal\User\Authenticator;
-
-// Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait;
+// From `charcoal-core`
+use \Charcoal\Model\ModelValidator;
 
 /**
- * Admin Save Action: Save an object in its Storage.
+ * Admin Create Action: Create an object in its Storage.
  *
  * ## Required Parameters
  * - `obj_type`
@@ -34,19 +26,12 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
  * - `200` in case of a successful login
  * - `404` if any error occurs
  */
-class SaveAction extends AdminAction implements ObjectContainerInterface
+class SaveAction extends AbstractSaveAction
 {
-    use ObjectContainerTrait;
-
-    /**
-     * @var Authenticator $authenticator
-     */
-    private $authenticator;
-
     /**
      * @var array $saveData
      */
-    private $saveData = [];
+    protected $saveData = [];
 
     /**
      * @param array|\ArrayAccess $data The action data.
@@ -60,26 +45,6 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         $this->setSaveData($data);
 
         return $this;
-    }
-
-    /**
-     * @param Container $container A DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setAuthenticator($container['admin/authenticator']);
-    }
-
-    /**
-     * @param Authenticator $authenticator The authenticator service.
-     * @return void
-     */
-    private function setAuthenticator(Authenticator $authenticator)
-    {
-        $this->authenticator = $authenticator;
     }
 
     /**
@@ -101,16 +66,6 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param ModelInterface|null $obj The object.
-     * @return SaveAction Chainable
-     */
-    public function setObj($obj)
-    {
-        $this->obj = $obj;
-        return $this;
-    }
-
-    /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -120,24 +75,32 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
         try {
             $this->setData($request->getParams());
 
-            $authorIdent = $this->authorIdent();
-
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
 
             $saveData = $this->saveData();
-            $saveData['created_by'] = $authorIdent;
-            $saveData['last_modifided_by'] = $authorIdent;
 
             $obj->setFlatData($this->saveData());
+
             $valid = $obj->validate();
-            $valid = true;
+
             if (!$valid) {
-                $validation = $obj->validation();
-                // @todo: Validation info to feedback
                 $this->setSuccess(false);
-                $this->addFeedback('error', 'Failed to save object: validation error(s).');
+                $this->addFeedbackFromValidation($obj);
+                if (!$this->hasFeedbacks()) {
+                    $this->addFeedback('error', 'Failed to create object: validation error(s).');
+                }
+
                 return $response->withStatus(404);
+            }
+
+            $authorIdent = $this->authorIdent();
+            if (!$obj->lastModifiedBy()) {
+                $obj->setLastModifiedBy($authorIdent);
+            }
+
+            if (!$obj->createdBy()) {
+                $obj->setCreatedBy($authorIdent);
             }
 
             $ret = $obj->save();
@@ -145,40 +108,24 @@ class SaveAction extends AdminAction implements ObjectContainerInterface
             if ($ret) {
                 $this->setObj($obj);
                 $this->setSuccess(true);
-                $this->addFeedback('success', 'Object saved successfully');
+                $this->addFeedback('success', 'Object was successfully created');
+                $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);
+
                 return $response;
             } else {
                 $this->setObj(null);
                 $this->setSuccess(false);
+                $this->addFeedback('error', 'Could not create objet. Unknown error');
+                $this->addFeedbackFromValidation($obj);
+
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
             $this->setObj(null);
             $this->setSuccess(false);
             $this->addFeedback('error', $e->getMessage());
+
             return $response->withStatus(404);
         }
-    }
-
-    /**
-     * @return string
-     */
-    private function authorIdent()
-    {
-        $author = $this->authenticator->authenticate();
-        return (string)$author->id();
-    }
-
-    /**
-     * @return array
-     */
-    public function results()
-    {
-        return [
-            'success'   => $this->success(),
-            'obj_id'    => $this->obj()->id(),
-            'obj'       => $this->obj(),
-            'feedbacks' => $this->feedbacks()
-        ];
     }
 }

@@ -1,23 +1,27 @@
 /**
-* Form widget that manages data sending
-* charcoal/admin/widget/form
-*
-* Require:
-* - jQuery
-* - Boostrap3-Dialog
-*
-* @param  {Object}  opts Options for widget
-*/
+ * Form widget that manages data sending
+ * charcoal/admin/widget/form
+ *
+ * Require:
+ * - jQuery
+ * - Boostrap3-Dialog
+ *
+ * @param  {Object}  opts Options for widget
+ */
 
 Charcoal.Admin.Widget_Form = function (opts)
 {
     this.widget_type = 'charcoal/admin/widget/form';
 
     // Widget_Form properties
-    this.widget_id = null;
-    this.obj_type = null;
-    this.obj_id = null;
-    this.form_selector = null;
+    this.widget_id         = null;
+    this.obj_type          = null;
+    this.obj_id            = null;
+    this.form_selector     = null;
+    this.form_working      = false;
+    this.suppress_feedback = false;
+    this.is_new_object     = false;
+    this.xhr               = null;
 
     this.set_properties(opts).bind_events();
 };
@@ -80,93 +84,185 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
 
 };
 
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @param  Element form - The submitted form.
+ * @return self
+ */
 Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
 {
+    if (this.form_working) {
+        return;
+    }
+
+    this.form_working = true;
+
+    this.is_new_object = !this.obj_id;
+
+    var $trigger, $form, form_data;
+
+    $form    = $(form);
+    $trigger = $form.find('[type="submit"]');
+
+    if ($trigger.prop('disabled')) {
+        return false;
+    }
+
+    this.disable_form($form, $trigger);
+
+    form_data = new FormData(form);
+
     // Let the component manager prepare the submit first
     // Calls the save function on each properties
     Charcoal.Admin.manager().prepare_submit();
 
-    var that = this,
-        form_data = new FormData(form),
-        url,
-        is_new_object;
-
-    if (that.obj_id) {
-        url = Charcoal.Admin.admin_url() + 'object/update';
-        is_new_object = false;
-    } else {
-        url = Charcoal.Admin.admin_url() + 'object/save';
-        is_new_object = true;
-    }
-
-    $.ajax({
-        url: url,
-        type: 'POST',
+    this.xhr = $.ajax({
+        type:        'POST',            // ($form.prop('method') || 'POST')
+        url:         this.request_url(),  // ($form.data('action') || this.request_url())
+        data:        form_data,
+        dataType:    'json',
         processData: false,
         contentType: false,
-        dataType: 'json',
-        data: form_data,
-        success: function (response) {
-            if (response.success) {
-
-                // Default, add feedback to list
-                Charcoal.Admin.feedback().add_data(response.feedbacks);
-
-                if (response.next_url) {
-                    // @todo "dynamise" the label
-                    Charcoal.Admin.feedback().add_action({
-                        label: 'Continuer',
-                        callback: function () {
-                            window.location.href =
-                                Charcoal.Admin.admin_url() +
-                                response.next_url;
-                        }
-                    });
-                }
-
-                if (!is_new_object) {
-                    Charcoal.Admin.feedback().call();
-                } else {
-                    if (response.next_url) {
-                        window.location.href =
-                            Charcoal.Admin.admin_url() +
-                            response.next_url;
-                    } else {
-                        window.location.href =
-                            Charcoal.Admin.admin_url() +
-                            'object/edit?obj_type=' + that.obj_type +
-                            '&obj_id=' + response.obj_id;
-                    }
-                }
-            } else {
-                Charcoal.Admin.feedback().add_data(
-                    [{
-                        level: 'An error occurred and the object could not be saved.',
-                        msg: 'error'
-                    }]
-                );
-                Charcoal.Admin.feedback().call();
-            }
-        },
-        error: function () {
-            Charcoal.Admin.feedback().add_data(
-                [{
-                    level: 'An error occurred and the object could not be saved.',
-                    msg: 'error'
-                }]
-            );
-            Charcoal.Admin.feedback().call();
-        }
     });
+
+    this.xhr
+        .then($.proxy(this.request_done, this, $form, $trigger))
+        .done($.proxy(this.request_success, this, $form, $trigger))
+        .fail($.proxy(this.request_failed, this, $form, $trigger))
+        .always($.proxy(this.request_complete, this, $form, $trigger));
+};
+
+Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, response, textStatus, jqXHR)
+{
+    if (!response || !response.success) {
+        if (response.feedbacks) {
+            return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+        } else {
+            return $.Deferred().reject(jqXHR, textStatus, 'An unknown error occurred.');
+        }
+    }
+
+    return $.Deferred().resolve(response, textStatus, jqXHR);
+};
+
+Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger, response/* textStatus, jqXHR */)
+{
+    if (response.feedbacks) {
+        Charcoal.Admin.feedback().add_data(response.feedbacks);
+    }
+
+    if (response.next_url) {
+        // @todo "dynamise" the label
+        Charcoal.Admin.feedback().add_action({
+            label:    'Continuer',
+            callback: function () {
+                window.location.href =
+                    Charcoal.Admin.admin_url() +
+                    response.next_url;
+            }
+        });
+    }
+
+    if (this.is_new_object) {
+        this.suppress_feedback = true;
+
+        if (response.next_url) {
+            window.location.href =
+                Charcoal.Admin.admin_url() +
+                response.next_url;
+        } else {
+            window.location.href =
+                Charcoal.Admin.admin_url() +
+                'object/edit?obj_type=' + this.obj_type +
+                '&obj_id=' + response.obj_id;
+        }
+    }
+};
+
+Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger, jqXHR, textStatus, errorThrown)
+{
+    if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
+        Charcoal.Admin.feedback().add_data(jqXHR.responseJSON.feedbacks);
+    } else {
+        var message = (this.is_new_object ? 'The object could not be saved: ' : 'The object could not be updated: ');
+        var error   = errorThrown || 'Unknown Error';
+
+        Charcoal.Admin.feedback().add_data([{
+            level: message + error,
+            msg:   'error'
+        }]);
+    }
+};
+
+Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigger/*, .... */)
+{
+    if (!this.suppress_feedback) {
+        Charcoal.Admin.feedback().call();
+        this.enable_form($form, $trigger);
+    }
+
+    this.form_working = this.is_new_object = this.suppress_feedback = false;
 };
 
 /**
-* Handle the "delete" button / action.
-*/
-Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
+ * @param  Element $form    The submitted form.
+ * @param  Element $trigger The form's submit button.
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.disable_form = function ($form, $trigger)
+{
+    if ($form) {
+        $form.prop('disabled', true);
+    }
+
+    if ($trigger) {
+        $trigger.prop('disabled', true)
+            .children('.glyphicon').removeClass('hidden')
+            .next('.btn-label').addClass('sr-only');
+    }
+
+    return this;
+};
+
+/**
+ * @param  Element $form    The submitted form.
+ * @param  Element $trigger The form's submit button.
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.enable_form = function ($form, $trigger)
+{
+    if ($form) {
+        $form.prop('disabled', false);
+    }
+
+    if ($trigger) {
+        $trigger.prop('disabled', false)
+            .children('.glyphicon').addClass('hidden')
+            .next('.btn-label').removeClass('sr-only');
+    }
+
+    return this;
+};
+
+/**
+ * @return string The requested URL for processing the form.
+ */
+Charcoal.Admin.Widget_Form.prototype.request_url = function ()
+{
+    if (this.is_new_object) {
+        return Charcoal.Admin.admin_url() + 'object/save';
+    } else {
+        return Charcoal.Admin.admin_url() + 'object/update';
+    }
+};
+
+/**
+ * Handle the "delete" button / action.
+ */
+Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */)
 {
     var that = this;
-    console.debug(form);
+    //console.debug(form);
     BootstrapDialog.confirm({
         title: 'Confirmer la suppression',
         type: BootstrapDialog.TYPE_DANGER,
@@ -186,7 +282,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
                     data: data,
                     dataType: 'json'
                 }).done(function (response) {
-                    console.debug(response);
+                    //console.debug(response);
                     if (response.success) {
                         var url = Charcoal.Admin.admin_url() + 'object/collection?obj_type=' + that.obj_type;
                         window.location.href = url;
@@ -197,7 +293,6 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (form)
             }
         }
     });
-
 };
 
 /**

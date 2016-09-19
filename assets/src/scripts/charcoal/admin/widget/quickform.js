@@ -7,9 +7,13 @@
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts)
 {
-    this.widget_type   = 'charcoal/admin/widget/quick-form';
-    this.save_callback = opts.save_callback || '';
-    this.obj_id        = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
+    this.widget_type       = 'charcoal/admin/widget/quick-form';
+    this.save_callback     = opts.save_callback || '';
+    this.form_working      = false;
+    this.suppress_feedback = false;
+    this.is_new_object     = false;
+    this.xhr               = null;
+    this.obj_id            = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 
     return this;
 };
@@ -33,72 +37,79 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function ()
 
 Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
 {
+    if (this.form_working) {
+        return;
+    }
+
+    this.form_working = true;
+
+    this.is_new_object = !this.obj_id;
+    console.log('Is New Object?', this.is_new_object, this.obj_id);
+
+    var $trigger, $form, form_data;
+
+    $form    = $(form);
+    $trigger = $form.find('[type="submit"]');
+
+    if ($trigger.prop('disabled')) {
+        return false;
+    }
+
+    this.disable_form($form, $trigger);
+
+    form_data = new FormData(form);
+
     // Let the component manager prepare the submit first
     // Calls the save function on each properties
     Charcoal.Admin.manager().prepare_submit();
 
-    var that = this,
-        form_data = new FormData(form),
-        url,
-        is_new_object;
-
-    if (that.obj_id) {
-        url = Charcoal.Admin.admin_url() + 'object/update';
-        is_new_object = false;
-    } else {
-        url = Charcoal.Admin.admin_url() + 'object/save';
-        is_new_object = true;
-    }
-
-    $.ajax({
-        url: url,
-        type: 'POST',
+    this.xhr = $.ajax({
+        type:        'POST',
+        url:         this.request_url(),
+        data:        form_data,
+        dataType:    'json',
         processData: false,
         contentType: false,
-        dataType: 'json',
-        data: form_data,
-        success: function (response) {
-            if (response.success) {
-
-                // Default, add feedback to list
-                Charcoal.Admin.feedback().add_data(response.feedbacks);
-
-                if (response.next_url) {
-                    // @todo "dynamise" the label
-                    Charcoal.Admin.feedback().add_action({
-                        label: 'Continuer',
-                        callback: function () {
-                            window.location.href =
-                                Charcoal.Admin.admin_url() +
-                                response.next_url;
-                        }
-                    });
-                }
-
-                if (typeof that.save_callback === 'function') {
-                    that.save_callback(response);
-                }
-
-                // Charcoal.Admin.feedback().call();
-
-            } else {
-                Charcoal.Admin.feedback().add_data(
-                    [{
-                        level: 'An error occurred and the object could not be saved.',
-                        msg: 'error'
-                    }]
-                );
-                Charcoal.Admin.feedback().call();
-            }
-        },
-        error: function () {
-            Charcoal.Admin.feedback().add_data(
-                [{
-                    level: 'An error occurred and the object could not be saved.',
-                    msg: 'error'
-                }]
-            );
-            Charcoal.Admin.feedback().call();
-        }
     });
+
+    this.xhr
+        .then($.proxy(this.request_done, this, $form, $trigger))
+        .done($.proxy(this.request_success, this, $form, $trigger))
+        .fail($.proxy(this.request_failed, this, $form, $trigger))
+        .always($.proxy(this.request_complete, this, $form, $trigger));
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.disable_form = Charcoal.Admin.Widget_Form.prototype.disable_form;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.enable_form = Charcoal.Admin.Widget_Form.prototype.enable_form;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.request_url = Charcoal.Admin.Widget_Form.prototype.request_url;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.request_done = Charcoal.Admin.Widget_Form.prototype.request_done;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widget_Form.prototype.request_failed;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */)
+{
+    if (response.feedbacks) {
+        Charcoal.Admin.feedback().add_data(response.feedbacks);
+    }
+
+    if (response.next_url) {
+        // @todo "dynamise" the label
+        Charcoal.Admin.feedback().add_action({
+            label:    'Continuer',
+            callback: function () {
+                window.location.href =
+                    Charcoal.Admin.admin_url() +
+                    response.next_url;
+            }
+        });
+    }
+
+    if (typeof this.save_callback === 'function') {
+        this.save_callback(response);
+    }
 };

@@ -176,6 +176,58 @@ Charcoal.Admin = (function ()
         return this.cachePool[key];
     };
 
+    /**
+     * Resolves the context of parameters for the "complete" callback option.
+     *
+     * (`jqXHR.always(function( data|jqXHR, textStatus, jqXHR|errorThrown ) {})`).
+     *
+     * @param  {...} Successful or failed argument list.
+     * @return {mixed[]} Standardized argument list.
+     */
+    Admin.parseJqXhrArgs = function ()
+    {
+        var args = {
+            failed:      true,
+            jqXHR:       null,
+            textStatus:  '',
+            errorThrown: '',
+            response:    null
+        };
+
+        // If the third argument is a string, the request failed
+        // and the value is an error message: errorThrown;
+        // otherwise it's probably the XML HTTP Request Object.
+        if (arguments[2] && $.type(arguments[2]) === 'string') {
+            args.jqXHR       = arguments[0] || null;
+            args.textStatus  = arguments[1] || null;
+            args.errorThrown = arguments[2] || null;
+            args.response    = arguments[3] || args.jqXHR.responseJSON || null;
+
+            if ($.type(args.response) === 'object') {
+                args.failed = !args.response.success;
+            } else {
+                args.failed = true;
+            }
+        } else {
+            args.response    = arguments[0] || null;
+            args.textStatus  = arguments[1] || null;
+            args.jqXHR       = arguments[2] || null;
+            args.errorThrown = null;
+
+            if (args.response === null) {
+                args.response = args.jqXHR.responseJSON;
+            }
+
+            if ($.type(args.response) === 'object') {
+                args.failed = !args.response.success;
+            } else {
+                args.failed = false;
+            }
+        }
+
+        return args;
+    };
+
     return Admin;
 
 }());

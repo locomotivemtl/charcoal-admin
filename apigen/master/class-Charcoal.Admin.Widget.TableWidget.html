@@ -283,7 +283,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.TableWidget.html#23-591" title="Go to source code">Charcoal/Admin/Widget/TableWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.TableWidget.html#23-621" title="Go to source code">Charcoal/Admin/Widget/TableWidget.php</a>
 		<br>
 	</div>
 
@@ -417,7 +417,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#94-108" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#94-105" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
 
 		<div class="description short">
 			
@@ -444,6 +444,53 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="resolveDataSourceFilter" id="_resolveDataSourceFilter">
+
+		<td class="attributes"><code>
+			 protected 
+
+			callable|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_resolveDataSourceFilter">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#107-138" title="Go to source code">resolveDataSourceFilter</a>( <span>mixed <var>$toResolve</var></span> )</code>
+
+		<div class="description short">
+			<p>Retrieve the default data source filters (when setting data on an entity).</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default data source filters (when setting data on an entity).</p>
+
+<p>Note: Adapted from \Slim\CallableResolver.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$toResolve</var></dt>
+					<dd>A callable used when merging data.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					callable|null
+				</div>
+
+
+				<h4>Link</h4>
+				<div class="list">
+						<a href="https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php">https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php</a><br>
+				</div>
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminWidget.html#_resolveDataSourceFilter">Charcoal\Admin\AdminWidget::resolveDataSourceFilter()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="dataFromRequest" id="_dataFromRequest">
 
 		<td class="attributes"><code>
@@ -456,7 +503,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dataFromRequest">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#110-118" title="Go to source code">dataFromRequest</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#140-148" title="Go to source code">dataFromRequest</a>( )</code>
 
 		<div class="description short">
 			<p>Fetch metadata from the current request.</p>
@@ -490,7 +537,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_acceptedRequestData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#120-128" title="Go to source code">acceptedRequestData</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#150-158" title="Go to source code">acceptedRequestData</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the accepted metadata from the current request.</p>
@@ -524,7 +571,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dataFromObject">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#130-156" title="Go to source code">dataFromObject</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#160-186" title="Go to source code">dataFromObject</a>( )</code>
 
 		<div class="description short">
 			<p>Fetch metadata from the current object type.</p>
@@ -558,7 +605,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_properties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#158-189" title="Go to source code">properties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#188-219" title="Go to source code">properties</a>( )</code>
 
 		<div class="description short">
 			<p>Sets and returns properties
@@ -594,7 +641,7 @@ Manages which to display, and their order, as set in object metadata</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSortable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#191-199" title="Go to source code">setSortable</a>( <span>boolean <var>$sortable</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#221-229" title="Go to source code">setSortable</a>( <span>boolean <var>$sortable</var></span> )</code>
 
 		<div class="description short">
 			
@@ -633,7 +680,7 @@ Manages which to display, and their order, as set in object metadata</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_sortable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#201-207" title="Go to source code">sortable</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#231-237" title="Go to source code">sortable</a>( )</code>
 
 		<div class="description short">
 			
@@ -667,7 +714,7 @@ Manages which to display, and their order, as set in object metadata</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertiesOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#209-227" title="Go to source code">propertiesOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#239-257" title="Go to source code">propertiesOptions</a>( )</code>
 
 		<div class="description short">
 			<p>Always return an array
@@ -703,7 +750,7 @@ Theses are the properties options used in the list display</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_viewOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#229-247" title="Go to source code">viewOptions</a>( <span>string <var>$ident</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#259-277" title="Go to source code">viewOptions</a>( <span>string <var>$ident</var></span> )</code>
 
 		<div class="description short">
 			<p>Get view options for perticular property</p>
@@ -742,7 +789,7 @@ Theses are the properties options used in the list display</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_collectionProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#249-280" title="Go to source code">collectionProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#279-310" title="Go to source code">collectionProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Properties to display in collection template, and their order, as set in object metadata</p>
@@ -776,7 +823,7 @@ Theses are the properties options used in the list display</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parsePropertyCell">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#282-309" title="Go to source code">parsePropertyCell</a>( <span>Charcoal\Model\ModelInterface <var>$object</var></span>, <span>Charcoal\Property\PropertyInterface <var>$property</var></span>, <span>string <var>$propertyValue</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#312-339" title="Go to source code">parsePropertyCell</a>( <span>Charcoal\Model\ModelInterface <var>$object</var></span>, <span>Charcoal\Property\PropertyInterface <var>$property</var></span>, <span>string <var>$propertyValue</var></span> )</code>
 
 		<div class="description short">
 			<p>Filter the property before its assigned to the object row.</p>
@@ -821,7 +868,7 @@ Theses are the properties options used in the list display</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parsePropertyCellClasses">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#311-340" title="Go to source code">parsePropertyCellClasses</a>( <span>Charcoal\Property\PropertyInterface <var>$property</var></span>, <span>Charcoal\Model\ModelInterface <var>$object</var> = <span class="php-keyword1">null</span> </span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#341-370" title="Go to source code">parsePropertyCellClasses</a>( <span>Charcoal\Property\PropertyInterface <var>$property</var></span>, <span>Charcoal\Model\ModelInterface <var>$object</var> = <span class="php-keyword1">null</span> </span> )</code>
 
 		<div class="description short">
 			<p>Filter the table cell's CSS classes before the property is assigned
@@ -866,7 +913,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showObjectActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#342-348" title="Go to source code">showObjectActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#372-378" title="Go to source code">showObjectActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -900,7 +947,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objectActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#350-382" title="Go to source code">objectActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#380-412" title="Go to source code">objectActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -934,7 +981,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_defaultObjectActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#384-394" title="Go to source code">defaultObjectActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#414-424" title="Go to source code">defaultObjectActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -968,7 +1015,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasObjectActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#396-403" title="Go to source code">hasObjectActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#426-433" title="Go to source code">hasObjectActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -1002,7 +1049,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_listActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#405-414" title="Go to source code">listActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#435-444" title="Go to source code">listActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -1036,7 +1083,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setListActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#416-425" title="Go to source code">setListActions</a>( <span>array <var>$listActions</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#446-455" title="Go to source code">setListActions</a>( <span>array <var>$listActions</var></span> )</code>
 
 		<div class="description short">
 			<p>Set list actions</p>
@@ -1075,7 +1122,7 @@ to the object row.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_createListActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#427-483" title="Go to source code">createListActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#457-513" title="Go to source code">createListActions</a>( )</code>
 
 		<div class="description short">
 			<p>Default list actions behavior.
@@ -1119,7 +1166,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_paginationWidget">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#486-500" title="Go to source code">paginationWidget</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#516-530" title="Go to source code">paginationWidget</a>( )</code>
 
 		<div class="description short">
 			
@@ -1153,7 +1200,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_sublistActions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#502-517" title="Go to source code">sublistActions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#532-547" title="Go to source code">sublistActions</a>( )</code>
 
 		<div class="description short">
 			
@@ -1187,7 +1234,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showTableHeader">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#519-525" title="Go to source code">showTableHeader</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#549-555" title="Go to source code">showTableHeader</a>( )</code>
 
 		<div class="description short">
 			
@@ -1221,7 +1268,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showTableFooter">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#527-533" title="Go to source code">showTableFooter</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#557-563" title="Go to source code">showTableFooter</a>( )</code>
 
 		<div class="description short">
 			
@@ -1255,7 +1302,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objectEditUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#535-542" title="Go to source code">objectEditUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#565-572" title="Go to source code">objectEditUrl</a>( )</code>
 
 		<div class="description short">
 			<p>Generate URL for editing an object</p>
@@ -1289,7 +1336,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_objectCreateUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#544-570" title="Go to source code">objectCreateUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#574-600" title="Go to source code">objectCreateUrl</a>( )</code>
 
 		<div class="description short">
 			<p>Generate URL for creating an object</p>
@@ -1323,7 +1370,7 @@ setListActions setter.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isObjCreatable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#572-590" title="Go to source code">isObjCreatable</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.TableWidget.html#602-620" title="Go to source code">isObjCreatable</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the object can be created.</p>
@@ -1354,13 +1401,21 @@ inserted programmatically or via direct action on the database.</p>
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.AdminWidget.html#methods">Charcoal\Admin\AdminWidget</a></caption>
 	<tr>
 		<td><code>
+			<a href="class-Charcoal.Admin.AdminWidget.html#_acceptedDataSources">acceptedDataSources()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_actions">actions()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_addDataSources">addDataSources()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_adminUrl">adminUrl()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_baseUrl">baseUrl()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_dataSourceFilter">dataSourceFilter()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_dataSources">dataSources()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_defaultDataSourceFilters">defaultDataSourceFilters()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_defaultDataSources">defaultDataSources()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_ident">ident()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_label">label()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_mergeDataSources">mergeDataSources()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_modelFactory">modelFactory()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_priority">priority()</a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#_setDataSources">setDataSources()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_setLabel">setLabel()</a>, 
 			<a href="class-Charcoal.Admin.AdminWidget.html#_setModelFactory">setModelFactory()</a>, 
@@ -1444,6 +1499,15 @@ inserted programmatically or via direct action on the database.</p>
 
 
 
+	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-Charcoal.Admin.AdminWidget.html#constants">Charcoal\Admin\AdminWidget</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.AdminWidget.html#DATA_SOURCE_OBJECT"><b>DATA_SOURCE_OBJECT</b></a>, 
+			<a href="class-Charcoal.Admin.AdminWidget.html#DATA_SOURCE_REQUEST"><b>DATA_SOURCE_REQUEST</b></a>
+		</code></td>
+	</tr>
+	</table>
 
 
 

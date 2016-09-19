@@ -24,11 +24,14 @@ class ImageInput extends FileInput
         $value = $this->inputVal();
         $html  = '';
 
-        if ($value) {
-            if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
-                $tpl  = '<img src="{{ baseUrl }}{{ inputVal }}" style="max-width: 100%">';
-                $html = $this->view()->render($tpl, $this);
+        if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
+            if (parse_url($value, PHP_URL_SCHEME)) {
+                $tpl = '<img src="{{ inputVal }}" style="max-width: 100%">';
+            } else {
+                $tpl = '<img src="{{ baseUrl }}{{ inputVal }}" style="max-width: 100%">';
             }
+
+            $html = $this->view()->render($tpl, $this);
         }
 
         return $html;

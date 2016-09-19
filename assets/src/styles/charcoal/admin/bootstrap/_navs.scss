@@ -14,6 +14,7 @@
 
         ~ div {
             padding-left: rem(10px);
+            padding-right: rem(10px);
         }
     }
     div {
@@ -29,26 +30,40 @@
         top: 50%;
         position: absolute;
         opacity: 0;
-        transform: translateY(-50%);
-        transition: opacity 0.1s ease-out, left 0.15s ease-out;
+        transform: translateX(-50%);
+        transition: opacity 0.1s ease-out, top 0.15s ease-out;
         white-space: nowrap;
-        background-color: #eeeeee;
-        border: #eee 1px solid;
-        border-bottom-color: #ddd;
+        background-color: $blue;
         height: 100%;
         box-sizing: content-box;
         z-index: 50;
 
+        &:after {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 5px 5px 5px;
+            border-color: transparent transparent $blue transparent;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -100%);
+
+        }
+
         @include vertical-center;
 
         > span {
-            left: -15px;
+            //left: -15px;
+            color: $white;
             position: relative;
         }
     }
     &:hover {
         .-hide-tab-title {
-            left: 100%;
+            top: 100%;
             opacity: 1;
         }
     }

@@ -3732,6 +3732,7 @@ Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.protot
  */
 Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 {
+    console.log(this.element());
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
         var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
@@ -3825,6 +3826,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             var title = $(this).data('title') || 'Edit';
             that.create_attachment(type, title, 0, function (response) {
                 if (response.success) {
+                    response.obj.id = response.obj_id;
                     that.add(response.obj);
                     that.join(function () {
                         that.reload();
@@ -3877,7 +3879,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     that.create_attachment(gallery_attachment, gallery_title, 0, function (response) {
                         if (response.success) {
                             that.add_object_to_container({
-                                id: response.obj.id,
+                                id: response.obj_id,
                                 type: response.obj.type
                             },{
                                 id: gallery_id,

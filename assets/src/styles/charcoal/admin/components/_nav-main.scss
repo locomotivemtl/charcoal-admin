@@ -160,7 +160,7 @@
 
     .c-nav-main_link_icon + & {
         @media (min-width: $from-small) {
-            margin-bottom: rem(7px);
+            margin-top: rem(7px);
         }
     }
 }

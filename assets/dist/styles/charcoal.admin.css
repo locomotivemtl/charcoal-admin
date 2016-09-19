@@ -833,7 +833,7 @@ td {
 
 @media (min-width: 700px) {
   .c-nav-main_link_icon + .c-nav-main_link_text {
-    margin-bottom: 0.4375rem; } }
+    margin-top: 0.4375rem; } }
 
 @media (min-width: 1200px) {
   .c-nav-main-overlay {

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Action\Object\SaveAction</title>
+	<title>Class Charcoal\Admin\Action\Object\AbstractSaveAction</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -175,11 +175,11 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li><a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html">AbstractSaveAction</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html">AbstractSaveAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.Object.DeleteAction.html">DeleteAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.Object.ReorderAction.html">ReorderAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.Object.RevertRevisionAction.html">RevertRevisionAction</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Action.Object.SaveAction.html">SaveAction</a></li>
+				<li><a href="class-Charcoal.Admin.Action.Object.SaveAction.html">SaveAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.Object.UpdateAction.html">UpdateAction</a></li>
 			</ul>
 
@@ -219,32 +219,11 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class SaveAction</h1>
+	<h1>Class AbstractSaveAction</h1>
 
 
 	<div class="description">
-	<p>Admin Create Action: Create an object in its Storage.</p>
-
-<h2>Required Parameters</h2>
-
-<ul>
-<li><code>obj_type</code></li>
-</ul>
-
-<h2>Response</h2>
-
-<ul>
-<li><code>success</code> <em>boolean</em> True if the object was properly saved, false in case of any error.</li>
-<li><code>obj_id</code> <em>mixed</em> The created object ID, if any.</li>
-<li><code>obj</code> <em>array</em> The created object data.</li>
-</ul>
-
-<h2>HTTP Codes</h2>
-
-<ul>
-<li><code>200</code> in case of a successful login</li>
-<li><code>404</code> if any error occurs</li>
-</ul>
+	<p>Base Admin Save Action</p>
 	</div>
 
 	<dl class="tree">
@@ -262,8 +241,7 @@ Charcoal\App\Action\AbstractAction
 		</dd>
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html"><span>Charcoal\Admin\Action\Object\AbstractSaveAction</span></a>
-			
+<b><span>Charcoal\Admin\Action\Object\AbstractSaveAction</span></b>			
 			 implements 
 				<a href="class-Charcoal.Admin.Ui.ObjectContainerInterface.html"><span>Charcoal\Admin\Ui\ObjectContainerInterface</span></a>
 			
@@ -271,15 +249,14 @@ Charcoal\App\Action\AbstractAction
 					<a href="class-Charcoal.Admin.Ui.ObjectContainerTrait.html"><span>Charcoal\Admin\Ui\ObjectContainerTrait</span></a>
 			
 		</dd>
-		<dd style="padding-left:90px">
-			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Action\Object\SaveAction</span></b>			
-			
-			
-		</dd>
 	</dl>
 
 
+	<div>
+		<h4>Direct known subclasses</h4>
+			<a href="class-Charcoal.Admin.Action.Object.SaveAction.html">Charcoal\Admin\Action\Object\SaveAction</a>, 
+			<a href="class-Charcoal.Admin.Action.Object.UpdateAction.html">Charcoal\Admin\Action\Object\UpdateAction</a>
+	</div>
 
 
 
@@ -287,12 +264,12 @@ Charcoal\App\Action\AbstractAction
 
 
 	<div class="info">
-		
+		<b>Abstract</b><br>
 		
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a>\<a href="namespace-Charcoal.Admin.Action.Object.html">Object</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Object.SaveAction.html#14-131" title="Go to source code">Charcoal/Admin/Action/Object/SaveAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#25-126" title="Go to source code">Charcoal/Admin/Action/Object/AbstractSaveAction.php</a>
 		<br>
 	</div>
 
@@ -300,19 +277,19 @@ Charcoal\App\Action\AbstractAction
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="setData" id="_setData">
+	<tr data-order="setDependencies" id="_setDependencies">
 
 		<td class="attributes"><code>
 			 public 
 
-			LoginAction
+			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Object.SaveAction.html#36-48" title="Go to source code">setData</a>( <span>array|ArrayAccess <var>$data</var></span> )</code>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#37-46" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -324,13 +301,80 @@ Charcoal\App\Action\AbstractAction
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$data</var></dt>
-					<dd>The action data.</dd>
+					<dt><var>$container</var></dt>
+					<dd>A DI Container.</dd>
 				</dl></div>
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_setDependencies">Charcoal\Admin\AdminAction::setDependencies()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setAuthenticator" id="_setAuthenticator">
+
+		<td class="attributes"><code>
+			 protected 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setAuthenticator">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#48-55" title="Go to source code">setAuthenticator</a>( <span>Charcoal\User\Authenticator <var>$authenticator</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$authenticator</var></dt>
+					<dd>The authenticator service.</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="authorIdent" id="_authorIdent">
+
+		<td class="attributes"><code>
+			 protected 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_authorIdent">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#57-64" title="Go to source code">authorIdent</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
 
 				<h4>Returns</h4>
 				<div class="list">
-					LoginAction<br>Chainable
+					string
 				</div>
 
 
@@ -339,7 +383,7 @@ Charcoal\App\Action\AbstractAction
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="setSaveData" id="_setSaveData">
+	<tr data-order="setObj" id="_setObj">
 
 		<td class="attributes"><code>
 			 public 
@@ -350,8 +394,8 @@ Charcoal\App\Action\AbstractAction
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setSaveData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Object.SaveAction.html#50-58" title="Go to source code">setSaveData</a>( <span>array <var>$saveData</var></span> )</code>
+		<a class="anchor" href="#_setObj">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#66-74" title="Go to source code">setObj</a>( <span>Charcoal\Model\ModelInterface|null <var>$obj</var></span> )</code>
 
 		<div class="description short">
 			
@@ -363,8 +407,8 @@ Charcoal\App\Action\AbstractAction
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$saveData</var></dt>
-					<dd>The save data.</dd>
+					<dt><var>$obj</var></dt>
+					<dd>The object.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -378,7 +422,52 @@ Charcoal\App\Action\AbstractAction
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="saveData" id="_saveData">
+	<tr data-order="addFeedbackFromValidation" id="_addFeedbackFromValidation">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Action.Object.SaveAction.html">Charcoal\Admin\Action\Object\SaveAction</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addFeedbackFromValidation">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#76-112" title="Go to source code">addFeedbackFromValidation</a>( <span>Charcoal\Model\ModelInterface <var>$obj</var></span>, <span>string[]|string|null <var>$filters</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Merge the given object's validation results the response feedback.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Merge the given object's validation results the response feedback.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$obj</var></dt>
+					<dd>The validated object.</dd>
+					<dt><var>$filters</var></dt>
+					<dd>Filter the levels to merge.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Action.Object.SaveAction.html">Charcoal\Admin\Action\Object\SaveAction</a></code><br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the filters are invalid.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="results" id="_results">
 
 		<td class="attributes"><code>
 			 public 
@@ -389,8 +478,8 @@ Charcoal\App\Action\AbstractAction
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_saveData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Object.SaveAction.html#60-66" title="Go to source code">saveData</a>( )</code>
+		<a class="anchor" href="#_results">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#114-125" title="Go to source code">results</a>( )</code>
 
 		<div class="description short">
 			
@@ -408,66 +497,14 @@ Charcoal\App\Action\AbstractAction
 
 
 
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="run" id="_run">
-
-		<td class="attributes"><code>
-			 public 
-
-			Psr\Http\Message\ResponseInterface
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_run">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Object.SaveAction.html#68-130" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$request</var></dt>
-					<dd>A PSR-7 compatible Request instance.</dd>
-					<dt><var>$response</var></dt>
-					<dd>A PSR-7 compatible Response instance.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Psr\Http\Message\ResponseInterface
-				</div>
-
-
-
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminAction.html#_results">Charcoal\Admin\AdminAction::results()</a></code></div>
 
 		</div>
 		</div></td>
 	</tr>
 	</table>
 
-	<table class="summary inherited">
-	<caption>Methods inherited from <a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#methods">Charcoal\Admin\Action\Object\AbstractSaveAction</a></caption>
-	<tr>
-		<td><code>
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#_addFeedbackFromValidation">addFeedbackFromValidation()</a>, 
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#_authorIdent">authorIdent()</a>, 
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#_results">results()</a>, 
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#_setAuthenticator">setAuthenticator()</a>, 
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#_setDependencies">setDependencies()</a>, 
-			<a href="class-Charcoal.Admin.Action.Object.AbstractSaveAction.html#_setObj">setObj()</a>
-		</code></td>
-	</tr>
-	</table>
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.AdminAction.html#methods">Charcoal\Admin\AdminAction</a></caption>
 	<tr>
@@ -529,34 +566,6 @@ Charcoal\App\Action\AbstractAction
 
 
 
-	<table class="summary properties" id="properties">
-	<caption>Properties summary</caption>
-	<tr data-order="saveData" id="$saveData">
-		<td class="attributes"><code>
-			protected  
-			array
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Object.SaveAction.html#31-34" title="Go to source code"><var>$saveData</var></a>
-
-			<div class="description short">
-				<p>$saveData</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>$saveData</p>
-
-			</div>
-		</td>
-		<td class="value">
-			<div>
-				<a href="#$saveData" class="anchor">#</a>
-				<code>[]</code>
-			</div>
-		</td>
-	</tr>
-	</table>
 
 
 	<table class="summary used">

@@ -49,6 +49,10 @@
             "object/revert-revision": {
                 "ident": "charcoal/admin/action/object/revert-revision"
             },
+            "object/load": {
+                "methods": [ "GET", "POST" ],
+                "ident": "charcoal/admin/action/object/load"
+            },
             "widget/load": {
                 "ident": "charcoal/admin/action/widget/load"
             },

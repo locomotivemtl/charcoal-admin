@@ -1,0 +1,32 @@
+{{!--
+   Select Options Property Input
+   =============================
+
+   `charcoal/admin/property/input/select`
+--}}
+<input
+        type="text"
+        id="{{inputId}}"
+        name="{{inputName}}"
+        class="{{inputClass}}"
+        value="{{ inputVal }}"
+    {{#required}}required{{/required}}
+    {{#disabled}}disabled{{/disabled}}
+>
+
+{{#addJs}}
+
+    <script>
+        Charcoal.Admin.manager().add_property_input({
+            id      : '{{inputId}}',
+            type    : 'charcoal/admin/property/input/selectize/tags',
+            obj_type: '{{obj_type}}',
+            title   : '{{label}}',
+            data    : {
+                selectize_options: {{& selectizeOptionsAsJson }}
+            }
+        })
+        ;
+    </script>
+
+{{/addJs}}

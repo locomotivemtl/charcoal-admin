@@ -5,10 +5,10 @@
  * @param {Object} opts Widget options
  * @return {thisArg}
  */
-Charcoal.Admin.Widget_Quick_Form = function (opts)
-{
+Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.widget_type       = 'charcoal/admin/widget/quick-form';
     this.save_callback     = opts.save_callback || '';
+    this.cancel_callback   = opts.cancel_callback || '';
     this.form_working      = false;
     this.suppress_feedback = false;
     this.is_new_object     = false;
@@ -17,26 +17,32 @@ Charcoal.Admin.Widget_Quick_Form = function (opts)
 
     return this;
 };
-Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Quick_Form.prototype             = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
-Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
+Charcoal.Admin.Widget_Quick_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
 
-Charcoal.Admin.Widget_Quick_Form.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
     this.bind_events();
 };
 
-Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function ()
-{
+Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
     var that = this;
     $(document).on('submit', '#' + this.id(), function (e) {
         e.preventDefault();
         that.submit_form(this);
     });
+    $('#' + this.id()).on(
+        'click.charcoal.bs.dialog',
+        '[data-dismiss="dialog"]',
+        function (event) {
+            if ($.isFunction(that.cancel_callback)) {
+                that.cancel_callback(event);
+            }
+        }
+    );
 };
 
-Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
-{
+Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     if (this.form_working) {
         return;
     }
@@ -63,10 +69,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
     this.disable_form($form, $trigger);
 
     this.xhr = $.ajax({
-        type:        'POST',
-        url:         this.request_url(),
-        data:        form_data,
-        dataType:    'json',
+        type: 'POST',
+        url: this.request_url(),
+        data: form_data,
+        dataType: 'json',
         processData: false,
         contentType: false,
     });
@@ -90,8 +96,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widge
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
 
-Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */)
-{
+Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
     if (response.feedbacks) {
         Charcoal.Admin.feedback().add_data(response.feedbacks);
     }
@@ -99,7 +104,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
     if (response.next_url) {
         // @todo "dynamise" the label
         Charcoal.Admin.feedback().add_action({
-            label:    'Continuer',
+            label: 'Continuer',
             callback: function () {
                 window.location.href =
                     Charcoal.Admin.admin_url() +

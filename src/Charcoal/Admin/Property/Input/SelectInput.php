@@ -10,7 +10,7 @@ use \Charcoal\Admin\Property\AbstractSelectableInput;
  * Select Options Input Property
  *
  * > The HTML _select_ (`<select>`) element represents a control that presents a menu of options.
- * — {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select}
+ * — {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select/}
  */
 class SelectInput extends AbstractSelectableInput
 {
@@ -18,7 +18,7 @@ class SelectInput extends AbstractSelectableInput
      * The Bootstrap select picker settigns.
      *
      * @var  array
-     * @link http://silviomoreto.github.io/bootstrap-select/
+     * - {@link http://silviomoreto.github.io/bootstrap-select/@link http://silviomoreto.github.io/bootstrap-select/}
      */
     private $selectOptions;
 

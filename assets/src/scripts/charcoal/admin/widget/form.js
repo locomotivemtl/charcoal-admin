@@ -23,6 +23,8 @@ Charcoal.Admin.Widget_Form = function (opts)
     this.is_new_object     = false;
     this.xhr               = null;
 
+    Charcoal.Admin.lang = $('[data-lang]:not(.hidden)').data('lang');
+
     this.set_properties(opts).bind_events();
 };
 Charcoal.Admin.Widget_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -300,6 +302,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */)
 */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang)
 {
+    Charcoal.Admin.lang = lang;
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 

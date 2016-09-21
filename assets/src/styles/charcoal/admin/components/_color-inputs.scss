@@ -1,0 +1,69 @@
+// ==========================================================================
+// Color-inputs
+// ==========================================================================
+
+.radio-color {
+    padding: 10px 2px;
+
+    input[type='radio'] {
+        opacity:     0;
+        margin-left: .25em;
+        margin-top:  .25em;
+    }
+
+    input[type='radio']:checked + .o-color-swatch::after {
+        position:      absolute;
+        content:       '';
+        top:           -4px;
+        left:          -4px;
+        right:         -4px;
+        bottom:        -4px;
+        display:       block;
+        border:        #3498DB 2px solid;
+        border-radius: $input-border-radius;
+    }
+
+    .o-color-swatch {
+        cursor:        pointer;
+        width:         $input-height-base - ($padding-base-vertical * 2) - 2px;
+        height:        $input-height-base - ($padding-base-vertical * 2) - 2px;
+        border-radius: $input-border-radius;
+
+        .minicolors-swatch-color {
+            border-radius: $input-border-radius;
+            border:        1px solid $gray-light;
+        }
+    }
+
+    &.input-lg {
+
+        .o-color-swatch {
+            width:         $input-height-large - ($padding-large-vertical * 2) - 2px;
+            height:        $input-height-large - ($padding-large-vertical * 2) - 2px;
+            border-radius: $input-border-radius-large;
+            .minicolors-swatch-color {
+                border-radius: $input-border-radius-large;
+            }
+        }
+
+        input[type='radio']:checked + .o-color-swatch::after {
+            border-radius: $input-border-radius-large;
+        }
+    }
+
+    &.input-sm {
+
+        .o-color-swatch {
+            width:         $input-height-small - ($padding-small-vertical * 2) - 2px;
+            height:        $input-height-small - ($padding-small-vertical * 2) - 2px;
+            border-radius: $input-border-radius-small;
+            .minicolors-swatch-color {
+                border-radius: $input-border-radius-small;
+            }
+        }
+
+        input[type='radio']:checked + .o-color-swatch::after {
+            border-radius: $input-border-radius-small;
+        }
+    }
+}

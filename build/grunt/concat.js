@@ -7,13 +7,13 @@ module.exports = {
             'assets/src/scripts/charcoal/admin/charcoal.js',
             'assets/src/scripts/charcoal/admin/component_manager.js',
             'assets/src/scripts/charcoal/admin/feedback.js',
+            'assets/src/scripts/charcoal/admin/widget.js',
+            'assets/src/scripts/charcoal/admin/widget/*.js',
             'assets/src/scripts/charcoal/admin/property.js',
             'assets/src/scripts/charcoal/admin/property/*.js',
-            'assets/src/scripts/charcoal/admin/property/input/*.js',
+            'assets/src/scripts/charcoal/admin/property/input/**/*.js',
             'assets/src/scripts/charcoal/admin/template.js',
-            'assets/src/scripts/charcoal/admin/template/*.js',
-            'assets/src/scripts/charcoal/admin/widget.js',
-            'assets/src/scripts/charcoal/admin/widget/*.js'
+            'assets/src/scripts/charcoal/admin/template/*.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.js'
     },
@@ -35,7 +35,10 @@ module.exports = {
             // Jquery Minicolors
             'bower_components/jquery-minicolors/jquery.minicolors.min.js',
             // Multiselect Two-sides
-            'bower_components/multiselect/dist/js/multiselect.min.js'
+            'bower_components/multiselect/dist/js/multiselect.min.js',
+            // Selectize
+            'bower_components/selectize/dist/js/standalone/selectize.min.js',
+            'assets/dist/scripts/vendors/selectize/selectize-item-color/src/plugin.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"

@@ -8,7 +8,7 @@
     }
 
     .bootstrap-dialog-close-button > .close {
-        width: 24px;
+        width:        24px;
         margin-right: -6px;
     }
 
@@ -37,13 +37,40 @@
 
     &.-elfinder {
         .modal-header {
-            border-bottom: none;
-            border-top-left-radius: 0;
+            border-bottom:           none;
+            border-top-left-radius:  0;
             border-top-right-radius: 0;
         }
 
         .modal-body {
             padding: 0;
+        }
+    }
+
+    .form-group {
+
+        .pull-right {
+            display: none;
+        }
+
+        [data-lang="en"],
+        [data-lang="fr"] {
+            &.hidden {
+                display: initial !important;
+            }
+
+            &:before {
+                display:    block;
+                margin-top: 10px;
+            }
+        }
+
+        [data-lang="en"]:before {
+            content: "en";
+        }
+
+        [data-lang="fr"]:before {
+            content: "fr";
         }
     }
 }

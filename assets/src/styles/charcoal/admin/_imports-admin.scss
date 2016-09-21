@@ -64,6 +64,7 @@
 @import "components/map-maker";
 @import "components/stats";
 @import "components/attachment";
+@import "components/color-inputs";
 
 // Bootstrap overwrites
 // ==========================================================================
@@ -87,6 +88,9 @@
 @import "vendors/bootstrap-select";
 @import "vendors/bootstrap-switch";
 @import "vendors/awesome-bootstrap-checkbox";
+@import "vendors/selectize-base-style";
+@import "vendors/selectize-default";
+@import "vendors/selectize";
 
 // Trumps
 // ==========================================================================

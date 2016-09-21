@@ -31,6 +31,13 @@ Charcoal.Admin = (function ()
     Admin.cachePool = {};
 
     /**
+     * Current language.
+     *
+     * @type {string}
+     */
+    Admin.lang = 'en';
+
+    /**
      * Set data that can be used by public methods
      * @param  {object}  data  Object containing data that needs to be set
      */

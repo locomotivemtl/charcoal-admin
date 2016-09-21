@@ -1,35 +1,34 @@
 /**
-* charcoal/admin/widget
-* This should be the base for all widgets
-* It is still possible to add a widget without passing
-* throught this class, but not suggested
-*
-* @see Component_Manager.render() for automatic call to widget constructor
-*
-* Interface:
-* ## Setters
-* - `set_opts`
-* - `set_id`
-* - `set_element`
-* - `set_type`
-*
-* ## Getters
-* - `opts( ident )`
-* - `id()`
-* - `element()`
-* - `type()`
-*
-* ## Others
-* - `init()`
-* - `reload( callback )`
-*/
+ * charcoal/admin/widget
+ * This should be the base for all widgets
+ * It is still possible to add a widget without passing
+ * throught this class, but not suggested
+ *
+ * @see Component_Manager.render() for automatic call to widget constructor
+ *
+ * Interface:
+ * ## Setters
+ * - `set_opts`
+ * - `set_id`
+ * - `set_element`
+ * - `set_type`
+ *
+ * ## Getters
+ * - `opts( ident )`
+ * - `id()`
+ * - `element()`
+ * - `type()`
+ *
+ * ## Others
+ * - `init()`
+ * - `reload( callback )`
+ */
 
-Charcoal.Admin.Widget = function (opts)
-{
+Charcoal.Admin.Widget = function (opts) {
     this._element = undefined;
-    this._id = undefined;
-    this._type = undefined;
-    this._opts = undefined;
+    this._id      = undefined;
+    this._type    = undefined;
+    this._opts    = undefined;
 
     if (!opts) {
         return this;
@@ -51,66 +50,60 @@ Charcoal.Admin.Widget = function (opts)
 };
 
 /**
-* Set options
-* @param {Object} opts
-* @return this (chainable)
-*/
-Charcoal.Admin.Widget.prototype.set_opts = function (opts)
-{
+ * Set options
+ * @param {Object} opts
+ * @return this (chainable)
+ */
+Charcoal.Admin.Widget.prototype.set_opts = function (opts) {
     this._opts = opts;
 
     return this;
 };
 
 /**
-* If a ident is specified, the method tries to return
-* the options pointed out.
-* If no ident is specified, the method returns
-* the whole opts object
-*
-* @param {String} ident | falcultative
-* @return {Object|Mixed|false}
-*/
-Charcoal.Admin.Widget.prototype.opts = function (ident)
-{
+ * If a ident is specified, the method tries to return
+ * the options pointed out.
+ * If no ident is specified, the method returns
+ * the whole opts object
+ *
+ * @param {String} ident | falcultative
+ * @return {Object|Mixed|false}
+ */
+Charcoal.Admin.Widget.prototype.opts = function (ident) {
     if (typeof ident === 'string') {
-        if (typeof this._opts[ ident ] === 'undefined') {
+        if (typeof this._opts[ident] === 'undefined') {
             return false;
         }
-        return this._opts[ ident ];
+        return this._opts[ident];
     }
 
     return this._opts;
 };
 
 /**
-* Default init
-* @return this (chainable)
-*/
-Charcoal.Admin.Widget.prototype.init = function ()
-{
+ * Default init
+ * @return this (chainable)
+ */
+Charcoal.Admin.Widget.prototype.init = function () {
     // Default init. Nothing!
     return this;
 };
 
 /**
-*
-*/
-Charcoal.Admin.Widget.prototype.set_id = function (id)
-{
+ *
+ */
+Charcoal.Admin.Widget.prototype.set_id = function (id) {
     this._id = id;
 };
 
-Charcoal.Admin.Widget.prototype.id = function ()
-{
+Charcoal.Admin.Widget.prototype.id = function () {
     return this._id;
 };
 
 /**
-*
-*/
-Charcoal.Admin.Widget.prototype.set_type = function (type)
-{
+ *
+ */
+Charcoal.Admin.Widget.prototype.set_type = function (type) {
     //
     this._type = type;
 
@@ -118,16 +111,14 @@ Charcoal.Admin.Widget.prototype.set_type = function (type)
     // Maybe reinit the plugin?
 };
 
-Charcoal.Admin.Widget.prototype.type = function ()
-{
+Charcoal.Admin.Widget.prototype.type = function () {
     return this._type;
 };
 
 /**
-*
-*/
-Charcoal.Admin.Widget.prototype.set_element = function (elem)
-{
+ *
+ */
+Charcoal.Admin.Widget.prototype.set_element = function (elem) {
     this._element = elem;
 
     return this;
@@ -137,36 +128,32 @@ Charcoal.Admin.Widget.prototype.set_element = function (elem)
  * Default behavior
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget.prototype.widget_options = function () {
     return this.opts();
 };
 
 /**
-*
-*/
-Charcoal.Admin.Widget.prototype.element = function ()
-{
+ *
+ */
+Charcoal.Admin.Widget.prototype.element = function () {
     return this._element;
 };
 
 /**
-* Default widget options
-* Can be overwritten by widget
-* @return {Object}
-*/
-Charcoal.Admin.Widget.prototype.widget_options = function ()
-{
+ * Default widget options
+ * Can be overwritten by widget
+ * @return {Object}
+ */
+Charcoal.Admin.Widget.prototype.widget_options = function () {
     return this.opts();
 };
 
 /**
-* Default widget type
-* Can be overwritten by widget
-* @return {String}
-*/
-Charcoal.Admin.Widget.prototype.widget_type = function ()
-{
+ * Default widget type
+ * Can be overwritten by widget
+ * @return {String}
+ */
+Charcoal.Admin.Widget.prototype.widget_type = function () {
     return this.type();
 };
 
@@ -175,8 +162,7 @@ Charcoal.Admin.Widget.prototype.widget_type = function ()
  *
  * @return {boolean} Default action is set to true.
  */
-Charcoal.Admin.Widget.prototype.save = function ()
-{
+Charcoal.Admin.Widget.prototype.save = function () {
     return true;
 };
 
@@ -187,22 +173,21 @@ Charcoal.Admin.Widget.prototype.save = function ()
  * @param  {Function} callback What to do after the anim_out?
  * @return {thisArg}           Chainable
  */
-Charcoal.Admin.Widget.prototype.anim_out = function (callback)
-{
+Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
     if (typeof callback !== 'function') {
-        callback = function () {};
+        callback = function () {
+        };
     }
     this.element().fadeOut(400, callback);
     return this;
 };
 
-Charcoal.Admin.Widget.prototype.reload = function (cb)
-{
+Charcoal.Admin.Widget.prototype.reload = function (cb) {
     var that = this;
 
-    var url = Charcoal.Admin.admin_url() + 'widget/load';
+    var url  = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
-        widget_type:    that.type(),
+        widget_type: that.type(),
         widget_options: that.widget_options()
     };
 
@@ -230,119 +215,129 @@ Charcoal.Admin.Widget.prototype.reload = function (cb)
 };
 
 /**
-* Load the widget into a dialog
-*/
-Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback)
-{
-    var title      = dialog_opts.title || '',
-        type       = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
-        size       = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
-        cssClass   = dialog_opts.cssClass || '',
-        showHeader = dialog_opts.showHeader || true,
-        showFooter = dialog_opts.showFooter || true;
+ * Load the widget into a dialog
+ */
+Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
+    var title       = dialog_opts.title || '',
+        type        = dialog_opts.type || BootstrapDialog.TYPE_DEFAULT,
+        size        = dialog_opts.size || BootstrapDialog.SIZE_NORMAL,
+        cssClass    = dialog_opts.cssClass || '',
+        showHeader  = dialog_opts.showHeader || true,
+        showFooter  = dialog_opts.showFooter || true,
+        userOptions = dialog_opts.dialog_options || {};
 
     delete dialog_opts.title;
     delete dialog_opts.type;
     delete dialog_opts.size;
     delete dialog_opts.cssClass;
+    delete dialog_opts.dialog_options;
 
-    BootstrapDialog.show({
-        title:    title,
-        type:     type,
-        size:     size,
+    var defaultOptions = {
+        title: title,
+        type: type,
+        size: size,
         cssClass: cssClass,
-        nl2br:    false,
-        message:  function (dialog) {
-            var xhr,
-                url      = Charcoal.Admin.admin_url() + 'widget/load',
-                data     = dialog_opts,
-                $message = $('<div>Loading...</div>');
+        nl2br: false,
+        showHeader: showHeader,
+        showFooter: showFooter,
+        onshown: function () {
+            Charcoal.Admin.manager().render();
+        }
+    };
 
-            if (!showHeader) {
-                dialog.getModalHeader().addClass('hidden');
+    var dialogOptions = $.extend({}, defaultOptions, userOptions);
+
+    dialogOptions.message = function (dialog) {
+        var xhr,
+            url      = Charcoal.Admin.admin_url() + 'widget/load',
+            data     = dialog_opts,
+            $message = $('<div>Loading...</div>');
+
+        if (!showHeader) {
+            dialog.getModalHeader().addClass('hidden');
+        }
+
+        if (!showFooter) {
+            dialog.getModalFooter().addClass('hidden');
+        }
+
+        dialog.getModalBody().on(
+            'click.charcoal.bs.dialog',
+            '[data-dismiss="dialog"]',
+            { dialog: dialog },
+            function (event) {
+                event.data.dialog.close();
             }
+        );
 
-            if (!showFooter) {
-                dialog.getModalFooter().addClass('hidden');
-            }
+        xhr = $.ajax({
+            method: 'POST',
+            url: url,
+            data: data,
+            dataType: 'json'
+        });
 
-            dialog.getModalBody().on(
-                'click.charcoal.bs.dialog',
-                '[data-dismiss="dialog"]',
-                { dialog: dialog },
-                function (event) {
-                    event.data.dialog.close();
+        xhr.then(function (response, textStatus, jqXHR) {
+            if (!response || !response.success) {
+                if (response.feedbacks) {
+                    return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                } else {
+                    return $.Deferred().reject(jqXHR, textStatus, 'An unknown error occurred.');
                 }
-            );
+            }
 
-            xhr = $.ajax({
-                method:   'POST',
-                url:      url,
-                data:     data,
-                dataType: 'json'
+            return $.Deferred().resolve(response, textStatus, jqXHR);
+        })
+            .done(function (response/*, textStatus, jqXHR*/) {
+                dialog.setMessage(response.widget_html);
+
+                if (typeof callback === 'function') {
+                    callback(response);
+                }
+
+                $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                dialog.setType(BootstrapDialog.TYPE_DANGER);
+                dialog.setMessage('<div class="alert alert-danger" role="alert">An unknown error occurred.</div>');
+
+                var errorHtml = '';
+
+                if ($.type(errorThrown) === 'string') {
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
+                        errorThrown = jqXHR.responseJSON.feedbacks;
+                    }
+                }
+
+                if ($.isArray(errorThrown)) {
+                    $.each(errorThrown, function (i, error) {
+                        if (error.message) {
+                            if (error.level === 'error') {
+                                error.level = 'danger';
+                            }
+                            errorHtml += '<div class="alert alert-' + error.level + '" role="alert">' +
+                                error.message +
+                                '</div>';
+                        }
+                    });
+                } else if ($.type(errorThrown) === 'string') {
+                    errorHtml = '<div class="alert alert-danger" role="alert">' + errorThrown + '</div>';
+                }
+
+                if (errorHtml) {
+                    dialog.setMessage(errorHtml);
+                }
+
+                $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
             });
 
-            xhr.then(function (response, textStatus, jqXHR) {
-                    if (!response || !response.success) {
-                        if (response.feedbacks) {
-                            return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
-                        } else {
-                            return $.Deferred().reject(jqXHR, textStatus, 'An unknown error occurred.');
-                        }
-                    }
+        return $message;
+    };
 
-                    return $.Deferred().resolve(response, textStatus, jqXHR);
-                })
-                .done(function (response/*, textStatus, jqXHR*/) {
-                    dialog.setMessage(response.widget_html);
-
-                    if (typeof callback === 'function') {
-                        callback(response);
-                    }
-
-                    $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
-                })
-                .fail(function (jqXHR, textStatus, errorThrown) {
-                    dialog.setType(BootstrapDialog.TYPE_DANGER);
-                    dialog.setMessage('<div class="alert alert-danger" role="alert">An unknown error occurred.</div>');
-
-                    var errorHtml = '';
-
-                    if ($.type(errorThrown) === 'string') {
-                        if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
-                            errorThrown = jqXHR.responseJSON.feedbacks;
-                        }
-                    }
-
-                    if ($.isArray(errorThrown)) {
-                        $.each(errorThrown, function (i, error) {
-                            if (error.message) {
-                                if (error.level === 'error') {
-                                    error.level = 'danger';
-                                }
-                                errorHtml += '<div class="alert alert-' + error.level + '" role="alert">' +
-                                                error.message +
-                                            '</div>';
-                            }
-                        });
-                    } else if ($.type(errorThrown) === 'string') {
-                        errorHtml = '<div class="alert alert-danger" role="alert">' + errorThrown + '</div>';
-                    }
-
-                    if (errorHtml) {
-                        dialog.setMessage(errorHtml);
-                    }
-
-                    $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
-                });
-
-            return $message;
-        }
-    });
+    BootstrapDialog.show(dialogOptions);
 };
 
-Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts,confirmed_callback,cancel_callback)
-{
+Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
     var defaults = {
         title: 'Voulez-vous vraiment effectuer cette action?',
         confirm_label: 'Oui',
@@ -361,7 +356,7 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts,confirmed_callba
                 }
                 dialog.close();
             }
-        },{
+        }, {
             label: opts.confirm_label,
             action: function (dialog) {
                 if (typeof confirmed_callback === 'function') {

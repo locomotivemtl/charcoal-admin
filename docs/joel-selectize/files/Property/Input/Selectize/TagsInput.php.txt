@@ -1,0 +1,32 @@
+<?php
+
+namespace Charcoal\Admin\Property\Input\Selectize;
+
+use Charcoal\Admin\Property\AbstractPropertyInput;
+
+class TagsInput extends AbstractPropertyInput
+{
+    /**
+     * The tags input settings
+     *
+     * @var array
+     */
+    private $tagsOptions;
+
+    /**
+     * @return array
+     */
+    public function tagsOptions()
+    {
+        return $this->tagsOptions;
+    }
+
+    /**
+     * @param array $tagsOptions
+     */
+    public function setTagsOptions($tagsOptions)
+    {
+        $this->tagsOptions = $tagsOptions;
+    }
+}
+

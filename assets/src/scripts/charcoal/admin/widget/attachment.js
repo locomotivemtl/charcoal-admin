@@ -8,11 +8,15 @@
 Charcoal.Admin.Widget_Attachment = function ()
 {
     this.glyphs = {
-        video:   'glyphicon-facetime-video',
-        image:   'glyphicon-picture',
-        file:    'glyphicon-file',
-        text:    'glyphicon-font',
-        gallery: 'glyphicon-duplicate'
+        embed:      'glyphicon-blackboard',
+        video:      'glyphicon-film',
+        image:      'glyphicon-picture',
+        file:       'glyphicon-file',
+        link:       'glyphicon-link',
+        text:       'glyphicon-font',
+        gallery:    'glyphicon-duplicate',
+        container:  'glyphicon-list',
+        accordion:  'glyphicon-list'
     };
 
     this.dirty = false;
@@ -166,29 +170,39 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     if (!_this.data('id')) {
                         break;
                     }
-                    that.confirm({
-                        title: 'Voulez-vous vraiment supprimer cet item?'
-                    }, function () {
-                        that.remove_join(_this.data('id'), function () {
-                            that.reload();
-                        });
-                    });
+
+                    that.confirm(
+                        {
+                            title: 'Voulez-vous vraiment supprimer cet item?'
+                        },
+                        function () {
+                            that.remove_join(_this.data('id'), function () {
+                                that.reload();
+                            });
+                        }
+                    );
                     break;
 
                 case 'add-object':
-                    var gallery_type = _this.data('type');
-                    var gallery_id = _this.data('id');
-                    var gallery_title = _this.data('title');
-                    var gallery_attachment = _this.data('attachment');
-                    that.create_attachment(gallery_attachment, gallery_title, 0, function (response) {
+                    var container_type   = _this.data('type'),
+                        container_group  = _this.data('group'),
+                        container_id     = _this.data('id'),
+                        attachment_title = _this.data('title'),
+                        attachment_type  = _this.data('attachment');
+
+                    that.create_attachment(attachment_type, attachment_title, 0, function (response) {
                         if (response.success) {
-                            that.add_object_to_container({
-                                id: response.obj_id,
-                                type: response.obj.type
-                            },{
-                                id: gallery_id,
-                                type: gallery_type
-                            });
+                            that.add_object_to_container(
+                                {
+                                    id:   response.obj_id,
+                                    type: response.obj.type
+                                },
+                                {
+                                    id:    container_id,
+                                    type:  container_type,
+                                    group: container_group
+                                }
+                            );
                         }
                     });
 
@@ -257,30 +271,26 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
 };
 
 /**
- * Add an image to an existing gallery.
- * @param {[type]} image   [description]
- * @param {[type]} gallery [description]
+ * Add an attachment to an existing container.
+ *
+ * @param {object} attachment - The attachment to add to the container.
+ * @param {object} container  - The container attachment.
  */
-Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (image, gallery)
+Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (attachment, container, grouping)
 {
-    // Scope.
-    var that = this;
-
-    var type = gallery.type;
-    var id = gallery.id;
-
-    var data = {
-        obj_type: type,
-        obj_id: id,
-        attachments: [
-            {
-                attachment_id:image.id,
-                attachment_type:image.type,
-                position:0
-            }
-        ],
-        group: 'inception-gallery'
-    };
+    var that = this,
+        data = {
+            obj_type:    container.type,
+            obj_id:      container.id,
+            attachments: [
+                {
+                    attachment_id:   attachment.id,
+                    attachment_type: attachment.type,
+                    position: 0
+                }
+            ],
+            group: grouping || container.group || ''
+        };
 
     $.post('add-join', data, function () {
         that.reload();

@@ -155,7 +155,7 @@ class ObjectFormWidget extends FormWidget implements
                 array_keys($objFormData['groups'])
             );
             foreach ($extraFormGroups as $groupIdent) {
-                $objFormData['groups'][$groupIdent] = array_merge(
+                $objFormData['groups'][$groupIdent] = array_replace_recursive(
                     $adminMetadata['form_groups'][$groupIdent],
                     $objFormData['groups'][$groupIdent]
                 );

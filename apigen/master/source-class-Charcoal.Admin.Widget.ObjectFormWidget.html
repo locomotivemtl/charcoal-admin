@@ -486,7 +486,7 @@
 </span><span id="155" class="l"><a href="#155">155: </a>                <span class="php-keyword2">array_keys</span>(<span class="php-var">$objFormData</span>[<span class="php-quote">'groups'</span>])
 </span><span id="156" class="l"><a href="#156">156: </a>            );
 </span><span id="157" class="l"><a href="#157">157: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$extraFormGroups</span> <span class="php-keyword1">as</span> <span class="php-var">$groupIdent</span>) {
-</span><span id="158" class="l"><a href="#158">158: </a>                <span class="php-var">$objFormData</span>[<span class="php-quote">'groups'</span>][<span class="php-var">$groupIdent</span>] = <span class="php-keyword2">array_merge</span>(
+</span><span id="158" class="l"><a href="#158">158: </a>                <span class="php-var">$objFormData</span>[<span class="php-quote">'groups'</span>][<span class="php-var">$groupIdent</span>] = <span class="php-keyword2">array_replace_recursive</span>(
 </span><span id="159" class="l"><a href="#159">159: </a>                    <span class="php-var">$adminMetadata</span>[<span class="php-quote">'form_groups'</span>][<span class="php-var">$groupIdent</span>],
 </span><span id="160" class="l"><a href="#160">160: </a>                    <span class="php-var">$objFormData</span>[<span class="php-quote">'groups'</span>][<span class="php-var">$groupIdent</span>]
 </span><span id="161" class="l"><a href="#161">161: </a>                );

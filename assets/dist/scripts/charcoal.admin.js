@@ -4291,13 +4291,13 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         return false;
     }
 
-    this.disable_form($form, $trigger);
-
-    form_data = new FormData(form);
-
     // Let the component manager prepare the submit first
     // Calls the save function on each properties
     Charcoal.Admin.manager().prepare_submit();
+
+    form_data = new FormData(form);
+
+    this.disable_form($form, $trigger);
 
     this.xhr = $.ajax({
         type:        'POST',            // ($form.prop('method') || 'POST')
@@ -4652,7 +4652,6 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
     this.form_working = true;
 
     this.is_new_object = !this.obj_id;
-    console.log('Is New Object?', this.is_new_object, this.obj_id);
 
     var $trigger, $form, form_data;
 
@@ -4663,13 +4662,13 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form)
         return false;
     }
 
-    this.disable_form($form, $trigger);
-
-    form_data = new FormData(form);
-
     // Let the component manager prepare the submit first
     // Calls the save function on each properties
     Charcoal.Admin.manager().prepare_submit();
+
+    form_data = new FormData(form);
+
+    this.disable_form($form, $trigger);
 
     this.xhr = $.ajax({
         type:        'POST',

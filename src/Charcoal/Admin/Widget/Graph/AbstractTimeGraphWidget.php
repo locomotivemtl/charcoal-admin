@@ -11,7 +11,7 @@ use \PDO;
 
 // From `charcoal-admin`
 use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
-use \Charcoal\Amin\Widget\Graph\TimeGraphWidgetInterface;
+use \Charcoal\Admin\Widget\Graph\TimeGraphWidgetInterface;
 
 /**
  * Base Time Graph widget.

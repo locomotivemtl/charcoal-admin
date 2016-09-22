@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Widget;
 
 use \Exception;
 use \InvalidArgumentException;
+use \RuntimeException;
 
 // From Pimple
 use \Pimple\Container;

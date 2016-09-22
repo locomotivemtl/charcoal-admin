@@ -418,7 +418,7 @@
 </span><span id="87" class="l"><a href="#87"> 87: </a>    {
 </span><span id="88" class="l"><a href="#88"> 88: </a>        <span class="php-var">$config</span>    = <span class="php-var">$this</span>-&gt;config();
 </span><span id="89" class="l"><a href="#89"> 89: </a>        <span class="php-var">$container</span> = <span class="php-var">$this</span>-&gt;app()-&gt;getContainer();
-</span><span id="90" class="l"><a href="#90"> 90: </a>        <span class="php-var">$baseUrl</span>   = <span class="php-var">$container</span>[<span class="php-quote">'request'</span>]-&gt;getUri()-&gt;getBaseUrl();
+</span><span id="90" class="l"><a href="#90"> 90: </a>        <span class="php-var">$baseUrl</span>   = <span class="php-var">$container</span>[<span class="php-quote">'base-url'</span>];
 </span><span id="91" class="l"><a href="#91"> 91: </a>        <span class="php-var">$adminUrl</span>  = <span class="php-keyword2">rtrim</span>(<span class="php-var">$baseUrl</span>, <span class="php-quote">'/\\'</span>).<span class="php-quote">'/'</span>.<span class="php-keyword2">trim</span>(<span class="php-var">$config</span>[<span class="php-quote">'base_path'</span>], <span class="php-quote">'/\\'</span>);
 </span><span id="92" class="l"><a href="#92"> 92: </a>
 </span><span id="93" class="l"><a href="#93"> 93: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$config</span>[<span class="php-quote">'handlers'</span>])) {

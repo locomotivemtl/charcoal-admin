@@ -4,13 +4,8 @@ namespace Charcoal\Admin\Widget\FormGroup;
 
 use \Pimple\Container;
 
-use \Charcoal\Loader\CollectionLoader;
-
-use \Charcoal\Translation\TranslationString;
-
 use \Charcoal\Ui\FormGroup\AbstractFormGroup;
 
-use \Charcoal\Admin\Widget\TableWidget;
 
 /**
  *

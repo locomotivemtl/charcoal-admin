@@ -3,7 +3,6 @@
 namespace Charcoal\Admin\Action;
 
 use \RuntimeException;
-use \InvalidArgumentException;
 
 // From PSR-7 (HTTP Messaging)
 use \Psr\Http\Message\RequestInterface;

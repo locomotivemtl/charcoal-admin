@@ -9,11 +9,9 @@ use \Exception;
 use \InvalidArgumentException;
 use \PDO;
 
-use \Pimple\Container;
-
 // From `charcoal-admin`
 use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
-use \Charcoal\Amin\Widget\Graph\GraphWidgetInterface;
+use \Charcoal\Admin\Widget\Graph\TimeGraphWidgetInterface;
 
 /**
  * Base Time Graph widget.

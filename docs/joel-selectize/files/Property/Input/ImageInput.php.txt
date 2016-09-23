@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Property\Input;
 // Dependency from 'charcoal-view'
 use \Charcoal\View\ViewableInterface;
 
-// Dependency from 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // Local Dependency
 use \Charcoal\Admin\Property\Input\FileInput;
 

@@ -8,7 +8,6 @@ use \Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
-use \Charcoal\Admin\User;
 
 /**
  * Create user script.

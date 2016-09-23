@@ -4,24 +4,25 @@ namespace Charcoal\Admin;
 
 use \Exception;
 
-// PSR-7 (HTTP Messaging) dependencies
+// From PSR-7 (HTTP Messaging)
+use \Psr\Http\Message\UriInterface;
 use \Psr\Http\Message\RequestInterface;
 
-// Dependency from `pimple/pimple` (Symfony DI Container)
+// From Pimple
 use \Pimple\Container;
 
-// Module `charcoal-factory` dependencies
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// Module `charcoal-base` dependencies
+// From 'charcoal-base
 use \Charcoal\User\Authenticator;
 use \Charcoal\User\Authorizer;
 
-use \Charcoal\App\Template\AbstractTemplate;
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 
-// Intra-module (`charcoal-admin`) dependency
-use \Charcoal\Admin\User;
+// From 'charcoal-app'
+use \Charcoal\App\Template\AbstractTemplate;
 
 /**
  * Base class for all `admin` Templates.
@@ -40,11 +41,17 @@ use \Charcoal\Admin\User;
  */
 class AdminTemplate extends AbstractTemplate
 {
+    /**
+     * The base URI.
+     *
+     * @var UriInterface
+     */
+    protected $baseUrl;
 
     /**
-     * Admin configuration
-     * from main config['admin']
-     * @var array
+     * The admin area configuration.
+     *
+     * @var \Charcoal\Admin\Config
      */
     protected $adminConfig;
 
@@ -131,6 +138,7 @@ class AdminTemplate extends AbstractTemplate
         parent::setDependencies($container);
 
         $this->adminConfig = $container['charcoal/admin/config'];
+        $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
@@ -544,7 +552,9 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @return string
+     * Retrieve the base URI of the administration area.
+     *
+     * @return string|UriInterface
      */
     public function adminUrl()
     {
@@ -554,19 +564,26 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
-     * @return string
+     * Set the base URI of the application.
+     *
+     * @param string|UriInterface $uri The base URI.
+     * @return self
+     */
+    public function setBaseUrl($uri)
+    {
+        $this->baseUrl = rtrim($uri, '/').'/';
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the base URI of the application.
+     *
+     * @return string|UriInterface
      */
     public function baseUrl()
     {
-        $appConfig = $this->app()->config();
-
-        if ($appConfig->has('URL')) {
-            return $appConfig->get('URL');
-        } else {
-            $uri = $this->app()->getContainer()->get('request')->getUri();
-
-            return rtrim($uri->getBaseUrl(), '/').'/';
-        }
+        return $this->baseUrl;
     }
 
     /**

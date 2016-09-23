@@ -2,14 +2,21 @@
 
 namespace Charcoal\Admin;
 
-use \RuntimeException;
 use \InvalidArgumentException;
 
+// From PSR-7 (HTTP Messaging)
+use \Psr\Http\Message\UriInterface;
+
+// From Pimple
 use \Pimple\Container;
 
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
+
+// From 'charcoal-app'
 use \Charcoal\App\App;
 use \Charcoal\App\Template\AbstractWidget;
 
@@ -22,7 +29,14 @@ class AdminWidget extends AbstractWidget
     const DATA_SOURCE_OBJECT  = 'object';
 
     /**
-     * The admin module's configuration.
+     * The base URI.
+     *
+     * @var UriInterface
+     */
+    protected $baseUrl;
+
+    /**
+     * The admin area configuration.
      *
      * @var \Charcoal\Admin\Config
      */
@@ -102,6 +116,7 @@ class AdminWidget extends AbstractWidget
 
         $this->adminConfig = $container['admin/config'];
 
+        $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
     }
 
@@ -507,29 +522,38 @@ class AdminWidget extends AbstractWidget
     }
 
     /**
-     * @return string
+     * Retrieve the base URI of the administration area.
+     *
+     * @return string|UriInterface
      */
     public function adminUrl()
     {
-        $adminPath = App::instance()->getContainer()->get('charcoal/admin/config')->basePath();
+        $adminPath = $this->adminConfig['base_path'];
 
         return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
     }
 
     /**
-     * @return string
+     * Set the base URI of the application.
+     *
+     * @param string|UriInterface $uri The base URI.
+     * @return self
+     */
+    public function setBaseUrl($uri)
+    {
+        $this->baseUrl = rtrim($uri, '/').'/';
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the base URI of the application.
+     *
+     * @return string|UriInterface
      */
     public function baseUrl()
     {
-        $appConfig = App::instance()->config();
-
-        if ($appConfig->has('URL')) {
-            return $appConfig->get('URL');
-        } else {
-            $uri = App::instance()->getContainer()->get('request')->getUri();
-
-            return rtrim($uri->getBaseUrl(), '/').'/';
-        }
+        return $this->baseUrl;
     }
 
     /**

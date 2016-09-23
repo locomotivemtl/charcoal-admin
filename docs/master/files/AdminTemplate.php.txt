@@ -24,7 +24,6 @@ use \Charcoal\Translation\TranslationString;
 // From 'charcoal-app'
 use \Charcoal\App\Template\AbstractTemplate;
 
-
 /**
  * Base class for all `admin` Templates.
  *

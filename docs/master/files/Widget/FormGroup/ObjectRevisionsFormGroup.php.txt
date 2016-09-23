@@ -6,7 +6,6 @@ use \Pimple\Container;
 
 use \Charcoal\Ui\FormGroup\AbstractFormGroup;
 
-
 /**
  *
  */

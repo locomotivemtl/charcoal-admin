@@ -24,6 +24,8 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
  * Base Admin Save Action
+ *
+ * Common methods between Update and Save.
  */
 abstract class AbstractSaveAction extends AdminAction implements ObjectContainerInterface
 {
@@ -96,7 +98,9 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
         }
 
         if (!is_array($filters) && $filters !== null) {
-            throw new InvalidArgumentException('Filters must be an array of validation levels or NULL');
+            throw new InvalidArgumentException(
+                'Filters must be an array of validation levels or NULL'
+            );
         }
 
         $validation = $validator->results();

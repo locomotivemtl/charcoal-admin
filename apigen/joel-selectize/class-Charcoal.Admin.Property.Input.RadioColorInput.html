@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Property\Input\TextInput</title>
+	<title>Class Charcoal\Admin\Property\Input\RadioColorInput</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -192,13 +192,13 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.NumberInput.html">NumberInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.PhoneInput.html">PhoneInput</a></li>
-				<li><a href="class-Charcoal.Admin.Property.Input.RadioColorInput.html">RadioColorInput</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Property.Input.RadioColorInput.html">RadioColorInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ReadonlyInput.html">ReadonlyInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.SelectInput.html">SelectInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.SwitchInput.html">SwitchInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.TextareaInput.html">TextareaInput</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Property.Input.TextInput.html">TextInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.TextInput.html">TextInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.TinymceInput.html">TinymceInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.UrlInput.html">UrlInput</a></li>
 			</ul>
@@ -239,11 +239,15 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class TextInput</h1>
+	<h1>Class RadioColorInput</h1>
 
 
 	<div class="description">
-	<p>Single-Line Text Input Property</p>
+	<p>Radio Button Input Property</p>
+
+<p>The HTML <em>radio button</em> (<code>&lt;input type="radio"&gt;</code>) input element represents
+a control to select a <em>single value</em> from a list of different values.
+— <a href="https://www.w3.org/wiki/HTML/Elements/input/radio">https://www.w3.org/wiki/HTML/Elements/input/radio</a></p>
 	</div>
 
 	<dl class="tree">
@@ -272,19 +276,29 @@
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Property\Input\TextInput</span></b>			
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html"><span>Charcoal\Admin\Property\AbstractSelectableInput</span></a>
+			
+			 implements 
+				<a href="class-Charcoal.Admin.Property.SelectableInputInterface.html"><span>Charcoal\Admin\Property\SelectableInputInterface</span></a>
+			
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.png" alt="Extended by">
+			<a href="class-Charcoal.Admin.Property.Input.RadioInput.html"><span>Charcoal\Admin\Property\Input\RadioInput</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:90px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Charcoal\Admin\Property\Input\RadioColorInput</span></b>			
 			
 			
 		</dd>
 	</dl>
 
 
-	<div>
-		<h4>Direct known subclasses</h4>
-			<a href="class-Charcoal.Admin.Property.Input.HiddenInput.html">Charcoal\Admin\Property\Input\HiddenInput</a>, 
-			<a href="class-Charcoal.Admin.Property.Input.PhoneInput.html">Charcoal\Admin\Property\Input\PhoneInput</a>, 
-			<a href="class-Charcoal.Admin.Property.Input.UrlInput.html">Charcoal\Admin\Property\Input\UrlInput</a>
-	</div>
 
 
 
@@ -297,370 +311,31 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#9-141" title="Go to source code">Charcoal/Admin/Property/Input/TextInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.RadioColorInput.html#5-15" title="Go to source code">Charcoal/Admin/Property/Input/RadioColorInput.php</a>
 		<br>
 	</div>
 
 
 
-	<table class="summary methods" id="methods">
-	<caption>Methods summary</caption>
-	<tr data-order="inputVal" id="_inputVal">
 
-		<td class="attributes"><code>
-			 public 
-
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_inputVal">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#33-44" title="Go to source code">inputVal</a>( )</code>
-
-		<div class="description short">
-			<p>Retrieve the value for the input form control.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Retrieve the value for the input form control.</p>
-
-<p>Note: line-breaks are automatically removed from the input value.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					Exception<br>If the value is invalid.
-				</div>
-
-				<h4>See</h4>
-				<div class="list">
-						AbstractPropertyInput::inputVal()<br>
-				</div>
-
-				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">Charcoal\Admin\Property\AbstractPropertyInput::inputVal()</a></code></div>
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setMinLength" id="_setMinLength">
-
-		<td class="attributes"><code>
-			 public 
-
-			Text
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setMinLength">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#46-60" title="Go to source code">setMinLength</a>( <span>integer <var>$minLength</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$minLength</var></dt>
-					<dd>The min length.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Text<br>Chainable
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					InvalidArgumentException<br>If the argument is not a number.
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="minLength" id="_minLength">
-
-		<td class="attributes"><code>
-			 public 
-
-			integer
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_minLength">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#62-68" title="Go to source code">minLength</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					integer
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setMaxLength" id="_setMaxLength">
-
-		<td class="attributes"><code>
-			 public 
-
-			Text
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setMaxLength">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#70-84" title="Go to source code">setMaxLength</a>( <span>integer <var>$maxLength</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$maxLength</var></dt>
-					<dd>The max length.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Text<br>Chainable
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					InvalidArgumentException<br>If the argument is not a number.
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="maxLength" id="_maxLength">
-
-		<td class="attributes"><code>
-			 public 
-
-			integer
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_maxLength">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#86-92" title="Go to source code">maxLength</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					integer
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setSize" id="_setSize">
-
-		<td class="attributes"><code>
-			 public 
-
-			Text
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setSize">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#94-108" title="Go to source code">setSize</a>( <span>integer <var>$size</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$size</var></dt>
-					<dd>The text size.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Text<br>Chainable
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					InvalidArgumentException<br>If the argument is not a number.
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="size" id="_size">
-
-		<td class="attributes"><code>
-			 public 
-
-			integer
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_size">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#110-116" title="Go to source code">size</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					integer
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setPattern" id="_setPattern">
-
-		<td class="attributes"><code>
-			 public 
-
-			Text
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setPattern">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#118-132" title="Go to source code">setPattern</a>( <span>string <var>$pattern</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$pattern</var></dt>
-					<dd>The pattern.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Text<br>Chainable
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					InvalidArgumentException<br>If the argument is not a string.
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="pattern" id="_pattern">
-
-		<td class="attributes"><code>
-			 public 
-
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_pattern">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.TextInput.html#134-140" title="Go to source code">pattern</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string
-				</div>
-
-
-
-
-		</div>
-		</div></td>
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.Input.RadioInput.html#methods">Charcoal\Admin\Property\Input\RadioInput</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Property.Input.RadioInput.html#_multiple">multiple()</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.RadioInput.html#_parseChoice">parseChoice()</a>
+		</code></td>
 	</tr>
 	</table>
-
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#methods">Charcoal\Admin\Property\AbstractSelectableInput</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_choices">choices()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractSelectableInput.html#_isChoiceSelected">isChoiceSelected()</a>
+		</code></td>
+	</tr>
+	</table>
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#methods">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>
 	<tr>
@@ -676,8 +351,8 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputId">inputId()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">inputName()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputType">inputType()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">inputVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_lang">lang()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_multiple">multiple()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_p">p()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_placeholder">placeholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_property">property()</a>, 

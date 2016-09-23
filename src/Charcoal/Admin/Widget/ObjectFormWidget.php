@@ -291,6 +291,9 @@ class ObjectFormWidget extends FormWidget implements
             $p->setPropertyIdent($propertyIdent);
             $p->setData($property);
 
+            $val = $obj[$propertyIdent];
+            $p->setPropertyVal($val);
+
             yield $propertyIdent => $p;
         }
     }

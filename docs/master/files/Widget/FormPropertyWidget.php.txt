@@ -87,6 +87,8 @@ class FormPropertyWidget extends AdminWidget
      */
     public function setDependencies(Container $container)
     {
+        parent::setDependencies($container);
+
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyInputFactory($container['property/input/factory']);
     }

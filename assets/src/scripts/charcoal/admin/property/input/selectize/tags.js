@@ -26,6 +26,12 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.constructor = Charcoal.Ad
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.parent      = Charcoal.Admin.Property.prototype;
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init = function () {
+    if (typeof $.fn.sortable !== 'function') {
+        var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
+        Charcoal.Admin.loadScript(url, this.init.bind(this));
+
+        return this;
+    }
     this.init_selectize();
 };
 

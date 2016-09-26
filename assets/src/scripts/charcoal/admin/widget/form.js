@@ -118,6 +118,20 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
 
     this.disable_form($form, $trigger);
 
+    // Use this loop if ever cascading checkbox inputs end up not
+    // working properly in checkbox.mustache
+    // $form.find('input[type="checkbox"]').each(function () {
+    //     var $input = $(this);
+    //     var inputName = $input.attr('name');
+
+    //     // Prevents affecting switch type radio inputs
+    //     if (typeof inputName !== 'undefined') {b
+    //         if (!form_data.has(inputName)) {
+    //             form_data.set(inputName, '');
+    //         }
+    //     }
+    // });
+
     this.xhr = $.ajax({
         type:        'POST',            // ($form.prop('method') || 'POST')
         url:         this.request_url(),  // ($form.data('action') || this.request_url())

@@ -27,6 +27,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
     use CollectionContainerTrait {
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
+        CollectionContainerTrait::parseObjectRow as parseCollectionObjectRow;
     }
 
     /**
@@ -53,6 +54,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @var array $listActions
      */
     private $listActions;
+
+    /**
+     * @var array|null
+     */
+    private $defaultObjectActions;
+
+    /**
+     * @var array|null
+     */
+    private $objectActions;
 
     /**
      * @param Container $container Pimple DI container.
@@ -118,16 +129,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         if (is_string($toResolve)) {
             $model = $this->proto();
 
-            $resolved = [ $model, $toResolve ];
+            $resolved = [$model, $toResolve];
 
             // check for slim callable as "class:method"
             $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
             if (preg_match($callablePattern, $toResolve, $matches)) {
-                $class  = $matches[1];
+                $class = $matches[1];
                 $method = $matches[2];
 
                 if ($class === 'parent') {
-                    $resolved = [ $model, $class.'::'.$method ];
+                    $resolved = [$model, $class . '::' . $method];
                 }
             }
 
@@ -154,7 +165,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function acceptedRequestData()
     {
-        return [ 'obj_type','obj_id', 'collection_ident', 'template', 'sortable' ];
+        return ['obj_type', 'obj_id', 'collection_ident', 'template', 'sortable'];
     }
 
     /**
@@ -164,7 +175,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function dataFromObject()
     {
-        $objMetadata   = $this->proto()->metadata();
+        $objMetadata = $this->proto()->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
 
         if (empty($adminMetadata['lists'])) {
@@ -323,7 +334,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         ModelInterface $object,
         PropertyInterface $property,
         $propertyValue
-    ) {
+    )
+    {
         $cell = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
 
         $cell['classes'] = $this->parsePropertyCellClasses($property, $object);
@@ -351,11 +363,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function parsePropertyCellClasses(
         PropertyInterface $property,
         ModelInterface $object = null
-    ) {
+    )
+    {
         unset($object);
 
-        $ident   = $property->ident();
-        $classes = [ sprintf('property-%s', $ident) ];
+        $ident = $property->ident();
+        $classes = [sprintf('property-%s', $ident)];
         $options = $this->viewOptions($ident);
 
         if (isset($options['classes'])) {
@@ -367,6 +380,26 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $classes;
+    }
+
+    /**
+     * Filter the object before its assigned to the row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface $object           The current row's object.
+     * @param  array          $objectProperties The $object's display properties.
+     * @return array
+     */
+    protected function parseObjectRow(ModelInterface $object, array $objectProperties)
+    {
+        $row = $this->parseCollectionObjectRow($object, $objectProperties);
+
+        $row['objectActions'] = $this->objectActions();
+        $row['primaryObjectAction'] = array_shift($row['objectActions']);
+        $row['hasObjectActions'] = (count($row['objectActions']) > 0);
+
+        return $row;
     }
 
     /**
@@ -382,33 +415,83 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
+        if ($this->objectActions === null) {
+            $this->objectActions = $this->createObjectActions();
+        }
+
+        $objectActions = [];
+        if (count($this->objectActions)) {
+            $obj = $this->currentObj;
+
+            foreach ($this->objectActions as $action) {
+                if (isset($action['url']) && TranslationString::isTranslatable($action['url'])) {
+                    $action['url'] = new TranslationString($action['url']);
+
+                    foreach ($action['url']->all() as $lang => $url) {
+                        $url = $obj->render($url);
+
+                        if (strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                            $url = $this->adminUrl().$url;
+                        }
+
+                        $action['url'][$lang] = $url;
+                    }
+                }
+
+                $objectActions[] = $action;
+            }
+        }
+
+        return $objectActions;
+    }
+
+    /**
+     * @return array
+     */
+    public function createObjectActions()
+    {
         $model = $this->proto();
-        $props = $model->metadata()->properties();
         $collectionIdent = $this->collectionIdent();
 
         if (!$collectionIdent) {
             return [];
         }
 
-        $metadata = $model->metadata();
-        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $listOptions = $adminMetadata['lists'][$collectionIdent];
+        $metadata    = $model->metadata();
+        $metadata    = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $listOptions = $metadata['lists'][$collectionIdent];
 
-        $objectActions = isset($listOptions['object_actions']) ? $listOptions['object_actions'] : [];
-        foreach ($objectActions as &$action) {
-            if (isset($action['url'])) {
-                if ($model->view() !== null) {
-                    $action['url'] = $model->render((string)$action['url']);
-                } else {
-                    $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
-                }
+        $objectActions = (isset($listOptions['object_actions']) ? $listOptions['object_actions'] : []);
+        $objectActions = array_merge($this->defaultObjectActions(), $objectActions);
 
-                $action['url'] = $this->adminUrl().$action['url'];
+        $parsedActions = [];
+        foreach ($objectActions as $actionIdent => $action) {
+            if (!isset($action['ident'])) {
+                $action['ident'] = $actionIdent;
+            }
+
+            if (!isset($action['active'])) {
+                $action['active'] = true;
+            }
+
+            if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
+                $action['label'] = new TranslationString($action['label']);
+            } elseif (is_string($action['ident'])) {
+                $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
             } else {
+                continue;
+            }
+
+            if (!isset($action['url'])) {
                 $action['url'] = '#';
             }
+
+            $parsedActions[$action['ident']] = $action;
         }
-        return $objectActions;
+
+        uasort($parsedActions, [ $this, 'sortActionsByPriority' ]);
+
+        return $parsedActions;
     }
 
     /**
@@ -416,20 +499,20 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function defaultObjectActions()
     {
-        return [
-            'label' => new TranslationString('Modifier'),
-            'url'   => $this->objectEditUrl().'&amp;obj_id={{id}}',
-            'ident' => 'edit'
-        ];
-    }
+        if (!$this->defaultObjectActions) {
+            $edit = ['edit' => [
+                'label'    => new TranslationString([
+                    'fr' => 'Modifier',
+                    'en' => 'Modify',
+                ]),
+                'url'      =>  $this->objectEditUrl() . '&obj_id={{id}}',
+                'ident'    => 'edit',
+                'priority' => 1
+            ]];
+            $this->defaultObjectActions = [$edit];
+        }
 
-    /**
-     * @return boolean
-     */
-    public function hasObjectActions()
-    {
-        $actions = $this->objectActions();
-        return (count($actions) > 0);
+        return $this->defaultObjectActions;
     }
 
     /**
@@ -483,7 +566,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
                     $action['label'] = new TranslationString($action['label']);
                 } elseif ($action['ident']) {
-                    $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
+                    $action['label'] = ucwords(str_replace(['.', '_'], ' ', $action['ident']));
                 } else {
                     continue;
                 }
@@ -511,7 +594,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         return $listActions;
     }
-
 
     /**
      * @return PaginationWidget
@@ -568,7 +650,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectEditUrl()
     {
-        return 'object/edit?obj_type='.$this->objType();
+        return 'object/edit?obj_type=' . $this->objType();
     }
 
     /**
@@ -590,7 +672,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                             $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
                         }
 
-                        $action['url'] = $this->adminUrl().$action['url'];
+                        $action['url'] = $this->adminUrl() . $action['url'];
                     }
                 }
             }
@@ -609,14 +691,29 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function isObjCreatable()
     {
-        $model  = $this->proto();
-        $method = [ $model, 'isCreatable' ];
+        $model = $this->proto();
+        $method = [$model, 'isCreatable'];
 
         if (is_callable($method)) {
             return call_user_func($method);
         }
 
         return true;
+    }
+
+    /**
+     * To be called with uasort()
+     *
+     * @param  array $a First action object to sort.
+     * @param  array $b Second action object to sort.
+     * @return integer
+     */
+    protected static function sortActionsByPriority(array $a, array $b)
+    {
+        $a = isset($a['priority']) ? $a['priority'] : 0;
+        $b = isset($b['priority']) ? $b['priority'] : 0;
+
+        return ($a < $b) ? (-1) : 1;
     }
 }
 

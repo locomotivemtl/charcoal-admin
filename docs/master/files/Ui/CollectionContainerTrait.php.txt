@@ -20,8 +20,8 @@ use \Charcoal\Property\PropertyInterface;
 use \Charcoal\View\ViewInterface;
 
 /**
-* Fully implements CollectionContainerInterface
-*/
+ * Fully implements CollectionContainerInterface
+ */
 trait CollectionContainerTrait
 {
     /**
@@ -68,6 +68,11 @@ trait CollectionContainerTrait
      * @var mixed $currentObjId
      */
     protected $currentObjId;
+
+    /**
+     * @var mixed $currentObj
+     */
+    protected $currentObj;
 
     /**
      * @var ModelInterface $proto
@@ -153,7 +158,7 @@ trait CollectionContainerTrait
     {
         if ($this->propertyDisplayFactory === null) {
             throw new Exception(
-                'No property display factory. '.get_class($this)
+                'No property display factory. ' . get_class($this)
             );
         }
         return $this->propertyDisplayFactory;
@@ -179,7 +184,7 @@ trait CollectionContainerTrait
     {
         if ($this->collectionLoader === null) {
             $this->collectionLoader = new CollectionLoader([
-                'logger' => $this->logger,
+                'logger'  => $this->logger,
                 'factory' => $this->modelFactory()
             ]);
         }
@@ -432,13 +437,15 @@ trait CollectionContainerTrait
 
                 $objectProperties[] = $this->parsePropertyCell($object, $property, $propertyValue);
             };
+            $this->currentObj = $object;
+            $this->currentObjId = $object->id();
 
             $row = $this->parseObjectRow($object, $objectProperties);
 
-            $this->currentObjId = $object->id();
-
             yield $row;
         }
+
+        return [];
     }
 
     /**
@@ -480,7 +487,8 @@ trait CollectionContainerTrait
         ModelInterface $object,
         PropertyInterface $property,
         $propertyValue
-    ) {
+    )
+    {
         unset($object);
 
         return [
@@ -501,6 +509,7 @@ trait CollectionContainerTrait
     protected function parseObjectRow(ModelInterface $object, array $objectProperties)
     {
         return [
+            'object'           => $object,
             'objectId'         => $object->id(),
             'objectProperties' => $objectProperties
         ];
@@ -532,7 +541,7 @@ trait CollectionContainerTrait
             $objType = $this->objType();
             if (!$objType) {
                 throw new Exception(
-                    __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
+                    __CLASS__ . '::' . __FUNCTION__ . ' - Can not create collection, object type is not defined.'
                 );
             }
             $obj = $this->modelFactory()->create($objType);

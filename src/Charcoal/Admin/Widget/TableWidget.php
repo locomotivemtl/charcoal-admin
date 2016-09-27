@@ -394,7 +394,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
 
         $row['objectActions'] = $this->objectActions();
-        error_log(var_export($row['objectActions'], true));
         $row['primaryObjectAction'] = array_shift($row['objectActions']);
         $row['hasObjectActions'] = (count($row['objectActions']) > 0);
 

@@ -2601,23 +2601,38 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
 
 Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
 {
-    var that = this,
-        data = {
-            obj_type: that.obj_type,
-            obj_id: that.obj_id
-        };
+    var that = this;
 
-    if (window.confirm('Are you sure you want to delete this object?')) {
-
-        $.post(that.delete_url, data, function (response) {
-            if (response.success) {
-                $(that.element).remove();
-                //that.widget_table.reload();
-            } else {
-                window.alert('Delete failed.');
+    BootstrapDialog.confirm({
+        title: 'Confirmer la suppression',
+        type: BootstrapDialog.TYPE_DANGER,
+        message:'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
+        btnOKLabel: 'Supprimer',
+        btnCancelLabel: 'Annuler',
+        callback: function (result) {
+            if (result) {
+                var url = that.delete_url;
+                var data = {
+                    obj_type: that.obj_type,
+                    obj_id: that.obj_id
+                };
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data,
+                    dataType: 'json'
+                }).done(function (response) {
+                    //console.debug(response);
+                    if (response.success) {
+                        $(that.element).remove();
+                    } else {
+                        window.alert('Erreur. Impossible de supprimer cet objet.');
+                    }
+                });
             }
-        }, 'json');
-    }
+        }
+    });
+
 };
 
 ;Charcoal.Admin.Widget_Wysiwyg = function ()

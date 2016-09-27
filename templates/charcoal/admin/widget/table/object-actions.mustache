@@ -5,7 +5,9 @@
     @used-by `charcoal/admin/widget/tbody-row`
 --}}
 <div class="btn-group">
-    <a href="{{adminUrl}}{{objectEditUrl}}&amp;obj_id={{objectId}}" class="btn btn-primary">{{#_t}}Modifier{{/_t}}</a>
+    {{#primaryObjectAction}}
+    <a href="{{url}}" class="btn btn-primary">{{label}}</a>
+    {{/primaryObjectAction}}
     {{#hasObjectActions}}
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret" aria-hidden="true"></span>
@@ -13,7 +15,7 @@
     </button>
     <ul class="dropdown-menu">
     {{#objectActions}}
-        <li><a class="js-obj-{{ident}}" href="{{url}}">{{label}}</a></li>
+        <li><a class="js-obj-{{ident}} {{#classes}}{{.}}{{/classes}}" href="{{url}}">{{label}}</a></li>
     {{/objectActions}}
     </ul>
     {{/hasObjectActions}}

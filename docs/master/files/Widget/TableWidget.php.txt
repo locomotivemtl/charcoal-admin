@@ -394,6 +394,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
 
         $row['objectActions'] = $this->objectActions();
+        error_log(var_export($row['objectActions'], true));
         $row['primaryObjectAction'] = array_shift($row['objectActions']);
         $row['hasObjectActions'] = (count($row['objectActions']) > 0);
 
@@ -498,7 +499,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function defaultObjectActions()
     {
         if (!$this->defaultObjectActions) {
-            $edit = ['edit' => [
+            $edit =  [
                 'label'    => new TranslationString([
                     'fr' => 'Modifier',
                     'en' => 'Modify',
@@ -506,7 +507,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 'url'      => $this->objectEditUrl().'&obj_id={{id}}',
                 'ident'    => 'edit',
                 'priority' => 1
-            ]];
+            ];
             $this->defaultObjectActions = [$edit];
         }
 

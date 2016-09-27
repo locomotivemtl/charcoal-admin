@@ -158,7 +158,7 @@ trait CollectionContainerTrait
     {
         if ($this->propertyDisplayFactory === null) {
             throw new Exception(
-                'No property display factory. ' . get_class($this)
+                'No property display factory. '.get_class($this)
             );
         }
         return $this->propertyDisplayFactory;
@@ -487,8 +487,7 @@ trait CollectionContainerTrait
         ModelInterface $object,
         PropertyInterface $property,
         $propertyValue
-    )
-    {
+    ) {
         unset($object);
 
         return [
@@ -541,7 +540,7 @@ trait CollectionContainerTrait
             $objType = $this->objType();
             if (!$objType) {
                 throw new Exception(
-                    __CLASS__ . '::' . __FUNCTION__ . ' - Can not create collection, object type is not defined.'
+                    __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
                 );
             }
             $obj = $this->modelFactory()->create($objType);

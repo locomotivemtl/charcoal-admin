@@ -138,7 +138,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 $method = $matches[2];
 
                 if ($class === 'parent') {
-                    $resolved = [$model, $class . '::' . $method];
+                    $resolved = [$model, $class.'::'.$method];
                 }
             }
 
@@ -334,8 +334,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         ModelInterface $object,
         PropertyInterface $property,
         $propertyValue
-    )
-    {
+    ) {
         $cell = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
 
         $cell['classes'] = $this->parsePropertyCellClasses($property, $object);
@@ -363,8 +362,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function parsePropertyCellClasses(
         PropertyInterface $property,
         ModelInterface $object = null
-    )
-    {
+    ) {
         unset($object);
 
         $ident = $property->ident();
@@ -430,7 +428,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                     foreach ($action['url']->all() as $lang => $url) {
                         $url = $obj->render($url);
 
-                        if (strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                        if (strpos($url, ':') === false && !in_array($url[0], ['/', '#', '?'])) {
                             $url = $this->adminUrl().$url;
                         }
 
@@ -457,8 +455,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             return [];
         }
 
-        $metadata    = $model->metadata();
-        $metadata    = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $metadata = $model->metadata();
+        $metadata = isset($metadata['admin']) ? $metadata['admin'] : null;
         $listOptions = $metadata['lists'][$collectionIdent];
 
         $objectActions = (isset($listOptions['object_actions']) ? $listOptions['object_actions'] : []);
@@ -477,7 +475,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
                 $action['label'] = new TranslationString($action['label']);
             } elseif (is_string($action['ident'])) {
-                $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
+                $action['label'] = ucwords(str_replace(['.', '_'], ' ', $action['ident']));
             } else {
                 continue;
             }
@@ -489,7 +487,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $parsedActions[$action['ident']] = $action;
         }
 
-        uasort($parsedActions, [ $this, 'sortActionsByPriority' ]);
+        uasort($parsedActions, [$this, 'sortActionsByPriority']);
 
         return $parsedActions;
     }
@@ -505,7 +503,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                     'fr' => 'Modifier',
                     'en' => 'Modify',
                 ]),
-                'url'      =>  $this->objectEditUrl() . '&obj_id={{id}}',
+                'url'      => $this->objectEditUrl().'&obj_id={{id}}',
                 'ident'    => 'edit',
                 'priority' => 1
             ]];
@@ -650,7 +648,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectEditUrl()
     {
-        return 'object/edit?obj_type=' . $this->objType();
+        return 'object/edit?obj_type='.$this->objType();
     }
 
     /**
@@ -672,7 +670,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                             $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
                         }
 
-                        $action['url'] = $this->adminUrl() . $action['url'];
+                        $action['url'] = $this->adminUrl().$action['url'];
                     }
                 }
             }

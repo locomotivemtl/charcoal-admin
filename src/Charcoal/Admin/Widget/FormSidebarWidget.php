@@ -155,18 +155,17 @@ class FormSidebarWidget extends AdminWidget implements
     public function formProperties()
     {
         $sidebarProperties = $this->sidebarProperties();
-        $formProperties = $this->form()->formProperties($sidebarProperties);
-        $ret = [];
-        foreach ($formProperties as $propertyIdent => $property) {
-            if (in_array($propertyIdent, $sidebarProperties)) {
-                if (is_callable([$this->form(), 'obj'])) {
-                    $obj = $this->form()->obj();
-                    $val = $obj[$propertyIdent];
-                    $property->setPropertyVal($val);
-                }
+        $obj               = $this->form()->obj();
+        $properties        = array_intersect(array_keys($obj->metadata()->properties()), $sidebarProperties);
+        $ret               = [];
+        foreach ($properties as $propertyIdent) {
+            $property = $obj->p($propertyIdent);
+            $val      = $obj[$propertyIdent];
 
-                yield $propertyIdent => $property;
-            }
+            yield $propertyIdent => [
+                'prop'       => $property,
+                'displayVal' => $property->displayVal($val)
+            ];
         }
     }
 
@@ -212,7 +211,7 @@ class FormSidebarWidget extends AdminWidget implements
 
             // Info = default
             // Possible: danger, info
-            $btn = (isset($action['type']) ? $action['type'] : 'info');
+            $btn             = (isset($action['type']) ? $action['type'] : 'info');
             $this->actions[] = [
                 'label'       => $label,
                 'url'         => $url,
@@ -245,7 +244,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjDeletable()
     {
         $obj    = $this->form()->obj();
-        $method = [ $obj, 'isDeletable' ];
+        $method = [$obj, 'isDeletable'];
 
         if (is_callable($method)) {
             return call_user_func($method);
@@ -266,7 +265,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjResettable()
     {
         $obj    = $this->form()->obj();
-        $method = [ $obj, 'isResettable' ];
+        $method = [$obj, 'isResettable'];
 
         if (is_callable($method)) {
             return call_user_func($method);

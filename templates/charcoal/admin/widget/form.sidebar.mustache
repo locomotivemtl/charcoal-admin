@@ -24,12 +24,10 @@
                 {{#hasSidebarProperties}}
                 <ul class="c-panel_table form-group">
                 {{#formProperties}}
-                    {{#_propdisplayVal}}
                     <li class="c-panel_table_row">
                         <p class="c-panel_table_header"><strong>{{prop.label}}</strong></p>
-                        <p class="c-panel_table_data">{{prop.displayVal}}</p>
+                        <p class="c-panel_table_data">{{displayVal}}</p>
                     </li>
-                    {{/_propdisplayVal}}
                 {{/formProperties}}
                 </ul>
                 {{/hasSidebarProperties}}

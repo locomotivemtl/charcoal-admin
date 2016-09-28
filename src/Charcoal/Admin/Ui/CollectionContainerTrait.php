@@ -444,8 +444,6 @@ trait CollectionContainerTrait
 
             yield $row;
         }
-
-        return [];
     }
 
     /**

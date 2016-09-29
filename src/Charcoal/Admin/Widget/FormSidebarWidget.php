@@ -191,13 +191,13 @@ class FormSidebarWidget extends AdminWidget implements
             }
 
             $label  = new TranslationString($action['label']);
-            $active = (isset($action['active']) ? $action['active'] : true);
+            $condition = (isset($action['condition']) ? $action['condition'] : true);
 
             $obj = $this->form()->obj();
             // Shame: Make sure the view is set before attempt rendering
             if ($obj->view()) {
-                if (!is_bool($active)) {
-                    $active = $obj->render($active);
+                if (!is_bool($condition)) {
+                    $condition = $obj->render($condition);
                 }
                 $url = $obj->render($action['url']);
             } else {
@@ -216,7 +216,7 @@ class FormSidebarWidget extends AdminWidget implements
                 'label'       => $label,
                 'url'         => $url,
                 'button_type' => $btn,
-                'active'      => $active
+                'active'   => $condition
             ];
         }
         return $this;

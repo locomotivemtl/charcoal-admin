@@ -8,6 +8,7 @@ use \Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
+use Psr\Log\NullLogger;
 
 /**
  * Create user script.
@@ -20,7 +21,7 @@ class CreateScript extends AdminScript
      */
     public static function start()
     {
-        $script = new CreateScript();
+        $script = new CreateScript(['logger' => new NullLogger()]);
         $script->createUser();
     }
 

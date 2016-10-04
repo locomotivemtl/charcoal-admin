@@ -658,7 +658,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function objectCreateUrl()
     {
         $actions = $this->listActions();
-
         if ($actions) {
             foreach ($actions as $action) {
                 if (isset($action['ident']) && $action['ident'] === 'create') {
@@ -669,8 +668,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                         } else {
                             $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);
                         }
-
-                        $action['url'] = $this->adminUrl().$action['url'];
+                        return $action['url'];
                     }
                 }
             }

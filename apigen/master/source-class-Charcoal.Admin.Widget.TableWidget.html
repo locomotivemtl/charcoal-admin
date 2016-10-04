@@ -998,63 +998,61 @@
 </span><span id="658" class="l"><a href="#658">658: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> objectCreateUrl()
 </span><span id="659" class="l"><a href="#659">659: </a>    {
 </span><span id="660" class="l"><a href="#660">660: </a>        <span class="php-var">$actions</span> = <span class="php-var">$this</span>-&gt;listActions();
-</span><span id="661" class="l"><a href="#661">661: </a>
-</span><span id="662" class="l"><a href="#662">662: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$actions</span>) {
-</span><span id="663" class="l"><a href="#663">663: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$actions</span> <span class="php-keyword1">as</span> <span class="php-var">$action</span>) {
-</span><span id="664" class="l"><a href="#664">664: </a>                <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$action</span>[<span class="php-quote">'ident'</span>]) &amp;&amp; <span class="php-var">$action</span>[<span class="php-quote">'ident'</span>] === <span class="php-quote">'create'</span>) {
-</span><span id="665" class="l"><a href="#665">665: </a>                    <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$action</span>[<span class="php-quote">'url'</span>])) {
-</span><span id="666" class="l"><a href="#666">666: </a>                        <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;proto();
-</span><span id="667" class="l"><a href="#667">667: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$model</span>-&gt;view() !== <span class="php-keyword1">null</span>) {
-</span><span id="668" class="l"><a href="#668">668: </a>                            <span class="php-var">$action</span>[<span class="php-quote">'url'</span>] = <span class="php-var">$model</span>-&gt;render((string)<span class="php-var">$action</span>[<span class="php-quote">'url'</span>]);
-</span><span id="669" class="l"><a href="#669">669: </a>                        } <span class="php-keyword1">else</span> {
-</span><span id="670" class="l"><a href="#670">670: </a>                            <span class="php-var">$action</span>[<span class="php-quote">'url'</span>] = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'~{{\s*id\s*}}~'</span>, <span class="php-var">$this</span>-&gt;currentObjId, <span class="php-var">$action</span>[<span class="php-quote">'url'</span>]);
-</span><span id="671" class="l"><a href="#671">671: </a>                        }
-</span><span id="672" class="l"><a href="#672">672: </a>
-</span><span id="673" class="l"><a href="#673">673: </a>                        <span class="php-var">$action</span>[<span class="php-quote">'url'</span>] = <span class="php-var">$this</span>-&gt;adminUrl().<span class="php-var">$action</span>[<span class="php-quote">'url'</span>];
-</span><span id="674" class="l"><a href="#674">674: </a>                    }
-</span><span id="675" class="l"><a href="#675">675: </a>                }
-</span><span id="676" class="l"><a href="#676">676: </a>            }
-</span><span id="677" class="l"><a href="#677">677: </a>        }
-</span><span id="678" class="l"><a href="#678">678: </a>
-</span><span id="679" class="l"><a href="#679">679: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;objectEditUrl();
-</span><span id="680" class="l"><a href="#680">680: </a>    }
-</span><span id="681" class="l"><a href="#681">681: </a>
-</span><span id="682" class="l"><a href="#682">682: </a>    <span class="php-comment">/**
-</span></span><span id="683" class="l"><a href="#683">683: </a><span class="php-comment">     * Determine if the object can be created.
-</span></span><span id="684" class="l"><a href="#684">684: </a><span class="php-comment">     *
-</span></span><span id="685" class="l"><a href="#685">685: </a><span class="php-comment">     * If TRUE, the &quot;Create&quot; button is shown. Objects can still be
-</span></span><span id="686" class="l"><a href="#686">686: </a><span class="php-comment">     * inserted programmatically or via direct action on the database.
-</span></span><span id="687" class="l"><a href="#687">687: </a><span class="php-comment">     *
-</span></span><span id="688" class="l"><a href="#688">688: </a><span class="php-comment">     * @return boolean
-</span></span><span id="689" class="l"><a href="#689">689: </a><span class="php-comment">     */</span>
-</span><span id="690" class="l"><a href="#690">690: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isObjCreatable()
-</span><span id="691" class="l"><a href="#691">691: </a>    {
-</span><span id="692" class="l"><a href="#692">692: </a>        <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;proto();
-</span><span id="693" class="l"><a href="#693">693: </a>        <span class="php-var">$method</span> = [<span class="php-var">$model</span>, <span class="php-quote">'isCreatable'</span>];
-</span><span id="694" class="l"><a href="#694">694: </a>
-</span><span id="695" class="l"><a href="#695">695: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_callable</span>(<span class="php-var">$method</span>)) {
-</span><span id="696" class="l"><a href="#696">696: </a>            <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func</span>(<span class="php-var">$method</span>);
-</span><span id="697" class="l"><a href="#697">697: </a>        }
-</span><span id="698" class="l"><a href="#698">698: </a>
-</span><span id="699" class="l"><a href="#699">699: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
-</span><span id="700" class="l"><a href="#700">700: </a>    }
-</span><span id="701" class="l"><a href="#701">701: </a>
-</span><span id="702" class="l"><a href="#702">702: </a>    <span class="php-comment">/**
-</span></span><span id="703" class="l"><a href="#703">703: </a><span class="php-comment">     * To be called with uasort()
-</span></span><span id="704" class="l"><a href="#704">704: </a><span class="php-comment">     *
-</span></span><span id="705" class="l"><a href="#705">705: </a><span class="php-comment">     * @param  array $a First action object to sort.
-</span></span><span id="706" class="l"><a href="#706">706: </a><span class="php-comment">     * @param  array $b Second action object to sort.
-</span></span><span id="707" class="l"><a href="#707">707: </a><span class="php-comment">     * @return integer
-</span></span><span id="708" class="l"><a href="#708">708: </a><span class="php-comment">     */</span>
-</span><span id="709" class="l"><a href="#709">709: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> sortActionsByPriority(<span class="php-keyword1">array</span> <span class="php-var">$a</span>, <span class="php-keyword1">array</span> <span class="php-var">$b</span>)
-</span><span id="710" class="l"><a href="#710">710: </a>    {
-</span><span id="711" class="l"><a href="#711">711: </a>        <span class="php-var">$a</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$a</span>[<span class="php-quote">'priority'</span>]) ? <span class="php-var">$a</span>[<span class="php-quote">'priority'</span>] : <span class="php-num">0</span>;
-</span><span id="712" class="l"><a href="#712">712: </a>        <span class="php-var">$b</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$b</span>[<span class="php-quote">'priority'</span>]) ? <span class="php-var">$b</span>[<span class="php-quote">'priority'</span>] : <span class="php-num">0</span>;
-</span><span id="713" class="l"><a href="#713">713: </a>
-</span><span id="714" class="l"><a href="#714">714: </a>        <span class="php-keyword1">return</span> (<span class="php-var">$a</span> &lt; <span class="php-var">$b</span>) ? (-<span class="php-num">1</span>) : <span class="php-num">1</span>;
-</span><span id="715" class="l"><a href="#715">715: </a>    }
-</span><span id="716" class="l"><a href="#716">716: </a>}
-</span><span id="717" class="l"><a href="#717">717: </a></span></code></pre>
+</span><span id="661" class="l"><a href="#661">661: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$actions</span>) {
+</span><span id="662" class="l"><a href="#662">662: </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$actions</span> <span class="php-keyword1">as</span> <span class="php-var">$action</span>) {
+</span><span id="663" class="l"><a href="#663">663: </a>                <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$action</span>[<span class="php-quote">'ident'</span>]) &amp;&amp; <span class="php-var">$action</span>[<span class="php-quote">'ident'</span>] === <span class="php-quote">'create'</span>) {
+</span><span id="664" class="l"><a href="#664">664: </a>                    <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$action</span>[<span class="php-quote">'url'</span>])) {
+</span><span id="665" class="l"><a href="#665">665: </a>                        <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;proto();
+</span><span id="666" class="l"><a href="#666">666: </a>                        <span class="php-keyword1">if</span> (<span class="php-var">$model</span>-&gt;view() !== <span class="php-keyword1">null</span>) {
+</span><span id="667" class="l"><a href="#667">667: </a>                            <span class="php-var">$action</span>[<span class="php-quote">'url'</span>] = <span class="php-var">$model</span>-&gt;render((string)<span class="php-var">$action</span>[<span class="php-quote">'url'</span>]);
+</span><span id="668" class="l"><a href="#668">668: </a>                        } <span class="php-keyword1">else</span> {
+</span><span id="669" class="l"><a href="#669">669: </a>                            <span class="php-var">$action</span>[<span class="php-quote">'url'</span>] = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'~{{\s*id\s*}}~'</span>, <span class="php-var">$this</span>-&gt;currentObjId, <span class="php-var">$action</span>[<span class="php-quote">'url'</span>]);
+</span><span id="670" class="l"><a href="#670">670: </a>                        }
+</span><span id="671" class="l"><a href="#671">671: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$action</span>[<span class="php-quote">'url'</span>];
+</span><span id="672" class="l"><a href="#672">672: </a>                    }
+</span><span id="673" class="l"><a href="#673">673: </a>                }
+</span><span id="674" class="l"><a href="#674">674: </a>            }
+</span><span id="675" class="l"><a href="#675">675: </a>        }
+</span><span id="676" class="l"><a href="#676">676: </a>
+</span><span id="677" class="l"><a href="#677">677: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;objectEditUrl();
+</span><span id="678" class="l"><a href="#678">678: </a>    }
+</span><span id="679" class="l"><a href="#679">679: </a>
+</span><span id="680" class="l"><a href="#680">680: </a>    <span class="php-comment">/**
+</span></span><span id="681" class="l"><a href="#681">681: </a><span class="php-comment">     * Determine if the object can be created.
+</span></span><span id="682" class="l"><a href="#682">682: </a><span class="php-comment">     *
+</span></span><span id="683" class="l"><a href="#683">683: </a><span class="php-comment">     * If TRUE, the &quot;Create&quot; button is shown. Objects can still be
+</span></span><span id="684" class="l"><a href="#684">684: </a><span class="php-comment">     * inserted programmatically or via direct action on the database.
+</span></span><span id="685" class="l"><a href="#685">685: </a><span class="php-comment">     *
+</span></span><span id="686" class="l"><a href="#686">686: </a><span class="php-comment">     * @return boolean
+</span></span><span id="687" class="l"><a href="#687">687: </a><span class="php-comment">     */</span>
+</span><span id="688" class="l"><a href="#688">688: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> isObjCreatable()
+</span><span id="689" class="l"><a href="#689">689: </a>    {
+</span><span id="690" class="l"><a href="#690">690: </a>        <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;proto();
+</span><span id="691" class="l"><a href="#691">691: </a>        <span class="php-var">$method</span> = [<span class="php-var">$model</span>, <span class="php-quote">'isCreatable'</span>];
+</span><span id="692" class="l"><a href="#692">692: </a>
+</span><span id="693" class="l"><a href="#693">693: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_callable</span>(<span class="php-var">$method</span>)) {
+</span><span id="694" class="l"><a href="#694">694: </a>            <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func</span>(<span class="php-var">$method</span>);
+</span><span id="695" class="l"><a href="#695">695: </a>        }
+</span><span id="696" class="l"><a href="#696">696: </a>
+</span><span id="697" class="l"><a href="#697">697: </a>        <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+</span><span id="698" class="l"><a href="#698">698: </a>    }
+</span><span id="699" class="l"><a href="#699">699: </a>
+</span><span id="700" class="l"><a href="#700">700: </a>    <span class="php-comment">/**
+</span></span><span id="701" class="l"><a href="#701">701: </a><span class="php-comment">     * To be called with uasort()
+</span></span><span id="702" class="l"><a href="#702">702: </a><span class="php-comment">     *
+</span></span><span id="703" class="l"><a href="#703">703: </a><span class="php-comment">     * @param  array $a First action object to sort.
+</span></span><span id="704" class="l"><a href="#704">704: </a><span class="php-comment">     * @param  array $b Second action object to sort.
+</span></span><span id="705" class="l"><a href="#705">705: </a><span class="php-comment">     * @return integer
+</span></span><span id="706" class="l"><a href="#706">706: </a><span class="php-comment">     */</span>
+</span><span id="707" class="l"><a href="#707">707: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> sortActionsByPriority(<span class="php-keyword1">array</span> <span class="php-var">$a</span>, <span class="php-keyword1">array</span> <span class="php-var">$b</span>)
+</span><span id="708" class="l"><a href="#708">708: </a>    {
+</span><span id="709" class="l"><a href="#709">709: </a>        <span class="php-var">$a</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$a</span>[<span class="php-quote">'priority'</span>]) ? <span class="php-var">$a</span>[<span class="php-quote">'priority'</span>] : <span class="php-num">0</span>;
+</span><span id="710" class="l"><a href="#710">710: </a>        <span class="php-var">$b</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$b</span>[<span class="php-quote">'priority'</span>]) ? <span class="php-var">$b</span>[<span class="php-quote">'priority'</span>] : <span class="php-num">0</span>;
+</span><span id="711" class="l"><a href="#711">711: </a>
+</span><span id="712" class="l"><a href="#712">712: </a>        <span class="php-keyword1">return</span> (<span class="php-var">$a</span> &lt; <span class="php-var">$b</span>) ? (-<span class="php-num">1</span>) : <span class="php-num">1</span>;
+</span><span id="713" class="l"><a href="#713">713: </a>    }
+</span><span id="714" class="l"><a href="#714">714: </a>}
+</span><span id="715" class="l"><a href="#715">715: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

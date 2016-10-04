@@ -15,14 +15,51 @@ use Psr\Log\NullLogger;
  */
 class CreateScript extends AdminScript
 {
+
     /**
-     * A way to create a user from a php script
-     * @return void
+     * Retrieve the available default arguments of this action.
+     *
+     * @link http://climate.thephpleague.com/arguments/ For descriptions of the options for CLImate.
+     *
+     * @return array
      */
-    public static function start()
+    public function defaultArguments()
     {
-        $script = new CreateScript(['logger' => new NullLogger()]);
-        $script->createUser();
+        $arguments = [
+            'databaseName'     => [
+                'prefix'      => 'u',
+                'longPrefix'  => 'username',
+                'description' => 'The user name'
+            ],
+            'databaseUser'     => [
+                'prefix'      => 'e',
+                'longPrefix'  => 'email',
+                'description' => 'The user email'
+            ],
+            'databasePassword' => [
+                'prefix'      => 'p',
+                'longPrefix'  => 'password',
+                'description' => 'The user password'
+            ],
+            'databaseHost'     => [
+                'prefix'      => 'r',
+                'longPrefix'  => 'role',
+                'description' => 'The user role'
+            ]
+        ];
+
+        $arguments = array_merge(parent::defaultArguments(), $arguments);
+
+        return $arguments;
+    }
+
+    /**
+     * CreateScript constructor Register the action's arguments..
+     */
+    public function __construct()
+    {
+        $arguments = $this->defaultArguments();
+        $this->setArguments($arguments);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Script\User;
 
 // PSR-7 (http messaging) dependencies
+use Pimple\Container;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
@@ -26,24 +27,24 @@ class CreateScript extends AdminScript
     public function defaultArguments()
     {
         $arguments = [
-            'databaseName'     => [
+            'username' => [
                 'prefix'      => 'u',
                 'longPrefix'  => 'username',
                 'description' => 'The user name'
             ],
-            'databaseUser'     => [
+            'email'    => [
                 'prefix'      => 'e',
                 'longPrefix'  => 'email',
                 'description' => 'The user email'
             ],
-            'databasePassword' => [
+            'password' => [
                 'prefix'      => 'p',
                 'longPrefix'  => 'password',
                 'description' => 'The user password'
             ],
-            'databaseHost'     => [
+            'roles'    => [
                 'prefix'      => 'r',
-                'longPrefix'  => 'role',
+                'longPrefix'  => 'roles',
                 'description' => 'The user role'
             ]
         ];
@@ -54,10 +55,12 @@ class CreateScript extends AdminScript
     }
 
     /**
-     * CreateScript constructor Register the action's arguments..
+     * @param array|\ArrayAccess $data The dependencies (app and logger).
      */
-    public function __construct()
+    public function __construct($data = null)
     {
+        parent::__construct($data);
+
         $arguments = $this->defaultArguments();
         $this->setArguments($arguments);
     }
@@ -98,18 +101,30 @@ class CreateScript extends AdminScript
             'password'
         ];
 
+        $default_props = [
+            'username' => $climate->arguments->get('username'),
+            'email'    => $climate->arguments->get('email'),
+            'password' => $climate->arguments->get('password'),
+            'roles'    => $climate->arguments->get('roles'),
+        ];
+
         $vals = [];
         foreach ($properties as $prop) {
             if (!in_array($prop->ident(), $shown_props)) {
                 continue;
             }
-            if ($prop->type() == 'password') {
-                $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
+
+            if ($default_props[$prop->ident()]) {
+                $v = $default_props[$prop->ident()];
             } else {
-                $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
+                if ($prop->type() == 'password') {
+                    $input = $climate->password(sprintf('Enter value for "%s":', $prop->label()));
+                } else {
+                    $input = $climate->input(sprintf('Enter value for "%s":', $prop->label()));
+                }
+                $input = $this->propertyToInput($prop);
+                $v     = $input->prompt();
             }
-            $input = $this->propertyToInput($prop);
-            $v     = $input->prompt();
 
             $prop->setVal($v);
             $valid                = $prop->validate();

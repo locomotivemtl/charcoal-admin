@@ -615,116 +615,118 @@
 </span><span id="275" class="l"><a href="#275">275: </a>            <span class="php-var">$props</span> = <span class="php-keyword2">array_merge</span>(<span class="php-keyword2">array_flip</span>(<span class="php-var">$group</span>), <span class="php-var">$props</span>);
 </span><span id="276" class="l"><a href="#276">276: </a>        }
 </span><span id="277" class="l"><a href="#277">277: </a>
-</span><span id="278" class="l"><a href="#278">278: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$props</span> <span class="php-keyword1">as</span> <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$property</span>) {
-</span><span id="279" class="l"><a href="#279">279: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$property</span>)) {
-</span><span id="280" class="l"><a href="#280">280: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception(
-</span><span id="281" class="l"><a href="#281">281: </a>                    <span class="php-keyword2">sprintf</span>(
-</span><span id="282" class="l"><a href="#282">282: </a>                        <span class="php-quote">'Invalid property data for &quot;%1$s&quot;, received %2$s'</span>,
-</span><span id="283" class="l"><a href="#283">283: </a>                        <span class="php-var">$propertyIdent</span>,
-</span><span id="284" class="l"><a href="#284">284: </a>                        (<span class="php-keyword2">is_object</span>(<span class="php-var">$property</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$property</span>) : <span class="php-keyword2">gettype</span>(<span class="php-var">$property</span>))
-</span><span id="285" class="l"><a href="#285">285: </a>                    )
-</span><span id="286" class="l"><a href="#286">286: </a>                );
-</span><span id="287" class="l"><a href="#287">287: </a>            }
-</span><span id="288" class="l"><a href="#288">288: </a>
-</span><span id="289" class="l"><a href="#289">289: </a>            <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;widgetFactory()-&gt;create(<span class="php-quote">'charcoal/admin/widget/form-property'</span>);
-</span><span id="290" class="l"><a href="#290">290: </a>            <span class="php-var">$p</span>-&gt;setViewController(<span class="php-var">$this</span>-&gt;viewController());
-</span><span id="291" class="l"><a href="#291">291: </a>            <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
-</span><span id="292" class="l"><a href="#292">292: </a>            <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$property</span>);
-</span><span id="293" class="l"><a href="#293">293: </a>
-</span><span id="294" class="l"><a href="#294">294: </a>            <span class="php-var">$val</span> = <span class="php-var">$obj</span>[<span class="php-var">$propertyIdent</span>];
-</span><span id="295" class="l"><a href="#295">295: </a>            <span class="php-var">$p</span>-&gt;setPropertyVal(<span class="php-var">$val</span>);
-</span><span id="296" class="l"><a href="#296">296: </a>
-</span><span id="297" class="l"><a href="#297">297: </a>            yield <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$p</span>;
-</span><span id="298" class="l"><a href="#298">298: </a>        }
-</span><span id="299" class="l"><a href="#299">299: </a>    }
-</span><span id="300" class="l"><a href="#300">300: </a>
-</span><span id="301" class="l"><a href="#301">301: </a>    <span class="php-comment">/**
-</span></span><span id="302" class="l"><a href="#302">302: </a><span class="php-comment">     * Retrieve an object property as a form control.
-</span></span><span id="303" class="l"><a href="#303">303: </a><span class="php-comment">     *
-</span></span><span id="304" class="l"><a href="#304">304: </a><span class="php-comment">     * @param string $propertyIdent An optional group to use.
-</span></span><span id="305" class="l"><a href="#305">305: </a><span class="php-comment">     * @throws InvalidArgumentException If the property identifier is not a string.
-</span></span><span id="306" class="l"><a href="#306">306: </a><span class="php-comment">     * @throws Exception If a property data is invalid.
-</span></span><span id="307" class="l"><a href="#307">307: </a><span class="php-comment">     * @return FormPropertyWidget
-</span></span><span id="308" class="l"><a href="#308">308: </a><span class="php-comment">     */</span>
-</span><span id="309" class="l"><a href="#309">309: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formProperty(<span class="php-var">$propertyIdent</span>)
-</span><span id="310" class="l"><a href="#310">310: </a>    {
-</span><span id="311" class="l"><a href="#311">311: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_string</span>(<span class="php-var">$propertyIdent</span>)) {
-</span><span id="312" class="l"><a href="#312">312: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> InvalidArgumentException(
-</span><span id="313" class="l"><a href="#313">313: </a>                <span class="php-quote">'Property ident must be a string'</span>
-</span><span id="314" class="l"><a href="#314">314: </a>            );
-</span><span id="315" class="l"><a href="#315">315: </a>        }
-</span><span id="316" class="l"><a href="#316">316: </a>
-</span><span id="317" class="l"><a href="#317">317: </a>        <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;obj();
-</span><span id="318" class="l"><a href="#318">318: </a>        <span class="php-var">$property</span> = <span class="php-var">$obj</span>-&gt;metadata()-&gt;property(<span class="php-var">$propertyIdent</span>);
-</span><span id="319" class="l"><a href="#319">319: </a>
-</span><span id="320" class="l"><a href="#320">320: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$property</span>)) {
-</span><span id="321" class="l"><a href="#321">321: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception(
-</span><span id="322" class="l"><a href="#322">322: </a>                <span class="php-keyword2">sprintf</span>(
-</span><span id="323" class="l"><a href="#323">323: </a>                    <span class="php-quote">'Invalid property data for &quot;%1$s&quot;, received %2$s'</span>,
-</span><span id="324" class="l"><a href="#324">324: </a>                    <span class="php-var">$propertyIdent</span>,
-</span><span id="325" class="l"><a href="#325">325: </a>                    (<span class="php-keyword2">is_object</span>(<span class="php-var">$property</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$property</span>) : <span class="php-keyword2">gettype</span>(<span class="php-var">$property</span>))
-</span><span id="326" class="l"><a href="#326">326: </a>                )
-</span><span id="327" class="l"><a href="#327">327: </a>            );
-</span><span id="328" class="l"><a href="#328">328: </a>        }
-</span><span id="329" class="l"><a href="#329">329: </a>
-</span><span id="330" class="l"><a href="#330">330: </a>        <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;widgetFactory()-&gt;create(<span class="php-quote">'charcoal/admin/widget/form-property'</span>);
-</span><span id="331" class="l"><a href="#331">331: </a>        <span class="php-var">$p</span>-&gt;setViewController(<span class="php-var">$this</span>-&gt;viewController());
-</span><span id="332" class="l"><a href="#332">332: </a>        <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
-</span><span id="333" class="l"><a href="#333">333: </a>        <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$property</span>);
-</span><span id="334" class="l"><a href="#334">334: </a>
-</span><span id="335" class="l"><a href="#335">335: </a>        <span class="php-keyword1">return</span> <span class="php-var">$p</span>;
-</span><span id="336" class="l"><a href="#336">336: </a>    }
-</span><span id="337" class="l"><a href="#337">337: </a>
-</span><span id="338" class="l"><a href="#338">338: </a>    <span class="php-comment">/**
-</span></span><span id="339" class="l"><a href="#339">339: </a><span class="php-comment">     * Set the form's auxiliary data.
-</span></span><span id="340" class="l"><a href="#340">340: </a><span class="php-comment">     *
-</span></span><span id="341" class="l"><a href="#341">341: </a><span class="php-comment">     * This method is called via {@see self::setData()} if a &quot;form_data&quot; parameter
-</span></span><span id="342" class="l"><a href="#342">342: </a><span class="php-comment">     * is present on the HTTP request.
-</span></span><span id="343" class="l"><a href="#343">343: </a><span class="php-comment">     *
-</span></span><span id="344" class="l"><a href="#344">344: </a><span class="php-comment">     * @param array $data Data.
-</span></span><span id="345" class="l"><a href="#345">345: </a><span class="php-comment">     * @return ObjectFormWidget Chainable.
-</span></span><span id="346" class="l"><a href="#346">346: </a><span class="php-comment">     */</span>
-</span><span id="347" class="l"><a href="#347">347: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setFormData(<span class="php-keyword1">array</span> <span class="php-var">$data</span>)
-</span><span id="348" class="l"><a href="#348">348: </a>    {
-</span><span id="349" class="l"><a href="#349">349: </a>        <span class="php-var">$objData</span> = <span class="php-var">$this</span>-&gt;objData();
-</span><span id="350" class="l"><a href="#350">350: </a>        <span class="php-var">$merged</span> = <span class="php-keyword2">array_replace_recursive</span>(<span class="php-var">$objData</span>, <span class="php-var">$data</span>);
-</span><span id="351" class="l"><a href="#351">351: </a>
-</span><span id="352" class="l"><a href="#352">352: </a>        <span class="php-comment">// Remove null values</span>
-</span><span id="353" class="l"><a href="#353">353: </a>        <span class="php-var">$merged</span> = <span class="php-keyword2">array_filter</span>(<span class="php-var">$merged</span>, <span class="php-keyword1">function</span> (<span class="php-var">$val</span>) {
-</span><span id="354" class="l"><a href="#354">354: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$val</span> === <span class="php-keyword1">null</span>) {
-</span><span id="355" class="l"><a href="#355">355: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
-</span><span id="356" class="l"><a href="#356">356: </a>            }
-</span><span id="357" class="l"><a href="#357">357: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
-</span><span id="358" class="l"><a href="#358">358: </a>        });
-</span><span id="359" class="l"><a href="#359">359: </a>
-</span><span id="360" class="l"><a href="#360">360: </a>        <span class="php-var">$this</span>-&gt;formData = <span class="php-var">$merged</span>;
-</span><span id="361" class="l"><a href="#361">361: </a>        <span class="php-var">$this</span>-&gt;obj()-&gt;setData(<span class="php-var">$merged</span>);
-</span><span id="362" class="l"><a href="#362">362: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
-</span><span id="363" class="l"><a href="#363">363: </a>    }
-</span><span id="364" class="l"><a href="#364">364: </a>
-</span><span id="365" class="l"><a href="#365">365: </a>    <span class="php-comment">/**
-</span></span><span id="366" class="l"><a href="#366">366: </a><span class="php-comment">     * Retrieve the form's auxiliary  data.
-</span></span><span id="367" class="l"><a href="#367">367: </a><span class="php-comment">     *
-</span></span><span id="368" class="l"><a href="#368">368: </a><span class="php-comment">     * @return array
-</span></span><span id="369" class="l"><a href="#369">369: </a><span class="php-comment">     */</span>
-</span><span id="370" class="l"><a href="#370">370: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formData()
-</span><span id="371" class="l"><a href="#371">371: </a>    {
-</span><span id="372" class="l"><a href="#372">372: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;formData) {
-</span><span id="373" class="l"><a href="#373">373: </a>            <span class="php-var">$this</span>-&gt;formData = <span class="php-var">$this</span>-&gt;objData();
-</span><span id="374" class="l"><a href="#374">374: </a>        }
-</span><span id="375" class="l"><a href="#375">375: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;formData;
-</span><span id="376" class="l"><a href="#376">376: </a>    }
-</span><span id="377" class="l"><a href="#377">377: </a>
-</span><span id="378" class="l"><a href="#378">378: </a>    <span class="php-comment">/**
-</span></span><span id="379" class="l"><a href="#379">379: </a><span class="php-comment">     * Object data.
-</span></span><span id="380" class="l"><a href="#380">380: </a><span class="php-comment">     * @return array Object data.
-</span></span><span id="381" class="l"><a href="#381">381: </a><span class="php-comment">     */</span>
-</span><span id="382" class="l"><a href="#382">382: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> objData()
-</span><span id="383" class="l"><a href="#383">383: </a>    {
-</span><span id="384" class="l"><a href="#384">384: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;obj()-&gt;data();
-</span><span id="385" class="l"><a href="#385">385: </a>    }
-</span><span id="386" class="l"><a href="#386">386: </a>}
-</span><span id="387" class="l"><a href="#387">387: </a></span></code></pre>
+</span><span id="278" class="l"><a href="#278">278: </a>        <span class="php-keyword1">foreach</span> (<span class="php-var">$props</span> <span class="php-keyword1">as</span> <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$propertyMetadata</span>) {
+</span><span id="279" class="l"><a href="#279">279: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword2">method_exists</span>(<span class="php-var">$obj</span>, <span class="php-quote">'filterPropertyMetadata'</span>)) {
+</span><span id="280" class="l"><a href="#280">280: </a>                <span class="php-var">$propertyMetadata</span> = <span class="php-var">$obj</span>-&gt;filterPropertyMetadata(<span class="php-var">$propertyMetadata</span>, <span class="php-var">$propertyIdent</span>);
+</span><span id="281" class="l"><a href="#281">281: </a>            }
+</span><span id="282" class="l"><a href="#282">282: </a>
+</span><span id="283" class="l"><a href="#283">283: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$propertyMetadata</span>)) {
+</span><span id="284" class="l"><a href="#284">284: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception(
+</span><span id="285" class="l"><a href="#285">285: </a>                    <span class="php-keyword2">sprintf</span>(
+</span><span id="286" class="l"><a href="#286">286: </a>                        <span class="php-quote">'Invalid property data for &quot;%1$s&quot;, received %2$s'</span>,
+</span><span id="287" class="l"><a href="#287">287: </a>                        <span class="php-var">$propertyIdent</span>,
+</span><span id="288" class="l"><a href="#288">288: </a>                        (<span class="php-keyword2">is_object</span>(<span class="php-var">$propertyMetadata</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$propertyMetadata</span>) : <span class="php-keyword2">gettype</span>(<span class="php-var">$propertyMetadata</span>))
+</span><span id="289" class="l"><a href="#289">289: </a>                    )
+</span><span id="290" class="l"><a href="#290">290: </a>                );
+</span><span id="291" class="l"><a href="#291">291: </a>            }
+</span><span id="292" class="l"><a href="#292">292: </a>
+</span><span id="293" class="l"><a href="#293">293: </a>            <span class="php-var">$formProperty</span> = <span class="php-var">$this</span>-&gt;widgetFactory()-&gt;create(<span class="php-quote">'charcoal/admin/widget/form-property'</span>);
+</span><span id="294" class="l"><a href="#294">294: </a>            <span class="php-var">$formProperty</span>-&gt;setViewController(<span class="php-var">$this</span>-&gt;viewController());
+</span><span id="295" class="l"><a href="#295">295: </a>            <span class="php-var">$formProperty</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
+</span><span id="296" class="l"><a href="#296">296: </a>            <span class="php-var">$formProperty</span>-&gt;setData(<span class="php-var">$propertyMetadata</span>);
+</span><span id="297" class="l"><a href="#297">297: </a>            <span class="php-var">$formProperty</span>-&gt;setPropertyVal(<span class="php-var">$obj</span>[<span class="php-var">$propertyIdent</span>]);
+</span><span id="298" class="l"><a href="#298">298: </a>
+</span><span id="299" class="l"><a href="#299">299: </a>            yield <span class="php-var">$propertyIdent</span> =&gt; <span class="php-var">$formProperty</span>;
+</span><span id="300" class="l"><a href="#300">300: </a>        }
+</span><span id="301" class="l"><a href="#301">301: </a>    }
+</span><span id="302" class="l"><a href="#302">302: </a>
+</span><span id="303" class="l"><a href="#303">303: </a>    <span class="php-comment">/**
+</span></span><span id="304" class="l"><a href="#304">304: </a><span class="php-comment">     * Retrieve an object property as a form control.
+</span></span><span id="305" class="l"><a href="#305">305: </a><span class="php-comment">     *
+</span></span><span id="306" class="l"><a href="#306">306: </a><span class="php-comment">     * @param string $propertyIdent An optional group to use.
+</span></span><span id="307" class="l"><a href="#307">307: </a><span class="php-comment">     * @throws InvalidArgumentException If the property identifier is not a string.
+</span></span><span id="308" class="l"><a href="#308">308: </a><span class="php-comment">     * @throws Exception If a property data is invalid.
+</span></span><span id="309" class="l"><a href="#309">309: </a><span class="php-comment">     * @return FormPropertyWidget
+</span></span><span id="310" class="l"><a href="#310">310: </a><span class="php-comment">     */</span>
+</span><span id="311" class="l"><a href="#311">311: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formProperty(<span class="php-var">$propertyIdent</span>)
+</span><span id="312" class="l"><a href="#312">312: </a>    {
+</span><span id="313" class="l"><a href="#313">313: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_string</span>(<span class="php-var">$propertyIdent</span>)) {
+</span><span id="314" class="l"><a href="#314">314: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> InvalidArgumentException(
+</span><span id="315" class="l"><a href="#315">315: </a>                <span class="php-quote">'Property ident must be a string'</span>
+</span><span id="316" class="l"><a href="#316">316: </a>            );
+</span><span id="317" class="l"><a href="#317">317: </a>        }
+</span><span id="318" class="l"><a href="#318">318: </a>
+</span><span id="319" class="l"><a href="#319">319: </a>        <span class="php-var">$obj</span> = <span class="php-var">$this</span>-&gt;obj();
+</span><span id="320" class="l"><a href="#320">320: </a>        <span class="php-var">$property</span> = <span class="php-var">$obj</span>-&gt;metadata()-&gt;property(<span class="php-var">$propertyIdent</span>);
+</span><span id="321" class="l"><a href="#321">321: </a>
+</span><span id="322" class="l"><a href="#322">322: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_array</span>(<span class="php-var">$property</span>)) {
+</span><span id="323" class="l"><a href="#323">323: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception(
+</span><span id="324" class="l"><a href="#324">324: </a>                <span class="php-keyword2">sprintf</span>(
+</span><span id="325" class="l"><a href="#325">325: </a>                    <span class="php-quote">'Invalid property data for &quot;%1$s&quot;, received %2$s'</span>,
+</span><span id="326" class="l"><a href="#326">326: </a>                    <span class="php-var">$propertyIdent</span>,
+</span><span id="327" class="l"><a href="#327">327: </a>                    (<span class="php-keyword2">is_object</span>(<span class="php-var">$property</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$property</span>) : <span class="php-keyword2">gettype</span>(<span class="php-var">$property</span>))
+</span><span id="328" class="l"><a href="#328">328: </a>                )
+</span><span id="329" class="l"><a href="#329">329: </a>            );
+</span><span id="330" class="l"><a href="#330">330: </a>        }
+</span><span id="331" class="l"><a href="#331">331: </a>
+</span><span id="332" class="l"><a href="#332">332: </a>        <span class="php-var">$p</span> = <span class="php-var">$this</span>-&gt;widgetFactory()-&gt;create(<span class="php-quote">'charcoal/admin/widget/form-property'</span>);
+</span><span id="333" class="l"><a href="#333">333: </a>        <span class="php-var">$p</span>-&gt;setViewController(<span class="php-var">$this</span>-&gt;viewController());
+</span><span id="334" class="l"><a href="#334">334: </a>        <span class="php-var">$p</span>-&gt;setPropertyIdent(<span class="php-var">$propertyIdent</span>);
+</span><span id="335" class="l"><a href="#335">335: </a>        <span class="php-var">$p</span>-&gt;setData(<span class="php-var">$property</span>);
+</span><span id="336" class="l"><a href="#336">336: </a>
+</span><span id="337" class="l"><a href="#337">337: </a>        <span class="php-keyword1">return</span> <span class="php-var">$p</span>;
+</span><span id="338" class="l"><a href="#338">338: </a>    }
+</span><span id="339" class="l"><a href="#339">339: </a>
+</span><span id="340" class="l"><a href="#340">340: </a>    <span class="php-comment">/**
+</span></span><span id="341" class="l"><a href="#341">341: </a><span class="php-comment">     * Set the form's auxiliary data.
+</span></span><span id="342" class="l"><a href="#342">342: </a><span class="php-comment">     *
+</span></span><span id="343" class="l"><a href="#343">343: </a><span class="php-comment">     * This method is called via {@see self::setData()} if a &quot;form_data&quot; parameter
+</span></span><span id="344" class="l"><a href="#344">344: </a><span class="php-comment">     * is present on the HTTP request.
+</span></span><span id="345" class="l"><a href="#345">345: </a><span class="php-comment">     *
+</span></span><span id="346" class="l"><a href="#346">346: </a><span class="php-comment">     * @param array $data Data.
+</span></span><span id="347" class="l"><a href="#347">347: </a><span class="php-comment">     * @return ObjectFormWidget Chainable.
+</span></span><span id="348" class="l"><a href="#348">348: </a><span class="php-comment">     */</span>
+</span><span id="349" class="l"><a href="#349">349: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setFormData(<span class="php-keyword1">array</span> <span class="php-var">$data</span>)
+</span><span id="350" class="l"><a href="#350">350: </a>    {
+</span><span id="351" class="l"><a href="#351">351: </a>        <span class="php-var">$objData</span> = <span class="php-var">$this</span>-&gt;objData();
+</span><span id="352" class="l"><a href="#352">352: </a>        <span class="php-var">$merged</span> = <span class="php-keyword2">array_replace_recursive</span>(<span class="php-var">$objData</span>, <span class="php-var">$data</span>);
+</span><span id="353" class="l"><a href="#353">353: </a>
+</span><span id="354" class="l"><a href="#354">354: </a>        <span class="php-comment">// Remove null values</span>
+</span><span id="355" class="l"><a href="#355">355: </a>        <span class="php-var">$merged</span> = <span class="php-keyword2">array_filter</span>(<span class="php-var">$merged</span>, <span class="php-keyword1">function</span> (<span class="php-var">$val</span>) {
+</span><span id="356" class="l"><a href="#356">356: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$val</span> === <span class="php-keyword1">null</span>) {
+</span><span id="357" class="l"><a href="#357">357: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">false</span>;
+</span><span id="358" class="l"><a href="#358">358: </a>            }
+</span><span id="359" class="l"><a href="#359">359: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">true</span>;
+</span><span id="360" class="l"><a href="#360">360: </a>        });
+</span><span id="361" class="l"><a href="#361">361: </a>
+</span><span id="362" class="l"><a href="#362">362: </a>        <span class="php-var">$this</span>-&gt;formData = <span class="php-var">$merged</span>;
+</span><span id="363" class="l"><a href="#363">363: </a>        <span class="php-var">$this</span>-&gt;obj()-&gt;setData(<span class="php-var">$merged</span>);
+</span><span id="364" class="l"><a href="#364">364: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
+</span><span id="365" class="l"><a href="#365">365: </a>    }
+</span><span id="366" class="l"><a href="#366">366: </a>
+</span><span id="367" class="l"><a href="#367">367: </a>    <span class="php-comment">/**
+</span></span><span id="368" class="l"><a href="#368">368: </a><span class="php-comment">     * Retrieve the form's auxiliary  data.
+</span></span><span id="369" class="l"><a href="#369">369: </a><span class="php-comment">     *
+</span></span><span id="370" class="l"><a href="#370">370: </a><span class="php-comment">     * @return array
+</span></span><span id="371" class="l"><a href="#371">371: </a><span class="php-comment">     */</span>
+</span><span id="372" class="l"><a href="#372">372: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> formData()
+</span><span id="373" class="l"><a href="#373">373: </a>    {
+</span><span id="374" class="l"><a href="#374">374: </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;formData) {
+</span><span id="375" class="l"><a href="#375">375: </a>            <span class="php-var">$this</span>-&gt;formData = <span class="php-var">$this</span>-&gt;objData();
+</span><span id="376" class="l"><a href="#376">376: </a>        }
+</span><span id="377" class="l"><a href="#377">377: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;formData;
+</span><span id="378" class="l"><a href="#378">378: </a>    }
+</span><span id="379" class="l"><a href="#379">379: </a>
+</span><span id="380" class="l"><a href="#380">380: </a>    <span class="php-comment">/**
+</span></span><span id="381" class="l"><a href="#381">381: </a><span class="php-comment">     * Object data.
+</span></span><span id="382" class="l"><a href="#382">382: </a><span class="php-comment">     * @return array Object data.
+</span></span><span id="383" class="l"><a href="#383">383: </a><span class="php-comment">     */</span>
+</span><span id="384" class="l"><a href="#384">384: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> objData()
+</span><span id="385" class="l"><a href="#385">385: </a>    {
+</span><span id="386" class="l"><a href="#386">386: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;obj()-&gt;data();
+</span><span id="387" class="l"><a href="#387">387: </a>    }
+</span><span id="388" class="l"><a href="#388">388: </a>}
+</span><span id="389" class="l"><a href="#389">389: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

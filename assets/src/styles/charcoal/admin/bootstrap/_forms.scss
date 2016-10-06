@@ -13,14 +13,18 @@ input[type="url"] {
     font-family: monospace;
 }
 
-label {
-    font-weight: $weight-normal;
+.control-label {
+    font-weight: 400;
 }
 
 .radio,
 .checkbox {
-    margin-top: 0;
+    margin-top:    0;
     margin-bottom: 0;
+}
+
+.form-field {
+    position: relative;
 }
 
 .form-control {
@@ -34,5 +38,17 @@ label {
 
     &.-noborder {
         border: none;
+    }
+}
+
+.active-lang {
+    [data-lang] {
+        display:        inline-block;
+        margin-bottom:  5px;
+        color:          #959595;
+        font-size:      $font-size-small;
+        font-weight:    700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 }

@@ -1491,13 +1491,16 @@ input[type="checkbox"]:focus {
 input[type="url"] {
   font-family: monospace; }
 
-label {
+.control-label {
   font-weight: 400; }
 
 .radio,
 .checkbox {
   margin-top: 0;
   margin-bottom: 0; }
+
+.form-field {
+  position: relative; }
 
 .form-control:focus {
   box-shadow: none; }
@@ -1507,6 +1510,15 @@ label {
 
 .form-control.-noborder {
   border: none; }
+
+.active-lang [data-lang] {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #959595;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase; }
 
 .table > thead > tr > th,
 .table > thead > tr > td,
@@ -1700,20 +1712,33 @@ a:focus {
 .bootstrap-dialog .form-group .pull-right {
   display: none; }
 
-.bootstrap-dialog .form-group [data-lang="en"].hidden,
-.bootstrap-dialog .form-group [data-lang="fr"].hidden {
-  display: initial !important; }
+.bootstrap-dialog .form-field[data-lang] {
+  margin-top: 10px;
+  margin-left: 30px; }
+  .bootstrap-dialog .form-field[data-lang].hidden {
+    display: block !important; }
+  .bootstrap-dialog .form-field[data-lang]::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 0;
+    left: -30px;
+    display: block;
+    width: 30px;
+    color: #959595;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 48px;
+    text-transform: uppercase; }
 
-.bootstrap-dialog .form-group [data-lang="en"]:before,
-.bootstrap-dialog .form-group [data-lang="fr"]:before {
-  display: block;
-  margin-top: 10px; }
+.form-group-sm .bootstrap-dialog .form-field[data-lang]::before {
+  line-height: 38px; }
 
-.bootstrap-dialog .form-group [data-lang="en"]:before {
-  content: "en"; }
+.form-group-lg .bootstrap-dialog .form-field[data-lang]::before {
+  line-height: 46px; }
 
-.bootstrap-dialog .form-group [data-lang="fr"]:before {
-  content: "fr"; }
+.bootstrap-dialog .form-field.form-property-file[data-lang]::before, .bootstrap-dialog .form-field.form-property-image[data-lang]::before {
+  line-height: 32px; }
 
 .o-color-swatch {
   cursor: text;

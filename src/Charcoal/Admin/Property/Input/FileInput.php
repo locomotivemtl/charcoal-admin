@@ -80,6 +80,17 @@ class FileInput extends AbstractPropertyInput
     /**
      * @return string|null
      */
+    public function abridgedInputVal()
+    {
+        $val = (string)$this->inputVal();
+        $val = preg_replace('!^'.preg_quote($this->p()->uploadPath(), '!').'!', '', $val);
+
+        return $val;
+    }
+
+    /**
+     * @return string|null
+     */
     public function filePreview()
     {
         return null;

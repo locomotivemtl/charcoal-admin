@@ -43,13 +43,12 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
             <div class="col-md-{{ layout.cellSpanBy12 }}">
                  <div class="form-group">
-                    <label for="{{ prop.inputId }}">{{ prop.label }}{{# prop.required }}<span class="text-danger">*</span>{{/ prop.required }}</label>
-
+                    <label class="control-label" for="{{ prop.inputId }}">{{ prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
 
                     {{# l10n }}
-                    <span class="pull-right">
+                    <span class="active-lang pull-right">
                         {{# languages }}
-                            <span aria-label="{{ name }}" data-lang="{{ ident }}" class="small text-uppercase text-muted{{^ current }} hidden{{/ current }}">{{ ident }}</span>
+                        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class=" hidden"{{/ current }}>{{ ident }}</span>
                         {{/ languages }}
                     </span>
                     {{/ l10n }}
@@ -57,10 +56,10 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                     {{> charcoal/admin/template/inc.description }}
 
                     {{# input }}
-                        {{!-- The actual property control (typically `PropertyInput`) --}}
-                        <div{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}{{# hidden }} class="hidden"{{/ hidden }}>
-                            {{> $widget_template }}
-                        </div>
+                    {{!-- The actual property control (typically `PropertyInput`) --}}
+                    <div class="form-field{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+                        {{> $widget_template }}
+                    </div>
                     {{/ input }}
 
                     {{> charcoal/admin/template/inc.notes }}

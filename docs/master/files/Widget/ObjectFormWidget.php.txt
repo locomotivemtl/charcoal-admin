@@ -275,26 +275,28 @@ class ObjectFormWidget extends FormWidget implements
             $props = array_merge(array_flip($group), $props);
         }
 
-        foreach ($props as $propertyIdent => $property) {
-            if (!is_array($property)) {
+        foreach ($props as $propertyIdent => $propertyMetadata) {
+            if (method_exists($obj, 'filterPropertyMetadata')) {
+                $propertyMetadata = $obj->filterPropertyMetadata($propertyMetadata, $propertyIdent);
+            }
+
+            if (!is_array($propertyMetadata)) {
                 throw new Exception(
                     sprintf(
                         'Invalid property data for "%1$s", received %2$s',
                         $propertyIdent,
-                        (is_object($property) ? get_class($property) : gettype($property))
+                        (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
                     )
                 );
             }
 
-            $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
-            $p->setViewController($this->viewController());
-            $p->setPropertyIdent($propertyIdent);
-            $p->setData($property);
+            $formProperty = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+            $formProperty->setViewController($this->viewController());
+            $formProperty->setPropertyIdent($propertyIdent);
+            $formProperty->setData($propertyMetadata);
+            $formProperty->setPropertyVal($obj[$propertyIdent]);
 
-            $val = $obj[$propertyIdent];
-            $p->setPropertyVal($val);
-
-            yield $propertyIdent => $p;
+            yield $propertyIdent => $formProperty;
         }
     }
 

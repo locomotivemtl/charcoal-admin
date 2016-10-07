@@ -428,7 +428,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                     foreach ($action['url']->all() as $lang => $url) {
                         $url = $obj->render($url);
 
-                        if (strpos($url, ':') === false && !in_array($url[0], ['/', '#', '?'])) {
+                        if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
                             $url = $this->adminUrl().$url;
                         }
 

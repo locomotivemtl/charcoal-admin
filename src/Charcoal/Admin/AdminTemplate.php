@@ -430,7 +430,7 @@ class AdminTemplate extends AbstractTemplate
 
             if (!empty($menuItem['url'])) {
                 $url = $menuItem['url'];
-                if (strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
                     $url = $this->adminUrl().$url;
                 }
             } else {

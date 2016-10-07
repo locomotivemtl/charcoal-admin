@@ -19,7 +19,10 @@ use \elFinder;
 use \Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
-use Charcoal\Property\PropertyInterface;
+use \Charcoal\Property\PropertyInterface;
+
+// From 'charcoal-app'
+use \Charcoal\App\CallableResolverAwareTrait;
 
 // Intra-module ('charcoal-admin') dependencies
 use \Charcoal\Admin\AdminAction;
@@ -29,12 +32,21 @@ use \Charcoal\Admin\AdminAction;
  */
 class ElfinderConnectorAction extends AdminAction
 {
+    use CallableResolverAwareTrait;
+
     /**
      * The base URI for the Charcoal application.
      *
      * @var string|\Psr\Http\Message\UriInterface
      */
     public $baseUrl;
+
+    /**
+     * Store the elFinder configuration.
+     *
+     * @var array
+     */
+    protected $elfinderConfig;
 
     /**
      * Store a reference to the admin configuration.
@@ -70,6 +82,7 @@ class ElfinderConnectorAction extends AdminAction
         $this->baseUrl = $container['base-url'];
         $this->adminConfig = $container['admin/config'];
         $this->setPropertyFactory($container['property/factory']);
+        $this->setCallableResolver($container['callableResolver']);
     }
 
     /**
@@ -112,14 +125,21 @@ class ElfinderConnectorAction extends AdminAction
     {
         unset($request);
 
-        $opts = $this->defaultConnectorOptions();
+        $this->elfinderConfig = $this->defaultConnectorOptions();
 
         if (isset($this->adminConfig['elfinder'])) {
-            $opts = array_merge_recursive($opts, $this->adminConfig['elfinder']);
+            $this->elfinderConfig = array_replace_recursive(
+                $this->elfinderConfig,
+                $this->adminConfig['elfinder']
+            );
+        }
+
+        if (isset($this->elfinderConfig['bind'])) {
+            $this->elfinderConfig['bind'] = $this->resolveBoundCallbacks($this->elfinderConfig['bind']);
         }
 
         // Run elFinder
-        $connector = new elFinderConnector(new elFinder($opts));
+        $connector = new elFinderConnector(new elFinder($this->elfinderConfig));
         $connector->run();
 
         return $response;
@@ -183,6 +203,64 @@ class ElfinderConnectorAction extends AdminAction
                 ]
             ]
         ];
+    }
+
+    /**
+     * Resolve elFinder event listeners.
+     *
+     * @param  array $toResolve One or many pairs of callbacks.
+     * @return array Returns the parsed event listeners.
+     */
+    protected function resolveBoundCallbacks(array $toResolve)
+    {
+        $resolved = $toResolve;
+
+        foreach ($toResolve as $actions => $callables) {
+            foreach ($callables as $i => $callable) {
+                if (!is_callable($callable) && is_string($callable)) {
+                    if (0 === strpos($callable, 'Plugin.')) {
+                        continue;
+                    }
+
+                    $resolved[$actions][$i] = $this->resolveCallable($callable);
+                }
+            }
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * Trim a file name.
+     *
+     * @param  string $path     The target path.
+     * @param  string $name     The target name.
+     * @param  string $src      The temporary file name.
+     * @param  object $elfinder The elFinder instance.
+     * @param  object $volume   The current volume instance.
+     * @return true
+     */
+    public function sanitizeOnUploadPreSave(&$path, &$name, $src, $elfinder, $volume)
+    {
+        if (isset($this->elfinderConfig['plugin']['Sanitizer'])) {
+            $opts = $this->elfinderConfig['plugin']['Sanitizer'];
+
+            if (isset($opts['enable']) && $opts['enable']) {
+                $mask  = (is_array($opts['replace']) ? implode($opts['replace']) : $opts['replace']);
+                $ext   = '.'.pathinfo($name, PATHINFO_EXTENSION);
+
+                // Strip leading and trailing dashes or underscores
+                $name  = trim(str_replace($ext, '', $name), $mask);
+
+                // Squeeze multiple delimiters and whitespace with a single separator
+                $name = preg_replace('!['.preg_quote($mask, '!').'\.\s]{2,}!', $opts['replace'], $name);
+
+                // Reassemble the file name
+                $name .= $ext;
+            }
+        }
+
+        return true;
     }
 
     /**

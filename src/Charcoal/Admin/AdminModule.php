@@ -13,9 +13,6 @@ use \Pimple\Container;
 use \Charcoal\App\Handler\HandlerInterface;
 use \Charcoal\App\Module\AbstractModule;
 
-// Intra-module ('charcoal-admin') dependencies
-use \Charcoal\Admin\Config as AdminConfig;
-
 /**
  * Charcoal Administration Module
  */
@@ -27,11 +24,10 @@ class AdminModule extends AbstractModule
      * This module is bound to the `/admin` URL.
      *
      * ## Provides
+     *
      * - `charcoal/admin/module` An instance of this module
      *   - Exact type: `\Charcoal\Admin\AdminModule`
      *   - which implements `\Charcoal\Module\ModuleInterface`
-     * - `charcoal/admin/config`
-     * - `
      *
      * ## Dependencies
      * - `charcoal/config` Provided by \Charcoal\CharcoalModule
@@ -52,17 +48,7 @@ class AdminModule extends AbstractModule
             return $module;
         };
 
-        $container['charcoal/admin/config'] = function ($c) {
-            $config = new AdminConfig();
-
-            if ($c['config']->has('admin')) {
-                $config->merge($c['config']->get('admin'));
-            }
-
-            return $config;
-        };
-
-        $config = $container['charcoal/admin/config'];
+        $config = $container['admin/config'];
 
         $this->setConfig($config);
 

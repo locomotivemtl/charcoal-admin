@@ -40,8 +40,8 @@ class AdminServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         /**
-         * @param Container $container The Pimple DI Container.
-         * @return \Charcoal\Config\ConfigInterface
+         * @param  Container $container The Pimple DI Container.
+         * @return ConfigInterface
          */
         $container['admin/config'] = function (Container $container) {
             $appConfig = $container['config'];

@@ -59,7 +59,6 @@ $modelFactory = new \Charcoal\Factory\GenericFactory([
 $GLOBALS['container'] = new AppContainer([
     'config'                => $config,
     'admin/config'          => $adminConfig,
-    'charcoal/admin/config' => $adminConfig,
     'metadata/loader'       => $metadataLoader,
     'model/factory'         => $modelFactory,
     'model/collection/loader' => new \Charcoal\Loader\CollectionLoader([

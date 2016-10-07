@@ -17,6 +17,13 @@ use Charcoal\App\Action\AbstractAction;
 abstract class AdminAction extends AbstractAction
 {
     /**
+     * Store a reference to the admin configuration.
+     *
+     * @var \Charcoal\Admin\Config
+     */
+    protected $adminConfig;
+
+    /**
      * @var array $feedbacks
      */
     private $feedbacks = [];
@@ -52,6 +59,7 @@ abstract class AdminAction extends AbstractAction
     {
         parent::setDependencies($container);
 
+        $this->adminConfig = $container['admin/config'];
         $this->setModelFactory($container['model/factory']);
     }
 

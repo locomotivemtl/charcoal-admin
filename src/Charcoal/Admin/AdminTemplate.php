@@ -49,7 +49,7 @@ class AdminTemplate extends AbstractTemplate
     protected $baseUrl;
 
     /**
-     * The admin area configuration.
+     * Store a reference to the admin configuration.
      *
      * @var \Charcoal\Admin\Config
      */
@@ -137,7 +137,7 @@ class AdminTemplate extends AbstractTemplate
     {
         parent::setDependencies($container);
 
-        $this->adminConfig = $container['charcoal/admin/config'];
+        $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
         $this->setAuthenticator($container['admin/authenticator']);

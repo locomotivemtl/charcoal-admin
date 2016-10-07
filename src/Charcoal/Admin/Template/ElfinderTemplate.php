@@ -30,6 +30,13 @@ use \Charcoal\Admin\AdminTemplate;
 class ElfinderTemplate extends AdminTemplate
 {
     /**
+     * Store the elFinder configuration from the admin configuration.
+     *
+     * @var \Charcoal\Config\ConfigInterface
+     */
+    protected $elfinderConfig;
+
+    /**
      * Store the factory instance for the current class.
      *
      * @var FactoryInterface $propertyFactory
@@ -106,6 +113,13 @@ class ElfinderTemplate extends AdminTemplate
             $this->callbackIdent = filter_var($params['callback'], FILTER_SANITIZE_STRING);
         }
 
+        if (isset($this->elfinderConfig['translations'])) {
+            $this->setLocalizations(array_replace_recursive(
+                $this->defaultLocalizations(),
+                $this->elfinderConfig['translations']
+            ));
+        }
+
         return true;
     }
 
@@ -119,6 +133,7 @@ class ElfinderTemplate extends AdminTemplate
     {
         parent::setDependencies($container);
 
+        $this->elfinderConfig = $container['elfinder/config'];
         $this->setPropertyFactory($container['property/factory']);
     }
 
@@ -234,13 +249,9 @@ class ElfinderTemplate extends AdminTemplate
     protected function defaultLocalizations()
     {
         return [
-            'folder_uploads' => [
+            'volume_default' => [
                 'en' => 'Library',
                 'fr' => 'Bibliothèque'
-            ],
-            'folder_media' => [
-                'en' => 'Media',
-                'fr' => 'Médias'
             ]
         ];
     }
@@ -427,6 +438,10 @@ class ElfinderTemplate extends AdminTemplate
     {
         $property = $this->formProperty();
         $settings = [];
+
+        if ($this->elfinderConfig['client']) {
+            $settings = $this->elfinderConfig['client'];
+        }
 
         $translator = TranslationConfig::instance();
         $settings['lang'] = $translator->currentLanguage();

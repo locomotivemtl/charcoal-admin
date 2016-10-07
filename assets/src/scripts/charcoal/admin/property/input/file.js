@@ -119,7 +119,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
     if (file && file.path) {
         this.$input.find('.hide-if-no-file').removeClass('hidden');
         this.$input.find('.form-control-static').html(file.name);
-        this.$hidden.val(file.path);
+        this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty();
     }
     // console.groupEnd();

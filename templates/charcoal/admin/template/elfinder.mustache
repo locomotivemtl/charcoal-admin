@@ -120,11 +120,36 @@
                 i18nMsgs = {{& elfinderLocalizationsAsJson }};
 
                 var elfInit = function (settings) {
+                    settings = elfDisableCommands(settings);
+
                     $().ready(function() {
                         elf = $('#elfinder')
                             .elfinder(settings)
                             .elfinder('instance');
                     });
+                };
+
+                var elfDisableCommands = function (settings) {
+                    if (settings.disabledCommands && !settings.commands) {
+                        var disabled = settings.disabledCommands;
+
+                        var commands = elFinder.prototype._options.commands;
+
+                        if ($.inArray('*', commands) !== -1) {
+                            commands = Object.keys(elFinder.prototype.commands);
+                        }
+
+                        $.each(disabled, function(i, cmd) {
+                            var idx = $.inArray(cmd, commands);
+                            delete commands[idx];
+                        });
+
+                        settings.commands = commands;
+                    }
+
+                    delete settings.disabledCommands;
+
+                    return settings;
                 };
 
                 if (settings.lang != 'en') {

@@ -6,6 +6,10 @@ namespace Charcoal\Admin\ServiceProvider;
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
 
+// From 'charcoal-config'
+use \Charcoal\Config\ConfigInterface;
+use \Charcoal\Config\GenericConfig as Config;
+
 // Module `charcoal-factory` dependencies
 use \Charcoal\Factory\GenericFactory as Factory;
 
@@ -46,6 +50,20 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container['admin/config'] = function (Container $container) {
             $appConfig = $container['config'];
             return new AdminConfig($appConfig['admin']);
+        };
+
+        $container->extend('admin/config', function (ConfigInterface $adminConfig, Container $container) {
+            $adminConfig['elfinder'] = new Config($adminConfig['elfinder']);
+
+            return $adminConfig;
+        });
+
+        /**
+         * @param  Container $container The Pimple DI Container.
+         * @return ConfigInterface
+         */
+        $container['elfinder/config'] = function (Container $container) {
+            return $container['admin/config']['elfinder'];
         };
 
         $this->registerAuthenticator($container);

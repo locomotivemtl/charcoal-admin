@@ -36,7 +36,7 @@ class AdminWidget extends AbstractWidget
     protected $baseUrl;
 
     /**
-     * The admin area configuration.
+     * Store a reference to the admin configuration.
      *
      * @var \Charcoal\Admin\Config
      */
@@ -115,7 +115,6 @@ class AdminWidget extends AbstractWidget
         parent::setDependencies($container);
 
         $this->adminConfig = $container['admin/config'];
-
         $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
     }

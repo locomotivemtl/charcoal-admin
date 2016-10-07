@@ -15,6 +15,9 @@ use \Pimple\Container;
 use \elFinderConnector;
 use \elFinder;
 
+// From 'charcoal-config'
+use \Charcoal\Config\GenericConfig as Config;
+
 // From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
@@ -39,21 +42,29 @@ class ElfinderConnectorAction extends AdminAction
      *
      * @var string|\Psr\Http\Message\UriInterface
      */
-    public $baseUrl;
+    protected $baseUrl;
 
     /**
-     * Store the elFinder configuration.
+     * The relative path to the storage directory.
      *
-     * @var array
+     * @var string
+     */
+    protected $uploadPath = 'uploads/';
+
+    /**
+     * Store the elFinder configuration from the admin configuration.
+     *
+     * @var \Charcoal\Config\ConfigInterface
      */
     protected $elfinderConfig;
 
     /**
-     * Store a reference to the admin configuration.
+     * The elFinder class settings.
      *
-     * @var \Charcoal\Admin\AdminConfig
+     * @var array
+     * - {@link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options}
      */
-    private $adminConfig;
+    protected $elfinderOptions;
 
     /**
      * Store the factory instance for the current class.
@@ -80,7 +91,7 @@ class ElfinderConnectorAction extends AdminAction
         parent::setDependencies($container);
 
         $this->baseUrl = $container['base-url'];
-        $this->adminConfig = $container['admin/config'];
+        $this->elfinderConfig = $container['elfinder/config'];
         $this->setPropertyFactory($container['property/factory']);
         $this->setCallableResolver($container['callableResolver']);
     }
@@ -125,24 +136,77 @@ class ElfinderConnectorAction extends AdminAction
     {
         unset($request);
 
-        $this->elfinderConfig = $this->defaultConnectorOptions();
-
-        if (isset($this->adminConfig['elfinder'])) {
-            $this->elfinderConfig = array_replace_recursive(
-                $this->elfinderConfig,
-                $this->adminConfig['elfinder']
-            );
-        }
-
-        if (isset($this->elfinderConfig['bind'])) {
-            $this->elfinderConfig['bind'] = $this->resolveBoundCallbacks($this->elfinderConfig['bind']);
-        }
-
-        // Run elFinder
-        $connector = new elFinderConnector(new elFinder($this->elfinderConfig));
-        $connector->run();
+        $this->setupElfinder();
 
         return $response;
+    }
+
+    /**
+     * Setup the elFinder connector.
+     *
+     * @param  array|null $extraOptions Additional settings to pass to elFinder.
+     * @return elFinderConnector
+     */
+    public function setupElfinder(array $extraOptions = [])
+    {
+        $options = $this->connectorOptions($extraOptions);
+
+        // Run elFinder
+        $connector = new elFinderConnector(new elFinder($options));
+        $connector->run();
+
+        return $connector;
+    }
+
+    /**
+     * Retrieve the default elFinder Connector options.
+     *
+     * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+     *     Documentation for connector options.
+     * @example https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
+     *     The Connector can be customized by defining a "elfinder" structure in
+     *     your application's admin configuration.
+     *
+     * @param  array|null $extraOptions Additional settings to pass to elFinder.
+     * @return array
+     */
+    public function connectorOptions(array $extraOptions = [])
+    {
+        if ($this->elfinderOptions === null || $extraOptions) {
+            $options = $this->defaultConnectorOptions();
+
+            if (isset($this->elfinderConfig['connector'])) {
+                $options = array_replace_recursive(
+                    $options,
+                    $this->elfinderConfig['connector'],
+                    $extraOptions
+                );
+            } else {
+                /** @todo Remove this deprecation notice for the next release */
+                $keys = $this->elfinderConfig->keys();
+                if ($keys && array_intersect([ 'bind', 'plugin', 'roots' ], $keys)) {
+                    trigger_error(
+                        'elFinder connector settings must be nested under [admin.elfinder.connector].',
+                        E_USER_DEPRECATED
+                    );
+                }
+            }
+
+            if ($extraOptions) {
+                $options = array_replace_recursive(
+                    $options,
+                    $extraOptions
+                );
+            }
+
+            if (isset($options['bind'])) {
+                $options['bind'] = $this->resolveBoundCallbacks($options['bind']);
+            }
+
+            $this->elfinderOptions = $options;
+        }
+
+        return $this->elfinderOptions;
     }
 
     /**
@@ -158,16 +222,8 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function defaultConnectorOptions()
     {
-        $startPath    = 'uploads/';
-        $formProperty = $this->formProperty();
-
-        if (isset($formProperty['upload_path'])) {
-            $startPath = $formProperty['upload_path'];
-
-            if (!file_exists($startPath)) {
-                mkdir($startPath, 0777, true);
-            }
-        }
+        $uploadPath = $this->uploadPath();
+        $startPath  = $this->startPath();
 
         $baseUrl = rtrim((string)$this->baseUrl, '/');
 
@@ -178,14 +234,14 @@ class ElfinderConnectorAction extends AdminAction
                     // Driver for accessing file system (REQUIRED)
                     'driver'         => 'LocalFileSystem',
                     // Path to files (REQUIRED)
-                    'path'           => 'uploads/',
+                    'path'           => $uploadPath,
                     'startPath'      => $startPath,
                     // Enable localized folder names
                     'i18nFolderName' => true,
                     // URL to files (REQUIRED)
-                    'URL'            => $baseUrl.'/uploads',
-                    'tmbURL'         => $baseUrl.'/uploads/.tmb',
-                    'tmbPath'        => 'uploads/.tmb',
+                    'URL'            => $baseUrl.'/'.$uploadPath,
+                    'tmbURL'         => $baseUrl.'/'.$uploadPath.'/.tmb',
+                    'tmbPath'        => $uploadPath.'/.tmb',
                     'tmbSize'        => 200,
                     'tmbBgColor'     => 'transparent',
                     // All MIME types not allowed to upload
@@ -242,8 +298,8 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function sanitizeOnUploadPreSave(&$path, &$name, $src, $elfinder, $volume)
     {
-        if (isset($this->elfinderConfig['plugin']['Sanitizer'])) {
-            $opts = $this->elfinderConfig['plugin']['Sanitizer'];
+        if (isset($this->elfinderOptions['plugin']['Sanitizer'])) {
+            $opts = $this->elfinderOptions['plugin']['Sanitizer'];
 
             if (isset($opts['enable']) && $opts['enable']) {
                 $mask  = (is_array($opts['replace']) ? implode($opts['replace']) : $opts['replace']);
@@ -326,9 +382,42 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
+     * Retrieve the default root path.
+     *
+     * @return string
+     */
+    public function uploadPath()
+    {
+        return trim($this->uploadPath, '/');
+    }
+
+    /**
+     * Retrieve the default root path.
+     *
+     * @return string
+     */
+    public function startPath()
+    {
+        $path = $this->uploadPath();
+        $prop = $this->formProperty();
+
+        if (isset($prop['upload_path'])) {
+            $path = $prop['upload_path'];
+
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+        }
+
+        return $path;
+    }
+
+    /**
+     * Default acceptable files to upload.
+     *
      * @return array
      */
-    private function defaultUploadAllow()
+    protected function defaultUploadAllow()
     {
         // By default, all images, pdf and plaintext files are allowed.
         return [
@@ -339,9 +428,11 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
+     * Default attributes for files and directories.
+     *
      * @return array
      */
-    private function attributesForHiddenFiles()
+    protected function attributesForHiddenFiles()
     {
         return [
             // Block access to all hidden files and directories (anything starting with ".")

@@ -389,7 +389,7 @@
 </span><span id="49" class="l"><a href="#49"> 49: </a>    <span class="php-keyword1">protected</span> <span class="php-var">$baseUrl</span>;
 </span><span id="50" class="l"><a href="#50"> 50: </a>
 </span><span id="51" class="l"><a href="#51"> 51: </a>    <span class="php-comment">/**
-</span></span><span id="52" class="l"><a href="#52"> 52: </a><span class="php-comment">     * The admin area configuration.
+</span></span><span id="52" class="l"><a href="#52"> 52: </a><span class="php-comment">     * Store a reference to the admin configuration.
 </span></span><span id="53" class="l"><a href="#53"> 53: </a><span class="php-comment">     *
 </span></span><span id="54" class="l"><a href="#54"> 54: </a><span class="php-comment">     * @var \Charcoal\Admin\Config
 </span></span><span id="55" class="l"><a href="#55"> 55: </a><span class="php-comment">     */</span>
@@ -477,7 +477,7 @@
 </span><span id="137" class="l"><a href="#137">137: </a>    {
 </span><span id="138" class="l"><a href="#138">138: </a>        parent::setDependencies(<span class="php-var">$container</span>);
 </span><span id="139" class="l"><a href="#139">139: </a>
-</span><span id="140" class="l"><a href="#140">140: </a>        <span class="php-var">$this</span>-&gt;adminConfig = <span class="php-var">$container</span>[<span class="php-quote">'charcoal/admin/config'</span>];
+</span><span id="140" class="l"><a href="#140">140: </a>        <span class="php-var">$this</span>-&gt;adminConfig = <span class="php-var">$container</span>[<span class="php-quote">'admin/config'</span>];
 </span><span id="141" class="l"><a href="#141">141: </a>        <span class="php-var">$this</span>-&gt;setBaseUrl(<span class="php-var">$container</span>[<span class="php-quote">'base-url'</span>]);
 </span><span id="142" class="l"><a href="#142">142: </a>        <span class="php-var">$this</span>-&gt;setModelFactory(<span class="php-var">$container</span>[<span class="php-quote">'model/factory'</span>]);
 </span><span id="143" class="l"><a href="#143">143: </a>        <span class="php-var">$this</span>-&gt;setAuthenticator(<span class="php-var">$container</span>[<span class="php-quote">'admin/authenticator'</span>]);
@@ -770,7 +770,7 @@
 </span><span id="430" class="l"><a href="#430">430: </a>
 </span><span id="431" class="l"><a href="#431">431: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$menuItem</span>[<span class="php-quote">'url'</span>])) {
 </span><span id="432" class="l"><a href="#432">432: </a>                <span class="php-var">$url</span> = <span class="php-var">$menuItem</span>[<span class="php-quote">'url'</span>];
-</span><span id="433" class="l"><a href="#433">433: </a>                <span class="php-keyword1">if</span> (<span class="php-keyword2">strpos</span>(<span class="php-var">$url</span>, <span class="php-quote">':'</span>) === <span class="php-keyword1">false</span> &amp;&amp; !<span class="php-keyword2">in_array</span>(<span class="php-var">$url</span>[<span class="php-num">0</span>], [ <span class="php-quote">'/'</span>, <span class="php-quote">'#'</span>, <span class="php-quote">'?'</span> ])) {
+</span><span id="433" class="l"><a href="#433">433: </a>                <span class="php-keyword1">if</span> (<span class="php-var">$url</span> &amp;&amp; <span class="php-keyword2">strpos</span>(<span class="php-var">$url</span>, <span class="php-quote">':'</span>) === <span class="php-keyword1">false</span> &amp;&amp; !<span class="php-keyword2">in_array</span>(<span class="php-var">$url</span>[<span class="php-num">0</span>], [ <span class="php-quote">'/'</span>, <span class="php-quote">'#'</span>, <span class="php-quote">'?'</span> ])) {
 </span><span id="434" class="l"><a href="#434">434: </a>                    <span class="php-var">$url</span> = <span class="php-var">$this</span>-&gt;adminUrl().<span class="php-var">$url</span>;
 </span><span id="435" class="l"><a href="#435">435: </a>                }
 </span><span id="436" class="l"><a href="#436">436: </a>            } <span class="php-keyword1">else</span> {

@@ -167,7 +167,7 @@ class TagsInput extends AbstractPropertyInput
                     $options['options'][] = [
                         'value' => $obj->id(),
                         'text'  => (string)$obj->name(),
-                        'color' => $obj->color()
+                        'color' => method_exists($obj, 'color') ? $obj->color() : '#4D84F1'
                     ];
                 }
             }

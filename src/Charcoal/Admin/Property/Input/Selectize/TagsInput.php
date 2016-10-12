@@ -150,10 +150,12 @@ class TagsInput extends AbstractPropertyInput
             $options = $metadata['data']['selectize_options'];
         }
 
-        $val = $this->propertyVal();
+        $val = $this->p()->val();
 
-        if ($val) {
-            if (!is_array($val)) {
+        if ($val !== null) {
+            $val = $this->p()->parseVal($val);
+
+            if (!$this->p()->multiple()) {
                 $val = [$val];
             }
 

@@ -4647,7 +4647,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                     callback({
                         value: response.obj.id,
                         text: response.obj.name[Charcoal.Admin.lang],
-                        color: response.obj.color
+                        color: response.obj.color || '#4D84F1'
                     });
                     BootstrapDialog.closeAll();
                 }

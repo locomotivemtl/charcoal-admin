@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Ui;
 
 use \Exception;
+use \RuntimeException;
 use \InvalidArgumentException;
 
 use \Charcoal\Factory\FactoryInterface;
@@ -270,7 +271,7 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @throws Exception If the object is invalid.
+     * @throws RuntimeException If the object is invalid.
      * @return boolean
      */
     protected function validateObjType()
@@ -281,8 +282,11 @@ trait ObjectContainerTrait
 
             $obj = $this->modelFactory()->get($objType);
             if (!$this->validateObjBaseClass($obj)) {
-                throw Exception(
-                    'Can not create object, type is not an instance of objBaseClass'
+                throw new RuntimeException(
+                    sprintf(
+                        'Can not create object, type is not an instance of %s',
+                        $this->objBaseClass()
+                    )
                 );
             }
             return true;
@@ -302,6 +306,7 @@ trait ObjectContainerTrait
             // If no base class is set, then no validation is performed.
             return true;
         }
+
         try {
             return ($obj instanceof $objBaseClass);
         } catch (Exception $e) {

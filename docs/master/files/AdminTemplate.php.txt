@@ -571,7 +571,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function setBaseUrl($uri)
     {
-        $this->baseUrl = rtrim($uri, '/').'/';
+        $this->baseUrl = $uri;
 
         return $this;
     }
@@ -583,7 +583,7 @@ class AdminTemplate extends AbstractTemplate
      */
     public function baseUrl()
     {
-        return $this->baseUrl;
+        return rtrim($this->baseUrl, '/').'/';
     }
 
     /**

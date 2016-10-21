@@ -540,7 +540,7 @@ class AdminWidget extends AbstractWidget
      */
     public function setBaseUrl($uri)
     {
-        $this->baseUrl = rtrim($uri, '/').'/';
+        $this->baseUrl = $uri;
 
         return $this;
     }
@@ -552,7 +552,7 @@ class AdminWidget extends AbstractWidget
      */
     public function baseUrl()
     {
-        return $this->baseUrl;
+        return rtrim($this->baseUrl, '/').'/';
     }
 
     /**

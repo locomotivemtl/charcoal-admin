@@ -911,7 +911,7 @@
 </span></span><span id="571" class="l"><a href="#571">571: </a><span class="php-comment">     */</span>
 </span><span id="572" class="l"><a href="#572">572: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> setBaseUrl(<span class="php-var">$uri</span>)
 </span><span id="573" class="l"><a href="#573">573: </a>    {
-</span><span id="574" class="l"><a href="#574">574: </a>        <span class="php-var">$this</span>-&gt;baseUrl = <span class="php-keyword2">rtrim</span>(<span class="php-var">$uri</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>;
+</span><span id="574" class="l"><a href="#574">574: </a>        <span class="php-var">$this</span>-&gt;baseUrl = <span class="php-var">$uri</span>;
 </span><span id="575" class="l"><a href="#575">575: </a>
 </span><span id="576" class="l"><a href="#576">576: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>;
 </span><span id="577" class="l"><a href="#577">577: </a>    }
@@ -923,7 +923,7 @@
 </span></span><span id="583" class="l"><a href="#583">583: </a><span class="php-comment">     */</span>
 </span><span id="584" class="l"><a href="#584">584: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> baseUrl()
 </span><span id="585" class="l"><a href="#585">585: </a>    {
-</span><span id="586" class="l"><a href="#586">586: </a>        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;baseUrl;
+</span><span id="586" class="l"><a href="#586">586: </a>        <span class="php-keyword1">return</span> <span class="php-keyword2">rtrim</span>(<span class="php-var">$this</span>-&gt;baseUrl, <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>;
 </span><span id="587" class="l"><a href="#587">587: </a>    }
 </span><span id="588" class="l"><a href="#588">588: </a>
 </span><span id="589" class="l"><a href="#589">589: </a>    <span class="php-comment">/**

@@ -243,7 +243,7 @@
 
 
 	<div class="description">
-	<p>DateTime Picker input</p>
+	<p>DateTimePicker Input Property</p>
 	</div>
 
 	<dl class="tree">
@@ -291,12 +291,203 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#7-12" title="Go to source code">Charcoal/Admin/Property/Input/DateTimePickerInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#7-97" title="Go to source code">Charcoal/Admin/Property/Input/DateTimePickerInput.php</a>
 		<br>
 	</div>
 
 
 
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="setDatetimepickerOptions" id="_setDatetimepickerOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDatetimepickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#20-33" title="Go to source code">setDatetimepickerOptions</a>( <span>array <var>$opts</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the picker's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the picker's options.</p>
+
+<p>This method overwrites existing helpers and merges (replacing or adding) picker options.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$opts</var></dt>
+					<dd>The picker options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addOption" id="_addOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#35-59" title="Go to source code">addOption</a>( <span>string <var>$optIdent</var></span>, <span>mixed <var>$optVal</var></span> )</code>
+
+		<div class="description short">
+			<p>Add (or replace) an option.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add (or replace) an option.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$optIdent</var></dt>
+					<dd>The setting to add/replace.</dd>
+					<dt><var>$optVal</var></dt>
+					<dd>The setting's value to apply.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code><br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the identifier is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="datetimepickerOptions" id="_datetimepickerOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_datetimepickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#61-73" title="Go to source code">datetimepickerOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the picker's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the picker's options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultDatetimepickerOptions" id="_defaultDatetimepickerOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultDatetimepickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#75-86" title="Go to source code">defaultDatetimepickerOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default picker options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default picker options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="optionsAsJson" id="_optionsAsJson">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_optionsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#88-96" title="Go to source code">optionsAsJson</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the picker's options as a JSON string.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the picker's options as a JSON string.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>Returns data serialized with json_encode().
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#methods">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>

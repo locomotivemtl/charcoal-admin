@@ -298,7 +298,9 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function sanitizeOnUploadPreSave(&$path, &$name, $src, $elfinder, $volume)
     {
-        unset($path, $src, $elfinder, $volume); //phpcs
+        // To please PHPCS
+        unset($path, $src, $elfinder, $volume);
+
         if (isset($this->elfinderOptions['plugin']['Sanitizer'])) {
             $opts = $this->elfinderOptions['plugin']['Sanitizer'];
 

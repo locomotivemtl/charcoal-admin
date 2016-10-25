@@ -41,14 +41,8 @@ module.exports = function(grunt) {
         'jscs',
         'jshint',
         'jsonlint',
-        //'phpunit',
         'uglify',
-        //'phplint' // To slow for default
         'copy:admin'
     ]);
     grunt.registerTask('sync', [ 'browserSync', 'watch', 'notify:watch' ]);
-    grunt.registerTask('tests', [
-        'phpunit',
-        'phplint'
-    ]);
 };

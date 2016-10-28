@@ -46,6 +46,10 @@
             "object/reorder": {
                 "ident": "charcoal/admin/action/object/reorder"
             },
+            "object/export": {
+                "methods": [ "GET" ],
+                "ident": "charcoal/admin/action/object/export"
+            },
             "object/revert-revision": {
                 "ident": "charcoal/admin/action/object/revert-revision"
             },

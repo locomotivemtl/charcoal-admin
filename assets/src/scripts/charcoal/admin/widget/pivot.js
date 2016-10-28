@@ -1,19 +1,19 @@
 /**
-* Relationship widget
+* Pivot widget
 * You can associate a specific object to another
 * using this widget.
 *
 * @see widget.js (Charcoal.Admin.Widget)
 */
-Charcoal.Admin.Widget_Relationship = function ()
+Charcoal.Admin.Widget_Pivot = function ()
 {
     this.dirty = false;
     return this;
 };
 
-Charcoal.Admin.Widget_Relationship.prototype = Object.create(Charcoal.Admin.Widget.prototype);
-Charcoal.Admin.Widget_Relationship.prototype.constructor = Charcoal.Admin.Widget_Relationship;
-Charcoal.Admin.Widget_Relationship.prototype.parent = Charcoal.Admin.Widget.prototype;
+Charcoal.Admin.Widget_Pivot.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Pivot.prototype.constructor = Charcoal.Admin.Widget_Pivot;
+Charcoal.Admin.Widget_Pivot.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 /**
  * Called upon creation
@@ -26,7 +26,7 @@ Charcoal.Admin.Widget_Relationship.prototype.parent = Charcoal.Admin.Widget.prot
  * @see Component_Manager.render()
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Relationship.prototype.init = function ()
+Charcoal.Admin.Widget_Pivot.prototype.init = function ()
 {
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
@@ -36,7 +36,7 @@ Charcoal.Admin.Widget_Relationship.prototype.init = function ()
         return this;
     }
     // var config = this.opts();
-    var $container = this.element().find('.js-relationship-sortable .js-grid-container');
+    var $container = this.element().find('.js-pivot-sortable .js-grid-container');
 
     this.element().on('hidden.bs.collapse', '[data-toggle="collapse"]', function () {
         $container.sortable('refreshPositions');
@@ -44,7 +44,7 @@ Charcoal.Admin.Widget_Relationship.prototype.init = function ()
 
     $container.sortable({
         handle:      '[draggable="true"]',
-        placeholder: 'panel js-relationship-placeholder',
+        placeholder: 'panel js-pivot-placeholder',
         start:       function (event, ui) {
             var $heading     = ui.item.children('.panel-heading'),
                 $collapsible = $heading.find('[data-toggle="collapse"]');
@@ -63,7 +63,7 @@ Charcoal.Admin.Widget_Relationship.prototype.init = function ()
  * Check if the widget has something a dirty state that needs to be saved.
  * @return Boolean     Widget dirty of not.
  */
-Charcoal.Admin.Widget_Relationship.prototype.is_dirty = function ()
+Charcoal.Admin.Widget_Pivot.prototype.is_dirty = function ()
 {
     return this.dirty;
 };
@@ -72,9 +72,9 @@ Charcoal.Admin.Widget_Relationship.prototype.is_dirty = function ()
  * Set the widget to dirty or not to prevent unnecessary save
  * action.
  * @param Boolean bool Self explanatory.
- * @return Add_Relationship_Widget Chainable.
+ * @return Add_Pivot_Widget Chainable.
  */
-Charcoal.Admin.Widget_Relationship.prototype.set_dirty_state = function (bool)
+Charcoal.Admin.Widget_Pivot.prototype.set_dirty_state = function (bool)
 {
     this.dirty = bool;
     return this;
@@ -85,41 +85,41 @@ Charcoal.Admin.Widget_Relationship.prototype.set_dirty_state = function (bool)
  *
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Relationship.prototype.listeners = function ()
+Charcoal.Admin.Widget_Pivot.prototype.listeners = function ()
 {
     // Scope
     var that = this,
-        $container = this.element().find('.js-relationship-sortable .js-grid-container');
+        $container = this.element().find('.js-pivot-sortable .js-grid-container');
 
     // Prevent multiple binds
     this.element()
         .off('click')
-        .on('click.charcoal.relationships', '.js-relationships-collapse', function () {
-            var $relationships = $container.children('.js-relationship');
+        .on('click.charcoal.pivots', '.js-pivots-collapse', function () {
+            var $pivots = $container.children('.js-pivot');
 
-            if ($container.hasClass('js-relationship-preview-only')) {
-                $relationships.children('.panel-heading.sr-only').removeClass('sr-only').addClass('sr-only-off');
+            if ($container.hasClass('js-pivot-preview-only')) {
+                $pivots.children('.panel-heading.sr-only').removeClass('sr-only').addClass('sr-only-off');
             }
 
-            $relationships.children('.panel-collapse.in').collapse('hide');
+            $pivots.children('.panel-collapse.in').collapse('hide');
         })
-        .on('click.charcoal.relationships', '.js-relationships-expand', function () {
-            var $relationships = $container.children('.js-relationship');
+        .on('click.charcoal.pivots', '.js-pivots-expand', function () {
+            var $pivots = $container.children('.js-pivot');
 
-            if ($container.hasClass('js-relationship-preview-only')) {
-                $relationships.children('.panel-heading.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
+            if ($container.hasClass('js-pivot-preview-only')) {
+                $pivots.children('.panel-heading.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
             }
 
-            $relationships.children('.panel-collapse:not(.in)').collapse('show');
+            $pivots.children('.panel-collapse:not(.in)').collapse('show');
         })
-        .on('click.charcoal.relationships', '.js-add-relationship', function (e) {
+        .on('click.charcoal.pivots', '.js-add-pivot', function (e) {
             e.preventDefault();
             var type = $(this).data('type');
             if (!type) {
                 return false;
             }
             var title = $(this).data('title') || 'Edit';
-            that.create_relationship(type, title, 0, function (response) {
+            that.create_pivot(type, title, 0, function (response) {
                 if (response.success) {
                     response.obj.id = response.obj_id;
 
@@ -130,7 +130,7 @@ Charcoal.Admin.Widget_Relationship.prototype.listeners = function ()
                 }
             });
         })
-        .on('click.charcoal.relationships', '.js-relationship-actions a', function (e) {
+        .on('click.charcoal.pivots', '.js-pivot-actions a', function (e) {
             var _this = $(this);
             if (!_this.data('action')) {
                 return ;
@@ -146,7 +146,7 @@ Charcoal.Admin.Widget_Relationship.prototype.listeners = function ()
                         break;
                     }
                     var title = _this.data('title') || 'Édition';
-                    that.create_relationship(type, title, id, function (response) {
+                    that.create_pivot(type, title, id, function (response) {
                         if (response.success) {
                             that.reload();
                         }
@@ -175,10 +175,10 @@ Charcoal.Admin.Widget_Relationship.prototype.listeners = function ()
                     var container_type   = _this.data('type'),
                         container_group  = _this.data('group'),
                         container_id     = _this.data('id'),
-                        relationship_title = _this.data('title'),
-                        relationship_type  = _this.data('relationship');
+                        pivot_title = _this.data('title'),
+                        pivot_type  = _this.data('pivot');
 
-                    that.create_relationship(relationship_type, relationship_title, 0, function (response) {
+                    that.create_pivot(pivot_type, pivot_title, 0, function (response) {
                         if (response.success) {
                             that.add_object_to_container(
                                 {
@@ -200,12 +200,12 @@ Charcoal.Admin.Widget_Relationship.prototype.listeners = function ()
 };
 
 /**
- * Select an relationship from the list
+ * Select an pivot from the list
  *
  * @param  {jQuery Object} elem Clicked element
  * @return {thisArg}            (Chainable)
  */
-Charcoal.Admin.Widget_Relationship.prototype.select_relationship = function (elem)
+Charcoal.Admin.Widget_Pivot.prototype.select_pivot = function (elem)
 {
     if (!elem.data('id') || !elem.data('type')) {
         // Invalid
@@ -213,7 +213,7 @@ Charcoal.Admin.Widget_Relationship.prototype.select_relationship = function (ele
     }
 };
 
-Charcoal.Admin.Widget_Relationship.prototype.create_relationship = function (type, title, id, cb)
+Charcoal.Admin.Widget_Pivot.prototype.create_pivot = function (type, title, id, cb)
 {
     // Id = EDIT mod.
     if (!id) {
@@ -226,8 +226,8 @@ Charcoal.Admin.Widget_Relationship.prototype.create_relationship = function (typ
         cssClass:       '-quick-form',
         widget_type:    'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type:   type,
-            obj_id:     id
+            obj_type: type,
+            obj_id:   id
         }
     };
     this.dialog(data, function (response) {
@@ -259,28 +259,28 @@ Charcoal.Admin.Widget_Relationship.prototype.create_relationship = function (typ
 };
 
 /**
- * Add an relationship to an existing container.
+ * Add an pivot to an existing container.
  *
- * @param {object} relationship - The relationship to add to the container.
- * @param {object} container  - The container relationship.
+ * @param {object} pivot - The pivot to add to the container.
+ * @param {object} container  - The container pivot.
  */
-Charcoal.Admin.Widget_Relationship.prototype.add_object_to_container = function (relationship, container, grouping)
+Charcoal.Admin.Widget_Pivot.prototype.add_object_to_container = function (pivot, container, grouping)
 {
     var that = this,
         data = {
             obj_type:    container.type,
             obj_id:      container.id,
-            relationships: [
+            pivots: [
                 {
-                    relationship_id:   relationship.id,
-                    relationship_type: relationship.type,
+                    pivot_id:   pivot.id,
+                    pivot_type: pivot.type,
                     position: 0
                 }
             ],
             group: grouping || container.group || ''
         };
 
-    $.post('relationship/add-join', data, function () {
+    $.post('pivot/add', data, function () {
         that.reload();
     }, 'json');
 };
@@ -289,7 +289,7 @@ Charcoal.Admin.Widget_Relationship.prototype.add_object_to_container = function 
  * This should use mustache templating. That'd be great.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relationship.prototype.add = function (obj)
+Charcoal.Admin.Widget_Pivot.prototype.add = function (obj)
 {
     if (!obj) {
         return false;
@@ -298,12 +298,12 @@ Charcoal.Admin.Widget_Relationship.prototype.add = function (obj)
     // There is something to save.
     this.set_dirty_state(true);
     // console.log(obj);
-    var $template = this.element().find('.js-relationship-template').clone();
-    $template.find('.js-relationship').data('id', obj.id).data('type', obj.type);
+    var $template = this.element().find('.js-pivot-template').clone();
+    $template.find('.js-pivot').data('id', obj.id).data('type', obj.type);
     // console.log($template.data());
     // console.log($template.prop('outerHTML'));
     // console.log(this.element());
-    this.element().find('.js-relationship-sortable').find('.js-grid-container').append($template);
+    this.element().find('.js-pivot-sortable').find('.js-grid-container').append($template);
     // return false;
     return this;
 
@@ -313,7 +313,7 @@ Charcoal.Admin.Widget_Relationship.prototype.add = function (obj)
  * [save description]
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relationship.prototype.save = function ()
+Charcoal.Admin.Widget_Pivot.prototype.save = function ()
 {
     if (this.is_dirty()) {
         return false;
@@ -323,33 +323,31 @@ Charcoal.Admin.Widget_Relationship.prototype.save = function ()
     this.join();
 };
 
-Charcoal.Admin.Widget_Relationship.prototype.join = function (cb)
+Charcoal.Admin.Widget_Pivot.prototype.join = function (cb)
 {
     // Scope
     var that = this;
 
     var opts = that.opts();
     var data = {
-        obj_type:         opts.data.obj_type,
-        obj_id:           opts.data.obj_id,
-        related_obj_type: opts.data.group,
-        relationships:    []
+        source_obj_type: opts.data.obj_type,
+        source_obj_id:   opts.data.obj_id,
+        target_obj_type: opts.data.group,
+        pivots:          []
     };
 
-    this.element().find('.js-relationship-container').find('.js-relationship').each(function (i)
+    this.element().find('.js-pivot-container').find('.js-pivot').each(function (i)
     {
         var $this = $(this);
         var id    = $this.data('id');
 
-        data.relationships.push({
-            related_obj_id: id,
+        data.pivots.push({
+            target_obj_id: id,
             position: i
         });
     });
 
-    console.log(data);
-
-    $.post('relationship/join', data, function () {
+    $.post('pivot/create', data, function () {
         if (typeof cb === 'function') {
             cb();
         }
@@ -362,7 +360,7 @@ Charcoal.Admin.Widget_Relationship.prototype.join = function (cb)
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-Charcoal.Admin.Widget_Relationship.prototype.remove_join = function (id, cb)
+Charcoal.Admin.Widget_Pivot.prototype.remove_join = function (id, cb)
 {
     if (!id) {
         // How could this possibly be!
@@ -374,13 +372,13 @@ Charcoal.Admin.Widget_Relationship.prototype.remove_join = function (id, cb)
 
     var opts = that.opts();
     var data = {
-        obj_type:      opts.data.obj_type,
-        obj_id:        opts.data.obj_id,
-        relationship_id: id,
+        source_obj_type:      opts.data.obj_type,
+        source_obj_id:        opts.data.obj_id,
+        pivot_id: id,
         group:         opts.data.group
     };
 
-    $.post('relationship/remove-join', data, function () {
+    $.post('pivot/remove', data, function () {
         if (typeof cb === 'function') {
             cb();
         }
@@ -392,7 +390,7 @@ Charcoal.Admin.Widget_Relationship.prototype.remove_join = function (id, cb)
  * Widget options as output by the widget itself.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relationship.prototype.widget_options = function ()
+Charcoal.Admin.Widget_Pivot.prototype.widget_options = function ()
 {
     return this.opts('widget_options');
 };

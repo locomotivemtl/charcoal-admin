@@ -57,7 +57,7 @@ class TagsInput extends AbstractPropertyInput
     }
 
     /**
-     * @throws \Exception If the model factory is not set.
+     * @throws Exception If the model factory is not set.
      * @return FactoryInterface
      */
     private function modelFactory()

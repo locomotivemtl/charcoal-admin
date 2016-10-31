@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
+use \Exception;
+use \InvalidArgumentException;
+
 use Charcoal\Admin\Property\AbstractPropertyInput;
 use Charcoal\Factory\FactoryInterface;
 use Charcoal\Property\ObjectProperty;
@@ -60,7 +63,7 @@ class TagsInput extends AbstractPropertyInput
     private function modelFactory()
     {
         if ($this->modelFactory === null) {
-            throw new \Exception(
+            throw new Exception(
                 sprintf('Model factory not set on object property "%s".')
             );
         }

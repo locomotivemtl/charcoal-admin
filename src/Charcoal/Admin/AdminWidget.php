@@ -17,7 +17,6 @@ use \Charcoal\Factory\FactoryInterface;
 use \Charcoal\Translation\TranslationString;
 
 // From 'charcoal-app'
-use \Charcoal\App\App;
 use \Charcoal\App\Template\AbstractWidget;
 
 /**

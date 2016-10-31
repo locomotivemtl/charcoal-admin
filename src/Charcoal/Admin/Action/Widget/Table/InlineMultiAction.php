@@ -98,7 +98,7 @@ class InlineMultiAction extends AdminAction
                 $o = [];
                 $o['id'] = $obj->id();
 
-                $objForm = $this->widgetFactory()->create('charcoal/admin/widget/object-form');
+                $objForm = $this->widgetFactory()->create(ObjectForm::class);
                 $objForm->set_objType($objType);
                 $objForm->set_objId($objId);
                 $formProperties = $objForm->formProperties();

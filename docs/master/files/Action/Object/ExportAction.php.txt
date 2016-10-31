@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-// Dependencies from `PHP`
-use \Exception;
-
 // PSR-7 (http messaging) dependencies
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
@@ -14,7 +11,6 @@ use \Charcoal\Admin\AdminAction;
 
 use \Pimple\Container;
 
-use \Charcoal\Translation\TranslationString;
 use \Charcoal\Admin\Service\Exporter;
 
 /**

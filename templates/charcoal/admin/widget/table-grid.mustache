@@ -10,7 +10,9 @@
 <div class="o-section">
     <div class="charcoal-admin-widget-table-grid" id="{{ widgetId }}">
         {{# hasObjects }}
+        {{# showTableHeader }}
         {{> charcoal/admin/widget/table/header }}
+        {{/ showTableHeader }}
 
         <div class="js-grid-container row clearfix" style="min-height:100px;">
             {{# objectRows }}

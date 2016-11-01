@@ -10,7 +10,9 @@
 <div class="o-section">
     <div class="charcoal-admin-widget-table" id="{{ widgetId }}">
         {{# hasObjects }}
+        {{# showTableHeader }}
         {{> charcoal/admin/widget/table/header }}
+        {{/ showTableHeader }}
 
         {{!--
         @TODO Implement a better responsive table solution (Tablesaw?)
@@ -18,13 +20,13 @@
         --}}
         <div class="table-container">
             <table class="table table-bordered table-hover">
-                {{# showTableHeader }}
+                {{# showTableHead }}
                 {{> charcoal/admin/widget/table/thead }}
-                {{/ showTableHeader }}
+                {{/ showTableHead }}
                 {{> charcoal/admin/widget/table/tbody }}
-                {{# showTableFooter }}
+                {{# showTableFoot }}
                 {{> charcoal/admin/widget/table/tfoot }}
-                {{/ showTableFooter }}
+                {{/ showTableFoot }}
             </table>
 
             {{# paginationWidget }}

@@ -41,6 +41,21 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $sortable;
 
     /**
+     * @var boolean $showTableHeader
+     */
+    protected $showTableHeader = true;
+
+    /**
+     * @var boolean $showTableHead
+     */
+    protected $showTableHead = true;
+
+    /**
+     * @var boolean $showTableFoot
+     */
+    protected $showTableFoot = false;
+
+    /**
      * @var FactoryInterface $propertyFactory
      */
     private $propertyFactory;
@@ -627,19 +642,57 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * @return boolean
+     * @param boolean $show The show flag.
+     * @return TableWidget Chainable
      */
-    public function showTableHeader()
+    public function setShowTableHeader($show)
     {
-        return true;
+        $this->showTableHeader = !!$show;
+        return $this;
     }
 
     /**
      * @return boolean
      */
-    public function showTableFooter()
+    public function showTableHeader()
     {
-        return false;
+        return $this->showTableHeader;
+    }
+
+    /**
+     * @param boolean $show The show flag.
+     * @return TableWidget Chainable
+     */
+    public function setShowTableHead($show)
+    {
+        $this->showTableHead = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showTableHead()
+    {
+        return $this->showTableHead;
+    }
+
+    /**
+     * @param boolean $show The show flag.
+     * @return TableWidget Chainable
+     */
+    public function setShowTableFoot($show)
+    {
+        $this->showTableFoot = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showTableFoot()
+    {
+        return $this->showTableFoot;
     }
 
     /**

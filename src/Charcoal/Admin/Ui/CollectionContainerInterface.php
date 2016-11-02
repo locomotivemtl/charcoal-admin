@@ -51,6 +51,11 @@ interface CollectionContainerInterface
     public function numPerPage();
 
     /**
+     * @return integer
+     */
+    public function numPages();
+
+    /**
      * @param mixed $collection The collection stucture or object.
      * @return CollectionContainerInterface Chainable
      */
@@ -75,6 +80,11 @@ interface CollectionContainerInterface
      * @return integer
      */
     public function numObjects();
+
+    /**
+     * @return integer
+     */
+    public function numTotal();
 
     /**
      * @return object

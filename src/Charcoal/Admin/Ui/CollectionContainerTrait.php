@@ -317,6 +317,17 @@ trait CollectionContainerTrait
     }
 
     /**
+     * @return integer
+     */
+    public function numPages()
+    {
+        if ($this->numPerPage() === 0) {
+            return 0;
+        }
+        return ceil($this->numTotal() / $this->numPerPage());
+    }
+
+    /**
      * @param mixed $collection The collection.
      * @return CollectionContainerInterface Chainable
      */

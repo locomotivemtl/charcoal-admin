@@ -236,6 +236,8 @@ class ElfinderConnectorAction extends AdminAction
                     // Path to files (REQUIRED)
                     'path'           => $uploadPath,
                     'startPath'      => $startPath,
+                    // Jpg Compression quality
+                    'jpgQuality'     => 80,
                     // Enable localized folder names
                     'i18nFolderName' => true,
                     // URL to files (REQUIRED)

@@ -2,19 +2,21 @@
 
 namespace Charcoal\Admin\Service;
 
+use \DateTime;
 use \Exception;
-
 use \SplTempFileObject;
-
-// charcoal-core dependencie
-use \Charcoal\Loader\CollectionLoader;
-
-use Charcoal\Factory\FactoryInterface;
-
-use \Charcoal\Translation\TranslationString;
 
 // LeagueCSV
 use League\Csv\Writer;
+
+// Module `charcoal-core` dependencies
+use \Charcoal\Loader\CollectionLoader;
+
+// Module `charcoal-factory` dependencies
+use Charcoal\Factory\FactoryInterface;
+
+// Module `charcoal-translation` dependencies
+use \Charcoal\Translation\TranslationString;
 
 /**
  * Admin base exporter
@@ -27,12 +29,6 @@ use League\Csv\Writer;
 class Exporter
 {
     /**
-     * AppConfig (from dependencies.)
-     * @var $appConfig
-     */
-    private $appConfig;
-
-    /**
      * Output file name
      * @var string $filename
      */
@@ -43,12 +39,6 @@ class Exporter
      * @var string $objType
      */
     private $objType;
-
-    /**
-     * Export ident for metadata
-     * @var string $exportIdent
-     */
-    private $exportIdent;
 
     /**
      * Options
@@ -65,10 +55,10 @@ class Exporter
     private $stripTags;
 
     /**
-     * Model factory
-     * @var FactoryInterface $modelFactory
+     * Export ident for metadata
+     * @var string $exportIdent
      */
-    private $modelFactory;
+    private $exportIdent;
 
     /**
      * Output properties
@@ -83,6 +73,19 @@ class Exporter
     private $collectionConfig;
 
     /**
+     * Model factory
+     * @var FactoryInterface $modelFactory
+     */
+    private $modelFactory;
+
+    /**
+     * Property factory used
+     * to display val.
+     * @var PropertyFactory $propertyFactory
+     */
+    private $propertyFactory;
+
+    /**
      * Object type proto
      * @var Model $proto
      */
@@ -95,27 +98,21 @@ class Exporter
     private $collection;
 
     /**
-     * Property factory used
-     * to display val.
-     * @var PropertyFactory $propertyFactory
-     */
-    private $propertyFactory;
-
-    /**
      * @param array $data Dependencies.
      * @throws Exception If missing dependencies.
      * @return Exporter Chainable
      */
     public function __construct(array $data)
     {
-        if (!isset($data['config'])) {
-            throw new Exception('AppConfig must be defined in the Exporter constructor.');
-        }
         if (!isset($data['factory'])) {
-            throw new Exception('Model Factory must be defined in the Exporter constructor.');
+            throw new Exception(
+                'Model Factory must be defined in the Exporter constructor.'
+            );
         }
         if (!isset($data['logger'])) {
-            throw new Exception('You must set the logger in the Exporter Constructor.');
+            throw new Exception(
+                'You must set the logger in the Exporter Constructor.'
+            );
         }
         if (isset($data['obj_type'])) {
             $this->setObjType($data['obj_type']);
@@ -127,32 +124,8 @@ class Exporter
 
         $this->logger = $data['logger'];
         $this->setModelFactory($data['factory']);
-        $this->setAppConfig($data['config']);
 
         return $this;
-    }
-    /**
-     * @param FactoryInterface $factory The property factory, to create properties.
-     * @return TableWidget Chainable
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-        return $this;
-    }
-
-    /**
-     * @throws Exception If the property factory was not previously set / injected.
-     * @return FactoryInterface
-     */
-    public function propertyFactory()
-    {
-        if ($this->propertyFactory === null) {
-            throw new Exception(
-                'Property factory is not set for table widget'
-            );
-        }
-        return $this->propertyFactory;
     }
 
     /**
@@ -167,6 +140,58 @@ class Exporter
     }
 
     /**
+     * Export to CSV
+     * @return void
+     */
+    public function export()
+    {
+        $headers = $this->fileHeaders();
+        $rows = $this->rows();
+
+        $writer = Writer::createFromFileObject(new SplTempFileObject());
+        $writer->setNewline("\r\n");
+        $writer->setOutputBOM(Writer::BOM_UTF8);
+        $writer->insertOne($headers);
+
+        foreach ($rows as $r) {
+            $writer->insertOne($r);
+        }
+
+        $writer->output($this->filename());
+    }
+
+    /**
+     * Actual object collection
+     * @throws Exception If collection config is not set.
+     * @return Collection Collection from the export config.
+     */
+    public function collection()
+    {
+        if ($this->collection) {
+            return $this->collection;
+        }
+
+        if (!$this->collectionConfig()) {
+            throw new Exception(
+                'No collection config set for '.$this->objType().' in Charcoal\\Admin\\Helper\\Exporter'
+            );
+        }
+
+        $collection = new CollectionLoader([
+            'logger' => $this->logger,
+            'factory' => $this->modelFactory()
+        ]);
+
+        $collection->setModel($this->proto());
+        $collection->setData($this->collectionConfig());
+
+        $this->collection = $collection->load();
+
+        return $this->collection;
+    }
+
+
+    /**
      * Object type proto
      * @throws Exception If no object type is defined.
      * @return mixed Object type proto | false.
@@ -178,7 +203,9 @@ class Exporter
         }
 
         if (!$this->objType()) {
-            throw new Exception('You must define an object type for the exporter.');
+            throw new Exception(
+                'You must define an object type for the exporter.'
+            );
         }
 
         $this->proto = $this->modelFactory()->get($this->objType());
@@ -257,7 +284,9 @@ class Exporter
         // Default filename.
         // Filename is not a requirement
         if (!$this->filename()) {
-            $this->setFilename('export.csv');
+            $ts = new DateTime('now');
+            $filename = str_replace('/', '.', strtolower($this->objType())).'-export-'.$ts->format('Ymd.His').'.csv';
+            $this->setFilename($filename);
         }
 
         // Properties to be exported
@@ -273,37 +302,6 @@ class Exporter
 
         return $this;
     }
-
-    /**
-     * Actual object collection
-     * @throws Exception If collection config is not set.
-     * @return Collection Collection from the export config.
-     */
-    public function collection()
-    {
-        if ($this->collection) {
-            return $this->collection;
-        }
-
-        if (!$this->collectionConfig()) {
-            throw new Exception(
-                'No collection config set for '.$this->objType().' in Charcoal\\Admin\\Helper\\Exporter'
-            );
-        }
-
-        $collection = new CollectionLoader([
-            'logger' => $this->logger,
-            'factory' => $this->modelFactory()
-        ]);
-
-        $collection->setModel($this->proto());
-        $collection->setData($this->collectionConfig());
-
-        $this->collection = $collection->load();
-
-        return $this->collection;
-    }
-
 
     /**
      * @return array File headers.
@@ -359,42 +357,9 @@ class Exporter
         }
     }
 
-    /**
-     * Export to CSV
-     * @return void
-     */
-    public function export()
-    {
-        $headers = $this->fileHeaders();
-        $rows = $this->rows();
-
-        $writer = Writer::createFromFileObject(new SplTempFileObject());
-        $writer->setNewline("\r\n");
-        $writer->setOutputBOM(Writer::BOM_UTF8);
-        $writer->insertOne($headers);
-
-        foreach ($rows as $r) {
-            $writer->insertOne($r);
-        }
-
-        $writer->output($this->filename());
-    }
-
-
 /**
  * SETTERS
  */
-
-    /**
-     * Porject app config
-     * @param mixed $cfg Project'S app config.
-     * @return Exporter Chainable.
-     */
-    private function setAppConfig($cfg)
-    {
-        $this->appConfig = $cfg;
-        return $this;
-    }
 
     /**
      * @param string $filename Output filename.
@@ -417,24 +382,13 @@ class Exporter
     }
 
     /**
-     * Set the model factory
-     * @param FactoryInterface $factory Model factory.
-     * @return Exporter (chainable)
-     */
-    private function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-        return $this;
-    }
-
-    /**
      * Convert br to newline?
      * @param boolean $bool Convert br to newline.
      * @return Exporter (chainable)
      */
     private function setConvertBrToNewlines($bool)
     {
-        $this->convertBrToNewlines = $bool;
+        $this->convertBrToNewlines = !!$bool;
         return $this;
     }
 
@@ -445,7 +399,7 @@ class Exporter
      */
     private function setStripTags($bool)
     {
-        $this->stripTags = $bool;
+        $this->stripTags = !!$bool;
         return $this;
     }
 
@@ -484,18 +438,30 @@ class Exporter
         return $this;
     }
 
+    /**
+     * Set the model factory
+     * @param FactoryInterface $factory Model factory.
+     * @return Exporter (chainable)
+     */
+    private function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @param FactoryInterface $factory The property factory, to create properties.
+     * @return TableWidget Chainable
+     */
+    private function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+        return $this;
+    }
 
 /**
  * GETTERS
  */
-
-    /**
-     * @return AppConfig AppConfig.
-     */
-    private function appConfig()
-    {
-        return $this->appConfig;
-    }
 
     /**
      * @return string Desired filename.
@@ -511,14 +477,6 @@ class Exporter
     private function objType()
     {
         return $this->objType;
-    }
-
-    /**
-     * @return ModelFactory Model factory.
-     */
-    private function modelFactory()
-    {
-        return $this->modelFactory;
     }
 
     /**
@@ -561,6 +519,27 @@ class Exporter
         return $this->collectionConfig;
     }
 
+    /**
+     * @return ModelFactory Model factory.
+     */
+    private function modelFactory()
+    {
+        return $this->modelFactory;
+    }
+
+    /**
+     * @throws Exception If the property factory was not previously set / injected.
+     * @return FactoryInterface
+     */
+    private function propertyFactory()
+    {
+        if ($this->propertyFactory === null) {
+            throw new Exception(
+                'Property factory is not set for table widget'
+            );
+        }
+        return $this->propertyFactory;
+    }
 
 /**
  * UTILS

@@ -67,7 +67,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function isChoiceSelected($choice)
     {
-        $val = $this->p()->val();
+        $val = $this->propertyVal();
 
         if ($val === null) {
             return false;

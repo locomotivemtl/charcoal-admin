@@ -153,7 +153,7 @@ class TagsInput extends AbstractPropertyInput
             $options = $metadata['data']['selectize_options'];
         }
 
-        $val = $this->p()->val();
+        $val = $this->propertyVal();
 
         if ($val !== null) {
             $val = $this->p()->parseVal($val);
@@ -162,8 +162,9 @@ class TagsInput extends AbstractPropertyInput
                 $val = [$val];
             }
 
+            $objType = $this->p()->objType()
             foreach ($val as $v) {
-                $obj = $this->modelFactory()->create($this->p()->objType());
+                $obj = $this->modelFactory()->create($objType);
                 $obj->load($v);
                 if ($obj->id()) {
                     if (!isset($options['options'])) {

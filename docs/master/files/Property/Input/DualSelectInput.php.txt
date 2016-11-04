@@ -54,7 +54,7 @@ class DualSelectInput extends AbstractSelectableInput
      */
     public function selectedChoices()
     {
-        $val = $this->p()->val();
+        $val = $this->propertyVal();
 
         if ($val !== null) {
             $val = $this->p()->parseVal($val);

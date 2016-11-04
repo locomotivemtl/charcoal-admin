@@ -162,7 +162,7 @@ class TagsInput extends AbstractPropertyInput
                 $val = [$val];
             }
 
-            $objType = $this->p()->objType()
+            $objType = $this->p()->objType();
             foreach ($val as $v) {
                 $obj = $this->modelFactory()->create($objType);
                 $obj->load($v);

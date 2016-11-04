@@ -488,7 +488,9 @@ abstract class AbstractPropertyInput implements
     public function inputVal()
     {
         $prop = $this->p();
-        $val  = $prop->inputVal($this->propertyVal(), [ 'lang' => $this->lang() ]);
+        $val  = $prop->inputVal($this->propertyVal(), [
+            'lang' => $this->lang()
+        ]);
 
         if ($val === null) {
             return '';

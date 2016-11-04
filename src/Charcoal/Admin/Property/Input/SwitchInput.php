@@ -15,7 +15,7 @@ class SwitchInput extends AbstractPropertyInput
      */
     public function checked()
     {
-        return !!$this->p()->val();
+        return !!$this->propertyVal();
     }
 
     /**
@@ -23,6 +23,6 @@ class SwitchInput extends AbstractPropertyInput
      */
     public function value()
     {
-        return ( $this->p()->val() ) ? : 0;
+        return $this->propertyVal() ? 1 : 0;
     }
 }

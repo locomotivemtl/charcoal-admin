@@ -334,8 +334,6 @@ class FormPropertyWidget extends AdminWidget
             $this->property = $p;
         }
 
-        $this->property->setVal($this->propertyVal());
-
         return $this->property;
     }
 

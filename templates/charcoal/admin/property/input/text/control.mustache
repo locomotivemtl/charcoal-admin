@@ -1,0 +1,21 @@
+{{!--
+    Text Property Input
+    ===================
+
+    `charcoal/admin/property/input/text`
+--}}
+<input
+    type="text"
+    id="{{ inputId }}"
+    name="{{ inputName }}"
+    class="form-control {{ inputClass }}"
+    {{# size }}size="{{ . }}"{{/ size }}
+    {{# minLength }}minlength="{{ . }}"{{/ minLength }}
+    {{# maxLength }}maxlength="{{ . }}"{{/ maxLength }}
+    {{# pattern }}pattern="{{ . }}"{{/ pattern }}
+    {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
+    {{# readOnly }}readonly{{/ readOnly }}
+    {{# required }}required{{/ required }}
+    {{# disabled }}disabled{{/ disabled }}
+    value="{{ inputVal }}"
+>

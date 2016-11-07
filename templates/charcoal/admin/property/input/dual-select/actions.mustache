@@ -1,0 +1,12 @@
+{{!--
+    Dual Select \ Actions
+    =====================
+
+    @used-by `charcoal/admin/property/input/dual-select`
+--}}
+<button type="button" id="{{ inputId }}_undo" class="btn btn-info btn-block" title="{{# _t }}Undo the last action{{/ _t }}">{{# _t }}Undo{{/ _t }}</button>
+<button type="button" id="{{ inputId }}_rightAll" class="btn btn-default btn-block" title="{{# _t }}Move all options from left to right{{/ _t }}"><i class="glyphicon glyphicon-forward"></i></button>
+<button type="button" id="{{ inputId }}_rightSelected" class="btn btn-default btn-block" title="{{# _t }}Move selected options from left to right{{/ _t }}"><i class="glyphicon glyphicon-chevron-right"></i></button>
+<button type="button" id="{{ inputId }}_leftSelected" class="btn btn-default btn-block" title="{{# _t }}Move selected options from right to left{{/ _t }}"><i class="glyphicon glyphicon-chevron-left"></i></button>
+<button type="button" id="{{ inputId }}_leftAll" class="btn btn-default btn-block" title="{{# _t }}Move all options from right to left{{/ _t }}"><i class="glyphicon glyphicon-backward"></i></button>
+<button type="button" id="{{ inputId }}_redo" class="btn btn-warning btn-block" title="{{# _t }}Redo the last action{{/ _t }}">{{# _t }}Redo{{/ _t }}</button>

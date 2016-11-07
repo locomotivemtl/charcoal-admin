@@ -21,7 +21,7 @@
         "summernote": "~0.6.13",
         "tinymce": "~4.4.2",
         "jquery-minicolors": "^2.2.3",
-        "multiselect": "multiselect-two-sides#^2.2.7",
+        "multiselect": "~2.3.0",
         "elfinder-theme-moono": "https://github.com/lokothodida/elfinder-theme-moono.git",
         "elfinder": "^2.1.14",
         "selectize": "~0.12.3"

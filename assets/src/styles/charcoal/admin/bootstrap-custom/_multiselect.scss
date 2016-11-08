@@ -1,0 +1,14 @@
+// ==========================================================================
+// Mulltiselect (Dual Select)
+// ==========================================================================
+
+.c-dualselect_list {
+    // Vertically space out multiple block controls
+    .form-control + .form-control {
+        margin-top: 5px;
+    }
+}
+
+.c-dualselect_reorder {
+    margin-top: 5px;
+}

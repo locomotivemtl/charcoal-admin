@@ -1676,6 +1676,12 @@ a:focus {
     .table-header .btn:first-child, .table-header .btn-group:first-child {
       margin-left: 0; }
 
+.c-dualselect_list .form-control + .form-control {
+  margin-top: 5px; }
+
+.c-dualselect_reorder {
+  margin-top: 5px; }
+
 .bootstrap-dialog iframe {
   display: block; }
 

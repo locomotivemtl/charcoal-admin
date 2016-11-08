@@ -8248,18 +8248,47 @@ input[type="radio"] .styled:checked + label::after {
             transform: rotate(359deg); } }
 
 /*!
- * Bootstrap-select v1.7.7 (http://silviomoreto.github.io/bootstrap-select)
+ * Bootstrap-select v1.11.2 (http://silviomoreto.github.io/bootstrap-select)
  *
- * Copyright 2013-2015 bootstrap-select
+ * Copyright 2013-2016 bootstrap-select
  * Licensed under MIT (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)
  */
+select.bs-select-hidden,
+select.selectpicker {
+  display: none !important; }
+
 .bootstrap-select {
   width: 220px \0;
   /*IE9 and below*/ }
 
 .bootstrap-select > .dropdown-toggle {
   width: 100%;
-  padding-right: 25px; }
+  padding-right: 25px;
+  z-index: 1; }
+
+.bootstrap-select > .dropdown-toggle.bs-placeholder,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:focus,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:active {
+  color: #999; }
+
+.bootstrap-select > select {
+  position: absolute !important;
+  bottom: 0;
+  left: 50%;
+  display: block !important;
+  width: 0.5px !important;
+  height: 100% !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  border: none; }
+
+.bootstrap-select > select.mobile-device {
+  top: 0;
+  left: 0;
+  display: block !important;
+  width: 100% !important;
+  z-index: 2; }
 
 .has-error .bootstrap-select .dropdown-toggle,
 .error .bootstrap-select .dropdown-toggle {
@@ -8286,6 +8315,9 @@ input[type="radio"] .styled:checked + label::after {
 
 .bootstrap-select.form-control.input-group-btn {
   z-index: auto; }
+
+.bootstrap-select.form-control.input-group-btn:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0; }
 
 .bootstrap-select.btn-group:not(.input-group-btn),
 .bootstrap-select.btn-group[class*="col-"] {
@@ -8319,7 +8351,9 @@ input[type="radio"] .styled:checked + label::after {
   outline: none !important; }
 
 .bootstrap-select.btn-group.bs-container {
-  position: absolute; }
+  position: absolute;
+  height: 0 !important;
+  padding: 0 !important; }
 
 .bootstrap-select.btn-group.bs-container .dropdown-menu {
   z-index: 1060; }
@@ -8493,19 +8527,6 @@ input[type="radio"] .styled:checked + label::after {
   margin-bottom: 0;
   width: 100%;
   float: none; }
-
-select.bs-select-hidden,
-select.selectpicker {
-  display: none !important; }
-
-select.mobile-device {
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  display: block !important;
-  width: 100%;
-  height: 100% !important;
-  opacity: 0; }
 /* ========================================================================
  * bootstrap-switch - v3.3.2
  * http://www.bootstrap-switch.org

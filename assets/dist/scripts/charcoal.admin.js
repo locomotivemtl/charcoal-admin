@@ -4171,13 +4171,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (op
     var id = '#' + this.input_id;
 
     var default_options = {
-        keepRenderingSort: false,
-        left: id + '_from',
-        right: id + '_to',
-        rightAll: id + 'right_All',
-        rightSelected: id + 'right_Selected',
-        leftSelected: id + 'left_Selected',
-        leftAll: id + 'left_All'
+        keepRenderingSort: false
     };
 
     if (opts.data.dualinput_options.searchable) {
@@ -4193,9 +4187,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (op
 
 Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualinput = function ()
 {
-
     $('#' + this.input_id).multiselect(this.dualinput_options);
-
 };
 
 /**
@@ -4231,7 +4223,6 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function ()
         dualselect.remove();
     }
 };
-
 ;/**
  * Upload File Property Control
  */

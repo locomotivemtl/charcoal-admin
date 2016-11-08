@@ -310,7 +310,7 @@ one representing selected values and the other representing unselected ones.</p>
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#8-160" title="Go to source code">Charcoal/Admin/Property/Input/DualSelectInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#8-195" title="Go to source code">Charcoal/Admin/Property/Input/DualSelectInput.php</a>
 		<br>
 	</div>
 
@@ -330,7 +330,7 @@ one representing selected values and the other representing unselected ones.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_unselectedChoices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#33-48" title="Go to source code">unselectedChoices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#42-57" title="Go to source code">unselectedChoices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the unselected options.</p>
@@ -364,7 +364,7 @@ one representing selected values and the other representing unselected ones.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_selectedChoices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#50-75" title="Go to source code">selectedChoices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#59-84" title="Go to source code">selectedChoices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectable options.</p>
@@ -398,7 +398,7 @@ one representing selected values and the other representing unselected ones.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_options">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#77-95" title="Go to source code">options</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#86-104" title="Go to source code">options</a>( )</code>
 
 		<div class="description short">
 			
@@ -432,7 +432,7 @@ one representing selected values and the other representing unselected ones.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_searchable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#97-141" title="Go to source code">searchable</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#106-158" title="Go to source code">searchable</a>( )</code>
 
 		<div class="description short">
 			
@@ -454,6 +454,40 @@ one representing selected values and the other representing unselected ones.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="reorderable" id="_reorderable">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_reorderable">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#160-176" title="Go to source code">reorderable</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if the right-side can be manually sorted.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the right-side can be manually sorted.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="dualSelectOptions" id="_dualSelectOptions">
 
 		<td class="attributes"><code>
@@ -466,7 +500,7 @@ one representing selected values and the other representing unselected ones.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dualSelectOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#143-149" title="Go to source code">dualSelectOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#178-184" title="Go to source code">dualSelectOptions</a>( )</code>
 
 		<div class="description short">
 			
@@ -500,7 +534,7 @@ one representing selected values and the other representing unselected ones.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDualSelectOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#151-159" title="Go to source code">setDualSelectOptions</a>( <span>mixed <var>$dualSelectOptions</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#186-194" title="Go to source code">setDualSelectOptions</a>( <span>mixed <var>$dualSelectOptions</var></span> )</code>
 
 		<div class="description short">
 			
@@ -598,24 +632,49 @@ one representing selected values and the other representing unselected ones.</p>
 	<tr data-order="searchable" id="$searchable">
 		<td class="attributes"><code>
 			protected  
-			boolean
+			mixed
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#18-21" title="Go to source code"><var>$searchable</var></a>
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#18-23" title="Go to source code"><var>$searchable</var></a>
 
 			<div class="description short">
-				<p>$searchable</p>
+				<p>Whether the lists can be filtered.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$searchable</p>
+				<p>Whether the lists can be filtered.</p>
 
 			</div>
 		</td>
 		<td class="value">
 			<div>
 				<a href="#$searchable" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="reorderable" id="$reorderable">
+		<td class="attributes"><code>
+			protected  
+			boolean
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#25-30" title="Go to source code"><var>$reorderable</var></a>
+
+			<div class="description short">
+				<p>Whether options in the right-side can be moved amongst each other.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Whether options in the right-side can be moved amongst each other.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$reorderable" class="anchor">#</a>
 				<code></code>
 			</div>
 		</td>
@@ -627,7 +686,7 @@ one representing selected values and the other representing unselected ones.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#23-26" title="Go to source code"><var>$options</var></a>
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#32-35" title="Go to source code"><var>$options</var></a>
 
 			<div class="description short">
 				<p>$options</p>
@@ -652,7 +711,7 @@ one representing selected values and the other representing unselected ones.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#28-31" title="Go to source code"><var>$dualSelectOptions</var></a>
+				<a href="source-class-Charcoal.Admin.Property.Input.DualSelectInput.html#37-40" title="Go to source code"><var>$dualSelectOptions</var></a>
 
 			<div class="description short">
 				<p>$dualSelectOptions</p>

@@ -2,7 +2,10 @@
 
 namespace Charcoal\Admin\Template;
 
-// Local parent namespace dependencies
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminTemplate as AdminTemplate;
 
 /**
@@ -34,5 +37,22 @@ class LostPasswordTemplate extends AdminTemplate
     public function showFooterMenu()
     {
         return false;
+    }
+
+    /**
+     * Retrieve the title of the page.
+     *
+     * @return TranslationString|string|null
+     */
+    public function title()
+    {
+        if ($this->title === null) {
+            $this->setTitle([
+                'en' => 'Lost Password',
+                'fr' => 'Mot de passe oublié',
+            ]);
+        }
+
+        return $this->title;
     }
 }

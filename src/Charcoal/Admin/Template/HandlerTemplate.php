@@ -76,7 +76,7 @@ class HandlerTemplate extends AdminTemplate
     }
 
     /**
-     * Retrieve the document title.
+     * Retrieve the error title.
      *
      * @return TranslationString
      */
@@ -86,9 +86,9 @@ class HandlerTemplate extends AdminTemplate
     }
 
     /**
-     * Retrieve the document title.
+     * Retrieve the title of the page.
      *
-     * @return TranslationString
+     * @return TranslationString|string|null
      */
     public function title()
     {

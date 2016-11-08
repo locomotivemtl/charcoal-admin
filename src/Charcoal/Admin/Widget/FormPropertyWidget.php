@@ -20,7 +20,6 @@ use \Charcoal\Property\PropertyInterface;
  */
 class FormPropertyWidget extends AdminWidget
 {
-
     /**
      * In memory copy of the PropertyInput object
      * @var PropertyInputInterface $input
@@ -36,6 +35,7 @@ class FormPropertyWidget extends AdminWidget
      * @var string $inputType
      */
     protected $inputType;
+
     /**
      * @var array $inputOptions
      */
@@ -238,13 +238,37 @@ class FormPropertyWidget extends AdminWidget
         return !!$description;
     }
 
-
     /**
      * @return boolean
      */
     public function showNotes()
     {
+        $prop = $this->prop();
+        $show = $prop['show_notes'];
+
+        if ($show === false) {
+            return false;
+        }
+
         $notes = $this->prop()->notes();
+
+        return !!$notes;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showNotesAbove()
+    {
+        $prop = $this->prop();
+        $show = $prop['show_notes'];
+
+        if ($show !== 'above') {
+            return false;
+        }
+
+        $notes = $this->prop()->notes();
+
         return !!$notes;
     }
 
@@ -366,7 +390,6 @@ class FormPropertyWidget extends AdminWidget
     {
         return $this->l10nMode;
     }
-
 
     /**
      * @return boolean

@@ -54,6 +54,9 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                     {{/ l10n }}
 
                     {{> charcoal/admin/template/inc.description }}
+                    {{# showNotesAbove }}
+                    {{> charcoal/admin/template/inc.notes }}
+                    {{/ showNotesAbove }}
 
                     {{# input }}
                     {{!-- The actual property control (typically `PropertyInput`) --}}
@@ -61,9 +64,10 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
                         {{> $widget_template }}
                     </div>
                     {{/ input }}
+                    {{^ showNotesAbove }}
 
                     {{> charcoal/admin/template/inc.notes }}
-
+                    {{/ showNotesAbove }}
                 </div>
             </div>
 

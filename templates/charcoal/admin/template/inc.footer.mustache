@@ -4,6 +4,8 @@
         {{>charcoal/admin/widget/menu.footer}}
     {{/showFooterMenu}}
 
+    {{>charcoal/admin/template/inc.foot.extra}}
+
     {{!-- Styles from widgets & templates --}}
     {{&cssRequirements}}
     {{&css}}
@@ -14,7 +16,6 @@
 
     {{& jsRequirements }}
 
-
     <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.vendors.js"></script>
     <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.js"></script>
     <script>
@@ -23,7 +24,6 @@
             'admin_path' : 'admin'
         });
 
-
         $(document).ready(function() {
             // Initialize tooltips globally
             $('[data-toggle="tooltip"]').tooltip();
@@ -31,7 +31,6 @@
             // Initialize bootstrap-select globally
             $('.selectpicker').selectpicker({});
         });
-
     </script>
 
     {{!-- Scripts from widgets & templates --}}

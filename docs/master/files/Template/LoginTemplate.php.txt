@@ -2,9 +2,10 @@
 
 namespace Charcoal\Admin\Template;
 
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 
-// Local parent namespace dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\Object\AuthToken;
 
@@ -124,11 +125,20 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-     * @return TranslationString
+     * Retrieve the title of the page.
+     *
+     * @return TranslationString|string|null
      */
     public function title()
     {
-        return new TranslationString('Connexion à Charcoal');
+        if ($this->title === null) {
+            $this->setTitle([
+                'en' => 'Log In',
+                'fr' => 'Se connecter',
+            ]);
+        }
+
+        return $this->title;
     }
 }
 

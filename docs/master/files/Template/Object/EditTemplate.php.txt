@@ -2,23 +2,22 @@
 
 namespace Charcoal\Admin\Template\Object;
 
-// Dependencies from `PHP`
 use \Exception;
 use \InvalidArgumentException;
 
-// Dependency from `pimple`
+// From `pimple`
 use \Pimple\Container;
 
-// Dependency from 'charcoal-translation'
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// Dependency from `charcoal-ui`
+// From 'charcoal-ui'
 use \Charcoal\Ui\DashboardBuilder;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\Ui\DashboardContainerInterface;
 use \Charcoal\Admin\Ui\DashboardContainerTrait;
@@ -213,7 +212,9 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return string|TranslationString
+     * Retrieve the title of the page.
+     *
+     * @return TranslationString|string|null
      */
     public function title()
     {
@@ -254,6 +255,14 @@ class EditTemplate extends AdminTemplate implements
 
         if (!$objLabel && isset($metadata['labels']['edit_item'])) {
             $objLabel = $metadata['labels']['edit_item'];
+
+            if (TranslationString::isTranslatable($objLabel)) {
+                $objLabel = new TranslationString($objLabel);
+            }
+        }
+
+        if (!$objLabel && isset($metadata['labels']['edit_model'])) {
+            $objLabel = $metadata['labels']['edit_model'];
 
             if (TranslationString::isTranslatable($objLabel)) {
                 $objLabel = new TranslationString($objLabel);

@@ -2,23 +2,22 @@
 
 namespace Charcoal\Admin\Template\Object;
 
-// Dependencies from `PHP`
 use \Exception;
 use \InvalidArgumentException;
 
-// Dependencies from `pimple`
+// From Pimple
 use \Pimple\Container;
 
-// Dependencies from `charcoal-translation`
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 
-// From `charcoal-factory`
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-ui`
+// From 'charcoal-ui'
 use \Charcoal\Ui\DashboardBuilder;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
@@ -264,7 +263,9 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return string|TranslationString
+     * Retrieve the title of the page.
+     *
+     * @return TranslationString|string|null
      */
     public function title()
     {

@@ -272,7 +272,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Template.html">Template</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#13-76" title="Go to source code">Charcoal/Admin/Template/LogoutTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#16-96" title="Go to source code">Charcoal/Admin/Template/LogoutTemplate.php</a>
 		<br>
 	</div>
 
@@ -292,7 +292,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_init">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#18-32" title="Go to source code">init</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#21-35" title="Go to source code">init</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
 
 		<div class="description short">
 			
@@ -333,7 +333,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_authRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#51-59" title="Go to source code">authRequired</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#54-62" title="Go to source code">authRequired</a>( )</code>
 
 		<div class="description short">
 			<p>Authentication is obviously never required for the login page.</p>
@@ -369,7 +369,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showHeaderMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#61-67" title="Go to source code">showHeaderMenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#64-70" title="Go to source code">showHeaderMenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -405,7 +405,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showFooterMenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#69-75" title="Go to source code">showFooterMenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#72-78" title="Go to source code">showFooterMenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -429,6 +429,42 @@ Charcoal\App\Template\AbstractTemplate
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="title" id="_title">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Translation\TranslationString|string|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_title">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.LogoutTemplate.html#80-95" title="Go to source code">title</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the title of the page.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the title of the page.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Translation\TranslationString|string|null
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminTemplate.html#_title">Charcoal\Admin\AdminTemplate::title()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
 	</table>
 
 	<table class="summary inherited">
@@ -440,6 +476,7 @@ Charcoal\App\Template\AbstractTemplate
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_authenticator">authenticator()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_authorizer">authorizer()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_baseUrl">baseUrl()</a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#_documentTitle">documentTitle()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_feedbacks">feedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_footerMenu">footerMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_hasFeedbacks">hasFeedbacks()</a>, 
@@ -460,12 +497,13 @@ Charcoal\App\Template\AbstractTemplate
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setShowFooterMenu">setShowFooterMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setShowHeaderMenu">setShowHeaderMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setShowTopHeaderMenu">setShowTopHeaderMenu()</a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#_setSiteName">setSiteName()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setSubtitle">setSubtitle()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setTitle">setTitle()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_setTopHeaderMenu">setTopHeaderMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_showTopHeaderMenu">showTopHeaderMenu()</a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#_siteName">siteName()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_subtitle">subtitle()</a>, 
-			<a href="class-Charcoal.Admin.AdminTemplate.html#_title">title()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_topHeaderMenu">topHeaderMenu()</a>
 		</code></td>
 	</tr>
@@ -487,7 +525,10 @@ Charcoal\App\Template\AbstractTemplate
 	<tr>
 		<td><code>
 			<a href="class-Charcoal.Admin.AdminTemplate.html#$adminConfig"><var>$adminConfig</var></a>, 
-			<a href="class-Charcoal.Admin.AdminTemplate.html#$baseUrl"><var>$baseUrl</var></a>
+			<a href="class-Charcoal.Admin.AdminTemplate.html#$baseUrl"><var>$baseUrl</var></a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#$label"><var>$label</var></a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#$subtitle"><var>$subtitle</var></a>, 
+			<a href="class-Charcoal.Admin.AdminTemplate.html#$title"><var>$title</var></a>
 		</code></td>
 	</tr>
 	</table>

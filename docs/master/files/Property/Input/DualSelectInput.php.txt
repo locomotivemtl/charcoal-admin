@@ -16,9 +16,18 @@ use Charcoal\Translation\TranslationString;
 class DualSelectInput extends AbstractSelectableInput
 {
     /**
-     * @var boolean $searchable
+     * Whether the lists can be filtered.
+     *
+     * @var mixed
      */
     protected $searchable;
+
+    /**
+     * Whether options in the right-side can be moved amongst each other.
+     *
+     * @var boolean
+     */
+    protected $reorderable;
 
     /**
      * @var array $options
@@ -99,45 +108,71 @@ class DualSelectInput extends AbstractSelectableInput
      */
     public function searchable()
     {
-        $this->searchable = $this->dualSelectOptions['searchable'];
+        if ($this->searchable === null) {
+            if (isset($this->dualSelectOptions['searchable'])) {
+                $searchable = $this->dualSelectOptions['searchable'];
 
-        $label = new TranslationString([
-            'en' => 'Search…',
-            'fr' => 'Recherche…'
-        ]);
+                $label = new TranslationString([
+                    'en' => 'Search…',
+                    'fr' => 'Recherche…'
+                ]);
 
-        $defaultOptions = [
-            'left'  => [
-                'placeholder' => $label
-            ],
-            'right' => [
-                'placeholder' => $label
-            ]
-        ];
+                $defaultOptions = [
+                    'left' => [
+                        'placeholder' => $label
+                    ],
+                    'right' => [
+                        'placeholder' => $label
+                    ]
+                ];
 
-        if (is_bool($this->searchable) && $this->searchable) {
-            $this->searchable = $defaultOptions;
-        } elseif (is_array($this->searchable)) {
-            $lists = [ 'left', 'right' ];
+                if (is_bool($searchable) && $searchable) {
+                    $searchable = $defaultOptions;
+                } elseif (is_array($searchable)) {
+                    $lists = [ 'left', 'right' ];
 
-            foreach ($lists as $ident) {
-                if (isset($this->searchable[$ident]['placeholder'])) {
-                    $placeholder = $this->searchable[$ident]['placeholder'];
-                } elseif (isset($this->searchable['placeholder'])) {
-                    $placeholder = $this->searchable['placeholder'];
-                }
+                    foreach ($lists as $ident) {
+                        if (isset($searchable[$ident]['placeholder'])) {
+                            $placeholder = $searchable[$ident]['placeholder'];
+                        } elseif (isset($searchable['placeholder'])) {
+                            $placeholder = $searchable['placeholder'];
+                        }
 
-                if (isset($placeholder) && TranslationString::isTranslatable($placeholder)) {
-                    $this->searchable[$ident]['placeholder'] = new TranslationString($placeholder);
+                        if (isset($placeholder) && TranslationString::isTranslatable($placeholder)) {
+                            $searchable[$ident]['placeholder'] = new TranslationString($placeholder);
+                        } else {
+                            $searchable[$ident]['placeholder'] = $label;
+                        }
+                    }
                 } else {
-                    $this->searchable[$ident]['placeholder'] = $label;
+                    $searchable = false;
                 }
+            } else {
+                $searchable = false;
             }
-        } else {
-            $this->searchable = false;
+
+            $this->searchable = $searchable;
         }
 
         return $this->searchable;
+    }
+
+    /**
+     * Determine if the right-side can be manually sorted.
+     *
+     * @return boolean
+     */
+    public function reorderable()
+    {
+        if ($this->reorderable === null) {
+            if (isset($this->dualSelectOptions['reorderable'])) {
+                $this->reorderable = boolval($this->dualSelectOptions['reorderable']);
+            } else {
+                $this->reorderable = false;
+            }
+        }
+
+        return $this->reorderable;
     }
 
     /**

@@ -78,6 +78,9 @@
             "object/table/alter": {
                 "ident": "charcoal/admin/script/object/table/alter"
             },
+            "object/table/alter-primary-key": {
+                "ident": "charcoal/admin/script/object/table/alter-primary-key"
+            },
             "object/table/create": {
                 "ident": "charcoal/admin/script/object/table/create"
             },

@@ -328,13 +328,13 @@ class AlterPrimaryKeyScript extends AdminScript
     }
 
     /**
-     * Handle the count of the given target rows.
+     * Describe the given count.
      *
      * @param  array|Traversable $rows The target model's existing rows.
      * @throws InvalidArgumentException If the given argument is not iterable.
      * @return boolean
      */
-    private function countTargetRows($rows = null)
+    private function describeCount($rows = null)
     {
         if ($rows === null) {
             $rows = $this->fetchTargetRows();
@@ -560,7 +560,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $this->insertNewField($newField, $newProp);
 
         $rows = $this->fetchTargetRows();
-        if (!$this->countTargetRows($rows)) {
+        if (!$this->describeCount($rows)) {
             return $this;
         }
 

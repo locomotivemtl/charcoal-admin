@@ -560,55 +560,53 @@ class AlterPrimaryKeyScript extends AdminScript
         $this->insertNewField($newField, $newProp);
 
         $rows = $this->fetchTargetRows();
-        if (!$this->describeCount($rows)) {
-            return $this;
-        }
-
-        if (!$this->quiet()) {
-            $cli->br();
-            $progress = $cli->progress($rows->rowCount());
-        }
-
-        if ($newProp->mode() === IdProperty::MODE_AUTO_INCREMENT) {
-            $pool = 0;
-            $ids  = function () use (&$pool) {
-                return ++$pool;
-            };
-        } else {
-            $pool = [];
-            $ids  = function () use (&$pool, $newProp) {
-                $id = $newProp->autoGenerate();
-                while (in_array($id, $pool)) {
-                    $id = $newProp->autoGenerate();
-                }
-
-                $pool[] = $id;
-
-                return $id;
-            };
-        }
-
-        foreach ($rows as $row) {
-            $id  = $ids();
-            $sql = strtr('UPDATE `%table` SET `%newKey` = :new WHERE `%oldKey` = :old;', [
-                '%table'  => $table,
-                '%newKey' => $newKey,
-                '%oldKey' => $oldKey,
-            ]);
-            $source->dbQuery(
-                $sql,
-                [
-                    'new' => $id,
-                    'old' => $row[$oldKey],
-                ],
-                [
-                    'new' => $newField->sqlPdoType(),
-                    'old' => $oldField->sqlPdoType(),
-                ]
-            );
-
+        if ($this->describeCount($rows)) {
             if (!$this->quiet()) {
-                $progress->advance();
+                $cli->br();
+                $progress = $cli->progress($rows->rowCount());
+            }
+
+            if ($newProp->mode() === IdProperty::MODE_AUTO_INCREMENT) {
+                $pool = 0;
+                $ids  = function () use (&$pool) {
+                    return ++$pool;
+                };
+            } else {
+                $pool = [];
+                $ids  = function () use (&$pool, $newProp) {
+                    $id = $newProp->autoGenerate();
+                    while (in_array($id, $pool)) {
+                        $id = $newProp->autoGenerate();
+                    }
+
+                    $pool[] = $id;
+
+                    return $id;
+                };
+            }
+
+            foreach ($rows as $row) {
+                $id  = $ids();
+                $sql = strtr('UPDATE `%table` SET `%newKey` = :new WHERE `%oldKey` = :old;', [
+                    '%table'  => $table,
+                    '%newKey' => $newKey,
+                    '%oldKey' => $oldKey,
+                ]);
+                $source->dbQuery(
+                    $sql,
+                    [
+                        'new' => $id,
+                        'old' => $row[$oldKey],
+                    ],
+                    [
+                        'new' => $newField->sqlPdoType(),
+                        'old' => $oldField->sqlPdoType(),
+                    ]
+                );
+
+                if (!$this->quiet()) {
+                    $progress->advance();
+                }
             }
         }
 

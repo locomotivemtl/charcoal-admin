@@ -399,9 +399,9 @@ class AlterPrimaryKeyScript extends AdminScript
         $field->setExtra('');
 
         // Don't alter table if column name already exists.
-        $sql = strtr("SHOW COLUMNS FROM `%table` LIKE '%field'", [
+        $sql = strtr('SHOW COLUMNS FROM `%table` LIKE "%key"', [
             '%table' => $source->table(),
-            '%field' => $field->sql(),
+            '%key'   => $field->ident(),
         ]);
 
         $res = $source->db()->query($sql);

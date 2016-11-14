@@ -747,9 +747,9 @@
 </span><span id="399" class="l"><a href="#399">399: </a>        <span class="php-var">$field</span>-&gt;setExtra(<span class="php-quote">''</span>);
 </span><span id="400" class="l"><a href="#400">400: </a>
 </span><span id="401" class="l"><a href="#401">401: </a>        <span class="php-comment">// Don't alter table if column name already exists.</span>
-</span><span id="402" class="l"><a href="#402">402: </a>        <span class="php-var">$sql</span> = <span class="php-keyword2">strtr</span>(<span class="php-quote">&quot;SHOW COLUMNS FROM `%table` LIKE '%field'&quot;</span>, [
+</span><span id="402" class="l"><a href="#402">402: </a>        <span class="php-var">$sql</span> = <span class="php-keyword2">strtr</span>(<span class="php-quote">'SHOW COLUMNS FROM `%table` LIKE &quot;%key&quot;'</span>, [
 </span><span id="403" class="l"><a href="#403">403: </a>            <span class="php-quote">'%table'</span> =&gt; <span class="php-var">$source</span>-&gt;table(),
-</span><span id="404" class="l"><a href="#404">404: </a>            <span class="php-quote">'%field'</span> =&gt; <span class="php-var">$field</span>-&gt;sql(),
+</span><span id="404" class="l"><a href="#404">404: </a>            <span class="php-quote">'%key'</span>   =&gt; <span class="php-var">$field</span>-&gt;ident(),
 </span><span id="405" class="l"><a href="#405">405: </a>        ]);
 </span><span id="406" class="l"><a href="#406">406: </a>
 </span><span id="407" class="l"><a href="#407">407: </a>        <span class="php-var">$res</span> = <span class="php-var">$source</span>-&gt;db()-&gt;query(<span class="php-var">$sql</span>);

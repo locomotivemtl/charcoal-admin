@@ -124,6 +124,7 @@ class AlterPrimaryKeyScript extends AdminScript
             $cli->info('Starting Conveversion');
         } else {
             $cli->info('Canceled Conveversion');
+
             return $this;
         }
 
@@ -134,6 +135,7 @@ class AlterPrimaryKeyScript extends AdminScript
             $cli->error(
                 'Could not instanciate a database connection.'
             );
+
             return $this;
         }
 
@@ -144,6 +146,7 @@ class AlterPrimaryKeyScript extends AdminScript
                     $table
                 )
             );
+
             return $this;
         }
 
@@ -151,7 +154,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $newKey = sprintf('%s_new', $model->key());
 
         $db->query(
-            strtr('LOCK TABLES `%table` WRITE;', [ '%table' => $table ])
+            strtr('LOCK TABLES `%table` WRITE;', ['%table' => $table])
         );
 
         $this->prepareProperties($oldKey, $newKey, $oldProp, $newProp);
@@ -164,6 +167,7 @@ class AlterPrimaryKeyScript extends AdminScript
                 )
             );
             $db->query('UNLOCK TABLES;');
+
             return $this;
         }
 
@@ -210,7 +214,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $newProp = clone $oldProp;
         $newProp->setIdent($newKey);
 
-        $sql  = strtr('SHOW COLUMNS FROM `%table`;', [ '%table' => $source->table() ]);
+        $sql  = strtr('SHOW COLUMNS FROM `%table`;', ['%table' => $source->table()]);
         $cols = $source->db()->query($sql, PDO::FETCH_ASSOC);
         foreach ($cols as $col) {
             if ($col['Field'] !== $oldKey) {
@@ -365,6 +369,7 @@ class AlterPrimaryKeyScript extends AdminScript
             $cli->comment(
                 sprintf('Only changing `%s` column.', $model->key())
             );
+
             return false;
         } elseif ($count === 1) {
             if (!$this->quiet()) {
@@ -406,7 +411,7 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $res = $source->db()->query($sql);
 
-        if ($res) {
+        if ($res->fetch(1)) {
             // Column name already exists.
             return $this;
         }
@@ -561,7 +566,7 @@ class AlterPrimaryKeyScript extends AdminScript
         IdProperty $oldProp,
         PropertyField $oldField
     ) {
-        $cli    = $this->climate();
+        $cli = $this->climate();
 
         $keepId = $cli->arguments->defined('keep_id');
         $model  = $this->targetModel();
@@ -739,6 +744,7 @@ class AlterPrimaryKeyScript extends AdminScript
                     $this->modelFactory()->get($response);
                 } catch (Exception $e) {
                     unset($e);
+
                     return false;
                 }
 
@@ -757,6 +763,7 @@ class AlterPrimaryKeyScript extends AdminScript
                     }
                 } catch (Exception $e) {
                     unset($e);
+
                     return false;
                 }
 
@@ -764,25 +771,25 @@ class AlterPrimaryKeyScript extends AdminScript
             };
 
             $arguments = [
-                'keep_id' => [
-                    'longPrefix'   => 'keep-id',
-                    'noValue'      => true,
-                    'description'  => 'Skip the deletion of the ID field to be replaced.',
+                'keep_id'       => [
+                    'longPrefix'  => 'keep-id',
+                    'noValue'     => true,
+                    'description' => 'Skip the deletion of the ID field to be replaced.',
                 ],
-                'target_model' => [
-                    'prefix'       => 'o',
-                    'longPrefix'   => 'obj-type',
-                    'required'     => true,
-                    'description'  => 'The object type to alter.',
-                    'prompt'       => 'What model must be altered?',
-                    'acceptValue'  => $validateModel->bindTo($this)
+                'target_model'  => [
+                    'prefix'      => 'o',
+                    'longPrefix'  => 'obj-type',
+                    'required'    => true,
+                    'description' => 'The object type to alter.',
+                    'prompt'      => 'What model must be altered?',
+                    'acceptValue' => $validateModel->bindTo($this)
                 ],
                 'related_model' => [
-                    'prefix'       => 'r',
-                    'longPrefix'   => 'related-obj-type',
-                    'description'  => 'Properties of related object types to synchronize (ObjType:propertyIdent,…).',
-                    'prompt'       => 'List related models and properties (ObjType:propertyIdent,…):',
-                    'acceptValue'  => $validateModels->bindTo($this)
+                    'prefix'      => 'r',
+                    'longPrefix'  => 'related-obj-type',
+                    'description' => 'Properties of related object types to synchronize (ObjType:propertyIdent,…).',
+                    'prompt'      => 'List related models and properties (ObjType:propertyIdent,…):',
+                    'acceptValue' => $validateModels->bindTo($this)
                 ]
             ];
 
@@ -860,7 +867,7 @@ class AlterPrimaryKeyScript extends AdminScript
         foreach ($models as $i => $model) {
             if (is_string($model)) {
                 list($model, $prop) = $this->resolveRelatedModel($model);
-                $models[$i] = $model;
+                $models[$i]                                 = $model;
                 $this->relatedProperties[$model->objType()] = $prop;
             } elseif ($model instanceof ModelInterface) {
                 if (!isset($this->relatedProperties[$model->objType()])) {
@@ -919,7 +926,7 @@ class AlterPrimaryKeyScript extends AdminScript
             );
         }
 
-        return [ $model, $prop ];
+        return [$model, $prop];
     }
 
     /**

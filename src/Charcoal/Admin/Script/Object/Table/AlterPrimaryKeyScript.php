@@ -397,6 +397,20 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $extra = $field->extra();
         $field->setExtra('');
+
+        // Don't alter table if column name already exists.
+        $sql = strtr("SHOW COLUMNS FROM `%table` LIKE '%field'", [
+            '%table' => $source->table(),
+            '%field' => $field->sql(),
+        ]);
+
+        $res = $source->db()->query($sql);
+
+        if ($res) {
+            // Column name already exists.
+            return $this;
+        }
+
         $sql = strtr('ALTER TABLE `%table` ADD COLUMN %field FIRST;', [
             '%table' => $source->table(),
             '%field' => $field->sql(),
@@ -548,6 +562,7 @@ class AlterPrimaryKeyScript extends AdminScript
         PropertyField $oldField
     ) {
         $cli    = $this->climate();
+
         $keepId = $cli->arguments->defined('keep_id');
         $model  = $this->targetModel();
         $source = $model->source();

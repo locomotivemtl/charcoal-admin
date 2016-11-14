@@ -42,7 +42,7 @@ if ($appEnv !== 'testing') {
 $adminConfig = new AdminConfig();
 
 $logger = new \Psr\Log\NullLogger();
-$metadataLoader = new \Charcoal\Model\MetadataLoader([
+$metadataLoader = new \Charcoal\Model\Service\MetadataLoader([
     'base_path' => '',
     'paths'     => [],
     'logger'    => $logger,

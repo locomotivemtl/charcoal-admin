@@ -16,11 +16,14 @@ use \Charcoal\Admin\AdminAction;
  * Admin Object Delete Action: Delete an object
  *
  * ## Parameters
+ *
  * **Required parameters**
+ *
  * - `obj_type`
  * - `obj_id`
  *
  * ## Response
+ *
  * - `success` true if login was successful, false otherwise.
  *   - Failure should also send a different HTTP code: see below.
  * - `feedbacks` (Optional) operation feedbacks, if any.
@@ -28,6 +31,7 @@ use \Charcoal\Admin\AdminAction;
  *   - This is the `next_url` parameter if it was set, or the default admin URL if not
  *
  * ## HTTP Codes
+ *
  * - `200` in case of a successful object deletion
  * - `404` if any error occurs
  *
@@ -45,23 +49,23 @@ class DeleteAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $obj_type = $request->getParam('obj_type');
-            $obj_id = $request->getParam('obj_id');
+            $objType = $request->getParam('obj_type');
+            $objId = $request->getParam('obj_id');
 
-            if (!$obj_type) {
+            if (!$objType) {
                 $this->setSuccess(false);
                 return $response->withStatus(404);
             }
 
-            if (!$obj_id) {
+            if (!$objId) {
                 $this->setSuccess(false);
                 return $response->withStatus(404);
             }
 
-            $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $obj_type, $obj_id));
+            $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $objType, $objId));
 
-            $obj = $this->modelFactory()->create($obj_type);
-            $obj->load($obj_id);
+            $obj = $this->modelFactory()->create($objType);
+            $obj->load($objId);
             if (!$obj->id()) {
                 $this->setSuccess(false);
                 return $response->withStatus(404);

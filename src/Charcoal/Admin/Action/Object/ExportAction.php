@@ -17,6 +17,20 @@ use \Charcoal\Admin\Service\Exporter;
  * From abstractAction
  * - TranslationAware
  * - ModelAware
+ *
+ * ## Parameters
+ *
+ * **Required parameters**
+ *
+ * - `obj_type`
+ *
+ * ** Optional parameters**
+ *
+ * - `ident`
+ *
+ * ## Response
+ *
+ * The response is in "csv" mode.
  */
 class ExportAction extends AdminAction
 {
@@ -56,14 +70,14 @@ class ExportAction extends AdminAction
         $params = $request->getParams();
         if (!isset($params['obj_type'])) {
             $this->setSuccess(false);
-            return $response;
+            return $response->withStatus(404);;
         }
 
+        // Does this do anything?
         $this->setMode('csv');
 
         $exporter = new Exporter([
             'logger' => $this->logger,
-            'config' => $this->appConfig,
             'factory' => $this->modelFactory(),
             'obj_type' => $params['obj_type'],
             'propertyFactory' => $this->propertyFactory

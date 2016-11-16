@@ -46,6 +46,8 @@ abstract class AbstractPropertyInput implements
     use LoggerAwareTrait;
     use ViewableTrait;
 
+    const DEFAULT_INPUT_TYPE = 'text';
+
     /**
      * @var string $lang
      */
@@ -77,6 +79,8 @@ abstract class AbstractPropertyInput implements
     private $multiple;
 
     /**
+     * The control type for the HTML element `<input>`.
+     *
      * @var string $type
      */
     protected $type;
@@ -85,6 +89,11 @@ abstract class AbstractPropertyInput implements
      * @var string $inputType
      */
     protected $inputType;
+
+    /**
+     * @var string $inputMode
+     */
+    protected $inputMode;
 
     /**
      * @var string $inputId
@@ -470,13 +479,16 @@ abstract class AbstractPropertyInput implements
      */
     public function inputName()
     {
-        $name = $this->p()->ident();
+        $name = $this->propertyIdent();
+
         if ($this->p()->l10n()) {
             $name .= '['.$this->lang().']';
         }
+
         if ($this->multiple()) {
             $name .= '[]';
         }
+
         return $name;
     }
 
@@ -509,9 +521,38 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $inputType The input type.
-     * @throws InvalidArgumentException If provided argument is not of type 'string'.
-     * @return  AbstractPropertyInput Chainable
+     * Set the hint to the browser for which keyboard to display.
+     *
+     * @param  string $inputMode The input type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
+     * @return AbstractPropertyInput Chainable
+     */
+    public function setInputMode($inputMode)
+    {
+        if (!is_string($inputMode)) {
+            throw new InvalidArgumentException(
+                'Input mode must be a string.'
+            );
+        }
+        $this->inputMode = $inputMode;
+        return $this;
+    }
+
+    /**
+     * Retrieve the hint to the browser for which keyboard to display.
+     *
+     * @return string
+     */
+    public function inputMode()
+    {
+        return $this->inputMode;
+    }
+
+    /**
+     * @param  string $inputType The input type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
+     * @return AbstractPropertyInput Chainable
+     * @todo   [mcaskill 2016-11-16]: Rename to `controlType` or `controlTemplate`.
      */
     public function setInputType($inputType)
     {
@@ -533,6 +574,49 @@ abstract class AbstractPropertyInput implements
             $this->inputType = 'charcoal/admin/property/input/text';
         }
         return $this->inputType;
+    }
+
+    /**
+     * Set the control type for the HTML element `<input>`.
+     *
+     * @param  string $type The control type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
+     * @return AbstractPropertyInput Chainable
+     * @todo   [mcaskill 2016-11-16]: Rename to `inputType`.
+     */
+    public function setType($type)
+    {
+        if (!is_string($type)) {
+            throw new InvalidArgumentException(
+                'HTML input type must be a string.'
+            );
+        }
+
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        if ($this->type === null) {
+            $this->type = self::DEFAULT_INPUT_TYPE;
+        }
+
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function propertyIdent()
+    {
+        return $this->p()->ident();
     }
 
     /**

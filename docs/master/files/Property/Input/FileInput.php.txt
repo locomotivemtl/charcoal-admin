@@ -78,6 +78,16 @@ class FileInput extends AbstractPropertyInput
     }
 
     /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        return 'file';
+    }
+
+    /**
      * @return string|null
      */
     public function abridgedInputVal()

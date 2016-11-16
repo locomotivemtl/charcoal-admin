@@ -20,6 +20,7 @@ class TextInput extends AbstractPropertyInput
      * @var integer $minLength
      */
     private $minLength = 0;
+
     /**
      * @var integer $maxLength
      */
@@ -29,6 +30,16 @@ class TextInput extends AbstractPropertyInput
      * @var string $pattern
      */
     private $pattern = '';
+
+    /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        return 'text';
+    }
 
     /**
      * Retrieve the value for the input form control.

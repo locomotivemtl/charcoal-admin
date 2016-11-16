@@ -14,6 +14,16 @@ use \Charcoal\Admin\Property\AbstractSelectableInput;
 class CheckboxInput extends AbstractSelectableInput
 {
     /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        return 'checkbox';
+    }
+
+    /**
      * Always accept multiple values.
      *
      * @return boolean

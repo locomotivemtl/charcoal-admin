@@ -4,19 +4,8 @@
 
     `charcoal/admin/property/input/tinymce`
 --}}
+{{> charcoal/admin/property/input/textarea }}
 
-<textarea
-    id="{{inputId}}"
-    name="{{inputName}}"
-    class="form-control {{inputClass}}"
-    cols="{{cols}}"
-    rows="{{rows}}"
-    {{#readOnly}}readonly{{/readOnly}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
->{{&inputVal}}</textarea>
-
-{{#addJs}}
 {{# addJs }}
 <script>
     Charcoal.Admin.manager().add_property_input({

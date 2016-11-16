@@ -13,7 +13,7 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
 /**
  * TinyMCE Rich-Text Input Property
  */
-class TinymceInput extends AbstractPropertyInput
+class TinymceInput extends TextareaInput
 {
     /**
      * The TinyMCE editor settigns.

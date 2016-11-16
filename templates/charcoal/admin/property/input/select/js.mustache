@@ -6,6 +6,13 @@
 --}}
 {{# addJs }}
 <script>
-    $('#{{ inputId }}').selectpicker({{& selectOptionsAsJson }});
+Charcoal.Admin.manager().add_property_input({
+    id: '{{ inputId }}',
+    type: 'charcoal/admin/property/input/SelectPicker',
+    data: {
+        select_selector: '#{{ inputId }}',
+        select_options:  {{& selectOptionsAsJson }}
+    }
+});
 </script>
 {{/ addJs }}

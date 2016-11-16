@@ -2,8 +2,11 @@
 
 namespace Charcoal\Admin\Property\Input;
 
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
+// From 'charcoal-admin'
 use \Charcoal\Admin\Property\AbstractSelectableInput;
-use Charcoal\Translation\TranslationString;
 
 /**
  * List Builder Input Property
@@ -30,14 +33,11 @@ class DualSelectInput extends AbstractSelectableInput
     protected $reorderable;
 
     /**
-     * @var array $options
+     * Settings for {@link http://crlcu.github.io/multiselect/ Multiselect}.
+     *
+     * @var array
      */
-    protected $options;
-
-    /**
-     * @var array $dualSelectOptions
-     */
-    protected $dualSelectOptions;
+    private $dualSelectOptions;
 
     /**
      * Retrieve the unselected options.
@@ -80,26 +80,6 @@ class DualSelectInput extends AbstractSelectableInput
                     yield $choices[$v];
                 }
             }
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function options()
-    {
-        $opts = $this->dualSelectOptions;
-
-        $optionName = array_keys($opts);
-
-        foreach ($optionName as $optName) {
-            $this->options[$optName] = $opts[$optName];
-        }
-
-        if ($this->options) {
-            return json_encode($this->options);
-        } else {
-            return [];
         }
     }
 
@@ -176,21 +156,90 @@ class DualSelectInput extends AbstractSelectableInput
     }
 
     /**
-     * @return mixed
+     * Set the dual-select's options.
+     *
+     * This method always merges default settings.
+     *
+     * @param  array $settings The dual-select options.
+     * @return Selectinput Chainable
+     */
+    public function setDualSelectOptions(array $settings)
+    {
+        $this->dualSelectOptions = array_merge($this->defaultDualSelectOptions(), $settings);
+
+        return $this;
+    }
+
+    /**
+     * Merge (replacing or adding) dual-select options.
+     *
+     * @param  array $settings The dual-select options.
+     * @return Selectinput Chainable
+     */
+    public function mergeDualSelectOptions(array $settings)
+    {
+        $this->dualSelectOptions = array_merge($this->dualSelectOptions, $settings);
+
+        return $this;
+    }
+
+    /**
+     * Add (or replace) an dual-select option.
+     *
+     * @param  string $key The setting to add/replace.
+     * @param  mixed  $val The setting's value to apply.
+     * @throws InvalidArgumentException If the identifier is not a string.
+     * @return Selectinput Chainable
+     */
+    public function addSelectOption($key, $val)
+    {
+        if (!is_string($key)) {
+            throw new InvalidArgumentException(
+                'Setting key must be a string.'
+            );
+        }
+
+        // Make sure default options are loaded.
+        if ($this->dualSelectOptions === null) {
+            $this->dualSelectOptions();
+        }
+
+        $this->dualSelectOptions[$key] = $val;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the dual-select's options.
+     *
+     * @return array
      */
     public function dualSelectOptions()
     {
+        if ($this->dualSelectOptions === null) {
+            $this->dualSelectOptions = $this->defaultDualSelectOptions();
+        }
+
         return $this->dualSelectOptions;
     }
 
     /**
-     * @param mixed $dualSelectOptions The dual-select options.
-     * @return DualSelectInput
+     * Retrieve the default dual-select options.
+     *
+     * @return array
      */
-    public function setDualSelectOptions($dualSelectOptions)
+    public function defaultDualSelectOptions()
     {
-        $this->dualSelectOptions = $dualSelectOptions;
+        return [];
+    }
 
-        return $this;
+    /**
+     * Retrieve the dual-select's options as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function dualSelectOptionsAsJson()
+    {
+        return json_encode($this->dualSelectOptions());
     }
 }

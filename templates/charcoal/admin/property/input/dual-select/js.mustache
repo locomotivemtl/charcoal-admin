@@ -11,7 +11,8 @@ Charcoal.Admin.manager().add_property_input({
     type: 'charcoal/admin/property/input/DualSelect',
     data: {
         {{# searchable }}searchable: true, {{/ searchable }}
-        dualinput_options: {{& options }}
+        dualselect_selector: '#{{ inputId }}',
+        dualselect_options:  {{& dualSelectOptionsAsJson }}
     }
 });
 </script>

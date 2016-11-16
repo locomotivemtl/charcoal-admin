@@ -7,93 +7,107 @@ use \InvalidArgumentException;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
- * DateTimePicker Input Property
+ * Date/Time Picker Input Property
  */
 class DateTimePickerInput extends AbstractPropertyInput
 {
-    /**
-     * The Bootstrap datetimepicker settings.
-     *
-     * @var  array
-     * - {@link https://eonasdan.github.io/bootstrap-datetimepicker/}
-     */
-    private $datetimepickerOptions;
+    const DEFAULT_JS_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
     /**
-     * Set the picker's options.
+     * Settings for {@link https://eonasdan.github.io/bootstrap-datetimepicker/ Bootstrap Datepicker}.
      *
-     * This method overwrites existing helpers and merges (replacing or adding) picker options.
-     *
-     * @param array $opts The picker options.
-     * @return self Chainable
+     * @var array
      */
-    public function setDatetimepickerOptions(array $opts)
+    private $pickerOptions;
+
+    /**
+     * Set the color picker's options.
+     *
+     * This method always merges default settings.
+     *
+     * @param  array $settings The color picker options.
+     * @return ColorpickerInput Chainable
+     */
+    public function setPickerOptions(array $settings)
     {
-        $this->datetimepickerOptions = array_merge($this->defaultDatetimepickerOptions(), $opts);
+        $this->pickerOptions = array_merge($this->defaultPickerOptions(), $settings);
 
         return $this;
     }
 
     /**
-     * Add (or replace) an option.
+     * Merge (replacing or adding) color picker options.
      *
-     * @param string $optIdent The setting to add/replace.
-     * @param mixed  $optVal   The setting's value to apply.
-     * @throws InvalidArgumentException If the identifier is not a string.
-     * @return self Chainable
+     * @param  array $settings The color picker options.
+     * @return ColorpickerInput Chainable
      */
-    public function addOption($optIdent, $optVal)
+    public function mergePickerOptions(array $settings)
     {
-        if (!is_string($optIdent)) {
+        $this->pickerOptions = array_merge($this->pickerOptions, $settings);
+
+        return $this;
+    }
+
+    /**
+     * Add (or replace) an color picker option.
+     *
+     * @param  string $key The setting to add/replace.
+     * @param  mixed  $val The setting's value to apply.
+     * @throws InvalidArgumentException If the identifier is not a string.
+     * @return ColorpickerInput Chainable
+     */
+    public function addPickerOption($key, $val)
+    {
+        if (!is_string($key)) {
             throw new InvalidArgumentException(
-                'Option identifier must be a string.'
+                'Setting key must be a string.'
             );
         }
 
         // Make sure default options are loaded.
-        if ($this->datetimepickerOptions === null) {
-            $this->datetimepickerOptions();
+        if ($this->pickerOptions === null) {
+            $this->pickerOptions();
         }
 
-        $this->datetimepickerOptions[$optIdent] = $optVal;
+        $this->pickerOptions[$key] = $val;
 
         return $this;
     }
 
     /**
-     * Retrieve the picker's options.
+     * Retrieve the color picker's options.
      *
      * @return array
      */
-    public function datetimepickerOptions()
+    public function pickerOptions()
     {
-        if ($this->datetimepickerOptions === null) {
-            $this->setDatetimepickerOptions($this->defaultDatetimepickerOptions());
+        if ($this->pickerOptions === null) {
+            $this->pickerOptions = $this->defaultPickerOptions();
         }
 
-        return $this->datetimepickerOptions;
+        return $this->pickerOptions;
     }
 
     /**
-     * Retrieve the default picker options.
+     * Retrieve the default color picker options.
      *
      * @return array
      */
-    public function defaultDatetimepickerOptions()
+    public function defaultPickerOptions()
     {
         return [
-            'format' => 'YYYY-MM-DD HH:mm:ss',
+            'format'      => self::DEFAULT_JS_FORMAT,
             'defaultDate' => $this->inputVal()
         ];
     }
 
     /**
-     * Retrieve the picker's options as a JSON string.
+     * Retrieve the color picker's options as a JSON string.
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */
-    public function optionsAsJson()
+    public function pickerOptionsAsJson()
     {
-        return json_encode($this->datetimepickerOptions());
+        return json_encode($this->pickerOptions());
     }
 }

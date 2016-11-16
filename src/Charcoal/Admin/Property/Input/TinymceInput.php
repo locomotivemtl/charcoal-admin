@@ -32,14 +32,14 @@ class TinymceInput extends AbstractPropertyInput
     /**
      * Set the editor's options.
      *
-     * This method overwrites existing helpers.
+     * This method always merges default settings.
      *
-     * @param array $opts The editor options.
+     * @param  array $settings The editor options.
      * @return Tinymce Chainable
      */
-    public function setEditorOptions(array $opts)
+    public function setEditorOptions(array $settings)
     {
-        $this->editorOptions = $opts;
+        $this->editorOptions = array_merge($this->defaultEditorOptions(), $settings);
 
         return $this;
     }
@@ -47,12 +47,12 @@ class TinymceInput extends AbstractPropertyInput
     /**
      * Merge (replacing or adding) editor options.
      *
-     * @param array $opts The editor options.
+     * @param  array $settings The editor options.
      * @return Tinymce Chainable
      */
-    public function mergeEditorOptions(array $opts)
+    public function mergeEditorOptions(array $settings)
     {
-        $this->editorOptions = array_merge($this->editorOptions, $opts);
+        $this->editorOptions = array_merge($this->editorOptions, $settings);
 
         return $this;
     }
@@ -60,16 +60,16 @@ class TinymceInput extends AbstractPropertyInput
     /**
      * Add (or replace) an editor option.
      *
-     * @param string $optIdent The setting to add/replace.
-     * @param mixed  $optVal   The setting's value to apply.
+     * @param  string $key The setting to add/replace.
+     * @param  mixed  $val The setting's value to apply.
      * @throws InvalidArgumentException If the identifier is not a string.
      * @return Tinymce Chainable
      */
-    public function addEditorOption($optIdent, $optVal)
+    public function addEditorOption($key, $val)
     {
-        if (!is_string($optIdent)) {
+        if (!is_string($key)) {
             throw new InvalidArgumentException(
-                'Option identifier must be a string.'
+                'Setting key must be a string.'
             );
         }
 
@@ -78,7 +78,7 @@ class TinymceInput extends AbstractPropertyInput
             $this->editorOptions();
         }
 
-        $this->editorOptions[$optIdent] = $optVal;
+        $this->editorOptions[$key] = $val;
 
         return $this;
     }
@@ -91,7 +91,7 @@ class TinymceInput extends AbstractPropertyInput
     public function editorOptions()
     {
         if ($this->editorOptions === null) {
-            $this->setEditorOptions($this->defaultEditorOptions());
+            $this->selectOptions = $this->defaultSelectOptions();
         }
 
         return $this->editorOptions;
@@ -104,10 +104,10 @@ class TinymceInput extends AbstractPropertyInput
      */
     public function defaultEditorOptions()
     {
-        $metadata = $this->metadata();
+        $defaultData = $this->metadata()->defaultData();
 
-        if (isset($metadata['data']['editor_options'])) {
-            return $metadata['data']['editor_options'];
+        if (isset($defaultData['editor_options'])) {
+            return $defaultData['editor_options'];
         }
 
         return [];

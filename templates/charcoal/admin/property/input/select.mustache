@@ -1,20 +1,21 @@
- {{!--
+{{!--
     Select Options Property Input
     =============================
 
     `charcoal/admin/property/input/select`
 --}}
 <select
-    id="{{inputId}}"
-    name="{{inputName}}"
-    class="{{inputClass}}"
-    {{#multiple}}multiple{{/multiple}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
+    id="{{ inputId }}"
+    name="{{ inputName }}"
+    class="{{ inputClass }}"
+    {{# size }}size="{{ . }}"{{/ size }}
+    {{# multiple }}multiple{{/ multiple }}
+    {{# required }}required{{/ required }}
+    {{# disabled }}disabled{{/ disabled }}
 >
-    {{#choices}}
+    {{# choices }}
     {{> charcoal/admin/property/input/select/option }}
-    {{/choices}}
+    {{/ choices }}
 </select>
 
 {{> charcoal/admin/property/input/select/js }}

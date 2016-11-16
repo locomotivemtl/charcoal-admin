@@ -1,9 +1,9 @@
 /**
-* Color picker
-*
-* Require
-* - jquery-minicolors
-*/
+ * Color picker
+ *
+ * Require
+ * - jquery-minicolors
+ */
 
 Charcoal.Admin.Property_Input_Colorpicker = function (opts)
 {
@@ -11,10 +11,11 @@ Charcoal.Admin.Property_Input_Colorpicker = function (opts)
 
     // Property_Input_Colorpicker properties
     this.input_id = null;
-    this.colorpicker_options = null;
 
-    this.set_properties(opts);
-    this.create_colorpicker();
+    this.colorpicker_selector = null;
+    this.colorpicker_options  = null;
+
+    this.set_properties(opts).create_colorpicker();
 };
 
 Charcoal.Admin.Property_Input_Colorpicker.prototype = Object.create(Charcoal.Admin.Property.prototype);
@@ -24,14 +25,11 @@ Charcoal.Admin.Property_Input_Colorpicker.prototype.parent = Charcoal.Admin.Prop
 Charcoal.Admin.Property_Input_Colorpicker.prototype.set_properties = function (opts)
 {
     this.input_id = opts.id || this.input_id;
-    this.colorpicker_options = opts.data.colorpicker_options || this.colorpicker_options;
 
-    var default_opts = {
-        format: 'hex',
-        letterCase: 'uppercase',
-        opacity: false,
-        theme: 'bootstrap'
-    };
+    this.colorpicker_selector = opts.data.colorpicker_selector || this.colorpicker_selector;
+    this.colorpicker_options  = opts.data.colorpicker_options  || this.colorpicker_options;
+
+    var default_opts = {};
 
     this.colorpicker_options = $.extend({}, default_opts, this.colorpicker_options);
 
@@ -40,5 +38,7 @@ Charcoal.Admin.Property_Input_Colorpicker.prototype.set_properties = function (o
 
 Charcoal.Admin.Property_Input_Colorpicker.prototype.create_colorpicker = function ()
 {
-    $('#' + this.input_id).minicolors(this.colorpicker_options);
+    $(this.colorpicker_selector).minicolors(this.colorpicker_options);
+
+    return this;
 };

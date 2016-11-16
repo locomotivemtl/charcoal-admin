@@ -1,9 +1,8 @@
 {{!--
-Tinymce Property Input
-======================
+    TinyMCE Property Input
+    ======================
 
-`charcoal/admin/property/input/tinymce`
-
+    `charcoal/admin/property/input/tinymce`
 --}}
 
 <textarea
@@ -18,10 +17,11 @@ Tinymce Property Input
 >{{&inputVal}}</textarea>
 
 {{#addJs}}
+{{# addJs }}
 <script>
     Charcoal.Admin.manager().add_property_input({
-        id      : '{{inputId}}',
-        input_id: '{{inputId}}',
+        id      : '{{ inputId }}',
+        input_id: '{{ inputId }}',
         type    : 'charcoal/admin/property/input/tinymce',
         data    : {
             editor_options: {{& editorOptionsAsJson }},
@@ -30,4 +30,4 @@ Tinymce Property Input
         }
     });
 </script>
-{{/addJs}}
+{{/ addJs }}

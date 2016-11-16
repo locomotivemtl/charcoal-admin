@@ -15,7 +15,11 @@ Charcoal.Admin.Property_Input_DualSelect = function (opts)
 
     // Property_Input_DualSelect properties
     this.input_id = null;
-    this.dualinput_options = {};
+
+    this.dualselect_selector = null;
+    this.dualselect_options  = {};
+
+    // The instance of Multiselect
     this._dualselect = null;
 
     this.set_properties(opts).init();
@@ -30,34 +34,37 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.parent = Charcoal.Admin.Prope
  */
 Charcoal.Admin.Property_Input_DualSelect.prototype.init = function ()
 {
-    this.create_dualinput();
+    this.create_dualselect();
 };
 
 Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (opts)
 {
     this.input_id = opts.id || this.input_id;
-    this.dualinput_options = opts.dualinput_options || opts.data.dualinput_options || this.dualinput_options;
 
-    var id = '#' + this.input_id;
+    this.dualselect_selector = opts.dualselect_selector || opts.data.dualselect_selector || this.dualselect_selector;
+    this.dualselect_options  = opts.dualselect_options  || opts.data.dualselect_options  || this.dualselect_options;
 
     var default_options = {
         keepRenderingSort: false
     };
 
-    if (opts.data.dualinput_options.searchable) {
-        this.dualinput_options.search = {
-            left: id + '_searchLeft',
-            right: id + '_searchRight'
+    if (opts.data.dualselect_options.searchable) {
+        this.dualselect_options.search = {
+            left:  this.dualselect_selector + '_searchLeft',
+            right: this.dualselect_selector + '_searchRight'
         };
     }
 
-    this.dualinput_options = $.extend({}, default_options, this.dualinput_options);
+    this.dualselect_options = $.extend({}, default_options, this.dualselect_options);
+
     return this;
 };
 
-Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualinput = function ()
+Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function ()
 {
-    $('#' + this.input_id).multiselect(this.dualinput_options);
+    $(this.dualselect_selector).multiselect(this.dualselect_options);
+
+    return this;
 };
 
 /**

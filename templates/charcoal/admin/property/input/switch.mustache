@@ -1,37 +1,35 @@
 {{!--
-Switch Property Input
-=======================
+    Switch Input Control
+    ====================
 
-`charcoal/admin/property/input/switch`
-
+    `charcoal/admin/property/input/switch`
 --}}
-<div>
 <input
-    id="switch_{{inputId}}"
+    id="switch_{{ inputId }}"
     type="checkbox"
-    class="form-control {{inputClass}}"
-    data-target="{{inputId}}"
-    {{#checked}}checked{{/checked}}
-    {{#readOnly}}readonly{{/readOnly}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
+    class="form-control {{ inputClass }}"
+    {{# checked }}checked{{/ checked }}
+    {{# readOnly }}readonly{{/ readOnly }}
+    {{# required }}required{{/ required }}
+    {{# disabled }}disabled{{/ disabled }}
 >
-<input type="hidden"
-    id="{{inputId}}"
-    name="{{inputName}}"
-    value="{{value}}"
+<input
+    type="hidden"
+    id="{{ inputId }}"
+    name="{{ inputName }}"
+    value="{{ value }}"
 >
-</div>
 
-{{#addJs}}
+{{# addJs }}
 <script>
 Charcoal.Admin.manager().add_property_input({
-    id: '{{inputId}}',
+    id: '{{ inputId }}',
     type: 'charcoal/admin/property/input/switch',
     data: {
-        input_selector : '#{{inputId}}',
-        switch_selector : '#switch_{{inputId}}'
+        input_selector:  '#{{ inputId }}',
+        switch_selector: '#switch_{{ inputId }}',
+        switch_options:  {{& switchOptionsAsJson }}
     }
 });
 </script>
-{{/addJs}}
+{{/ addJs }}

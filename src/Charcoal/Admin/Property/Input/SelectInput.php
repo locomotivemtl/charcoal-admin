@@ -15,10 +15,9 @@ use \Charcoal\Admin\Property\AbstractSelectableInput;
 class SelectInput extends AbstractSelectableInput
 {
     /**
-     * The Bootstrap select picker settigns.
+     * Settings for {@link http://silviomoreto.github.io/bootstrap-select/ Bootstrap Select}.
      *
-     * @var  array
-     * - {@link http://silviomoreto.github.io/bootstrap-select/@link http://silviomoreto.github.io/bootstrap-select/}
+     * @var array
      */
     private $selectOptions;
 
@@ -64,14 +63,14 @@ class SelectInput extends AbstractSelectableInput
     /**
      * Set the select picker's options.
      *
-     * This method overwrites existing helpers.
+     * This method always merges default settings.
      *
-     * @param array $opts The select picker options.
-     * @return Tinymce Chainable
+     * @param  array $settings The select picker options.
+     * @return Selectinput Chainable
      */
-    public function setSelectOptions(array $opts)
+    public function setSelectOptions(array $settings)
     {
-        $this->selectOptions = $opts;
+        $this->selectOptions = array_merge($this->defaultSelectOptions(), $settings);
 
         return $this;
     }
@@ -79,12 +78,12 @@ class SelectInput extends AbstractSelectableInput
     /**
      * Merge (replacing or adding) select picker options.
      *
-     * @param array $opts The select picker options.
-     * @return Tinymce Chainable
+     * @param  array $settings The select picker options.
+     * @return Selectinput Chainable
      */
-    public function mergeSelectOptions(array $opts)
+    public function mergeSelectOptions(array $settings)
     {
-        $this->selectOptions = array_merge($this->selectOptions, $opts);
+        $this->selectOptions = array_merge($this->selectOptions, $settings);
 
         return $this;
     }
@@ -92,16 +91,16 @@ class SelectInput extends AbstractSelectableInput
     /**
      * Add (or replace) an select picker option.
      *
-     * @param string $optIdent The setting to add/replace.
-     * @param mixed  $optVal   The setting's value to apply.
+     * @param  string $key The setting to add/replace.
+     * @param  mixed  $val The setting's value to apply.
      * @throws InvalidArgumentException If the identifier is not a string.
-     * @return Tinymce Chainable
+     * @return Selectinput Chainable
      */
-    public function addSelectOption($optIdent, $optVal)
+    public function addSelectOption($key, $val)
     {
-        if (!is_string($optIdent)) {
+        if (!is_string($key)) {
             throw new InvalidArgumentException(
-                'Option identifier must be a string.'
+                'Setting key must be a string.'
             );
         }
 
@@ -110,7 +109,7 @@ class SelectInput extends AbstractSelectableInput
             $this->selectOptions();
         }
 
-        $this->selectOptions[$optIdent] = $optVal;
+        $this->selectOptions[$key] = $val;
 
         return $this;
     }
@@ -123,7 +122,7 @@ class SelectInput extends AbstractSelectableInput
     public function selectOptions()
     {
         if ($this->selectOptions === null) {
-            $this->setSelectOptions($this->defaultSelectOptions());
+            $this->selectOptions = $this->defaultSelectOptions();
         }
 
         return $this->selectOptions;
@@ -136,12 +135,6 @@ class SelectInput extends AbstractSelectableInput
      */
     public function defaultSelectOptions()
     {
-        $metadata = $this->metadata();
-
-        if (isset($metadata['data']['select_options'])) {
-            return $metadata['data']['select_options'];
-        }
-
         return [];
     }
 

@@ -2,25 +2,22 @@
 // Color-inputs
 // ==========================================================================
 
-.radio-color {
+.radio-color-group,
+.checkbox-color-group {
+    margin-left: -10px;
+}
+
+.radio-color-group .radio-color,
+.checkbox-color-group .checkbox-color {
+    margin-left: 10px;
+}
+
+.radio-color,
+.checkbox-color {
     padding: 10px 2px;
 
-    input[type='radio'] {
-        opacity:     0;
-        margin-left: .25em;
-        margin-top:  .25em;
-    }
-
-    input[type='radio']:checked + .o-color-swatch::after {
-        position:      absolute;
-        content:       '';
-        top:           -4px;
-        left:          -4px;
-        right:         -4px;
-        bottom:        -4px;
-        display:       block;
-        border:        #3498DB 2px solid;
-        border-radius: $input-border-radius;
+    label {
+        margin-bottom: 0;
     }
 
     .o-color-swatch {
@@ -36,7 +33,6 @@
     }
 
     &.input-lg {
-
         .o-color-swatch {
             width:         $input-height-large - ($padding-large-vertical * 2) - 2px;
             height:        $input-height-large - ($padding-large-vertical * 2) - 2px;
@@ -45,14 +41,9 @@
                 border-radius: $input-border-radius-large;
             }
         }
-
-        input[type='radio']:checked + .o-color-swatch::after {
-            border-radius: $input-border-radius-large;
-        }
     }
 
     &.input-sm {
-
         .o-color-swatch {
             width:         $input-height-small - ($padding-small-vertical * 2) - 2px;
             height:        $input-height-small - ($padding-small-vertical * 2) - 2px;
@@ -61,9 +52,38 @@
                 border-radius: $input-border-radius-small;
             }
         }
+    }
+}
 
-        input[type='radio']:checked + .o-color-swatch::after {
-            border-radius: $input-border-radius-small;
-        }
+.radio-color input[type="radio"],
+.checkbox-color input[type="checkbox"] {
+    opacity:     0;
+    margin-left: .25em;
+    margin-top:  .25em;
+
+    &:checked + .o-color-swatch::after {
+        position:      absolute;
+        content:       '';
+        top:           -4px;
+        left:          -4px;
+        right:         -4px;
+        bottom:        -4px;
+        display:       block;
+        border:        #3498DB 2px solid;
+        border-radius: $input-border-radius;
+    }
+}
+
+.radio-color.input-lg input[type="radio"],
+.checkbox-color.input-lg input[type="checkbox"] {
+    &:checked + .o-color-swatch::after {
+        border-radius: $input-border-radius-large;
+    }
+}
+
+.radio-color.input-sm input[type="radio"],
+.checkbox-color.input-sm input[type="checkbox"] {
+    &:checked + .o-color-swatch::after {
+        border-radius: $input-border-radius-small;
     }
 }

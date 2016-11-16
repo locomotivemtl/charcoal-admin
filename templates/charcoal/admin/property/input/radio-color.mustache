@@ -4,11 +4,11 @@
 
     `charcoal/admin/property/input/radio-color`
 --}}
-{{# choices }}
-<div class="radio-inline radio-color input-lg">
-    {{> charcoal/admin/property/control/choice }}
-    <label for="{{ inputId }}" class="o-color-swatch minicolors-sprite" aria-label="{{ label }}">
-        <span class="minicolors-swatch-color"{{# value }} style="background-color: {{ . }};"{{/ value }}></span>
-    </label>
-</div>
-{{/ choices }}
+<fieldset class="radio-color-group">
+    {{# choices }}
+    <div class="radio-inline radio-color input-lg">
+        {{> charcoal/admin/property/control/choice }}
+        {{> charcoal/admin/property/input/choice/color-label }}
+    </div>
+    {{/ choices }}
+</fieldset>

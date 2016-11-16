@@ -1,0 +1,15 @@
+{{!--
+    Checkbox Button Property Input
+    ===========================
+
+    `charcoal/admin/property/input/checkbox-color`
+--}}
+<fieldset class="checkbox-color-group">
+    {{> charcoal/admin/property/control/fallback }}
+    {{# choices }}
+    <div class="checkbox-inline checkbox-color input-lg">
+        {{> charcoal/admin/property/control/choice }}
+        {{> charcoal/admin/property/input/choice/color-label }}
+    </div>
+    {{/ choices }}
+</fieldset>

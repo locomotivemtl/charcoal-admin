@@ -118,7 +118,7 @@ class DualSelectInput extends AbstractSelectableInput
                 ]);
 
                 $defaultOptions = [
-                    'left' => [
+                    'left'  => [
                         'placeholder' => $label
                     ],
                     'right' => [
@@ -129,7 +129,7 @@ class DualSelectInput extends AbstractSelectableInput
                 if (is_bool($searchable) && $searchable) {
                     $searchable = $defaultOptions;
                 } elseif (is_array($searchable)) {
-                    $lists = [ 'left', 'right' ];
+                    $lists = ['left', 'right'];
 
                     foreach ($lists as $ident) {
                         if (isset($searchable[$ident]['placeholder'])) {
@@ -190,6 +190,15 @@ class DualSelectInput extends AbstractSelectableInput
     public function setDualSelectOptions($dualSelectOptions)
     {
         $this->dualSelectOptions = $dualSelectOptions;
+
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function inputRawIdent()
+    {
+        return $this->p()->ident();
     }
 }

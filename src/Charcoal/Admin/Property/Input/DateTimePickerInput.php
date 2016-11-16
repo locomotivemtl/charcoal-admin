@@ -21,6 +21,16 @@ class DateTimePickerInput extends AbstractPropertyInput
     private $pickerOptions;
 
     /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        return 'datetime-local';
+    }
+
+    /**
      * Set the color picker's options.
      *
      * This method always merges default settings.

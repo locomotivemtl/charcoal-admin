@@ -1,0 +1,20 @@
+{{!--
+    Radio \ Checkbox
+    ================
+
+    `charcoal/admin/property/input/checkbox`
+    `charcoal/admin/property/input/checkbox-color`
+    `charcoal/admin/property/input/radio`
+    `charcoal/admin/property/input/radio-color`
+--}}
+<input
+    type="{{ type }}"
+    id="{{ inputId }}"
+    name="{{ inputName }}"
+    class="{{ inputClass }}"
+    {{# checked }}checked{{/ checked }}
+    {{# readOnly }}readonly{{/ readOnly }}
+    {{# required }}required{{/ required }}
+    {{# disabled }}disabled{{/ disabled }}
+    value="{{ value }}"
+>

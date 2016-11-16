@@ -1,23 +1,12 @@
 {{!--
-Radio Button Property Input
-===========================
+    Radio Button Property Input
+    ===========================
 
-`charcoal/admin/property/input/radio`
-
+    `charcoal/admin/property/input/radio`
 --}}
-{{#choices}}
+{{# choices }}
 <label class="radio-inline">
-    <input
-        type="radio"
-        id="{{inputId}}"
-        name="{{inputName}}"
-        class="{{inputClass}}"
-        {{#checked}}checked{{/checked}}
-        {{#readOnly}}readonly{{/readOnly}}
-        {{#required}}required{{/required}}
-        {{#disabled}}disabled{{/disabled}}
-        value="{{value}}"
-    >
-    <span>{{title}}</span>
+    {{> charcoal/admin/property/control/choice }}
+    <span>{{& label }}</span>
 </label>
-{{/choices}}
+{{/ choices }}

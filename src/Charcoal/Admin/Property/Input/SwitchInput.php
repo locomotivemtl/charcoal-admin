@@ -20,6 +20,16 @@ class SwitchInput extends AbstractPropertyInput
     private $switchOptions;
 
     /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        return 'checkbox';
+    }
+
+    /**
      * @return boolean
      */
     public function checked()

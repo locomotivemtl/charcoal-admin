@@ -1,25 +1,14 @@
 {{!--
-Radio Button Property Input
-===========================
+    Radio Button Property Input
+    ===========================
 
-`charcoal/admin/property/input/radio`
-
+    `charcoal/admin/property/input/radio-color`
 --}}
-{{#choices}}
+{{# choices }}
 <div class="radio-inline radio-color input-lg">
-    <input
-        type="radio"
-        id="{{inputId}}"
-        name="{{inputName}}"
-        class="{{inputClass}}"
-        {{#checked}}checked{{/checked}}
-        {{#readOnly}}readonly{{/readOnly}}
-        {{#required}}required{{/required}}
-        {{#disabled}}disabled{{/disabled}}
-        value="{{title}}"
-    >
-    <label for="{{inputId}}" class="o-color-swatch minicolors-sprite" aria-label="{{ title }}">
-        <span class="minicolors-swatch-color"{{# title }} style="background-color: {{ . }};"{{/ title }}></span>
+    {{> charcoal/admin/property/control/choice }}
+    <label for="{{ inputId }}" class="o-color-swatch minicolors-sprite" aria-label="{{ label }}">
+        <span class="minicolors-swatch-color"{{# value }} style="background-color: {{ . }};"{{/ value }}></span>
     </label>
 </div>
-{{/choices}}
+{{/ choices }}

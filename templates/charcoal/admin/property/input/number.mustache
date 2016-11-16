@@ -1,22 +1,7 @@
 {{!--
-Number input
+    Number Input Control
+    ====================
 
-Display a property (most likely a `PropertyInteger`...) as a "number" input.
-
-`charcoal/admin/property/input/number`
+    `charcoal/admin/property/input/number`
 --}}
-<input
-    type="number"
-    id="{{inputId}}"
-    name="{{inputName}}"
-    class="form-control {{inputClass}}"
-    {{#size}}size="{{size}}"{{/size}}
-    {{#minLength}}minlength="{{minLength}}"{{/minLength}}
-    {{#maxLength}}maxlength="{{maxLength}}"{{/maxLength}}
-    {{#pattern}}pattern="{{pattern}}"{{/pattern}}
-    {{#placeholder}}placeholder="{{placeholder}}"{{/placeholder}}
-    {{#readOnly}}readonly{{/readOnly}}
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
-    value="{{val}}"
->
+{{> charcoal/admin/property/control/input }}

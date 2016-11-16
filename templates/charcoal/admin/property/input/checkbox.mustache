@@ -1,24 +1,13 @@
 {{!--
-Checkbox Property Input
-=======================
+    Checkbox Property Input
+    =======================
 
-`charcoal/admin/property/input/checkbox`
-
+    `charcoal/admin/property/input/checkbox`
 --}}
-<input type="hidden" name="{{ propertyIdent }}" value="">
-{{#choices}}
+{{> charcoal/admin/property/control/fallback }}
+{{# choices }}
 <label class="checkbox-inline">
-    <input
-        type="checkbox"
-        id="{{inputId}}"
-        name="{{inputName}}"
-        class="{{inputClass}}"
-        {{#checked}}checked{{/checked}}
-        {{#readOnly}}readonly{{/readOnly}}
-        {{#required}}required{{/required}}
-        {{#disabled}}disabled{{/disabled}}
-        value="{{value}}"
-    >
-    <span>{{title}}</span>
+    {{> charcoal/admin/property/control/choice }}
+    <span>{{& label }}</span>
 </label>
-{{/choices}}
+{{/ choices }}

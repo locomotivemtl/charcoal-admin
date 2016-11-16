@@ -1,15 +1,21 @@
 {{!--
-    Text Property Input
-    ===================
+    Input Control
+    =============
 
-    `charcoal/admin/property/input/text`
+    @used-by
+        - `charcoal/admin/property/input/text`
+        - `charcoal/admin/property/input/phone`
+        - `charcoal/admin/property/input/url`
 --}}
 <input
-    type="text"
+    type="{{ type }}"
     id="{{ inputId }}"
     name="{{ inputName }}"
     class="form-control {{ inputClass }}"
     {{# size }}size="{{ . }}"{{/ size }}
+    {{# min }}min="{{ . }}"{{/ min }}
+    {{# max }}max="{{ . }}"{{/ max }}
+    {{# step }}step="{{ . }}"{{/ step }}
     {{# minLength }}minlength="{{ . }}"{{/ minLength }}
     {{# maxLength }}maxlength="{{ . }}"{{/ maxLength }}
     {{# pattern }}pattern="{{ . }}"{{/ pattern }}

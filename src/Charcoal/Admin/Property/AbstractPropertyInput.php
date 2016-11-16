@@ -46,6 +46,8 @@ abstract class AbstractPropertyInput implements
     use LoggerAwareTrait;
     use ViewableTrait;
 
+    const DEFAULT_INPUT_TYPE = 'text';
+
     /**
      * @var string $lang
      */
@@ -77,6 +79,8 @@ abstract class AbstractPropertyInput implements
     private $multiple;
 
     /**
+     * The control type for the HTML element `<input>`.
+     *
      * @var string $type
      */
     protected $type;
@@ -539,6 +543,42 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * Set the control type for the HTML element `<input>`.
+     *
+     * @param  string $type The control type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
+     * @return AbstractPropertyInput Chainable
+     * @todo   [mcaskill 2016-11-16]: Rename to `inputType`.
+     */
+    public function setType($type)
+    {
+        if (!is_string($type)) {
+            throw new InvalidArgumentException(
+                'HTML input type must be a string.'
+            );
+        }
+
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the control type for the HTML element `<input>`.
+     *
+     * @return string
+     */
+    public function type()
+    {
+        if ($this->type === null) {
+            $this->type = self::DEFAULT_INPUT_TYPE;
+        }
+
+        return $this->type;
+    }
+
+    /**
+     * @return string
      */
     public function propertyIdent()
     {

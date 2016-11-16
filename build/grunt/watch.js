@@ -24,16 +24,6 @@ module.exports = {
             'notify:json'
         ]
     },
-    php: {
-        files: [
-            'src/**/*.php',
-            'tests/**/*.php',
-        ],
-        tasks: [
-            'phplint',
-            'notify:php'
-        ]
-    },
     sass: {
         files: [ 'assets/src/styles/**/*.scss' ],
         tasks: [

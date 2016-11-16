@@ -91,6 +91,11 @@ abstract class AbstractPropertyInput implements
     protected $inputType;
 
     /**
+     * @var string $inputMode
+     */
+    protected $inputMode;
+
+    /**
      * @var string $inputId
      */
     protected $inputId;
@@ -516,9 +521,38 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $inputType The input type.
-     * @throws InvalidArgumentException If provided argument is not of type 'string'.
-     * @return  AbstractPropertyInput Chainable
+     * Set the hint to the browser for which keyboard to display.
+     *
+     * @param  string $inputMode The input type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
+     * @return AbstractPropertyInput Chainable
+     */
+    public function setInputMode($inputMode)
+    {
+        if (!is_string($inputMode)) {
+            throw new InvalidArgumentException(
+                'Input mode must be a string.'
+            );
+        }
+        $this->inputMode = $inputMode;
+        return $this;
+    }
+
+    /**
+     * Retrieve the hint to the browser for which keyboard to display.
+     *
+     * @return string
+     */
+    public function inputMode()
+    {
+        return $this->inputMode;
+    }
+
+    /**
+     * @param  string $inputType The input type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
+     * @return AbstractPropertyInput Chainable
+     * @todo   [mcaskill 2016-11-16]: Rename to `controlType` or `controlTemplate`.
      */
     public function setInputType($inputType)
     {

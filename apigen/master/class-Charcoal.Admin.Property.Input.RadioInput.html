@@ -187,6 +187,7 @@
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-Charcoal.Admin.Property.Input.AudioInput.html">AudioInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxColorInput.html">CheckboxColorInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxInput.html">CheckboxInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
@@ -313,7 +314,7 @@ a control to select a <em>single value</em> from a list of different values.
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#7-41" title="Go to source code">Charcoal/Admin/Property/Input/RadioInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#7-51" title="Go to source code">Charcoal/Admin/Property/Input/RadioInput.php</a>
 		<br>
 	</div>
 
@@ -321,6 +322,42 @@ a control to select a <em>single value</em> from a list of different values.
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="type" id="_type">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_type">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#16-24" title="Go to source code">type</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_type">Charcoal\Admin\Property\AbstractPropertyInput::type()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="multiple" id="_multiple">
 
 		<td class="attributes"><code>
@@ -333,7 +370,7 @@ a control to select a <em>single value</em> from a list of different values.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_multiple">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#16-24" title="Go to source code">multiple</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#26-34" title="Go to source code">multiple</a>( )</code>
 
 		<div class="description short">
 			<p>Never accept multiple values.</p>
@@ -369,7 +406,7 @@ a control to select a <em>single value</em> from a list of different values.
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseChoice">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#26-40" title="Go to source code">parseChoice</a>( <span>string|integer <var>$ident</var></span>, <span>array|object <var>$choice</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.RadioInput.html#36-50" title="Go to source code">parseChoice</a>( <span>string|integer <var>$ident</var></span>, <span>array|object <var>$choice</var></span> )</code>
 
 		<div class="description short">
 			<p>Prepare a single selectable option for output.</p>
@@ -424,6 +461,7 @@ a control to select a <em>single value</em> from a list of different values.
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_ident">ident()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputClass">inputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputId">inputId()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputMode">inputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">inputName()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputType">inputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">inputVal()</a>, 
@@ -431,6 +469,7 @@ a control to select a <em>single value</em> from a list of different values.
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_p">p()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_placeholder">placeholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_property">property()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyIdent">propertyIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyVal">propertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_readOnly">readOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
@@ -441,6 +480,7 @@ a control to select a <em>single value</em> from a list of different values.
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputId">setInputId()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputMode">setInputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputType">setInputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setLang">setLang()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setMultiple">setMultiple()</a>, 
@@ -449,6 +489,7 @@ a control to select a <em>single value</em> from a list of different values.
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setPropertyVal">setPropertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setReadOnly">setReadOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setRequired">setRequired()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setType">setType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setter">setter()</a>
 		</code></td>
 	</tr>
@@ -461,6 +502,14 @@ a control to select a <em>single value</em> from a list of different values.
 
 
 
+	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#constants">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#DEFAULT_INPUT_TYPE"><b>DEFAULT_INPUT_TYPE</b></a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -471,6 +520,7 @@ a control to select a <em>single value</em> from a list of different values.
 		<td><code>
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputClass"><var>$inputClass</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputId"><var>$inputId</var></a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputMode"><var>$inputMode</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputType"><var>$inputType</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$type"><var>$type</var></a>
 		</code></td>

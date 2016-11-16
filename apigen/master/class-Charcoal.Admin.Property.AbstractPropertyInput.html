@@ -269,7 +269,6 @@
 			<a href="class-Charcoal.Admin.Property.Input.AudioInput.html">Charcoal\Admin\Property\Input\AudioInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.TextareaInput.html">Charcoal\Admin\Property\Input\TextareaInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.TextInput.html">Charcoal\Admin\Property\Input\TextInput</a>, 
-			<a href="class-Charcoal.Admin.Property.Input.TinymceInput.html">Charcoal\Admin\Property\Input\TinymceInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">Charcoal\Admin\Property\Input\ColorPickerInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.FileInput.html">Charcoal\Admin\Property\Input\FileInput</a>, 
@@ -282,7 +281,9 @@
 
 	<div>
 		<h4>Indirect known subclasses</h4>
+			<a href="class-Charcoal.Admin.Property.Input.CheckboxColorInput.html">Charcoal\Admin\Property\Input\CheckboxColorInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.CheckboxInput.html">Charcoal\Admin\Property\Input\CheckboxInput</a>, 
+			<a href="class-Charcoal.Admin.Property.Input.UrlInput.html">Charcoal\Admin\Property\Input\UrlInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">Charcoal\Admin\Property\Input\DualSelectInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.HiddenInput.html">Charcoal\Admin\Property\Input\HiddenInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.ImageInput.html">Charcoal\Admin\Property\Input\ImageInput</a>, 
@@ -290,7 +291,7 @@
 			<a href="class-Charcoal.Admin.Property.Input.RadioColorInput.html">Charcoal\Admin\Property\Input\RadioColorInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.RadioInput.html">Charcoal\Admin\Property\Input\RadioInput</a>, 
 			<a href="class-Charcoal.Admin.Property.Input.SelectInput.html">Charcoal\Admin\Property\Input\SelectInput</a>, 
-			<a href="class-Charcoal.Admin.Property.Input.UrlInput.html">Charcoal\Admin\Property\Input\UrlInput</a>
+			<a href="class-Charcoal.Admin.Property.Input.TinymceInput.html">Charcoal\Admin\Property\Input\TinymceInput</a>
 	</div>
 
 
@@ -303,7 +304,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#36-600" title="Go to source code">Charcoal/Admin/Property/AbstractPropertyInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#36-684" title="Go to source code">Charcoal/Admin/Property/AbstractPropertyInput.php</a>
 		<br>
 	</div>
 
@@ -323,7 +324,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#119-137" title="Go to source code">__construct</a>( <span>array|ArrayAccess <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#128-146" title="Go to source code">__construct</a>( <span>array|ArrayAccess <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -358,7 +359,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#139-149" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#148-158" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Inject dependencies from a DI Container.</p>
@@ -393,7 +394,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#151-180" title="Go to source code">setData</a>( <span>array|Traversable <var>$data</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#160-189" title="Go to source code">setData</a>( <span>array|Traversable <var>$data</var></span> )</code>
 
 		<div class="description short">
 			<p>This function takes an array and fill the model object with its value.</p>
@@ -442,7 +443,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_createMetadata">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#182-193" title="Go to source code">createMetadata</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#191-202" title="Go to source code">createMetadata</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
 
 		<div class="description short">
 			
@@ -481,7 +482,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyVal">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#195-203" title="Go to source code">setPropertyVal</a>( <span>mixed <var>$val</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#204-212" title="Go to source code">setPropertyVal</a>( <span>mixed <var>$val</var></span> )</code>
 
 		<div class="description short">
 			
@@ -520,7 +521,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyVal">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#205-211" title="Go to source code">propertyVal</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#214-220" title="Go to source code">propertyVal</a>( )</code>
 
 		<div class="description short">
 			
@@ -554,7 +555,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setLang">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#213-221" title="Go to source code">setLang</a>( <span>string <var>$lang</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#222-230" title="Go to source code">setLang</a>( <span>string <var>$lang</var></span> )</code>
 
 		<div class="description short">
 			
@@ -593,7 +594,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_lang">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#223-233" title="Go to source code">lang</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#232-242" title="Go to source code">lang</a>( )</code>
 
 		<div class="description short">
 			<p>Get the input language</p>
@@ -627,7 +628,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hidden">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#235-246" title="Go to source code">hidden</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#244-255" title="Go to source code">hidden</a>( )</code>
 
 		<div class="description short">
 			
@@ -661,7 +662,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#248-262" title="Go to source code">setIdent</a>( <span>string <var>$ident</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#257-271" title="Go to source code">setIdent</a>( <span>string <var>$ident</var></span> )</code>
 
 		<div class="description short">
 			
@@ -706,7 +707,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_ident">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#264-270" title="Go to source code">ident</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#273-279" title="Go to source code">ident</a>( )</code>
 
 		<div class="description short">
 			
@@ -742,7 +743,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setReadOnly">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#272-280" title="Go to source code">setReadOnly</a>( <span>boolean <var>$readOnly</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#281-289" title="Go to source code">setReadOnly</a>( <span>boolean <var>$readOnly</var></span> )</code>
 
 		<div class="description short">
 			
@@ -783,7 +784,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_readOnly">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#282-288" title="Go to source code">readOnly</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#291-297" title="Go to source code">readOnly</a>( )</code>
 
 		<div class="description short">
 			
@@ -819,7 +820,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#290-298" title="Go to source code">setRequired</a>( <span>boolean <var>$required</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#299-307" title="Go to source code">setRequired</a>( <span>boolean <var>$required</var></span> )</code>
 
 		<div class="description short">
 			
@@ -860,7 +861,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_required">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#300-306" title="Go to source code">required</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#309-315" title="Go to source code">required</a>( )</code>
 
 		<div class="description short">
 			
@@ -896,7 +897,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDisabled">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#309-317" title="Go to source code">setDisabled</a>( <span>boolean <var>$disabled</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#318-326" title="Go to source code">setDisabled</a>( <span>boolean <var>$disabled</var></span> )</code>
 
 		<div class="description short">
 			
@@ -937,7 +938,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_disabled">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#319-325" title="Go to source code">disabled</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#328-334" title="Go to source code">disabled</a>( )</code>
 
 		<div class="description short">
 			
@@ -973,7 +974,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setMultiple">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#327-335" title="Go to source code">setMultiple</a>( <span>boolean <var>$multiple</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#336-344" title="Go to source code">setMultiple</a>( <span>boolean <var>$multiple</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1012,7 +1013,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_multiple">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#337-343" title="Go to source code">multiple</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#346-352" title="Go to source code">multiple</a>( )</code>
 
 		<div class="description short">
 			
@@ -1046,7 +1047,7 @@ on the metadata object, because the method <code>set_foobar()</code> does not ex
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPlaceholder">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#345-362" title="Go to source code">setPlaceholder</a>( <span>mixed <var>$placeholder</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#354-371" title="Go to source code">setPlaceholder</a>( <span>mixed <var>$placeholder</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the form control's placeholder.</p>
@@ -1088,7 +1089,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_placeholder">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#364-384" title="Go to source code">placeholder</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#373-393" title="Go to source code">placeholder</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the placeholder.</p>
@@ -1122,7 +1123,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_renderPlaceholder">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#386-405" title="Go to source code">renderPlaceholder</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#395-414" title="Go to source code">renderPlaceholder</a>( )</code>
 
 		<div class="description short">
 			<p>Render the placeholders.</p>
@@ -1156,7 +1157,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setInputId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#407-415" title="Go to source code">setInputId</a>( <span>string <var>$inputId</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#416-424" title="Go to source code">setInputId</a>( <span>string <var>$inputId</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1197,7 +1198,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#417-430" title="Go to source code">inputId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#426-439" title="Go to source code">inputId</a>( )</code>
 
 		<div class="description short">
 			<p>Get the input ID.</p>
@@ -1235,7 +1236,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_generateInputId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#432-440" title="Go to source code">generateInputId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#441-449" title="Go to source code">generateInputId</a>( )</code>
 
 		<div class="description short">
 			<p>Generate a unique input ID.</p>
@@ -1269,7 +1270,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setInputClass">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#442-456" title="Go to source code">setInputClass</a>( <span>string <var>$inputClass</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#451-465" title="Go to source code">setInputClass</a>( <span>string <var>$inputClass</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1312,7 +1313,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputClass">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#458-464" title="Go to source code">inputClass</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#467-473" title="Go to source code">inputClass</a>( )</code>
 
 		<div class="description short">
 			
@@ -1346,7 +1347,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputName">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#466-481" title="Go to source code">inputName</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#475-493" title="Go to source code">inputName</a>( )</code>
 
 		<div class="description short">
 			<p>The input name should always be the property's ident.</p>
@@ -1382,7 +1383,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputVal">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#483-509" title="Go to source code">inputVal</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#495-521" title="Go to source code">inputVal</a>( )</code>
 
 		<div class="description short">
 			
@@ -1414,6 +1415,83 @@ in the property control.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setInputMode" id="_setInputMode">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html">Charcoal\Admin\Property\AbstractPropertyInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setInputMode">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#523-539" title="Go to source code">setInputMode</a>( <span>string <var>$inputMode</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the hint to the browser for which keyboard to display.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the hint to the browser for which keyboard to display.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$inputMode</var></dt>
+					<dd>The input type.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html">Charcoal\Admin\Property\AbstractPropertyInput</a></code><br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the provided argument is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="inputMode" id="_inputMode">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_inputMode">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#541-549" title="Go to source code">inputMode</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the hint to the browser for which keyboard to display.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the hint to the browser for which keyboard to display.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setInputType" id="_setInputType">
 
 		<td class="attributes"><code>
@@ -1426,7 +1504,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setInputType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#511-525" title="Go to source code">setInputType</a>( <span>string <var>$inputType</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#551-566" title="Go to source code">setInputType</a>( <span>string <var>$inputType</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1449,7 +1527,7 @@ in the property control.</p>
 
 				<h4>Throws</h4>
 				<div class="list">
-					InvalidArgumentException<br>If provided argument is not of type 'string'.
+					InvalidArgumentException<br>If the provided argument is not a string.
 				</div>
 
 
@@ -1471,7 +1549,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#527-536" title="Go to source code">inputType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#568-577" title="Go to source code">inputType</a>( )</code>
 
 		<div class="description short">
 			
@@ -1495,6 +1573,117 @@ in the property control.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setType" id="_setType">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html">Charcoal\Admin\Property\AbstractPropertyInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#579-598" title="Go to source code">setType</a>( <span>string <var>$type</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$type</var></dt>
+					<dd>The control type.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html">Charcoal\Admin\Property\AbstractPropertyInput</a></code><br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the provided argument is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="type" id="_type">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_type">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#600-612" title="Go to source code">type</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="propertyIdent" id="_propertyIdent">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_propertyIdent">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#614-620" title="Go to source code">propertyIdent</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setProperty" id="_setProperty">
 
 		<td class="attributes"><code>
@@ -1507,7 +1696,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#538-546" title="Go to source code">setProperty</a>( <span>Charcoal\Property\PropertyInterface <var>$p</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#622-630" title="Go to source code">setProperty</a>( <span>Charcoal\Property\PropertyInterface <var>$p</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1548,7 +1737,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_property">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#548-554" title="Go to source code">property</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#632-638" title="Go to source code">property</a>( )</code>
 
 		<div class="description short">
 			
@@ -1584,7 +1773,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_p">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#556-564" title="Go to source code">p</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#640-648" title="Go to source code">p</a>( )</code>
 
 		<div class="description short">
 			<p>Alias of the <code>property</code> method.</p>
@@ -1620,7 +1809,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getter">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#566-576" title="Go to source code">getter</a>( <span>string <var>$key</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#650-660" title="Go to source code">getter</a>( <span>string <var>$key</var></span> )</code>
 
 		<div class="description short">
 			<p>Allow an object to define how the key getter are called.</p>
@@ -1659,7 +1848,7 @@ in the property control.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setter">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#578-588" title="Go to source code">setter</a>( <span>string <var>$key</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#662-672" title="Go to source code">setter</a>( <span>string <var>$key</var></span> )</code>
 
 		<div class="description short">
 			<p>Allow an object to define how the key setter are called.</p>
@@ -1695,6 +1884,33 @@ in the property control.</p>
 
 
 
+	<table class="summary constants" id="constants">
+	<caption>Constants summary</caption>
+	<tr data-order="DEFAULT_INPUT_TYPE" id="DEFAULT_INPUT_TYPE">
+
+		<td class="attributes"><code>string</code></td>
+		<td class="name">
+			<code>
+				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#49" title="Go to source code"><b>DEFAULT_INPUT_TYPE</b></a>
+			</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#DEFAULT_INPUT_TYPE" class="anchor">#</a>
+				<code><span class="php-quote">'text'</span></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 
 
@@ -1708,14 +1924,14 @@ in the property control.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#79-82" title="Go to source code"><var>$type</var></a>
+				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#81-86" title="Go to source code"><var>$type</var></a>
 
 			<div class="description short">
-				<p>$type</p>
+				<p>The control type for the HTML element <code>&lt;input&gt;</code>.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$type</p>
+				<p>The control type for the HTML element <code>&lt;input&gt;</code>.</p>
 
 			</div>
 		</td>
@@ -1733,7 +1949,7 @@ in the property control.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#84-87" title="Go to source code"><var>$inputType</var></a>
+				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#88-91" title="Go to source code"><var>$inputType</var></a>
 
 			<div class="description short">
 				<p>$inputType</p>
@@ -1751,6 +1967,31 @@ in the property control.</p>
 			</div>
 		</td>
 	</tr>
+	<tr data-order="inputMode" id="$inputMode">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#93-96" title="Go to source code"><var>$inputMode</var></a>
+
+			<div class="description short">
+				<p>$inputMode</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>$inputMode</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$inputMode" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
 	<tr data-order="inputId" id="$inputId">
 		<td class="attributes"><code>
 			protected  
@@ -1758,7 +1999,7 @@ in the property control.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#89-92" title="Go to source code"><var>$inputId</var></a>
+				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#98-101" title="Go to source code"><var>$inputId</var></a>
 
 			<div class="description short">
 				<p>$inputId</p>
@@ -1783,7 +2024,7 @@ in the property control.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#94-97" title="Go to source code"><var>$inputClass</var></a>
+				<a href="source-class-Charcoal.Admin.Property.AbstractPropertyInput.html#103-106" title="Go to source code"><var>$inputClass</var></a>
 
 			<div class="description short">
 				<p>$inputClass</p>

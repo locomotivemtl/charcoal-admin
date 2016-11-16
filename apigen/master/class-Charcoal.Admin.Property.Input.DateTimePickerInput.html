@@ -187,6 +187,7 @@
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-Charcoal.Admin.Property.Input.AudioInput.html">AudioInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxColorInput.html">CheckboxColorInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxInput.html">CheckboxInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
 				<li class="active"><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
@@ -248,7 +249,7 @@
 
 
 	<div class="description">
-	<p>DateTimePicker Input Property</p>
+	<p>Date/Time Picker Input Property</p>
 	</div>
 
 	<dl class="tree">
@@ -296,7 +297,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#9-99" title="Go to source code">Charcoal/Admin/Property/Input/DateTimePickerInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#9-123" title="Go to source code">Charcoal/Admin/Property/Input/DateTimePickerInput.php</a>
 		<br>
 	</div>
 
@@ -304,39 +305,75 @@
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="setDatetimepickerOptions" id="_setDatetimepickerOptions">
+	<tr data-order="type" id="_type">
 
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code>
+			string
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setDatetimepickerOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#22-35" title="Go to source code">setDatetimepickerOptions</a>( <span>array <var>$opts</var></span> )</code>
+		<a class="anchor" href="#_type">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#23-31" title="Go to source code">type</a>( )</code>
 
 		<div class="description short">
-			<p>Set the picker's options.</p>
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Set the picker's options.</p>
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
 
-<p>This method overwrites existing helpers and merges (replacing or adding) picker options.</p>
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_type">Charcoal\Admin\Property\AbstractPropertyInput::type()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setPickerOptions" id="_setPickerOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			ColorpickerInput
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setPickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#33-46" title="Go to source code">setPickerOptions</a>( <span>array <var>$settings</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the color picker's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the color picker's options.</p>
+
+<p>This method always merges default settings.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$opts</var></dt>
-					<dd>The picker options.</dd>
+					<dt><var>$settings</var></dt>
+					<dd>The color picker options.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code><br>Chainable
+					ColorpickerInput<br>Chainable
 				</div>
 
 
@@ -345,39 +382,78 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="addOption" id="_addOption">
+	<tr data-order="mergePickerOptions" id="_mergePickerOptions">
 
 		<td class="attributes"><code>
 			 public 
 
-			<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code>
+			ColorpickerInput
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_addOption">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#37-61" title="Go to source code">addOption</a>( <span>string <var>$optIdent</var></span>, <span>mixed <var>$optVal</var></span> )</code>
+		<a class="anchor" href="#_mergePickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#48-59" title="Go to source code">mergePickerOptions</a>( <span>array <var>$settings</var></span> )</code>
 
 		<div class="description short">
-			<p>Add (or replace) an option.</p>
+			<p>Merge (replacing or adding) color picker options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Add (or replace) an option.</p>
+			<p>Merge (replacing or adding) color picker options.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$optIdent</var></dt>
+					<dt><var>$settings</var></dt>
+					<dd>The color picker options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					ColorpickerInput<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addPickerOption" id="_addPickerOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			ColorpickerInput
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addPickerOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#61-85" title="Go to source code">addPickerOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
+
+		<div class="description short">
+			<p>Add (or replace) an color picker option.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add (or replace) an color picker option.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
 					<dd>The setting to add/replace.</dd>
-					<dt><var>$optVal</var></dt>
+					<dt><var>$val</var></dt>
 					<dd>The setting's value to apply.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">Charcoal\Admin\Property\Input\DateTimePickerInput</a></code><br>Chainable
+					ColorpickerInput<br>Chainable
 				</div>
 
 				<h4>Throws</h4>
@@ -390,7 +466,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="datetimepickerOptions" id="_datetimepickerOptions">
+	<tr data-order="pickerOptions" id="_pickerOptions">
 
 		<td class="attributes"><code>
 			 public 
@@ -401,15 +477,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_datetimepickerOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#63-75" title="Go to source code">datetimepickerOptions</a>( )</code>
+		<a class="anchor" href="#_pickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#87-99" title="Go to source code">pickerOptions</a>( )</code>
 
 		<div class="description short">
-			<p>Retrieve the picker's options.</p>
+			<p>Retrieve the color picker's options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the picker's options.</p>
+			<p>Retrieve the color picker's options.</p>
 
 
 
@@ -424,7 +500,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="defaultDatetimepickerOptions" id="_defaultDatetimepickerOptions">
+	<tr data-order="defaultPickerOptions" id="_defaultPickerOptions">
 
 		<td class="attributes"><code>
 			 public 
@@ -435,15 +511,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_defaultDatetimepickerOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#77-88" title="Go to source code">defaultDatetimepickerOptions</a>( )</code>
+		<a class="anchor" href="#_defaultPickerOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#101-112" title="Go to source code">defaultPickerOptions</a>( )</code>
 
 		<div class="description short">
-			<p>Retrieve the default picker options.</p>
+			<p>Retrieve the default color picker options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the default picker options.</p>
+			<p>Retrieve the default color picker options.</p>
 
 
 
@@ -458,7 +534,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="optionsAsJson" id="_optionsAsJson">
+	<tr data-order="pickerOptionsAsJson" id="_pickerOptionsAsJson">
 
 		<td class="attributes"><code>
 			 public 
@@ -469,15 +545,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_optionsAsJson">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#90-98" title="Go to source code">optionsAsJson</a>( )</code>
+		<a class="anchor" href="#_pickerOptionsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#114-122" title="Go to source code">pickerOptionsAsJson</a>( )</code>
 
 		<div class="description short">
-			<p>Retrieve the picker's options as a JSON string.</p>
+			<p>Retrieve the color picker's options as a JSON string.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the picker's options as a JSON string.</p>
+			<p>Retrieve the color picker's options as a JSON string.</p>
 
 
 
@@ -507,6 +583,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_ident">ident()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputClass">inputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputId">inputId()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputMode">inputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">inputName()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputType">inputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">inputVal()</a>, 
@@ -515,6 +592,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_p">p()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_placeholder">placeholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_property">property()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyIdent">propertyIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyVal">propertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_readOnly">readOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
@@ -525,6 +603,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputId">setInputId()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputMode">setInputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputType">setInputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setLang">setLang()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setMultiple">setMultiple()</a>, 
@@ -533,6 +612,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setPropertyVal">setPropertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setReadOnly">setReadOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setRequired">setRequired()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setType">setType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setter">setter()</a>
 		</code></td>
 	</tr>
@@ -544,7 +624,42 @@
 
 
 
+	<table class="summary constants" id="constants">
+	<caption>Constants summary</caption>
+	<tr data-order="DEFAULT_JS_FORMAT" id="DEFAULT_JS_FORMAT">
 
+		<td class="attributes"><code>string</code></td>
+		<td class="name">
+			<code>
+				<a href="source-class-Charcoal.Admin.Property.Input.DateTimePickerInput.html#14" title="Go to source code"><b>DEFAULT_JS_FORMAT</b></a>
+			</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#DEFAULT_JS_FORMAT" class="anchor">#</a>
+				<code><span class="php-quote">'YYYY-MM-DD HH:mm:ss'</span></code>
+			</div>
+		</td>
+	</tr>
+	</table>
+
+	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#constants">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#DEFAULT_INPUT_TYPE"><b>DEFAULT_INPUT_TYPE</b></a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -555,6 +670,7 @@
 		<td><code>
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputClass"><var>$inputClass</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputId"><var>$inputId</var></a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputMode"><var>$inputMode</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputType"><var>$inputType</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$type"><var>$type</var></a>
 		</code></td>

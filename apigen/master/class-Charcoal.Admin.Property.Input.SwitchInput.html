@@ -187,6 +187,7 @@
 			<h3>Classes</h3>
 			<ul>
 				<li><a href="class-Charcoal.Admin.Property.Input.AudioInput.html">AudioInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxColorInput.html">CheckboxColorInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.CheckboxInput.html">CheckboxInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
@@ -247,6 +248,11 @@
 	<h1>Class SwitchInput</h1>
 
 
+	<div class="description">
+	<p>Switch Input Property</p>
+
+<p>For displaying checkboxes and radio buttons as toggle switches.</p>
+	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -293,7 +299,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#8-28" title="Go to source code">Charcoal/Admin/Property/Input/SwitchInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#8-135" title="Go to source code">Charcoal/Admin/Property/Input/SwitchInput.php</a>
 		<br>
 	</div>
 
@@ -301,6 +307,42 @@
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
+	<tr data-order="type" id="_type">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_type">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#22-30" title="Go to source code">type</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_type">Charcoal\Admin\Property\AbstractPropertyInput::type()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="checked" id="_checked">
 
 		<td class="attributes"><code>
@@ -313,7 +355,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_checked">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#13-19" title="Go to source code">checked</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#32-38" title="Go to source code">checked</a>( )</code>
 
 		<div class="description short">
 			
@@ -347,7 +389,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_value">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#21-27" title="Go to source code">value</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#40-46" title="Go to source code">value</a>( )</code>
 
 		<div class="description short">
 			
@@ -361,6 +403,233 @@
 				<h4>Returns</h4>
 				<div class="list">
 					integer
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setSwitchOptions" id="_setSwitchOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			Switchinput
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setSwitchOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#48-61" title="Go to source code">setSwitchOptions</a>( <span>array <var>$settings</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the switch's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the switch's options.</p>
+
+<p>This method always merges default settings.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$settings</var></dt>
+					<dd>The switch options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Switchinput<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mergeSwitchOptions" id="_mergeSwitchOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			Switchinput
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mergeSwitchOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#63-74" title="Go to source code">mergeSwitchOptions</a>( <span>array <var>$settings</var></span> )</code>
+
+		<div class="description short">
+			<p>Merge (replacing or adding) switch options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Merge (replacing or adding) switch options.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$settings</var></dt>
+					<dd>The switch options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Switchinput<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addSwitchOption" id="_addSwitchOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			Switchinput
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addSwitchOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#76-100" title="Go to source code">addSwitchOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
+
+		<div class="description short">
+			<p>Add (or replace) an switch option.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add (or replace) an switch option.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
+					<dd>The setting to add/replace.</dd>
+					<dt><var>$val</var></dt>
+					<dd>The setting's value to apply.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Switchinput<br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the identifier is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="switchOptions" id="_switchOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_switchOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#102-114" title="Go to source code">switchOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the switch's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the switch's options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultSwitchOptions" id="_defaultSwitchOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultSwitchOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#116-124" title="Go to source code">defaultSwitchOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default switch options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default switch options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="switchOptionsAsJson" id="_switchOptionsAsJson">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_switchOptionsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#126-134" title="Go to source code">switchOptionsAsJson</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the switch's options as a JSON string.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the switch's options as a JSON string.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>Returns data serialized with json_encode().
 				</div>
 
 
@@ -384,6 +653,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_ident">ident()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputClass">inputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputId">inputId()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputMode">inputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">inputName()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputType">inputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">inputVal()</a>, 
@@ -392,6 +662,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_p">p()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_placeholder">placeholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_property">property()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyIdent">propertyIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_propertyVal">propertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_readOnly">readOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
@@ -402,6 +673,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputId">setInputId()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputMode">setInputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputType">setInputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setLang">setLang()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setMultiple">setMultiple()</a>, 
@@ -410,6 +682,7 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setPropertyVal">setPropertyVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setReadOnly">setReadOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setRequired">setRequired()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setType">setType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setter">setter()</a>
 		</code></td>
 	</tr>
@@ -422,6 +695,14 @@
 
 
 
+	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#constants">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#DEFAULT_INPUT_TYPE"><b>DEFAULT_INPUT_TYPE</b></a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -432,6 +713,7 @@
 		<td><code>
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputClass"><var>$inputClass</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputId"><var>$inputId</var></a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputMode"><var>$inputMode</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$inputType"><var>$inputType</var></a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#$type"><var>$type</var></a>
 		</code></td>

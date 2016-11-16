@@ -193,12 +193,4 @@ class DualSelectInput extends AbstractSelectableInput
 
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function inputRawIdent()
-    {
-        return $this->p()->ident();
-    }
 }

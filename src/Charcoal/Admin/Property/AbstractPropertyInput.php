@@ -470,13 +470,16 @@ abstract class AbstractPropertyInput implements
      */
     public function inputName()
     {
-        $name = $this->p()->ident();
+        $name = $this->propertyIdent();
+
         if ($this->p()->l10n()) {
             $name .= '['.$this->lang().']';
         }
+
         if ($this->multiple()) {
             $name .= '[]';
         }
+
         return $name;
     }
 
@@ -533,6 +536,13 @@ abstract class AbstractPropertyInput implements
             $this->inputType = 'charcoal/admin/property/input/text';
         }
         return $this->inputType;
+    }
+
+    /**
+     */
+    public function propertyIdent()
+    {
+        return $this->p()->ident();
     }
 
     /**

@@ -35,30 +35,32 @@ use \Charcoal\Admin\Service\Exporter;
 class ExportAction extends AdminAction
 {
     /**
-     * Application configurations
-     * @var $appConfig
+     * Store the application's configuration.
+     *
+     * @var \Charcoal\App\AppConfig
      */
     private $appConfig;
 
     /**
-     * PropertyFactory
-     * The property factory used to output the displayVal
-     * @var PropertyFactory $propertyFactory
+     * Store the factory instance for the current class.
+     *
+     * @var \Charcoal\Factory\FactoryInterface
      */
     private $propertyFactory;
 
     /**
-     * Set dependencies.
-     * @param Container $container Dependencies.
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
      * @return void
      */
     public function setDependencies(Container $container)
     {
         $this->appConfig = $container['config'];
         $this->propertyFactory = $container['property/factory'];
+
         parent::setDependencies($container);
     }
-
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -70,16 +72,16 @@ class ExportAction extends AdminAction
         $params = $request->getParams();
         if (!isset($params['obj_type'])) {
             $this->setSuccess(false);
-            return $response->withStatus(404);;
+            return $response->withStatus(404);
         }
 
         // Does this do anything?
         $this->setMode('csv');
 
         $exporter = new Exporter([
-            'logger' => $this->logger,
-            'factory' => $this->modelFactory(),
-            'obj_type' => $params['obj_type'],
+            'logger'          => $this->logger,
+            'factory'         => $this->modelFactory(),
+            'obj_type'        => $params['obj_type'],
             'propertyFactory' => $this->propertyFactory
         ]);
 
@@ -101,6 +103,7 @@ class ExportAction extends AdminAction
     public function results()
     {
         $ret = '';
+
         return $ret;
     }
 }

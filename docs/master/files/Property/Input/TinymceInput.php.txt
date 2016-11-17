@@ -91,7 +91,7 @@ class TinymceInput extends TextareaInput
     public function editorOptions()
     {
         if ($this->editorOptions === null) {
-            $this->selectOptions = $this->defaultSelectOptions();
+            $this->editorOptions = $this->defaultEditorOptions();
         }
 
         return $this->editorOptions;

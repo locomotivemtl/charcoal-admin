@@ -192,6 +192,7 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.EmailInput.html">EmailInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.FileInput.html">FileInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.HiddenInput.html">HiddenInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ImageInput.html">ImageInput</a></li>
@@ -294,7 +295,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#8-49" title="Go to source code">Charcoal/Admin/Property/Input/MapWidgetInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#10-170" title="Go to source code">Charcoal/Admin/Property/Input/MapWidgetInput.php</a>
 		<br>
 	</div>
 
@@ -302,7 +303,44 @@
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="setMapOptions" id="_setMapOptions">
+	<tr data-order="setDependencies" id="_setDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#29-46" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			<p>Inject dependencies from a DI Container.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Inject dependencies from a DI Container.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>A dependencies container instance.</dd>
+				</dl></div>
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">Charcoal\Admin\Property\AbstractPropertyInput::setDependencies()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setApiKey" id="_setApiKey">
 
 		<td class="attributes"><code>
 			 public 
@@ -313,26 +351,26 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setMapOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#18-27" title="Go to source code">setMapOptions</a>( <span>array <var>$mapOptions</var></span> )</code>
+		<a class="anchor" href="#_setApiKey">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#48-59" title="Go to source code">setApiKey</a>( <span>string <var>$key</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Sets the API key for the mapping service.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Sets the API key for the mapping service.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$mapOptions</var></dt>
-					<dd>The map options.</dd>
+					<dt><var>$key</var></dt>
+					<dd>An API key.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code><br>Chainable
+					<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code>
 				</div>
 
 
@@ -341,7 +379,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="mapOptions" id="_mapOptions">
+	<tr data-order="apiKey" id="_apiKey">
 
 		<td class="attributes"><code>
 			 public 
@@ -352,15 +390,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_mapOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#29-37" title="Go to source code">mapOptions</a>( )</code>
+		<a class="anchor" href="#_apiKey">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#61-69" title="Go to source code">apiKey</a>( )</code>
 
 		<div class="description short">
-			<p>Get the map options as JSON-encoded string.</p>
+			<p>Retrieve API key for the mapping service.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Get the map options as JSON-encoded string.</p>
+			<p>Retrieve API key for the mapping service.</p>
 
 
 
@@ -375,7 +413,200 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="mapApiKey" id="_mapApiKey">
+	<tr data-order="setMapOptions" id="_setMapOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setMapOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#71-88" title="Go to source code">setMapOptions</a>( <span>array <var>$settings</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the map widget's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the map widget's options.</p>
+
+<p>This method always merges default settings.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$settings</var></dt>
+					<dd>The map widget options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mergeMapOptions" id="_mergeMapOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mergeMapOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#90-105" title="Go to source code">mergeMapOptions</a>( <span>array <var>$settings</var></span> )</code>
+
+		<div class="description short">
+			<p>Merge (replacing or adding) map widget options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Merge (replacing or adding) map widget options.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$settings</var></dt>
+					<dd>The map widget options.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code><br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="addMapOption" id="_addMapOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_addMapOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#107-135" title="Go to source code">addMapOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
+
+		<div class="description short">
+			<p>Add (or replace) an map widget option.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Add (or replace) an map widget option.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
+					<dd>The setting to add/replace.</dd>
+					<dt><var>$val</var></dt>
+					<dd>The setting's value to apply.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.MapWidgetInput.html">Charcoal\Admin\Property\Input\MapWidgetInput</a></code><br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the identifier is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mapOptions" id="_mapOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mapOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#137-149" title="Go to source code">mapOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the map widget's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the map widget's options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultMapOptions" id="_defaultMapOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultMapOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#151-159" title="Go to source code">defaultMapOptions</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default map widget options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default map widget options.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mapOptionsAsJson" id="_mapOptionsAsJson">
 
 		<td class="attributes"><code>
 			 public 
@@ -386,21 +617,21 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_mapApiKey">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#39-48" title="Go to source code">mapApiKey</a>( )</code>
+		<a class="anchor" href="#_mapOptionsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.MapWidgetInput.html#161-169" title="Go to source code">mapOptionsAsJson</a>( )</code>
 
 		<div class="description short">
-			<p>Map api key for google maps.</p>
+			<p>Retrieve the map widget's options as a JSON string.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Map api key for google maps.</p>
+			<p>Retrieve the map widget's options as a JSON string.</p>
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					string<br>Map api key.
+					string<br>Returns data serialized with json_encode().
 				</div>
 
 
@@ -439,7 +670,6 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_required">required()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setData">setData()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDisabled">setDisabled()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 

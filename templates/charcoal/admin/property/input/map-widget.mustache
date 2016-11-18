@@ -46,12 +46,12 @@
     >
 </div>
 
-{{#addJs}}
+{{# addJs }}
 <script>
 Charcoal.Admin.manager().add_property_input({
-    id: '{{inputId}}',
+    id:   '{{ inputId }}',
     type: 'charcoal/admin/property/input/map-widget',
-    data: {{&mapOptions}}
+    data: {{& mapOptionsAsJson }}
 });
 </script>
-{{/addJs}}
+{{/ addJs }}

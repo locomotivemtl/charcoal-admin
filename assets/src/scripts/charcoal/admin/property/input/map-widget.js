@@ -25,8 +25,8 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data)
         };
 
         $.getScript(
-            'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
-            '&language=fr&callback=_tmp_google_onload_function&key=' + this.data.data.api_key,
+            'https://maps.googleapis.com/maps/api/js?sensor=false' +
+            '&callback=_tmp_google_onload_function&key=' + data.data.api_key,
             function () {}
         );
     } else {

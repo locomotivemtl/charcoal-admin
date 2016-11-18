@@ -5,11 +5,9 @@ namespace Charcoal\Admin\Property\Input;
 use \Charcoal\Admin\Property\Input\TextInput;
 
 /**
- * Telephone Number Input
- *
- * This method should be renamed to `TelInput` (@todo).
+ * Email Address Input
  */
-class PhoneInput extends TextInput
+class EmailInput extends TextInput
 {
     /**
      * Retrieve the control type for the HTML element `<input>`.
@@ -18,7 +16,7 @@ class PhoneInput extends TextInput
      */
     public function type()
     {
-        return 'tel';
+        return 'email';
     }
 }
 

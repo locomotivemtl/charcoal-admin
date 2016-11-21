@@ -468,15 +468,18 @@ trait CollectionContainerTrait
      */
     protected function setupDisplayPropertyValue(ModelInterface $object, PropertyInterface $property)
     {
-        unset($object);
-
-        $metadata = $property->metadata();
-
         $displayType = $property->displayType();
 
         $this->display = $this->propertyDisplayFactory()->create($displayType);
         $this->display->setDisplayType($displayType);
         $this->display->setProperty($property);
+
+        $metadata    = $property->metadata();
+        $objMetadata = $object->metadata()->property($property->ident());
+
+        if ($objMetadata) {
+            $metadata->setData($objMetadata);
+        }
 
         $this->display->setData($metadata);
         $this->display->setData($property->viewOptions($displayType));

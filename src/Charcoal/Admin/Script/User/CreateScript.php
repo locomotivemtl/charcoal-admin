@@ -3,27 +3,39 @@
 namespace Charcoal\Admin\Script\User;
 
 // PSR-7 (http messaging) dependencies
-use Pimple\Container;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
+// Pimple dependencies
+use Pimple\Container;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
-use Psr\Log\NullLogger;
 
 /**
- * Create user script.
+ * Create admin user script.
  */
 class CreateScript extends AdminScript
 {
 
     /**
-     * Retrieve the available default arguments of this action.
-     *
-     * @link http://climate.thephpleague.com/arguments/ For descriptions of the options for CLImate.
-     *
-     * @return array
+     * @param array|\ArrayAccess $data The dependencies (app and logger).
      */
+    public function __construct($data = null)
+    {
+        parent::__construct($data);
+
+        $arguments = $this->defaultArguments();
+        $this->setArguments($arguments);
+    }
+
+        /**
+         * Retrieve the available default arguments of this action.
+         *
+         * @link http://climate.thephpleague.com/arguments/ For descriptions of the options for CLImate.
+         *
+         * @return array
+         */
     public function defaultArguments()
     {
         $arguments = [
@@ -40,7 +52,8 @@ class CreateScript extends AdminScript
             'password' => [
                 'prefix'      => 'p',
                 'longPrefix'  => 'password',
-                'description' => 'The user password'
+                'description' => 'The user password',
+                'inputType'   => 'password'
             ],
             'roles'    => [
                 'prefix'      => 'r',
@@ -52,17 +65,6 @@ class CreateScript extends AdminScript
         $arguments = array_merge(parent::defaultArguments(), $arguments);
 
         return $arguments;
-    }
-
-    /**
-     * @param array|\ArrayAccess $data The dependencies (app and logger).
-     */
-    public function __construct($data = null)
-    {
-        parent::__construct($data);
-
-        $arguments = $this->defaultArguments();
-        $this->setArguments($arguments);
     }
 
     /**
@@ -142,13 +144,5 @@ class CreateScript extends AdminScript
         } else {
             $climate->red()->out("\nError. Object could not be created.");
         }
-    }
-
-    /**
-     * @return boolean
-     */
-    public function authRequired()
-    {
-        return false;
     }
 }

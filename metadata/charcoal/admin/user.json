@@ -9,7 +9,7 @@
             "allow_null": false
         },
         "email": {
-            "type": "email",
+            "type": "string",
             "required": true,
             "allow_empty": false,
             "allow_null": false

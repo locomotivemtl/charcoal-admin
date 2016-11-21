@@ -211,26 +211,38 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @throws Exception If the dashboard config can not be loaded.
-     * @return array
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
      */
-    private function objCollectionDashboardConfig()
+    private function objAdminMetadata()
     {
         $obj = $this->proto();
 
         $objMetadata     = $obj->metadata();
-        $dashboardIdent  = $this->dashboardIdent();
-        $dashboardConfig = $this->dashboardConfig();
 
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
         if ($adminMetadata === null) {
             throw new Exception(
                 sprintf(
-                    'No dashboard for %s (no admin metadata).',
-                    $obj->type()
+                    'The object %s does not have an admin metadata.',
+                    get_class($obj)
                 )
             );
         }
+
+        return $adminMetadata;
+    }
+
+    /**
+     * @throws Exception If the dashboard config can not be loaded.
+     * @return array
+     */
+    private function objCollectionDashboardConfig()
+    {
+        $adminMetadata  = $this->objAdminMetadata();
+
+        $dashboardIdent  = $this->dashboardIdent();
+        $dashboardConfig = $this->dashboardConfig();
 
         if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
             $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
@@ -241,7 +253,7 @@ class CollectionTemplate extends AdminTemplate implements
                 throw new Exception(
                     sprintf(
                         'No default collection dashboard defined in admin metadata for %s.',
-                        $obj->type()
+                        get_class($this->proto())
                     )
                 );
             }
@@ -273,12 +285,16 @@ class CollectionTemplate extends AdminTemplate implements
             return $this->title;
         }
 
-        $config = $this->objCollectionDashboardConfig();
+        try {
+            $config = $this->objCollectionDashboardConfig();
 
-        if (isset($config['title'])) {
-            $this->title = new TranslationString($config['title']);
+            if (isset($config['title'])) {
+                $this->title = new TranslationString($config['title']);
 
-            return $this->title;
+                return $this->title;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
         }
 
         $model    = $this->proto();
@@ -326,7 +342,11 @@ class CollectionTemplate extends AdminTemplate implements
             }
         }
 
-        $this->title = $model->render((string)$objLabel, $model);
+        if ($model && $model->view()) {
+            $this->title = $model->render((string)$objLabel, $model);
+        } else {
+            $this->title = (string)$objLabel;
+        }
 
         return $this->title;
     }

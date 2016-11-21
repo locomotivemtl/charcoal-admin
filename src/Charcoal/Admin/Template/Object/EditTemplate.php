@@ -159,27 +159,44 @@ class EditTemplate extends AdminTemplate implements
         return $sidemenu;
     }
 
+
     /**
-     * @throws Exception If the dashboard config can not be loaded.
-     * @return array
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
      */
-    private function objEditDashboardConfig()
+    private function objAdminMetadata()
     {
         $obj = $this->obj();
 
         $objMetadata     = $obj->metadata();
-        $dashboardIdent  = $this->dashboardIdent();
-        $dashboardConfig = $this->dashboardConfig();
 
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
         if ($adminMetadata === null) {
             throw new Exception(
                 sprintf(
-                    'No dashboard for %s (no admin metadata).',
-                    $obj->type()
+                    'The object %s does not have an admin metadata.',
+                    get_class($obj)
                 )
             );
         }
+
+        return $adminMetadata;
+    }
+
+    /**
+     * Get the dashboard config for the current object.
+     *
+     * This method loads the "dashboard config" from the object's admin metadata.
+     *
+     * @throws Exception If the object's dashboard config can not be loaded.
+     * @return array
+     */
+    private function objEditDashboardConfig()
+    {
+        $adminMetadata = $this->objAdminMetadata();
+
+        $dashboardIdent  = $this->dashboardIdent();
+        $dashboardConfig = $this->dashboardConfig();
 
         if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
             $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
@@ -190,7 +207,7 @@ class EditTemplate extends AdminTemplate implements
                 throw new Exception(
                     sprintf(
                         'No default edit dashboard defined in admin metadata for %s',
-                        $obj->type()
+                        get_class($this->obj())
                     )
                 );
             }
@@ -222,12 +239,16 @@ class EditTemplate extends AdminTemplate implements
             return $this->title;
         }
 
-        $config = $this->objEditDashboardConfig();
+        try {
+            $config = $this->objEditDashboardConfig();
 
-        if (isset($config['title'])) {
-            $this->title = new TranslationString($config['title']);
+            if (isset($config['title'])) {
+                $this->title = new TranslationString($config['title']);
 
-            return $this->title;
+                return $this->title;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
         }
 
         $obj      = $this->obj();
@@ -292,7 +313,11 @@ class EditTemplate extends AdminTemplate implements
             }
         }
 
-        $this->title = $obj->render((string)$objLabel, $obj);
+        if ($obj && $obj->view()) {
+            $this->title = $obj->render((string)$objLabel, $obj);
+        } else {
+            $this->title = (string)$objLabel;
+        }
 
         return $this->title;
     }

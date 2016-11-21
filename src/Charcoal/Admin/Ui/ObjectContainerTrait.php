@@ -278,8 +278,12 @@ trait ObjectContainerTrait
     {
         try {
             $objType = $this->objType();
-            // Catch exception to know if the objType is valid
 
+            if (!$objType) {
+                return false;
+            }
+
+            // Catch exception to know if the objType is valid
             $obj = $this->modelFactory()->get($objType);
             if (!$this->validateObjBaseClass($obj)) {
                 throw new RuntimeException(

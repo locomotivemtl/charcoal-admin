@@ -2,10 +2,19 @@
 
 namespace Charcoal\Admin;
 
+use \RuntimeException;
+
 use \Pimple\Container;
+
+// From PSR-7 (HTTP Messaging)
+use \Psr\Http\Message\RequestInterface;
 
 // Module `charcoal-factory` dependencies
 use \Charcoal\Factory\FactoryInterface;
+
+// From 'charcoal-base
+use \Charcoal\User\Authenticator;
+use \Charcoal\User\Authorizer;
 
 // Module `charcoal-app` dependencies
 use Charcoal\App\Action\AbstractAction;
@@ -34,6 +43,16 @@ abstract class AdminAction extends AbstractAction
     private $modelFactory;
 
     /**
+     * @var Authenticator $authenticator
+     */
+    private $authenticator;
+
+    /**
+     * @var Authorizer $authorizer
+     */
+    private $authorizer;
+
+    /**
     * @param array $data Optional.
     */
     final public function __construct(array $data = null)
@@ -42,11 +61,6 @@ abstract class AdminAction extends AbstractAction
 
         if ($data !== null) {
             $this->setData($data);
-        }
-
-        if ($this->authRequired() === true) {
-            // @todo Authentication
-            $this->auth();
         }
     }
 
@@ -61,6 +75,62 @@ abstract class AdminAction extends AbstractAction
 
         $this->adminConfig = $container['admin/config'];
         $this->setModelFactory($container['model/factory']);
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
+    }
+
+    /**
+     * Template's init method is called automatically from `charcoal-app`'s Template Route.
+     *
+     * For admin templates, initializations is:
+     *
+     * - to start a session, if necessary
+     * - to authenticate
+     * - to initialize the template data with `$_GET`
+     *
+     * @param RequestInterface $request The request to initialize.
+     * @return boolean
+     * @see \Charcoal\App\Route\TemplateRoute::__invoke()
+     */
+    public function init(RequestInterface $request)
+    {
+        if (!session_id()) {
+            session_cache_limiter(false);
+            session_start();
+        }
+
+        if ($this->authRequired() !== false) {
+            // This can reset headers / die if unauthorized.
+            if (!$this->authenticator()->authenticate()) {
+                header('HTTP/1.0 403 Forbidden');
+                exit;
+            }
+
+            // Initialize data with GET / POST parameters.
+            $this->setData($request->getParams());
+
+            // Test template vs. ACL roles
+            $authUser = $this->authenticator()->authenticate();
+            if (!$this->authorizer()->userAllowed($authUser, $this->requiredAclPermissions())) {
+                header('HTTP/1.0 403 Forbidden');
+                exit;
+            }
+        } else {
+            // Initialize data with GET / POST parameters.
+            $this->setData($request->getParams());
+        }
+
+        return parent::init($request);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function requiredAclPermissions()
+    {
+        return [
+            'action'
+        ];
     }
 
     /**
@@ -81,6 +151,44 @@ abstract class AdminAction extends AbstractAction
         return $this->modelFactory;
     }
 
+    /**
+     * @param Authenticator $authenticator The authentication service.
+     * @return void
+     */
+    protected function setAuthenticator(Authenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
+    }
+
+    /**
+     * @return Authenticator
+     */
+    protected function authenticator()
+    {
+        if ($this->authenticator === null) {
+            throw new RuntimeException(
+                'Authenticator has not been set on action.'
+            );
+        }
+        return $this->authenticator;
+    }
+
+    /**
+     * @param Authorizer $authorizer The authorization service.
+     * @return void
+     */
+    protected function setAuthorizer(Authorizer $authorizer)
+    {
+        $this->authorizer = $authorizer;
+    }
+
+    /**
+     * @return Authorizer
+     */
+    protected function authorizer()
+    {
+        return $this->authorizer;
+    }
 
     /**
      * Authentication is required by default.
@@ -91,7 +199,7 @@ abstract class AdminAction extends AbstractAction
      */
     public function authRequired()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -101,6 +209,11 @@ abstract class AdminAction extends AbstractAction
      */
     private function auth()
     {
+        if (!session_id()) {
+            session_cache_limiter(false);
+            session_start();
+        }
+
         $u = User::getAuthenticated();
         if ($u === null || !$u->id()) {
             die('Auth required');

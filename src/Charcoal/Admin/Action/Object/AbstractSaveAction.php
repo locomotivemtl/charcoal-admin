@@ -31,10 +31,7 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
 {
     use ObjectContainerTrait;
 
-    /**
-     * @var Authenticator $authenticator
-     */
-    private $authenticator;
+
 
     /**
      * @param Container $container A DI Container.
@@ -43,17 +40,6 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
-
-        $this->setAuthenticator($container['admin/authenticator']);
-    }
-
-    /**
-     * @param Authenticator $authenticator The authenticator service.
-     * @return void
-     */
-    protected function setAuthenticator(Authenticator $authenticator)
-    {
-        $this->authenticator = $authenticator;
     }
 
     /**
@@ -61,7 +47,7 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
      */
     protected function authorIdent()
     {
-        $author = $this->authenticator->authenticate();
+        $author = $this->authenticator()->authenticate();
         return (string)$author->id();
     }
 

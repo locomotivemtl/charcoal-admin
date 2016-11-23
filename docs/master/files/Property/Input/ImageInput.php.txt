@@ -14,6 +14,13 @@ use \Charcoal\Admin\Property\Input\FileInput;
 class ImageInput extends FileInput
 {
     /**
+     * The CSS classes for the HTML `class` attribute.
+     *
+     * @var string|null
+     */
+    protected $classAttr;
+
+    /**
      * @return string|null
      */
     public function filePreview()
@@ -23,9 +30,9 @@ class ImageInput extends FileInput
 
         if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
             if (parse_url($value, PHP_URL_SCHEME)) {
-                $tpl = '<img src="{{ inputVal }}" style="max-width: 100%">';
+                $tpl = '<img src="{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }} style="max-width: 100%">';
             } else {
-                $tpl = '<img src="{{ baseUrl }}{{ inputVal }}" style="max-width: 100%">';
+                $tpl = '<img src="{{ baseUrl }}{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }} style="max-width: 100%">';
             }
 
             $html = $this->view()->render($tpl, $this);
@@ -58,6 +65,33 @@ class ImageInput extends FileInput
             'en' => 'Remove Image',
             'fr' => 'Retirer l’image'
         ];
+    }
+
+    /**
+     * Set the CSS classes to apply on the image.
+     *
+     * @param  string|string[] $classes A space-separated list of CSS classes.
+     * @return ImageDisplay Chainable
+     */
+    public function setClassAttr($classes)
+    {
+        if (is_array($classes)) {
+            $classes = implode(' ', $classes);
+        }
+
+        $this->classAttr = $classes;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the CSS classes for the HTML `class` attribute.
+     *
+     * @return string
+     */
+    public function classAttr()
+    {
+        return $this->classAttr;
     }
 }
 

@@ -2,5 +2,5 @@
     You are at /admin of the website
 }}
 {{# displayVal }}
-<img src="../{{ . }}" style="{{# height }}height: {{ . }};{{/ height }} {{# width }}width: {{ . }};{{/ width }} {{# maxWidth }}max-width: {{ . }};{{/ maxWidth }} {{# maxHeight }}max-height: {{ . }};{{/ maxHeight }}">
+<img src="../{{ . }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }}{{# styleAttr }} style="{{ . }}"{{/ styleAttr }}>
 {{/ displayVal }}

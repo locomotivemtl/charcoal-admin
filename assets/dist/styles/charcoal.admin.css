@@ -2256,6 +2256,15 @@ fieldset[disabled] .selectize-control.multi .selectize-input {
   overflow: hidden;
   text-overflow: ellipsis; }
 
+img.u-transparent {
+  border: 1px solid #DDD;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAHUlEQVQYV2NkwA4k0YUZh4hCDIcD3f0cm2cGu0IAl7sFiL+f5rUAAAAASUVORK5CYII=);
+  background-repeat: repeat; }
+
+img.u-contrast-dark {
+  border-color: #333;
+  background-color: #666; }
+
 .u-spin {
   -webkit-animation: spin 1.5s infinite linear;
           animation: spin 1.5s infinite linear; }

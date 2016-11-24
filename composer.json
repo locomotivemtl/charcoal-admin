@@ -44,7 +44,7 @@
             "Charcoal\\Admin\\": "src/Charcoal/Admin"
         }
     },
-    "autoload-sev": {
+    "autoload-dev": {
         "psr-4": {
             "Charcoal\\Admin\\Tests\\": "tests/Charcoal/Admin"
         }

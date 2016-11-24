@@ -8,7 +8,7 @@ use \InvalidArgumentException;
 use \Charcoal\Translation\TranslationString;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use \Charcoal\Admin\Property\Input\TextareaInput;
 
 /**
  * TinyMCE Rich-Text Input Property

@@ -23,21 +23,12 @@ $config = new AppConfig([
             'password' => ''
         ]
     ],
+    'default_database' => 'default',
     'modules'   => [
         'admin' => []
     ],
     'admin' => []
 ]);
-
-$appEnv = getenv('APPLICATION_ENV');
-if ($appEnv !== 'testing') {
-    $configPath = realpath(__DIR__.'/../../../../config/config.php');
-
-    if (file_exists($configPath)) {
-        $localConfig = new GenericConfig($configPath);
-        $config['databases'] = $localConfig['databases'];
-    }
-}
 
 $adminConfig = new AdminConfig();
 
@@ -58,6 +49,9 @@ $modelFactory = new \Charcoal\Factory\GenericFactory([
 
 $GLOBALS['container'] = new AppContainer([
     'config'                => $config,
+    'database'              => function (Container $container) {
+        $pdo = new PDO('sqlite::memory:');
+    },
     'admin/config'          => $adminConfig,
     'metadata/loader'       => $metadataLoader,
     'model/factory'         => $modelFactory,
@@ -82,8 +76,3 @@ $GLOBALS['container'] = new AppContainer([
 ]);
 $GLOBALS['container']->register(new \Charcoal\Admin\ServiceProvider\AclServiceProvider());
 $GLOBALS['container']->register(new \Charcoal\Ui\ServiceProvider\UiServiceProvider());
-
-
-// Charcoal / Slim is the main app
-$GLOBALS['app'] = App::instance($GLOBALS['container']);
-$GLOBALS['app']->setLogger($logger);

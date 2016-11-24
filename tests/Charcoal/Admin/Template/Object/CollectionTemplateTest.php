@@ -2,8 +2,17 @@
 
 namespace Charcoal\Admin\Tests\Template\Object;
 
+use \ReflectionClass;
+
+use \PHPUnit_Framework_TestCase;
+
+use \Psr\Log\NullLogger;
+
 use \Charcoal\Admin\Template\Object\CollectionTemplate;
 
+/**
+ *
+ */
 class CollectionTemplateTest extends \PHPUnit_Framework_TestCase
 {
     public $obj;
@@ -12,7 +21,7 @@ class CollectionTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $container = $GLOBALS['container'];
         $this->obj = $this->getMock(CollectionTemplate::class, null, [[
-            'logger' => new \Psr\Log\NullLogger(),
+            'logger' => new NullLogger(),
             'metadata_loader' => $container['metadata/loader']
         ]]);
         $this->obj->setDependencies($container);
@@ -24,7 +33,7 @@ class CollectionTemplateTest extends \PHPUnit_Framework_TestCase
 
     public static function getMethod($obj, $name)
     {
-        $class = new \ReflectionClass($obj);
+        $class = new ReflectionClass($obj);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
@@ -35,5 +44,14 @@ class CollectionTemplateTest extends \PHPUnit_Framework_TestCase
         $foo = self::getMethod($this->obj, 'authRequired');
         $res = $foo->invoke($this->obj);
         $this->assertTrue($res);
+    }
+
+    public function testTitle()
+    {
+        $this->obj->setObjType('charcoal/admin/user');
+        $ret = $this->obj->title();
+        $ret2 = $this->obj->title();
+
+        $this->assertSame($ret, $ret2);
     }
 }

@@ -6,4 +6,6 @@
     `charcoal/admin/property/input/checkbox-color`
     `charcoal/admin/property/input/dual-select`
 --}}
-<input type="hidden" name="{{ propertyIdent }}" value="">
+<input type="hidden"
+       name="{{ propertyIdent }}{{# multiple }}{{# l10n }}[{{ lang }}]{{/ l10n }}{{/ multiple }}"
+       value="">

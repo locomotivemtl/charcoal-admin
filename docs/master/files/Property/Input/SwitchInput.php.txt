@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Property\Input;
 
+use \InvalidArgumentException;
+
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 

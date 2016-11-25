@@ -6,9 +6,6 @@ namespace Charcoal\Admin\Script\User;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-// Pimple dependencies
-use Pimple\Container;
-
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminScript;
 

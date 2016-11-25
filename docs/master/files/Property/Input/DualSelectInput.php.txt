@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Property\Input;
 
+use \InvalidArgumentException;
+
 // From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 

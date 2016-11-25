@@ -22,20 +22,26 @@ use \Charcoal\Admin\User;
  * Admin Login Action: Attempt to log a user in.
  *
  * ## Parameters
+ *
  * **Required parameters**
+ *
  * - `username`
  * - `password`
+ *
  * **Optional parameters**
- * - `nextUrl`
+ *
+ * - `next_rl`
  *
  * ## Response
+ *
  * - `success` true if login was successful, false otherwise.
  *   - Failure should also send a different HTTP code: see below.
  * - `feedbacks` (Optional) operation feedbacks, if any.
- * - `nextUrl` Redirect URL, in case of successfull login.
+ * - `next_url` Redirect URL, in case of successfull login.
  *   - This is the `nextUrl` parameter if it was set, or the default admin URL if not
  *
  * ## HTTP Codes
+ *
  * - `200` in case of a successful login
  * - `403` in case of wrong credentials
  * - `404` if a required parameter is missing
@@ -43,11 +49,6 @@ use \Charcoal\Admin\User;
  */
 class LoginAction extends AdminAction
 {
-    /**
-     * @var Authenticator $authenticator
-     */
-    private $authenticator;
-
     /**
      * @var string $nextUrl
      */
@@ -59,19 +60,9 @@ class LoginAction extends AdminAction
     protected $errMsg;
 
     /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        $this->authenticator = $container['admin/authenticator'];
-        parent::setDependencies($container);
-    }
-
-    /**
      * Authentication is required by default.
      *
-     * Change to false in
+     * Change to false in the login action controller; this is meant to be called before login.
      *
      * @return boolean
      */
@@ -120,7 +111,7 @@ class LoginAction extends AdminAction
             sprintf('Admin login attempt: "%s"', $username)
         );
 
-        $authUser = $this->authenticator->authenticateByPassword($username, $password);
+        $authUser = $this->authenticator()->authenticateByPassword($username, $password);
 
         if ($authUser === null) {
             $this->logger->warning(

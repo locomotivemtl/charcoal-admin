@@ -16,9 +16,9 @@
         {{/ searchable }}
 
         <select name="[]" id="{{ inputId }}" class="form-control {{ inputClass }}" size="8" multiple="multiple">
-            {{# unselectedChoices }}
-                {{> charcoal/admin/property/input/dual-select/option }}
-            {{/ unselectedChoices }}
+        {{# unselectedChoices }}
+            {{> charcoal/admin/property/input/dual-select/option }}
+        {{/ unselectedChoices }}
         </select>
     </div>
 
@@ -37,9 +37,9 @@
 
         {{> charcoal/admin/property/control/fallback }}
         <select name="{{ inputName }}" id="{{ inputId }}_to" class="form-control" size="8" multiple="multiple">
-            {{# selectedChoices }}
-                {{> charcoal/admin/property/input/dual-select/option }}
-            {{/ selectedChoices }}
+        {{# selectedChoices }}
+            {{> charcoal/admin/property/input/dual-select/option }}
+        {{/ selectedChoices }}
         </select>
 
         {{# reorderable }}

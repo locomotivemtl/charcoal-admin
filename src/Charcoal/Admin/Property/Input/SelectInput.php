@@ -24,6 +24,8 @@ class SelectInput extends AbstractSelectableInput
     /**
      * Retrieve the selectable options.
      *
+     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\TagsInput}.
+     *
      * @todo [^1]: With PHP7 we can simply do `yield from $choices;`.
      * @return Generator|array
      */
@@ -45,6 +47,8 @@ class SelectInput extends AbstractSelectableInput
 
     /**
      * Retrieve a blank choice.
+     *
+     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\TagsInput}.
      *
      * @return array
      */

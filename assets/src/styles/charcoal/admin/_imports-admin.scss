@@ -6,12 +6,15 @@
 @import "settings/tools";
 
 // ==========================================================================
+// ==========================================================================
 // Bootstrap
 // ==========================================================================
 
 // Core variables
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/vendor-prefixes";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/border-radius";
+@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-divider";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/labels";
 // Charcoal variables
 @import "settings/settings";
@@ -85,13 +88,10 @@
 // Vendors
 // ==========================================================================
 @import "vendors/minicolors";
-@import "vendors/summernote";
+// @import "vendors/summernote";
 @import "vendors/bootstrap-select";
 @import "vendors/bootstrap-switch";
 @import "vendors/awesome-bootstrap-checkbox";
-@import "vendors/selectize-base-style";
-@import "vendors/selectize-default";
-@import "vendors/selectize";
 
 // Trumps
 // ==========================================================================

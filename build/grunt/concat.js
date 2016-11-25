@@ -27,7 +27,7 @@ module.exports = {
             'bower_components/moment/min/moment.min.js',
             'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             // Summernote
-            'bower_components/summernote/dist/summernote.js',
+            // 'bower_components/summernote/dist/summernote.js',
             // BB Map
             'bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
             // Bootstrap Select
@@ -38,7 +38,7 @@ module.exports = {
             'bower_components/multiselect/dist/js/multiselect.min.js',
             // Selectize
             'bower_components/selectize/dist/js/standalone/selectize.min.js',
-            'assets/dist/scripts/vendors/selectize/selectize-item-color/src/plugin.js'
+            // 'assets/dist/scripts/vendors/selectize/selectize-item-color/src/plugin.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"

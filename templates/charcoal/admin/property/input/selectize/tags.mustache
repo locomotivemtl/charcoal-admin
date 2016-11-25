@@ -4,29 +4,51 @@
 
    `charcoal/admin/property/input/select`
 --}}
+{{# multiple }}
 <input
-        type="text"
-        id="{{inputId}}"
-        name="{{inputName}}"
-        class="{{inputClass}}"
-        value="{{ inputVal }}"
-    {{#required}}required{{/required}}
-    {{#disabled}}disabled{{/disabled}}
+    type="text"
+    id="{{ inputId }}"
+    name="{{ inputName }}"
+    class="form-control {{ inputClass }}"
+    value="{{ inputVal }}"
+    {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
+    {{# readOnly }}readonly{{/ readOnly }}
+    {{# required }}required{{/ required }}
+    {{# disabled }}disabled{{/ disabled }}
 >
+{{/ multiple }}
+{{^ multiple }}
+<select
+    id="{{ inputId }}"
+    name="{{ inputName }}"
+    class="{{ inputClass }}"
+    {{# size }}size="{{ . }}"{{/ size }}
+    {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
+    {{# multiple }}multiple{{/ multiple }}
+    {{# required }}required{{/ required }}
+    {{# disabled }}disabled{{/ disabled }}
+>
+    {{# choices }}
+    {{> charcoal/admin/property/input/select/option }}
+    {{/ choices }}
+</select>
+{{/ multiple }}
 
-{{#addJs}}
-
-    <script>
-        Charcoal.Admin.manager().add_property_input({
-            id      : '{{inputId}}',
-            type    : 'charcoal/admin/property/input/selectize/tags',
-            obj_type: '{{obj_type}}',
-            title   : '{{label}}',
-            data    : {
-                selectize_options: {{& selectizeOptionsAsJson }}
-            }
-        })
-        ;
-    </script>
-
-{{/addJs}}
+{{# addJs }}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id:   '{{ inputId }}',
+    type: 'charcoal/admin/property/input/selectize/tags',
+    data: {
+        title: '{{ label }}',
+        obj_type: '{{ obj_type }}',
+        {{# multiple }}
+        multiple: true,
+        multiple_separator: "{{ property.multipleSeparator }}",
+        {{/ multiple }}
+        selectize_selector: '#{{ inputId }}',
+        selectize_options: {{& selectizeOptionsAsJson }}
+    }
+});
+</script>
+{{/ addJs }}

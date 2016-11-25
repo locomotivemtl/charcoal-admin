@@ -1,12 +1,8 @@
 /**
- * TextExt implementation for Tags inputs
- * charcoal/admin/property/input/text-ext/tags
+ * Selectize Picker
  *
- * Require:
- * - jQuery
- * - text-ext
- *
- * @param  {Object}  opts Options for input property
+ * Require
+ * - selectize.js
  */
 
 Charcoal.Admin.Property_Input_Selectize_Tags = function (opts) {
@@ -16,8 +12,12 @@ Charcoal.Admin.Property_Input_Selectize_Tags = function (opts) {
     this.input_id     = null;
     this.type         = null;
     this.title        = null;
-    this.selectize_options = {};
+    this.multiple     = false;
+    this.separator    = ',';
     this._tags        = null;
+
+    this.selectize_selector = null;
+    this.selectize_options  = {};
 
     this.set_properties(opts).init();
 };
@@ -32,25 +32,39 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init = function () {
 
         return this;
     }
+
     this.init_selectize();
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function (opts) {
-    this.input_id     = opts.id || this.input_id;
-    this.type         = opts.obj_type || this.type;
-    this.title        = opts.title || this.title;
-    this.selectize_options = opts.selectize_options || opts.data.selectize_options || this.selectize_options;
+    this.input_id = opts.id || this.input_id;
+    this.type     = opts.data.obj_type || this.type;
+    this.title    = opts.data.title || this.title;
+
+    this.multiple  = opts.data.multiple || this.multiple;
+    this.separator = opts.data.multiple_separator || this.multiple_separator || ',';
+
+    this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
+    this.selectize_options  = opts.data.selectize_options  || this.selectize_options;
 
     // var selectedItems = this.tags_initialized();
-
-    var default_opts = {
-        plugins: [
+    var plugins;
+    if (this.multiple) {
+        plugins = [
             // 'restore_on_backspace',
             'remove_button',
             'drag_drop',
-            'item_color'
-        ],
-        delimiter: ',',
+            'charcoal_item'
+        ];
+    } else {
+        plugins = [
+            'charcoal_item'
+        ];
+    }
+
+    var default_opts = {
+        plugins: plugins,
+        delimiter: this.separator,
         persist: false,
         preload: true,
         openOnFocus: true,
@@ -75,14 +89,11 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
     };
 
     this.selectize_options = $.extend({}, default_opts, this.selectize_options);
-    // this.selectize_options.selector = '#' + this.input_id;
 
     return this;
-
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (input, callback) {
-
     var type  = this.type;
     var id    = this.id;
     var title = this.title;
@@ -108,7 +119,6 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
         }
     };
     this.dialog(data, function (response) {
-
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.
@@ -126,20 +136,18 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                 save_callback: function (response) {
                     callback({
                         value: response.obj.id,
-                        text: response.obj.name[Charcoal.Admin.lang],
-                        color: response.obj.color || '#4D84F1'
+                        text:  response.obj.name[Charcoal.Admin.lang],
+                        color: response.obj.color,
+                        class: 'new'
                     });
                     BootstrapDialog.closeAll();
                 }
             });
         }
-
     });
-
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (query, callback) {
-
     var self = this;
 
     if (!query.length) {
@@ -160,7 +168,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
                 item = res.collection[item];
                 items.push({
                     value: item.id,
-                    text: item.name[Charcoal.Admin.lang],
+                    text:  item.name[Charcoal.Admin.lang],
                     color: item.color
                 });
             }
@@ -172,7 +180,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.dialog = Charcoal.Admin.Widget.prototype.dialog;
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
-    var selectize = $('#' + this.input_id).selectize(this.selectize_options);
+    var selectize = $(this.selectize_selector).selectize(this.selectize_options);
     console.log(selectize);
 };
 

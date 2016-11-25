@@ -2,27 +2,29 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
-use \Exception;
+use \RuntimeException;
 use \InvalidArgumentException;
 
-use Charcoal\Admin\Property\AbstractPropertyInput;
-use Charcoal\Factory\FactoryInterface;
-use Charcoal\Property\ObjectProperty;
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-factory'
+use Charcoal\Factory\FactoryInterface;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractSelectableInput;
+
 /**
- * Tags input property
+ * Tags Input Property
  *
- * > The Tags input is a text input in which tags can be outputted
- * -{@link http://selectize.github.io/selectize.js/}
+ * The HTML form control can be either an `<input type="text">` (for multiple values) or a `<select>` (single value).
  */
-class TagsInput extends AbstractPropertyInput
+class TagsInput extends AbstractSelectableInput
 {
     /**
-     * The Selectize settings
+     * Settings for {@link http://selectize.github.io/selectize.js/ Selectize.js}
      *
-     * @var  array
-     * - {@link http://selectize.github.io/selectize.js/}
+     * @var array
      */
     private $selectizeOptions;
 
@@ -47,27 +49,76 @@ class TagsInput extends AbstractPropertyInput
     }
 
     /**
-     * @param FactoryInterface $factory The factory, to create model objects.
-     * @return ObjectProperty Chainable
+     * Set an object model factory.
+     *
+     * @param  FactoryInterface $factory The model factory, to create objects.
+     * @return self
      */
-    public function setModelFactory(FactoryInterface $factory)
+    protected function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
+
         return $this;
     }
 
     /**
-     * @throws Exception If the model factory is not set.
+     * Retrieve the object model factory.
+     *
+     * @throws RuntimeException If the model factory was not previously set.
      * @return FactoryInterface
      */
-    private function modelFactory()
+    public function modelFactory()
     {
-        if ($this->modelFactory === null) {
-            throw new Exception(
-                sprintf('Model factory not set on object property "%s".')
+        if (!isset($this->modelFactory)) {
+            throw new RuntimeException(
+                sprintf('Model Factory is not defined for "%s"', get_class($this))
             );
         }
+
         return $this->modelFactory;
+    }
+
+    /**
+     * Retrieve the selectable options.
+     *
+     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
+     *
+     * @todo   [^1]: With PHP7 we can simply do `yield from $choices;`.
+     * @return Generator|array
+     */
+    public function choices()
+    {
+        if ($this->p()->allowNull() && !$this->p()->multiple()) {
+            $prepend = $this->emptyChoice();
+
+            yield $prepend;
+        }
+
+        $choices = parent::choices();
+
+        /* Pass along the Generator from the parent method [^1] */
+        foreach ($choices as $choice) {
+            yield $choice;
+        }
+    }
+
+    /**
+     * Retrieve a blank choice.
+     *
+     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
+     *
+     * @return array
+     */
+    protected function emptyChoice()
+    {
+        $label = $this->placeholder();
+
+        return [
+            'value'   => '',
+            'label'   => $label,
+            'title'   => $label,
+            'subtext' => ''
+        ];
     }
 
     /**
@@ -75,12 +126,12 @@ class TagsInput extends AbstractPropertyInput
      *
      * This method overwrites existing helpers.
      *
-     * @param array $opts The selectize picker options.
-     * @return Tinymce Chainable
+     * @param  array $settings The selectize picker options.
+     * @return TagsInput Chainable
      */
-    public function setSelectizeOptions(array $opts)
+    public function setSelectizeOptions(array $settings)
     {
-        $this->selectizeOptions = $opts;
+        $this->selectizeOptions = array_merge($this->defaultSelectizeOptions(), $settings);
 
         return $this;
     }
@@ -88,12 +139,12 @@ class TagsInput extends AbstractPropertyInput
     /**
      * Merge (replacing or adding) selectize picker options.
      *
-     * @param array $opts The selectize picker options.
-     * @return Tinymce Chainable
+     * @param  array $settings The selectize picker options.
+     * @return TagsInput Chainable
      */
-    public function mergeSelectizeOptions(array $opts)
+    public function mergeSelectizeOptions(array $settings)
     {
-        $this->selectizeOptions = array_merge($this->selectizeOptions, $opts);
+        $this->selectizeOptions = array_merge($this->selectizeOptions, $settings);
 
         return $this;
     }
@@ -101,16 +152,16 @@ class TagsInput extends AbstractPropertyInput
     /**
      * Add (or replace) an selectize picker option.
      *
-     * @param string $optIdent The setting to add/replace.
-     * @param mixed  $optVal   The setting's value to apply.
+     * @param  string $key The setting to add/replace.
+     * @param  mixed  $val The setting's value to apply.
      * @throws InvalidArgumentException If the identifier is not a string.
      * @return self Chainable
      */
-    public function addSelectizeOption($optIdent, $optVal)
+    public function addSelectizeOption($key, $val)
     {
-        if (!is_string($optIdent)) {
+        if (!is_string($key)) {
             throw new InvalidArgumentException(
-                'Option identifier must be a string.'
+                'Setting key must be a string.'
             );
         }
 
@@ -119,7 +170,7 @@ class TagsInput extends AbstractPropertyInput
             $this->selectizeOptions();
         }
 
-        $this->selectizeOptions[$optIdent] = $optVal;
+        $this->selectizeOptions[$key] = $val;
 
         return $this;
     }
@@ -132,7 +183,7 @@ class TagsInput extends AbstractPropertyInput
     public function selectizeOptions()
     {
         if ($this->selectizeOptions === null) {
-            $this->setSelectizeOptions($this->defaultSelectizeOptions());
+            $this->selectizeOptions = $this->defaultSelectizeOptions();
         }
 
         return $this->selectizeOptions;
@@ -146,8 +197,7 @@ class TagsInput extends AbstractPropertyInput
     public function defaultSelectizeOptions()
     {
         $metadata = $this->metadata();
-
-        $options = [];
+        $options  = [];
 
         if (isset($metadata['data']['selectize_options'])) {
             $options = $metadata['data']['selectize_options'];

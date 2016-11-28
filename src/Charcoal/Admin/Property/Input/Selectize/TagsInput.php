@@ -209,7 +209,7 @@ class TagsInput extends AbstractSelectableInput
             $val = $this->p()->parseVal($val);
 
             if (!$this->p()->multiple()) {
-                $val = [$val];
+                $val = [ $val ];
             }
 
             $objType = $this->p()->objType();
@@ -223,7 +223,7 @@ class TagsInput extends AbstractSelectableInput
                     $options['options'][] = [
                         'value' => $obj->id(),
                         'text'  => (string)$obj->name(),
-                        'color' => method_exists($obj, 'color') ? $obj->color() : '#4D84F1'
+                        'color' => method_exists($obj, 'color') ? $obj->color() : null
                     ];
                 }
             }

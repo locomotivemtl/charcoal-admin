@@ -161,6 +161,7 @@ abstract class AdminAction extends AbstractAction
     }
 
     /**
+     * @throws RuntimeException If the Authenticator has not been defined.
      * @return Authenticator
      */
     protected function authenticator()

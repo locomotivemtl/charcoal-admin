@@ -8,8 +8,6 @@ use \InvalidArgumentException;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-use \Pimple\Container;
-
 // From `charcoal-core`
 use \Charcoal\Model\ModelInterface;
 use \Charcoal\Model\ModelValidator;
@@ -30,17 +28,6 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 abstract class AbstractSaveAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
-
-
-
-    /**
-     * @param Container $container A DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-    }
 
     /**
      * @return string

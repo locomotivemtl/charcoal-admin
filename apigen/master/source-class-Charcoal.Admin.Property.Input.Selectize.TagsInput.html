@@ -559,7 +559,7 @@
 </span><span id="209" class="l"><a href="#209">209: </a>            <span class="php-var">$val</span> = <span class="php-var">$this</span>-&gt;p()-&gt;parseVal(<span class="php-var">$val</span>);
 </span><span id="210" class="l"><a href="#210">210: </a>
 </span><span id="211" class="l"><a href="#211">211: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;p()-&gt;multiple()) {
-</span><span id="212" class="l"><a href="#212">212: </a>                <span class="php-var">$val</span> = [<span class="php-var">$val</span>];
+</span><span id="212" class="l"><a href="#212">212: </a>                <span class="php-var">$val</span> = [ <span class="php-var">$val</span> ];
 </span><span id="213" class="l"><a href="#213">213: </a>            }
 </span><span id="214" class="l"><a href="#214">214: </a>
 </span><span id="215" class="l"><a href="#215">215: </a>            <span class="php-var">$objType</span> = <span class="php-var">$this</span>-&gt;p()-&gt;objType();
@@ -573,7 +573,7 @@
 </span><span id="223" class="l"><a href="#223">223: </a>                    <span class="php-var">$options</span>[<span class="php-quote">'options'</span>][] = [
 </span><span id="224" class="l"><a href="#224">224: </a>                        <span class="php-quote">'value'</span> =&gt; <span class="php-var">$obj</span>-&gt;id(),
 </span><span id="225" class="l"><a href="#225">225: </a>                        <span class="php-quote">'text'</span>  =&gt; (string)<span class="php-var">$obj</span>-&gt;name(),
-</span><span id="226" class="l"><a href="#226">226: </a>                        <span class="php-quote">'color'</span> =&gt; <span class="php-keyword2">method_exists</span>(<span class="php-var">$obj</span>, <span class="php-quote">'color'</span>) ? <span class="php-var">$obj</span>-&gt;color() : <span class="php-quote">'#4D84F1'</span>
+</span><span id="226" class="l"><a href="#226">226: </a>                        <span class="php-quote">'color'</span> =&gt; <span class="php-keyword2">method_exists</span>(<span class="php-var">$obj</span>, <span class="php-quote">'color'</span>) ? <span class="php-var">$obj</span>-&gt;color() : <span class="php-keyword1">null</span>
 </span><span id="227" class="l"><a href="#227">227: </a>                    ];
 </span><span id="228" class="l"><a href="#228">228: </a>                }
 </span><span id="229" class="l"><a href="#229">229: </a>            }

@@ -4047,11 +4047,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
  * - jquery-minicolors
  */
 
-Charcoal.Admin.Property_Input_Colorpicker = function (opts)
+Charcoal.Admin.Property_Input_ColorPicker = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/colorpicker';
 
-    // Property_Input_Colorpicker properties
+    // Property_Input_ColorPicker properties
     this.input_id = null;
 
     this.colorpicker_selector = null;
@@ -4060,11 +4060,11 @@ Charcoal.Admin.Property_Input_Colorpicker = function (opts)
     this.set_properties(opts).create_colorpicker();
 };
 
-Charcoal.Admin.Property_Input_Colorpicker.prototype = Object.create(Charcoal.Admin.Property.prototype);
-Charcoal.Admin.Property_Input_Colorpicker.prototype.constructor = Charcoal.Admin.Property_Input_Colorpicker;
-Charcoal.Admin.Property_Input_Colorpicker.prototype.parent = Charcoal.Admin.Property.prototype;
+Charcoal.Admin.Property_Input_ColorPicker.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_ColorPicker.prototype.constructor = Charcoal.Admin.Property_Input_ColorPicker;
+Charcoal.Admin.Property_Input_ColorPicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Colorpicker.prototype.set_properties = function (opts)
+Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (opts)
 {
     this.input_id = opts.id || this.input_id;
 
@@ -4078,7 +4078,7 @@ Charcoal.Admin.Property_Input_Colorpicker.prototype.set_properties = function (o
     return this;
 };
 
-Charcoal.Admin.Property_Input_Colorpicker.prototype.create_colorpicker = function ()
+Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = function ()
 {
     $(this.colorpicker_selector).minicolors(this.colorpicker_options);
 

@@ -18,8 +18,12 @@ use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
  * ## Required Parameters
+ *
  * - `obj_type`
  * - `obj_orders`
+ *
+ * ## Optional Parameters
+ *
  * - `starting_order`
  *
  */
@@ -35,7 +39,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     /**
      * @var integer $startingOrder
      */
-    private $startingOrder;
+    private $startingOrder = 1;
 
     /**
      * @param Container $container A DI Container.
@@ -50,65 +54,56 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param array $orders The object orders.
-     * @return ReorderAction Chainable
-     */
-    public function setObjOrders(array $orders)
-    {
-        $this->objOrders = $orders;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function objOrders()
-    {
-        return $this->objOrders;
-    }
-
-    /**
-     * @param integer $order The starting order.
-     * @return ReorderAction Chainable
-     */
-    public function setStartingOrder($order)
-    {
-        $this->startingOrder = (int)$order;
-        return $this;
-    }
-
-    /**
-     * @return integer
-     */
-    public function startingOrder()
-    {
-        return $this->startingOrder;
-    }
-
-    /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $this->setData($request->getParams());
+        $objType = $request->getParam('obj_type');
+        $objOrders = $request->getParam('obj_orders');
+        $startingOrder = (int)$request->getParam('start_order');
 
-        $proto = $this->obj();
+        if (!$objType) {
+            $this->setSuccess(false);
+            $this->addFeedback('error', 'obj_type required');
+            return $response->withStatus(404);
+        }
+        $this->setObjType($objType);
 
-        $objOrders = $this->objOrders();
-        $pos = $this->startingOrder();
-        foreach ($objOrders as $orderId) {
-            $q = 'update `'.$proto->source()->table().'` set `position` = :position where `'.$proto->key().'` = :id';
-            $proto->source()->dbQuery($q, [
-                'id' => $orderId,
-                'position' => $pos
-            ]);
-            $pos++;
+        if (!$objOrders || !is_array($objOrders)) {
+            $this->setSuccess(false);
+            $this->addFeedback('error', 'obj_orders required / must be an array');
+            return $response->withStatus(404);
         }
 
-        $this->setSuccess(true);
-        return $response;
+        try {
+            $proto = $this->obj();
+
+            $pos = $startingOrder;
+            foreach ($objOrders as $orderId) {
+                $q = '
+                update
+                    `'.$proto->source()->table().'`
+                set
+                    `position` = :position
+                where
+                    `'.$proto->key().'` = :id';
+                $proto->source()->dbQuery($q, [
+                    'id' => $orderId,
+                    'position' => $pos
+                ]);
+                $pos++;
+            }
+
+            $this->setSuccess(true);
+            return $response;
+        } catch (Exception $e) {
+            $this->addFeedback('error', sprintf('An error occured loading the object: "%s"', $e->getMessage()));
+            $this->addFeedback('error', $e->getMessage());
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        }
     }
 
     /**
@@ -118,8 +113,6 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     {
         return [
             'success'           => $this->success(),
-            'obj_orders'        => $this->objOrders(),
-            'starting_order'    => $this->startingOrder(),
             'feedbacks'         => $this->feedbacks()
         ];
     }

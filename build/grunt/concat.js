@@ -13,7 +13,8 @@ module.exports = {
             'assets/src/scripts/charcoal/admin/property/*.js',
             'assets/src/scripts/charcoal/admin/property/input/**/*.js',
             'assets/src/scripts/charcoal/admin/template.js',
-            'assets/src/scripts/charcoal/admin/template/*.js'
+            'assets/src/scripts/charcoal/admin/template/*.js',
+            'assets/src/scripts/charcoal/admin/template/**/*.js',
         ],
         dest: 'assets/dist/scripts/charcoal.admin.js'
     },

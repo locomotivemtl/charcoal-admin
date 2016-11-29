@@ -56,6 +56,11 @@ class AdminTemplate extends AbstractTemplate
     protected $adminConfig;
 
     /**
+     * @var \Charcoal\App\Config
+     */
+    protected $appConfig;
+
+    /**
      * The name of the project.
      *
      * @var TranslationString|string|null
@@ -105,11 +110,6 @@ class AdminTemplate extends AbstractTemplate
     private $feedbacks;
 
     /**
-     * @var \Charcoal\App\App $app
-     */
-    private $app;
-
-    /**
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
@@ -125,18 +125,6 @@ class AdminTemplate extends AbstractTemplate
     private $authorizer;
 
     /**
-     * @return \Charcoal\App\App
-     */
-    private function app()
-    {
-        if ($this->app === null) {
-            $this->logger->notice('App from singleton');
-            $this->app = \Charcoal\App\App::instance();
-        }
-        return $this->app;
-    }
-
-    /**
      * Set common dependencies (services) used in all admin templates.
      *
      * @param Container $container DI Container.
@@ -146,6 +134,7 @@ class AdminTemplate extends AbstractTemplate
     {
         parent::setDependencies($container);
 
+        $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
@@ -671,6 +660,14 @@ class AdminTemplate extends AbstractTemplate
         }
 
         return $siteName;
+    }
+
+    /**
+     * @return string
+     */
+    public function recaptchaKey()
+    {
+        return (string)$this->appConfig['apis.google.recaptcha.key'];
     }
 }
 

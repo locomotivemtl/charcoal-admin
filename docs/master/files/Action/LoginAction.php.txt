@@ -9,11 +9,6 @@ use \InvalidArgumentException;
 use \Psr\Http\Message\RequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
-use \Pimple\Container;
-
-// Dependency from `charcoal-base`
-use \Charcoal\User\Authenticator;
-
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminAction;
 use \Charcoal\Admin\User;

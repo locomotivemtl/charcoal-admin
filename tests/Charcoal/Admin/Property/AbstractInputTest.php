@@ -2,16 +2,28 @@
 
 namespace Charcoal\Admin\Tests\Property;
 
+use \PHPUnit_Framework_TestCase;
+
+use \Pimple\Container;
+
+use \Charcoal\Admin\Property\AbstractPropertyInput;
+
+use \Charcoal\Admin\Tests\ContainerProvider;
+
 class AbstractInputTest extends \PHPUnit_Framework_TestCase
 {
     public $obj;
 
     public function setUp()
     {
-        $container = $GLOBALS['container'];
-        $this->obj = $this->getMockForAbstractClass('\Charcoal\Admin\Property\AbstractPropertyInput', [
+        $container = new Container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerLogger($container);
+        $containerProvider->registerMetadataLoader($container);
+
+        $this->obj = $this->getMockForAbstractClass(AbstractPropertyInput::class, [
             [
-                'logger' => new \Psr\Log\NullLogger(),
+                'logger' => $container['logger'],
                 'metadata_loader' => $container['metadata/loader']
             ]
         ]);

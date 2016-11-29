@@ -8,7 +8,11 @@ use \PHPUnit_Framework_TestCase;
 
 use \Psr\Log\NullLogger;
 
+use \Pimple\Container;
+
 use \Charcoal\Admin\Template\Object\CollectionTemplate;
+
+use \Charcoal\Admin\Tests\ContainerProvider;
 
 /**
  *
@@ -19,7 +23,19 @@ class CollectionTemplateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $container = $GLOBALS['container'];
+        $container = new Container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerBaseUrl($container);
+        $containerProvider->registerAdminConfig($container);
+        $containerProvider->registerLogger($container);
+        $containerProvider->registerMetadataLoader($container);
+        $containerProvider->registerModelFactory($container);
+        $containerProvider->registerAuthenticator($container);
+        $containerProvider->registerAuthorizer($container);
+        $containerProvider->registerWidgetFactory($container);
+        $containerProvider->registerDashboardBuilder($container);
+        $containerProvider->registerCollectionLoader($container);
+
         $this->obj = $this->getMock(CollectionTemplate::class, null, [[
             'logger' => new NullLogger(),
             'metadata_loader' => $container['metadata/loader']

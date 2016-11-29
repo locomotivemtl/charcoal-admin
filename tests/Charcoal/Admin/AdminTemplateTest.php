@@ -2,7 +2,11 @@
 
 namespace Charcoal\Admin\Tests;
 
+use \Pimple\Container;
+
 use \Charcoal\Admin\AdminTemplate;
+
+use \Charcoal\Admin\Tests\ContainerProvider;
 
 class AdminTemplateTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,9 +14,18 @@ class AdminTemplateTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $container = $GLOBALS['container'];
+        $container = new Container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerAdminConfig($container);
+        $containerProvider->registerBaseUrl($container);
+        $containerProvider->registerModelFactory($container);
+        $containerProvider->registerLogger($container);
+        $containerProvider->registerMetadataLoader($container);
+        $containerProvider->registerAuthenticator($container);
+        $containerProvider->registerAuthorizer($container);
+
         $this->obj = $this->getMock(AdminTemplate::class, null, [[
-            'logger' => new \Psr\Log\NullLogger(),
+            'logger' => $container['logger'],
             'metadata_loader' => $container['metadata/loader']
         ]]);
         $this->obj->setDependencies($container);

@@ -4,9 +4,16 @@ namespace Charcoal\Admin\Tests\Template;
 
 use \Charcoal\Admin\Template\LoginTemplate;
 
+/**
+ *
+ */
 class LoginTemplateTest extends \PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Instance of object under test
+     * @var LoginTemplate
+     */
+    private $obj;
 
     public function setUp()
     {

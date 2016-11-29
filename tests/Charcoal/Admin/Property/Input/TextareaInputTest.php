@@ -2,16 +2,26 @@
 
 namespace Charcoal\Admin\Tests\Property\Input;
 
+use \PHPUnit_Framework_TestCase;
+
+use \Pimple\Container;
+
 use \Charcoal\Admin\Property\Input\TextareaInput;
 
-class TextareaInputTest extends \PHPUnit_Framework_TestCase
+use \Charcoal\Admin\Tests\ContainerProvider;
+
+class TextareaInputTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp()
     {
-        $container = $GLOBALS['container'];
+        $container = new Container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerLogger($container);
+        $containerProvider->registerMetadataLoader($container);
+
         $this->obj = new TextareaInput([
-            'logger' => new \Psr\Log\NullLogger(),
+            'logger' => $container['logger'],
             'metadata_loader' => $container['metadata/loader']
         ]);
     }

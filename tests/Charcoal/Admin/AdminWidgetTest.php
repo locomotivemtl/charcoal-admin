@@ -2,15 +2,18 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
+use \PHPUnit_Framework_TestCase;
 
-class AdminWidgetTest extends \PHPUnit_Framework_TestCase
+use \Psr\Log\NullLogger;
+
+use \Charcoal\Admin\AdminWidget;
+
+class AdminWidgetTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $logger = new \Psr\Log\NullLogger();
         $this->obj = new AdminWidget([
-            'logger'=>$logger
+            'logger'=> new NullLogger()
         ]);
     }
 

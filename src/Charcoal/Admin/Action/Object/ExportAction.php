@@ -35,13 +35,6 @@ use \Charcoal\Admin\Service\Exporter;
 class ExportAction extends AdminAction
 {
     /**
-     * Store the application's configuration.
-     *
-     * @var \Charcoal\App\AppConfig
-     */
-    private $appConfig;
-
-    /**
      * Store the factory instance for the current class.
      *
      * @var \Charcoal\Factory\FactoryInterface
@@ -56,7 +49,6 @@ class ExportAction extends AdminAction
      */
     public function setDependencies(Container $container)
     {
-        $this->appConfig = $container['config'];
         $this->propertyFactory = $container['property/factory'];
 
         parent::setDependencies($container);

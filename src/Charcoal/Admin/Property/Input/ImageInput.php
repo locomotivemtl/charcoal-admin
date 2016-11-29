@@ -6,6 +6,7 @@ namespace Charcoal\Admin\Property\Input;
 use \Charcoal\View\ViewableInterface;
 
 // Local Dependency
+use \Charcoal\Admin\Ui\ImageAttributesTrait;
 use \Charcoal\Admin\Property\Input\FileInput;
 
 /**
@@ -13,12 +14,7 @@ use \Charcoal\Admin\Property\Input\FileInput;
  */
 class ImageInput extends FileInput
 {
-    /**
-     * The CSS classes for the HTML `class` attribute.
-     *
-     * @var string|null
-     */
-    protected $classAttr;
+    use ImageAttributesTrait;
 
     /**
      * @return string|null
@@ -30,9 +26,9 @@ class ImageInput extends FileInput
 
         if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
             if (parse_url($value, PHP_URL_SCHEME)) {
-                $tpl = '<img src="{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }} style="max-width: 100%">';
+                $tpl = '<img src="{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }}{{# styleAttr }} style="{{ . }}"{{/ styleAttr }}>';
             } else {
-                $tpl = '<img src="{{ baseUrl }}{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }} style="max-width: 100%">';
+                $tpl = '<img src="{{ baseUrl }}{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }}{{# styleAttr }} style="{{ . }}"{{/ styleAttr }}>';
             }
 
             $html = $this->view()->render($tpl, $this);

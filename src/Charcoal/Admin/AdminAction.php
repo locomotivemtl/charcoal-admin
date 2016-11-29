@@ -33,6 +33,11 @@ abstract class AdminAction extends AbstractAction
     protected $adminConfig;
 
     /**
+     * @var \Charcoal\App\Config
+     */
+    protected $appConfig;
+
+    /**
      * @var array $feedbacks
      */
     private $feedbacks = [];
@@ -73,6 +78,7 @@ abstract class AdminAction extends AbstractAction
     {
         parent::setDependencies($container);
 
+        $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setModelFactory($container['model/factory']);
         $this->setAuthenticator($container['admin/authenticator']);

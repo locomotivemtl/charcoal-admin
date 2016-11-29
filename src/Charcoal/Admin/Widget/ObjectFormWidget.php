@@ -249,9 +249,9 @@ class ObjectFormWidget extends FormWidget implements
             $obj = $this->obj();
             $objId = $obj->id();
             if ($objId) {
-                return 'action/object/update';
+                return 'object/update';
             } else {
-                return 'action/object/save';
+                return 'object/save';
             }
         } else {
             return $action;

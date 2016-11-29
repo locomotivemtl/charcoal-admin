@@ -13,7 +13,7 @@ use \Charcoal\Config\GenericConfig as Config;
 // Module `charcoal-factory` dependencies
 use \Charcoal\Factory\GenericFactory as Factory;
 
-// Modeul `charcoal-base` dependencies
+// Module `charcoal-base` dependencies
 use \Charcoal\User\Authenticator;
 use \Charcoal\User\Authorizer;
 

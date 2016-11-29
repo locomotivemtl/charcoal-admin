@@ -131,16 +131,27 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             if (!type) {
                 return false;
             }
-            var title = $(this).data('title') || 'Edit';
-            that.create_attachment(type, title, 0, function (response) {
-                if (response.success) {
-                    response.obj.id = response.obj_id;
-                    that.add(response.obj);
-                    that.join(function () {
-                        that.reload();
-                    });
-                }
-            });
+            var id = $(this).data('id');
+            if (id) {
+                that.add({
+                    id:   id,
+                    type: type
+                });
+                that.join(function () {
+                    that.reload();
+                });
+            } else {
+                var title = $(this).data('title') || 'Edit';
+                that.create_attachment(type, title, 0, function (response) {
+                    if (response.success) {
+                        response.obj.id = response.obj_id;
+                        that.add(response.obj);
+                        that.join(function () {
+                            that.reload();
+                        });
+                    }
+                });
+            }
         })
         .on('click.charcoal.attachments', '.js-attachment-actions a', function (e) {
             var _this = $(this);

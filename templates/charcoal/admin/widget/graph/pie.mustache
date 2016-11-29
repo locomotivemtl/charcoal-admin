@@ -1,61 +1,48 @@
 <div id="{{widgetId}}" style="height:{{height}}px;"></div>
 
 {{#addJsRequirement}}
-<script src="{{baseUrl}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
+<script src="{{baseUrl}}assets/admin/scripts/vendors/echarts/echarts.min.js"></script>
 {{/addJsRequirement}}
 
 {{#addJs}}
 <script type="text/javascript">
-require.config({
-    paths: {
-        echarts: '{{baseUrl}}assets/admin/scripts/vendors/echarts/'
-    }
+
+var myChart = echarts.init(document.getElementById('{{widgetId}}'));
+
+myChart.showLoading({
+    text: 'Loading...',
 });
+myChart.hideLoading();
 
-require(
-    [
-        'echarts',
-        'echarts/chart/pie'
+myChart.setOption({
+    color:[
+        {{#colors}}
+            '{{.}}',
+        {{/colors}}
     ],
-    function (ec) {
-        var myChart = ec.init(document.getElementById('{{widgetId}}'));
+    tooltip : {
+        trigger: 'item'
+    },
+    toolbox: {
+        show : true
+    },
+    calculable : false,
 
-        myChart.showLoading({
-            text: 'Loading...',
-        });
-        myChart.hideLoading();
-
-        myChart.setOption({
-            color:[
-                {{#colors}}
-                    '{{.}}',
-                {{/colors}}
-            ],
-            tooltip : {
-                trigger: 'item'
-            },
-            toolbox: {
-                show : true
-            },
-            calculable : false,
-
-            series : [
-                {
-                    name:'Serie 1',
-                    type:'pie',
-                     radius : '50%',
-                    data:[ {value:335, name:'PHP'},
-                {value:310, name:'Javascript'},
-                {value:234, name:'JSON'},
-                {value:135, name:'HTML'}
-                ]
-                }
-            ]
-        });
-        $(window).on('resize', function() {
-            myChart.resize();
-        });
-    }
-);
+    series : [
+        {
+            name:'Serie 1',
+            type:'pie',
+             radius : '50%',
+            data:[ {value:335, name:'PHP'},
+        {value:310, name:'Javascript'},
+        {value:234, name:'JSON'},
+        {value:135, name:'HTML'}
+        ]
+        }
+    ]
+});
+$(window).on('resize', function() {
+    myChart.resize();
+});
 </script>
 {{/addJs}}

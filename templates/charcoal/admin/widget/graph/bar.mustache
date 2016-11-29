@@ -2,61 +2,48 @@
 
 {{#addJsRequirement}}
 <script src="{{baseUrl}}assets/admin/scripts/vendors/echarts/echarts.js"></script>
+<script src="{{baseUrl}}assets/admin/scripts/vendors/echarts/echarts.min.js"></script>
 {{/addJsRequirement}}
 
 {{#addJs}}
 <script type="text/javascript">
-require.config({
-    paths: {
-        echarts: '{{baseUrl}}assets/admin/scripts/vendors/echarts/'
-    }
+
+var myChart = echarts.init(document.getElementById('{{widgetId}}'));
+
+myChart.showLoading({
+    text: 'Loading...',
 });
+myChart.hideLoading();
 
-require(
-    [
-        'echarts',
-        'echarts/chart/bar',
-        'echarts/chart/line'
+myChart.setOption({
+    color:[
+        {{#colors}}
+            '{{.}}',
+        {{/colors}}
     ],
-    function (ec) {
-        var myChart = ec.init(document.getElementById('{{widgetId}}'));
-
-        myChart.showLoading({
-            text: 'Loading...',
-        });
-        myChart.hideLoading();
-
-        myChart.setOption({
-            color:[
-                {{#colors}}
-                    '{{.}}',
-                {{/colors}}
-            ],
-            tooltip : {
-                trigger: 'axis'
-            },
-            toolbox: {
-                show : true
-            },
-            calculable : false,
-            xAxis : [
-                {
-                    type : 'category',
-                    data : {{&categoriesJson}}
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value',
-                    splitArea : {show : true}
-                }
-            ],
-            series : {{&seriesJson}}
-        });
-        $(window).on('resize', function() {
-            myChart.resize();
-        });
-    }
-);
+    tooltip : {
+        trigger: 'axis'
+    },
+    toolbox: {
+        show : true
+    },
+    calculable : false,
+    xAxis : [
+        {
+            type : 'category',
+            data : {{&categoriesJson}}
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            splitArea : {show : true}
+        }
+    ],
+    series : {{&seriesJson}}
+});
+$(window).on('resize', function() {
+    myChart.resize();
+});
 </script>
 {{/addJs}}

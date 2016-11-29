@@ -9,7 +9,7 @@ module.exports = {
             },
             {
                 expand: true,
-                cwd: 'bower_components/echarts/build/dist',
+                cwd: 'bower_components/echarts/dist/',
                 // src: ['echarts.js'],
                 src: [ '**/*.*', '*/*.*', '*.*' ],
                 dest: 'assets/dist/scripts/vendors/echarts/'

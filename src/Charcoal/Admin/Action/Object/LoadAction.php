@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use \Exception;
+use \UnexpectedValueException;
 use \InvalidArgumentException;
 use \RuntimeException;
 
@@ -85,19 +85,19 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * @param RequestInterface  $request  The request options.
-     * @param ResponseInterface $response The response to return.
+     * @param  RequestInterface  $request  The request options.
+     * @param  ResponseInterface $response The response to return.
      * @return ResponseInterface
-     * @throws \Exception If object_id is passed as $request option.
-     * @todo Implement obj_id support for load object action
+     * @throws UnexpectedValueException If "obj_id" is passed as $request option.
+     * @todo   Implement obj_id support for load object action
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         $objType = $request->getParam('obj_type');
-        $objId = $request->getParam('obj_id');
+        $objId   = $request->getParam('obj_id');
 
         if ($objId) {
-            throw new Exception(
+            throw new UnexpectedValueException(
                 'An error occured loading the object: obj_id is not yet supported in LoadAction'
             );
         }

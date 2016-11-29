@@ -2,29 +2,38 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use Charcoal\Factory\FactoryInterface;
-use Charcoal\Loader\CollectionLoader;
-
-use Charcoal\Model\Collection;
 use \Exception;
 use \InvalidArgumentException;
-use Pimple\Container;
 use \RuntimeException;
-
-// from `charcoal-admin`
-use Charcoal\Admin\AdminAction;
 
 // PSR-7 (http messaging) dependencies
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+use Pimple\Container;
+
+// Module `charcoal-factory` depenencie
+
+// Moduele  `charcoal-core` dependencies
+use Charcoal\Model\Collection;
+use Charcoal\Loader\CollectionLoader;
+
+// from `charcoal-admin`
+use Charcoal\Admin\AdminAction;
+
 /**
  * Admin Load Action: Load an object from database.
  *
  * ## Required Parameters
+ *
  * - `obj_type`
  *
+ * ## Optional Parameters
+ *
+ * - `obj_id`
+ *
  * ## Response
+ *
  * - `success` _boolean_ True if the object was properly loaded, false in case of any error.
  * - `collection` _Charcoal\Model\Collection_ The created collection, if any.
  *
@@ -88,13 +97,15 @@ class LoadAction extends AdminAction
         $objId = $request->getParam('obj_id');
 
         if ($objId) {
-            throw new \Exception('An error occured loading the object: obj_id is not yet supported in LoadAction');
+            throw new Exception(
+                'An error occured loading the object: obj_id is not yet supported in LoadAction'
+            );
         }
 
         if (!$objType) {
             $this->setSuccess(false);
             $this->addFeedback('error', 'obj_type required');
-            return $response->withStatus(400);
+            return $response->withStatus(404);
         }
 
         try {

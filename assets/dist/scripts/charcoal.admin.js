@@ -1064,7 +1064,6 @@ Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.protot
  */
 Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 {
-    console.log(this.element());
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
         var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
@@ -5074,8 +5073,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.dialog = Charcoal.Admin.Widget.prototype.dialog;
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
-    var selectize = $(this.selectize_selector).selectize(this.selectize_options);
-    console.log(selectize);
+    $(this.selectize_selector).selectize(this.selectize_options);
 };
 
 ;/**
@@ -5636,7 +5634,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
             //'pagebreak',
             'paste',
             //'preview',
-            'print',
+            //'print',
             //'save',
             'searchreplace',
             //'spellchecker',
@@ -5732,6 +5730,32 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //textpattern_patterns: [],
         visualblocks_default_state: false
     };
+
+    if (('plugins' in default_opts) && ('plugins' in this.editor_options)) {
+        $.each(this.editor_options.plugins, function (i, pattern) {
+            // If the first character is ! it should be omitted
+            var exclusion = pattern.indexOf('!') === 0;
+            var index;
+
+            // If the pattern is an exclusion, remove the !
+            if (exclusion) {
+                pattern = pattern.slice(1);
+            }
+
+            if (exclusion) {
+                // If an exclusion, remove matching plugins.
+                while ((index = default_opts.plugins.indexOf(pattern)) > -1) {
+                    delete default_opts.plugins[index];
+                }
+            } else {
+                // Otherwise add matching plugins.
+                if (default_opts.plugins.indexOf(pattern) === -1) {
+                    default_opts.plugins.push(pattern);
+                }
+            }
+        });
+        delete this.editor_options.plugins;
+    }
 
     this.editor_options = $.extend({}, default_opts, this.editor_options);
     this.editor_options.selector = '#' + this.input_id;
@@ -6023,7 +6047,7 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
                 title:   'Lost password error',
                 message: 'There was an error attempting to retrieve lost password.',
                 type:    BootstrapDialog.TYPE_DANGER,
-                onhidden: function() {
+                onhidden: function () {
                     window.grecaptcha.reset();
                 }
             });

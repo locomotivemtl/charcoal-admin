@@ -40,7 +40,6 @@ Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.protot
  */
 Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 {
-    console.log(this.element());
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
         var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';

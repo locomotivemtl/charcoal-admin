@@ -180,7 +180,6 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.dialog = Charcoal.Admin.Widget.prototype.dialog;
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
-    var selectize = $(this.selectize_selector).selectize(this.selectize_options);
-    console.log(selectize);
+    $(this.selectize_selector).selectize(this.selectize_options);
 };
 

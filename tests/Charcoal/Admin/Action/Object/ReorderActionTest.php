@@ -111,6 +111,7 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseUrl($container);
             $containerProvider->registerAdminConfig($container);
             $containerProvider->registerAuthenticator($container);
             $containerProvider->registerAuthorizer($container);

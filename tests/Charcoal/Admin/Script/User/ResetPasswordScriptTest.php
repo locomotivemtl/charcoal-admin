@@ -21,6 +21,8 @@ use \Charcoal\Source\DatabaseSource;
 
 use \Charcoal\Admin\Script\User\ResetPasswordScript;
 
+use \Charcoal\Admin\Tests\ContainerProvider;
+
 /**
  *
  */
@@ -40,61 +42,9 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
     private function getContainer()
     {
         $container = new Container();
-        $container['logger'] = function (Container $container) {
-            return new NullLogger();
-        };
-        $container['cache'] = function (Container $container) {
-            return new VoidCachePool();
-        };
-        $container['database'] = function (Container $container) {
-            return new PDO('sqlite::memory:');
-        };
-        $container['metadata/loader'] = function (Container $container) {
-            return new MetadataLoader([
-                'logger'    => $container['logger'],
-                'cache'     => $container['cache'],
-                'base_path' => realpath(__DIR__.'/../../../../../'),
-                'paths'     => [
-                    'metadata',
-                    'vendor/locomotivemtl/charcoal-base/metadata'
-                ]
-            ]);
-        };
-        $container['model/factory'] = function (Container $container) {
-            return new Factory([
-                'arguments' => [[
-                    'logger'            => $container['logger'],
-                    'metadata_loader'   => $container['metadata/loader'],
-                    'property_factory'  => $container['property/factory'],
-                    'source_factory'    => $container['source/factory'],
-                    'container'         => $container
-                ]]
-            ]);
-        };
-        $container['property/factory'] = function (Container $container) {
-            return new Factory([
-                'resolver_options' => [
-                    'prefix'    => '\Charcoal\Property\\',
-                    'suffix'    => 'Property'
-                ],
-                'arguments' => [[
-                    'logger'    => $container['logger'],
-                    'database'  => $container['database'],
-                    'container' => $container
-                ]]
-            ]);
-        };
-        $container['source/factory'] = function (Container $container) {
-            return new Factory([
-                'map' => [
-                    'database' => DatabaseSource::class
-                ],
-                'arguments' => [[
-                    'logger' => $container['logger'],
-                    'pdo'    => $container['database']
-                ]]
-            ]);
-        };
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerModelFactory($container);
+        $containerProvider->registerClimate($container);
         return $container;
     }
 
@@ -104,6 +54,8 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
 
         $this->obj = new ResetPasswordScript([
             'logger' => $this->container['logger'],
+            'climate' => $this->container['climate'],
+            'model_factory' => $this->container['model/factory'],
 
             // Will call `setDependencies()` on object. AdminScript expects a 'mode/factory'.
             'container' => $this->container

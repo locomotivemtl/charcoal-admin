@@ -80,6 +80,7 @@ abstract class AdminAction extends AbstractAction
 
         $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
+        $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
@@ -279,5 +280,40 @@ abstract class AdminAction extends AbstractAction
             'feedbacks' => $this->feedbacks()
         ];
         return $results;
+    }
+
+    /**
+     * Retrieve the base URI of the administration area.
+     *
+     * @return string|UriInterface
+     */
+    public function adminUrl()
+    {
+        $adminPath = $this->adminConfig['base_path'];
+
+        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
+    }
+
+    /**
+     * Set the base URI of the application.
+     *
+     * @param string|UriInterface $uri The base URI.
+     * @return self
+     */
+    public function setBaseUrl($uri)
+    {
+        $this->baseUrl = $uri;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the base URI of the application.
+     *
+     * @return string|UriInterface
+     */
+    public function baseUrl()
+    {
+        return rtrim($this->baseUrl, '/').'/';
     }
 }

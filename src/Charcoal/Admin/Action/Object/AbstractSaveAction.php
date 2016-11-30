@@ -93,11 +93,18 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
      */
     public function results()
     {
-        return [
+        $results =  [
             'success'   => $this->success(),
-            'obj_id'    => $this->obj()->id(),
-            'obj'       => $this->obj(),
+            'obj_id'    => null,
+            'obj'       => null,
             'feedbacks' => $this->feedbacks()
         ];
+
+        if ($this->success() === true) {
+            $results['obj_id'] = $this->obj()->id();
+            $results['obj'] = $this->obj();
+        }
+
+        return $results;
     }
 }

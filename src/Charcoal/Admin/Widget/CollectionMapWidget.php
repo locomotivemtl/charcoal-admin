@@ -41,6 +41,11 @@ class CollectionMapWidget extends AdminWidget
     private $polygonProperty;
 
     /**
+     * @var string $pathProperty
+     */
+    private $pathProperty;
+
+    /**
      * @var string $infoboxTemplate
      */
     public $infoboxTemplate = '';
@@ -111,6 +116,24 @@ class CollectionMapWidget extends AdminWidget
     }
 
     /**
+     * @param string $p The path property ident.
+     * @return MapWidget Chainable
+     */
+    public function setPathProperty($p)
+    {
+        $this->pathProperty = $p;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function pathProperty()
+    {
+        return $this->pathProperty;
+    }
+
+    /**
      * @param string $template The infobox template ident.
      * @return CollectionMapWidget Chainable
      */
@@ -154,6 +177,17 @@ class CollectionMapWidget extends AdminWidget
                     $obj->mapShowMarker = false;
                 }
 
+                if ($that->pathProperty()) {
+                    $mapPath = call_user_func([$obj, $that->pathProperty()]);
+                    if ($mapPath) {
+                        $obj->mapShowPath = true;
+                        // Same type of coords.
+                        $obj->mapPath = $that->formatPolygon($mapPath);
+                    } else {
+                        $obj->mapShowPath = false;
+                    }
+                }
+
                 if ($that->polygonProperty()) {
                     $mapPolygon = call_user_func([$obj, $that->polygonProperty()]);
                     if ($mapPolygon) {
@@ -193,6 +227,9 @@ class CollectionMapWidget extends AdminWidget
             $ret = [];
             foreach ($polygon as $poly) {
                 $coords = explode(',', $poly);
+                if (count($coords) < 2) {
+                    continue;
+                }
                 $ret[] = [(float)$coords[0], (float)$coords[1]];
             }
         } else {

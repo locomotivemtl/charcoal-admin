@@ -97,6 +97,27 @@ function load_collection_map() {
 
             },
         {{/mapShowPolygon}}
+        {{#mapShowPath}}
+            "line_{{id}}": {
+                type: 'line',
+                paths: {{mapPath}},
+                {{#show_infobox}}
+                onclick: function(){
+                    BootstrapDialog.show({
+                        nl2br: false,
+                        message: $('#{{widget_id}}_infowindow_{{id}}').html(),
+                        buttons: [{
+                            label: 'Modifier',
+                            action: function(dialog) {
+                                window.location.href = '{{baseUrl}}/admin/object/edit?obj_type={{obj_type}}&obj_id={{id}}'
+                            }
+                        }]
+                    });
+                }
+                {{/show_infobox}}
+
+            },
+        {{/mapShowPath}}
         {{/map_objects}}
         }
     };

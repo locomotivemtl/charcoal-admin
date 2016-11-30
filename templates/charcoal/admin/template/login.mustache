@@ -58,10 +58,10 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
             {{/rememberMeEnabled}}
             <div class="form-group">
                 <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log in{{/_t}}</button>
+
+                <small><a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a></small>
             </div>
         </form>
-
-        {{!--<a href="{{urlLostPassword}_}" id="btn-lost-password">{{#_t}_}Lost your password?{{/_t}_}</a>--}}
 
         {{>charcoal/admin/widget/feedbacks}}
     </div>

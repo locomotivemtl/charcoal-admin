@@ -13,6 +13,13 @@
             "logout": {
                 "ident": "charcoal/admin/template/logout"
             },
+            "account/lost-password":{
+                "ident": "charcoal/admin/template/account/lost-password"
+            },
+            "account/reset-password":{
+                "route":"/account/reset-password[/{token}]",
+                "ident": "charcoal/admin/template/account/reset-password"
+            },
             "object/edit": {
                 "ident": "charcoal/admin/template/object/edit"
             },
@@ -33,6 +40,12 @@
         "actions": {
             "login": {
                 "ident": "charcoal/admin/action/login"
+            },
+            "account/lost-password":{
+                "ident": "charcoal/admin/action/account/lost-password"
+            },
+            "account/reset-password":{
+                "ident": "charcoal/admin/action/account/reset-password"
             },
             "object/delete": {
                 "ident": "charcoal/admin/action/object/delete"

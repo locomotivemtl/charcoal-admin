@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Property;
 
 use \Traversable;
-use \Exception;
+use \UnexpectedValueException;
 use \InvalidArgumentException;
 
 use \Pimple\Container;
@@ -494,7 +494,7 @@ abstract class AbstractPropertyInput implements
 
     /**
      * @uses   AbstractProperty::inputVal() Must handle string sanitization of value.
-     * @throws Exception If the value is invalid.
+     * @throws UnexpectedValueException If the value is invalid.
      * @return string
      */
     public function inputVal()
@@ -509,7 +509,7 @@ abstract class AbstractPropertyInput implements
         }
 
         if (!is_scalar($val)) {
-            throw new Exception(
+            throw new UnexpectedValueException(
                 sprintf(
                     'Input value must be a string, received %s',
                     (is_object($val) ? get_class($val) : gettype($val))

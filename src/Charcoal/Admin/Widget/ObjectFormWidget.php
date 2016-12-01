@@ -2,8 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use \UnexpectedValueException;
 use \InvalidArgumentException;
-use \Exception;
 
 use \Pimple\Container;
 
@@ -261,8 +261,8 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * Retrieve the object's properties as form controls.
      *
-     * @param array $group An optional group to use.
-     * @throws Exception If a property data is invalid.
+     * @param  array $group An optional group to use.
+     * @throws UnexpectedValueException If a property data is invalid.
      * @return FormPropertyWidget[]|Generator
      */
     public function formProperties(array $group = null)
@@ -281,7 +281,7 @@ class ObjectFormWidget extends FormWidget implements
             }
 
             if (!is_array($propertyMetadata)) {
-                throw new Exception(
+                throw new UnexpectedValueException(
                     sprintf(
                         'Invalid property data for "%1$s", received %2$s',
                         $propertyIdent,
@@ -303,9 +303,9 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * Retrieve an object property as a form control.
      *
-     * @param string $propertyIdent An optional group to use.
+     * @param  string $propertyIdent An optional group to use.
      * @throws InvalidArgumentException If the property identifier is not a string.
-     * @throws Exception If a property data is invalid.
+     * @throws UnexpectedValueException If a property data is invalid.
      * @return FormPropertyWidget
      */
     public function formProperty($propertyIdent)
@@ -320,7 +320,7 @@ class ObjectFormWidget extends FormWidget implements
         $property = $obj->metadata()->property($propertyIdent);
 
         if (!is_array($property)) {
-            throw new Exception(
+            throw new UnexpectedValueException(
                 sprintf(
                     'Invalid property data for "%1$s", received %2$s',
                     $propertyIdent,

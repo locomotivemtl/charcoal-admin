@@ -2,18 +2,23 @@
 
 namespace Charcoal\Admin\Widget;
 
-// Dependencies from `PHP`
+use \RuntimeException;
 use \InvalidArgumentException;
-use \Exception;
 
+// From Pimple
 use \Pimple\Container;
 
-use \Charcoal\Admin\AdminWidget;
-
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-core`
+// From `charcoal-property`
 use \Charcoal\Property\PropertyInterface;
+
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationConfig;
+
+// From 'charcoal-admin'
+use \Charcoal\Admin\AdminWidget;
 
 /**
  *
@@ -104,13 +109,13 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     * @throws Exception If the property factory dependency was not set / injected.
+     * @throws RuntimeException If the property factory dependency was not set / injected.
      * @return FactoryInterface
      */
     public function propertyFactory()
     {
         if ($this->propertyFactory === null) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Property factory was not set'
             );
         }
@@ -128,13 +133,13 @@ class FormPropertyWidget extends AdminWidget
     }
 
     /**
-     * @throws Exception If the property input factory dependency was not set / injected.
+     * @throws RuntimeException If the property input factory dependency was not set / injected.
      * @return FactoryInterface
      */
     public function propertyInputFactory()
     {
         if ($this->propertyInputFactory === null) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Property input factory was not set'
             );
         }
@@ -364,11 +369,24 @@ class FormPropertyWidget extends AdminWidget
     /**
      * @return array
      */
-    public function langs()
+    public function availableLanguages()
     {
-        $langs = \Charcoal\Translation\TranslationConfig::instance()->availableLanguages();
+        $trans = TranslationConfig::instance();
 
-        return $langs;
+        return $trans->availableLanguages();
+    }
+
+    /**
+     * Determine if the form control's active language should be displayed.
+     *
+     * @return boolean
+     */
+    public function showActiveLanguage()
+    {
+        $prop  = $this->prop();
+        $trans = TranslationConfig::instance();
+
+        return ($trans->isMultilingual() && $prop->l10n());
     }
 
     /**
@@ -424,7 +442,7 @@ class FormPropertyWidget extends AdminWidget
 
         $res = [];
         if ($this->loopL10n() && $prop->l10n()) {
-            $langs = $this->langs();
+            $langs = $this->availableLanguages();
             $inputId = $this->input->inputId();
             foreach ($langs as $lang) {
                 // Set a unique input ID for language.

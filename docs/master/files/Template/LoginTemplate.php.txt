@@ -125,6 +125,14 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
+     * @return string
+     */
+    public function urlLostPassword()
+    {
+        return 'account/lost-password';
+    }
+
+    /**
      * Retrieve the title of the page.
      *
      * @return TranslationString|string|null

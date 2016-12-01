@@ -41,6 +41,14 @@ class LostPasswordAction extends AdminAction
     }
 
     /**
+     * @return boolean
+     */
+    public function authRequired()
+    {
+        return false;
+    }
+
+    /**
      * Note that the lost-password action should never change status code and always return 200.
      *
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.

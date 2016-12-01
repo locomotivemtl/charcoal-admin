@@ -28,6 +28,13 @@ use \Charcoal\Admin\User\LostPasswordToken;
  */
 class ResetPasswordAction extends AdminAction
 {
+    /**
+     * @return boolean
+     */
+    public function authRequired()
+    {
+        return false;
+    }
 
     /**
      * Note that the lost-password action should never change status code and always return 200.

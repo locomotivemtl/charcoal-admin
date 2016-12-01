@@ -4,4 +4,4 @@
 
     `charcoal/admin/property/input/readonly`
 --}}
-<p class="form-control-static">{{# inputVal }}{{& . }}{{/ inputVal }}{{^ inputVal }}—{{/ inputVal }}</p>
+<p class="form-control-static">{{^ inputVal }}—{{/ inputVal }}{{& displayVal }}</p>

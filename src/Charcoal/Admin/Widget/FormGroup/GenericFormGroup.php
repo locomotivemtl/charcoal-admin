@@ -9,5 +9,4 @@ use \Charcoal\Admin\Widget\FormGroupWidget;
  */
 class GenericFormGroup extends FormGroupWidget
 {
-
 }

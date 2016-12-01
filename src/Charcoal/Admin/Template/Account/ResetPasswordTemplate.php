@@ -100,4 +100,21 @@ class ResetPasswordTemplate extends AdminTemplate
         $tokenProto->loadFromQuery($q, ['token'=>$token]);
         return !!$tokenProto->token();
     }
+
+    /**
+     * Retrieve the title of the page.
+     *
+     * @return TranslationString|string|null
+     */
+    public function title()
+    {
+        if ($this->title === null) {
+            $this->setTitle([
+                'en' => 'Reset Password',
+                'fr' => 'Réinitialisation du mot de passe',
+            ]);
+        }
+
+        return $this->title;
+    }
 }

@@ -32,4 +32,21 @@ class LostPasswordTemplate extends AdminTemplate
     {
         return $this->adminUrl().'account/reset-password';
     }
+
+    /**
+     * Retrieve the title of the page.
+     *
+     * @return TranslationString|string|null
+     */
+    public function title()
+    {
+        if ($this->title === null) {
+            $this->setTitle([
+                'en' => 'Lost Password',
+                'fr' => 'Mot de passe oublié',
+            ]);
+        }
+
+        return $this->title;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Template;
+namespace Charcoal\Admin\Tests\Template\Account;
 
 use \ReflectionClass;
 
@@ -8,12 +8,12 @@ use \Psr\Log\NullLogger;
 
 use \PHPUnit_Framework_TestCase;
 
-use \Charcoal\Admin\Template\LoginTemplate;
+use \Charcoal\Admin\Template\Account\ResetPasswordTemplate;
 
 /**
  *
  */
-class LoginTemplateTest extends PHPUnit_Framework_TestCase
+class ResetPasswordTemplateTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Instance of object under test
@@ -23,7 +23,7 @@ class LoginTemplateTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->obj = new LoginTemplate([
+        $this->obj = new ResetPasswordTemplate([
             'logger' => new NullLogger()
         ]);
     }
@@ -42,15 +42,5 @@ class LoginTemplateTest extends PHPUnit_Framework_TestCase
         $foo = self::getMethod($this->obj, 'authRequired');
         $res = $foo->invoke($this->obj);
         $this->assertNotTrue($res);
-    }
-
-    public function testShowHeaderMenuIsFalse()
-    {
-        $this->assertNotTrue($this->obj->showHeaderMenu());
-    }
-
-    public function testShowFooterMenuIsFalse()
-    {
-        $this->assertNotTrue($this->obj->showHeaderMenu());
     }
 }

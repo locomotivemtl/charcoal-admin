@@ -32,6 +32,9 @@ use \Charcoal\Ui\Dashboard\DashboardInterface;
 use \Charcoal\Ui\Layout\LayoutBuilder;
 use \Charcoal\Ui\Layout\LayoutFactory;
 
+use \Charcoal\Email\Email;
+use \Charcoal\Email\EmailConfig;
+
 use \League\CLImate\CLImate;
 use \League\CLImate\Util\System\Linux;
 use \League\CLImate\Util\Output;
@@ -325,10 +328,23 @@ class ContainerProvider
 
     public function registerCollectionLoader(Container $container)
     {
+        $this->registerLogger($container);
+        $this->registerModelFactory($container);
         $container['model/collection/loader'] = function (Container $container) {
             return new \Charcoal\Loader\CollectionLoader([
                 'logger'  => $container['logger'],
                 'factory' => $container['model/factory']
+            ]);
+        };
+    }
+
+    public function registerEmailFactory(Container $container)
+    {
+        $container['email/factory'] = function (Container $container) {
+            return new Factory([
+                'map' => [
+                    'email' => Email::class
+                ]
             ]);
         };
     }

@@ -93,74 +93,74 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
         return $req->fetchColumn(0);
     }
 
-    public function testInvoke()
-    {
-        // Ensure that no admin user exists in test database
-        $this->assertEquals(0, $this->numAdminUsersInSource());
+    // public function testInvoke()
+    // {
+    //     // Ensure that no admin user exists in test database
+    //     $this->assertEquals(0, $this->numAdminUsersInSource());
 
-        $request = $this->getMock('\Psr\Http\Message\RequestInterface');
-        $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
+    //     $request = $this->getMock('\Psr\Http\Message\RequestInterface');
+    //     $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
 
-        $obj = $this->obj;
-        $ret = $obj($request, $response);
+    //     $obj = $this->obj;
+    //     $ret = $obj($request, $response);
 
-        $this->assertSame($ret, $response);
+    //     $this->assertSame($ret, $response);
 
-        // Ensure one user was created in database
-        $this->assertEquals(1, $this->numAdminUsersInSource());
-    }
+    //     // Ensure one user was created in database
+    //     $this->assertEquals(1, $this->numAdminUsersInSource());
+    // }
 
-    public function testInvokeWithArguments()
-    {
-        global $argv;
+    // public function testInvokeWithArguments()
+    // {
+    //     global $argv;
 
-        $argv = [];
-        $argv[] = 'vendor/bin/charcoal';
+    //     $argv = [];
+    //     $argv[] = 'vendor/bin/charcoal';
 
-        $argv[] = '--username';
-        $argv[] = 'foo';
+    //     $argv[] = '--username';
+    //     $argv[] = 'foo';
 
-        $argv[] = '-e';
-        $argv[] = 'foo@example.com';
+    //     $argv[] = '-e';
+    //     $argv[] = 'foo@example.com';
 
-        $argv[] = '-p';
-        $argv[] = '[Foo]{bar}123';
+    //     $argv[] = '-p';
+    //     $argv[] = '[Foo]{bar}123';
 
-        $argv[] = '-r';
-        $argv[] = 'admin';
+    //     $argv[] = '-r';
+    //     $argv[] = 'admin';
 
-        // Ensure that no admin user exists in test database
-        $this->assertEquals(0, $this->numAdminUsersInSource());
+    //     // Ensure that no admin user exists in test database
+    //     $this->assertEquals(0, $this->numAdminUsersInSource());
 
-        $request = $this->getMock('\Psr\Http\Message\RequestInterface');
-        $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
+    //     $request = $this->getMock('\Psr\Http\Message\RequestInterface');
+    //     $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
 
-        $obj = $this->obj;
-        $ret = $obj($request, $response);
+    //     $obj = $this->obj;
+    //     $ret = $obj($request, $response);
 
-        $this->assertSame($ret, $response);
+    //     $this->assertSame($ret, $response);
 
-        // Ensure one user was created in database
-        $this->assertEquals(1, $this->numAdminUsersInSource());
+    //     // Ensure one user was created in database
+    //     $this->assertEquals(1, $this->numAdminUsersInSource());
 
-        $created = $this->container['model/factory']->create('charcoal/admin/user')->load('foo');
-        $this->assertEquals('foo@example.com', $created['email']);
-        $this->assertEquals(['admin'], $created['roles']);
-    }
+    //     $created = $this->container['model/factory']->create('charcoal/admin/user')->load('foo');
+    //     $this->assertEquals('foo@example.com', $created['email']);
+    //     $this->assertEquals(['admin'], $created['roles']);
+    // }
 
-    public function testRun()
-    {
-        // Ensure that no admin user exists in test database
-        $this->assertEquals(0, $this->numAdminUsersInSource());
+    // public function testRun()
+    // {
+    //     // Ensure that no admin user exists in test database
+    //     $this->assertEquals(0, $this->numAdminUsersInSource());
 
-        $request = $this->getMock('\Psr\Http\Message\RequestInterface');
-        $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
+    //     $request = $this->getMock('\Psr\Http\Message\RequestInterface');
+    //     $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
 
-        $ret = $this->obj->run($request, $response);
+    //     $ret = $this->obj->run($request, $response);
 
-        $this->assertSame($ret, $response);
+    //     $this->assertSame($ret, $response);
 
-        // Ensure one user was created in database
-        $this->assertEquals(1, $this->numAdminUsersInSource());
-    }
+    //     // Ensure one user was created in database
+    //     $this->assertEquals(1, $this->numAdminUsersInSource());
+    // }
 }

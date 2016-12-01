@@ -368,7 +368,7 @@
 </span><span id="3" class="l"><a href="#3">  3: </a><span class="php-keyword1">namespace</span> Charcoal\Admin\Property;
 </span><span id="4" class="l"><a href="#4">  4: </a>
 </span><span id="5" class="l"><a href="#5">  5: </a><span class="php-keyword1">use</span> \Traversable;
-</span><span id="6" class="l"><a href="#6">  6: </a><span class="php-keyword1">use</span> \Exception;
+</span><span id="6" class="l"><a href="#6">  6: </a><span class="php-keyword1">use</span> \UnexpectedValueException;
 </span><span id="7" class="l"><a href="#7">  7: </a><span class="php-keyword1">use</span> \InvalidArgumentException;
 </span><span id="8" class="l"><a href="#8">  8: </a>
 </span><span id="9" class="l"><a href="#9">  9: </a><span class="php-keyword1">use</span> \Pimple\Container;
@@ -859,7 +859,7 @@
 </span><span id="494" class="l"><a href="#494">494: </a>
 </span><span id="495" class="l"><a href="#495">495: </a>    <span class="php-comment">/**
 </span></span><span id="496" class="l"><a href="#496">496: </a><span class="php-comment">     * @uses   AbstractProperty::inputVal() Must handle string sanitization of value.
-</span></span><span id="497" class="l"><a href="#497">497: </a><span class="php-comment">     * @throws Exception If the value is invalid.
+</span></span><span id="497" class="l"><a href="#497">497: </a><span class="php-comment">     * @throws UnexpectedValueException If the value is invalid.
 </span></span><span id="498" class="l"><a href="#498">498: </a><span class="php-comment">     * @return string
 </span></span><span id="499" class="l"><a href="#499">499: </a><span class="php-comment">     */</span>
 </span><span id="500" class="l"><a href="#500">500: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> inputVal()
@@ -874,7 +874,7 @@
 </span><span id="509" class="l"><a href="#509">509: </a>        }
 </span><span id="510" class="l"><a href="#510">510: </a>
 </span><span id="511" class="l"><a href="#511">511: </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword2">is_scalar</span>(<span class="php-var">$val</span>)) {
-</span><span id="512" class="l"><a href="#512">512: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> Exception(
+</span><span id="512" class="l"><a href="#512">512: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> UnexpectedValueException(
 </span><span id="513" class="l"><a href="#513">513: </a>                <span class="php-keyword2">sprintf</span>(
 </span><span id="514" class="l"><a href="#514">514: </a>                    <span class="php-quote">'Input value must be a string, received %s'</span>,
 </span><span id="515" class="l"><a href="#515">515: </a>                    (<span class="php-keyword2">is_object</span>(<span class="php-var">$val</span>) ? <span class="php-keyword2">get_class</span>(<span class="php-var">$val</span>) : <span class="php-keyword2">gettype</span>(<span class="php-var">$val</span>))

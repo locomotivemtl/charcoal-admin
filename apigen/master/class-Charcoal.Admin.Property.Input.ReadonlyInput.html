@@ -259,6 +259,9 @@
 	<h1>Class ReadonlyInput</h1>
 
 
+	<div class="description">
+	<p>Static Control Value Property</p>
+	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -305,12 +308,216 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#7-13" title="Go to source code">Charcoal/Admin/Property/Input/ReadonlyInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#16-137" title="Go to source code">Charcoal/Admin/Property/Input/ReadonlyInput.php</a>
 		<br>
 	</div>
 
 
 
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="setDependencies" id="_setDependencies">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#37-46" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>Pimple DI container.</dd>
+				</dl></div>
+
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">Charcoal\Admin\Property\AbstractPropertyInput::setDependencies()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setPropertyDisplayFactory" id="_setPropertyDisplayFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.ReadonlyInput.html">Charcoal\Admin\Property\Input\ReadonlyInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setPropertyDisplayFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#48-60" title="Go to source code">setPropertyDisplayFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+
+		<div class="description short">
+			<p>Set a property display factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set a property display factory.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd><p>The property display factory,
+    to create displayable property values.</p></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.ReadonlyInput.html">Charcoal\Admin\Property\Input\ReadonlyInput</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="propertyDisplayFactory" id="_propertyDisplayFactory">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Factory\FactoryInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_propertyDisplayFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#62-77" title="Go to source code">propertyDisplayFactory</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the property display factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the property display factory.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Factory\FactoryInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the property display factory was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="displayVal" id="_displayVal">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_displayVal">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#79-104" title="Go to source code">displayVal</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					UnexpectedValueException<br>If the value is invalid.
+				</div>
+
+				<h4>Uses</h4>
+				<div class="list">
+						AbstractProperty::inputVal() Must handle string sanitization of value.<br>
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="inputVal" id="_inputVal">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_inputVal">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#106-136" title="Go to source code">inputVal</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					UnexpectedValueException<br>If the value is invalid.
+				</div>
+
+				<h4>Uses</h4>
+				<div class="list">
+						AbstractProperty::inputVal() Must handle string sanitization of value.<br>
+				</div>
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">Charcoal\Admin\Property\AbstractPropertyInput::inputVal()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#methods">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>
@@ -328,7 +535,6 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputMode">inputMode()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">inputName()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputType">inputType()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">inputVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_lang">lang()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_multiple">multiple()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_p">p()</a>, 
@@ -340,7 +546,6 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_required">required()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setData">setData()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDisabled">setDisabled()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
@@ -379,6 +584,34 @@
 
 
 
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="hasValue" id="$hasValue">
+		<td class="attributes"><code>
+			protected  
+			boolean|null
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.ReadonlyInput.html#23-28" title="Go to source code"><var>$hasValue</var></a>
+
+			<div class="description short">
+				<p>Whether the input property has a value.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Whether the input property has a value.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$hasValue" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#properties">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>

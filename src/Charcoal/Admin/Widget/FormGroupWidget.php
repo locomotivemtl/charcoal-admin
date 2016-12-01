@@ -4,16 +4,18 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+// From Pimple
 use \Pimple\Container;
 
-// Dependencies from `charcoal-ui`
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationConfig;
+
+// From 'charcoal-ui'
 use \Charcoal\Ui\AbstractUiItem;
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\FormGroup\FormGroupTrait;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
-
-use \Charcoal\Translation\TranslationConfig;
 
 /**
  * Form Group Widget Controller

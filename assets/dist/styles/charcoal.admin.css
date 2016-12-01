@@ -1742,12 +1742,12 @@ a:focus {
 .bootstrap-dialog .form-group .pull-right {
   display: none; }
 
-.bootstrap-dialog .form-field[data-lang] {
+.bootstrap-dialog .form-field.-l10n[data-lang] {
   margin-top: 10px;
   margin-left: 30px; }
-  .bootstrap-dialog .form-field[data-lang].hidden {
+  .bootstrap-dialog .form-field.-l10n[data-lang].hidden {
     display: block !important; }
-  .bootstrap-dialog .form-field[data-lang]::before {
+  .bootstrap-dialog .form-field.-l10n[data-lang]::before {
     content: attr(data-lang);
     position: absolute;
     top: 0;
@@ -1761,13 +1761,13 @@ a:focus {
     line-height: 48px;
     text-transform: uppercase; }
 
-.form-group-sm .bootstrap-dialog .form-field[data-lang]::before {
+.form-group-sm .bootstrap-dialog .form-field.-l10n[data-lang]::before {
   line-height: 38px; }
 
-.form-group-lg .bootstrap-dialog .form-field[data-lang]::before {
+.form-group-lg .bootstrap-dialog .form-field.-l10n[data-lang]::before {
   line-height: 46px; }
 
-.bootstrap-dialog .form-field.form-property-file[data-lang]::before, .bootstrap-dialog .form-field.form-property-image[data-lang]::before {
+.bootstrap-dialog .form-field.-l10n.form-property-file[data-lang]::before, .bootstrap-dialog .form-field.-l10n.form-property-image[data-lang]::before {
   line-height: 32px; }
 
 .o-color-swatch {

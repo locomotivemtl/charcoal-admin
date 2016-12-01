@@ -38,6 +38,11 @@
 
 						<ul>
 				<li>
+					<a href="namespace-Charcoal.Admin.Action.Account.html">
+						Account					</a>
+
+						</li>
+				<li>
 					<a href="namespace-Charcoal.Admin.Action.Object.html">
 						Object					</a>
 
@@ -134,6 +139,11 @@
 
 						<ul>
 				<li>
+					<a href="namespace-Charcoal.Admin.Template.Account.html">
+						Account					</a>
+
+						</li>
+				<li>
 					<a href="namespace-Charcoal.Admin.Template.Object.html">
 						Object					</a>
 
@@ -187,6 +197,8 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
+				<li><a href="class-Charcoal.Admin.Action.Account.LostPasswordAction.html">Charcoal\Admin\Action\Account\LostPasswordAction</a></li>
+				<li><a href="class-Charcoal.Admin.Action.Account.ResetPasswordAction.html">Charcoal\Admin\Action\Account\ResetPasswordAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.ElfinderConnectorAction.html">Charcoal\Admin\Action\ElfinderConnectorAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.LoginAction.html">Charcoal\Admin\Action\LoginAction</a></li>
 				<li><a href="class-Charcoal.Admin.Action.LogoutAction.html">Charcoal\Admin\Action\LogoutAction</a></li>
@@ -253,19 +265,21 @@
 				<li><a href="class-Charcoal.Admin.Service.Exporter.html">Charcoal\Admin\Service\Exporter</a></li>
 				<li><a href="class-Charcoal.Admin.ServiceProvider.AclServiceProvider.html">Charcoal\Admin\ServiceProvider\AclServiceProvider</a></li>
 				<li><a href="class-Charcoal.Admin.ServiceProvider.AdminServiceProvider.html">Charcoal\Admin\ServiceProvider\AdminServiceProvider</a></li>
+				<li><a href="class-Charcoal.Admin.Template.Account.LostPasswordTemplate.html">Charcoal\Admin\Template\Account\LostPasswordTemplate</a></li>
+				<li><a href="class-Charcoal.Admin.Template.Account.ResetPasswordTemplate.html">Charcoal\Admin\Template\Account\ResetPasswordTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.ElfinderTemplate.html">Charcoal\Admin\Template\ElfinderTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.HandlerTemplate.html">Charcoal\Admin\Template\HandlerTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.HelpTemplate.html">Charcoal\Admin\Template\HelpTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.HomeTemplate.html">Charcoal\Admin\Template\HomeTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.LoginTemplate.html">Charcoal\Admin\Template\LoginTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.LogoutTemplate.html">Charcoal\Admin\Template\LogoutTemplate</a></li>
-				<li><a href="class-Charcoal.Admin.Template.LostPasswordTemplate.html">Charcoal\Admin\Template\LostPasswordTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.Object.EditTemplate.html">Charcoal\Admin\Template\Object\EditTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Ui.Sidemenu.AbstractSidemenuGroup.html">Charcoal\Admin\Ui\Sidemenu\AbstractSidemenuGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Ui.Sidemenu.GenericSidemenuGroup.html">Charcoal\Admin\Ui\Sidemenu\GenericSidemenuGroup</a></li>
 				<li><a href="class-Charcoal.Admin.User.html">Charcoal\Admin\User</a></li>
 				<li><a href="class-Charcoal.Admin.User.AclRole.html">Charcoal\Admin\User\AclRole</a></li>
+				<li><a href="class-Charcoal.Admin.User.LostPasswordToken.html">Charcoal\Admin\User\LostPasswordToken</a></li>
 				<li><a href="class-Charcoal.Admin.User.Permission.html">Charcoal\Admin\User\Permission</a></li>
 				<li><a href="class-Charcoal.Admin.User.PermissionCategory.html">Charcoal\Admin\User\PermissionCategory</a></li>
 				<li><a href="class-Charcoal.Admin.Widget.CollectionMapWidget.html">Charcoal\Admin\Widget\CollectionMapWidget</a></li>
@@ -444,15 +458,22 @@
 </span></span><span id="93" class="l"><a href="#93"> 93: </a><span class="php-comment">     */</span>
 </span><span id="94" class="l"><a href="#94"> 94: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> results()
 </span><span id="95" class="l"><a href="#95"> 95: </a>    {
-</span><span id="96" class="l"><a href="#96"> 96: </a>        <span class="php-keyword1">return</span> [
+</span><span id="96" class="l"><a href="#96"> 96: </a>        <span class="php-var">$results</span> =  [
 </span><span id="97" class="l"><a href="#97"> 97: </a>            <span class="php-quote">'success'</span>   =&gt; <span class="php-var">$this</span>-&gt;success(),
-</span><span id="98" class="l"><a href="#98"> 98: </a>            <span class="php-quote">'obj_id'</span>    =&gt; <span class="php-var">$this</span>-&gt;obj()-&gt;id(),
-</span><span id="99" class="l"><a href="#99"> 99: </a>            <span class="php-quote">'obj'</span>       =&gt; <span class="php-var">$this</span>-&gt;obj(),
+</span><span id="98" class="l"><a href="#98"> 98: </a>            <span class="php-quote">'obj_id'</span>    =&gt; <span class="php-keyword1">null</span>,
+</span><span id="99" class="l"><a href="#99"> 99: </a>            <span class="php-quote">'obj'</span>       =&gt; <span class="php-keyword1">null</span>,
 </span><span id="100" class="l"><a href="#100">100: </a>            <span class="php-quote">'feedbacks'</span> =&gt; <span class="php-var">$this</span>-&gt;feedbacks()
 </span><span id="101" class="l"><a href="#101">101: </a>        ];
-</span><span id="102" class="l"><a href="#102">102: </a>    }
-</span><span id="103" class="l"><a href="#103">103: </a>}
-</span><span id="104" class="l"><a href="#104">104: </a></span></code></pre>
+</span><span id="102" class="l"><a href="#102">102: </a>
+</span><span id="103" class="l"><a href="#103">103: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$this</span>-&gt;success() === <span class="php-keyword1">true</span>) {
+</span><span id="104" class="l"><a href="#104">104: </a>            <span class="php-var">$results</span>[<span class="php-quote">'obj_id'</span>] = <span class="php-var">$this</span>-&gt;obj()-&gt;id();
+</span><span id="105" class="l"><a href="#105">105: </a>            <span class="php-var">$results</span>[<span class="php-quote">'obj'</span>] = <span class="php-var">$this</span>-&gt;obj();
+</span><span id="106" class="l"><a href="#106">106: </a>        }
+</span><span id="107" class="l"><a href="#107">107: </a>
+</span><span id="108" class="l"><a href="#108">108: </a>        <span class="php-keyword1">return</span> <span class="php-var">$results</span>;
+</span><span id="109" class="l"><a href="#109">109: </a>    }
+</span><span id="110" class="l"><a href="#110">110: </a>}
+</span><span id="111" class="l"><a href="#111">111: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
@@ -460,6 +481,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?fb22e1a0b747772c5f5c7e125fa8614576ec4f66"></script>
+<script src="elementlist.js?b112bab7b4c3e582f5b4a84eabea23c4104ec608"></script>
 </body>
 </html>

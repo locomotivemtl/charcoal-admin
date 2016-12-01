@@ -290,7 +290,7 @@ class ObjectFormWidget extends FormWidget implements
                 );
             }
 
-            $formProperty = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+            $formProperty = $this->createFormProperty();
             $formProperty->setViewController($this->viewController());
             $formProperty->setPropertyIdent($propertyIdent);
             $formProperty->setData($propertyMetadata);
@@ -316,20 +316,19 @@ class ObjectFormWidget extends FormWidget implements
             );
         }
 
-        $obj = $this->obj();
-        $property = $obj->metadata()->property($propertyIdent);
+        $propertyMetadata = $this->obj()->metadata()->property($propertyIdent);
 
-        if (!is_array($property)) {
+        if (!is_array($propertyMetadata)) {
             throw new UnexpectedValueException(
                 sprintf(
                     'Invalid property data for "%1$s", received %2$s',
                     $propertyIdent,
-                    (is_object($property) ? get_class($property) : gettype($property))
+                    (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
                 )
             );
         }
 
-        $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+        $p = $this->createFormProperty();
         $p->setViewController($this->viewController());
         $p->setPropertyIdent($propertyIdent);
         $p->setData($property);

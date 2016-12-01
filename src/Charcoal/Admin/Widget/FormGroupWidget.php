@@ -17,6 +17,9 @@ use \Charcoal\Ui\FormGroup\FormGroupTrait;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
+// From 'charcoal-admin'
+use \Charcoal\Admin\Ui\ObjectContainerInterface;
+
 /**
  * Form Group Widget Controller
  */
@@ -71,16 +74,17 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
-     * @param array|ArrayInterface $data Class data.
+     * @param  array|ArrayInterface $data Widget data.
      * @return FormGroupWidget Chainable
      */
     public function setData($data)
     {
-        parent::setData($data);
-
-        if (isset($data['properties']) && $data['properties'] !== null) {
+        if (!empty($data['properties'])) {
             $this->setGroupProperties($data['properties']);
+            unset($data['properties']);
         }
+
+        parent::setData($data);
 
         return $this;
     }
@@ -159,8 +163,11 @@ class FormGroupWidget extends AbstractUiItem implements
      */
     public function formProperties()
     {
+        $form = $this->form();
+        $obj  = ($form instanceof ObjectContainerInterface) ? $form->obj() : null;
+
         $groupProperties = $this->groupProperties();
-        $formProperties  = $this->form()->formProperties($groupProperties);
+        $formProperties  = $form->formProperties($groupProperties);
         $propOptions     = $this->propertiesOptions();
 
         $ret = [];
@@ -174,8 +181,7 @@ class FormGroupWidget extends AbstractUiItem implements
                     }
                 }
 
-                if (is_callable([$this->form(), 'obj'])) {
-                    $obj = $this->form()->obj();
+                if ($obj) {
                     $val = $obj[$propertyIdent];
                     $property->setPropertyVal($val);
                 }

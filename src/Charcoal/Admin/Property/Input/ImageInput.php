@@ -22,19 +22,11 @@ class ImageInput extends FileInput
     public function filePreview()
     {
         $value = $this->inputVal();
-        $html  = '';
-
-        if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
-            if (parse_url($value, PHP_URL_SCHEME)) {
-                $tpl = '<img src="{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }}{{# styleAttr }} style="{{ . }}"{{/ styleAttr }}>';
-            } else {
-                $tpl = '<img src="{{ baseUrl }}{{ inputVal }}"{{# classAttr }} class="{{ . }}"{{/ classAttr }}{{# styleAttr }} style="{{ . }}"{{/ styleAttr }}>';
-            }
-
-            $html = $this->view()->render($tpl, $this);
+        if ($value) {
+            return $this->view()->render('charcoal/admin/property/input/image/preview', $this);
         }
 
-        return $html;
+        return '';
     }
 
     /**

@@ -32,16 +32,6 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
-     * @var array $objOrders
-     */
-    private $objOrders;
-
-    /**
-     * @var integer $startingOrder
-     */
-    private $startingOrder = 1;
-
-    /**
      * @param Container $container A DI Container.
      * @return void
      */

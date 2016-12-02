@@ -16,7 +16,8 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
 /**
  * Static Control Value Property
  *
- * @todo Alter {@see \Charcoal\Admin\Widget\FormPropertyWidget} to support {@see \Charcoal\Admin\Property\AbstractPropertyDisplay}.
+ * @todo Alter {@see \Charcoal\Admin\Widget\FormPropertyWidget} to support
+ *      {@see \Charcoal\Admin\Property\AbstractPropertyDisplay.
  */
 class ReadonlyInput extends AbstractPropertyInput
 {

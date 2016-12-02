@@ -8,11 +8,12 @@ use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\User\LostPasswordToken;
 
 /**
- * Reset password template
+ * Reset Password Template
  *
  * This template, which does not require authentication, allows a user to reset its password
- * if he can provide a valid lost-password-token, that should have been sent to his email address.
- * @see \Charcoal\Admin\Template\Account\LostPasswordTemplate
+ * if they can provide a valid lost-password token, that should have been sent to their email address.
+ *
+ * Related: {@see \Charcoal\Admin\Template\Account\LostPasswordTemplate Lost Password Template}
  */
 class ResetPasswordTemplate extends AdminTemplate
 {

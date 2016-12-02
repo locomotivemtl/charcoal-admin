@@ -103,7 +103,29 @@ class FileInput extends AbstractPropertyInput
      */
     public function filePreview()
     {
-        return null;
+        $value = $this->inputVal();
+        if ($value) {
+            return $this->view()->render('charcoal/admin/property/input/file/preview', $this);
+        }
+
+        return '';
+    }
+
+    /**
+     * Retrieve input value for file preview.
+     *
+     * @return string
+     */
+    public function previewVal()
+    {
+        $val = parent::inputVal();
+
+        if (!parse_url($val, PHP_URL_SCHEME)) {
+            $uri = $this->baseUrl;
+            return $uri->withPath($val);
+        }
+
+        return $val;
     }
 
     /**

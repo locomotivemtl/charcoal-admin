@@ -5,7 +5,9 @@ namespace Charcoal\Admin\Template\Account;
 use \Charcoal\Admin\AdminTemplate;
 
 /**
- * Lost password template
+ * Lost Password Template
+ *
+ * Related: {@see \Charcoal\Admin\Template\Account\ResetPasswordTemplate Reset Password Template}
  */
 class LostPasswordTemplate extends AdminTemplate
 {

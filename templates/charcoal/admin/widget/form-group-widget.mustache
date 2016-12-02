@@ -1,17 +1,14 @@
 {{!--
-Form group (Default) Widget
-===========================
+    Form Group Widget
+    =================
 
-`charcoal/admin/widget/form.group`
+    `charcoal/admin/widget/form-group-widget`
 
-Display a form group (as a fieldset) and loop the properties to display them.
+    Display a form group (as a fieldset) and loop the properties to display them.
 
-This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
-
+    This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 --}}
-
 <fieldset>
-
     {{# showHeader }}
     <header class="o-header -border">
         {{# showTitle }}
@@ -27,64 +24,8 @@ This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
     {{/ showDescription }}
     {{/ showHeader }}
 
-{{!-- Loop form properties (typically `FormPropertyWidget`) --}}
-{{# formProperties }}
+    {{> charcoal/admin/widget/form-group/form-properties }}
 
-    {{# layout }}
-
-        {{ start }}
-        {{# cellStartsRow }}
-
-    <section class="o-section">
-        <div class="row">
-
-        {{/ cellStartsRow }}
-    {{/ layout }}
-
-            <div class="col-md-{{ layout.cellSpanBy12 }}">
-                 <div class="form-group">
-                    <label class="control-label" for="{{ prop.inputId }}">{{ prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
-
-                    {{# showActiveLanguage }}
-                    <span class="active-lang pull-right">
-                        {{# languages }}
-                        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="hidden"{{/ current }}>{{ ident }}</span>
-                        {{/ languages }}
-                    </span>
-                    {{/ showActiveLanguage }}
-
-                    {{> charcoal/admin/template/inc.description }}
-                    {{# showNotesAbove }}
-                    {{> charcoal/admin/template/inc.notes }}
-                    {{/ showNotesAbove }}
-
-                    {{# input }}
-                    {{!-- The actual property control (typically `PropertyInput`) --}}
-                    <div class="form-field{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
-                        {{> $widget_template }}
-                    </div>
-                    {{/ input }}
-                    {{^ showNotesAbove }}
-
-                    {{> charcoal/admin/template/inc.notes }}
-                    {{/ showNotesAbove }}
-                </div>
-            </div>
-
-    {{# layout }}
-        {{# cellEndsRow }}
-
-        </div>
-    </section>
-
-        {{/ cellEndsRow }}
-
-        {{!-- Hack: Execute end layout --}}
-        {{ end }}
-    {{/ layout }}
-
-{{/ formProperties }}
-
-{{> charcoal/admin/template/inc.notes }}
+    {{> charcoal/admin/template/inc.notes }}
 
 </fieldset>

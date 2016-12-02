@@ -38,6 +38,11 @@ class FormGroupWidget extends AbstractUiItem implements
     private $widgetId;
 
     /**
+     * @var array|null $parsedFormProperties
+     */
+    protected $parsedFormProperties;
+
+    /**
      * @var array $groupProperties
      */
     private $groupProperties = [];
@@ -52,9 +57,12 @@ class FormGroupWidget extends AbstractUiItem implements
      */
     public function __construct($data)
     {
+        parent::__construct($data);
+
         if (isset($data['form'])) {
             $this->setForm($data['form']);
         }
+
         $this->setFormInputBuilder($data['form_input_builder']);
 
         // Set up layout builder (to fulfill LayoutAware Interface)
@@ -125,6 +133,7 @@ class FormGroupWidget extends AbstractUiItem implements
     public function setGroupProperties(array $properties)
     {
         $this->groupProperties = $properties;
+        $this->parsedFormProperties = null;
 
         return $this;
     }
@@ -157,6 +166,33 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
+     * Parse the form group and model properties.
+     *
+     * @return array
+     */
+    protected function parsedFormProperties()
+    {
+        if ($this->parsedFormProperties === null) {
+            $groupProperties = $this->groupProperties();
+            $formProperties  = $this->form()->formProperties($groupProperties);
+
+            $this->parsedFormProperties = $formProperties;
+        }
+
+        return $this->parsedFormProperties;
+    }
+
+    /**
+     * Determine if the form group has properties.
+     *
+     * @return boolean
+     */
+    public function hasFormProperties()
+    {
+        return !!count($this->parsedFormProperties());
+    }
+
+    /**
      * Retrieve the object's properties from the form.
      *
      * @return mixed|Generator
@@ -167,7 +203,7 @@ class FormGroupWidget extends AbstractUiItem implements
         $obj  = ($form instanceof ObjectContainerInterface) ? $form->obj() : null;
 
         $groupProperties = $this->groupProperties();
-        $formProperties  = $form->formProperties($groupProperties);
+        $formProperties  = $this->parsedFormProperties();
         $propOptions     = $this->propertiesOptions();
 
         $ret = [];

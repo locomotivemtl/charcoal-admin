@@ -1,0 +1,31 @@
+{{!--
+    Form Group Widget \ Form Properties
+    ===================================
+
+    @used-by `charcoal/admin/widget/form-group-widget`
+--}}
+{{!-- Loop form properties (typically `FormPropertyWidget`) --}}
+{{# formProperties }}
+    {{# layout }}
+        {{ start }}
+        {{# cellStartsRow }}
+
+    <section class="o-section">
+        <div class="row">
+        {{/ cellStartsRow }}
+    {{/ layout }}
+
+            <div class="col-md-{{ layout.cellSpanBy12 }}">
+                {{> charcoal/admin/widget/form-property-widget }}
+            </div>
+
+    {{# layout }}
+        {{# cellEndsRow }}
+        </div>
+    </section>
+
+        {{/ cellEndsRow }}
+        {{!-- Hack: Execute end layout --}}
+        {{ end }}
+    {{/ layout }}
+{{/ formProperties }}

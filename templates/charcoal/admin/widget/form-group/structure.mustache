@@ -1,0 +1,43 @@
+{{!--
+    Form Group \ Structure Property
+    ===============================
+
+    `charcoal/admin/widget/form-group/structure-form-group`
+--}}
+
+<fieldset>
+
+    {{# showHeader }}
+    <header class="o-header -border">
+        {{# showTitle }}
+        <h2>{{ title }}</h2>
+        {{/ showTitle }}
+
+        {{> charcoal/admin/template/inc.description }}
+    </header>
+    {{/ showHeader }}
+    {{^ showHeader }}
+    {{# showDescription }}
+    <div class="help-block o-section">{{& description }}</div>
+    {{/ showDescription }}
+    {{/ showHeader }}
+
+    <div class="c-structure_entries">
+    {{^ hasFormProperties }}
+    {{!^ hasEntries }}
+        <div class="c-structure_empty alert alert-warning" role="alert">{{# _t }}No Template Options.{{/ _t }}</div>
+        {{!> charcoal/admin/widget/structure/empty }}
+    {{!/ hasEntries }}
+    {{/ hasFormProperties }}
+    {{!# entries }}
+        <section class="c-structure_entry" id="structure-entry-{{ id }}">
+            <div class="c-structure_entry_content">
+                {{> charcoal/admin/widget/form-group/form-properties }}
+            </div>
+        </section>
+    {{!/ entries }}
+    </div>
+
+    {{> charcoal/admin/template/inc.notes }}
+
+</fieldset>

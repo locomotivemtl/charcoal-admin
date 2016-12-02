@@ -1,0 +1,33 @@
+{{!--
+    Form Property Widget
+    ====================
+
+    @used-by `charcoal/admin/widget/form-group-widget`
+--}}
+<fieldset class="form-group">
+    <label class="control-label" for="{{ prop.inputId }}">{{ prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
+
+    {{# showActiveLanguage }}
+    <span class="active-lang pull-right">
+        {{# languages }}
+        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="hidden"{{/ current }}>{{ ident }}</span>
+        {{/ languages }}
+    </span>
+    {{/ showActiveLanguage }}
+
+    {{> charcoal/admin/template/inc.description }}
+    {{# showNotesAbove }}
+    {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
+
+    {{# input }}
+    {{!-- The actual property control (typically `PropertyInput`) --}}
+    <div class="form-field{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+        {{> $widget_template }}
+    </div>
+    {{/ input }}
+    {{^ showNotesAbove }}
+
+    {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
+</fieldset>

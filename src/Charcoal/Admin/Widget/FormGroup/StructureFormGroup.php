@@ -6,9 +6,6 @@ use \RuntimeException;
 use \UnexpectedValueException;
 use \InvalidArgumentException;
 
-// From Pimple
-use \Pimple\Container;
-
 // From 'charcoal-property'
 use \Charcoal\Property\PropertyInterface;
 
@@ -83,22 +80,19 @@ class StructureFormGroup extends FormGroupWidget
      *
      * @var PropertyInterface|null
      */
-    private $storageProperty;
+    protected $storageProperty;
 
     /**
-     * Inject dependencies from a DI Container.
+     * Whether the form is ready.
      *
-     * @param  Container $container A dependencies container instance.
-     * @return void
+     * @var boolean
      */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-    }
+    protected $isStructureFinalized = false;
 
     /**
      * Retrieve the form's object.
      *
+     * @throws RuntimeException If the form doesn't have a model.
      * @return \Charcoal\Model\ModelInterface
      */
     public function obj()
@@ -152,19 +146,13 @@ class StructureFormGroup extends FormGroupWidget
 
         $this->storageProperty = $property;
 
-        $struct = $property->structureData();
-        if (isset($struct['admin']['form_group'])) {
-            $widgetData = $this->data();
-            $this->setData($struct['admin']['form_group']);
-            $this->setData($widgetData);
-        }
-
         return $this;
     }
 
     /**
      * Retrieve the form group's storage property master.
      *
+     * @throws RuntimeException If the storage property was not previously set.
      * @return PropertyInterface
      */
     public function storageProperty()
@@ -185,35 +173,91 @@ class StructureFormGroup extends FormGroupWidget
      */
     public function structProperties()
     {
-        $struct = $this->storageProperty()->structureData();
+        $property = $this->storageProperty();
 
-        if (isset($struct['properties'])) {
-            return $struct['properties'];
+        if ($property) {
+            $struct = $property->structureData();
+
+            if (isset($struct['properties'])) {
+                return $struct['properties'];
+            }
         }
 
         return [];
     }
 
     /**
+     * Finalize the form group's properies, entries, and layout.
+     *
+     * @param  boolean $reload Rebuild the form group's structure.
+     * @return void
+     */
+    protected function finalizeStructure($reload = false)
+    {
+        if ($reload || !$this->isStructureFinalized) {
+            $this->isStructureFinalized = true;
+
+            $property = $this->storageProperty();
+
+            if ($property) {
+                $struct = $property->structureData();
+                if (isset($struct['admin']['form_group'])) {
+                    $widgetData = $this->data();
+                    $this->setData($struct['admin']['form_group']);
+                    $this->setData($widgetData);
+                }
+            }
+        }
+    }
+
+    /**
+     * Parse the form group and model properties.
+     *
+     * @return array
+     */
+    protected function parsedFormProperties()
+    {
+        if ($this->parsedFormProperties === null) {
+            $this->finalizeStructure();
+
+            $groupProperties  = $this->groupProperties();
+            $structProperties = $this->structProperties();
+
+            if ($groupProperties) {
+                if (is_string(key($groupProperties))) {
+                    $structProperties = $groupProperties;
+                } else {
+                    $structProperties = array_merge(array_flip($groupProperties), $structProperties);
+                }
+            }
+
+            $this->parsedFormProperties = $structProperties;
+        }
+
+        return $this->parsedFormProperties;
+    }
+
+    /**
      * Retrieve the object's properties from the form.
      *
-     * @return mixed|Generator
+     * @todo   Add support to StructureProperty and StructureFormGroup for multiple-values:
+     *         `($store->multiple() ? '%1$s['.uniqid().'][%2$s]' : '%1$s[%2$s]' )`.
+     * @throws UnexpectedValueException If a property data is invalid.
+     * @return \Charcoal\Admin\Widget\FormPropertyWidget[]|\Generator
      */
     public function formProperties()
     {
-        $master = $this->storageProperty();
-        $form   = $this->form();
-        $obj    = $this->obj();
-        $entry  = $obj[$master->ident()];
+        $this->finalizeStructure();
 
-        $propertyIdentPattern = ($master->multiple() ? '%1$s['.uniqid().'][%2$s]' : '%1$s[%2$s]' );
+        $store = $this->storageProperty();
+        $form  = $this->form();
+        $obj   = $this->obj();
+        $entry = $obj[$store->ident()];
+
+        $propertyIdentPattern = '%1$s[%2$s]';
 
         $propPreferences  = $this->propertiesOptions();
-        $groupProperties  = $this->groupProperties();
-        $structProperties = $this->structProperties();
-        if ($groupProperties) {
-            $structProperties = array_merge(array_flip($groupProperties), $structProperties);
-        }
+        $structProperties = $this->parsedFormProperties();
 
         foreach ($structProperties as $propertyIdent => $propertyMetadata) {
             if (method_exists($obj, 'filterPropertyMetadata')) {
@@ -230,7 +274,7 @@ class StructureFormGroup extends FormGroupWidget
                 );
             }
 
-            $subPropertyIdent = sprintf($propertyIdentPattern, $master->ident(), $propertyIdent);
+            $subPropertyIdent = sprintf($propertyIdentPattern, $store->ident(), $propertyIdent);
 
             $formProperty = $form->createFormProperty();
             $formProperty->setViewController($this->viewController());

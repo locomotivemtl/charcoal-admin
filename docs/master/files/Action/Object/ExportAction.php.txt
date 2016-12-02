@@ -63,6 +63,7 @@ class ExportAction extends AdminAction
     {
         $params = $request->getParams();
         if (!isset($params['obj_type'])) {
+            $this->addFeedback('error', 'Missing object type.');
             $this->setSuccess(false);
             return $response->withStatus(404);
         }
@@ -94,7 +95,10 @@ class ExportAction extends AdminAction
      */
     public function results()
     {
-        $ret = '';
+        $ret = [
+            'success' => $this->success(),
+            'feedbacks' => $this->feedbacks()
+        ];
 
         return $ret;
     }

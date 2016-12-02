@@ -172,7 +172,7 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function connectorOptions(array $extraOptions = [])
     {
-        if ($this->elfinderOptions === null || $extraOptions) {
+        if ($this->elfinderOptions === null || !empty($extraOptions)) {
             $options = $this->defaultConnectorOptions();
 
             if (isset($this->elfinderConfig['connector'])) {
@@ -184,7 +184,7 @@ class ElfinderConnectorAction extends AdminAction
             } else {
                 /** @todo Remove this deprecation notice for the next release */
                 $keys = $this->elfinderConfig->keys();
-                if ($keys && array_intersect([ 'bind', 'plugin', 'roots' ], $keys)) {
+                if (!empty($keys) && array_intersect([ 'bind', 'plugin', 'roots' ], $keys)) {
                     trigger_error(
                         'elFinder connector settings must be nested under [admin.elfinder.connector].',
                         E_USER_DEPRECATED

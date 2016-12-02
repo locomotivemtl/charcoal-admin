@@ -103,13 +103,12 @@ class ResetPasswordScript extends AdminScript
     }
 
     /**
-     * @param string $username The username.
-     * @param string $password The new, plain-text password.
+     * @param  string $username The username.
+     * @param  string $password The new, plain-text password.
      * @return void
+     * @todo   Implement reset password email dispatch.
      */
     private function sendResetPasswordEmail($username, $password)
     {
-        // TODO: write me!
-        return;
     }
 }

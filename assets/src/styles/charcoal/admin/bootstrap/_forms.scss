@@ -25,6 +25,12 @@ input[type="url"] {
 
 .form-field {
     position: relative;
+
+    &.-multiple {
+        > .form-control + .form-control {
+            margin-top: 5px;
+        }
+    }
 }
 
 .form-control {

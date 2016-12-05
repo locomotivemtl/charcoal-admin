@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
+use \Psr\Log\NullLogger;
+
 use \Charcoal\Admin\Widget\CollectionMapWidget;
 
 class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
@@ -10,7 +12,7 @@ class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $logger = new \Psr\Log\NullLogger();
+        $logger = new NullLogger();
         $this->obj = new CollectionMapWidget([
             'logger' => $logger
         ]);

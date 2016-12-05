@@ -2,19 +2,23 @@
 
 namespace Charcoal\Admin\Tests\Template;
 
+use \Psr\Log\NullLogger;
+
+use \PHPUnit_Framework_TestCase;
+
 use \Charcoal\Admin\Template\LogoutTemplate;
 
 /**
  *
  */
-class LogoutTemplateTest extends \PHPUnit_Framework_TestCase
+class LogoutTemplateTest extends PHPUnit_Framework_TestCase
 {
     public $obj;
 
     public function setUp()
     {
         $this->obj = new LogoutTemplate([
-            'logger' => new \Psr\Log\NullLogger()
+            'logger' => new NullLogger()
         ]);
     }
 

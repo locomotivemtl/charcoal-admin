@@ -2,13 +2,21 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
+use \PHPUnit_Framework_TestCase;
+
 use \Psr\Log\NullLogger;
 
 use \Charcoal\Admin\Widget\FormSidebarWidget;
 use \Charcoal\Admin\Widget\FormWidget;
 
-class FormWidgetTest extends \PHPUnit_Framework_TestCase
+class FormWidgetTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Object under test
+     * @var FormWidget
+     */
+    private $obj;
+
     public function setUp()
     {
         $logger = new NullLogger();

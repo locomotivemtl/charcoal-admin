@@ -17,7 +17,7 @@ use \Charcoal\Admin\Tests\ContainerProvider;
 /**
  *
  */
-class CollectionTemplateTest extends \PHPUnit_Framework_TestCase
+class CollectionTemplateTest extends PHPUnit_Framework_TestCase
 {
     public $obj;
 

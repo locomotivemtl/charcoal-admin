@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Property\Input;
 
 use \RuntimeException;
-use \UnexpectedValueException
+use \UnexpectedValueException;
 
 // From Pimple
 use \Pimple\Container;

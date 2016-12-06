@@ -18,8 +18,13 @@ use \Charcoal\User\Authenticator;
 use \Charcoal\User\Authorizer;
 
 use \Charcoal\Admin\Config as AdminConfig;
+use \Charcoal\Admin\Property\PropertyInputInterface;
+use \Charcoal\Admin\Property\PropertyDisplayInterface;
 use \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 use \Charcoal\Admin\Ui\Sidemenu\GenericSidemenuGroup;
+use \Charcoal\Admin\User;
+use \Charcoal\Admin\User\AuthToken;
+
 
 /**
  * Charcoal Administration Service Provider
@@ -90,9 +95,9 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container['admin/authenticator'] = function (Container $container) {
             return new Authenticator([
                 'logger'        => $container['logger'],
-                'user_type'     => 'charcoal/admin/user',
+                'user_type'     => User::class,
                 'user_factory'  => $container['model/factory'],
-                'token_type'    => 'charcoal/admin/object/auth-token',
+                'token_type'    => AuthToken::class,
                 'token_factory' => $container['model/factory']
             ]);
         };
@@ -133,7 +138,7 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['property/input/factory'] = function (Container $container) {
             return new Factory([
-                'base_class' => '\Charcoal\Admin\Property\PropertyInputInterface',
+                'base_class' => PropertyInputInterface::class,
                 'arguments' => [[
                     'container' => $container,
                     'logger'    => $container['logger']
@@ -150,7 +155,7 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['property/display/factory'] = function (Container $container) {
             return new Factory([
-                'base_class' => '\Charcoal\Admin\Property\PropertyDisplayInterface',
+                'base_class' => PropertyDisplayInterface::class,
                 'arguments' => [[
                     'container' => $container,
                     'logger'    => $container['logger']

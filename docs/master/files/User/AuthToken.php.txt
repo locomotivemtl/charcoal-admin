@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Object;
+namespace Charcoal\Admin\User;
 
 use \DateTime;
 use \DateTimeInterface;
@@ -8,7 +8,7 @@ use \InvalidArgumentException;
 
 use \Charcoal\Model\AbstractModel;
 
-use \Charcoal\Admin\Object\AuthTokenMetadata;
+use \Charcoal\Admin\User\AuthTokenMetadata;
 
 /**
  * Authorization token; to keep a user logged in

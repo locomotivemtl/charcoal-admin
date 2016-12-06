@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Object;
+namespace Charcoal\Admin\User;
 
 use \InvalidArgumentException;
 

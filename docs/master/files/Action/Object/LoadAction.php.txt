@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Action\Object;
 
+use \Exception;
 use \UnexpectedValueException;
 use \InvalidArgumentException;
 use \RuntimeException;

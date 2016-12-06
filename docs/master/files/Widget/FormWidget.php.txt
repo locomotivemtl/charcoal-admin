@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use Charcoal\User\Authenticator;
+use Charcoal\User\Authorizer;
 use \Exception;
 use \InvalidArgumentException;
 use \RuntimeException;
@@ -58,6 +60,16 @@ class FormWidget extends AdminWidget implements
     private $widgetFactory;
 
     /**
+     * @var Authenticator $authenticator
+     */
+    private $authenticator;
+
+    /**
+     * @var Authorizer $authorizer
+     */
+    private $authorizer;
+
+    /**
      * @param Container $container The DI container.
      * @return void
      */
@@ -75,6 +87,9 @@ class FormWidget extends AdminWidget implements
 
         // Required Dependencies
         $this->setWidgetFactory($container['widget/factory']);
+
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
     }
 
     /**
@@ -147,6 +162,7 @@ class FormWidget extends AdminWidget implements
         if ($data !== null) {
             $p->setData($data);
         }
+
         return $p;
     }
 
@@ -170,7 +186,7 @@ class FormWidget extends AdminWidget implements
      */
     protected function acceptedRequestData()
     {
-        return [ 'next_url', 'form_data', 'l10n_mode', 'group_display_mode' ];
+        return ['next_url', 'form_data', 'l10n_mode', 'group_display_mode'];
     }
 
     /**
@@ -183,6 +199,7 @@ class FormWidget extends AdminWidget implements
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             $this->addSidebar($sidebarIdent, $sidebar);
         }
+
         return $this;
     }
 
@@ -219,6 +236,7 @@ class FormWidget extends AdminWidget implements
                 'Sidebar must be a FormSidebarWidget object or an array'
             );
         }
+
         return $this;
     }
 
@@ -230,7 +248,7 @@ class FormWidget extends AdminWidget implements
         $sidebars = $this->sidebars;
         uasort($sidebars, ['self', 'sortSidebarsByPriority']);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
-            $template = $sidebar->template() ? : 'charcoal/admin/widget/form.sidebar';
+            $template                   = $sidebar->template() ?: 'charcoal/admin/widget/form.sidebar';
             $GLOBALS['widget_template'] = $template;
             yield $sidebarIdent => $sidebar;
         }
@@ -261,6 +279,7 @@ class FormWidget extends AdminWidget implements
         foreach ($properties as $propertyIdent => $property) {
             $this->addFormProperty($propertyIdent, $property);
         }
+
         return $this;
     }
 
@@ -312,6 +331,40 @@ class FormWidget extends AdminWidget implements
                 yield $prop->propertyIdent() => $prop;
             }
         }
+    }
+
+    /**
+     * @param Authenticator $authenticator The authentication service.
+     * @return void
+     */
+    protected function setAuthenticator(Authenticator $authenticator)
+    {
+        $this->authenticator = $authenticator;
+    }
+
+    /**
+     * @return Authenticator
+     */
+    protected function authenticator()
+    {
+        return $this->authenticator;
+    }
+
+    /**
+     * @param Authorizer $authorizer The authorization service.
+     * @return void
+     */
+    protected function setAuthorizer(Authorizer $authorizer)
+    {
+        $this->authorizer = $authorizer;
+    }
+
+    /**
+     * @return Authorizer
+     */
+    protected function authorizer()
+    {
+        return $this->authorizer;
     }
 
     /**

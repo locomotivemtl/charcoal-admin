@@ -48,10 +48,15 @@
 
 {{# addJs }}
 <script>
-Charcoal.Admin.manager().add_property_input({
+var inputOptions = {
     id:   '{{ inputId }}',
     type: 'charcoal/admin/property/input/map-widget',
-    data: {{& mapOptionsAsJson }}
-});
+};
+
+{{#mapOptionsAsJson}}
+    inputOptions['data'] = {{& mapOptionsAsJson }};
+{{/mapOptionsAsJson}}
+
+Charcoal.Admin.manager().add_property_input(inputOptions);
 </script>
 {{/ addJs }}

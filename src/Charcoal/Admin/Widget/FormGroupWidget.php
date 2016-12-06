@@ -82,7 +82,7 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
-     * @param  array|ArrayInterface $data Widget data.
+     * @param  array|\ArrayAccess $data Widget data.
      * @return FormGroupWidget Chainable
      */
     public function setData($data)
@@ -90,6 +90,11 @@ class FormGroupWidget extends AbstractUiItem implements
         if (!empty($data['properties'])) {
             $this->setGroupProperties($data['properties']);
             unset($data['properties']);
+        }
+
+        if (isset($data['permissions'])) {
+            $this->setRequiredAclPermissions($data['permissions']);
+            unset($data['permissions']);
         }
 
         parent::setData($data);
@@ -112,6 +117,7 @@ class FormGroupWidget extends AbstractUiItem implements
     public function setWidgetId($widgetId)
     {
         $this->widgetId = $widgetId;
+
         return $this;
     }
 
@@ -123,6 +129,7 @@ class FormGroupWidget extends AbstractUiItem implements
         if (!$this->widgetId) {
             $this->widgetId = 'widget_'.uniqid();
         }
+
         return $this->widgetId;
     }
 
@@ -132,7 +139,7 @@ class FormGroupWidget extends AbstractUiItem implements
      */
     public function setGroupProperties(array $properties)
     {
-        $this->groupProperties = $properties;
+        $this->groupProperties      = $properties;
         $this->parsedFormProperties = null;
 
         return $this;

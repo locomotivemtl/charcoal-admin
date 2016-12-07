@@ -2,7 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
+// From 'charcoal-admin'
+use Charcoal\Admin\User\AuthAwareTrait;
 
 // From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
@@ -14,6 +15,8 @@ use \Charcoal\Ui\Form\FormInterface;
 // Intra-module dependencies
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
+use Pimple\Container;
+use \InvalidArgumentException;
 
 /**
  * Form Sidebar Widget
@@ -21,6 +24,8 @@ use \Charcoal\Admin\Ui\FormSidebarInterface;
 class FormSidebarWidget extends AdminWidget implements
     FormSidebarInterface
 {
+    use AuthAwareTrait;
+
     /**
      * Store a reference to the parent form widget.
      *
@@ -60,6 +65,30 @@ class FormSidebarWidget extends AdminWidget implements
     protected $showFooter = true;
 
     /**
+     * The required Acl permissions fetch from sidebar for specif parts.
+     *
+     * @var string[] $requiredAclPermissions
+     */
+    private $requiredAclPermissions = [];
+
+    /**
+     * The required Acl permissions for the whole sidebar.
+     *
+     * @var string[] $requiredGlobalAclPermissions
+     */
+    private $requiredGlobalAclPermissions = [];
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->setAuthDependencies($container);
+    }
+
+    /**
      * @param array|ArrayInterface $data Class data.
      * @return FormSidebarWidget Chainable
      */
@@ -69,6 +98,17 @@ class FormSidebarWidget extends AdminWidget implements
 
         if (isset($data['properties']) && $data['properties'] !== null) {
             $this->setSidebarProperties($data['properties']);
+        }
+
+        if (isset($data['permissions'])) {
+            $permissions = $data['permissions'];
+            unset($data['permissions']);
+            $isAssoc = $this->isAssoc($permissions);
+            if ($isAssoc) {
+                $this->setRequiredAclPermissions($permissions);
+            } else {
+                $this->setRequiredGlobalAclPermissions($permissions);
+            }
         }
 
         return $this;
@@ -83,6 +123,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function setForm(FormInterface $form)
     {
         $this->form = $form;
+
         return $this;
     }
 
@@ -116,6 +157,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function setSidebarProperties($properties)
     {
         $this->sidebarProperties = $properties;
+
         return $this;
     }
 
@@ -176,6 +218,8 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function setActions($actions)
     {
+        //todo : include the default save action.
+
         if (!$actions) {
             return $this;
         }
@@ -190,7 +234,7 @@ class FormSidebarWidget extends AdminWidget implements
                 continue;
             }
 
-            $label  = new TranslationString($action['label']);
+            $label     = new TranslationString($action['label']);
             $condition = (isset($action['condition']) ? $action['condition'] : true);
 
             $obj = $this->form()->obj();
@@ -216,9 +260,10 @@ class FormSidebarWidget extends AdminWidget implements
                 'label'       => $label,
                 'url'         => $url,
                 'button_type' => $btn,
-                'active'   => $condition
+                'active'      => $condition
             ];
         }
+
         return $this;
     }
 
@@ -243,6 +288,11 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function isObjDeletable()
     {
+        // Overridden by permissions
+        if (!$this->checkPermission('delete')) {
+            return false;
+        }
+
         $obj    = $this->form()->obj();
         $method = [$obj, 'isDeletable'];
 
@@ -264,8 +314,38 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function isObjResettable()
     {
+        // Overridden by permissions
+        if (!$this->checkPermission('reset')) {
+            return false;
+        }
+
         $obj    = $this->form()->obj();
         $method = [$obj, 'isResettable'];
+
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the object can be saved.
+     *
+     * If TRUE, the "Save" button is shown. The object can still be
+     * saved programmatically.
+     *
+     * @return boolean
+     */
+    public function isObjSavable()
+    {
+        // Overridden by permissions
+        if (!$this->checkPermission('save')) {
+            return false;
+        }
+
+        $obj    = $this->form()->obj();
+        $method = [$obj, 'isSavable'];
 
         if (is_callable($method)) {
             return call_user_func($method);
@@ -325,6 +405,7 @@ class FormSidebarWidget extends AdminWidget implements
         if ($this->title === null) {
             $this->setTitle('Actions');
         }
+
         return $this->title;
     }
 
@@ -333,6 +414,11 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function showFooter()
     {
+        // Overridden by permissions
+        if (!$this->checkPermission('footer')) {
+            return false;
+        }
+
         return $this->showFooter;
     }
 
@@ -343,6 +429,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function setShowFooter($showFooter)
     {
         $this->showFooter = !!$showFooter;
+
         return $this;
     }
 
@@ -382,6 +469,91 @@ class FormSidebarWidget extends AdminWidget implements
                 'current' => ($lang->ident() === $curLang)
             ];
         }
+    }
+
+    // ==========================================================================
+    // PERMISSIONS
+    // ==========================================================================
+
+    /**
+     * Return true if the user as required permissions.
+     *
+     * @param string $permissionName The permission name to check against the user's permissions.
+     * @return boolean
+     */
+    protected function checkPermission($permissionName)
+    {
+        if (!isset($this->requiredAclPermissions[$permissionName])) {
+            return true;
+        }
+
+        $permissions = $this->requiredAclPermissions[$permissionName];
+
+        // Test sidebar vs. ACL roles
+        $authUser = $this->authenticator()->authenticate();
+        if (!$this->authorizer()->userAllowed($authUser, $permissions)) {
+            header('HTTP/1.0 403 Forbidden');
+            header('Location: '.$this->adminUrl().'login');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function requiredAclPermissions()
+    {
+        return $this->requiredAclPermissions;
+    }
+
+    /**
+     * @param array $permissions The Acl permissions required pby the form group.
+     * @return self
+     */
+    public function setRequiredAclPermissions(array $permissions)
+    {
+        $this->requiredAclPermissions = $permissions;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function requiredGlobalAclPermissions()
+    {
+        return $this->requiredGlobalAclPermissions;
+    }
+
+    /**
+     * @param array $permissions The GlobalAcl permissions required pby the form group.
+     * @return self
+     */
+    public function setRequiredGlobalAclPermissions(array $permissions)
+    {
+        $this->requiredGlobalAclPermissions = $permissions;
+
+        return $this;
+    }
+
+    // ==========================================================================
+    // UTILS
+    // ==========================================================================
+
+    /**
+     * @param array $array Detect if $array is assoc or not.
+     * @return boolean
+     */
+    protected function isAssoc(array $array)
+    {
+        if ($array === []) {
+            return false;
+        }
+
+        return !!array_filter($array, 'is_string', ARRAY_FILTER_USE_KEY);
     }
 }
 

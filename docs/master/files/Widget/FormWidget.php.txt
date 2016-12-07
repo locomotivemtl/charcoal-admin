@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
+use Charcoal\Admin\User\AuthAwareTrait;
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 use \Exception;
@@ -35,6 +36,7 @@ class FormWidget extends AdminWidget implements
     FormInterface,
     LayoutAwareInterface
 {
+    use AuthAwareTrait;
     use FormTrait;
     use LayoutAwareTrait;
 
@@ -60,16 +62,6 @@ class FormWidget extends AdminWidget implements
     private $widgetFactory;
 
     /**
-     * @var Authenticator $authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var Authorizer $authorizer
-     */
-    private $authorizer;
-
-    /**
      * @param Container $container The DI container.
      * @return void
      */
@@ -88,8 +80,8 @@ class FormWidget extends AdminWidget implements
         // Required Dependencies
         $this->setWidgetFactory($container['widget/factory']);
 
-        $this->setAuthenticator($container['admin/authenticator']);
-        $this->setAuthorizer($container['admin/authorizer']);
+        // Set the Authenticator
+        $this->setAuthDependencies($container);
     }
 
     /**
@@ -230,6 +222,16 @@ class FormWidget extends AdminWidget implements
 
             $s->setForm($this);
             $s->setData($sidebar);
+
+            // Test sidebar vs. ACL roles
+            $authUser = $this->authenticator()->authenticate();
+            if (!$this->authorizer()->userAllowed($authUser, $s->requiredGlobalAclPermissions())) {
+                header('HTTP/1.0 403 Forbidden');
+                header('Location: '.$this->adminUrl().'login');
+
+                return $this;
+            }
+
             $this->sidebars[$sidebarIdent] = $s;
         } else {
             throw new InvalidArgumentException(
@@ -331,40 +333,6 @@ class FormWidget extends AdminWidget implements
                 yield $prop->propertyIdent() => $prop;
             }
         }
-    }
-
-    /**
-     * @param Authenticator $authenticator The authentication service.
-     * @return void
-     */
-    protected function setAuthenticator(Authenticator $authenticator)
-    {
-        $this->authenticator = $authenticator;
-    }
-
-    /**
-     * @return Authenticator
-     */
-    protected function authenticator()
-    {
-        return $this->authenticator;
-    }
-
-    /**
-     * @param Authorizer $authorizer The authorization service.
-     * @return void
-     */
-    protected function setAuthorizer(Authorizer $authorizer)
-    {
-        $this->authorizer = $authorizer;
-    }
-
-    /**
-     * @return Authorizer
-     */
-    protected function authorizer()
-    {
-        return $this->authorizer;
     }
 
     /**

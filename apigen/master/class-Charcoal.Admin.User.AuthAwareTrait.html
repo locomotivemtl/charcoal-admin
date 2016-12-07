@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\User\LostPasswordToken</title>
+	<title>Trait Charcoal\Admin\User\AuthAwareTrait</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -194,7 +194,7 @@
 				<li><a href="class-Charcoal.Admin.User.AclRole.html">AclRole</a></li>
 				<li><a href="class-Charcoal.Admin.User.AuthToken.html">AuthToken</a></li>
 				<li><a href="class-Charcoal.Admin.User.AuthTokenMetadata.html">AuthTokenMetadata</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.User.LostPasswordToken.html">LostPasswordToken</a></li>
+				<li><a href="class-Charcoal.Admin.User.LostPasswordToken.html">LostPasswordToken</a></li>
 				<li><a href="class-Charcoal.Admin.User.Permission.html">Permission</a></li>
 				<li><a href="class-Charcoal.Admin.User.PermissionCategory.html">PermissionCategory</a></li>
 			</ul>
@@ -202,7 +202,7 @@
 
 			<h3>Traits</h3>
 			<ul>
-				<li><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">AuthAwareTrait</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">AuthAwareTrait</a></li>
 			</ul>
 
 
@@ -239,23 +239,7 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class LostPasswordToken</h1>
-
-
-
-	<dl class="tree">
-		<dd style="padding-left:0px">
-Charcoal\Model\AbstractModel
-			
-			
-		</dd>
-		<dd style="padding-left:30px">
-			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\User\LostPasswordToken</span></b>			
-			
-			
-		</dd>
-	</dl>
+	<h1>Trait AuthAwareTrait</h1>
 
 
 
@@ -263,6 +247,19 @@ Charcoal\Model\AbstractModel
 
 
 
+
+
+	<div>
+		<h4>Direct Known Users</h4>
+			<a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a>
+	</div>
+
+	<div>
+		<h4>Indirect Known Users</h4>
+			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html">Charcoal\Admin\Widget\ObjectFormWidget</a>, 
+			<a href="class-Charcoal.Admin.Widget.QuickFormWidget.html">Charcoal\Admin\Widget\QuickFormWidget</a>
+	</div>
 
 	<div class="info">
 		
@@ -270,7 +267,7 @@ Charcoal\Model\AbstractModel
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.User.html">User</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#11-117" title="Go to source code">Charcoal/Admin/User/LostPasswordToken.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#9-78" title="Go to source code">Charcoal/Admin/User/AuthAwareTrait.php</a>
 		<br>
 	</div>
 
@@ -278,53 +275,19 @@ Charcoal\Model\AbstractModel
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="key" id="_key">
+	<tr data-order="setAuthDependencies" id="_setAuthDependencies">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			string
+			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_key">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#31-37" title="Go to source code">key</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setToken" id="_setToken">
-
-		<td class="attributes"><code>
-			 public 
-
-			<code><a href="class-Charcoal.Admin.User.LostPasswordToken.html">Charcoal\Admin\User\LostPasswordToken</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setToken">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#39-47" title="Go to source code">setToken</a>( <span>string <var>$token</var></span> )</code>
+		<a class="anchor" href="#_setAuthDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#21-29" title="Go to source code">setAuthDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -336,14 +299,10 @@ Charcoal\Model\AbstractModel
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$token</var></dt>
-					<dd>The token.</dd>
+					<dt><var>$container</var></dt>
+					<dd>The DI container.</dd>
 				</dl></div>
 
-				<h4>Returns</h4>
-				<div class="list">
-					<code><a href="class-Charcoal.Admin.User.LostPasswordToken.html">Charcoal\Admin\User\LostPasswordToken</a></code><br>Chainable
-				</div>
 
 
 
@@ -351,53 +310,19 @@ Charcoal\Model\AbstractModel
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="token" id="_token">
+	<tr data-order="setAuthenticator" id="_setAuthenticator">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			string
+			<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_token">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#49-55" title="Go to source code">token</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					string
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setUser" id="_setUser">
-
-		<td class="attributes"><code>
-			 public 
-
-			<code><a href="class-Charcoal.Admin.User.LostPasswordToken.html">Charcoal\Admin\User\LostPasswordToken</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setUser">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#57-65" title="Go to source code">setUser</a>( <span>string <var>$user</var></span> )</code>
+		<a class="anchor" href="#_setAuthenticator">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#31-40" title="Go to source code">setAuthenticator</a>( <span>Charcoal\User\Authenticator <var>$authenticator</var></span> )</code>
 
 		<div class="description short">
 			
@@ -409,13 +334,13 @@ Charcoal\Model\AbstractModel
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$user</var></dt>
-					<dd>The user.</dd>
+					<dt><var>$authenticator</var></dt>
+					<dd>The authentication service.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.User.LostPasswordToken.html">Charcoal\Admin\User\LostPasswordToken</a></code><br>Chainable
+					<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
 				</div>
 
 
@@ -424,19 +349,19 @@ Charcoal\Model\AbstractModel
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="user" id="_user">
+	<tr data-order="authenticator" id="_authenticator">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			string
+			Charcoal\User\Authenticator
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_user">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#67-73" title="Go to source code">user</a>( )</code>
+		<a class="anchor" href="#_authenticator">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#42-58" title="Go to source code">authenticator</a>( )</code>
 
 		<div class="description short">
 			
@@ -449,51 +374,12 @@ Charcoal\Model\AbstractModel
 
 				<h4>Returns</h4>
 				<div class="list">
-					string
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setExpiry" id="_setExpiry">
-
-		<td class="attributes"><code>
-			 public 
-
-			Content
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setExpiry">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#75-96" title="Go to source code">setExpiry</a>( <span>DateTime|string|null <var>$expiry</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$expiry</var></dt>
-					<dd>The date/time at object's creation.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Content<br>Chainable
+					Charcoal\User\Authenticator
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					InvalidArgumentException<br>If the date/time is invalid.
+					Exception<br>When setAuthDependencies is not called from class.
 				</div>
 
 
@@ -501,19 +387,58 @@ Charcoal\Model\AbstractModel
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="expiry" id="_expiry">
+	<tr data-order="setAuthorizer" id="_setAuthorizer">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			DateTime|null
+			<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_expiry">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#98-104" title="Go to source code">expiry</a>( )</code>
+		<a class="anchor" href="#_setAuthorizer">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#60-69" title="Go to source code">setAuthorizer</a>( <span>Charcoal\User\Authorizer <var>$authorizer</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$authorizer</var></dt>
+					<dd>The authorization service.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="authorizer" id="_authorizer">
+
+		<td class="attributes"><code>
+			 protected 
+
+			Charcoal\User\Authorizer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_authorizer">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#71-77" title="Go to source code">authorizer</a>( )</code>
 
 		<div class="description short">
 			
@@ -526,41 +451,7 @@ Charcoal\Model\AbstractModel
 
 				<h4>Returns</h4>
 				<div class="list">
-					DateTime|null
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="preSave" id="_preSave">
-
-		<td class="attributes"><code>
-			 public 
-
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_preSave">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.LostPasswordToken.html#106-116" title="Go to source code">preSave</a>( )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					boolean<br>Success / Failure.
+					Charcoal\User\Authorizer
 				</div>
 
 

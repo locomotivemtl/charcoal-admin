@@ -1,4 +1,4 @@
- {{!--
+{{!--
 
 --}}
 <aside class="c-aside o-flex_aside" id="{{widgetId}}">
@@ -8,68 +8,72 @@
 
             <div class="c-panel_main">
                 {{#subtitle}}
-                <p>{{.}}</p>
+                    <p>{{.}}</p>
                 {{/subtitle}}
 
                 {{#showLanguageSwitch}}
-                <div class="btn-group btn-group-justified form-group js-lang-switch" role="group" aria-label="{{#_t}}Language switcher{{/_t}}">
-                    {{#languages}}
-                    <div class="btn-group" role="group">
-                        <button type="button" data-lang-switch="{{ident}}" class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">{{name}}</button>
+                    <div class="btn-group btn-group-justified form-group js-lang-switch" role="group"
+                         aria-label="{{#_t}}Language switcher{{/_t}}">
+                        {{#languages}}
+                            <div class="btn-group" role="group">
+                                <button type="button" data-lang-switch="{{ident}}"
+                                        class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">{{name}}</button>
+                            </div>
+                        {{/languages}}
                     </div>
-                    {{/languages}}
-                </div>
                 {{/showLanguageSwitch}}
 
                 {{#hasSidebarProperties}}
-                <ul class="c-panel_table form-group">
-                {{#formProperties}}
-                    <li class="c-panel_table_row">
-                        <p class="c-panel_table_header"><strong>{{prop.label}}</strong></p>
-                        <p class="c-panel_table_data">{{displayVal}}</p>
-                    </li>
-                {{/formProperties}}
-                </ul>
+                    <ul class="c-panel_table form-group">
+                        {{#formProperties}}
+                            <li class="c-panel_table_row">
+                                <p class="c-panel_table_header"><strong>{{prop.label}}</strong></p>
+                                <p class="c-panel_table_data">{{displayVal}}</p>
+                            </li>
+                        {{/formProperties}}
+                    </ul>
                 {{/hasSidebarProperties}}
 
                 {{#actions}}
                     {{#active}}
-                    <div class="form-group">
-                        <a href="{{baseUrl}}{{url}}" class="btn btn-{{button_type}} btn-lg btn-block">{{label}}</a>
-                    </div>
+                        <div class="form-group">
+                            <a href="{{baseUrl}}{{url}}" class="btn btn-{{button_type}} btn-lg btn-block">{{label}}</a>
+                        </div>
                     {{/active}}
                 {{/actions}}
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-info btn-lg btn-block">
-                        <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
-                        <span class="btn-label">{{# _t }}Sauvegarder{{/ _t }}</span>
-                    </button>
-                </div>
+                {{# isObjSavable }}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-info btn-lg btn-block">
+                            <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
+                            <span class="btn-label">{{# _t }}Sauvegarder{{/ _t }}</span>
+                        </button>
+                    </div>
+                {{/ isObjSavable }}
             </div>
 
             {{# showFooter }}
-            <footer class="c-panel_footer">
-            {{!--
-            @todo Only show the "delete" button if there's an object's ID.
-            --}}
-                {{#isObjDeletable}}
-                <div class="c-panel_footer_item -red">
+                <footer class="c-panel_footer">
+                    {{!--
+                    @todo Only show the "delete" button if there's an object's ID.
+                    --}}
+                    {{#isObjDeletable}}
+                        <div class="c-panel_footer_item -red">
                     <span role="button" class="js-obj-delete">
                        <span class="fa fa-trash-o"></span>
                        <span class="btn-label">{{# _t }}Effacer{{/ _t }}</span>
                     </span>
-                </div>
-                {{/isObjDeletable}}
-                {{#isObjResettable}}
-                <div class="c-panel_footer_item -blue">
+                        </div>
+                    {{/isObjDeletable}}
+                    {{#isObjResettable}}
+                        <div class="c-panel_footer_item -blue">
                     <span role="button" class="js-reset-form">
                         <span class="fa fa-refresh"></span>
                         <span class="btn-label">{{# _t }}Réinitialiser{{/ _t }}</span>
                     </span>
-                </div>
-                {{/isObjResettable}}
-            </footer>
+                        </div>
+                    {{/isObjResettable}}
+                </footer>
             {{/ showFooter }}
         </div>
     </div>

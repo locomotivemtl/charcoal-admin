@@ -203,18 +203,17 @@ class StructureFormGroup extends FormGroupWidget
             if ($property) {
                 $struct = $property->structureMetadata();
                 $formGroup = null;
-                if (isset($struct['admin']['form_group'])) {
-                    $formGroup = $struct['admin']['form_group'];
-                } elseif (isset($struct['admin']['default_form_group'])) {
+                if (isset($struct['admin']['default_form_group'])) {
                     $groupName = $struct['admin']['default_form_group'];
                     if (isset($struct['admin']['form_groups'][$groupName])) {
                         $formGroup = $struct['admin']['form_groups'][$groupName];
                     }
+                } elseif (isset($struct['admin']['form_group'])) {
+                    $formGroup = $struct['admin']['form_group'];
                 }
 
                 if ($formGroup) {
-                    $widgetData = $this->data();
-                    $this->setData($formGroup);
+                    $widgetData = array_replace($formGroup, $this->data());
                     $this->setData($widgetData);
                 }
             }
@@ -264,6 +263,10 @@ class StructureFormGroup extends FormGroupWidget
         $form  = $this->form();
         $obj   = $this->obj();
         $entry = $obj[$store->ident()];
+
+        if (is_string($entry)) {
+            $entry = $store->parseVal($entry);
+        }
 
         $propertyIdentPattern = '%1$s[%2$s]';
 

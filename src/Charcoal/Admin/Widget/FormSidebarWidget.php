@@ -2,8 +2,10 @@
 
 namespace Charcoal\Admin\Widget;
 
-// From 'charcoal-admin'
-use Charcoal\Admin\User\AuthAwareTrait;
+use \InvalidArgumentException;
+
+// From Pimple
+use \Pimple\Container;
 
 // From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
@@ -12,17 +14,18 @@ use \Charcoal\Translation\TranslationConfig;
 // From 'charcoal-ui'
 use \Charcoal\Ui\Form\FormInterface;
 
-// Intra-module dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
-use Pimple\Container;
-use \InvalidArgumentException;
+use \Charcoal\Admin\User\AuthAwareInterface;
+use \Charcoal\Admin\User\AuthAwareTrait;
 
 /**
  * Form Sidebar Widget
  */
 class FormSidebarWidget extends AdminWidget implements
-    FormSidebarInterface
+    FormSidebarInterface,
+    AuthAwareInterface
 {
     use AuthAwareTrait;
 

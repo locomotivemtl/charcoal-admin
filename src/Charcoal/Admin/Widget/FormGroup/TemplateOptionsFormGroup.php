@@ -320,7 +320,7 @@ class TemplateOptionsFormGroup extends StructureFormGroup
                 }
                 $metadata = $this->loadMetadata($template);
                 $property = $this->storageProperty();
-                $property->setStructureData($metadata);
+                $property->setStructureMetadata($metadata);
             }
 
             parent::finalizeStructure();

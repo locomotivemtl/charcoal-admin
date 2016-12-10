@@ -20,12 +20,11 @@ This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
     {{>charcoal/admin/widget/feedbacks}}
 
     <div class="o-flex_main">
-        <div class="o-container clearfix">
-            <div>
-                {{# title }}<h2 style="margin-bottom: 20px">{{&.}}</h2>{{/ title }}
-                {{# subtitle }}<h3 style="margin-bottom: 20px">{{&.}}</h3>{{/ subtitle }}
-            </div>
-            {{!-- Display the object's "edit" dashboard --}}
+        <div class="o-container -top -bottom clearfix">
+            <header class="o-container_header">
+                {{# title }}<h2>{{&.}}</h2>{{/ title }}
+                {{# subtitle }}<h3>{{&.}}</h3>{{/ subtitle }}
+            </header>
             {{#dashboard}}
                 {{>charcoal/admin/widget/dashboard}}
             {{/dashboard}}

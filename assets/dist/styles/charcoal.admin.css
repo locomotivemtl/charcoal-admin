@@ -117,6 +117,28 @@ td {
   .o-container.-top {
     padding-top: 3.75rem; } }
 
+@media (max-width: 699px) {
+  .o-container.-bottom {
+    padding-bottom: 15px; } }
+
+@media (min-width: 700px) {
+  .o-container.-bottom {
+    padding-bottom: 3.75rem; } }
+
+@media (max-width: 699px) {
+  .o-container_header {
+    margin-bottom: 7.5px; } }
+
+@media (min-width: 700px) {
+  .o-container_header {
+    margin-bottom: 1.875rem; } }
+
+.o-container_header :first-child {
+  margin-top: 0; }
+
+.o-container_header :first-child {
+  margin-bottom: 0; }
+
 .o-container_aside {
   width: 17.5rem; }
 
@@ -1525,9 +1547,8 @@ input[type="url"] {
 
 .form-field {
   position: relative; }
-
-.form-field.-multiple > .form-control + .form-control {
-  margin-top: 5px; }
+  .form-field.-multiple > .form-control + .form-control {
+    margin-top: 5px; }
 
 .form-control:focus {
   box-shadow: none; }

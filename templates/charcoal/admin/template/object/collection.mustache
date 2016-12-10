@@ -26,14 +26,12 @@ Hack: Create the object's table if necessary
 
     {{!-- Object edit section --}}
     <div class="o-flex_main">
-        <section class="o-container">
+        <section class="o-container -bottom">
             <header class="o-header">
                 <h1>{{title}}</h1>
-
                 {{#searchWidget}}
                     {{>charcoal/admin/widget/search}}
                 {{/searchWidget}}
-
             </header>
             {{#dashboard}}
                 {{>charcoal/admin/widget/dashboard}}

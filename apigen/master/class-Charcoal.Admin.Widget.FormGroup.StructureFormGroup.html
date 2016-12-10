@@ -247,7 +247,7 @@ assigned to the widget directly or a proxy structure property.</p>
 
 <p><strong>Example #1 — Structure widget</strong></p>
 
-<pre><code class="json">"properties": { "extra_data": { "type": "structure", "structure_data": { "properties": { … }, "admin": { "form_group": { … } } } }
+<pre><code class="json">"properties": { "extra_data": { "type": "structure", "structure_metadata": { "properties": { … }, "admin": { "form_groups": { … }, "default_form_group": "…" } } }
 },
 "widgets": [ { "title": "Extra Data", "type": "charcoal/admin/widget/form-group/structure", "template": "charcoal/admin/widget/form-group/structure", "storage_property": "extra_data" }
 ]
@@ -311,7 +311,7 @@ Charcoal\Ui\AbstractUiItem
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a>\<a href="namespace-Charcoal.Admin.Widget.FormGroup.html">FormGroup</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#19-304" title="Go to source code">Charcoal/Admin/Widget/FormGroup/StructureFormGroup.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#19-323" title="Go to source code">Charcoal/Admin/Widget/FormGroup/StructureFormGroup.php</a>
 		<br>
 	</div>
 
@@ -331,7 +331,7 @@ Charcoal\Ui\AbstractUiItem
 
 		<td class="name"><div>
 		<a class="anchor" href="#_obj">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#92-107" title="Go to source code">obj</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#93-108" title="Go to source code">obj</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the form's object.</p>
@@ -369,7 +369,7 @@ Charcoal\Ui\AbstractUiItem
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setStorageProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#109-150" title="Go to source code">setStorageProperty</a>( <span>string|Charcoal\Property\PropertyInterface <var>$propertyIdent</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#110-151" title="Go to source code">setStorageProperty</a>( <span>string|Charcoal\Property\PropertyInterface <var>$propertyIdent</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the form group's storage target.</p>
@@ -416,7 +416,7 @@ of the form group's data.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_storageProperty">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#152-167" title="Go to source code">storageProperty</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#153-168" title="Go to source code">storageProperty</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the form group's storage property master.</p>
@@ -454,7 +454,7 @@ of the form group's data.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_structProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#169-187" title="Go to source code">structProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#170-188" title="Go to source code">structProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the properties from the storage property's structure.</p>
@@ -488,7 +488,7 @@ of the form group's data.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_finalizeStructure">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#189-211" title="Go to source code">finalizeStructure</a>( <span>boolean <var>$reload</var> = <span class="php-keyword1">false</span></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#190-222" title="Go to source code">finalizeStructure</a>( <span>boolean <var>$reload</var> = <span class="php-keyword1">false</span></span> )</code>
 
 		<div class="description short">
 			<p>Finalize the form group's properies, entries, and layout.</p>
@@ -523,7 +523,7 @@ of the form group's data.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parsedFormProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#213-238" title="Go to source code">parsedFormProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#224-249" title="Go to source code">parsedFormProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Parse the form group and model properties.</p>
@@ -559,7 +559,7 @@ of the form group's data.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_formProperties">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#240-303" title="Go to source code">formProperties</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#251-322" title="Go to source code">formProperties</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the object's properties from the form.</p>
@@ -628,7 +628,7 @@ of the form group's data.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#71-76" title="Go to source code"><var>$storage</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#72-77" title="Go to source code"><var>$storage</var></a>
 
 			<div class="description short">
 				<p>The form group's storage medium.</p>
@@ -653,7 +653,7 @@ of the form group's data.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#78-83" title="Go to source code"><var>$storageProperty</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#79-84" title="Go to source code"><var>$storageProperty</var></a>
 
 			<div class="description short">
 				<p>The form group's storage target. {@deprecated In favor of $storage.}</p>
@@ -678,7 +678,7 @@ of the form group's data.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#85-90" title="Go to source code"><var>$isStructureFinalized</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html#86-91" title="Go to source code"><var>$isStructureFinalized</var></a>
 
 			<div class="description short">
 				<p>Whether the form is ready.</p>

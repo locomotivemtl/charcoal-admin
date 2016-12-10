@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\User\AclRole</title>
+	<title>Interface Charcoal\Admin\User\AuthAwareInterface</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -191,7 +191,7 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li class="active"><a href="class-Charcoal.Admin.User.AclRole.html">AclRole</a></li>
+				<li><a href="class-Charcoal.Admin.User.AclRole.html">AclRole</a></li>
 				<li><a href="class-Charcoal.Admin.User.AuthToken.html">AuthToken</a></li>
 				<li><a href="class-Charcoal.Admin.User.AuthTokenMetadata.html">AuthTokenMetadata</a></li>
 				<li><a href="class-Charcoal.Admin.User.LostPasswordToken.html">LostPasswordToken</a></li>
@@ -201,7 +201,7 @@
 
 			<h3>Interfaces</h3>
 			<ul>
-				<li><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">AuthAwareInterface</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">AuthAwareInterface</a></li>
 			</ul>
 
 			<h3>Traits</h3>
@@ -243,31 +243,30 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class AclRole</h1>
+	<h1>Interface AuthAwareInterface</h1>
 
 
 	<div class="description">
-	<p>ACL Role, to manage permissions</p>
+	<p>Defines a class with authentication capabilities.</p>
+
+<p>Implementation, as trait, provided by <code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>.</p>
 	</div>
 
-	<dl class="tree">
-		<dd style="padding-left:0px">
-Charcoal\User\AclRole
-			
-			
-		</dd>
-		<dd style="padding-left:30px">
-			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\User\AclRole</span></b>			
-			
-			
-		</dd>
-	</dl>
 
 
 
 
+	<div>
+		<h4>Direct known implementers</h4>
+			<a href="class-Charcoal.Admin.Widget.FormSidebarWidget.html">Charcoal\Admin\Widget\FormSidebarWidget</a>, 
+			<a href="class-Charcoal.Admin.Widget.FormWidget.html">Charcoal\Admin\Widget\FormWidget</a>
+	</div>
 
+	<div>
+		<h4>Indirect known implementers</h4>
+			<a href="class-Charcoal.Admin.Widget.ObjectFormWidget.html">Charcoal\Admin\Widget\ObjectFormWidget</a>, 
+			<a href="class-Charcoal.Admin.Widget.QuickFormWidget.html">Charcoal\Admin\Widget\QuickFormWidget</a>
+	</div>
 
 
 
@@ -277,12 +276,161 @@ Charcoal\User\AclRole
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.User.html">User</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.User.AclRole.html#7-13" title="Go to source code">Charcoal/Admin/User/AclRole.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.User.AuthAwareInterface.html#8-44" title="Go to source code">Charcoal/Admin/User/AuthAwareInterface.php</a>
 		<br>
 	</div>
 
 
 
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="setAuthenticator" id="_setAuthenticator">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setAuthenticator">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareInterface.html#15-21" title="Go to source code">setAuthenticator</a>( <span>Charcoal\User\Authenticator <var>$authenticator</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the authentication service.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the authentication service.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$authenticator</var></dt>
+					<dd>The authentication service.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="authenticator" id="_authenticator">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\User\Authenticator
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_authenticator">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareInterface.html#23-28" title="Go to source code">authenticator</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the authentication service.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the authentication service.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\User\Authenticator
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setAuthorizer" id="_setAuthorizer">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setAuthorizer">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareInterface.html#30-36" title="Go to source code">setAuthorizer</a>( <span>Charcoal\User\Authorizer <var>$authorizer</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the authorization service.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the authorization service.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$authorizer</var></dt>
+					<dd>The authorization service.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="authorizer" id="_authorizer">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\User\Authorizer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_authorizer">#</a>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareInterface.html#38-43" title="Go to source code">authorizer</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the authorization service.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the authorization service.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\User\Authorizer
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
 
 
 

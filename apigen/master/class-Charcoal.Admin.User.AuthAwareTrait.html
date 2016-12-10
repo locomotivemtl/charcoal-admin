@@ -199,6 +199,10 @@
 				<li><a href="class-Charcoal.Admin.User.PermissionCategory.html">PermissionCategory</a></li>
 			</ul>
 
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">AuthAwareInterface</a></li>
+			</ul>
 
 			<h3>Traits</h3>
 			<ul>
@@ -242,6 +246,9 @@
 	<h1>Trait AuthAwareTrait</h1>
 
 
+	<div class="description">
+	<p>An implementation, as Trait, of the <code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>.</p>
+	</div>
 
 
 
@@ -267,7 +274,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.User.html">User</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#9-78" title="Go to source code">Charcoal/Admin/User/AuthAwareTrait.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#14-98" title="Go to source code">Charcoal/Admin/User/AuthAwareTrait.php</a>
 		<br>
 	</div>
 
@@ -287,7 +294,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setAuthDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#21-29" title="Go to source code">setAuthDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#29-37" title="Go to source code">setAuthDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -313,23 +320,23 @@
 	<tr data-order="setAuthenticator" id="_setAuthenticator">
 
 		<td class="attributes"><code>
-			 protected 
+			 public 
 
-			<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
+			<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setAuthenticator">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#31-40" title="Go to source code">setAuthenticator</a>( <span>Charcoal\User\Authenticator <var>$authenticator</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#39-50" title="Go to source code">setAuthenticator</a>( <span>Charcoal\User\Authenticator <var>$authenticator</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the authentication service.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the authentication service.</p>
 
 
 				<h4>Parameters</h4>
@@ -340,7 +347,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
+					<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
 				</div>
 
 
@@ -352,7 +359,7 @@
 	<tr data-order="authenticator" id="_authenticator">
 
 		<td class="attributes"><code>
-			 protected 
+			 public 
 
 			Charcoal\User\Authenticator
 			
@@ -361,14 +368,14 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_authenticator">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#42-58" title="Go to source code">authenticator</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#52-67" title="Go to source code">authenticator</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the authentication service.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the authentication service.</p>
 
 
 
@@ -379,7 +386,7 @@
 
 				<h4>Throws</h4>
 				<div class="list">
-					Exception<br>When setAuthDependencies is not called from class.
+					RuntimeException<br>If the authenticator was not previously set.
 				</div>
 
 
@@ -390,23 +397,23 @@
 	<tr data-order="setAuthorizer" id="_setAuthorizer">
 
 		<td class="attributes"><code>
-			 protected 
+			 public 
 
-			<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
+			<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setAuthorizer">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#60-69" title="Go to source code">setAuthorizer</a>( <span>Charcoal\User\Authorizer <var>$authorizer</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#69-80" title="Go to source code">setAuthorizer</a>( <span>Charcoal\User\Authorizer <var>$authorizer</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the authorization service.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the authorization service.</p>
 
 
 				<h4>Parameters</h4>
@@ -417,7 +424,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code><a href="class-Charcoal.Admin.User.AuthAwareTrait.html">Charcoal\Admin\User\AuthAwareTrait</a></code>
+					<code><a href="class-Charcoal.Admin.User.AuthAwareInterface.html">Charcoal\Admin\User\AuthAwareInterface</a></code>
 				</div>
 
 
@@ -429,7 +436,7 @@
 	<tr data-order="authorizer" id="_authorizer">
 
 		<td class="attributes"><code>
-			 protected 
+			 public 
 
 			Charcoal\User\Authorizer
 			
@@ -438,14 +445,14 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_authorizer">#</a>
-		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#71-77" title="Go to source code">authorizer</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.User.AuthAwareTrait.html#82-97" title="Go to source code">authorizer</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the authorization service.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the authorization service.</p>
 
 
 
@@ -454,6 +461,10 @@
 					Charcoal\User\Authorizer
 				</div>
 
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the authorizer was not previously set.
+				</div>
 
 
 

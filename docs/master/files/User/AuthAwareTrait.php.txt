@@ -2,10 +2,18 @@
 
 namespace Charcoal\Admin\User;
 
-use Charcoal\User\Authenticator;
-use Charcoal\User\Authorizer;
-use Pimple\Container;
+use \RuntimeException;
 
+// From Pimple
+use \Pimple\Container;
+
+// From 'charcoal-base'
+use \Charcoal\User\Authenticator;
+use \Charcoal\User\Authorizer;
+
+/**
+ * An implementation, as Trait, of the {@see \Charcoal\Admin\User\AuthAwareInterface}.
+ */
 trait AuthAwareTrait
 {
     /**
@@ -19,7 +27,7 @@ trait AuthAwareTrait
     private $authorizer;
 
     /**
-     * @param Container $container The DI container.
+     * @param  Container $container The DI container.
      * @return void
      */
     protected function setAuthDependencies(Container $container)
@@ -29,10 +37,12 @@ trait AuthAwareTrait
     }
 
     /**
-     * @param Authenticator $authenticator The authentication service.
-     * @return self
+     * Set the authentication service.
+     *
+     * @param  Authenticator $authenticator The authentication service.
+     * @return AuthAwareInterface
      */
-    protected function setAuthenticator(Authenticator $authenticator)
+    public function setAuthenticator(Authenticator $authenticator)
     {
         $this->authenticator = $authenticator;
 
@@ -40,17 +50,16 @@ trait AuthAwareTrait
     }
 
     /**
+     * Retrieve the authentication service.
+     *
+     * @throws RuntimeException If the authenticator was not previously set.
      * @return Authenticator
-     * @throws \Exception When setAuthDependencies is not called from class.
      */
-    protected function authenticator()
+    public function authenticator()
     {
         if (!$this->authenticator) {
-            throw new \Exception(
-                sprintf(
-                    'AuthAwareTrait::setAuthDependencies must be set in %s',
-                    self::class
-                )
+            throw new RuntimeException(
+                sprintf('Authenticator service is not defined for "%s"', get_class($this))
             );
         }
 
@@ -58,10 +67,12 @@ trait AuthAwareTrait
     }
 
     /**
-     * @param Authorizer $authorizer The authorization service.
-     * @return self
+     * Set the authorization service.
+     *
+     * @param  Authorizer $authorizer The authorization service.
+     * @return AuthAwareInterface
      */
-    protected function setAuthorizer(Authorizer $authorizer)
+    public function setAuthorizer(Authorizer $authorizer)
     {
         $this->authorizer = $authorizer;
 
@@ -69,10 +80,19 @@ trait AuthAwareTrait
     }
 
     /**
+     * Retrieve the authorization service.
+     *
+     * @throws RuntimeException If the authorizer was not previously set.
      * @return Authorizer
      */
-    protected function authorizer()
+    public function authorizer()
     {
+        if (!$this->authenticator) {
+            throw new RuntimeException(
+                sprintf('Authorizer service is not defined for "%s"', get_class($this))
+            );
+        }
+
         return $this->authorizer;
     }
 }

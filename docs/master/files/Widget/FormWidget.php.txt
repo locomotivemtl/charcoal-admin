@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Widget;
 
-use Charcoal\Admin\User\AuthAwareTrait;
-use Charcoal\User\Authenticator;
-use Charcoal\User\Authorizer;
 use \Exception;
 use \InvalidArgumentException;
 use \RuntimeException;
@@ -28,16 +25,23 @@ use \Charcoal\Ui\Layout\LayoutAwareTrait;
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
+use \Charcoal\Admin\User\AuthAwareInterface;
+use \Charcoal\Admin\User\AuthAwareTrait;
 
 /**
+ * A Basic Admin Form
  *
+ * For submitting information to a web server.
+ *
+ * The widget is a variant of {@see \Charcoal\Ui\Form\AbstractForm}.
  */
 class FormWidget extends AdminWidget implements
     FormInterface,
+    AuthAwareInterface,
     LayoutAwareInterface
 {
-    use AuthAwareTrait;
     use FormTrait;
+    use AuthAwareTrait;
     use LayoutAwareTrait;
 
     /**
@@ -62,7 +66,7 @@ class FormWidget extends AdminWidget implements
     private $widgetFactory;
 
     /**
-     * @param Container $container The DI container.
+     * @param  Container $container The DI container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -70,17 +74,15 @@ class FormWidget extends AdminWidget implements
         parent::setDependencies($container);
 
         $this->setHttpRequest($container['request']);
-
-        // Fill FormInterface dependencies
-        $this->setFormGroupFactory($container['form/group/factory']);
-
-        // Fill LayoutAwareInterface dependencies
-        $this->setLayoutBuilder($container['layout/builder']);
-
-        // Required Dependencies
         $this->setWidgetFactory($container['widget/factory']);
 
-        // Set the Authenticator
+        // Satisfies FormInterface
+        $this->setFormGroupFactory($container['form/group/factory']);
+
+        // Satisfies LayoutAwareInterface
+        $this->setLayoutBuilder($container['layout/builder']);
+
+        // Satisfies AuthAwareInterface
         $this->setAuthDependencies($container);
     }
 
@@ -248,9 +250,13 @@ class FormWidget extends AdminWidget implements
     public function sidebars()
     {
         $sidebars = $this->sidebars;
-        uasort($sidebars, ['self', 'sortSidebarsByPriority']);
+        uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
-            $template                   = $sidebar->template() ?: 'charcoal/admin/widget/form.sidebar';
+            if ($sidebar->template()) {
+                $template = $sidebar->template();
+            } else {
+                $template = 'charcoal/admin/widget/form.sidebar';
+            }
             $GLOBALS['widget_template'] = $template;
             yield $sidebarIdent => $sidebar;
         }

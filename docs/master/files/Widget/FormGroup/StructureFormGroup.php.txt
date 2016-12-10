@@ -30,10 +30,11 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
  * "properties": {
  *     "extra_data": {
  *         "type": "structure",
- *         "structure_data": {
+ *         "structure_metadata": {
  *             "properties": { … },
  *             "admin": {
- *                 "form_group": { … }
+ *                 "form_groups": { … },
+ *                 "default_form_group": "…"
  *             }
  *         }
  *     }
@@ -176,7 +177,7 @@ class StructureFormGroup extends FormGroupWidget
         $property = $this->storageProperty();
 
         if ($property) {
-            $struct = $property->structureData();
+            $struct = $property->structureMetadata();
 
             if (isset($struct['properties'])) {
                 return $struct['properties'];
@@ -200,10 +201,20 @@ class StructureFormGroup extends FormGroupWidget
             $property = $this->storageProperty();
 
             if ($property) {
-                $struct = $property->structureData();
+                $struct = $property->structureMetadata();
+                $formGroup = null;
                 if (isset($struct['admin']['form_group'])) {
+                    $formGroup = $struct['admin']['form_group'];
+                } elseif (isset($struct['admin']['default_form_group'])) {
+                    $groupName = $struct['admin']['default_form_group'];
+                    if (isset($struct['admin']['form_groups'][$groupName])) {
+                        $formGroup = $struct['admin']['form_groups'][$groupName];
+                    }
+                }
+
+                if ($formGroup) {
                     $widgetData = $this->data();
-                    $this->setData($struct['admin']['form_group']);
+                    $this->setData($formGroup);
                     $this->setData($widgetData);
                 }
             }
@@ -264,6 +275,10 @@ class StructureFormGroup extends FormGroupWidget
                 $propertyMetadata = $obj->filterPropertyMetadata($propertyMetadata, $propertyIdent);
             }
 
+            if (is_bool($propertyMetadata) && $propertyMetadata === false) {
+                continue;
+            }
+
             if (!is_array($propertyMetadata)) {
                 throw new UnexpectedValueException(
                     sprintf(
@@ -272,6 +287,10 @@ class StructureFormGroup extends FormGroupWidget
                         (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
                     )
                 );
+            }
+
+            if (isset($propertyMetadata['active']) && $propertyMetadata['active'] === false) {
+                continue;
             }
 
             $subPropertyIdent = sprintf($propertyIdentPattern, $store->ident(), $propertyIdent);

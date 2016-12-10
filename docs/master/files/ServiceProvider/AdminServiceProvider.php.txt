@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\ServiceProvider;
 
-// Dependencies from 'Pimple'
+// From Pimple
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
 
@@ -10,13 +10,14 @@ use \Pimple\ServiceProviderInterface;
 use \Charcoal\Config\ConfigInterface;
 use \Charcoal\Config\GenericConfig as Config;
 
-// Module `charcoal-factory` dependencies
+// From 'charcoal-factory'
 use \Charcoal\Factory\GenericFactory as Factory;
 
-// Module `charcoal-base` dependencies
+// From 'charcoal-base'
 use \Charcoal\User\Authenticator;
 use \Charcoal\User\Authorizer;
 
+// From 'charcoal-admin'
 use \Charcoal\Admin\Config as AdminConfig;
 use \Charcoal\Admin\Property\PropertyInputInterface;
 use \Charcoal\Admin\Property\PropertyDisplayInterface;
@@ -24,7 +25,6 @@ use \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 use \Charcoal\Admin\Ui\Sidemenu\GenericSidemenuGroup;
 use \Charcoal\Admin\User;
 use \Charcoal\Admin\User\AuthToken;
-
 
 /**
  * Charcoal Administration Service Provider

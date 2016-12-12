@@ -1547,7 +1547,7 @@ input[type="url"] {
 
 .form-field {
   position: relative; }
-  .form-field.-multiple > .form-control + .form-control {
+  .form-field.-multiple > .form-control:not(.selectized) + .form-control {
     margin-top: 5px; }
 
 .form-control:focus {

@@ -27,7 +27,7 @@ input[type="url"] {
     position: relative;
 
     &.-multiple {
-        > .form-control + .form-control {
+        > .form-control:not(.selectized) + .form-control {
             margin-top: 5px;
         }
     }

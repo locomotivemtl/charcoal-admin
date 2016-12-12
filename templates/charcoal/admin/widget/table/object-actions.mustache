@@ -5,18 +5,23 @@
     @used-by `charcoal/admin/widget/tbody-row`
 --}}
 <div class="btn-group">
-    {{#primaryObjectAction}}
-    <a href="{{url}}" class="btn btn-primary">{{label}}</a>
-    {{/primaryObjectAction}}
-    {{#hasObjectActions}}
+    {{# primaryObjectAction }}
+    {{# isButton }}
+    <button class="btn btn-primary">{{& label }}</button>
+    {{/ isButton }}
+    {{^ isButton }}
+    <a href="{{ url }}" class="btn btn-primary">{{& label }}</a>
+    {{/ isButton }}
+    {{/ primaryObjectAction }}
+    {{# hasObjectActions }}
     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret" aria-hidden="true"></span>
-        <span class="sr-only">{{#_t}}Toggle Dropdown{{/_t}}</span>
+        <span class="sr-only">{{# _t }}Toggle Dropdown{{/ _t }}</span>
     </button>
     <ul class="dropdown-menu">
-    {{#objectActions}}
-        <li><a class="js-obj-{{ident}}{{#classes}} {{.}}{{/classes}}" href="{{url}}">{{label}}</a></li>
-    {{/objectActions}}
+    {{# objectActions }}
+        <li><a class="js-obj-{{ ident }}{{# classes }} {{ . }}{{/ classes }}" href="{{ url }}">{{& label }}</a></li>
+    {{/ objectActions }}
     </ul>
-    {{/hasObjectActions}}
+    {{/ hasObjectActions }}
 </div>

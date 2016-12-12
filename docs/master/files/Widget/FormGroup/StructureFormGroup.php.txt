@@ -311,7 +311,7 @@ class StructureFormGroup extends FormGroupWidget
                 }
             }
 
-            if ($obj) {
+            if ($obj && !empty($entry)) {
                 $val = $entry[$propertyIdent];
                 $formProperty->setPropertyVal($val);
             }

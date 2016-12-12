@@ -5,7 +5,7 @@
     @used-by `charcoal/admin/widget/form-group-widget`
 --}}
 <fieldset class="form-group">
-    <label class="control-label" for="{{ prop.inputId }}">{{ prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
+    <label class="control-label" for="{{ prop.inputId }}">{{& prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
 
     {{# showActiveLanguage }}
     <span class="active-lang pull-right">

@@ -168,8 +168,8 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * Set the identifier of the form to use.
      *
-     * @param string $formIdent The form identifier.
-     * @throws InvalidArgumentException If the argument is not a string.
+     * @param  string $formIdent The form identifier.
+     * @throws InvalidArgumentException If the identifier is not a string.
      * @return ObjectForm Chainable
      */
     public function setFormIdent($formIdent)
@@ -194,12 +194,8 @@ class ObjectFormWidget extends FormWidget implements
     {
         $metadata = $this->obj()->metadata();
 
-        if (isset($metadata['admin'])) {
-            $metadata = $metadata['admin'];
-
-            if (isset($metadata['default_form'])) {
-                return $metadata['default_form'];
-            }
+        if (isset($metadata['admin']['default_form'])) {
+            return $metadata['admin']['default_form'];
         }
 
         return '';

@@ -676,7 +676,7 @@
 </span><span id="311" class="l"><a href="#311">311: </a>                }
 </span><span id="312" class="l"><a href="#312">312: </a>            }
 </span><span id="313" class="l"><a href="#313">313: </a>
-</span><span id="314" class="l"><a href="#314">314: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$entry</span>)) {
+</span><span id="314" class="l"><a href="#314">314: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$entry</span>) &amp;&amp; <span class="php-keyword1">isset</span>(<span class="php-var">$entry</span>[<span class="php-var">$propertyIdent</span>])) {
 </span><span id="315" class="l"><a href="#315">315: </a>                <span class="php-var">$val</span> = <span class="php-var">$entry</span>[<span class="php-var">$propertyIdent</span>];
 </span><span id="316" class="l"><a href="#316">316: </a>                <span class="php-var">$formProperty</span>-&gt;setPropertyVal(<span class="php-var">$val</span>);
 </span><span id="317" class="l"><a href="#317">317: </a>            }

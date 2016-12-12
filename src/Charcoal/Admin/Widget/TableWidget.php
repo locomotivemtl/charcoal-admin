@@ -2,21 +2,28 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Exception;
-use \InvalidArgumentException;
+use \RuntimeException;
 
+// From Pimple
 use \Pimple\Container;
 
-use \Charcoal\Translation\TranslationString;
-
+// From 'charcoal-core'
 use \Charcoal\Model\ModelInterface;
 
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-use \Charcoal\Admin\AdminWidget;
-
+// From 'charcoal-property'
 use \Charcoal\Property\PropertyInterface;
 
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
+// From 'charcoal-view'
+use \Charcoal\View\ViewableInterface;
+
+// From 'charcoal-admin'
+use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
@@ -104,13 +111,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * @throws Exception If the property factory was not previously set / injected.
+     * @throws RuntimeException If the property factory was not previously set / injected.
      * @return FactoryInterface
      */
     public function propertyFactory()
     {
         if ($this->propertyFactory === null) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Property factory is not set for table widget'
             );
         }
@@ -180,7 +187,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function acceptedRequestData()
     {
-        return ['obj_type', 'obj_id', 'collection_ident', 'template', 'sortable'];
+        return [ 'obj_type', 'obj_id', 'collection_ident', 'template', 'sortable' ];
     }
 
     /**
@@ -199,7 +206,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
-            $collectionIdent = (isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '');
+            $collectionIdent = $this->collectionIdentFallback();
         }
 
         if (isset($adminMetadata['lists'][$collectionIdent])) {
@@ -408,9 +415,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
 
-        $row['objectActions'] = $this->objectActions();
+        $row['objectActions']       = $this->objectActions();
         $row['primaryObjectAction'] = array_shift($row['objectActions']);
-        $row['hasObjectActions'] = (count($row['objectActions']) > 0);
+        $row['hasObjectActions']    = (count($row['objectActions']) > 0);
 
         return $row;
     }

@@ -216,8 +216,10 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param string $collectionIdent The collection identifier.
-     * @throws InvalidArgumentException If the ident argument is not a string.
+     * Set the identifier of the collection to use.
+     *
+     * @param  string $collectionIdent The collection identifier.
+     * @throws InvalidArgumentException If the identifier argument is not a string.
      * @return CollectionContainerInterface Chainable
      */
     public function setCollectionIdent($collectionIdent)
@@ -232,6 +234,24 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Retrieve the identifier of the collection to use, or its fallback.
+     *
+     * @return string
+     */
+    public function collectionIdentFallback()
+    {
+        $metadata = $this->proto()->metadata();
+
+        if (isset($metadata['admin']['default_list'])) {
+            return $metadata['admin']['default_list'];
+        }
+
+        return $this->collectionIdent;
+    }
+
+    /**
+     * Retrieve the identifier of the collection to use.
+     *
      * @return string|null
      */
     public function collectionIdent()
@@ -247,6 +267,10 @@ trait CollectionContainerTrait
     public function collectionMeta()
     {
         $collectionIdent = $this->collectionIdent();
+
+        if (!$collectionIdent) {
+            $collectionIdent = $this->collectionIdentFallback();
+        }
 
         if (!$collectionIdent) {
             return [];

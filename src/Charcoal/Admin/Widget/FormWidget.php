@@ -180,7 +180,7 @@ class FormWidget extends AdminWidget implements
      */
     protected function acceptedRequestData()
     {
-        return ['next_url', 'form_data', 'l10n_mode', 'group_display_mode'];
+        return [ 'next_url', 'form_ident', 'form_data', 'l10n_mode', 'group_display_mode' ];
     }
 
     /**

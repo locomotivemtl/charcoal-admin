@@ -19,12 +19,8 @@ class QuickFormWidget extends ObjectFormWidget
     {
         $metadata = $this->obj()->metadata();
 
-        if (isset($metadata['admin'])) {
-            $metadata = $metadata['admin'];
-
-            if (isset($metadata['default_quick_form'])) {
-                return $metadata['default_quick_form'];
-            }
+        if (isset($metadata['admin']['default_quick_form'])) {
+            return $metadata['admin']['default_quick_form'];
         }
 
         return 'quick';

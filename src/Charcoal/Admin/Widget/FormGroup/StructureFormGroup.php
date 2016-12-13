@@ -91,6 +91,14 @@ class StructureFormGroup extends FormGroupWidget
     protected $isStructureFinalized = false;
 
     /**
+     * @return string
+     */
+    public function type()
+    {
+        return 'charcoal/admin/widget/form-group/structure';
+    }
+
+    /**
      * Retrieve the form's object.
      *
      * @throws RuntimeException If the form doesn't have a model.

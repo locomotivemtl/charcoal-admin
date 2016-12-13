@@ -1568,6 +1568,14 @@ input[type="url"] {
   letter-spacing: 1px;
   text-transform: uppercase; }
 
+.form-field.form-property-structure > .c-structure {
+  padding: 15px 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px; }
+
+.c-structure_entry_content > .o-section {
+  margin-bottom: 0; }
+
 .table > thead > tr > th,
 .table > thead > tr > td,
 .table > tbody > tr > th,

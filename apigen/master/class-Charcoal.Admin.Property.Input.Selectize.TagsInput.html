@@ -293,7 +293,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a>\<a href="namespace-Charcoal.Admin.Property.Input.Selectize.html">Selectize</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#17-244" title="Go to source code">Charcoal/Admin/Property/Input/Selectize/TagsInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#20-326" title="Go to source code">Charcoal/Admin/Property/Input/Selectize/TagsInput.php</a>
 		<br>
 	</div>
 
@@ -313,7 +313,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#38-49" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#48-59" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			<p>Inject dependencies from a DI Container.</p>
@@ -350,7 +350,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setModelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#51-62" title="Go to source code">setModelFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#61-72" title="Go to source code">setModelFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			<p>Set an object model factory.</p>
@@ -389,7 +389,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_modelFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#64-79" title="Go to source code">modelFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#74-89" title="Go to source code">modelFactory</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the object model factory.</p>
@@ -415,6 +415,42 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="inputName" id="_inputName">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_inputName">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#91-105" title="Go to source code">inputName</a>( )</code>
+
+		<div class="description short">
+			<p>The input name should always be the property's ident.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>The input name should always be the property's ident.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">Charcoal\Admin\Property\AbstractPropertyInput::inputName()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="choices" id="_choices">
 
 		<td class="attributes"><code>
@@ -427,7 +463,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_choices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#81-103" title="Go to source code">choices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#107-129" title="Go to source code">choices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectable options.</p>
@@ -465,7 +501,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_emptyChoice">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#105-122" title="Go to source code">emptyChoice</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#131-148" title="Go to source code">emptyChoice</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve a blank choice.</p>
@@ -489,6 +525,79 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setAllowClipboardCopy" id="_setAllowClipboardCopy">
+
+		<td class="attributes"><code>
+			 public 
+
+			UiItemInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setAllowClipboardCopy">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#150-161" title="Go to source code">setAllowClipboardCopy</a>( <span>boolean <var>$flag</var></span> )</code>
+
+		<div class="description short">
+			<p>Show/hide the "Copy to Clipboard" button.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Show/hide the "Copy to Clipboard" button.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$flag</var></dt>
+					<dd>Show (TRUE) or hide (FALSE) the copy button.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					UiItemInterface<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="allowClipboardCopy" id="_allowClipboardCopy">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_allowClipboardCopy">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#163-171" title="Go to source code">allowClipboardCopy</a>( )</code>
+
+		<div class="description short">
+			<p>Determine if the property allows "Copy to Clipboard".</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Determine if the property allows "Copy to Clipboard".</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setSelectizeOptions" id="_setSelectizeOptions">
 
 		<td class="attributes"><code>
@@ -501,7 +610,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSelectizeOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#124-137" title="Go to source code">setSelectizeOptions</a>( <span>array <var>$settings</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#173-186" title="Go to source code">setSelectizeOptions</a>( <span>array <var>$settings</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the selectize picker's options.</p>
@@ -542,7 +651,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_mergeSelectizeOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#139-150" title="Go to source code">mergeSelectizeOptions</a>( <span>array <var>$settings</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#188-199" title="Go to source code">mergeSelectizeOptions</a>( <span>array <var>$settings</var></span> )</code>
 
 		<div class="description short">
 			<p>Merge (replacing or adding) selectize picker options.</p>
@@ -581,7 +690,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addSelectizeOption">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#152-176" title="Go to source code">addSelectizeOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#201-225" title="Go to source code">addSelectizeOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
 
 		<div class="description short">
 			<p>Add (or replace) an selectize picker option.</p>
@@ -626,7 +735,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_selectizeOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#178-190" title="Go to source code">selectizeOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#227-239" title="Go to source code">selectizeOptions</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectize picker's options.</p>
@@ -660,7 +769,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_defaultSelectizeOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#192-233" title="Go to source code">defaultSelectizeOptions</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#241-262" title="Go to source code">defaultSelectizeOptions</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the default selectize picker options.</p>
@@ -694,7 +803,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_selectizeOptionsAsJson">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#235-243" title="Go to source code">selectizeOptionsAsJson</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#317-325" title="Go to source code">selectizeOptionsAsJson</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectize picker's options as a JSON string.</p>
@@ -741,7 +850,6 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputClass">inputClass()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputId">inputId()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputMode">inputMode()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputName">inputName()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputType">inputType()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_inputVal">inputVal()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_lang">lang()</a>, 
@@ -793,6 +901,34 @@
 
 
 
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="allowClipboardCopy" id="$allowClipboardCopy">
+		<td class="attributes"><code>
+			protected  
+			boolean
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.Selectize.TagsInput.html#34-39" title="Go to source code"><var>$allowClipboardCopy</var></a>
+
+			<div class="description short">
+				<p>Whether to show a button to copy items to clipboard.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Whether to show a button to copy items to clipboard.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$allowClipboardCopy" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#properties">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>

@@ -14,6 +14,7 @@ use \Charcoal\Translation\TranslationConfig;
 use \Charcoal\Ui\AbstractUiItem;
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\FormGroup\FormGroupTrait;
+use \Charcoal\Ui\FormInput\FormInputInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
@@ -233,7 +234,15 @@ class FormGroupWidget extends AbstractUiItem implements
                     $property->setL10nMode($this->l10nMode());
                 }
 
+                if ($property instanceof FormInputInterface) {
+                    $property->setFormGroup($this);
+                }
+
                 yield $propertyIdent => $property;
+
+                if ($property instanceof FormInputInterface) {
+                    $property->clearFormGroup();
+                }
             }
         }
     }

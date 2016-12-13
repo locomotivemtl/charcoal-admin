@@ -320,7 +320,15 @@ class StructureFormGroup extends FormGroupWidget
                 $formProperty->setL10nMode($this->l10nMode());
             }
 
+            if ($formProperty instanceof FormInputInterface) {
+                $formProperty->setFormGroup($this);
+            }
+
             yield $propertyIdent => $formProperty;
+
+            if ($formProperty instanceof FormInputInterface) {
+                $formProperty->clearFormGroup();
+            }
         }
     }
 }

@@ -17,13 +17,22 @@ use \Charcoal\Property\PropertyInterface;
 // From 'charcoal-translation'
 use \Charcoal\Translation\TranslationConfig;
 
+// From 'charcoal-ui'
+use \Charcoal\Ui\FormGroup\FormGroupInterface;
+use \Charcoal\Ui\FormGroup\FormGroupTrait;
+use \Charcoal\Ui\FormInput\FormInputInterface;
+use \Charcoal\Ui\Layout\LayoutAwareInterface;
+use \Charcoal\Ui\Layout\LayoutAwareTrait;
+
+
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 
 /**
  *
  */
-class FormPropertyWidget extends AdminWidget
+class FormPropertyWidget extends AdminWidget implements
+    FormInputInterface
 {
     /**
      * In memory copy of the PropertyInput object
@@ -75,6 +84,13 @@ class FormPropertyWidget extends AdminWidget
      * @var string $l10nMode
      */
     private $l10nMode;
+
+    /**
+     * The form group the input belongs to.
+     *
+     * @var FormGroupInterface
+     */
+    protected $formGroup;
 
     /**
      * @var PropertyFactory $factory
@@ -144,6 +160,41 @@ class FormPropertyWidget extends AdminWidget
             );
         }
         return $this->propertyInputFactory;
+    }
+
+    /**
+     * Set the form input's parent group.
+     *
+     * @param  FormGroupInterface $formGroup The parent form group object.
+     * @return FormInputInterface Chainable
+     */
+    public function setFormGroup(FormGroupInterface $formGroup)
+    {
+        $this->formGroup = $formGroup;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the input's parent group.
+     *
+     * @return FormGroupInterface
+     */
+    public function formGroup()
+    {
+        return $this->formGroup;
+    }
+
+    /**
+     * Clear the input's parent group.
+     *
+     * @return FormInputInterface Chainable
+     */
+    public function clearFormGroup()
+    {
+        $this->formGroup = null;
+
+        return $this;
     }
 
     /**
@@ -420,38 +471,50 @@ class FormPropertyWidget extends AdminWidget
      */
     public function input()
     {
-        $prop = $this->prop();
+        $inputType = $this->inputType();
 
-        /** @todo Needs fix. Must be manually triggered after setting data for metadata to work */
-        $metadata = $prop->metadata();
+        if ($this->input === null) {
+            $prop = $this->prop();
 
-        $inputType   = $this->inputType();
-        $this->input = $this->propertyInputFactory()->create($inputType);
+            /** @todo Needs fix. Must be manually triggered after setting data for metadata to work */
+            $metadata = $prop->metadata();
 
-        $this->input->setInputType($inputType);
-        $this->input->setProperty($prop);
-        $this->input->setPropertyVal($this->propertyVal);
-        $this->input->setData($prop->data());
-        $this->input->setViewController($this->viewController());
+            $input = $this->propertyInputFactory()->create($inputType);
 
-        if (isset($metadata['admin'])) {
-            $this->input->setData($metadata['admin']);
+            if ($this->formGroup() && ($input instanceof FormInputInterface)) {
+                $input->setFormGroup($this->formGroup());
+            }
+
+            $input->setInputType($inputType);
+            $input->setProperty($prop);
+            $input->setPropertyVal($this->propertyVal);
+            $input->setData($prop->data());
+            $input->setViewController($this->viewController());
+
+            if (isset($metadata['admin'])) {
+                $input->setData($metadata['admin']);
+            }
+
+            $this->input = $input;
+        } else {
+            $input = $this->input;
         }
 
         $GLOBALS['widget_template'] = $inputType;
 
-        $res = [];
         if ($this->loopL10n() && $prop->l10n()) {
             $langs = $this->availableLanguages();
-            $inputId = $this->input->inputId();
+            $inputId = $input->inputId();
             foreach ($langs as $lang) {
                 // Set a unique input ID for language.
-                $this->input->setInputId($inputId.'_'.$lang);
-                $this->input->setLang($lang);
-                yield $this->input;
+                $input->setInputId($inputId.'_'.$lang);
+                $input->setLang($lang);
+
+                yield $input;
             }
+            $input->setInputId($inputId);
         } else {
-            yield $this->input;
+            yield $input;
         }
     }
 }

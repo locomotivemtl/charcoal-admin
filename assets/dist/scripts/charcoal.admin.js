@@ -5007,6 +5007,8 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
     this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
     this.selectize_options  = opts.data.selectize_options  || this.selectize_options;
 
+    this.$input = $(this.selectize_selector || '#' + this.input_id);
+
     // var selectedItems = this.tags_initialized();
     var plugins;
     if (this.multiple) {
@@ -5028,6 +5030,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
         persist: false,
         preload: true,
         openOnFocus: true,
+        dropdownParent: this.$input.closest('.form-field'),
         createFilter: function (input) {
             for (var item in this.options) {
                 if (this.options[item].text === input) {
@@ -5214,7 +5217,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.onKeyDown = function (eve
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
-    var $select = $(this.selectize_selector).selectize(this.selectize_options);
+    var $select = this.$input.selectize(this.selectize_options);
     this.selectize = $select[0].selectize;
 
     /*

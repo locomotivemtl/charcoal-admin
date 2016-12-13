@@ -4858,6 +4858,66 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     return this;
 };
 ;/* global Selectize */
+/**
+ * Plugin: "create_on_enter" for selectize.js
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ *
+ * @author Jordi Hereu Mayo <jhereumayo@gmail.com>
+ */
+Selectize.define('create_on_blur', function () {
+    if (this.settings.mode !== 'multi') {
+        return;
+    }
+    var self = this;
+    this.onBlur = (function () {
+        var original = self.onBlur;
+        return function () {
+            if (this.$control_input.val().trim() !== '') {
+                self.createItem(this.$control_input.val());
+            }
+            return original.apply(this, arguments);
+        };
+    })();
+});
+;/* global Selectize */
+/**
+ * Plugin: "create_on_enter" for selectize.js
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ *
+ * @author Jordi Hereu Mayo <jhereumayo@gmail.com>
+ */
+Selectize.define('create_on_enter', function () {
+    if (this.settings.mode !== 'multi') {
+        return;
+    }
+    var self = this;
+    this.onKeyUp = (function () {
+        var original = self.onKeyUp;
+        return function (e) {
+            if (e.keyCode === 13 && this.$control_input.val().trim() !== '') {
+                self.createItem(this.$control_input.val());
+            }
+            return original.apply(this, arguments);
+        };
+    })();
+});
+;/* global Selectize */
 Selectize.define('charcoal_item', function (options) {
     options = $.extend({
         classField: 'class',
@@ -4891,7 +4951,8 @@ Selectize.define('charcoal_item', function (options) {
     })();
 
 });
-;/**
+;/* global Clipboard */
+/**
  * Selectize Picker
  *
  * Require
@@ -4903,14 +4964,18 @@ Charcoal.Admin.Property_Input_Selectize_Tags = function (opts) {
 
     // Property_Input_Selectize_Tags properties
     this.input_id     = null;
-    this.type         = null;
+    this.obj_type     = null;
+    this.copy_items   = false;
     this.title        = null;
     this.multiple     = false;
     this.separator    = ',';
     this._tags        = null;
 
+    this.selectize          = null;
     this.selectize_selector = null;
     this.selectize_options  = {};
+
+    this.clipboard = null;
 
     this.set_properties(opts).init();
 };
@@ -4927,12 +4992,14 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init = function () {
     }
 
     this.init_selectize();
+    this.init_clipboard();
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function (opts) {
-    this.input_id = opts.id || this.input_id;
-    this.type     = opts.data.obj_type || this.type;
-    this.title    = opts.data.title || this.title;
+    this.input_id   = opts.id || this.input_id;
+    this.obj_type   = opts.data.obj_type || this.obj_type;
+    this.copy_items = opts.data.copy_items || this.copy_items;
+    this.title      = opts.data.title || this.title;
 
     this.multiple  = opts.data.multiple || this.multiple;
     this.separator = opts.data.multiple_separator || this.multiple_separator || ',';
@@ -4961,7 +5028,6 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
         persist: false,
         preload: true,
         openOnFocus: true,
-        create: this.create_tag.bind(this),
         createFilter: function (input) {
             for (var item in this.options) {
                 if (this.options[item].text === input) {
@@ -4970,24 +5036,60 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
             }
             return true;
         },
-        load: this.load_tags.bind(this),
         onInitialize: function () {
             var self = this;
             self.sifter.iterator(this.items, function (value) {
                 var option = self.options[value];
-                var $item = self.getItem(value);
+                var $item  = self.getItem(value);
                 $item.css('background-color', option.color/*[options.colorField]*/);
             });
         }
     };
 
+    if (this.obj_type) {
+        default_opts.create = this.create_tag.bind(this);
+        default_opts.load   = this.load_tags.bind(this);
+    } else {
+        default_opts.plugins.push('create_on_enter');
+        default_opts.create = function (input) {
+            return {
+                value: input,
+                text:  input
+            };
+        };
+    }
+
     this.selectize_options = $.extend({}, default_opts, this.selectize_options);
+
+    if (this.selectize_options.splitOn) {
+        var splitOn = this.selectize_options.splitOn;
+        if ($.type(splitOn) === 'array') {
+            for (var i = splitOn.length - 1; i >= 0; i--) {
+                switch (splitOn[i]) {
+                    case 'comma':
+                        splitOn[i] = '\\s*,\\s*';
+                        break;
+
+                    case 'tab':
+                        splitOn[i] = '\\t+';
+                        break;
+
+                    default:
+                        splitOn[i] = splitOn[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                }
+            }
+
+            splitOn = splitOn.join('|');
+        }
+
+        this.selectize_options.splitOn = new RegExp(splitOn);
+    }
 
     return this;
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (input, callback) {
-    var type  = this.type;
+    var type  = this.obj_type;
     var id    = this.id;
     var title = this.title;
 
@@ -5041,7 +5143,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (query, callback) {
-    var self = this;
+    var type  = this.obj_type;
 
     if (!query.length) {
         return callback();
@@ -5049,7 +5151,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
     $.ajax({
         url: Charcoal.Admin.admin_url() + 'object/load',
         data: {
-            obj_type: self.type
+            obj_type: type
         },
         type: 'GET',
         error: function () {
@@ -5072,10 +5174,77 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.dialog = Charcoal.Admin.Widget.prototype.dialog;
 
-Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
-    $(this.selectize_selector).selectize(this.selectize_options);
+Charcoal.Admin.Property_Input_Selectize_Tags.prototype.onKeyDown = function (event) {
+    var self   = this;
+    var isTemp = false;
+    var IS_MAC = /Mac/.test(navigator.userAgent);
+
+    if (self.isLocked) {
+        if (event.keyCode !== 9) {
+            event.preventDefault();
+        }
+    }
+
+    if ($.type(self.isCmdDown) === 'undefined') {
+        isTemp = true;
+        self.isCmdDown = event[IS_MAC ? 'metaKey' : 'ctrlKey'];
+    }
+
+    if (self.isCmdDown && event.keyCode === 67) {
+        if (isTemp) {
+            self.isCmdDown = undefined;
+        }
+
+        if (self.$activeItems.length) {
+            var values = [], i = 0, n = self.$activeItems.length;
+            for (; i < n; i++) {
+                values.push($(self.$activeItems[i]).attr('data-value'));
+                /** @todo Select Active Values */
+                document.execCommand('copy');
+            }
+        }
+
+        return;
+    }
+
+    if ((self.isFull() || self.isInputHidden) && !(IS_MAC ? event.metaKey : event.ctrlKey)) {
+        event.preventDefault();
+        return;
+    }
 };
 
+Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
+    var $select = $(this.selectize_selector).selectize(this.selectize_options);
+    this.selectize = $select[0].selectize;
+
+    /*
+    if (this.copy_items) {
+        var that = this;
+        this.selectize.$control.on('keydown', function () {
+            return that.onKeyDown.apply(that.selectize, arguments);
+        });
+    }
+    */
+};
+
+Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_clipboard = function () {
+    if (!this.copy_items) {
+        return;
+    }
+
+    var selectize = this.selectize;
+    this.clipboard = new Clipboard(this.selectize_selector + '_copy', {
+        text: function (/*trigger*/) {
+            /*
+            if (selectize.$activeItems.length) {
+                console.log(selectize.$activeItems);
+            }
+            */
+
+            return selectize.$input.val();
+        }
+    });
+};
 ;/**
 * Switch looking input that manages boolean properties
 * charcoal/admin/property/input/switch

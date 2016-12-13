@@ -4,35 +4,46 @@
 
    `charcoal/admin/property/input/select`
 --}}
-{{# multiple }}
-<input
-    type="text"
-    id="{{ inputId }}"
-    name="{{ inputName }}"
-    class="form-control {{ inputClass }}"
-    value="{{ inputVal }}"
-    {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
-    {{# readOnly }}readonly{{/ readOnly }}
-    {{# required }}required{{/ required }}
-    {{# disabled }}disabled{{/ disabled }}
->
-{{/ multiple }}
-{{^ multiple }}
-<select
-    id="{{ inputId }}"
-    name="{{ inputName }}"
-    class="{{ inputClass }}"
-    {{# size }}size="{{ . }}"{{/ size }}
-    {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
-    {{# multiple }}multiple{{/ multiple }}
-    {{# required }}required{{/ required }}
-    {{# disabled }}disabled{{/ disabled }}
->
-    {{# choices }}
-    {{> charcoal/admin/property/input/select/option }}
-    {{/ choices }}
-</select>
-{{/ multiple }}
+{{# allowClipboardCopy }}
+<div class="input-group">
+{{/ allowClipboardCopy }}
+    {{# multiple }}
+    <input
+        type="text"
+        id="{{ inputId }}"
+        name="{{ inputName }}"
+        class="form-control {{ inputClass }}"
+        value="{{ inputVal }}"
+        {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
+        {{# readOnly }}readonly{{/ readOnly }}
+        {{# required }}required{{/ required }}
+        {{# disabled }}disabled{{/ disabled }}
+    >
+    {{/ multiple }}
+    {{^ multiple }}
+    <select
+        id="{{ inputId }}"
+        name="{{ inputName }}"
+        class="{{ inputClass }}"
+        {{# size }}size="{{ . }}"{{/ size }}
+        {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
+        {{# multiple }}multiple{{/ multiple }}
+        {{# required }}required{{/ required }}
+        {{# disabled }}disabled{{/ disabled }}
+    >
+        {{# choices }}
+        {{> charcoal/admin/property/input/select/option }}
+        {{/ choices }}
+    </select>
+    {{/ multiple }}
+{{# allowClipboardCopy }}
+    <span class="input-group-btn">
+        <button id="{{ inputId }}_copy" class="btn btn-lg btn-default" type="button" data-clipboard-target="#{{ inputId }}">
+            <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+        </button>
+    </span>
+</div>
+{{/ allowClipboardCopy }}
 
 {{# addJs }}
 <script>
@@ -41,11 +52,16 @@ Charcoal.Admin.manager().add_property_input({
     type: 'charcoal/admin/property/input/selectize/tags',
     data: {
         title: '{{ label }}',
-        obj_type: '{{ obj_type }}',
+        {{# property.objType }}
+        obj_type: '{{ . }}',
+        {{/ property.objType }}
         {{# multiple }}
         multiple: true,
-        multiple_separator: "{{ property.multipleSeparator }}",
+        multiple_separator: '{{ property.multipleSeparator }}',
         {{/ multiple }}
+        {{# allowClipboardCopy }}
+        copy_items: true,
+        {{/ allowClipboardCopy }}
         selectize_selector: '#{{ inputId }}',
         selectize_options: {{& selectizeOptionsAsJson }}
     }

@@ -10210,6 +10210,7 @@ select.mobile-device {
   border-radius: 0; }
 
 .selectize-control .selectize-input {
+  display: block;
   padding: 4px 12px 0; }
 
 .selectize-control.multi .selectize-input.has-items {
@@ -10239,3 +10240,17 @@ select.mobile-device {
   .selectize-control.plugin-remove_button [data-value] .remove {
     width: 20px;
     padding: 12px 0 0 0; }
+
+.input-group > .selectize-control:not(:first-child):not(:last-child) .selectize-input {
+  border-radius: 0; }
+
+.input-group > .selectize-control:first-child:not(.selectized) .selectize-input {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0; }
+
+.input-group > .selectize-control:last-child:not(.selectized) .selectize-input {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0; }
+
+.input-group > .selectize-control ~ .input-group-btn {
+  vertical-align: top; }

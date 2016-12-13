@@ -15,6 +15,7 @@ $selectize-offset-item-remove:  28px;
 
 .selectize-control {
     .selectize-input {
+        display: block;
         padding: 4px $selectize-padding-x 0;
     }
 
@@ -59,5 +60,29 @@ $selectize-offset-item-remove:  28px;
                 padding: $selectize-padding-x 0 0 0;
             }
         }
+    }
+}
+
+.input-group > .selectize-control {
+    &:not(:first-child):not(:last-child) {
+        .selectize-input {
+            border-radius: 0;
+        }
+    }
+
+    &:first-child:not(.selectized) {
+        .selectize-input {
+            @include border-right-radius(0);
+        }
+    }
+
+    &:last-child:not(.selectized) {
+        .selectize-input {
+            @include border-left-radius(0);
+        }
+    }
+
+    ~ .input-group-btn {
+        vertical-align: top;
     }
 }

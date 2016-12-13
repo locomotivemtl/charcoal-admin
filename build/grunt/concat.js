@@ -39,7 +39,9 @@ module.exports = {
             'bower_components/multiselect/dist/js/multiselect.min.js',
             // Selectize
             'bower_components/selectize/dist/js/standalone/selectize.min.js',
-            // 'assets/dist/scripts/vendors/selectize/selectize-item-color/src/plugin.js'
+            // 'assets/dist/scripts/vendors/selectize/selectize-item-color/src/plugin.js',
+            // Selectize
+            'bower_components/clipboard/dist/clipboard.min.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"

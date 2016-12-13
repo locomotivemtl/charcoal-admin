@@ -11,6 +11,9 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-property'
+use Charcoal\Property\ObjectProperty;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Property\AbstractSelectableInput;
 
@@ -27,6 +30,13 @@ class TagsInput extends AbstractSelectableInput
      * @var array
      */
     private $selectizeOptions;
+
+    /**
+     * Whether to show a button to copy items to clipboard.
+     *
+     * @var boolean
+     */
+    protected $allowClipboardCopy;
 
     /**
      * Store the factory instance for the current class.
@@ -79,6 +89,22 @@ class TagsInput extends AbstractSelectableInput
     }
 
     /**
+     * The input name should always be the property's ident.
+     *
+     * @return string
+     */
+    public function inputName()
+    {
+        $name = $this->propertyIdent();
+
+        if ($this->p()->l10n()) {
+            $name .= '['.$this->lang().']';
+        }
+
+        return $name;
+    }
+
+    /**
      * Retrieve the selectable options.
      *
      * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
@@ -119,6 +145,29 @@ class TagsInput extends AbstractSelectableInput
             'title'   => $label,
             'subtext' => ''
         ];
+    }
+
+    /**
+     * Show/hide the "Copy to Clipboard" button.
+     *
+     * @param  boolean $flag Show (TRUE) or hide (FALSE) the copy button.
+     * @return UiItemInterface Chainable
+     */
+    public function setAllowClipboardCopy($flag)
+    {
+        $this->allowClipboardCopy = !!$flag;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the property allows "Copy to Clipboard".
+     *
+     * @return boolean
+     */
+    public function allowClipboardCopy()
+    {
+        return $this->allowClipboardCopy;
     }
 
     /**
@@ -203,33 +252,66 @@ class TagsInput extends AbstractSelectableInput
             $options = $metadata['data']['selectize_options'];
         }
 
-        $val = $this->propertyVal();
+        if (isset($options['options'])) {
+            $options['options'] = array_merge($options['options'], $this->selectizeVal());
+        } else {
+            $options['options'] = $this->selectizeVal();
+        }
+
+        return $options;
+    }
+
+    /**
+     * Convert the given value into selectize picker choices.
+     *
+     * @param  mixed $val     The value to parse into selectize choices.
+     * @param  array $options Optional structure options.
+     * @return array
+     */
+    private function selectizeVal($val = null, array $options = [])
+    {
+        /** @todo Find a use for this */
+        unset($options);
+
+        $choices = [];
+
+        if ($val === null) {
+            $val = $this->propertyVal();
+        }
 
         if ($val !== null) {
-            $val = $this->p()->parseVal($val);
+            $prop = $this->property();
+            $val  = $prop->parseVal($val);
 
-            if (!$this->p()->multiple()) {
+            if (!$prop->multiple()) {
                 $val = [ $val ];
             }
 
-            $objType = $this->p()->objType();
-            foreach ($val as $v) {
-                $obj = $this->modelFactory()->create($objType);
-                $obj->load($v);
-                if ($obj->id()) {
-                    if (!isset($options['options'])) {
-                        $options['options'] = [];
+            if ($prop instanceof ObjectProperty) {
+                $objType = $prop->objType();
+                foreach ($val as $v) {
+                    $obj = $this->modelFactory()->create($objType);
+                    $obj->load($v);
+                    if ($obj->id()) {
+                        $choices[] = [
+                            'value' => $obj->id(),
+                            'text'  => (string)$obj->name(),
+                            'color' => method_exists($obj, 'color') ? $obj->color() : null
+                        ];
                     }
-                    $options['options'][] = [
-                        'value' => $obj->id(),
-                        'text'  => (string)$obj->name(),
-                        'color' => method_exists($obj, 'color') ? $obj->color() : null
+                }
+            } else {
+                foreach ($val as $v) {
+                    $choices[] = [
+                        'value' => $v,
+                        'text'  => $v,
+                        'color' => null
                     ];
                 }
             }
         }
 
-        return $options;
+        return $choices;
     }
 
     /**

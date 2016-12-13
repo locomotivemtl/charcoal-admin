@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Charcoal\Admin\Property\Input\SwitchInput</title>
+	<title>Class Charcoal\Admin\Property\Input\StructureWidgetInput</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -208,8 +208,8 @@
 				<li><a href="class-Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.ReadonlyInput.html">ReadonlyInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.SelectInput.html">SelectInput</a></li>
-				<li><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">StructureWidgetInput</a></li>
-				<li class="active"><a href="class-Charcoal.Admin.Property.Input.SwitchInput.html">SwitchInput</a></li>
+				<li class="active"><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">StructureWidgetInput</a></li>
+				<li><a href="class-Charcoal.Admin.Property.Input.SwitchInput.html">SwitchInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.TextareaInput.html">TextareaInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.TextInput.html">TextInput</a></li>
 				<li><a href="class-Charcoal.Admin.Property.Input.TinymceInput.html">TinymceInput</a></li>
@@ -252,14 +252,9 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class SwitchInput</h1>
+	<h1>Class StructureWidgetInput</h1>
 
 
-	<div class="description">
-	<p>Switch Input Property</p>
-
-<p>For displaying checkboxes and radio buttons as toggle switches.</p>
-	</div>
 
 	<dl class="tree">
 		<dd style="padding-left:0px">
@@ -287,7 +282,9 @@
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Charcoal\Admin\Property\Input\SwitchInput</span></b>			
+<b><span>Charcoal\Admin\Property\Input\StructureWidgetInput</span></b>			
+			 implements 
+<span>Charcoal\Ui\FormInput\FormInputInterface</span>
 			
 			
 		</dd>
@@ -306,7 +303,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a>\<a href="namespace-Charcoal.Admin.Property.Input.html">Input</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#10-137" title="Go to source code">Charcoal/Admin/Property/Input/SwitchInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#28-312" title="Go to source code">Charcoal/Admin/Property/Input/StructureWidgetInput.php</a>
 		<br>
 	</div>
 
@@ -314,68 +311,74 @@
 
 	<table class="summary methods" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="type" id="_type">
+	<tr data-order="setDependencies" id="_setDependencies">
 
 		<td class="attributes"><code>
 			 public 
 
-			string
+			
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_type">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#24-32" title="Go to source code">type</a>( )</code>
+		<a class="anchor" href="#_setDependencies">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#69-81" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
-			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+			<p>Inject dependencies from a DI Container.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the control type for the HTML element <code>&lt;input&gt;</code>.</p>
+			<p>Inject dependencies from a DI Container.</p>
 
 
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$container</var></dt>
+					<dd>A dependencies container instance.</dd>
+				</dl></div>
 
-				<h4>Returns</h4>
-				<div class="list">
-					string
-				</div>
 
 
 
 				<h4>Overrides</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_type">Charcoal\Admin\Property\AbstractPropertyInput::type()</a></code></div>
+				<div class="list"><code><a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">Charcoal\Admin\Property\AbstractPropertyInput::setDependencies()</a></code></div>
 
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="checked" id="_checked">
+	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			boolean
+			<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_checked">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#34-40" title="Go to source code">checked</a>( )</code>
+		<a class="anchor" href="#_setWidgetFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#83-94" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the widget factory.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the widget factory.</p>
 
 
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd>The factory to create widgets.</dd>
+				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					boolean
+					<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
 				</div>
 
 
@@ -384,32 +387,75 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="value" id="_value">
+	<tr data-order="widgetFactory" id="_widgetFactory">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			integer
+			Charcoal\Factory\FactoryInterface
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_value">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#42-48" title="Go to source code">value</a>( )</code>
+		<a class="anchor" href="#_widgetFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#96-111" title="Go to source code">widgetFactory</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the widget factory.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the widget factory.</p>
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					integer
+					Charcoal\Factory\FactoryInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the widget factory was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setFormGroupFactory" id="_setFormGroupFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setFormGroupFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#113-124" title="Go to source code">setFormGroupFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the form group factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the form group factory.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd>The factory to create form groups.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
 				</div>
 
 
@@ -418,26 +464,205 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="setSwitchOptions" id="_setSwitchOptions">
+	<tr data-order="formGroupFactory" id="_formGroupFactory">
 
 		<td class="attributes"><code>
-			 public 
+			 protected 
 
-			Switchinput
+			Charcoal\Factory\FactoryInterface
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setSwitchOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#50-63" title="Go to source code">setSwitchOptions</a>( <span>array <var>$settings</var></span> )</code>
+		<a class="anchor" href="#_formGroupFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#126-141" title="Go to source code">formGroupFactory</a>( )</code>
 
 		<div class="description short">
-			<p>Set the switch's options.</p>
+			<p>Retrieve the form group factory.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Set the switch's options.</p>
+			<p>Retrieve the form group factory.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Factory\FactoryInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the form group factory was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setFormGroup" id="_setFormGroup">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Ui\FormInput\FormInputInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setFormGroup">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#143-154" title="Go to source code">setFormGroup</a>( <span>Charcoal\Ui\FormGroup\FormGroupInterface <var>$formGroup</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the form input's parent group.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the form input's parent group.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$formGroup</var></dt>
+					<dd>The parent form group object.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Ui\FormInput\FormInputInterface<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="formGroup" id="_formGroup">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Ui\FormGroup\FormGroupInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_formGroup">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#156-164" title="Go to source code">formGroup</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the input's parent group.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the input's parent group.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Ui\FormGroup\FormGroupInterface
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="structureWidget" id="_structureWidget">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\App\Template\WidgetInterface|Charcoal\Ui\FormGroup\FormGroupInterface|Generator
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_structureWidget">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#166-178" title="Go to source code">structureWidget</a>( )</code>
+
+		<div class="description short">
+			<p>Yield the structure widget.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Yield the structure widget.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\App\Template\WidgetInterface|Charcoal\Ui\FormGroup\FormGroupInterface|Generator
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getStructureWidget" id="_getStructureWidget">
+
+		<td class="attributes"><code>
+			 protected 
+
+			Charcoal\App\Template\WidgetInterface|Charcoal\Ui\FormGroup\FormGroupInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getStructureWidget">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#180-203" title="Go to source code">getStructureWidget</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the structure widget.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the structure widget.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\App\Template\WidgetInterface|Charcoal\Ui\FormGroup\FormGroupInterface
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setStructureOptions" id="_setStructureOptions">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setStructureOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#205-218" title="Go to source code">setStructureOptions</a>( <span>array <var>$settings</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the structure widget's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the structure widget's options.</p>
 
 <p>This method always merges default settings.</p>
 
@@ -445,12 +670,12 @@
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$settings</var></dt>
-					<dd>The switch options.</dd>
+					<dd>The structure widget options.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					Switchinput<br>Chainable
+					<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code><br>Chainable
 				</div>
 
 
@@ -459,37 +684,37 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="mergeSwitchOptions" id="_mergeSwitchOptions">
+	<tr data-order="mergeStructureOptions" id="_mergeStructureOptions">
 
 		<td class="attributes"><code>
 			 public 
 
-			Switchinput
+			<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_mergeSwitchOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#65-76" title="Go to source code">mergeSwitchOptions</a>( <span>array <var>$settings</var></span> )</code>
+		<a class="anchor" href="#_mergeStructureOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#220-231" title="Go to source code">mergeStructureOptions</a>( <span>array <var>$settings</var></span> )</code>
 
 		<div class="description short">
-			<p>Merge (replacing or adding) switch options.</p>
+			<p>Merge (replacing or adding) structure widget options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Merge (replacing or adding) switch options.</p>
+			<p>Merge (replacing or adding) structure widget options.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$settings</var></dt>
-					<dd>The switch options.</dd>
+					<dd>The structure widget options.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					Switchinput<br>Chainable
+					<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code><br>Chainable
 				</div>
 
 
@@ -498,26 +723,26 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="addSwitchOption" id="_addSwitchOption">
+	<tr data-order="addStructureOption" id="_addStructureOption">
 
 		<td class="attributes"><code>
 			 public 
 
-			Switchinput
+			<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_addSwitchOption">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#78-102" title="Go to source code">addSwitchOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
+		<a class="anchor" href="#_addStructureOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#233-257" title="Go to source code">addStructureOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$val</var></span> )</code>
 
 		<div class="description short">
-			<p>Add (or replace) an switch option.</p>
+			<p>Add (or replace) an structure widget option.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Add (or replace) an switch option.</p>
+			<p>Add (or replace) an structure widget option.</p>
 
 
 				<h4>Parameters</h4>
@@ -530,7 +755,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					Switchinput<br>Chainable
+					<code><a href="class-Charcoal.Admin.Property.Input.StructureWidgetInput.html">Charcoal\Admin\Property\Input\StructureWidgetInput</a></code><br>Chainable
 				</div>
 
 				<h4>Throws</h4>
@@ -543,7 +768,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="switchOptions" id="_switchOptions">
+	<tr data-order="structureOptions" id="_structureOptions">
 
 		<td class="attributes"><code>
 			 public 
@@ -554,15 +779,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_switchOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#104-116" title="Go to source code">switchOptions</a>( )</code>
+		<a class="anchor" href="#_structureOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#259-271" title="Go to source code">structureOptions</a>( )</code>
 
 		<div class="description short">
-			<p>Retrieve the switch's options.</p>
+			<p>Retrieve the structure widget's options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the switch's options.</p>
+			<p>Retrieve the structure widget's options.</p>
 
 
 
@@ -577,7 +802,48 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="defaultSwitchOptions" id="_defaultSwitchOptions">
+	<tr data-order="structureOption" id="_structureOption">
+
+		<td class="attributes"><code>
+			 public 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_structureOption">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#273-289" title="Go to source code">structureOption</a>( <span>string <var>$key</var></span>, <span>mixed <var>$default</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Retrieve an option from the widget's options.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve an option from the widget's options.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
+					<dd>The option key to lookup.</dd>
+					<dt><var>$default</var></dt>
+					<dd>The fallback value to return if the $key doesn't exist.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultStructureOptions" id="_defaultStructureOptions">
 
 		<td class="attributes"><code>
 			 public 
@@ -588,15 +854,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_defaultSwitchOptions">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#118-126" title="Go to source code">defaultSwitchOptions</a>( )</code>
+		<a class="anchor" href="#_defaultStructureOptions">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#291-301" title="Go to source code">defaultStructureOptions</a>( )</code>
 
 		<div class="description short">
-			<p>Retrieve the default switch options.</p>
+			<p>Retrieve the default structure widget options.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the default switch options.</p>
+			<p>Retrieve the default structure widget options.</p>
 
 
 
@@ -611,7 +877,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="switchOptionsAsJson" id="_switchOptionsAsJson">
+	<tr data-order="structureOptionsAsJson" id="_structureOptionsAsJson">
 
 		<td class="attributes"><code>
 			 public 
@@ -622,15 +888,15 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_switchOptionsAsJson">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.Input.SwitchInput.html#128-136" title="Go to source code">switchOptionsAsJson</a>( )</code>
+		<a class="anchor" href="#_structureOptionsAsJson">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#303-311" title="Go to source code">structureOptionsAsJson</a>( )</code>
 
 		<div class="description short">
-			<p>Retrieve the switch's options as a JSON string.</p>
+			<p>Retrieve the structure widget's options as a JSON string.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Retrieve the switch's options as a JSON string.</p>
+			<p>Retrieve the structure widget's options as a JSON string.</p>
 
 
 
@@ -675,7 +941,6 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_renderPlaceholder">renderPlaceholder()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_required">required()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setData">setData()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDependencies">setDependencies()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setDisabled">setDisabled()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setIdent">setIdent()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setInputClass">setInputClass()</a>, 
@@ -690,7 +955,8 @@
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setReadOnly">setReadOnly()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setRequired">setRequired()</a>, 
 			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setType">setType()</a>, 
-			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setter">setter()</a>
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_setter">setter()</a>, 
+			<a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#_type">type()</a>
 		</code></td>
 	</tr>
 	</table>
@@ -713,6 +979,84 @@
 
 
 
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="widgetFactory" id="$widgetFactory">
+		<td class="attributes"><code>
+			protected  
+			Charcoal\Factory\FactoryInterface
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#34-39" title="Go to source code"><var>$widgetFactory</var></a>
+
+			<div class="description short">
+				<p>Store the widget factory instance for the current class.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Store the widget factory instance for the current class.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$widgetFactory" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="formGroupFactory" id="$formGroupFactory">
+		<td class="attributes"><code>
+			protected  
+			Charcoal\Factory\FactoryInterface
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#41-46" title="Go to source code"><var>$formGroupFactory</var></a>
+
+			<div class="description short">
+				<p>Store the form group widget factory instance for the current class.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Store the form group widget factory instance for the current class.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$formGroupFactory" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="structureWidget" id="$structureWidget">
+		<td class="attributes"><code>
+			protected  
+			Charcoal\App\Template\WidgetInterface
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.Input.StructureWidgetInput.html#48-53" title="Go to source code"><var>$structureWidget</var></a>
+
+			<div class="description short">
+				<p>Store the structure widget instance.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Store the structure widget instance.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$structureWidget" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#properties">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>

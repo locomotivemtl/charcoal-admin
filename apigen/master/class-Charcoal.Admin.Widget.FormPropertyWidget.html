@@ -270,6 +270,8 @@ Charcoal\App\Template\AbstractWidget
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
 <b><span>Charcoal\Admin\Widget\FormPropertyWidget</span></b>			
+			 implements 
+<span>Charcoal\Ui\FormInput\FormInputInterface</span>
 			
 			
 		</dd>
@@ -288,7 +290,7 @@ Charcoal\App\Template\AbstractWidget
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#23-457" title="Go to source code">Charcoal/Admin/Widget/FormPropertyWidget.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#31-520" title="Go to source code">Charcoal/Admin/Widget/FormPropertyWidget.php</a>
 		<br>
 	</div>
 
@@ -308,7 +310,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#89-99" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#105-115" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -345,7 +347,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#101-109" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#117-125" title="Go to source code">setPropertyFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -384,7 +386,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#111-123" title="Go to source code">propertyFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#127-139" title="Go to source code">propertyFactory</a>( )</code>
 
 		<div class="description short">
 			
@@ -422,7 +424,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyInputFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#125-133" title="Go to source code">setPropertyInputFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#141-149" title="Go to source code">setPropertyInputFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
 
 		<div class="description short">
 			
@@ -461,7 +463,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyInputFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#135-147" title="Go to source code">propertyInputFactory</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#151-163" title="Go to source code">propertyInputFactory</a>( )</code>
 
 		<div class="description short">
 			
@@ -487,6 +489,113 @@ Charcoal\App\Template\AbstractWidget
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setFormGroup" id="_setFormGroup">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Ui\FormInput\FormInputInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setFormGroup">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#165-176" title="Go to source code">setFormGroup</a>( <span>Charcoal\Ui\FormGroup\FormGroupInterface <var>$formGroup</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the form input's parent group.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the form input's parent group.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$formGroup</var></dt>
+					<dd>The parent form group object.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Ui\FormInput\FormInputInterface<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="formGroup" id="_formGroup">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Ui\FormGroup\FormGroupInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_formGroup">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#178-186" title="Go to source code">formGroup</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the input's parent group.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the input's parent group.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Ui\FormGroup\FormGroupInterface
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="clearFormGroup" id="_clearFormGroup">
+
+		<td class="attributes"><code>
+			 public 
+
+			Charcoal\Ui\FormInput\FormInputInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_clearFormGroup">#</a>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#188-198" title="Go to source code">clearFormGroup</a>( )</code>
+
+		<div class="description short">
+			<p>Clear the input's parent group.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Clear the input's parent group.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Ui\FormInput\FormInputInterface<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="setData" id="_setData">
 
 		<td class="attributes"><code>
@@ -499,7 +608,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setData">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#149-161" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#200-212" title="Go to source code">setData</a>( <span>array|ArrayInterface <var>$data</var></span> )</code>
 
 		<div class="description short">
 			
@@ -538,7 +647,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setActive">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#163-171" title="Go to source code">setActive</a>( <span>boolean <var>$active</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#214-222" title="Go to source code">setActive</a>( <span>boolean <var>$active</var></span> )</code>
 
 		<div class="description short">
 			
@@ -577,7 +686,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_active">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#173-179" title="Go to source code">active</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#224-230" title="Go to source code">active</a>( )</code>
 
 		<div class="description short">
 			
@@ -611,7 +720,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#181-199" title="Go to source code">setPropertyIdent</a>( <span>string <var>$propertyIdent</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#232-250" title="Go to source code">setPropertyIdent</a>( <span>string <var>$propertyIdent</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the form's property identifier.</p>
@@ -654,7 +763,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyIdent">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#201-209" title="Go to source code">propertyIdent</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#252-260" title="Go to source code">propertyIdent</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the form's property identifier.</p>
@@ -688,7 +797,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setPropertyVal">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#211-219" title="Go to source code">setPropertyVal</a>( <span>mixed <var>$propertyVal</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#262-270" title="Go to source code">setPropertyVal</a>( <span>mixed <var>$propertyVal</var></span> )</code>
 
 		<div class="description short">
 			
@@ -727,7 +836,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_propertyVal">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#221-227" title="Go to source code">propertyVal</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#272-278" title="Go to source code">propertyVal</a>( )</code>
 
 		<div class="description short">
 			
@@ -761,7 +870,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showLabel">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#229-235" title="Go to source code">showLabel</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#280-286" title="Go to source code">showLabel</a>( )</code>
 
 		<div class="description short">
 			
@@ -797,7 +906,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showDescription">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#237-244" title="Go to source code">showDescription</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#288-295" title="Go to source code">showDescription</a>( )</code>
 
 		<div class="description short">
 			
@@ -831,7 +940,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showNotes">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#246-261" title="Go to source code">showNotes</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#297-312" title="Go to source code">showNotes</a>( )</code>
 
 		<div class="description short">
 			
@@ -865,7 +974,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showNotesAbove">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#263-278" title="Go to source code">showNotesAbove</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#314-329" title="Go to source code">showNotesAbove</a>( )</code>
 
 		<div class="description short">
 			
@@ -899,7 +1008,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_description">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#280-286" title="Go to source code">description</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#331-337" title="Go to source code">description</a>( )</code>
 
 		<div class="description short">
 			
@@ -933,7 +1042,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_notes">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#288-294" title="Go to source code">notes</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#339-345" title="Go to source code">notes</a>( )</code>
 
 		<div class="description short">
 			
@@ -967,7 +1076,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#296-302" title="Go to source code">inputId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#347-353" title="Go to source code">inputId</a>( )</code>
 
 		<div class="description short">
 			
@@ -1001,7 +1110,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputName">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#304-310" title="Go to source code">inputName</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#355-361" title="Go to source code">inputName</a>( )</code>
 
 		<div class="description short">
 			
@@ -1035,7 +1144,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setInputType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#312-320" title="Go to source code">setInputType</a>( <span>string <var>$inputType</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#363-371" title="Go to source code">setInputType</a>( <span>string <var>$inputType</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1074,7 +1183,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_inputType">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#322-340" title="Go to source code">inputType</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#373-391" title="Go to source code">inputType</a>( )</code>
 
 		<div class="description short">
 			
@@ -1108,7 +1217,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setProp">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#342-350" title="Go to source code">setProp</a>( <span>Charcoal\Property\PropertyInterface <var>$property</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#393-401" title="Go to source code">setProp</a>( <span>Charcoal\Property\PropertyInterface <var>$property</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1147,7 +1256,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_prop">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#352-367" title="Go to source code">prop</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#403-418" title="Go to source code">prop</a>( )</code>
 
 		<div class="description short">
 			
@@ -1181,7 +1290,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_availableLanguages">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#369-377" title="Go to source code">availableLanguages</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#420-428" title="Go to source code">availableLanguages</a>( )</code>
 
 		<div class="description short">
 			
@@ -1215,7 +1324,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_showActiveLanguage">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#379-390" title="Go to source code">showActiveLanguage</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#430-441" title="Go to source code">showActiveLanguage</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the form control's active language should be displayed.</p>
@@ -1242,14 +1351,14 @@ Charcoal\App\Template\AbstractWidget
 		<td class="attributes"><code>
 			 public 
 
-			FormGroupInterface
+			Charcoal\Ui\FormGroup\FormGroupInterface
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setL10nMode">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#392-400" title="Go to source code">setL10nMode</a>( <span>string <var>$mode</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#443-451" title="Go to source code">setL10nMode</a>( <span>string <var>$mode</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1267,7 +1376,7 @@ Charcoal\App\Template\AbstractWidget
 
 				<h4>Returns</h4>
 				<div class="list">
-					FormGroupInterface<br>Chainable
+					Charcoal\Ui\FormGroup\FormGroupInterface<br>Chainable
 				</div>
 
 
@@ -1288,7 +1397,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_l10nMode">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#402-408" title="Go to source code">l10nMode</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#453-459" title="Go to source code">l10nMode</a>( )</code>
 
 		<div class="description short">
 			
@@ -1322,7 +1431,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_loopL10n">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#410-416" title="Go to source code">loopL10n</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#461-467" title="Go to source code">loopL10n</a>( )</code>
 
 		<div class="description short">
 			
@@ -1356,7 +1465,7 @@ Charcoal\App\Template\AbstractWidget
 
 		<td class="name"><div>
 		<a class="anchor" href="#_input">#</a>
-		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#418-456" title="Go to source code">input</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#469-519" title="Go to source code">input</a>( )</code>
 
 		<div class="description short">
 			
@@ -1446,7 +1555,7 @@ Charcoal\App\Template\AbstractWidget
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#34-37" title="Go to source code"><var>$type</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#43-46" title="Go to source code"><var>$type</var></a>
 
 			<div class="description short">
 				<p>$type</p>
@@ -1471,7 +1580,7 @@ Charcoal\App\Template\AbstractWidget
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#39-42" title="Go to source code"><var>$inputType</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#48-51" title="Go to source code"><var>$inputType</var></a>
 
 			<div class="description short">
 				<p>$inputType</p>
@@ -1496,7 +1605,7 @@ Charcoal\App\Template\AbstractWidget
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#44-47" title="Go to source code"><var>$inputOptions</var></a>
+				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#53-56" title="Go to source code"><var>$inputOptions</var></a>
 
 			<div class="description short">
 				<p>$inputOptions</p>
@@ -1510,6 +1619,31 @@ Charcoal\App\Template\AbstractWidget
 		<td class="value">
 			<div>
 				<a href="#$inputOptions" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="formGroup" id="$formGroup">
+		<td class="attributes"><code>
+			protected  
+			Charcoal\Ui\FormGroup\FormGroupInterface
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Widget.FormPropertyWidget.html#88-93" title="Go to source code"><var>$formGroup</var></a>
+
+			<div class="description short">
+				<p>The form group the input belongs to.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The form group the input belongs to.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$formGroup" class="anchor">#</a>
 				<code></code>
 			</div>
 		</td>

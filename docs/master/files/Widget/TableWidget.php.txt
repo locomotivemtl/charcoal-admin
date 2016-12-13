@@ -730,7 +730,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             } elseif ($action['ident']) {
                 $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
             } else {
-                continue;
+                $action['label'] = null;
+                $action['active'] = false;
             }
 
             if (isset($action['url']) && TranslationString::isTranslatable($action['url'])) {

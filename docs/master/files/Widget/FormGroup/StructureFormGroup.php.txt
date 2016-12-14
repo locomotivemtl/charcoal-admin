@@ -315,7 +315,7 @@ class StructureFormGroup extends FormGroupWidget
                 $propertyOptions = $propPreferences[$propertyIdent];
 
                 if (is_array($propertyOptions)) {
-                    $formProperty->setData($propertyOptions);
+                    $formProperty->merge($propertyOptions);
                 }
             }
 

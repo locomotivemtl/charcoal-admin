@@ -635,17 +635,21 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $action = $this->parseActionItem($action, $ident);
 
             if (isset($action['url'])) {
-                $action['url'] = $this->parseActionUrl($action['url'], $action, $this);
+                $action['url'] = $this->parseActionUrl($action['url'], $action, $this->proto());
             }
 
             if (!isset($action['button_type'])) {
                 $action['button_type'] = ($action['ident'] === 'create') ? 'info' : 'default';
             }
 
-            $listActions[] = $action;
+            if (isset($listActions[$ident])) {
+                $listActions[$ident] = array_replace($listActions[$ident], $action);
+            } else {
+                $listActions[$ident] = $action;
+            }
         }
 
-        uasort($listActions, [ $this, 'sortActionsByPriority' ]);
+        usort($listActions, [ $this, 'sortActionsByPriority' ]);
 
         return $listActions;
     }
@@ -678,10 +682,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $ident  = $this->parseActionItem($ident, $action);
             $action = $this->parseActionItem($action, $ident);
 
-            $parsedActions[$ident] = $action;
+            if (isset($parsedActions[$ident])) {
+                $parsedActions[$ident] = array_replace($parsedActions[$ident], $action);
+            } else {
+                $parsedActions[$ident] = $action;
+            }
         }
 
-        uasort($parsedActions, [ $this, 'sortActionsByPriority' ]);
+        usort($parsedActions, [ $this, 'sortActionsByPriority' ]);
 
         return $parsedActions;
     }

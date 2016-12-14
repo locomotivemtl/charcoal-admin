@@ -103,7 +103,7 @@ class FormPropertyWidget extends AdminWidget implements
     private $propertyInputFactory;
 
     /**
-     * @param Container $container Pimple DI container.
+     * @param  Container $container Pimple DI container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -115,7 +115,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param FactoryInterface $factory The property factory, used to create properties.
+     * @param  FactoryInterface $factory The property factory, used to create properties.
      * @return FormPropertyWidget Chainable
      */
     protected function setPropertyFactory(FactoryInterface $factory)
@@ -139,7 +139,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param FactoryInterface $factory The property input factory, used to create property inputs.
+     * @param  FactoryInterface $factory The property input factory, used to create property inputs.
      * @return FormPropertyWidget Chainable
      */
     protected function setPropertyInputFactory(FactoryInterface $factory)
@@ -166,7 +166,7 @@ class FormPropertyWidget extends AdminWidget implements
      * Set the form input's parent group.
      *
      * @param  FormGroupInterface $formGroup The parent form group object.
-     * @return FormInputInterface Chainable
+     * @return FormPropertyWidget Chainable
      */
     public function setFormGroup(FormGroupInterface $formGroup)
     {
@@ -188,7 +188,7 @@ class FormPropertyWidget extends AdminWidget implements
     /**
      * Clear the input's parent group.
      *
-     * @return FormInputInterface Chainable
+     * @return FormPropertyWidget Chainable
      */
     public function clearFormGroup()
     {
@@ -198,8 +198,10 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param array|ArrayInterface $data The widget AND property data.
-     * @return FormProperty Chainable
+     * Set the widget and property data.
+     *
+     * @param  array|ArrayAccess $data Widget and property data.
+     * @return FormPropertyWidget Chainable
      */
     public function setData($data)
     {
@@ -212,7 +214,20 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param boolean $active The active flag.
+     * Merge widget and property data.
+     *
+     * @param  array|\Traversable $data Widget and property data.
+     * @return FormPropertyWidget Chainable
+     */
+    public function merge($data)
+    {
+        $this->propertyData = array_replace($this->propertyData, $data);
+
+        return $this;
+    }
+
+    /**
+     * @param  boolean $active The active flag.
      * @return FormPropertyWidget Chainable
      */
     public function setActive($active)
@@ -232,9 +247,9 @@ class FormPropertyWidget extends AdminWidget implements
     /**
      * Set the form's property identifier.
      *
-     * @param string $propertyIdent The property identifier.
+     * @param  string $propertyIdent The property identifier.
      * @throws InvalidArgumentException If the property ident is not a string.
-     * @return FormPropertyWidget
+     * @return FormPropertyWidget Chainable
      */
     public function setPropertyIdent($propertyIdent)
     {
@@ -260,7 +275,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param mixed $propertyVal The property value.
+     * @param  mixed $propertyVal The property value.
      * @return FormPropertyWidget Chainable
      */
     public function setPropertyVal($propertyVal)
@@ -329,7 +344,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return TranslationString
+     * @return TranslationString|string|null
      */
     public function description()
     {
@@ -337,7 +352,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return TranslationString
+     * @return TranslationString|string|null
      */
     public function notes()
     {
@@ -361,7 +376,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $inputType The property input type.
+     * @param  string $inputType The property input type.
      * @return FormPropertyWidget Chainable
      */
     public function setInputType($inputType)
@@ -391,8 +406,8 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param PropertyInterface $property The property.
-     * @return FormProperty Chainable
+     * @param  PropertyInterface $property The property.
+     * @return FormPropertyWidget Chainable
      */
     public function setProp(PropertyInterface $property)
     {
@@ -441,8 +456,8 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $mode The l10n mode.
-     * @return FormGroupInterface Chainable
+     * @param  string $mode The l10n mode.
+     * @return FormPropertyWidget Chainable
      */
     public function setL10nMode($mode)
     {

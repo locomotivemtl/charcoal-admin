@@ -221,7 +221,7 @@ class FormGroupWidget extends AbstractUiItem implements
                     $propertyOptions = $propOptions[$propertyIdent];
 
                     if (is_array($propertyOptions)) {
-                        $property->setData($propertyOptions);
+                        $property->merge($propertyOptions);
                     }
                 }
 

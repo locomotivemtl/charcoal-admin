@@ -331,9 +331,6 @@ class TemplateOptionsFormGroup extends StructureFormGroup
             }
 
             if ($template) {
-                if (substr($template, -1, 9) !== '-template') {
-                    $template .= '-template';
-                }
                 $metadata = $this->loadMetadata($template);
                 $property = $this->storageProperty();
                 $property->setStructureMetadata($metadata);

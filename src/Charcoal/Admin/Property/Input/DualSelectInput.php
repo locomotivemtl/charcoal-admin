@@ -59,7 +59,7 @@ class DualSelectInput extends AbstractSelectableInput
     }
 
     /**
-     * Retrieve the selectable options.
+     * Retrieve the selected options.
      *
      * @return Generator|array
      */

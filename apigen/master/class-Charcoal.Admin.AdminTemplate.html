@@ -298,7 +298,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminTemplate.html#27-672" title="Go to source code">Charcoal/Admin/AdminTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.AdminTemplate.html#27-721" title="Go to source code">Charcoal/Admin/AdminTemplate.php</a>
 		<br>
 	</div>
 
@@ -1293,6 +1293,49 @@ Charcoal\App\Template\AbstractTemplate
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="createSidemenu" id="_createSidemenu">
+
+		<td class="attributes"><code>
+			 protected 
+
+			SidemenuWidgetInterface|null
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_createSidemenu">#</a>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#508-555" title="Go to source code">createSidemenu</a>( <span>mixed <var>$sidemenuConfig</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$sidemenuConfig</var></dt>
+					<dd>The sidemenu widget ID or config.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					SidemenuWidgetInterface|null
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the sidemenu widget is invalid.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="hasFeedbacks" id="_hasFeedbacks">
 
 		<td class="attributes"><code>
@@ -1305,7 +1348,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hasFeedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#508-514" title="Go to source code">hasFeedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#557-563" title="Go to source code">hasFeedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -1339,7 +1382,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_feedbacks">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#516-522" title="Go to source code">feedbacks</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#565-571" title="Go to source code">feedbacks</a>( )</code>
 
 		<div class="description short">
 			
@@ -1373,7 +1416,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_addFeedback">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#524-537" title="Go to source code">addFeedback</a>( <span>string <var>$level</var></span>, <span>mixed <var>$msg</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#573-586" title="Go to source code">addFeedback</a>( <span>string <var>$level</var></span>, <span>mixed <var>$msg</var></span> )</code>
 
 		<div class="description short">
 			
@@ -1414,7 +1457,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_authRequired">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#539-553" title="Go to source code">authRequired</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#588-602" title="Go to source code">authRequired</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if user authentication is required.</p>
@@ -1454,7 +1497,7 @@ should return <code>false</code>.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isAuthenticated">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#555-564" title="Go to source code">isAuthenticated</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#604-613" title="Go to source code">isAuthenticated</a>( )</code>
 
 		<div class="description short">
 			<p>Determine if the current user is authenticated.
@@ -1490,7 +1533,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_adminUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#566-576" title="Go to source code">adminUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#615-625" title="Go to source code">adminUrl</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the base URI of the administration area.</p>
@@ -1524,7 +1567,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setBaseUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#578-589" title="Go to source code">setBaseUrl</a>( <span>string|Psr\Http\Message\UriInterface <var>$uri</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#627-638" title="Go to source code">setBaseUrl</a>( <span>string|Psr\Http\Message\UriInterface <var>$uri</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the base URI of the application.</p>
@@ -1563,7 +1606,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_baseUrl">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#591-599" title="Go to source code">baseUrl</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#640-648" title="Go to source code">baseUrl</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the base URI of the application.</p>
@@ -1597,7 +1640,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_headerMenuLogo">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#601-615" title="Go to source code">headerMenuLogo</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#650-664" title="Go to source code">headerMenuLogo</a>( )</code>
 
 		<div class="description short">
 			
@@ -1631,7 +1674,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setSiteName">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#617-632" title="Go to source code">setSiteName</a>( <span>mixed <var>$name</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#666-681" title="Go to source code">setSiteName</a>( <span>mixed <var>$name</var></span> )</code>
 
 		<div class="description short">
 			<p>Set the name of the project.</p>
@@ -1670,7 +1713,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_siteName">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#634-642" title="Go to source code">siteName</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#683-691" title="Go to source code">siteName</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the name of the project.</p>
@@ -1704,7 +1747,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_documentTitle">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#644-663" title="Go to source code">documentTitle</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#693-712" title="Go to source code">documentTitle</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the document title.</p>
@@ -1738,7 +1781,7 @@ Uses the Authenticator service.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_recaptchaKey">#</a>
-		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#665-671" title="Go to source code">recaptchaKey</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.AdminTemplate.html#714-720" title="Go to source code">recaptchaKey</a>( )</code>
 
 		<div class="description short">
 			

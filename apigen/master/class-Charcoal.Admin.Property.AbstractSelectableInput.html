@@ -305,7 +305,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Property.html">Property</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#5-88" title="Go to source code">Charcoal/Admin/Property/AbstractSelectableInput.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#5-188" title="Go to source code">Charcoal/Admin/Property/AbstractSelectableInput.php</a>
 		<br>
 	</div>
 
@@ -325,7 +325,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_choices">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#11-33" title="Go to source code">choices</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#18-40" title="Go to source code">choices</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the selectable options.</p>
@@ -361,7 +361,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_parseChoice">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#35-60" title="Go to source code">parseChoice</a>( <span>string|integer <var>$ident</var></span>, <span>array|object <var>$choice</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#42-67" title="Go to source code">parseChoice</a>( <span>string|integer <var>$ident</var></span>, <span>array|object <var>$choice</var></span> )</code>
 
 		<div class="description short">
 			<p>Prepare a single selectable option for output.</p>
@@ -390,6 +390,45 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="parseChoiceVal" id="_parseChoiceVal">
+
+		<td class="attributes"><code>
+			 protected 
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_parseChoiceVal">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#69-94" title="Go to source code">parseChoiceVal</a>( <span>mixed <var>$value</var></span> )</code>
+
+		<div class="description short">
+			<p>Convert the value to a scalar.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Convert the value to a scalar.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$value</var></dt>
+					<dd>A value to parse.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="isChoiceSelected" id="_isChoiceSelected">
 
 		<td class="attributes"><code>
@@ -402,7 +441,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_isChoiceSelected">#</a>
-		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#62-87" title="Go to source code">isChoiceSelected</a>( <span>mixed <var>$choice</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#96-121" title="Go to source code">isChoiceSelected</a>( <span>mixed <var>$choice</var></span> )</code>
 
 		<div class="description short">
 			<p>Determine if the provided option is a selected value.</p>
@@ -428,6 +467,152 @@
 
 				<h4>Implementation of</h4>
 				<div class="list"><code><a href="class-Charcoal.Admin.Property.SelectableInputInterface.html#_isChoiceSelected">Charcoal\Admin\Property\SelectableInputInterface::isChoiceSelected()</a></code></div>
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="mapObjToChoice" id="_mapObjToChoice">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_mapObjToChoice">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#123-147" title="Go to source code">mapObjToChoice</a>( <span>array|ArrayAccess <var>$obj</var></span> )</code>
+
+		<div class="description short">
+			<p>Convert the given object into a choice structure.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Convert the given object into a choice structure.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$obj</var></dt>
+					<dd>The object to map to a choice.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setChoiceObjMap" id="_setChoiceObjMap">
+
+		<td class="attributes"><code>
+			 public 
+
+			TagsInput
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setChoiceObjMap">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#149-160" title="Go to source code">setChoiceObjMap</a>( <span>array <var>$map</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the object-to-choice data map.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the object-to-choice data map.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$map</var></dt>
+					<dd>Model-to-choice mapping.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					TagsInput<br>Chainable
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="choiceObjMap" id="_choiceObjMap">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_choiceObjMap">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#162-174" title="Go to source code">choiceObjMap</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the object-to-choice data map.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the object-to-choice data map.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array<br>Returns a data map to abide.
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="defaultChoiceObjMap" id="_defaultChoiceObjMap">
+
+		<td class="attributes"><code>
+			 public 
+
+			array
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_defaultChoiceObjMap">#</a>
+		<code><a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#176-187" title="Go to source code">defaultChoiceObjMap</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the default object-to-choice data map.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the default object-to-choice data map.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					array
+				</div>
+
+
+
+
 		</div>
 		</div></td>
 	</tr>
@@ -500,6 +685,34 @@
 
 
 
+	<table class="summary properties" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="choiceObjMap" id="$choiceObjMap">
+		<td class="attributes"><code>
+			protected  
+			array
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Property.AbstractSelectableInput.html#11-16" title="Go to source code"><var>$choiceObjMap</var></a>
+
+			<div class="description short">
+				<p>The object-to-choice map.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The object-to-choice map.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$choiceObjMap" class="anchor">#</a>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	</table>
 
 	<table class="summary inherited">
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Property.AbstractPropertyInput.html#properties">Charcoal\Admin\Property\AbstractPropertyInput</a></caption>

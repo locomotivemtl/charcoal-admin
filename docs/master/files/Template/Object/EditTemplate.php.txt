@@ -66,7 +66,6 @@ class EditTemplate extends AdminTemplate implements
         $this->dashboardBuilder = $container['dashboard/builder'];
     }
 
-
     /**
      * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return EditTemplate Chainable
@@ -74,6 +73,7 @@ class EditTemplate extends AdminTemplate implements
     protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
+
         return $this;
     }
 
@@ -88,6 +88,7 @@ class EditTemplate extends AdminTemplate implements
                 'Model factory not set'
             );
         }
+
         return $this->widgetFactory;
     }
 
@@ -99,6 +100,7 @@ class EditTemplate extends AdminTemplate implements
     public function setDashboardBuilder(DashboardBuilder $builder)
     {
         $this->dashboardBuilder = $builder;
+
         return $this;
     }
 
@@ -113,6 +115,7 @@ class EditTemplate extends AdminTemplate implements
                 'Dashboard builder was not set.'
             );
         }
+
         return $this->dashboardBuilder;
     }
 
@@ -125,7 +128,8 @@ class EditTemplate extends AdminTemplate implements
     {
         unset($data);
         $dashboardConfig = $this->objEditDashboardConfig();
-        $dashboard = $this->dashboardBuilder->build($dashboardConfig);
+        $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
+
         return $dashboard;
     }
 
@@ -137,7 +141,21 @@ class EditTemplate extends AdminTemplate implements
         $dashboardConfig = $this->objEditDashboardConfig();
 
         if (!isset($dashboardConfig['sidemenu'])) {
-            return null;
+
+            $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+
+            $sidemenuIdent = $sidemenuFromRequest ?: $mainMenuFromRequest;
+
+            if (!$sidemenuIdent) {
+                return null;
+            }
+
+            $dashboardConfig['sidemenu'] = [
+                "widget_options" => [
+                    "ident" => $sidemenuIdent
+                ]
+            ];
         }
 
         $sidemenuConfig = $dashboardConfig['sidemenu'];
@@ -159,7 +177,6 @@ class EditTemplate extends AdminTemplate implements
         return $sidemenu;
     }
 
-
     /**
      * @throws Exception If the object's admin metadata is not set.
      * @return \ArrayAccess
@@ -168,7 +185,7 @@ class EditTemplate extends AdminTemplate implements
     {
         $obj = $this->obj();
 
-        $objMetadata     = $obj->metadata();
+        $objMetadata = $obj->metadata();
 
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
         if ($adminMetadata === null) {
@@ -258,8 +275,8 @@ class EditTemplate extends AdminTemplate implements
         $objLabel = null;
 
         if (!$objLabel && isset($metadata['admin']['forms'])) {
-            $adminMetadata  = $metadata['admin'];
-            $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
+            $adminMetadata = $metadata['admin'];
+            $formIdent     = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
 
             if ($formIdent === false || $formIdent === null || $formIdent === '') {
                 $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
@@ -291,7 +308,7 @@ class EditTemplate extends AdminTemplate implements
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['singular_name']) ? $metadata['labels']['singular_name'] : null );
+            $objType = (isset($metadata['labels']['singular_name']) ? $metadata['labels']['singular_name'] : null);
             if (TranslationString::isTranslatable($objType)) {
                 $objType = new TranslationString($objType);
             }

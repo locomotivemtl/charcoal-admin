@@ -65,7 +65,7 @@ class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
@@ -79,7 +79,7 @@ class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar&username=foobar'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
@@ -93,7 +93,7 @@ class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar&username=foobar&password=foo&password_confirm=bar'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
@@ -107,7 +107,7 @@ class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar&username=foobar&password=foo&password_confirm=foo'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
@@ -121,7 +121,7 @@ class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar&username=foobar&password=foo&password_confirm=foo&g-recaptcha-response=foobar'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);

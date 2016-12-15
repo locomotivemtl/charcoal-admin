@@ -65,7 +65,7 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'username=foobar'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
@@ -79,7 +79,7 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
     {
          $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'username=foobar&g-recaptcha-response=foobar'
-        ]));
+         ]));
         $response = new Response();
 
         $res = $this->obj->run($request, $response);

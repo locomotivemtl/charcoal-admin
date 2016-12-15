@@ -87,6 +87,7 @@ class CollectionTemplate extends AdminTemplate implements
     protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
+
         return $this;
     }
 
@@ -104,6 +105,7 @@ class CollectionTemplate extends AdminTemplate implements
                 'Widget factory was not set.'
             );
         }
+
         return $this->widgetFactory;
     }
 
@@ -115,6 +117,7 @@ class CollectionTemplate extends AdminTemplate implements
     public function setDashboardBuilder(DashboardBuilder $builder)
     {
         $this->dashboardBuilder = $builder;
+
         return $this;
     }
 
@@ -129,6 +132,7 @@ class CollectionTemplate extends AdminTemplate implements
                 'Dashboard builder was not set.'
             );
         }
+
         return $this->dashboardBuilder;
     }
 
@@ -141,7 +145,8 @@ class CollectionTemplate extends AdminTemplate implements
     {
         unset($data);
         $dashboardConfig = $this->objCollectionDashboardConfig();
-        $dashboard = $this->dashboardBuilder->build($dashboardConfig);
+        $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
+
         return $dashboard;
     }
 
@@ -153,7 +158,21 @@ class CollectionTemplate extends AdminTemplate implements
         $dashboardConfig = $this->objCollectionDashboardConfig();
 
         if (!isset($dashboardConfig['sidemenu'])) {
-            return null;
+
+            $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+
+            $sidemenuIdent = $sidemenuFromRequest ?: $mainMenuFromRequest;
+
+            if (!$sidemenuIdent) {
+                return null;
+            }
+
+            $dashboardConfig['sidemenu'] = [
+                "widget_options" => [
+                    "ident" => $sidemenuIdent
+                ]
+            ];
         }
 
         $sidemenuConfig = $dashboardConfig['sidemenu'];
@@ -188,16 +207,16 @@ class CollectionTemplate extends AdminTemplate implements
         $widget = $this->widgetFactory()->create('charcoal/admin/widget/search');
         $widget->setObjType($this->objType());
 
-        $obj = $this->proto();
+        $obj      = $this->proto();
         $metadata = $obj->metadata();
 
         $adminMetadata = $metadata['admin'];
-        $lists = $adminMetadata['lists'];
+        $lists         = $adminMetadata['lists'];
 
-        $listIdent = ( isset($adminMetadata['default_search_list']) ) ? $adminMetadata['default_search_list'] : '';
+        $listIdent = (isset($adminMetadata['default_search_list'])) ? $adminMetadata['default_search_list'] : '';
 
         if (!$listIdent) {
-            $listIdent = ( isset($adminMetadata['default_list']) ) ? $adminMetadata['default_list'] : '';
+            $listIdent = (isset($adminMetadata['default_list'])) ? $adminMetadata['default_list'] : '';
         }
 
         if (!$listIdent) {
@@ -207,6 +226,7 @@ class CollectionTemplate extends AdminTemplate implements
         // Note that if the ident doesn't match a list,
         // it will return basicly every properties of the object
         $widget->setCollectionIdent($listIdent);
+
         return $widget;
     }
 
@@ -218,7 +238,7 @@ class CollectionTemplate extends AdminTemplate implements
     {
         $obj = $this->proto();
 
-        $objMetadata     = $obj->metadata();
+        $objMetadata = $obj->metadata();
 
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
         if ($adminMetadata === null) {
@@ -239,7 +259,7 @@ class CollectionTemplate extends AdminTemplate implements
      */
     private function objCollectionDashboardConfig()
     {
-        $adminMetadata  = $this->objAdminMetadata();
+        $adminMetadata = $this->objAdminMetadata();
 
         $dashboardIdent  = $this->dashboardIdent();
         $dashboardConfig = $this->dashboardConfig();
@@ -327,7 +347,7 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['name']) ? $metadata['labels']['name'] : null );
+            $objType = (isset($metadata['labels']['name']) ? $metadata['labels']['name'] : null);
             if (TranslationString::isTranslatable($objType)) {
                 $objType = new TranslationString($objType);
             }

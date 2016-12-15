@@ -50,7 +50,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     public function setData($data)
     {
         $objData = $this->dataFromObject();
-        $data = array_merge_recursive($objData, $data);
+        $data    = array_merge_recursive($objData, $data);
 
         parent::setData($data);
 
@@ -63,9 +63,9 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function dataFromObject()
     {
-        $obj = $this->proto();
-        $metadata = $obj->metadata();
-        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $obj             = $this->proto();
+        $metadata        = $obj->metadata();
+        $adminMetadata   = isset($metadata['admin']) ? $metadata['admin'] : null;
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
             $collectionIdent = isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '';
@@ -86,13 +86,13 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     public function properties()
     {
         if ($this->properties === null) {
-            $obj = $this->proto();
+            $obj   = $this->proto();
             $props = $obj->metadata()->properties();
 
             $collectionIdent = $this->collectionIdent();
 
             if ($collectionIdent) {
-                $metadata = $obj->metadata();
+                $metadata      = $obj->metadata();
                 $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
 
                 if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
@@ -117,14 +117,17 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function jsonPropertiesList()
     {
-        $obj = $this->proto();
-        $metadata = $obj->metadata();
-        $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
+        $obj             = $this->proto();
+        $metadata        = $obj->metadata();
+        $adminMetadata   = isset($metadata['admin']) ? $metadata['admin'] : null;
         $collectionIdent = $this->collectionIdent();
+
+        $props = [];
 
         if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
             $props = $adminMetadata['lists'][$collectionIdent]['properties'];
         }
+
         return json_encode($props);
     }
 }

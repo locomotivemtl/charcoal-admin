@@ -1439,7 +1439,9 @@ Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
 {
     return this.opts('widget_options');
 };
-;/**
+;/* global URLSearchParams */
+
+/**
  * Form widget that manages data sending
  * charcoal/admin/widget/form
  *
@@ -1450,8 +1452,7 @@ Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Form = function (opts)
-{
+Charcoal.Admin.Widget_Form = function (opts) {
     this.widget_type = 'charcoal/admin/widget/form';
 
     // Widget_Form properties
@@ -1468,12 +1469,11 @@ Charcoal.Admin.Widget_Form = function (opts)
 
     this.set_properties(opts).bind_events();
 };
-Charcoal.Admin.Widget_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Form.prototype             = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
-Charcoal.Admin.Widget_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
+Charcoal.Admin.Widget_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
 
-Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
     this.widget_id     = opts.id || this.widget_id;
     this.obj_type      = opts.data.obj_type || this.obj_type;
     this.obj_id        = Charcoal.Admin.parseNumber(opts.data.obj_id || this.obj_id);
@@ -1483,8 +1483,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts)
     return this;
 };
 
-Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
-{
+Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     var that = this;
 
     // Submit the form via ajax
@@ -1516,14 +1515,14 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
     });
 
     /*if (that.isTab) {
-        $(that.form_selector).on('click', '.js-group-tabs', function (e) {
-            e.preventDefault();
-            var href = $(this).attr('href');
-            $(that.form_selector).find('.js-group-tab').addClass('hidden');
-            $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
-            $(this).parent().addClass('active').siblings('.active').removeClass('active');
-        });
-    }*/
+     $(that.form_selector).on('click', '.js-group-tabs', function (e) {
+     e.preventDefault();
+     var href = $(this).attr('href');
+     $(that.form_selector).find('.js-group-tab').addClass('hidden');
+     $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
+     $(this).parent().addClass('active').siblings('.active').removeClass('active');
+     });
+     }*/
 
 };
 
@@ -1532,8 +1531,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function ()
  * @param  Element form - The submitted form.
  * @return self
  */
-Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
-{
+Charcoal.Admin.Widget_Form.prototype.submit_form = function (form) {
     if (this.form_working) {
         return;
     }
@@ -1574,10 +1572,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
     // });
 
     this.xhr = $.ajax({
-        type:        'POST',            // ($form.prop('method') || 'POST')
-        url:         this.request_url(),  // ($form.data('action') || this.request_url())
-        data:        form_data,
-        dataType:    'json',
+        type       : 'POST',            // ($form.prop('method') || 'POST')
+        url        : this.request_url(),  // ($form.data('action') || this.request_url())
+        data       : form_data,
+        dataType   : 'json',
         processData: false,
         contentType: false,
     });
@@ -1589,8 +1587,7 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form)
         .always($.proxy(this.request_complete, this, $form, $trigger));
 };
 
-Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, response, textStatus, jqXHR)
-{
+Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, response, textStatus, jqXHR) {
     if (!response || !response.success) {
         if (response.feedbacks) {
             return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
@@ -1602,8 +1599,7 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, r
     return $.Deferred().resolve(response, textStatus, jqXHR);
 };
 
-Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger, response/* textStatus, jqXHR */)
-{
+Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger, response/* textStatus, jqXHR */) {
     if (response.feedbacks) {
         Charcoal.Admin.feedback().add_data(response.feedbacks);
     }
@@ -1611,7 +1607,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
     if (response.next_url) {
         // @todo "dynamise" the label
         Charcoal.Admin.feedback().add_action({
-            label:    'Continuer',
+            label   : 'Continuer',
             callback: function () {
                 window.location.href =
                     Charcoal.Admin.admin_url() +
@@ -1628,16 +1624,21 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
                 Charcoal.Admin.admin_url() +
                 response.next_url;
         } else {
+
+            var params = new URLSearchParams(window.location.search);
+
             window.location.href =
                 Charcoal.Admin.admin_url() +
-                'object/edit?obj_type=' + this.obj_type +
+                'object/edit?' +
+                (params.has('main_menu') ? 'main_menu=' + params.get('main_menu') + '&' : '') +
+                (params.has('sidemenu') ? 'sidemenu=' + params.get('sidemenu') + '&' : '') +
+                'obj_type=' + this.obj_type +
                 '&obj_id=' + response.obj_id;
         }
     }
 };
 
-Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger, jqXHR, textStatus, errorThrown)
-{
+Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger, jqXHR, textStatus, errorThrown) {
     if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
         Charcoal.Admin.feedback().add_data(jqXHR.responseJSON.feedbacks);
     } else {
@@ -1646,13 +1647,12 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
 
         Charcoal.Admin.feedback().add_data([{
             level: message + error,
-            msg:   'error'
+            msg  : 'error'
         }]);
     }
 };
 
-Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigger/*, .... */)
-{
+Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigger/*, .... */) {
     if (!this.suppress_feedback) {
         Charcoal.Admin.feedback().call();
         this.enable_form($form, $trigger);
@@ -1666,8 +1666,7 @@ Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigge
  * @param  Element $trigger The form's submit button.
  * @return self
  */
-Charcoal.Admin.Widget_Form.prototype.disable_form = function ($form, $trigger)
-{
+Charcoal.Admin.Widget_Form.prototype.disable_form = function ($form, $trigger) {
     if ($form) {
         $form.prop('disabled', true);
     }
@@ -1686,8 +1685,7 @@ Charcoal.Admin.Widget_Form.prototype.disable_form = function ($form, $trigger)
  * @param  Element $trigger The form's submit button.
  * @return self
  */
-Charcoal.Admin.Widget_Form.prototype.enable_form = function ($form, $trigger)
-{
+Charcoal.Admin.Widget_Form.prototype.enable_form = function ($form, $trigger) {
     if ($form) {
         $form.prop('disabled', false);
     }
@@ -1704,8 +1702,7 @@ Charcoal.Admin.Widget_Form.prototype.enable_form = function ($form, $trigger)
 /**
  * @return string The requested URL for processing the form.
  */
-Charcoal.Admin.Widget_Form.prototype.request_url = function ()
-{
+Charcoal.Admin.Widget_Form.prototype.request_url = function () {
     if (this.is_new_object) {
         return Charcoal.Admin.admin_url() + 'object/save';
     } else {
@@ -1716,27 +1713,26 @@ Charcoal.Admin.Widget_Form.prototype.request_url = function ()
 /**
  * Handle the "delete" button / action.
  */
-Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */)
-{
+Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
     var that = this;
     //console.debug(form);
     BootstrapDialog.confirm({
-        title: 'Confirmer la suppression',
-        type: BootstrapDialog.TYPE_DANGER,
-        message:'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
-        btnOKLabel: 'Supprimer',
+        title         : 'Confirmer la suppression',
+        type          : BootstrapDialog.TYPE_DANGER,
+        message       : 'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
+        btnOKLabel    : 'Supprimer',
         btnCancelLabel: 'Annuler',
-        callback: function (result) {
+        callback      : function (result) {
             if (result) {
-                var url = Charcoal.Admin.admin_url() + 'object/delete';
+                var url  = Charcoal.Admin.admin_url() + 'object/delete';
                 var data = {
                     obj_type: that.obj_type,
-                    obj_id: that.obj_id
+                    obj_id  : that.obj_id
                 };
                 $.ajax({
-                    method: 'POST',
-                    url: url,
-                    data: data,
+                    method  : 'POST',
+                    url     : url,
+                    data    : data,
                     dataType: 'json'
                 }).done(function (response) {
                     //console.debug(response);
@@ -1753,10 +1749,9 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */)
 };
 
 /**
-* Switch languages for all l10n elements in the form
-*/
-Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang)
-{
+ * Switch languages for all l10n elements in the form
+ */
+Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
     Charcoal.Admin.lang = lang;
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');

@@ -506,6 +506,55 @@ class AdminTemplate extends AbstractTemplate
     }
 
     /**
+     * @param  mixed $sidemenuConfig The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the sidemenu widget is invalid.
+     * @return SidemenuWidgetInterface|null
+     */
+    protected function createSidemenu($sidemenuConfig = null)
+    {
+        if (empty($sidemenuConfig)) {
+            $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+
+            if ($sidemenuFromRequest) {
+                $sidemenuConfig = $sidemenuFromRequest;
+            } elseif ($mainMenuFromRequest) {
+                $sidemenuConfig = $mainMenuFromRequest;
+            } else {
+                return null;
+            }
+        }
+
+        if (is_string($sidemenuConfig)) {
+            $sidemenuConfig = [
+                'widget_options' => [
+                    'ident' => $sidemenuConfig
+                ]
+            ];
+        } elseif (!is_array($sidemenuConfig)) {
+            throw new InvalidArgumentException(
+                'The sidemenu definition must be a sidemenu identifier or sidemenu structure.'
+            );
+        }
+
+        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
+
+        if (isset($sidemenuConfig['widget_type'])) {
+            $widgetType = $sidemenuConfig['widget_type'];
+        } else {
+            $widgetType = 'charcoal/admin/widget/sidemenu';
+        }
+
+        $sidemenu = $this->widgetFactory()->create($widgetType);
+
+        if (isset($sidemenuConfig['widget_options'])) {
+            $sidemenu->setData($sidemenuConfig['widget_options']);
+        }
+
+        return $sidemenu;
+    }
+
+    /**
      * @return boolean
      */
     public function hasFeedbacks()

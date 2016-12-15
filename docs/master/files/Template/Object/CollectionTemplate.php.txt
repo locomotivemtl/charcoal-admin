@@ -151,47 +151,17 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return SidemenuWidgetInterface
+     * @return SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
         $dashboardConfig = $this->objCollectionDashboardConfig();
 
-        if (!isset($dashboardConfig['sidemenu'])) {
-
-            $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
-            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-
-            $sidemenuIdent = $sidemenuFromRequest ?: $mainMenuFromRequest;
-
-            if (!$sidemenuIdent) {
-                return null;
-            }
-
-            $dashboardConfig['sidemenu'] = [
-                "widget_options" => [
-                    "ident" => $sidemenuIdent
-                ]
-            ];
-        }
-
-        $sidemenuConfig = $dashboardConfig['sidemenu'];
-
-        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-
-        if (isset($sidemenuConfig['widget_type'])) {
-            $widgetType = $sidemenuConfig['widget_type'];
+        if (isset($dashboardConfig['sidemenu'])) {
+            return $this->createSidemenu($dashboardConfig['sidemenu']);
         } else {
-            $widgetType = 'charcoal/admin/widget/sidemenu';
+            return $this->createSidemenu();
         }
-
-        $sidemenu = $this->widgetFactory()->create($widgetType);
-
-        if (isset($sidemenuConfig['widget_options'])) {
-            $sidemenu->setData($sidemenuConfig['widget_options']);
-        }
-
-        return $sidemenu;
     }
 
     /**

@@ -180,6 +180,7 @@ class StructureWidgetInput extends AbstractPropertyInput implements
     /**
      * Retrieve the structure widget.
      *
+     * @throws InvalidArgumentException If the structure widget is invalid.
      * @return WidgetInterface|FormGroupInterface
      */
     protected function getStructureWidget()
@@ -187,10 +188,16 @@ class StructureWidgetInput extends AbstractPropertyInput implements
         if ($this->structureWidget === null) {
             $type = $this->structureOption('widget_type');
 
-            if (is_subclass_of($type, FormGroupInterface::class)) {
+            if ($this->formGroupFactory()->isResolvable($type)) {
                 $widget = $this->formGroupFactory()->create($type);
-            } else {
+            } elseif ($this->widgetFactory()->isResolvable($type)) {
                 $widget = $this->widgetFactory()->create($type);
+            } else {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid structure widget UI. Must be an instance of %s or %s',
+                    WidgetInterface::class,
+                    FormGroupInterface::class
+                ));
             }
 
             $widget->setForm($this->formGroup()->form());

@@ -98,6 +98,22 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     private $metadataLoader;
 
     /**
+     * @return string
+     */
+    public function type()
+    {
+        return 'charcoal/admin/widget/form-group/template-options';
+    }
+
+    /**
+     * @return string
+     */
+    public function template()
+    {
+        return 'charcoal/admin/widget/form-group/structure';
+    }
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.

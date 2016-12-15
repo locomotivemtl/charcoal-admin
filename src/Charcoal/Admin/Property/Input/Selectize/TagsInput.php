@@ -8,6 +8,9 @@ use \InvalidArgumentException;
 // From Pimple
 use Pimple\Container;
 
+// From 'charcoal-core'
+use \Charcoal\Loader\CollectionLoader;
+
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
@@ -20,7 +23,8 @@ use Charcoal\Admin\Property\AbstractSelectableInput;
 /**
  * Tags Input Property
  *
- * The HTML form control can be either an `<input type="text">` (for multiple values) or a `<select>` (single value).
+ * The HTML form control can be either an `<input type="text">` (for multiple values)
+ * or a `<select>` (single value).
  */
 class TagsInput extends AbstractSelectableInput
 {
@@ -46,6 +50,13 @@ class TagsInput extends AbstractSelectableInput
     private $modelFactory;
 
     /**
+     * Store the collection loader for the current class.
+     *
+     * @var CollectionLoader
+     */
+    private $collectionLoader;
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.
@@ -56,6 +67,7 @@ class TagsInput extends AbstractSelectableInput
         parent::setDependencies($container);
 
         $this->setModelFactory($container['model/factory']);
+        $this->setCollectionLoader($container['model/collection/loader']);
     }
 
     /**
@@ -86,6 +98,36 @@ class TagsInput extends AbstractSelectableInput
         }
 
         return $this->modelFactory;
+    }
+
+    /**
+     * Set a model collection loader.
+     *
+     * @param CollectionLoader $loader The collection loader.
+     * @return self
+     */
+    private function setCollectionLoader(CollectionLoader $loader)
+    {
+        $this->collectionLoader = $loader;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the model collection loader.
+     *
+     * @throws RuntimeException If the collection loader was not previously set.
+     * @return CollectionLoader
+     */
+    protected function collectionLoader()
+    {
+        if (!isset($this->collectionLoader)) {
+            throw new RuntimeException(
+                sprintf('Collection Loader is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->collectionLoader;
     }
 
     /**
@@ -180,7 +222,10 @@ class TagsInput extends AbstractSelectableInput
      */
     public function setSelectizeOptions(array $settings)
     {
-        $this->selectizeOptions = array_merge($this->defaultSelectizeOptions(), $settings);
+        $this->selectizeOptions = array_merge(
+            $this->defaultSelectizeOptions(),
+            $this->parseSelectizeOptions($settings)
+        );
 
         return $this;
     }
@@ -193,7 +238,10 @@ class TagsInput extends AbstractSelectableInput
      */
     public function mergeSelectizeOptions(array $settings)
     {
-        $this->selectizeOptions = array_merge($this->selectizeOptions, $settings);
+        $this->selectizeOptions = array_merge(
+            $this->selectizeOptions,
+            $this->parseSelectizeOptions($settings)
+        );
 
         return $this;
     }
@@ -217,6 +265,10 @@ class TagsInput extends AbstractSelectableInput
         // Make sure default options are loaded.
         if ($this->selectizeOptions === null) {
             $this->selectizeOptions();
+        }
+
+        if ($key === 'options') {
+            $val = $this->parseSelectizeAvailableChoices($val);
         }
 
         $this->selectizeOptions[$key] = $val;
@@ -250,6 +302,7 @@ class TagsInput extends AbstractSelectableInput
 
         if (isset($metadata['data']['selectize_options'])) {
             $options = $metadata['data']['selectize_options'];
+            $options = $this->parseSelectizeOptions($options);
         }
 
         if (isset($options['options'])) {
@@ -259,6 +312,27 @@ class TagsInput extends AbstractSelectableInput
         }
 
         return $options;
+    }
+
+    /**
+     * Retrieve the selectize picker's options as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function selectizeOptionsAsJson()
+    {
+        return json_encode($this->selectizeOptions());
+    }
+
+    /**
+     * Parse the selectize picker's options.
+     *
+     * @param  array $settings The selectize picker options.
+     * @return array Returns the parsed options.
+     */
+    protected function parseSelectizeOptions(array $settings)
+    {
+        return $settings;
     }
 
     /**
@@ -288,24 +362,24 @@ class TagsInput extends AbstractSelectableInput
             }
 
             if ($prop instanceof ObjectProperty) {
-                $objType = $prop->objType();
-                foreach ($val as $v) {
-                    $obj = $this->modelFactory()->create($objType);
-                    $obj->load($v);
-                    if ($obj->id()) {
-                        $choices[] = [
-                            'value' => $obj->id(),
-                            'text'  => (string)$obj->name(),
-                            'color' => method_exists($obj, 'color') ? $obj->color() : null
-                        ];
-                    }
+                $model  = $this->modelFactory()->get($prop->objType());
+                $loader = $this->collectionLoader();
+                $loader->reset()->setModel($model);
+                $loader->addFilter([
+                    'property' => $model->key(),
+                    'operator' => 'IN',
+                    'val'      => $val
+                ]);
+                $collection = $loader->load();
+                $choices = [];
+                foreach ($collection as $obj) {
+                    $choices[] = $this->mapObjToChoice($obj);
                 }
             } else {
                 foreach ($val as $v) {
                     $choices[] = [
                         'value' => $v,
-                        'text'  => $v,
-                        'color' => null
+                        'text'  => $v
                     ];
                 }
             }
@@ -315,12 +389,16 @@ class TagsInput extends AbstractSelectableInput
     }
 
     /**
-     * Retrieve the selectize picker's options as a JSON string.
+     * Retrieve the default object-to-choice data map.
      *
-     * @return string Returns data serialized with {@see json_encode()}.
+     * @return array
      */
-    public function selectizeOptionsAsJson()
+    public function defaultChoiceObjMap()
     {
-        return json_encode($this->selectizeOptions());
+        return [
+            'value' => 'id',
+            'text'  => 'name:title:label',
+            'color' => 'color'
+        ];
     }
 }

@@ -1572,10 +1572,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form) {
     // });
 
     this.xhr = $.ajax({
-        type       : 'POST',            // ($form.prop('method') || 'POST')
-        url        : this.request_url(),  // ($form.data('action') || this.request_url())
-        data       : form_data,
-        dataType   : 'json',
+        type: 'POST',            // ($form.prop('method') || 'POST')
+        url: this.request_url(),  // ($form.data('action') || this.request_url())
+        data: form_data,
+        dataType: 'json',
         processData: false,
         contentType: false,
     });
@@ -1607,7 +1607,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
     if (response.next_url) {
         // @todo "dynamise" the label
         Charcoal.Admin.feedback().add_action({
-            label   : 'Continuer',
+            label: 'Continuer',
             callback: function () {
                 window.location.href =
                     Charcoal.Admin.admin_url() +
@@ -1647,7 +1647,7 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
 
         Charcoal.Admin.feedback().add_data([{
             level: message + error,
-            msg  : 'error'
+            msg: 'error'
         }]);
     }
 };
@@ -1717,22 +1717,22 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
     var that = this;
     //console.debug(form);
     BootstrapDialog.confirm({
-        title         : 'Confirmer la suppression',
-        type          : BootstrapDialog.TYPE_DANGER,
-        message       : 'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
-        btnOKLabel    : 'Supprimer',
+        title: 'Confirmer la suppression',
+        type: BootstrapDialog.TYPE_DANGER,
+        message: 'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
+        btnOKLabel: 'Supprimer',
         btnCancelLabel: 'Annuler',
-        callback      : function (result) {
+        callback: function (result) {
             if (result) {
                 var url  = Charcoal.Admin.admin_url() + 'object/delete';
                 var data = {
                     obj_type: that.obj_type,
-                    obj_id  : that.obj_id
+                    obj_id: that.obj_id
                 };
                 $.ajax({
-                    method  : 'POST',
-                    url     : url,
-                    data    : data,
+                    method: 'POST',
+                    url: url,
+                    data: data,
                     dataType: 'json'
                 }).done(function (response) {
                     //console.debug(response);
@@ -5019,8 +5019,10 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
         ];
     }
 
+    var objType = this.obj_type;
     var default_opts = {
         plugins: plugins,
+        formData: {},
         delimiter: this.separator,
         persist: false,
         preload: true,
@@ -5028,10 +5030,12 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
         dropdownParent: this.$input.closest('.form-field'),
         createFilter: function (input) {
             for (var item in this.options) {
-                if (this.options[item].text === input) {
+                item = this.options[item];
+                if (item.text === input) {
                     return false;
                 }
             }
+
             return true;
         },
         onInitialize: function () {
@@ -5039,12 +5043,15 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
             self.sifter.iterator(this.items, function (value) {
                 var option = self.options[value];
                 var $item  = self.getItem(value);
-                $item.css('background-color', option.color/*[options.colorField]*/);
+
+                if (option.color) {
+                    $item.css('background-color', option.color/*[options.colorField]*/);
+                }
             });
         }
     };
 
-    if (this.obj_type) {
+    if (objType) {
         default_opts.create = this.create_tag.bind(this);
         default_opts.load   = this.load_tags.bind(this);
     } else {
@@ -5087,9 +5094,24 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (input, callback) {
-    var type  = this.obj_type;
-    var id    = this.id;
-    var title = this.title;
+    var type      = this.obj_type;
+    var id        = this.id;
+    var title     = this.title;
+    var settings  = this.selectize_options;
+    var form_data = {};
+
+    if ($.isEmptyObject(settings.formData)) {
+        form_data = {
+            name: input
+        };
+    } else {
+        form_data = $.extend({}, settings.formData);
+        $.each(form_data, function (key, value) {
+            if (value === ':input') {
+                form_data[key] = input;
+            }
+        });
+    }
 
     var data = {
         title: title,
@@ -5104,13 +5126,12 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
         },
         widget_type: 'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type: type,
-            obj_id: id,
-            form_data: {
-                name: input
-            }
+            obj_type:  type,
+            obj_id:    id,
+            form_data: form_data
         }
     };
+
     this.dialog(data, function (response) {
         if (response.success) {
             // Call the quickForm widget js.

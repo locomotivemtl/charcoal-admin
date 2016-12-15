@@ -1568,7 +1568,7 @@ input[type="url"] {
   letter-spacing: 1px;
   text-transform: uppercase; }
 
-.form-field.form-property-structure > .c-structure {
+.form-field > .c-structure {
   padding: 15px 15px 0;
   border: 1px solid #ccc;
   border-radius: 4px; }

@@ -22,7 +22,7 @@
 
     {{# input }}
     {{!-- The actual property control (typically `PropertyInput`) --}}
-    <div class="form-field{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+    <div id="form-field-{{ inputId }}" class="form-field form-field-{{ inputId }}{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
         {{> $widget_template }}
     </div>
     {{/ input }}

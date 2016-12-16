@@ -664,7 +664,7 @@
 </span><span id="298" class="l"><a href="#298">298: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> defaultSelectizeOptions()
 </span><span id="299" class="l"><a href="#299">299: </a>    {
 </span><span id="300" class="l"><a href="#300">300: </a>        <span class="php-var">$metadata</span> = <span class="php-var">$this</span>-&gt;metadata();
-</span><span id="301" class="l"><a href="#301">301: </a>        <span class="php-var">$options</span>  = [];
+</span><span id="301" class="l"><a href="#301">301: </a>        <span class="php-var">$options</span> = [];
 </span><span id="302" class="l"><a href="#302">302: </a>
 </span><span id="303" class="l"><a href="#303">303: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$metadata</span>[<span class="php-quote">'data'</span>][<span class="php-quote">'selectize_options'</span>])) {
 </span><span id="304" class="l"><a href="#304">304: </a>            <span class="php-var">$options</span> = <span class="php-var">$metadata</span>[<span class="php-quote">'data'</span>][<span class="php-quote">'selectize_options'</span>];
@@ -721,54 +721,57 @@
 </span><span id="355" class="l"><a href="#355">355: </a>
 </span><span id="356" class="l"><a href="#356">356: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$val</span> !== <span class="php-keyword1">null</span>) {
 </span><span id="357" class="l"><a href="#357">357: </a>            <span class="php-var">$prop</span> = <span class="php-var">$this</span>-&gt;property();
-</span><span id="358" class="l"><a href="#358">358: </a>            <span class="php-var">$val</span>  = <span class="php-var">$prop</span>-&gt;parseVal(<span class="php-var">$val</span>);
+</span><span id="358" class="l"><a href="#358">358: </a>            <span class="php-var">$val</span> = <span class="php-var">$prop</span>-&gt;parseVal(<span class="php-var">$val</span>);
 </span><span id="359" class="l"><a href="#359">359: </a>
 </span><span id="360" class="l"><a href="#360">360: </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$prop</span>-&gt;multiple()) {
 </span><span id="361" class="l"><a href="#361">361: </a>                <span class="php-var">$val</span> = [ <span class="php-var">$val</span> ];
 </span><span id="362" class="l"><a href="#362">362: </a>            }
 </span><span id="363" class="l"><a href="#363">363: </a>
 </span><span id="364" class="l"><a href="#364">364: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$prop</span> <span class="php-keyword1">instanceof</span> ObjectProperty) {
-</span><span id="365" class="l"><a href="#365">365: </a>                <span class="php-var">$model</span>  = <span class="php-var">$this</span>-&gt;modelFactory()-&gt;get(<span class="php-var">$prop</span>-&gt;objType());
-</span><span id="366" class="l"><a href="#366">366: </a>                <span class="php-var">$loader</span> = <span class="php-var">$this</span>-&gt;collectionLoader();
-</span><span id="367" class="l"><a href="#367">367: </a>                <span class="php-var">$loader</span>-&gt;<span class="php-keyword2">reset</span>()-&gt;setModel(<span class="php-var">$model</span>);
-</span><span id="368" class="l"><a href="#368">368: </a>                <span class="php-var">$loader</span>-&gt;addFilter([
-</span><span id="369" class="l"><a href="#369">369: </a>                    <span class="php-quote">'property'</span> =&gt; <span class="php-var">$model</span>-&gt;<span class="php-keyword2">key</span>(),
-</span><span id="370" class="l"><a href="#370">370: </a>                    <span class="php-quote">'operator'</span> =&gt; <span class="php-quote">'IN'</span>,
-</span><span id="371" class="l"><a href="#371">371: </a>                    <span class="php-quote">'val'</span>      =&gt; <span class="php-var">$val</span>
-</span><span id="372" class="l"><a href="#372">372: </a>                ]);
-</span><span id="373" class="l"><a href="#373">373: </a>                <span class="php-var">$collection</span> = <span class="php-var">$loader</span>-&gt;load();
-</span><span id="374" class="l"><a href="#374">374: </a>                <span class="php-var">$choices</span> = [];
-</span><span id="375" class="l"><a href="#375">375: </a>                <span class="php-keyword1">foreach</span> (<span class="php-var">$collection</span> <span class="php-keyword1">as</span> <span class="php-var">$obj</span>) {
-</span><span id="376" class="l"><a href="#376">376: </a>                    <span class="php-var">$choices</span>[] = <span class="php-var">$this</span>-&gt;mapObjToChoice(<span class="php-var">$obj</span>);
-</span><span id="377" class="l"><a href="#377">377: </a>                }
-</span><span id="378" class="l"><a href="#378">378: </a>            } <span class="php-keyword1">else</span> {
-</span><span id="379" class="l"><a href="#379">379: </a>                <span class="php-keyword1">foreach</span> (<span class="php-var">$val</span> <span class="php-keyword1">as</span> <span class="php-var">$v</span>) {
-</span><span id="380" class="l"><a href="#380">380: </a>                    <span class="php-var">$choices</span>[] = [
-</span><span id="381" class="l"><a href="#381">381: </a>                        <span class="php-quote">'value'</span> =&gt; <span class="php-var">$v</span>,
-</span><span id="382" class="l"><a href="#382">382: </a>                        <span class="php-quote">'text'</span>  =&gt; <span class="php-var">$v</span>
-</span><span id="383" class="l"><a href="#383">383: </a>                    ];
-</span><span id="384" class="l"><a href="#384">384: </a>                }
-</span><span id="385" class="l"><a href="#385">385: </a>            }
-</span><span id="386" class="l"><a href="#386">386: </a>        }
-</span><span id="387" class="l"><a href="#387">387: </a>
-</span><span id="388" class="l"><a href="#388">388: </a>        <span class="php-keyword1">return</span> <span class="php-var">$choices</span>;
-</span><span id="389" class="l"><a href="#389">389: </a>    }
+</span><span id="365" class="l"><a href="#365">365: </a>                <span class="php-var">$model</span> = <span class="php-var">$this</span>-&gt;modelFactory()-&gt;get(<span class="php-var">$prop</span>-&gt;objType());
+</span><span id="366" class="l"><a href="#366">366: </a>                <span class="php-keyword1">if</span> (!<span class="php-var">$model</span>-&gt;source()-&gt;tableExists()) {
+</span><span id="367" class="l"><a href="#367">367: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$choices</span>;
+</span><span id="368" class="l"><a href="#368">368: </a>                }
+</span><span id="369" class="l"><a href="#369">369: </a>                <span class="php-var">$loader</span> = <span class="php-var">$this</span>-&gt;collectionLoader();
+</span><span id="370" class="l"><a href="#370">370: </a>                <span class="php-var">$loader</span>-&gt;<span class="php-keyword2">reset</span>()-&gt;setModel(<span class="php-var">$model</span>);
+</span><span id="371" class="l"><a href="#371">371: </a>                <span class="php-var">$loader</span>-&gt;addFilter([
+</span><span id="372" class="l"><a href="#372">372: </a>                    <span class="php-quote">'property'</span> =&gt; <span class="php-var">$model</span>-&gt;<span class="php-keyword2">key</span>(),
+</span><span id="373" class="l"><a href="#373">373: </a>                    <span class="php-quote">'operator'</span> =&gt; <span class="php-quote">'IN'</span>,
+</span><span id="374" class="l"><a href="#374">374: </a>                    <span class="php-quote">'val'</span>      =&gt; <span class="php-var">$val</span>
+</span><span id="375" class="l"><a href="#375">375: </a>                ]);
+</span><span id="376" class="l"><a href="#376">376: </a>                <span class="php-var">$collection</span> = <span class="php-var">$loader</span>-&gt;load();
+</span><span id="377" class="l"><a href="#377">377: </a>                <span class="php-var">$choices</span> = [];
+</span><span id="378" class="l"><a href="#378">378: </a>                <span class="php-keyword1">foreach</span> (<span class="php-var">$collection</span> <span class="php-keyword1">as</span> <span class="php-var">$obj</span>) {
+</span><span id="379" class="l"><a href="#379">379: </a>                    <span class="php-var">$choices</span>[] = <span class="php-var">$this</span>-&gt;mapObjToChoice(<span class="php-var">$obj</span>);
+</span><span id="380" class="l"><a href="#380">380: </a>                }
+</span><span id="381" class="l"><a href="#381">381: </a>            } <span class="php-keyword1">else</span> {
+</span><span id="382" class="l"><a href="#382">382: </a>                <span class="php-keyword1">foreach</span> (<span class="php-var">$val</span> <span class="php-keyword1">as</span> <span class="php-var">$v</span>) {
+</span><span id="383" class="l"><a href="#383">383: </a>                    <span class="php-var">$choices</span>[] = [
+</span><span id="384" class="l"><a href="#384">384: </a>                        <span class="php-quote">'value'</span> =&gt; <span class="php-var">$v</span>,
+</span><span id="385" class="l"><a href="#385">385: </a>                        <span class="php-quote">'text'</span>  =&gt; <span class="php-var">$v</span>
+</span><span id="386" class="l"><a href="#386">386: </a>                    ];
+</span><span id="387" class="l"><a href="#387">387: </a>                }
+</span><span id="388" class="l"><a href="#388">388: </a>            }
+</span><span id="389" class="l"><a href="#389">389: </a>        }
 </span><span id="390" class="l"><a href="#390">390: </a>
-</span><span id="391" class="l"><a href="#391">391: </a>    <span class="php-comment">/**
-</span></span><span id="392" class="l"><a href="#392">392: </a><span class="php-comment">     * Retrieve the default object-to-choice data map.
-</span></span><span id="393" class="l"><a href="#393">393: </a><span class="php-comment">     *
-</span></span><span id="394" class="l"><a href="#394">394: </a><span class="php-comment">     * @return array
-</span></span><span id="395" class="l"><a href="#395">395: </a><span class="php-comment">     */</span>
-</span><span id="396" class="l"><a href="#396">396: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> defaultChoiceObjMap()
-</span><span id="397" class="l"><a href="#397">397: </a>    {
-</span><span id="398" class="l"><a href="#398">398: </a>        <span class="php-keyword1">return</span> [
-</span><span id="399" class="l"><a href="#399">399: </a>            <span class="php-quote">'value'</span> =&gt; <span class="php-quote">'id'</span>,
-</span><span id="400" class="l"><a href="#400">400: </a>            <span class="php-quote">'text'</span>  =&gt; <span class="php-quote">'name:title:label'</span>,
-</span><span id="401" class="l"><a href="#401">401: </a>            <span class="php-quote">'color'</span> =&gt; <span class="php-quote">'color'</span>
-</span><span id="402" class="l"><a href="#402">402: </a>        ];
-</span><span id="403" class="l"><a href="#403">403: </a>    }
-</span><span id="404" class="l"><a href="#404">404: </a>}
-</span><span id="405" class="l"><a href="#405">405: </a></span></code></pre>
+</span><span id="391" class="l"><a href="#391">391: </a>        <span class="php-keyword1">return</span> <span class="php-var">$choices</span>;
+</span><span id="392" class="l"><a href="#392">392: </a>    }
+</span><span id="393" class="l"><a href="#393">393: </a>
+</span><span id="394" class="l"><a href="#394">394: </a>    <span class="php-comment">/**
+</span></span><span id="395" class="l"><a href="#395">395: </a><span class="php-comment">     * Retrieve the default object-to-choice data map.
+</span></span><span id="396" class="l"><a href="#396">396: </a><span class="php-comment">     *
+</span></span><span id="397" class="l"><a href="#397">397: </a><span class="php-comment">     * @return array
+</span></span><span id="398" class="l"><a href="#398">398: </a><span class="php-comment">     */</span>
+</span><span id="399" class="l"><a href="#399">399: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> defaultChoiceObjMap()
+</span><span id="400" class="l"><a href="#400">400: </a>    {
+</span><span id="401" class="l"><a href="#401">401: </a>        <span class="php-keyword1">return</span> [
+</span><span id="402" class="l"><a href="#402">402: </a>            <span class="php-quote">'value'</span> =&gt; <span class="php-quote">'id'</span>,
+</span><span id="403" class="l"><a href="#403">403: </a>            <span class="php-quote">'text'</span>  =&gt; <span class="php-quote">'name:title:label'</span>,
+</span><span id="404" class="l"><a href="#404">404: </a>            <span class="php-quote">'color'</span> =&gt; <span class="php-quote">'color'</span>
+</span><span id="405" class="l"><a href="#405">405: </a>        ];
+</span><span id="406" class="l"><a href="#406">406: </a>    }
+</span><span id="407" class="l"><a href="#407">407: </a>}
+</span><span id="408" class="l"><a href="#408">408: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>

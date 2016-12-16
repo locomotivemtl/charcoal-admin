@@ -53,6 +53,13 @@ class SidemenuWidget extends AdminWidget implements
     private $parented = false;
 
     /**
+     * The title is displayed by default.
+     *
+     * @var boolean
+     */
+    private $showTitle = true;
+
+    /**
      * The sidemenu's title.
      *
      * @var string
@@ -134,7 +141,7 @@ class SidemenuWidget extends AdminWidget implements
         $metadata = $this->adminSidemenu();
 
         if (isset($metadata[$ident])) {
-            return $this->hasLinks() || $this->hasGroups() || $this->hasActions();
+            return $this->hasLinks() || $this->hasGroups() || $this->hasActions() || $this->showTitle();
         }
 
         return false;
@@ -158,6 +165,33 @@ class SidemenuWidget extends AdminWidget implements
     public function objType()
     {
         return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+    }
+
+    /**
+     * Show/hide the widget's title.
+     *
+     * @param boolean $show Show (TRUE) or hide (FALSE) the title.
+     * @return UiItemInterface Chainable
+     */
+    public function setShowTitle($show)
+    {
+        $this->showTitle = !!$show;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the title is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a title.
+     */
+    public function showTitle()
+    {
+        if ($this->showTitle === false) {
+            return false;
+        } else {
+            return !!$this->title();
+        }
     }
 
     /**

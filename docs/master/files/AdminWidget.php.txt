@@ -145,7 +145,7 @@ class AdminWidget extends AbstractWidget
     {
         if (!is_string($template)) {
             throw new InvalidArgumentException(
-                'Can not set UI Item\'s template: template identifier must be a string'
+                'The Admin Widget can not set the template, must be a string'
             );
         }
         $this->template = $template;

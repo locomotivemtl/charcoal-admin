@@ -6,9 +6,11 @@
 --}}
 {{# hasSidemenu }}
 <nav class="c-nav-secondary o-flex_aside" id="{{ widget_id }}">
+    {{# showTitle }}
     <header class="o-header">
         <h1 class="c-nav_heading">{{ title }}</h1>
     </header>
+    {{/ showTitle }}
     {{# hasLinks }}
     <ul class="c-nav_list -light -secondary">
     {{# links }}

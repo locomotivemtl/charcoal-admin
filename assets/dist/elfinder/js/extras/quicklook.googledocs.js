@@ -1,14 +1,5 @@
-"use strict";
+"use strict"
 
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define(['elfinder'], factory);
-	} else if (typeof exports !== 'undefined') {
-		module.exports = factory(require('elfinder'));
-	} else {
-		factory(root.elFinder);
-	}
-}(this, function(elFinder) {
 try {
 	if (! elFinder.prototype.commands.quicklook.plugins) {
 		elFinder.prototype.commands.quicklook.plugins = [];
@@ -66,4 +57,3 @@ try {
 		});
 	});
 } catch(e) {}
-}));

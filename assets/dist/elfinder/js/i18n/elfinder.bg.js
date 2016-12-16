@@ -3,15 +3,7 @@
  * @author Stamo Petkov <stamo.petkov@gmail.com>
  * @version 2014-12-19, 2015-10-20
  */
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define(['elfinder'], factory);
-	} else if (typeof exports !== 'undefined') {
-		module.exports = factory(require('elfinder'));
-	} else {
-		factory(root.elFinder);
-	}
-}(this, function(elFinder) {
+if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
 	elFinder.prototype.i18.bg = {
 		translator : 'Stamo Petkov &lt;stamo.petkov@gmail.com&gt;',
 		language   : 'Български',
@@ -408,5 +400,5 @@
 			'kindVideoOGG'    : 'Ogg филм'
 		}
 	};
-}));
+}
 

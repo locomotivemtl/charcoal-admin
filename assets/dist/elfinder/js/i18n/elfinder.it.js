@@ -4,15 +4,7 @@
  * @author Claudio Nicora (nicorac@yahoo.com)
  * @version 2016-07-11
  */
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define(['elfinder'], factory);
-	} else if (typeof exports !== 'undefined') {
-		module.exports = factory(require('elfinder'));
-	} else {
-		factory(root.elFinder);
-	}
-}(this, function(elFinder) {
+if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
 	elFinder.prototype.i18.it = {
 		translator : 'Alberto Tocci (alberto.tocci@gmail.com), Claudio Nicora (nicorac@yahoo.com)',
 		language   : 'Italiano',
@@ -445,4 +437,4 @@
 			'kindVideoOGG'    : 'Filmato Ogg'
 		}
 	};
-}));
+}

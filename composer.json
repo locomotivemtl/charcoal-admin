@@ -27,7 +27,7 @@
         "psr/http-message": "^1.0",
         "paragonie/random_compat": "^1.2",
         "zendframework/zend-permissions-acl": "^2.6",
-        "studio-42/elfinder": "2.1.18@dev",
+        "studio-42/elfinder": "2.1.14@dev",
         "locomotivemtl/charcoal-core": "^0.2",
         "locomotivemtl/charcoal-base": "^0.2",
         "locomotivemtl/charcoal-app": "~0.2",

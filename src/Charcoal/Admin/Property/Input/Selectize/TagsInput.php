@@ -298,7 +298,7 @@ class TagsInput extends AbstractSelectableInput
     public function defaultSelectizeOptions()
     {
         $metadata = $this->metadata();
-        $options  = [];
+        $options = [];
 
         if (isset($metadata['data']['selectize_options'])) {
             $options = $metadata['data']['selectize_options'];
@@ -355,14 +355,17 @@ class TagsInput extends AbstractSelectableInput
 
         if ($val !== null) {
             $prop = $this->property();
-            $val  = $prop->parseVal($val);
+            $val = $prop->parseVal($val);
 
             if (!$prop->multiple()) {
                 $val = [ $val ];
             }
 
             if ($prop instanceof ObjectProperty) {
-                $model  = $this->modelFactory()->get($prop->objType());
+                $model = $this->modelFactory()->get($prop->objType());
+                if (!$model->source()->tableExists()) {
+                    return $choices;
+                }
                 $loader = $this->collectionLoader();
                 $loader->reset()->setModel($model);
                 $loader->addFilter([

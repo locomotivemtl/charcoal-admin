@@ -4,19 +4,5 @@
 
     `charcoal/admin/property/input/select`
 --}}
-<select
-    id="{{ inputId }}"
-    name="{{ inputName }}"
-    class="{{ inputClass }}"
-    {{# size }}size="{{ . }}"{{/ size }}
-    {{# multiple }}multiple{{/ multiple }}
-    {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
-    {{# required }}required{{/ required }}
-    {{# disabled }}disabled{{/ disabled }}
->
-    {{# choices }}
-    {{> charcoal/admin/property/input/select/option }}
-    {{/ choices }}
-</select>
-
+{{> charcoal/admin/property/control/select }}
 {{> charcoal/admin/property/input/select/js }}

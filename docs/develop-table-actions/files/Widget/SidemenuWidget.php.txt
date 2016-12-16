@@ -124,6 +124,23 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
+     * Determine if the sidemenu has anything.
+     *
+     * @return boolean
+     */
+    public function hasSidemenu()
+    {
+        $ident    = $this->ident();
+        $metadata = $this->adminSidemenu();
+
+        if (isset($metadata[$ident])) {
+            return $this->hasLinks() || $this->hasGroups() || $this->hasActions();
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve the metadata for the sidemenu.
      *
      * @return array

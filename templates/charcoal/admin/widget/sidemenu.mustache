@@ -4,15 +4,16 @@
 
     @see `charcoal/admin/widget/sidemenu`
 --}}
+{{# hasSidemenu }}
 <nav class="c-nav-secondary o-flex_aside" id="{{ widget_id }}">
     <header class="o-header">
         <h1 class="c-nav_heading">{{ title }}</h1>
     </header>
     {{# hasLinks }}
     <ul class="c-nav_list -light -secondary">
-        {{# links }}
+    {{# links }}
         {{> charcoal/admin/widget/sidemenu/link }}
-        {{/ links }}
+    {{/ links }}
     </ul>
 
     {{/ hasLinks }}
@@ -30,9 +31,9 @@
         <div id="{{ groupId }}" class="{{# collapsible }}collapse panel-collapse{{/ collapsible }}{{^ collapsed }} in{{/ collapsed }}">
             <div class="{{# collapsible }}panel-body{{/ collapsible }}">
                 <ul class="c-nav_list -light -secondary -inpanel">
-                    {{#links}}
+                {{# links }}
                     {{> charcoal/admin/widget/sidemenu/link }}
-                    {{/links}}
+                {{/ links }}
                 </ul>
             </div>
         </div>
@@ -52,15 +53,15 @@
         e.preventDefault();
 
         BootstrapDialog.show({
-            title  : '{{# _t }}Librairie de fichiers{{/ _t }}',
-            size   : BootstrapDialog.SIZE_WIDE,
+            title:   '{{# _t }}Librairie de fichiers{{/ _t }}',
+            size:    BootstrapDialog.SIZE_WIDE,
             message: $(
-                    '<iframe width="100%" height="400px" frameborder="0" ' +
-                    'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
+                '<iframe width="100%" height="400px" frameborder="0" ' +
+                'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
             )
         });
 
     });
 </script>
 {{/addJs}}
-
+{{/ hasSidemenu }}

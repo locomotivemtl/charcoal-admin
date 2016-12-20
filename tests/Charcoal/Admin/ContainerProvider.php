@@ -307,7 +307,7 @@ class ContainerProvider
                 'logger'        => $container['logger'],
                 'user_type'     => 'charcoal/admin/user',
                 'user_factory'  => $container['model/factory'],
-                'token_type'    => 'charcoal/admin/object/auth-token',
+                'token_type'    => 'charcoal/admin/user/auth-token',
                 'token_factory' => $container['model/factory']
             ]);
         };

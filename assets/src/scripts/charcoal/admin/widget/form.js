@@ -273,7 +273,14 @@ Charcoal.Admin.Widget_Form.prototype.request_url = function () {
  * Handle the "delete" button / action.
  */
 Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
-    var that = this;
+    var that       = this;
+    var params     = new URLSearchParams(window.location.search);
+    var successUrl = Charcoal.Admin.admin_url() +
+        'object/collection?' +
+        (params.has('main_menu') ? 'main_menu=' + params.get('main_menu') + '&' : '') +
+        (params.has('sidemenu') ? 'sidemenu=' + params.get('sidemenu') + '&' : '') +
+        'obj_type=' + this.obj_type;
+
     //console.debug(form);
     BootstrapDialog.confirm({
         title: 'Confirmer la suppression',
@@ -296,8 +303,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
                 }).done(function (response) {
                     //console.debug(response);
                     if (response.success) {
-                        var url = Charcoal.Admin.admin_url() + 'object/collection?obj_type=' + that.obj_type;
-                        window.location.href = url;
+                        window.location.href = successUrl;
                     } else {
                         window.alert('Erreur. Impossible de supprimer cet objet.');
                     }

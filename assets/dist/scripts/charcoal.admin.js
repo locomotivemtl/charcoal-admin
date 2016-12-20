@@ -1572,10 +1572,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form) {
     // });
 
     this.xhr = $.ajax({
-        type: 'POST',            // ($form.prop('method') || 'POST')
-        url: this.request_url(),  // ($form.data('action') || this.request_url())
-        data: form_data,
-        dataType: 'json',
+        type       : 'POST',            // ($form.prop('method') || 'POST')
+        url        : this.request_url(),  // ($form.data('action') || this.request_url())
+        data       : form_data,
+        dataType   : 'json',
         processData: false,
         contentType: false,
     });
@@ -1607,7 +1607,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
     if (response.next_url) {
         // @todo "dynamise" the label
         Charcoal.Admin.feedback().add_action({
-            label: 'Continuer',
+            label   : 'Continuer',
             callback: function () {
                 window.location.href =
                     Charcoal.Admin.admin_url() +
@@ -1647,7 +1647,7 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
 
         Charcoal.Admin.feedback().add_data([{
             level: message + error,
-            msg: 'error'
+            msg  : 'error'
         }]);
     }
 };
@@ -1714,31 +1714,37 @@ Charcoal.Admin.Widget_Form.prototype.request_url = function () {
  * Handle the "delete" button / action.
  */
 Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
-    var that = this;
+    var that       = this;
+    var params     = new URLSearchParams(window.location.search);
+    var successUrl = Charcoal.Admin.admin_url() +
+        'object/collection?' +
+        (params.has('main_menu') ? 'main_menu=' + params.get('main_menu') + '&' : '') +
+        (params.has('sidemenu') ? 'sidemenu=' + params.get('sidemenu') + '&' : '') +
+        'obj_type=' + this.obj_type;
+
     //console.debug(form);
     BootstrapDialog.confirm({
-        title: 'Confirmer la suppression',
-        type: BootstrapDialog.TYPE_DANGER,
-        message: 'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
-        btnOKLabel: 'Supprimer',
+        title         : 'Confirmer la suppression',
+        type          : BootstrapDialog.TYPE_DANGER,
+        message       : 'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
+        btnOKLabel    : 'Supprimer',
         btnCancelLabel: 'Annuler',
-        callback: function (result) {
+        callback      : function (result) {
             if (result) {
                 var url  = Charcoal.Admin.admin_url() + 'object/delete';
                 var data = {
                     obj_type: that.obj_type,
-                    obj_id: that.obj_id
+                    obj_id  : that.obj_id
                 };
                 $.ajax({
-                    method: 'POST',
-                    url: url,
-                    data: data,
+                    method  : 'POST',
+                    url     : url,
+                    data    : data,
                     dataType: 'json'
                 }).done(function (response) {
                     //console.debug(response);
                     if (response.success) {
-                        var url = Charcoal.Admin.admin_url() + 'object/collection?obj_type=' + that.obj_type;
-                        window.location.href = url;
+                        window.location.href = successUrl;
                     } else {
                         window.alert('Erreur. Impossible de supprimer cet objet.');
                     }

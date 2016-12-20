@@ -137,7 +137,7 @@ class LoginAction extends AdminAction
             return;
         }
 
-        $authToken = $this->modelFactory()->create('charcoal/admin/object/auth-token');
+        $authToken = $this->modelFactory()->create('charcoal/admin/user/auth-token');
         $authToken->generate($u->username());
         $authToken->sendCookie();
 

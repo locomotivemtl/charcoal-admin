@@ -181,12 +181,15 @@
         color: $white;
     }
 
+    .c-nav_list_header.is-active > & {
+        font-weight: 500;
+    }
+
     &:hover {
         text-decoration: none;
     }
 
     .panel-heading &{
-
         color: $gray-dark;
         transition: color 0.2s;
 

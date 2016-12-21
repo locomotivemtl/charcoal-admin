@@ -2,24 +2,24 @@
 // Tables
 // ==========================================================================
 .table {
-  > thead,
-  > tbody,
-  > tfoot {
-    > tr {
-      > th,
-      > td {
-        vertical-align: middle;
-      }
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                vertical-align: middle;
+            }
+        }
     }
-  }
 
-  > thead > tr > th {
-    border-bottom-width: 1px;
-    font-weight: $weight-bold;
-  }
+    > thead > tr > th {
+        border-bottom-width: 1px;
+        font-weight: $weight-bold;
+    }
 }
 
-.table_checkbox {
+.table-cell-checkbox {
     width: rem(20px + 30px);
     text-align: center;
 }

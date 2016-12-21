@@ -31,6 +31,19 @@
     @include u-truncate;
 }
 
+.u-truncated {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.u-truncated > * {
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 img.u-transparent {
     border: 1px solid #DDD;
     background-image:  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAHUlEQVQYV2NkwA4k0YUZh4hCDIcD3f0cm2cGu0IAl7sFiL+f5rUAAAAASUVORK5CYII=);

@@ -7,7 +7,7 @@
 <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span class="sr-only">{{# _t }}Erreurs:{{/ _t }}</span>
-    <span>Aucun objet de type "{{ objType }}" n'existe.</span>
+    <span>{{# _t }}Aucun objet de type "{{ objType }}" n'existe.{{/ _t }}</span>
     {{# isObjCreatable }}
     <div class="btn-group" role="group">
         <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Créer un nouvel objet{{/ _t }}</a>

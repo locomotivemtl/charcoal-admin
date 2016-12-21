@@ -629,6 +629,8 @@ td {
     color: #080909; }
   .c-nav_list.-dark .c-nav_list_link {
     color: #ffffff; }
+  .c-nav_list_header.is-active > .c-nav_list_link {
+    font-weight: 500; }
   .c-nav_list_link:hover {
     text-decoration: none; }
   .panel-heading .c-nav_list_link {
@@ -1588,7 +1590,7 @@ input[type="url"] {
   border-bottom-width: 1px;
   font-weight: 700; }
 
-.table_checkbox {
+.table-cell-checkbox {
   width: 3.125rem;
   text-align: center; }
 
@@ -1922,6 +1924,17 @@ a:focus {
   word-wrap: normal;
   /* [2] */
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.u-truncated {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap; }
+
+.u-truncated > * {
+  display: table-cell;
   overflow: hidden;
   text-overflow: ellipsis; }
 

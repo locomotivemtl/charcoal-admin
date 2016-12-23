@@ -11,7 +11,7 @@ use \Charcoal\Translation\TranslationString;
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminTemplate;
 use \Charcoal\Admin\User;
-use \Charcoal\Admin\Object\AuthToken;
+use \Charcoal\Admin\User\AuthToken;
 
 /**
  * Logout template

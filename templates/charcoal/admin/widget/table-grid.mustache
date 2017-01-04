@@ -6,29 +6,26 @@
 
     This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\TableGrid`.
 --}}
+<div class="charcoal-admin-widget-table-grid o-section" id="{{ widgetId }}">
+    {{# hasObjects }}
+    {{# showTableHeader }}
+    {{> charcoal/admin/widget/table/header }}
+    {{/ showTableHeader }}
 
-<div class="o-section">
-    <div class="charcoal-admin-widget-table-grid" id="{{ widgetId }}">
-        {{# hasObjects }}
-        {{# showTableHeader }}
-        {{> charcoal/admin/widget/table/header }}
-        {{/ showTableHeader }}
+    <div class="js-grid-container row clearfix" style="min-height:100px;">
+        {{# objectRows }}
+        {{> charcoal/admin/widget/table-grid/item }}
+        {{/ objectRows }}
 
-        <div class="js-grid-container row clearfix" style="min-height:100px;">
-            {{# objectRows }}
-            {{> charcoal/admin/widget/table-grid/item }}
-            {{/ objectRows }}
-
-            {{# paginationWidget }}
-            {{> charcoal/admin/widget/table/pagination }}
-            {{/ paginationWidget }}
-        </div>
-        {{/ hasObjects }}
-
-        {{^ hasObjects }}
-        {{> charcoal/admin/widget/table/empty }}
-        {{/ hasObjects }}
+        {{# paginationWidget }}
+        {{> charcoal/admin/widget/table/pagination }}
+        {{/ paginationWidget }}
     </div>
+    {{/ hasObjects }}
+
+    {{^ hasObjects }}
+    {{> charcoal/admin/widget/table/empty }}
+    {{/ hasObjects }}
 </div>
 
 {{> charcoal/admin/widget/table/css }}

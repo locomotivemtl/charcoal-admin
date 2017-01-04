@@ -6,39 +6,36 @@
 
     This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 --}}
+<div class="charcoal-admin-widget-table o-section" id="{{ widgetId }}">
+    {{# hasObjects }}
+    {{# showTableHeader }}
+    {{> charcoal/admin/widget/table/header }}
+    {{/ showTableHeader }}
 
-<div class="o-section">
-    <div class="charcoal-admin-widget-table" id="{{ widgetId }}">
-        {{# hasObjects }}
-        {{# showTableHeader }}
-        {{> charcoal/admin/widget/table/header }}
-        {{/ showTableHeader }}
+    {{!--
+    @TODO Implement a better responsive table solution (Tablesaw?)
+    <div class="table-responsive">
+    --}}
+    <div class="table-container table-responsive">
+        <table class="table table-bordered table-hover">
+            {{# showTableHead }}
+            {{> charcoal/admin/widget/table/thead }}
+            {{/ showTableHead }}
+            {{> charcoal/admin/widget/table/tbody }}
+            {{# showTableFoot }}
+            {{> charcoal/admin/widget/table/tfoot }}
+            {{/ showTableFoot }}
+        </table>
 
-        {{!--
-        @TODO Implement a better responsive table solution (Tablesaw?)
-        <div class="table-responsive">
-        --}}
-        <div class="table-container table-responsive">
-            <table class="table table-bordered table-hover">
-                {{# showTableHead }}
-                {{> charcoal/admin/widget/table/thead }}
-                {{/ showTableHead }}
-                {{> charcoal/admin/widget/table/tbody }}
-                {{# showTableFoot }}
-                {{> charcoal/admin/widget/table/tfoot }}
-                {{/ showTableFoot }}
-            </table>
-
-            {{# paginationWidget }}
-            {{> charcoal/admin/widget/table/pagination }}
-            {{/ paginationWidget }}
-        </div>
-
-        {{/ hasObjects }}
-        {{^ hasObjects }}
-        {{> charcoal/admin/widget/table/empty }}
-        {{/ hasObjects }}
+        {{# paginationWidget }}
+        {{> charcoal/admin/widget/table/pagination }}
+        {{/ paginationWidget }}
     </div>
+
+    {{/ hasObjects }}
+    {{^ hasObjects }}
+    {{> charcoal/admin/widget/table/empty }}
+    {{/ hasObjects }}
 </div>
 
 {{> charcoal/admin/widget/table/css }}

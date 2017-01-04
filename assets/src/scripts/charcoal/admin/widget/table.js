@@ -11,22 +11,19 @@
 
 Charcoal.Admin.Widget_Table = function ()
 {
-    this.widget_type = 'charcoal/admin/widget/table';
-
     // Widget_Table properties
-    this.obj_type = null;
-    this.widget_id = null;
+    this.obj_type       = null;
+    this.widget_id      = null;
     this.table_selector = null;
-    // this.properties = null;
-    this.properties_options = null;
-    this.filters = {};
-    this.orders = [];
-    this.pagination = {
+    this.table_rows     = [];
+    this.filters        = [];
+    this.orders         = [];
+    this.pagination     = {
         page: 1,
         num_per_page: 50
     };
-    this.table_rows = [];
 
+    this.properties = this.properties_options = undefined;
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -45,14 +42,14 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
 {
     var opts = this.opts();
 
-    this.obj_type = opts.data.obj_type || this.obj_type;
-    this.widget_id = opts.id || this.widget_id;
-    this.table_selector = '#' + this.widget_id;
-    this.properties = opts.data.properties || this.properties;
+    this.obj_type           = opts.data.obj_type           || this.obj_type;
+    this.widget_id          = opts.id                      || this.widget_id;
+    this.table_selector     = '#' + this.widget_id;
+    this.properties         = opts.data.properties         || this.properties;
     this.properties_options = opts.data.properties_options || this.properties_options;
-    this.filters = opts.data.filters || this.filters;
-    this.orders = opts.data.orders || this.orders;
-    this.pagination = opts.data.pagination || this.pagination;
+    this.filters            = opts.data.filters            || this.filters;
+    this.orders             = opts.data.orders             || this.orders;
+    this.pagination         = opts.data.pagination         || this.pagination;
 
     // @todo remove the hardcoded shit
     this.collection_ident = opts.data.collection_ident || 'default';
@@ -279,15 +276,15 @@ Charcoal.Admin.Widget_Table.prototype.get_filters = function ()
 Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 {
     return {
-        obj_type:   this.obj_type,
+        obj_type:          this.obj_type,
+        collection_ident:  this.collection_ident,
         collection_config: {
-            properties: this.properties,
+            properties:         this.properties,
             properties_options: this.properties_options,
-            filters:    this.filters,
-            orders:     this.orders,
-            pagination: this.pagination
-        },
-        collection_ident: this.collection_ident
+            filters:            this.filters,
+            orders:             this.orders,
+            pagination:         this.pagination
+        }
     };
 };
 
@@ -381,9 +378,9 @@ Charcoal.Admin.Widget_Table.Table_Row = function (container, row)
     this.widget_table = container;
     this.element = row;
 
-    this.obj_id = this.element.getAttribute('data-id');
-    this.obj_type = this.widget_table.obj_type;
-    this.load_url = Charcoal.Admin.admin_url() + 'widget/load';
+    this.obj_id     = this.element.getAttribute('data-id');
+    this.obj_type   = this.widget_table.obj_type;
+    this.load_url   = Charcoal.Admin.admin_url() + 'widget/load';
     this.inline_url = Charcoal.Admin.admin_url() + 'widget/table/inline';
     this.delete_url = Charcoal.Admin.admin_url() + 'object/delete';
 

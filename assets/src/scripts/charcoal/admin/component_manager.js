@@ -1,193 +1,291 @@
 /**
-* charcoal/admin/component_manager
-*/
+ * Charcoal Component Manager
+ *
+ * Implements its own deferred "ready list" based on `jQuery.fn.ready`.
+ */
 
-Charcoal.Admin.ComponentManager = function ()
-{
-    var that = this;
+;(function ($, document, undefined) {
+    'use strict';
 
-    that.components = {};
+    // Stored for quick usage
+    var $document = $(document);
 
-    $(document).on('ready', function () {
-        that.render();
-    });
-};
+    // The deferred used when the Components and the DOM are ready
+    var readyList = $.Deferred();
 
-Charcoal.Admin.ComponentManager.prototype.add_property_input = function (opts)
-{
-    this.add_component('property_inputs', opts);
-};
+    // A counter to track how many items to wait for before the ready event fires.
+    var readyWait = 1;
 
-Charcoal.Admin.ComponentManager.prototype.add_widget = function (opts)
-{
-    this.add_component('widgets', opts);
-};
+    /**
+     * Creates a new component manager.
+     *
+     * @class
+     */
+    var Manager = function ()
+    {
+        // Are the Components and the DOM ready to be used? Set to true once it occurs.
+        this.isReady = false;
 
-Charcoal.Admin.ComponentManager.prototype.add_template = function (opts)
-{
-    this.add_component('templates', opts);
-};
+        // The collection of registered components
+        this.components = {};
 
-Charcoal.Admin.ComponentManager.prototype.add_component = function (component_type, opts)
-{
-    // Figure out which component to instanciate
-    var ident = Charcoal.Admin.get_object_name(opts.type);
+        $document.on('ready', $.proxy(this.render, this));
+    };
 
-    // Make sure it exists first
-    if (typeof(Charcoal.Admin[ident]) === 'function') {
+    Manager.prototype.add_property_input = function (opts)
+    {
+        this.add_component('property_inputs', opts);
+    };
 
-        opts.ident = ident;
+    Manager.prototype.add_widget = function (opts)
+    {
+        this.add_component('widgets', opts);
+    };
 
-        // Check if component type array exists in components array
-        this.components[component_type] = this.components[component_type] || [];
-        this.components[component_type].push(opts);
+    Manager.prototype.add_template = function (opts)
+    {
+        this.add_component('templates', opts);
+    };
 
-    } else {
-        console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
-    }
-};
+    Manager.prototype.add_component = function (component_type, opts)
+    {
+        // Figure out which component to instanciate
+        var ident = Charcoal.Admin.get_object_name(opts.type);
 
-/**
-* @todo Document
-*/
-Charcoal.Admin.ComponentManager.prototype.render = function ()
-{
+        // Make sure it exists first
+        if (typeof(Charcoal.Admin[ident]) === 'function') {
 
-    for (var component_type in this.components) {
-        var super_class = Charcoal;
+            opts.ident = ident;
 
-        switch (component_type)
-        {
-        case 'widgets' :
-            super_class = Charcoal.Admin.Widget;
-            break;
+            // Check if component type array exists in components array
+            this.components[component_type] = this.components[component_type] || [];
+            this.components[component_type].push(opts);
 
-        case 'property_inputs' :
-            super_class = Charcoal.Admin.Property;
-            break;
+        } else {
+            console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
+        }
+    };
 
-        case 'templates' :
-            super_class = Charcoal.Admin.Template;
-            break;
+    /**
+     * Retrieve Components
+     */
 
-    }
+    Manager.prototype.get_property_input = function (id)
+    {
+        return this.get_component('property_inputs', id);
+    };
 
-        for (var i = 0, len = this.components[component_type].length; i < len; i++) {
+    Manager.prototype.get_widget = function (id)
+    {
+        return this.get_component('widgets', id);
+    };
 
-            var component_data = this.components[component_type][i];
+    Manager.prototype.get_template = function (id)
+    {
+        return this.get_component('templates', id);
+    };
 
-            // If we are already dealing with a full on component
-            if (component_data instanceof super_class) {
-                if (typeof component_data.destroy === 'function') {
-                    component_data.destroy();
-                    component_data.init();
-                }
-                continue;
+    Manager.prototype.get_component = function (type, id)
+    {
+        if (!this.isReady) {
+            throw new Error('Components must be rendered.');
+        }
+
+        if (type in this.components) {
+            return this.components[type].find(function (component/*, index, components*/) {
+                return component._id === id;
+            });
+        }
+
+        return undefined;
+    };
+
+    /**
+     * Specify a function to execute when the components are rendered.
+     *
+     * The `.ready()` method is also constrained by the DOM's readiness.
+     *
+     * @param  {Function} fn - A function to execute after the DOM is ready.
+     * @return {this}
+     */
+    Manager.prototype.ready = function (fn)
+    {
+        readyList.promise().done(fn);
+
+        return this;
+    };
+
+    Manager.prototype.render = function ()
+    {
+        var renderEvent = $.Event('render.charcoal.components', {
+            relatedTarget: this
+        });
+
+        $document.trigger(renderEvent);
+
+        if (renderEvent.isDefaultPrevented()) {
+            return;
+        }
+
+        for (var component_type in this.components) {
+            var super_class = Charcoal;
+
+            switch (component_type) {
+                case 'widgets':
+                    super_class = Charcoal.Admin.Widget;
+                break;
+
+                case 'property_inputs':
+                    super_class = Charcoal.Admin.Property;
+                break;
+
+                case 'templates':
+                    super_class = Charcoal.Admin.Template;
+                break;
             }
 
-            try {
-                var component = new Charcoal.Admin[component_data.ident](component_data);
-                this.components[component_type][i] = component;
+            for (var i = 0, len = this.components[component_type].length; i < len; i++) {
+                var component_data = this.components[component_type][i];
 
-                // Automatic supra class call
-                switch (component_type) {
-                    case 'widgets' :
-                        // Automatic call on superclass
-                        Charcoal.Admin.Widget.call(component, component_data);
-                        component.init();
+                // If we are already dealing with a full on component
+                if (component_data instanceof super_class) {
+                    if (typeof component_data.destroy === 'function') {
+                        component_data.destroy();
+                        component_data.init();
+                    }
+                    continue;
+                }
+
+                try {
+                    var component = new Charcoal.Admin[component_data.ident](component_data);
+                    this.components[component_type][i] = component;
+
+                    // Automatic supra class call
+                    switch (component_type) {
+                        case 'widgets':
+                            // Automatic call on superclass
+                            Charcoal.Admin.Widget.call(component, component_data);
+                            component.init();
                         break;
-                }
+                    }
 
-            } catch (error) {
-                console.error('Was not able to instanciate ' + component_data.ident);
-                console.error(error);
+                } catch (error) {
+                    console.error('Was not able to instanciate ' + component_data.ident);
+                    console.error(error);
+                }
             }
         }
 
-    }
-};
+        // Handle it asynchronously to allow scripts the opportunity to delay ready
+        if (this.isReady) {
+            return this;
+        }
 
-/**
-* This is called by the widget.form on form submit
-* Called save because it's calling the save method on the properties' input
-* @see admin/widget/form.js submit_form()
-* @return boolean Success (in case of validation)
-*/
-Charcoal.Admin.ComponentManager.prototype.prepare_submit = function ()
-{
-    this.prepare_inputs();
-    this.prepare_widgets();
-    return true;
-};
-Charcoal.Admin.ComponentManager.prototype.prepare_inputs = function ()
-{
-    // Get inputs
-    var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
+        // Remember that the DOM is ready
+        this.isReady = true;
 
-    if (!inputs.length) {
-        // No inputs? Move on
+        // If a normal DOM Ready event fired, decrement, and wait if need be
+        if (--readyWait > 0) {
+            return;
+        }
+
+        // If there are functions bound, to execute
+        readyList.resolveWith(this);
+
+        var renderedEvent = $.Event('rendered.charcoal.components', {
+            relatedTarget: this
+        });
+
+        $document.trigger(renderedEvent);
+
+        return this;
+    };
+
+    /**
+     * This is called by the widget.form on form submit
+     * Called save because it's calling the save method on the properties' input
+     * @see admin/widget/form.js submit_form()
+     * @return boolean Success (in case of validation)
+     */
+    Manager.prototype.prepare_submit = function ()
+    {
+        this.prepare_inputs();
+        this.prepare_widgets();
         return true;
-    }
+    };
 
-    var length = inputs.length;
-    var input;
+    Manager.prototype.prepare_inputs = function ()
+    {
+        // Get inputs
+        var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
 
-    // Loop for validation
-    var k = 0;
-    for (; k < length; k++) {
-        input = inputs[ k ];
-        if (typeof input.validate === 'function') {
-            input.validate();
+        if (!inputs.length) {
+            // No inputs? Move on
+            return true;
         }
-    }
 
-    // We should add a check if the validation passed right here, before saving
+        var length = inputs.length;
+        var input;
 
-    // Loop for save
-    var i = 0;
-    for (; i < length; i++) {
-        input = inputs[ i ];
-        if (typeof input.save === 'function') {
-            input.save();
+        // Loop for validation
+        var k = 0;
+        for (; k < length; k++) {
+            input = inputs[ k ];
+            if (typeof input.validate === 'function') {
+                input.validate();
+            }
         }
-    }
 
-    return true;
-};
+        // We should add a check if the validation passed right here, before saving
 
-Charcoal.Admin.ComponentManager.prototype.prepare_widgets = function ()
-{
-    // Get inputs
-    var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
+        // Loop for save
+        var i = 0;
+        for (; i < length; i++) {
+            input = inputs[ i ];
+            if (typeof input.save === 'function') {
+                input.save();
+            }
+        }
 
-    if (!widgets.length) {
-        // No inputs? Move on
         return true;
-    }
+    };
 
-    var length = widgets.length;
-    var widget;
+    Manager.prototype.prepare_widgets = function ()
+    {
+        // Get inputs
+        var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
 
-    // Loop for validation
-    var k = 0;
-    for (; k < length; k++) {
-        widget = widgets[ k ];
-        if (typeof widget.validate === 'function') {
-            widget.validate();
+        if (!widgets.length) {
+            // No inputs? Move on
+            return true;
         }
-    }
 
-    // We should add a check if the validation passed right here, before saving
+        var length = widgets.length;
+        var widget;
 
-    // Loop for save
-    var i = 0;
-    for (; i < length; i++) {
-        widget = widgets[ i ];
-        if (typeof widget.save === 'function') {
-            widget.save();
+        // Loop for validation
+        var k = 0;
+        for (; k < length; k++) {
+            widget = widgets[ k ];
+            if (typeof widget.validate === 'function') {
+                widget.validate();
+            }
         }
-    }
 
-    return true;
+        // We should add a check if the validation passed right here, before saving
 
-};
+        // Loop for save
+        var i = 0;
+        for (; i < length; i++) {
+            widget = widgets[ i ];
+            if (typeof widget.save === 'function') {
+                widget.save();
+            }
+        }
+
+        return true;
+    };
+
+    Charcoal.Admin.ComponentManager = Manager;
+
+}(jQuery, document));

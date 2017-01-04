@@ -45,9 +45,18 @@ trait CollectionContainerTrait
     private $collectionIdent;
 
     /**
-     * @var mixed $collectionConfig
+     * Collection configuration.
+     *
+     * @var array|null
      */
     private $collectionConfig;
+
+    /**
+     * Default collection configuration.
+     *
+     * @var array|null
+     */
+    private $defaultCollectionConfig;
 
     /**
      * @var integer $numTotal
@@ -264,7 +273,7 @@ trait CollectionContainerTrait
      *
      * @return array
      */
-    public function collectionMeta()
+    public function collectionMetadata()
     {
         $collectionIdent = $this->collectionIdent();
 
@@ -286,24 +295,83 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @param mixed $collectionConfig The collection configuration.
-     * @return CollectionContainerInterface Chainable
-     */
-    public function setCollectionConfig($collectionConfig)
-    {
-        $this->collectionConfig = $collectionConfig;
-        return $this;
-    }
-
-    /**
-     * @return mixed
+     * Retrieve the collection configset.
+     *
+     * @return array|null
      */
     public function collectionConfig()
     {
         if ($this->collectionConfig === null) {
             $this->collectionConfig = $this->createCollectionConfig();
         }
+
         return $this->collectionConfig;
+    }
+
+    /**
+     * Replace the collection's configset with the given parameters.
+     *
+     * @param  mixed $config New collection config values.
+     * @return CollectionContainerInterface Chainable
+     */
+    public function setCollectionConfig($config)
+    {
+        if (empty($config) || !is_array($config)) {
+            $config = [];
+        }
+
+        $this->collectionConfig = array_replace_recursive(
+            $this->defaultCollectionConfig(),
+            $this->parseCollectionConfig($config)
+        );
+
+        return $this;
+    }
+
+    /**
+     * Merge given parameters into the collection's configset.
+     *
+     * @param  array $config New collection config values.
+     * @return self
+     */
+    public function mergeCollectionConfig(array $config)
+    {
+        $this->collectionConfig = array_replace_recursive(
+            $this->defaultCollectionConfig(),
+            $this->collectionConfig,
+            $this->parseCollectionConfig($config)
+        );
+
+        return $this;
+    }
+
+    /**
+     * Stub: Parse given parameters into the collection's configset.
+     *
+     * @param  array $config New collection config values.
+     * @return array
+     */
+    protected function parseCollectionConfig(array $config)
+    {
+        return array_filter($config, function ($val) {
+            return empty($val) && !is_numeric($val);
+        });
+    }
+
+    /**
+     * Retrieve the default collection configuration.
+     *
+     * The default configset is determined by the collection ident and object type, if assigned.
+     *
+     * @return array|null
+     */
+    protected function defaultCollectionConfig()
+    {
+        if ($this->defaultCollectionConfig === null) {
+            $this->defaultCollectionConfig = $this->collectionMetadata();
+        }
+
+        return $this->defaultCollectionConfig;
     }
 
     /**
@@ -313,7 +381,7 @@ trait CollectionContainerTrait
      */
     protected function createCollectionConfig()
     {
-        return $this->collectionMeta();
+        return $this->collectionMetadata();
     }
 
     /**
@@ -472,6 +540,7 @@ trait CollectionContainerTrait
 
                 $objectProperties[] = $this->parsePropertyCell($object, $property, $propertyValue);
             };
+
             $this->currentObj = $object;
             $this->currentObjId = $object->id();
 

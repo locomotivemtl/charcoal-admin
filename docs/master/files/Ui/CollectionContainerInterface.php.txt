@@ -30,10 +30,10 @@ interface CollectionContainerInterface
     public function collectionIdent();
 
     /**
-     * @param mixed $collectionConfig The collection config.
+     * @param mixed $config The collection config.
      * @return CollectionContainerInterface Chainable
      */
-    public function setCollectionConfig($collectionConfig);
+    public function setCollectionConfig($config);
 
     /**
      * @return mixed

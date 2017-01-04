@@ -307,27 +307,35 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Always return an array
-     * Theses are the properties options used in the list display
-     * @return array
+     * Retrieve the property customizations for the collection.
+     *
+     * @return array|null
      */
     public function propertiesOptions()
     {
         if ($this->propertiesOptions === null) {
-            $collectionConfig = $this->collectionConfig();
-
-            if (empty($collectionConfig)) {
-                return [];
-            }
-
-            if (!isset($collectionConfig['properties_options'])) {
-                return [];
-            }
-
-            $this->propertiesOptions = $collectionConfig['properties_options'];
+            $this->propertiesOptions = $this->defaultPropertiesOptions();
         }
 
         return $this->propertiesOptions;
+    }
+
+    /**
+     * Retrieve the default property customizations.
+     *
+     * The default configset is determined by the collection ident and object type, if assigned.
+     *
+     * @return array|null
+     */
+    protected function defaultPropertiesOptions()
+    {
+        $collectionConfig = $this->collectionConfig();
+
+        if (empty($collectionConfig['properties_options'])) {
+            return [];
+        }
+
+        return $collectionConfig['properties_options'];
     }
 
     /**

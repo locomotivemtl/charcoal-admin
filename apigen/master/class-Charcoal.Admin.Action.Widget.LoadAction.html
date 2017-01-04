@@ -268,7 +268,7 @@ Charcoal\App\Action\AbstractAction
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Action.html">Action</a>\<a href="namespace-Charcoal.Admin.Action.Widget.html">Widget</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#18-153" title="Go to source code">Charcoal/Admin/Action/Widget/LoadAction.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#25-282" title="Go to source code">Charcoal/Admin/Action/Widget/LoadAction.php</a>
 		<br>
 	</div>
 
@@ -288,7 +288,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#43-52" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$dependencies</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#65-75" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -300,8 +300,8 @@ Charcoal\App\Action\AbstractAction
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$dependencies</var></dt>
-					<dd>The DI container.</dd>
+					<dt><var>$container</var></dt>
+					<dd>A dependencies container instance.</dd>
 				</dl></div>
 
 
@@ -325,22 +325,22 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_run">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#54-91" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#77-122" title="Go to source code">run</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>Psr\Http\Message\ResponseInterface <var>$response</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Execute the endpoint.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Execute the endpoint.</p>
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$request</var></dt>
-					<dd>PSR7 Request.</dd>
+					<dd>A PSR-7 compatible Request instance.</dd>
 					<dt><var>$response</var></dt>
-					<dd>PSR7 Response.</dd>
+					<dd>A PSR-7 compatible Response instance.</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -366,14 +366,14 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setWidgetId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#93-107" title="Go to source code">setWidgetId</a>( <span>string <var>$id</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#124-142" title="Go to source code">setWidgetId</a>( <span>string <var>$id</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the widget's ID.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the widget's ID.</p>
 
 
 				<h4>Parameters</h4>
@@ -409,14 +409,91 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_widgetId">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#109-115" title="Go to source code">widgetId</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#144-152" title="Go to source code">widgetId</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the widget's ID.</p>
 		</div>
 
 		<div class="description detailed hidden">
+			<p>Retrieve the widget's ID.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setWidgetType" id="_setWidgetType">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a></code>
 			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setWidgetType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#154-172" title="Go to source code">setWidgetType</a>( <span>string <var>$type</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the widget's type.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the widget's type.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$type</var></dt>
+					<dd>The widget type.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a></code><br>Chainable
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					InvalidArgumentException<br>If the widget type argument is not a string.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="widgetType" id="_widgetType">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_widgetType">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#174-182" title="Go to source code">widgetType</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the widget's type.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the widget's type.</p>
 
 
 
@@ -443,14 +520,14 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setWidgetHtml">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#117-131" title="Go to source code">setWidgetHtml</a>( <span>string <var>$html</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#184-202" title="Go to source code">setWidgetHtml</a>( <span>string <var>$html</var></span> )</code>
 
 		<div class="description short">
-			
+			<p>Set the widget's rendered view.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Set the widget's rendered view.</p>
 
 
 				<h4>Parameters</h4>
@@ -486,14 +563,14 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_widgetHtml">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#133-139" title="Go to source code">widgetHtml</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#204-212" title="Go to source code">widgetHtml</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Retrieve the widget's rendered view.</p>
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Retrieve the widget's rendered view.</p>
 
 
 
@@ -502,6 +579,160 @@ Charcoal\App\Action\AbstractAction
 					string
 				</div>
 
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setWidgetView" id="_setWidgetView">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setWidgetView">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#214-225" title="Go to source code">setWidgetView</a>( <span>Charcoal\View\ViewInterface <var>$view</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the widget renderer.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the widget renderer.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$view</var></dt>
+					<dd>The view renderer to create widgets.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="widgetView" id="_widgetView">
+
+		<td class="attributes"><code>
+			 protected 
+
+			Charcoal\View\ViewInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_widgetView">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#227-240" title="Go to source code">widgetView</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the widget renderer.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the widget renderer.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\View\ViewInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the widget renderer was not previously set.
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			<code><a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setWidgetFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#242-253" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
+
+		<div class="description short">
+			<p>Set the widget factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Set the widget factory.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$factory</var></dt>
+					<dd>The factory to create widgets.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-Charcoal.Admin.Action.Widget.LoadAction.html">Charcoal\Admin\Action\Widget\LoadAction</a></code>
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="widgetFactory" id="_widgetFactory">
+
+		<td class="attributes"><code>
+			 protected 
+
+			Charcoal\Factory\FactoryInterface
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_widgetFactory">#</a>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#255-268" title="Go to source code">widgetFactory</a>( )</code>
+
+		<div class="description short">
+			<p>Retrieve the widget factory.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve the widget factory.</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					Charcoal\Factory\FactoryInterface
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					RuntimeException<br>If the widget factory was not previously set.
+				</div>
 
 
 
@@ -520,7 +751,7 @@ Charcoal\App\Action\AbstractAction
 
 		<td class="name"><div>
 		<a class="anchor" href="#_results">#</a>
-		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#141-152" title="Go to source code">results</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#270-281" title="Go to source code">results</a>( )</code>
 
 		<div class="description short">
 			
@@ -590,21 +821,46 @@ Charcoal\App\Action\AbstractAction
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#23-26" title="Go to source code"><var>$widgetId</var></a>
+				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#30-35" title="Go to source code"><var>$widgetId</var></a>
 
 			<div class="description short">
-				<p>$widgetId</p>
+				<p>The widget's current ID.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$widgetId</p>
+				<p>The widget's current ID.</p>
 
 			</div>
 		</td>
 		<td class="value">
 			<div>
 				<a href="#$widgetId" class="anchor">#</a>
-				<code><span class="php-quote">''</span></code>
+				<code></code>
+			</div>
+		</td>
+	</tr>
+	<tr data-order="widgetType" id="$widgetType">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#37-42" title="Go to source code"><var>$widgetType</var></a>
+
+			<div class="description short">
+				<p>The widget's current type.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>The widget's current type.</p>
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#$widgetType" class="anchor">#</a>
+				<code></code>
 			</div>
 		</td>
 	</tr>
@@ -615,39 +871,39 @@ Charcoal\App\Action\AbstractAction
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#28-31" title="Go to source code"><var>$widgetHtml</var></a>
+				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#44-49" title="Go to source code"><var>$widgetHtml</var></a>
 
 			<div class="description short">
-				<p>$widgetHtml</p>
+				<p>The widget's renderered view.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$widgetHtml</p>
+				<p>The widget's renderered view.</p>
 
 			</div>
 		</td>
 		<td class="value">
 			<div>
 				<a href="#$widgetHtml" class="anchor">#</a>
-				<code><span class="php-quote">''</span></code>
+				<code></code>
 			</div>
 		</td>
 	</tr>
 	<tr data-order="widgetView" id="$widgetView">
 		<td class="attributes"><code>
 			protected  
-			ViewInterface
+			Charcoal\View\ViewInterface
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#33-36" title="Go to source code"><var>$widgetView</var></a>
+				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#51-56" title="Go to source code"><var>$widgetView</var></a>
 
 			<div class="description short">
-				<p>$widgetView</p>
+				<p>Store the view renderer.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$widgetView</p>
+				<p>Store the view renderer.</p>
 
 			</div>
 		</td>
@@ -665,14 +921,14 @@ Charcoal\App\Action\AbstractAction
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#38-41" title="Go to source code"><var>$widgetFactory</var></a>
+				<a href="source-class-Charcoal.Admin.Action.Widget.LoadAction.html#58-63" title="Go to source code"><var>$widgetFactory</var></a>
 
 			<div class="description short">
-				<p>$widgetFactory</p>
+				<p>Store the widget factory.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>$widgetFactory</p>
+				<p>Store the widget factory.</p>
 
 			</div>
 		</td>

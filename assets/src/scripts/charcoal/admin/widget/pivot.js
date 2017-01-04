@@ -135,7 +135,7 @@ Charcoal.Admin.Widget_Pivot.prototype.listeners = function ()
                             });
                         }
                     );
-                    break;
+                break;
             }
         });
 };

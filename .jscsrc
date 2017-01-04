@@ -37,7 +37,7 @@
         "beforeOpeningRoundBrace": true,
         "afterOpeningRoundBrace": true
     },
-    "disallowSpacesInsideArrayBrackets": true,
+    "disallowSpacesInsideArrayBrackets": false,
     "disallowSpacesInsideParentheses": true,
     "disallowYodaConditions": true,
 

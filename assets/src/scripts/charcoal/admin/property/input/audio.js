@@ -400,7 +400,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-            break;
+        break;
 
         case 'pause_recording' :
             /**
@@ -426,7 +426,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-            break;
+        break;
 
         case 'stop_recording' :
             /**
@@ -451,7 +451,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-            break;
+        break;
 
         case 'start_playback' :
             /**
@@ -468,7 +468,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              * Reset button
              */
 
-            break;
+        break;
 
         case 'pause_playback' :
             /**
@@ -485,7 +485,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              * Reset button
              */
 
-            break;
+        break;
 
         case 'reset' :
             /**
@@ -512,7 +512,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',true);
 
-            break;
+        break;
     }
 };
 
@@ -729,11 +729,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = functio
         case 'waves':
             this.recording_properties.$analyser_canvas.addClass('hidden');
             this.recording_properties.$waves_canvas.removeClass('hidden');
-            break;
+        break;
         default:
             this.recording_properties.$analyser_canvas.removeClass('hidden');
             this.recording_properties.$waves_canvas.addClass('hidden');
-            break;
+        break;
     }
 };
 

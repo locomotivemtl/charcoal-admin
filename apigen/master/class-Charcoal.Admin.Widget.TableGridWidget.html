@@ -319,11 +319,15 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_createObjectActions">createObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_dataFromObject">dataFromObject()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_dataFromRequest">dataFromRequest()</a>, 
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultActionStruct">defaultActionStruct()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultListActions">defaultListActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultObjectActions">defaultObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultPropertiesOptions">defaultPropertiesOptions()</a>, 
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_emptyListActions">emptyListActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_isObjCreatable">isObjCreatable()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_isObjDeletable">isObjDeletable()</a>, 
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_isObjEditable">isObjEditable()</a>, 
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_jsActionPrefix">jsActionPrefix()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_listActions">listActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_objectActions">objectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_objectCreateUrl">objectCreateUrl()</a>, 
@@ -333,6 +337,7 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActionItem">parseActionItem()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActionUrl">parseActionUrl()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActions">parseActions()</a>, 
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseAsObjectActions">parseAsObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseObjectRow">parseObjectRow()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parsePropertyCell">parsePropertyCell()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parsePropertyCellClasses">parsePropertyCellClasses()</a>, 
@@ -349,6 +354,7 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_setShowTableHead">setShowTableHead()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_setShowTableHeader">setShowTableHeader()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_setSortable">setSortable()</a>, 
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showEmptyListActions">showEmptyListActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showListActions">showListActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showObjectActions">showObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showTableFoot">showTableFoot()</a>, 
@@ -472,6 +478,14 @@ Charcoal\App\Template\AbstractWidget
 
 
 	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-Charcoal.Admin.Widget.TableWidget.html#constants">Charcoal\Admin\Widget\TableWidget</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#DEFAULT_ACTION_PRIORITY"><b>DEFAULT_ACTION_PRIORITY</b></a>
+		</code></td>
+	</tr>
+	</table>
+	<table class="summary inherited">
 	<caption>Constants inherited from <a href="class-Charcoal.Admin.AdminWidget.html#constants">Charcoal\Admin\AdminWidget</a></caption>
 	<tr>
 		<td><code>
@@ -488,6 +502,7 @@ Charcoal\App\Template\AbstractWidget
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Widget.TableWidget.html#properties">Charcoal\Admin\Widget\TableWidget</a></caption>
 	<tr>
 		<td><code>
+			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$actionsPriority"><var>$actionsPriority</var></a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$parsedListActions"><var>$parsedListActions</var></a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$parsedObjectActions"><var>$parsedObjectActions</var></a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$parsedProperties"><var>$parsedProperties</var></a>, 

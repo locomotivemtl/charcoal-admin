@@ -13,6 +13,7 @@
 // Core variables
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/vendor-prefixes";
+@import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/reset-filter";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/border-radius";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-divider";
 @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins/labels";
@@ -72,6 +73,7 @@
 // Bootstrap overwrites
 // ==========================================================================
 @import "bootstrap/badges";
+@import "bootstrap/dropdowns";
 @import "bootstrap/navs";
 @import "bootstrap/forms";
 @import "bootstrap/tables";

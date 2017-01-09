@@ -14,23 +14,23 @@
                 {{#showLanguageSwitch}}
                     <div class="btn-group btn-group-justified form-group js-lang-switch" role="group"
                          aria-label="{{#_t}}Language switcher{{/_t}}">
-                        {{#languages}}
-                            <div class="btn-group" role="group">
-                                <button type="button" data-lang-switch="{{ident}}"
-                                        class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">{{name}}</button>
-                            </div>
-                        {{/languages}}
+                    {{#languages}}
+                        <div class="btn-group" role="group">
+                            <button type="button" data-lang-switch="{{ident}}"
+                                    class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">{{name}}</button>
+                        </div>
+                    {{/languages}}
                     </div>
                 {{/showLanguageSwitch}}
 
                 {{#hasSidebarProperties}}
                     <ul class="c-panel_table form-group">
-                        {{#formProperties}}
-                            <li class="c-panel_table_row">
-                                <p class="c-panel_table_header"><strong>{{prop.label}}</strong></p>
-                                <p class="c-panel_table_data">{{displayVal}}</p>
-                            </li>
-                        {{/formProperties}}
+                    {{#formProperties}}
+                        <li class="c-panel_table_row">
+                            <p class="c-panel_table_header"><strong>{{prop.label}}</strong></p>
+                            <p class="c-panel_table_data">{{displayVal}}</p>
+                        </li>
+                    {{/formProperties}}
                     </ul>
                 {{/hasSidebarProperties}}
 
@@ -54,25 +54,25 @@
 
             {{# showFooter }}
                 <footer class="c-panel_footer">
-                    {{!--
-                    @todo Only show the "delete" button if there's an object's ID.
-                    --}}
-                    {{#isObjDeletable}}
-                        <div class="c-panel_footer_item -red">
-                    <span role="button" class="js-obj-delete">
-                       <span class="fa fa-trash-o"></span>
-                       <span class="btn-label">{{# _t }}Effacer{{/ _t }}</span>
-                    </span>
-                        </div>
-                    {{/isObjDeletable}}
-                    {{#isObjResettable}}
-                        <div class="c-panel_footer_item -blue">
-                    <span role="button" class="js-reset-form">
-                        <span class="fa fa-refresh"></span>
-                        <span class="btn-label">{{# _t }}Réinitialiser{{/ _t }}</span>
-                    </span>
-                        </div>
-                    {{/isObjResettable}}
+                {{!--
+                @todo Only show the "delete" button if there's an object's ID.
+                --}}
+                {{#isObjDeletable}}
+                    <div class="c-panel_footer_item -red">
+                        <span role="button" class="js-obj-delete">
+                           <span class="fa fa-trash-o"></span>
+                           <span class="btn-label">{{# _t }}Effacer{{/ _t }}</span>
+                        </span>
+                    </div>
+                {{/isObjDeletable}}
+                {{#isObjResettable}}
+                    <div class="c-panel_footer_item -blue">
+                        <span role="button" class="js-reset-form">
+                            <span class="fa fa-refresh"></span>
+                            <span class="btn-label">{{# _t }}Réinitialiser{{/ _t }}</span>
+                        </span>
+                    </div>
+                {{/isObjResettable}}
                 </footer>
             {{/ showFooter }}
         </div>

@@ -1,0 +1,42 @@
+{{!--
+    Table Widget \ Collection \ Dropdown Menu
+    =========================================
+
+    @used-by `charcoal/admin/widget/table/actions/dropdown`
+--}}
+{{# isSeparator }}
+<li role="separator" class="divider"></li>
+{{/ isSeparator }}
+{{^ isSeparator }}
+    {{# isHeader }}
+    <li class="dropdown-header">{{& label }}</li>
+    {{/ isHeader }}
+    {{# hasActions }}
+    <li class="dropdown-submenu dropdown-menu-item">
+        {{> charcoal/admin/widget/table/actions/dropdown-submenu }}
+    </li>
+    {{/ hasActions }}
+    {{^ hasActions }}
+    <li class="dropdown-menu-item">
+        {{# isButton }}
+        <button class="btn{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+                type="button"
+                {{# widgetType }}
+                data-widget-type="{{ . }}"
+                {{/ widgetType }}
+                >{{> charcoal/admin/widget/table/actions/label }}</button>
+        {{/ isButton }}
+        {{# isLink }}
+        <a{{# ident }} class="{{ jsActionPrefix }}-{{ . }}"{{/ ident }}
+           href="{{ url }}"
+           {{# widgetType }}
+           data-widget-type="{{ . }}"
+           {{/ widgetType }}
+           >{{> charcoal/admin/widget/table/actions/label }}</a>
+        {{/ isLink }}
+        {{# isText }}
+        {{> charcoal/admin/widget/table/actions/label }}
+        {{/ isText }}
+    </li>
+    {{/ hasActions }}
+{{/ isSeparator }}

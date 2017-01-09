@@ -7,8 +7,11 @@
     border: 1px solid $table-border-color;
     border-bottom: none;
     font-size: rem(13px);
+}
 
-    .btn, .btn-group {
+.table-header-group {
+    > .btn,
+    > .btn-group {
         margin-left: $grid-gutter-width;
 
         &:first-child {

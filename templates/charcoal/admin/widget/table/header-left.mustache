@@ -19,12 +19,15 @@
 </div>
 --}}
 {{# showListActions }}
+<div class="btn-group" role="group">
 {{# listActions }}
-    {{# isButton }}
-    <button class="btn btn-{{ button_type }} js-list-{{ ident }}" data-widget-type="{{ widgetType }}">{{& label }}</button>
-    {{/ isButton }}
-    {{^ isButton }}
-    <a class="btn btn-{{ button_type }} js-list-{{ ident }}" href="{{ url }}" data-widget-type="{{ widgetType }}">{{& label }}</a>
-    {{/ isButton }}
+    {{# isSeparator }}
+        </div>
+        <div class="btn-group" role="group">
+    {{/ isSeparator }}
+    {{^ isSeparator }}
+        {{> charcoal/admin/widget/table/actions }}
+    {{/ isSeparator }}
 {{/ listActions }}
+</div>
 {{/ showListActions }}

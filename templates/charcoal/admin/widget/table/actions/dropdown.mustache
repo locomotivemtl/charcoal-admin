@@ -1,0 +1,57 @@
+{{!--
+    Table Widget \ Collection \ Dropdown Actions
+    ============================================
+
+    @used-by `charcoal/admin/widget/table/actions`
+--}}
+<div class="btn-group" role="group">
+    {{# isButton }}
+    <button class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+            type="button"
+            {{# widgetType }}
+            data-widget-type="{{ . }}"
+            {{/ widgetType }}
+            {{^ splitButton }}
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            {{/ splitButton }}>
+            {{> charcoal/admin/widget/table/actions/label }}
+            {{^ splitButton }}
+            <span class="caret" aria-hidden="true"></span>
+            {{/ splitButton }}
+        </button>
+    {{/ isButton }}
+    {{^ isButton }}
+    <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+       href="{{ url }}"
+       {{# widgetType }}
+       data-widget-type="{{ . }}"
+       {{/ widgetType }}
+       {{^ splitButton }}
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false"
+       {{/ splitButton }}>
+        {{> charcoal/admin/widget/table/actions/label }}
+        {{^ splitButton }}
+        <span class="caret" aria-hidden="true"></span>
+        {{/ splitButton }}
+    </a>
+    {{/ isButton }}
+    {{# splitButton }}
+    <button class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }} dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">{{# _t }}Toggle Dropdown{{/ _t }}</span>
+    </button>
+    {{/ splitButton }}
+    <ul class="dropdown-menu">
+    {{# actions }}
+        {{> charcoal/admin/widget/table/actions/dropdown-menu }}
+    {{/ actions }}
+    </ul>
+</div>

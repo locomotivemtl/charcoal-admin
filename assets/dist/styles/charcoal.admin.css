@@ -1468,6 +1468,49 @@ ul.c-panel_table {
   .badge-danger[href]:hover, .badge-danger[href]:focus {
     background-color: #c9302c; }
 
+.dropdown-menu-item, .dropdown-menu > li > button {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.428571429;
+  white-space: nowrap; }
+
+.dropdown-menu-item {
+  color: #333333; }
+  .dropdown-menu-item > a,
+  .dropdown-menu-item > button {
+    margin: -3px -20px; }
+
+.dropdown-menu > li > button {
+  color: #333333;
+  width: calc(100% + 40px);
+  font-size: inherit;
+  text-align: inherit;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none; }
+  .dropdown-menu > li > button:hover, .dropdown-menu > li > button:focus {
+    text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5; }
+
+.dropdown-menu > .active > button, .dropdown-menu > .active > button:hover, .dropdown-menu > .active > button:focus {
+  color: #fff;
+  text-decoration: none;
+  outline: 0;
+  background-color: #337ab7; }
+
+.dropdown-menu > .disabled > button, .dropdown-menu > .disabled > button:hover, .dropdown-menu > .disabled > button:focus {
+  color: #777777; }
+
+.dropdown-menu > .disabled > button:hover, .dropdown-menu > .disabled > button:focus {
+  text-decoration: none;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  cursor: not-allowed; }
+
 .nav-tabs {
   margin-bottom: 2.5rem; }
 
@@ -1729,10 +1772,13 @@ a:focus {
   border: 1px solid #ddd;
   border-bottom: none;
   font-size: 0.8125rem; }
-  .table-header .btn, .table-header .btn-group {
-    margin-left: 15px; }
-    .table-header .btn:first-child, .table-header .btn-group:first-child {
-      margin-left: 0; }
+
+.table-header-group > .btn,
+.table-header-group > .btn-group {
+  margin-left: 15px; }
+  .table-header-group > .btn:first-child,
+  .table-header-group > .btn-group:first-child {
+    margin-left: 0; }
 
 .c-dualselect_list .form-control + .form-control {
   margin-top: 5px; }

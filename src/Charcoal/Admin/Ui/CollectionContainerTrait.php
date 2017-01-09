@@ -548,6 +548,9 @@ trait CollectionContainerTrait
 
             yield $row;
         }
+
+        $this->currentObj = null;
+        $this->currentObjId = null;
     }
 
     /**

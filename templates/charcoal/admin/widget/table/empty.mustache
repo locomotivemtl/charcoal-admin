@@ -8,9 +8,20 @@
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span class="sr-only">{{# _t }}Erreurs:{{/ _t }}</span>
     <span>{{# _t }}Aucun objet de type "{{ objType }}" n'existe.{{/ _t }}</span>
-    {{# isObjCreatable }}
     <div class="btn-group" role="group">
+    {{# emptyListActions }}
+        {{# isSeparator }}
+            </div>
+            <div class="btn-group" role="group">
+        {{/ isSeparator }}
+        {{^ isSeparator }}
+            {{> charcoal/admin/widget/table/actions }}
+        {{/ isSeparator }}
+    {{/ emptyListActions }}
+    {{^ showEmptyListActions }}
+        {{# isObjCreatable }}
         <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Créer un nouvel objet{{/ _t }}</a>
+        {{/ isObjCreatable }}
+    {{/ showEmptyListActions }}
     </div>
-    {{/ isObjCreatable }}
 </div>

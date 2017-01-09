@@ -5,7 +5,19 @@
     @used-by `charcoal/admin/widget/tbody-row`
 --}}
 <td class="table-row-actions">
-    {{# object }}
-    {{> charcoal/admin/widget/table/object-actions }}
-    {{/ object }}
+{{# object }}
+    {{# showObjectActions }}
+    <div class="btn-group" role="group">
+    {{# objectActions }}
+        {{# isSeparator }}
+            </div>
+            <div class="btn-group" role="group">
+        {{/ isSeparator }}
+        {{^ isSeparator }}
+            {{> charcoal/admin/widget/table/actions }}
+        {{/ isSeparator }}
+    {{/ objectActions }}
+    </div>
+    {{/ showObjectActions }}
+{{/ object }}
 </td>

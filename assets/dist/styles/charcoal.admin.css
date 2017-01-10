@@ -1643,6 +1643,9 @@ input[type="url"] {
   transition: background-color 0.3s; }
   .btn.btn-lg {
     font-size: 1rem; }
+  .btn > .fa + .btn-label,
+  .btn > .glyphicon + .btn-label {
+    margin-left: 0.25em; }
 
 .btn-link-primary,
 .btn-link-success,

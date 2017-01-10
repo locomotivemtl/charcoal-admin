@@ -20,6 +20,7 @@ use \Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
+use \Charcoal\Translation\TranslationConfig;
 
 // From 'charcoal-app'
 use \Charcoal\App\Template\AbstractTemplate;
@@ -709,6 +710,16 @@ class AdminTemplate extends AbstractTemplate
         }
 
         return $siteName;
+    }
+
+    /**
+     * Retrieve the current language.
+     *
+     * @return string
+     */
+    public function lang()
+    {
+        return TranslationConfig::instance()->currentLanguage();
     }
 
     /**

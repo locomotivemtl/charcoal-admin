@@ -117,7 +117,10 @@ Charcoal.Admin = (function ()
         if (typeof feedback === 'undefined') {
             feedback = new Charcoal.Admin.Feedback();
         }
-        feedback.add_data(data);
+
+        if (data) {
+            feedback.add_data(data);
+        }
 
         return feedback;
     };
@@ -731,15 +734,21 @@ Charcoal.Admin.Feedback.prototype.call = function ()
         if (typeof ret[ this.msgs[i].level ] === 'undefined') {
             ret[ this.msgs[i].level ] = [];
         }
+
         ret[ this.msgs[i].level ].push(this.msgs[i].msg);
     }
 
+    console.log(this.msgs);
+    console.log(ret);
+
     for (var level in ret) {
+        var key = level;
+
         if (typeof this.context_aliases[ level ] === 'string') {
-            level = this.context_aliases[ level ];
+            key = this.context_aliases[ level ];
         }
 
-        if (typeof this.context_definitions[ level ] === 'undefined') {
+        if (typeof this.context_definitions[ key ] === 'undefined') {
             continue;
         }
 
@@ -758,9 +767,9 @@ Charcoal.Admin.Feedback.prototype.call = function ()
         }
 
         BootstrapDialog.show({
-            title:   this.context_definitions[ level ].title,
+            title:   this.context_definitions[ key ].title,
             message: '<p>' + ret[ level ].join('</p><p>') + '</p>',
-            type:    this.context_definitions[ level ].type,
+            type:    this.context_definitions[ key ].type,
             buttons: buttons
         });
 
@@ -965,7 +974,7 @@ Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
     return this;
 };
 
-Charcoal.Admin.Widget.prototype.reload = function (cb) {
+Charcoal.Admin.Widget.prototype.reload = function (callback) {
     var that = this;
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load';
@@ -990,8 +999,8 @@ Charcoal.Admin.Widget.prototype.reload = function (cb) {
             });
         }
         // Callback
-        if (typeof cb === 'function') {
-            cb(response);
+        if (typeof callback === 'function') {
+            callback.call(that, response);
         }
     }, 'json');
 
@@ -2579,7 +2588,7 @@ Charcoal.Admin.Widget_Table = function ()
         num_per_page: 50
     };
 
-    this.properties = this.properties_options = undefined;
+    this.template = this.properties = this.properties_options = undefined;
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -2601,6 +2610,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
     this.obj_type           = opts.data.obj_type           || this.obj_type;
     this.widget_id          = opts.id                      || this.widget_id;
     this.table_selector     = '#' + this.widget_id;
+    this.template           = opts.data.template           || this.template;
     this.properties         = opts.data.properties         || this.properties;
     this.properties_options = opts.data.properties_options || this.properties_options;
     this.filters            = opts.data.filters            || this.filters;
@@ -2833,6 +2843,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 {
     return {
         obj_type:          this.obj_type,
+        template:          this.template,
         collection_ident:  this.collection_ident,
         collection_config: {
             properties:         this.properties,
@@ -2847,15 +2858,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 /**
 *
 */
-Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
+Charcoal.Admin.Widget_Table.prototype.reload = function (callback)
 {
-    var callback = function (response)
-    {
-        if (typeof cb === 'function') {
-            cb(response);
-        }
-    };
-
     // Call supra class
     Charcoal.Admin.Widget.prototype.reload.call(this, callback);
 

@@ -182,7 +182,7 @@ Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
     return this;
 };
 
-Charcoal.Admin.Widget.prototype.reload = function (cb) {
+Charcoal.Admin.Widget.prototype.reload = function (callback) {
     var that = this;
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load';
@@ -207,8 +207,8 @@ Charcoal.Admin.Widget.prototype.reload = function (cb) {
             });
         }
         // Callback
-        if (typeof cb === 'function') {
-            cb(response);
+        if (typeof callback === 'function') {
+            callback.call(that, response);
         }
     }, 'json');
 

@@ -23,7 +23,7 @@ Charcoal.Admin.Widget_Table = function ()
         num_per_page: 50
     };
 
-    this.properties = this.properties_options = undefined;
+    this.template = this.properties = this.properties_options = undefined;
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -45,6 +45,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
     this.obj_type           = opts.data.obj_type           || this.obj_type;
     this.widget_id          = opts.id                      || this.widget_id;
     this.table_selector     = '#' + this.widget_id;
+    this.template           = opts.data.template           || this.template;
     this.properties         = opts.data.properties         || this.properties;
     this.properties_options = opts.data.properties_options || this.properties_options;
     this.filters            = opts.data.filters            || this.filters;
@@ -277,6 +278,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 {
     return {
         obj_type:          this.obj_type,
+        template:          this.template,
         collection_ident:  this.collection_ident,
         collection_config: {
             properties:         this.properties,
@@ -291,15 +293,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 /**
 *
 */
-Charcoal.Admin.Widget_Table.prototype.reload = function (cb)
+Charcoal.Admin.Widget_Table.prototype.reload = function (callback)
 {
-    var callback = function (response)
-    {
-        if (typeof cb === 'function') {
-            cb(response);
-        }
-    };
-
     // Call supra class
     Charcoal.Admin.Widget.prototype.reload.call(this, callback);
 

@@ -1,4 +1,26 @@
 /**
+ * Enable each element in the set of matched elements.
+ */
+$.fn.enable = function () {
+    this.each(function () {
+        $(this).removeAttr('disabled').prop('disabled', false);
+    });
+
+    return this;
+};
+
+/**
+ * Disable each element in the set of matched elements.
+ */
+$.fn.disable = function () {
+    this.each(function () {
+        $(this).attr('disabled', true).prop('disabled', true);
+    });
+
+    return this;
+};
+
+/**
  * @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
  */
 if (!Array.prototype.find) {

@@ -65,8 +65,9 @@ Charcoal.Admin = (function ()
     };
 
     /**
-     * Provides an access to our instanciated ComponentManager
-     * @return  {object}  ComponentManager instance
+     * Provides access to the component manager.
+     *
+     * @return {ComponentManager}
      */
     Admin.manager = function ()
     {
@@ -78,18 +79,19 @@ Charcoal.Admin = (function ()
     };
 
     /**
-     * Provides an access to our instanciated Feedback object
-     * You can set the data already in as a parameter when necessary.
-     * @return {Object} Feedback instance
+     * Provides access to the feedback manager.
+     *
+     * @param  {array|object} [entries] Optional entries to push on the manager.
+     * @return {Feedback}
      */
-    Admin.feedback = function (data)
+    Admin.feedback = function (/* entries */)
     {
         if (typeof feedback === 'undefined') {
             feedback = new Charcoal.Admin.Feedback();
         }
 
-        if (data) {
-            feedback.add_data(data);
+        if (arguments.length) {
+            feedback.push.apply(feedback, arguments);
         }
 
         return feedback;

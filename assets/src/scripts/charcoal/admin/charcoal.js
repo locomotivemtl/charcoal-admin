@@ -87,7 +87,10 @@ Charcoal.Admin = (function ()
         if (typeof feedback === 'undefined') {
             feedback = new Charcoal.Admin.Feedback();
         }
-        feedback.add_data(data);
+
+        if (data) {
+            feedback.add_data(data);
+        }
 
         return feedback;
     };

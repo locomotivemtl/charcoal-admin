@@ -170,15 +170,18 @@ Charcoal.Admin.Feedback.prototype.call = function ()
         if (typeof ret[ this.msgs[i].level ] === 'undefined') {
             ret[ this.msgs[i].level ] = [];
         }
+
         ret[ this.msgs[i].level ].push(this.msgs[i].msg);
     }
 
     for (var level in ret) {
+        var key = level;
+
         if (typeof this.context_aliases[ level ] === 'string') {
-            level = this.context_aliases[ level ];
+            key = this.context_aliases[ level ];
         }
 
-        if (typeof this.context_definitions[ level ] === 'undefined') {
+        if (typeof this.context_definitions[ key ] === 'undefined') {
             continue;
         }
 
@@ -197,9 +200,9 @@ Charcoal.Admin.Feedback.prototype.call = function ()
         }
 
         BootstrapDialog.show({
-            title:   this.context_definitions[ level ].title,
+            title:   this.context_definitions[ key ].title,
             message: '<p>' + ret[ level ].join('</p><p>') + '</p>',
-            type:    this.context_definitions[ level ].type,
+            type:    this.context_definitions[ key ].type,
             buttons: buttons
         });
 

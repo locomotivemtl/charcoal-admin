@@ -99,7 +99,7 @@ class LoadAction extends AdminAction
                 $widget->setData($widgetOptions);
             }
 
-            $widgetHtml = $widget->renderTemplate($widgetType);
+            $widgetHtml = $widget->renderTemplate($widget->template());
             $widgetId   = $widget->widgetId();
 
             $this->setWidgetHtml($widgetHtml);

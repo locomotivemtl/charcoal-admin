@@ -95,6 +95,17 @@ class FileInput extends AbstractPropertyInput
         $val = (string)$this->inputVal();
         $val = preg_replace('!^'.preg_quote($this->p()->uploadPath(), '!').'!', '', $val);
 
+        if (strpos($val, '://') !== false) {
+            $host = parse_url($val, PHP_URL_HOST);
+            $path = ltrim(substr($val, (strpos($val, $host) + strlen($host) + 1)), '/');
+            if (mb_strlen($path) > 30) {
+                $a = 12;
+                $z = 12;
+                $abr = (($a > 0) ? mb_substr($path, 0, $a) : '').'&hellip;'.(($z > 0) ? mb_substr($path, -$z) : '');
+                $val = str_replace($path, $abr, $val);
+            }
+        }
+
         return $val;
     }
 

@@ -400,7 +400,7 @@ class TagsInput extends AbstractSelectableInput
     {
         return [
             'value' => 'id',
-            'text'  => 'name:title:label',
+            'text'  => 'name:title:label:id',
             'color' => 'color'
         ];
     }

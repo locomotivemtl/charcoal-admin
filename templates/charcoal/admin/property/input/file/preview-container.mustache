@@ -9,7 +9,9 @@
     <div class="js-preview">{{& filePreview }}</div>
     {{! @see charcoal/admin/property/input/readonly }}
     <figcaption class="caption">
-        <p class="u-truncate"><samp class="form-control-static" title="{{ inputVal }}">{{& abridgedInputVal }}</samp></p>
+        <p class="u-truncate">
+            <samp class="form-control-static" title="{{ inputVal }}">{{& abridgedInputVal }}</samp>
+        </p>
         <button type="button" class="btn btn-danger js-remove-file">{{ removeButtonLabel }}</button>
     </figcaption>
 </figure>

@@ -151,13 +151,15 @@
     },
 
     "acl": {
-        "default_permissions": {
-            "allowed": [
-                "action",
-                "template",
-                "template.charcoal/admin/home"
-            ],
-            "denied": []
+        "permissions":{
+            "default": {
+                "allowed": [
+                    "action",
+                    "template",
+                    "template.charcoal/admin/home"
+                ],
+                "denied": []
+            }
         }
     }
 }

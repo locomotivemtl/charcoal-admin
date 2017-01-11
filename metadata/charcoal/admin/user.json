@@ -8,21 +8,24 @@
             "required": true,
             "allow_null": false
         },
-        "email": {
-            "type": "string",
-            "required": true,
-            "allow_empty": false,
-            "allow_null": false
-        },
-        "roles": {
-            "type": "string",
-            "multiple": true
-        },
         "password": {
             "type": "password",
             "required": true,
             "allow_null": false,
             "allow_empty": false
+        },
+        "email": {
+            "type": "email",
+            "required": true,
+            "allow_empty": false,
+            "allow_null": false
+        },
+        "active":{
+            "type":"boolean"
+        },
+        "roles": {
+            "type": "string",
+            "multiple": true
         },
         "last_login_date": {
             "type": "date-time"

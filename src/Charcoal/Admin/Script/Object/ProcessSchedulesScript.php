@@ -47,22 +47,27 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
     }
 
     /**
-     * @param FactoryInterface $factory The factory used to create queue items.
-     * @return ScheduleInterface Chainable
+     * @return array
      */
-    protected function setScheduleFactory(FactoryInterface $factory)
+    public function defaultArguments()
     {
-        $this->scheduleFactory = $factory;
-        return $this;
+        $arguments = [
+            'obj-type' => [
+                'longPrefix'   => 'obj-type',
+                'description'  => 'Object type. Leave empty to process all objects.',
+                'defaultValue' => ''
+            ],
+            'obj-id' => [
+                'longPrefix'  => 'obj-id',
+                'description'  => 'Object ID. Must have obj-type set to have any effect. Leave empty to process all objects.',
+                'defaultValue' => ''
+            ]
+        ];
+
+        $arguments = array_merge(parent::defaultArguments(), $arguments);
+        return $arguments;
     }
 
-    /**
-     * @return FactoryInterface
-     */
-    protected function scheduleFactory()
-    {
-        return $this->scheduleFactory;
-    }
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -77,26 +82,10 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
 
         $climate = $this->climate();
 
-        $loader = new CollectionLoader([
-            'logger' => $this->logger,
-            'factory' => $this->scheduleFactory()
-        ]);
-        $loader->setModel($this->scheduleProto());
-        $loader->addFilter([
-            'property' => 'processed',
-            'val'      => 0
-        ]);
-        $loader->addFilter([
-             'property' => 'scheduled_date',
-             'val'      => date('Y-m-d H:i:s'),
-             'operator' => '<'
-        ]);
+        $objType = $climate->arguments->get('obj-type');
+        $objId = $climate->arguments->get('obj-id');
 
-        $loader->addOrder([
-            'property' => 'scheduled_date',
-            'mode'     => 'asc'
-        ]);
-        $scheduled = $loader->load();
+        $scheduled = $this->loadSchedules($objType, $objId);
 
         $callback = function($obj) use ($climate) {
             // No default callback
@@ -123,6 +112,66 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
 
         return $response;
     }
+
+    /**
+     *
+     */
+    private function loadSchedules($objType=null, $objId=null)
+    {
+        $loader = new CollectionLoader([
+            'logger' => $this->logger,
+            'factory' => $this->scheduleFactory()
+        ]);
+        $loader->setModel($this->scheduleProto());
+        if ($objType) {
+            $loader->addFilter([
+                'property' => 'target_type',
+                'val'      => $objType
+            ]);
+
+            if($objId) {
+                $loader->addFilter([
+                    'property' => 'target_id',
+                    'val'      => $objId
+                ]);
+            }
+        }
+        $loader->addFilter([
+            'property' => 'processed',
+            'val'      => 0
+        ]);
+        $loader->addFilter([
+             'property' => 'scheduled_date',
+             'val'      => date('Y-m-d H:i:s'),
+             'operator' => '<'
+        ]);
+
+        $loader->addOrder([
+            'property' => 'scheduled_date',
+            'mode'     => 'asc'
+        ]);
+        $schedules = $loader->load();
+        return $schedules;
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create queue items.
+     * @return ScheduleInterface Chainable
+     */
+    protected function setScheduleFactory(FactoryInterface $factory)
+    {
+        $this->scheduleFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface
+     */
+    protected function scheduleFactory()
+    {
+        return $this->scheduleFactory;
+    }
+
 
     /**
      * @return ObjectSchedule

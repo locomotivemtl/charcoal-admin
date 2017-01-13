@@ -11,6 +11,9 @@ use \Psr\Http\Message\ResponseInterface;
 // From `charcoal-core`
 use \Charcoal\Model\ModelValidator;
 
+// From `charcoal-base`
+use \Charcoal\Object\ContentInterface;
+
 /**
  * Admin Update Action: Save an object in its Storage.
  *
@@ -96,9 +99,11 @@ class UpdateAction extends AbstractSaveAction
                 return $response->withStatus(404);
             }
 
-            $authorIdent = $this->authorIdent();
-            if (!$obj->lastModifiedBy()) {
-                $obj->setLastModifiedBy($authorIdent);
+            if ($obj instanceof ContentInterface) {
+                $authorIdent = $this->authorIdent();
+                if (!$obj->lastModifiedBy()) {
+                    $obj->setLastModifiedBy($authorIdent);
+                }
             }
 
             $ret = $obj->update();

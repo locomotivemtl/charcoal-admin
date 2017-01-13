@@ -22,6 +22,21 @@ class Config extends AbstractConfig
     private $basePath = self::DEFAULT_BASE_PATH;
 
     /**
+     * @var array
+     */
+    public $routes = [];
+
+    /**
+     * @var array
+     */
+    public $handlers = [];
+
+    /**
+     * @var array
+     */
+    public $acl = [];
+
+    /**
      * The default data is defined in a JSON file.
      *
      * @return array
@@ -83,10 +98,6 @@ class Config extends AbstractConfig
      */
     public function setRoutes(array $routes)
     {
-        if (!isset($this->routes)) {
-            $this->routes = [];
-        }
-
         $toIterate = ['templates', 'actions', 'scripts'];
         foreach ($routes as $key => $val) {
             if (in_array($key, $toIterate) && isset($this->routes[$key])) {

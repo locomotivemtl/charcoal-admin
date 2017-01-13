@@ -707,13 +707,26 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         $this->actionsPriority = self::DEFAULT_ACTION_PRIORITY;
 
+        $listActions = $this->parseAsListActions($actions);
+
+        return $listActions;
+    }
+
+    /**
+     * Parse the given actions as collection actions.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array
+     */
+    protected function parseAsListActions(array $actions)
+    {
         $listActions = [];
-        foreach ($actions as $ident => $action) {
+        foreach ($actions as $action) {
             $ident  = $this->parseActionIdent($ident, $action);
             $action = $this->parseActionItem($action, $ident);
 
-            if (!isset($action['priority'])) {
-                $action['priority'] = $this->actionsPriority++;
+            if (isset($action['url'])) {
+                $action['url'] = $this->parseActionUrl($action['url'], $action);
             }
 
             if ($action['ident'] === 'create') {
@@ -722,8 +735,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 $action['empty'] = (isset($action['empty']) ? boolval($action['empty']) : false);
             }
 
-            if (isset($action['url'])) {
-                $action['url'] = $this->parseActionUrl($action['url'], $action);
+            if (is_array($action['actions'])) {
+                $action['actions'] = $this->parseAsListActions($action['actions']);
             }
 
             if (isset($listActions[$ident])) {
@@ -856,7 +869,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                     case 'edit':
                         $action['buttonType'] = 'primary';
                         break;
-                    
+
                     default:
                         $action['buttonType'] = 'default';
                         break;

@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\User;
 
-use \Charcoal\User\AclRole as UserAclRole;
+use \Charcoal\User\Acl\Role as UserAclRole;
 
 /**
  * ACL Role, to manage permissions

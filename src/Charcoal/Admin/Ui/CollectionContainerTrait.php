@@ -106,6 +106,7 @@ trait CollectionContainerTrait
     public function setView(ViewInterface $view)
     {
         $this->view = $view;
+
         return $this;
     }
 
@@ -120,6 +121,7 @@ trait CollectionContainerTrait
                 'View instance is not set for table widget'
             );
         }
+
         return $this->view;
     }
 
@@ -130,6 +132,7 @@ trait CollectionContainerTrait
     public function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
+
         return $this;
     }
 
@@ -146,6 +149,7 @@ trait CollectionContainerTrait
                 sprintf('Model Factory is not defined for "%s"', get_class($this))
             );
         }
+
         return $this->modelFactory;
     }
 
@@ -156,6 +160,7 @@ trait CollectionContainerTrait
     private function setPropertyDisplayFactory(FactoryInterface $factory)
     {
         $this->propertyDisplayFactory = $factory;
+
         return $this;
     }
 
@@ -170,6 +175,7 @@ trait CollectionContainerTrait
                 'No property display factory. '.get_class($this)
             );
         }
+
         return $this->propertyDisplayFactory;
     }
 
@@ -180,6 +186,7 @@ trait CollectionContainerTrait
     public function setCollectionLoader(CollectionLoader $loader)
     {
         $this->collectionLoader = $loader;
+
         return $this;
     }
 
@@ -197,6 +204,7 @@ trait CollectionContainerTrait
                 'factory' => $this->modelFactory()
             ]);
         }
+
         return $this->collectionLoader;
     }
 
@@ -212,7 +220,8 @@ trait CollectionContainerTrait
                 'Obj type must be a string'
             );
         }
-        $this->objType = str_replace(['.', '_'], '/', $objType);
+        $this->objType = str_replace([ '.', '_' ], '/', $objType);
+
         return $this;
     }
 
@@ -239,6 +248,7 @@ trait CollectionContainerTrait
             );
         }
         $this->collectionIdent = $collectionIdent;
+
         return $this;
     }
 
@@ -346,7 +356,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Stub: Parse given parameters into the collection's configset.
+     * Stub: Parse given parameters into the collection's config set.
      *
      * @param  array $config New collection config values.
      * @return array
@@ -354,7 +364,7 @@ trait CollectionContainerTrait
     protected function parseCollectionConfig(array $config)
     {
         return array_filter($config, function ($val) {
-            return empty($val) && !is_numeric($val);
+            return !empty($val) || is_numeric($val);
         });
     }
 
@@ -393,6 +403,7 @@ trait CollectionContainerTrait
         if (isset($collectionConfig['pagination']['page'])) {
             return $collectionConfig['pagination']['page'];
         }
+
         return 1;
     }
 
@@ -405,6 +416,7 @@ trait CollectionContainerTrait
         if (isset($collectionConfig['pagination']['num_per_page'])) {
             return $collectionConfig['pagination']['num_per_page'];
         }
+
         return 0;
     }
 
@@ -416,6 +428,7 @@ trait CollectionContainerTrait
         if ($this->numPerPage() === 0) {
             return 0;
         }
+
         return ceil($this->numTotal() / $this->numPerPage());
     }
 
@@ -426,6 +439,7 @@ trait CollectionContainerTrait
     public function setCollection($collection)
     {
         $this->collection = $collection;
+
         return $this;
     }
 
@@ -437,6 +451,7 @@ trait CollectionContainerTrait
         if ($this->collection === null) {
             $this->collection = $this->createCollection();
         }
+
         return $this->collection;
     }
 
@@ -470,6 +485,7 @@ trait CollectionContainerTrait
         }
 
         $collection = $loader->load();
+
         return $collection;
     }
 
@@ -478,8 +494,7 @@ trait CollectionContainerTrait
      */
     public function objects()
     {
-        $collection = $this->collection();
-        return $this->collection()->objects();
+        return $this->collection()->values();
     }
 
     /**
@@ -570,7 +585,7 @@ trait CollectionContainerTrait
         $this->display->setDisplayType($displayType);
         $this->display->setProperty($property);
 
-        $metadata    = $property->metadata();
+        $metadata = $property->metadata();
         $objMetadata = $object->metadata()->property($property->ident());
 
         if ($objMetadata) {
@@ -663,6 +678,7 @@ trait CollectionContainerTrait
 
             $this->numTotal = $loader->loadCount();
         }
+
         return $this->numTotal;
     }
 
@@ -682,6 +698,7 @@ trait CollectionContainerTrait
             }
             $this->proto = $this->modelFactory()->create($objType);
         }
+
         return $this->proto;
     }
 }

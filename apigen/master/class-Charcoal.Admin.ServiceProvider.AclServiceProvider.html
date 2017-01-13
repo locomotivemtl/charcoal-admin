@@ -245,12 +245,12 @@
 <li><code>admin/acl</code> A Zend ACL instance containing the admin resources / permissions.</li>
 </ul>
 
-<h2>Helpers</h2>
+<h2>Dependencies</h2>
 
-<ul>
-<li><code>admin/acl/roles</code></li>
-<li><code>admin/acl/permissions</code></li>
-</ul>
+<p>This service provider expects a few "global" services to be registered on the container:
+- <code>logger</code>, a PSR-3 logger
+- <code>database</code>, a PDO instance
+- <code>admin/config</code>, a PSR-6 Cache pool</p>
 	</div>
 
 	<dl class="tree">
@@ -276,7 +276,7 @@
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.ServiceProvider.html">ServiceProvider</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.ServiceProvider.AclServiceProvider.html#18-170" title="Go to source code">Charcoal/Admin/ServiceProvider/AclServiceProvider.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.ServiceProvider.AclServiceProvider.html#16-75" title="Go to source code">Charcoal/Admin/ServiceProvider/AclServiceProvider.php</a>
 		<br>
 	</div>
 
@@ -296,7 +296,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_register">#</a>
-		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AclServiceProvider.html#35-169" title="Go to source code">register</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.ServiceProvider.AclServiceProvider.html#35-74" title="Go to source code">register</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			

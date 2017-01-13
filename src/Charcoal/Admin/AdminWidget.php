@@ -145,7 +145,7 @@ class AdminWidget extends AbstractWidget
     {
         if (!is_string($template)) {
             throw new InvalidArgumentException(
-                'The Admin Widget can not set the template, must be a string'
+                'The admin widget template must be a string'
             );
         }
         $this->template = $template;
@@ -193,7 +193,7 @@ class AdminWidget extends AbstractWidget
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException(
-                'Template ident must be a string'
+                'The admin widget type must be a string'
             );
         }
         $this->type = $type;
@@ -217,7 +217,7 @@ class AdminWidget extends AbstractWidget
     {
         if (!is_string($ident)) {
             throw new InvalidArgumentException(
-                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
+                'The admin widget identifier must be a string'
             );
         }
         $this->ident = $ident;

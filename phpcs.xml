@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
-<ruleset name="Charcoal">
-<!-- PHP CodeSniffer ruleset -->
+<ruleset name="Charcoal" >
+    <!-- PHP CodeSniffer ruleset -->
 
-    <description>Charcoal Coding Standard</description>
+    <description >Charcoal Coding Standard</description >
     <arg name="encoding" value="utf-8" />
     <arg name="tab-width" value="4" />
 
-<!-- Include the whole PSR-1 standard -->
+    <!-- Include the whole PSR-1 standard -->
 
-    <rule ref="PSR1"/>
+    <rule ref="PSR1" />
 
-<!-- Include the whole PSR-2 standard -->
+    <!-- Include the whole PSR-2 standard -->
 
-    <rule ref="PSR2"/>
+    <rule ref="PSR2" />
 
-<!-- Array Sniffs -->
+    <!-- Array Sniffs -->
 
     <!-- Ensures short-array notation. -->
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
@@ -23,7 +23,7 @@
     <!-- Ensures array declaration is standard. Disabled because of weird spacing requirement. -->
     <!--<rule ref="Squiz.Arrays.ArrayDeclaration" />-->
 
-<!-- Classes Sniffs -->
+    <!-- Classes Sniffs -->
 
     <!-- Classes with duplicate names are not allowed -->
     <rule ref="Generic.Classes.DuplicateClassName" />
@@ -40,7 +40,7 @@
     <!-- Test class names are camel-cased properly -->
     <rule ref="Squiz.Classes.ValidClassName" />
 
-<!-- Code Analysis Sniffs -->
+    <!-- Code Analysis Sniffs -->
 
     <!-- Do not allow empty if, else or case -->
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
@@ -61,7 +61,7 @@
     <!-- This sniff class detects empty statement. -->
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
 
-<!-- Commenting Sniffs -->
+    <!-- Commenting Sniffs -->
 
     <!-- Detect "fixme" comments and warn -->
     <rule ref="Generic.Commenting.Fixme" />
@@ -87,9 +87,9 @@
     <!-- Function comment blocks -->
     <rule ref="Squiz.Commenting.FunctionComment" />
     <!-- Do not test scalar typehint (php-7 only feature) -->
-    <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
-        <severity>0</severity>
-    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" >
+        <severity >0</severity >
+    </rule >
     <!-- Verifies that a @throws tag exists for a function that throws exceptions -->
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
     <!-- Checks that there is adequate spacing between comments -->
@@ -101,7 +101,7 @@
     <!-- Variable commenting rules -->
     <rule ref="Squiz.Commenting.VariableComment" />
 
-<!-- Control Structures Sniffs -->
+    <!-- Control Structures Sniffs -->
 
     <!-- Inline controls (IF, ELSE, FOR, WHILE) must have brackets -->
     <rule ref="Generic.ControlStructures.InlineControlStructure" />
@@ -114,17 +114,12 @@
     <!-- Verifies that there is a space between each condition of FOR loops -->
     <rule ref="Squiz.ControlStructures.ForLoopDeclaration" />
     <!-- Tests the spacing of shorthand IF statements -->
-    <rule ref="Squiz.ControlStructures.InlineIfDeclaration" />
-    <!-- Allow inline shorthand IF statements to be declared on multiple lines -->
-    <rule ref="Squiz.ControlStructures.InlineIfDeclaration.NotSingleLine">
-        <!-- This returns false-positive; hide them -->
-        <severity>0</severity>
-    </rule>
+    <!--<rule ref="Squiz.ControlStructures.InlineIfDeclaration" />-->
     <!-- Ensures all control structure keywords are lowercase -->
     <rule ref="Squiz.ControlStructures.LowercaseDeclaration" />
     <!--<rule ref="Squiz.ControlStructures.SwitchDeclaration" />-->
 
-<!-- Files Sniffs -->
+    <!-- Files Sniffs -->
 
     <!-- A simple sniff for detecting BOMs that may corrupt application work -->
     <rule ref="Generic.Files.ByteOrderMark" />
@@ -136,11 +131,11 @@
     <!--Generic.Files_InlineHTMLSniff-->
 
     <!-- All line endings are standardized to "\n" -->
-    <rule ref="Generic.Files.LineEndings">
-        <properties>
+    <rule ref="Generic.Files.LineEndings" >
+        <properties >
             <property name="eolChar" value="\n" />
-        </properties>
-    </rule>
+        </properties >
+    </rule >
     <!-- Make sure all files are a certain max length -->
     <!--<rule ref="Generic.Files.LineLength">
         <properties>
@@ -151,7 +146,7 @@
     <!-- Checks that all file names are lowercased. Incompatible with PSR. -->
     <!--<rule ref="Generic.Files.LowercasedFilename" />-->
 
-<!-- Formatting Sniffs -->
+    <!-- Formatting Sniffs -->
 
     <!-- Do not allow multiple PHP statements (;) on a same line -->
     <rule ref="Generic.Formatting.DisallowMultipleStatements" />
@@ -166,7 +161,7 @@
     <!-- Tests that all arithmetic operations are bracketed. -->
     <rule ref="Squiz.Formatting.OperatorBracket" />
 
-<!-- Functions Sniffs -->
+    <!-- Functions Sniffs -->
 
     <!-- Ensures that variables are not passed by reference when calling a function -->
     <rule ref="Generic.Functions.CallTimePassByReference" />
@@ -178,11 +173,11 @@
 
     <!--<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />-->
     <!-- Checks that arguments in function declarations are spaced correctly. -->
-    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
-        <properties>
-            <property name="equalsSpacing" value="1"/>
-        </properties>
-    </rule>
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing" >
+        <properties >
+            <property name="equalsSpacing" value="1" />
+        </properties >
+    </rule >
     <!-- @todo doc me -->
     <rule ref="Squiz.Functions.FunctionDeclaration" />
     <!-- @todo doc me -->
@@ -193,13 +188,13 @@
     <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
     <!-- Ensure single and multi-line function declarations are defined correctly -->
     <rule ref="Squiz.Functions.MultiLineFunctionDeclaration" />
-    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction">
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction" >
         <!-- This check is disabled; it breaks lambda functions -->
-        <severity>0></severity>
-    </rule>
+        <severity >0></severity >
+    </rule >
     <rule ref="PEAR.Functions.ValidDefaultValue" />
 
-<!-- Metrics Sniffs -->
+    <!-- Metrics Sniffs -->
 
     <!--
     Generic.Metrics_CyclomaticComplexity
@@ -211,7 +206,7 @@
         absoluteNestingLevel
     -->
 
-<!-- Naming Conventions Sniffs -->
+    <!-- Naming Conventions Sniffs -->
 
     <!-- @todo Doc -->
     <!--<rule ref="Generic.NamingConventions.CamelCapsFunctionName" /> -->
@@ -220,14 +215,14 @@
     <!-- All constants should be uppercase -->
     <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
 
-<!-- Objects Sniffs -->
+    <!-- Objects Sniffs -->
 
     <!-- Ensures objects are assigned to a variable when instantiated. -->
-    <rule ref="Squiz.Objects.ObjectInstantiation">
+    <rule ref="Squiz.Objects.ObjectInstantiation" >
         <exclude name="Squiz.Objects.ObjectInstantiation.NotAssigned" />
-    </rule>
+    </rule >
 
-<!-- Operators Sniffs -->
+    <!-- Operators Sniffs -->
 
     <!-- Force === operator instead of implicit true if(x) or false if(!x) -->
     <!--<rule ref="Squiz.Operators.ComparisonOperatorUsage" />-->
@@ -236,7 +231,7 @@
     <!-- Disallow "and" and "or". Use && and || instead -->
     <rule ref="Squiz.Operators.ValidLogicalOperators" />
 
-<!-- PHP Sniffs -->
+    <!-- PHP Sniffs -->
 
     <!-- Checks that the opening PHP tag is the first content in a file -->
     <!--<rule ref="Generic.PHP.CharacterBeforePHPOpeningTag" />-->
@@ -274,9 +269,9 @@
     <!-- @todo Doc me -->
     <rule ref="Squiz.PHP.DiscouragedFunctions" />
     <rule ref="Squiz.PHP.EmbeddedPhp" />
-    <rule ref="Squiz.PHP.EmbeddedPhp.Indent">
-        <severity>0</severity>
-    </rule>
+    <rule ref="Squiz.PHP.EmbeddedPhp.Indent" >
+        <severity >0</severity >
+    </rule >
     <rule ref="Squiz.PHP.Eval" />
     <!-- Disallow usage of functions that should be obsolete but kept for compatibility. -->
     <rule ref="Squiz.PHP.ForbiddenFunctions" />
@@ -287,7 +282,7 @@
     <!-- Warns of code that will never be reached DISABLED-->
     <rule ref="Squiz.PHP.NonExecutableCode" />
 
-<!-- Scope Sniffs -->
+    <!-- Scope Sniffs -->
 
     <!-- Verifies that class members have scope modifiers. -->
     <rule ref="Squiz.Scope.MemberVarScope" />
@@ -297,31 +292,31 @@
     <rule ref="Squiz.Scope.StaticThisUsage" />
 
 
-<!-- Strings Sniffs -->
+    <!-- Strings Sniffs -->
 
     <!-- Use one string instead of concatenating 2 strings together -->
     <rule ref="Generic.Strings.UnnecessaryStringConcat" />
-    <rule ref="Generic.Strings.UnnecessaryStringConcat.Found">
-        <type>warning</type>
-        <message>Only concatenate strings if they would be too long on a single line.</message>
-    </rule>
+    <rule ref="Generic.Strings.UnnecessaryStringConcat.Found" >
+        <type >warning</type >
+        <message >Only concatenate strings if they would be too long on a single line.</message >
+    </rule >
     <!-- Makes sure there are no spaces between the concatenation operator (.) the strings -->
     <rule ref="Squiz.Strings.ConcatenationSpacing" />
-    <rule ref="Squiz.Strings.ConcatenationSpacing.PaddingFound">
-        <type>warning</type>
-        <message>Concat operator should not be surrounded by spaces</message>
-    </rule>
+    <rule ref="Squiz.Strings.ConcatenationSpacing.PaddingFound" >
+        <type >warning</type >
+        <message >Concat operator should not be surrounded by spaces</message >
+    </rule >
     <!-- Makes sure that any use of Double Quotes ("") are warranted. -->
     <rule ref="Squiz.Strings.DoubleQuoteUsage" />
     <!-- Makes sure that any strings that are "echoed" are not enclosed in brackets -->
     <rule ref="Squiz.Strings.EchoedStrings" />
 
-<!-- Version Control Sniffs -->
+    <!-- Version Control Sniffs -->
 
     <!-- Tests that the correct Subversion properties are set -->
     <rule ref="Generic.VersionControl.SubversionProperties" />
 
-<!-- White Space Sniffs -->
+    <!-- White Space Sniffs -->
 
     <!-- Throws errors if spaces are used for indentation -->
     <!--<rule ref="Generic.WhiteSpace.DisallowSpaceIndent" />-->
@@ -330,19 +325,19 @@
     <!-- Checks that control structures are structured correctly -->
     <!--<rule ref="Generic.Whitespace.ScopeIndent" />-->
     <!-- There MUST NOT be trailing whitespace at the end of non-blank lines. -->
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
-        <properties>
-            <property name="ignoreBlankLines" value="true"/>
-        </properties>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
-        <severity>0</severity>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile">
-        <severity>0</severity>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
-        <severity>0</severity>
-    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" >
+        <properties >
+            <property name="ignoreBlankLines" value="true" />
+        </properties >
+    </rule >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile" >
+        <severity >0</severity >
+    </rule >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile" >
+        <severity >0</severity >
+    </rule >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines" >
+        <severity >0</severity >
+    </rule >
 
-</ruleset>
+</ruleset >

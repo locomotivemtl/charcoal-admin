@@ -96,6 +96,10 @@ class LoadAction extends AdminAction
             $widget->setView($this->widgetView());
 
             if (is_array($widgetOptions)) {
+                if (!isset($widgetOptions['type'])) {
+                    $widgetOptions['type'] = $widgetType;
+                }
+
                 $widget->setData($widgetOptions);
             }
 

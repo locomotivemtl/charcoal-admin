@@ -1604,6 +1604,9 @@ input[type="url"] {
 .form-control.-noborder {
   border: none; }
 
+textarea.form-control {
+  padding: 12px; }
+
 .active-lang [data-lang] {
   display: inline-block;
   margin-bottom: 5px;

@@ -47,6 +47,10 @@ input[type="url"] {
     }
 }
 
+textarea.form-control {
+    padding: $padding-base-horizontal;
+}
+
 .active-lang {
     [data-lang] {
         display:        inline-block;

@@ -266,19 +266,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $this->parsedProperties = true;
 
             $model = $this->proto();
-            $metadata = $model->metadata();
-            $properties = $metadata->properties();
+            $properties = $model->metadata()->properties();
 
             $listProperties = null;
             if ($this->properties === null) {
-                $collectionIdent = $this->collectionIdent();
-                if (!$collectionIdent) {
-                    $collectionIdent = $this->collectionIdentFallback();
-                }
-                if ($collectionIdent) {
-                    if (isset($metadata['admin']['lists'][$collectionIdent]['properties'])) {
-                        $listProperties = array_flip($metadata['admin']['lists'][$collectionIdent]['properties']);
-                    }
+                $collectionConfig = $this->collectionConfig();
+                if (isset($collectionConfig['properties'])) {
+                    $listProperties = array_flip($collectionConfig['properties']);
                 }
             } else {
                 $listProperties = array_flip($this->properties);
@@ -478,7 +472,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function parseObjectRow(ModelInterface $object, array $objectProperties)
     {
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
-        $row['objectActions']     = $this->objectActions();
+        $row['objectActions'] = $this->objectActions();
         $row['showObjectActions'] = $this->showObjectActions();
 
         return $row;
@@ -600,7 +594,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         if ($this->defaultObjectActions === null) {
             $edit = [
-                'label'  => new TranslationString([
+                'label'    => new TranslationString([
                     'fr' => 'Modifier',
                     'en' => 'Modify',
                 ]),
@@ -721,8 +715,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function parseAsListActions(array $actions)
     {
         $listActions = [];
-        foreach ($actions as $action) {
-            $ident  = $this->parseActionIdent($ident, $action);
+        foreach ($actions as $ident => $action) {
+            $ident = $this->parseActionIdent($ident, $action);
             $action = $this->parseActionItem($action, $ident);
 
             if (isset($action['url'])) {
@@ -786,7 +780,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         $parsedActions = [];
         foreach ($actions as $ident => $action) {
-            $ident  = $this->parseActionIdent($ident, $action);
+            $ident = $this->parseActionIdent($ident, $action);
             $action = $this->parseActionItem($action, $ident);
 
             if (!isset($action['priority'])) {
@@ -881,24 +875,24 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             } elseif ($action['ident']) {
                 $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
             } else {
-                $action['label']  = null;
+                $action['label'] = null;
                 $action['active'] = false;
             }
 
             if (isset($action['url']) && TranslationString::isTranslatable($action['url'])) {
                 $action['url'] = new TranslationString($action['url']);
-                $action['isText']   = false;
-                $action['isLink']   = true;
+                $action['isText'] = false;
+                $action['isLink'] = true;
                 $action['isButton'] = false;
             } else {
                 $action['url'] = '#';
             }
 
             if (isset($action['actions']) && is_array($action['actions'])) {
-                $action['actions']    = $this->parseActions($action['actions']);
+                $action['actions'] = $this->parseActions($action['actions']);
                 $action['hasActions'] = boolval($action['actions']);
             } else {
-                $action['actions']    = [];
+                $action['actions'] = [];
                 $action['hasActions'] = false;
             }
 
@@ -944,24 +938,24 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function defaultActionStruct()
     {
         return [
-            'ident'        => null,
-            'priority'     => null,
-            'active'       => true,
-            'empty'        => false,
-            'label'        => null,
-            'showLabel'    => true,
-            'icon'         => null,
-            'glyphicon'    => false,
-            'url'          => null,
-            'isText'       => false,
-            'isLink'       => false,
-            'isButton'     => true,
-            'isHeader'     => false,
-            'isSeparator'  => false,
-            'buttonType'   => null,
-            'splitButton'  => false,
-            'hasActions'   => false,
-            'actions'      => [],
+            'ident'       => null,
+            'priority'    => null,
+            'active'      => true,
+            'empty'       => false,
+            'label'       => null,
+            'showLabel'   => true,
+            'icon'        => null,
+            'glyphicon'   => false,
+            'url'         => null,
+            'isText'      => false,
+            'isLink'      => false,
+            'isButton'    => true,
+            'isHeader'    => false,
+            'isSeparator' => false,
+            'buttonType'  => null,
+            'splitButton' => false,
+            'hasActions'  => false,
+            'actions'     => [],
         ];
     }
 
@@ -1130,7 +1124,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function isObjEditable()
     {
-        $model  = ($this->currentObj) ? $this->currentObj : $this->proto();
+        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
         $method = [ $model, 'isEditable' ];
 
         if (is_callable($method)) {
@@ -1150,7 +1144,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function isObjDeletable()
     {
-        $model  = ($this->currentObj) ? $this->currentObj : $this->proto();
+        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
         $method = [ $model, 'isDeletable' ];
 
         if (is_callable($method)) {

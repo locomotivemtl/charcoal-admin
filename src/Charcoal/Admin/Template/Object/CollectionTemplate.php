@@ -2,27 +2,30 @@
 
 namespace Charcoal\Admin\Template\Object;
 
-use \Exception;
-use \InvalidArgumentException;
+use Exception;
+use InvalidArgumentException;
+
+// From PSR-7 (http messaging)
+use Psr\Http\Message\RequestInterface;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\DashboardBuilder;
+use Charcoal\Ui\DashboardBuilder;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminTemplate;
-use \Charcoal\Admin\Ui\CollectionContainerInterface;
-use \Charcoal\Admin\Ui\CollectionContainerTrait;
-use \Charcoal\Admin\Ui\DashboardContainerInterface;
-use \Charcoal\Admin\Ui\DashboardContainerTrait;
+use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Ui\CollectionContainerInterface;
+use Charcoal\Admin\Ui\CollectionContainerTrait;
+use Charcoal\Admin\Ui\DashboardContainerInterface;
+use Charcoal\Admin\Ui\DashboardContainerTrait;
 
 /**
  * Object collection template (table with a list of objects).
@@ -63,6 +66,18 @@ class CollectionTemplate extends AdminTemplate implements
         // Required dependencies.
         $this->setWidgetFactory($container['widget/factory']);
         $this->dashboardBuilder = $container['dashboard/builder'];
+    }
+
+    /**
+     * @param RequestInterface $request PSR-7 request.
+     * @return boolean
+     */
+    public function init(RequestInterface $request)
+    {
+        parent::init($request);
+        $this->createObjTable();
+
+        return true;
     }
 
     /**

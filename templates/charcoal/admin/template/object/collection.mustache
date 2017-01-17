@@ -11,11 +11,6 @@ This template expects a `Charcoal\Admin\Template\Object\Collection` model as con
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-{{!--
-Hack: Create the object's table if necessary
---}}
-{{createObjTable}}
-
 <div class="o-flex">
 
     {{#sidemenu}}
@@ -24,7 +19,7 @@ Hack: Create the object's table if necessary
 
     {{>charcoal/admin/widget/feedbacks}}
 
-    {{!-- Object edit section --}}
+    {{!-- Object list section --}}
     <div class="o-flex_main">
         <section class="o-container -bottom">
             <header class="o-header">

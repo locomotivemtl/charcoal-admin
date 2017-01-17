@@ -3,26 +3,26 @@
 namespace Charcoal\Admin\Script\Object;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Pimple (DI container) dependencies
-use \Pimple\Container;
+use Pimple\Container;
 
 // From `charcoal-core`
-use \Charcoal\Loader\CollectionLoader;
+use Charcoal\Loader\CollectionLoader;
 
 // From `charcoal-factory`
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
-use \Charcoal\Admin\AdminScript;
+use Charcoal\Admin\AdminScript;
 
 // Module `charcoal-app` dependencies
-use \Charcoal\App\Script\CronScriptInterface;
-use \Charcoal\App\Script\CronScriptTrait;
+use Charcoal\App\Script\CronScriptInterface;
+use Charcoal\App\Script\CronScriptTrait;
 
 // Module `charcoal-base` dependencies
-use \Charcoal\Object\ObjectSchedule;
+use Charcoal\Object\ObjectSchedule;
 
 /**
  * Process object schedules.
@@ -114,9 +114,11 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
     }
 
     /**
-     *
+     * @param string $obType Optional object type to load.
+     * @param string $objId Optional object id to loader.
+     * @return Charcoal\Model\CollectionInterface
      */
-    private function loadSchedules($objType=null, $objId=null)
+    private function loadSchedules($objType = null, $objId = null)
     {
         $loader = new CollectionLoader([
             'logger' => $this->logger,
@@ -129,7 +131,7 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
                 'val'      => $objType
             ]);
 
-            if($objId) {
+            if ($objId) {
                 $loader->addFilter([
                     'property' => 'target_id',
                     'val'      => $objId

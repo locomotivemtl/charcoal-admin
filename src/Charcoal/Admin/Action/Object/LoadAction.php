@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use \Exception;
-use \UnexpectedValueException;
-use \InvalidArgumentException;
-use \RuntimeException;
+use Exception;
+use UnexpectedValueException;
+use InvalidArgumentException;
+use RuntimeException;
 
 // PSR-7 (http messaging) dependencies
 use Psr\Http\Message\RequestInterface;

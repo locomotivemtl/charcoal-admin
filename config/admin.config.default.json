@@ -33,6 +33,10 @@
                 "template": "charcoal/admin/template/media",
                 "controller": "charcoal/admin/template/home"
             },
+            "system/users":{
+                "template": "charcoal/admin/template/system/users",
+                "controller": "charcoal/admin/template/system/users"
+            },
 
             "contents": {},
             "envoie": {}

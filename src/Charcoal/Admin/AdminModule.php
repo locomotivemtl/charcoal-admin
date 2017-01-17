@@ -3,15 +3,15 @@
 namespace Charcoal\Admin;
 
 // Dependencies from PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Dependency from Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // Dependency from 'charcoal-app'
-use \Charcoal\App\Handler\HandlerInterface;
-use \Charcoal\App\Module\AbstractModule;
+use Charcoal\App\Handler\HandlerInterface;
+use Charcoal\App\Module\AbstractModule;
 
 /**
  * Charcoal Administration Module

@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Template\Account;
 
-use \Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\AdminTemplate;
 
 /**
  * Lost Password Template

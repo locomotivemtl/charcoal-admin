@@ -3,22 +3,22 @@
 namespace Charcoal\Admin\Action\Widget\Table;
 
 // Dependencies from `PHP`
-use \Exception;
+use Exception;
 
 // Dependencies from `pimple/pimple`
-use \Pimple\Container;
+use Pimple\Container;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Dependency from 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\Widget\ObjectForm;
-use \Charcoal\Admin\Widget\FormProperty;
+use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\Widget\ObjectForm;
+use Charcoal\Admin\Widget\FormProperty;
 
 /**
  *

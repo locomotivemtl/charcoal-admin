@@ -2,13 +2,15 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \Pimple\Container;
+use PHPUnit_Framework_TestCase;
 
-use \Charcoal\Admin\AdminTemplate;
+use Pimple\Container;
 
-use \Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Admin\AdminTemplate;
 
-class AdminTemplateTest extends \PHPUnit_Framework_TestCase
+use Charcoal\Admin\Tests\ContainerProvider;
+
+class AdminTemplateTest extends PHPUnit_Framework_TestCase
 {
     public $obj;
 

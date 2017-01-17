@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin\Template\Account;
 
-use \Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestInterface;
 
-use \Charcoal\Admin\AdminTemplate;
-use \Charcoal\Admin\User\LostPasswordToken;
+use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\User\LostPasswordToken;
 
 /**
  * Reset Password Template

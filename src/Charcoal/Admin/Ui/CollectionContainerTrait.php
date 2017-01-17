@@ -2,22 +2,22 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \Exception;
-use \InvalidArgumentException;
+use Exception;
+use InvalidArgumentException;
 
 // From `charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From `charcoal-core`
-use \Charcoal\Loader\CollectionLoader;
-use \Charcoal\Model\Collection;
-use \Charcoal\Model\ModelInterface;
+use Charcoal\Loader\CollectionLoader;
+use Charcoal\Model\Collection;
+use Charcoal\Model\ModelInterface;
 
 // From `charcoal-property`
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyInterface;
 
 // From `charcoal-view`
-use \Charcoal\View\ViewInterface;
+use Charcoal\View\ViewInterface;
 
 /**
  * Fully implements CollectionContainerInterface

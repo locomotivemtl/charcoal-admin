@@ -1,16 +1,19 @@
 <?php
 namespace Charcoal\Admin\Tests\Template\Object;
 
-use \ReflectionClass;
+use ReflectionClass;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
-use \Pimple\Container;
+use Pimple\Container;
 
-use \Charcoal\Admin\Template\Object\EditTemplate;
+use Charcoal\Admin\Template\Object\EditTemplate;
 
-use \Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Admin\Tests\ContainerProvider;
 
+/**
+ *
+ */
 class EditTemplateTest extends PHPUnit_Framework_TestCase
 {
     public $obj;

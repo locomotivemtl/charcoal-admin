@@ -37,7 +37,7 @@ class CollectionTemplateTest extends PHPUnit_Framework_TestCase
         $containerProvider->registerCollectionLoader($container);
 
         $this->obj = $this->getMock(CollectionTemplate::class, null, [[
-            'logger' => new NullLogger(),
+            'logger' => $container['logger'],
             'metadata_loader' => $container['metadata/loader']
         ]]);
         $this->obj->setDependencies($container);
@@ -60,6 +60,12 @@ class CollectionTemplateTest extends PHPUnit_Framework_TestCase
         $foo = self::getMethod($this->obj, 'authRequired');
         $res = $foo->invoke($this->obj);
         $this->assertTrue($res);
+    }
+
+    public function testInit()
+    {
+        //$ret = $this->obj->init();
+        $this->assertTrue(true);
     }
 
     public function testTitle()

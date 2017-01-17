@@ -2,13 +2,16 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
-use \Psr\Log\NullLogger;
+use Psr\Log\NullLogger;
 
-use \Charcoal\Admin\Widget\FormSidebarWidget;
-use \Charcoal\Admin\Widget\FormWidget;
+use Charcoal\Admin\Widget\FormSidebarWidget;
+use Charcoal\Admin\Widget\FormWidget;
 
+/**
+ *
+ */
 class FormWidgetTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -17,6 +20,9 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
      */
     private $obj;
 
+    /**
+     *
+     */
     public function setUp()
     {
         $logger = new NullLogger();
@@ -25,6 +31,9 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     *
+     */
     private function sidebarWidget()
     {
         $logger = new NullLogger();
@@ -33,11 +42,17 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     *
+     */
     public function testConstructor()
     {
         $this->assertInstanceOf(FormWidget::class, $this->obj);
     }
 
+    /**
+     *
+     */
     public function testSidebars()
     {
         $sidebars = iterator_to_array($this->obj->sidebars());

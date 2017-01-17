@@ -114,8 +114,8 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
     }
 
     /**
-     * @param string $obType Optional object type to load.
-     * @param string $objId Optional object id to loader.
+     * @param string $objType Optional object type to load.
+     * @param string $objId   Optional object id to loader.
      * @return Charcoal\Model\CollectionInterface
      */
     private function loadSchedules($objType = null, $objId = null)

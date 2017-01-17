@@ -1,0 +1,30 @@
+{{!--
+`charcoal/admin/template/system/users`
+--}}
+{{>charcoal/admin/template/inc.header}}
+
+<div class="o-flex">
+    {{#sidemenu}}
+        {{>charcoal/admin/widget/sidemenu}}
+    {{/sidemenu}}
+
+    {{>charcoal/admin/widget/feedbacks}}
+
+    {{!-- Object list section --}}
+    <div class="o-flex_main">
+        <section class="o-container -bottom">
+            <header class="o-header">
+                <h1>{{title}}</h1>
+                {{#searchWidget}}
+                    {{>charcoal/admin/widget/search}}
+                {{/searchWidget}}
+            </header>
+            {{#dashboard}}
+                {{>charcoal/admin/widget/dashboard}}
+            {{/dashboard}}
+
+        </section>
+    </div>
+</div>
+
+{{>charcoal/admin/template/inc.footer}}

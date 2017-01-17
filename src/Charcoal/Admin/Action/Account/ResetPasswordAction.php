@@ -2,21 +2,21 @@
 
 namespace Charcoal\Admin\Action\Account;
 
-use \Exception;
+use Exception;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-use \Pimple\Container;
+use Pimple\Container;
 
 // Modele `charcoal-factory
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\User;
-use \Charcoal\Admin\User\LostPasswordToken;
+use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\User;
+use Charcoal\Admin\User\LostPasswordToken;
 
 /**
  * Reset password action

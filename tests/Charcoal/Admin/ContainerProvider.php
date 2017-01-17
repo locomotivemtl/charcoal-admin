@@ -2,44 +2,44 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \PDO;
+use PDO;
 
-use \Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Acl;
 
-use \Pimple\Container;
+use Pimple\Container;
 
-use \Mockery;
+use Mockery;
 
-use \Psr\Log\NullLogger;
-use \Cache\Adapter\Void\VoidCachePool;
+use Psr\Log\NullLogger;
+use Cache\Adapter\Void\VoidCachePool;
 
-use \Charcoal\Factory\GenericFactory as Factory;
+use Charcoal\Factory\GenericFactory as Factory;
 
-use \Charcoal\App\AppConfig;
-use \Charcoal\App\Template\WidgetBuilder;
+use Charcoal\App\AppConfig;
+use Charcoal\App\Template\WidgetBuilder;
 
-use \Charcoal\Model\Service\MetadataLoader;
-use \Charcoal\Source\DatabaseSource;
+use Charcoal\Model\Service\MetadataLoader;
+use Charcoal\Source\DatabaseSource;
 
 // Module `charcoal-base` dependencies
-use \Charcoal\User\Authenticator;
-use \Charcoal\User\Authorizer;
+use Charcoal\User\Authenticator;
+use Charcoal\User\Authorizer;
 
-use \Charcoal\Admin\Config as AdminConfig;
+use Charcoal\Admin\Config as AdminConfig;
 
-use \Charcoal\Ui\Dashboard\DashboardBuilder;
-use \Charcoal\Ui\Dashboard\DashboardInterface;
-use \Charcoal\Ui\Layout\LayoutBuilder;
-use \Charcoal\Ui\Layout\LayoutFactory;
+use Charcoal\Ui\Dashboard\DashboardBuilder;
+use Charcoal\Ui\Dashboard\DashboardInterface;
+use Charcoal\Ui\Layout\LayoutBuilder;
+use Charcoal\Ui\Layout\LayoutFactory;
 
-use \Charcoal\Email\Email;
-use \Charcoal\Email\EmailConfig;
+use Charcoal\Email\Email;
+use Charcoal\Email\EmailConfig;
 
-use \League\CLImate\CLImate;
-use \League\CLImate\Util\System\Linux;
-use \League\CLImate\Util\Output;
-use \League\CLImate\Util\Reader\Stdin;
-use \League\CLImate\Util\UtilFactory;
+use League\CLImate\CLImate;
+use League\CLImate\Util\System\Linux;
+use League\CLImate\Util\Output;
+use League\CLImate\Util\Reader\Stdin;
+use League\CLImate\Util\UtilFactory;
 
 /**
  *
@@ -279,6 +279,24 @@ class ContainerProvider
         };
     }
 
+    public function registerPropertyDisplayFactory(Container $container)
+    {
+        $this->registerDatabase($container);
+        $this->registerLogger($container);
+        $container['property/display/factory'] = function (Container $container) {
+            return new Factory([
+                'resolver_options'=>[
+                    'suffix' => 'Display'
+                ],
+                'arguments' => [[
+                    'container' => $container,
+                    'logger'    => $container['logger']
+                ]]
+            ]);
+        };
+    }
+
+
     public function registerModelFactory(Container $container)
     {
         $this->registerLogger($container);
@@ -346,6 +364,13 @@ class ContainerProvider
                     'email' => Email::class
                 ]
             ]);
+        };
+    }
+
+    public function registerElfinderConfig(Container $container)
+    {
+        $container['elfinder/config'] = function (Container $container) {
+            return [];
         };
     }
 }

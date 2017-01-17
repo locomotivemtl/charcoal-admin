@@ -2,14 +2,14 @@
 
 namespace Charcoal\Admin\User;
 
-use \RuntimeException;
+use RuntimeException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-base'
-use \Charcoal\User\Authenticator;
-use \Charcoal\User\Authorizer;
+use Charcoal\User\Authenticator;
+use Charcoal\User\Authorizer;
 
 /**
  * An implementation, as Trait, of the {@see \Charcoal\Admin\User\AuthAwareInterface}.

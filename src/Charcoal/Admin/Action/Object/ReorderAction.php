@@ -2,19 +2,19 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use \Exception;
+use Exception;
 
 // Dependencies from PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Dependency from Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait;
+use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
  * ## Required Parameters

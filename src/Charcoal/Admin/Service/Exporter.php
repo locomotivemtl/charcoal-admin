@@ -2,21 +2,21 @@
 
 namespace Charcoal\Admin\Service;
 
-use \DateTime;
-use \Exception;
-use \SplTempFileObject;
+use DateTime;
+use Exception;
+use SplTempFileObject;
 
 // LeagueCSV
 use League\Csv\Writer;
 
 // Module `charcoal-core` dependencies
-use \Charcoal\Loader\CollectionLoader;
+use Charcoal\Loader\CollectionLoader;
 
 // Module `charcoal-factory` dependencies
 use Charcoal\Factory\FactoryInterface;
 
 // Module `charcoal-translation` dependencies
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
 /**
  * Admin base exporter
@@ -64,7 +64,7 @@ class Exporter
      * Output properties
      * @var array $properties
      */
-    private $properties;
+    private $properties = [];
 
     /**
      * CollectionConfig

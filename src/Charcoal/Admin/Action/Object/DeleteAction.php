@@ -3,17 +3,17 @@
 namespace Charcoal\Admin\Action\Object;
 
 // Dependencies from `PHP`
-use \Exception;
+use Exception;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
+use Charcoal\Admin\AdminAction;
 
 /**
- * Admin Object Delete Action: Delete an object
+ * Admin Object Delete Action: Delete an object from storage.
  *
  * ## Parameters
  *

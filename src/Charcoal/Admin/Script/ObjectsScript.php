@@ -3,16 +3,16 @@
 namespace Charcoal\Admin\Script;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Module `charcoal-core` dependencies
-use \Charcoal\Loader\CollectionLoader;
+use Charcoal\Loader\CollectionLoader;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminScript;
-use \Charcoal\Admin\Ui\CollectionContainerInterface;
-use \Charcoal\Admin\Ui\CollectionContainerTrait;
+use Charcoal\Admin\AdminScript;
+use Charcoal\Admin\Ui\CollectionContainerInterface;
+use Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
  * Script action to list the objects of a certain type.

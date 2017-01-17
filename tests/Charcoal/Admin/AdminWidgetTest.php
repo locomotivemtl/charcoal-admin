@@ -2,16 +2,27 @@
 
 namespace Charcoal\Admin\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
-use \Psr\Log\NullLogger;
+use Psr\Log\NullLogger;
 
-use \Charcoal\Admin\AdminWidget;
+use Pimple\Container;
 
+use Charcoal\Admin\AdminWidget;
+
+/**
+ *
+ */
 class AdminWidgetTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     *
+     */
     public function setUp()
     {
+        $container = new Container();
+        $containerProvider = new ContainerProvider();
+
         $this->obj = new AdminWidget([
             'logger'=> new NullLogger()
         ]);

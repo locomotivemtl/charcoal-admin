@@ -3,11 +3,11 @@
 namespace Charcoal\Admin\Template;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminTemplate;
-use \Charcoal\Admin\User\AuthToken;
+use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\User\AuthToken;
 
 /**
  *

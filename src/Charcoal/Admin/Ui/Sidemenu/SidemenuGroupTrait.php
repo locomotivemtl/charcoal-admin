@@ -2,13 +2,13 @@
 
 namespace Charcoal\Admin\Ui\Sidemenu;
 
-use \ArrayIterator;
-use \InvalidArgumentException;
+use ArrayIterator;
+use InvalidArgumentException;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
-// Local Dependency
+// Local module (charcoal-admin) dependency
 use Charcoal\Admin\Widget\SidemenuWidgetInterface;
 
 /**

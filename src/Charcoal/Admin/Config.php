@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // From `charcoal-core`
-use \Charcoal\Config\AbstractConfig;
+use Charcoal\Config\AbstractConfig;
 
 /**
  * Admin Config.

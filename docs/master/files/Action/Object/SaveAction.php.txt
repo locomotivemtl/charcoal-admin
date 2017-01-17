@@ -2,17 +2,17 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use \Exception;
+use Exception;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // From `charcoal-core`
-use \Charcoal\Model\ModelValidator;
+use Charcoal\Model\ModelValidator;
 
 // From `charcoal-base`
-use \Charcoal\Object\ContentInterface;
+use Charcoal\Object\ContentInterface;
 
 /**
  * Admin Create Action: Create an object in its Storage.

@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \Charcoal\Ui\Form\FormInterface;
+use Charcoal\Ui\Form\FormInterface;
 
 /**
  * Form Sidebar Interface

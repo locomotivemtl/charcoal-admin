@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin\Property;
 
-use \Traversable;
+use Traversable;
 
 // Dependency from 'charcoal-base'
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyInterface;
 
 /**
  *

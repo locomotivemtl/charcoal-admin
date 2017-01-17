@@ -3,10 +3,10 @@
 namespace Charcoal\Admin\Template;
 
 // Dependency from 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
-// Local Dependency
-use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+// Local module (charcoal-admin) dependency
+use Charcoal\Admin\AdminTemplate;
 
 /**
  * Admin Error Handler Template

@@ -2,36 +2,36 @@
 
 namespace Charcoal\Admin\Property;
 
-use \Traversable;
-use \UnexpectedValueException;
-use \InvalidArgumentException;
+use Traversable;
+use UnexpectedValueException;
+use InvalidArgumentException;
 
-use \Pimple\Container;
+use Pimple\Container;
 
 // Dependencies from PSR-3 (Logger)
-use \Psr\Log\LoggerAwareInterface;
-use \Psr\Log\LoggerAwareTrait;
-use \Psr\Log\NullLogger;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 // Dependencies from 'charcoal-core'
-use \Charcoal\Model\DescribableInterface;
-use \Charcoal\Model\DescribableTrait;
+use Charcoal\Model\DescribableInterface;
+use Charcoal\Model\DescribableTrait;
 
 // Dependencies from 'charcoal-view'
-use \Charcoal\View\ViewableInterface;
-use \Charcoal\View\ViewableTrait;
+use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewableTrait;
 
 // Dependencies from 'charcoal-translation'
-use \Charcoal\Translation\TranslationConfig;
-use \Charcoal\Translation\TranslationString;
-use \Charcoal\Translation\TranslationStringInterface;
+use Charcoal\Translation\TranslationConfig;
+use Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationStringInterface;
 
 // Dependency from 'charcoal-admin'
-use \Charcoal\Admin\Property\PropertyInputInterface;
+use Charcoal\Admin\Property\PropertyInputInterface;
 
 // Local namespace dependencies
-use \Charcoal\Property\PropertyInterface;
-use \Charcoal\Property\PropertyMetadata;
+use Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyMetadata;
 
 /**
  *

@@ -2,19 +2,19 @@
 
 namespace Charcoal\Admin;
 
-use \RuntimeException;
+use RuntimeException;
 
-use \Pimple\Container;
+use Pimple\Container;
 
 // From PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestInterface;
 
 // Module `charcoal-factory` dependencies
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-base
-use \Charcoal\User\Authenticator;
-use \Charcoal\User\Authorizer;
+use Charcoal\User\Authenticator;
+use Charcoal\User\Authorizer;
 
 // Module `charcoal-app` dependencies
 use Charcoal\App\Action\AbstractAction;

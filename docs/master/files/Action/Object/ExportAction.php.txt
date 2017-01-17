@@ -3,15 +3,15 @@
 namespace Charcoal\Admin\Action\Object;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
+use Charcoal\Admin\AdminAction;
 
-use \Pimple\Container;
+use Pimple\Container;
 
-use \Charcoal\Admin\Service\Exporter;
+use Charcoal\Admin\Service\Exporter;
 
 /**
  * From abstractAction

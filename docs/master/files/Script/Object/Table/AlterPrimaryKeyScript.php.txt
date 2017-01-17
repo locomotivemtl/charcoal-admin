@@ -2,33 +2,33 @@
 
 namespace Charcoal\Admin\Script\Object\Table;
 
-use \PDO;
-use \PDOStatement;
+use PDO;
+use PDOStatement;
 
-use \Countable;
-use \Traversable;
-use \Exception;
-use \RuntimeException;
-use \UnexpectedValueException;
-use \InvalidArgumentException;
+use Countable;
+use Traversable;
+use Exception;
+use RuntimeException;
+use UnexpectedValueException;
+use InvalidArgumentException;
 
 // From PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-core'
-use \Charcoal\Model\ModelInterface;
+use Charcoal\Model\ModelInterface;
 
 // From 'charcoal-property'
-use \Charcoal\Property\IdProperty;
-use \Charcoal\Property\PropertyField;
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\IdProperty;
+use Charcoal\Property\PropertyField;
+use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-app'
-use \Charcoal\App\Script\ArgScriptTrait;
+use Charcoal\App\Script\ArgScriptTrait;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminScript;
+use Charcoal\Admin\AdminScript;
 
 /**
  * Alter an object's primary key (SQL source).
@@ -66,9 +66,7 @@ class AlterPrimaryKeyScript extends AdminScript
         parent::init();
 
         $this->setDescription(
-            'The <underline>object/table/alter-primary-key</underline> script '.
-            'replaces the existing primary key with the new definition from '.
-            'the given model\'s metadata.'
+            'The <underline>object/table/alter-primary-key</underline> script '.'replaces the existing primary key with the new definition from '.'the given model\'s metadata.'
         );
     }
 

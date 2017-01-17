@@ -3,12 +3,12 @@
 namespace Charcoal\Admin\Action;
 
 // From PSR-7
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\User;
+use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\User;
 
 /**
  * Logout Action

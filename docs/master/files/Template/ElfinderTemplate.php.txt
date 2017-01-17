@@ -2,27 +2,27 @@
 
 namespace Charcoal\Admin\Template;
 
-use \RuntimeException;
-use \InvalidArgumentException;
-use \ArrayIterator;
+use RuntimeException;
+use InvalidArgumentException;
+use ArrayIterator;
 
-use \Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestInterface;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
 use Charcoal\Property\FileProperty;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationConfig;
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationConfig;
+use Charcoal\Translation\TranslationString;
 
-// Intra-module dependency
-use \Charcoal\Admin\AdminTemplate;
+// Local module (charcoal-admin) dependency
+use Charcoal\Admin\AdminTemplate;
 
 /**
  *

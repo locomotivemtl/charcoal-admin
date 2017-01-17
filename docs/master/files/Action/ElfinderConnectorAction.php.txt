@@ -2,33 +2,33 @@
 
 namespace Charcoal\Admin\Action;
 
-use \RuntimeException;
+use RuntimeException;
 
 // From PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From elFinder
-use \elFinderConnector;
-use \elFinder;
+use elFinderConnector;
+use elFinder;
 
 // From 'charcoal-config'
-use \Charcoal\Config\GenericConfig as Config;
+use Charcoal\Config\GenericConfig as Config;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-app'
-use \Charcoal\App\CallableResolverAwareTrait;
+use Charcoal\App\CallableResolverAwareTrait;
 
 // Intra-module ('charcoal-admin') dependencies
-use \Charcoal\Admin\AdminAction;
+use Charcoal\Admin\AdminAction;
 
 /**
  * elFinder Connector

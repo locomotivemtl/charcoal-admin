@@ -2,28 +2,28 @@
 
 namespace Charcoal\Admin;
 
-use \Exception;
+use Exception;
 
 // From PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\UriInterface;
-use \Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\RequestInterface;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-base
-use \Charcoal\User\Authenticator;
-use \Charcoal\User\Authorizer;
+use Charcoal\User\Authenticator;
+use Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-use \Charcoal\Translation\TranslationConfig;
+use Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationConfig;
 
 // From 'charcoal-app'
-use \Charcoal\App\Template\AbstractTemplate;
+use Charcoal\App\Template\AbstractTemplate;
 
 /**
  * Base class for all `admin` Templates.
@@ -92,14 +92,17 @@ class AdminTemplate extends AbstractTemplate
      * @var boolean $showHeaderMenu
      */
     private $showHeaderMenu = true;
+
     /**
      * @var boolean $showFooterMenu
      */
     private $showFooterMenu = true;
+
     /**
      * @var boolean $showTopHeaderMenu
      */
     private $showTopHeaderMenu;
+
     /**
      * @var boolean $headerMenu
      */

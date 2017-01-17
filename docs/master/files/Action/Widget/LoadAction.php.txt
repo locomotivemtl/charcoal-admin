@@ -2,25 +2,25 @@
 
 namespace Charcoal\Admin\Action\Widget;
 
-use \Exception;
-use \RuntimeException;
-use \InvalidArgumentException;
+use Exception;
+use RuntimeException;
+use InvalidArgumentException;
 
 // From PSR-7
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-view'
-use \Charcoal\View\ViewInterface;
+use Charcoal\View\ViewInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminAction;
+use Charcoal\Admin\AdminAction;
 
 /**
  *

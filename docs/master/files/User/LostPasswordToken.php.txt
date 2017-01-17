@@ -2,11 +2,11 @@
 
 namespace Charcoal\Admin\User;
 
-use \DateTime;
-use \DateTimeInterface;
-use \InvalidArgumentException;
+use DateTime;
+use DateTimeInterface;
+use InvalidArgumentException;
 
-use \Charcoal\Model\AbstractModel;
+use Charcoal\Model\AbstractModel;
 
 /**
  *

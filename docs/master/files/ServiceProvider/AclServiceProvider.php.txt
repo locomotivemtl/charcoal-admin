@@ -3,15 +3,15 @@
 namespace Charcoal\Admin\ServiceProvider;
 
 // Dependencies from `pimple/pimple`
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 // Dependencies from `zendframework/zend-permissions`
-use \Zend\Permissions\Acl\Acl;
-use \Zend\Permissions\Acl\Resource\GenericResource as AclResource;
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Resource\GenericResource as AclResource;
 
 // Dependencies from `charcoal-base`
-use \Charcoal\User\Acl\Manager as AclManager;
+use Charcoal\User\Acl\Manager as AclManager;
 
 /**
  * Admin ACL (Access-Control-List) provider.

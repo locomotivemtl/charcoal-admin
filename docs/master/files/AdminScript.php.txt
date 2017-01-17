@@ -3,16 +3,16 @@
 namespace Charcoal\Admin;
 
 // Module `pimple/pimple` dependencies
-use \Pimple\Container;
+use Pimple\Container;
 
 // Module `charcoal-factory` dependencies
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // Module `charcoal-app` dependencies
-use \Charcoal\App\Script\AbstractScript;
+use Charcoal\App\Script\AbstractScript;
 
 // Module `charcoal-property` dependencies
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyInterface;
 
 /**
  *

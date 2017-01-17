@@ -2,22 +2,22 @@
 
 namespace Charcoal\Admin;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // From PSR-7 (HTTP Messaging)
-use \Psr\Http\Message\UriInterface;
+use Psr\Http\Message\UriInterface;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
 // From 'charcoal-app'
-use \Charcoal\App\Template\AbstractWidget;
+use Charcoal\App\Template\AbstractWidget;
 
 /**
  * The base Widget for the `admin` module.

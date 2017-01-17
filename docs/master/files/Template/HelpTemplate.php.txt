@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Template;
 
-use \Charcoal\Admin\AdminTemplate as AdminTemplate;
+use Charcoal\Admin\AdminTemplate;
 
 /**
  * Admin Help template

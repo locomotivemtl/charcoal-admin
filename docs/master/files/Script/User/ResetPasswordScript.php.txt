@@ -3,12 +3,12 @@
 namespace Charcoal\Admin\Script\User;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminScript;
-use \Charcoal\Admin\User;
+use Charcoal\Admin\AdminScript;
+use Charcoal\Admin\User;
 
 /**
  *

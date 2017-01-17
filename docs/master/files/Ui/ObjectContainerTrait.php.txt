@@ -2,11 +2,12 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \Exception;
-use \RuntimeException;
-use \InvalidArgumentException;
+use Exception;
+use RuntimeException;
+use InvalidArgumentException;
 
-use \Charcoal\Factory\FactoryInterface;
+// From charcoal-factory
+use Charcoal\Factory\FactoryInterface;
 
 /**
 * Fully implements ObjectContainerInterface

@@ -3,15 +3,15 @@
 namespace Charcoal\Admin\Action;
 
 // Dependencies from `PHP`
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\User;
+use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\User;
 
 /**
  * Admin Login Action: Attempt to log a user in.

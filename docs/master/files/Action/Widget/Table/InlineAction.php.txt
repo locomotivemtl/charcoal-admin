@@ -2,21 +2,21 @@
 
 namespace Charcoal\Admin\Action\Widget\Table;
 
-use \Exception;
+use Exception;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-use \Pimple\Container;
+use Pimple\Container;
 
 // Dependency from 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminAction;
-use \Charcoal\Admin\Widget\ObjectFormWidget;
-use \Charcoal\Admin\Widget\FormPropertyWidget;
+use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\Widget\ObjectFormWidget;
+use Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
  * Inline action: Return the inline edit properties HTML from an object

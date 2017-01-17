@@ -3,11 +3,11 @@
 namespace Charcoal\Admin\Script\Object\Table;
 
 // PSR-7 (http messaging) dependencies
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\AdminScript;
+use Charcoal\Admin\AdminScript;
 
 /**
  * Alter an object's table (sql source) according to its metadata's properties.

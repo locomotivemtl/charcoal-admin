@@ -2,22 +2,45 @@
 
 namespace Charcoal\Admin\Ui;
 
-use \InvalidArgumentException as InvalidArgumentException;
+use Exception;
+use InvalidArgumentException;
 
+// From 'charcoal-factory'
+use Charcoal\Factory\FactoryInterface;
+
+// From 'charcoal-ui'
+use Charcoal\Ui\Dashboard\DashboardBuilder;
+use Charcoal\Ui\Dashboard\DashboardInterface;
+
+/**
+ * Implements Charcoal\Admin\Ui\DashboardContainerInterface
+ */
 trait DashboardContainerTrait
 {
     /**
      * @var string $dashboboardIdent
      */
     protected $dashboardIdent;
+
     /**
      * @var mixed $dashboardConfig
      */
     protected $dashboardConfig;
+
     /**
      * @var Dashboard $dashboard
      */
     protected $dashboard;
+
+    /**
+     * @var FactoryInterface $widgetFactory
+     */
+    private $widgetFactory;
+
+    /**
+     * @var DashboardBuilder $dashboardBuilder
+     */
+    private $dashboardBuilder;
 
     /**
      * @param string $dashboardIdent The dashboard identifier.
@@ -65,26 +88,12 @@ trait DashboardContainerTrait
     }
 
     /**
-     * @param array $data Optional dashboard config.
-     * @return null
+     * @return array
      */
-    public function createDashboardConfig(array $data = null)
-    {
-        return null;
-    }
+    abstract protected function createDashboardConfig();
 
     /**
-     * @param mixed $dashboard The dashboard to set.
-     * @return DashboardContainerInterface Chainable
-     */
-    public function setDashboard($dashboard)
-    {
-        $this->dashboard = $dashboard;
-        return $this;
-    }
-
-    /**
-     * @return Dashboard
+     * @return DashboardInterface
      */
     public function dashboard()
     {
@@ -95,8 +104,64 @@ trait DashboardContainerTrait
     }
 
     /**
-     * @param array $data Optional dashboard data.
-     * @return Dashboard
+     * @return DashboardInterface
      */
-    abstract public function createDashboard(array $data = null);
+    protected function createDashboard()
+    {
+        $dashboardConfig = $this->createDashboardConfig();
+        $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
+
+        return $dashboard;
+    }
+
+
+    /**
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return void
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+    }
+
+    /**
+     * Safe Widget Factory getter.
+     * Create the widget factory if it was not preiously injected / set.
+     *
+     * @throws Exception If the widget factory dependency was not previously set / injected.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new Exception(
+                'Widget factory was not set.'
+            );
+        }
+        return $this->widgetFactory;
+    }
+
+    /**
+     * @param DashboardBuilder $builder The builder, to create customized dashboard objects.
+     * @return void
+     *
+     */
+    protected function setDashboardBuilder(DashboardBuilder $builder)
+    {
+        $this->dashboardBuilder = $builder;
+    }
+
+    /**
+     * @throws Exception If the dashboard builder dependency was not previously set / injected.
+     * @return DashboardBuilder
+     */
+    protected function dashboardBuilder()
+    {
+        if ($this->dashboardBuilder === null) {
+            throw new Exception(
+                'Dashboard builder was not set.'
+            );
+        }
+        return $this->dashboardBuilder;
+    }
 }

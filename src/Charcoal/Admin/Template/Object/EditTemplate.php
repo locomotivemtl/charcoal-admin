@@ -2,28 +2,28 @@
 
 namespace Charcoal\Admin\Template\Object;
 
-use \Exception;
-use \InvalidArgumentException;
+use Exception;
+use InvalidArgumentException;
 
 // From `pimple`
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
+use Charcoal\Translation\TranslationString;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\DashboardBuilder;
+use Charcoal\Ui\DashboardBuilder;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminTemplate;
-use \Charcoal\Admin\Ui\DashboardContainerInterface;
-use \Charcoal\Admin\Ui\DashboardContainerTrait;
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait;
-use \Charcoal\Admin\Widget\SidemenuWidget;
+use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Ui\DashboardContainerInterface;
+use Charcoal\Admin\Ui\DashboardContainerTrait;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Ui\ObjectContainerTrait;
+use Charcoal\Admin\Widget\SidemenuWidget;
 
 /**
  * Object Edit Template
@@ -39,16 +39,6 @@ class EditTemplate extends AdminTemplate implements
      * @var SideMenuWidgetInterface $sidemenu
      */
     private $sidemenu;
-
-    /**
-     * @var FactoryInterface $widgetFactory
-     */
-    private $widgetFactory;
-
-    /**
-     * @var DashboardBuilder $dashboardBuilder
-     */
-    private $dashboardBuilder;
 
     /**
      * @param Container $container DI container.
@@ -67,70 +57,11 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
-     * @return EditTemplate Chainable
+     * @return array
      */
-    protected function setWidgetFactory(FactoryInterface $factory)
+    protected function createDashboardConfig()
     {
-        $this->widgetFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * @throws Exception If the widget factory was not set before being accessed.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new Exception(
-                'Model factory not set'
-            );
-        }
-
-        return $this->widgetFactory;
-    }
-
-    /**
-     * @param DashboardBuilder $builder A builder to create customized Dashboard objects.
-     * @return CollectionTemplate Chainable
-     *
-     */
-    public function setDashboardBuilder(DashboardBuilder $builder)
-    {
-        $this->dashboardBuilder = $builder;
-
-        return $this;
-    }
-
-    /**
-     * @throws Exception If the dashboard builder dependency was not previously set / injected.
-     * @return DashboardBuilder
-     */
-    public function dashboardBuilder()
-    {
-        if ($this->dashboardBuilder === null) {
-            throw new Exception(
-                'Dashboard builder was not set.'
-            );
-        }
-
-        return $this->dashboardBuilder;
-    }
-
-    /**
-     * @param array $data Optional dashboard data.
-     * @return Dashboard
-     * @see DashboardContainerTrait::createDashboard()
-     */
-    public function createDashboard(array $data = null)
-    {
-        unset($data);
-        $dashboardConfig = $this->objEditDashboardConfig();
-        $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
-
-        return $dashboard;
+        return $this->objEditDashboardConfig();
     }
 
     /**
@@ -183,7 +114,6 @@ class EditTemplate extends AdminTemplate implements
         $adminMetadata = $this->objAdminMetadata();
 
         $dashboardIdent  = $this->dashboardIdent();
-        $dashboardConfig = $this->dashboardConfig();
 
         if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
             $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
@@ -202,15 +132,13 @@ class EditTemplate extends AdminTemplate implements
             $dashboardIdent = $adminMetadata['default_edit_dashboard'];
         }
 
-        if (empty($dashboardConfig)) {
-            if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
-                throw new Exception(
-                    'Dashboard config is not defined.'
-                );
-            }
-
-            $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
+        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
+            throw new Exception(
+                'Dashboard config is not defined.'
+            );
         }
+
+        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
 
         return $dashboardConfig;
     }

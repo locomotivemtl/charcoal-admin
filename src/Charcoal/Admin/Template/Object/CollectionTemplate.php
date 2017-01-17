@@ -14,18 +14,13 @@ use Pimple\Container;
 // From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
 
-// From 'charcoal-factory'
-use Charcoal\Factory\FactoryInterface;
-
-// From 'charcoal-ui'
-use Charcoal\Ui\DashboardBuilder;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;
 use Charcoal\Admin\Ui\DashboardContainerInterface;
 use Charcoal\Admin\Ui\DashboardContainerTrait;
+use Charcoal\Admin\Widget\SearchWidget;
 
 /**
  * Object collection template (table with a list of objects).
@@ -43,16 +38,6 @@ class CollectionTemplate extends AdminTemplate implements
     private $sidemenu;
 
     /**
-     * @var FactoryInterface $widgetFactory
-     */
-    private $widgetFactory;
-
-    /**
-     * @var DashboardBuilder $dashboardBuilder
-     */
-    private $dashboardBuilder;
-
-    /**
      * @param Container $container DI Container.
      * @return void
      */
@@ -60,12 +45,13 @@ class CollectionTemplate extends AdminTemplate implements
     {
         parent::setDependencies($container);
 
+        // Required collection dependencies
         $this->setModelFactory($container['model/factory']);
         $this->setCollectionLoader($container['model/collection/loader']);
 
-        // Required dependencies.
+        // Required dashboard dependencies.
         $this->setWidgetFactory($container['widget/factory']);
-        $this->dashboardBuilder = $container['dashboard/builder'];
+        $this->setDashboardBuilder($container['dashboard/builder']);
     }
 
     /**
@@ -83,7 +69,7 @@ class CollectionTemplate extends AdminTemplate implements
     /**
      * @return void
      */
-    public function createObjTable()
+    private function createObjTable()
     {
         $obj = $this->proto();
         if (!$obj) {
@@ -96,73 +82,11 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
-     * @return CollectionTemplate Chainable
+     * @return array
      */
-    protected function setWidgetFactory(FactoryInterface $factory)
+    protected function createDashboardConfig()
     {
-        $this->widgetFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Safe Widget Factory getter.
-     * Create the widget factory if it was not preiously injected / set.
-     *
-     * @throws Exception If the widget factory dependency was not previously set / injected.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new Exception(
-                'Widget factory was not set.'
-            );
-        }
-
-        return $this->widgetFactory;
-    }
-
-    /**
-     * @param DashboardBuilder $builder The builder, to create customized dashboard objects.
-     * @return CollectionTemplate Chainable
-     *
-     */
-    public function setDashboardBuilder(DashboardBuilder $builder)
-    {
-        $this->dashboardBuilder = $builder;
-
-        return $this;
-    }
-
-    /**
-     * @throws Exception If the dashboard builder dependency was not previously set / injected.
-     * @return DashboardBuilder
-     */
-    public function dashboardBuilder()
-    {
-        if ($this->dashboardBuilder === null) {
-            throw new Exception(
-                'Dashboard builder was not set.'
-            );
-        }
-
-        return $this->dashboardBuilder;
-    }
-
-    /**
-     * @param array $data Optional Dashboard data.
-     * @return Dashboard
-     * @see DashboardContainerTrait::createDashboard()
-     */
-    public function createDashboard(array $data = null)
-    {
-        unset($data);
-        $dashboardConfig = $this->objCollectionDashboardConfig();
-        $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
-
-        return $dashboard;
+        return $this->objCollectionDashboardConfig();
     }
 
     /**
@@ -170,7 +94,7 @@ class CollectionTemplate extends AdminTemplate implements
      */
     public function sidemenu()
     {
-        $dashboardConfig = $this->objCollectionDashboardConfig();
+        $dashboardConfig = $this->dashboardConfig();
 
         if (isset($dashboardConfig['sidemenu'])) {
             return $this->createSidemenu($dashboardConfig['sidemenu']);
@@ -184,35 +108,63 @@ class CollectionTemplate extends AdminTemplate implements
      * Uses the "default_search_list" ident that should point
      * on ident in the "lists"
      *
-     * @see charcoal/admin/widget/search
      * @return widget
      */
     public function searchWidget()
     {
-        $widget = $this->widgetFactory()->create('charcoal/admin/widget/search');
+        $widget = $this->widgetFactory()->create(SearchWidget::class);
         $widget->setObjType($this->objType());
 
-        $obj      = $this->proto();
-        $metadata = $obj->metadata();
-
-        $adminMetadata = $metadata['admin'];
-        $lists         = $adminMetadata['lists'];
-
-        $listIdent = (isset($adminMetadata['default_search_list'])) ? $adminMetadata['default_search_list'] : '';
-
-        if (!$listIdent) {
-            $listIdent = (isset($adminMetadata['default_list'])) ? $adminMetadata['default_list'] : '';
-        }
-
-        if (!$listIdent) {
-            $listIdent = 'default';
-        }
+        $listIdent = $this->metadataListIdent();
 
         // Note that if the ident doesn't match a list,
         // it will return basicly every properties of the object
         $widget->setCollectionIdent($listIdent);
 
         return $widget;
+    }
+
+    /**
+     * @return string
+     */
+    private function metadataListIdent()
+    {
+        $adminMetadata = $this->objAdminMetadata();
+
+        if (isset($adminMetadata['default_search_list'])) {
+            $listIdent = $adminMetadata['default_search_list'];
+        } elseif (isset($adminMetadata['default_list'])) {
+            $listIdent = $adminMetadata['default_list'];
+        } else {
+            $listIdent = 'default';
+        }
+
+        return $listIdent;
+    }
+
+    /**
+     * @throws Exception If no default collection is defined.
+     * @return string
+     */
+    private function metadataDashboardIdent()
+    {
+
+        $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        if ($dashboardIdent) {
+            return $dashboardIdent;
+        }
+
+        $adminMetadata = $this->objAdminMetadata();
+        if (!isset($adminMetadata['default_collection_dashboard'])) {
+            throw new Exception(
+                sprintf(
+                    'No default collection dashboard defined in admin metadata for %s.',
+                    get_class($this->proto())
+                )
+            );
+        }
+
+        return $adminMetadata['default_collection_dashboard'];
     }
 
     /**
@@ -225,15 +177,7 @@ class CollectionTemplate extends AdminTemplate implements
 
         $objMetadata = $obj->metadata();
 
-        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
-        if ($adminMetadata === null) {
-            throw new Exception(
-                sprintf(
-                    'The object %s does not have an admin metadata.',
-                    get_class($obj)
-                )
-            );
-        }
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : [];
 
         return $adminMetadata;
     }
@@ -246,35 +190,18 @@ class CollectionTemplate extends AdminTemplate implements
     {
         $adminMetadata = $this->objAdminMetadata();
 
-        $dashboardIdent  = $this->dashboardIdent();
-        $dashboardConfig = $this->dashboardConfig();
-
-        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
-            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        $dashboardIdent = $this->dashboardIdent();
+        if (!$dashboardIdent) {
+            $dashboardIdent = $this->metadataDashboardIdent();
         }
 
-        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
-            if (!isset($adminMetadata['default_collection_dashboard'])) {
-                throw new Exception(
-                    sprintf(
-                        'No default collection dashboard defined in admin metadata for %s.',
-                        get_class($this->proto())
-                    )
-                );
-            }
-
-            $dashboardIdent = $adminMetadata['default_collection_dashboard'];
+        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
+            throw new Exception(
+                'Dashboard config is not defined.'
+            );
         }
 
-        if (empty($dashboardConfig)) {
-            if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
-                throw new Exception(
-                    'Dashboard config is not defined.'
-                );
-            }
-
-            $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
-        }
+        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
 
         return $dashboardConfig;
     }

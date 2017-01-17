@@ -142,6 +142,11 @@
 						Object					</a>
 
 						</li>
+				<li>
+					<a href="namespace-Charcoal.Admin.Template.System.html">
+						System					</a>
+
+						</li>
 							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.Ui.html">
@@ -280,7 +285,7 @@ Charcoal\App\Template\AbstractTemplate
 		<b>Namespace:</b> <a href="namespace-Charcoal.html">Charcoal</a>\<a href="namespace-Charcoal.Admin.html">Admin</a>\<a href="namespace-Charcoal.Admin.Template.html">Template</a>\<a href="namespace-Charcoal.Admin.Template.Object.html">Object</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#27-343" title="Go to source code">Charcoal/Admin/Template/Object/CollectionTemplate.php</a>
+			<b>Located at</b> <a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#25-285" title="Go to source code">Charcoal/Admin/Template/Object/CollectionTemplate.php</a>
 		<br>
 	</div>
 
@@ -300,7 +305,7 @@ Charcoal\App\Template\AbstractTemplate
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setDependencies">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#52-66" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#40-55" title="Go to source code">setDependencies</a>( <span>Pimple\Container <var>$container</var></span> )</code>
 
 		<div class="description short">
 			
@@ -325,19 +330,19 @@ Charcoal\App\Template\AbstractTemplate
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="createObjTable" id="_createObjTable">
+	<tr data-order="init" id="_init">
 
 		<td class="attributes"><code>
 			 public 
 
-			
+			boolean
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_createObjTable">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#68-81" title="Go to source code">createObjTable</a>( )</code>
+		<a class="anchor" href="#_init">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#57-67" title="Go to source code">init</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span> )</code>
 
 		<div class="description short">
 			
@@ -347,145 +352,38 @@ Charcoal\App\Template\AbstractTemplate
 			
 
 
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$request</var></dt>
+					<dd>PSR-7 request.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
 
 
 
-
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Charcoal.Admin.AdminTemplate.html#_init">Charcoal\Admin\AdminTemplate::init()</a></code></div>
 
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="setWidgetFactory" id="_setWidgetFactory">
+	<tr data-order="createDashboardConfig" id="_createDashboardConfig">
 
 		<td class="attributes"><code>
 			 protected 
 
-			<code><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></code>
+			array
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_setWidgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#83-92" title="Go to source code">setWidgetFactory</a>( <span>Charcoal\Factory\FactoryInterface <var>$factory</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$factory</var></dt>
-					<dd>The widget factory, to create the dashboard and sidemenu widgets.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></code><br>Chainable
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="widgetFactory" id="_widgetFactory">
-
-		<td class="attributes"><code>
-			 protected 
-
-			Charcoal\Factory\FactoryInterface
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_widgetFactory">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#94-110" title="Go to source code">widgetFactory</a>( )</code>
-
-		<div class="description short">
-			<p>Safe Widget Factory getter.
-Create the widget factory if it was not preiously injected / set.</p>
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Safe Widget Factory getter.
-Create the widget factory if it was not preiously injected / set.</p>
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					Charcoal\Factory\FactoryInterface
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					Exception<br>If the widget factory dependency was not previously set / injected.
-				</div>
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="setDashboardBuilder" id="_setDashboardBuilder">
-
-		<td class="attributes"><code>
-			 public 
-
-			<code><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></code>
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_setDashboardBuilder">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#112-122" title="Go to source code">setDashboardBuilder</a>( <span>Charcoal\Ui\DashboardBuilder <var>$builder</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$builder</var></dt>
-					<dd>The builder, to create customized dashboard objects.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></code><br>Chainable
-				</div>
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="dashboardBuilder" id="_dashboardBuilder">
-
-		<td class="attributes"><code>
-			 public 
-
-			Charcoal\Ui\DashboardBuilder
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_dashboardBuilder">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#124-137" title="Go to source code">dashboardBuilder</a>( )</code>
+		<a class="anchor" href="#_createDashboardConfig">#</a>
+		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#84-90" title="Go to source code">createDashboardConfig</a>( )</code>
 
 		<div class="description short">
 			
@@ -498,61 +396,12 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 				<h4>Returns</h4>
 				<div class="list">
-					Charcoal\Ui\DashboardBuilder
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					Exception<br>If the dashboard builder dependency was not previously set / injected.
+					array
 				</div>
 
 
 
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="createDashboard" id="_createDashboard">
 
-		<td class="attributes"><code>
-			 public 
-
-			Dashboard
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_createDashboard">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#139-151" title="Go to source code">createDashboard</a>( <span>array <var>$data</var> = <span class="php-keyword1">null</span></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$data</var></dt>
-					<dd>Optional Dashboard data.</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					Dashboard
-				</div>
-
-
-				<h4>See</h4>
-				<div class="list">
-						DashboardContainerTrait::createDashboard()<br>
-				</div>
-
-
-				<h4>Implementation of</h4>
-				<div class="list"><code><a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_createDashboard">Charcoal\Admin\Ui\DashboardContainerInterface::createDashboard()</a></code></div>
 		</div>
 		</div></td>
 	</tr>
@@ -568,7 +417,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_sidemenu">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#153-165" title="Go to source code">sidemenu</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#92-104" title="Go to source code">sidemenu</a>( )</code>
 
 		<div class="description short">
 			
@@ -602,7 +451,7 @@ Create the widget factory if it was not preiously injected / set.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_searchWidget">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#167-201" title="Go to source code">searchWidget</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#106-125" title="Go to source code">searchWidget</a>( )</code>
 
 		<div class="description short">
 			<p>Sets the search widget accodingly
@@ -623,10 +472,6 @@ on ident in the "lists"</p>
 				</div>
 
 
-				<h4>See</h4>
-				<div class="list">
-						charcoal/admin/widget/search<br>
-				</div>
 
 
 		</div>
@@ -644,7 +489,7 @@ on ident in the "lists"</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_title">#</a>
-		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#267-342" title="Go to source code">title</a>( )</code>
+		<code><a href="source-class-Charcoal.Admin.Template.Object.CollectionTemplate.html#209-284" title="Go to source code">title</a>( )</code>
 
 		<div class="description short">
 			<p>Retrieve the title of the page.</p>
@@ -688,7 +533,6 @@ on ident in the "lists"</p>
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_headerMenu">headerMenu()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_headerMenuLogo">headerMenuLogo()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_ident">ident()</a>, 
-			<a href="class-Charcoal.Admin.AdminTemplate.html#_init">init()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_isAuthenticated">isAuthenticated()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_label">label()</a>, 
 			<a href="class-Charcoal.Admin.AdminTemplate.html#_lang">lang()</a>, 
@@ -744,11 +588,9 @@ on ident in the "lists"</p>
 	<caption>Methods inherited from <a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#methods">Charcoal\Admin\Ui\DashboardContainerInterface</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_createDashboardConfig">createDashboardConfig()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_dashboard">dashboard()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_dashboardConfig">dashboardConfig()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_dashboardIdent">dashboardIdent()</a>, 
-			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_setDashboard">setDashboard()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_setDashboardConfig">setDashboardConfig()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerInterface.html#_setDashboardIdent">setDashboardIdent()</a>
 		</code></td>
@@ -801,13 +643,16 @@ on ident in the "lists"</p>
 	<caption>Methods used from <a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#methods">Charcoal\Admin\Ui\DashboardContainerTrait</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_createDashboardConfig">createDashboardConfig()</a>, 
+			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_createDashboard">createDashboard()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_dashboard">dashboard()</a>, 
+			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_dashboardBuilder">dashboardBuilder()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_dashboardConfig">dashboardConfig()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_dashboardIdent">dashboardIdent()</a>, 
-			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_setDashboard">setDashboard()</a>, 
+			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_setDashboardBuilder">setDashboardBuilder()</a>, 
 			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_setDashboardConfig">setDashboardConfig()</a>, 
-			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_setDashboardIdent">setDashboardIdent()</a>
+			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_setDashboardIdent">setDashboardIdent()</a>, 
+			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_setWidgetFactory">setWidgetFactory()</a>, 
+			<a href="class-Charcoal.Admin.Ui.DashboardContainerTrait.html#_widgetFactory">widgetFactory()</a>
 		</code></td>
 	</tr>
 	</table>

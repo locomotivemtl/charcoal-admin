@@ -143,6 +143,11 @@
 						Object					</a>
 
 						</li>
+				<li>
+					<a href="namespace-Charcoal.Admin.Template.System.html">
+						System					</a>
+
+						</li>
 							</ul></li>
 				<li>
 					<a href="namespace-Charcoal.Admin.Ui.html">
@@ -270,6 +275,7 @@
 				<li><a href="class-Charcoal.Admin.Template.LogoutTemplate.html">Charcoal\Admin\Template\LogoutTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.Object.CollectionTemplate.html">Charcoal\Admin\Template\Object\CollectionTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Template.Object.EditTemplate.html">Charcoal\Admin\Template\Object\EditTemplate</a></li>
+				<li><a href="class-Charcoal.Admin.Template.System.UsersTemplate.html">Charcoal\Admin\Template\System\UsersTemplate</a></li>
 				<li><a href="class-Charcoal.Admin.Ui.Sidemenu.AbstractSidemenuGroup.html">Charcoal\Admin\Ui\Sidemenu\AbstractSidemenuGroup</a></li>
 				<li><a href="class-Charcoal.Admin.Ui.Sidemenu.GenericSidemenuGroup.html">Charcoal\Admin\Ui\Sidemenu\GenericSidemenuGroup</a></li>
 				<li><a href="class-Charcoal.Admin.User.html">Charcoal\Admin\User</a></li>
@@ -369,12 +375,12 @@
 </span><span id="3" class="l"><a href="#3"> 3: </a><span class="php-keyword1">namespace</span> Charcoal\Admin\Template;
 </span><span id="4" class="l"><a href="#4"> 4: </a>
 </span><span id="5" class="l"><a href="#5"> 5: </a><span class="php-comment">// Intra-module (`charcoal-admin`) dependencies</span>
-</span><span id="6" class="l"><a href="#6"> 6: </a><span class="php-keyword1">use</span> \Charcoal\Admin\Ui\DashboardContainerInterface;
-</span><span id="7" class="l"><a href="#7"> 7: </a><span class="php-keyword1">use</span> \Charcoal\Admin\Ui\DashboardContainerTrait;
-</span><span id="8" class="l"><a href="#8"> 8: </a><span class="php-keyword1">use</span> \Charcoal\Admin\Widget\DashboardWidget;
+</span><span id="6" class="l"><a href="#6"> 6: </a><span class="php-keyword1">use</span> Charcoal\Admin\Ui\DashboardContainerInterface;
+</span><span id="7" class="l"><a href="#7"> 7: </a><span class="php-keyword1">use</span> Charcoal\Admin\Ui\DashboardContainerTrait;
+</span><span id="8" class="l"><a href="#8"> 8: </a><span class="php-keyword1">use</span> Charcoal\Admin\Widget\DashboardWidget;
 </span><span id="9" class="l"><a href="#9"> 9: </a>
 </span><span id="10" class="l"><a href="#10">10: </a><span class="php-comment">// Local parent namespace dependencies</span>
-</span><span id="11" class="l"><a href="#11">11: </a><span class="php-keyword1">use</span> \Charcoal\Admin\AdminTemplate;
+</span><span id="11" class="l"><a href="#11">11: </a><span class="php-keyword1">use</span> Charcoal\Admin\AdminTemplate;
 </span><span id="12" class="l"><a href="#12">12: </a>
 </span><span id="13" class="l"><a href="#13">13: </a><span class="php-comment">/**
 </span></span><span id="14" class="l"><a href="#14">14: </a><span class="php-comment"> * The Home template is a simple Dashboard, loaded from the metadata.
@@ -385,7 +391,7 @@
 </span><span id="19" class="l"><a href="#19">19: </a>
 </span><span id="20" class="l"><a href="#20">20: </a>    <span class="php-comment">/**
 </span></span><span id="21" class="l"><a href="#21">21: </a><span class="php-comment">     * @param array $data Optional dashboard data.
-</span></span><span id="22" class="l"><a href="#22">22: </a><span class="php-comment">     * @return Dashboard
+</span></span><span id="22" class="l"><a href="#22">22: </a><span class="php-comment">     * @return Charcoal\Ui\Dashboard\DashboardInterface
 </span></span><span id="23" class="l"><a href="#23">23: </a><span class="php-comment">     */</span>
 </span><span id="24" class="l"><a href="#24">24: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> createDashboard(<span class="php-keyword1">array</span> <span class="php-var">$data</span> = <span class="php-keyword1">null</span>)
 </span><span id="25" class="l"><a href="#25">25: </a>    {
@@ -412,6 +418,6 @@
 </div>
 </div>
 <script src="resources/combined.js?73fac82b0b888a4f83be7acb1aefbec5e8659d72"></script>
-<script src="elementlist.js?181683b408433e46223e1025bd87162717a681f3"></script>
+<script src="elementlist.js?76820f7b68590cf593824135bd343c9f853191bc"></script>
 </body>
 </html>

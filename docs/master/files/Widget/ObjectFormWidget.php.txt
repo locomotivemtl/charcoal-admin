@@ -106,7 +106,7 @@ class ObjectFormWidget extends FormWidget implements
             // check for slim callable as "class:method"
             $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
             if (preg_match($callablePattern, $toResolve, $matches)) {
-                $class  = $matches[1];
+                $class = $matches[1];
                 $method = $matches[2];
 
                 if ($class === 'parent') {
@@ -129,7 +129,7 @@ class ObjectFormWidget extends FormWidget implements
     {
         return array_merge(
             parent::acceptedRequestData(),
-            [ 'obj_type','obj_id', 'template' ]
+            [ 'obj_type', 'obj_id', 'template' ]
         );
     }
 
@@ -140,9 +140,9 @@ class ObjectFormWidget extends FormWidget implements
      */
     protected function dataFromObject()
     {
-        $objMetadata   = $this->obj()->metadata();
+        $objMetadata = $this->obj()->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
-        $formIdent     = $this->formIdent();
+        $formIdent = $this->formIdent();
         if (!$formIdent) {
             $formIdent = $this->formIdentFallback();
         }
@@ -158,6 +158,19 @@ class ObjectFormWidget extends FormWidget implements
                 $objFormData['groups'][$groupIdent] = array_replace_recursive(
                     $adminMetadata['form_groups'][$groupIdent],
                     $objFormData['groups'][$groupIdent]
+                );
+            }
+        }
+
+        if (isset($objFormData['sidebars']) && isset($adminMetadata['form_sidebars'])) {
+            $extraFormSidebars = array_intersect(
+                array_keys($adminMetadata['form_sidebars']),
+                array_keys($objFormData['sidebars'])
+            );
+            foreach ($extraFormSidebars as $sidebarIdent) {
+                $objFormData['sidebars'][$sidebarIdent] = array_replace_recursive(
+                    $adminMetadata['form_sidebars'][$sidebarIdent],
+                    $objFormData['sidebars'][$sidebarIdent]
                 );
             }
         }
@@ -211,11 +224,11 @@ class ObjectFormWidget extends FormWidget implements
         return $this->formIdent;
     }
 
-     /**
-      * @param string $url The next URL.
-      * @throws InvalidArgumentException If argument is not a string.
-      * @return ActionInterface Chainable
-      */
+    /**
+     * @param string $url The next URL.
+     * @throws InvalidArgumentException If argument is not a string.
+     * @return ActionInterface Chainable
+     */
     public function setNextUrl($url)
     {
         if (!is_string($url)) {
@@ -226,10 +239,12 @@ class ObjectFormWidget extends FormWidget implements
 
         if (!$this->obj()) {
             $this->nextUrl = $url;
+
             return $this;
         }
 
         $this->nextUrl = $this->obj()->render($url);
+
         return $this;
     }
 
@@ -263,7 +278,7 @@ class ObjectFormWidget extends FormWidget implements
      */
     public function formProperties(array $group = null)
     {
-        $obj   = $this->obj();
+        $obj = $this->obj();
         $props = $obj->metadata()->properties();
 
         // We need to sort form properties by form group property order if a group exists
@@ -351,11 +366,13 @@ class ObjectFormWidget extends FormWidget implements
             if ($val === null) {
                 return false;
             }
+
             return true;
         });
 
         $this->formData = $merged;
         $this->obj()->setData($merged);
+
         return $this;
     }
 
@@ -369,6 +386,7 @@ class ObjectFormWidget extends FormWidget implements
         if (!$this->formData) {
             $this->formData = $this->objData();
         }
+
         return $this->formData;
     }
 

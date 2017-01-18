@@ -25,6 +25,10 @@ use Charcoal\Translation\TranslationConfig;
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
 
+// Local module (charcoal-admin) dependencies
+use Charcoal\Admin\User\AuthAwareInterface;
+use Charcoal\Admin\User\AuthAwareTrait;
+
 /**
  * Base class for all `admin` Templates.
  *
@@ -40,8 +44,10 @@ use Charcoal\App\Template\AbstractTemplate;
  * - `hasFeedback` (bool) - If there is feedback to display or not
  * - `feedback` (iterator) - The feedback data
  */
-class AdminTemplate extends AbstractTemplate
+class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
 {
+    use AuthAwareTrait;
+
     /**
      * The base URI.
      *
@@ -143,6 +149,8 @@ class AdminTemplate extends AbstractTemplate
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
         $this->setModelFactory($container['model/factory']);
+
+        // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }
@@ -226,40 +234,6 @@ class AdminTemplate extends AbstractTemplate
             );
         }
         return $this->modelFactory;
-    }
-
-    /**
-     * @param Authenticator $authenticator The authentication service.
-     * @return void
-     */
-    protected function setAuthenticator(Authenticator $authenticator)
-    {
-        $this->authenticator = $authenticator;
-    }
-
-    /**
-     * @return Authenticator
-     */
-    protected function authenticator()
-    {
-        return $this->authenticator;
-    }
-
-    /**
-     * @param Authorizer $authorizer The authorization service.
-     * @return void
-     */
-    protected function setAuthorizer(Authorizer $authorizer)
-    {
-        $this->authorizer = $authorizer;
-    }
-
-    /**
-     * @return Authorizer
-     */
-    protected function authorizer()
-    {
-        return $this->authorizer;
     }
 
     /**

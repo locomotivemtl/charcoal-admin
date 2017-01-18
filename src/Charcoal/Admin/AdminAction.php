@@ -19,12 +19,17 @@ use Charcoal\User\Authorizer;
 // Module `charcoal-app` dependencies
 use Charcoal\App\Action\AbstractAction;
 
+// Local module (charcoal-admin) dependencies
+use Charcoal\Admin\User\AuthAwareInterface;
+use Charcoal\Admin\User\AuthAwareTrait;
+
 /**
  * The base class for the `admin` Actions.
  *
  */
-abstract class AdminAction extends AbstractAction
+abstract class AdminAction extends AbstractAction implements AuthAwareInterface
 {
+    use AuthAwareTrait;
     /**
      * Store a reference to the admin configuration.
      *
@@ -82,6 +87,8 @@ abstract class AdminAction extends AbstractAction
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
+
+        // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }
@@ -156,46 +163,6 @@ abstract class AdminAction extends AbstractAction
     protected function modelFactory()
     {
         return $this->modelFactory;
-    }
-
-    /**
-     * @param Authenticator $authenticator The authentication service.
-     * @return void
-     */
-    protected function setAuthenticator(Authenticator $authenticator)
-    {
-        $this->authenticator = $authenticator;
-    }
-
-    /**
-     * @throws RuntimeException If the Authenticator has not been defined.
-     * @return Authenticator
-     */
-    protected function authenticator()
-    {
-        if ($this->authenticator === null) {
-            throw new RuntimeException(
-                'Authenticator has not been set on action.'
-            );
-        }
-        return $this->authenticator;
-    }
-
-    /**
-     * @param Authorizer $authorizer The authorization service.
-     * @return void
-     */
-    protected function setAuthorizer(Authorizer $authorizer)
-    {
-        $this->authorizer = $authorizer;
-    }
-
-    /**
-     * @return Authorizer
-     */
-    protected function authorizer()
-    {
-        return $this->authorizer;
     }
 
     /**
@@ -290,7 +257,6 @@ abstract class AdminAction extends AbstractAction
     public function adminUrl()
     {
         $adminPath = $this->adminConfig['base_path'];
-
         return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
     }
 
@@ -303,7 +269,6 @@ abstract class AdminAction extends AbstractAction
     public function setBaseUrl($uri)
     {
         $this->baseUrl = $uri;
-
         return $this;
     }
 

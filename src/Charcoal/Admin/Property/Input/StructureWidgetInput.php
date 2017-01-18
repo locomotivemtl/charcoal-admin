@@ -22,6 +22,7 @@ use \Charcoal\Ui\FormInput\FormInputInterface;
 use \Charcoal\App\Template\WidgetInterface;
 
 // From 'charcoal-admin'
+use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 use \Charcoal\Admin\Widget\FormGroup\StructureFormGroup;
 
@@ -200,7 +201,12 @@ class StructureWidgetInput extends AbstractPropertyInput implements
                 ));
             }
 
+            if (!$widget->ident()) {
+                $widget->setIdent($this->propertyIdent());
+            }
+
             $widget->setForm($this->formGroup()->form());
+            $widget->setFormGroup($this->formGroup());
             $widget->setStorageProperty($this->property());
 
             $this->structureWidget = $widget;

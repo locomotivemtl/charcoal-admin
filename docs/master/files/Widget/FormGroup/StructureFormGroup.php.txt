@@ -11,6 +11,8 @@ use \Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-ui'
 use \Charcoal\Ui\FormGroup\AbstractFormGroup;
+use \Charcoal\Ui\FormGroup\FormGroupInterface;
+use \Charcoal\Ui\FormInput\FormInputInterface;
 
 // From 'charcoal-admin'
 use \Charcoal\Admin\Widget\FormGroupWidget;
@@ -70,6 +72,13 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 class StructureFormGroup extends FormGroupWidget
 {
     /**
+     * The form group's storage model.
+     *
+     * @var ModelInterface|null
+     */
+    protected $obj;
+
+    /**
      * The form group's storage medium.
      *
      * @var array|PropertyInterface|SourceInterface|null
@@ -82,6 +91,13 @@ class StructureFormGroup extends FormGroupWidget
      * @var PropertyInterface|null
      */
     protected $storageProperty;
+
+    /**
+     * The form group the input belongs to.
+     *
+     * @var FormGroupInterface|null
+     */
+    private $formGroup;
 
     /**
      * Whether the form is ready.
@@ -106,13 +122,58 @@ class StructureFormGroup extends FormGroupWidget
      */
     public function obj()
     {
-        if (!$this->form() instanceof ObjectContainerInterface) {
-            throw new RuntimeException(
-                sprintf('The form must implement %s', ObjectContainerInterface::class)
-            );
+        if ($this->obj === null) {
+            $formGroup = $this->formGroup();
+            if ($formGroup instanceof self) {
+                $prop = $formGroup->storageProperty();
+                $val  = $formGroup->obj()->propertyValue($prop->ident());
+                $this->obj = $prop->structureVal($val);
+            } elseif ($this->form() instanceof ObjectContainerInterface) {
+                $this->obj = $this->form()->obj();
+            } else {
+                throw new RuntimeException(sprintf(
+                    'The %1$s widget has no data model.',
+                    static::CLASS
+                ));
+            }
         }
 
-        return $this->form()->obj();
+        return $this->obj;
+    }
+
+    /**
+     * Set the form input's parent group.
+     *
+     * @param  FormGroupInterface $formGroup The parent form group object.
+     * @return StructureFormGroup
+     */
+    public function setFormGroup(FormGroupInterface $formGroup)
+    {
+        $this->formGroup = $formGroup;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the input's parent group.
+     *
+     * @return FormGroupInterface|null
+     */
+    public function formGroup()
+    {
+        return $this->formGroup;
+    }
+
+    /**
+     * Clear the group's parent group.
+     *
+     * @return StructureFormGroup
+     */
+    public function clearFormGroup()
+    {
+        $this->formGroup = null;
+
+        return $this;
     }
 
     /**
@@ -140,13 +201,11 @@ class StructureFormGroup extends FormGroupWidget
 
         $obj = $this->obj();
         if (!$obj->hasProperty($propertyIdent)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'The "%1$s" property is not defined on [%2$s]',
-                    $propertyIdent,
-                    get_class($this->obj())
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'The "%1$s" property is not defined on [%2$s]',
+                $propertyIdent,
+                get_class($this->obj())
+            ));
         }
 
         if ($property === null) {
@@ -282,6 +341,10 @@ class StructureFormGroup extends FormGroupWidget
         $structProperties = $this->parsedFormProperties();
 
         foreach ($structProperties as $propertyIdent => $propertyMetadata) {
+            if (is_array($propertyMetadata)) {
+                $propertyMetadata['ident'] = $propertyIdent;
+            }
+
             if (method_exists($obj, 'filterPropertyMetadata')) {
                 $propertyMetadata = $obj->filterPropertyMetadata($propertyMetadata, $propertyIdent);
             }
@@ -304,7 +367,12 @@ class StructureFormGroup extends FormGroupWidget
                 continue;
             }
 
-            $subPropertyIdent = sprintf($propertyIdentPattern, $store->ident(), $propertyIdent);
+            $subPropertyIdent = sprintf(
+                $propertyIdentPattern,
+                ($store['input_name'] ?: $store->ident()),
+                $propertyIdent
+            );
+            $propertyMetadata['input_name'] = $subPropertyIdent;
 
             $formProperty = $form->createFormProperty();
             $formProperty->setViewController($this->viewController());

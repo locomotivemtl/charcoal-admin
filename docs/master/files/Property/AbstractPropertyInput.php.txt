@@ -96,6 +96,11 @@ abstract class AbstractPropertyInput implements
     protected $inputMode;
 
     /**
+     * @var string $inputName
+     */
+    protected $inputName;
+
+    /**
      * @var string $inputId
      */
     protected $inputId;
@@ -169,7 +174,7 @@ abstract class AbstractPropertyInput implements
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
      * @param array|Traversable $data The input data.
-     * @return Input Chainable
+     * @return AbstractPropertyInput Chainable
      */
     public function setData($data)
     {
@@ -414,19 +419,24 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param string $inputId HTML input id attribute.
-     * @return Input Chainable
+     * Set the input ID.
+     *
+     * Used for the HTML "ID" attribute.
+     *
+     * @param  string $inputId HTML input id attribute.
+     * @return AbstractPropertyInput Chainable
      */
     public function setInputId($inputId)
     {
         $this->inputId = $inputId;
+
         return $this;
     }
 
     /**
-     * Get the input ID.
+     * Retrieve the input ID.
      *
-     * If none was previously set, than a unique random one will be generated.
+     * If none was previously set then a unique random one will be generated.
      *
      * @return string
      */
@@ -435,6 +445,7 @@ abstract class AbstractPropertyInput implements
         if (!$this->inputId) {
             $this->inputId = $this->generateInputId();
         }
+
         return $this->inputId;
     }
 
@@ -473,13 +484,34 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * Set the input Name.
+     *
+     * Used for the HTML "name" attribute.
+     *
+     * @param  string $inputName HTML input id attribute.
+     * @return AbstractPropertyInput Chainable
+     */
+    public function setInputName($inputName)
+    {
+        $this->inputName = $inputName;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the input name.
+     *
      * The input name should always be the property's ident.
      *
      * @return string
      */
     public function inputName()
     {
-        $name = $this->propertyIdent();
+        if ($this->inputName) {
+            $name = $this->inputName;
+        } else {
+            $name = $this->propertyIdent();
+        }
 
         if ($this->p()->l10n()) {
             $name .= '['.$this->lang().']';
@@ -625,7 +657,9 @@ abstract class AbstractPropertyInput implements
      */
     public function setProperty(PropertyInterface $p)
     {
-        $this->property = $p;
+        $this->property  = $p;
+        $this->inputName = null;
+
         return $this;
     }
 

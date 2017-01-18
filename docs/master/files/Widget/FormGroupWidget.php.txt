@@ -39,6 +39,13 @@ class FormGroupWidget extends AbstractUiItem implements
     private $widgetId;
 
     /**
+     * Whether notes shoudl be display before or after the form fields.
+     *
+     * @var boolean
+     */
+    private $showNotesAbove = false;
+
+    /**
      * @var array|null $parsedFormProperties
      */
     protected $parsedFormProperties;
@@ -265,6 +272,27 @@ class FormGroupWidget extends AbstractUiItem implements
                 'current' => ($lang->ident() === $curLang)
             ];
         }
+    }
+
+    /**
+     * Show/hide the widget's notes.
+     *
+     * @param  boolean|string $show Whether to show or hide notes.
+     * @return FormGroupWidget Chainable
+     */
+    public function setShowNotes($show)
+    {
+        $this->showNotesAbove = ($show === 'above');
+
+        return parent::setShowNotes($show);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showNotesAbove()
+    {
+        return $this->showNotesAbove;
     }
 }
 

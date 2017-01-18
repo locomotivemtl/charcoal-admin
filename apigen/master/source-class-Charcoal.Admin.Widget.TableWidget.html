@@ -851,7 +851,7 @@
 </span><span id="479" class="l"><a href="#479"> 479: </a>    {
 </span><span id="480" class="l"><a href="#480"> 480: </a>        <span class="php-var">$row</span> = <span class="php-var">$this</span>-&gt;parseCollectionObjectRow(<span class="php-var">$object</span>, <span class="php-var">$objectProperties</span>);
 </span><span id="481" class="l"><a href="#481"> 481: </a>        <span class="php-var">$row</span>[<span class="php-quote">'objectActions'</span>] = <span class="php-var">$this</span>-&gt;objectActions();
-</span><span id="482" class="l"><a href="#482"> 482: </a>        <span class="php-var">$row</span>[<span class="php-quote">'showObjectActions'</span>] = <span class="php-var">$this</span>-&gt;showObjectActions();
+</span><span id="482" class="l"><a href="#482"> 482: </a>        <span class="php-var">$row</span>[<span class="php-quote">'showObjectActions'</span>] = <span class="php-keyword2">count</span>(<span class="php-var">$row</span>[<span class="php-quote">'objectActions'</span>]);
 </span><span id="483" class="l"><a href="#483"> 483: </a>
 </span><span id="484" class="l"><a href="#484"> 484: </a>        <span class="php-keyword1">return</span> <span class="php-var">$row</span>;
 </span><span id="485" class="l"><a href="#485"> 485: </a>    }
@@ -953,7 +953,7 @@
 </span><span id="581" class="l"><a href="#581"> 581: </a>                }
 </span><span id="582" class="l"><a href="#582"> 582: </a>            }
 </span><span id="583" class="l"><a href="#583"> 583: </a>
-</span><span id="584" class="l"><a href="#584"> 584: </a>            <span class="php-keyword1">if</span> (<span class="php-keyword2">is_array</span>(<span class="php-var">$action</span>[<span class="php-quote">'actions'</span>])) {
+</span><span id="584" class="l"><a href="#584"> 584: </a>            <span class="php-keyword1">if</span> (<span class="php-var">$action</span>[<span class="php-quote">'actions'</span>]) {
 </span><span id="585" class="l"><a href="#585"> 585: </a>                <span class="php-var">$action</span>[<span class="php-quote">'actions'</span>] = <span class="php-var">$this</span>-&gt;parseAsObjectActions(<span class="php-var">$action</span>[<span class="php-quote">'actions'</span>]);
 </span><span id="586" class="l"><a href="#586"> 586: </a>            }
 </span><span id="587" class="l"><a href="#587"> 587: </a>
@@ -1291,16 +1291,16 @@
 </span><span id="919" class="l"><a href="#919"> 919: </a>    <span class="php-keyword1">protected</span> <span class="php-keyword1">function</span> parseActionUrl(<span class="php-var">$url</span>, <span class="php-var">$action</span> = <span class="php-keyword1">null</span>, ViewableInterface <span class="php-var">$renderer</span> = <span class="php-keyword1">null</span>)
 </span><span id="920" class="l"><a href="#920"> 920: </a>    {
 </span><span id="921" class="l"><a href="#921"> 921: </a>        <span class="php-keyword1">unset</span>(<span class="php-var">$action</span>);
-</span><span id="922" class="l"><a href="#922"> 922: </a>
-</span><span id="923" class="l"><a href="#923"> 923: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$renderer</span> === <span class="php-keyword1">null</span>) {
-</span><span id="924" class="l"><a href="#924"> 924: </a>            <span class="php-var">$renderer</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;currentObj) ? <span class="php-var">$this</span>-&gt;currentObj : <span class="php-var">$this</span>-&gt;proto();
-</span><span id="925" class="l"><a href="#925"> 925: </a>        }
-</span><span id="926" class="l"><a href="#926"> 926: </a>
-</span><span id="927" class="l"><a href="#927"> 927: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$url</span> <span class="php-keyword1">instanceof</span> TranslationString) {
-</span><span id="928" class="l"><a href="#928"> 928: </a>            <span class="php-var">$url</span> = <span class="php-var">$url</span>-&gt;fallback();
-</span><span id="929" class="l"><a href="#929"> 929: </a>        }
-</span><span id="930" class="l"><a href="#930"> 930: </a>
-</span><span id="931" class="l"><a href="#931"> 931: </a>        <span class="php-var">$url</span> = <span class="php-var">$renderer</span>-&gt;render(<span class="php-var">$url</span>);
+</span><span id="922" class="l"><a href="#922"> 922: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$renderer</span> === <span class="php-keyword1">null</span>) {
+</span><span id="923" class="l"><a href="#923"> 923: </a>            <span class="php-var">$renderer</span> = <span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;currentObj) ? <span class="php-var">$this</span>-&gt;currentObj : <span class="php-var">$this</span>-&gt;proto();
+</span><span id="924" class="l"><a href="#924"> 924: </a>        }
+</span><span id="925" class="l"><a href="#925"> 925: </a>
+</span><span id="926" class="l"><a href="#926"> 926: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$url</span> <span class="php-keyword1">instanceof</span> TranslationString) {
+</span><span id="927" class="l"><a href="#927"> 927: </a>            <span class="php-var">$url</span> = <span class="php-var">$url</span>-&gt;fallback();
+</span><span id="928" class="l"><a href="#928"> 928: </a>        }
+</span><span id="929" class="l"><a href="#929"> 929: </a>
+</span><span id="930" class="l"><a href="#930"> 930: </a>        <span class="php-var">$url</span> = <span class="php-var">$renderer</span>-&gt;renderTemplate(<span class="php-var">$url</span>);
+</span><span id="931" class="l"><a href="#931"> 931: </a>
 </span><span id="932" class="l"><a href="#932"> 932: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$url</span> &amp;&amp; <span class="php-keyword2">strpos</span>(<span class="php-var">$url</span>, <span class="php-quote">':'</span>) === <span class="php-keyword1">false</span> &amp;&amp; !<span class="php-keyword2">in_array</span>(<span class="php-var">$url</span>[<span class="php-num">0</span>], [ <span class="php-quote">'/'</span>, <span class="php-quote">'#'</span>, <span class="php-quote">'?'</span> ])) {
 </span><span id="933" class="l"><a href="#933"> 933: </a>            <span class="php-var">$url</span> = <span class="php-var">$this</span>-&gt;adminUrl().<span class="php-var">$url</span>;
 </span><span id="934" class="l"><a href="#934"> 934: </a>        }

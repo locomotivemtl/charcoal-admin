@@ -16,16 +16,24 @@
         {{/ showTitle }}
 
         {{> charcoal/admin/template/inc.description }}
+        {{# showNotesAbove }}
+        {{> charcoal/admin/template/inc.notes }}
+        {{/ showNotesAbove }}
     </header>
     {{/ showHeader }}
     {{^ showHeader }}
     {{# showDescription }}
     <div class="help-block o-section">{{& description }}</div>
     {{/ showDescription }}
+    {{# showNotesAbove }}
+    {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
     {{/ showHeader }}
 
     {{> charcoal/admin/widget/form-group/form-properties }}
 
+    {{^ showNotesAbove }}
     {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
 
 </fieldset>

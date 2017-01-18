@@ -5,24 +5,27 @@
     @used-by `charcoal/admin/widget/table/header-left`
     @used-by `charcoal/admin/widget/table/empty`
 --}}
-{{# hasActions }}
-    {{> charcoal/admin/widget/table/actions/dropdown }}
-{{/ hasActions }}
-{{^ hasActions }}
-    {{# isButton }}
-    <button class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
-            type="button"
-            {{# widgetType }}
-            data-widget-type="{{ . }}"
-            {{/ widgetType }}
+{{# active }}
+    {{# hasActions }}
+        {{> charcoal/admin/widget/table/actions/dropdown }}
+    {{/ hasActions }}
+    {{^ hasActions }}
+        {{# isButton }}
+            <button
+                class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+                type="button"
+                {{# widgetType }}
+                data-widget-type="{{ . }}"
+                {{/ widgetType }}
             >{{> charcoal/admin/widget/table/actions/label }}</button>
-    {{/ isButton }}
-    {{^ isButton }}
-    <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
-       href="{{ url }}"
-       {{# widgetType }}
-       data-widget-type="{{ . }}"
-       {{/ widgetType }}
-       >{{> charcoal/admin/widget/table/actions/label }}</a>
-    {{/ isButton }}
-{{/ hasActions }}
+        {{/ isButton }}
+        {{^ isButton }}
+            <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+               href="{{ url }}"
+                {{# widgetType }}
+               data-widget-type="{{ . }}"
+                {{/ widgetType }}
+            >{{> charcoal/admin/widget/table/actions/label }}</a>
+        {{/ isButton }}
+    {{/ hasActions }}
+{{/ active }}

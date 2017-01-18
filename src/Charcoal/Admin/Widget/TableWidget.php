@@ -479,7 +479,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
         $row['objectActions'] = $this->objectActions();
-        $row['showObjectActions'] = $this->showObjectActions();
+        $row['showObjectActions'] = count($row['objectActions']);
 
         return $row;
     }
@@ -581,7 +581,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 }
             }
 
-            if (is_array($action['actions'])) {
+            if ($action['actions']) {
                 $action['actions'] = $this->parseAsObjectActions($action['actions']);
             }
 
@@ -919,7 +919,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function parseActionUrl($url, $action = null, ViewableInterface $renderer = null)
     {
         unset($action);
-
         if ($renderer === null) {
             $renderer = isset($this->currentObj) ? $this->currentObj : $this->proto();
         }
@@ -928,7 +927,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $url = $url->fallback();
         }
 
-        $url = $renderer->render($url);
+        $url = $renderer->renderTemplate($url);
+
         if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
             $url = $this->adminUrl().$url;
         }

@@ -5,22 +5,20 @@ var Charcoal = Charcoal || {};
  * It gives access to private properties and public methods
  * @return  {object}  Charcoal.Admin
  */
-Charcoal.Admin = (function ()
-{
+Charcoal.Admin = (function () {
     'use strict';
 
     var options, manager, feedback;
 
     options = {
-        base_url:   null,
+        base_url: null,
         admin_path: null,
     };
 
     /**
      * Object function that acts as a container for public methods
      */
-    function Admin()
-    {
+    function Admin() {
     }
 
     /**
@@ -41,8 +39,7 @@ Charcoal.Admin = (function ()
      * Set data that can be used by public methods
      * @param  {object}  data  Object containing data that needs to be set
      */
-    Admin.set_data = function (data)
-    {
+    Admin.set_data = function (data) {
         options = $.extend(true, options, data);
     };
 
@@ -50,8 +47,7 @@ Charcoal.Admin = (function ()
      * Generates the admin URL used by forms and other objects
      * @return  {string}  URL for admin section
      */
-    Admin.admin_url = function ()
-    {
+    Admin.admin_url = function () {
         return options.base_url + options.admin_path + '/';
     };
 
@@ -59,8 +55,7 @@ Charcoal.Admin = (function ()
      * Returns the base_url of the project
      * @return  {string}  URL for admin section
      */
-    Admin.base_url = function ()
-    {
+    Admin.base_url = function () {
         return options.base_url;
     };
 
@@ -69,13 +64,26 @@ Charcoal.Admin = (function ()
      *
      * @return {ComponentManager}
      */
-    Admin.manager = function ()
-    {
+    Admin.manager = function () {
         if (typeof(manager) === 'undefined') {
             manager = new Charcoal.Admin.ComponentManager();
         }
 
         return manager;
+    };
+
+    Admin.queryParams = function () {
+        var pairs = location.search.slice(1).split('&');
+
+        var result = {};
+        pairs.forEach(function (pair) {
+            pair = pair.split('=');
+            if (pair[1]) {
+                result[pair[0]] = decodeURIComponent(pair[1] || '');
+            }
+        });
+
+        return JSON.parse(JSON.stringify(result));
     };
 
     /**
@@ -84,8 +92,7 @@ Charcoal.Admin = (function ()
      * @param  {array|object} [entries] Optional entries to push on the manager.
      * @return {Feedback}
      */
-    Admin.feedback = function (/* entries */)
-    {
+    Admin.feedback = function (/* entries */) {
         if (typeof feedback === 'undefined') {
             feedback = new Charcoal.Admin.Feedback();
         }
@@ -102,11 +109,10 @@ Charcoal.Admin = (function ()
      * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
      * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
      */
-    Admin.get_object_name = function (name)
-    {
+    Admin.get_object_name = function (name) {
         // Getting rid of Charcoal.Admin namespacing
         var string_array = name.split('/');
-        string_array = string_array.splice(2,string_array.length);
+        string_array     = string_array.splice(2, string_array.length);
 
         // Uppercasing
         string_array.forEach(function (element, index, array) {
@@ -116,7 +122,7 @@ Charcoal.Admin = (function ()
             var substr_array = element.split('-');
             if (substr_array.length > 1) {
                 substr_array.forEach(function (e, i) {
-                    substr_array[ i ] = e.charAt(0).toUpperCase() + e.slice(1);
+                    substr_array[i] = e.charAt(0).toUpperCase() + e.slice(1);
                 });
                 element = substr_array.join('_');
             }
@@ -151,14 +157,13 @@ Charcoal.Admin = (function ()
      * @param   {string}    src      - Full path to a script file.
      * @param   {function}  callback - Fires multiple times
      */
-    Admin.loadScript = function (src, callback)
-    {
+    Admin.loadScript = function (src, callback) {
         this.cache(src, function (defer) {
             $.ajax({
-                url:      src,
+                url: src,
                 dataType: 'script',
-                success:  defer.resolve,
-                error:    defer.reject
+                success: defer.resolve,
+                error: defer.reject
             });
         }).then(callback);
     };
@@ -171,8 +176,7 @@ Charcoal.Admin = (function ()
      * @param   {function}  callback - Fires multiple times.
      * @return  {mixed}     Returns the stored value.
      */
-    Admin.cache = function (key, value, callback)
-    {
+    Admin.cache = function (key, value, callback) {
         if (!this.cachePool[key]) {
             if (typeof value === 'function') {
                 this.cachePool[key] = $.Deferred(function (defer) {
@@ -196,14 +200,13 @@ Charcoal.Admin = (function ()
      * @param  {...} Successful or failed argument list.
      * @return {mixed[]} Standardized argument list.
      */
-    Admin.parseJqXhrArgs = function ()
-    {
+    Admin.parseJqXhrArgs = function () {
         var args = {
-            failed:      true,
-            jqXHR:       null,
-            textStatus:  '',
+            failed: true,
+            jqXHR: null,
+            textStatus: '',
             errorThrown: '',
-            response:    null
+            response: null
         };
 
         // If the third argument is a string, the request failed

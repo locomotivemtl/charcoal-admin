@@ -24,6 +24,12 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.is_new_object     = false;
     this.xhr               = null;
 
+    var urlParams = Charcoal.Admin.queryParams();
+
+    if ('tab_ident' in urlParams) {
+        $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
+    }
+
     Charcoal.Admin.lang = $('[data-lang]:not(.hidden)').data('lang');
 
     this.set_properties(opts).bind_events();

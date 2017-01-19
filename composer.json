@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Charcoal\\": "src/Charcoal"
+            "Charcoal\\Object\\": "src/Charcoal/Object"
         }
     },
     "scripts": {

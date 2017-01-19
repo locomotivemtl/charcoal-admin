@@ -1,0 +1,44 @@
+language: php
+
+php:
+    - 5.6
+    - 7.0
+    - 7.1
+    - nightly
+
+env:
+    global:
+        - secure: "r/Ir8PoC9DyjjKNE9LxI3jiCpLoGC75yKNBhNfY7G5bBJfAjn0fJMCqpWqdBxGsSzFMlQfqVNOS4XfrN/grLwmMIwYJGARXoinpHQ8E6F6Y56b5sHmVXVhvQruQNrGdTanwYZL5Yb4QHHkJ3vw2aejJ6VRM0pbVMYoDPcEp52hW/epdXkuF004ukm3t3F7+QiVWG0rgrs2YukCIy+X6XuwgWN51wgW1UNaboruM4vWAR/kxdFqAzSWPmnLEzfL9zl8zgGdux/oD5cSjSnbq6OAiPlehmhFuKx5vUOuSUDydLxryHJdkzFLFyBEvoX9Jnx6mjItHYxWcHC1V0ntjIOuYOcYutLLg0KHwA62lZ1HfC9LQZbhHNA1T8fLxHfq20aKAZ0rOx8tf3nOzf2MdOJMwSxq7e9VtKTZDbzl7A5lV91iR6LMrDKda8UKaQUNCAuTJolRPnoa644D1nZ1fr9UE+aLuxluXRtpjqnlkPLHMpQGlvvOyl1HuINBg2xWweIHRk6Lmg/3ZjDCg2XtMrViz111dcAFNQOGBoayilp/5kU9Lx3BsgX5cXISRXfAWxJhv6Ehb8CUrYeyanmZgGBP0MCCHLrUvlsnVXlMBS98105+IHX2M6gboe4+5LEzdcsjh1s6ymF5rjbLcWkdeePJjKSScetFCONhQTKWH34Js="
+        - GH_REPO: github.com/locomotivemtl/charcoal-object.git
+
+matrix:
+    allow_failures:
+        - php: nightly
+
+before_script:
+    ## Init Composer
+    - composer selfupdate --quiet
+    - COMPOSER_ROOT_VERSION=dev-master composer install -n --dev
+
+    ## Create temporary folders
+    - mkdir -p build/logs
+
+script:
+    ## Lint PHP Files
+    - find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1
+
+    ## Run PHP Code Sniffer
+    - ./vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;./vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/
+
+    ## Run PHPUnit Tests
+    - phpunit --configuration ./tests/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml
+
+after_script:
+    - php vendor/bin/coveralls -v
+    - bash build/travis/phpdoc_ghpages.sh
+    - bash build/travis/apigen_ghpages.sh
+
+notifications:
+    slack: locomotivemtl:d9h8ZWwTZ6b3WUsSP9s26nb1
+    email: charcoal@locomotive.ca
+

@@ -3,7 +3,6 @@ Charcoal Object
 
 Object definition (Content and UserData), behaviors and tools.
 
-
 # Table of content
 -   [How to install](#how-to-install)
     -   [Dependencies](#dependencies)
@@ -32,10 +31,10 @@ Object definition (Content and UserData), behaviors and tools.
 
 # How to install
 
-The preferred (and only supported) way of installing _charcoal-user_ is with **composer**:
+The preferred (and only supported) way of installing _charcoal-object_ is with **composer**:
 
 ```shell
-★ composer require locomotivemtl/charcoal-user
+★ composer require locomotivemtl/charcoal-object
 ```
 
 ## Dependencies
@@ -337,7 +336,7 @@ To run the scripts (phplint, phpcs and phpunit):
 | [Travis](https://travis-ci.org/locomotivemtl/charcoal-object) | [![Build Status](https://travis-ci.org/locomotivemtl/charcoal-object.svg?branch=master)](https://travis-ci.org/locomotivemtl/charcoal-object) | Runs code sniff check and unit tests. Auto-generates API documentation. |
 | [Scrutinizer](https://scrutinizer-ci.com/g/locomotivemtl/charcoal-object/) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/locomotivemtl/charcoal-object/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/locomotivemtl/charcoal-object/?branch=master) | Code quality checker. Also validates API documentation quality. |
 | [Coveralls](https://coveralls.io/github/locomotivemtl/charcoal-object) | [![Coverage Status](https://coveralls.io/repos/github/locomotivemtl/charcoal-object/badge.svg?branch=master)](https://coveralls.io/github/locomotivemtl/charcoal-object?branch=master) | Unit Tests code coverage. |
-| [Sensiolabs](https://insight.sensiolabs.com/projects/533b5796-7e69-42a7-a046-71342146308a) | [![SensioLabsInsight](https://insight.sensiolabs.com/projects/533b5796-7e69-42a7-a046-71342146308a/mini.png)](https://insight.sensiolabs.com/projects/533b5796-7e69-42a7-a046-71342146308a) | Another code quality checker, focused on PHP. |
+| [Sensiolabs](https://insight.sensiolabs.com/projects/5ef771c49-8c05-448b-a112-069737b380dc) | [![SensioLabsInsight](https://insight.sensiolabs.com/projects/ef771c49-8c05-448b-a112-069737b380dc/mini.png)](https://insight.sensiolabs.com/projects/ef771c49-8c05-448b-a112-069737b380dc) | Another code quality checker, focused on PHP. |
 
 ## Coding Style
 

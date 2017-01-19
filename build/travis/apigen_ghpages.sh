@@ -6,7 +6,7 @@
 # echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
 # echo "TRAVIS_BUILD_NUMBER: $TRAVIS_BUILD_NUMBER"
 
-if [ "$TRAVIS_REPO_SLUG" == "locomotivemtl/charcoal-base" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "locomotivemtl/charcoal-object" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
 
     echo -e "Publishing ApiGen to Github Pages...\n";
 
@@ -48,5 +48,5 @@ if [ "$TRAVIS_REPO_SLUG" == "locomotivemtl/charcoal-base" ] && [ "$TRAVIS_PULL_R
     git push -fq origin gh-pages > /dev/null
 
     echo -e "Published ApiGen to gh-pages.\n"
-    echo -e ">>> http://locomotivemtl.github.io/charcoal-base/apigen/$TRAVIS_BRANCH/ \n"
+    echo -e ">>> http://locomotivemtl.github.io/charcoal-object/apigen/$TRAVIS_BRANCH/ \n"
 fi

@@ -103,7 +103,7 @@ trait RoutableTrait
     /**
      * Retrieve the object's URL slug pattern.
      *
-     * @throws InvalidArgumentException If a slug pattern is not defined.
+     * @throws Exception If a slug pattern is not defined.
      * @return TranslationString|null
      */
     public function slugPattern()

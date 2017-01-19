@@ -33,7 +33,24 @@ Charcoal.Admin = (function () {
      *
      * @type {string}
      */
-    Admin.lang = 'en';
+    Admin.lang = document.documentElement.lang;
+
+    /**
+     * Default language.
+     *
+     * @type {string}
+     */
+    Admin.defaultLang = 'en';
+
+    /**
+     * @param  {string}  lang Lang to set
+     * @return  {string}
+     */
+    Admin.set_lang = function (lang) {
+        Admin.lang = lang || document.documentElement.lang || Admin.defaultLang;
+
+        return Admin.lang;
+    };
 
     /**
      * Set data that can be used by public methods

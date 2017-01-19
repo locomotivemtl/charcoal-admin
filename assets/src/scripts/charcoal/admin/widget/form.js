@@ -30,7 +30,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
         $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
     }
 
-    Charcoal.Admin.lang = $('[data-lang]:not(.hidden)').data('lang');
+    Charcoal.Admin.set_lang($('[data-lang]:not(.hidden)').data('lang'));
 
     this.set_properties(opts).bind_events();
 };
@@ -323,7 +323,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    Charcoal.Admin.lang = lang;
+    Charcoal.Admin.set_lang(lang);
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 

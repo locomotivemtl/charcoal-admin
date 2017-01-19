@@ -85,7 +85,24 @@ Charcoal.Admin = (function () {
      *
      * @type {string}
      */
-    Admin.lang = 'en';
+    Admin.lang = document.documentElement.lang;
+
+    /**
+     * Default language.
+     *
+     * @type {string}
+     */
+    Admin.defaultLang = 'en';
+
+    /**
+     * @param  {string}  lang Lang to set
+     * @return  {string}
+     */
+    Admin.set_lang = function (lang) {
+        Admin.lang = lang || document.documentElement.lang || Admin.defaultLang;
+
+        return Admin.lang;
+    };
 
     /**
      * Set data that can be used by public methods
@@ -1925,7 +1942,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
         $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
     }
 
-    Charcoal.Admin.lang = $('[data-lang]:not(.hidden)').data('lang');
+    Charcoal.Admin.set_lang($('[data-lang]:not(.hidden)').data('lang'));
 
     this.set_properties(opts).bind_events();
 };
@@ -2218,7 +2235,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    Charcoal.Admin.lang = lang;
+    Charcoal.Admin.set_lang(lang);
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 
@@ -5416,13 +5433,13 @@ Charcoal.Admin.Property_Input_Selectize_Tags = function (opts) {
     this.input_type = 'charcoal/admin/property/input/selectize/tags';
 
     // Property_Input_Selectize_Tags properties
-    this.input_id     = null;
-    this.obj_type     = null;
-    this.copy_items   = false;
-    this.title        = null;
-    this.multiple     = false;
-    this.separator    = ',';
-    this._tags        = null;
+    this.input_id   = null;
+    this.obj_type   = null;
+    this.copy_items = false;
+    this.title      = null;
+    this.multiple   = false;
+    this.separator  = ',';
+    this._tags      = null;
 
     this.selectize          = null;
     this.selectize_selector = null;
@@ -5458,7 +5475,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
     this.separator = opts.data.multiple_separator || this.multiple_separator || ',';
 
     this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
-    this.selectize_options  = opts.data.selectize_options  || this.selectize_options;
+    this.selectize_options  = opts.data.selectize_options || this.selectize_options;
 
     this.$input = $(this.selectize_selector || '#' + this.input_id);
 
@@ -5477,7 +5494,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
         ];
     }
 
-    var objType = this.obj_type;
+    var objType      = this.obj_type;
     var default_opts = {
         plugins: plugins,
         formData: {},
@@ -5517,7 +5534,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
         default_opts.create = function (input) {
             return {
                 value: input,
-                text:  input
+                text: input
             };
         };
     }
@@ -5584,8 +5601,8 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
         },
         widget_type: 'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type:  type,
-            obj_id:    id,
+            obj_type: type,
+            obj_id: id,
             form_data: form_data
         }
     };
@@ -5608,7 +5625,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                 save_callback: function (response) {
                     callback({
                         value: response.obj.id,
-                        text:  response.obj.name[Charcoal.Admin.lang],
+                        text: response.obj.name[Charcoal.Admin.lang] || response.obj.name || response.obj.id,
                         color: response.obj.color,
                         class: 'new'
                     });
@@ -5620,11 +5637,12 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (query, callback) {
-    var type  = this.obj_type;
+    var type = this.obj_type;
 
     if (!query.length) {
         return callback();
     }
+
     $.ajax({
         url: Charcoal.Admin.admin_url() + 'object/load',
         data: {
@@ -5640,7 +5658,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
                 item = res.collection[item];
                 items.push({
                     value: item.id,
-                    text:  item.name[Charcoal.Admin.lang],
+                    text: item.name[Charcoal.Admin.lang] || item.name || item.id,
                     color: item.color
                 });
             }
@@ -5663,7 +5681,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.onKeyDown = function (eve
     }
 
     if ($.type(self.isCmdDown) === 'undefined') {
-        isTemp = true;
+        isTemp         = true;
         self.isCmdDown = event[IS_MAC ? 'metaKey' : 'ctrlKey'];
     }
 
@@ -5691,17 +5709,17 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.onKeyDown = function (eve
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_selectize = function () {
-    var $select = this.$input.selectize(this.selectize_options);
+    var $select    = this.$input.selectize(this.selectize_options);
     this.selectize = $select[0].selectize;
 
     /*
-    if (this.copy_items) {
-        var that = this;
-        this.selectize.$control.on('keydown', function () {
-            return that.onKeyDown.apply(that.selectize, arguments);
-        });
-    }
-    */
+     if (this.copy_items) {
+     var that = this;
+     this.selectize.$control.on('keydown', function () {
+     return that.onKeyDown.apply(that.selectize, arguments);
+     });
+     }
+     */
 };
 
 Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_clipboard = function () {
@@ -5709,14 +5727,14 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_clipboard = function
         return;
     }
 
-    var selectize = this.selectize;
+    var selectize  = this.selectize;
     this.clipboard = new Clipboard(this.selectize_selector + '_copy', {
         text: function (/*trigger*/) {
             /*
-            if (selectize.$activeItems.length) {
-                console.log(selectize.$activeItems);
-            }
-            */
+             if (selectize.$activeItems.length) {
+             console.log(selectize.$activeItems);
+             }
+             */
 
             return selectize.$input.val();
         }

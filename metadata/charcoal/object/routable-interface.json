@@ -1,0 +1,21 @@
+{
+    "slug_pattern": null,
+
+    "routable_spec": {
+        "editable": false,
+        "pattern": null,
+        "prefix": null,
+        "suffix": null
+    },
+
+    "properties": {
+        "slug": {
+            "type": "string",
+            "l10n": true,
+            "label": {
+                "fr": "Permalien",
+                "en": "Permalink"
+            }
+        }
+    }
+}

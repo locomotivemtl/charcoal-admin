@@ -1,0 +1,9 @@
+{
+    "properties": {
+        "master": {
+            "type": "object",
+            "allow_null": true,
+            "label": "Parent"
+        }
+    }
+}

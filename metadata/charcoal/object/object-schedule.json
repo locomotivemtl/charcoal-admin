@@ -1,0 +1,45 @@
+{
+    "properties": {
+        "id": {
+            "type": "id"
+        },
+        "target_type": {
+            "type": "string",
+            "label": {
+                "en": "Object type",
+                "fr": "Type de l'objet"
+            }
+        },
+        "target_id": {
+            "type": "string",
+            "label": {
+                "en": "Object identifier",
+                "fr": "Identifiant de l'objet"
+            }
+        },
+        "scheduled_date": {
+            "type": "date-time"
+        },
+        "data_diff": {
+            "type": "structure",
+            "label": {
+                "en": "Diff data",
+                "fr": "Données différentes"
+            }
+        },
+        "processed": {
+            "type": "boolean"
+        },
+        "processed_date": {
+            "type": "date-time"
+        }
+    },
+
+    "sources": {
+        "default": {
+            "type": "database",
+            "table": "object_schedules"
+        }
+    },
+    "default_source": "default"
+}

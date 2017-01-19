@@ -1,0 +1,66 @@
+{
+    "properties": {
+        "publish_date": {
+            "type": "date-time",
+            "label": {
+                "en": "Publish Date",
+                "fr": "Date de publication"
+            },
+            "notes": {
+                "en": "This is the date/time to automatically trigger publication.",
+                "fr": "Ceci est l’horodatage pour déclencher automatiquement la publication."
+            },
+            "description": {
+                "en": "Leaving this field blank will trigger publication when the object is saved.",
+                "fr": "Laissez ce champ vide pour déclencher la publication de l’objet lors de l’enregistrement."
+            }
+        },
+        "expiry_date": {
+            "type": "date-time",
+            "label": {
+                "en": "Expiry Date",
+                "fr": "Date d’expiration"
+            },
+            "notes": {
+                "en": "This is the date/time to automatically trigger un-publication.",
+                "fr": " Ceci est l’horodatage pour déclencher automatiquement la dé-publication."
+            },
+            "description": {
+                "en": "Allows you to schedule the object to be expired. An expired object is still present but is no longer visible on the website.",
+                "fr": "Vous permet de planifier l’expiration de l’objet. Un objet expiré est toujours présent, mais n’est plus visible sur le site."
+            }
+        },
+        "publish_status": {
+            "type": "string",
+            "input_type": "charcoal/admin/property/input/select",
+            "label": {
+                "en": "Publication Status",
+                "fr": "Status de publication"
+            },
+            "choices": {
+                "draft": {
+                    "label": {
+                        "en": "Draft",
+                        "fr": "Brouillon"
+                    }
+                },
+                "pending": {
+                    "label": {
+                        "en": "Pending Approval",
+                        "fr": "En attente d’approbation"
+                    }
+                },
+                "published": {
+                    "label": {
+                        "en": "Published",
+                        "fr": "Publiée"
+                    }
+                }
+            },
+            "description": {
+                "en": "Only the \"Published\" items should be shown on the website.",
+                "fr": "Seuls les items \"publiés\" seront affichés sur le site web."
+            }
+        }
+    }
+}

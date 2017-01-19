@@ -1,0 +1,12 @@
+{
+    "properties": {
+        "categories": {
+            "type": "object",
+            "multiple": true,
+            "label": {
+                "en": "Categories",
+                "fr": "Catégories"
+            }
+        }
+    }
+}

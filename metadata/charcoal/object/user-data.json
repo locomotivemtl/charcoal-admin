@@ -1,0 +1,44 @@
+{
+    "properties": {
+        "ip": {
+            "type": "ip",
+            "label": {
+                "en": "IP Address",
+                "fr": "Adresse IP"
+            },
+            "description": {
+                "en": "The remote (client) IP address at the creation time. Typically auto-genereted on save (or send).",
+                "fr": "L'adresse IP du client au moment de la création. Habituellement auto-générée lors de la sauvegarde / l'envoi."
+            }
+        },
+        "lang": {
+            "type": "lang",
+            "label": {
+                "en": "Language",
+                "fr": "Langue"
+            }
+        },
+        "ts": {
+            "type": "date-time",
+            "label": {
+                "en": "Timestamp",
+                "fr": "Horodatage"
+            },
+            "description": {
+                "en": "The date and time of creation. Typically auto-generated on save (or send).",
+                "fr": "La date (à la seconde) de création. Habituellement auto-générée lors de la sauvegarde (ou l'envoi)."
+            }
+        },
+        "origin": {
+            "type": "text",
+            "label": {
+                "en": "Origin",
+                "fr": "Origine"
+            },
+            "description": {
+                "en": "The location (e.g., URL) that contained the form the user submitted or action triggered.",
+                "fr": "L'emplacement (e.g., URL) qui contenait le formulaire que l'utilisateur a soumis ou l'action exécutée."
+            }
+        }
+    }
+}

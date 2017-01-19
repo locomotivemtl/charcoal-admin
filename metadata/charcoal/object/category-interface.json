@@ -1,0 +1,19 @@
+{
+    "properties": {
+        "id": {
+            "type": "id",
+            "label": "ID"
+        },
+        "name": {
+            "type": "string",
+            "l10n": true,
+            "label": {
+                "en": "Name",
+                "fr": "Nom"
+            }
+        },
+        "position": {
+            "type": "integer"
+        }
+    }
+}

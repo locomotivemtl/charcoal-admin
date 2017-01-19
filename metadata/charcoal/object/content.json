@@ -1,0 +1,59 @@
+{
+    "properties": {
+        "active": {
+            "type": "boolean",
+            "label": {
+                "fr": "Actif",
+                "en": "Active"
+            },
+            "description": {
+                "en": "An object can be set active or inactive. An inactive object is usually excluded from query results.",
+                "fr": "Un objet peut être réglé actif ou inactif. Un objet inactif est généralement exclu des des résultats de requête."
+            }
+        },
+        "position": {
+            "type": "number",
+            "label": "Position",
+            "description": {
+                "en": "For sorting the object in a collection.",
+                "fr": "Pour trier l'objet dans une collection."
+            }
+        },
+        "created": {
+            "type": "date-time",
+            "input_type": "charcoal/admin/property/input/readonly",
+            "label": {
+                "en": "Creation date",
+                "fr": "Date de création"
+            },
+            "description": {
+                "en": "The creation date should be set automatically when first saving this object in storage.",
+                "fr": "La date de création devrait être enregistrée automatiquement lors de la première sauvegarde de l'objet."
+            }
+        },
+        "created_by": {
+            "type": "string",
+            "input_type": "charcoal/admin/property/input/readonly",
+            "label": {
+                "en": "Created by",
+                "fr": "Créé par"
+            }
+        },
+        "last_modified": {
+            "type": "date-time",
+            "input_type": "charcoal/admin/property/input/readonly",
+            "label": {
+                "en": "Last modified",
+                "fr": "Dernière modification"
+            }
+        },
+        "last_modified_by": {
+            "type": "string",
+            "input_type": "charcoal/admin/property/input/readonly",
+            "label": {
+                "en": "Last modfied by",
+                "fr": "Modifié par"
+            }
+        }
+    }
+}

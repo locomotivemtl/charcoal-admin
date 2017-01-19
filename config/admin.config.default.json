@@ -31,7 +31,7 @@
             },
             "media": {
                 "template": "charcoal/admin/template/media",
-                "controller": "charcoal/admin/template/home"
+                "controller": "charcoal/admin/template/elfinder"
             },
             "system/users":{
                 "template": "charcoal/admin/template/system/users",

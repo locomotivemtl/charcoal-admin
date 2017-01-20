@@ -81,9 +81,9 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($res['success']);
     }
 
-        /**
-         *
-         */
+    /**
+     *
+     */
     public function testRun()
     {
         $container = $this->container();
@@ -96,7 +96,7 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
-        $this->assertEquals(200, $res->getStatusCode());
+        $this->assertEquals(500, $res->getStatusCode());
 
         $res = $this->obj->results();
         $this->assertTrue($res['success']);

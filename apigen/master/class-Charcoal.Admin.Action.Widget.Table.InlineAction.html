@@ -260,7 +260,11 @@ Charcoal\App\Action\AbstractAction
 			<img src="resources/inherit.png" alt="Extended by">
 			<a href="class-Charcoal.Admin.AdminAction.html"><span>Charcoal\Admin\AdminAction</span></a>
 			
+			 implements 
+				<a href="class-Charcoal.Admin.User.AuthAwareInterface.html"><span>Charcoal\Admin\User\AuthAwareInterface</span></a>
 			
+			 uses 
+					<a href="class-Charcoal.Admin.User.AuthAwareTrait.html"><span>Charcoal\Admin\User\AuthAwareTrait</span></a>
 			
 		</dd>
 		<dd style="padding-left:60px">
@@ -493,8 +497,6 @@ Charcoal\App\Action\AbstractAction
 			<a href="class-Charcoal.Admin.AdminAction.html#_addFeedback">addFeedback()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_adminUrl">adminUrl()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_authRequired">authRequired()</a>, 
-			<a href="class-Charcoal.Admin.AdminAction.html#_authenticator">authenticator()</a>, 
-			<a href="class-Charcoal.Admin.AdminAction.html#_authorizer">authorizer()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_baseUrl">baseUrl()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_feedbacks">feedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_hasFeedbacks">hasFeedbacks()</a>, 
@@ -502,14 +504,35 @@ Charcoal\App\Action\AbstractAction
 			<a href="class-Charcoal.Admin.AdminAction.html#_modelFactory">modelFactory()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_numFeedbacks">numFeedbacks()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_requiredAclPermissions">requiredAclPermissions()</a>, 
-			<a href="class-Charcoal.Admin.AdminAction.html#_setAuthenticator">setAuthenticator()</a>, 
-			<a href="class-Charcoal.Admin.AdminAction.html#_setAuthorizer">setAuthorizer()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_setBaseUrl">setBaseUrl()</a>, 
 			<a href="class-Charcoal.Admin.AdminAction.html#_setModelFactory">setModelFactory()</a>
 		</code></td>
 	</tr>
 	</table>
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Charcoal.Admin.User.AuthAwareInterface.html#methods">Charcoal\Admin\User\AuthAwareInterface</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.User.AuthAwareInterface.html#_authenticator">authenticator()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareInterface.html#_authorizer">authorizer()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareInterface.html#_setAuthenticator">setAuthenticator()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareInterface.html#_setAuthorizer">setAuthorizer()</a>
+		</code></td>
+	</tr>
+	</table>
 
+	<table class="summary used">
+	<caption>Methods used from <a href="class-Charcoal.Admin.User.AuthAwareTrait.html#methods">Charcoal\Admin\User\AuthAwareTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.User.AuthAwareTrait.html#_authenticator">authenticator()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareTrait.html#_authorizer">authorizer()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareTrait.html#_setAuthDependencies">setAuthDependencies()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareTrait.html#_setAuthenticator">setAuthenticator()</a>, 
+			<a href="class-Charcoal.Admin.User.AuthAwareTrait.html#_setAuthorizer">setAuthorizer()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 

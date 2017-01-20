@@ -53,16 +53,6 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     private $modelFactory;
 
     /**
-     * @var Authenticator $authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var Authorizer $authorizer
-     */
-    private $authorizer;
-
-    /**
     * @param array $data Optional.
     */
     final public function __construct(array $data = null)

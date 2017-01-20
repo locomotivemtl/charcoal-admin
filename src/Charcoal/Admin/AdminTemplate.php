@@ -125,16 +125,6 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     private $modelFactory;
 
     /**
-     * @var Authenticator $authenticator
-     */
-    private $authenticator;
-
-    /**
-     * @var Authorizer $authorizer
-     */
-    private $authorizer;
-
-    /**
      * Set common dependencies (services) used in all admin templates.
      *
      * @param Container $container DI Container.

@@ -98,7 +98,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Wid
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
     if (response.feedbacks) {
-        Charcoal.Admin.feedback().add_data(response.feedbacks);
+        Charcoal.Admin.feedback(response.feedbacks);
     }
 
     if (response.next_url) {

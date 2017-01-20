@@ -8,7 +8,9 @@ var Charcoal = Charcoal || {};
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback;
+    var options, manager, feedback, debug,
+        currentLang = document.documentElement.lang,
+        defaultLang = 'en';
 
     options = {
         base_url: null,
@@ -18,8 +20,7 @@ Charcoal.Admin = (function () {
     /**
      * Object function that acts as a container for public methods
      */
-    function Admin() {
-    }
+    function Admin() {}
 
     /**
      * Simple cache store.
@@ -29,28 +30,84 @@ Charcoal.Admin = (function () {
     Admin.cachePool = {};
 
     /**
-     * Current language.
+     * Application Debug Mode.
      *
-     * @type {string}
+     * @param  {boolean} [mode]
+     * @return {boolean}
      */
-    Admin.lang = document.documentElement.lang;
+    Admin.debug = function (mode) {
+        if (typeof mode === 'boolean') {
+            debug = mode;
+        } else {
+            throw new TypeError('Must be a boolean, received ' + (typeof mode));
+        }
 
-    /**
-     * Default language.
-     *
-     * @type {string}
-     */
-    Admin.defaultLang = 'en';
-
-    /**
-     * @param  {string}  lang Lang to set
-     * @return  {string}
-     */
-    Admin.set_lang = function (lang) {
-        Admin.lang = lang || document.documentElement.lang || Admin.defaultLang;
-
-        return Admin.lang;
+        return debug || false;
     };
+
+    /**
+     * @alias  Admin.debug
+     * @param  {boolean} [mode]
+     * @return {boolean}
+     */
+    Admin.devMode = function (mode) {
+        return Admin.debug(mode);
+    };
+
+    /**
+     * Retrieve the current language or determine
+     * if the given language is the default one.
+     *
+     * @param  {string} [lang] - A language code.
+     * @return {string|boolean}
+     */
+    Admin.lang = function (lang) {
+        if (typeof lang === 'string') {
+            return currentLang === lang;
+        }
+
+        return currentLang || defaultLang;
+    };
+
+    /**
+     * Retrieve the default language or determine
+     * if the given language is the default one.
+     *
+     * @param  {string} [lang] - A language code.
+     * @return {string|boolean}
+     */
+    Admin.defaultLang = function (lang) {
+        if (typeof lang === 'string') {
+            return defaultLang === lang;
+        }
+
+        return defaultLang;
+    };
+
+    /**
+     * Set the current language.
+     *
+     * @param  {string|null} lang - A language code.
+     * @return {string}
+     */
+    Admin.setLang = function (lang) {
+        if (lang === null) {
+            currentLang = document.documentElement.lang || defaultLang;
+        } else if (typeof lang === 'string') {
+            currentLang = lang || document.documentElement.lang || defaultLang;
+        } else {
+            throw new TypeError('Must be a language code, received ' + (typeof mode));
+        }
+
+        return currentLang;
+    };
+
+    /**
+     * @alias  Admin.setLang
+     * @param  {string|null} lang - A language code.
+     * @return {string}
+     */
+    Admin.set_lang = Admin.setLang;
 
     /**
      * Set data that can be used by public methods

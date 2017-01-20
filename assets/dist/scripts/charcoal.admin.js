@@ -60,7 +60,9 @@ if (!Array.prototype.find) {
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback;
+    var options, manager, feedback, debug,
+        currentLang = document.documentElement.lang,
+        defaultLang = 'en';
 
     options = {
         base_url: null,
@@ -70,8 +72,7 @@ Charcoal.Admin = (function () {
     /**
      * Object function that acts as a container for public methods
      */
-    function Admin() {
-    }
+    function Admin() {}
 
     /**
      * Simple cache store.
@@ -81,28 +82,84 @@ Charcoal.Admin = (function () {
     Admin.cachePool = {};
 
     /**
-     * Current language.
+     * Application Debug Mode.
      *
-     * @type {string}
+     * @param  {boolean} [mode]
+     * @return {boolean}
      */
-    Admin.lang = document.documentElement.lang;
+    Admin.debug = function (mode) {
+        if (typeof mode === 'boolean') {
+            debug = mode;
+        } else {
+            throw new TypeError('Must be a boolean, received ' + (typeof mode));
+        }
 
-    /**
-     * Default language.
-     *
-     * @type {string}
-     */
-    Admin.defaultLang = 'en';
-
-    /**
-     * @param  {string}  lang Lang to set
-     * @return  {string}
-     */
-    Admin.set_lang = function (lang) {
-        Admin.lang = lang || document.documentElement.lang || Admin.defaultLang;
-
-        return Admin.lang;
+        return debug || false;
     };
+
+    /**
+     * @alias  Admin.debug
+     * @param  {boolean} [mode]
+     * @return {boolean}
+     */
+    Admin.devMode = function (mode) {
+        return Admin.debug(mode);
+    };
+
+    /**
+     * Retrieve the current language or determine
+     * if the given language is the default one.
+     *
+     * @param  {string} [lang] - A language code.
+     * @return {string|boolean}
+     */
+    Admin.lang = function (lang) {
+        if (typeof lang === 'string') {
+            return currentLang === lang;
+        }
+
+        return currentLang || defaultLang;
+    };
+
+    /**
+     * Retrieve the default language or determine
+     * if the given language is the default one.
+     *
+     * @param  {string} [lang] - A language code.
+     * @return {string|boolean}
+     */
+    Admin.defaultLang = function (lang) {
+        if (typeof lang === 'string') {
+            return defaultLang === lang;
+        }
+
+        return defaultLang;
+    };
+
+    /**
+     * Set the current language.
+     *
+     * @param  {string|null} lang - A language code.
+     * @return {string}
+     */
+    Admin.setLang = function (lang) {
+        if (lang === null) {
+            currentLang = document.documentElement.lang || defaultLang;
+        } else if (typeof lang === 'string') {
+            currentLang = lang || document.documentElement.lang || defaultLang;
+        } else {
+            throw new TypeError('Must be a language code, received ' + (typeof mode));
+        }
+
+        return currentLang;
+    };
+
+    /**
+     * @alias  Admin.setLang
+     * @param  {string|null} lang - A language code.
+     * @return {string}
+     */
+    Admin.set_lang = Admin.setLang;
 
     /**
      * Set data that can be used by public methods
@@ -631,20 +688,20 @@ Charcoal.Admin = (function () {
         supported: [ 'success', 'info', 'notice', 'warning', 'error' ],
         definitions: {
             success: {
-                title: (Admin.lang === 'fr' ? 'Succès!' : 'Success!'),
+                title: (Admin.lang('fr') ? 'Succès!' : 'Success!'),
                 type:  BootstrapDialog.TYPE_SUCCESS
             },
             notice: {
-                title: (Admin.lang === 'fr' ? 'Notice!' : 'Notice!'),
+                title: (Admin.lang('fr') ? 'Notice!' : 'Notice!'),
                 type:  BootstrapDialog.TYPE_INFO,
                 alias: [ 'info' ]
             },
             warning: {
-                title: (Admin.lang === 'fr' ? 'Attention!' : 'Attention!'),
+                title: (Admin.lang('fr') ? 'Attention!' : 'Attention!'),
                 type:  BootstrapDialog.TYPE_WARNING
             },
             error: {
-                title: (Admin.lang === 'fr' ? 'Une erreur s\'est produite!' : 'An error occurred!'),
+                title: (Admin.lang('fr') ? 'Une erreur s\'est produite!' : 'An error occurred!'),
                 type:  BootstrapDialog.TYPE_DANGER
             }
         },
@@ -655,7 +712,7 @@ Charcoal.Admin = (function () {
 
     /**
      * Create a new feedback manager.
-     * 
+     *
      * @class
      */
     var Manager = function ()
@@ -1942,7 +1999,10 @@ Charcoal.Admin.Widget_Form = function (opts) {
         $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
     }
 
-    Charcoal.Admin.set_lang($('[data-lang]:not(.hidden)').data('lang'));
+    var lang = $('[data-lang]:not(.hidden)').data('lang');
+    if (lang) {
+        Charcoal.Admin.setLang(lang);
+    }
 
     this.set_properties(opts).bind_events();
 };
@@ -2078,7 +2138,7 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, r
 
 Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger, response/* textStatus, jqXHR */) {
     if (response.feedbacks) {
-        Charcoal.Admin.feedback().add_data(response.feedbacks);
+        Charcoal.Admin.feedback(response.feedbacks);
     }
 
     if (response.next_url) {
@@ -2117,21 +2177,21 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
 
 Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger, jqXHR, textStatus, errorThrown) {
     if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
-        Charcoal.Admin.feedback().add_data(jqXHR.responseJSON.feedbacks);
+        Charcoal.Admin.feedback(jqXHR.responseJSON.feedbacks);
     } else {
         var message = (this.is_new_object ? 'The object could not be saved: ' : 'The object could not be updated: ');
         var error   = errorThrown || 'Unknown Error';
 
-        Charcoal.Admin.feedback().add_data([{
-            level: message + error,
-            msg: 'error'
+        Charcoal.Admin.feedback([{
+            msg:   message + error,
+            level: 'error'
         }]);
     }
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigger/*, .... */) {
     if (!this.suppress_feedback) {
-        Charcoal.Admin.feedback().call();
+        Charcoal.Admin.feedback().dispatch();
         this.enable_form($form, $trigger);
     }
 
@@ -2235,7 +2295,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    Charcoal.Admin.set_lang(lang);
+    Charcoal.Admin.setLang(lang);
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 
@@ -2744,7 +2804,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Wid
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
     if (response.feedbacks) {
-        Charcoal.Admin.feedback().add_data(response.feedbacks);
+        Charcoal.Admin.feedback(response.feedbacks);
     }
 
     if (response.next_url) {
@@ -5625,7 +5685,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                 save_callback: function (response) {
                     callback({
                         value: response.obj.id,
-                        text: response.obj.name[Charcoal.Admin.lang] || response.obj.name || response.obj.id,
+                        text: response.obj.name[Charcoal.Admin.lang()] || response.obj.name || response.obj.id,
                         color: response.obj.color,
                         class: 'new'
                     });
@@ -5658,7 +5718,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
                 item = res.collection[item];
                 items.push({
                     value: item.id,
-                    text: item.name[Charcoal.Admin.lang] || item.name || item.id,
+                    text: item.name[Charcoal.Admin.lang()] || item.name || item.id,
                     color: item.color
                 });
             }

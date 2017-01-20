@@ -680,6 +680,23 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     }
 
     /**
+     * Application Debug Mode.
+     *
+     * @return boolean
+     */
+    public function devMode()
+    {
+        if (!$this->appConfig) {
+            return false;
+        }
+
+        $debug   = isset($this->appConfig['debug'])    ? $this->appConfig['debug']    : false;
+        $devMode = isset($this->appConfig['dev_mode']) ? $this->appConfig['dev_mode'] : false;
+
+        return $debug || $devMode;
+    }
+
+    /**
      * Retrieve the current language.
      *
      * @return string

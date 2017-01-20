@@ -23,20 +23,20 @@
         supported: [ 'success', 'info', 'notice', 'warning', 'error' ],
         definitions: {
             success: {
-                title: (Admin.lang === 'fr' ? 'Succès!' : 'Success!'),
+                title: (Admin.lang('fr') ? 'Succès!' : 'Success!'),
                 type:  BootstrapDialog.TYPE_SUCCESS
             },
             notice: {
-                title: (Admin.lang === 'fr' ? 'Notice!' : 'Notice!'),
+                title: (Admin.lang('fr') ? 'Notice!' : 'Notice!'),
                 type:  BootstrapDialog.TYPE_INFO,
                 alias: [ 'info' ]
             },
             warning: {
-                title: (Admin.lang === 'fr' ? 'Attention!' : 'Attention!'),
+                title: (Admin.lang('fr') ? 'Attention!' : 'Attention!'),
                 type:  BootstrapDialog.TYPE_WARNING
             },
             error: {
-                title: (Admin.lang === 'fr' ? 'Une erreur s\'est produite!' : 'An error occurred!'),
+                title: (Admin.lang('fr') ? 'Une erreur s\'est produite!' : 'An error occurred!'),
                 type:  BootstrapDialog.TYPE_DANGER
             }
         },
@@ -47,7 +47,7 @@
 
     /**
      * Create a new feedback manager.
-     * 
+     *
      * @class
      */
     var Manager = function ()

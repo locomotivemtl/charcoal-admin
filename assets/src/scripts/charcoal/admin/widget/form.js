@@ -30,7 +30,10 @@ Charcoal.Admin.Widget_Form = function (opts) {
         $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
     }
 
-    Charcoal.Admin.set_lang($('[data-lang]:not(.hidden)').data('lang'));
+    var lang = $('[data-lang]:not(.hidden)').data('lang');
+    if (lang) {
+        Charcoal.Admin.setLang(lang);
+    }
 
     this.set_properties(opts).bind_events();
 };
@@ -166,7 +169,7 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, r
 
 Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger, response/* textStatus, jqXHR */) {
     if (response.feedbacks) {
-        Charcoal.Admin.feedback().add_data(response.feedbacks);
+        Charcoal.Admin.feedback(response.feedbacks);
     }
 
     if (response.next_url) {
@@ -205,21 +208,21 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
 
 Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger, jqXHR, textStatus, errorThrown) {
     if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
-        Charcoal.Admin.feedback().add_data(jqXHR.responseJSON.feedbacks);
+        Charcoal.Admin.feedback(jqXHR.responseJSON.feedbacks);
     } else {
         var message = (this.is_new_object ? 'The object could not be saved: ' : 'The object could not be updated: ');
         var error   = errorThrown || 'Unknown Error';
 
-        Charcoal.Admin.feedback().add_data([{
-            level: message + error,
-            msg: 'error'
+        Charcoal.Admin.feedback([{
+            msg:   message + error,
+            level: 'error'
         }]);
     }
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigger/*, .... */) {
     if (!this.suppress_feedback) {
-        Charcoal.Admin.feedback().call();
+        Charcoal.Admin.feedback().dispatch();
         this.enable_form($form, $trigger);
     }
 
@@ -323,7 +326,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    Charcoal.Admin.set_lang(lang);
+    Charcoal.Admin.setLang(lang);
     $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
     $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 

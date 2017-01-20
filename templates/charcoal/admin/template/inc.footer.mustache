@@ -25,6 +25,12 @@
         });
 
         $(document).ready(function() {
+            var $html = $(document.documentElement);
+            $html.removeClass('has-no-js').addClass('has-js');
+            if ($html.hasClass('s-admin-debug') || $html.hasClass('debug-mode')) {
+                Charcoal.Admin.debug(true);
+            }
+
             // Initialize tooltips globally
             $('[data-toggle="tooltip"]').tooltip();
 

@@ -346,6 +346,12 @@ trait CollectionContainerTrait
      */
     public function mergeCollectionConfig(array $config)
     {
+        if ($this->collectionConfig === null) {
+            $this->setCollectionConfig($config);
+
+            return $this;
+        }
+
         $this->collectionConfig = array_replace_recursive(
             $this->defaultCollectionConfig(),
             $this->collectionConfig,

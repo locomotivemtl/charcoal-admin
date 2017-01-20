@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin;
 
-use RuntimeException;
-
 use Pimple\Container;
 
 // From PSR-7 (HTTP Messaging)

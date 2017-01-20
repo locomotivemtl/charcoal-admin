@@ -3,7 +3,6 @@
 namespace Charcoal\Admin\Property;
 
 use Traversable;
-use UnexpectedValueException;
 use InvalidArgumentException;
 
 // Dependencies from PSR-3 (Logger)

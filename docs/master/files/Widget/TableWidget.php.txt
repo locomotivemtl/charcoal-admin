@@ -252,10 +252,65 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $collectionIdent = $this->collectionIdentFallback();
         }
 
-        if (isset($adminMetadata['lists'][$collectionIdent])) {
-            $objListData = $adminMetadata['lists'][$collectionIdent];
-        } else {
-            $objListData = [];
+        $objListData = isset($adminMetadata['lists'][$collectionIdent]) ?
+            $adminMetadata['lists'][$collectionIdent] : [];
+
+        $collectionConfig = [];
+
+        if (isset($objListData['list_actions']) && isset($adminMetadata['list_actions'])) {
+            $extraListActions = array_intersect(
+                array_keys($adminMetadata['list_actions']),
+                array_keys($objListData['list_actions'])
+            );
+            foreach ($extraListActions as $listIdent) {
+                $objListData['list_actions'][$listIdent] = array_replace_recursive(
+                    $adminMetadata['list_actions'][$listIdent],
+                    $objListData['list_actions'][$listIdent]
+                );
+            }
+        }
+
+        if (isset($objListData['object_actions']) && isset($adminMetadata['list_object_actions'])) {
+            $extraObjectActions = array_intersect(
+                array_keys($adminMetadata['list_object_actions']),
+                array_keys($objListData['object_actions'])
+            );
+            foreach ($extraObjectActions as $listIdent) {
+                $objListData['object_actions'][$listIdent] = array_replace_recursive(
+                    $adminMetadata['list_object_actions'][$listIdent],
+                    $objListData['object_actions'][$listIdent]
+                );
+            }
+        }
+
+        if (isset($objListData['orders']) && isset($adminMetadata['list_orders'])) {
+            $extraOrders = array_intersect(
+                array_keys($adminMetadata['list_orders']),
+                array_keys($objListData['orders'])
+            );
+            foreach ($extraOrders as $listIdent) {
+                $collectionConfig['orders'][$listIdent] = array_replace_recursive(
+                    $adminMetadata['list_orders'][$listIdent],
+                    $objListData['orders'][$listIdent]
+                );
+            }
+        }
+
+        if (isset($objListData['filters']) && isset($adminMetadata['list_filters'])) {
+            $extraFilters = array_intersect(
+                array_keys($adminMetadata['list_filters']),
+                array_keys($objListData['filters'])
+            );
+            foreach ($extraFilters as $listIdent) {
+                $collectionConfig['filters'][$listIdent] = array_replace_recursive(
+                    $adminMetadata['list_filters'][$listIdent],
+                    $objListData['filters'][$listIdent]
+                );
+            }
+        }
+
+        if ($collectionConfig) {
+            $this->mergeCollectionConfig($collectionConfig);
         }
 
         return $objListData;

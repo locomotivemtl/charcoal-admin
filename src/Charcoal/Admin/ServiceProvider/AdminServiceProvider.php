@@ -57,7 +57,7 @@ class AdminServiceProvider implements ServiceProviderInterface
             return new AdminConfig($appConfig['admin']);
         };
 
-        $container->extend('admin/config', function (ConfigInterface $adminConfig, Container $container) {
+        $container->extend('admin/config', function (ConfigInterface $adminConfig) {
             $adminConfig['elfinder'] = new Config($adminConfig['elfinder']);
 
             return $adminConfig;

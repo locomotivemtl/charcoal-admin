@@ -58,7 +58,7 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
                 'defaultValue' => ''
             ],
             'obj-id' => [
-                'longPrefix'  => 'obj-id',
+                'longPrefix'   => 'obj-id',
                 'description'  => 'Object ID. Must have obj-type set to have any effect. Leave empty to process all objects.',
                 'defaultValue' => ''
             ]

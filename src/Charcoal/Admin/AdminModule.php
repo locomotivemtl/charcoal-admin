@@ -81,11 +81,10 @@ class AdminModule extends AbstractModule
             /**
              * HTTP 404 (Not Found) handler.
              *
-             * @param  object|HandlerInterface $handler   An error handler instance.
-             * @param  Container               $container A container instance.
+             * @param  object|HandlerInterface $handler An error handler instance.
              * @return HandlerInterface
              */
-            $container->extend('notFoundHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+            $container->extend('notFoundHandler', function ($handler) use ($config, $adminUrl) {
                 if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
                     $handler->config()->merge($config['handlers.defaults']);
                     $handler->setBaseUrl($adminUrl);
@@ -97,11 +96,10 @@ class AdminModule extends AbstractModule
             /**
              * HTTP 405 (Not Allowed) handler.
              *
-             * @param  object|HandlerInterface $handler   An error handler instance.
-             * @param  Container               $container A container instance.
+             * @param  object|HandlerInterface $handler An error handler instance.
              * @return HandlerInterface
              */
-            $container->extend('notAllowedHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+            $container->extend('notAllowedHandler', function ($handler) use ($config, $adminUrl) {
                 if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
                     $handler->config()->merge($config['handlers.defaults']);
                     $handler->setBaseUrl($adminUrl);
@@ -113,11 +111,10 @@ class AdminModule extends AbstractModule
             /**
              * HTTP 500 (Error) handler for PHP 7+ Throwables.
              *
-             * @param  object|HandlerInterface $handler   An error handler instance.
-             * @param  Container               $container A container instance.
+             * @param  object|HandlerInterface $handler An error handler instance.
              * @return HandlerInterface
              */
-            $container->extend('phpErrorHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+            $container->extend('phpErrorHandler', function ($handler) use ($config, $adminUrl) {
                 if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
                     $handler->config()->merge($config['handlers.defaults']);
                     $handler->setBaseUrl($adminUrl);
@@ -129,11 +126,10 @@ class AdminModule extends AbstractModule
             /**
              * HTTP 500 (Error) handler.
              *
-             * @param  object|HandlerInterface $handler   An error handler instance.
-             * @param  Container               $container A container instance.
+             * @param  object|HandlerInterface $handler An error handler instance.
              * @return HandlerInterface
              */
-            $container->extend('errorHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+            $container->extend('errorHandler', function ($handler) use ($config, $adminUrl) {
                 if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
                     $handler->config()->merge($config['handlers.defaults']);
                     $handler->setBaseUrl($adminUrl);
@@ -147,11 +143,10 @@ class AdminModule extends AbstractModule
              *
              * This handler is not part of Slim.
              *
-             * @param  object|HandlerInterface $handler   An error handler instance.
-             * @param  Container               $container A container instance.
+             * @param  object|HandlerInterface $handler An error handler instance.
              * @return HandlerInterface
              */
-            $container->extend('shutdownHandler', function ($handler, Container $container) use ($config, $adminUrl) {
+            $container->extend('shutdownHandler', function ($handler) use ($config, $adminUrl) {
                 if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
                     $handler->config()->merge($config['handlers.defaults']);
                     $handler->setBaseUrl($adminUrl);

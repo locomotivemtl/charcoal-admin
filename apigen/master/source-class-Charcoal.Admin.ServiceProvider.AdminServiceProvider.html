@@ -429,7 +429,7 @@
 </span><span id="57" class="l"><a href="#57"> 57: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">new</span> AdminConfig(<span class="php-var">$appConfig</span>[<span class="php-quote">'admin'</span>]);
 </span><span id="58" class="l"><a href="#58"> 58: </a>        };
 </span><span id="59" class="l"><a href="#59"> 59: </a>
-</span><span id="60" class="l"><a href="#60"> 60: </a>        <span class="php-var">$container</span>-&gt;extend(<span class="php-quote">'admin/config'</span>, <span class="php-keyword1">function</span> (ConfigInterface <span class="php-var">$adminConfig</span>, Container <span class="php-var">$container</span>) {
+</span><span id="60" class="l"><a href="#60"> 60: </a>        <span class="php-var">$container</span>-&gt;extend(<span class="php-quote">'admin/config'</span>, <span class="php-keyword1">function</span> (ConfigInterface <span class="php-var">$adminConfig</span>) {
 </span><span id="61" class="l"><a href="#61"> 61: </a>            <span class="php-var">$adminConfig</span>[<span class="php-quote">'elfinder'</span>] = <span class="php-keyword1">new</span> Config(<span class="php-var">$adminConfig</span>[<span class="php-quote">'elfinder'</span>]);
 </span><span id="62" class="l"><a href="#62"> 62: </a>
 </span><span id="63" class="l"><a href="#63"> 63: </a>            <span class="php-keyword1">return</span> <span class="php-var">$adminConfig</span>;

@@ -479,7 +479,6 @@ trait CollectionContainerTrait
      */
     public function createCollection(array $data = null)
     {
-        unset($data);
         $objType = $this->objType();
         if (!$objType) {
             throw new Exception(sprintf(

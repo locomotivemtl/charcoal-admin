@@ -17,6 +17,8 @@ use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
+ * Reorder a collection of objects.
+ *
  * ## Required Parameters
  *
  * - `obj_type`
@@ -24,7 +26,8 @@ use Charcoal\Admin\Ui\ObjectContainerTrait;
  *
  * ## Optional Parameters
  *
- * - `starting_order`
+ * - `order_property`
+ * - `start_order`
  *
  */
 class ReorderAction extends AdminAction implements ObjectContainerInterface
@@ -50,46 +53,67 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $objType = $request->getParam('obj_type');
-        $objOrders = $request->getParam('obj_orders');
+        $objType       = $request->getParam('obj_type');
+        $objOrders     = $request->getParam('obj_orders');
+        $orderProperty = $request->getParam('order_property', 'position');
         $startingOrder = (int)$request->getParam('start_order');
 
         if (!$objType) {
             $this->setSuccess(false);
-            $this->addFeedback('error', 'obj_type required');
-            return $response->withStatus(404);
+            $this->addFeedback('error', '"obj_type" required, must be a string');
+            return $response->withStatus(400);
         }
         $this->setObjType($objType);
 
         if (!$objOrders || !is_array($objOrders)) {
             $this->setSuccess(false);
-            $this->addFeedback('error', 'obj_orders required / must be an array');
-            return $response->withStatus(404);
+            $this->addFeedback('error', '"obj_orders" required, must be an array of object IDs');
+            return $response->withStatus(400);
+        }
+
+        if (!is_string($orderProperty)) {
+            $this->setSuccess(false);
+            $this->addFeedback('error', sprintf(
+                '"order_property" must be a string, received %s',
+                (is_object($prop) ? get_class($prop) : gettype($prop))
+            ));
+            return $response->withStatus(400);
         }
 
         try {
             $proto = $this->obj();
 
+            if (!$proto->hasProperty($orderProperty)) {
+                $this->setSuccess(false);
+                $this->addFeedback('error', sprintf(
+                    'Missing "%s" property for sorting on [%s]',
+                    $orderProperty,
+                    $objType
+                ));
+                return $response->withStatus(400);
+            }
+
             $pos = $startingOrder;
+            $sql = 'UPDATE `%table` SET `%pos` = :pos WHERE `%key` = :id';
+            $sql = strtr($sql, [
+                '%table' => $proto->source()->table(),
+                '%pos'   => $orderProperty,
+                '%key'   => $proto->key()
+            ]);
+
             foreach ($objOrders as $orderId) {
-                $q = '
-                update
-                    `'.$proto->source()->table().'`
-                set
-                    `position` = :position
-                where
-                    `'.$proto->key().'` = :id';
-                $proto->source()->dbQuery($q, [
-                    'id' => $orderId,
-                    'position' => $pos
+                $proto->source()->dbQuery($sql, [
+                    'id'  => $orderId,
+                    'pos' => $pos
                 ]);
+
                 $pos++;
             }
 
             $this->setSuccess(true);
             return $response;
         } catch (Exception $e) {
-            $this->addFeedback('error', sprintf('An error occured loading the object: "%s"', $e->getMessage()));
+            $this->addFeedback('error', 'An error occured while sorting the objects');
             $this->addFeedback('error', $e->getMessage());
             $this->setSuccess(false);
             return $response->withStatus(500);
@@ -102,8 +126,8 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     public function results()
     {
         return [
-            'success'           => $this->success(),
-            'feedbacks'         => $this->feedbacks()
+            'success'   => $this->success(),
+            'feedbacks' => $this->feedbacks()
         ];
     }
 }

@@ -199,13 +199,23 @@ trait CollectionContainerTrait
     protected function collectionLoader()
     {
         if ($this->collectionLoader === null) {
-            $this->collectionLoader = new CollectionLoader([
-                'logger'  => $this->logger,
-                'factory' => $this->modelFactory()
-            ]);
+            $this->collectionLoader = $this->createCollectionLoader();
         }
 
         return $this->collectionLoader;
+    }
+
+    /**
+     * Create a collection loader.
+     *
+     * @return CollectionLoader
+     */
+    protected function createCollectionLoader()
+    {
+        return new CollectionLoader([
+            'logger'  => $this->logger,
+            'factory' => $this->modelFactory()
+        ]);
     }
 
     /**
@@ -472,12 +482,10 @@ trait CollectionContainerTrait
         unset($data);
         $objType = $this->objType();
         if (!$objType) {
-            throw new Exception(
-                sprintf(
-                    '%1$s cannot create collection. Object type is not defined.',
-                    get_class($this)
-                )
-            );
+            throw new Exception(sprintf(
+                '%1$s cannot create collection. Object type is not defined.',
+                get_class($this)
+            ));
         }
         $obj = $this->modelFactory()->create($objType);
 
@@ -488,6 +496,10 @@ trait CollectionContainerTrait
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
             unset($collectionConfig['properties']);
             $loader->setData($collectionConfig);
+        }
+
+        if ($data) {
+            $loader->setData($data);
         }
 
         $collection = $loader->load();
@@ -665,17 +677,19 @@ trait CollectionContainerTrait
      */
     public function numTotal()
     {
-        if (!$this->numTotal) {
+        if ($this->numTotal === null) {
             $objType = $this->objType();
             if (!$objType) {
-                throw new Exception(
-                    __CLASS__.'::'.__FUNCTION__.' - Can not create collection, object type is not defined.'
-                );
+                throw new Exception(sprintf(
+                    '%1$s cannot create collection. Object type is not defined.',
+                    get_class($this)
+                ));
             }
             $obj = $this->modelFactory()->create($objType);
 
             $loader = $this->collectionLoader();
             $loader->setModel($obj);
+
             $collectionConfig = $this->collectionConfig();
             if (is_array($collectionConfig) && !empty($collectionConfig)) {
                 unset($collectionConfig['properties']);

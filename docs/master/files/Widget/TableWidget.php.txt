@@ -1125,7 +1125,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectEditUrl()
     {
-        return 'object/edit?obj_type='.$this->objType();
+        return 'object/edit?main_menu={{ main_menu }}&obj_type='.$this->objType();
     }
 
     /**

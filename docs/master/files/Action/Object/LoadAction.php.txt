@@ -105,8 +105,8 @@ class LoadAction extends AdminAction
 
         if (!$objType) {
             $this->setSuccess(false);
-            $this->addFeedback('error', 'obj_type required');
-            return $response->withStatus(404);
+            $this->addFeedback('error', '"obj_type" required');
+            return $response->withStatus(400);
         }
 
         try {

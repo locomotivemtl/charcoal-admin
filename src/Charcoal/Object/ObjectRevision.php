@@ -417,24 +417,22 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
 
         $rev = $this->modelFactory()->create(self::class);
 
-        $rev->loadFromQuery(
-            '
+        $sql = sprintf('
             SELECT
                 *
             FROM
-                `'.$this->source()->table().'`
+                `%s`
             WHERE
                 `target_type` = :target_type
             AND
                 `target_id` = :target_id
             ORDER BY
                 `rev_ts` desc
-            LIMIT 1',
-            [
-                'target_type' => $obj->objType(),
-                'target_id'   => $obj->id()
-            ]
-        );
+            LIMIT 1', $this->source()->table());
+        $rev->loadFromQuery($sql, [
+            'target_type' => $obj->objType(),
+            'target_id'   => $obj->id()
+        ]);
 
         return $rev;
     }
@@ -457,25 +455,23 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
 
         $rev = $this->modelFactory()->create(self::class);
 
-        $rev->loadFromQuery(
-            '
+        $sql = sprintf('
             SELECT
                 *
             FROM
-                `'.$this->source()->table().'`
+                `%s`
             WHERE
                 `target_type` = :target_type
             AND
                 `target_id` = :target_id
             AND
                 `rev_num` = :rev_num
-            LIMIT 1',
-            [
-                'target_type' => $obj->objType(),
-                'target_id'   => $obj->id(),
-                'rev_num'     => $revNum
-            ]
-        );
+            LIMIT 1', $this->source()->table());
+        $rev->loadFromQuery($sql, [
+            'target_type' => $obj->objType(),
+            'target_id'   => $obj->id(),
+            'rev_num'     => $revNum
+        ]);
 
         return $rev;
     }

@@ -482,4 +482,14 @@ trait HierarchicalTrait
      * @return \Charcoal\Factory\FactoryInterface
      */
     abstract public function modelFactory();
+
+    /**
+     * @return string
+     */
+    abstract public function id();
+
+    /**
+     * @return string
+     */
+    abstract public function objType();
 }

@@ -190,4 +190,9 @@ trait RevisionableTrait
      * @return \Charcoal\Factory\FactoryInterface
      */
     abstract public function modelFactory();
+
+    /**
+     * @return \Charcoal\Model\MetadataInterface
+     */
+    abstract public function metadata();
 }

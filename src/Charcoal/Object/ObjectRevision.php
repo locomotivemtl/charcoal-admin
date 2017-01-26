@@ -238,7 +238,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     }
 
     /**
-     * @param string|array $data The previous revision data.
+     * @param string|array|null $data The previous revision data.
      * @return ObjectRevision Chainable
      */
     public function setDataPrev($data)
@@ -262,7 +262,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     }
 
     /**
-     * @param array|string $data The current revision (object) data.
+     * @param array|string|null $data The current revision (object) data.
      * @return ObjectRevision Chainable
      */
     public function setDataObj($data)

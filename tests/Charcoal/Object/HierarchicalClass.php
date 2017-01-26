@@ -35,6 +35,11 @@ class HierarchicalClass implements
         return $this->id;
     }
 
+    public function objType()
+    {
+        return 'charcoal/tests/object/hierarchical-class';
+    }
+
     public function loadChildren()
     {
         return [];

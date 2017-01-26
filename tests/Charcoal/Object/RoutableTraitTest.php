@@ -31,8 +31,6 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
             true,
             [ 'metadata' ]
         );
-
-
     }
 
     public function testSlugPattern()

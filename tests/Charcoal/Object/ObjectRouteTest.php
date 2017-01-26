@@ -75,12 +75,10 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
 
     public function testLastModificationDate()
     {
-
     }
 
     public function testLang()
     {
-
     }
 
     public function testSetSlug()
@@ -102,6 +100,4 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('\InvalidArgumentException');
         $this->obj->setSlug(false);
     }
-
 }
-

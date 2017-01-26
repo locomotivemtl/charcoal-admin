@@ -15,7 +15,6 @@ class CategoryTraitTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->obj = $this->getMockForTrait('\Charcoal\Object\CategoryTrait');
-
     }
 
     public function testUnsetCategoryItemTypeThrowsException()

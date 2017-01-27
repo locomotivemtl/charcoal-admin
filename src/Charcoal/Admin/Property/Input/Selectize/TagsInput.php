@@ -175,25 +175,6 @@ class TagsInput extends AbstractSelectableInput
     }
 
     /**
-     * Retrieve a blank choice.
-     *
-     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
-     *
-     * @return array
-     */
-    protected function emptyChoice()
-    {
-        $label = $this->placeholder();
-
-        return [
-            'value'   => '',
-            'label'   => $label,
-            'title'   => $label,
-            'subtext' => ''
-        ];
-    }
-
-    /**
      * Show/hide the "Copy to Clipboard" button.
      *
      * @param  boolean $flag Show (TRUE) or hide (FALSE) the copy button.

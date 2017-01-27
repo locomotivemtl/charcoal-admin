@@ -46,25 +46,6 @@ class SelectInput extends AbstractSelectableInput
     }
 
     /**
-     * Retrieve a blank choice.
-     *
-     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\TagsInput}.
-     *
-     * @return array
-     */
-    protected function emptyChoice()
-    {
-        $label = $this->placeholder();
-
-        return [
-            'value'   => '',
-            'label'   => $label,
-            'title'   => $label,
-            'subtext' => ''
-        ];
-    }
-
-    /**
      * Set the select picker's options.
      *
      * This method always merges default settings.

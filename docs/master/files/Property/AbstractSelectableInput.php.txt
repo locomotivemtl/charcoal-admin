@@ -2,12 +2,22 @@
 
 namespace Charcoal\Admin\Property;
 
+// From 'charcoal-translation'
+use Charcoal\Translation\TranslationString;
+
 /**
  * Selectable input properties provide an array of choices to choose from.
  */
 abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     SelectableInputInterface
 {
+    /**
+     * The empty (NULL) option.
+     *
+     * @var array
+     */
+    protected $emptyChoice;
+
     /**
      * The object-to-choice map.
      *
@@ -118,6 +128,72 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
         } else {
             return $choice == $val;
         }
+    }
+
+    /**
+     * Set the empty option's structure.
+     *
+     * @param  array|string $choice The property value.
+     * @throws InvalidArgumentException If the choice structure is invalid.
+     * @return PropertyInputInterface Chainable
+     */
+    public function setEmptyChoice($choice)
+    {
+        if (is_string($choice) || ($choice instanceof TranslationString)) {
+            $choice = [
+                'label' => $choice
+            ];
+        }
+
+        if (is_array($choice)) {
+            $choice = array_replace_recursive(
+                $this->defaultEmptyChoice(),
+                $choice
+            );
+        } else {
+            throw new InvalidArgumentException(sprintf(
+                'Empty choice must be an array, received %s',
+                (is_object($choice) ? get_class($choice) : gettype($choice))
+            ));
+        }
+
+        if (!$choice['label'] instanceof TranslationString) {
+            $choice['label'] = new TranslationString($choice['label']);
+        }
+
+        $this->emptyChoice = $choice;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the empty option structure.
+     *
+     * @return array|null
+     */
+    public function emptyChoice()
+    {
+        if ($this->emptyChoice === null) {
+            return $this->defaultEmptyChoice();
+        }
+
+        return $this->emptyChoice;
+    }
+
+    /**
+     * Retrieve the default empty option structure.
+     *
+     * @return array
+     */
+    protected function defaultEmptyChoice()
+    {
+        return [
+            'value' => '',
+            'label' => new TranslationString([
+                'en' => '— None —',
+                'fr' => '— Aucun —'
+            ])
+        ];
     }
 
     /**

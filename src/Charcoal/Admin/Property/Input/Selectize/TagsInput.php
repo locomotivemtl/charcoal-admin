@@ -137,7 +137,11 @@ class TagsInput extends AbstractSelectableInput
      */
     public function inputName()
     {
-        $name = $this->propertyIdent();
+        if ($this->inputName) {
+            $name = $this->inputName;
+        } else {
+            $name = $this->propertyIdent();
+        }
 
         if ($this->p()->l10n()) {
             $name .= '['.$this->lang().']';

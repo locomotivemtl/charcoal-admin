@@ -9,13 +9,11 @@ use Psr\Http\Message\ResponseInterface;
 // Pimple (DI container) dependencies
 use Pimple\Container;
 
-// From `charcoal-core`
+// Module `charcoal-core` dependencies
 use Charcoal\Loader\CollectionLoader;
 
-// From `charcoal-factory`
+// Module `charcoal-factory` dependencies
 use Charcoal\Factory\FactoryInterface;
-
-use Charcoal\Admin\AdminScript;
 
 // Module `charcoal-app` dependencies
 use Charcoal\App\Script\CronScriptInterface;
@@ -23,6 +21,9 @@ use Charcoal\App\Script\CronScriptTrait;
 
 // Module `charcoal-base` dependencies
 use Charcoal\Object\ObjectSchedule;
+
+// Intra-module (`charcoal-admin`) dependencies
+use Charcoal\Admin\AdminScript;
 
 /**
  * Process object schedules.

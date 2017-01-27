@@ -1,0 +1,41 @@
+{
+    "properties":{
+        "id":{
+            "type":"id",
+            "mode":"uniqid"
+        },
+        "users":{
+            "type":"object",
+            "obj_type":"charcoal/admin/user"
+
+        },
+        "target_types":{
+            "type":"string",
+            "multiple":true
+        },
+        "extra_emails":{
+            "type":"email",
+            "multiple":true
+        },
+        "frequency":{
+            "type":"string",
+            "choices":{
+                "minute":{},
+                "hourly":{},
+                "daily":{},
+                "weekly":{},
+                "yearly":{}
+            }
+        },
+        "active":{
+            "type":"boolean"
+        }
+    },
+
+    "sources":{
+        "default":{
+            "table":"charcoal_admin_notifications"
+        }
+    },
+    "default_source":"default"
+}

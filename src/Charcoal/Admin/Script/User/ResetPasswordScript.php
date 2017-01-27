@@ -49,7 +49,7 @@ class ResetPasswordScript extends AdminScript
             ],
             'sendEmail' => [
                 'longPrefix'    => 'send-email',
-                'description'   => 'If true, an email will be sent to the user.',
+                'description'   => 'If set, an email will be sent to the user.',
                 'noValue'       => true,
                 'defaultValue'  => false
             ]

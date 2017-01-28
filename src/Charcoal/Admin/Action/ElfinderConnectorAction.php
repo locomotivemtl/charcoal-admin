@@ -24,6 +24,9 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
+// From 'charcoal-translation'
+use Charcoal\Translation\TranslationString;
+
 // From 'charcoal-app'
 use Charcoal\App\CallableResolverAwareTrait;
 
@@ -45,7 +48,7 @@ class ElfinderConnectorAction extends AdminAction
     protected $baseUrl;
 
     /**
-     * The relative path to the storage directory.
+     * The relative path (from filesystem's root) to the storage directory.
      *
      * @var string
      */
@@ -94,6 +97,10 @@ class ElfinderConnectorAction extends AdminAction
         $this->elfinderConfig = $container['elfinder/config'];
         $this->setPropertyFactory($container['property/factory']);
         $this->setCallableResolver($container['callableResolver']);
+
+        // From filesystem provider
+        $this->filesystemConfig = $container['filesystem/config'];
+        $this->filesystems = $container['filesystems'];
     }
 
     /**
@@ -223,43 +230,60 @@ class ElfinderConnectorAction extends AdminAction
     public function defaultConnectorOptions()
     {
         $uploadPath = $this->uploadPath();
-        $startPath  = $this->startPath();
 
-        $baseUrl = rtrim((string)$this->baseUrl, '/');
+        $defaultBaseUrl = rtrim((string)$this->baseUrl, '/');
 
-        return [
-            'debug' => false,
-            'roots' => [
-                'default' => [
-                    // Driver for accessing file system (REQUIRED)
-                    'driver'         => 'LocalFileSystem',
-                    // Path to files (REQUIRED)
-                    'path'           => $uploadPath,
-                    'startPath'      => $startPath,
-                    // Jpg Compression quality
-                    'jpgQuality'     => 80,
-                    // Enable localized folder names
-                    'i18nFolderName' => true,
-                    // URL to files (REQUIRED)
-                    'URL'            => $baseUrl.'/'.$uploadPath,
-                    'tmbURL'         => $baseUrl.'/'.$uploadPath.'/.tmb',
-                    'tmbPath'        => $uploadPath.'/.tmb',
-                    'tmbSize'        => 200,
-                    'tmbBgColor'     => 'transparent',
-                    // All MIME types not allowed to upload
-                    'uploadDeny'     => [ 'all' ],
-                    // MIME type `image` and `text/plain` allowed to upload
-                    'uploadAllow'    => $this->defaultUploadAllow(),
-                    // Allowed MIME type `image` and `text/plain` only
-                    'uploadOrder'    => [ 'deny', 'allow' ],
-                    // Disable and hide dot starting files (OPTIONAL)
-                    'accessControl'  => 'access',
-                    // File permission attributes
-                    'attributes'     => [
-                        $this->attributesForHiddenFiles()
-                    ]
+        $filesystemConfig = $this->filesystemConfig;
+        $filesystems = $this->filesystems;
+
+        $fs = [];
+        foreach ($filesystemConfig['connections'] as $filesystem => $config) {
+            if (isset($config['public']) && !$config['public']) {
+                continue;
+                ;
+            }
+            $label = isset($config['label']) ? new TranslationString($config['label']) : ucfirst($filesystem);
+            $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
+
+            $fs[$filesystem] = [
+                'driver' => 'Flysystem',
+                'filesystem'    => $filesystems[$filesystem],
+
+                'alias'         => (string)$label,
+                'cache'         => false,
+
+                // Path to files (REQUIRED)
+                'path'          => $uploadPath,
+                'startPath'     => $config['path'],
+
+                // Jpg Compression quality
+                'jpgQuality'     => 80,
+                // Enable localized folder names
+                'i18nFolderName' => true,
+                // URL to files (REQUIRED)
+                'URL'            => $baseUrl.'/'.$uploadPath,
+                'tmbURL'         => $baseUrl.'/'.$uploadPath.'/.tmb',
+                'tmbPath'        => $uploadPath.'/.tmb',
+                'tmbSize'        => 200,
+                'tmbBgColor'     => 'transparent',
+                // All MIME types not allowed to upload
+                'uploadDeny'     => [ 'all' ],
+                // MIME type `image` and `text/plain` allowed to upload
+                'uploadAllow'    => $this->defaultUploadAllow(),
+                // Allowed MIME type `image` and `text/plain` only
+                'uploadOrder'    => [ 'deny', 'allow' ],
+                // Disable and hide dot starting files
+                'accessControl'  => 'access',
+                // File permission attributes
+                'attributes'     => [
+                    $this->attributesForHiddenFiles()
                 ]
-            ]
+
+            ];
+        }
+        return [
+            'debug' => true,
+            'roots' => $fs
         ];
     }
 
@@ -394,27 +418,6 @@ class ElfinderConnectorAction extends AdminAction
     public function uploadPath()
     {
         return trim($this->uploadPath, '/');
-    }
-
-    /**
-     * Retrieve the default root path.
-     *
-     * @return string
-     */
-    public function startPath()
-    {
-        $path = $this->uploadPath();
-        $prop = $this->formProperty();
-
-        if (isset($prop['upload_path'])) {
-            $path = $prop['upload_path'];
-
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-        }
-
-        return $path;
     }
 
     /**

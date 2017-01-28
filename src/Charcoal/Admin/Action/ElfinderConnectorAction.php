@@ -217,7 +217,7 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
-     * Retrieve the default elFinder Connector options.
+     * Retrieve the default elFinder Connector options from the configured flysystem filesystems.
      *
      * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
      *     Documentation for connector options.

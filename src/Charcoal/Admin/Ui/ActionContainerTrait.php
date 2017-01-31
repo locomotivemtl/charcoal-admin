@@ -169,7 +169,9 @@ trait ActionContainerTrait
 
             if (isset($action['actions']) && is_array($action['actions'])) {
                 $action['actions']    = $this->parseActions($action['actions']);
-                $action['hasActions'] = boolval($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             } else {
                 $action['actions']    = [];
                 $action['hasActions'] = false;

@@ -649,7 +649,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             if ($action['actions']) {
-                $action['actions'] = $this->parseAsObjectActions($action['actions']);
+                $action['actions']    = $this->parseAsObjectActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             $objectActions[] = $action;
@@ -809,7 +812,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             if (is_array($action['actions'])) {
-                $action['actions'] = $this->parseAsListActions($action['actions']);
+                $action['actions']    = $this->parseAsListActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             if (isset($listActions[$ident])) {

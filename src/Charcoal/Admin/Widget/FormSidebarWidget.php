@@ -344,7 +344,10 @@ class FormSidebarWidget extends AdminWidget implements
             }
 
             if ($action['actions']) {
-                $action['actions'] = $this->parseAsSidebarActions($action['actions']);
+                $action['actions']    = $this->parseAsSidebarActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             if (isset($sidebarActions[$ident])) {

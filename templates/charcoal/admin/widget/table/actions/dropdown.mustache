@@ -25,6 +25,7 @@
     {{^ isButton }}
     <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
        href="{{ url }}"
+       target="{{ target }}"
        {{# widgetType }}
        data-widget-type="{{ . }}"
        {{/ widgetType }}

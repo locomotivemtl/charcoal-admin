@@ -1,13 +1,13 @@
 {{!--
-    Table Widget \ Collection \ Dropdown Actions
-    ============================================
+    Admin \ UI \ Dropdown Actions
+    =============================
 
-    @used-by `charcoal/admin/widget/table/actions`
+    @used-by `charcoal/admin/widget/actions`
 --}}
 <div class="btn-group" role="group">
     {{# isButton }}
-    <button class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
-            type="button"
+    <button class="{{ cssClasses }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}"
+            type="{{ buttonType }}"
             {{# widgetType }}
             data-widget-type="{{ . }}"
             {{/ widgetType }}
@@ -16,14 +16,14 @@
             aria-haspopup="true"
             aria-expanded="false"
             {{/ splitButton }}>
-            {{> charcoal/admin/widget/table/actions/label }}
+            {{> charcoal/admin/widget/actions/label }}
             {{^ splitButton }}
             <span class="caret" aria-hidden="true"></span>
             {{/ splitButton }}
         </button>
     {{/ isButton }}
     {{^ isButton }}
-    <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+    <a class="{{ cssClasses }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}"
        href="{{ url }}"
        {{# target }}
        target="{{ . }}"
@@ -36,7 +36,7 @@
        aria-haspopup="true"
        aria-expanded="false"
        {{/ splitButton }}>
-        {{> charcoal/admin/widget/table/actions/label }}
+        {{> charcoal/admin/widget/actions/label }}
         {{^ splitButton }}
         <span class="caret" aria-hidden="true"></span>
         {{/ splitButton }}
@@ -54,7 +54,7 @@
     {{/ splitButton }}
     <ul class="dropdown-menu">
     {{# actions }}
-        {{> charcoal/admin/widget/table/actions/dropdown-menu }}
+        {{> charcoal/admin/widget/actions/dropdown-menu }}
     {{/ actions }}
     </ul>
 </div>

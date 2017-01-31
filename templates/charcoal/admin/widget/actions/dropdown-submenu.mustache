@@ -1,19 +1,19 @@
 {{!--
-    Table Widget \ Collection \ Sub-Dropdown Menu
-    =============================================
+    Admin \ UI \ Sub-Dropdown Menu
+    ==============================
 
-    @used-by `charcoal/admin/widget/table/actions/dropdown-menu`
+    @used-by `charcoal/admin/widget/actions/dropdown-menu`
 --}}
 {{# isButton }}
 <button class="btn{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
-        type="button"
+        type="{{ buttonType }}"
         {{# widgetType }}
         data-widget-type="{{ . }}"
         {{/ widgetType }}
         tabindex="-1"
         aria-haspopup="true"
         aria-expanded="false"
-        >{{> charcoal/admin/widget/table/actions/label }}</button>
+        >{{> charcoal/admin/widget/actions/label }}</button>
 {{/ isButton }}
 {{# isLink }}
 <a{{# ident }} class="{{ jsActionPrefix }}-{{ . }}"{{/ ident }}
@@ -27,13 +27,13 @@
    tabindex="-1"
    aria-haspopup="true"
    aria-expanded="false"
-   >{{> charcoal/admin/widget/table/actions/label }}</a>
+   >{{> charcoal/admin/widget/actions/label }}</a>
 {{/ isLink }}
 {{# isText }}
-{{> charcoal/admin/widget/table/actions/label }}
+{{> charcoal/admin/widget/actions/label }}
 {{/ isText }}
 <ul class="dropdown-menu">
 {{# actions }}
-    {{> charcoal/admin/widget/table/actions/dropdown-menu }}
+    {{> charcoal/admin/widget/actions/dropdown-menu }}
 {{/ actions }}
 </ul>

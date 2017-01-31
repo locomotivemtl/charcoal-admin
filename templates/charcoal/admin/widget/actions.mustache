@@ -1,26 +1,27 @@
 {{!--
-    Table Widget \ Collection Actions
-    =================================
+    Admin \ UI \ Actions
+    ====================
 
     @used-by `charcoal/admin/widget/table/header-left`
     @used-by `charcoal/admin/widget/table/empty`
+    @used-by `charcoal/admin/widget/form.sidebar`
 --}}
 {{# active }}
     {{# hasActions }}
-        {{> charcoal/admin/widget/table/actions/dropdown }}
+        {{> charcoal/admin/widget/actions/dropdown }}
     {{/ hasActions }}
     {{^ hasActions }}
         {{# isButton }}
             <button
-                class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
-                type="button"
+                class="{{ cssClasses }}"
+                type="{{ buttonType }}"
                 {{# widgetType }}
                 data-widget-type="{{ . }}"
                 {{/ widgetType }}
-            >{{> charcoal/admin/widget/table/actions/label }}</button>
+            >{{> charcoal/admin/widget/actions/label }}</button>
         {{/ isButton }}
         {{^ isButton }}
-            <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+            <a class="{{ cssClasses }}"
                href="{{ url }}"
                 {{# target }}
                 target="{{ . }}"
@@ -28,7 +29,7 @@
                 {{# widgetType }}
                data-widget-type="{{ . }}"
                 {{/ widgetType }}
-            >{{> charcoal/admin/widget/table/actions/label }}</a>
+            >{{> charcoal/admin/widget/actions/label }}</a>
         {{/ isButton }}
     {{/ hasActions }}
 {{/ active }}

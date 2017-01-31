@@ -1,8 +1,8 @@
 {{!--
-    Table Widget \ Collection \ Dropdown Menu
-    =========================================
+    Admin \ UI \ Dropdown Menu
+    ==========================
 
-    @used-by `charcoal/admin/widget/table/actions/dropdown`
+    @used-by `charcoal/admin/widget/actions/dropdown`
 --}}
 {{# isSeparator }}
 <li role="separator" class="divider"></li>
@@ -13,18 +13,18 @@
     {{/ isHeader }}
     {{# hasActions }}
     <li class="dropdown-submenu dropdown-menu-item">
-        {{> charcoal/admin/widget/table/actions/dropdown-submenu }}
+        {{> charcoal/admin/widget/actions/dropdown-submenu }}
     </li>
     {{/ hasActions }}
     {{^ hasActions }}
     <li class="dropdown-menu-item">
         {{# isButton }}
         <button class="btn{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
-                type="button"
+                type="{{ buttonType }}"
                 {{# widgetType }}
                 data-widget-type="{{ . }}"
                 {{/ widgetType }}
-                >{{> charcoal/admin/widget/table/actions/label }}</button>
+                >{{> charcoal/admin/widget/actions/label }}</button>
         {{/ isButton }}
         {{# isLink }}
         <a{{# ident }} class="{{ jsActionPrefix }}-{{ . }}"{{/ ident }}
@@ -35,10 +35,10 @@
            {{# widgetType }}
            data-widget-type="{{ . }}"
            {{/ widgetType }}
-           >{{> charcoal/admin/widget/table/actions/label }}</a>
+           >{{> charcoal/admin/widget/actions/label }}</a>
         {{/ isLink }}
         {{# isText }}
-        {{> charcoal/admin/widget/table/actions/label }}
+        {{> charcoal/admin/widget/actions/label }}
         {{/ isText }}
     </li>
     {{/ hasActions }}

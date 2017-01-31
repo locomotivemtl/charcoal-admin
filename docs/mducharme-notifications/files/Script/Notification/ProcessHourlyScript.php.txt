@@ -49,7 +49,7 @@ class ProcessHourlyScript extends AbstractNotificationScript
     }
 
     /**
-     * @param Notification        $notification The notification object
+     * @param Notification        $notification The notification object.
      * @param CollectionInterface $objects      The objects that were modified.
      * @return array
      */

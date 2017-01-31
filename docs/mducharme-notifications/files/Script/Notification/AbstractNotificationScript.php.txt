@@ -147,7 +147,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     }
 
     /**
-     * @param Notification        $notification The notification object
+     * @param Notification        $notification The notification object.
      * @param CollectionInterface $objects      The objects that were modified.
      * @return void
      */
@@ -268,7 +268,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     abstract protected function endDate();
 
     /**
-     * @param Notification        $notification The notification object
+     * @param Notification        $notification The notification object.
      * @param CollectionInterface $objects      The objects that were modified.
      * @return array
      */

@@ -52,13 +52,13 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
     /**
      *
      */
-    public function testRunWithoutObjTypeIs404()
+    public function testRunWithoutObjTypeIs400()
     {
         $request = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
 
         $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $this->assertEquals(400, $res->getStatusCode());
 
         $res = $this->obj->results();
         $this->assertFalse($res['success']);

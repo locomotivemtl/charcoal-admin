@@ -34,22 +34,19 @@
                     </ul>
                 {{/hasSidebarProperties}}
 
-                {{#actions}}
-                    {{#active}}
-                        <div class="form-group">
-                            <a href="{{baseUrl}}{{url}}" class="btn btn-{{button_type}} btn-lg btn-block">{{label}}</a>
+                {{# showSidebarActions }}
+                <div class="btn-group-vertical btn-block" role="group">
+                {{# sidebarActions }}
+                    {{# isSeparator }}
                         </div>
-                    {{/active}}
-                {{/actions}}
-
-                {{# isObjSavable }}
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-info btn-lg btn-block">
-                            <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
-                            <span class="btn-label">{{# _t }}Sauvegarder{{/ _t }}</span>
-                        </button>
-                    </div>
-                {{/ isObjSavable }}
+                        <div class="btn-group-vertical btn-block" role="group">
+                    {{/ isSeparator }}
+                    {{^ isSeparator }}
+                        {{> charcoal/admin/widget/actions }}
+                    {{/ isSeparator }}
+                {{/ sidebarActions }}
+                </div>
+                {{/ showSidebarActions }}
             </div>
 
             {{# showFooter }}

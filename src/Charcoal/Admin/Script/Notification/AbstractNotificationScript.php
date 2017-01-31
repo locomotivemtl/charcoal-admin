@@ -11,6 +11,7 @@ use Pimple\Container;
 
 // Module `charcoal-core` dependencies
 use Charcoal\Loader\CollectionLoader;
+use Charcoal\Model\CollectionInterface;
 
 // Module `charcoal-object` dependencies
 use Charcoal\Object\ObjectRevision;
@@ -25,6 +26,7 @@ use Charcoal\App\Script\CronScriptTrait;
 // Intra-module (`charcoal-admin`) dependencies
 use Charcoal\Admin\AdminScript;
 use Charcoal\Admin\Object\Notification;
+use Charcoal\Admin\User;
 
 /**
  * Base class for all the notification script
@@ -39,6 +41,16 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     private $notificationFactory;
 
     /**
+     * @var FactoryInterface
+     */
+    private $emailFactory;
+
+    /**
+     * @var FactoryInterface
+     */
+    private $userFactory;
+
+    /**
      * @param Container $container Pimple DI container.
      * @return void
      */
@@ -47,6 +59,8 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         parent::setDependencies($container);
         $this->setNotificationFactory($container['model/factory']);
         $this->setRevisionFactory($container['model/factory']);
+        $this->emailFactory = $container['email/factory'];
+        $this->userFactory = $container['model/factory'];
     }
 
     /**
@@ -100,7 +114,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
      * @param string $frequency The frequency type to load.
      * @return Charcoal\Model\CollectionInterface
      */
-    protected function loadNotifications($frequency)
+    private function loadNotifications($frequency)
     {
         $loader = new CollectionLoader([
             'logger' => $this->logger,
@@ -128,15 +142,53 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         }
         foreach ($notification->targetTypes() as $objType) {
             $objects = $this->updatedObjects($objType);
-            foreach ($objects as $obj) {
-                var_dump($obj->data());
-            }
+            $this->sendEmail($notification, $objects);
+        }
+    }
+
+    /**
+     * @param Notification $notification The notification object
+     * @param CollectionInterface $objects The objects that were modified.
+     * @return void
+     */
+    private function sendEmail(Notification $notification, CollectionInterface $objects)
+    {
+        $email = $this->emailFactory->create('email');
+
+        $defaultEmailData = [
+            'campaign'  => 'admin-notification-'.$notification->id(),
+            'subject'   => 'Charcoal Notification',
+            'from'      => 'charcoal@example.com',
+            'template_data' => [
+                'objects'       => $objects,
+                'numObjects'    => count($objects),
+                'frequency'     => $this->frequency(),
+                'startString'   => $this->startDate()->format('Y-m-d H:i:s'),
+                'endString'     => $this->endDate()->format('Y-m-d H:i:s')
+            ]
+        ];
+        $emailData = array_replace_recursive($defaultEmailData, $this->emailData($notification, $objects));
+
+        $email->setData($emailData);
+
+        foreach($notification->users() as $userId) {
+            $user = $this->userFactory->create(User::class);
+            $user->load($userId);
+            $email->setTo($user->email());
+            $email->queue();
+            $email->send();
+        }
+
+        foreach($notification->extraEmails() as $extraEmail) {
+            $email->setTo($extraEmail);
+            $email->queue();
+            $email->send();
         }
     }
 
     /**
      * @param string $objType The object (target) type to process.
-     * @return Charcoal\Model\CollectionInterface
+     * @return CollectionInterface
      */
     private function updatedObjects($objType)
     {
@@ -151,16 +203,15 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         ]);
         $loader->addFilter([
             'property'  => 'rev_ts',
-            'val'       => $this->startDate(),
+            'val'       => $this->startDate()->format('Y-m-d H:i:s'),
             'operator'  => '>'
         ]);
         $loader->addFilter([
             'property'  => 'rev_ts',
-            'val'       => $this->endDate(),
+            'val'       => $this->endDate()->format('Y-m-d H:i:s'),
             'operator'  => '<'
         ]);
-        $objects = $loader->load();
-        return $objects;
+        return $loader->load();
     }
 
     /**
@@ -197,7 +248,6 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         return $this->revisionFactory;
     }
 
-
     /**
      * Get the frequency type of this script.
      *
@@ -207,13 +257,21 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
 
     /**
      * Retrieve the "minimal" date that the revisions should have been made for this script.
-     * @return string
+     * @return DateTime
      */
     abstract protected function startDate();
 
     /**
      * Retrieve the "maximal" date that the revisions should have been made for this script.
-     * @return string
+     * @return DateTime
      */
     abstract protected function endDate();
+
+    /**
+     * @param Notification $notification The notification object
+     * @param CollectionInterface $objects The objects that were modified.
+     * @return array
+     */
+    abstract protected function emailData(Notification $notification, CollectionInterface $objects);
+
 }

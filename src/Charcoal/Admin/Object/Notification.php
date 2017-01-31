@@ -15,7 +15,7 @@ class Notification extends AbstractModel
      * The user ids (usernames).
      * @var string[]
      */
-    private $users;
+    private $users = [];
 
     /**
      * The types of object to watch, for notifications.
@@ -27,7 +27,7 @@ class Notification extends AbstractModel
      * Extra emails the report shoul be sent to.
      * @var string[]
      */
-    private $extraEmails;
+    private $extraEmails = [];
 
     /**
      * Can be "minute", "hourly", "daily", "weekly" or "monthly".
@@ -48,7 +48,7 @@ class Notification extends AbstractModel
     public function setUsers($users)
     {
         if ($users === null) {
-            $this->users = null;
+            $this->users = [];
             return $this;
         }
         if (is_string($users)) {
@@ -64,7 +64,7 @@ class Notification extends AbstractModel
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function users()
     {
@@ -110,7 +110,7 @@ class Notification extends AbstractModel
     public function setExtraEmails($extraEmails)
     {
         if ($extraEmails === null) {
-            $this->extraEmails = null;
+            $this->extraEmails = [];
             return $this;
         }
         if (is_string($extraEmails)) {

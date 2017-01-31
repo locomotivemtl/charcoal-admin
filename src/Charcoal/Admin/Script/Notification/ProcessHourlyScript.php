@@ -11,7 +11,6 @@ use Charcoal\Model\CollectionInterface;
 use Charcoal\Admin\Object\Notification;
 use Charcoal\Admin\Script\Notification\AbstractNotificationScript;
 
-
 /**
  * Process "hourly" notifications
  */
@@ -28,9 +27,9 @@ class ProcessHourlyScript extends AbstractNotificationScript
     }
 
       /**
-     * Retrieve the "minimal" date that the revisions should have been made for this script.
-     * @return DateTime
-     */
+       * Retrieve the "minimal" date that the revisions should have been made for this script.
+       * @return DateTime
+       */
     protected function startDate()
     {
         $d = new DateTime('1 hour ago');
@@ -50,8 +49,8 @@ class ProcessHourlyScript extends AbstractNotificationScript
     }
 
     /**
-     * @param Notification $notification The notification object
-     * @param CollectionInterface $objects The objects that were modified.
+     * @param Notification        $notification The notification object
+     * @param CollectionInterface $objects      The objects that were modified.
      * @return array
      */
     protected function emailData(Notification $notification, CollectionInterface $objects)

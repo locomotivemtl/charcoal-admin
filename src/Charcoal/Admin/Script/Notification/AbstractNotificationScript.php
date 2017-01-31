@@ -147,8 +147,8 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     }
 
     /**
-     * @param Notification $notification The notification object
-     * @param CollectionInterface $objects The objects that were modified.
+     * @param Notification        $notification The notification object
+     * @param CollectionInterface $objects      The objects that were modified.
      * @return void
      */
     private function sendEmail(Notification $notification, CollectionInterface $objects)
@@ -171,7 +171,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
 
         $email->setData($emailData);
 
-        foreach($notification->users() as $userId) {
+        foreach ($notification->users() as $userId) {
             $user = $this->userFactory->create(User::class);
             $user->load($userId);
             $email->setTo($user->email());
@@ -179,7 +179,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             $email->send();
         }
 
-        foreach($notification->extraEmails() as $extraEmail) {
+        foreach ($notification->extraEmails() as $extraEmail) {
             $email->setTo($extraEmail);
             $email->queue();
             $email->send();
@@ -268,10 +268,9 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     abstract protected function endDate();
 
     /**
-     * @param Notification $notification The notification object
-     * @param CollectionInterface $objects The objects that were modified.
+     * @param Notification        $notification The notification object
+     * @param CollectionInterface $objects      The objects that were modified.
      * @return array
      */
     abstract protected function emailData(Notification $notification, CollectionInterface $objects);
-
 }

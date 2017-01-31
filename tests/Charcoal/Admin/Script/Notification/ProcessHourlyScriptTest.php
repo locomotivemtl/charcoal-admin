@@ -12,7 +12,6 @@ use Pimple\Container;
 use Charcoal\Admin\Script\Notification\ProcessHourlyScript;
 use Charcoal\Admin\Tests\ContainerProvider;
 
-
 /**
  *
  */
@@ -46,7 +45,7 @@ class ProcessHourlyScriptTest extends PHPUnit_Framework_TestCase
         return $container;
     }
 
-    private function callMethod($obj, $name, array $args=[])
+    private function callMethod($obj, $name, array $args = [])
     {
         $class = new ReflectionClass($obj);
         $method = $class->getMethod($name);
@@ -81,4 +80,3 @@ class ProcessHourlyScriptTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('hourly', $this->callMethod($this->obj, 'frequency'));
     }
 }
-

@@ -283,6 +283,8 @@ Charcoal\App\Template\AbstractWidget
 				<a href="class-Charcoal.Admin.Ui.CollectionContainerInterface.html"><span>Charcoal\Admin\Ui\CollectionContainerInterface</span></a>
 			
 			 uses 
+					<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html"><span>Charcoal\Admin\Ui\ActionContainerTrait</span></a>, 
+			
 					<a href="class-Charcoal.Admin.Ui.CollectionContainerTrait.html"><span>Charcoal\Admin\Ui\CollectionContainerTrait</span></a>
 			
 		</dd>
@@ -324,7 +326,6 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_createObjectActions">createObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_dataFromObject">dataFromObject()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_dataFromRequest">dataFromRequest()</a>, 
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultActionStruct">defaultActionStruct()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultListActions">defaultListActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultObjectActions">defaultObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_defaultPropertiesOptions">defaultPropertiesOptions()</a>, 
@@ -338,10 +339,6 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_objectCreateUrl">objectCreateUrl()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_objectEditUrl">objectEditUrl()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_paginationWidget">paginationWidget()</a>, 
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActionIdent">parseActionIdent()</a>, 
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActionItem">parseActionItem()</a>, 
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActionUrl">parseActionUrl()</a>, 
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseActions">parseActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseAsListActions">parseAsListActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseAsObjectActions">parseAsObjectActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_parseObjectRow">parseObjectRow()</a>, 
@@ -366,7 +363,6 @@ Charcoal\App\Template\AbstractWidget
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showTableFoot">showTableFoot()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showTableHead">showTableHead()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_showTableHeader">showTableHeader()</a>, 
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_sortActionsByPriority">sortActionsByPriority()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_sortable">sortable()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_sublistActions">sublistActions()</a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#_viewOptions">viewOptions()</a>
@@ -434,6 +430,25 @@ Charcoal\App\Template\AbstractWidget
 	</tr>
 	</table>
 
+	<table class="summary used">
+	<caption>Methods used from <a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#methods">Charcoal\Admin\Ui\ActionContainerTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_defaultActionPriority">defaultActionPriority()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_defaultActionStruct">defaultActionStruct()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_getActionRenderer">getActionRenderer()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActionCondition">parseActionCondition()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActionCssClasses">parseActionCssClasses()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActionIdent">parseActionIdent()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActionItem">parseActionItem()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActionRenderables">parseActionRenderables()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActionUrl">parseActionUrl()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_parseActions">parseActions()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_resolveActionType">resolveActionType()</a>, 
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#_sortActionsByPriority">sortActionsByPriority()</a>
+		</code></td>
+	</tr>
+	</table>
 	<table class="summary used">
 	<caption>Methods used from <a href="class-Charcoal.Admin.Ui.CollectionContainerTrait.html#methods">Charcoal\Admin\Ui\CollectionContainerTrait</a></caption>
 	<tr>
@@ -509,7 +524,6 @@ Charcoal\App\Template\AbstractWidget
 	<caption>Properties inherited from <a href="class-Charcoal.Admin.Widget.TableWidget.html#properties">Charcoal\Admin\Widget\TableWidget</a></caption>
 	<tr>
 		<td><code>
-			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$actionsPriority"><var>$actionsPriority</var></a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$parsedListActions"><var>$parsedListActions</var></a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$parsedObjectActions"><var>$parsedObjectActions</var></a>, 
 			<a href="class-Charcoal.Admin.Widget.TableWidget.html#$parsedProperties"><var>$parsedProperties</var></a>, 
@@ -533,6 +547,14 @@ Charcoal\App\Template\AbstractWidget
 	</tr>
 	</table>
 
+	<table class="summary used">
+	<caption>Properties used from <a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#properties">Charcoal\Admin\Ui\ActionContainerTrait</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Charcoal.Admin.Ui.ActionContainerTrait.html#$actionsPriority"><var>$actionsPriority</var></a>
+		</code></td>
+	</tr>
+	</table>
 	<table class="summary used">
 	<caption>Properties used from <a href="class-Charcoal.Admin.Ui.CollectionContainerTrait.html#properties">Charcoal\Admin\Ui\CollectionContainerTrait</a></caption>
 	<tr>

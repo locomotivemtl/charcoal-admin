@@ -22,10 +22,12 @@
         {{^ isButton }}
             <a class="btn{{# buttonType }} btn-{{ . }}{{/ buttonType }}{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
                href="{{ url }}"
+                {{# target }}
+                target="{{ . }}"
+                {{/ target }}
                 {{# widgetType }}
                data-widget-type="{{ . }}"
                 {{/ widgetType }}
-                target="{{ target }}"
             >{{> charcoal/admin/widget/table/actions/label }}</a>
         {{/ isButton }}
     {{/ hasActions }}

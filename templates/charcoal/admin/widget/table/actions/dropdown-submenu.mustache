@@ -18,6 +18,9 @@
 {{# isLink }}
 <a{{# ident }} class="{{ jsActionPrefix }}-{{ . }}"{{/ ident }}
    href="{{ url }}"
+   {{# target }}
+   target="{{ . }}"
+   {{/ target }}
    {{# widgetType }}
    data-widget-type="{{ . }}"
    {{/ widgetType }}

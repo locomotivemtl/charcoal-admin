@@ -240,7 +240,6 @@ class ElfinderConnectorAction extends AdminAction
         foreach ($filesystemConfig['connections'] as $filesystem => $config) {
             if (isset($config['public']) && !$config['public']) {
                 continue;
-                ;
             }
             $label = isset($config['label']) ? new TranslationString($config['label']) : ucfirst($filesystem);
             $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;

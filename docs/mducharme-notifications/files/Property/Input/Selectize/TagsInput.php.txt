@@ -137,7 +137,11 @@ class TagsInput extends AbstractSelectableInput
      */
     public function inputName()
     {
-        $name = $this->propertyIdent();
+        if ($this->inputName) {
+            $name = $this->inputName;
+        } else {
+            $name = $this->propertyIdent();
+        }
 
         if ($this->p()->l10n()) {
             $name .= '['.$this->lang().']';
@@ -168,25 +172,6 @@ class TagsInput extends AbstractSelectableInput
         foreach ($choices as $choice) {
             yield $choice;
         }
-    }
-
-    /**
-     * Retrieve a blank choice.
-     *
-     * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
-     *
-     * @return array
-     */
-    protected function emptyChoice()
-    {
-        $label = $this->placeholder();
-
-        return [
-            'value'   => '',
-            'label'   => $label,
-            'title'   => $label,
-            'subtext' => ''
-        ];
     }
 
     /**

@@ -83,7 +83,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      * Set an object model factory.
      *
      * @param FactoryInterface $factory The model factory, to create objects.
-     * @return ObjectContainerInterface Chainable
+     * @return ObjectScheduleInterface Chainable
      */
     public function setModelFactory(FactoryInterface $factory)
     {
@@ -214,7 +214,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @param  null|string|DateTimeInterface $ts A date/time string or object.
      * @throws InvalidArgumentException If the date/time is invalid.
-     * @return QueueItemInterface Chainable
+     * @return ObjectScheduleInterface Chainable
      */
     public function setScheduledDate($ts)
     {
@@ -259,7 +259,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @param  null|string|DateTimeInterface $ts A date/time string or object.
      * @throws InvalidArgumentException If the date/time is invalid.
-     * @return QueueItemInterface Chainable
+     * @return ObjectScheduleInterface Chainable
      */
     public function setProcessedDate($ts)
     {
@@ -304,7 +304,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * Presets the item as _to-be_ processed and queued now.
      *
-     * @return QueueItemInterface Chainable
+     * @return ObjectScheduleInterface Chainable
      */
     public function preSave()
     {
@@ -354,7 +354,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
         $obj = $this->modelFactory()->create($this->targetType());
         $obj->load($this->targetId());
         if (!$obj->id()) {
-            $this->logger->error(sprintf('Can not load "%s" object %id', $this->targetType(), $this->targetId()));
+            $this->logger->error(sprintf('Can not load "%s" object %s', $this->targetType(), $this->targetId()));
         }
         $obj->setData($this->dataDiff());
         $update = $obj->update(array_keys($this->dataDiff()));

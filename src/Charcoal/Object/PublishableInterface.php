@@ -14,18 +14,18 @@ interface PublishableInterface
     public function setPublishDate($publishDate);
 
     /**
-     * @return DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function publishDate();
 
     /**
-     * @param string|DateTime $expiryDate The expiry date.
+     * @param string|\DateTimeInterface $expiryDate The expiry date.
      * @return PublishableInterface Chainable
      */
     public function setExpiryDate($expiryDate);
 
     /**
-     * @return DateTime|null
+     * @return \DateTimeInterface|null
      */
     public function expiryDate();
 

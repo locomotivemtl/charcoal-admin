@@ -49,7 +49,7 @@ interface ObjectRevisionInterface
     public function setRevTs($revTs);
 
     /**
-     * @return DateTimeInterface|null
+     * @return \DateTimeInterface|null
      */
     public function revTs();
 

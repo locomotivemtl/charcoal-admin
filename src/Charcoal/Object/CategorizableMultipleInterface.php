@@ -27,7 +27,7 @@ interface CategorizableMultipleInterface
     /**
      * Set the categories the object belongs to.
      *
-     * @param array|Traversable $categories The object's categories.
+     * @param array|\Traversable $categories The object's categories.
      * @return CategorizableMultipleInterface Chainable
      */
     public function setCategories($categories);
@@ -35,7 +35,7 @@ interface CategorizableMultipleInterface
     /**
      * Retrieve the categories the object belongs to.
      *
-     * @return array|Traversable
+     * @return array|\Traversable
      */
     public function categories();
 }

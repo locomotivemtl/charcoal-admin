@@ -82,7 +82,7 @@ class Content extends AbstractModel implements
 
     /**
      * @param FactoryInterface $factory The factory used to create models.
-     * @return AdminScript Chainable
+     * @return Content Chainable
      */
     protected function setModelFactory(FactoryInterface $factory)
     {

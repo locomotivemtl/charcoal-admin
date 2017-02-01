@@ -9,9 +9,10 @@ use Psr\Http\Message\ResponseInterface;
 // Intra-module (`charcoal-admin`) dependencies
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
+use Charcoal\Admin\User\AuthToken;
 
 /**
- * Logout Action
+ * Log Out Action
  */
 class LogoutAction extends AdminAction
 {
@@ -26,10 +27,30 @@ class LogoutAction extends AdminAction
         unset($request);
 
         $user = User::getAuthenticated($this->modelFactory());
-        $res = $user->logout();
-        $this->setSuccess($res);
+        if ($user) {
+            $result = $user->logout();
+            $this->deleteUserAuthTokens($user);
+            $this->setSuccess($result);
+        }
 
         return $response;
+    }
+
+    /**
+     * @param User $user The user to clear auth tokens for.
+     * @return LogoutTemplate Chainable
+     */
+    private function deleteUserAuthTokens(User $user)
+    {
+        $token = $this->modelFactory()->create(AuthToken::class);
+
+        if ($token->source()->tableExists()) {
+            $table = $token->source()->table();
+            $q = 'DELETE FROM '.$table.' WHERE username = :username';
+            $token->source()->dbQuery($q, [ 'username' => $user->username() ]);
+        }
+
+        return $this;
     }
 
     /**

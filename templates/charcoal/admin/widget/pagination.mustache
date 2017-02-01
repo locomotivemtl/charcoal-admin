@@ -5,10 +5,10 @@ Pagination Widget
 `charcoal/admin/widget/pagination`
 --}}
 
-<nav>
-    <ul class="pagination">
         <li data-page-num="{{pagePrev}}" class="js-page-switch {{^previousEnabled}}disabled{{/previousEnabled}}">
             <a href="#" aria-label="{{#_t}}Previous{{/_t}}">
+<nav id="{{ widgetId }}">
+    <ul class="pagination"{{# showLabel }} aria-label="{{ label }}"{{/ showLabel }}>
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>

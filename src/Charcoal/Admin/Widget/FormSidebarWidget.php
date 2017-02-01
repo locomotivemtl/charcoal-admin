@@ -379,21 +379,8 @@ class FormSidebarWidget extends AdminWidget implements
     protected function defaultSidebarActions()
     {
         if ($this->defaultSidebarActions === null) {
-            $obj = $this->form()->obj();
-            if ($obj->id()) {
-                $label = new TranslationString([
-                    'fr' => 'Mettre à jour',
-                    'en' => 'Update',
-                ]);
-            } else {
-                $label = new TranslationString([
-                    'fr' => 'Sauvegarder',
-                    'en' => 'Save',
-                ]);
-            }
-
             $save = [
-                'label'      => $label,
+                'label'      => $this->form()->submitLabel(),
                 'ident'      => 'save',
                 'buttonType' => 'submit',
                 'priority'   => 90

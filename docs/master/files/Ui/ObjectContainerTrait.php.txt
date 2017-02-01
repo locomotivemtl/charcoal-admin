@@ -20,12 +20,12 @@ trait ObjectContainerTrait
     private $modelFactory;
 
     /**
-     * @var string $objType
+     * @var string|null $objType
      */
     protected $objType;
 
     /**
-     * @var string $objId
+     * @var string|numeric|null $objId
      */
     protected $objId;
 
@@ -71,16 +71,19 @@ trait ObjectContainerTrait
     public function setObjType($objType)
     {
         if (!is_string($objType)) {
-            throw new InvalidArgumentException(
-                'Obj type needs to be a string'
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Object type must be a string, received %s.',
+                (is_object($objType) ? get_class($objType) : gettype($objType))
+            ));
         }
+
         $this->objType = str_replace(['.', '_'], '/', $objType);
+
         return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function objType()
     {
@@ -88,25 +91,33 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @param string|numeric $objId The object id to load.
+     * @param  string|numeric|null $objId The object id to load.
      * @throws InvalidArgumentException If provided argument is not of type 'scalar'.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjId($objId)
     {
-        if (!is_scalar($objId)) {
-            throw new InvalidArgumentException(
-                'Obj ID must be a string or numerical value.'
-            );
+        if ($objId === null) {
+            $this->objId = null;
+            return $this;
         }
+
+        if (!is_scalar($objId)) {
+            throw new InvalidArgumentException(sprintf(
+                'Object ID must be a string or numerical value, received %s.',
+                (is_object($objId) ? get_class($objId) : gettype($objId))
+            ));
+        }
+
         $this->objId = $objId;
+
         return $this;
     }
 
     /**
      * Assign the Object ID
      *
-     * @return string|numeric
+     * @return string|numeric|null
      */
     public function objId()
     {
@@ -138,6 +149,22 @@ trait ObjectContainerTrait
     }
 
     /**
+     * Retrieve a singleton of the {self::$objType} for prototyping.
+     *
+     * @throws RuntimeException If the class has no object type.
+     * @return ModelInterface
+     */
+    public function proto()
+    {
+        $objType = $this->objType();
+        if (!$objType) {
+            throw new RuntimeException('Can not create prototype, object type is undefined');
+        }
+
+        return $this->modelFactory()->get($objType);
+    }
+
+    /**
      * Retrieve the object.
      *
      * @return ModelInterface
@@ -146,6 +173,7 @@ trait ObjectContainerTrait
     {
         if ($this->obj === null) {
             $this->obj = $this->createOrLoadObj();
+            $this->setObjId($this->obj->id());
         }
 
         return $this->obj;
@@ -279,20 +307,17 @@ trait ObjectContainerTrait
     {
         try {
             $objType = $this->objType();
-
             if (!$objType) {
                 return false;
             }
 
             // Catch exception to know if the objType is valid
-            $obj = $this->modelFactory()->get($objType);
+            $obj = $this->proto();
             if (!$this->validateObjBaseClass($obj)) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Can not create object, type is not an instance of %s',
-                        $this->objBaseClass()
-                    )
-                );
+                throw new RuntimeException(sprintf(
+                    'Can not create object, type is not an instance of %s',
+                    $this->objBaseClass()
+                ));
             }
             return true;
         } catch (Exception $e) {

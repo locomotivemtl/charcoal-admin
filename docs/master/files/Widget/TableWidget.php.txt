@@ -862,7 +862,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $pagination->setData([
             'page'         => $this->page(),
             'num_per_page' => $this->numPerPage(),
-            'num_total'    => $this->numTotal()
+            'num_total'    => $this->numTotal(),
+            'label'        => new TranslationString([
+                'fr' => 'Navigation de la liste des objects',
+                'en' => 'Objects list navigation',
+            ])
         ]);
 
         return $pagination;

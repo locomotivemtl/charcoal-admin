@@ -5,8 +5,13 @@ namespace Charcoal\Admin\Widget;
 use \UnexpectedValueException;
 use \InvalidArgumentException;
 
+// From Pimple
 use \Pimple\Container;
 
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
+// From 'charcoal-admin'
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
 
@@ -49,6 +54,32 @@ class ObjectFormWidget extends FormWidget implements
     public function widgetType()
     {
         return 'charcoal/admin/widget/objectForm';
+    }
+
+    /**
+     * Retrieve the label for the form submission button.
+     *
+     * @return TranslationString|string|null
+     */
+    public function submitLabel()
+    {
+        if ($this->submitLabel === null) {
+            if ($this->objId()) {
+                $label = [
+                    'en' => 'Update',
+                    'fr' => 'Mettre à jour'
+                ];
+            } else {
+                $label = [
+                    'en' => 'Save',
+                    'fr' => 'Sauvegarder'
+                ];
+            }
+
+            $this->submitLabel = new TranslationString($label);
+        }
+
+        return $this->submitLabel;
     }
 
     /**

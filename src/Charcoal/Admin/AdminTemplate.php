@@ -709,6 +709,8 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function recaptchaKey()
     {
-        return (string)$this->appConfig['apis.google.recaptcha.key'];
+        $key = $this->appConfig['apis.google.recaptcha.public_key'] ?: $this->appConfig['apis.google.recaptcha.key'];
+
+        return (string)$key;
     }
 }

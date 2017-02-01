@@ -262,9 +262,13 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function sidebarActions()
     {
-        if ($this->sidebarActions === null || $this->parsedSidebarActions === false) {
+        if ($this->sidebarActions === null) {
+            $this->setListActions([]);
+        }
+
+        if ($this->parsedSidebarActions === false) {
             $this->parsedSidebarActions = true;
-            $this->sidebarActions = $this->createSidebarActions();
+            $this->sidebarActions = $this->createSidebarActions($this->sidebarActions);
         }
 
         return $this->sidebarActions;
@@ -276,11 +280,11 @@ class FormSidebarWidget extends AdminWidget implements
      * @param  array $actions One or more actions.
      * @return FormSidebarWidget Chainable.
      */
-    public function setSidebarActions(array $actions)
+    protected function setSidebarActions(array $actions)
     {
         $this->parsedSidebarActions = false;
 
-        $this->sidebarActions = $actions;
+        $this->sidebarActions = $this->mergeActions($this->defaultSidebarActions(), $actions);
 
         return $this;
     }
@@ -292,19 +296,11 @@ class FormSidebarWidget extends AdminWidget implements
      * It is still possible to completly override those externally by setting the "actions"
      * with the {@see self::setSidebarActions()} method.
      *
+     * @param  array $actions Actions to resolve.
      * @return array Sidebar actions.
      */
-    public function createSidebarActions()
+    protected function createSidebarActions(array $actions)
     {
-        if ($this->sidebarActions === null) {
-            $actions = $this->defaultSidebarActions();
-        } else {
-            $actions = array_merge(
-                $this->defaultSidebarActions(),
-                $this->sidebarActions
-            );
-        }
-
         $this->actionsPriority = $this->defaultActionPriority();
 
         $sidebarActions = $this->parseAsSidebarActions($actions);
@@ -380,7 +376,7 @@ class FormSidebarWidget extends AdminWidget implements
      *
      * @return array
      */
-    public function defaultSidebarActions()
+    protected function defaultSidebarActions()
     {
         if ($this->defaultSidebarActions === null) {
             $obj = $this->form()->obj();

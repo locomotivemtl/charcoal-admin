@@ -70,7 +70,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * The name of the project.
      *
-     * @var TranslationString|string|null
+     * @var string|null
      */
     private $siteName;
 
@@ -285,7 +285,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return string|null
      */
     public function title()
     {
@@ -632,10 +632,10 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * Set the name of the project.
      *
-     * @param  mixed $name Name of the project.
+     * @param  string $name Name of the project.
      * @return AdminTemplate Chainable
      */
-    public function setSiteName($name)
+    protected function setSiteName($name)
     {
         if (TranslationString::isTranslatable($name)) {
             $this->siteName = new TranslationString($name);
@@ -649,7 +649,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * Retrieve the name of the project.
      *
-     * @return TranslationString|string|null
+     * @return string|null
      */
     public function siteName()
     {

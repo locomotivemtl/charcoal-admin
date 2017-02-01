@@ -637,7 +637,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $action = $this->parseActionRenderables($action, true);
 
             if (isset($action['ident'])) {
-                if ($action['ident'] === 'create' && !$this->isObjCreatable()) {
+                if ($action['ident'] === 'view' && !$this->isObjViewable()) {
+                    $action['active'] = false;
+                } elseif ($action['ident'] === 'create' && !$this->isObjCreatable()) {
                     $action['active'] = false;
                 } elseif ($action['ident'] === 'edit' && !$this->isObjEditable()) {
                     $action['active'] = false;
@@ -647,7 +649,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             if ($action['actions']) {
-                $action['actions'] = $this->parseAsObjectActions($action['actions']);
+                $action['actions']    = $this->parseAsObjectActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             $objectActions[] = $action;
@@ -807,7 +812,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             if (is_array($action['actions'])) {
-                $action['actions'] = $this->parseAsListActions($action['actions']);
+                $action['actions']    = $this->parseAsListActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             if (isset($listActions[$ident])) {
@@ -1034,9 +1042,32 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function isObjDeletable()
     {
-        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
+        $model  = ($this->currentObj) ? $this->currentObj : $this->proto();
         $method = [ $model, 'isDeletable' ];
 
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the object can be viewed (on the front-end).
+     *
+     * If TRUE, any "View" button is shown. The object can still be
+     * saved programmatically.
+     *
+     * @return boolean
+     */
+    public function isObjViewable()
+    {
+        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
+        if (!$model->id()) {
+            return false;
+        }
+
+        $method = [ $model, 'isViewable' ];
         if (is_callable($method)) {
             return call_user_func($method);
         }

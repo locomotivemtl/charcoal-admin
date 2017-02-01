@@ -620,15 +620,13 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function headerMenuLogo()
     {
-        if (!isset($this->adminConfig['menu_logo'])) {
-            return 'assets/admin/images/user_01.jpg';
+        if (isset($this->adminConfig['menu_logo'])) {
+            if (is_string($this->adminConfig['menu_logo'])) {
+                return $this->adminConfig['menu_logo'];
+            }
         }
 
-        if (!is_string($this->adminConfig['menu_logo'])) {
-            return 'assets/admin/images/user_01.jpg';
-        }
-
-        return $this->adminConfig['menu_logo'];
+        return 'assets/admin/images/identicon.png';
     }
 
     /**

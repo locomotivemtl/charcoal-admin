@@ -56,7 +56,7 @@
 .c-nav-user_name {
     display: block;
     width: 100%;
-    @include ellipsis;
+    @include u-truncate;
 }
 
 .c-nav-user_link {

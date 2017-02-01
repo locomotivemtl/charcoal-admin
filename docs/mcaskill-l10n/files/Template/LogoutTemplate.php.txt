@@ -14,7 +14,7 @@ use Charcoal\Admin\User;
 use Charcoal\Admin\User\AuthToken;
 
 /**
- * Logout template
+ * Log Out template
  */
 class LogoutTemplate extends AdminTemplate
 {
@@ -25,9 +25,8 @@ class LogoutTemplate extends AdminTemplate
     public function init(RequestInterface $request)
     {
         $user = User::getAuthenticated($this->modelFactory());
-
         if ($user) {
-            $user->logout();
+            $result = $user->logout();
             $this->deleteUserAuthTokens($user);
         }
 
@@ -45,7 +44,7 @@ class LogoutTemplate extends AdminTemplate
         if ($token->source()->tableExists()) {
             $table = $token->source()->table();
             $q = 'DELETE FROM '.$table.' WHERE username = :username';
-            $token->source()->dbQuery($q, [ 'username'=>$user->username() ]);
+            $token->source()->dbQuery($q, [ 'username' => $user->username() ]);
         }
 
         return $this;

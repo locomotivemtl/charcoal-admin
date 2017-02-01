@@ -566,9 +566,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
-        if ($this->objectActions === null || $this->parsedObjectActions === false) {
+        if ($this->objectActions === null) {
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['object_actions'])) {
+                $actions = $collectionConfig['object_actions'];
+            } else {
+                $actions = [];
+            }
+            $this->setObjectActions($actions);
+        }
+
+        if ($this->parsedObjectActions === false) {
             $this->parsedObjectActions = true;
-            $this->objectActions = $this->createObjectActions();
+            $this->objectActions = $this->createObjectActions($this->objectActions);
         }
 
         $objectActions = [];
@@ -589,7 +599,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $this->parsedObjectActions = false;
 
-        $this->objectActions = $actions;
+        $this->objectActions = $this->mergeActions($this->defaultObjectActions(), $actions);
 
         return $this;
     }
@@ -601,25 +611,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * It is still possible to completly override those externally by setting the "object_actions"
      * with the {@see self::setObjectActions()} method.
      *
+     * @param  array $actions Actions to resolve.
      * @return array Object actions.
      */
-    public function createObjectActions()
+    public function createObjectActions(array $actions)
     {
-        if ($this->objectActions === null) {
-            $collectionConfig = $this->collectionConfig();
-            if (isset($collectionConfig['object_actions'])) {
-                $actions = $collectionConfig['object_actions'];
-            } else {
-                $actions = [];
-            }
-        } else {
-            $actions = $this->objectActions;
-        }
-
-        $objectActions = $this->parseActions(array_merge(
-            $this->defaultObjectActions(),
-            $actions
-        ));
+        $objectActions = $this->parseActions($actions);
 
         return $objectActions;
     }
@@ -666,7 +663,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      *
      * @return array
      */
-    public function defaultObjectActions()
+    protected function defaultObjectActions()
     {
         if ($this->defaultObjectActions === null) {
             $edit = [
@@ -729,9 +726,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function listActions()
     {
-        if ($this->listActions === null || $this->parsedListActions === false) {
+        if ($this->listActions === null) {
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['list_actions'])) {
+                $actions = $collectionConfig['list_actions'];
+            } else {
+                $actions = [];
+            }
+            $this->setListActions($actions);
+        }
+
+        if ($this->parsedListActions === false) {
             $this->parsedListActions = true;
-            $this->listActions = $this->createListActions();
+            $this->listActions = $this->createListActions($this->listActions);
         }
 
         return $this->listActions;
@@ -743,11 +750,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @param  array $actions One or more actions.
      * @return TableWidget Chainable.
      */
-    public function setListActions(array $actions)
+    protected function setListActions(array $actions)
     {
         $this->parsedListActions = false;
 
-        $this->listActions = $actions;
+        $this->listActions = $this->mergeActions($this->defaultListActions(), $actions);
 
         return $this;
     }
@@ -759,24 +766,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * It is still possible to completly override those externally by setting the "list_actions"
      * with the {@see self::setListActions()} method.
      *
-     * @todo Convert to Charcoal\Ui\Menu\GenericMenu
+     * @param  array $actions Actions to resolve.
      * @return array List actions.
      */
-    public function createListActions()
+    protected function createListActions(array $actions)
     {
-        if ($this->listActions === null) {
-            $collectionConfig = $this->collectionConfig();
-            if (isset($collectionConfig['list_actions'])) {
-                $actions = $collectionConfig['list_actions'];
-            } else {
-                $actions = [];
-            }
-        } else {
-            $actions = $this->listActions;
-        }
-
-        $actions = array_merge($this->defaultListActions(), $actions);
-
         $this->actionsPriority = $this->defaultActionPriority();
 
         $listActions = $this->parseAsListActions($actions);
@@ -848,7 +842,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      *
      * @return array
      */
-    public function defaultListActions()
+    protected function defaultListActions()
     {
         if ($this->defaultListActions === null) {
             $this->defaultListActions = [];
@@ -868,7 +862,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $pagination->setData([
             'page'         => $this->page(),
             'num_per_page' => $this->numPerPage(),
-            'num_total'    => $this->numTotal()
+            'num_total'    => $this->numTotal(),
+            'label'        => new TranslationString([
+                'fr' => 'Navigation de la liste des objects',
+                'en' => 'Objects list navigation',
+            ])
         ]);
 
         return $pagination;

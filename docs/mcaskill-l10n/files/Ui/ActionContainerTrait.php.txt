@@ -36,7 +36,7 @@ trait ActionContainerTrait
      * @param  array $actions  Actions to resolve.
      * @param  mixed $renderer Either a {@see ViewableInterface} or TRUE
      *     to determine if any renderables should be processed.
-     * @return array List actions.
+     * @return array Returns a collection of parsed actions.
      */
     protected function parseActions(array $actions, $renderer = false)
     {
@@ -77,6 +77,61 @@ trait ActionContainerTrait
     }
 
     /**
+     * Merge the given (raw) UI actions into a unique set.
+     *
+     * @param  array ...$params Variable list of actions to merge.
+     * @return array Returns a collection of merged actions.
+     */
+    protected function mergeActions(array ...$params)
+    {
+        $unique = [];
+        foreach ($params as $actions) {
+            foreach ($actions as $ident => $action) {
+                if ($action === '|') {
+                    $unique[$ident] = $action;
+                    continue;
+                }
+
+                $ident = $this->parseActionIdent($ident, $action);
+                $action['ident'] = $ident;
+
+                $hasActions = (isset($action['actions']) && is_array($action['actions']));
+                if ($hasActions) {
+                    $action['actions'] = $this->mergeActions($action['actions']);
+                } else {
+                    $action['actions'] = [];
+                }
+
+                if (isset($unique[$ident])) {
+                    if (static::compareActions($action, $unique[$ident])) {
+                        if ($hasActions && !!$unique[$ident]['actions']) {
+                            $action['actions'] = $this->mergeActions(
+                                $unique[$ident]['actions'],
+                                $action['actions']
+                            );
+                            unset($unique[$ident]['actions']);
+                        }
+                        $unique[$ident] = array_replace($unique[$ident], $action);
+                    } else {
+                        if ($hasActions && !!$unique[$ident]['actions']) {
+                            $unique[$ident]['actions'] = $this->mergeActions(
+                                $unique[$ident]['actions'],
+                                $action['actions']
+                            );
+                            unset($action['actions']);
+                        }
+                        $unique[$ident] = array_replace($action, $unique[$ident]);
+                    }
+                } else {
+                    $unique[$ident] = $action;
+                }
+            }
+        }
+
+        return $unique;
+    }
+
+    /**
      * Parse the given UI action identifier.
      *
      * @param  string $ident  The action identifier.
@@ -86,7 +141,7 @@ trait ActionContainerTrait
     protected function parseActionIdent($ident, $action)
     {
         if (isset($action['ident'])) {
-            $ident = $action['ident'];
+            return $action['ident'];
         }
 
         return $ident;
@@ -153,11 +208,11 @@ trait ActionContainerTrait
                 $action['isLink']   = true;
                 $action['isButton'] = false;
             } else {
-                $action['url'] = '#';
+                $action['url'] = null;
             }
 
             if (isset($action['buttonType'])) {
-                if (in_array($action['buttonType'], $buttonTypes)) {
+                if ($action['url'] === '#' && in_array($action['buttonType'], $buttonTypes)) {
                     $action['isLink']   = false;
                     $action['isButton'] = true;
                 }
@@ -329,6 +384,12 @@ trait ActionContainerTrait
             $url = $url->fallback();
         }
 
+        $url = trim($url);
+
+        if (empty($url) && !is_numeric($url)) {
+            return '#';
+        }
+
         if ($renderer === null) {
             /** @todo Shame! Force `{{ id }}` to use "obj_id" GET parameter… */
             $objId = filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
@@ -437,6 +498,24 @@ trait ActionContainerTrait
         $b = isset($b['priority']) ? $b['priority'] : 0;
 
         return ($a < $b) ? (-1) : 1;
+    }
+
+    /**
+     * To be called when merging actions.
+     *
+     * Note: Practical for extended classes.
+     *
+     * @param  array $a First action object to sort.
+     * @param  array $b Second action object to sort.
+     * @return boolean Returns TRUE if $a has priority. Otherwise, FALSE for $b.
+     */
+    protected static function compareActions(array $a, array $b)
+    {
+        $a = isset($a['priority']) ? $a['priority'] : 0;
+        $b = isset($b['priority']) ? $b['priority'] : 0;
+        $c = isset($action['isSubmittable']) && $action['isSubmittable'];
+
+        return ($c || ($a === 0) || ($a >= $b));
     }
 
     /**

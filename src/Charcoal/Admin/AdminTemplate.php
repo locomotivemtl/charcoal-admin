@@ -167,7 +167,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
 
         if ($this->authRequired() !== false) {
             // This can reset headers / die if unauthorized.
-            if (!$this->authenticator->authenticate()) {
+            if (!$this->authenticator()->authenticate()) {
                 header('HTTP/1.0 403 Forbidden');
                 header('Location: '.$this->adminUrl().'login');
                 exit;
@@ -571,13 +571,22 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
 
     /**
      * Determine if the current user is authenticated.
-     * Uses the Authenticator service.
      *
      * @return boolean
      */
     public function isAuthenticated()
     {
-        return !!$this->authenticator->authenticate();
+        return !!$this->authenticator()->authenticate();
+    }
+
+    /**
+     * Retrieve the currently authenticated user.
+     *
+     * @return \Charcoal\User\UserInterface|null
+     */
+    public function getAuthenticatedUser()
+    {
+        return $this->authenticator()->authenticate();
     }
 
     /**

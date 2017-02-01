@@ -223,6 +223,26 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     }
 
     /**
+     * Determine if the current user is authenticated.
+     *
+     * @return boolean
+     */
+    public function isAuthenticated()
+    {
+        return !!$this->authenticator()->authenticate();
+    }
+
+    /**
+     * Retrieve the currently authenticated user.
+     *
+     * @return \Charcoal\User\UserInterface|null
+     */
+    public function getAuthenticatedUser()
+    {
+        return $this->authenticator()->authenticate();
+    }
+
+    /**
      * @return boolean
      */
     public function hasFeedbacks()

@@ -89,6 +89,21 @@
             }
         },
         "scripts": {
+            "notification/minute":{
+                "ident": "charcoal/admin/script/notification/process-minute"
+            },
+            "notification/hourly":{
+                "ident": "charcoal/admin/script/notification/process-hourly"
+            },
+            "notification/daily":{
+                "ident": "charcoal/admin/script/notification/process-daily"
+            },
+            "notification/weekly":{
+                "ident": "charcoal/admin/script/notification/process-weekly"
+            },
+            "notification/monthly":{
+                "ident": "charcoal/admin/script/notification/process-monthly"
+            },
             "object/create": {
                 "ident": "charcoal/admin/script/object/create"
             },

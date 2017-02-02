@@ -82,9 +82,6 @@
                         "form_ident": "default",
                         "obj_type": "charcoal/admin/user/acl-role"
                     }
-                },
-                "sidemenu": {
-                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/map"
                 }
             },
             "admin.table": {
@@ -103,9 +100,6 @@
                         "collection_ident": "default",
                         "obj_type": "charcoal/admin/user/acl-role"
                     }
-                },
-                "sidemenu": {
-                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/map"
                 }
             }
         },

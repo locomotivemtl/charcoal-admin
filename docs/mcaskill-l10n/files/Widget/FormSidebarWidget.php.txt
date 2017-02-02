@@ -263,7 +263,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function sidebarActions()
     {
         if ($this->sidebarActions === null) {
-            $this->setListActions([]);
+            $this->setSidebarActions([]);
         }
 
         if ($this->parsedSidebarActions === false) {

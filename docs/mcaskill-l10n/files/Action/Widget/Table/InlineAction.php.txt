@@ -3,23 +3,27 @@
 namespace Charcoal\Admin\Action\Widget\Table;
 
 use Exception;
+use RuntimeException;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From Pimple
 use Pimple\Container;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Widget\ObjectFormWidget;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
- * Inline action: Return the inline edit properties HTML from an object
+ * Action: Inline editing of one object in Table Widget
+ *
+ * Renders an HTML form for editing an object in a table row.
  *
  * ## Required parameters
  * - `objType`
@@ -60,13 +64,13 @@ class InlineAction extends AdminAction
     }
 
     /**
-     * @throws Exception If the factory is not set.
+     * @throws RuntimeException If the factory is not set.
      * @return FactoryInterface
      */
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Widget factory is not set on inline action widget.'
             );
         }
@@ -80,7 +84,7 @@ class InlineAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         $objType = $request->getParam('obj_type');
-        $objId = $request->getParam('obj_id');
+        $objId   = $request->getParam('obj_id');
 
         if (!$objType || !$objId) {
             $this->setSuccess(false);

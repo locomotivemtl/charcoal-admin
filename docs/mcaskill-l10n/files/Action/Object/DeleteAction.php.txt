@@ -2,14 +2,13 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-// Dependencies from `PHP`
 use Exception;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 
 /**
@@ -19,64 +18,111 @@ use Charcoal\Admin\AdminAction;
  *
  * **Required parameters**
  *
- * - `obj_type`
- * - `obj_id`
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
+ * - `obj_id` (_mixed_) — The object ID to delete
  *
  * ## Response
  *
- * - `success` true if login was successful, false otherwise.
- *   - Failure should also send a different HTTP code: see below.
- * - `feedbacks` (Optional) operation feedbacks, if any.
- * - `next_url` Redirect URL, in case of successfull login.
- *   - This is the `next_url` parameter if it was set, or the default admin URL if not
+ * - `success` (_boolean_) — TRUE if the object was properly deleted, FALSE in case of any error.
+ * - `next_url` (_string_) — Redirect the client on success or failure.
  *
  * ## HTTP Codes
  *
- * - `200` in case of a successful object deletion
- * - `404` if any error occurs
- *
- * Ident: `charcoal/admin/action/object/delete`
+ * - `200` — Successful; Object has been deleted
+ * - `400` — Client error; Invalid request data
+ * - `404` — Storage error; Object nonexistent ID
+ * - `500` — Server error; Object could not be deleted
  *
  */
 class DeleteAction extends AdminAction
 {
-
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @todo   Add support for "next_url".
+     * @todo   Implement Trash
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
+            $failMessage = $this->translate('Failed to delete object');
+            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+                '{{ errorMessage }}' => $failMessage
+            ]);
+            $reqMessage  = $this->translate(
+                '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+            );
+            $typeMessage = $this->translate(
+                '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+            );
+
             $objType = $request->getParam('obj_type');
-            $objId = $request->getParam('obj_id');
+            $objId   = $request->getParam('obj_id');
 
             if (!$objType) {
+                $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+                $this->addFeedback('error', strtr($requiredMessage, [
+                    '{{ parameter }}'    => '"obj_type"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
                 $this->setSuccess(false);
-                return $response->withStatus(404);
+
+                return $response->withStatus(400);
             }
 
             if (!$objId) {
+                $actualType = is_object($objId) ? get_class($objId) : gettype($objId);
+                $this->addFeedback('error', strtr($requiredMessage, [
+                    '{{ parameter }}'    => '"obj_id"',
+                    '{{ expectedType }}' => 'string or numeric',
+                    '{{ actualType }}'   => $actualType,
+                ]));
                 $this->setSuccess(false);
-                return $response->withStatus(404);
+
+                return $response->withStatus(400);
             }
 
-            $this->logger->debug(sprintf('Admin Deleting object "%s" ID %s', $objType, $objId));
+            $this->logger->debug(sprintf(
+                '[Admin] Deleting Object "%s" ID: %s',
+                $objType,
+                $objId
+            ));
 
             $obj = $this->modelFactory()->create($objType);
             $obj->load($objId);
+
             if (!$obj->id()) {
+                $this->addFeedback('error', strtr($errorThrown, [
+                    '{{ errorThrown }}' => $this->translate('No object found.')
+                ]));
                 $this->setSuccess(false);
+
                 return $response->withStatus(404);
             }
-            $res = $obj->delete();
-            if ($res) {
+
+            $result = $obj->delete();
+            if ($result) {
+                $this->addFeedback('success', $this->translate('Object permanently deleted.'));
+                $this->addFeedback('success', strtr($this->translate('Deleted Object: {{ objId }}'), [
+                    '{{ objId }}' => $obj->id()
+                ]));
                 $this->setSuccess(true);
+
                 return $response;
+            } else {
+                $this->addFeedback('error', $failMessage);
+                $this->setSuccess(false);
+
+                return $response->withStatus(500);
             }
         } catch (Exception $e) {
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
+
             return $response->withStatus(500);
         }
     }
@@ -86,12 +132,10 @@ class DeleteAction extends AdminAction
      */
     public function results()
     {
-        $results = [
+        return [
             'success'   => $this->success(),
             'feedbacks' => $this->feedbacks()
         ];
-
-        return $results;
     }
 }
 

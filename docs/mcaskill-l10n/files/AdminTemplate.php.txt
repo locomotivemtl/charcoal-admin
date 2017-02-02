@@ -21,6 +21,8 @@ use Charcoal\User\Authorizer;
 // From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
 use Charcoal\Translation\TranslationConfig;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
@@ -44,9 +46,12 @@ use Charcoal\Admin\User\AuthAwareTrait;
  * - `hasFeedback` (bool) - If there is feedback to display or not
  * - `feedback` (iterator) - The feedback data
  */
-class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
+class AdminTemplate extends AbstractTemplate implements
+    AuthAwareInterface,
+    CatalogAwareInterface
 {
     use AuthAwareTrait;
+    use CatalogAwareTrait;
 
     /**
      * The base URI.
@@ -718,7 +723,13 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function recaptchaKey()
     {
-        $key = $this->appConfig['apis.google.recaptcha.public_key'] ?: $this->appConfig['apis.google.recaptcha.key'];
+        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+
+        if (isset($recaptcha['public_key'])) {
+            $key = $recaptcha['public_key'];
+        } else {
+            $key = $recaptcha['key'];
+        }
 
         return (string)$key;
     }

@@ -4,41 +4,52 @@ namespace Charcoal\Admin\Action\Object;
 
 use Exception;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Model\ModelValidator;
 
-// From `charcoal-base`
+// From 'charcoal-object'
 use Charcoal\Object\ContentInterface;
 
 /**
- * Admin Create Action: Create an object in its Storage.
+ * Action: Create an object and insert into storage.
  *
  * ## Required Parameters
- * - `obj_type`
+ *
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
  *
  * ## Response
- * - `success` _boolean_ True if the object was properly saved, false in case of any error.
- * - `obj_id` _mixed_ The created object ID, if any.
- * - `obj` _array_ The created object data.
  *
- * ## HTTP Codes
- * - `200` in case of a successful login
- * - `404` if any error occurs
+ * - `success` (_boolean_) — TRUE if the object was properly saved, FALSE in case of any error.
+ * - `obj_id` (_mixed_) — The created object ID, if any.
+ * - `obj` (_array_) — The created object data.
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; Object has been created
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Object could not be created
  */
 class SaveAction extends AbstractSaveAction
 {
     /**
-     * @var array $saveData
+     * Data for the target model.
+     *
+     * @var array
      */
     protected $saveData = [];
 
     /**
-     * @param array|\ArrayAccess $data The action data.
-     * @return LoginAction Chainable
+     * Set the action's dataset.
+     *
+     * Extract relevant model data from $data, excluding _object type_.
+     * This {@see self::$saveData subset} is merged onto the target model.
+     *
+     * @param  array|\ArrayAccess $data The update action data.
+     * @return SaveAction Chainable
      */
     public function setData($data)
     {
@@ -51,16 +62,21 @@ class SaveAction extends AbstractSaveAction
     }
 
     /**
-     * @param array $saveData The save data.
+     * Set the dataset used to create the target model.
+     *
+     * @param  array $saveData The save data.
      * @return SaveAction Chainable
      */
     public function setSaveData(array $saveData)
     {
         $this->saveData = $saveData;
+
         return $this;
     }
 
     /**
+     * Retrieve the dataset used to create the target model.
+     *
      * @return array
      */
     public function saveData()
@@ -69,32 +85,36 @@ class SaveAction extends AbstractSaveAction
     }
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
+            $failMessage = $this->translate('Failed to create object');
+            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+                '{{ errorMessage }}' => $failMessage
+            ]);
+
             $this->setData($request->getParams());
 
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
-
-            $saveData = $this->saveData();
-
             $obj->setFlatData($this->saveData());
 
             $valid = $obj->validate();
-
             if (!$valid) {
-                $this->setSuccess(false);
-                $this->addFeedbackFromValidation($obj);
                 if (!$this->hasFeedbacks()) {
-                    $this->addFeedback('error', 'Failed to create object: validation error(s).');
+                    $this->addFeedback('error', strtr($errorThrown, [
+                        '{{ errorThrown }}' => $this->translate('Invalid Data')
+                    ]));
                 }
 
-                return $response->withStatus(404);
+                $this->addFeedbackFromValidation($obj);
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
             }
 
             if ($obj instanceof ContentInterface) {
@@ -108,29 +128,37 @@ class SaveAction extends AbstractSaveAction
                 }
             }
 
-            $ret = $obj->save();
+            $result = $obj->save();
 
-            if ($ret) {
+            if ($result) {
                 $this->setObj($obj);
-                $this->setSuccess(true);
-                $this->addFeedback('success', 'Object was successfully created');
+
+                $this->addFeedback('success', $this->translate('Object has been successfully created.'));
+                $this->addFeedback('success', strtr($this->translate('Created Object: {{ objId }}'), [
+                    '{{ objId }}' => $obj->id()
+                ]));
                 $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);
+                $this->setSuccess(true);
 
                 return $response;
             } else {
                 $this->setObj(null);
-                $this->setSuccess(false);
-                $this->addFeedback('error', 'Could not create objet. Unknown error');
-                $this->addFeedbackFromValidation($obj);
 
-                return $response->withStatus(404);
+                $this->addFeedback('error', $failMessage);
+                $this->addFeedbackFromValidation($obj);
+                $this->setSuccess(false);
+
+                return $response->withStatus(500);
             }
         } catch (Exception $e) {
             $this->setObj(null);
-            $this->setSuccess(false);
-            $this->addFeedback('error', $e->getMessage());
 
-            return $response->withStatus(404);
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
+            $this->setSuccess(false);
+
+            return $response->withStatus(500);
         }
     }
 }

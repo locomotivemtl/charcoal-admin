@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin;
 
+use RuntimeException;
+
 use Pimple\Container;
 
 // From PSR-7 (HTTP Messaging)
@@ -16,6 +18,8 @@ use Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
@@ -28,9 +32,12 @@ use Charcoal\Admin\User\AuthAwareTrait;
  * The base class for the `admin` Actions.
  *
  */
-abstract class AdminAction extends AbstractAction implements AuthAwareInterface
+abstract class AdminAction extends AbstractAction implements
+    AuthAwareInterface,
+    CatalogAwareInterface
 {
     use AuthAwareTrait;
+    use CatalogAwareTrait;
 
     /**
      * Store a reference to the admin configuration.
@@ -91,6 +98,9 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
+
+        // CatalogAware Depencency
+        $this->setCatalog($container['translator/catalog']);
     }
 
     /**
@@ -240,6 +250,34 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     public function getAuthenticatedUser()
     {
         return $this->authenticator()->authenticate();
+    }
+
+    /**
+     * @todo   {@link https://github.com/mcaskill/charcoal-recaptcha Implement CAPTCHA validation as a service}.
+     * @param  string $response The captcha value (response) to validate.
+     * @throws RuntimeException If Google reCAPTCHA is not configured.
+     * @return boolean
+     */
+    protected function validateCaptcha($response)
+    {
+        $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+
+        if (isset($recaptcha['private_key'])) {
+            $secret = $recaptcha['private_key'];
+        } else {
+            $secret = $recaptcha['secret'];
+        }
+
+        if (!$secret) {
+            throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] not configured.');
+        }
+
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $response = file_get_contents($validationUrl.'?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
+        $response = json_decode($response, true);
+
+        return !!$response['success'];
     }
 
     /**

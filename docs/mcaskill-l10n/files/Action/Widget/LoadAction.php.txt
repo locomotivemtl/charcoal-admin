@@ -23,7 +23,27 @@ use Charcoal\View\ViewInterface;
 use Charcoal\Admin\AdminAction;
 
 /**
+ * Action: Build a widget.
  *
+ * ## Required Parameters
+ *
+ * - `widget_type` (_string_) — The widget type, as an identifier for a {@see \Charcoal\App\Template\WidgetInterface}.
+ *
+ * ## Optional Parameters
+ *
+ * - `widget_options` (_array_) — Data to set on the built widget.
+ *
+ * ## Response
+ *
+ * - `success` (_boolean_) — TRUE if the widget was built, FALSE in case of any error.
+ * - `widget_html` (_string_) — The widget's rendered view.
+ * - `widget_id` (_string_) — The widget's ID.
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; Widget built
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Widget could not be built
  */
 class LoadAction extends AdminAction
 {
@@ -83,19 +103,54 @@ class LoadAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $previousId    = $request->getParam('widget_id');
         $widgetType    = $request->getParam('widget_type');
         $widgetOptions = $request->getParam('widget_options');
 
-        if (!$widgetType) {
-            $this->setSuccess(false);
-            return $response->withStatus(400);
+        if ($previousId) {
+            $failMessage = $this->translate('Failed to reload widget');
+        } else {
+            $failMessage = $this->translate('Failed to load widget');
         }
+        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            '{{ errorMessage }}' => $failMessage
+        ]);
+        $reqMessage  = $this->translate(
+            '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+        );
+        $typeMessage = $this->translate(
+            '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+        );
 
         try {
+            if (!$widgetType) {
+                $actualType = is_object($widgetType) ? get_class($widgetType) : gettype($widgetType);
+                $this->addFeedback('error', strtr($requiredMessage, [
+                    '{{ parameter }}'    => '"obj_type"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
             $widget = $this->widgetFactory()->create($widgetType);
             $widget->setView($this->widgetView());
 
-            if (is_array($widgetOptions)) {
+            if (isset($widgetOptions)) {
+                if (!is_array($widgetOptions)) {
+                    $actualType = is_object($widgetOptions) ? get_class($widgetOptions) : gettype($widgetOptions);
+                    $this->addFeedback('error', strtr($typeMessage, [
+                        '{{ parameter }}'    => '"widget_options"',
+                        '{{ expectedType }}' => 'array',
+                        '{{ actualType }}'   => $actualType,
+                    ]));
+                    $this->setSuccess(false);
+
+                    return $response->withStatus(400);
+                }
+
                 if (!isset($widgetOptions['type'])) {
                     $widgetOptions['type'] = $widgetType;
                 }
@@ -109,18 +164,21 @@ class LoadAction extends AdminAction
             $this->setWidgetHtml($widgetHtml);
             $this->setWidgetId($widgetId);
 
+            if ($previousId) {
+                $doneMessage = $this->translate('Widget Reloaded');
+            } else {
+                $doneMessage = $this->translate('Widget Loaded');
+            }
+            $this->addFeedback('success', $doneMessage);
             $this->setSuccess(true);
+
             return $response;
         } catch (Exception $e) {
-            $message = $e->getMessage();
-
-            $this->addFeedback('error', 'An error occured reloading the widget');
-
-            if ($message) {
-                $this->addFeedback('error', $message);
-            }
-
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
+
             return $response->withStatus(500);
         }
     }

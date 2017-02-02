@@ -6,13 +6,22 @@ namespace Charcoal\Admin\Action;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\AuthToken;
 
 /**
- * Log Out Action
+ * Action: Attempt to log a user out.
+ *
+ * ## Response
+ *
+ * - `success` (_boolean_) — TRUE if the user was properly logged out, FALSE in case of any error.
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; User has been safely logged out
+ * - `500` — Server error; User could not be logged out
  */
 class LogoutAction extends AdminAction
 {
@@ -26,14 +35,48 @@ class LogoutAction extends AdminAction
     {
         unset($request);
 
-        $user = User::getAuthenticated($this->modelFactory());
-        if ($user) {
-            $result = $user->logout();
-            $this->deleteUserAuthTokens($user);
-            $this->setSuccess($result);
-        }
+        try {
+            $doneMessage = $this->translate('You are now logged out.');
+            $failMessage = $this->translate('An error occurred while logging out');
+            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+                '{{ errorMessage }}' => $failMessage
+            ]);
 
-        return $response;
+            $user = User::getAuthenticated($this->modelFactory());
+            if ($user === null) {
+                $result = false;
+
+                /** Fail silently — Never confirm or deny the existence of an account. */
+                $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+                if ($ip) {
+                    $logMessage = sprintf('[Admin] Logout attempt for unauthenticated user from %s', $ip);
+                } else {
+                    $logMessage = '[Admin] Logout attempt for unauthenticated user';
+                }
+                $this->logger->warning($logMessage);
+            } {
+                $result = $user->logout();
+                $this->deleteUserAuthTokens($user);
+            }
+
+            $this->setSuccess($result);
+            if ($result) {
+                $this->addFeedback('success', $doneMessage);
+
+                return $response;
+            } else {
+                $this->addFeedback('error', $failMessage);
+
+                return $response->withStatus(500);
+            }
+        } catch (Exception $e) {
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
+            $this->setSuccess(false);
+
+            return $response->withStatus(500);
+        }
     }
 
     /**
@@ -54,6 +97,7 @@ class LogoutAction extends AdminAction
     }
 
     /**
+     * @todo   Provide feedback and redirection?
      * @return array
      */
     public function results()

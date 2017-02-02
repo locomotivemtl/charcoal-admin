@@ -2,26 +2,28 @@
 
 namespace Charcoal\Admin\Action\Widget\Table;
 
-// Dependencies from `PHP`
 use Exception;
+use RuntimeException;
 
-// Dependencies from `pimple/pimple`
-use Pimple\Container;
-
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Dependency from 'charcoal-factory'
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Widget\ObjectForm;
 use Charcoal\Admin\Widget\FormProperty;
 
 /**
+ * Action: Inline editing of multiple objects in Table Widget
  *
+ * Renders an HTML form for editing objects across table rows.
  */
 class InlineMultiAction extends AdminAction
 {
@@ -58,13 +60,13 @@ class InlineMultiAction extends AdminAction
     }
 
     /**
-     * @throws Exception If the factory is not set.
+     * @throws RuntimeException If the factory is not set.
      * @return FactoryInterface
      */
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Widget factory is not set on inline action widget.'
             );
         }
@@ -79,7 +81,7 @@ class InlineMultiAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         $objType = $request->getParam('obj_type');
-        $objIds = $request->getParam('obj_ids');
+        $objIds  = $request->getParam('obj_ids');
 
         if (!$objType || !$objIds) {
             $this->setSuccess(false);

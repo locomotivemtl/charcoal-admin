@@ -47,9 +47,9 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
         $this->obj = $obj;
 
         if ($obj instanceof ModelInterface) {
-            $this->setObjId($obj->id());
+            $this->objId = $obj->id();
         } else {
-            $this->setObjId(null);
+            $this->objId = null;
         }
 
         return $this;

@@ -34,8 +34,8 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
      */
     protected function authorIdent()
     {
-        $author = $this->authenticator()->authenticate();
-        return (string)$author->id();
+        $user = $this->getAuthenticatedUser();
+        return (string)$user->id();
     }
 
     /**
@@ -45,6 +45,13 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     public function setObj($obj)
     {
         $this->obj = $obj;
+
+        if ($obj instanceof ModelInterface) {
+            $this->objId = $obj->id();
+        } else {
+            $this->objId = null;
+        }
+
         return $this;
     }
 

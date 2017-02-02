@@ -14,7 +14,10 @@ use Charcoal\Factory\FactoryInterface;
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
-// Module `charcoal-app` dependencies
+// From 'charcoal-translation'
+use Charcoal\Translation\TranslationString;
+
+// From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
 
 // Local module (charcoal-admin) dependencies
@@ -28,6 +31,7 @@ use Charcoal\Admin\User\AuthAwareTrait;
 abstract class AdminAction extends AbstractAction implements AuthAwareInterface
 {
     use AuthAwareTrait;
+
     /**
      * Store a reference to the admin configuration.
      *
@@ -39,6 +43,13 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
      * @var \Charcoal\App\Config
      */
     protected $appConfig;
+
+    /**
+     * The name of the project.
+     *
+     * @var string|null
+     */
+    private $siteName;
 
     /**
      * @var array $feedbacks
@@ -74,6 +85,7 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
         $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
+        $this->setSiteName($container['config']['project_name']);
         $this->setModelFactory($container['model/factory']);
 
         // AuthAware dependencies
@@ -154,6 +166,33 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     }
 
     /**
+     * Set the name of the project.
+     *
+     * @param  string $name Name of the project.
+     * @return AdminAction Chainable
+     */
+    protected function setSiteName($name)
+    {
+        if (TranslationString::isTranslatable($name)) {
+            $this->siteName = new TranslationString($name);
+        } else {
+            $this->siteName = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the name of the project.
+     *
+     * @return string|null
+     */
+    public function siteName()
+    {
+        return $this->siteName;
+    }
+
+    /**
      * Authentication is required by default.
      *
      * Reimplement and change to false in templates that do not require authentication.
@@ -181,6 +220,26 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
         if ($u === null || !$u->id()) {
             die('Auth required');
         }
+    }
+
+    /**
+     * Determine if the current user is authenticated.
+     *
+     * @return boolean
+     */
+    public function isAuthenticated()
+    {
+        return !!$this->authenticator()->authenticate();
+    }
+
+    /**
+     * Retrieve the currently authenticated user.
+     *
+     * @return \Charcoal\User\UserInterface|null
+     */
+    public function getAuthenticatedUser()
+    {
+        return $this->authenticator()->authenticate();
     }
 
     /**

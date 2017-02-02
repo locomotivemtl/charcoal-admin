@@ -1,72 +1,180 @@
-// ==========================================================================
-// Mixins tools
-// ==========================================================================
+
+///
+/// Tools
+/// ============================================================================
+///
+
+///
+/// Removes units (px, em, etc.) from a given number.
+///
+/// @param  {Number} $value - The numeric value to strip units from.
+/// @return {Number} A unitless numeric value.
+///
+@function strip-unit($value)
+{
+    @return $value / ($value * 0 + 1);
+}
+
+///
+/// Resolve whether a rule is important or not.
+///
+/// @param  {Boolean}     $flag - Whether a rule is important (TRUE) or not (FALSE).
+/// @return {String|Null} Returns `!important` or NULL.
+///
+@function important($flag: false)
+{
+    @if ($flag == true) {
+        @return !important;
+    } @elseif ($important == false) {
+        @return null;
+    } @else {
+        @error "`#{$flag}` needs to be `true` or `false`."
+    }
+}
+
+/// Functions
+/// ============================================================================
+
+/// Mixins
+/// ============================================================================
 
 @mixin ellipsis {
     @include u-truncate;
 }
 
-// Text Truncation =============================================================
-
-// Prevent text from wrapping onto multiple lines,
-// and truncate with an ellipsis.
-//
-// 1. Ensure that the node has a maximum width after which
-//    truncation can occur.
-// 2. Fix for IE 8/9 if `word-wrap: break-word` is in effect
-//    on ancestor nodes.
-//
-// @see  inuitcss/utils-text
-
-@mixin u-truncate( $truncation-boundary: 100% )
+///
+/// Prevent text from wrapping onto multiple lines for the current element.
+///
+/// An ellipsis is appended to the end of the line.
+///
+/// 1. Ensure that the node has a maximum width after which truncation can occur.
+/// 2. Fix for IE 8/9 if `word-wrap: break-word` is in effect on ancestor nodes.
+///
+/// @param  {Number} $width [100%] - The maximum width of element.
+/// @output `max-width`, `word-wrap`, `white-space`, `overflow`, `text-overflow`
+///
+@mixin u-truncate($width: 100%)
 {
-    @if $truncation-boundary {
-        max-width: $truncation-boundary; /* [1] */
+    @if $width {
+        max-width: $width; // [1]
     }
-    word-wrap     : normal;  /* [2] */
-    white-space   : nowrap;
-    overflow      : hidden;
-    text-overflow : ellipsis;
+    word-wrap:     normal;  // [2]
+    white-space:   nowrap;
+    overflow:      hidden;
+    text-overflow: ellipsis;
 }
 
-// Contain Floats ==============================================================
-
-// Micro clearfix, as per {@link css-101.org/articles/clearfix/latest-new-clearfix-so-far.php CSS Mojo}
-//
-// Make an element expand to contain floated children.
-// Uses pseudo-elements (micro clearfix).
-//
-// 1. The space content is one way to avoid an Opera bug when the
-//    `contenteditable` attribute is included anywhere else in the document.
-//    Otherwise it causes space to appear at the top and bottom of the
-//    element.
-// 2. The use of `table` rather than `block` is only necessary if using
-//    `::before` to contain the top-margins of child elements.
-
-@mixin u-clearfix
+///
+/// Micro clearfix rules for containing floats.
+///
+/// @link   http://www.cssmojo.com/the-very-latest-clearfix-reloaded/
+/// @param  {List} $supports The type of clearfix to generate.
+/// @output Injects `:::after` pseudo-element.
+///
+@mixin u-clearfix($supports...)
 {
     &::after {
-        content : ""; // [1]
-        display : table; // [2]
-        clear   : both;
+        content: if(list-contains($supports, opera), " ", "");
+        display: if(list-contains($supports, table), table, block);
+        clear:   both;
     }
 }
 
-// Mixins
-// ==========================================================================
-@mixin vertical-center {
+///
+/// Vertically-center the direct descendants of the current element.
+///
+/// Centering is achieved by displaying children as inline-blocks. Any whitespace
+/// between elements is nullified by redefining the font size of the container
+/// and its children.
+///
+/// @output `font-size`, `display`, `vertical-align`
+///
+@mixin o-vertical-center
+{
     font-size: 0;
 
-    &:before {
-        display: inline-block;
-        height: 100%;
-        content: "";
+    &::before {
+        display:        inline-block;
+        height:         100%;
+        content:        "";
         vertical-align: middle;
     }
 
     > * {
-        display: inline-block;
+        display:        inline-block;
+        font-size:      1rem;
         vertical-align: middle;
-        font-size: 1rem;
     }
+}
+
+///
+/// Applies accessible hiding to the current element.
+///
+/// @param  {Boolean} $important [true] - Whether the visibility is important.
+/// @output Properties for removing the element from the document flow.
+///
+@mixin u-accessibly-hidden($important: true)
+{
+    $important: important($important);
+
+    position: absolute $important;
+    overflow: hidden;
+    height:   1px;
+    width:    1px;
+    padding:  0;
+    margin:   0;
+    border:   0;
+    clip:     rect(0 0 0 0);
+}
+
+///
+/// Allows an accessibly hidden element to be focusable via keyboard navigation.
+///
+/// @content For styling the now visible element.
+/// @output  Injects `:focus`, `:active` pseudo-classes.
+///
+@mixin u-accessibly-focusable
+{
+    &:focus,
+    &:active {
+        height: auto;
+        width:  auto;
+        clip:   auto;
+
+        @content;
+    }
+}
+
+///
+/// Hide the current element from all.
+///
+/// The element will be hidden from screen readers and removed from the document flow.
+///
+/// @link   http://juicystudio.com/article/screen-readers-display-none.php
+/// @param  {Boolean} $important [true] - Whether the visibility is important.
+/// @output `display`, `visibility`
+///
+@mixin u-hidden($important: true)
+{
+    $important: important($important);
+
+    display    : none   $important;
+    visibility : hidden $important;
+}
+
+///
+/// Show the current element for all.
+///
+/// The element will be accessible from screen readers and visible in the document flow.
+///
+/// @param  {String}  $display   [block] - The rendering box used for the element.
+/// @param  {Boolean} $important [true]  - Whether the visibility is important.
+/// @output `display`, `visibility`
+///
+@mixin u-shown($display: block, $important: true)
+{
+    $important: important($important);
+
+    display    : $display $important;
+    visibility : visible  $important;
 }

@@ -70,7 +70,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * The name of the project.
      *
-     * @var TranslationString|string|null
+     * @var string|null
      */
     private $siteName;
 
@@ -167,7 +167,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
 
         if ($this->authRequired() !== false) {
             // This can reset headers / die if unauthorized.
-            if (!$this->authenticator->authenticate()) {
+            if (!$this->authenticator()->authenticate()) {
                 header('HTTP/1.0 403 Forbidden');
                 header('Location: '.$this->adminUrl().'login');
                 exit;
@@ -285,7 +285,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return string|null
      */
     public function title()
     {
@@ -571,13 +571,22 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
 
     /**
      * Determine if the current user is authenticated.
-     * Uses the Authenticator service.
      *
      * @return boolean
      */
     public function isAuthenticated()
     {
-        return !!$this->authenticator->authenticate();
+        return !!$this->authenticator()->authenticate();
+    }
+
+    /**
+     * Retrieve the currently authenticated user.
+     *
+     * @return \Charcoal\User\UserInterface|null
+     */
+    public function getAuthenticatedUser()
+    {
+        return $this->authenticator()->authenticate();
     }
 
     /**
@@ -620,24 +629,22 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function headerMenuLogo()
     {
-        if (!isset($this->adminConfig['menu_logo'])) {
-            return 'assets/admin/images/user_01.jpg';
+        if (isset($this->adminConfig['menu_logo'])) {
+            if (is_string($this->adminConfig['menu_logo'])) {
+                return $this->adminConfig['menu_logo'];
+            }
         }
 
-        if (!is_string($this->adminConfig['menu_logo'])) {
-            return 'assets/admin/images/user_01.jpg';
-        }
-
-        return $this->adminConfig['menu_logo'];
+        return 'assets/admin/images/identicon.png';
     }
 
     /**
      * Set the name of the project.
      *
-     * @param  mixed $name Name of the project.
+     * @param  string $name Name of the project.
      * @return AdminTemplate Chainable
      */
-    public function setSiteName($name)
+    protected function setSiteName($name)
     {
         if (TranslationString::isTranslatable($name)) {
             $this->siteName = new TranslationString($name);
@@ -651,7 +658,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * Retrieve the name of the project.
      *
-     * @return TranslationString|string|null
+     * @return string|null
      */
     public function siteName()
     {
@@ -711,6 +718,8 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function recaptchaKey()
     {
-        return (string)$this->appConfig['apis.google.recaptcha.key'];
+        $key = $this->appConfig['apis.google.recaptcha.public_key'] ?: $this->appConfig['apis.google.recaptcha.key'];
+
+        return (string)$key;
     }
 }

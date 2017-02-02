@@ -12,6 +12,9 @@ use \Pimple\Container;
 // From PSR-7 (HTTP Messaging)
 use \Psr\Http\Message\RequestInterface;
 
+// From 'charcoal-translation'
+use \Charcoal\Translation\TranslationString;
+
 // From `charcoal-app`
 use \Charcoal\Factory\FactoryInterface;
 
@@ -50,6 +53,13 @@ class FormWidget extends AdminWidget implements
      * @var array
      */
     protected $sidebars = [];
+
+    /**
+     * Label for the form submission button.
+     *
+     * @var TranslationString|string
+     */
+    protected $submitLabel;
 
     /**
      * Store the HTTP request object.
@@ -339,6 +349,23 @@ class FormWidget extends AdminWidget implements
                 yield $prop->propertyIdent() => $prop;
             }
         }
+    }
+
+    /**
+     * Retrieve the label for the form submission button.
+     *
+     * @return TranslationString|string|null
+     */
+    public function submitLabel()
+    {
+        if ($this->submitLabel === null) {
+            $this->submitLabel = new TranslationString([
+                'en' => 'Save',
+                'fr' => 'Sauvegarder'
+            ]);
+        }
+
+        return $this->submitLabel;
     }
 
     /**

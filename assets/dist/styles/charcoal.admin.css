@@ -412,9 +412,7 @@ td {
         -ms-flex-positive: 1;
             flex-grow: 1;
     max-width: 100%;
-    /* [1] */
     word-wrap: normal;
-    /* [2] */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -652,9 +650,7 @@ td {
   -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s;
   max-width: 100%;
-  /* [1] */
   word-wrap: normal;
-  /* [2] */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -953,9 +949,7 @@ td {
   display: block;
   width: 100%;
   max-width: 100%;
-  /* [1] */
   word-wrap: normal;
-  /* [2] */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
@@ -1557,15 +1551,15 @@ ul.c-panel_table {
     -webkit-transform: translate(-50%, -100%);
         -ms-transform: translate(-50%, -100%);
             transform: translate(-50%, -100%); }
-  .nav-tabs > li:not(.active) a .-hide-tab-title:before {
+  .nav-tabs > li:not(.active) a .-hide-tab-title::before {
     display: inline-block;
     height: 100%;
     content: "";
     vertical-align: middle; }
   .nav-tabs > li:not(.active) a .-hide-tab-title > * {
     display: inline-block;
-    vertical-align: middle;
-    font-size: 1rem; }
+    font-size: 1rem;
+    vertical-align: middle; }
   .nav-tabs > li:not(.active) a .-hide-tab-title > span {
     color: #ffffff;
     position: relative; }
@@ -1958,6 +1952,24 @@ a:focus {
   .checkbox input {
     cursor: pointer; }
 
+/**
+ * Utilities / Helpers
+ * =============================================================================
+ */
+/**
+ * Layout
+ */
+.u-clearfix::after {
+  content: " ";
+  display: table;
+  clear: both; }
+
+.u-resize-vertical {
+  resize: vertical; }
+
+/**
+ * Backgrounds
+ */
 .u-background-blue {
   background-color: #1a252d; }
 
@@ -1967,14 +1979,12 @@ a:focus {
 .u-background-lightblue {
   background-color: #eaf2f4; }
 
-.u-resize-vertical {
-  resize: vertical; }
-
+/**
+ * Decorative
+ */
 .u-truncate {
   max-width: 100%;
-  /* [1] */
   word-wrap: normal;
-  /* [2] */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
@@ -2022,3 +2032,50 @@ img.u-contrast-dark {
   to {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg); } }
+
+/**
+ * Visibility / Display
+ */
+[hidden][aria-hidden="false"] {
+  clip: rect(0, 0, 0, 0);
+  display: inherit;
+  position: absolute; }
+
+[hidden][aria-hidden="false"]:focus {
+  clip: auto; }
+
+/**
+ * Completely remove from the flow but leave available to screen readers.
+ */
+.u-screen-reader-text {
+  position: absolute !important;
+  overflow: hidden;
+  height: 1px;
+  width: 1px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  clip: rect(0 0 0 0); }
+
+@media not print {
+  .u-screen-reader-text\@screen {
+    position: absolute !important;
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    clip: rect(0 0 0 0); } }
+
+/*
+ * Extends the `.screen-reader-text` class to allow the element
+ * to be focusable when navigated to via the keyboard.
+ *
+ * @link https://www.drupal.org/node/897638
+ * @todo Define styles when focused.
+ */
+.u-screen-reader-text.-focusable:focus, .u-screen-reader-text.-focusable:active {
+  height: auto;
+  width: auto;
+  clip: auto; }

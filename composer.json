@@ -33,7 +33,8 @@
         "locomotivemtl/charcoal-email": "^0.1.2",
         "locomotivemtl/charcoal-object": "~0.1",
         "locomotivemtl/charcoal-ui": "~0.1",
-        "locomotivemtl/charcoal-user": "~0.1"
+        "locomotivemtl/charcoal-user": "~0.1",
+        "barryvdh/elfinder-flysystem-driver": "^0.2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8",

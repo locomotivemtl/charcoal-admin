@@ -26,11 +26,11 @@ class PaginationWidget extends AdminWidget
      */
     private $numTotal;
 
-        /**
-         * @param integer $page The page number, of the items to load.
-         * @throws InvalidArgumentException If the argument is not a number or lower than 0.
-         * @return PaginationWidget Chainable
-         */
+    /**
+     * @param integer $page The page number, of the items to load.
+     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
+     * @return PaginationWidget Chainable
+     */
     public function setPage($page)
     {
         if (!is_numeric($page)) {

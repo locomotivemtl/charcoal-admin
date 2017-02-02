@@ -81,7 +81,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
         }
 
         try {
-            $proto = $this->obj();
+            $proto = $this->proto();
 
             if (!$proto->hasProperty($orderProperty)) {
                 $this->setSuccess(false);

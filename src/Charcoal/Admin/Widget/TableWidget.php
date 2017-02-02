@@ -19,11 +19,9 @@ use \Charcoal\Property\PropertyInterface;
 // From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
 
-// From 'charcoal-view'
-use \Charcoal\View\ViewableInterface;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\ActionContainerTrait;
 use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
@@ -32,12 +30,15 @@ use \Charcoal\Admin\Ui\CollectionContainerTrait;
  */
 class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
+    use ActionContainerTrait;
     use CollectionContainerTrait {
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
         CollectionContainerTrait::parseObjectRow as parseCollectionObjectRow;
     }
 
     /**
+     * Default sorting priority for an action.
+     *
      * @const integer
      */
     const DEFAULT_ACTION_PRIORITY = 10;
@@ -88,37 +89,44 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     private $adminMetadata;
 
     /**
+     * Store the list actions.
+     *
+     * @var array|null
+     */
+    private $listActions;
+
+    /**
+     * Store the default list actions.
+     *
      * @var array|null
      */
     private $defaultListActions;
 
     /**
-     * @var array $listActions
-     */
-    private $listActions;
-
-    /**
-     * @var integer $actionsPriority
-     */
-    protected $actionsPriority;
-
-    /**
-     * @var boolean $parsedListActions
+     * Keep track if list actions are finalized.
+     *
+     * @var boolean
      */
     protected $parsedListActions = false;
 
     /**
-     * @var array|null
-     */
-    private $defaultObjectActions;
-
-    /**
+     * Store the object actions.
+     *
      * @var array|null
      */
     private $objectActions;
 
     /**
-     * @var boolean $parsedListActions
+     * Store the default object actions.
+     *
+     * @var array|null
+     */
+    private $defaultObjectActions;
+
+    /**
+     * Keep track if object actions are finalized.
+     *
+     * @var boolean
      */
     protected $parsedObjectActions = false;
 
@@ -558,9 +566,19 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
-        if ($this->objectActions === null || $this->parsedObjectActions === false) {
+        if ($this->objectActions === null) {
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['object_actions'])) {
+                $actions = $collectionConfig['object_actions'];
+            } else {
+                $actions = [];
+            }
+            $this->setObjectActions($actions);
+        }
+
+        if ($this->parsedObjectActions === false) {
             $this->parsedObjectActions = true;
-            $this->objectActions = $this->createObjectActions();
+            $this->objectActions = $this->createObjectActions($this->objectActions);
         }
 
         $objectActions = [];
@@ -572,14 +590,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Set table's object actions.
+     * Set the table's object actions.
      *
      * @param  array $actions One or more actions.
      * @return TableWidget Chainable.
      */
     public function setObjectActions(array $actions)
     {
-        $this->objectActions = $actions;
+        $this->parsedObjectActions = false;
+
+        $this->objectActions = $this->mergeActions($this->defaultObjectActions(), $actions);
 
         return $this;
     }
@@ -587,29 +607,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
      * Build the table's object actions (row).
      *
-     * Object actions should come from the collection data pointed out by the "collection_ident".
+     * Object actions should come from the collection settings defined by the "collection_ident".
      * It is still possible to completly override those externally by setting the "object_actions"
      * with the {@see self::setObjectActions()} method.
      *
+     * @param  array $actions Actions to resolve.
      * @return array Object actions.
      */
-    public function createObjectActions()
+    public function createObjectActions(array $actions)
     {
-        if ($this->objectActions === null) {
-            $collectionConfig = $this->collectionConfig();
-            if (isset($collectionConfig['object_actions'])) {
-                $actions = $collectionConfig['object_actions'];
-            } else {
-                $actions = [];
-            }
-        } else {
-            $actions = $this->objectActions;
-        }
-
-        $objectActions = $this->parseActions(array_merge(
-            $this->defaultObjectActions(),
-            $actions
-        ));
+        $objectActions = $this->parseActions($actions);
 
         return $objectActions;
     }
@@ -624,12 +631,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $objectActions = [];
         foreach ($actions as $action) {
-            if (isset($action['url'])) {
-                $action['url'] = $this->parseActionUrl($action['url'], $action);
-            }
+            $action = $this->parseActionRenderables($action, true);
 
             if (isset($action['ident'])) {
-                if ($action['ident'] === 'edit' && !$this->isObjEditable()) {
+                if ($action['ident'] === 'view' && !$this->isObjViewable()) {
+                    $action['active'] = false;
+                } elseif ($action['ident'] === 'create' && !$this->isObjCreatable()) {
+                    $action['active'] = false;
+                } elseif ($action['ident'] === 'edit' && !$this->isObjEditable()) {
                     $action['active'] = false;
                 } elseif ($action['ident'] === 'delete' && !$this->isObjDeletable()) {
                     $action['active'] = false;
@@ -637,7 +646,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             if ($action['actions']) {
-                $action['actions'] = $this->parseAsObjectActions($action['actions']);
+                $action['actions']    = $this->parseAsObjectActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             $objectActions[] = $action;
@@ -651,11 +663,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      *
      * @return array
      */
-    public function defaultObjectActions()
+    protected function defaultObjectActions()
     {
         if ($this->defaultObjectActions === null) {
             $edit = [
-                'label'    => new TranslationString([
+                'label'  => new TranslationString([
                     'fr' => 'Modifier',
                     'en' => 'Modify',
                 ]),
@@ -714,39 +726,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function listActions()
     {
-        if ($this->listActions === null || $this->parsedListActions === false) {
-            $this->parsedListActions = true;
-            $this->listActions = $this->createListActions();
-        }
-
-        return $this->listActions;
-    }
-
-    /**
-     * Set table's collection actions.
-     *
-     * @param  array $actions One or more actions.
-     * @return TableWidget Chainable.
-     */
-    public function setListActions(array $actions)
-    {
-        $this->listActions = $actions;
-
-        return $this;
-    }
-
-    /**
-     * Build the table collection actions.
-     *
-     * List actions should come from the collection data pointed out by the "collection_ident".
-     * It is still possible to completly override those externally by setting the "list_actions"
-     * with the {@see self::setListActions()} method.
-     *
-     * @todo Convert to Charcoal\Ui\Menu\GenericMenu
-     * @return array List actions.
-     */
-    public function createListActions()
-    {
         if ($this->listActions === null) {
             $collectionConfig = $this->collectionConfig();
             if (isset($collectionConfig['list_actions'])) {
@@ -754,13 +733,45 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             } else {
                 $actions = [];
             }
-        } else {
-            $actions = $this->listActions;
+            $this->setListActions($actions);
         }
 
-        $actions = array_merge($this->defaultListActions(), $actions);
+        if ($this->parsedListActions === false) {
+            $this->parsedListActions = true;
+            $this->listActions = $this->createListActions($this->listActions);
+        }
 
-        $this->actionsPriority = self::DEFAULT_ACTION_PRIORITY;
+        return $this->listActions;
+    }
+
+    /**
+     * Set the table's collection actions.
+     *
+     * @param  array $actions One or more actions.
+     * @return TableWidget Chainable.
+     */
+    protected function setListActions(array $actions)
+    {
+        $this->parsedListActions = false;
+
+        $this->listActions = $this->mergeActions($this->defaultListActions(), $actions);
+
+        return $this;
+    }
+
+    /**
+     * Build the table collection actions.
+     *
+     * List actions should come from the collection settings defined by the "collection_ident".
+     * It is still possible to completly override those externally by setting the "list_actions"
+     * with the {@see self::setListActions()} method.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array List actions.
+     */
+    protected function createListActions(array $actions)
+    {
+        $this->actionsPriority = $this->defaultActionPriority();
 
         $listActions = $this->parseAsListActions($actions);
 
@@ -777,25 +788,37 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $listActions = [];
         foreach ($actions as $ident => $action) {
-            $ident = $this->parseActionIdent($ident, $action);
-            $action = $this->parseActionItem($action, $ident);
+            $ident  = $this->parseActionIdent($ident, $action);
+            $action = $this->parseActionItem($action, $ident, true);
 
-            if (isset($action['url'])) {
-                $action['url'] = $this->parseActionUrl($action['url'], $action);
+            if (!isset($action['priority'])) {
+                $action['priority'] = $this->actionsPriority++;
             }
 
             if ($action['ident'] === 'create') {
                 $action['empty'] = true;
+
+                if (!$this->isObjCreatable()) {
+                    $action['active'] = false;
+                }
             } else {
                 $action['empty'] = (isset($action['empty']) ? boolval($action['empty']) : false);
             }
 
             if (is_array($action['actions'])) {
-                $action['actions'] = $this->parseAsListActions($action['actions']);
+                $action['actions']    = $this->parseAsListActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
             }
 
             if (isset($listActions[$ident])) {
-                $listActions[$ident] = array_replace($listActions[$ident], $action);
+                $hasPriority = ($action['priority'] > $listActions[$ident]['priority']);
+                if ($hasPriority || $action['isSubmittable']) {
+                    $listActions[$ident] = array_replace($listActions[$ident], $action);
+                } else {
+                    $listActions[$ident] = array_replace($action, $listActions[$ident]);
+                }
             } else {
                 $listActions[$ident] = $action;
             }
@@ -819,205 +842,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      *
      * @return array
      */
-    public function defaultListActions()
+    protected function defaultListActions()
     {
         if ($this->defaultListActions === null) {
             $this->defaultListActions = [];
         }
 
         return $this->defaultListActions;
-    }
-
-    /**
-     * Parse the given table actions.
-     *
-     * @todo   Convert to Charcoal\Ui\Menu\GenericMenu
-     * @param  array $actions Actions to resolve.
-     * @return array List actions.
-     */
-    protected function parseActions(array $actions)
-    {
-        $this->actionsPriority = self::DEFAULT_ACTION_PRIORITY;
-
-        $parsedActions = [];
-        foreach ($actions as $ident => $action) {
-            $ident = $this->parseActionIdent($ident, $action);
-            $action = $this->parseActionItem($action, $ident);
-
-            if (!isset($action['priority'])) {
-                $action['priority'] = $this->actionsPriority++;
-            }
-
-            if (isset($parsedActions[$ident])) {
-                $parsedActions[$ident] = array_replace($parsedActions[$ident], $action);
-            } else {
-                $parsedActions[$ident] = $action;
-            }
-        }
-
-        usort($parsedActions, [ $this, 'sortActionsByPriority' ]);
-
-        while (($first = reset($parsedActions)) && $first['isSeparator']) {
-            array_shift($parsedActions);
-        }
-
-        while (($last = end($parsedActions)) && $last['isSeparator']) {
-            array_pop($parsedActions);
-        }
-
-        return $parsedActions;
-    }
-
-    /**
-     * Parse the given table action identifier.
-     *
-     * @param  string $ident  The action identifier.
-     * @param  mixed  $action The action structure.
-     * @return string Resolved action identifier.
-     */
-    protected function parseActionIdent($ident, $action)
-    {
-        if (isset($action['ident'])) {
-            $ident = $action['ident'];
-        }
-
-        return $ident;
-    }
-
-    /**
-     * Parse the given table action structure.
-     *
-     * @todo   Convert to Charcoal\Ui\Menu\GenericMenu
-     * @param  mixed  $action The action structure.
-     * @param  string $ident  The action identifier.
-     * @return array Resolved action structure.
-     */
-    protected function parseActionItem($action, $ident)
-    {
-        if ($action === '|') {
-            $action = $this->defaultActionStruct();
-            $action['isSeparator'] = true;
-        } elseif (is_array($action)) {
-            // Normalize structure keys
-            foreach ($action as $key => $val) {
-                $attr = $this->getter($key);
-                if ($key !== $attr) {
-                    $action[$attr] = $val;
-                    unset($action[$key]);
-                }
-            }
-
-            if (isset($action['ident'])) {
-                if ($action['ident'] === 'create' && !$this->isObjCreatable()) {
-                    $action['active'] = false;
-                }
-            } else {
-                $action['ident'] = $ident;
-            }
-
-            if (!isset($action['buttonType'])) {
-                switch ($action['ident']) {
-                    case 'create':
-                        $action['buttonType'] = 'info';
-                        break;
-
-                    case 'edit':
-                        $action['buttonType'] = 'primary';
-                        break;
-
-                    default:
-                        $action['buttonType'] = 'default';
-                        break;
-                }
-            }
-
-            if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
-                $action['label'] = new TranslationString($action['label']);
-            } elseif ($action['ident']) {
-                $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
-            } else {
-                $action['label'] = null;
-                $action['active'] = false;
-            }
-
-            if (isset($action['url']) && TranslationString::isTranslatable($action['url'])) {
-                $action['url'] = new TranslationString($action['url']);
-                $action['isText'] = false;
-                $action['isLink'] = true;
-                $action['isButton'] = false;
-            } else {
-                $action['url'] = '#';
-            }
-
-            if (isset($action['actions']) && is_array($action['actions'])) {
-                $action['actions'] = $this->parseActions($action['actions']);
-                $action['hasActions'] = boolval($action['actions']);
-            } else {
-                $action['actions'] = [];
-                $action['hasActions'] = false;
-            }
-
-            $action = array_replace($this->defaultActionStruct(), $action);
-        }
-
-        return $action;
-    }
-
-    /**
-     * Parse the given table action URL.
-     *
-     * @param  string                 $url      The action's URL.
-     * @param  mixed                  $action   The action structure.
-     * @param  ViewableInterface|null $renderer The renderer.
-     * @return array Resolved action structure.
-     */
-    protected function parseActionUrl($url, $action = null, ViewableInterface $renderer = null)
-    {
-        unset($action);
-        if ($renderer === null) {
-            $renderer = isset($this->currentObj) ? $this->currentObj : $this->proto();
-        }
-
-        if ($url instanceof TranslationString) {
-            $url = $url->fallback();
-        }
-
-        $url = $renderer->renderTemplate($url);
-
-        if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
-            $url = $this->adminUrl().$url;
-        }
-
-        return $url;
-    }
-
-    /**
-     * Retrieve the default action structure.
-     *
-     * @return array
-     */
-    protected function defaultActionStruct()
-    {
-        return [
-            'ident'       => null,
-            'priority'    => null,
-            'active'      => true,
-            'empty'       => false,
-            'label'       => null,
-            'showLabel'   => true,
-            'icon'        => null,
-            'glyphicon'   => false,
-            'url'         => null,
-            'isText'      => false,
-            'isLink'      => false,
-            'isButton'    => true,
-            'isHeader'    => false,
-            'isSeparator' => false,
-            'buttonType'  => null,
-            'splitButton' => false,
-            'hasActions'  => false,
-            'actions'     => [],
-        ];
     }
 
     /**
@@ -1031,7 +862,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $pagination->setData([
             'page'         => $this->page(),
             'num_per_page' => $this->numPerPage(),
-            'num_total'    => $this->numTotal()
+            'num_total'    => $this->numTotal(),
+            'label'        => new TranslationString([
+                'fr' => 'Navigation de la liste des objects',
+                'en' => 'Objects list navigation',
+            ])
         ]);
 
         return $pagination;
@@ -1205,7 +1040,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function isObjDeletable()
     {
-        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
+        $model  = ($this->currentObj) ? $this->currentObj : $this->proto();
         $method = [ $model, 'isDeletable' ];
 
         if (is_callable($method)) {
@@ -1216,17 +1051,25 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * To be called with uasort()
+     * Determine if the object can be viewed (on the front-end).
      *
-     * @param  array $a First action object to sort.
-     * @param  array $b Second action object to sort.
-     * @return integer
+     * If TRUE, any "View" button is shown. The object can still be
+     * saved programmatically.
+     *
+     * @return boolean
      */
-    protected static function sortActionsByPriority(array $a, array $b)
+    public function isObjViewable()
     {
-        $a = isset($a['priority']) ? $a['priority'] : 0;
-        $b = isset($b['priority']) ? $b['priority'] : 0;
+        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
+        if (!$model->id()) {
+            return false;
+        }
 
-        return ($a < $b) ? (-1) : 1;
+        $method = [ $model, 'isViewable' ];
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
     }
 }

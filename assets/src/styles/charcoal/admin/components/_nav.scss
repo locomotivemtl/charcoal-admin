@@ -209,7 +209,7 @@
     padding: rem(3px) rem(10px);
     border-radius: $radius;
     transition: background-color $speed;
-    @include ellipsis;
+    @include u-truncate;
     max-width: 100%;
     margin: 0;
 

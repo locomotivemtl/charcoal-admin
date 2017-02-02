@@ -1,0 +1,116 @@
+/**
+ * Utilities / Helpers
+ * =============================================================================
+ */
+
+/**
+ * Layout
+ */
+
+.u-clearfix {
+    @include u-clearfix;
+}
+
+.u-resize-vertical {
+    resize: vertical;
+}
+
+/**
+ * Backgrounds
+ */
+
+.u-background-blue {
+    background-color: $charcoal-blue;
+}
+
+.u-background-darkblue {
+    background-color: $charcoal-darkblue;
+}
+
+.u-background-lightblue {
+    background-color: $charcoal-lightblue;
+}
+
+/**
+ * Decorative
+ */
+
+.u-truncate {
+    @include u-truncate;
+}
+
+.u-truncated {
+    display:      table;
+    table-layout: fixed;
+    width:        100%;
+    white-space:  nowrap;
+}
+
+.u-truncated > * {
+    display:       table-cell;
+    overflow:      hidden;
+    text-overflow: ellipsis;
+}
+
+img.u-transparent {
+    border: 1px solid #DDD;
+    background-image:  url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAHUlEQVQYV2NkwA4k0YUZh4hCDIcD3f0cm2cGu0IAl7sFiL+f5rUAAAAASUVORK5CYII=);
+    background-repeat: repeat;
+}
+
+img.u-contrast-dark {
+    border-color:     #333;
+    background-color: #666;
+}
+
+.u-spin {
+    animation: spin 1.5s infinite linear;
+
+    &.glyphicon-refresh {
+            transform-origin: 50% 42%;
+    }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg);   }
+    to   { transform: rotate(360deg); }
+}
+
+/**
+ * Visibility / Display
+ */
+
+[hidden][aria-hidden="false"] {
+    clip:     rect(0, 0, 0, 0);
+    display:  inherit;
+    position: absolute;
+}
+
+[hidden][aria-hidden="false"]:focus {
+    clip: auto;
+}
+
+
+/**
+ * Completely remove from the flow but leave available to screen readers.
+ */
+.u-screen-reader-text {
+    @include u-accessibly-hidden;
+}
+
+@media not print {
+    .u-screen-reader-text\@screen {
+        @include u-accessibly-hidden;
+    }
+}
+
+/*
+ * Extends the `.screen-reader-text` class to allow the element
+ * to be focusable when navigated to via the keyboard.
+ *
+ * @link https://www.drupal.org/node/897638
+ * @todo Define styles when focused.
+ */
+.u-screen-reader-text.-focusable {
+    @include u-accessibly-focusable;
+}

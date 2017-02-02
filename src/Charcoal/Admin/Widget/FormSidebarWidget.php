@@ -16,6 +16,7 @@ use \Charcoal\Ui\Form\FormInterface;
 
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
+use \Charcoal\Admin\Ui\ActionContainerTrait;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
 use \Charcoal\Admin\User\AuthAwareInterface;
 use \Charcoal\Admin\User\AuthAwareTrait;
@@ -27,7 +28,15 @@ class FormSidebarWidget extends AdminWidget implements
     FormSidebarInterface,
     AuthAwareInterface
 {
+    use ActionContainerTrait;
     use AuthAwareTrait;
+
+    /**
+     * Default sorting priority for an action.
+     *
+     * @const integer
+     */
+    const DEFAULT_ACTION_PRIORITY = 10;
 
     /**
      * Store a reference to the parent form widget.
@@ -42,9 +51,25 @@ class FormSidebarWidget extends AdminWidget implements
     private $widgetType = 'properties';
 
     /**
-     * @var Object $actions
+     * Store the sidebar actions.
+     *
+     * @var array|null
      */
-    private $actions;
+    private $sidebarActions;
+
+    /**
+     * Store the default list actions.
+     *
+     * @var array|null
+     */
+    private $defaultSidebarActions;
+
+    /**
+     * Keep track if sidebar actions are finalized.
+     *
+     * @var boolean
+     */
+    protected $parsedSidebarActions = false;
 
     /**
      * @var array $sidebarProperties
@@ -101,6 +126,10 @@ class FormSidebarWidget extends AdminWidget implements
 
         if (isset($data['properties']) && $data['properties'] !== null) {
             $this->setSidebarProperties($data['properties']);
+        }
+
+        if (isset($data['actions']) && $data['actions'] !== null) {
+            $this->setSidebarActions($data['actions']);
         }
 
         if (isset($data['permissions'])) {
@@ -215,70 +244,159 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * Defined the form actions.
-     * @param object $actions The sidebar actions.
-     * @return FormSidebarWidget Chainable
+     * Determine if the sidebar's actions should be shown.
+     *
+     * @return boolean
      */
-    public function setActions($actions)
+    public function showSidebarActions()
     {
-        //todo : include the default save action.
+        $actions = $this->sidebarActions();
 
-        if (!$actions) {
-            return $this;
+        return count($actions);
+    }
+
+    /**
+     * Retrieve the sidebar's actions.
+     *
+     * @return array
+     */
+    public function sidebarActions()
+    {
+        if ($this->sidebarActions === null) {
+            $this->setSidebarActions([]);
         }
-        $this->actions = [];
 
-        foreach ($actions as $ident => $action) {
-            if (!isset($action['url']) || !isset($action['label'])) {
-                continue;
-            }
-
-            if (!TranslationString::isTranslatable($action['label'])) {
-                continue;
-            }
-
-            $label     = new TranslationString($action['label']);
-            $condition = (isset($action['condition']) ? $action['condition'] : true);
-
-            $obj = $this->form()->obj();
-            // Shame: Make sure the view is set before attempt rendering
-            if ($obj->view()) {
-                if (!is_bool($condition)) {
-                    $condition = $obj->render($condition);
-                }
-                $url = $obj->render($action['url']);
-            } else {
-                // Shame part 2: force '{{id}}' to use obj_id GET parameter...
-                if (isset($_GET['obj_id'])) {
-                    $url = preg_replace('~\{\{\s*(obj_)?id\s*\}\}~', $_GET['obj_id'], $action['url']);
-                } else {
-                    $url = $action['url'];
-                }
-            }
-
-            // Info = default
-            // Possible: danger, info
-            $btn             = (isset($action['type']) ? $action['type'] : 'info');
-            $this->actions[] = [
-                'label'       => $label,
-                'url'         => $url,
-                'button_type' => $btn,
-                'active'      => $condition
-            ];
+        if ($this->parsedSidebarActions === false) {
+            $this->parsedSidebarActions = true;
+            $this->sidebarActions = $this->createSidebarActions($this->sidebarActions);
         }
+
+        return $this->sidebarActions;
+    }
+
+    /**
+     * Set the sidebar's actions.
+     *
+     * @param  array $actions One or more actions.
+     * @return FormSidebarWidget Chainable.
+     */
+    protected function setSidebarActions(array $actions)
+    {
+        $this->parsedSidebarActions = false;
+
+        $this->sidebarActions = $this->mergeActions($this->defaultSidebarActions(), $actions);
 
         return $this;
     }
 
     /**
-     * Returns the actions as an ArrayIterator
-     * [ ['label' => $label, 'url' => $url] ]
-     * @see $this->set_actions()
-     * @return object actions
+     * Build the sidebar's actions.
+     *
+     * Sidebar actions should come from the form settings defined by the "sidebars".
+     * It is still possible to completly override those externally by setting the "actions"
+     * with the {@see self::setSidebarActions()} method.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array Sidebar actions.
      */
-    public function actions()
+    protected function createSidebarActions(array $actions)
     {
-        return $this->actions;
+        $this->actionsPriority = $this->defaultActionPriority();
+
+        $sidebarActions = $this->parseAsSidebarActions($actions);
+
+        return $sidebarActions;
+    }
+
+    /**
+     * Parse the given actions as object actions.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array
+     */
+    protected function parseAsSidebarActions(array $actions)
+    {
+        $sidebarActions = [];
+        foreach ($actions as $ident => $action) {
+            $ident  = $this->parseActionIdent($ident, $action);
+            $action = $this->parseActionItem($action, $ident, true);
+
+            if (!isset($action['priority'])) {
+                $action['priority'] = $this->actionsPriority++;
+            }
+
+            if ($action['ident'] === 'view' && !$this->isObjViewable()) {
+                $action['active'] = false;
+            } elseif ($action['ident'] === 'save' && !$this->isObjSavable()) {
+                $action['active'] = false;
+            } elseif ($action['ident'] === 'reset' && !$this->isObjResettable()) {
+                $action['active'] = false;
+            } elseif ($action['ident'] === 'delete' && !$this->isObjDeletable()) {
+                $action['active'] = false;
+            }
+
+            if ($action['isSubmittable'] && !$this->isObjSavable()) {
+                $action['active'] = false;
+            }
+
+            if ($action['actions']) {
+                $action['actions']    = $this->parseAsSidebarActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
+            }
+
+            if (isset($sidebarActions[$ident])) {
+                $hasPriority = ($action['priority'] > $sidebarActions[$ident]['priority']);
+                if ($hasPriority || $action['isSubmittable']) {
+                    $sidebarActions[$ident] = array_replace($sidebarActions[$ident], $action);
+                } else {
+                    $sidebarActions[$ident] = array_replace($action, $sidebarActions[$ident]);
+                }
+            } else {
+                $sidebarActions[$ident] = $action;
+            }
+        }
+
+        usort($sidebarActions, [ $this, 'sortActionsByPriority' ]);
+
+        while (($first = reset($sidebarActions)) && $first['isSeparator']) {
+            array_shift($sidebarActions);
+        }
+
+        while (($last = end($sidebarActions)) && $last['isSeparator']) {
+            array_pop($sidebarActions);
+        }
+
+        return $sidebarActions;
+    }
+
+    /**
+     * Retrieve the table's default object actions.
+     *
+     * @return array
+     */
+    protected function defaultSidebarActions()
+    {
+        if ($this->defaultSidebarActions === null) {
+            $save = [
+                'label'      => $this->form()->submitLabel(),
+                'ident'      => 'save',
+                'buttonType' => 'submit',
+                'priority'   => 90
+            ];
+            $this->defaultSidebarActions = [ $save ];
+        }
+
+        return $this->defaultSidebarActions;
+    }
+
+    /**
+     * @return string
+     */
+    public function jsActionPrefix()
+    {
+        return 'js-sidebar';
     }
 
     /**
@@ -297,7 +415,7 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         $obj    = $this->form()->obj();
-        $method = [$obj, 'isDeletable'];
+        $method = [ $obj, 'isDeletable' ];
 
         if (is_callable($method)) {
             return call_user_func($method);
@@ -323,7 +441,7 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         $obj    = $this->form()->obj();
-        $method = [$obj, 'isResettable'];
+        $method = [ $obj, 'isResettable' ];
 
         if (is_callable($method)) {
             return call_user_func($method);
@@ -348,8 +466,36 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         $obj    = $this->form()->obj();
-        $method = [$obj, 'isSavable'];
+        $method = [ $obj, 'isSavable' ];
 
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the object can be viewed (on the front-end).
+     *
+     * If TRUE, any "View" button is shown. The object can still be
+     * saved programmatically.
+     *
+     * @return boolean
+     */
+    public function isObjViewable()
+    {
+        // Overridden by permissions
+        if (!$this->checkPermission('view')) {
+            return false;
+        }
+
+        $obj = $this->form()->obj();
+        if (!$obj->id()) {
+            return false;
+        }
+
+        $method = [ $obj, 'isViewable' ];
         if (is_callable($method)) {
             return call_user_func($method);
         }
@@ -474,9 +620,10 @@ class FormSidebarWidget extends AdminWidget implements
         }
     }
 
-    // ==========================================================================
-    // PERMISSIONS
-    // ==========================================================================
+
+
+    // ACL Permissions
+    // =========================================================================
 
     /**
      * Return true if the user as required permissions.
@@ -542,9 +689,10 @@ class FormSidebarWidget extends AdminWidget implements
         return $this;
     }
 
-    // ==========================================================================
-    // UTILS
-    // ==========================================================================
+
+
+    // Utilities
+    // =========================================================================
 
     /**
      * @param array $array Detect if $array is assoc or not.

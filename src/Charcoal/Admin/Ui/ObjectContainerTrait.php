@@ -6,7 +6,10 @@ use Exception;
 use RuntimeException;
 use InvalidArgumentException;
 
-// From charcoal-factory
+// From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
+
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
 /**
@@ -91,17 +94,12 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @param  string|numeric|null $objId The object id to load.
+     * @param  string|numeric $objId The object id to load.
      * @throws InvalidArgumentException If provided argument is not of type 'scalar'.
      * @return ObjectContainerInterface Chainable
      */
     public function setObjId($objId)
     {
-        if ($objId === null) {
-            $this->objId = null;
-            return $this;
-        }
-
         if (!is_scalar($objId)) {
             throw new InvalidArgumentException(sprintf(
                 'Object ID must be a string or numerical value, received %s.',
@@ -173,7 +171,12 @@ trait ObjectContainerTrait
     {
         if ($this->obj === null) {
             $this->obj = $this->createOrLoadObj();
-            $this->setObjId($this->obj->id());
+
+            if ($this->obj instanceof ModelInterface) {
+                $this->objId = $this->obj->id();
+            } else {
+                $this->objId = null;
+            }
         }
 
         return $this->obj;

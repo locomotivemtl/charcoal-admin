@@ -120,7 +120,7 @@ class FormSidebarWidget extends AdminWidget implements
      * @param array|ArrayInterface $data Class data.
      * @return FormSidebarWidget Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

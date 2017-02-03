@@ -125,10 +125,10 @@ abstract class AbstractPropertyDisplay implements
      * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
-     * @param array|Traversable $data The display data.
+     * @param array $data The display data.
      * @return Display Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         foreach ($data as $prop => $val) {
             $func = [$this, $this->setter($prop)];

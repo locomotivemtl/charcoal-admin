@@ -170,10 +170,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * @param array|ArrayInterface $data The widget data.
+     * @param array $data The widget data.
      * @return TableWidget Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

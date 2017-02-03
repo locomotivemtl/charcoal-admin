@@ -44,10 +44,10 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     protected $filters;
 
     /**
-     * @param array|ArrayInterface $data The search widget data.
+     * @param array $data The search widget data.
      * @return TableWidget Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $objData = $this->dataFromObject();
         $data    = array_merge_recursive($objData, $data);

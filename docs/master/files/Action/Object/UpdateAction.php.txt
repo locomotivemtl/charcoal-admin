@@ -38,10 +38,10 @@ class UpdateAction extends AbstractSaveAction
     protected $updateData = [];
 
     /**
-     * @param array|\ArrayAccess $data The update action data.
+     * @param array $data The update action data.
      * @return LoginAction Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

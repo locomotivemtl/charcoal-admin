@@ -24,6 +24,5 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     public function createDashboardConfig(array $data = null)
     {
         return $this->dashboardConfig();
-
     }
 }

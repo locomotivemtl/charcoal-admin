@@ -16,7 +16,7 @@ interface PropertyDisplayInterface
      * @param array|Traversable $data The display data.
      * @return Display Chainable
      */
-    public function setData($data);
+    public function setData(array $data);
 
     /**
      * @param string $ident The display identifier.

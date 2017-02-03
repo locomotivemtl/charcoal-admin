@@ -37,10 +37,10 @@ class SaveAction extends AbstractSaveAction
     protected $saveData = [];
 
     /**
-     * @param array|\ArrayAccess $data The action data.
+     * @param array $data The action data.
      * @return LoginAction Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

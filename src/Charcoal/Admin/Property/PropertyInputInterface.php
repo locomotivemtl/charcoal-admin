@@ -16,7 +16,7 @@ interface PropertyInputInterface
      * @param array|Traversable $data The object (input) data.
      * @return Input Chainable
      */
-    public function setData($data);
+    public function setData(array $data);
 
     /**
      * @param string $ident The input identifier.

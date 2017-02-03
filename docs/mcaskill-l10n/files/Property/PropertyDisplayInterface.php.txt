@@ -4,11 +4,11 @@ namespace Charcoal\Admin\Property;
 
 use Traversable;
 
-// Dependency from 'charcoal-base'
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
 /**
- *
+ * Defines a property display element.
  */
 interface PropertyDisplayInterface
 {

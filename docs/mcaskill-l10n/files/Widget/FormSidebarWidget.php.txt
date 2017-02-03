@@ -83,9 +83,28 @@ class FormSidebarWidget extends AdminWidget implements
     protected $priority;
 
     /**
-     * @var TranslationString $title
+     * The title is displayed by default.
+     *
+     * @var boolean
+     */
+    private $showTitle = true;
+
+    /**
+     * The sidebar's title.
+     *
+     * @var string
      */
     protected $title;
+
+    /**
+     * @var boolean $showSubtitle
+     */
+    private $showSubtitle = true;
+
+    /**
+     * @var string $subtitle
+     */
+    private $subtitle;
 
     /**
      * @var boolean
@@ -167,19 +186,6 @@ class FormSidebarWidget extends AdminWidget implements
     public function form()
     {
         return $this->form;
-    }
-
-    /**
-     * @param mixed $subtitle The sidebar subtitle.
-     * @return FormSidebarWidget Chainable
-     */
-    public function setSubtitle($subtitle)
-    {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->title = new TranslationString($subtitle);
-        }
-
-        return $this;
     }
 
     /**
@@ -534,6 +540,33 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * Show/hide the widget's title.
+     *
+     * @param boolean $show Show (TRUE) or hide (FALSE) the title.
+     * @return UiItemInterface Chainable
+     */
+    public function setShowTitle($show)
+    {
+        $this->showTitle = !!$show;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the title is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a title.
+     */
+    public function showTitle()
+    {
+        if ($this->showTitle === false) {
+            return false;
+        } else {
+            return !!$this->title();
+        }
+    }
+
+    /**
      * @param mixed $title The sidebar title.
      * @return FormSidebarWidget Chainable
      */
@@ -541,6 +574,8 @@ class FormSidebarWidget extends AdminWidget implements
     {
         if (TranslationString::isTranslatable($title)) {
             $this->title = new TranslationString($title);
+        } else {
+            $this->title = null;
         }
 
         return $this;
@@ -552,10 +587,55 @@ class FormSidebarWidget extends AdminWidget implements
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle('Actions');
+            $this->setTitle($this->translate('Actions'));
         }
 
         return $this->title;
+    }
+
+    /**
+     * @param boolean $show The show subtitle flag.
+     * @return FormSidebarWidget Chainable
+     */
+    public function setShowSubtitle($show)
+    {
+        $this->showSubtitle = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showSubtitle()
+    {
+        if ($this->showSubtitle === false) {
+            return false;
+        } else {
+            return !!$this->subtitle();
+        }
+    }
+
+    /**
+     * @param mixed $subtitle The sidebar widget subtitle.
+     * @return FormSidebarWidget Chainable
+     */
+    public function setSubtitle($subtitle)
+    {
+        if (TranslationString::isTranslatable($subtitle)) {
+            $this->subtitle = new TranslationString($subtitle);
+        } else {
+            $this->subtitle = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return TranslationString
+     */
+    public function subtitle()
+    {
+        return $this->subtitle;
     }
 
     /**

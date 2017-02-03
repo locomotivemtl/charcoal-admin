@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin;
 
-// Module `charcoal-base` dependencies
+// From 'charcoal-user'
 use Charcoal\User\AbstractUser;
 
-// Local namespace dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\UserGroup;
 
 /**

@@ -2,8 +2,11 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Admin\AdminWidget;
+// From 'charcoal-translation'
 use \Charcoal\Translation\TranslationString;
+
+// From 'charcoal-admin'
+use \Charcoal\Admin\AdminWidget;
 
 /**
  *
@@ -33,22 +36,22 @@ class TextWidget extends AdminWidget
     /**
      * @var string $title
      */
-    private $title = '';
+    private $title;
 
     /**
      * @var string $subtitle
      */
-    private $subtitle = '';
+    private $subtitle;
 
     /**
      * @var string $description
      */
-    private $description = '';
+    private $description;
 
     /**
      * @var string $notes
      */
-    private $notes = '';
+    private $notes;
 
     /**
      * @param boolean $show The show title flag.
@@ -146,6 +149,8 @@ class TextWidget extends AdminWidget
     {
         if (TranslationString::isTranslatable($title)) {
             $this->title = new TranslationString($title);
+        } else {
+            $this->title = null;
         }
 
         return $this;
@@ -167,6 +172,8 @@ class TextWidget extends AdminWidget
     {
         if (TranslationString::isTranslatable($subtitle)) {
             $this->subtitle = new TranslationString($subtitle);
+        } else {
+            $this->subtitle = null;
         }
 
         return $this;
@@ -188,6 +195,8 @@ class TextWidget extends AdminWidget
     {
         if (TranslationString::isTranslatable($description)) {
             $this->description = new TranslationString($description);
+        } else {
+            $this->description = null;
         }
 
         return $this;
@@ -209,6 +218,8 @@ class TextWidget extends AdminWidget
     {
         if (TranslationString::isTranslatable($notes)) {
             $this->notes = new TranslationString($notes);
+        } else {
+            $this->notes = null;
         }
 
         return $this;

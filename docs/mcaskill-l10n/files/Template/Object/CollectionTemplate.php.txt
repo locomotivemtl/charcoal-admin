@@ -5,7 +5,7 @@ namespace Charcoal\Admin\Template\Object;
 use Exception;
 use InvalidArgumentException;
 
-// From PSR-7 (http messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
 // From Pimple
@@ -75,9 +75,10 @@ class CollectionTemplate extends AdminTemplate implements
         if (!$obj) {
             return;
         }
-        if ($obj->source()->tableExists() === false) {
+
+        if (!$obj->source()->tableExists()) {
             $obj->source()->createTable();
-            $this->addFeedback('success', 'A new table was created for object.');
+            $this->addFeedback('notice', $this->translate('The {{ objType }} table has been created.'));
         }
     }
 
@@ -156,12 +157,10 @@ class CollectionTemplate extends AdminTemplate implements
 
         $adminMetadata = $this->objAdminMetadata();
         if (!isset($adminMetadata['default_collection_dashboard'])) {
-            throw new Exception(
-                sprintf(
-                    'No default collection dashboard defined in admin metadata for %s.',
-                    get_class($this->proto())
-                )
-            );
+            throw new Exception(sprintf(
+                'No default collection dashboard defined in admin metadata for %s.',
+                get_class($this->proto())
+            ));
         }
 
         return $adminMetadata['default_collection_dashboard'];
@@ -264,13 +263,12 @@ class CollectionTemplate extends AdminTemplate implements
                 $objType = new TranslationString($objType);
             }
 
-            $objLabel = new TranslationString([
-                'en' => 'List: {{objType}}',
-                'fr' => 'Liste : {{objType}}'
-            ]);
+            $objLabel = $this->translate('Collection: {{ objType }}');
 
             if ($objType) {
-                $objLabel = sprintf(str_replace('{{objType}}', '%s', $objLabel), $objType);
+                $objLabel = strtr($objLabel, [
+                    '{{ objType }}' => $objType
+                ]);
             }
         }
 

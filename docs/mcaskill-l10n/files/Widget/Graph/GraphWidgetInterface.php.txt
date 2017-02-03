@@ -4,8 +4,6 @@ namespace Charcoal\Admin\Widget\Graph;
 
 /**
  * Graph Widget Interface
- *
- *
  */
 interface GraphWidgetInterface
 {

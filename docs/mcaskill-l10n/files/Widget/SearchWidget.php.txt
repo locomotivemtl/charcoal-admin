@@ -4,14 +4,15 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+// From Pimple
 use \Pimple\Container;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use \Charcoal\Charcoal;
 use \Charcoal\Property\PropertyFactory;
 use \Charcoal\Property\PropertyInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;

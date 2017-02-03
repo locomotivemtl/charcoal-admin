@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\User;
 
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 

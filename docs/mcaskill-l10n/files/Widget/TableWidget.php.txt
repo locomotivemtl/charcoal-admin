@@ -667,10 +667,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         if ($this->defaultObjectActions === null) {
             $edit = [
-                'label'  => new TranslationString([
-                    'fr' => 'Modifier',
-                    'en' => 'Modify',
-                ]),
+                'label'    => $this->translate('Modify'),
                 'url'      => $this->objectEditUrl().'&obj_id={{id}}',
                 'ident'    => 'edit',
                 'priority' => 1
@@ -863,30 +860,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             'page'         => $this->page(),
             'num_per_page' => $this->numPerPage(),
             'num_total'    => $this->numTotal(),
-            'label'        => new TranslationString([
-                'fr' => 'Navigation de la liste des objects',
-                'en' => 'Objects list navigation',
-            ])
+            'label'        => $this->translate('Objects list navigation')
         ]);
 
         return $pagination;
-    }
-
-    /**
-     * @return array
-     */
-    public function sublistActions()
-    {
-        return [
-            [
-                'label' => 'Inline Edit',
-                'ident' => 'inline-edit'
-            ],
-            [
-                'label' => 'Delete',
-                'ident' => 'Delete'
-            ]
-        ];
     }
 
     /**

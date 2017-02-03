@@ -4,11 +4,11 @@ namespace Charcoal\Admin\Property;
 
 use Traversable;
 
-// Dependency from 'charcoal-base'
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
 /**
- *
+ * Defines a property form control.
  */
 interface PropertyInputInterface
 {
@@ -50,7 +50,6 @@ interface PropertyInputInterface
      * @return boolean
      */
     public function required();
-
 
     /**
      * @param boolean $disabled The disabled flag.

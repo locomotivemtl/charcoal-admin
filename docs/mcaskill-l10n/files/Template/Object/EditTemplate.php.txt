@@ -5,7 +5,7 @@ namespace Charcoal\Admin\Template\Object;
 use Exception;
 use InvalidArgumentException;
 
-// From `pimple`
+// From Pimple
 use Pimple\Container;
 
 // From 'charcoal-translation'
@@ -90,12 +90,10 @@ class EditTemplate extends AdminTemplate implements
 
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
         if ($adminMetadata === null) {
-            throw new Exception(
-                sprintf(
-                    'The object %s does not have an admin metadata.',
-                    get_class($obj)
-                )
-            );
+            throw new Exception(sprintf(
+                'The object %s does not have an admin metadata.',
+                get_class($obj)
+            ));
         }
 
         return $adminMetadata;
@@ -121,12 +119,10 @@ class EditTemplate extends AdminTemplate implements
 
         if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
             if (!isset($adminMetadata['default_edit_dashboard'])) {
-                throw new Exception(
-                    sprintf(
-                        'No default edit dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    )
-                );
+                throw new Exception(sprintf(
+                    'No default edit dashboard defined in admin metadata for %s',
+                    get_class($this->obj())
+                ));
             }
 
             $dashboardIdent = $adminMetadata['default_edit_dashboard'];
@@ -212,19 +208,15 @@ class EditTemplate extends AdminTemplate implements
             }
 
             if ($objId) {
-                $objLabel = new TranslationString([
-                    'en' => 'Edit: {{objType}} #{{id}}',
-                    'fr' => 'Modifier : {{objType}} #{{id}}'
-                ]);
+                $objLabel = $this->translate('Edit: {{ objType }} #{{ id }}');
             } else {
-                $objLabel = new TranslationString([
-                    'en' => 'Create: {{objType}}',
-                    'fr' => 'Créer : {{objType}}'
-                ]);
+                $objLabel = $this->translate('Create: {{ objType }}');
             }
 
             if ($objType) {
-                $objLabel = sprintf(str_replace('{{objType}}', '%s', $objLabel), $objType);
+                $objLabel = strtr($objLabel, [
+                    '{{ objType }}' => $objType
+                ]);
             }
         }
 

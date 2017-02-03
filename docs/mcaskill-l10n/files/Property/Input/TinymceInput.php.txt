@@ -143,14 +143,11 @@ class TinymceInput extends TextareaInput
     /**
      * Retrieve the default title for the file picker dialog.
      *
-     * @return string[]
+     * @return string
      */
     protected function defaultDialogTitle()
     {
-        return [
-            'en' => 'Media Library',
-            'fr' => 'Bibliothèque de médias'
-        ];
+        return $this->translate('Media Library');
     }
 
     /**

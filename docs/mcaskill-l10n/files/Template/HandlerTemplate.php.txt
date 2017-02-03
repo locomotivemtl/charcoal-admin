@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin\Template;
 
-// Dependency from 'charcoal-translation'
+// From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
 
-// Local module (charcoal-admin) dependency
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
 /**
@@ -16,14 +16,14 @@ class HandlerTemplate extends AdminTemplate
     /**
      * The current error title.
      *
-     * @var TranslationString
+     * @var string|null
      */
     private $errorTitle;
 
     /**
      * The current error message.
      *
-     * @var TranslationString
+     * @var string|null
      */
     private $errorMessage;
 
@@ -45,6 +45,8 @@ class HandlerTemplate extends AdminTemplate
     {
         if (TranslationString::isTranslatable($message)) {
             $this->errorMessage = new TranslationString($message);
+        } else {
+            $this->errorMessage = null;
         }
 
         return $this;
@@ -53,7 +55,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Retrieve the error message.
      *
-     * @return TranslationString
+     * @return string|null
      */
     public function errorMessage()
     {
@@ -70,6 +72,8 @@ class HandlerTemplate extends AdminTemplate
     {
         if (TranslationString::isTranslatable($title)) {
             $this->errorTitle = new TranslationString($title);
+        } else {
+            $this->errorTitle = null;
         }
 
         return $this;
@@ -78,7 +82,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Retrieve the error title.
      *
-     * @return TranslationString
+     * @return string|null
      */
     public function errorTitle()
     {
@@ -88,7 +92,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return string|null
      */
     public function title()
     {

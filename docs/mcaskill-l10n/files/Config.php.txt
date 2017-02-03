@@ -98,7 +98,7 @@ class Config extends AbstractConfig
      */
     public function setRoutes(array $routes)
     {
-        $toIterate = ['templates', 'actions', 'scripts'];
+        $toIterate = [ 'templates', 'actions', 'scripts' ];
         foreach ($routes as $key => $val) {
             if (in_array($key, $toIterate) && isset($this->routes[$key])) {
                 $this->routes[$key] = array_merge($this->routes[$key], $val);

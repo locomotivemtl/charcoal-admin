@@ -2,13 +2,11 @@
 
 namespace Charcoal\Admin\Template;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\DashboardContainerInterface;
 use Charcoal\Admin\Ui\DashboardContainerTrait;
 use Charcoal\Admin\Widget\DashboardWidget;
-
-// Local parent namespace dependencies
-use Charcoal\Admin\AdminTemplate;
 
 /**
  * The Home template is a simple Dashboard, loaded from the metadata.
@@ -23,7 +21,7 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
      */
     public function createDashboard(array $data = null)
     {
-        $dashboardIdent = $this->dashboardIdent();
+        $dashboardIdent  = $this->dashboardIdent();
         $dashboardConfig = $this->dashboardConfig();
 
         $metadata = $this->metadata();

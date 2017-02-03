@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Widget;
 
 use \InvalidArgumentException;
 
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 
 /**
@@ -79,9 +80,10 @@ class PaginationWidget extends AdminWidget
     public function setNumPerPage($numPerPage)
     {
         if (!is_numeric($numPerPage)) {
-            throw new InvalidArgumentException(
-                sprintf('Num per page must be a numeric value. (%s sent)', gettype($numPerPage))
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Num per page must be a numeric value. (%s sent)',
+                gettype($numPerPage)
+            ));
         }
         $this->numPerPage = (int)$numPerPage;
         return $this;
@@ -130,7 +132,7 @@ class PaginationWidget extends AdminWidget
         while ($i <= $this->numPages()) {
             yield [
                 'active' => ($i == $this->page()),
-                'num' => $i
+                'num'    => $i
             ];
             $i++;
         }

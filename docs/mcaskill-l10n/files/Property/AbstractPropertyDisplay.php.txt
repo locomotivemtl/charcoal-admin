@@ -19,6 +19,8 @@ use Charcoal\Model\DescribableTrait;
 
 // Dependency from 'charcoal-translation'
 use Charcoal\Translation\TranslationConfig;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // Dependencies from 'charcoal-property'
 use Charcoal\Property\PropertyFactory;
@@ -32,10 +34,12 @@ use Charcoal\Admin\Property\PropertyDisplayInterface;
  *
  */
 abstract class AbstractPropertyDisplay implements
+    CatalogAwareInterface,
     DescribableInterface,
     PropertyDisplayInterface,
     LoggerAwareInterface
 {
+    use CatalogAwareTrait;
     use DescribableTrait;
     use LoggerAwareTrait;
 
@@ -111,7 +115,7 @@ abstract class AbstractPropertyDisplay implements
      */
     public function setDependencies(Container $container)
     {
-        // This method is a stub. Reimplement in children method
+        $this->setCatalog($container['translator/catalog']);
     }
 
     /**
@@ -184,9 +188,7 @@ abstract class AbstractPropertyDisplay implements
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
-            );
+            throw new InvalidArgumentException('Property Display identifier must be string');
         }
         $this->ident = $ident;
         return $this;
@@ -251,9 +253,7 @@ abstract class AbstractPropertyDisplay implements
     public function setDisplayClass($displayClass)
     {
         if (!is_string($displayClass)) {
-            throw new InvalidArgumentException(
-                'Display class must be a string'
-            );
+            throw new InvalidArgumentException('CSS Class(es) must be a string');
         }
         $this->displayClass = $displayClass;
         return $this;
@@ -303,7 +303,7 @@ abstract class AbstractPropertyDisplay implements
     {
         if (!is_string($displayType)) {
             throw new InvalidArgumentException(
-                'Display type must be a string.'
+                'Property Display Type must be a string.'
             );
         }
         $this->displayType = $displayType;
@@ -331,7 +331,6 @@ abstract class AbstractPropertyDisplay implements
         return $this;
     }
 
-
     /**
      * @return PropertyInterface
      */
@@ -341,7 +340,7 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
-     * Alias of the `property` method.
+     * Alias of {@see self::property()}
      *
      * @return PropertyInterface
      */

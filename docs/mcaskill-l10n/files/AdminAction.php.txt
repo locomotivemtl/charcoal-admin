@@ -4,15 +4,16 @@ namespace Charcoal\Admin;
 
 use RuntimeException;
 
-use Pimple\Container;
-
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
-// Module `charcoal-factory` dependencies
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From 'charcoal-base
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
@@ -24,7 +25,8 @@ use Charcoal\Translation\Catalog\CatalogAwareTrait;
 // From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
 
-// Local module (charcoal-admin) dependencies
+// From 'charcoal-admin'
+use Charcoal\Admin\Ui\FeedbackContainerTrait;
 use Charcoal\Admin\User\AuthAwareInterface;
 use Charcoal\Admin\User\AuthAwareTrait;
 
@@ -38,6 +40,7 @@ abstract class AdminAction extends AbstractAction implements
 {
     use AuthAwareTrait;
     use CatalogAwareTrait;
+    use FeedbackContainerTrait;
 
     /**
      * Store a reference to the admin configuration.
@@ -59,18 +62,13 @@ abstract class AdminAction extends AbstractAction implements
     private $siteName;
 
     /**
-     * @var array $feedbacks
-     */
-    private $feedbacks = [];
-
-    /**
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
 
     /**
-    * @param array $data Optional.
-    */
+     * @param array $data Optional.
+     */
     final public function __construct(array $data = null)
     {
         parent::__construct($data);
@@ -228,7 +226,7 @@ abstract class AdminAction extends AbstractAction implements
 
         $u = User::getAuthenticated();
         if ($u === null || !$u->id()) {
-            die('Auth required');
+            die('Auth Required');
         }
     }
 
@@ -278,45 +276,6 @@ abstract class AdminAction extends AbstractAction implements
         $response = json_decode($response, true);
 
         return !!$response['success'];
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasFeedbacks()
-    {
-        return (count($this->feedbacks()) > 0);
-    }
-
-    /**
-     * @return integer
-     */
-    public function numFeedbacks()
-    {
-        return count($this->feedbacks());
-    }
-
-    /**
-     * @return array
-     */
-    public function feedbacks()
-    {
-        return $this->feedbacks;
-    }
-
-    /**
-     * @param string $level The feedback level.
-     * @param mixed  $msg   The actual feedback message.
-     * @return AdminAction Chainable
-     */
-    public function addFeedback($level, $msg)
-    {
-        $this->feedbacks[] = [
-            'msg'     => $msg,
-            'message' => $msg,
-            'level'   => $level
-        ];
-        return $this;
     }
 
     /**

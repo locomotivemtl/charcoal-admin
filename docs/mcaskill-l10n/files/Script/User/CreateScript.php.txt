@@ -14,7 +14,6 @@ use Charcoal\Admin\AdminScript;
  */
 class CreateScript extends AdminScript
 {
-
     /**
      * @param array|\ArrayAccess $data The dependencies (app and logger).
      */
@@ -26,13 +25,13 @@ class CreateScript extends AdminScript
         $this->setArguments($arguments);
     }
 
-        /**
-         * Retrieve the available default arguments of this action.
-         *
-         * @link http://climate.thephpleague.com/arguments/ For descriptions of the options for CLImate.
-         *
-         * @return array
-         */
+    /**
+     * Retrieve the available default arguments of this action.
+     *
+     * @link http://climate.thephpleague.com/arguments/ For descriptions of the options for CLImate.
+     *
+     * @return array
+     */
     public function defaultArguments()
     {
         $arguments = [
@@ -41,7 +40,7 @@ class CreateScript extends AdminScript
                 'longPrefix'  => 'username',
                 'description' => 'The user name'
             ],
-            'email'    => [
+            'email' => [
                 'prefix'      => 'e',
                 'longPrefix'  => 'email',
                 'description' => 'The user email'
@@ -52,7 +51,7 @@ class CreateScript extends AdminScript
                 'description' => 'The user password',
                 'inputType'   => 'password'
             ],
-            'roles'    => [
+            'roles' => [
                 'prefix'      => 'r',
                 'longPrefix'  => 'roles',
                 'description' => 'The user role'

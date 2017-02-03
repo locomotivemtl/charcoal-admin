@@ -28,16 +28,17 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
      */
     private $obj;
 
+    /**
+     * @var Container
+     */
+    private $container;
+
+    /**
+     *
+     */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerDatabase($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
-
+        $container = $this->container();
         $this->obj = new LoginAction([
             'logger' => $container['logger'],
             'container' => $container
@@ -80,12 +81,7 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
 
     private function createUser($username, $password, $email = 'info@example.com')
     {
-        // Create User Table
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-
-        $containerProvider->registerModelFactory($container);
-
+        $container = $this->container();
         $userProto = $container['model/factory']->create(User::class);
         $userProto->setData([
             'username'  => $username,
@@ -93,5 +89,24 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
             'email'     => $email
         ]);
         $userProto->save();
+    }
+
+    /**
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseUrl($container);
+            $containerProvider->registerAdminConfig($container);
+            $containerProvider->registerAuthenticator($container);
+            $containerProvider->registerAuthorizer($container);
+            $containerProvider->registerCollectionLoader($container);
+
+            $this->container = $container;
+        }
+        return $this->container;
     }
 }

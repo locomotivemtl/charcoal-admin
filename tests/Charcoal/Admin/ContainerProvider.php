@@ -21,7 +21,7 @@ use Charcoal\App\Template\WidgetBuilder;
 use Charcoal\Model\Service\MetadataLoader;
 use Charcoal\Source\DatabaseSource;
 
-// Module `charcoal-base` dependencies
+// Module `charcoal-user` dependencies
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
@@ -237,7 +237,8 @@ class ContainerProvider
                 'base_path' => __DIR__.'/../../..',
                 'paths'=>[
                     'metadata',
-                    'vendor/locomotivemtl/charcoal-base/metadata'
+                    'vendor/locomotivemtl/charcoal-object/metadata',
+                    'vendor/locomotivemtl/charcoal-user/metadata'
                 ]
             ]);
         };

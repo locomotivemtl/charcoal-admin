@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
- * Password Property
+ * Password Input Property
  */
 class PasswordInput extends TextInput
 {
@@ -20,5 +20,4 @@ class PasswordInput extends TextInput
     {
         return 'password';
     }
-
 }

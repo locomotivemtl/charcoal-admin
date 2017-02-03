@@ -170,6 +170,7 @@ class DeleteActionTest extends PHPUnit_Framework_TestCase
             $containerProvider->registerAdminConfig($container);
             $containerProvider->registerAuthenticator($container);
             $containerProvider->registerAuthorizer($container);
+            $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;
         }

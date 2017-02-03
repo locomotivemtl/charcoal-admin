@@ -54,7 +54,7 @@ class LogoutAction extends AdminAction
                     $logMessage = '[Admin] Logout attempt for unauthenticated user';
                 }
                 $this->logger->warning($logMessage);
-            } {
+            } else {
                 $result = $user->logout();
                 $this->deleteUserAuthTokens($user);
             }

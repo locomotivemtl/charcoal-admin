@@ -32,7 +32,6 @@ use Charcoal\Admin\AdminAction;
  * - `400` — Client error; Invalid request data
  * - `404` — Storage error; Object nonexistent ID
  * - `500` — Server error; Object could not be deleted
- *
  */
 class DeleteAction extends AdminAction
 {

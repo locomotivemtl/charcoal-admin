@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Action\Widget\Table;
 
 use Exception;
 use RuntimeException;
+use UnexpectedValueException;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
@@ -17,23 +18,42 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
-use Charcoal\Admin\Widget\ObjectForm;
-use Charcoal\Admin\Widget\FormProperty;
+use Charcoal\Admin\Widget\ObjectFormWidget;
+use Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
  * Action: Inline editing of multiple objects in Table Widget
  *
  * Renders an HTML form for editing objects across table rows.
+ *
+ * ## Required Parameters
+ *
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
+ * - `obj_ids` (_mixed_) — One or more object IDs to edit
+ *
+ * ## Response
+ *
+ * - `success` (_boolean_) — TRUE if the object was properly deleted, FALSE in case of any error.
+ * - `objects` (_array_) — Form controls grouped by object.
+ *
+ * ## HTTP Codes
+ *
+ * - `200` — Successful; Form widgets built
+ * - `400` — Client error; Invalid request data
+ * - `404` — Storage error; Object nonexistent IDs
+ * - `500` — Server error; Form widgets could not be built
  */
 class InlineMultiAction extends AdminAction
 {
     /**
      * @var array $objects
      */
-    protected $objects;
+    protected $objects = [];
 
     /**
-     * @var FactoryInterface $widgetFactory
+     * Store the widget factory.
+     *
+     * @var FactoryInterface
      */
     private $widgetFactory;
 
@@ -45,82 +65,106 @@ class InlineMultiAction extends AdminAction
     {
         parent::setDependencies($container);
 
-        // Required ObjectContainerInterface dependencies
         $this->setWidgetFactory($container['widget/factory']);
     }
 
     /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
-     * @return InlineAction Chainable
-     */
-    protected function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
-        return $this;
-    }
-
-    /**
-     * @throws RuntimeException If the factory is not set.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new RuntimeException(
-                'Widget factory is not set on inline action widget.'
-            );
-        }
-        return $this->widgetFactory;
-    }
-
-    /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
+     * @throws UnexpectedValueException If there are no form controls.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $failMessage = $this->translate('Failed to load quick edit');
+        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            '{{ errorMessage }}' => $failMessage
+        ]);
+        $reqMessage  = $this->translate(
+            '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+        );
+        $typeMessage = $this->translate(
+            '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+        );
+
         $objType = $request->getParam('obj_type');
         $objIds  = $request->getParam('obj_ids');
 
-        if (!$objType || !$objIds) {
+        if (!$objType) {
+            $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+            $this->addFeedback('error', strtr($reqMessage, [
+                '{{ parameter }}'    => '"obj_type"',
+                '{{ expectedType }}' => 'string',
+                '{{ actualType }}'   => $actualType,
+            ]));
             $this->setSuccess(false);
-            return $response->withStatus(404);
+
+            return $response->withStatus(400);
+        }
+
+        if (!$objIds || !is_array($objIds)) {
+            $actualType = is_object($objIds) ? get_class($objIds) : gettype($objIds);
+            $this->addFeedback('error', strtr($reqMessage, [
+                '{{ parameter }}'    => '"obj_ids"',
+                '{{ expectedType }}' => 'array of object IDs',
+                '{{ actualType }}'   => $actualType,
+            ]));
+            $this->setSuccess(false);
+
+            return $response->withStatus(400);
         }
 
         try {
-            $this->objects = [];
             foreach ($objIds as $objId) {
                 $obj = $this->modelFactory()->create($objType);
                 $obj->load($objId);
+
                 if (!$obj->id()) {
                     continue;
                 }
 
-                $o = [];
-                $o['id'] = $obj->id();
+                $objForm = [ 'id' => $obj->id() ];
 
-                $objForm = $this->widgetFactory()->create(ObjectForm::class);
-                $objForm->set_objType($objType);
-                $objForm->set_objId($objId);
-                $formProperties = $objForm->formProperties();
-                foreach ($formProperties as $propertyIdent => $property) {
-                    if (!($property instanceof FormProperty)) {
+                $form = $this->widgetFactory()->create(ObjectForm::class);
+                $form->set_objType($objType);
+                $form->set_objId($objId);
+
+                $formProperties = $form->formProperties();
+                foreach ($formProperties as $propertyIdent => $formProperty) {
+                    if (!$formProperty instanceof FormProperty) {
                         continue;
                     }
-                    $p = $obj->p($propertyIdent);
-                    $property->setPropertyVal($p->val());
-                    $property->setProp($p);
-                    $inputType = $property->inputType();
-                    $o['inlineProperties'][$propertyIdent] = $property->renderTemplate($inputType);
+
+                    $property = $obj->property($propertyIdent);
+                    $formProperty->setPropertyVal($property->val());
+                    $formProperty->setProp($property);
+
+                    $inputType = $formProperty->inputType();
+                    $objForm['properties'][$propertyIdent] = $formProperty->renderTemplate($inputType);
                 }
-                $this->objects[] = $o;
+
+                if (!$objForm['properties']) {
+                    continue;
+                }
+
+                $this->objects[] = $objForm;
             }
+
+            if (!$this->objects) {
+                throw new UnexpectedValueException('No editable properties.');
+            }
+
+            $this->addFeedback('success', $this->translate('Widgets Loaded'));
             $this->setSuccess(true);
+
             return $response;
         } catch (Exception $e) {
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
-            return $response->withStatus(404);
+
+            return $response->withStatus(500);
         }
     }
 
@@ -134,6 +178,34 @@ class InlineMultiAction extends AdminAction
             'objects'   => $this->objects,
             'feedbacks' => $this->feedbacks()
         ];
+    }
+
+    /**
+     * Set the widget factory.
+     *
+     * @param  FactoryInterface $factory The factory to create widgets.
+     * @return self
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the widget factory.
+     *
+     * @throws RuntimeException If the widget factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if (!isset($this->widgetFactory)) {
+            throw new RuntimeException('Widget Factory is not defined');
+        }
+
+        return $this->widgetFactory;
     }
 }
 

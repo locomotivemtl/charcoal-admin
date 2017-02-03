@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\User;
 
-use \Charcoal\User\Permission as UserPermission;
+use \Charcoal\User\Acl\Permission as UserPermission;
 
 /**
  * Permission definition

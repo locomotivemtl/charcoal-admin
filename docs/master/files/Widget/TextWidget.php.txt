@@ -52,7 +52,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The show title flag.
-     * @return Text Chainable
+     * @return TextWidget Chainable
      */
     public function setShowTitle($show)
     {
@@ -74,7 +74,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The show subtitle flag.
-     * @return Text Chainable
+     * @return TextWidget Chainable
      */
     public function setShowSubtitle($show)
     {
@@ -96,7 +96,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The show description flag.
-     * @return Text Chainable
+     * @return TextWidget Chainable
      */
     public function setShowDescription($show)
     {
@@ -118,7 +118,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The "show notes" flag.
-     * @return Text Chainable
+     * @return TextWidget Chainable
      */
     public function setShowNotes($show)
     {

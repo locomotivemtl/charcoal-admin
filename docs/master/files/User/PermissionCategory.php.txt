@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\User;
 
-use \Charcoal\User\PermissionCategory as UserPermissionCategory;
+use \Charcoal\User\Acl\PermissionCategory as UserPermissionCategory;
 
 /**
  * Category of permission

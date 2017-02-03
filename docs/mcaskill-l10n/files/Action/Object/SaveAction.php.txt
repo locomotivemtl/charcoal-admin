@@ -48,10 +48,10 @@ class SaveAction extends AbstractSaveAction
      * Extract relevant model data from $data, excluding _object type_.
      * This {@see self::$saveData subset} is merged onto the target model.
      *
-     * @param  array|\ArrayAccess $data The update action data.
+     * @param  array $data The update action data.
      * @return SaveAction Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

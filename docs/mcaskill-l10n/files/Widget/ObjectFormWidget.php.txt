@@ -75,10 +75,10 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * @param array|ArrayInterface $data The widget data.
+     * @param array $data The widget data.
      * @return ObjectForm Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

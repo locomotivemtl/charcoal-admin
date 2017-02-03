@@ -611,7 +611,7 @@ trait CollectionContainerTrait
             $metadata->setData($objMetadata);
         }
 
-        $this->display->setData($metadata);
+        $this->display->setData($metadata->data());
         $this->display->setData($property->viewOptions($displayType));
     }
 

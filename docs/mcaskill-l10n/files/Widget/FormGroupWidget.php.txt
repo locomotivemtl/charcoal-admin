@@ -90,10 +90,10 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
-     * @param  array|\ArrayAccess $data Widget data.
+     * @param  array $data Widget data.
      * @return FormGroupWidget Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         if (!empty($data['properties'])) {
             $this->setGroupProperties($data['properties']);

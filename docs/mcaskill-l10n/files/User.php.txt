@@ -5,9 +5,6 @@ namespace Charcoal\Admin;
 // From 'charcoal-user'
 use Charcoal\User\AbstractUser;
 
-// From 'charcoal-admin'
-use Charcoal\Admin\UserGroup;
-
 /**
  * Admin User class.
  */
@@ -19,19 +16,6 @@ class User extends AbstractUser
     public static function sessionKey()
     {
         return 'admin.user';
-    }
-
-    /**
-     * @param array|null $data Optional. Default usergroup data.
-     * @return UserGroup
-     */
-    public function createGroup(array $data = null)
-    {
-        $group =  new UserGroup();
-        if ($data !== null) {
-            $group->setData($data);
-        }
-        return $group;
     }
 }
 

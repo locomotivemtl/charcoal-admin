@@ -47,10 +47,10 @@ class UpdateAction extends AbstractSaveAction
      * Extract relevant model data from $data, excluding _object type_ and _ID_.
      * This {@see self::$updateData subset} is merged onto the target model.
      *
-     * @param  array|\ArrayAccess $data The update action data.
+     * @param  array $data The update action data.
      * @return UpdateAction Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         parent::setData($data);
 

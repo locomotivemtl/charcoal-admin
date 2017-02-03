@@ -178,10 +178,10 @@ abstract class AbstractPropertyInput implements
      * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
-     * @param array|Traversable $data The input data.
+     * @param array $data The input data.
      * @return AbstractPropertyInput Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         foreach ($data as $prop => $val) {
             $func = [$this, $this->setter($prop)];

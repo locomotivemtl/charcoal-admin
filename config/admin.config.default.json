@@ -37,6 +37,14 @@
                 "template": "charcoal/admin/template/system/users",
                 "controller": "charcoal/admin/template/system/users"
             },
+            "system/user-roles":{
+                "template": "charcoal/admin/template/system/user-roles",
+                "controller": "charcoal/admin/template/system/user-roles"
+            },
+            "system/user-permissions":{
+                "template": "charcoal/admin/template/system/user-permissions",
+                "controller": "charcoal/admin/template/system/userpermissions"
+            },
 
             "contents": {},
             "envoie": {}

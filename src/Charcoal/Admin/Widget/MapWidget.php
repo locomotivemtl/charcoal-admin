@@ -99,7 +99,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     /**
      * Get the widget's associated object.
      *
-     * @return ModelInterface
+     * @return \Charcoal\Model\ModelInterface
      */
     public function obj()
     {
@@ -107,7 +107,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         $id = ( isset($GET['obj_id']) ? $GET['obj_id'] : 0 );
         $obj_type = ( isset($GET['obj_type']) ? $GET['obj_type'] : 0 );
         if ($id && $obj_type) {
-            $obj = ModelFactory::instance()->get($obj_type, [
+            $obj = $this->modelFactory()->create($obj_type, [
                 'logger'=>$this->logger
             ]);
             $obj->load($id);

@@ -26,6 +26,7 @@ use Charcoal\Translation\TranslationConfig;
 use Charcoal\App\Template\AbstractTemplate;
 
 // Local module (charcoal-admin) dependencies
+use Charcoal\Admin\Ui\FeedbackContainerTrait;
 use Charcoal\Admin\User\AuthAwareInterface;
 use Charcoal\Admin\User\AuthAwareTrait;
 
@@ -41,12 +42,11 @@ use Charcoal\Admin\User\AuthAwareTrait;
  * - `headerMenu` (iterator) - The header menu data
  * - `showFooterMenu` (bool) - Display the footer menu or not
  * - `footerMenu` (iterator) - The footer menu data
- * - `hasFeedback` (bool) - If there is feedback to display or not
- * - `feedback` (iterator) - The feedback data
  */
 class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
 {
     use AuthAwareTrait;
+    use FeedbackContainerTrait;
 
     /**
      * The base URI.
@@ -113,11 +113,6 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      * @var boolean $headerMenu
      */
     private $headerMenu;
-
-    /**
-     * @var array $feedbacks
-     */
-    private $feedbacks;
 
     /**
      * @var FactoryInterface $modelFactory
@@ -520,37 +515,6 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
         }
 
         return $sidemenu;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasFeedbacks()
-    {
-        return (count($this->feedbacks()) > 0);
-    }
-
-    /**
-     * @return array
-     */
-    public function feedbacks()
-    {
-        return $this->feedbacks;
-    }
-
-    /**
-     * @param string $level The feedback level.
-     * @param mixed  $msg   The feedback message.
-     * @return AdminTemplate Chainable
-     */
-    public function addFeedback($level, $msg)
-    {
-        $this->feedbacks[] = [
-            'msg'     => $msg,
-            'message' => $msg,
-            'level'   => $level
-        ];
-        return $this;
     }
 
     /**

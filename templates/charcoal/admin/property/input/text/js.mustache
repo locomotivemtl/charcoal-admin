@@ -15,6 +15,9 @@ Charcoal.Admin.manager().add_property_input({
         {{# multiple }}
         , multiple: true
         , multiple_separator: "{{ property.multipleSeparator }}"
+        {{# property.multipleOptionsAsJson }}
+        , multiple_options: {{& .}}
+        {{/ property.multipleOptionsAsJson }}
         {{/ multiple }}
         {{# l10n }}
         , l10n: true

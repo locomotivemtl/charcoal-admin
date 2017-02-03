@@ -1,19 +1,18 @@
 /**
-* Switch looking input that manages boolean properties
-* charcoal/admin/property/input/switch
-*
-* Require:
-* - jQuery
-* - bootstrapSwitch
-*
-* @param  {Object}  opts Options for input property
-*/
+ * Switch looking input that manages boolean properties
+ * charcoal/admin/property/input/switch
+ *
+ * Require:
+ * - jQuery
+ * - bootstrapSwitch
+ *
+ * @param  {Object}  opts Options for input property
+ */
 
-Charcoal.Admin.Property_Input_Text = function (opts)
-{
+Charcoal.Admin.Property_Input_Text = function (opts) {
     this.input_type = 'charcoal/admin/property/input/text';
-    this.opts = opts;
-    this.data = opts.data;
+    this.opts       = opts;
+    this.data       = opts.data;
 
     // Required
     this.set_input_id(this.opts.id);
@@ -22,19 +21,21 @@ Charcoal.Admin.Property_Input_Text = function (opts)
     this.set_data(this.data);
 
     // Run the plugin or whatever is necessary
+    this.initialisation = true;
     this.init();
+    this.initialisation = false;
+
     return this;
 };
-Charcoal.Admin.Property_Input_Text.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Text.prototype             = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Text.prototype.constructor = Charcoal.Admin.Property_Input_Text;
-Charcoal.Admin.Property_Input_Text.prototype.parent = Charcoal.Admin.Property.prototype;
+Charcoal.Admin.Property_Input_Text.prototype.parent      = Charcoal.Admin.Property.prototype;
 
 /**
  * Set multiple values required
  * @param {Object} data Data passed from the template
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_data = function (data)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_data = function (data) {
     // Input desc
     this.set_input_name(data.input_name);
     this.set_input_val(data.input_val);
@@ -49,11 +50,16 @@ Charcoal.Admin.Property_Input_Text.prototype.set_data = function (data)
     // Multiple
     this.set_multiple(data.multiple);
     this.set_multiple_separator(data.multiple_separator);
+
+    var min = (data.multiple_options) ? data.multiple_options.min : 0;
+    var max = (data.multiple_options) ? data.multiple_options.max : 0;
+
+    this.set_multiple_min(min);
+    this.set_multiple_max(max);
     return this;
 };
 
-Charcoal.Admin.Property_Input_Text.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Text.prototype.init = function () {
     // Impossible!
     if (!this.input_id) {
         return this;
@@ -71,15 +77,16 @@ Charcoal.Admin.Property_Input_Text.prototype.init = function ()
  * When multiple
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function ()
-{
+Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
     // New input
-    this.chars_new = [13];
+    this.chars_new    = [13];
     // Check to delete current input
     this.chars_remove = [8, 46];
     // Navigate.
-    this.char_next = [40];
-    this.char_prev = [38];
+    this.char_next    = [40];
+    this.char_prev    = [38];
+
+    this.currentValAmount = 1;
 
     // Add to container.
     // input.wrap('<div></div>');
@@ -91,6 +98,13 @@ Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function ()
     // Initial split.
     this.split_val(this.$input);
 
+    if (this.multiple_min) {
+        var additionalFields = this.multiple_min - this.currentValAmount;
+        for (; additionalFields > 1; additionalFields--) {
+            this.add_item();
+        }
+    }
+
     return this;
 };
 /**
@@ -100,14 +114,13 @@ Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function ()
  * @param  {[type]} input [description]
  * @return {thisArg}      Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input)
-{
+Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input) {
     var separator = this.multiple_separator;
-    input = input || this.$input;
-    var val = input.val();
+    input         = input || this.$input;
+    var val       = input.val();
 
     var split = val.split(separator);
-    var i = 0;
+    var i     = 0;
     var total = split.length;
     if (total === 1) {
         // Nothing to split.
@@ -118,37 +131,49 @@ Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input)
         if (i === 0) {
             input.val(split[i]);
         } else {
-            input = this.insert_item(input, split[i]);
+            if (this.initialisation || !this.multiple_max || this.currentValAmount < this.multiple_max) {
+                input = this.insert_item(input, split[i]);
+            } else {
+                var next = input.next('input');
+                if (next.length && !next.innerHTML) {
+                    this.remove_item(next);
+                    input = this.insert_item(input, split[i]);
+                }
+            }
         }
     }
 
     return this;
 };
 
-Charcoal.Admin.Property_Input_Text.prototype.bind_keyboard_events = function (input)
-{
+Charcoal.Admin.Property_Input_Text.prototype.bind_keyboard_events = function (input) {
     // Scope
     var that = this;
 
-    var chars_new = this.chars_new;
+    var chars_new    = this.chars_new;
     var chars_remove = this.chars_remove;
-    var char_next = this.char_next;
-    var char_prev = this.char_prev;
+    var char_next    = this.char_next;
+    var char_prev    = this.char_prev;
 
     // Bind the keyboard events
     input.on('keydown', function (e) {
 
         var keyCode = e.keyCode;
         if (chars_new.indexOf(keyCode) > -1) {
-            e.preventDefault();
-            that.insert_item($(this));
+            if (!that.multiple_max || that.currentValAmount < that.multiple_max) {
+                e.preventDefault();
+                that.insert_item($(this));
+            }
         }
 
         if (chars_remove.indexOf(keyCode) > -1) {
-            // Delete keys (8 is backspage, 46 is "del")
-            if ($(this).val() === '') {
-                e.preventDefault();
-                that.remove_item($(this));
+
+            if (!that.multiple_min || that.currentValAmount > that.multiple_min) {
+                // Delete keys (8 is backspage, 46 is "del")
+                if ($(this).val() === '') {
+                    e.preventDefault();
+                    that.remove_item($(this));
+                }
             }
         }
 
@@ -175,12 +200,14 @@ Charcoal.Admin.Property_Input_Text.prototype.bind_keyboard_events = function (in
  * @param  {String|undefined} val   Should we have a value already in that input.
  * @return {jQueryObject}           Clone object
  */
-Charcoal.Admin.Property_Input_Text.prototype.insert_item = function (elem, val)
-{
+Charcoal.Admin.Property_Input_Text.prototype.insert_item = function (elem, val) {
     var clone = this.input_clone(val);
     clone.insertAfter(elem);
     this.bind_keyboard_events(clone);
     clone.focus();
+
+    this.currentValAmount++;
+
     return clone;
 };
 
@@ -189,12 +216,13 @@ Charcoal.Admin.Property_Input_Text.prototype.insert_item = function (elem, val)
  * @param {String|undefined} val    If the input already as a value
  * @return {jQueryObject}           Clone object
  */
-Charcoal.Admin.Property_Input_Text.prototype.add_item = function (val)
-{
+Charcoal.Admin.Property_Input_Text.prototype.add_item = function (val) {
     var clone = this.input_clone(val);
     this.$container.append(clone);
     this.bind_keyboard_events(clone);
     clone.focus();
+
+    this.currentValAmount++;
 
     return clone;
 };
@@ -205,8 +233,7 @@ Charcoal.Admin.Property_Input_Text.prototype.add_item = function (val)
  * @param  {jQueryObject} item      Input to be removed
  * @return {thisArg}                Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.remove_item = function (item)
-{
+Charcoal.Admin.Property_Input_Text.prototype.remove_item = function (item) {
     var prev = item.prev('input');
     var next = item.next('input');
 
@@ -224,6 +251,8 @@ Charcoal.Admin.Property_Input_Text.prototype.remove_item = function (item)
     this.remove_item_listeners(item);
     item.remove();
 
+    this.currentValAmount--;
+
     return this;
 };
 /**
@@ -231,8 +260,7 @@ Charcoal.Admin.Property_Input_Text.prototype.remove_item = function (item)
  * @param  {jQueryObject} item      Input to be removed
  * @return {thisArg}                Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.remove_item_listeners = function (item)
-{
+Charcoal.Admin.Property_Input_Text.prototype.remove_item_listeners = function (item) {
     item.off('keydown');
     item.off('keyup');
 
@@ -244,15 +272,14 @@ Charcoal.Admin.Property_Input_Text.prototype.remove_item_listeners = function (i
  * @param  {String} val Optional parameter - Value of the input.
  * @return {jQueryObject}     The actual "clone", which isn't really a clone.
  */
-Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val)
-{
-    var input = this.$input;
-    var classes = input.attr('class');
+Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
+    var input      = this.$input;
+    var classes    = input.attr('class');
     var min_length = this.min_length;
     var max_length = this.max_length;
     // var size = this.size;
-    var required = this.required;
-    var readonly = this.readonly;
+    var required   = this.required;
+    var readonly   = this.readonly;
     var input_name = this.input_name;
 
     var clone = $('<input type="text" />');
@@ -288,8 +315,7 @@ Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val)
  * @param {string} input_id ID of the input.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_input_id = function (input_id)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_input_id = function (input_id) {
     this.input_id = input_id;
     return this;
 };
@@ -298,8 +324,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_input_id = function (input_id)
  * @param {String} input_name Name of the current input
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_input_name = function (input_name)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_input_name = function (input_name) {
     this.input_name = input_name;
     return this;
 };
@@ -308,8 +333,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_input_name = function (input_na
  * @param {String} input_val Value of the current input
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_input_val = function (input_val)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_input_val = function (input_val) {
     this.input_val = input_val;
     return this;
 };
@@ -318,8 +342,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_input_val = function (input_val
  * Is the input in readOnly mode?
  * @param {Boolean|undefined} readonly Defines if input is in readonly mode or not
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_readonly = function (readonly)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_readonly = function (readonly) {
     if (!readonly) {
         readonly = false;
     }
@@ -331,8 +354,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_readonly = function (readonly)
  * Is the input required?
  * @param {Boolean|undefined} required Defines if input is required
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_required = function (required)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_required = function (required) {
     if (!required) {
         required = false;
     }
@@ -344,8 +366,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_required = function (required)
  * The input min length
  * @param {Integer} min_length Min length of the input.
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_min_length = function (min_length)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_min_length = function (min_length) {
     if (!min_length) {
         min_length = 0;
     }
@@ -357,8 +378,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_min_length = function (min_leng
  * The input max length
  * @param {Integer} max_length Max length of the input.
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_max_length = function (max_length)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_max_length = function (max_length) {
     if (!max_length) {
         max_length = 0;
     }
@@ -370,8 +390,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_max_length = function (max_leng
  * Size of the input
  * @param {Integer} size Not sure about this one.
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_size = function (size)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_size = function (size) {
     if (!size) {
         size = 0;
     }
@@ -385,21 +404,48 @@ Charcoal.Admin.Property_Input_Text.prototype.set_size = function (size)
  * @param {Boolean} multiple Is the input multiple or what.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_multiple = function (multiple)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_multiple = function (multiple) {
     if (!multiple) {
         multiple = false;
     }
     this.multiple = multiple;
     return this;
 };
+
+/**
+ * Multiple true or false?
+ * Multiple input will replicate itself when multiple separator is typed in.
+ * @param {Boolean} multiple_min Is the input multiple or what.
+ * @return {thisArg} Chainable
+ */
+Charcoal.Admin.Property_Input_Text.prototype.set_multiple_min = function (multiple_min) {
+    if (!multiple_min) {
+        multiple_min = false;
+    }
+    this.multiple_min = multiple_min;
+    return this;
+};
+
+/**
+ * Multiple true or false?
+ * Multiple input will replicate itself when multiple separator is typed in.
+ * @param {Boolean} multiple_max Is the input multiple or what.
+ * @return {thisArg} Chainable
+ */
+Charcoal.Admin.Property_Input_Text.prototype.set_multiple_max = function (multiple_max) {
+    if (!multiple_max) {
+        multiple_max = false;
+    }
+    this.multiple_max = multiple_max;
+    return this;
+};
+
 /**
  * Multiple separator
  * @param {String} separator Multiple separator || undefined.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Text.prototype.set_multiple_separator = function (separator)
-{
+Charcoal.Admin.Property_Input_Text.prototype.set_multiple_separator = function (separator) {
     if (!separator) {
         // Default
         separator = ',';

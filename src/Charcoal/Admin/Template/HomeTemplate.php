@@ -21,20 +21,9 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
      * @param array $data Optional dashboard data.
      * @return Charcoal\Ui\Dashboard\DashboardInterface
      */
-    public function createDashboard(array $data = null)
+    public function createDashboardConfig(array $data = null)
     {
-        $dashboardIdent = $this->dashboardIdent();
-        $dashboardConfig = $this->dashboardConfig();
+        return $this->dashboardConfig();
 
-        $metadata = $this->metadata();
-
-        $dashboard = new DashboardWidget();
-        if (is_array($data)) {
-            $dashboard->setData($data);
-        } elseif (isset($metadata['dashboard'])) {
-            $dashboard->setData($metadata['dashboard']);
-        }
-
-        return $dashboard;
     }
 }

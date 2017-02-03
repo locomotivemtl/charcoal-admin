@@ -99,7 +99,7 @@ class ReadonlyInput extends AbstractPropertyInput
         $display = $this->propertyDisplayFactory()->create($displayType);
         $display->setDisplayType($displayType);
         $display->setProperty($property);
-        $display->setData($property->metadata());
+        $display->setData($property->metadata()->data());
         $display->setPropertyVal($this->propertyVal());
 
         return $this->view()->renderTemplate($displayType, $display);

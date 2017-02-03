@@ -97,6 +97,39 @@ class UpdateAction extends AbstractSaveAction
             $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
+            $reqMessage  = $this->translate(
+                '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+            );
+            $typeMessage = $this->translate(
+                '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+            );
+
+            $objType = $request->getParam('obj_type');
+            $objId   = $request->getParam('obj_id');
+
+            if (!$objType) {
+                $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+                $this->addFeedback('error', strtr($reqMessage, [
+                    '{{ parameter }}'    => '"obj_type"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
+            if (!$objId) {
+                $actualType = is_object($objId) ? get_class($objId) : gettype($objId);
+                $this->addFeedback('error', strtr($reqMessage, [
+                    '{{ parameter }}'    => '"obj_id"',
+                    '{{ expectedType }}' => 'string or numeric',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
 
             $this->setData($request->getParams());
 

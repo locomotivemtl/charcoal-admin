@@ -66,7 +66,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
         $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage
         ]);
-        $reqdMessage = $this->translate(
+        $reqMessage = $this->translate(
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
         $typeMessage = $this->translate(
@@ -81,7 +81,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
         try {
             if (!$objType) {
                 $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
-                $this->addFeedback('error', strtr($requiredMessage, [
+                $this->addFeedback('error', strtr($reqMessage, [
                     '{{ parameter }}'    => '"obj_type"',
                     '{{ expectedType }}' => 'string',
                     '{{ actualType }}'   => $actualType,
@@ -94,7 +94,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
 
             if (!$objOrders || !is_array($objOrders)) {
                 $actualType = is_object($objOrders) ? get_class($objOrders) : gettype($objOrders);
-                $this->addFeedback('error', strtr($requiredMessage, [
+                $this->addFeedback('error', strtr($reqMessage, [
                     '{{ parameter }}'    => '"obj_orders"',
                     '{{ expectedType }}' => 'array of object IDs',
                     '{{ actualType }}'   => $actualType,

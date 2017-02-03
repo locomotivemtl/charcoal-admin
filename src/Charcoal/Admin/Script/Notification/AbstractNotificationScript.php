@@ -51,6 +51,11 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     private $userFactory;
 
     /**
+     * @var FactoryInterface
+     */
+    private $objectFactory;
+
+    /**
      * @param Container $container Pimple DI container.
      * @return void
      */
@@ -61,6 +66,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         $this->setRevisionFactory($container['model/factory']);
         $this->emailFactory = $container['email/factory'];
         $this->userFactory = $container['model/factory'];
+        $this->objectFactory = $container['model/factory'];
     }
 
     /**
@@ -177,6 +183,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             $email->setTo($user->email());
             $email->queue();
             $email->send();
+            var_dump($email->msgHtml());
         }
 
         foreach ($notification->extraEmails() as $extraEmail) {
@@ -211,6 +218,18 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             'val'       => $this->endDate()->format('Y-m-d H:i:s'),
             'operator'  => '<'
         ]);
+        $loader->addOrder([
+            'property' => 'rev_ts',
+            'mode'     => 'DESC'
+        ]);
+        $objFactory = $this->objectFactory;
+        $userFactory = $this->userFactory;
+        $loader->setCallback(function (&$obj) use ($objFactory, $userFactory) {
+            $obj->dateStr = $obj['rev_ts']->format('Y-m-d H:i:s');
+            $obj->numProperties = count($obj->dataDiff());
+            $obj->targetObject = $objFactory->create($obj['target_type'])->load($obj['target_id']);
+            $obj->userObject = $userFactory->create(User::class)->load($obj['rev_user']);
+        });
         return $loader->load();
     }
 

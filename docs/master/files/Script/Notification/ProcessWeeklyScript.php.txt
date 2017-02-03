@@ -49,17 +49,23 @@ class ProcessWeeklyScript extends AbstractNotificationScript
     }
 
     /**
-     * @param Notification        $notification The notification object.
-     * @param CollectionInterface $objects      The objects that were modified.
+     * @param  Notification        $notification The notification object.
+     * @param  CollectionInterface $objects      The objects that were modified.
      * @return array
      */
     protected function emailData(Notification $notification, CollectionInterface $objects)
     {
+        $subject = sprintf(
+            'Weekly Charcoal Notification - %s to %s',
+            $this->startDate()->format('Y-m-d'),
+            $this->endDate()->format('Y-m-d')
+        );
+
         return [
-            'subject'   => sprintf('Weekly Charcoal Notification - %s to %s', $this->startDate()->format('Y-m-d'), $this->endDate()->format('Y-m-d')),
-            'template_ident' => 'charcoal/admin/email/notification.weekly',
-            'template_data' => [
-                'startString'   => $this->startDate()->format('Y-m-d'),
+            'subject'         => $subject,
+            'template_ident'  => 'charcoal/admin/email/notification.weekly',
+            'template_data'   => [
+                'startString' => $this->startDate()->format('Y-m-d'),
                 'endString'   => $this->startDate()->format('Y-m-d')
             ]
         ];

@@ -21,6 +21,7 @@ use Charcoal\Translation\TranslationString;
 use Charcoal\App\Action\AbstractAction;
 
 // Local module (charcoal-admin) dependencies
+use Charcoal\Admin\Ui\FeedbackContainerTrait;
 use Charcoal\Admin\User\AuthAwareInterface;
 use Charcoal\Admin\User\AuthAwareTrait;
 
@@ -31,6 +32,7 @@ use Charcoal\Admin\User\AuthAwareTrait;
 abstract class AdminAction extends AbstractAction implements AuthAwareInterface
 {
     use AuthAwareTrait;
+    use FeedbackContainerTrait;
 
     /**
      * Store a reference to the admin configuration.
@@ -52,18 +54,13 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     private $siteName;
 
     /**
-     * @var array $feedbacks
-     */
-    private $feedbacks = [];
-
-    /**
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
 
     /**
-    * @param array $data Optional.
-    */
+     * @param array $data Optional.
+     */
     final public function __construct(array $data = null)
     {
         parent::__construct($data);
@@ -218,7 +215,7 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
 
         $u = User::getAuthenticated();
         if ($u === null || !$u->id()) {
-            die('Auth required');
+            die('Auth Required');
         }
     }
 
@@ -240,45 +237,6 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     public function getAuthenticatedUser()
     {
         return $this->authenticator()->authenticate();
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasFeedbacks()
-    {
-        return (count($this->feedbacks()) > 0);
-    }
-
-    /**
-     * @return integer
-     */
-    public function numFeedbacks()
-    {
-        return count($this->feedbacks());
-    }
-
-    /**
-     * @return array
-     */
-    public function feedbacks()
-    {
-        return $this->feedbacks;
-    }
-
-    /**
-     * @param string $level The feedback level.
-     * @param mixed  $msg   The actual feedback message.
-     * @return AdminAction Chainable
-     */
-    public function addFeedback($level, $msg)
-    {
-        $this->feedbacks[] = [
-            'msg'     => $msg,
-            'message' => $msg,
-            'level'   => $level
-        ];
-        return $this;
     }
 
     /**

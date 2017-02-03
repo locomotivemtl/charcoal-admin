@@ -30,7 +30,7 @@
             "allow_null": false,
             "label":{
                 "en":"Email",
-                "fr":"courriel"
+                "fr":"Courriel"
             }
         },
         "active":{
@@ -105,6 +105,10 @@
     "admin": {
         "lists": {
             "default": {
+                "label": {
+                    "en":"Administrators",
+                    "fr":"Administrateurs / Gestionnaires"
+                },
                 "properties": [
                     "username",
                     "email",
@@ -112,7 +116,10 @@
                     "last_login_date"
                 ],
                 "list_actions":[{
-                    "label":"Create a new user",
+                    "label":{
+                        "en":"Create a new user",
+                        "fr":"Créer un nouvel utilisateur"
+                    },
                     "ident":"create",
                     "url":"object/edit?obj_type=charcoal/admin/user"
                 }]

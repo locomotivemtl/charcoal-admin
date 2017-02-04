@@ -183,7 +183,6 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             $email->setTo($user->email());
             $email->queue();
             $email->send();
-            var_dump($email->msgHtml());
         }
 
         foreach ($notification->extraEmails() as $extraEmail) {

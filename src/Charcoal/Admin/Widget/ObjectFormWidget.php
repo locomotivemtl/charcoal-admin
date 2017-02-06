@@ -8,9 +8,6 @@ use \InvalidArgumentException;
 // From Pimple
 use \Pimple\Container;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
@@ -59,7 +56,7 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * Retrieve the label for the form submission button.
      *
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function submitLabel()
     {
@@ -76,7 +73,7 @@ class ObjectFormWidget extends FormWidget implements
                 ];
             }
 
-            $this->submitLabel = new TranslationString($label);
+            $this->submitLabel = $this->translator()->translation($label);
         }
 
         return $this->submitLabel;

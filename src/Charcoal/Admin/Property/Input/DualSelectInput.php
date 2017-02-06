@@ -4,9 +4,6 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\Property\AbstractSelectableInput;
 
@@ -94,7 +91,7 @@ class DualSelectInput extends AbstractSelectableInput
             if (isset($this->dualSelectOptions['searchable'])) {
                 $searchable = $this->dualSelectOptions['searchable'];
 
-                $label = new TranslationString([
+                $label = $this->translator()->translation([
                     'en' => 'Search…',
                     'fr' => 'Recherche…'
                 ]);
@@ -120,8 +117,8 @@ class DualSelectInput extends AbstractSelectableInput
                             $placeholder = $searchable['placeholder'];
                         }
 
-                        if (isset($placeholder) && TranslationString::isTranslatable($placeholder)) {
-                            $searchable[$ident]['placeholder'] = new TranslationString($placeholder);
+                        if (isset($placeholder)) {
+                            $searchable[$ident]['placeholder'] = $this->translator()->translation($placeholder);
                         } else {
                             $searchable[$ident]['placeholder'] = $label;
                         }

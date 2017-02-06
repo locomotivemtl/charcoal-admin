@@ -4,8 +4,6 @@ namespace Charcoal\Admin\Template\System;
 
 use Pimple\Container;
 
-use Charcoal\Translation\TranslationString;
-
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;
@@ -41,11 +39,11 @@ class UsersTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {
-        return new TranslationString('Administrators');
+        return $this->translator()->translation('Administrators');
     }
 
     /**

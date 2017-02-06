@@ -32,6 +32,10 @@ use Charcoal\Ui\Dashboard\DashboardInterface;
 use Charcoal\Ui\Layout\LayoutBuilder;
 use Charcoal\Ui\Layout\LayoutFactory;
 
+use Charcoal\Translator\LanguageManager;
+use Charcoal\Translator\Translator;
+use Symfony\Component\Translation\MessageSelector;
+
 use Charcoal\Email\Email;
 use Charcoal\Email\EmailConfig;
 
@@ -373,5 +377,68 @@ class ContainerProvider
         $container['elfinder/config'] = function (Container $container) {
             return [];
         };
+    }
+
+    public function registerTranslator(Container $container)
+    {
+        $container['language/manager'] = function (Container $container) {
+            return new LanguageManager([
+                'languages' => [
+                    'en'=>['locale'=>'en-US']
+                ],
+                'default_language' => 'en',
+                'fallback_languages' => ['en']
+            ]);
+        };
+
+        $container['translator'] = function (Container $container) {
+            return new Translator([
+                'locale'            => 'en',
+                'message_selector'  => new MessageSelector(),
+                'cache_dir'         => null,
+                'debug'             => false,
+                'language_manager'  => $container['language/manager']
+            ]);
+        };
+    }
+
+    public function registerActionDependencies(Container $container)
+    {
+        $this->registerLogger($container);
+
+        $this->registerModelFactory($container);
+        $this->registerTranslator($container);
+
+        $this->registerAdminConfig($container);
+        $this->registerBaseUrl($container);
+
+        $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
+    }
+
+    public function registerTemplateDependencies(Container $container)
+    {
+        $this->registerLogger($container);
+
+        $this->registerModelFactory($container);
+        $this->registerTranslator($container);
+
+        $this->registerAdminConfig($container);
+        $this->registerBaseUrl($container);
+
+        $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
+
+
+    }
+
+    public function registerWidgetDependencies(Container $container)
+    {
+        $this->registerTranslator($container);
+        $this->registerLogger($container);
+        $this->registerAdminConfig($container);
+        $this->registerBaseUrl($container);
+        $this->registerModelFactory($container);
+
     }
 }

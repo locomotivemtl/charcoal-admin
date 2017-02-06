@@ -24,9 +24,6 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-app'
 use Charcoal\App\CallableResolverAwareTrait;
 
@@ -241,7 +238,7 @@ class ElfinderConnectorAction extends AdminAction
             if (isset($config['public']) && !$config['public']) {
                 continue;
             }
-            $label = isset($config['label']) ? new TranslationString($config['label']) : ucfirst($filesystem);
+            $label = isset($config['label']) ? $this->translator()->translation($config['label']) : ucfirst($filesystem);
             $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
 
             $fs[$filesystem] = [

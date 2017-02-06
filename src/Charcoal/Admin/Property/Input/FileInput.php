@@ -4,9 +4,6 @@ namespace Charcoal\Admin\Property\Input;
 
 use \Pimple\Container;
 
-// Dependency from 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // Local Dependency
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
@@ -46,21 +43,21 @@ class FileInput extends AbstractPropertyInput
     /**
      * Label for the file picker dialog.
      *
-     * @var TranslationString|string
+     * @var \Charcoal\Translator\Translation
      */
     private $dialogTitle;
 
     /**
      * Label for the "file picker" button.
      *
-     * @var TranslationString|string
+     * @var \Charcoal\Translator\Translation
      */
     private $chooseButtonLabel;
 
     /**
      * Label for the "remove file" button.
      *
-     * @var TranslationString|string
+     * @var \Charcoal\Translator\Translation
      */
     private $removeButtonLabel;
 
@@ -212,11 +209,7 @@ class FileInput extends AbstractPropertyInput
      */
     public function setDialogTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->dialogTitle = new TranslationString($title);
-        } else {
-            $this->dialogTitle = null;
-        }
+        $this->dialogTitle = $this->translator()->translation($title);
 
         return $this;
     }
@@ -237,7 +230,7 @@ class FileInput extends AbstractPropertyInput
     /**
      * Retrieve the title for the file picker dialog.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function dialogTitle()
     {
@@ -256,11 +249,7 @@ class FileInput extends AbstractPropertyInput
      */
     public function setChooseButtonLabel($label)
     {
-        if (TranslationString::isTranslatable($label)) {
-            $this->chooseButtonLabel = new TranslationString($label);
-        } else {
-            $this->chooseButtonLabel = null;
-        }
+        $this->chooseButtonLabel = $this->translator()->translation($label);
 
         return $this;
     }
@@ -281,7 +270,7 @@ class FileInput extends AbstractPropertyInput
     /**
      * Retrieve the label for the file picker button.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function chooseButtonLabel()
     {
@@ -300,11 +289,7 @@ class FileInput extends AbstractPropertyInput
      */
     public function setRemoveButtonLabel($label)
     {
-        if (TranslationString::isTranslatable($label)) {
-            $this->removeButtonLabel = new TranslationString($label);
-        } else {
-            $this->removeButtonLabel = null;
-        }
+        $this->removeButtonLabel = $this->translator()->translation($label);
 
         return $this;
     }
@@ -325,7 +310,7 @@ class FileInput extends AbstractPropertyInput
     /**
      * Retrieve the label for the file removal button.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function removeButtonLabel()
     {

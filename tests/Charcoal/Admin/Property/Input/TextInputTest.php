@@ -19,12 +19,15 @@ class TextInputTest extends PHPUnit_Framework_TestCase
 //        $container = $GLOBALS['container'];
         $container = new Container();
         $containerProvider = new ContainerProvider();
+        $containerProvider->registerTranslator($container);
         $containerProvider->registerLogger($container);
         $containerProvider->registerMetadataLoader($container);
+        $container['view'] = $this->getMock('\Charcoal\View\ViewInterface');
 
         $this->obj = new TextInput([
             'logger' => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
+            'metadata_loader' => $container['metadata/loader'],
+            'container' => $container
         ]);
     }
 
@@ -95,9 +98,6 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $ret = $obj->setPlaceholder('foo');
         $this->assertSame($ret, $obj);
-        $this->assertEquals('foo', $obj->placeholder());
-
-        $obj->setPlaceholder(false);
         $this->assertEquals('foo', $obj->placeholder());
     }
 }

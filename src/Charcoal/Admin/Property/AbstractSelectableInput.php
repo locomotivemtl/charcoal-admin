@@ -2,8 +2,11 @@
 
 namespace Charcoal\Admin\Property;
 
+use Closure;
+use DateTimeInterface;
+
 // From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
+use Charcoal\Translator\Translation;
 
 /**
  * Selectable input properties provide an array of choices to choose from.
@@ -84,15 +87,15 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     protected function parseChoiceVal($value)
     {
-        if ($value instanceof \Closure) {
+        if ($value instanceof Closure) {
             $value = $value();
         }
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTimeInterface) {
             $value = $value->format('Y-m-d-H:i');
         }
 
-        if ($value instanceof \Charcoal\Translation\TranslationString) {
+        if ($value instanceof Translation) {
             $value = $value->fallback();
         }
 
@@ -139,7 +142,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function setEmptyChoice($choice)
     {
-        if (is_string($choice) || ($choice instanceof TranslationString)) {
+        if (is_string($choice) || ($choice instanceof Translation)) {
             $choice = [
                 'label' => $choice
             ];
@@ -157,8 +160,8 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             ));
         }
 
-        if (!$choice['label'] instanceof TranslationString) {
-            $choice['label'] = new TranslationString($choice['label']);
+        if (!$choice['label'] instanceof Translation) {
+            $choice['label'] = $this->translator()->translation($choice['label']);
         }
 
         $this->emptyChoice = $choice;
@@ -189,7 +192,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     {
         return [
             'value' => '',
-            'label' => new TranslationString([
+            'label' => $this->translator()->translation([
                 'en' => '— None —',
                 'fr' => '— Aucun —'
             ])

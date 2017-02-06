@@ -15,7 +15,7 @@ use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
+use Charcoal\Translator\Translator;
 
 // From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
@@ -79,11 +79,13 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     {
         parent::setDependencies($container);
 
+        $this->setModelFactory($container['model/factory']);
+        $this->setTranslator($container['translator']);
+
         $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
-        $this->setModelFactory($container['model/factory']);
 
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
@@ -163,6 +165,23 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     }
 
     /**
+     * @param Translator $translator The translator service.
+     * @return void
+     */
+    private function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return Translator
+     */
+    protected function translator()
+    {
+        return $this->translator;
+    }
+
+    /**
      * Set the name of the project.
      *
      * @param  string $name Name of the project.
@@ -170,11 +189,7 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
      */
     protected function setSiteName($name)
     {
-        if (TranslationString::isTranslatable($name)) {
-            $this->siteName = new TranslationString($name);
-        } else {
-            $this->siteName = null;
-        }
+        $this->siteName = $this->translator()->translation($name);
 
         return $this;
     }

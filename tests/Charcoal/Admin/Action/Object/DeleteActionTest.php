@@ -38,6 +38,9 @@ class DeleteActionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerActionDependencies($container);
+
         $this->obj = new DeleteAction([
             'logger' => $container['logger'],
             'container' => $container

@@ -19,8 +19,7 @@ use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-use Charcoal\Translation\TranslationConfig;
+use Charcoal\Translator\Translator;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
@@ -36,8 +35,8 @@ use Charcoal\Admin\User\AuthAwareTrait;
  * An action extends
  *
  * # Available (mustache) methods
- * - `title` (TranslationString) - The page title
- * - `subtitle` (TranslationString) The page subtitle
+ * - `title` (Translation) - The page title
+ * - `subtitle` (Translation) The page subtitle
  * - `showHeaderMenu` (bool) - Display the header menu or not
  * - `headerMenu` (iterator) - The header menu data
  * - `showFooterMenu` (bool) - Display the footer menu or not
@@ -80,17 +79,17 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     private $ident;
 
     /**
-     * @var TranslationString $label
+     * @var \Charcoal\Translator\Translation $label
      */
     protected $label;
 
     /**
-     * @var TranslationString $title
+     * @var \Charcoal\Translator\Translation $title
      */
     protected $title;
 
     /**
-     * @var TranslationString $subtitle
+     * @var \Charcoal\Translator\Translation $subtitle
      */
     protected $subtitle;
 
@@ -120,6 +119,11 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     private $modelFactory;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * Set common dependencies (services) used in all admin templates.
      *
      * @param Container $container DI Container.
@@ -129,11 +133,14 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     {
         parent::setDependencies($container);
 
+        $this->setModelFactory($container['model/factory']);
+        $this->setTranslator($container['translator']);
+
         $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
-        $this->setModelFactory($container['model/factory']);
+
 
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
@@ -222,6 +229,23 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     }
 
     /**
+     * @param Translator $translator The translator service.
+     * @return void
+     */
+    private function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return Translator
+     */
+    protected function translator()
+    {
+        return $this->translator;
+    }
+
+    /**
      * @param mixed $ident Template identifier.
      * @return AdminTemplate Chainable
      */
@@ -245,15 +269,12 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function setLabel($label)
     {
-        if (TranslationString::isTranslatable($label)) {
-            $this->label = new TranslationString($label);
-        }
-
+        $this->label = $this->translator()->translation($label);
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation
      */
     public function label()
     {
@@ -268,11 +289,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        } else {
-            $this->title = null;
-        }
+        $this->title = $this->translator()->translation($label);
 
         return $this;
     }
@@ -299,19 +316,14 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function setSubtitle($subtitle)
     {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->subtitle = new TranslationString($subtitle);
-        } else {
-            $this->subtitle = null;
-        }
-
+        $this->subtitle = $this->translator()->translation($subtitle);
         return $this;
     }
 
     /**
      * Retrieve the page's sub-title.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function subtitle()
     {
@@ -430,8 +442,8 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
                 $menuItem['icon'] = $icon;
             }
 
-            if (isset($menuItem['label']) && TranslationString::isTranslatable($menuItem['label'])) {
-                $menuItem['label'] = new TranslationString($menuItem['label']);
+            if (isset($menuItem['label'])) {
+                $menuItem['label'] = $this->translator()->translation($menuItem['label']);
             }
 
             $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
@@ -610,12 +622,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     protected function setSiteName($name)
     {
-        if (TranslationString::isTranslatable($name)) {
-            $this->siteName = new TranslationString($name);
-        } else {
-            $this->siteName = null;
-        }
-
+        $this->siteName = $this->translator()->translation($name);
         return $this;
     }
 
@@ -632,7 +639,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     /**
      * Retrieve the document title.
      *
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation
      */
     public function documentTitle()
     {
@@ -674,7 +681,7 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function lang()
     {
-        return TranslationConfig::instance()->currentLanguage();
+        return $this->translator()->getLocale();
     }
 
     /**

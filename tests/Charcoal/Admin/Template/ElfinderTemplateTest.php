@@ -25,13 +25,8 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerLogger($container);
+        $containerProvider->registerTemplateDependencies($container);
         $containerProvider->registerMetadataLoader($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
         $containerProvider->registerElfinderConfig($container);
 
         $this->obj = $this->getMock(ElfinderTemplate::class, null, [[

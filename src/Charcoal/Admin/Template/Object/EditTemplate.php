@@ -8,9 +8,6 @@ use InvalidArgumentException;
 // From `pimple`
 use Pimple\Container;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
@@ -146,7 +143,7 @@ class EditTemplate extends AdminTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {
@@ -158,7 +155,7 @@ class EditTemplate extends AdminTemplate implements
             $config = $this->objEditDashboardConfig();
 
             if (isset($config['title'])) {
-                $this->title = new TranslationString($config['title']);
+                $this->title = $this->translator()->translation($config['title']);
 
                 return $this->title;
             }
@@ -181,43 +178,28 @@ class EditTemplate extends AdminTemplate implements
             }
 
             if (isset($adminMetadata['forms'][$formIdent]['label'])) {
-                $objLabel = $adminMetadata['forms'][$formIdent]['label'];
-
-                if (TranslationString::isTranslatable($objLabel)) {
-                    $objLabel = new TranslationString($objLabel);
-                }
+                $objLabel = $this->translator()->translation($adminMetadata['forms'][$formIdent]['label']);
             }
         }
 
         if (!$objLabel && isset($metadata['labels']['edit_item'])) {
-            $objLabel = $metadata['labels']['edit_item'];
-
-            if (TranslationString::isTranslatable($objLabel)) {
-                $objLabel = new TranslationString($objLabel);
-            }
+            $objLabel = $this->translator()->translation($metadata['labels']['edit_item']);
         }
 
         if (!$objLabel && isset($metadata['labels']['edit_model'])) {
-            $objLabel = $metadata['labels']['edit_model'];
-
-            if (TranslationString::isTranslatable($objLabel)) {
-                $objLabel = new TranslationString($objLabel);
-            }
+            $objLabel = $this->translator()->translation($metadata['labels']['edit_model']);
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['singular_name']) ? $metadata['labels']['singular_name'] : null);
-            if (TranslationString::isTranslatable($objType)) {
-                $objType = new TranslationString($objType);
-            }
+            $objType = (isset($metadata['labels']['singular_name']) ? $this->translator()->translation($metadata['labels']['singular_name']) : null);
 
             if ($objId) {
-                $objLabel = new TranslationString([
+                $objLabel = $this->translator()->translation([
                     'en' => 'Edit: {{objType}} #{{id}}',
                     'fr' => 'Modifier : {{objType}} #{{id}}'
                 ]);
             } else {
-                $objLabel = new TranslationString([
+                $objLabel = $this->translator()->translation([
                     'en' => 'Create: {{objType}}',
                     'fr' => 'Créer : {{objType}}'
                 ]);

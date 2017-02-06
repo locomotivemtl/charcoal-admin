@@ -18,17 +18,13 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerLogger($container);
+        $containerProvider->registerTemplateDependencies($container);
         $containerProvider->registerMetadataLoader($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
 
         $this->obj = $this->getMock(AdminTemplate::class, null, [[
             'logger' => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
+            'metadata_loader' => $container['metadata/loader'],
+            'container' => $container
         ]]);
         $this->obj->setDependencies($container);
 

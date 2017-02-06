@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Template;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\User\AuthToken;
@@ -135,7 +132,7 @@ class LoginTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {

@@ -14,7 +14,7 @@ use Pimple\Container;
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
+use Charcoal\Translator\Translator;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractWidget;
@@ -106,12 +106,19 @@ class AdminWidget extends AbstractWidget
     private $modelFactory;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * @param Container $container Pimple DI container.
      * @return void
      */
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        $this->setTranslator($container['translator']);
 
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
@@ -134,6 +141,23 @@ class AdminWidget extends AbstractWidget
     protected function modelFactory()
     {
         return $this->modelFactory;
+    }
+
+    /**
+     * @param Translator $translator The translator service.
+     * @return void
+     */
+    private function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return Translator
+     */
+    protected function translator()
+    {
+        return $this->translator;
     }
 
     /**
@@ -446,9 +470,7 @@ class AdminWidget extends AbstractWidget
      */
     public function setLabel($label)
     {
-        if (TranslationString::isTranslatable($label)) {
-            $this->label = new TranslationString($label);
-        }
+        $this->label = $this->translator()->translation($label);
 
         return $this;
     }

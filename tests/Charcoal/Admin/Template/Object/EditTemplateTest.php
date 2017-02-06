@@ -22,13 +22,8 @@ class EditTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerModelFactory($container);
+        $containerProvider->registerTemplateDependencies($container);
         $containerProvider->registerMetadataLoader($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
         $containerProvider->registerWidgetFactory($container);
         $containerProvider->registerDashboardBuilder($container);
 

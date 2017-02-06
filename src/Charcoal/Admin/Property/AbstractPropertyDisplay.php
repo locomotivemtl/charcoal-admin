@@ -17,9 +17,6 @@ use Pimple\Container;
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// Dependency from 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
-
 // Dependencies from 'charcoal-property'
 use Charcoal\Property\PropertyFactory;
 use Charcoal\Property\PropertyInterface;
@@ -279,7 +276,7 @@ abstract class AbstractPropertyDisplay implements
             $name .= '[]';
         }
         if ($this->p()->l10n()) {
-            $lang = TranslationConfig::instance()->currentLanguage();
+            $lang = $this->transator()->getLocale();
             $name .= '['.$lang.']';
         }
         return $name;

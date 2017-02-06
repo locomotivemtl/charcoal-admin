@@ -344,7 +344,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function description()
     {
@@ -352,7 +352,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function notes()
     {

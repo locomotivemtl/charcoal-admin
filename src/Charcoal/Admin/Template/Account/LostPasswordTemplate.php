@@ -38,7 +38,7 @@ class LostPasswordTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {

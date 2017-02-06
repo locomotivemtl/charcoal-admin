@@ -8,7 +8,6 @@ use \InvalidArgumentException;
 use \Pimple\Container;
 
 // From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
 use \Charcoal\Translation\TranslationConfig;
 
 // From 'charcoal-ui'
@@ -83,7 +82,7 @@ class FormSidebarWidget extends AdminWidget implements
     protected $priority;
 
     /**
-     * @var TranslationString $title
+     * @var Translation $title
      */
     protected $title;
 
@@ -175,9 +174,7 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function setSubtitle($subtitle)
     {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->title = new TranslationString($subtitle);
-        }
+        $this->translator()->translation($subtitle);
 
         return $this;
     }
@@ -539,15 +536,13 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function title()
     {

@@ -5,7 +5,7 @@ namespace Charcoal\Admin\Ui;
 use RuntimeException;
 
 // From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
+use Charcoal\Translator\Translation;
 
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
@@ -187,8 +187,8 @@ trait ActionContainerTrait
                 $action['actionType'] = $this->resolveActionType($action);
             }
 
-            if (isset($action['label']) && TranslationString::isTranslatable($action['label'])) {
-                $action['label'] = new TranslationString($action['label']);
+            if (isset($action['label'])) {
+                $action['label'] = $this->translator()->translation($action['label']);
             } else {
                 $action['label'] = ucwords(str_replace([ '.', '_' ], ' ', $action['ident']));
 
@@ -197,13 +197,13 @@ trait ActionContainerTrait
                     $meta  = $model->metadata();
                     $label = sprintf('%s_item', $action['ident']);
                     if (isset($meta['labels'][$label])) {
-                        $action['label'] = new TranslationString($meta['labels'][$label]);
+                        $action['label'] = $this->translator()->translation($meta['labels'][$label]);
                     }
                 }
             }
 
-            if (isset($action['url']) && TranslationString::isTranslatable($action['url'])) {
-                $action['url']      = new TranslationString($action['url']);
+            if (isset($action['url'])) {
+                $action['url']      = $this->translator()->translation($action['url']);
                 $action['isText']   = false;
                 $action['isLink']   = true;
                 $action['isButton'] = false;
@@ -380,8 +380,8 @@ trait ActionContainerTrait
             $renderer = $this->getActionRenderer();
         }
 
-        if ($url instanceof TranslationString) {
-            $url = $url->fallback();
+        if ($url instanceof Translation) {
+            $url = (string)$url;
         }
 
         $url = trim($url);

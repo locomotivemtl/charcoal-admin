@@ -31,10 +31,7 @@ class UpdateActionTest extends PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
+        $containerProvider->registerActionDependencies($container);
 
         $this->obj = new UpdateAction([
             'logger' => $container['logger'],

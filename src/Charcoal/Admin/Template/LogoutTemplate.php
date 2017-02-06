@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Template;
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\User;
@@ -79,7 +76,7 @@ class LogoutTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {

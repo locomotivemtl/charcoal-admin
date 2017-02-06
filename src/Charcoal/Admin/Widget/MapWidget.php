@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Translation\TranslationString;
 use \Charcoal\Model\ModelFactory;
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
@@ -124,15 +123,13 @@ class MapWidget extends AdminWidget implements FormGroupInterface
      */
     public function setSubtitle($subtitle)
     {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->title = new TranslationString($subtitle);
-        }
+        $this->subtitle = $this->translator()->translation($subtitle);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function subtitle()
     {
@@ -145,15 +142,13 @@ class MapWidget extends AdminWidget implements FormGroupInterface
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function title()
     {

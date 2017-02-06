@@ -22,9 +22,8 @@ use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewableTrait;
 
 // Dependencies from 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
-use Charcoal\Translation\TranslationString;
-use Charcoal\Translation\TranslationStringInterface;
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\Translation;
 
 // Dependency from 'charcoal-admin'
 use Charcoal\Admin\Property\PropertyInputInterface;
@@ -111,7 +110,7 @@ abstract class AbstractPropertyInput implements
     protected $inputClass = '';
 
     /**
-     * @var TranslationStringInterface $placeholder
+     * @var Translation $placeholder
      */
     private $placeholder;
 
@@ -129,6 +128,11 @@ abstract class AbstractPropertyInput implements
      * @var PropertyInterface $property
      */
     private $property;
+
+    /**
+     * @var Translator
+     */
+    private $translator;
 
     /**
      * @param array|\ArrayAccess $data Constructor data.
@@ -158,8 +162,26 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
+        $this->setTranslator($container['translator']);
         $this->setView($container['view']);
         $this->setMetadataLoader($container['metadata/loader']);
+    }
+
+        /**
+         * @param Translator $translator The translator service.
+         * @return void
+         */
+    private function setTranslator(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return Translator
+     */
+    protected function translator()
+    {
+        return $this->translator;
     }
 
     /**
@@ -241,7 +263,7 @@ abstract class AbstractPropertyInput implements
     public function lang()
     {
         if ($this->lang === null) {
-            return TranslationConfig::instance()->currentLanguage();
+            return $this->translator()->getLocale();
         }
         return $this->lang;
     }
@@ -252,7 +274,7 @@ abstract class AbstractPropertyInput implements
     public function hidden()
     {
         if ($this->p()->l10n()) {
-            if ($this->lang() != TranslationConfig::instance()->currentLanguage()) {
+            if ($this->lang() != $this->translator()->getLocale()) {
                 return true;
             }
         }
@@ -367,10 +389,8 @@ abstract class AbstractPropertyInput implements
      */
     public function setPlaceholder($placeholder)
     {
-        if (TranslationString::isTranslatable($placeholder)) {
-            $this->placeholder = new TranslationString($placeholder);
-            $this->placeholder->isRendered = false;
-        }
+        $this->placeholder = $this->translator()->translation($placeholder);
+        $this->placeholder->isRendered = false;
 
         return $this;
     }
@@ -405,8 +425,8 @@ abstract class AbstractPropertyInput implements
      */
     protected function renderPlaceholder()
     {
-        if ($this->placeholder instanceof TranslationString) {
-            foreach ($this->placeholder->all() as $lang => $value) {
+        if ($this->placeholder instanceof Translation) {
+            foreach ($this->placeholder->data() as $lang => $value) {
                 if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
                     $this->placeholder[$lang] = $this->view()->render($value, $this->viewController());
                 }

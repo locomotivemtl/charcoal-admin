@@ -4,8 +4,6 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
-// Dependency from 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\Input\TextareaInput;
@@ -25,7 +23,7 @@ class TinymceInput extends TextareaInput
     /**
      * Label for the file picker dialog.
      *
-     * @var TranslationString|string
+     * @var \Charcoal\Translator\Translation
      */
     private $dialogTitle;
 
@@ -131,11 +129,7 @@ class TinymceInput extends TextareaInput
      */
     public function setDialogTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->dialogTitle = new TranslationString($title);
-        } else {
-            $this->dialogTitle = null;
-        }
+        $this->dialogTitle = $this->translator()->translation($title);
 
         return $this;
     }
@@ -156,7 +150,7 @@ class TinymceInput extends TextareaInput
     /**
      * Retrieve the title for the file picker dialog.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function dialogTitle()
     {

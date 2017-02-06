@@ -18,11 +18,9 @@ use Charcoal\Factory\FactoryInterface;
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-use Charcoal\Translation\TranslationConfig;
-use Charcoal\Translation\Catalog\CatalogAwareInterface;
-use Charcoal\Translation\Catalog\CatalogAwareTrait;
+// From 'charcoal-translator'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
@@ -35,23 +33,20 @@ use Charcoal\Admin\User\AuthAwareTrait;
 /**
  * Base class for all `admin` Templates.
  *
- * An action extends
- *
  * # Available (mustache) methods
- * - `title` (TranslationString) - The page title
- * - `subtitle` (TranslationString) The page subtitle
+ * - `title` (Translation) - The page title
+ * - `subtitle` (Translation) The page subtitle
  * - `showHeaderMenu` (bool) - Display the header menu or not
  * - `headerMenu` (iterator) - The header menu data
  * - `showFooterMenu` (bool) - Display the footer menu or not
  * - `footerMenu` (iterator) - The footer menu data
  */
 class AdminTemplate extends AbstractTemplate implements
-    AuthAwareInterface,
-    CatalogAwareInterface
+    AuthAwareInterface
 {
     use AuthAwareTrait;
-    use CatalogAwareTrait;
     use FeedbackContainerTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The base URI.
@@ -68,6 +63,8 @@ class AdminTemplate extends AbstractTemplate implements
     protected $adminConfig;
 
     /**
+     * Store a reference to the application configuration.
+     *
      * @var \Charcoal\App\Config
      */
     protected $appConfig;
@@ -75,7 +72,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * The name of the project.
      *
-     * @var string|null
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $siteName;
 
@@ -85,17 +82,17 @@ class AdminTemplate extends AbstractTemplate implements
     private $ident;
 
     /**
-     * @var TranslationString $label
+     * @var \Charcoal\Translator\Translation|string|null $label
      */
     protected $label;
 
     /**
-     * @var TranslationString $title
+     * @var \Charcoal\Translator\Translation|string|null $title
      */
     protected $title;
 
     /**
-     * @var TranslationString $subtitle
+     * @var \Charcoal\Translator\Translation|string|null $subtitle
      */
     protected $subtitle;
 
@@ -134,18 +131,17 @@ class AdminTemplate extends AbstractTemplate implements
     {
         parent::setDependencies($container);
 
+        $this->setModelFactory($container['model/factory']);
+        $this->setTranslator($container['translator']);
+
         $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
-        $this->setModelFactory($container['model/factory']);
 
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
-
-        // CatalogAware Depencency
-        $this->setCatalog($container['translation/catalog']);
     }
 
     /**
@@ -253,17 +249,13 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function setLabel($label)
     {
-        if (TranslationString::isTranslatable($label)) {
-            $this->label = new TranslationString($label);
-        } else {
-            $this->label = null;
-        }
+        $this->label = $this->translator()->translation($label);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function label()
     {
@@ -278,11 +270,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        } else {
-            $this->title = null;
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
@@ -290,7 +278,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
@@ -309,11 +297,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function setSubtitle($subtitle)
     {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->subtitle = new TranslationString($subtitle);
-        } else {
-            $this->subtitle = null;
-        }
+        $this->subtitle = $this->translator()->translation($subtitle);
 
         return $this;
     }
@@ -321,7 +305,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the page's sub-title.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function subtitle()
     {
@@ -440,8 +424,8 @@ class AdminTemplate extends AbstractTemplate implements
                 $menuItem['icon'] = $icon;
             }
 
-            if (isset($menuItem['label']) && TranslationString::isTranslatable($menuItem['label'])) {
-                $menuItem['label'] = new TranslationString($menuItem['label']);
+            if (isset($menuItem['label'])) {
+                $menuItem['label'] = $this->translator()->translation($menuItem['label']);
             }
 
             $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
@@ -566,7 +550,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the base URI of the administration area.
      *
-     * @return string|UriInterface
+     * @return UriInterface|string
      */
     public function adminUrl()
     {
@@ -578,7 +562,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Set the base URI of the application.
      *
-     * @param string|UriInterface $uri The base URI.
+     * @param UriInterface|string $uri The base URI.
      * @return self
      */
     public function setBaseUrl($uri)
@@ -591,7 +575,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the base URI of the application.
      *
-     * @return string|UriInterface
+     * @return UriInterface|string
      */
     public function baseUrl()
     {
@@ -620,19 +604,14 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function setSiteName($name)
     {
-        if (TranslationString::isTranslatable($name)) {
-            $this->siteName = new TranslationString($name);
-        } else {
-            $this->siteName = null;
-        }
-
+        $this->siteName = $this->translator()->translation($name);
         return $this;
     }
 
     /**
      * Retrieve the name of the project.
      *
-     * @return string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function siteName()
     {
@@ -642,7 +621,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the document title.
      *
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function documentTitle()
     {
@@ -684,7 +663,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function lang()
     {
-        return TranslationConfig::instance()->currentLanguage();
+        return $this->translator()->getLocale();
     }
 
     /**

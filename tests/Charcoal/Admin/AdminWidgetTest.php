@@ -22,9 +22,11 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
+        $containerProvider->registerWidgetDependencies($container);
 
         $this->obj = new AdminWidget([
-            'logger'=> new NullLogger()
+            'logger'=> new NullLogger(),
+            'container' => $container
         ]);
     }
 

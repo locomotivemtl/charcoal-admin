@@ -89,11 +89,11 @@ class LoadAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $failMessage = $this->translate('Failed to load object(s)');
-        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+        $failMessage = $this->translator()->translation('Failed to load object(s)');
+        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage
         ]);
-        $reqMessage  = $this->translate(
+        $reqMessage  = $this->translator()->translation(
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
 
@@ -128,15 +128,15 @@ class LoadAction extends AdminAction
             $count = count($this->objCollection);
             switch ($count) {
                 case 0:
-                    $doneMessage = $this->translate('No objects found.');
+                    $doneMessage = $this->translator()->translation('No objects found.');
                     break;
 
                 case 1:
-                    $doneMessage = $this->translate('One object found.');
+                    $doneMessage = $this->translator()->translation('One object found.');
                     break;
 
                 default:
-                    $doneMessage = strtr($this->translate('{{ count }} objects found.'), [
+                    $doneMessage = strtr($this->translator()->translation('{{ count }} objects found.'), [
                         '{{ count }}' => $count
                     ]);
                     break;

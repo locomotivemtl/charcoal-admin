@@ -17,10 +17,9 @@ use Charcoal\Factory\FactoryInterface;
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-use Charcoal\Translation\Catalog\CatalogAwareInterface;
-use Charcoal\Translation\Catalog\CatalogAwareTrait;
+// From 'charcoal-translator'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
@@ -32,15 +31,13 @@ use Charcoal\Admin\User\AuthAwareTrait;
 
 /**
  * The base class for the `admin` Actions.
- *
  */
 abstract class AdminAction extends AbstractAction implements
-    AuthAwareInterface,
-    CatalogAwareInterface
+    AuthAwareInterface
 {
     use AuthAwareTrait;
-    use CatalogAwareTrait;
     use FeedbackContainerTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Store a reference to the admin configuration.
@@ -50,6 +47,8 @@ abstract class AdminAction extends AbstractAction implements
     protected $adminConfig;
 
     /**
+     * Store a reference to the application configuration.
+     *
      * @var \Charcoal\App\Config
      */
     protected $appConfig;
@@ -57,11 +56,13 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * The name of the project.
      *
-     * @var string|null
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $siteName;
 
     /**
+     * Store the model factory.
+     *
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
@@ -87,18 +88,17 @@ abstract class AdminAction extends AbstractAction implements
     {
         parent::setDependencies($container);
 
+        $this->setModelFactory($container['model/factory']);
+        $this->setTranslator($container['translator']);
+
         $this->appConfig = $container['config'];
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
-        $this->setModelFactory($container['model/factory']);
 
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
-
-        // CatalogAware Depencency
-        $this->setCatalog($container['translation/catalog']);
     }
 
     /**
@@ -181,11 +181,7 @@ abstract class AdminAction extends AbstractAction implements
      */
     protected function setSiteName($name)
     {
-        if (TranslationString::isTranslatable($name)) {
-            $this->siteName = new TranslationString($name);
-        } else {
-            $this->siteName = null;
-        }
+        $this->siteName = $this->translator()->translation($name);
 
         return $this;
     }
@@ -193,7 +189,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Retrieve the name of the project.
      *
-     * @return string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function siteName()
     {
@@ -296,7 +292,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Retrieve the base URI of the administration area.
      *
-     * @return string|UriInterface
+     * @return UriInterface|string
      */
     public function adminUrl()
     {
@@ -307,7 +303,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Set the base URI of the application.
      *
-     * @param string|UriInterface $uri The base URI.
+     * @param  UriInterface|string $uri The base URI.
      * @return self
      */
     public function setBaseUrl($uri)
@@ -319,7 +315,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Retrieve the base URI of the application.
      *
-     * @return string|UriInterface
+     * @return UriInterface|string
      */
     public function baseUrl()
     {

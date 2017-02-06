@@ -39,7 +39,11 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
-        $this->obj = $container['widget/factory']->create(TableWidget::class);
+
+        $this->obj = new TableWidget([
+            'logger'    => $container['logger'],
+            'container' => $container
+        ]);
     }
 
     public function testSetSortable()
@@ -107,7 +111,7 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerWidgetDependencies($container);
             $containerProvider->registerWidgetFactory($container);
             $containerProvider->registerPropertyFactory($container);
             $containerProvider->registerPropertyDisplayFactory($container);

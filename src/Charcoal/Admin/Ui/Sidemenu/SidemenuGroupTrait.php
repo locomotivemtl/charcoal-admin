@@ -5,10 +5,7 @@ namespace Charcoal\Admin\Ui\Sidemenu;
 use ArrayIterator;
 use InvalidArgumentException;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
-// Local module (charcoal-admin) dependency
+// From 'charcoal-admin'
 use Charcoal\Admin\Widget\SidemenuWidgetInterface;
 
 /**
@@ -222,12 +219,12 @@ trait SidemenuGroupTrait
                 $active = !!$link['active'];
             }
 
-            if (isset($link['name']) && TranslationString::isTranslatable($link['name'])) {
-                $name = new TranslationString($link['name']);
+            if (isset($link['name'])) {
+                $name = $this->translator()->translation($link['name']);
             }
 
-            if (isset($link['url']) && TranslationString::isTranslatable($link['url'])) {
-                $url = new TranslationString($link['url']);
+            if (isset($link['url'])) {
+                $url = $this->translator()->translation($link['url']);
             }
 
             if ($name === null && $url === null) {

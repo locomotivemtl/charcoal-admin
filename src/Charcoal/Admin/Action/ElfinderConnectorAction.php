@@ -7,6 +7,7 @@ use RuntimeException;
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 // From Pimple
 use Pimple\Container;
@@ -24,9 +25,6 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-app'
 use Charcoal\App\CallableResolverAwareTrait;
 
@@ -43,7 +41,7 @@ class ElfinderConnectorAction extends AdminAction
     /**
      * The base URI for the Charcoal application.
      *
-     * @var string|\Psr\Http\Message\UriInterface
+     * @var UriInterface|string
      */
     protected $baseUrl;
 
@@ -243,7 +241,7 @@ class ElfinderConnectorAction extends AdminAction
             if (isset($config['public']) && !$config['public']) {
                 continue;
             }
-            $label = isset($config['label']) ? new TranslationString($config['label']) : ucfirst($filesystem);
+            $label = isset($config['label']) ? $this->translator()->translation($config['label']) : ucfirst($filesystem);
             $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
 
             $roots[$filesystem] = [

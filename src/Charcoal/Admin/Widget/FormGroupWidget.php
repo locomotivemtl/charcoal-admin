@@ -7,9 +7,6 @@ use \InvalidArgumentException;
 // From Pimple
 use \Pimple\Container;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationConfig;
-
 // From 'charcoal-ui'
 use \Charcoal\Ui\AbstractUiItem;
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
@@ -257,21 +254,28 @@ class FormGroupWidget extends AbstractUiItem implements
     /**
      * Retrieve the available languages, formatted for the sidebar language-switcher.
      *
-     * @return array|Generator
+     * @see    FormSidebarWidget::languages()
+     * @return array
      */
     public function languages()
     {
-        $trans   = TranslationConfig::instance();
-        $curLang = $trans->currentLanguage();
-        $langs   = $trans->languages();
+        $currentLocale = $this->translator()->getLocale();
+        $languages = [];
+        foreach ($this->translator()->locales() as $locale => $localeConfig) {
+            if (isset($localeConfig['name'])) {
+                $label = $localeConfig['name'];
+            } else {
+                $label = 'locale.'.$locale;
+            }
 
-        foreach ($langs as $lang) {
-            yield [
-                'ident'   => $lang->ident(),
-                'name'    => $lang->name(),
-                'current' => ($lang->ident() === $curLang)
+            $languages[] = [
+                'ident'   => $locale,
+                'name'    => $this->translator()->translation($label),
+                'current' => ($locale === $currentLocale)
             ];
         }
+
+        return $languages;
     }
 
     /**

@@ -2,9 +2,12 @@
 
 namespace Charcoal\Admin\Property\Display;
 
-use \Charcoal\Admin\Ui\ImageAttributesTrait;
-use \Charcoal\Admin\Property\AbstractPropertyDisplay;
+// From Pimple
 use Pimple\Container;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Ui\ImageAttributesTrait;
+use Charcoal\Admin\Property\AbstractPropertyDisplay;
 
 /**
  * Image Display Property
@@ -16,7 +19,7 @@ class ImageDisplay extends AbstractPropertyDisplay
     /**
      * The base URI for the Charcoal application.
      *
-     * @var string|\Psr\Http\Message\UriInterface
+     * @var \Psr\Http\Message\UriInterface|string
      */
     public $baseUrl;
 

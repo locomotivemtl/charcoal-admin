@@ -92,14 +92,14 @@ class SaveAction extends AbstractSaveAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $failMessage = $this->translate('Failed to create object');
-            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            $failMessage = $this->translator()->translation('Failed to create object');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
-            $reqMessage  = $this->translate(
+            $reqMessage  = $this->translator()->translation(
                 '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
             );
-            $typeMessage = $this->translate(
+            $typeMessage = $this->translator()->translation(
                 '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
             );
 
@@ -126,7 +126,7 @@ class SaveAction extends AbstractSaveAction
             if (!$valid) {
                 if (!$this->hasFeedbacks()) {
                     $this->addFeedback('error', strtr($errorThrown, [
-                        '{{ errorThrown }}' => $this->translate('Invalid Data')
+                        '{{ errorThrown }}' => $this->translator()->translation('Invalid Data')
                     ]));
                 }
 
@@ -152,8 +152,8 @@ class SaveAction extends AbstractSaveAction
             if ($result) {
                 $this->setObj($obj);
 
-                $this->addFeedback('success', $this->translate('Object has been successfully created.'));
-                $this->addFeedback('success', strtr($this->translate('Created Object: {{ objId }}'), [
+                $this->addFeedback('success', $this->translator()->translate('Object has been successfully created.'));
+                $this->addFeedback('success', strtr($this->translator()->translate('Created Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
                 $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);

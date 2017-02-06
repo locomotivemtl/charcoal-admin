@@ -39,6 +39,7 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+
         $this->obj = $this->getMock(ElfinderTemplate::class, null, [[
             'logger'          => $container['logger'],
             'metadata_loader' => $container['metadata/loader']
@@ -62,7 +63,8 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerTemplateDependencies($container);
+            $containerProvider->registerMetadataLoader($container);
             $containerProvider->registerElfinderConfig($container);
 
             $this->container = $container;

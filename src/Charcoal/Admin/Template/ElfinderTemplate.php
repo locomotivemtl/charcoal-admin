@@ -18,10 +18,6 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-property'
 use Charcoal\Property\FileProperty;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
@@ -82,7 +78,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Custom localization messages.
      *
-     * @var TranslationString[]|Traversable|array
+     * @var {\Charcoal\Translator\Translation|string|null}[]|null
      */
     private $localizations;
 
@@ -214,14 +210,7 @@ class ElfinderTemplate extends AdminTemplate
             ));
         }
 
-        if (!TranslationString::isTranslatable($translations)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid translations, received %s',
-                (is_object($ident) ? get_class($ident) : gettype($ident))
-            ));
-        }
-
-        $this->localizations[$ident] = new TranslationString($translations);
+        $this->localizations[$ident] = $this->translator()->translation($translations);
 
         return $this;
     }
@@ -250,11 +239,13 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the default custom localizations.
      *
-     * @return array
+     * @return \Charcoal\Translator\Translation|string|null
      */
     protected function defaultLocalizations()
     {
-        return $this->translate('Library');
+        return [
+            'volume_default' => $this->translator()->translation('Library')
+        ];
     }
 
     /**
@@ -280,7 +271,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the localizations.
      *
-     * @return TranslationString[]|Traversable|array|null
+     * @return {\Charcoal\Translator\Translation|string}[]|null
      */
     public function localizations()
     {
@@ -296,7 +287,7 @@ class ElfinderTemplate extends AdminTemplate
      *
      * @param  string $ident The message ID to lookup.
      * @throws InvalidArgumentException If the message ID is not a string.
-     * @return TranslationString[]|string
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function localization($ident)
     {
@@ -324,7 +315,7 @@ class ElfinderTemplate extends AdminTemplate
         $i18n = [];
 
         foreach ($this->localizations() as $id => $translations) {
-            foreach ($translations->all() as $language => $message) {
+            foreach ($translations->data() as $language => $message) {
                 $i18n[$language][$id] = $message;
             }
         }
@@ -442,8 +433,7 @@ class ElfinderTemplate extends AdminTemplate
             $settings = $this->elfinderConfig['client'];
         }
 
-        $translator = TranslationConfig::instance();
-        $settings['lang'] = $translator->currentLanguage();
+        $settings['lang'] = $this->translator()->getLocale();
 
         if ($property) {
             $mimeTypes = filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);

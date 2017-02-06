@@ -6,48 +6,45 @@ use Traversable;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-use Pimple\Container;
-
-// Dependencies from PSR-3 (Logger)
+// From PSR-3
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
-// Dependencies from 'charcoal-core'
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-core'
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// Dependencies from 'charcoal-view'
+// From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewableTrait;
 
-// Dependencies from 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
-use Charcoal\Translation\TranslationString;
-use Charcoal\Translation\TranslationStringInterface;
-use Charcoal\Translation\Catalog\CatalogAwareInterface;
-use Charcoal\Translation\Catalog\CatalogAwareTrait;
+// From 'charcoal-translator'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\TranslatorAwareTrait;
 
-// Dependency from 'charcoal-admin'
-use Charcoal\Admin\Property\PropertyInputInterface;
-
-// Local namespace dependencies
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 use Charcoal\Property\PropertyMetadata;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\PropertyInputInterface;
 
 /**
  *
  */
 abstract class AbstractPropertyInput implements
-    CatalogAwareInterface,
     DescribableInterface,
     PropertyInputInterface,
     LoggerAwareInterface,
     ViewableInterface
 {
-    use CatalogAwareTrait;
     use DescribableTrait;
     use LoggerAwareTrait;
+    use TranslatorAwareTrait;
     use ViewableTrait;
 
     const DEFAULT_INPUT_TYPE = 'text';
@@ -115,7 +112,7 @@ abstract class AbstractPropertyInput implements
     protected $inputClass = '';
 
     /**
-     * @var TranslationStringInterface $placeholder
+     * @var \Charcoal\Translator\Translation|string|null $placeholder
      */
     private $placeholder;
 
@@ -162,7 +159,7 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
-        $this->setCatalog($container['translaion/catalog']);
+        $this->setTranslator($container['translator']);
         $this->setView($container['view']);
         $this->setMetadataLoader($container['metadata/loader']);
     }
@@ -246,8 +243,9 @@ abstract class AbstractPropertyInput implements
     public function lang()
     {
         if ($this->lang === null) {
-            return TranslationConfig::instance()->currentLanguage();
+            return $this->translator()->getLocale();
         }
+
         return $this->lang;
     }
 
@@ -257,10 +255,11 @@ abstract class AbstractPropertyInput implements
     public function hidden()
     {
         if ($this->p()->l10n()) {
-            if ($this->lang() != TranslationConfig::instance()->currentLanguage()) {
+            if ($this->lang() != $this->translator()->getLocale()) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -364,15 +363,13 @@ abstract class AbstractPropertyInput implements
      * A placeholder is a hint to the user of what can be entered
      * in the property control.
      *
-     * @param mixed $placeholder The placeholder attribute.
+     * @param  mixed $placeholder The placeholder attribute.
      * @return AbstractPropertyInput Chainable
      */
     public function setPlaceholder($placeholder)
     {
-        if (TranslationString::isTranslatable($placeholder)) {
-            $this->placeholder = new TranslationString($placeholder);
-            $this->placeholder->isRendered = false;
-        }
+        $this->placeholder = $this->translator()->translation($placeholder);
+        $this->placeholder->isRendered = false;
 
         return $this;
     }
@@ -380,7 +377,7 @@ abstract class AbstractPropertyInput implements
     /**
      * Retrieve the placeholder.
      *
-     * @return string
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function placeholder()
     {
@@ -402,13 +399,13 @@ abstract class AbstractPropertyInput implements
     /**
      * Render the placeholders.
      *
-     * @todo Implement data presenter as a better alternative.
+     * @todo   Implement data presenter as a better alternative.
      * @return AbstractPropertyInput Chainable
      */
     protected function renderPlaceholder()
     {
-        if ($this->placeholder instanceof TranslationString) {
-            foreach ($this->placeholder->all() as $lang => $value) {
+        if ($this->placeholder instanceof Translation) {
+            foreach ($this->placeholder->data() as $lang => $value) {
                 if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
                     $this->placeholder[$lang] = $this->view()->render($value, $this->viewController());
                 }

@@ -15,7 +15,7 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
@@ -110,7 +110,7 @@ class LostPasswordAction extends AdminAction
         $username = $request->getParam('username');
 
         if (!$username) {
-            $this->addFeedback('error', $this->translate('Missing username.'));
+            $this->addFeedback('error', $this->translator()->translate('Missing username.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -118,28 +118,28 @@ class LostPasswordAction extends AdminAction
 
         $recaptchaValue = $request->getParam('g-recaptcha-response');
         if (!$recaptchaValue) {
-            $this->addFeedback('error', $this->translate('Missing CAPTCHA response.'));
+            $this->addFeedback('error', $this->translator()->translate('Missing CAPTCHA response.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$this->validateCaptcha($recaptchaValue)) {
-            $this->addFeedback('error', $this->translate('Invalid or malformed CAPTCHA response.'));
+            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed CAPTCHA response.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         $doneMessage = strtr(
-            $this->translate(
+            $this->translator()->translation(
                 'Instructions to reset your password have been sent to the email address registered to {{ username }}.'
             ),
             [
                 '{{ username }}' => $username
             ]
         );
-        $failMessage = $this->translate('An error occurred while processing the password reset request.');
+        $failMessage = $this->translator()->translation('An error occurred while processing the password reset request.');
 
         $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
         $user = $this->loadUser($username);
@@ -264,11 +264,11 @@ class LostPasswordAction extends AdminAction
         $userEmail = $user->email();
         $siteName  = $this->siteName();
         if ($siteName) {
-            $subject = strtr($this->translate('{{ siteName }} — Password Reset'), [
+            $subject = strtr($this->translator()->translation('{{ siteName }} — Password Reset'), [
                 '{{ siteName }}' => $siteName
             ]);
         } else {
-            $subject = $this->translate('Charcoal — Password Reset');
+            $subject = $this->translator()->translation('Charcoal — Password Reset');
         }
 
         $from = [

@@ -41,7 +41,7 @@ class ResetPasswordTemplate extends AdminTemplate
         if ($this->lostPasswordToken) {
             if (!$this->validateToken($this->lostPasswordToken)) {
                 $this->lostPasswordToken = false;
-                $this->addFeedback('warning', $this->translate('Invalid or expired reset token.'));
+                $this->addFeedback('warning', $this->translator()->translate('Invalid or expired reset token.'));
             }
         }
 
@@ -108,12 +108,12 @@ class ResetPasswordTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translate('Password Reset'));
+            $this->setTitle($this->translator()->translation('Password Reset'));
         }
 
         return $this->title;

@@ -9,14 +9,11 @@ use SplTempFileObject;
 // LeagueCSV
 use League\Csv\Writer;
 
-// Module `charcoal-core` dependencies
+// From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;
 
-// Module `charcoal-factory` dependencies
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
-
-// Module `charcoal-translation` dependencies
-use Charcoal\Translation\TranslationString;
 
 /**
  * Admin base exporter
@@ -328,8 +325,7 @@ class Exporter
             }
 
             if (isset($prop['label'])) {
-                $label = new TranslationString($prop['label']);
-                $label = (string)$label;
+                $label = $this->translator()->translation($prop['label']);
             } else {
                 $label = ucfirst($p);
             }

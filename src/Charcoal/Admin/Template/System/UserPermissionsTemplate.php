@@ -8,9 +8,6 @@ use Psr\Http\Message\RequestInterface;
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
@@ -72,11 +69,11 @@ class UserPermissionsTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {
-        return new TranslationString('Administrator Permissions');
+        return $this->translator()->translation('Administrator Permissions');
     }
 
     /**

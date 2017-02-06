@@ -108,17 +108,17 @@ class LoadAction extends AdminAction
         $widgetOptions = $request->getParam('widget_options');
 
         if ($previousId) {
-            $failMessage = $this->translate('Failed to reload widget');
+            $failMessage = $this->translator()->translation('Failed to reload widget');
         } else {
-            $failMessage = $this->translate('Failed to load widget');
+            $failMessage = $this->translator()->translation('Failed to load widget');
         }
-        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage
         ]);
-        $reqMessage  = $this->translate(
+        $reqMessage  = $this->translator()->translation(
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
-        $typeMessage = $this->translate(
+        $typeMessage = $this->translator()->translation(
             '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
         );
 
@@ -165,9 +165,9 @@ class LoadAction extends AdminAction
             $this->setWidgetId($widgetId);
 
             if ($previousId) {
-                $doneMessage = $this->translate('Widget Reloaded');
+                $doneMessage = $this->translator()->translation('Widget Reloaded');
             } else {
-                $doneMessage = $this->translate('Widget Loaded');
+                $doneMessage = $this->translator()->translation('Widget Loaded');
             }
             $this->addFeedback('success', $doneMessage);
             $this->setSuccess(true);

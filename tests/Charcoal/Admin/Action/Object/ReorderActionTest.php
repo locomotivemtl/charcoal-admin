@@ -22,6 +22,7 @@ use \Charcoal\Admin\Action\Object\ReorderAction;
 use \Charcoal\Admin\Tests\ContainerProvider;
 use \Charcoal\Admin\Tests\Mock\SortableModel as Model;
 
+
 /**
  *
  */
@@ -61,6 +62,8 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerActionDependencies($container);
 
         $this->action = new ReorderAction([
             'logger'    => $container['logger'],

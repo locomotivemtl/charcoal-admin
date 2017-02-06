@@ -44,6 +44,9 @@ class ExportActionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerActionDependencies($container);
+
         $this->obj = new ExportAction([
             'logger'    => $container['logger'],
             'container' => $container

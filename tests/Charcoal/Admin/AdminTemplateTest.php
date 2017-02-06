@@ -40,8 +40,9 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
         $container = $this->container();
 
         $this->obj = $this->getMock(AdminTemplate::class, null, [[
-            'logger' => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
+            'logger'          => $container['logger'],
+            'metadata_loader' => $container['metadata/loader'],
+            'container'       => $container
         ]]);
         $this->obj->setDependencies($container);
 
@@ -92,7 +93,7 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerTemplateDependencies($container);
             $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;

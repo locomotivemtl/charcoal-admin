@@ -12,9 +12,6 @@ use \Pimple\Container;
 // From PSR-7
 use \Psr\Http\Message\RequestInterface;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // From `charcoal-app`
 use \Charcoal\Factory\FactoryInterface;
 
@@ -30,6 +27,7 @@ use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
 use \Charcoal\Admin\User\AuthAwareInterface;
 use \Charcoal\Admin\User\AuthAwareTrait;
+use \Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
  * A Basic Admin Form
@@ -57,7 +55,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Label for the form submission button.
      *
-     * @var TranslationString|string
+     * @var Translation|string
      */
     protected $submitLabel;
 
@@ -164,7 +162,7 @@ class FormWidget extends AdminWidget implements
      */
     public function createFormProperty(array $data = null)
     {
-        $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+        $p = $this->widgetFactory()->create(FormPropertyWidget::class);
         if ($data !== null) {
             $p->setData($data);
         }
@@ -356,12 +354,12 @@ class FormWidget extends AdminWidget implements
     /**
      * Retrieve the label for the form submission button.
      *
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function submitLabel()
     {
         if ($this->submitLabel === null) {
-            $this->submitLabel = $this->translate('Save');
+            $this->submitLabel = $this->translator()->translation('Save');
         }
 
         return $this->submitLabel;

@@ -38,6 +38,7 @@ class EditTemplateTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+
         $this->obj = new EditTemplate([
             'logger'          => $container['logger'],
             'metadata_loader' => $container['metadata/loader'],
@@ -80,7 +81,7 @@ class EditTemplateTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerTemplateDependencies($container);
             $containerProvider->registerWidgetFactory($container);
             $containerProvider->registerDashboardBuilder($container);
 

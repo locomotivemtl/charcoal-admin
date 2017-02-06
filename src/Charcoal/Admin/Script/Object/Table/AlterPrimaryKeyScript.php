@@ -264,12 +264,10 @@ class AlterPrimaryKeyScript extends AdminScript
                 return 'RFC-4122 UUID';
         }
 
-        throw new UnexpectedValueException(
-            sprintf(
-                'The ID mode was not recognized: %s',
-                is_object($mode) ? get_class($mode) : gettype($mode)
-            )
-        );
+        throw new UnexpectedValueException(sprintf(
+            'The ID mode was not recognized: %s',
+            is_object($mode) ? get_class($mode) : gettype($mode)
+        ));
     }
 
     /**

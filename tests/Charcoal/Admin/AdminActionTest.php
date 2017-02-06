@@ -147,7 +147,7 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerActionDependencies($container);
             $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;

@@ -10,14 +10,11 @@ use InvalidArgumentException;
 use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
-
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 
 /**
  * Admin Sidemenu Widget
@@ -204,11 +201,7 @@ class SidemenuWidget extends AdminWidget implements
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        } else {
-            $this->title = null;
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
@@ -216,7 +209,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the title of the sidemenu.
      *
-     * @return TranslationString|string|null
+     * @return Translation|null
      */
     public function title()
     {
@@ -227,9 +220,7 @@ class SidemenuWidget extends AdminWidget implements
             $this->title = '';
 
             if (isset($metadata[$ident]['title'])) {
-                if (TranslationString::isTranslatable($metadata[$ident]['title'])) {
-                    $this->setTitle($metadata[$ident]['title']);
-                }
+                $this->setTitle($metadata[$ident]['title']);
             }
         }
 
@@ -280,12 +271,12 @@ class SidemenuWidget extends AdminWidget implements
                 $active = !!$link['active'];
             }
 
-            if (isset($link['name']) && TranslationString::isTranslatable($link['name'])) {
-                $name = new TranslationString($link['name']);
+            if (isset($link['name'])) {
+                $name = $this->translator()->translation($link['name']);
             }
 
-            if (isset($link['url']) && TranslationString::isTranslatable($link['url'])) {
-                $url = new TranslationString($link['url']);
+            if (isset($link['url'])) {
+                $url = $this->translator()->translation($link['url']);
             }
 
             if ($name === null && $url === null) {

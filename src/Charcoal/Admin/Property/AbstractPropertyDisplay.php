@@ -5,43 +5,41 @@ namespace Charcoal\Admin\Property;
 use Traversable;
 use InvalidArgumentException;
 
-// Dependencies from PSR-3 (Logger)
+// From PSR-3
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
-// Dependency from Pimple
+// From Pimple
 use Pimple\Container;
 
-// Dependencies from 'charcoal-core'
+// From 'charcoal-core'
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// Dependency from 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
-use Charcoal\Translation\Catalog\CatalogAwareInterface;
-use Charcoal\Translation\Catalog\CatalogAwareTrait;
+// From 'charcoal-translator'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\TranslatorAwareTrait;
 
-// Dependencies from 'charcoal-property'
+// From 'charcoal-property'
 use Charcoal\Property\PropertyFactory;
 use Charcoal\Property\PropertyInterface;
 use Charcoal\Property\PropertyMetadata;
 
-// Local dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\Property\PropertyDisplayInterface;
 
 /**
  *
  */
 abstract class AbstractPropertyDisplay implements
-    CatalogAwareInterface,
     DescribableInterface,
     PropertyDisplayInterface,
     LoggerAwareInterface
 {
-    use CatalogAwareTrait;
     use DescribableTrait;
     use LoggerAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * @var string $ident
@@ -57,6 +55,7 @@ abstract class AbstractPropertyDisplay implements
      * @var string $type
      */
     protected $type;
+
     /**
      * @var string $displayType
      */
@@ -115,7 +114,7 @@ abstract class AbstractPropertyDisplay implements
      */
     public function setDependencies(Container $container)
     {
-        $this->setCatalog($container['translation/catalog']);
+        $this->setTranslator($container['translator']);
     }
 
     /**
@@ -279,7 +278,7 @@ abstract class AbstractPropertyDisplay implements
             $name .= '[]';
         }
         if ($this->p()->l10n()) {
-            $lang = TranslationConfig::instance()->currentLanguage();
+            $lang = $this->transator()->getLocale();
             $name .= '['.$lang.']';
         }
         return $name;

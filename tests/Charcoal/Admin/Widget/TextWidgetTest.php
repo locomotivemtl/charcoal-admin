@@ -2,17 +2,27 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
+use PHPUnit_Framework_TestCase;
+
 use \Psr\Log\NullLogger;
+
+use Pimple\Container;
 
 use \Charcoal\Admin\Widget\TextWidget;
 
-class TextWidgetTest extends \PHPUnit_Framework_TestCase
+use Charcoal\Admin\Tests\ContainerProvider;
+
+class TextWidgetTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $logger = new NullLogger();
+        $container = new Container();
+        $containerProvider = new ContainerProvider();
+        $containerProvider->registerWidgetDependencies($container);
+
         $this->obj = new TextWidget([
-            'logger' => $logger
+            'logger' => $container['logger'],
+            'container' => $container
         ]);
     }
 

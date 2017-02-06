@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Template\System;
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
@@ -46,15 +43,11 @@ class UsersTemplate extends AdminTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
-        if ($this->title === null) {
-            $this->setTitle($this->translate('Administrators'));
-        }
-
-        return $this->title;
+        return $this->translator()->translation('Administrators');
     }
 
     /**

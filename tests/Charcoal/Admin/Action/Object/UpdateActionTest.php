@@ -44,6 +44,7 @@ class UpdateActionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+
         $this->obj = new UpdateAction([
             'logger'    => $container['logger'],
             'container' => $container
@@ -77,7 +78,7 @@ class UpdateActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerActionDependencies($container);
 
             $this->container = $container;
         }

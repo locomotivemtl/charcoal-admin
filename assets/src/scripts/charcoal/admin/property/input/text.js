@@ -100,7 +100,7 @@ Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
 
     if (this.multiple_min) {
         var additionalFields = this.multiple_min - this.currentValAmount;
-        for (; additionalFields > 1; additionalFields--) {
+        for (; additionalFields > 0; additionalFields--) {
             this.add_item();
         }
     }
@@ -122,6 +122,7 @@ Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input) {
     var split = val.split(separator);
     var i     = 0;
     var total = split.length;
+
     if (total === 1) {
         // Nothing to split.
         return false;

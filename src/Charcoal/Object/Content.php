@@ -18,7 +18,7 @@ use Charcoal\Model\AbstractModel;
 // From `charcoal-translation`
 use Charcoal\Translator\TranslatorAwareTrait;
 
-// Local namespace (`charcoal-object`) dependencies
+// From `charcoal-object`
 use Charcoal\Object\ContentInterface;
 use Charcoal\Object\RevisionableInterface;
 use Charcoal\Object\RevisionableTrait;

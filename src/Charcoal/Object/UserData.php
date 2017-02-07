@@ -16,7 +16,7 @@ use Charcoal\Model\AbstractModel;
 // From `charcoal-translation`
 use Charcoal\Translator\TranslatorAwareTrait;
 
-// Local namespace (`charcoal-object`) dependency
+// From `charcoal-object`
 use Charcoal\Object\UserDataInterface;
 
 /**

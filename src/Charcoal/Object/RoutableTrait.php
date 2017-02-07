@@ -11,7 +11,6 @@ use Charcoal\Loader\CollectionLoader;
 
 // From 'charcoal-translation'
 use Charcoal\Translator\Translation;
-use Charcoal\Translation\TranslationConfig;
 
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
@@ -223,17 +222,16 @@ trait RoutableTrait
      */
     public function generateSlug()
     {
-        $translator = TranslationConfig::instance();
-        $languages  = $translator->availableLanguages();
+        $languages  = $this->translator()->availableLocales();
         $patterns   = $this->slugPattern();
         $curSlug    = $this->slug();
         $newSlug    = [];
 
-        $origLang = $translator->currentLanguage();
+        $origLang = $this->translator()->getLocale();
         foreach ($languages as $lang) {
             $pattern = $patterns[$lang];
 
-            $translator->setCurrentLanguage($lang);
+            $this->translator()->setLocale($lang);
             if ($this->isSlugEditable() && isset($curSlug[$lang]) && strlen($curSlug[$lang])) {
                 $newSlug[$lang] = $curSlug[$lang];
             } else {
@@ -262,7 +260,7 @@ trait RoutableTrait
                 }
             }
         }
-        $translator->setCurrentLanguage($origLang);
+        $this->translator()->setLocale($origLang);
 
         return $this->translator()->translation($newSlug);
     }
@@ -363,7 +361,6 @@ trait RoutableTrait
      */
     protected function generateObjectRoute($slug = null)
     {
-        $translator = TranslationConfig::instance();
 
         if (!$slug) {
             $slug = $this->generateSlug();
@@ -373,13 +370,13 @@ trait RoutableTrait
             $slugs = $slug->all();
         }
 
-        $origLang = $translator->currentLanguage();
+        $origLang = $this->translator()->getLocale();
         foreach ($slugs as $lang => $slug) {
-            if (!$translator->hasLanguage($lang)) {
+            if (!in_array($lang, $this->translator()->availableLocales())) {
                 continue;
             }
 
-            $translator->setCurrentLanguage($lang);
+            $this->translator()->setLocale($lang);
 
             $objectRoute = $this->createRouteObject();
 
@@ -420,7 +417,7 @@ trait RoutableTrait
             }
         }
 
-        $translator->setCurrentLanguage($origLang);
+        $this->translator()->setLocale($origLang);
     }
 
     /**
@@ -432,11 +429,10 @@ trait RoutableTrait
      */
     protected function getLatestObjectRoute($lang = null)
     {
-        $translator = TranslationConfig::instance();
 
         if ($lang === null) {
             $lang = $this->translator()->getLocale();
-        } elseif (!$translator->hasLanguage($lang)) {
+        } elseif (!in_array($lang, $this->translator()->availableLocales())) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid language, received %s',
                 (is_object($lang) ? get_class($lang) : gettype($lang))

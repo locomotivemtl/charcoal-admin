@@ -16,7 +16,7 @@ use Charcoal\Translation\TranslationConfig;
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 
-// Local Dependencies
+// From 'charcoal-object'
 use Charcoal\Object\ObjectRoute;
 use Charcoal\Object\ObjectRouteInterface;
 
@@ -116,9 +116,10 @@ trait RoutableTrait
             } elseif (isset($metadata['slug_pattern'])) {
                 $this->setSlugPattern($metadata['slug_pattern']);
             } else {
-                throw new Exception(
-                    sprintf('Undefined route pattern (slug) for %s', get_called_class())
-                );
+                throw new Exception(sprintf(
+                    'Undefined route pattern (slug) for %s',
+                    get_called_class()
+                ));
             }
         }
 
@@ -250,9 +251,10 @@ trait RoutableTrait
             } else {
                 $newSlug[$lang] = $this->generateRoutePattern($pattern);
                 if (!strlen($newSlug[$lang])) {
-                    throw new UnexpectedValueException(
-                        sprintf('The slug is empty. The pattern is "%s"', $pattern)
-                    );
+                    throw new UnexpectedValueException(sprintf(
+                        'The slug is empty. The pattern is "%s"',
+                        $pattern
+                    ));
                 }
             }
             $newSlug[$lang] = $this->finalizeSlug($newSlug[$lang]);
@@ -325,14 +327,12 @@ trait RoutableTrait
 
         $value = $this->filterRouteToken($value, $token);
         if (!is_string($value) && !is_numeric($value)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Route token "%1$s" must be a string with %2$s; received %3$s',
-                    $token,
-                    get_called_class(),
-                    (is_object($value) ? get_class($value) : gettype($value))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Route token "%1$s" must be a string with %2$s; received %3$s',
+                $token,
+                get_called_class(),
+                (is_object($value) ? get_class($value) : gettype($value))
+            ));
         }
 
         return $value;
@@ -449,12 +449,10 @@ trait RoutableTrait
         if ($lang === null) {
             $lang = $translator->currentLanguage();
         } elseif (!$translator->hasLanguage($lang)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Invalid language, received %s',
-                    (is_object($lang) ? get_class($lang) : gettype($lang))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Invalid language, received %s',
+                (is_object($lang) ? get_class($lang) : gettype($lang))
+            ));
         }
 
         if (isset($this->latestObjectRoute[$lang])) {

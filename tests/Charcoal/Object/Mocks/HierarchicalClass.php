@@ -1,11 +1,17 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests\Mocks;
 
-use \Charcoal\Model\ModelInterface;
-use \Charcoal\Object\HierarchicalInterface;
-use \Charcoal\Object\HierarchicalTrait;
+// From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
 
+// From 'charcoal-object'
+use Charcoal\Object\HierarchicalInterface;
+use Charcoal\Object\HierarchicalTrait;
+
+/**
+ *
+ */
 class HierarchicalClass implements
     ModelInterface,
     HierarchicalInterface
@@ -51,10 +57,10 @@ class HierarchicalClass implements
     }
 
     /**
-     * @param array|\ArrayAccess $data The model data.
+     * @param array $data The model data.
      * @return ModelInterface Chainable
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         return null;
     }

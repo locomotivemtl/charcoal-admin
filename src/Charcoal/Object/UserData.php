@@ -7,10 +7,10 @@ use DateTimeInterface;
 use Exception;
 use InvalidArgumentException;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
-// Local namespace (`charcoal-object`) dependency
+// From 'charcoal-object'
 use Charcoal\Object\UserDataInterface;
 
 /**
@@ -190,9 +190,10 @@ class UserData extends AbstractModel implements
             try {
                 $timestamp = new DateTime($timestamp);
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    sprintf('Invalid timestamp: %s', $e->getMessage())
-                );
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid timestamp: %s',
+                    $e->getMessage()
+                ), 0, $e);
             }
         }
 

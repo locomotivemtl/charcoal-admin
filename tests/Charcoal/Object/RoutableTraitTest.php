@@ -1,24 +1,37 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests;
 
 use DateTime;
 
-use Psr\Log\NullLogger;
+// From Pimple
+use Pimple\Container;
 
-use Charcoal\Model\Service\MetadataLoader;
-
-use Charcoal\Object\RoutableTrait as RoutableTrait;
+// From 'charcoal-object'
+use Charcoal\Object\RoutableTrait;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class RoutableTraitTest extends \PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var RoutableTrait
+     */
+    private $obj;
 
     /**
-     * Create mock object from trait.
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
      */
     public function setUp()
     {
@@ -135,6 +148,8 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateSlug()
     {
+        $container = $this->container();
+
         $this->obj->expects($this->any())
             ->method('metadata')
             ->willReturn([
@@ -144,36 +159,13 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
                     'suffix'  => '-baz'
                 ]
             ]);
-        $metadataLoader = new MetadataLoader([
-            'logger' => new NullLogger(),
-            'base_path' => __DIR__.'/../../../',
-            'paths' => ['metadata'],
-            'config' => $GLOBALS['container']['config'],
-            'cache'  => $GLOBALS['container']['cache']
-        ]);
-        $factory = new \Charcoal\Factory\GenericFactory([
-            'arguments' => [[
-                'logger' => new NullLogger(),
-                'metadata_loader' => $metadataLoader,
-                'source_factory' => new \Charcoal\Factory\GenericFactory([
-                    'map'=>[
-                        'database' => '\Charcoal\Source\DatabaseSource',
 
-                    ],
-                    'arguments' => [[
-                        'logger' => new NullLogger(),
-                        'pdo'    => new \PDO('sqlite::memory:')
-                    ]]
-                ])
-            ]]
-        ]);
         $this->obj->expects($this->any())
             ->method('modelFactory')
-            ->willReturn($factory);
+            ->willReturn($container['model/factory']);
         $ret = $this->obj->generateSlug();
         $this->assertEquals('barfoofoobaz', (string)$ret);
     }
-
 
     /**
      * @dataProvider providerSlugs
@@ -186,13 +178,33 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
     public function providerSlugs()
     {
         return [
-            ['A B C', 'a-b-c'],
-            ['_this_is_a_test_', 'this-is-a-test'],
-            ['Allö Bébé!', 'allo-bebe'],
-            ['"Hello-#-{$}-£™¡¢∞§¶•ªº-World"', 'hello-world'],
-            ['&quot;', 'quot'],
-            ['fr/14/Services Santé et Sécurité au Travail', 'fr/14/services-sante-et-securite-au-travail'],
-            ['fr/ 14/Services S   anté et Sécurité au Travail', 'fr/14/services-s-ante-et-securite-au-travail']
+            [ 'A B C', 'a-b-c' ],
+            [ '_this_is_a_test_', 'this-is-a-test' ],
+            [ 'Allö Bébé!', 'allo-bebe' ],
+            [ '"Hello-#-{$}-£™¡¢∞§¶•ªº-World"', 'hello-world' ],
+            [ '&quot;', 'quot' ],
+            [ 'fr/14/Services Santé et Sécurité au Travail', 'fr/14/services-sante-et-securite-au-travail' ],
+            [ 'fr/ 14/Services S   anté et Sécurité au Travail', 'fr/14/services-s-ante-et-securite-au-travail' ]
         ];
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerModelFactory($container);
+            $containerProvider->registerModelCollectionLoader($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

@@ -2,20 +2,19 @@
 
 namespace Charcoal\Object;
 
-// Dependencies from `PHP`
 use \DateTime;
 use \DateTimeInterface;
 use \Exception;
 use \RuntimeException;
 use \InvalidArgumentException;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// Dependency from 'charcoal-core'
+// From 'charcoal-core'
 use \Charcoal\Model\AbstractModel;
 
-// Local namespace dependencies
+// From 'charcoal-object'
 use \Charcoal\Object\ObjectScheduleInterface;
 
 /**
@@ -101,9 +100,10 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
     protected function modelFactory()
     {
         if (!isset($this->modelFactory)) {
-            throw new RuntimeException(
-                sprintf('Model Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Model Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->modelFactory;
@@ -227,9 +227,11 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
             try {
                 $ts = new DateTime($ts);
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    sprintf('%s (%s)', $e->getMessage(), $ts)
-                );
+                throw new InvalidArgumentException(sprintf(
+                    '%s (%s)',
+                    $e->getMessage(),
+                    $ts
+                ), 0, $e);
             }
         }
 
@@ -272,9 +274,11 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
             try {
                 $ts = new DateTime($ts);
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    sprintf('%s (%s)', $e->getMessage(), $ts)
-                );
+                throw new InvalidArgumentException(sprintf(
+                    '%s (%s)',
+                    $e->getMessage(),
+                    $ts
+                ), 0, $e);
             }
         }
 
@@ -340,9 +344,10 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
         }
 
         if ($this->targetId() === null) {
-            $this->logger->error(
-                sprintf('Can not process object schedule: no object "%s" ID defined.', $this->targetType())
-            );
+            $this->logger->error(sprintf(
+                'Can not process object schedule: no object "%s" ID defined.',
+                $this->targetType()
+            ));
             return false;
         }
 
@@ -354,7 +359,11 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
         $obj = $this->modelFactory()->create($this->targetType());
         $obj->load($this->targetId());
         if (!$obj->id()) {
-            $this->logger->error(sprintf('Can not load "%s" object %s', $this->targetType(), $this->targetId()));
+            $this->logger->error(sprintf(
+                'Can not load "%s" object %s',
+                $this->targetType(),
+                $this->targetId()
+            ));
         }
         $obj->setData($this->dataDiff());
         $update = $obj->update(array_keys($this->dataDiff()));

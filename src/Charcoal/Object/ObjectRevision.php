@@ -2,7 +2,6 @@
 
 namespace Charcoal\Object;
 
-// Dependencies from `PHP`
 use \InvalidArgumentException;
 use \DateTime;
 use \DateTimeInterface;
@@ -16,7 +15,7 @@ use \Charcoal\Factory\FactoryInterface;
 // From `charcoal-core`
 use \Charcoal\Model\AbstractModel;
 
-// Local namespace dependencies
+// From 'charcoal-object'
 use \Charcoal\Object\ObjectRevisionInterface;
 use \Charcoal\Object\RevisionableInterface;
 

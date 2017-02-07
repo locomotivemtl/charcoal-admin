@@ -7,7 +7,7 @@ use \InvalidArgumentException;
 // From 'charcoal-core'
 use \Charcoal\Loader\CollectionLoader;
 
-// Local Dependencies
+// From 'charcoal-object'
 use \Charcoal\Object\ObjectRevision;
 use \Charcoal\Object\ObjectRevisionInterface;
 

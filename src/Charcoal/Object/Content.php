@@ -6,16 +6,16 @@ use DateTime;
 use DateTimeInterface;
 use InvalidArgumentException;
 
-// From `pimple/pimple`
+// From Pimple
 use Pimple\Container;
 
-// From `charcoal-factory`
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
-// Local namespace (`charcoal-object`) dependencies
+// From 'charcoal-object'
 use Charcoal\Object\ContentInterface;
 use Charcoal\Object\RevisionableInterface;
 use Charcoal\Object\RevisionableTrait;
@@ -127,11 +127,14 @@ class Content extends AbstractModel implements
             $this->position = null;
             return $this;
         }
+
         if (!is_numeric($position)) {
-            throw new InvalidArgumentException(
-                sprintf('Position must be an integer (%s given).', gettype($position))
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Position must be an integer, received %s',
+                is_object($position) ? get_class($position) : gettype($position)
+            ));
         }
+
         $this->position = (int)$position;
         return $this;
     }

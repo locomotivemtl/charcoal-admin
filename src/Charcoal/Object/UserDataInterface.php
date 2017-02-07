@@ -2,7 +2,7 @@
 
 namespace Charcoal\Object;
 
-// Dependency from 'charcoal-core'
+// From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 
 /**

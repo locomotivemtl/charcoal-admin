@@ -7,5 +7,4 @@ namespace Charcoal\Object;
  */
 interface ArchivableInterface
 {
-
 }

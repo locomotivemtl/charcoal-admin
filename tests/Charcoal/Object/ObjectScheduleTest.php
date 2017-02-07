@@ -1,33 +1,46 @@
 <?php
 
-use \Psr\Log\NullLogger;
+namespace Charcoal\Object\Tests;
 
-use \Charcoal\Factory\GenericFactory as Factory;
+use DateTime;
 
-use \Charcoal\Model\Service\MetadataLoader;
+// From PHPUnit
+use PHPUnit_Framework_TestCase;
 
-use \Charcoal\Object\ObjectSchedule;
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-object'
+use Charcoal\Object\ObjectSchedule;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Tested Class.
+     *
+     * @var ObjectSchedule
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $metadataLoader = new MetadataLoader([
-            'logger' => new NullLogger(),
-            'base_path' => __DIR__,
-            'paths' => ['metadata'],
-            'config' => $GLOBALS['container']['config'],
-            'cache'  => $GLOBALS['container']['cache']
-        ]);
+        $container = $this->container();
 
-        $logger = new NullLogger();
-        $this->obj = new ObjectSchedule([
-            'logger'=>$logger,
-            'metadata_loader' => $metadataLoader
-        ]);
+        $this->obj = $container['model/factory']->create(ObjectSchedule::class);
     }
 
     public function testSetTargetType()
@@ -111,8 +124,8 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $factory = new Factory();
-        $this->obj->setModelFactory($factory);
+        $container = $this->container();
+        $this->obj->setModelFactory($container['model/factory']);
 
         $this->assertFalse($this->obj->process());
 
@@ -123,5 +136,24 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->process());
 
         //q$this->obj->process();
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerModelFactory($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

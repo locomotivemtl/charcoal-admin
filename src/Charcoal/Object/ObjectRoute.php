@@ -5,16 +5,17 @@ use DateTime;
 use InvalidArgumentException;
 use RuntimeException;
 
+// From Pimple
 use Pimple\Container;
 
-// Dependencies from 'charcoal-core'
+// From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 use Charcoal\Loader\CollectionLoader;
 
-// Dependency from 'charcoal-factory'
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Local Dependency
+// From 'charcoal-object'
 use Charcoal\Object\ObjectRouteInterface;
 
 /**
@@ -371,9 +372,10 @@ class ObjectRoute extends AbstractModel implements
     public function modelFactory()
     {
         if (!isset($this->modelFactory)) {
-            throw new RuntimeException(
-                sprintf('Model Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Model Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
         return $this->modelFactory;
     }
@@ -387,9 +389,10 @@ class ObjectRoute extends AbstractModel implements
     public function collectionLoader()
     {
         if (!isset($this->collectionLoader)) {
-            throw new RuntimeException(
-                sprintf('Collection Loader is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Collection Loader is not defined for "%s"',
+                get_class($this)
+            ));
         }
         return $this->collectionLoader;
     }

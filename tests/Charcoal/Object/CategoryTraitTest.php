@@ -1,20 +1,29 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests;
+
+// From 'charcoal-object'
+use Charcoal\Object\CategoryTrait;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class CategoryTraitTest extends \PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var CategoryTrait
+     */
+    private $obj;
 
     /**
-     * Create mock object from trait.
+     * Set up the test.
      */
     public function setUp()
     {
-        $this->obj = $this->getMockForTrait('\Charcoal\Object\CategoryTrait');
+        $this->obj = $this->getMockForTrait(CategoryTrait::class);
     }
 
     public function testUnsetCategoryItemTypeThrowsException()

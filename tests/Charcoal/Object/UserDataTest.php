@@ -1,35 +1,43 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests;
 
-use \DateTime;
+use DateTime;
 
-use \Psr\Log\NullLogger;
+// From Pimple
+use Pimple\Container;
 
-use \Charcoal\Model\Service\MetadataLoader;
-
-use \Charcoal\Object\UserData;
+// From 'charcoal-object'
+use Charcoal\Object\UserData;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class UserDataTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Tested Class.
+     *
+     * @var UserData
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $metadataLoader = new MetadataLoader([
-            'logger' => new NullLogger(),
-            'base_path' => __DIR__,
-            'paths' => ['metadata'],
-            'config' => $GLOBALS['container']['config'],
-            'cache'  => $GLOBALS['container']['cache']
-        ]);
+        $container = $this->container();
 
-         $logger = new NullLogger();
-         $this->obj = new UserData([
-            'logger'=>$logger,
-            'metadata_loader' => $metadataLoader
-         ]);
+        $this->obj = $container['model/factory']->create(UserData::class);
     }
 
     public function testConstructor()
@@ -108,5 +116,24 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($obj->resolveOrigin(), $obj->origin());
         $this->assertSame(null, $obj->lang());
         $this->assertNotSame(null, $obj->ts());
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerModelFactory($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

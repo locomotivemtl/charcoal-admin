@@ -1,25 +1,33 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests;
+
+// From 'charcoal-object'
+use Charcoal\Object\ArchivableTrait;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class ArchivableTraitTest extends \PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var ArchivableTrait
+     */
+    private $obj;
 
     /**
-     * Create mock object from trait.
+     * Set up the test.
      */
     public function setUp()
     {
-        $this->obj = $this->getMockForTrait('\Charcoal\Object\ArchivableTrait');
+        $this->obj = $this->getMockForTrait(ArchivableTrait::class);
     }
 
     public function testConstructor()
     {
-        // This unit test is a stub
         $this->assertTrue(true);
     }
 }

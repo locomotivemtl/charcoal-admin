@@ -1,28 +1,46 @@
 <?php
 
-use \Psr\Log\NullLogger;
+namespace Charcoal\Object\Tests;
 
-use \Charcoal\Model\Service\MetadataLoader;
+use DateTime;
 
-use \Charcoal\Object\ObjectRoute;
+// From PHPUnit
+use PHPUnit_Framework_TestCase;
 
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-object'
+use Charcoal\Object\ObjectRoute;
+use Charcoal\Object\Tests\ContainerProvider;
+
+/**
+ *
+ */
 class ObjectRouteTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Tested Class.
+     *
+     * @var ObjectRoute
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $metadataLoader = new MetadataLoader([
-            'logger'    => new NullLogger(),
-            'base_path' => __DIR__,
-            'paths'     => ['metadata'],
-            'config'    => $GLOBALS['container']['config'],
-            'cache'     => $GLOBALS['container']['cache']
-        ]);
+        $container = $this->container();
 
-        $logger = new NullLogger();
-        $this->obj = new ObjectRoute([
-            'logger'          => $logger,
-            'metadata_loader' => $metadataLoader
-        ]);
+        $this->obj = $container['model/factory']->create(ObjectRoute::class);
     }
 
     public function testDefaults()
@@ -99,5 +117,25 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\InvalidArgumentException');
         $this->obj->setSlug(false);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerModelFactory($container);
+            $containerProvider->registerModelCollectionLoader($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

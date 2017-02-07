@@ -1,28 +1,46 @@
 <?php
 
-use \Psr\Log\NullLogger;
+namespace Charcoal\Object\Tests;
 
-use \Charcoal\Model\Service\MetadataLoader;
+use DateTime;
 
-use \Charcoal\Object\ObjectRevision;
+// From PHPUnit
+use PHPUnit_Framework_TestCase;
 
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-object'
+use Charcoal\Object\ObjectRevision;
+use Charcoal\Object\Tests\ContainerProvider;
+
+/**
+ *
+ */
 class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Tested Class.
+     *
+     * @var ObjectRevision
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $metadataLoader = new MetadataLoader([
-            'logger'    => new NullLogger(),
-            'base_path' => __DIR__,
-            'paths'     => ['metadata'],
-            'config'    => $GLOBALS['container']['config'],
-            'cache'     => $GLOBALS['container']['cache']
-        ]);
+        $container = $this->container();
 
-        $logger = new NullLogger();
-        $this->obj = new ObjectRevision([
-            'logger'          => $logger,
-            'metadata_loader' => $metadataLoader
-        ]);
+        $this->obj = $container['model/factory']->create(ObjectRevision::class);
     }
 
     public function testSetObjType()
@@ -136,5 +154,24 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $ret = $this->obj->createDiff();
 
         $this->assertEquals([['bar'=>1, 'baz'=>1], ['bar'=>42]], $ret);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerModelFactory($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

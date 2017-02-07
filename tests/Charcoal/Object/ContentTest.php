@@ -1,52 +1,59 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests;
 
-use \PHPUnit_Framework_TestCase;
+use DateTime;
 
-use \DateTime;
+// From PHPUnit
+use PHPUnit_Framework_TestCase;
 
-use \Psr\Log\NullLogger;
+// From Pimple
+use Pimple\Container;
 
-use \Charcoal\Model\Service\MetadataLoader;
-
-use \Charcoal\Object\Content;
+// From 'charcoal-object'
+use Charcoal\Object\Content;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class ContentTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Tested Class.
+     *
+     * @var Content
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $metadataLoader = new MetadataLoader([
-            'logger' => new NullLogger(),
-            'base_path' => __DIR__,
-            'paths' => ['metadata'],
-            'config' => $GLOBALS['container']['config'],
-            'cache'  => $GLOBALS['container']['cache']
-        ]);
+        $container = $this->container();
 
-        $logger = new NullLogger();
-        $this->obj = new Content([
-            'logger'=>$logger,
-            'metadata_loader' => $metadataLoader
-        ]);
+        $this->obj = $container['model/factory']->create(Content::class);
     }
 
     public function testSetData()
     {
         $obj = $this->obj;
-        $ret = $obj->setData(
-            [
-            'active'=>false,
-            'position'=>42,
-            'created'=>'2015-01-01 13:05:45',
-            'created_by'=>'Me',
-            'last_modified'=>'2015-04-01 22:10:30',
-            'lastModified_by'=>'You'
-            ]
-        );
+        $ret = $obj->setData([
+            'active'          => false,
+            'position'        => 42,
+            'created'         => '2015-01-01 13:05:45',
+            'created_by'      => 'Me',
+            'last_modified'   => '2015-04-01 22:10:30',
+            'lastModified_by' => 'You'
+        ]);
         $this->assertSame($ret, $obj);
         $this->assertNotTrue($obj->active());
         $this->assertEquals(42, $obj->position());
@@ -182,4 +189,23 @@ class ContentTest extends PHPUnit_Framework_TestCase
     //     $this->assertNotSame(null, $obj->lastModified());
 
     // }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerModelFactory($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
+    }
 }

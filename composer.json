@@ -36,6 +36,11 @@
             "Charcoal\\Object\\": "src/Charcoal/Object"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Charcoal\\Object\\Tests\\": "tests/Charcoal/Object"
+        }
+    },
     "scripts": {
         "test": [
             "@tests"

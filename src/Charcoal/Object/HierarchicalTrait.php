@@ -75,9 +75,10 @@ trait HierarchicalTrait
 
         if ($master instanceof ModelInterface) {
             if ($master->id() === $this->id()) {
-                throw new UnexpectedValueException(
-                    sprintf('Can not be ones own parent: %s', $master->id())
-                );
+                throw new UnexpectedValueException(sprintf(
+                    'Can not be ones own parent: %s',
+                    $master->id()
+                ));
             }
         }
 
@@ -287,9 +288,10 @@ trait HierarchicalTrait
 
         if ($child instanceof ModelInterface) {
             if ($child->id() === $this->id()) {
-                throw new UnexpectedValueException(
-                    sprintf('Can not be ones own child: %s', $child->id())
-                );
+                throw new UnexpectedValueException(sprintf(
+                    'Can not be ones own child: %s',
+                    $child->id()
+                ));
             }
         }
 
@@ -410,9 +412,10 @@ trait HierarchicalTrait
         }
 
         if (!is_scalar($ident)) {
-            throw new InvalidArgumentException(
-                sprintf('Can not load object (not a scalar or a "%s")', $class)
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Can not load object (not a scalar or a "%s")',
+                $class
+            ));
         }
 
         $cached = $this->loadObjectFromCache($ident);

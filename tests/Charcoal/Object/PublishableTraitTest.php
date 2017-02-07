@@ -1,24 +1,31 @@
 <?php
 
-namespace Charcoal\Tests\Object;
+namespace Charcoal\Object\Tests;
 
-use \DateTime;
+use DateTime;
 
-use \Charcoal\Object\PublishableTrait as PublishableTrait;
+// From 'charcoal-object'
+use Charcoal\Object\PublishableTrait;
+use Charcoal\Object\Tests\ContainerProvider;
 
 /**
  *
  */
 class PublishableTraitTest extends \PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var PublishableTrait
+     */
+    private $obj;
 
     /**
-     * Create mock object from trait.
+     * Set up the test.
      */
     public function setUp()
     {
-        $this->obj = $this->getMockForTrait('\Charcoal\Object\PublishableTrait');
+        $this->obj = $this->getMockForTrait(PublishableTrait::class);
     }
 
     /**
@@ -77,7 +84,6 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('pending', $obj->publishStatus());
         $obj->setPublishStatus('published');
         $this->assertEquals('published', $obj->publishStatus());
-// No date set.
 
         $this->setExpectedException('\InvalidArgumentException');
         $obj->setPublishStatus('foobar');
@@ -108,13 +114,13 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
     public function providerPublishStatus()
     {
         return [
-            [null, null, 'published'],
-            ['yesterday', 'tomorrow', 'published'],
-            ['2 days ago', 'yesterday', 'expired'],
-            ['tomorrow', '+1 week', 'pending'],
-            ['tomorrow', null, 'pending'],
-            [null, 'tomorrow', 'published'],
-            [null, 'yesterday', 'expired']
+            [ null, null, 'published' ],
+            [ 'yesterday', 'tomorrow', 'published' ],
+            [ '2 days ago', 'yesterday', 'expired' ],
+            [ 'tomorrow', '+1 week', 'pending' ],
+            [ 'tomorrow', null, 'pending' ],
+            [ null, 'tomorrow', 'published' ],
+            [ null, 'yesterday', 'expired' ]
         ];
     }
 

@@ -2,7 +2,6 @@
 
 namespace Charcoal\Object;
 
-// Dependencies from `PHP`
 use \DateTime;
 use \DateTimeInterface;
 use \InvalidArgumentException;
@@ -104,9 +103,10 @@ trait PublishableTrait
             'published'
         ];
         if (!in_array($status, $validStatus)) {
-            throw new InvalidArgumentException(
-                sprintf('Status "%s" is not a valid publish status.', $status)
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Status "%s" is not a valid publish status.',
+                $status
+            ));
         }
         $this->publishStatus = $status;
         return $this;

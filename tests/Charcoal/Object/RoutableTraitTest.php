@@ -2,19 +2,23 @@
 
 namespace Charcoal\Object\Tests;
 
+use PHPUnit_Framework_TestCase;
+
 use DateTime;
 
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-object'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\LocalesManager;
+
 use Charcoal\Object\RoutableTrait;
-use Charcoal\Object\Tests\ContainerProvider;
+
 
 /**
  *
  */
-class RoutableTraitTest extends \PHPUnit_Framework_TestCase
+class RoutableTraitTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Tested Class.
@@ -30,6 +34,20 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
      */
     private $container;
 
+    private function translator()
+    {
+        return new Translator([
+            'manager' => new LocalesManager([
+                'locales' => [
+                    'en'=>['locale'=>'en-US'],
+                    'fr'=>['locale'=>'fr-CA']
+                ],
+                'default_language'=>'en',
+                'fallback_languages'=>['en']
+            ])
+        ]);
+    }
+
     /**
      * Set up the test.
      */
@@ -44,6 +62,10 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
             true,
             [ 'metadata' ]
         );
+
+        $this->obj->expects($this->any())
+            ->method('translator')
+            ->willReturn($this->translator());
     }
 
     public function testSlugPattern()

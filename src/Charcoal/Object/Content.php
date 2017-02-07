@@ -15,7 +15,10 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
-// From 'charcoal-object'
+// From `charcoal-translation`
+use Charcoal\Translator\TranslatorAwareTrait;
+
+// Local namespace (`charcoal-object`) dependencies
 use Charcoal\Object\ContentInterface;
 use Charcoal\Object\RevisionableInterface;
 use Charcoal\Object\RevisionableTrait;
@@ -28,22 +31,23 @@ class Content extends AbstractModel implements
     RevisionableInterface
 {
     use RevisionableTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Objects are active by default
-     * @var boolean $Active
+     * @var boolean
      */
     private $active = true;
 
     /**
      * The position is used for ordering lists
-     * @var integer $Position
+     * @var integer
      */
     private $position = 0;
 
     /**
      * Object creation date (set automatically on save)
-     * @var DateTime $Created
+     * @var DateTimeInterface
      */
     private $created;
 
@@ -54,7 +58,7 @@ class Content extends AbstractModel implements
 
     /**
      * Object last modified date (set automatically on save and update)
-     * @var DateTime $LastModified
+     * @var DateTimeInterface
      */
     private $lastModified;
 
@@ -64,7 +68,7 @@ class Content extends AbstractModel implements
     private $lastModifiedBy;
 
     /**
-     * @var FactoryInterface $modelFactory
+     * @var FactoryInterface
      */
     private $modelFactory;
 
@@ -77,6 +81,7 @@ class Content extends AbstractModel implements
     {
         parent::setDependencies($container);
 
+        $this->setTranslator($container['translator']);
         $this->setModelFactory($container['model/factory']);
     }
 

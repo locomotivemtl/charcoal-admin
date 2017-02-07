@@ -19,6 +19,9 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\GenericFactory as Factory;
 
+use Charcoal\Translator\LocalesManager;
+use Charcoal\Translator\Translator;
+
 // From 'charcoal-core'
 use Charcoal\Model\Service\MetadataLoader;
 use Charcoal\Loader\CollectionLoader;
@@ -44,6 +47,7 @@ class ContainerProvider
         $this->registerDatabase($container);
         $this->registerLogger($container);
         $this->registerCache($container);
+        $this->registerTranslator($container);
     }
 
     /**
@@ -184,6 +188,7 @@ class ContainerProvider
     {
         $this->registerLogger($container);
         $this->registerDatabase($container);
+        $this->registerTranslator($container);
 
         $container['property/factory'] = function (Container $container) {
             return new Factory([
@@ -194,7 +199,8 @@ class ContainerProvider
                 'arguments' => [[
                     'container' => $container,
                     'database'  => $container['database'],
-                    'logger'    => $container['logger']
+                    'logger'    => $container['logger'],
+                    'translator' => $container['translator']
                 ]]
             ]);
         };
@@ -226,6 +232,29 @@ class ContainerProvider
     {
         $container['acl'] = function (Container $container) {
             return new Acl();
+        };
+    }
+
+    /**
+     * Setup the framework's Translator.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerTranslator(Container $container)
+    {
+        $container['language/manager'] = function (Container $container) {
+            return new LocalesManager([
+                'locales' => [
+                    'en'=>['locale'=>'en-US']
+                ]
+            ]);
+        };
+
+        $container['translator'] = function (Container $container) {
+            return new Translator([
+                'manager'  => $container['language/manager']
+            ]);
         };
     }
 }

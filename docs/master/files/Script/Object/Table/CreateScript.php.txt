@@ -14,7 +14,6 @@ use Charcoal\Admin\AdminScript;
  */
 class CreateScript extends AdminScript
 {
-
     /**
      * @return array
      */

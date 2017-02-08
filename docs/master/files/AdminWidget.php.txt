@@ -15,6 +15,8 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractWidget;
@@ -22,8 +24,10 @@ use Charcoal\App\Template\AbstractWidget;
 /**
  * The base Widget for the `admin` module.
  */
-class AdminWidget extends AbstractWidget
+class AdminWidget extends AbstractWidget implements CatalogAwareInterface
 {
+    use CatalogAwareTrait;
+
     const DATA_SOURCE_REQUEST = 'request';
     const DATA_SOURCE_OBJECT  = 'object';
 
@@ -116,6 +120,9 @@ class AdminWidget extends AbstractWidget
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setModelFactory($container['model/factory']);
+
+        // CatalogAware Depencency
+        $this->setCatalog($container['translator/catalog']);
     }
 
     /**
@@ -247,7 +254,6 @@ class AdminWidget extends AbstractWidget
 
             return $this;
         }
-
 
         if (!is_array($sources)) {
             $sources = [ $sources ];
@@ -458,12 +464,6 @@ class AdminWidget extends AbstractWidget
      */
     public function label()
     {
-        if ($this->label === null) {
-            // Generate label from ident
-            $label = ucwords(str_replace(['_', '.', '/'], ' ', $this->ident()));
-            $this->setLabel($label);
-        }
-
         return $this->label;
     }
 
@@ -513,7 +513,7 @@ class AdminWidget extends AbstractWidget
     public function showLabel()
     {
         if ($this->showLabel !== false) {
-            return ((string)$this->label() == '');
+            return !!strval($this->label());
         } else {
             return false;
         }

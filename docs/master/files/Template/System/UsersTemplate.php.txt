@@ -2,10 +2,13 @@
 
 namespace Charcoal\Admin\Template\System;
 
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;
@@ -14,7 +17,7 @@ use Charcoal\Admin\Ui\DashboardContainerTrait;
 use Charcoal\Admin\User;
 
 /**
- * List admin users
+ * List Admin Users
  */
 class UsersTemplate extends AdminTemplate implements
     CollectionContainerInterface,
@@ -41,11 +44,17 @@ class UsersTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return TranslationString
+     * Retrieve the title of the page.
+     *
+     * @return string|null
      */
     public function title()
     {
-        return new TranslationString('Administrators');
+        if ($this->title === null) {
+            $this->setTitle($this->translate('Administrators'));
+        }
+
+        return $this->title;
     }
 
     /**
@@ -54,15 +63,17 @@ class UsersTemplate extends AdminTemplate implements
     public function createDashboardConfig()
     {
         return [
-            'layout'=>[
-                'structure'=>[[
-                    'columns' => [0]
-                ]]
+            'layout' => [
+                'structure' => [
+                    [
+                        'columns' => [ 0 ]
+                    ]
+                ]
             ],
-            'widgets'=>[
-                'list'=>[
-                    'type'=>'charcoal/support/admin/widget/table',
-                    'obj_type'=>'charcoal/admin/user'
+            'widgets' => [
+                'list' => [
+                    'type'     => 'charcoal/support/admin/widget/table',
+                    'obj_type' => 'charcoal/admin/user'
                 ]
             ]
         ];

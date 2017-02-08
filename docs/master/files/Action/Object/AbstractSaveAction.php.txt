@@ -4,18 +4,18 @@ namespace Charcoal\Admin\Action\Object;
 
 use InvalidArgumentException;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 use Charcoal\Model\ModelValidator;
 
-// From `charcoal-base`
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From `charcoal-admin`
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;

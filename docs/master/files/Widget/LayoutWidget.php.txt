@@ -5,11 +5,11 @@ namespace Charcoal\Admin\Widget;
 use \InvalidArgumentException;
 use \Iterator;
 
-// Dependencies from `charcoal-ui`
+// From 'charcoal-ui'
 use \Charcoal\Ui\Layout\LayoutInterface;
 use \Charcoal\Ui\Layout\LayoutTrait;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 
 /**

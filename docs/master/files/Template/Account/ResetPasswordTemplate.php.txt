@@ -2,8 +2,10 @@
 
 namespace Charcoal\Admin\Template\Account;
 
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\User\LostPasswordToken;
 
@@ -23,24 +25,26 @@ class ResetPasswordTemplate extends AdminTemplate
     private $lostPasswordToken;
 
     /**
-     * @param RequestInterface $request The PSR-7 HTTP request.
+     * @param  RequestInterface $request The PSR-7 HTTP request.
      * @return boolean
      */
     public function init(RequestInterface $request)
     {
-        // Undocumented Slim3 feature: The route attributes are stored in routeInfo[2].
+        // Undocumented Slim 3 feature: The route attributes are stored in routeInfo[2].
         $routeInfo = $request->getAttribute('routeInfo');
         if (isset($routeInfo[2]['token'])) {
             $this->lostPasswordToken = $routeInfo[2]['token'];
         } else {
             $this->lostPasswordToken = $request->getParam('token');
         }
+
         if ($this->lostPasswordToken) {
             if (!$this->validateToken($this->lostPasswordToken)) {
                 $this->lostPasswordToken = false;
-                $this->addFeedback('warning', 'Invalid or expired token.');
+                $this->addFeedback('warning', $this->translate('Invalid or expired reset token.'));
             }
         }
+
         return true;
     }
 
@@ -51,7 +55,6 @@ class ResetPasswordTemplate extends AdminTemplate
     {
         return $this->lostPasswordToken;
     }
-
 
     /**
      * @return boolean
@@ -78,28 +81,28 @@ class ResetPasswordTemplate extends AdminTemplate
     }
 
     /**
+     * Validate the given password reset token.
+     *
      * To be valid, a token should:
      *
      * - exist in the database
      * - not be expired
      *
-     * @param string $token The token to validate.
+     * @see    \Charcoal\Admin\Action\Account\ResetPasswordAction::validateToken()
+     * @param  string $token The token to validate.
      * @return boolean
      */
     private function validateToken($token)
     {
-        $tokenProto = $this->modelFactory()->create(LostPasswordToken::class);
-        $q = '
-        select
-            *
-        from
-            `'.$tokenProto->source()->table().'`
-        where
-            `token`=:token
-        and
-            `expiry` > NOW()';
-        $tokenProto->loadFromQuery($q, ['token'=>$token]);
-        return !!$tokenProto->token();
+        $obj = $this->modelFactory()->create(LostPasswordToken::class);
+        $sql = strtr('SELECT * FROM `%table` WHERE `token` = :token AND `expiry` > NOW()', [
+            '%table' => $obj->source()->table()
+        ]);
+        $obj->loadFromQuery($sql, [
+            'token' => $token
+        ]);
+
+        return !!$obj->token();
     }
 
     /**
@@ -110,10 +113,7 @@ class ResetPasswordTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle([
-                'en' => 'Reset Password',
-                'fr' => 'Réinitialisation du mot de passe',
-            ]);
+            $this->setTitle($this->translate('Password Reset'));
         }
 
         return $this->title;

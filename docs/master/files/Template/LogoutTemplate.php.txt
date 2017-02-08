@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Template;
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\User;
@@ -79,15 +76,12 @@ class LogoutTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return string|null
      */
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle([
-                'en' => 'Logged Out',
-                'fr' => 'Déconnecté(e)',
-            ]);
+            $this->setTitle($this->translate('Logged Out'));
         }
 
         return $this->title;

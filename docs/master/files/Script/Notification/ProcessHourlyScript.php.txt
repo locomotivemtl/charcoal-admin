@@ -56,10 +56,10 @@ class ProcessHourlyScript extends AbstractNotificationScript
     protected function emailData(Notification $notification, CollectionInterface $objects)
     {
         return [
-            'subject'   => sprintf('Hourly Charcoal Notification - %s', $this->startDate()->format('Y-m-d H:m')),
-            'template_ident' => 'charcoal/admin/email/notification.hourly',
-            'template_data' => [
-                'startString'   => $this->startDate()->format('Y-m-d H:m'),
+            'subject'         => sprintf('Hourly Charcoal Notification - %s', $this->startDate()->format('Y-m-d H:m')),
+            'template_ident'  => 'charcoal/admin/email/notification.hourly',
+            'template_data'   => [
+                'startString' => $this->startDate()->format('Y-m-d H:m'),
             ]
         ];
     }

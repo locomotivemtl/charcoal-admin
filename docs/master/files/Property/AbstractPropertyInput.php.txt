@@ -25,6 +25,8 @@ use Charcoal\View\ViewableTrait;
 use Charcoal\Translation\TranslationConfig;
 use Charcoal\Translation\TranslationString;
 use Charcoal\Translation\TranslationStringInterface;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // Dependency from 'charcoal-admin'
 use Charcoal\Admin\Property\PropertyInputInterface;
@@ -37,11 +39,13 @@ use Charcoal\Property\PropertyMetadata;
  *
  */
 abstract class AbstractPropertyInput implements
+    CatalogAwareInterface,
     DescribableInterface,
     PropertyInputInterface,
     LoggerAwareInterface,
     ViewableInterface
 {
+    use CatalogAwareTrait;
     use DescribableTrait;
     use LoggerAwareTrait;
     use ViewableTrait;
@@ -158,6 +162,7 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
+        $this->setCatalog($container['translator/catalog']);
         $this->setView($container['view']);
         $this->setMetadataLoader($container['metadata/loader']);
     }
@@ -267,9 +272,7 @@ abstract class AbstractPropertyInput implements
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
-            );
+            throw new InvalidArgumentException('Property Input identifier must be string');
         }
         $this->ident = $ident;
         return $this;
@@ -318,7 +321,6 @@ abstract class AbstractPropertyInput implements
     {
         return $this->required;
     }
-
 
     /**
      * @param boolean $disabled Disabled flag.
@@ -467,9 +469,7 @@ abstract class AbstractPropertyInput implements
     public function setInputClass($inputClass)
     {
         if (!is_string($inputClass)) {
-            throw new InvalidArgumentException(
-                'Input class must be a string'
-            );
+            throw new InvalidArgumentException('CSS Class(es) must be a string');
         }
         $this->inputClass = $inputClass;
         return $this;
@@ -541,12 +541,10 @@ abstract class AbstractPropertyInput implements
         }
 
         if (!is_scalar($val)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Input value must be a string, received %s',
-                    (is_object($val) ? get_class($val) : gettype($val))
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'Property Input Value must be a string, received %s',
+                (is_object($val) ? get_class($val) : gettype($val))
+            ));
         }
 
         return $val;
@@ -563,7 +561,7 @@ abstract class AbstractPropertyInput implements
     {
         if (!is_string($inputMode)) {
             throw new InvalidArgumentException(
-                'Input mode must be a string.'
+                'Property Input Mode must be a string.'
             );
         }
         $this->inputMode = $inputMode;
@@ -590,7 +588,7 @@ abstract class AbstractPropertyInput implements
     {
         if (!is_string($inputType)) {
             throw new InvalidArgumentException(
-                'Input type must be a string.'
+                'Property Input Type must be a string.'
             );
         }
         $this->inputType = $inputType;
@@ -620,7 +618,7 @@ abstract class AbstractPropertyInput implements
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException(
-                'HTML input type must be a string.'
+                'HTML Input Type must be a string.'
             );
         }
 
@@ -672,7 +670,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * Alias of the `property` method.
+     * Alias of {@see self::property()}
      *
      * @return PropertyInterface
      */

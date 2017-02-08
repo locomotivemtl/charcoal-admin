@@ -4,7 +4,7 @@ namespace Charcoal\Admin;
 
 use Exception;
 
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 
@@ -14,18 +14,20 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From 'charcoal-base
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
 use Charcoal\Translation\TranslationConfig;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
 
-// Local module (charcoal-admin) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
 use Charcoal\Admin\User\AuthAwareInterface;
 use Charcoal\Admin\User\AuthAwareTrait;
@@ -43,9 +45,12 @@ use Charcoal\Admin\User\AuthAwareTrait;
  * - `showFooterMenu` (bool) - Display the footer menu or not
  * - `footerMenu` (iterator) - The footer menu data
  */
-class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
+class AdminTemplate extends AbstractTemplate implements
+    AuthAwareInterface,
+    CatalogAwareInterface
 {
     use AuthAwareTrait;
+    use CatalogAwareTrait;
     use FeedbackContainerTrait;
 
     /**
@@ -138,6 +143,9 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
+
+        // CatalogAware Depencency
+        $this->setCatalog($container['translator/catalog']);
     }
 
     /**
@@ -247,6 +255,8 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
     {
         if (TranslationString::isTranslatable($label)) {
             $this->label = new TranslationString($label);
+        } else {
+            $this->label = null;
         }
 
         return $this;
@@ -682,7 +692,13 @@ class AdminTemplate extends AbstractTemplate implements AuthAwareInterface
      */
     public function recaptchaKey()
     {
-        $key = $this->appConfig['apis.google.recaptcha.public_key'] ?: $this->appConfig['apis.google.recaptcha.key'];
+        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+
+        if (isset($recaptcha['public_key'])) {
+            $key = $recaptcha['public_key'];
+        } else {
+            $key = $recaptcha['key'];
+        }
 
         return (string)$key;
     }

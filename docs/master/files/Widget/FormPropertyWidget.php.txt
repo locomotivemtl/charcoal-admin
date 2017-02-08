@@ -24,7 +24,6 @@ use \Charcoal\Ui\FormInput\FormInputInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 

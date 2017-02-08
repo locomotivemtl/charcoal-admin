@@ -261,7 +261,7 @@ class ElfinderConnectorAction extends AdminAction
                 'i18nFolderName' => true,
                 // URL to files (REQUIRED)
                 'URL'            => $baseUrl.'/'.$uploadPath,
-                'tmbURL'         => $baseUrl.'/'.$uploadPath.'/.tmb',
+                'tmbURL'         => $defaultBaseUrl.'/'.$uploadPath.'/.tmb',
                 'tmbPath'        => $uploadPath.'/.tmb',
                 'tmbSize'        => 200,
                 'tmbBgColor'     => 'transparent',
@@ -276,12 +276,7 @@ class ElfinderConnectorAction extends AdminAction
                 // File permission attributes
                 'attributes'     => [
                     $this->attributesForHiddenFiles()
-                ],
-
-                //Glide stuff
-                // 'glideURL'       => 'http://volleyball.dev/glide'
-                // 'glideURL'       => isset($config['glide_url']) ? $config['glide_url'] : '',
-                // 'glideKey'       => isset($config['glide_key']) ? $config['glide_key'] : '',
+                ]
             ];
 
             return [
@@ -315,7 +310,7 @@ class ElfinderConnectorAction extends AdminAction
                 'i18nFolderName' => true,
                 // URL to files (REQUIRED)
                 'URL'            => $baseUrl.'/'.$uploadPath,
-                'tmbURL'         => $baseUrl.'/'.$uploadPath.'/.tmb',
+                'tmbURL'         => $defaultBaseUrl.'/'.$uploadPath.'/.tmb',
                 'tmbPath'        => $uploadPath.'/.tmb',
                 'tmbSize'        => 200,
                 'tmbBgColor'     => 'transparent',
@@ -328,8 +323,6 @@ class ElfinderConnectorAction extends AdminAction
                 // Disable and hide dot starting files
                 'accessControl'  => 'access',
                 // File permission attributes
-
-                'glideURL' => 'http://volleyball.dev/glide',
 
                 'attributes' => [
                     $this->attributesForHiddenFiles()

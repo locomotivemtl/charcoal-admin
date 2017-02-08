@@ -115,7 +115,7 @@ abstract class AbstractPropertyDisplay implements
      */
     public function setDependencies(Container $container)
     {
-        $this->setCatalog($container['translator/catalog']);
+        $this->setCatalog($container['translation/catalog']);
     }
 
     /**

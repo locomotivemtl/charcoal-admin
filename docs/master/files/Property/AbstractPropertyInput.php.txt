@@ -162,7 +162,7 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
-        $this->setCatalog($container['translator/catalog']);
+        $this->setCatalog($container['translaion/catalog']);
         $this->setView($container['view']);
         $this->setMetadataLoader($container['metadata/loader']);
     }

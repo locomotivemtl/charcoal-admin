@@ -244,6 +244,13 @@ class ElfinderConnectorAction extends AdminAction
             $label = isset($config['label']) ?
                 $this->translator()->translation($config['label']) : ucfirst($currentFileSystem);
             $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
+
+            $startPath = $this->formProperty()->uploadPath();
+
+            if (!$startPath) {
+                $startPath = isset($config['path']) ? $config['path'] : '/';
+            }
+
             $roots[$currentFileSystem] = [
                 'driver'     => 'Flysystem',
                 'filesystem' => $filesystems[$currentFileSystem],
@@ -253,7 +260,7 @@ class ElfinderConnectorAction extends AdminAction
 
                 // Path to files (REQUIRED)
                 'path'           => $uploadPath,
-                'startPath'      => isset($config['path']) ? $config['path'] : '/',
+                'startPath'      => $startPath,
 
                 // Jpg Compression quality
                 'jpgQuality'     => 80,

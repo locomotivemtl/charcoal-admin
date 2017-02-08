@@ -124,12 +124,10 @@ class ReadonlyInput extends AbstractPropertyInput
         }
 
         if (!is_scalar($val)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Input value must be a string, received %s',
-                    (is_object($val) ? get_class($val) : gettype($val))
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'Input value must be a string, received %s',
+                (is_object($val) ? get_class($val) : gettype($val))
+            ));
         }
 
         $this->hasValue = true;

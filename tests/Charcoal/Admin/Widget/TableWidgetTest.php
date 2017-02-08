@@ -2,14 +2,16 @@
 
 namespace Charcoal\Admin\Tests\Widget;
 
-use PHPUnit_Framework_TestCase;
+// From PHPUnit
+use \PHPUnit_Framework_TestCase;
 
 use Psr\Log\NullLogger;
 
-use Pimple\Container;
+// From Pimple
+use \Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Widget\TableWidget;
-
 use Charcoal\Admin\Tests\ContainerProvider;
 
 /**
@@ -17,26 +19,27 @@ use Charcoal\Admin\Tests\ContainerProvider;
  */
 class TableWidgetTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Tested Class.
+     *
+     * @var TableWidget
+     */
     private $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerPropertyFactory($container);
-        $containerProvider->registerPropertyDisplayFactory($container);
-
-        $container['view'] = $this->getMock('\Charcoal\View\ViewInterface');
-
-        $logger = new NullLogger();
-        $this->obj = new TableWidget([
-            'logger' => $logger,
-            'container' => $container
-        ]);
+        $container = $this->container();
+        $this->obj = $container['widget/factory']->create(TableWidget::class);
     }
 
     public function testSetSortable()
@@ -92,5 +95,28 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
 
         $this->obj->set('show_table_foot', true);
         $this->assertTrue($this->obj['show_table_foot']);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerWidgetFactory($container);
+            $containerProvider->registerPropertyFactory($container);
+            $containerProvider->registerPropertyDisplayFactory($container);
+
+            $container['view'] = $this->getMock('\Charcoal\View\ViewInterface');
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

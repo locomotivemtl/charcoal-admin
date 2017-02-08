@@ -2,19 +2,25 @@
 
 namespace Charcoal\Admin\Tests\Action\Account;
 
+// From PHPUnit
 use \PHPUnit_Framework_TestCase;
 
+// From Mockery
+use \Mockery as m;
+
+// From Pimple
 use \Pimple\Container;
 
+// From Slim
 use \Slim\Http\Environment;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
+// From 'charcoal-admin'
 use \Charcoal\Admin\Action\Account\ResetPasswordAction;
+use \Charcoal\Admin\User;
 
 use \Charcoal\Admin\Tests\ContainerProvider;
-
-use \Charcoal\Admin\User;
 
 /**
  *
@@ -22,116 +28,133 @@ use \Charcoal\Admin\User;
 class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Instance of object under test
-     * @var LoginAction
+     * Tested Class.
+     *
+     * @var ResetPasswordAction
      */
-    private $obj;
+    public $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
     private $container;
 
     /**
-     *
+     * Set up the test.
      */
     public function setUp()
     {
         $container = $this->container();
         $this->obj = new ResetPasswordAction([
-            'logger' => $container['logger'],
+            'logger'    => $container['logger'],
             'container' => $container
         ]);
     }
 
-    /**
-     *
-     */
     public function testAuthRequiredIsFalse()
     {
         $this->assertFalse($this->obj->authRequired());
     }
 
-    public function testRunWithoutTokenReturns404()
+    public function testRunWithoutTokenReturns400()
     {
-         $request = Request::createFromEnvironment(Environment::mock());
+        $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
     }
 
-    public function testRunWithoutUsernameReturns404()
+    public function testRunWithoutUsernameReturns400()
     {
-         $request = Request::createFromEnvironment(Environment::mock([
+        $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar'
-         ]));
+        ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
     }
 
-    public function testRunWithoutPasswordReturns404()
+    public function testRunWithoutPasswordReturns400()
     {
-         $request = Request::createFromEnvironment(Environment::mock([
+        $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar&username=foobar'
-         ]));
+        ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
     }
 
-    public function testRunWithoutMatchingPasswordsReturns404()
+    public function testRunWithoutMatchingPasswordsReturns400()
     {
-         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar&password=foo&password_confirm=bar'
-         ]));
+        $request = Request::createFromEnvironment(Environment::mock([
+            'QUERY_STRING' => 'token=foobar&username=foobar&password1=foo&password2=bar'
+        ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
     }
 
-    public function testRunWithoutRecaptchaReturns404()
+    public function testRunWithoutRecaptchaReturns400()
     {
-         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar&password=foo&password_confirm=foo'
-         ]));
+        $mock = m::mock($this->obj);
+        $mock->shouldAllowMockingProtectedMethods()
+             ->shouldReceive('validateCaptcha')
+                ->with(null)
+                    ->andReturn(false);
+
+        $request = Request::createFromEnvironment(Environment::mock([
+            'QUERY_STRING' => 'token=foobar&username=foobar&password1=foo&password2=foo'
+        ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $mock->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $mock->results();
+        $this->assertFalse($results['success']);
     }
 
-    public function testRunWithInvalidRecaptchaReturns404()
+    public function testRunWithInvalidRecaptchaReturns400()
     {
-         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar&password=foo&password_confirm=foo&g-recaptcha-response=foobar'
-         ]));
+        $mock = m::mock($this->obj);
+        $mock->shouldAllowMockingProtectedMethods()
+             ->shouldReceive('validateCaptcha')
+                ->with('foobar')
+                    ->andReturn(false);
+
+        $request = Request::createFromEnvironment(Environment::mock([
+            'QUERY_STRING' => 'token=foobar&username=foobar&password1=foo&password2=foo&g-recaptcha-response=foobar'
+        ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $mock->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $mock->results();
+        $this->assertFalse($results['success']);
     }
 
     /**
+     * Set up the service container.
+     *
      * @return Container
      */
     private function container()
@@ -139,13 +162,11 @@ class ResetPasswordActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerBaseUrl($container);
-            $containerProvider->registerAdminConfig($container);
-            $containerProvider->registerAuthenticator($container);
-            $containerProvider->registerAuthorizer($container);
+            $containerProvider->registerAdminServices($container);
 
             $this->container = $container;
         }
+
         return $this->container;
     }
 }

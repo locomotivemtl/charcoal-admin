@@ -148,9 +148,10 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     protected function metadataLoader()
     {
         if ($this->metadataLoader === null) {
-            throw new RuntimeException(
-                sprintf('Metadata Loader is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Metadata Loader is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->metadataLoader;
@@ -230,13 +231,11 @@ class TemplateOptionsFormGroup extends StructureFormGroup
 
         $obj = $this->obj();
         if (!$obj->hasProperty($propertyIdent)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'The "%1$s" property is not defined on [%2$s]',
-                    $propertyIdent,
-                    get_class($this->obj())
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'The "%1$s" property is not defined on [%2$s]',
+                $propertyIdent,
+                get_class($this->obj())
+            ));
         }
 
         if ($property === null) {
@@ -261,9 +260,10 @@ class TemplateOptionsFormGroup extends StructureFormGroup
             if ($obj instanceof TemplateableInterface) {
                 $this->setTemplateProperty($obj->property('template_ident'));
             } else {
-                throw new RuntimeException(
-                    sprintf('Storage property owner is not defined for "%s"', get_class($this))
-                );
+                throw new RuntimeException(sprintf(
+                    'Storage property owner is not defined for "%s"',
+                    get_class($this)
+                ));
             }
         }
 
@@ -283,9 +283,10 @@ class TemplateOptionsFormGroup extends StructureFormGroup
             if ($obj instanceof TemplateableInterface) {
                 $this->setStorageProperty($obj->property('template_options'));
             } else {
-                throw new RuntimeException(
-                    sprintf('Storage property owner is not defined for "%s"', get_class($this))
-                );
+                throw new RuntimeException(sprintf(
+                    'Storage property owner is not defined for "%s"',
+                    get_class($this)
+                ));
             }
         }
 

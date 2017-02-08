@@ -4,55 +4,104 @@ namespace Charcoal\Admin\Tests;
 
 use PDO;
 
+// From Zend
 use Zend\Permissions\Acl\Acl;
 
+// From Pimple
 use Pimple\Container;
 
+// From Mockery
 use Mockery;
 
-use Psr\Log\NullLogger;
-use Cache\Adapter\Void\VoidCachePool;
-
-use Charcoal\Factory\GenericFactory as Factory;
-
-use Charcoal\App\AppConfig;
-use Charcoal\App\Template\WidgetBuilder;
-
-use Charcoal\Model\Service\MetadataLoader;
-use Charcoal\Source\DatabaseSource;
-
-// Module `charcoal-user` dependencies
-use Charcoal\User\Authenticator;
-use Charcoal\User\Authorizer;
-
-use Charcoal\Admin\Config as AdminConfig;
-
-use Charcoal\Ui\Dashboard\DashboardBuilder;
-use Charcoal\Ui\Dashboard\DashboardInterface;
-use Charcoal\Ui\Layout\LayoutBuilder;
-use Charcoal\Ui\Layout\LayoutFactory;
-
-use Charcoal\Email\Email;
-use Charcoal\Email\EmailConfig;
-
+// From 'league/climate'
 use League\CLImate\CLImate;
 use League\CLImate\Util\System\Linux;
 use League\CLImate\Util\Output;
 use League\CLImate\Util\Reader\Stdin;
 use League\CLImate\Util\UtilFactory;
 
+// From PSR-3
+use Psr\Log\NullLogger;
+use Cache\Adapter\Void\VoidCachePool;
+
+// From 'charcoal-factory'
+use Charcoal\Factory\GenericFactory as Factory;
+
+// From 'charcoal-app'
+use Charcoal\App\AppConfig;
+use Charcoal\App\Template\WidgetBuilder;
+
+// From 'charcoal-core'
+use Charcoal\Model\Service\MetadataLoader;
+use Charcoal\Source\DatabaseSource;
+
+// From 'charcoal-user'
+use Charcoal\User\Authenticator;
+use Charcoal\User\Authorizer;
+
+// From 'charcoal-ui'
+use Charcoal\Ui\Dashboard\DashboardBuilder;
+use Charcoal\Ui\Dashboard\DashboardInterface;
+use Charcoal\Ui\Layout\LayoutBuilder;
+use Charcoal\Ui\Layout\LayoutFactory;
+
+// From 'charcoal-email'
+use Charcoal\Email\Email;
+use Charcoal\Email\EmailConfig;
+
+// From 'charcoal-translation'
+use Charcoal\Language\Language;
+use Charcoal\Language\LanguageRepository;
+use Charcoal\Translation\Catalog\Catalog;
+use Charcoal\Translation\Catalog\ResourceRepository;
+use Charcoal\Translation\TranslationConfig;
+
+// From 'charcoal-translator'
+use Charcoal\Translator\LocalesManager;
+use Charcoal\Translator\Translator;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Config as AdminConfig;
+
 /**
  *
  */
 class ContainerProvider
 {
-
-    public function registerConfig(Container $container)
+    /**
+     * Register the unit tests required services.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerBaseServices(Container $container)
     {
-        $container['config'] = function (Container $container) {
-            return new AppConfig();
-        };
+        $this->registerConfig($container);
+        $this->registerDatabase($container);
+        $this->registerLogger($container);
+        $this->registerCache($container);
     }
+
+    /**
+     * Register the admin services.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerAdminServices(Container $container)
+    {
+        $this->registerBaseUrl($container);
+        $this->registerAdminConfig($container);
+        $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
+    }
+
+    /**
+     * Setup the application's base URI.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerBaseUrl(Container $container)
     {
         $container['base-url'] = function (Container $container) {
@@ -60,12 +109,46 @@ class ContainerProvider
         };
     }
 
+    /**
+     * Setup the application configset.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerConfig(Container $container)
+    {
+        $container['config'] = function (Container $container) {
+            return new AppConfig([
+                'base_path'  => realpath(__DIR__.'/../../..'),
+                'apis'       => [
+                    'google' => [
+                        'recaptcha' => [
+                            'public_key'  => 'foobar',
+                            'private_key' => 'bazqux',
+                        ]
+                    ]
+                ]
+            ]);
+        };
+    }
+
+    /**
+     * Setup the admin module configset.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerAdminConfig(Container $container)
+    {
+        $this->registerConfig($container);
+
+        $container['admin/config'] = function (Container $container) {
+            return new AdminConfig();
+        };
+    }
+
     public function registerLayoutFactory(Container $container)
     {
-        /**
-         * @param Container $container A Pimple DI container.
-         * @return LayoutFactory
-         */
         $container['layout/factory'] = function (Container $container) {
 
             $layoutFactory = new LayoutFactory();
@@ -76,10 +159,7 @@ class ContainerProvider
     public function registerLayoutBuilder(Container $container)
     {
         $this->registerLayoutFactory($container);
-        /**
-         * @param Container $container A Pimple DI container.
-         * @return LayoutBuilder
-         */
+
         $container['layout/builder'] = function (Container $container) {
             $layoutFactory = $container['layout/factory'];
             $layoutBuilder = new LayoutBuilder($layoutFactory, $container);
@@ -92,10 +172,7 @@ class ContainerProvider
         $this->registerLogger($container);
         $this->registerWidgetBuilder($container);
         $this->registerLayoutBuilder($container);
-        /**
-         * @param Container $container A Pimple DI container.
-         * @return LayoutFactory
-         */
+
         $container['dashboard/factory'] = function (Container $container) {
             return new Factory([
                 'arguments'          => [[
@@ -104,7 +181,7 @@ class ContainerProvider
                     'widget_builder' => $container['widget/builder'],
                     'layout_builder' => $container['layout/builder']
                 ]],
-                'resolver_options'   => [
+                'resolver_options' => [
                     'suffix' => 'Dashboard'
                 ]
             ]);
@@ -115,10 +192,6 @@ class ContainerProvider
     {
         $this->registerDashboardFactory($container);
 
-        /**
-         * @param Container $container A Pimple DI container.
-         * @return LayoutBuilder
-         */
         $container['dashboard/builder'] = function (Container $container) {
             $dashboardFactory = $container['dashboard/factory'];
             $dashboardBuilder = new DashboardBuilder($dashboardFactory, $container);
@@ -129,6 +202,7 @@ class ContainerProvider
     public function registerWidgetFactory(Container $container)
     {
         $this->registerLogger($container);
+
         $container['widget/factory'] = function (Container $container) {
             return new Factory([
                 'resolver_options' => [
@@ -136,7 +210,7 @@ class ContainerProvider
                 ],
                 'arguments' => [[
                     'container' => $container,
-                    'logger' => $container['logger']
+                    'logger'    => $container['logger']
                 ]]
             ]);
         };
@@ -145,6 +219,7 @@ class ContainerProvider
     public function registerWidgetBuilder(Container $container)
     {
         $this->registerWidgetFactory($container);
+
         $container['widget/builder'] = function (Container $container) {
             return new WidgetBuilder($container['widget/factory'], $container);
         };
@@ -158,6 +233,7 @@ class ContainerProvider
 
             return $system;
         };
+
         $container['climate/output'] = function (Container $container) {
             $output = Mockery::mock(Output::class);
             $output->shouldReceive('persist')->andReturn($output);
@@ -166,6 +242,7 @@ class ContainerProvider
 
             return $output;
         };
+
         $container['climate/reader'] = function (Container $container) {
             $reader = Mockery::mock(Stdin::class);
             $reader->shouldReceive('line')->andReturn('line');
@@ -173,11 +250,12 @@ class ContainerProvider
             $reader->shouldReceive('multiLine')->andReturn('multiLine');
             return $reader;
         };
+
         $container['climate/util'] = function (Container $container) {
             return new UtilFactory($container['climate/system']);
         };
-        $container['climate'] = function (Container $container) {
 
+        $container['climate'] = function (Container $container) {
             $climate = new CLImate();
 
             $climate->setOutput($container['climate/output']);
@@ -188,14 +266,59 @@ class ContainerProvider
         };
     }
 
-    public function registerAdminConfig(Container $container)
+    /**
+     * Setup the application's translator service.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerTranslator(Container $container)
     {
-        $this->registerConfig($container);
-        $container['admin/config'] = function (Container $container) {
-            return new AdminConfig();
+        $container['language/manager'] = function (Container $container) {
+            return new LocalesManager([
+                'locales' => [
+                    'en' => [ 'locale' => 'en-US' ]
+                ]
+            ]);
+        };
+
+        $container['translator'] = function (Container $container) {
+            return new Translator([
+                'manager' => $container['language/manager']
+            ]);
+        };
+
+        /**
+         * @deprecated
+         */
+        $container['translator/catalog'] = function (Container $container) {
+            $catalog = new Catalog();
+            $loader  = new ResourceRepository([
+                'logger'    => $container['logger'],
+                'cache'     => $container['cache'],
+                'languages' => [ 'en' ],
+                'base_path' => realpath(__DIR__.'/../../..'),
+                'paths'     => [
+                    'translations/charcoal/admin/',
+                    'vendor/locomotivemtl/charcoal-app/translations/charcoal/app/'
+                ]
+            ]);
+
+            $translations = $loader->load();
+            if ($translations) {
+                $catalog->addResources($translations);
+            }
+
+            return $catalog;
         };
     }
 
+    /**
+     * Setup the application's logging interface.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerLogger(Container $container)
     {
         $container['logger'] = function (Container $container) {
@@ -203,10 +326,16 @@ class ContainerProvider
         };
     }
 
+    /**
+     * Setup the application's caching interface.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerCache(Container $container)
     {
-        $container['cache'] = function (Container $container) {
-            return new VoidCachePool;
+        $container['cache'] = function ($container) {
+            return new VoidCachePool();
         };
     }
 
@@ -230,12 +359,13 @@ class ContainerProvider
     {
         $this->registerLogger($container);
         $this->registerCache($container);
+
         $container['metadata/loader'] = function (Container $container) {
             return new MetadataLoader([
-                'logger'=>$container['logger'],
-                'cache' => $container['cache'],
-                'base_path' => __DIR__.'/../../..',
-                'paths'=>[
+                'logger'    => $container['logger'],
+                'cache'     => $container['cache'],
+                'base_path' => realpath(__DIR__.'/../../..'),
+                'paths'     => [
                     'metadata',
                     'vendor/locomotivemtl/charcoal-object/metadata',
                     'vendor/locomotivemtl/charcoal-user/metadata'
@@ -248,12 +378,13 @@ class ContainerProvider
     {
         $this->registerLogger($container);
         $this->registerDatabase($container);
+
         $container['source/factory'] = function (Container $container) {
             return new Factory([
-                'map'=>[
-                    'database'=>DatabaseSource::class
+                'map' => [
+                    'database' => DatabaseSource::class
                 ],
-                'arguments' => [[
+                'arguments'  => [[
                     'logger' => $container['logger'],
                     'pdo'    => $container['database']
                 ]]
@@ -263,18 +394,21 @@ class ContainerProvider
 
     public function registerPropertyFactory(Container $container)
     {
+        $this->registerTranslator($container);
         $this->registerDatabase($container);
         $this->registerLogger($container);
+
         $container['property/factory'] = function (Container $container) {
             return new Factory([
-                'resolver_options'=>[
-                    'prefix' => '\Charcoal\Property\\',
+                'resolver_options' => [
+                    'prefix' => '\\Charcoal\\Property\\',
                     'suffix' => 'Property'
                 ],
                 'arguments' => [[
-                    'container' => $container,
-                    'database'  => $container['database'],
-                    'logger'    => $container['logger']
+                    'container'  => $container,
+                    'database'   => $container['database'],
+                    'translator' => $container['translator'],
+                    'logger'     => $container['logger']
                 ]]
             ]);
         };
@@ -284,9 +418,10 @@ class ContainerProvider
     {
         $this->registerDatabase($container);
         $this->registerLogger($container);
+
         $container['property/display/factory'] = function (Container $container) {
             return new Factory([
-                'resolver_options'=>[
+                'resolver_options' => [
                     'suffix' => 'Display'
                 ],
                 'arguments' => [[
@@ -301,17 +436,19 @@ class ContainerProvider
     public function registerModelFactory(Container $container)
     {
         $this->registerLogger($container);
+        $this->registerTranslator($container);
         $this->registerMetadataLoader($container);
         $this->registerPropertyFactory($container);
         $this->registerSourceFactory($container);
+
         $container['model/factory'] = function (Container $container) {
             return new Factory([
                 'arguments' => [[
-                    'container' => $container,
-                    'logger'=>$container['logger'],
-                    'metadata_loader' => $container['metadata/loader'],
+                    'container'        => $container,
+                    'logger'           => $container['logger'],
+                    'metadata_loader'  => $container['metadata/loader'],
                     'property_factory' => $container['property/factory'],
-                    'source_factory'=> $container['source/factory']
+                    'source_factory'   => $container['source/factory']
                 ]]
             ]);
         };
@@ -321,6 +458,7 @@ class ContainerProvider
     {
         $this->registerLogger($container);
         $this->registerModelFactory($container);
+
         $container['admin/authenticator'] = function (Container $container) {
             return new Authenticator([
                 'logger'        => $container['logger'],
@@ -336,6 +474,7 @@ class ContainerProvider
     {
         $this->registerLogger($container);
         $this->registerAcl($container);
+
         $container['admin/authorizer'] = function (Container $container) {
             return new Authorizer([
                 'logger'    => $container['logger'],
@@ -349,6 +488,7 @@ class ContainerProvider
     {
         $this->registerLogger($container);
         $this->registerModelFactory($container);
+
         $container['model/collection/loader'] = function (Container $container) {
             return new \Charcoal\Loader\CollectionLoader([
                 'logger'  => $container['logger'],

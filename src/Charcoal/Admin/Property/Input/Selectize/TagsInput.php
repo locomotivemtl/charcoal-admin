@@ -92,9 +92,10 @@ class TagsInput extends AbstractSelectableInput
     public function modelFactory()
     {
         if (!isset($this->modelFactory)) {
-            throw new RuntimeException(
-                sprintf('Model Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Model Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->modelFactory;
@@ -122,9 +123,10 @@ class TagsInput extends AbstractSelectableInput
     protected function collectionLoader()
     {
         if (!isset($this->collectionLoader)) {
-            throw new RuntimeException(
-                sprintf('Collection Loader is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Collection Loader is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->collectionLoader;

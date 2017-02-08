@@ -2,17 +2,29 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Loader\CollectionLoader;
+use RuntimeException;
 
-use \Charcoal\Admin\AdminWidget;
+// From Pimple
+use Pimple\Container;
 
-use \Charcoal\App\App;
+// From 'charcoal-core'
+use Charcoal\Loader\CollectionLoader;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminWidget;
 
 /**
  *
  */
 class CollectionMapWidget extends AdminWidget
 {
+    /**
+     * The API key for the mapping service.
+     *
+     * @var array
+     */
+    private $apiKey;
+
     /**
      * @var \Charcoal\Model\AbstractModel[] $mapObjects
      */
@@ -46,9 +58,78 @@ class CollectionMapWidget extends AdminWidget
     private $pathProperty;
 
     /**
+     * Store the collection loader for the current class.
+     *
+     * @var CollectionLoader
+     */
+    private $collectionLoader;
+
+    /**
      * @var string $infoboxTemplate
      */
     public $infoboxTemplate = '';
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->collectionLoader = $container['model/collection/loader'];
+
+        $appConfig = $container['config'];
+
+        if (isset($appConfig['google.console.api_key'])) {
+            $this->setApiKey($appConfig['google.console.api_key']);
+        } elseif (isset($appConfig['apis.google.map.key'])) {
+            $this->setApiKey($appConfig['apis.google.map.key']);
+        }
+    }
+
+    /**
+     * Sets the API key for the mapping service.
+     *
+     * @param  string $key An API key.
+     * @return self
+     */
+    public function setApiKey($key)
+    {
+        $this->apiKey = $key;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve API key for the mapping service.
+     *
+     * @return string
+     */
+    public function apiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * Retrieve the model collection loader.
+     *
+     * @throws RuntimeException If the collection loader was not previously set.
+     * @return CollectionLoader
+     */
+    protected function collectionLoader()
+    {
+        if (!isset($this->collectionLoader)) {
+            throw new RuntimeException(sprintf(
+                'Collection Loader is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->collectionLoader;
+    }
 
     /**
      * @return \Charcoal\Model\AbstractModel
@@ -159,10 +240,7 @@ class CollectionMapWidget extends AdminWidget
     public function mapObjects()
     {
         if ($this->mapObjects === null) {
-            $loader = new CollectionLoader([
-                'logger'    => $this->logger,
-                'factory'   => $this->modelFactory()
-            ]);
+            $loader = $this->collectionLoader();
             $loader->setModel($this->objProto());
 
             $that = $this;
@@ -236,18 +314,5 @@ class CollectionMapWidget extends AdminWidget
             $ret = $rawPolygon;
         }
         return json_encode($ret, true);
-    }
-
-    /**
-     * Google maps api key.
-     *
-     * @return string|null Google maps api key.
-     */
-    public function gmapApiKey()
-    {
-        $appConfig = App::instance()->config();
-        $key = $appConfig->get('apis.google.map.key');
-
-        return ($key) ? $key : null;
     }
 }

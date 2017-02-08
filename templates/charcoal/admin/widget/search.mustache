@@ -1,13 +1,15 @@
 
 <div class="o-container_aside" id="{{widgetId}}">
     <div class="input-group">
-        <input type="text" class="form-control input-sm" placeholder="Rechercher">
-            <span class="input-group-btn">
+        <input type="text" class="form-control input-sm" placeholder="{{# _t }}Search…{{/ _t }}">
+        <span class="input-group-btn">
             <button class="btn btn-default input-sm js-search" type="button">
-                <span class="fa fa-search"></span>
+                <span class="fa fa-search" aria-hidden="true"></span>
+                <span class="btn-label sr-only">{{# _t }}Search{{/ _t }}</span>
             </button>
             <button class="btn btn-default input-sm js-undo" type="button">
-                <span class="fa fa-undo"></span>
+                <span class="fa fa-undo" aria-hidden="true"></span>
+                <span class="btn-label sr-only">{{# _t }}Clear Results{{/ _t }}</span>
             </button>
         </span>
     </div>

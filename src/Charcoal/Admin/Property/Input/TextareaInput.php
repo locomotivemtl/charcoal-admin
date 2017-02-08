@@ -40,7 +40,7 @@ class TextareaInput extends AbstractPropertyInput
     {
         if (!is_numeric($cols)) {
             throw new InvalidArgumentException(
-                'Accept needs to be a string'
+                'Columns must to be a number'
             );
         }
         $this->cols = (int)$cols;
@@ -64,7 +64,7 @@ class TextareaInput extends AbstractPropertyInput
     {
         if (!is_numeric($rows)) {
             throw new InvalidArgumentException(
-                'Accept needs to be a string'
+                'Rows must to be a number'
             );
         }
         $this->rows = (int)$rows;
@@ -88,7 +88,7 @@ class TextareaInput extends AbstractPropertyInput
     {
         if (!is_numeric($minLength)) {
             throw new InvalidArgumentException(
-                'Min length needs to be an integer'
+                'Minimum length needs to be an integer'
             );
         }
         $this->minLength = (int)$minLength;
@@ -112,7 +112,7 @@ class TextareaInput extends AbstractPropertyInput
     {
         if (!is_numeric($maxLength)) {
             throw new InvalidArgumentException(
-                'Max length needs to be an integer'
+                'Maximum length needs to be an integer'
             );
         }
         $this->maxLength = (int)$maxLength;

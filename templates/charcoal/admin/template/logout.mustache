@@ -5,10 +5,10 @@ Logout template
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-background -fixed u-background-lightblue" {{#backgroundImage}}style="background-image:url({{backgroundImage}});"{{/backgroundImage}}>
+<div class="o-background -fixed u-background-lightblue"{{#backgroundImage}} style="background-image: url({{.}});"{{/backgroundImage}}>
     {{#backgroundVideo}}
     <video class="embedded-video horizontal" muted="" preload="auto" autoplay loop>
-      <source src="{{backgroundVideo}}" type="video/mp4">
+      <source src="{{.}}" type="video/mp4">
     </video>
     {{/backgroundVideo}}
 </div>
@@ -21,12 +21,10 @@ Logout template
             </div>
         </div>
         <div class="text-center">
+            <h2>{{#_t}}Logged Out{{/_t}}</h2>
+            <p>{{#_t}}You have safely logged out from Charcoal.{{/_t}}</p>
 
-            <h2>{{#_t}}Déconnexion{{/_t}}</h2>
-            <p>{{#_t}}Vous avez quitté Charcoal de façon sécuritaire.{{/_t}}</p>
-
-            <a href="login" class="btn btn-default">{{#_t}}Se reconnecter{{/_t}}</a>
-
+            <a href="login" class="btn btn-default">{{#_t}}Log In Again{{/_t}}</a>
         </div>
     </div>
 </div>

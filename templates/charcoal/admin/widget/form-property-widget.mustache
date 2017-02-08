@@ -8,7 +8,7 @@
     <label class="control-label" for="{{ prop.inputId }}">{{& prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
 
     {{# showActiveLanguage }}
-    <span class="active-lang pull-right">
+    <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
         {{# languages }}
         <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="hidden"{{/ current }}>{{ ident }}</span>
         {{/ languages }}

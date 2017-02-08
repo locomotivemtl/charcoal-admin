@@ -5,18 +5,18 @@ namespace Charcoal\Admin\Ui;
 use Exception;
 use InvalidArgumentException;
 
-// From `charcoal-factory'
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;
 use Charcoal\Model\Collection;
 use Charcoal\Model\ModelInterface;
 
-// From `charcoal-property`
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
-// From `charcoal-view`
+// From 'charcoal-view'
 use Charcoal\View\ViewInterface;
 
 /**
@@ -145,9 +145,10 @@ trait CollectionContainerTrait
     protected function modelFactory()
     {
         if ($this->modelFactory === null) {
-            throw new Exception(
-                sprintf('Model Factory is not defined for "%s"', get_class($this))
-            );
+            throw new Exception(sprintf(
+                'Model Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->modelFactory;
@@ -171,9 +172,10 @@ trait CollectionContainerTrait
     private function propertyDisplayFactory()
     {
         if ($this->propertyDisplayFactory === null) {
-            throw new Exception(
-                'No property display factory. '.get_class($this)
-            );
+            throw new Exception(sprintf(
+                'Property display factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->propertyDisplayFactory;
@@ -711,9 +713,10 @@ trait CollectionContainerTrait
         if ($this->proto === null || $reload) {
             $objType = $this->objType();
             if ($objType === null) {
-                throw new InvalidArgumentException(
-                    sprintf('%s Can not create an object prototype: object type is null.', get_class($this))
-                );
+                throw new InvalidArgumentException(sprintf(
+                    '%s Can not create an object prototype: object type is null.',
+                    get_class($this)
+                ));
             }
             $this->proto = $this->modelFactory()->create($objType);
         }

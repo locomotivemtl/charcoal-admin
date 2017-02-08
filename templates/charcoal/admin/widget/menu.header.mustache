@@ -11,12 +11,13 @@ Header menu Widget
         <span class="c-header-main_button_line"></span>
         <span class="c-header-main_button_line"></span>
     </div>
-    <a class="c-header-main_link" href="{{adminUrl}}home">
+    <a class="c-header-main_link" href="{{adminUrl}}">
         <svg class="c-header-main_logo_img" role="img" title="Charcoal"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
     </a>
     {{#baseUrl}}
     <a class="btn btn-link" href="{{baseUrl}}">
-        <span class="glyphicon glyphicon-home" aria-hidden="true"></span> {{#_t}}Aller sur le site{{/_t}}
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+        <span class="btn-label">{{# _t }}Visit Site{{/ _t }}</span>
     </a>
     {{/baseUrl}}
     {{!--
@@ -28,7 +29,7 @@ Header menu Widget
     --}}
     {{#showTopHeaderMenu}}
     <button class="c-header-main_user js-toggle-class" type="button" data-target="body" data-class="has-nav-user">
-        <span class="c-header-main_user_name">Bienvenue sur memo</span>
+        <span class="c-header-main_user_name">{{# _t }}Welcome{{/ _t }}</span>
         <span class="c-header-main_user_icon">
             <span class="c-header-main_user_icon_dot"></span>
             <span class="c-header-main_user_icon_dot"></span>
@@ -38,9 +39,9 @@ Header menu Widget
     {{/showTopHeaderMenu}}
 
     {{^showTopHeaderMenu}}
-        {{#isAuthenticated}}
-    <button type="button" class="c-header-main_user btn btn-danger" id="btn-logout">{{#_t}}Déconnexion{{/_t}}</button>
-        {{/isAuthenticated}}
+    {{#isAuthenticated}}
+    <button type="button" class="c-header-main_user btn btn-danger" id="btn-logout">{{#_t}}Log Out{{/_t}}</button>
+    {{/isAuthenticated}}
     {{/showTopHeaderMenu}}
 </header>
 
@@ -57,53 +58,45 @@ Header menu Widget
 
 <div class="c-nav-user-overlay js-toggle-class" data-target="body" data-class="has-nav-user"></div>
 <nav class="c-nav-user">
+    {{# isAuthenticated }}
+    {{# getAuthenticatedUser }}
     <header class="o-header">
         <div class="c-nav-user_avatar">
-            <img src="{{baseUrl}}{{headerMenuLogo}}">
+            <img src="{{baseUrl}}assets/admin/images/avatar.jpg">
         </div>
         <div class="c-nav-user_info">
-            <span class="c-nav-user_name">
-                Memo
-            </span>
-            <a class="c-nav-user_link" href="#">
-                Mon compte
-            </a>
+            <span class="c-nav-user_name">{{ username }}</span>
+            <a class="c-nav-user_link" href="#">{{#_t}}Account Management{{/_t}}</a>
         </div>
     </header>
+    {{/ getAuthenticatedUser }}
     <ul class="c-nav_list -dark">
-        {{!--<li class="c-nav_list_item">
+        {{!--
+        <li class="c-nav_list_item">
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="#">
-                    <span class="c-nav_list_link_text">
-                        Gérer les comptes
-                    </span>
+                    <span class="c-nav_list_link_text">[[# _t ]]Manage Users[[/ _t ]]</span>
                 </a>
             </div>
         </li>
         <li class="c-nav_list_item">
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="#">
-                    <span class="c-nav_list_link_text">
-                        Langues
-                    </span>
+                    <span class="c-nav_list_link_text">[[# _t ]]Languages[[/ _t ]]</span>
                 </a>
             </div>
         </li>
         <li class="c-nav_list_item">
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="#">
-                    <span class="c-nav_list_link_text">
-                        Tester les courriels
-                    </span>
+                    <span class="c-nav_list_link_text">[[# _t ]]Test Emails[[/ _t ]]</span>
                 </a>
             </div>
         </li>--}}
         <li class="c-nav_list_item">
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="{{baseUrl}}admin/messaging/send-sms">
-                    <span class="c-nav_list_link_text">
-                        {{#_t}}Tester les SMS{{/_t}}
-                    </span>
+                    <span class="c-nav_list_link_text">{{#_t}}Test SMS{{/_t}}</span>
                 </a>
             </div>
         </li>
@@ -111,7 +104,7 @@ Header menu Widget
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="{{baseUrl}}admin/messaging/send-voice">
                     <span class="c-nav_list_link_text">
-                        {{#_t}}Tester les messages vocaux{{/_t}}
+                        {{#_t}}Test Voice Messages{{/_t}}
                     </span>
                 </a>
             </div>
@@ -120,14 +113,15 @@ Header menu Widget
             <div class="c-nav_list_header">
                 <a class="c-nav_list_link" href="help">
                     <span class="c-nav_list_link_text">
-                        {{#_t}}Aide{{/_t}}
+                        {{#_t}}Help{{/_t}}
                     </span>
                 </a>
             </div>
         </li>
         <li class="c-nav_list_item">
     </ul>
-    <button type="button" class="btn btn-danger" id="btn-logout">{{#_t}}Déconnexion{{/_t}}</button>
+    <button type="button" class="btn btn-danger" id="btn-logout">{{#_t}}Log Out{{/_t}}</button>
+    {{/ isAuthenticated }}
 </nav>
 {{/showHeaderMenu}}
 

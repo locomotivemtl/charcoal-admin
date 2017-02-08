@@ -172,13 +172,14 @@ class Exporter
         }
 
         if (!$this->collectionConfig()) {
-            throw new Exception(
-                'No collection config set for '.$this->objType().' in Charcoal\\Admin\\Helper\\Exporter'
-            );
+            throw new Exception(sprintf(
+                'Collection Config required for "%s"',
+                get_class($this)
+            ));
         }
 
         $collection = new CollectionLoader([
-            'logger' => $this->logger,
+            'logger'  => $this->logger,
             'factory' => $this->modelFactory()
         ]);
 
@@ -189,7 +190,6 @@ class Exporter
 
         return $this->collection;
     }
-
 
     /**
      * Object type proto
@@ -237,9 +237,11 @@ class Exporter
         if (!$this->exportIdent()) {
             $exportIdent = $this->exportIdent() ? : $this->metadata()->get('admin.default_export');
             if (!$exportIdent) {
-                throw new Exception(
-                    'No export ident defined for '.$this->objType().' in Charcoal\\Admin\\Helper\\Exporter'
-                );
+                throw new Exception(sprintf(
+                    'No export ident defined for "%s" in %s',
+                    $this->objType(),
+                    get_class($this)
+                ));
             }
 
             $this->setExportIdent($exportIdent);
@@ -247,25 +249,31 @@ class Exporter
 
         $export = $metadata->get('admin.export.'.$this->exportIdent());
         if (!$export) {
-            throw new Exception(
-                'No export data defined for '.$this->objType().'
-                 at ident '.$this->exportIdent().' in Charcoal\\Admin\\Helper\\Exporter'
-            );
+            throw new Exception(sprintf(
+                'No export data defined for "%s" at "%s" in %s',
+                $this->objType(),
+                $this->exportIdent(),
+                get_class($this)
+            ));
         }
 
         if (is_string($export)) {
             $export = $metadata->get('admin.lists.'.$export);
             if (!$export) {
-                throw new Exception(
-                    'No export data defined for '.$this->objType().' in Charcoal\\Admin\\Helper\\Exporter'
-                );
+                throw new Exception(sprintf(
+                    'No export data defined for "%s" in %s',
+                    $this->objType(),
+                    get_class($this)
+                ));
             }
         }
 
         if (!isset($export['properties'])) {
-            throw new Exception(
-                'No properties defined to export '.$this->objType().' in Charcoal\\Admin\\Helper\\Exporter'
-            );
+            throw new Exception(sprintf(
+                'No properties defined to export "%s" in %s',
+                $this->objType(),
+                get_class($this)
+            ));
         }
 
         if (isset($export['exporter_options'])) {
@@ -551,7 +559,7 @@ class Exporter
      */
     private function brToNewline($text)
     {
-        $breaks = ['<br />','<br>','<br/>'];
+        $breaks = [ '<br />', '<br>', '<br/>' ];
         $text = str_ireplace($breaks, "\r\n", $text);
         return $text;
     }

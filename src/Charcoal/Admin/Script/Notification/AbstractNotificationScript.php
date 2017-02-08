@@ -162,9 +162,9 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         $email = $this->emailFactory->create('email');
 
         $defaultEmailData = [
-            'campaign'  => 'admin-notification-'.$notification->id(),
-            'subject'   => 'Charcoal Notification',
-            'from'      => 'charcoal@example.com',
+            'campaign'      => 'admin-notification-'.$notification->id(),
+            'subject'       => 'Charcoal Notification',
+            'from'          => 'charcoal@example.com',
             'template_data' => [
                 'objects'       => $objects,
                 'numObjects'    => count($objects),
@@ -183,7 +183,6 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             $email->setTo($user->email());
             $email->queue();
             $email->send();
-            var_dump($email->msgHtml());
         }
 
         foreach ($notification->extraEmails() as $extraEmail) {
@@ -200,8 +199,8 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     private function updatedObjects($objType)
     {
         $loader = new CollectionLoader([
-            'logger' => $this->logger,
-            'factory' => $this->revisionFactory()
+            'logger'   => $this->logger,
+            'factory'  => $this->revisionFactory()
         ]);
         $loader->setModel(ObjectRevision::class);
         $loader->addFilter([

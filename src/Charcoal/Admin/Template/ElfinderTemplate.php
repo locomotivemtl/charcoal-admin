@@ -2,10 +2,11 @@
 
 namespace Charcoal\Admin\Template;
 
+use ArrayIterator;
 use RuntimeException;
 use InvalidArgumentException;
-use ArrayIterator;
 
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
 // From Pimple
@@ -21,7 +22,7 @@ use Charcoal\Property\FileProperty;
 use Charcoal\Translation\TranslationConfig;
 use Charcoal\Translation\TranslationString;
 
-// Local module (charcoal-admin) dependency
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
 /**
@@ -39,34 +40,42 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Store the factory instance for the current class.
      *
-     * @var FactoryInterface $propertyFactory
+     * @var FactoryInterface
      */
     private $propertyFactory;
 
     /**
      * Store the current property instance for the current class.
      *
-     * @var PropertyInterface $formProperty
+     * @var PropertyInterface
      */
     private $formProperty;
 
     /**
-     * @var string $objType
+     * The related object type.
+     *
+     * @var string
      */
     private $objType;
 
     /**
-     * @var string $objId
+     * The related object ID.
+     *
+     * @var string
      */
     private $objId;
 
     /**
-     * @var string $propertyIdent
+     * The related property identifier.
+     *
+     * @var string
      */
     private $propertyIdent;
 
     /**
-     * @var boolean $showAssets
+     * Whether to output JS/CSS assets for initializing elFinder.
+     *
+     * @var boolean
      */
     private $showAssets = true;
 
@@ -78,7 +87,9 @@ class ElfinderTemplate extends AdminTemplate
     private $localizations;
 
     /**
-     * @var string $callbackIdent
+     * The related JS callback ID.
+     *
+     * @var string
      */
     private $callbackIdent = '';
 
@@ -160,9 +171,10 @@ class ElfinderTemplate extends AdminTemplate
     public function propertyFactory()
     {
         if (!isset($this->propertyFactory)) {
-            throw new RuntimeException(
-                sprintf('Property Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Property Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->propertyFactory;
@@ -196,21 +208,17 @@ class ElfinderTemplate extends AdminTemplate
     public function addLocalization($ident, $translations)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Translation key must be a string, received %s',
-                    (is_object($ident) ? get_class($ident) : gettype($ident))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Translation key must be a string, received %s',
+                (is_object($ident) ? get_class($ident) : gettype($ident))
+            ));
         }
 
         if (!TranslationString::isTranslatable($translations)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Invalid translations, received %s',
-                    (is_object($ident) ? get_class($ident) : gettype($ident))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Invalid translations, received %s',
+                (is_object($ident) ? get_class($ident) : gettype($ident))
+            ));
         }
 
         $this->localizations[$ident] = new TranslationString($translations);
@@ -228,12 +236,10 @@ class ElfinderTemplate extends AdminTemplate
     public function removeLocalization($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Translation key must be a string, received %s',
-                    (is_object($ident) ? get_class($ident) : gettype($ident))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Translation key must be a string, received %s',
+                (is_object($ident) ? get_class($ident) : gettype($ident))
+            ));
         }
 
         unset($this->localizations[$ident]);
@@ -248,12 +254,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     protected function defaultLocalizations()
     {
-        return [
-            'volume_default' => [
-                'en' => 'Library',
-                'fr' => 'Bibliothèque'
-            ]
-        ];
+        return $this->translate('Library');
     }
 
     /**
@@ -300,12 +301,10 @@ class ElfinderTemplate extends AdminTemplate
     public function localization($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Translation key must be a string, received %s',
-                    (is_object($ident) ? get_class($ident) : gettype($ident))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Translation key must be a string, received %s',
+                (is_object($ident) ? get_class($ident) : gettype($ident))
+            ));
         }
 
         if (isset($this->localizations[$ident])) {

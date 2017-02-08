@@ -10,34 +10,34 @@
 var myChart = echarts.init(document.getElementById('{{widgetId}}'));
 
 myChart.showLoading({
-    text: 'Loading...',
+    text: '{{# _t }}Loading…{{/ _t }}',
 });
 myChart.hideLoading();
 
 myChart.setOption({
-    color:[
+    color: [
         {{#colors}}
-            '{{.}}',
+        '{{.}}',
         {{/colors}}
     ],
-    tooltip : {
+    tooltip: {
         trigger: 'item'
     },
     toolbox: {
-        show : true
+        show: true
     },
-    calculable : false,
-
-    series : [
+    calculable: false,
+    series: [
         {
-            name:'Serie 1',
-            type:'pie',
-             radius : '50%',
-            data:[ {value:335, name:'PHP'},
-        {value:310, name:'Javascript'},
-        {value:234, name:'JSON'},
-        {value:135, name:'HTML'}
-        ]
+            name: 'Serie 1',
+            type: 'pie',
+            radius: '50%',
+            data: [
+                { value: 335, name: 'PHP' },
+                { value: 310, name: 'Javascript' },
+                { value: 234, name: 'JSON' },
+                { value: 135, name: 'HTML' }
+            ]
         }
     ]
 });

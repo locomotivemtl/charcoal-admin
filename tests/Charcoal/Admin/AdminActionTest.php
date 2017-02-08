@@ -2,34 +2,49 @@
 
 namespace Charcoal\Admin\Tests;
 
-use PHPUnit_Framework_TestCase;
-
 use ReflectionClass;
 
+// From PHPUnit
+use PHPUnit_Framework_TestCase;
+
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
-
 use Charcoal\Admin\Tests\ContainerProvider;
 
+/**
+ *
+ */
 class AdminActionTest extends PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var AdminAction
+     */
+    private $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerMetadataLoader($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
+        $container = $this->container();
 
         $this->obj = $this->getMockForAbstractClass(AdminAction::class, [[
-            'logger' => $container['logger'],
+            'logger'          => $container['logger'],
             'metadata_loader' => $container['metadata/loader']
         ]]);
         $this->obj->setDependencies($container);
@@ -49,14 +64,12 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
 
     public function testSetData()
     {
-        $ret = $this->obj->setData([
-
-        ]);
+        $ret = $this->obj->setData([]);
     }
 
     public function testInit()
     {
-        $request = $this->getMock(\Psr\Http\Message\RequestInterface::class);
+        $request = $this->getMock(RequestInterface::class);
         //$this->obj->init($request);
     }
 
@@ -97,9 +110,9 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $this->obj);
         $this->assertTrue($this->obj->hasFeedbacks());
         $this->assertEquals([[
-            'level'=>'error',
-            'msg'=>'Message',
-            'message'=>'Message'
+            'level'   => 'error',
+            'msg'     => 'Message',
+            'message' => 'Message'
         ]], $this->obj->feedbacks());
         $this->assertEquals(1, $this->obj->numFeedbacks());
     }
@@ -119,9 +132,27 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
 
     public function testAuthRequiredIsTrue()
     {
-
         $foo = self::getMethod($this->obj, 'authRequired');
         $res = $foo->invoke($this->obj);
         $this->assertTrue($res);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerCollectionLoader($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

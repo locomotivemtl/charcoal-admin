@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeInterface;
 use InvalidArgumentException;
 
+// From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
 /**
@@ -37,7 +38,7 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
-     * @param string $token The token.
+     * @param  string $token The token.
      * @return LostPasswordToken Chainable
      */
     public function setToken($token)
@@ -55,7 +56,7 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
-     * @param string $user The user.
+     * @param  string $user The user.
      * @return LostPasswordToken Chainable
      */
     public function setUser($user)
@@ -73,9 +74,9 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
-     * @param DateTime|string|null $expiry The date/time at object's creation.
+     * @param  DateTime|string|null $expiry The date/time at object's creation.
      * @throws InvalidArgumentException If the date/time is invalid.
-     * @return Content Chainable
+     * @return LostPasswordToken Chainable
      */
     public function setExpiry($expiry)
     {
@@ -83,15 +84,19 @@ class LostPasswordToken extends AbstractModel
             $this->expiry = null;
             return $this;
         }
+
         if (is_string($expiry)) {
             $expiry = new DateTime($expiry);
         }
+
         if (!($expiry instanceof DateTimeInterface)) {
             throw new InvalidArgumentException(
                 'Invalid "Expiry" value. Must be a date/time string or a DateTime object.'
             );
         }
+
         $this->expiry = $expiry;
+
         return $this;
     }
 
@@ -104,7 +109,8 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
-     * @return boolean Success / Failure.
+     * @see    \Charcoal\Source\StorableTrait::preSave() For the "create" Event.
+     * @return boolean
      */
     public function preSave()
     {

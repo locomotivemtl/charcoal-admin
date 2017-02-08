@@ -92,7 +92,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             $value = $value->format('Y-m-d-H:i');
         }
 
-        if ($value instanceof \Charcoal\Translation\TranslationString) {
+        if ($value instanceof TranslationString) {
             $value = $value->fallback();
         }
 
@@ -189,10 +189,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     {
         return [
             'value' => '',
-            'label' => new TranslationString([
-                'en' => '— None —',
-                'fr' => '— Aucun —'
-            ])
+            'label' => $this->translate('— None —')
         ];
     }
 

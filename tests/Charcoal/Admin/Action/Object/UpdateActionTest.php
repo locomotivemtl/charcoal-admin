@@ -1,20 +1,23 @@
 <?php
 
-namespace Charcoal\Admin\Tests\ActionObject;
+namespace Charcoal\Admin\Tests\Action\Object;
 
+// From PHPUnit
 use \PHPUnit_Framework_TestCase;
 
+// From Pimple
 use \Pimple\Container;
 
+// From Slim
 use \Slim\Http\Environment;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
+// From 'charcoal-admin'
 use \Charcoal\Admin\Action\Object\UpdateAction;
+use \Charcoal\Admin\User;
 
 use \Charcoal\Admin\Tests\ContainerProvider;
-
-use \Charcoal\Admin\User;
 
 /**
  *
@@ -22,22 +25,27 @@ use \Charcoal\Admin\User;
 class UpdateActionTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Instance of object under test
-     * @var LoginAction
+     * Tested Class.
+     *
+     * @var UpdateAction
      */
     private $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
-
+        $container = $this->container();
         $this->obj = new UpdateAction([
-            'logger' => $container['logger'],
+            'logger'    => $container['logger'],
             'container' => $container
         ]);
     }
@@ -47,18 +55,33 @@ class UpdateActionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->authRequired());
     }
 
-    /**
-     *
-     */
-    public function testRunWithoutObjTypeIs404()
+    public function testRunWithoutObjTypeIs400()
     {
-        $request = Request::createFromEnvironment(Environment::mock());
+        $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerAdminServices($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

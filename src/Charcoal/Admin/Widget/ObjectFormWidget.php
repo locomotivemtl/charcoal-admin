@@ -19,7 +19,7 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
- *
+ * Object Admin Form
  */
 class ObjectFormWidget extends FormWidget implements
     ObjectContainerInterface
@@ -65,18 +65,10 @@ class ObjectFormWidget extends FormWidget implements
     {
         if ($this->submitLabel === null) {
             if ($this->objId()) {
-                $label = [
-                    'en' => 'Update',
-                    'fr' => 'Mettre à jour'
-                ];
+                $this->submitLabel = $this->translate('Update');
             } else {
-                $label = [
-                    'en' => 'Save',
-                    'fr' => 'Sauvegarder'
-                ];
+                $this->submitLabel = $this->translate('Save');
             }
-
-            $this->submitLabel = new TranslationString($label);
         }
 
         return $this->submitLabel;
@@ -323,13 +315,11 @@ class ObjectFormWidget extends FormWidget implements
             }
 
             if (!is_array($propertyMetadata)) {
-                throw new UnexpectedValueException(
-                    sprintf(
-                        'Invalid property data for "%1$s", received %2$s',
-                        $propertyIdent,
-                        (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
-                    )
-                );
+                throw new UnexpectedValueException(sprintf(
+                    'Invalid property data for "%1$s", received %2$s',
+                    $propertyIdent,
+                    (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
+                ));
             }
 
             $formProperty = $this->createFormProperty();
@@ -361,13 +351,11 @@ class ObjectFormWidget extends FormWidget implements
         $propertyMetadata = $this->obj()->metadata()->property($propertyIdent);
 
         if (!is_array($propertyMetadata)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Invalid property data for "%1$s", received %2$s',
-                    $propertyIdent,
-                    (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'Invalid property data for "%1$s", received %2$s',
+                $propertyIdent,
+                (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
+            ));
         }
 
         $p = $this->createFormProperty();

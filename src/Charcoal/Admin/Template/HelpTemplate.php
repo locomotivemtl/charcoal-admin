@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Template;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
 /**
@@ -17,5 +18,19 @@ class HelpTemplate extends AdminTemplate
     protected function authRequired()
     {
         return false;
+    }
+
+    /**
+     * Retrieve the title of the page.
+     *
+     * @return string|null
+     */
+    public function title()
+    {
+        if ($this->title === null) {
+            $this->setTitle($this->translate('Support'));
+        }
+
+        return $this->title;
     }
 }

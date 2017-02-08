@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\User;
 
-// From `charcoal-base`
+// From 'charcoal-user'
 use Charcoal\User\AuthTokenMetadata as BaseAuthTokenMetadata;
 
 /**
@@ -18,7 +18,7 @@ class AuthTokenMetadata extends BaseAuthTokenMetadata
         $parentDefaults = parent::defaults();
 
         $defaults = array_replace_recursive($parentDefaults, [
-            'cookie_name'     => 'charcoal_admin_login',
+            'cookie_name' => 'charcoal_admin_login'
         ]);
         return $defaults;
     }

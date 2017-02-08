@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Ui;
 
+/**
+ *
+ */
 interface DashboardContainerInterface
 {
     /**

@@ -2,11 +2,18 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Translation\TranslationString;
-use \Charcoal\Model\ModelFactory;
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
-use \Charcoal\Ui\FormGroup\FormGroupTrait;
+// From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
+
+// From 'charcoal-admin'
+use Charcoal\Translation\TranslationString;
+
+// From 'charcoal-ui'
+use Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\FormGroup\FormGroupTrait;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminWidget;
 
 /**
  * Map Widget displays a google map widget, with UI to add polygons, lines and points.
@@ -16,6 +23,11 @@ use \Charcoal\Ui\FormGroup\FormGroupTrait;
 class MapWidget extends AdminWidget implements FormGroupInterface
 {
     use FormGroupTrait;
+
+    /**
+     * @var ModelInterface $obj
+     */
+    protected $obj;
 
     /**
      * @var object styles (concerning the marker style)
@@ -99,22 +111,26 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     /**
      * Get the widget's associated object.
      *
-     * @return \Charcoal\Model\ModelInterface
+     * @throws InvalidArgumentException If the object type or ID are invalid or missing.
+     * @return ModelInterface
      */
     public function obj()
     {
-        $obj = null;
-        $id = ( isset($GET['obj_id']) ? $GET['obj_id'] : 0 );
-        $obj_type = ( isset($GET['obj_type']) ? $GET['obj_type'] : 0 );
-        if ($id && $obj_type) {
-            $obj = $this->modelFactory()->create($obj_type, [
-                'logger'=>$this->logger
-            ]);
-            $obj->load($id);
-        }
-        return $obj;
-    }
+        if ($this->obj === null) {
+            $objId   = filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
+            $objType = filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+            if ($objId && $objType) {
+                $obj = $this->modelFactory()->create($objType);
+                $obj->load($objId);
 
+                $this->obj = $obj;
+            } else {
+                throw new InvalidArgumentException('Missing Object Type or ID');
+            }
+        }
+
+        return $this->obj;
+    }
 
     /**
      * Title and subtitle getter/setters
@@ -125,7 +141,9 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     public function setSubtitle($subtitle)
     {
         if (TranslationString::isTranslatable($subtitle)) {
-            $this->title = new TranslationString($subtitle);
+            $this->subtitle = new TranslationString($subtitle);
+        } else {
+            $this->subtitle = null;
         }
 
         return $this;
@@ -147,6 +165,8 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     {
         if (TranslationString::isTranslatable($title)) {
             $this->title = new TranslationString($title);
+        } else {
+            $this->title = null;
         }
 
         return $this;
@@ -158,7 +178,7 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle('Actions');
+            $this->setTitle($this->translate('Map'));
         }
 
         return $this->title;

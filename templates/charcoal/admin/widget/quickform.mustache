@@ -23,10 +23,15 @@
         <input type="hidden" name="obj_id" value="{{ objId }}">
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-link-danger" data-dismiss="dialog">{{# _t }}Annuler{{/ _t }}</button>
-        <button type="submit" class="btn btn-info">{{ submitLabel }}</button>
+        <button type="button" class="btn btn-link-danger" data-dismiss="dialog">
+            <span class="btn-label">{{# _t }}Cancel{{/ _t }}</span>
+        </button>
+        <button type="submit" class="btn btn-info">
+            <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
+            <span class="btn-lable">{{ submitLabel }}</span>
+        </button>
     </div>
 </form>
 
-    {{& jsRequirements }}
-    {{& js }}
+{{& jsRequirements }}
+{{& js }}

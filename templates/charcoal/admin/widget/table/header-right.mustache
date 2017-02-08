@@ -5,12 +5,12 @@
     @used-by `charcoal/admin/widget/table/header`
 --}}
 {{!--
-<strong>Filtres</strong>
+<strong>[[# _t ]]Filters[[/ _t ]]</strong>
 <div class="btn-group">
-    <button type="button" class="btn btn-info">Les plus récentes alertes</button>
+    <button type="button" class="btn btn-info">[[# _t ]]Latest Objects[[/ _t ]]</button>
     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
+        <span class="sr-only">[[# _t ]]Toggle Dropdown[[/ _t ]]</span>
     </button>
     <ul class="dropdown-menu">
         <li><a href="#">Action</a></li>
@@ -21,9 +21,9 @@
     </ul>
 </div>
 --}}
-{{#numPerPage}}
-    {{#_t}}Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total){{/_t}}
-{{/numPerPage}}
-{{^numPerPage}}
-    {{#_t}}{{ numTotal }} in total{{/_t}}
-{{/numPerPage}}
+{{# numPerPage }}
+    {{# _t }}Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total){{/ _t }}
+{{/ numPerPage }}
+{{^ numPerPage }}
+    {{# _t }}{{ numTotal }} in total{{/ _t }}
+{{/ numPerPage }}

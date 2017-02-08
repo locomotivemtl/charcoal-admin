@@ -7,7 +7,7 @@ use RuntimeException;
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-base'
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
@@ -58,9 +58,10 @@ trait AuthAwareTrait
     public function authenticator()
     {
         if (!$this->authenticator) {
-            throw new RuntimeException(
-                sprintf('Authenticator service is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Authenticator service is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->authenticator;
@@ -88,9 +89,10 @@ trait AuthAwareTrait
     public function authorizer()
     {
         if (!$this->authenticator) {
-            throw new RuntimeException(
-                sprintf('Authorizer service is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Authorizer service is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->authorizer;

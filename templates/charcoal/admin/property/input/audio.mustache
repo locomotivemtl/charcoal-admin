@@ -11,13 +11,22 @@ Audio Property Input
     <div class="o-toolbox_actions">
         <div class="btn-group-vertical">
             {{#textEnabled}}
-            <label for="voice_message_input_{{inputId}}" class="btn btn-default js-toggle-pane" data-pane="text"><svg class="o-toolbox_icon" role="img" title="Enter text"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-text"></use></svg></label>
+            <label for="voice_message_input_{{inputId}}" class="btn btn-default js-toggle-pane" data-pane="text">
+                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-text"></use></svg>
+                <span class="sr-only">{{#_t}}Enter text here{{/_t}}</span>
+            </label>
             {{/textEnabled}}
             {{#recordingEnabled}}
-            <button type="button" class="btn btn-default js-toggle-pane" data-pane="recording"><svg class="o-toolbox_icon" role="img" title="Enregistrer un message"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-microphone"></use></svg></button>
+            <button type="button" class="btn btn-default js-toggle-pane" data-pane="recording">
+                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-microphone"></use></svg>
+                <span class="btn-label sr-only">{{#_t}}Record A Message{{/_t}}</span>
+            </button>
             {{/recordingEnabled}}
             {{#fileEnabled}}
-            <button type="button" class="btn btn-default js-toggle-pane" data-pane="file"><svg class="o-toolbox_icon" role="img" title="Use an audio file"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-file"></use></svg></button>
+            <button type="button" class="btn btn-default js-toggle-pane" data-pane="file">
+                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-file"></use></svg>
+                <span class="btn-label sr-only">{{#_t}}Upload Audio File{{/_t}}</span>
+            </button>
             {{/fileEnabled}}
         </div>
     </div>
@@ -33,20 +42,23 @@ Audio Property Input
             <div class="c-audio-player -complex">
                 <div class="c-audio-player_wrap">
 
-                    <button class="btn c-audio-player_button -playback js-recording-playback" disabled type="button" title="Toggle playback">
+                    <button class="btn c-audio-player_button -playback js-recording-playback" disabled type="button">
                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                         <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                        <span class="btn-label sr-only">{{#_t}}Play/Pause{{/_t}}</span>
                     </button>
-                    <button class="btn c-audio-player_button -stop js-recording-stop" disabled type="button" title="Complete recording">
+                    <button class="btn c-audio-player_button -stop js-recording-stop" disabled type="button">
                         <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                        <span class="btn-label sr-only">{{#_t}}Complete Recording{{/_t}}</span>
                     </button>
-                    <button class="btn c-audio-player_button -reset js-recording-reset" disabled type="button" title="Restart recording">
+                    <button class="btn c-audio-player_button -reset js-recording-reset" disabled type="button">
                         <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        <span class="btn-label sr-only">{{#_t}}Restart Recording{{/_t}}</span>
                     </button>
-
                     <button class="btn c-audio-player_button -record js-recording-record" type="button">
                         <span class="c-audio-player_button_circle"></span>
                         <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                        <span class="btn-label sr-only">{{#_t}}Record{{/_t}}</span>
                     </button>
 
                     <span class="c-audio-player_time js-recording-timer">00:00</span>
@@ -59,8 +71,8 @@ Audio Property Input
         {{#fileEnabled}}
         <div class="o-toolbox_pane js-pane hidden" data-pane="file">
             <audio class="js-file-audio{{^alert.voiceAudio}} hide{{/alert.voiceAudio}}" src="{{alert.voiceAudio}}" controls></audio> <br>
-            <button class="btn btn-danger js-file-reset{{^alert.voiceAudio}} hide{{/alert.voiceAudio}}" type="button">Effacer</button>
-            <input class="form-control js-file-input{{#alert.voiceAudio}} hide{{/alert.voiceAudio}}" type="file" name="voice_audio">
+            <button type="button" class="btn btn-danger js-file-reset{{^alert.voiceAudio}} hide{{/alert.voiceAudio}}">{{#_t}}Delete{{/_t}}</button>
+            <input type="file" name="voice_audio" class="form-control js-file-input{{#alert.voiceAudio}} hide{{/alert.voiceAudio}}">
         </div>
         {{/fileEnabled}}
     </div>
@@ -93,6 +105,6 @@ Charcoal.Admin.manager().add_property_input({
 {{/displayAudioWidget}}
 {{^displayAudioWidget}}
 <div class="o-toolbox -small -left" id="{{inputId}}">
-    <p>{{#_t}}Il faut activer au moins une des méthodes suivantes : texte, enregistrement ou fichier{{/_t}}</p>
+    <p>{{#_t}}You must activate at least one of the following methods: text, record, or file{{/_t}}</p>
 </div>
 {{/displayAudioWidget}}

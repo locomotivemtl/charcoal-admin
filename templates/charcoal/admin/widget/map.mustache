@@ -4,9 +4,7 @@
 
 <div id="{{widgetId}}">
     <div class="o-container">
-        <div class="js-map-maker-map" style="height: 400px; width: 100%;">
-
-        </div>
+        <div class="js-map-maker-map" style="height: 400px; width: 100%;"></div>
     </div>
 </div>
 
@@ -18,7 +16,7 @@ Charcoal.Admin.manager().add_widget({
     data: {
         obj_type: '{{objType}}'
     },
-    coords : [{{obj.lat}}, {{obj.lng}}]
+    coords : [ {{obj.lat}}, {{obj.lng}} ]
 });
 </script>
 {{/addJs}}

@@ -2,29 +2,42 @@
 
 namespace Charcoal\Admin\Tests;
 
+// From PHPUnit
 use PHPUnit_Framework_TestCase;
 
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
 use Charcoal\Admin\Tests\ContainerProvider;
 
 class AdminTemplateTest extends PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var AdminTemplate
+     */
+    private $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerMetadataLoader($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
+        $container = $this->container();
 
         $this->obj = $this->getMock(AdminTemplate::class, null, [[
             'logger' => $container['logger'],
@@ -67,5 +80,24 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
         $foo = self::getMethod($this->obj, 'authRequired');
         $res = $foo->invoke($this->obj);
         $this->assertTrue($res);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerCollectionLoader($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

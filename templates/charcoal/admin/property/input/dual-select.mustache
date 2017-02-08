@@ -4,15 +4,13 @@
 
     `charcoal/admin/property/input/dual-select`
 --}}
-
 <div class="row c-dualselect bootstrap-multiselect">
     <div class="c-dualselect_list -left col-xs-5">
-        <label class="sr-only" for="{{ inputId }}">{{# _t }}Unselected options{{/ _t }}</label>
+        <label class="sr-only" for="{{ inputId }}">{{# _t }}Unselected Options{{/ _t }}</label>
 
         {{# searchable }}
-            <label class="sr-only" for="{{ inputId }}_searchLeft">{{# _t }}Search the left side{{/ _t }}</label>
-            <input id="{{ inputId }}_searchLeft" type="text" name="q" class="form-control"
-                   placeholder="{{ left.placeholder }}"/>
+            <label class="sr-only" for="{{ inputId }}_searchLeft">{{# _t }}Search Unselected Options{{/ _t }}</label>
+            <input id="{{ inputId }}_searchLeft" type="text" name="q" class="form-control" placeholder="{{ left.placeholder }}"/>
         {{/ searchable }}
 
         <select name="[]" id="{{ inputId }}" class="form-control {{ inputClass }}" size="8" multiple="multiple">
@@ -27,12 +25,11 @@
     </div>
 
     <div class="c-dualselect_list -right col-xs-5">
-        <label class="sr-only" for="{{ inputId }}_to">{{# _t }}Selected options{{/ _t }}</label>
+        <label class="sr-only" for="{{ inputId }}_to">{{# _t }}Selected Options{{/ _t }}</label>
 
         {{# searchable }}
-            <label class="sr-only" for="{{ inputId }}_searchRight">{{# _t }}Search the right side{{/ _t }}</label>
-            <input id="{{ inputId }}_searchRight" type="text" name="q" class="form-control"
-                   placeholder="{{ right.placeholder }}"/>
+            <label class="sr-only" for="{{ inputId }}_searchRight">{{# _t }}Search Selected Options{{/ _t }}</label>
+            <input id="{{ inputId }}_searchRight" type="text" name="q" class="form-control" placeholder="{{ right.placeholder }}"/>
         {{/ searchable }}
 
         {{> charcoal/admin/property/control/fallback }}

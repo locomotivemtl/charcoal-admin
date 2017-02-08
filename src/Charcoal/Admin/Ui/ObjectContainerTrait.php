@@ -13,8 +13,8 @@ use Charcoal\Model\ModelInterface;
 use Charcoal\Factory\FactoryInterface;
 
 /**
-* Fully implements ObjectContainerInterface
-*/
+ * An implementation, as Trait, of the {@see \Charcoal\Admin\Ui\ObjectContainerInterface}.
+ */
 trait ObjectContainerTrait
 {
     /**
@@ -38,7 +38,7 @@ trait ObjectContainerTrait
     protected $objBaseClass;
 
     /**
-     * @var Object $obj
+     * @var ModelInterface $obj
      */
     protected $obj;
 
@@ -59,9 +59,10 @@ trait ObjectContainerTrait
     protected function modelFactory()
     {
         if ($this->modelFactory === null) {
-            throw new Exception(
-                sprintf('Model factory not set for %s', get_class($this))
-            );
+            throw new Exception(sprintf(
+                'Model factory not set for %s',
+                get_class($this)
+            ));
         }
         return $this->modelFactory;
     }
@@ -207,12 +208,10 @@ trait ObjectContainerTrait
     protected function cloneObj()
     {
         if (empty($_GET['clone_id'])) {
-            throw new Exception(
-                sprintf(
-                    '%1$s cannot clone object. Clone ID missing from request.',
-                    get_class($this)
-                )
-            );
+            throw new Exception(sprintf(
+                '%1$s cannot clone object. Clone ID missing from request.',
+                get_class($this)
+            ));
         }
 
         $obj   = $this->createObj();
@@ -237,12 +236,10 @@ trait ObjectContainerTrait
     protected function createObjFromBluePrint()
     {
         if (empty($_GET['blueprint_id'])) {
-            throw new Exception(
-                sprintf(
-                    '%1$s cannot create object from blueprint. Blueprint ID missing from request.',
-                    get_class($this)
-                )
-            );
+            throw new Exception(sprintf(
+                '%1$s cannot create object from blueprint. Blueprint ID missing from request.',
+                get_class($this)
+            ));
         }
 
         $obj = $this->createObj();
@@ -269,13 +266,11 @@ trait ObjectContainerTrait
     protected function createObj()
     {
         if (!$this->validateObjType()) {
-            throw new Exception(
-                sprintf(
-                    '%1$s cannot create object. Invalid object type: "%2$s"',
-                    get_class($this),
-                    $this->objType()
-                )
-            );
+            throw new Exception(sprintf(
+                '%1$s cannot create object. Invalid object type: "%2$s"',
+                get_class($this),
+                $this->objType()
+            ));
         }
 
         $objType = $this->objType();

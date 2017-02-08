@@ -4,20 +4,22 @@
 <aside class="c-aside o-flex_aside" id="{{widgetId}}">
     <div class="o-container -top -right">
         <div class="c-panel -fixed">
-            <header class="c-panel_header">{{title}}</header>
+            {{# showTitle }}
+            <header class="c-panel_header">{{& title }}</header>
+            {{/ showTitle }}
 
             <div class="c-panel_main">
-                {{#subtitle}}
-                    <p>{{.}}</p>
-                {{/subtitle}}
+                {{# showSubtitle }}
+                <p>{{& subtitle }}</p>
+                {{/ showSubtitle }}
 
                 {{#showLanguageSwitch}}
-                    <div class="btn-group btn-group-justified form-group js-lang-switch" role="group"
-                         aria-label="{{#_t}}Language switcher{{/_t}}">
+                    <div class="btn-group btn-group-justified form-group js-lang-switch" role="group" aria-label="{{#_t}}Languages{{/_t}}">
                     {{#languages}}
                         <div class="btn-group" role="group">
-                            <button type="button" data-lang-switch="{{ident}}"
-                                    class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">{{name}}</button>
+                            <button type="button" data-lang-switch="{{ident}}" class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}}">
+                                <span class="btn-label">{{name}}</span>
+                            </button>
                         </div>
                     {{/languages}}
                     </div>
@@ -56,17 +58,17 @@
                 --}}
                 {{#isObjDeletable}}
                     <div class="c-panel_footer_item -red">
-                        <span role="button" class="js-obj-delete">
-                           <span class="fa fa-trash-o"></span>
-                           <span class="btn-label">{{# _t }}Effacer{{/ _t }}</span>
+                        <span role="button" class="js-obj-delete" aria-label="{{# _t }}Delete Object{{/ _t }}">
+                           <span class="fa fa-trash-o" aria-hidden="true"></span>
+                           <span class="btn-label" aria-hidden="true">{{# _t }}Delete{{/ _t }}</span>
                         </span>
                     </div>
                 {{/isObjDeletable}}
                 {{#isObjResettable}}
                     <div class="c-panel_footer_item -blue">
-                        <span role="button" class="js-reset-form">
-                            <span class="fa fa-refresh"></span>
-                            <span class="btn-label">{{# _t }}Réinitialiser{{/ _t }}</span>
+                        <span role="button" class="js-reset-form" aria-label="{{# _t }}Reset Form{{/ _t }}">
+                            <span class="fa fa-refresh" aria-hidden="true"></span>
+                            <span class="btn-label" aria-hidden="true">{{# _t }}Reset{{/ _t }}</span>
                         </span>
                     </div>
                 {{/isObjResettable}}

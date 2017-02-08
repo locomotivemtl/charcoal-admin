@@ -2,50 +2,129 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-// PSR-7 (http messaging) dependencies
+use InvalidArgumentException;
+
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From `charcoal-admin`
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
+ * Action: Restore Object Revision
  *
+ * ## Required Parameters
+ *
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
+ * - `obj_id` (_mixed_) — The object ID to revert
+ * - `rev_num` (_integer_) — The object's revision to restore the object to
+ *
+ * ## Response
+ *
+ * - `success` (_boolean_) — TRUE if the object was properly restored, FALSE in case of any error.
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; Revision has been restored
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Revision could not be restored
  */
 class RevertRevisionAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
     /**
-     * @var integer $revNum
+     * The revision number to restore.
+     *
+     * @var integer|null
      */
     protected $revNum;
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * Set the revision number to restore.
+     *
+     * @param  integer $revNum The revision number to load.
+     * @throws InvalidArgumentException If the given revision is invalid.
+     * @return ObjectContainerInterface Chainable
+     */
+    protected function setRevNum($revNum)
+    {
+        if (!is_int($revNum)) {
+            throw new InvalidArgumentException(sprintf(
+                'Revision must be an integer, received %s.',
+                (is_object($revNum) ? get_class($revNum) : gettype($revNum))
+            ));
+        }
+
+        $this->revNum = $revNum;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the revision number to restore.
+     *
+     * @return integer|null
+     */
+    public function revNum()
+    {
+        return $this->revNum;
+    }
+
+    /**
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $params = $request->getParams();
-        $this->setData($params);
+        try {
+            $failMessage = $this->translate('Failed to restore revision');
+            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+                '{{ errorMessage }}' => $failMessage
+            ]);
 
-        $obj = $this->obj();
-        $revNum = $params['rev_num'];
+            $this->setData($request->getParams());
 
-        $ret = $obj->revertToRevision($revNum);
+            $obj    = $this->obj();
+            $revNum = $this->revNum();
+            $rev    = $obj->revisionNum($revNum);
+            $revTs  = $rev->revTs();
+            $result = $obj->revertToRevision($revNum);
 
-        if ($ret) {
-            $this->setSuccess(true);
-            $this->addFeedback('success', 'Object was succesfully reverted to revision.');
-            return $response;
-        } else {
+            if ($result) {
+                $doneMessage = $this->translate(
+                    'Object has been successfully restored to revision from {{ revisionDate }}'
+                );
+
+                $this->addFeedback('success', strtr($doneMessage, [
+                    '{{ revisionDate }}' => $revTs->format('Y-m-d @ H:i:s')
+                ]));
+                $this->addFeedback('success', strtr($this->translate('Restored Revision: {{ revisionNum }}'), [
+                    '{{ revisionNum }}' => $revNum
+                ]));
+                $this->addFeedback('success', strtr($this->translate('Reverted Object: {{ objId }}'), [
+                    '{{ objId }}' => $obj->id()
+                ]));
+                $this->setSuccess(true);
+
+                return $response;
+            } else {
+                $this->addFeedback('error', $failMessage);
+                $this->setSuccess(false);
+
+                return $response->withStatus(500);
+            }
+        } catch (Exception $e) {
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
-            $this->addFeedback('error', 'Could not revert to revision');
-            return $response->withStatus(404);
+
+            return $response->withStatus(500);
         }
     }
 }

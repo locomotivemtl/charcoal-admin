@@ -10,36 +10,36 @@
 var myChart = echarts.init(document.getElementById('{{widgetId}}'));
 
 myChart.showLoading({
-    text: 'Loading...',
+    text: '{{# _t }}Loading…{{/ _t }}',
 });
 myChart.hideLoading();
 
 myChart.setOption({
-    color:[
+    color: [
         {{#colors}}
-            '{{.}}',
+        '{{.}}',
         {{/colors}}
     ],
-    tooltip : {
+    tooltip: {
         trigger: 'axis'
     },
     toolbox: {
-        show : true
+        show: true
     },
-    calculable : false,
-    xAxis : [
+    calculable: false,
+    xAxis: [
         {
-            type : 'category',
-            data : {{&categoriesJson}}
+            type: 'category',
+            data: {{&categoriesJson}}
         }
     ],
-    yAxis : [
+    yAxis: [
         {
-            type : 'value',
-            splitArea : {show : true}
+            type: 'value',
+            splitArea: { show: true }
         }
     ],
-    series : {{&seriesJson}}
+    series: {{&seriesJson}}
 });
 $(window).on('resize', function() {
     myChart.resize();

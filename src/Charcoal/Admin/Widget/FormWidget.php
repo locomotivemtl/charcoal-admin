@@ -9,7 +9,7 @@ use \RuntimeException;
 // From Pimple
 use \Pimple\Container;
 
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use \Psr\Http\Message\RequestInterface;
 
 // From 'charcoal-translation'
@@ -25,7 +25,7 @@ use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
 use \Charcoal\Admin\User\AuthAwareInterface;
@@ -118,9 +118,10 @@ class FormWidget extends AdminWidget implements
     public function httpRequest()
     {
         if (!isset($this->httpRequest)) {
-            throw new RuntimeException(
-                sprintf('A PSR-7 Request instance is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'A PSR-7 Request instance is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->httpRequest;
@@ -148,9 +149,10 @@ class FormWidget extends AdminWidget implements
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            throw new RuntimeException(
-                sprintf('Widget Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Widget Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->widgetFactory;
@@ -359,10 +361,7 @@ class FormWidget extends AdminWidget implements
     public function submitLabel()
     {
         if ($this->submitLabel === null) {
-            $this->submitLabel = new TranslationString([
-                'en' => 'Save',
-                'fr' => 'Sauvegarder'
-            ]);
+            $this->submitLabel = $this->translate('Save');
         }
 
         return $this->submitLabel;

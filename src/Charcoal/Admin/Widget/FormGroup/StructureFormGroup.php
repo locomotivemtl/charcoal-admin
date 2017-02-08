@@ -226,9 +226,10 @@ class StructureFormGroup extends FormGroupWidget
     public function storageProperty()
     {
         if ($this->storageProperty === null) {
-            throw new RuntimeException(
-                sprintf('Storage property owner is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Storage property owner is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->storageProperty;
@@ -354,13 +355,11 @@ class StructureFormGroup extends FormGroupWidget
             }
 
             if (!is_array($propertyMetadata)) {
-                throw new UnexpectedValueException(
-                    sprintf(
-                        'Invalid property data for "%1$s", received %2$s',
-                        $propertyIdent,
-                        (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
-                    )
-                );
+                throw new UnexpectedValueException(sprintf(
+                    'Invalid property data for "%1$s", received %2$s',
+                    $propertyIdent,
+                    (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
+                ));
             }
 
             if (isset($propertyMetadata['active']) && $propertyMetadata['active'] === false) {

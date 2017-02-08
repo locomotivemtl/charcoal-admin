@@ -114,7 +114,6 @@ trait DashboardContainerTrait
         return $dashboard;
     }
 
-
     /**
      * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return void

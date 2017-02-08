@@ -2,13 +2,17 @@
 
 namespace Charcoal\Admin\Action\Account;
 
-// PSR-7 (http messaging) dependencies
+use Exception;
+use RuntimeException;
+
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From Pimple
 use Pimple\Container;
 
-// Modele `charcoal-factory
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
 // Intra-module (`charcoal-admin`) dependencies
@@ -17,16 +21,30 @@ use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
 
 /**
- * Lost password action
+ * Lost Password Action
  *
- * ## Required parameters
+ * This action is used to generate a time-sensitive _password reset token_
+ * for which a link will be sent via email to the address assigned to the
+ * submitted username. Consult {@see \Charcoal\Admin\Action\Account\ResetPasswordAction}
+ * for processing a reset token.
+ *
+ * ## Required Parameters
  *
  * - `username`
  * - `g-recaptcha-response`
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Either a reset token is generated and emailed to user
+ *   or the action failed silently (nonexistent user account)
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error
  */
 class LostPasswordAction extends AdminAction
 {
     /**
+     * Store the factory instance for the current class.
+     *
      * @var FactoryInterface
      */
     private $emailFactory;
@@ -39,6 +57,36 @@ class LostPasswordAction extends AdminAction
     {
         parent::setDependencies($container);
         $this->setEmailFactory($container['email/factory']);
+    }
+
+    /**
+     * Set an email model factory.
+     *
+     * @param FactoryInterface $factory The email factory, to create emails.
+     * @return self
+     */
+    private function setEmailFactory(FactoryInterface $factory)
+    {
+        $this->emailFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the email model factory.
+     *
+     * @throws RuntimeException If the model factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function emailFactory()
+    {
+        if (!isset($this->emailFactory)) {
+            throw new RuntimeException(
+                sprintf('Email Factory is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->emailFactory;
     }
 
     /**
@@ -62,50 +110,94 @@ class LostPasswordAction extends AdminAction
         $username = $request->getParam('username');
 
         if (!$username) {
-            $this->addFeedback('error', 'Missing username.');
+            $this->addFeedback('error', $this->translate('Missing username.'));
             $this->setSuccess(false);
-            return $response->withStatus(404);
+
+            return $response->withStatus(400);
         }
 
         $recaptchaValue = $request->getParam('g-recaptcha-response');
         if (!$recaptchaValue) {
-            $this->addFeedback('error', 'Missing captcha.');
+            $this->addFeedback('error', $this->translate('Missing CAPTCHA response.'));
             $this->setSuccess(false);
-            return $response->withStatus(404);
-        }
-        if (!$this->validateCaptcha($recaptchaValue)) {
-            $this->addFeedback('error', 'Invalid captcha.');
-            $this->setSuccess(false);
-            return $response->withStatus(404);
+
+            return $response->withStatus(400);
         }
 
+        if (!$this->validateCaptcha($recaptchaValue)) {
+            $this->addFeedback('error', $this->translate('Invalid or malformed CAPTCHA response.'));
+            $this->setSuccess(false);
+
+            return $response->withStatus(400);
+        }
+
+        $doneMessage = strtr(
+            $this->translate(
+                'Instructions to reset your password have been sent to the email address registered to {{ username }}.'
+            ),
+            [
+                '{{ username }}' => $username
+            ]
+        );
+        $failMessage = $this->translate('An error occurred while processing the password reset request.');
+
+        $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
         $user = $this->loadUser($username);
-        if (!$user) {
-            // Fail silently.
-            $this->logger->error('Lost password request: can not find user in database.');
+        if ($user === null) {
+            /**
+             * Fail silently — Never confirm or deny the existence
+             * of an account with a given email or username.
+             */
+            if ($ip) {
+                $logMessage = sprintf(
+                    '[Admin] Lost Password Request — Can not find "%s" user in database for %s.',
+                    $username,
+                    $ip
+                );
+            } else {
+                $logMessage = sprintf(
+                    '[Admin] Lost Password Request — Can not find "%s" user in database.',
+                    $username
+                );
+            }
+            $this->logger->error($logMessage);
+
+            $this->addFeedback('success', $doneMessage);
+            $this->setSuccess(true);
+
             return $response;
         }
 
-        $token = $this->generateLostPasswordToken($user);
-        $this->sendLostPasswordEmail($user, $token);
+        try {
+            $token = $this->generateLostPasswordToken($user);
+            $this->sendLostPasswordEmail($user, $token);
 
-        return $response;
-    }
+            $this->addFeedback('success', $doneMessage);
+            $this->setSuccess(true);
 
-    /**
-     * @param string $response The captcha value (response) to validate.
-     * @return boolean
-     */
-    private function validateCaptcha($response)
-    {
-        $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+            return $response;
+        } catch (Exception $e) {
+            if ($ip) {
+                $logMessage = sprintf(
+                    '[Admin] Lost Password Request — Failed to process request for "%s" from %s: %s',
+                    $username,
+                    $ip,
+                    $e->getMessage()
+                );
+            } else {
+                $logMessage = sprintf(
+                    '[Admin] Lost Password Request — Failed to process request for "%s": %s',
+                    $username,
+                    $e->getMessage()
+                );
+            }
+            $this->logger->error($logMessage);
 
-        $secret = $this->appConfig['apis.google.recaptcha.secret'];
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-        $response = file_get_contents($validationUrl.'?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
-        $response = json_decode($response, true);
+            $this->addFeedback('error', $failMessage);
+            $this->setSuccess(false);
 
-        return !!$response['success'];
+            return $response->withStatus(500);
+        }
     }
 
     /**
@@ -130,17 +222,20 @@ class LostPasswordAction extends AdminAction
         if (!$username) {
             return false;
         }
+
         // Try to get user by username
         $user = $this->modelFactory()->create(User::class);
         $user->loadFrom('username', $username);
         if ($user->id()) {
             return $user;
         }
+
         // Try to get user by email
         $user->loadFrom('email', $username);
         if ($user->id()) {
             return $user;
         }
+
         return false;
     }
 
@@ -159,17 +254,27 @@ class LostPasswordAction extends AdminAction
     }
 
     /**
-     *
-     * @param User   $user  The user to send the lost-password email to.
-     * @param string $token The lost-password token, as string.
+     * @todo   Implement `$container['admin/config']['user.lost_password_email']`
+     * @param  User   $user  The user to send the lost-password email to.
+     * @param  string $token The lost-password token, as string.
      * @return void
      */
     private function sendLostPasswordEmail(User $user, $token)
     {
         $userEmail = $user->email();
+        $siteName  = $this->siteName();
+        if ($siteName) {
+            $subject = strtr($this->translate('{{ siteName }} — Password Reset'), [
+                '{{ siteName }}' => $siteName
+            ]);
+        } else {
+            $subject = $this->translate('Charcoal — Password Reset');
+        }
 
-        $subject = 'Charcoal lost password';
-        $from = 'charcoal@locomotive.ca';
+        $from = [
+            'name'  => 'Charcoal',
+            'email' => 'charcoal@locomotive.ca'
+        ];
 
         // Create email
         $emailObj = $this->emailFactory->create('email');
@@ -181,22 +286,15 @@ class LostPasswordAction extends AdminAction
             'log'               => true,
             'template_ident'    => 'charcoal/admin/email/user.lost-password',
             'template_data'     => [
-                'user'  => $user,
-                'token' => $token->id(),
+                'user'             => $user,
+                'token'            => $token->id(),
+                'siteName'         => $siteName,
+                'adminUrl'         => $this->adminUrl(),
                 'urlResetPassword' => $this->adminUrl().'account/reset-password/'.$token->id(),
-                'expiry'=> $token->expiry()->format('Y-m-d H:i:s'),
-                'ip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
+                'expiry'           => $token->expiry()->format('Y-m-d H:i:s'),
+                'ipAddress'        => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
             ]
         ]);
         $emailObj->send();
-    }
-
-    /**
-     * @param FactoryInterface $factory The email factory, to create email objects.
-     * @return void
-     */
-    private function setEmailFactory(FactoryInterface $factory)
-    {
-        $this->emailFactory = $factory;
     }
 }

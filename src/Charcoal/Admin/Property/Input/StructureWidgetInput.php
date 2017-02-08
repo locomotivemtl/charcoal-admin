@@ -103,9 +103,10 @@ class StructureWidgetInput extends AbstractPropertyInput implements
     protected function widgetFactory()
     {
         if (!isset($this->widgetFactory)) {
-            throw new RuntimeException(
-                sprintf('Widget Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Widget Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->widgetFactory;
@@ -133,9 +134,10 @@ class StructureWidgetInput extends AbstractPropertyInput implements
     protected function formGroupFactory()
     {
         if (!isset($this->formGroupFactory)) {
-            throw new RuntimeException(
-                sprintf('Form Group Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Form Group Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->formGroupFactory;

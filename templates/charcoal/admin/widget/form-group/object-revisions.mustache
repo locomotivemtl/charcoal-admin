@@ -16,11 +16,14 @@
 
     <table class="table table-bordered table-hover">
         <thead>
-            <th class="text-center">#<span class="sr-only">&nbsp;Révision</span></th>
-            <th>Date</th>
-            <th>Auteur</th>
-            <th>Changements</th>
-            <th>Options</th>
+            <th class="text-center">
+                <span aria-hidden="true">#</span>
+                <span class="sr-only">{{# _t }}Revision #{{/ _t }}</span>
+            </th>
+            <th>{{# _t }}Date{{/ _t }}</th>
+            <th>{{# _t }}Author{{/ _t }}</th>
+            <th>{{# _t }}Changeset{{/ _t }}</th>
+            <th>{{# _t }}Options{{/ _t }}</th>
         </thead>
         <tbody>
         {{# objectRevisions }}
@@ -28,15 +31,18 @@
                 <td class="text-center">{{ revNum }}</td>
                 <td>{{ revTsDisplay }}</td>
                 <td>{{ revUser }}</td>
-                <td>{{& changedProperties }}{{# droppedProperties }}<br><strong>Discontinué</strong>: {{& . }}{{/ droppedProperties }}</td>
+                <td>{{& changedProperties }}{{# droppedProperties }}<br><strong>{{# _t }}Deprecated{{/ _t }}</strong>: {{& . }}{{/ droppedProperties }}</td>
                 <td>{{# allowRevert }}
-                    <a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">Retourner à #{{ revNum }}</a>
+                    <a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">
+                        <span aria-hidden="true">{{# _t }}Restore{{/ _t }}</span>
+                        <span class="sr-only">{{# _t }}Restore This Revision{{/ _t }}</span>
+                    </a>
                 {{/ allowRevert }}</td>
             </tr>
             {{/ objectRevisions }}
             {{^ objectRevisions }}
             <tr class="js-table-row">
-                <td colspan="5" class="text-center">Aucun historique de changements</td>
+                <td colspan="5" class="text-center">{{# _t }}No history of changes{{/ _t }}</td>
             </tr>
         {{/ objectRevisions }}
         </tbody>
@@ -60,37 +66,36 @@ $(document).ready(function() {
         };
         console.debug(data);
         BootstrapDialog.show({
-            title: 'Retourner à une révision',
-            message: 'Êtes-vous surs de vouloir retourner à cette révision? Tous les changements effectués depuis cette révision seront annulés.',
+            title: '{{# _t }}Restore This Revision{{/ _t }}',
+            message: '{{# _t }}Are you sure you want to restore this revision?{{/ _t }} {{# _t }}Any changes made since this revision will be canceled.{{/ _t }}',
             buttons: [{
                 id: 'ok-btn',
-                label: 'Revert',
+                label: '{{# _t }}Restore{{/ _t }}',
                 action: function(dialog) {
                     $.ajax({
                         url: url,
                         type: 'POST',
-                        data:data,
+                        data: data,
                         success: function (response) {
                             if (response.success) {
                                 window.location.reload();
-                            }
-                            else {
-                                Charcoal.Admin.feedback().add_data(
-                                    [{
-                                        msg: 'Erreur: impossible de retourner à une révision.',
+                            } else {
+                                Charcoal.Admin.feedback().add_data([
+                                    {
+                                        msg: '{{# _t }}Error:{{/ _t }} {{# _t }}Unable to revert to the revision.{{/ _t }}',
                                         level: 'error'
-                                    }]
-                                );
+                                    }
+                                ]);
                                 Charcoal.Admin.feedback().call();
                             }
                         },
                         error: function() {
-                            Charcoal.Admin.feedback().add_data(
-                                [{
-                                    msg: 'Erreur: impossible de retourner à une révision.',
+                            Charcoal.Admin.feedback().add_data([
+                                {
+                                    msg: '{{# _t }}Error:{{/ _t }} {{# _t }}Unable to revert to the revision.{{/ _t }}',
                                     level: 'error'
-                                }]
-                            );
+                                }
+                            ]);
                             Charcoal.Admin.feedback().call();
                         }
                     })

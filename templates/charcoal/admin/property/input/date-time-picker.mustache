@@ -18,8 +18,15 @@ DateTime picker Property Input
         value=""
     >
     <span class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar"></span>
+        <span class="glyphicon glyphicon-calendar" aria-label="{{# _t }}Use Calendar Widget{{/ _t }}"></span>
     </span>
+    {{!--
+    <div class="input-group-btn">
+        <button type="button" class="btn btn-default" aria-label="[[# _t ]]Use Calendar Widget[[/ _t ]]">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </button>
+    </div>
+    --}}
 </div>
 
 {{# addJs }}

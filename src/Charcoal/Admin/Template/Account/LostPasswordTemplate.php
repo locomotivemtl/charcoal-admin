@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Template\Account;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
 /**
@@ -43,10 +44,7 @@ class LostPasswordTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle([
-                'en' => 'Lost Password',
-                'fr' => 'Mot de passe oublié',
-            ]);
+            $this->setTitle($this->translate('Lost Password'));
         }
 
         return $this->title;

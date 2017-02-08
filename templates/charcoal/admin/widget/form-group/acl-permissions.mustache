@@ -1,19 +1,17 @@
 <div>
-
-{{#permission_categories}}
-<h2>{{name}}</h2>
-    {{#permissions}}
-        <h3>{{name}}</h3>
-        <label class="radio-inline">
-            <input type="radio" name="permissions[{{ident}}]">{{#_t}}Denied{{/_t}}
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="permissions[{{ident}}]">{{#_t}}N/A{{/_t}}
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="permissions[{{ident}}]">{{#_t}}Allowed{{/_t}}
-        </label>
-    {{/permissions}}
-{{/permission_categories}}
-
+    {{#permission_categories}}
+    <h2>{{name}}</h2>
+        {{#permissions}}
+            <h3>{{name}}</h3>
+            <label class="radio-inline">
+                <input type="radio" name="permissions[{{ident}}]">{{#_t}}Denied{{/_t}}
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="permissions[{{ident}}]">{{#_t}}N/A{{/_t}}
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="permissions[{{ident}}]">{{#_t}}Allowed{{/_t}}
+            </label>
+        {{/permissions}}
+    {{/permission_categories}}
 </div>

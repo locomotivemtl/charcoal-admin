@@ -5,19 +5,23 @@ Pagination Widget
 `charcoal/admin/widget/pagination`
 --}}
 
-        <li data-page-num="{{pagePrev}}" class="js-page-switch {{^previousEnabled}}disabled{{/previousEnabled}}">
-            <a href="#" aria-label="{{#_t}}Previous{{/_t}}">
 <nav id="{{ widgetId }}">
     <ul class="pagination"{{# showLabel }} aria-label="{{ label }}"{{/ showLabel }}>
+        <li data-page-num="{{pagePrev}}" class="page-item js-page-switch{{^previousEnabled}} disabled{{/previousEnabled}}">
+            <a href="#" class="page-link">
                 <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">{{# _t }}Previous Page{{/ _t }}</span>
             </a>
         </li>
         {{#pages}}
-        <li data-page-num="{{num}}" class="js-page-switch {{#active}}active{{/active}}"><a href="#">{{num}}</a></li>
+        <li data-page-num="{{num}}" class="page-item js-page-switch{{#active}} active{{/active}}">
+            <a href="#" class="page-link">{{num}}</a>
+        </li>
         {{/pages}}
-        <li data-page-num="{{pageNext}}" class="js-page-switch {{^nextEnabled}}disabled{{/nextEnabled}}">
-            <a href="#" aria-label="{{#_t}}Next{{/_t}}">
+        <li data-page-num="{{pageNext}}" class="page-item js-page-switch{{^nextEnabled}} disabled{{/nextEnabled}}">
+            <a href="#" class="page-link">
                 <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">{{# _t }}Next Page{{/ _t }}</span>
             </a>
         </li>
     </ul>

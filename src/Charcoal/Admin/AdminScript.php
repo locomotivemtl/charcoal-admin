@@ -65,9 +65,10 @@ abstract class AdminScript extends AbstractScript
         } elseif ($prop->type() == 'boolean') {
             return $this->booleanInput($prop);
         } else {
-            $input = $climate->input(
-                sprintf('Enter value for "%s":', $prop->label())
-            );
+            $input = $climate->input(sprintf(
+                'Enter value for "%s":',
+                $prop->label()
+            ));
             if ($prop->type() == 'text' || $prop->type == 'html') {
                 $input->multiLine();
             }
@@ -106,9 +107,11 @@ abstract class AdminScript extends AbstractScript
     {
         $climate = $this->climate();
 
-        $input = $climate->password(
-            sprintf('Enter value for "%s":', $prop->label())
-        );
+        $input = $climate->password(sprintf(
+            'Enter value for "%s":',
+            $prop->label()
+        ));
+
         return $input;
     }
 }

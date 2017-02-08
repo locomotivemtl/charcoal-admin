@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\User;
 
+// From 'charcoal-user'
 use \Charcoal\User\Acl\PermissionCategory as UserPermissionCategory;
 
 /**
@@ -9,5 +10,4 @@ use \Charcoal\User\Acl\PermissionCategory as UserPermissionCategory;
  */
 class PermissionCategory extends UserPermissionCategory
 {
-
 }

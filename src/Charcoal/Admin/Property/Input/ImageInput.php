@@ -32,27 +32,21 @@ class ImageInput extends FileInput
     /**
      * Retrieve the default label for the file picker button.
      *
-     * @return string[]
+     * @return string
      */
     protected function defaultChooseButtonLabel()
     {
-        return [
-            'en' => 'Choose Image…',
-            'fr' => 'Choisissez une image…'
-        ];
+        return $this->translate('Choose Image…');
     }
 
     /**
      * Retrieve the default label for the file removal button.
      *
-     * @return string[]
+     * @return string
      */
     protected function defaultRemoveButtonLabel()
     {
-        return [
-            'en' => 'Remove Image',
-            'fr' => 'Retirer l’image'
-        ];
+        return $this->translate('Remove Image');
     }
 
     /**

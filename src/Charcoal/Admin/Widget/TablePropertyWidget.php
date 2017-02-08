@@ -2,12 +2,12 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Charcoal\Admin\AdminWidget as AdminWidget;
+// From 'charcoal-admin'
+use \Charcoal\Admin\AdminWidget;
 
 /**
  *
  */
 class TablePropertyWidget extends AdminWidget
 {
-
 }

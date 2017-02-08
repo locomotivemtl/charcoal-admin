@@ -56,7 +56,7 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
     private $container;
 
     /**
-     *
+     * Set up the test.
      */
     public function setUp()
     {
@@ -164,6 +164,8 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Set up the service container.
+     *
      * @return Container
      */
     private function container()
@@ -171,10 +173,7 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerBaseUrl($container);
-            $containerProvider->registerAdminConfig($container);
-            $containerProvider->registerAuthenticator($container);
-            $containerProvider->registerAuthorizer($container);
+            $containerProvider->registerAdminServices($container);
 
             $this->container = $container;
         }

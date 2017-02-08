@@ -133,13 +133,13 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                     //console.debug(i);
                     window.console.debug(objects[i]);
 
-                    var inline_properties = objects[i].inline_properties,
+                    var formControls = objects[i].properties,
                         row = $(sublist.elems[i]).parents('tr'),
                         p = 0;
 
-                    for (p in inline_properties) {
+                    for (p in formControls) {
                         var td = row.find('.property-' + p);
-                        td.html(inline_properties[p]);
+                        td.html(formControls[p]);
                     }
                 }
             }
@@ -448,12 +448,12 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.inline_edit = function ()
     $.post(that.inline_url, data, function (response) {
         if (response.success) {
 
-            var inline_properties = response.inline_properties,
+            var formControls = response.properties,
                 p;
 
-            for (p in inline_properties) {
+            for (p in formControls) {
                 var td = $(that.element).find('.property-' + p);
-                td.html(inline_properties[p]);
+                td.html(formControls[p]);
             }
         }
     }, 'json');

@@ -65,10 +65,10 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
 
         $obj = $this->obj;
         $obj->setIdent('foo.bar');
-        $this->assertEquals('Foo Bar', $obj->label());
+        $this->assertEquals(null, $obj->label());
 
-        $obj->setLabel('foo');
-        $this->assertEquals('foo', $obj->label());
+        $obj->setLabel('Foo Bar');
+        $this->assertEquals('Foo Bar', $obj->label());
 
         //$this->setExpectedException('\InvalidArgumentException');
         //$obj->set_label(null);

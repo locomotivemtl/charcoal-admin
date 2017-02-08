@@ -2,35 +2,39 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
-use Charcoal\Admin\AdminAction;
-
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Service\Exporter;
 
 /**
- * From abstractAction
- * - TranslationAware
- * - ModelAware
+ * Action: Export one or more objects from storage.
  *
- * ## Parameters
+ * ## Required Parameters
  *
- * **Required parameters**
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
  *
- * - `obj_type`
- *
- * ** Optional parameters**
+ * ## Optional Parameters
  *
  * - `ident`
  *
  * ## Response
  *
- * The response is in "csv" mode.
+ * The response is in CSV mode.
+ *
+ * - `success` (_boolean_) — TRUE if the object(s) was/were exported, FALSE in case of any error.
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; Object(s) expoerted, if any
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Object(s) could not be expoerted, if any
  */
 class ExportAction extends AdminAction
 {
@@ -55,31 +59,62 @@ class ExportAction extends AdminAction
     }
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $params = $request->getParams();
-        if (!isset($params['obj_type'])) {
-            $this->addFeedback('error', 'Missing object type.');
+        $failMessage = $this->translate('Failed to export object(s)');
+        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            '{{ errorMessage }}' => $failMessage
+        ]);
+        $reqMessage  = $this->translate(
+            '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+        );
+        $typeMessage = $this->translate(
+            '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+        );
+
+        $objType     = $request->getParam('obj_type');
+        $exportIdent = $request->getParam('ident');
+
+        if (!$objType) {
+            $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+            $this->addFeedback('error', strtr($reqMessage, [
+                '{{ parameter }}'    => '"obj_type"',
+                '{{ expectedType }}' => 'string',
+                '{{ actualType }}'   => $actualType,
+            ]));
             $this->setSuccess(false);
-            return $response->withStatus(404);
+
+            return $response->withStatus(400);
         }
 
-        // Does this do anything?
+        /** @todo Does this do anything? */
         $this->setMode('csv');
 
         $exporter = new Exporter([
             'logger'          => $this->logger,
             'factory'         => $this->modelFactory(),
-            'obj_type'        => $params['obj_type'],
+            'obj_type'        => $objType,
             'propertyFactory' => $this->propertyFactory
         ]);
 
-        if (isset($params['ident'])) {
-            $exporter->setExportIdent($params['ident']);
+        if (isset($exportIdent)) {
+            if (!is_string($exportIdent)) {
+                $actualType = is_object($exportIdent) ? get_class($exportIdent) : gettype($exportIdent);
+                $this->addFeedback('error', strtr($typeMessage, [
+                    '{{ parameter }}'    => 'Export "ident"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
+            $exporter->setExportIdent($exportIdent);
         }
 
         $exporter->process();
@@ -95,11 +130,9 @@ class ExportAction extends AdminAction
      */
     public function results()
     {
-        $ret = [
-            'success' => $this->success(),
+        return [
+            'success'   => $this->success(),
             'feedbacks' => $this->feedbacks()
         ];
-
-        return $ret;
     }
 }

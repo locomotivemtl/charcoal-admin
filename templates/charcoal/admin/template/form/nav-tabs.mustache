@@ -6,15 +6,15 @@
     @used-by charcoal/admin/template/quick-form
 --}}
 <ul class="nav nav-tabs{{^ showHeader }} bootstrap-dialog-title{{/ showHeader }}" role="tablist">
-    {{# groups }}
-        <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation">
-            <a href="#form_group_{{ widgetId }}" aria-controls="form_group_{{ widgetId }}" class="js-group-tabs"
-               role="tab" data-toggle="tab" data-tab-ident="{{ident}}">
-                {{# icon }}<i class="fa fa-{{ . }}" aria-hidden="true"></i>{{/ icon }}
-                {{# showTitle }}{{& title }}{{/ showTitle }}
-                {{^ showTitle }}
-                    <div class="-hide-tab-title"><span>{{& title }}</span></div>{{/ showTitle }}
-            </a>
-        </li>
-    {{/ groups }}
+{{# groups }}
+    <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation">
+        <a href="#form_group_{{ widgetId }}" aria-controls="form_group_{{ widgetId }}" class="js-group-tabs"
+           role="tab" data-toggle="tab" data-tab-ident="{{ident}}">
+            {{# icon }}<i class="fa fa-{{ . }}" aria-hidden="true"></i>{{/ icon }}
+            {{# showTitle }}{{& title }}{{/ showTitle }}
+            {{^ showTitle }}
+                <div class="-hide-tab-title"><span>{{& title }}</span></div>{{/ showTitle }}
+        </a>
+    </li>
+{{/ groups }}
 </ul>

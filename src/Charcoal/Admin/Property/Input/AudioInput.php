@@ -9,7 +9,6 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
  */
 class AudioInput extends AbstractPropertyInput
 {
-
     /**
      * @var boolean $textEnabled
      */

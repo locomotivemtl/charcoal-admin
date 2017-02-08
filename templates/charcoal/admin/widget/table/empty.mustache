@@ -6,8 +6,8 @@
 --}}
 <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-    <span class="sr-only">{{# _t }}Erreurs:{{/ _t }}</span>
-    <span>{{# _t }}Aucun objet de type "{{ objType }}" n'existe.{{/ _t }}</span>
+    <span class="sr-only">{{# _t }}Errors:{{/ _t }}</span>
+    <span>{{# _t }}No "{{ objType }}" objects found.{{/ _t }}</span>
     <div class="btn-group" role="group">
     {{# emptyListActions }}
         {{# isSeparator }}
@@ -20,7 +20,7 @@
     {{/ emptyListActions }}
     {{^ showEmptyListActions }}
         {{# isObjCreatable }}
-        <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Créer un nouvel objet{{/ _t }}</a>
+        <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
         {{/ isObjCreatable }}
     {{/ showEmptyListActions }}
     </div>

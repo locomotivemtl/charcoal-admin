@@ -94,10 +94,7 @@ class DualSelectInput extends AbstractSelectableInput
             if (isset($this->dualSelectOptions['searchable'])) {
                 $searchable = $this->dualSelectOptions['searchable'];
 
-                $label = new TranslationString([
-                    'en' => 'Search…',
-                    'fr' => 'Recherche…'
-                ]);
+                $label = $this->translate('Search…');
 
                 $defaultOptions = [
                     'left'  => [

@@ -11,10 +11,10 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-background -fixed u-background-lightblue" {{#backgroundImage}}style="background-image:url({{backgroundImage}});"{{/backgroundImage}}>
+<div class="o-background -fixed u-background-lightblue"{{#backgroundImage}} style="background-image: url({{.}});"{{/backgroundImage}}>
     {{#backgroundVideo}}
     <video class="embedded-video horizontal" muted="" preload="auto" autoplay loop>
-      <source src="{{backgroundVideo}}" type="video/mp4">
+      <source src="{{.}}" type="video/mp4">
     </video>
     {{/backgroundVideo}}
 </div>
@@ -49,15 +49,15 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
             <div class="form-group">
                 <div class="checkbox">
                     <input type="hidden" name="remember-me" value="0">
-                    <input type="checkbox" id="checkbox1" name="remember-me">
-                    <label for="checkbox1">
-                        {{#_t}}Remember me?{{/_t}}
+                    <input type="checkbox" id="remember-me" name="remember-me">
+                    <label for="remember-me">
+                        {{#_t}}Remember Me{{/_t}}
                     </label>
                 </div>
             </div>
             {{/rememberMeEnabled}}
             <div class="form-group">
-                <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log in{{/_t}}</button>
+                <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log In{{/_t}}</button>
 
                 <small><a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a></small>
             </div>

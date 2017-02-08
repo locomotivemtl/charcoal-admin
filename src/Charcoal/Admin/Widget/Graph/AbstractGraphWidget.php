@@ -4,7 +4,6 @@ namespace Charcoal\Admin\Widget\Graph;
 
 // From `charcoal-admin`
 use \Charcoal\Admin\AdminWidget;
-
 use \Charcoal\Admin\Widget\Graph\GraphWidgetInterface;
 
 /**
@@ -68,26 +67,26 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     public function defaultColors()
     {
         return [
-            '#ed5564',
-            '#337ab7',
-            '#da70d6',
-            '#32cd32',
-            '#6495ed',
-            '#ff69b4',
-            '#ba55d3',
-            '#cd5c5c',
-            '#ffa500',
-            '#40e0d0',
-            '#1e90ff',
-            '#ff6347',
-            '#7b68ee',
-            '#00fa9a',
-            '#ffd700',
-            '#6b8e23',
-            '#ff00ff',
-            '#3cb371',
-            '#b8860b',
-            '#30e0e0'
+            '#ED5564',
+            '#337AB7',
+            '#DA70D6',
+            '#32CD32',
+            '#6495ED',
+            '#FF69B4',
+            '#BA55D3',
+            '#CD5C5C',
+            '#FFA500',
+            '#40E0D0',
+            '#1E90FF',
+            '#FF6347',
+            '#7B68EE',
+            '#00FA9A',
+            '#FFD700',
+            '#6B8E23',
+            '#FF00FF',
+            '#3CB371',
+            '#B8860B',
+            '#30E0E0'
         ];
     }
 

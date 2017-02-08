@@ -16,7 +16,7 @@ use Charcoal\Email\ServiceProvider\EmailServiceProvider;
 // From 'charcoal-factory'
 use Charcoal\Factory\GenericFactory as Factory;
 
-// From 'charcoal-base'
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 

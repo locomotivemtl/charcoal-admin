@@ -4,7 +4,7 @@ namespace Charcoal\Admin\Action;
 
 use RuntimeException;
 
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -30,11 +30,11 @@ use Charcoal\Translation\TranslationString;
 // From 'charcoal-app'
 use Charcoal\App\CallableResolverAwareTrait;
 
-// Intra-module ('charcoal-admin') dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 
 /**
- * elFinder Connector
+ * Action: Setup elFinder Connector
  */
 class ElfinderConnectorAction extends AdminAction
 {
@@ -126,17 +126,19 @@ class ElfinderConnectorAction extends AdminAction
     public function propertyFactory()
     {
         if (!isset($this->propertyFactory)) {
-            throw new RuntimeException(
-                sprintf('Property Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Property Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->propertyFactory;
     }
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @todo   Implement {@see self::$httpRequest} to replace `filter_input(INPUT_GET)`.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
@@ -236,7 +238,7 @@ class ElfinderConnectorAction extends AdminAction
         $filesystemConfig = $this->filesystemConfig;
         $filesystems = $this->filesystems;
 
-        $fs = [];
+        $roots = [];
         foreach ($filesystemConfig['connections'] as $filesystem => $config) {
             if (isset($config['public']) && !$config['public']) {
                 continue;
@@ -244,7 +246,7 @@ class ElfinderConnectorAction extends AdminAction
             $label = isset($config['label']) ? new TranslationString($config['label']) : ucfirst($filesystem);
             $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
 
-            $fs[$filesystem] = [
+            $roots[$filesystem] = [
                 'driver' => 'Flysystem',
                 'filesystem'    => $filesystems[$filesystem],
 
@@ -282,7 +284,7 @@ class ElfinderConnectorAction extends AdminAction
         }
         return [
             'debug' => true,
-            'roots' => $fs
+            'roots' => $roots
         ];
     }
 

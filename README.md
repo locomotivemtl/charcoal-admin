@@ -23,13 +23,16 @@ $ composer require locomotivemtl/charcoal-admin
 	-	It brings the following dependencies:
 		-	[locomotivemtl/charcoal-config](https://github.com/locomotivemtl/charcoal-config)
 			-	The configuration container for all things Charcoal.
-		-	[locomotivemtl/charcoal-view](https://github.com/locomotivemtl/charcoal-view)
-			-	The view / templating engines. Mustache is the default engine.
--	[locomotivemtl/charcoal-base](https://github.com/locomotivemtl/charcoal-base)
-	-	Base project classes: Assets, Objects, Properties, Templates and Widgets
-	-	It brings the additional charcoal dependencies:
-		-	[locomotivemtl/charcoal-image](https://github.com/locomotivemtl/charcoal-image)
-			-	Image manipulation.
+		-	[locomotivemtl/charcoal-property](https://github.com/locomotivemtl/charcoal-property)
+			-	The building blocks of the Model's definition.
+            -   [locomotivemtl/charcoal-image](https://github.com/locomotivemtl/charcoal-image)
+                -   Image manipulation.
+        -   [locomotivemtl/charcoal-view](https://github.com/locomotivemtl/charcoal-view)
+            -   The view / templating engines. Mustache is the default engine.
+-   [locomotivemtl/charcoal-object](https://github.com/locomotivemtl/charcoal-object)
+    -   Object definition (Content and UserData), behaviors and tools.
+-	[locomotivemtl/charcoal-user](https://github.com/locomotivemtl/charcoal-user)
+	-	User defintion (as Charcoal Model), authentication and authorization (with Zend ACL).
 
 > 👉 Development dependencies are described in the _Development_ section of this README file.
 
@@ -78,9 +81,7 @@ Like all Charcoal projects / modules, the main components are:
 	-	JSON metadata in `metadata/charcoal/boilerplate/`
 -	**Templates**
 	-	Templates are specialized Model which acts as View / Controller
-	-	Split in `Templates`, `Widgets` and `PropertyInput`
-		-	All defined in the `charcoal-base` module
-		-	All those classes extend `\Charcoal\Model\AbstractModel`
+	-	Split in `Templates`, `Widgets`, `PropertyDisplay`, and `PropertyInput`
 	-	PHP Models in `src/Charcoal/Boilerplate/Template/`
 	-	Mustache views (templates) in `templates/boilerplate/`
 	-	Optionnally, templates metadata in `metdata/boilerplate/template/`

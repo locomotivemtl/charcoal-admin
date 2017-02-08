@@ -247,13 +247,10 @@ trait SidemenuGroupTrait
                 'selected' => $isSelected
             ];
         } else {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Link must be an associative array, received %2$s',
-                    'MenuItemInterface',
-                    (is_object($link) ? get_class($link) : gettype($link))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Link must be an associative array, received %s',
+                (is_object($link) ? get_class($link) : gettype($link))
+            ));
         }
 
         return $this;

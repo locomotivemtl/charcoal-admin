@@ -2,45 +2,56 @@
 
 namespace Charcoal\Admin\Tests\Action;
 
+// From PHPUnit
 use \PHPUnit_Framework_TestCase;
 
-
+// From Pimple
 use \Pimple\Container;
 
+// From Slim
 use \Slim\Http\Environment;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
+// From 'charcoal-admin'
 use \Charcoal\Admin\Action\LoginAction;
 
 use \Charcoal\Admin\Tests\ContainerProvider;
-
-use \Charcoal\Admin\User;
+use \Charcoal\Admin\Tests\Mock\UserProviderTrait;
 
 /**
  *
  */
 class LoginActionTest extends PHPUnit_Framework_TestCase
 {
+    use UserProviderTrait;
+
     /**
-     * Instance of object under test
+     * Tested Class.
+     *
      * @var LoginAction
      */
     private $obj;
 
     /**
+     * Store the service container.
+     *
      * @var Container
      */
     private $container;
 
     /**
-     *
+     * Set up the test.
      */
     public function setUp()
     {
+        if (session_id()) {
+            session_unset();
+        }
+
         $container = $this->container();
         $this->obj = new LoginAction([
-            'logger' => $container['logger'],
+            'logger'    => $container['logger'],
             'container' => $container
         ]);
     }
@@ -50,48 +61,50 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj->authRequired());
     }
 
-    /**
-     * Assert that
-     */
-    public function testRunWithoutParamsIs404()
+    public function testRunWithoutParamsIs400()
     {
-        $request = Request::createFromEnvironment(Environment::mock());
+        $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(404, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
     }
 
-    /**
-     * Assert that
-     */
     public function testRunWithInvalidCredentials()
     {
-        $this->createUser('foo', 'foobar');
+        $this->createUser('foo');
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'username=test&password=test123'
+            'QUERY_STRING' => 'username=qux&password=asdfgh'
         ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertFalse($this->obj->success());
-        $this->assertEquals(403, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(403, $response->getStatusCode());
+
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
     }
 
-    private function createUser($username, $password, $email = 'info@example.com')
+    public function testRunWithValidCredentials()
     {
-        $container = $this->container();
-        $userProto = $container['model/factory']->create(User::class);
-        $userProto->setData([
-            'username'  => $username,
-            'password'  => $password,
-            'email'     => $email
-        ]);
-        $userProto->save();
+        $this->createUser('foo');
+
+        $request = Request::createFromEnvironment(Environment::mock([
+            'QUERY_STRING' => 'username=foo&password=qwerty'
+        ]));
+        $response = new Response();
+
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $results = $this->obj->results();
+        $this->assertTrue($results['success']);
     }
 
     /**
+     * Set up the service container.
+     *
      * @return Container
      */
     private function container()
@@ -99,14 +112,12 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerBaseUrl($container);
-            $containerProvider->registerAdminConfig($container);
-            $containerProvider->registerAuthenticator($container);
-            $containerProvider->registerAuthorizer($container);
+            $containerProvider->registerAdminServices($container);
             $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;
         }
+
         return $this->container;
     }
 }

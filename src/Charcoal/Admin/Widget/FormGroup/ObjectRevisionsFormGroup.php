@@ -2,12 +2,14 @@
 
 namespace Charcoal\Admin\Widget\FormGroup;
 
+// From Pimple
 use \Pimple\Container;
 
+// From 'charcoal-ui'
 use \Charcoal\Ui\FormGroup\AbstractFormGroup;
 
 /**
- *
+ * Form Group: Object Revisions List
  */
 class ObjectRevisionsFormGroup extends AbstractFormGroup
 {
@@ -45,7 +47,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
      */
     public function objType()
     {
-        return (isset($_GET['obj_type']) ? $_GET['obj_type'] : null);
+        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
     }
 
     /**
@@ -55,7 +57,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
      */
     public function objId()
     {
-        return (isset($_GET['obj_id']) ? $_GET['obj_id'] : null);
+        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
     }
 
     /**

@@ -228,10 +228,7 @@ class FileInput extends AbstractPropertyInput
      */
     protected function defaultDialogTitle()
     {
-        return [
-            'en' => 'Media Library',
-            'fr' => 'Bibliothèque de médias'
-        ];
+        return $this->translate('Media Library');
     }
 
     /**
@@ -272,10 +269,7 @@ class FileInput extends AbstractPropertyInput
      */
     protected function defaultChooseButtonLabel()
     {
-        return [
-            'en' => 'Choose File…',
-            'fr' => 'Choisissez un fichier…'
-        ];
+        return $this->translate('Choose File…');
     }
 
     /**
@@ -316,10 +310,7 @@ class FileInput extends AbstractPropertyInput
      */
     protected function defaultRemoveButtonLabel()
     {
-        return [
-            'en' => 'Remove File',
-            'fr' => 'Retirer le fichier'
-        ];
+        return $this->translate('Remove File');
     }
 
     /**

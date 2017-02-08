@@ -2,18 +2,31 @@
 
 namespace Charcoal\Admin\Widget\FormGroup;
 
-use \Pimple\Container;
+use PDO;
+use RuntimeException;
 
-use \Zend\Permissions\Acl\Acl;
-use \Zend\Permissions\Acl\Role\GenericRole as Role;
-use \Zend\Permissions\Acl\Resource\GenericResource as Resource;
+// From Pimple
+use Pimple\Container;
 
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\User\Permission;
-use \Charcoal\Admin\User\PermissionCategory;
+// From 'zendframework/zend-permissions-acl'
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
-use \Charcoal\Ui\FormGroup\FormGroupTrait;
+// From 'charcoal-core'
+use Charcoal\Loader\CollectionLoader;
+
+// From 'charcoal-ui'
+use Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\FormGroup\FormGroupTrait;
+
+// From 'charcoal-user'
+use Charcoal\User\Acl\Manager as AclManager;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\User\Permission;
+use Charcoal\Admin\User\PermissionCategory;
 
 /**
  * ACL Permissions Widget (Form Group)
@@ -39,19 +52,103 @@ class AclPermissions extends AdminWidget implements
     private $roleDenied;
 
     /**
+     * Store the collection loader for the current class.
+     *
+     * @var CollectionLoader
+     */
+    private $collectionLoader;
+
+    /**
+     * Store the ACL roles and permissions manager.
+     *
+     * @var AclManager
+     */
+    private $aclManager;
+
+    /**
+     * Store the database connection.
+     *
+     * @var PDO
+     */
+    private $database;
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->database         = $container['database'];
+        $this->aclManager       = $container['admin/acl'];
+        $this->collectionLoader = $container['model/collection/loader'];
+    }
+
+    /**
+     * Retrieve the database connection.
+     *
+     * @throws RuntimeException If the connection is undefined.
+     * @return PDO
+     */
+    protected function db()
+    {
+        if (!isset($this->database)) {
+            throw new RuntimeException(sprintf(
+                'Database Connection is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->database;
+    }
+
+    /**
+     * Retrieve the ACL manager.
+     *
+     * @throws RuntimeException If the manager is undefined.
+     * @return AclManager
+     */
+    protected function adminAcl()
+    {
+        if (!isset($this->modelFactory)) {
+            throw new RuntimeException(sprintf(
+                'ACL Manager is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->aclManager;
+    }
+
+    /**
+     * Retrieve the model collection loader.
+     *
+     * @throws RuntimeException If the collection loader was not previously set.
+     * @return CollectionLoader
+     */
+    protected function collectionLoader()
+    {
+        if (!isset($this->collectionLoader)) {
+            throw new RuntimeException(sprintf(
+                'Collection Loader is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->collectionLoader;
+    }
+
+    /**
+     * Retrieve the current object ID from the GET parameters.
+     *
      * @return string
      */
     public function objId()
     {
-        return $_GET['obj_id'];
-    }
-
-    /**
-     * @return Acl
-     */
-    protected function adminAcl()
-    {
-        return \Charcoal\App\App::instance()->getContainer()->get('admin/acl');
+        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
     }
 
     /**
@@ -67,25 +164,27 @@ class AclPermissions extends AdminWidget implements
             $this->roleAcl->addResource(new Resource('admin'));
 
             $q = '
-            select
-                `denied`,
-                `allowed`,
-                `superuser`
-            from
-                `charcoal_admin_acl_roles`
-            where
-                ident = :id';
+                SELECT
+                    `denied`,
+                    `allowed`,
+                    `superuser`
+                FROM
+                    `charcoal_admin_acl_roles`
+                WHERE
+                    ident = :id';
 
-            $db = \Charcoal\App\App::instance()->getContainer()->get('database');
-            $sth = $db->prepare($q);
+            $sth = $this->db()->prepare($q);
             $sth->bindParam(':id', $id);
             $sth->execute();
-            $permissions = $sth->fetch(\PDO::FETCH_ASSOC);
+            $permissions = $sth->fetch(PDO::FETCH_ASSOC);
+
             $this->roleAllowed = explode(',', trim($permissions['allowed']));
-            $this->roleDenied = explode(',', trim($permissions['denied']));
+            $this->roleDenied  = explode(',', trim($permissions['denied']));
+
             foreach ($this->roleAllowed as $allowed) {
                 $this->roleAcl->allow($id, 'admin', $allowed);
             }
+
             foreach ($this->roleDenied as $denied) {
                 $this->roleAcl->deny($id, 'admin', $denied);
             }
@@ -98,21 +197,16 @@ class AclPermissions extends AdminWidget implements
      */
     public function permissionCategories()
     {
-        $factory = \Charcoal\App\App::instance()->getContainer()->get('model/factory');
-        $loader = new \Charcoal\Loader\CollectionLoader([
-            'logger' => $this->logger,
-            'factory' => $factory
-        ]);
-        $model = $factory->create(PermissionCategory::class);
-        $loader->setModel($model);
+        $loader = $this->collectionLoader();
+        $loader->setModel(PermissionCategory::class);
         $categories = $loader->load();
 
         $ret = [];
         foreach ($categories as $c) {
             $ret[] = [
-                'ident'=>$c->id(),
-                'name'=>$c->name(),
-                'permissions'=>$this->loadCategoryPermissions($c->id())
+                'ident'       => $c->id(),
+                'name'        => $c->name(),
+                'permissions' => $this->loadCategoryPermissions($c->id())
             ];
         }
 
@@ -125,17 +219,11 @@ class AclPermissions extends AdminWidget implements
      */
     private function loadCategoryPermissions($category)
     {
-        $factory = \Charcoal\App\App::instance()->getContainer()->get('model/factory');
-
         $adminAcl = $this->adminAcl();
-        $roleAcl = $this->roleAcl();
+        $roleAcl  = $this->roleAcl();
 
-        $loader = new \Charcoal\Loader\CollectionLoader([
-            'logger' => $this->logger,
-            'factory' => $factory
-        ]);
-        $model = $factory->create(Permission::class);
-        $loader->setModel($model);
+        $loader = $this->collectionLoader();
+        $loader->setModel(Permission::class);
         $loader->addFilter('category', $category);
         $permissions = $loader->load();
 
@@ -145,8 +233,9 @@ class AclPermissions extends AdminWidget implements
 
             $permission = [
                 'ident' => $ident,
-                'name' => $perm->name()
+                'name'  => $perm->name()
             ];
+
             if (in_array($ident, $this->roleAllowed)) {
                 $permission['status'] = 'allowed';
             } elseif (in_array($ident, $this->roleDenied)) {
@@ -154,11 +243,13 @@ class AclPermissions extends AdminWidget implements
             } else {
                 $permission['status'] = '';
             }
+
             if ($adminAcl->hasResource($ident)) {
                 $permission['parent_status'] = $adminAcl->isAllowed($ident, 'admin') ? 'allowed' : 'denied';
             } else {
                 $permission['parent_status'] = '';
             }
+
             $ret[] = $permission;
         }
 

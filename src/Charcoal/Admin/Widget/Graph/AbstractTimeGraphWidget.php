@@ -1,7 +1,6 @@
 <?php
 namespace Charcoal\Admin\Widget\Graph;
 
-// Dependencies from `PHP`
 use \DateInterval;
 use \DateTime;
 use \DateTimeInterface;
@@ -9,7 +8,7 @@ use \Exception;
 use \InvalidArgumentException;
 use \PDO;
 
-// From `charcoal-admin`
+// From 'charcoal-admin'
 use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
 use \Charcoal\Admin\Widget\Graph\TimeGraphWidgetInterface;
 
@@ -148,9 +147,10 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
             try {
                 $ts = new DateTime($ts);
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    'Invalid start date: '.$e->getMessage()
-                );
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid start date: %s',
+                    $e->getMessage()
+                ), $e);
             }
         }
         if (!($ts instanceof DateTimeInterface)) {
@@ -181,9 +181,10 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
             try {
                 $ts = new DateTime($ts);
             } catch (Exception $e) {
-                throw new InvalidArgumentException(
-                    'Invalid end date: '.$e->getMessage()
-                );
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid end date: %s',
+                    $e->getMessage()
+                ), $e);
             }
         }
         if (!($ts instanceof DateTimeInterface)) {
@@ -280,37 +281,37 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
         if ($this->dbRows === null) {
             $model = $this->modelFactory()->create($this->objType());
 
-            $sql = [];
+            $cols = [];
             $seriesOptions = $this->seriesOptions();
             foreach ($seriesOptions as $serieId => $serieOpts) {
-                $sql[] = $serieOpts['function'].' as '.$serieId;
+                $cols[] = $serieOpts['function'].' AS '.$serieId;
             }
 
-            $q = sprintf(
-                '
-                SELECT
-                    %1$s as x,
-                    '.implode(
-                    ', ',
-                    $sql
-                ).'
+            $sql = strtr(
+                'SELECT
+                    %func AS x, %cols
                 FROM
-                    %2$s
+                    %table
                 WHERE
-                    %1$s BETWEEN  :start_date AND :end_date
+                    %func BETWEEN  :start_date AND :end_date
                 GROUP BY
-                    %1$s
+                    %func
                 ORDER BY
-                    %1$s ASC',
-                $this->categoryFunction(),
-                $model->source()->table()
+                    %func ASC',
+                [
+                    '%table' => $model->source()->table(),
+                    '%cols'  => implode(', ', $cols),
+                    '%func'  => $this->categoryFunction(),
+                ]
             );
-            $res = $model->source()->dbQuery($q, [
-                'start_date'    => $this->startDate()->format($this->dateFormat()),
-                'end_date'      => $this->endDate()->format($this->dateFormat())
+            $result = $model->source()->dbQuery($sql, [
+                'start_date' => $this->startDate()->format($this->dateFormat()),
+                'end_date'   => $this->endDate()->format($this->dateFormat())
             ]);
-            $this->dbRows = $res->fetchAll((PDO::FETCH_GROUP|PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC));
+
+            $this->dbRows = $result->fetchAll((PDO::FETCH_GROUP|PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC));
         }
+
         return $this->dbRows;
     }
 
@@ -351,7 +352,6 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
         return array_keys($rows);
     }
 
-
     /**
      * @return array Series structure.
      */
@@ -383,8 +383,8 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
      */
     abstract protected function seriesOptions();
 
-        /**
-         * @return string
-         */
+    /**
+     * @return string
+     */
     abstract protected function categoryFunction();
 }

@@ -55,10 +55,10 @@ class ProcessMinuteScript extends AbstractNotificationScript
     protected function emailData(Notification $notification, CollectionInterface $objects)
     {
         return [
-            'subject'   => sprintf('Daily Charcoal Notification - %s', $this->startDate()->format('Y-m-d H:i:s')),
-            'template_ident' => 'charcoal/admin/email/notification.minute',
-            'template_data' => [
-                'startString'   => $this->startDate()->format('Y-m-d H:i:s')
+            'subject'         => sprintf('Daily Charcoal Notification - %s', $this->startDate()->format('Y-m-d H:i:s')),
+            'template_ident'  => 'charcoal/admin/email/notification.minute',
+            'template_data'   => [
+                'startString' => $this->startDate()->format('Y-m-d H:i:s')
             ]
         ];
     }

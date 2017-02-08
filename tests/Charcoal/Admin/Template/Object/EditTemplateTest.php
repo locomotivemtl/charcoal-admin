@@ -3,12 +3,14 @@ namespace Charcoal\Admin\Tests\Template\Object;
 
 use ReflectionClass;
 
+// From PHPUnit
 use PHPUnit_Framework_TestCase;
 
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Template\Object\EditTemplate;
-
 use Charcoal\Admin\Tests\ContainerProvider;
 
 /**
@@ -16,28 +18,30 @@ use Charcoal\Admin\Tests\ContainerProvider;
  */
 class EditTemplateTest extends PHPUnit_Framework_TestCase
 {
-    public $obj;
+    /**
+     * Tested Class.
+     *
+     * @var EditTemplate
+     */
+    private $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
+     */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerAdminConfig($container);
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerMetadataLoader($container);
-        $containerProvider->registerAuthenticator($container);
-        $containerProvider->registerAuthorizer($container);
-        $containerProvider->registerWidgetFactory($container);
-        $containerProvider->registerDashboardBuilder($container);
-
+        $container = $this->container();
         $this->obj = new EditTemplate([
-            'logger' => $container['logger'],
+            'logger'          => $container['logger'],
             'metadata_loader' => $container['metadata/loader'],
-
-            // This will trigger `setDependencies`
-            'container' => $container
+            'container'       => $container
         ]);
         //$this->obj->setDependencies($container);
     }
@@ -64,5 +68,25 @@ class EditTemplateTest extends PHPUnit_Framework_TestCase
         $ret2 = $this->obj->title();
 
         $this->assertSame($ret, $ret2);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerAdminServices($container);
+            $containerProvider->registerWidgetFactory($container);
+            $containerProvider->registerDashboardBuilder($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

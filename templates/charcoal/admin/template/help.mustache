@@ -6,27 +6,18 @@ Help template
 
 {{>charcoal/admin/widget/feedbacks}}
 
-
 <section class="section help jumbotron">
     <h2>{{title}}</h2>
     <h3>{{subtitle}}</h3>
 
     <div class="content o-container">
-        <h1>Besoin d'aide?</h1>
+        <h1>{{# _t }}Need Help?{{/ _t }}</h1>
 
-        <div>
-            Pour toutes questions à propos de l'utilisation de ce service, n'hésitez pas à communiquer avec <a href="mailto:charcoal@locomotive.ca">charcoal@locomotive.ca</a>.
-        </div>
-        <br />
-        <div>
-            Charcoal est opéré par <a href="http://locomotive.ca">Locomotive</a>, une agence Web de Montréal.
-        </div>
+        <p>{{# _t }}For any questions about the use of this service, please do not hesitate to contact <a href="mailto:charcoal@locomotive.ca">charcoal@locomotive.ca</a>.{{/ _t }}</p>
+        <p>{{# _t }}Charcoal is operated by <a href="https://locomotive.ca">Locomotive</a>, a Web agency based in Montréal.{{/ _t }}</p>
+        <p>{{# _t }}Memo, the alerts system, is propulsed by <em>Charcoal</em>.{{/ _t }}</p>
 
-        <div>
-            Memo, le système d'alerte, est propulsé par <em>Charcoal</em>.
-        </div>
-
-        <div style="margin-top:3em;">&copy; 2015 Locomotive</div>
+        <p style="margin-top:3em;">&copy; {{ now.year }} Locomotive</p>
     </div>
 </section>
 

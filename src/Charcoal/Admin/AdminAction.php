@@ -2,25 +2,30 @@
 
 namespace Charcoal\Admin;
 
-use Pimple\Container;
+use RuntimeException;
 
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
-// Module `charcoal-factory` dependencies
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From 'charcoal-base
+// From 'charcoal-user'
 use Charcoal\User\Authenticator;
 use Charcoal\User\Authorizer;
 
 // From 'charcoal-translation'
 use Charcoal\Translation\TranslationString;
+use Charcoal\Translation\Catalog\CatalogAwareInterface;
+use Charcoal\Translation\Catalog\CatalogAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
 
-// Local module (charcoal-admin) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
 use Charcoal\Admin\User\AuthAwareInterface;
 use Charcoal\Admin\User\AuthAwareTrait;
@@ -29,9 +34,12 @@ use Charcoal\Admin\User\AuthAwareTrait;
  * The base class for the `admin` Actions.
  *
  */
-abstract class AdminAction extends AbstractAction implements AuthAwareInterface
+abstract class AdminAction extends AbstractAction implements
+    AuthAwareInterface,
+    CatalogAwareInterface
 {
     use AuthAwareTrait;
+    use CatalogAwareTrait;
     use FeedbackContainerTrait;
 
     /**
@@ -88,6 +96,9 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
+
+        // CatalogAware Depencency
+        $this->setCatalog($container['translator/catalog']);
     }
 
     /**
@@ -237,6 +248,34 @@ abstract class AdminAction extends AbstractAction implements AuthAwareInterface
     public function getAuthenticatedUser()
     {
         return $this->authenticator()->authenticate();
+    }
+
+    /**
+     * @todo   {@link https://github.com/mcaskill/charcoal-recaptcha Implement CAPTCHA validation as a service}.
+     * @param  string $response The captcha value (response) to validate.
+     * @throws RuntimeException If Google reCAPTCHA is not configured.
+     * @return boolean
+     */
+    protected function validateCaptcha($response)
+    {
+        $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+
+        if (isset($recaptcha['private_key'])) {
+            $secret = $recaptcha['private_key'];
+        } else {
+            $secret = $recaptcha['secret'];
+        }
+
+        if (!$secret) {
+            throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] not configured.');
+        }
+
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $response = file_get_contents($validationUrl.'?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
+        $response = json_decode($response, true);
+
+        return !!$response['success'];
     }
 
     /**

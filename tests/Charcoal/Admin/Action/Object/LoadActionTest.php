@@ -2,108 +2,97 @@
 
 namespace Charcoal\Admin\Tests\Action\Object;
 
+// From PHPUnit
 use \PHPUnit_Framework_TestCase;
 
+// From Pimple
 use \Pimple\Container;
 
+// From Slim
 use \Slim\Http\Environment;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
+// From 'charcoal-core'
+use \Charcoal\Model\CollectionInterface;
+
+// From 'charcoal-admin'
 use \Charcoal\Admin\Action\Object\LoadAction;
 
 use \Charcoal\Admin\Tests\ContainerProvider;
-
-use \Charcoal\Admin\User;
+use \Charcoal\Admin\Tests\Mock\UserProviderTrait;
 
 /**
  *
  */
 class LoadActionTest extends PHPUnit_Framework_TestCase
 {
+    use UserProviderTrait;
+
     /**
-     * Instance of object under test
-     * @var LoginAction
+     * Tested Class.
+     *
+     * @var LoadAction
      */
     private $obj;
 
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
     private $container;
 
     /**
-     *
+     * Set up the test.
      */
     public function setUp()
     {
         $container = $this->container();
         $this->obj = new LoadAction([
-            'logger' => $container['logger'],
+            'logger'    => $container['logger'],
             'container' => $container
         ]);
     }
 
-    /**
-     *
-     */
     public function testAuthRequiredIsTrue()
     {
         $this->assertTrue($this->obj->authRequired());
     }
 
-    /**
-     *
-     */
     public function testRunWithoutObjTypeIs400()
     {
-        $request = Request::createFromEnvironment(Environment::mock());
+        $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(400, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(400, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertFalse($res['success']);
+        $results = $this->obj->results();
+        $this->assertFalse($results['success']);
     }
 
-    /**
-     *
-     */
     public function testRun()
     {
-        $this->createUser('foo');
+        $user = $this->createUser('foo');
 
         $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'obj_type=charcoal/admin/user'
         ]));
         $response = new Response();
 
-        $res = $this->obj->run($request, $response);
-        $this->assertEquals(200, $res->getStatusCode());
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(200, $response->getStatusCode());
 
-        $res = $this->obj->results();
-        $this->assertTrue($res['success']);
+        $results = $this->obj->results();
+        $this->assertTrue($results['success']);
+
+        $this->assertEquals(json_encode([ $user ]), json_encode($results['collection']));
     }
 
     /**
-     * @return User
-     */
-    private function createUser($username, $password = 'password', $email = 'info@example.com')
-    {
-        // Create User Table
-        $container = $this->container();
-
-        $userProto = $container['model/factory']->create(User::class);
-        $userProto->setData([
-            'username'  => $username,
-            'password'  => $password,
-            'email'     => $email
-        ]);
-        $userProto->save();
-        return $userProto;
-    }
-
-
-
-    /**
+     * Set up the service container.
+     *
      * @return Container
      */
     private function container()
@@ -111,14 +100,12 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerBaseUrl($container);
-            $containerProvider->registerAdminConfig($container);
-            $containerProvider->registerAuthenticator($container);
-            $containerProvider->registerAuthorizer($container);
+            $containerProvider->registerAdminServices($container);
             $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;
         }
+
         return $this->container;
     }
 }

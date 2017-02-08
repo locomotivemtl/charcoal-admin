@@ -464,12 +464,6 @@ class AdminWidget extends AbstractWidget implements CatalogAwareInterface
      */
     public function label()
     {
-        if ($this->label === null) {
-            // Generate label from ident
-            $label = ucwords(str_replace([ '_', '.', '/' ], ' ', $this->ident()));
-            $this->setLabel($label);
-        }
-
         return $this->label;
     }
 

@@ -78,7 +78,7 @@ class CollectionTemplate extends AdminTemplate implements
 
         if (!$obj->source()->tableExists()) {
             $obj->source()->createTable();
-            $this->addFeedback('notice', $this->translate('The {{ objType }} table has been created.'));
+            $this->addFeedback('notice', $this->translate('The "{{ objType }}" table has been created.'));
         }
     }
 

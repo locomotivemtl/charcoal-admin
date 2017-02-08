@@ -276,7 +276,12 @@ class ElfinderConnectorAction extends AdminAction
                 // File permission attributes
                 'attributes'     => [
                     $this->attributesForHiddenFiles()
-                ]
+                ],
+
+                //Glide stuff
+                // 'glideURL'       => 'http://volleyball.dev/glide'
+                // 'glideURL'       => isset($config['glide_url']) ? $config['glide_url'] : '',
+                // 'glideKey'       => isset($config['glide_key']) ? $config['glide_key'] : '',
             ];
 
             return [
@@ -323,7 +328,10 @@ class ElfinderConnectorAction extends AdminAction
                 // Disable and hide dot starting files
                 'accessControl'  => 'access',
                 // File permission attributes
-                'attributes'     => [
+
+                'glideURL' => 'http://volleyball.dev/glide',
+
+                'attributes' => [
                     $this->attributesForHiddenFiles()
                 ]
 

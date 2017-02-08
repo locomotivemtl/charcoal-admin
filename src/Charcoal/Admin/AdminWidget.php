@@ -122,7 +122,7 @@ class AdminWidget extends AbstractWidget implements CatalogAwareInterface
         $this->setModelFactory($container['model/factory']);
 
         // CatalogAware Depencency
-        $this->setCatalog($container['translator/catalog']);
+        $this->setCatalog($container['translation/catalog']);
     }
 
     /**

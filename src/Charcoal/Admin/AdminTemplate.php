@@ -145,7 +145,7 @@ class AdminTemplate extends AbstractTemplate implements
         $this->setAuthorizer($container['admin/authorizer']);
 
         // CatalogAware Depencency
-        $this->setCatalog($container['translator/catalog']);
+        $this->setCatalog($container['translation/catalog']);
     }
 
     /**

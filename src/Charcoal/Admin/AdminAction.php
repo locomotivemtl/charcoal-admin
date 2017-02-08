@@ -98,7 +98,7 @@ abstract class AdminAction extends AbstractAction implements
         $this->setAuthorizer($container['admin/authorizer']);
 
         // CatalogAware Depencency
-        $this->setCatalog($container['translator/catalog']);
+        $this->setCatalog($container['translation/catalog']);
     }
 
     /**

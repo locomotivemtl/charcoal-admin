@@ -125,14 +125,6 @@ Charcoal.Admin.Widget.prototype.set_element = function (elem) {
 };
 
 /**
- * Default behavior
- * @return {[type]} [description]
- */
-Charcoal.Admin.Widget.prototype.widget_options = function () {
-    return this.opts();
-};
-
-/**
  *
  */
 Charcoal.Admin.Widget.prototype.element = function () {

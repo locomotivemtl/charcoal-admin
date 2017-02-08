@@ -16,8 +16,8 @@ Charcoal.Admin.Widget_Table = function ()
     this.widget_id      = null;
     this.table_selector = null;
     this.table_rows     = [];
-    this.filters        = [];
-    this.orders         = [];
+    this.filters        = {};
+    this.orders         = {};
     this.pagination     = {
         page: 1,
         num_per_page: 50

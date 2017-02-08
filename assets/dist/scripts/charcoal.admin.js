@@ -1308,14 +1308,6 @@ Charcoal.Admin.Widget.prototype.set_element = function (elem) {
 };
 
 /**
- * Default behavior
- * @return {[type]} [description]
- */
-Charcoal.Admin.Widget.prototype.widget_options = function () {
-    return this.opts();
-};
-
-/**
  *
  */
 Charcoal.Admin.Widget.prototype.element = function () {
@@ -2948,11 +2940,12 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
     // Dumb loop
     for (; i < total; i++) {
         var single_filter = {};
-        single_filter[ properties[i] ] = {};
-        single_filter[ properties[i] ].val = '%' + val + '%';
-        single_filter[ properties[i] ].property = properties[i];
-        single_filter[ properties[i] ].operator = 'LIKE';
-        single_filter[ properties[i] ].operand = 'OR';
+        single_filter[properties[i]] = {
+            val: '%' + val + '%',
+            property: properties[i],
+            operator: 'LIKE',
+            operand: 'OR'
+        };
 
         widget.add_filter(single_filter);
     }
@@ -2981,8 +2974,8 @@ Charcoal.Admin.Widget_Table = function ()
     this.widget_id      = null;
     this.table_selector = null;
     this.table_rows     = [];
-    this.filters        = [];
-    this.orders         = [];
+    this.filters        = {};
+    this.orders         = {};
     this.pagination     = {
         page: 1,
         num_per_page: 50

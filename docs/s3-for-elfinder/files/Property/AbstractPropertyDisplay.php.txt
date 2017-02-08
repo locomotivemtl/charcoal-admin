@@ -5,27 +5,28 @@ namespace Charcoal\Admin\Property;
 use Traversable;
 use InvalidArgumentException;
 
-// Dependencies from PSR-3 (Logger)
+// From PSR-3
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
-// Dependency from Pimple
+// From Pimple
 use Pimple\Container;
 
-// Dependencies from 'charcoal-core'
+// From 'charcoal-core'
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// Dependency from 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
+// From 'charcoal-translator'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\TranslatorAwareTrait;
 
-// Dependencies from 'charcoal-property'
+// From 'charcoal-property'
 use Charcoal\Property\PropertyFactory;
 use Charcoal\Property\PropertyInterface;
 use Charcoal\Property\PropertyMetadata;
 
-// Local dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\Property\PropertyDisplayInterface;
 
 /**
@@ -38,6 +39,7 @@ abstract class AbstractPropertyDisplay implements
 {
     use DescribableTrait;
     use LoggerAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * @var string $ident
@@ -53,6 +55,7 @@ abstract class AbstractPropertyDisplay implements
      * @var string $type
      */
     protected $type;
+
     /**
      * @var string $displayType
      */
@@ -111,7 +114,7 @@ abstract class AbstractPropertyDisplay implements
      */
     public function setDependencies(Container $container)
     {
-        // This method is a stub. Reimplement in children method
+        $this->setTranslator($container['translator']);
     }
 
     /**
@@ -184,9 +187,7 @@ abstract class AbstractPropertyDisplay implements
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
-            );
+            throw new InvalidArgumentException('Property Display identifier must be string');
         }
         $this->ident = $ident;
         return $this;
@@ -251,9 +252,7 @@ abstract class AbstractPropertyDisplay implements
     public function setDisplayClass($displayClass)
     {
         if (!is_string($displayClass)) {
-            throw new InvalidArgumentException(
-                'Display class must be a string'
-            );
+            throw new InvalidArgumentException('CSS Class(es) must be a string');
         }
         $this->displayClass = $displayClass;
         return $this;
@@ -279,7 +278,7 @@ abstract class AbstractPropertyDisplay implements
             $name .= '[]';
         }
         if ($this->p()->l10n()) {
-            $lang = TranslationConfig::instance()->currentLanguage();
+            $lang = $this->transator()->getLocale();
             $name .= '['.$lang.']';
         }
         return $name;
@@ -303,7 +302,7 @@ abstract class AbstractPropertyDisplay implements
     {
         if (!is_string($displayType)) {
             throw new InvalidArgumentException(
-                'Display type must be a string.'
+                'Property Display Type must be a string.'
             );
         }
         $this->displayType = $displayType;
@@ -331,7 +330,6 @@ abstract class AbstractPropertyDisplay implements
         return $this;
     }
 
-
     /**
      * @return PropertyInterface
      */
@@ -341,7 +339,7 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
-     * Alias of the `property` method.
+     * Alias of {@see self::property()}
      *
      * @return PropertyInterface
      */

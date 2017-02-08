@@ -6,17 +6,15 @@ use ArrayIterator;
 use RuntimeException;
 use InvalidArgumentException;
 
+// From Pimple
 use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
-// Local Dependency
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 
 /**
  * Admin Sidemenu Widget
@@ -122,9 +120,10 @@ class SidemenuWidget extends AdminWidget implements
     protected function sidemenuGroupFactory()
     {
         if (!isset($this->sidemenuGroupFactory)) {
-            throw new RuntimeException(
-                sprintf('Sidemenu Group Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Sidemenu Group Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->sidemenuGroupFactory;
@@ -202,11 +201,7 @@ class SidemenuWidget extends AdminWidget implements
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        } else {
-            $this->title = null;
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
@@ -214,7 +209,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the title of the sidemenu.
      *
-     * @return TranslationString|string|null
+     * @return Translation|null
      */
     public function title()
     {
@@ -225,9 +220,7 @@ class SidemenuWidget extends AdminWidget implements
             $this->title = '';
 
             if (isset($metadata[$ident]['title'])) {
-                if (TranslationString::isTranslatable($metadata[$ident]['title'])) {
-                    $this->setTitle($metadata[$ident]['title']);
-                }
+                $this->setTitle($metadata[$ident]['title']);
             }
         }
 
@@ -278,12 +271,12 @@ class SidemenuWidget extends AdminWidget implements
                 $active = !!$link['active'];
             }
 
-            if (isset($link['name']) && TranslationString::isTranslatable($link['name'])) {
-                $name = new TranslationString($link['name']);
+            if (isset($link['name'])) {
+                $name = $this->translator()->translation($link['name']);
             }
 
-            if (isset($link['url']) && TranslationString::isTranslatable($link['url'])) {
-                $url = new TranslationString($link['url']);
+            if (isset($link['url'])) {
+                $url = $this->translator()->translation($link['url']);
             }
 
             if ($name === null && $url === null) {
@@ -297,13 +290,10 @@ class SidemenuWidget extends AdminWidget implements
                 'selected' => ($linkIdent === $objType)
             ];
         } else {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Link must be an associative array, received %2$s',
-                    'MenuItemInterface',
-                    (is_object($link) ? get_class($link) : gettype($link))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Link must be an associative array, received %s',
+                (is_object($link) ? get_class($link) : gettype($link))
+            ));
         }
 
         return $this;
@@ -540,13 +530,11 @@ class SidemenuWidget extends AdminWidget implements
         } elseif ($group === false || $group === null) {
             return $this;
         } else {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Group must be an instance of %s or an array of form group options, received %s',
-                    'SidemenuGroupInterface',
-                    (is_object($group) ? get_class($group) : gettype($group))
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Group must be an instance of %s or an array of form group options, received %s',
+                'SidemenuGroupInterface',
+                (is_object($group) ? get_class($group) : gettype($group))
+            ));
         }
 
         return $this;

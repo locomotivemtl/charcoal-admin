@@ -2,27 +2,27 @@
 
 namespace Charcoal\Admin\Script\Object;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Pimple (DI container) dependencies
+// From Pimple
 use Pimple\Container;
 
-// Module `charcoal-core` dependencies
+// From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;
 
-// Module `charcoal-factory` dependencies
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Module `charcoal-app` dependencies
+// From 'charcoal-app'
 use Charcoal\App\Script\CronScriptInterface;
 use Charcoal\App\Script\CronScriptTrait;
 
-// Module `charcoal-base` dependencies
+// From 'charcoal-object'
 use Charcoal\Object\ObjectSchedule;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 
 /**
@@ -60,7 +60,7 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
             ],
             'obj-id' => [
                 'longPrefix'   => 'obj-id',
-                'description'  => 'Object ID. Must have obj-type set to have any effect. Leave empty to process all objects.',
+                'description'  => 'Object ID. Must have "obj-type" set to have any effect. Leave empty to process all objects.',
                 'defaultValue' => ''
             ]
         ];
@@ -68,7 +68,6 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
         $arguments = array_merge(parent::defaultArguments(), $arguments);
         return $arguments;
     }
-
 
     /**
      * @param RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -174,7 +173,6 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
     {
         return $this->scheduleFactory;
     }
-
 
     /**
      * @return ObjectSchedule

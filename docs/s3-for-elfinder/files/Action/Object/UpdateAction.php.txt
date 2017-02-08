@@ -4,42 +4,51 @@ namespace Charcoal\Admin\Action\Object;
 
 use Exception;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Model\ModelValidator;
 
-// From `charcoal-base`
+// From 'charcoal-object'
 use Charcoal\Object\ContentInterface;
 
 /**
- * Admin Update Action: Save an object in its Storage.
+ * Action: Save an object and update copy in storage.
  *
  * ## Required Parameters
- * - `obj_type` _string_ The object type, as an identifier for a `ModelInterface`.
- * - `obj_id` _mixed_ The object ID to load and update
+ *
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
+ * - `obj_id` (_mixed_) — The object ID to load and update
  *
  * ## Response
- * - `success` _boolean_ True if the object was properly saved, false in case of any error.
  *
- * ## HTTP Codes
- * - `200` in case of a successful login
- * - `404` if any error occurs
+ * - `success` (_boolean_) — TRUE if the object was properly saved, FALSE in case of any error.
  *
- * Ident: `charcoal/admin/action/object/update`
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; Object has been updated
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Object could not be updated
  */
 class UpdateAction extends AbstractSaveAction
 {
     /**
-     * @var array $updateData
+     * Data for the target model.
+     *
+     * @var array
      */
     protected $updateData = [];
 
     /**
-     * @param array $data The update action data.
-     * @return LoginAction Chainable
+     * Set the action's dataset.
+     *
+     * Extract relevant model data from $data, excluding _object type_ and _ID_.
+     * This {@see self::$updateData subset} is merged onto the target model.
+     *
+     * @param  array $data The update action data.
+     * @return UpdateAction Chainable
      */
     public function setData(array $data)
     {
@@ -47,22 +56,28 @@ class UpdateAction extends AbstractSaveAction
 
         unset($data['obj_type']);
         unset($data['obj_id']);
+
         $this->setUpdateData($data);
 
         return $this;
     }
 
     /**
-     * @param array $updateData The update data.
-     * @return SaveAction Chainable
+     * Set the dataset used to update the target model.
+     *
+     * @param  array $updateData The update data.
+     * @return UpdateAction Chainable
      */
     public function setUpdateData(array $updateData)
     {
         $this->updateData = $updateData;
+
         return $this;
     }
 
     /**
+     * Retrieve the dataset used to update the target model.
+     *
      * @return array
      */
     public function updateData()
@@ -71,32 +86,69 @@ class UpdateAction extends AbstractSaveAction
     }
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
+            $failMessage = $this->translator()->translation('Failed to update object');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+                '{{ errorMessage }}' => $failMessage
+            ]);
+            $reqMessage  = $this->translator()->translation(
+                '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+            );
+            $typeMessage = $this->translator()->translation(
+                '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+            );
+
+            $objType = $request->getParam('obj_type');
+            $objId   = $request->getParam('obj_id');
+
+            if (!$objType) {
+                $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+                $this->addFeedback('error', strtr($reqMessage, [
+                    '{{ parameter }}'    => '"obj_type"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
+            if (!$objId) {
+                $actualType = is_object($objId) ? get_class($objId) : gettype($objId);
+                $this->addFeedback('error', strtr($reqMessage, [
+                    '{{ parameter }}'    => '"obj_id"',
+                    '{{ expectedType }}' => 'ID',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
             $this->setData($request->getParams());
 
             // Load or reload object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
-
-            $updateData = $this->updateData();
-
             $obj->mergeData($this->updateData());
 
             $valid = $obj->validate();
-
             if (!$valid) {
-                $this->setSuccess(false);
-                $this->addFeedbackFromValidation($obj);
                 if (!$this->hasFeedbacks()) {
-                    $this->addFeedback('error', 'Failed to update object: validation error(s).');
+                    $this->addFeedback('error', strtr($errorThrown, [
+                        '{{ errorThrown }}' => $this->translator()->translate('Invalid Data')
+                    ]));
                 }
 
-                return $response->withStatus(404);
+                $this->addFeedbackFromValidation($obj);
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
             }
 
             if ($obj instanceof ContentInterface) {
@@ -106,26 +158,31 @@ class UpdateAction extends AbstractSaveAction
                 }
             }
 
-            $ret = $obj->update();
+            $result = $obj->update();
 
-            if ($ret) {
-                $this->setSuccess(true);
-                $this->addFeedback('success', sprintf('Object was successfully updated. (ID: %s)', $obj->id()));
+            if ($result) {
+                $this->addFeedback('success', $this->translator()->translate('Object has been successfully updated.'));
+                $this->addFeedback('success', strtr($this->translator()->translate('Updated Object: {{ objId }}'), [
+                    '{{ objId }}' => $obj->id()
+                ]));
                 $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);
+                $this->setSuccess(true);
 
                 return $response;
             } else {
-                $this->setSuccess(false);
-                $this->addFeedback('error', 'Could not update objet. Unknown error');
+                $this->addFeedback('error', $failMessage);
                 $this->addFeedbackFromValidation($obj);
+                $this->setSuccess(false);
 
-                return $response->withStatus(404);
+                return $response->withStatus(500);
             }
         } catch (Exception $e) {
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
-            $this->addFeedback('error', $e->getMessage());
 
-            return $response->withStatus(404);
+            return $response->withStatus(500);
         }
     }
 }

@@ -9,11 +9,8 @@ use \RuntimeException;
 // From Pimple
 use \Pimple\Container;
 
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use \Psr\Http\Message\RequestInterface;
-
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
 
 // From `charcoal-app`
 use \Charcoal\Factory\FactoryInterface;
@@ -25,11 +22,12 @@ use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
 use \Charcoal\Admin\User\AuthAwareInterface;
 use \Charcoal\Admin\User\AuthAwareTrait;
+use \Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
  * A Basic Admin Form
@@ -57,7 +55,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Label for the form submission button.
      *
-     * @var TranslationString|string
+     * @var Translation|string
      */
     protected $submitLabel;
 
@@ -118,9 +116,10 @@ class FormWidget extends AdminWidget implements
     public function httpRequest()
     {
         if (!isset($this->httpRequest)) {
-            throw new RuntimeException(
-                sprintf('A PSR-7 Request instance is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'A PSR-7 Request instance is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->httpRequest;
@@ -148,9 +147,10 @@ class FormWidget extends AdminWidget implements
     protected function widgetFactory()
     {
         if ($this->widgetFactory === null) {
-            throw new RuntimeException(
-                sprintf('Widget Factory is not defined for "%s"', get_class($this))
-            );
+            throw new RuntimeException(sprintf(
+                'Widget Factory is not defined for "%s"',
+                get_class($this)
+            ));
         }
 
         return $this->widgetFactory;
@@ -162,7 +162,7 @@ class FormWidget extends AdminWidget implements
      */
     public function createFormProperty(array $data = null)
     {
-        $p = $this->widgetFactory()->create('charcoal/admin/widget/form-property');
+        $p = $this->widgetFactory()->create(FormPropertyWidget::class);
         if ($data !== null) {
             $p->setData($data);
         }
@@ -354,15 +354,12 @@ class FormWidget extends AdminWidget implements
     /**
      * Retrieve the label for the form submission button.
      *
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function submitLabel()
     {
         if ($this->submitLabel === null) {
-            $this->submitLabel = new TranslationString([
-                'en' => 'Save',
-                'fr' => 'Sauvegarder'
-            ]);
+            $this->submitLabel = $this->translator()->translation('Save');
         }
 
         return $this->submitLabel;

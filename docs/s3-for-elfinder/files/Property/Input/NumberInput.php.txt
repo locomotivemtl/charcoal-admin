@@ -35,7 +35,7 @@ class NumberInput extends AbstractPropertyInput
     {
         if (!is_numeric($min)) {
             throw new InvalidArgumentException(
-                'Min length needs to be an integer'
+                'Minimum length needs to be an integer'
             );
         }
         $this->min = (int)$min;
@@ -59,7 +59,7 @@ class NumberInput extends AbstractPropertyInput
     {
         if (!is_numeric($max)) {
             throw new InvalidArgumentException(
-                'Max length needs to be an integer'
+                'Maximum length needs to be an integer'
             );
         }
         $this->max = (int)$max;

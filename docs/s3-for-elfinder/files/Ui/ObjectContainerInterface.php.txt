@@ -3,11 +3,12 @@
 namespace Charcoal\Admin\Ui;
 
 /**
- * The Object Container Interface.
+ * Defines awareness of a primary object.
+ *
+ * Implementation, as trait, provided by {@see \Charcoal\Admin\Ui\ObjectContainerTrait}.
  */
 interface ObjectContainerInterface
 {
-
     /**
      * @param string $objType The object type.
      * @return ObjectContainerInterface Chainable

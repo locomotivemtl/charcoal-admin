@@ -2,15 +2,15 @@
 
 namespace Charcoal\Admin\ServiceProvider;
 
-// Dependencies from `pimple/pimple`
+// From Pimple
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-// Dependencies from `zendframework/zend-permissions`
+// From 'zendframework/zend-permissions'
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\GenericResource as AclResource;
 
-// Dependencies from `charcoal-base`
+// From 'charcoal-user'
 use Charcoal\User\Acl\Manager as AclManager;
 
 /**
@@ -21,7 +21,6 @@ use Charcoal\User\Acl\Manager as AclManager;
  * ## Services
  *
  * - `admin/acl` A Zend ACL instance containing the admin resources / permissions.
- *
  *
  * ## Dependencies
  *
@@ -52,7 +51,7 @@ class AclServiceProvider implements ServiceProviderInterface
             $tableName = 'charcoal_admin_acl_roles';
 
             $aclManager = new AclManager([
-                'logger'    => $container['logger']
+                'logger' => $container['logger']
             ]);
 
             $acl = new Acl();

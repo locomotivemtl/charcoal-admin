@@ -7,10 +7,6 @@ use \InvalidArgumentException;
 // From Pimple
 use \Pimple\Container;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-use \Charcoal\Translation\TranslationConfig;
-
 // From 'charcoal-ui'
 use \Charcoal\Ui\Form\FormInterface;
 
@@ -83,9 +79,32 @@ class FormSidebarWidget extends AdminWidget implements
     protected $priority;
 
     /**
-     * @var TranslationString $title
+     * The title is displayed by default.
+     *
+     * @var boolean
+     */
+    private $showTitle = true;
+
+    /**
+     * The sidebar's title.
+     *
+     * @var \Charcoal\Translator\Translation|string|null
      */
     protected $title;
+
+    /**
+     * The subtitle is displayed by default.
+     *
+     * @var boolean
+     */
+    private $showSubtitle = true;
+
+    /**
+     * The sidebar's subtitle.
+     *
+     * @var \Charcoal\Translator\Translation|string|null
+     */
+    private $subtitle;
 
     /**
      * @var boolean
@@ -167,19 +186,6 @@ class FormSidebarWidget extends AdminWidget implements
     public function form()
     {
         return $this->form;
-    }
-
-    /**
-     * @param mixed $subtitle The sidebar subtitle.
-     * @return FormSidebarWidget Chainable
-     */
-    public function setSubtitle($subtitle)
-    {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->title = new TranslationString($subtitle);
-        }
-
-        return $this;
     }
 
     /**
@@ -534,28 +540,94 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * @param mixed $title The sidebar title.
-     * @return FormSidebarWidget Chainable
+     * Show/hide the widget's title.
+     *
+     * @param boolean $show Show (TRUE) or hide (FALSE) the title.
+     * @return UiItemInterface Chainable
      */
-    public function setTitle($title)
+    public function setShowTitle($show)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        }
+        $this->showTitle = !!$show;
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * Determine if the title is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a title.
+     */
+    public function showTitle()
+    {
+        if ($this->showTitle === false) {
+            return false;
+        } else {
+            return !!$this->title();
+        }
+    }
+
+    /**
+     * @param mixed $title The sidebar title.
+     * @return FormSidebarWidget Chainable
+     */
+    public function setTitle($title)
+    {
+        $this->title = $this->translator()->translation($title);
+
+        return $this;
+    }
+
+    /**
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle('Actions');
+            $this->setTitle($this->translator()->translation('Actions'));
         }
 
         return $this->title;
+    }
+
+    /**
+     * @param boolean $show The show subtitle flag.
+     * @return FormSidebarWidget Chainable
+     */
+    public function setShowSubtitle($show)
+    {
+        $this->showSubtitle = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showSubtitle()
+    {
+        if ($this->showSubtitle === false) {
+            return false;
+        } else {
+            return !!$this->subtitle();
+        }
+    }
+
+    /**
+     * @param mixed $subtitle The sidebar widget subtitle.
+     * @return FormSidebarWidget Chainable
+     */
+    public function setSubtitle($subtitle)
+    {
+        $this->subtitle = $this->translator()->translation($subtitle);
+
+        return $this;
+    }
+
+    /**
+     * @return \Charcoal\Translator\Translation|string|null
+     */
+    public function subtitle()
+    {
+        return $this->subtitle;
     }
 
     /**
@@ -583,13 +655,13 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * @see    FormPropertyWidget::showActiveLanguage()
      * @return boolean
      */
     public function showLanguageSwitch()
     {
-        $trans = TranslationConfig::instance();
-
-        if ($trans->isMultilingual()) {
+        $locales = count($this->translator()->availableLocales());
+        if ($locales > 1) {
             foreach ($this->form()->formProperties() as $prop) {
                 if ($prop->prop()->l10n()) {
                     return true;
@@ -603,21 +675,28 @@ class FormSidebarWidget extends AdminWidget implements
     /**
      * Retrieve the available languages, formatted for the sidebar language-switcher.
      *
-     * @return array|Generator
+     * @see    FormGroupWidget::languages()
+     * @return array
      */
     public function languages()
     {
-        $trans   = TranslationConfig::instance();
-        $curLang = $trans->currentLanguage();
-        $langs   = $trans->languages();
+        $currentLocale = $this->translator()->getLocale();
+        $languages = [];
+        foreach ($this->translator()->locales() as $locale => $localeConfig) {
+            if (isset($localeConfig['name'])) {
+                $label = $localeConfig['name'];
+            } else {
+                $label = 'locale.'.$locale;
+            }
 
-        foreach ($langs as $lang) {
-            yield [
-                'ident'   => $lang->ident(),
-                'name'    => $lang->name(),
-                'current' => ($lang->ident() === $curLang)
+            $languages[] = [
+                'ident'   => $locale,
+                'name'    => $this->translator()->translation($label),
+                'current' => ($locale === $currentLocale)
             ];
         }
+
+        return $languages;
     }
 
 

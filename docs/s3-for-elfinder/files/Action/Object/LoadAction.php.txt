@@ -7,41 +7,41 @@ use UnexpectedValueException;
 use InvalidArgumentException;
 use RuntimeException;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From Pimple
 use Pimple\Container;
 
-// Module `charcoal-factory` depenencie
-
-// Moduele  `charcoal-core` dependencies
+// From 'charcoal-core'
 use Charcoal\Model\Collection;
 use Charcoal\Loader\CollectionLoader;
 
-// from `charcoal-admin`
+// From `charcoal-admin`
 use Charcoal\Admin\AdminAction;
 
 /**
- * Admin Load Action: Load an object from database.
+ * Action: Load one or more objects from storage.
  *
  * ## Required Parameters
  *
- * - `obj_type`
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
  *
  * ## Optional Parameters
  *
- * - `obj_id`
+ * - `obj_id` (_mixed_) — The object ID to load.
  *
  * ## Response
  *
- * - `success` _boolean_ True if the object was properly loaded, false in case of any error.
- * - `collection` _Charcoal\Model\Collection_ The created collection, if any.
+ * - `success` (_boolean_) — TRUE if the object(s) was/were loaded, FALSE in case of any error.
+ * - `collection` (_Charcoal\Model\Collection_) — One or more of the requested objects, if any.
  *
- * ## HTTP Codes
- * - `400` if any bad requests occurs
+ * ## HTTP Status Codes
  *
- * Ident: `charcoal/admin/action/object/load`
+ * - `200` — Successful; Object(s) loaded, if any
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Object(s) could not be loaded, if any
  */
 class LoadAction extends AdminAction
 {
@@ -69,12 +69,7 @@ class LoadAction extends AdminAction
      */
     protected $objCollection;
 
-    // ==========================================================================
-    // FUNCTIONS
-    // ==========================================================================
-
     /**
-     * Dependencies
      * @param Container $container DI Container.
      * @return void
      */
@@ -94,30 +89,68 @@ class LoadAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $failMessage = $this->translator()->translation('Failed to load object(s)');
+        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+            '{{ errorMessage }}' => $failMessage
+        ]);
+        $reqMessage  = $this->translator()->translation(
+            '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+        );
+
         $objType = $request->getParam('obj_type');
         $objId   = $request->getParam('obj_id');
 
         if ($objId) {
-            throw new UnexpectedValueException(
-                'An error occured loading the object: obj_id is not yet supported in LoadAction'
-            );
+            $this->addFeedback('error', strtr('{{ parameter }} not supported', [
+                '{{ parameter }}' => '"obj_id"'
+            ]));
+            $this->setSuccess(false);
+
+            return $response->withStatus(400);
         }
 
         if (!$objType) {
+            $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+            $this->addFeedback('error', strtr($reqMessage, [
+                '{{ parameter }}'    => '"obj_type"',
+                '{{ expectedType }}' => 'string',
+                '{{ actualType }}'   => $actualType,
+            ]));
             $this->setSuccess(false);
-            $this->addFeedback('error', '"obj_type" required');
+
             return $response->withStatus(400);
         }
 
         try {
             $this->setObjType($objType);
-            $this->objCollection = $this->loadObjectCollection($objType);
+            $this->loadObjectCollection($objType);
+
+            $count = count($this->objCollection);
+            switch ($count) {
+                case 0:
+                    $doneMessage = $this->translator()->translation('No objects found.');
+                    break;
+
+                case 1:
+                    $doneMessage = $this->translator()->translation('One object found.');
+                    break;
+
+                default:
+                    $doneMessage = strtr($this->translator()->translation('{{ count }} objects found.'), [
+                        '{{ count }}' => $count
+                    ]);
+                    break;
+            }
+            $this->addFeedback('success', $doneMessage);
             $this->setSuccess(true);
+
             return $response;
         } catch (Exception $e) {
-            $this->addFeedback('error', sprintf('An error occured loading the object: "%s"', $e->getMessage()));
-            $this->addFeedback('error', $e->getMessage());
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
+
             return $response->withStatus(500);
         }
     }
@@ -130,32 +163,44 @@ class LoadAction extends AdminAction
      */
     protected function loadObjectCollection($objType)
     {
-        $proto = $this->modelFactory()->get($objType);
+        $proto  = $this->modelFactory()->get($objType);
         $loader = $this->collectionLoader();
         $loader->setModel($proto);
         $loader->addFilter('active', true);
 
-        return $loader->load();
+        $this->objCollection = $loader->load();
+
+        return $this->objCollection;
     }
 
-    // ==========================================================================
-    // SETTERS
-    // ==========================================================================
+    /**
+     * @return array The object collection parsed as array
+     */
+    public function objCollection()
+    {
+        if (!$this->objCollection) {
+            return [];
+        }
+
+        return $this->objCollection->objects();
+    }
 
     /**
-     * @param string $objType The object type as string.
-     * @return self
-     * @throws InvalidArgumentException If $objType is not a string.
+     * Retrieve the model collection loader.
+     *
+     * @throws RuntimeException If the collection loader was not previously set.
+     * @return CollectionLoader
      */
-    public function setObjType($objType)
+    public function collectionLoader()
     {
-        if (!is_string($objType)) {
-            throw new InvalidArgumentException(
-                'obj_type must be a string'
-            );
+        if (!isset($this->collectionLoader)) {
+            throw new RuntimeException(sprintf(
+                'Collection Loader is not defined for "%s"',
+                get_class($this)
+            ));
         }
-        $this->objType = $objType;
-        return $this;
+
+        return $this->collectionLoader;
     }
 
     /**
@@ -171,10 +216,6 @@ class LoadAction extends AdminAction
         return $this;
     }
 
-    // ==========================================================================
-    // GETTERS
-    // ==========================================================================
-
     /**
      * @return string The object type as string.
      */
@@ -184,36 +225,23 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * @return array The object collection parsed as array
+     * @param string $objType The object type as string.
+     * @throws InvalidArgumentException If the object type is not a string.
+     * @return self
      */
-    public function objCollection()
+    public function setObjType($objType)
     {
-        if (!$this->objCollection) {
-            return [];
-        }
-        return $this->objCollection->objects();
-    }
-
-    /**
-     * Retrieve the model collection loader.
-     *
-     * @throws RuntimeException If the collection loader was not previously set.
-     * @return CollectionLoader
-     */
-    public function collectionLoader()
-    {
-        if (!isset($this->collectionLoader)) {
-            throw new RuntimeException(
-                sprintf('Collection Loader is not defined for "%s"', get_class($this))
-            );
+        if (!is_string($objType)) {
+            throw new InvalidArgumentException(sprintf(
+                'Object type must be a string, received %s',
+                is_object($objType) ? get_class($objType) : gettype($objType)
+            ));
         }
 
-        return $this->collectionLoader;
-    }
+        $this->objType = $objType;
 
-    // ==========================================================================
-    // RESULTS
-    // ==========================================================================
+        return $this;
+    }
 
     /**
      * @return array

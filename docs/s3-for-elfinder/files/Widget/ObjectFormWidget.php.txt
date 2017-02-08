@@ -8,9 +8,6 @@ use \InvalidArgumentException;
 // From Pimple
 use \Pimple\Container;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
@@ -19,7 +16,7 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
 use \Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
- *
+ * Object Admin Form
  */
 class ObjectFormWidget extends FormWidget implements
     ObjectContainerInterface
@@ -59,24 +56,16 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * Retrieve the label for the form submission button.
      *
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function submitLabel()
     {
         if ($this->submitLabel === null) {
             if ($this->objId()) {
-                $label = [
-                    'en' => 'Update',
-                    'fr' => 'Mettre à jour'
-                ];
+                $this->submitLabel = $this->translator()->translation('Update');
             } else {
-                $label = [
-                    'en' => 'Save',
-                    'fr' => 'Sauvegarder'
-                ];
+                $this->submitLabel = $this->translator()->translation('Save');
             }
-
-            $this->submitLabel = new TranslationString($label);
         }
 
         return $this->submitLabel;
@@ -323,13 +312,11 @@ class ObjectFormWidget extends FormWidget implements
             }
 
             if (!is_array($propertyMetadata)) {
-                throw new UnexpectedValueException(
-                    sprintf(
-                        'Invalid property data for "%1$s", received %2$s',
-                        $propertyIdent,
-                        (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
-                    )
-                );
+                throw new UnexpectedValueException(sprintf(
+                    'Invalid property data for "%1$s", received %2$s',
+                    $propertyIdent,
+                    (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
+                ));
             }
 
             $formProperty = $this->createFormProperty();
@@ -361,13 +348,11 @@ class ObjectFormWidget extends FormWidget implements
         $propertyMetadata = $this->obj()->metadata()->property($propertyIdent);
 
         if (!is_array($propertyMetadata)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Invalid property data for "%1$s", received %2$s',
-                    $propertyIdent,
-                    (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'Invalid property data for "%1$s", received %2$s',
+                $propertyIdent,
+                (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
+            ));
         }
 
         $p = $this->createFormProperty();

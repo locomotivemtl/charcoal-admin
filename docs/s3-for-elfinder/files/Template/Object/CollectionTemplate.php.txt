@@ -5,14 +5,12 @@ namespace Charcoal\Admin\Template\Object;
 use Exception;
 use InvalidArgumentException;
 
-// From PSR-7 (http messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
@@ -75,9 +73,15 @@ class CollectionTemplate extends AdminTemplate implements
         if (!$obj) {
             return;
         }
-        if ($obj->source()->tableExists() === false) {
+
+        if (!$obj->source()->tableExists()) {
             $obj->source()->createTable();
-            $this->addFeedback('success', 'A new table was created for object.');
+            $this->addFeedback('notice', strtr(
+                $this->translator()->translate('The "{{ objType }}" table has been created.'),
+                [
+                    '{{ objType }}' => $obj->objType()
+                ]
+            ));
         }
     }
 
@@ -156,12 +160,10 @@ class CollectionTemplate extends AdminTemplate implements
 
         $adminMetadata = $this->objAdminMetadata();
         if (!isset($adminMetadata['default_collection_dashboard'])) {
-            throw new Exception(
-                sprintf(
-                    'No default collection dashboard defined in admin metadata for %s.',
-                    get_class($this->proto())
-                )
-            );
+            throw new Exception(sprintf(
+                'No default collection dashboard defined in admin metadata for %s.',
+                get_class($this->proto())
+            ));
         }
 
         return $adminMetadata['default_collection_dashboard'];
@@ -209,7 +211,7 @@ class CollectionTemplate extends AdminTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {
@@ -221,8 +223,7 @@ class CollectionTemplate extends AdminTemplate implements
             $config = $this->objCollectionDashboardConfig();
 
             if (isset($config['title'])) {
-                $this->title = new TranslationString($config['title']);
-
+                $this->title = $this->translator()->translation($config['title']);
                 return $this->title;
             }
         } catch (Exception $e) {
@@ -242,35 +243,23 @@ class CollectionTemplate extends AdminTemplate implements
             }
 
             if (isset($adminMetadata['lists'][$listIdent]['label'])) {
-                $objLabel = $adminMetadata['lists'][$listIdent]['label'];
-
-                if (TranslationString::isTranslatable($objLabel)) {
-                    $objLabel = new TranslationString($objLabel);
-                }
+                $objLabel = $this->translator()->translation($adminMetadata['lists'][$listIdent]['label']);
             }
         }
 
         if (!$objLabel && isset($metadata['labels']['all_items'])) {
-            $objLabel = $metadata['labels']['all_items'];
-
-            if (TranslationString::isTranslatable($objLabel)) {
-                $objLabel = new TranslationString($objLabel);
-            }
+            $objLabel = $this->translator()->translation($metadata['labels']['all_items']);
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['name']) ? $metadata['labels']['name'] : null);
-            if (TranslationString::isTranslatable($objType)) {
-                $objType = new TranslationString($objType);
-            }
+            $objType = (isset($metadata['labels']['name']) ? $this->translator()->translation($metadata['labels']['name']) : null);
 
-            $objLabel = new TranslationString([
-                'en' => 'List: {{objType}}',
-                'fr' => 'Liste : {{objType}}'
-            ]);
+            $objLabel = $this->translator()->translation('Collection: {{ objType }}');
 
             if ($objType) {
-                $objLabel = sprintf(str_replace('{{objType}}', '%s', $objLabel), $objType);
+                $objLabel = strtr($objLabel, [
+                    '{{ objType }}' => $objType
+                ]);
             }
         }
 

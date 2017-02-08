@@ -4,8 +4,6 @@ namespace Charcoal\Admin\Property\Input;
 
 use \InvalidArgumentException;
 
-// Dependency from 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
 
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\Input\TextareaInput;
@@ -25,7 +23,7 @@ class TinymceInput extends TextareaInput
     /**
      * Label for the file picker dialog.
      *
-     * @var TranslationString|string
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $dialogTitle;
 
@@ -126,16 +124,12 @@ class TinymceInput extends TextareaInput
     /**
      * Set the title for the file picker dialog.
      *
-     * @param  string|string[] $title The dialog title.
+     * @param  mixed $title The dialog title.
      * @return self
      */
     public function setDialogTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->dialogTitle = new TranslationString($title);
-        } else {
-            $this->dialogTitle = null;
-        }
+        $this->dialogTitle = $this->translator()->translation($title);
 
         return $this;
     }
@@ -143,20 +137,17 @@ class TinymceInput extends TextareaInput
     /**
      * Retrieve the default title for the file picker dialog.
      *
-     * @return string[]
+     * @return \Charcoal\Translator\Translation|string|null
      */
     protected function defaultDialogTitle()
     {
-        return [
-            'en' => 'Media Library',
-            'fr' => 'Bibliothèque de médias'
-        ];
+        return $this->translator()->translation('Media Library');
     }
 
     /**
      * Retrieve the title for the file picker dialog.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function dialogTitle()
     {

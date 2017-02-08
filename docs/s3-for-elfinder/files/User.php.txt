@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin;
 
-// Module `charcoal-base` dependencies
+// From 'charcoal-user'
 use Charcoal\User\AbstractUser;
 
 /**

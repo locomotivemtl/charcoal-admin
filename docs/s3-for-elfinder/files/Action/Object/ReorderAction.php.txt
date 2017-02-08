@@ -4,38 +4,47 @@ namespace Charcoal\Admin\Action\Object;
 
 use Exception;
 
-// Dependencies from PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Dependency from Pimple
+// From Pimple
 use Pimple\Container;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
- * Reorder a collection of objects.
+ * Action: Reorder a collection of objects.
  *
  * ## Required Parameters
  *
- * - `obj_type`
- * - `obj_orders`
+ * - `obj_type` (_string_) — The object type, as an identifier for a {@see \Charcoal\Model\ModelInterface}.
+ * - `obj_orders` (_array_) — One or more object IDs to be sorted
  *
  * ## Optional Parameters
  *
- * - `order_property`
- * - `start_order`
+ * - `order_property` (_string_) — The object property, for sorting, to update
+ * - `start_order` (_integer_) — The initial value to increment from
  *
+ * ## Response
+ *
+ * - `success` (_boolean_) — TRUE if the object(s) was/were reordered, FALSE in case of any error.
+ *
+ * ## HTTP Status Codes
+ *
+ * - `200` — Successful; Objects reordered
+ * - `400` — Client error; Invalid request data
+ * - `500` — Server error; Objects could not be reordered
  */
 class ReorderAction extends AdminAction implements ObjectContainerInterface
 {
     use ObjectContainerTrait;
 
     /**
-     * @param Container $container A DI Container.
+     * @param  Container $container A DI Container.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -47,49 +56,76 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     }
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $failMessage = $this->translator()->translation('Failed to sort object(s)');
+        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+            '{{ errorMessage }}' => $failMessage
+        ]);
+        $reqMessage = $this->translator()->translation(
+            '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
+        );
+        $typeMessage = $this->translator()->translation(
+            '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
+        );
+
         $objType       = $request->getParam('obj_type');
         $objOrders     = $request->getParam('obj_orders');
         $orderProperty = $request->getParam('order_property', 'position');
         $startingOrder = (int)$request->getParam('start_order');
 
-        if (!$objType) {
-            $this->setSuccess(false);
-            $this->addFeedback('error', '"obj_type" required, must be a string');
-            return $response->withStatus(400);
-        }
-        $this->setObjType($objType);
-
-        if (!$objOrders || !is_array($objOrders)) {
-            $this->setSuccess(false);
-            $this->addFeedback('error', '"obj_orders" required, must be an array of object IDs');
-            return $response->withStatus(400);
-        }
-
-        if (!is_string($orderProperty)) {
-            $this->setSuccess(false);
-            $this->addFeedback('error', sprintf(
-                '"order_property" must be a string, received %s',
-                (is_object($prop) ? get_class($prop) : gettype($prop))
-            ));
-            return $response->withStatus(400);
-        }
-
         try {
+            if (!$objType) {
+                $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
+                $this->addFeedback('error', strtr($reqMessage, [
+                    '{{ parameter }}'    => '"obj_type"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+            $this->setObjType($objType);
+
+            if (!$objOrders || !is_array($objOrders)) {
+                $actualType = is_object($objOrders) ? get_class($objOrders) : gettype($objOrders);
+                $this->addFeedback('error', strtr($reqMessage, [
+                    '{{ parameter }}'    => '"obj_orders"',
+                    '{{ expectedType }}' => 'array of object IDs',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
+            if (!is_string($orderProperty)) {
+                $actualType = is_object($orderProperty) ? get_class($orderProperty) : gettype($orderProperty);
+                $this->addFeedback('error', strtr($typeMessage, [
+                    '{{ parameter }}'    => '"obj_property"',
+                    '{{ expectedType }}' => 'string',
+                    '{{ actualType }}'   => $actualType,
+                ]));
+                $this->setSuccess(false);
+
+                return $response->withStatus(400);
+            }
+
             $proto = $this->proto();
 
             if (!$proto->hasProperty($orderProperty)) {
+                $feedback = $this->translator()->translate('Missing "{{ propIdent }}" property for sorting on {{ objType }}');
+                $this->addFeedback('error', strtr($feedback, [
+                    '{{ propIdent }}' => $orderProperty,
+                    '{{ objType }}'   => $objType
+                ]));
                 $this->setSuccess(false);
-                $this->addFeedback('error', sprintf(
-                    'Missing "%s" property for sorting on [%s]',
-                    $orderProperty,
-                    $objType
-                ));
+
                 return $response->withStatus(400);
             }
 
@@ -110,12 +146,20 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
                 $pos++;
             }
 
+            if (count($objOrders) === 1) {
+                $this->addFeedback('success', $this->translator()->translate('Object has been successfully updated.'));
+            } else {
+                $this->addFeedback('success', $this->translator()->translate('Objects have been successfully reordered.'));
+            }
             $this->setSuccess(true);
+
             return $response;
         } catch (Exception $e) {
-            $this->addFeedback('error', 'An error occured while sorting the objects');
-            $this->addFeedback('error', $e->getMessage());
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $e->getMessage()
+            ]));
             $this->setSuccess(false);
+
             return $response->withStatus(500);
         }
     }

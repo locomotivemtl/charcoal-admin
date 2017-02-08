@@ -6,32 +6,32 @@ use Traversable;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-use Pimple\Container;
-
-// Dependencies from PSR-3 (Logger)
+// From PSR-3
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
-// Dependencies from 'charcoal-core'
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-core'
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// Dependencies from 'charcoal-view'
+// From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewableTrait;
 
-// Dependencies from 'charcoal-translation'
-use Charcoal\Translation\TranslationConfig;
-use Charcoal\Translation\TranslationString;
-use Charcoal\Translation\TranslationStringInterface;
+// From 'charcoal-translator'
+use Charcoal\Translator\Translator;
+use Charcoal\Translator\TranslatorAwareTrait;
 
-// Dependency from 'charcoal-admin'
-use Charcoal\Admin\Property\PropertyInputInterface;
-
-// Local namespace dependencies
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 use Charcoal\Property\PropertyMetadata;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\PropertyInputInterface;
 
 /**
  *
@@ -44,6 +44,7 @@ abstract class AbstractPropertyInput implements
 {
     use DescribableTrait;
     use LoggerAwareTrait;
+    use TranslatorAwareTrait;
     use ViewableTrait;
 
     const DEFAULT_INPUT_TYPE = 'text';
@@ -111,7 +112,7 @@ abstract class AbstractPropertyInput implements
     protected $inputClass = '';
 
     /**
-     * @var TranslationStringInterface $placeholder
+     * @var \Charcoal\Translator\Translation|string|null $placeholder
      */
     private $placeholder;
 
@@ -158,6 +159,7 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
+        $this->setTranslator($container['translator']);
         $this->setView($container['view']);
         $this->setMetadataLoader($container['metadata/loader']);
     }
@@ -241,8 +243,9 @@ abstract class AbstractPropertyInput implements
     public function lang()
     {
         if ($this->lang === null) {
-            return TranslationConfig::instance()->currentLanguage();
+            return $this->translator()->getLocale();
         }
+
         return $this->lang;
     }
 
@@ -252,10 +255,11 @@ abstract class AbstractPropertyInput implements
     public function hidden()
     {
         if ($this->p()->l10n()) {
-            if ($this->lang() != TranslationConfig::instance()->currentLanguage()) {
+            if ($this->lang() != $this->translator()->getLocale()) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -267,9 +271,7 @@ abstract class AbstractPropertyInput implements
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException(
-                __CLASS__.'::'.__FUNCTION__.'() - Ident must be a string.'
-            );
+            throw new InvalidArgumentException('Property Input identifier must be string');
         }
         $this->ident = $ident;
         return $this;
@@ -319,7 +321,6 @@ abstract class AbstractPropertyInput implements
         return $this->required;
     }
 
-
     /**
      * @param boolean $disabled Disabled flag.
      * @return Widget (Chainable)
@@ -362,15 +363,13 @@ abstract class AbstractPropertyInput implements
      * A placeholder is a hint to the user of what can be entered
      * in the property control.
      *
-     * @param mixed $placeholder The placeholder attribute.
+     * @param  mixed $placeholder The placeholder attribute.
      * @return AbstractPropertyInput Chainable
      */
     public function setPlaceholder($placeholder)
     {
-        if (TranslationString::isTranslatable($placeholder)) {
-            $this->placeholder = new TranslationString($placeholder);
-            $this->placeholder->isRendered = false;
-        }
+        $this->placeholder = $this->translator()->translation($placeholder);
+        $this->placeholder->isRendered = false;
 
         return $this;
     }
@@ -378,7 +377,7 @@ abstract class AbstractPropertyInput implements
     /**
      * Retrieve the placeholder.
      *
-     * @return string
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function placeholder()
     {
@@ -400,13 +399,13 @@ abstract class AbstractPropertyInput implements
     /**
      * Render the placeholders.
      *
-     * @todo Implement data presenter as a better alternative.
+     * @todo   Implement data presenter as a better alternative.
      * @return AbstractPropertyInput Chainable
      */
     protected function renderPlaceholder()
     {
-        if ($this->placeholder instanceof TranslationString) {
-            foreach ($this->placeholder->all() as $lang => $value) {
+        if ($this->placeholder instanceof Translation) {
+            foreach ($this->placeholder->data() as $lang => $value) {
                 if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
                     $this->placeholder[$lang] = $this->view()->render($value, $this->viewController());
                 }
@@ -467,9 +466,7 @@ abstract class AbstractPropertyInput implements
     public function setInputClass($inputClass)
     {
         if (!is_string($inputClass)) {
-            throw new InvalidArgumentException(
-                'Input class must be a string'
-            );
+            throw new InvalidArgumentException('CSS Class(es) must be a string');
         }
         $this->inputClass = $inputClass;
         return $this;
@@ -541,12 +538,10 @@ abstract class AbstractPropertyInput implements
         }
 
         if (!is_scalar($val)) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Input value must be a string, received %s',
-                    (is_object($val) ? get_class($val) : gettype($val))
-                )
-            );
+            throw new UnexpectedValueException(sprintf(
+                'Property Input Value must be a string, received %s',
+                (is_object($val) ? get_class($val) : gettype($val))
+            ));
         }
 
         return $val;
@@ -563,7 +558,7 @@ abstract class AbstractPropertyInput implements
     {
         if (!is_string($inputMode)) {
             throw new InvalidArgumentException(
-                'Input mode must be a string.'
+                'Property Input Mode must be a string.'
             );
         }
         $this->inputMode = $inputMode;
@@ -590,7 +585,7 @@ abstract class AbstractPropertyInput implements
     {
         if (!is_string($inputType)) {
             throw new InvalidArgumentException(
-                'Input type must be a string.'
+                'Property Input Type must be a string.'
             );
         }
         $this->inputType = $inputType;
@@ -620,7 +615,7 @@ abstract class AbstractPropertyInput implements
     {
         if (!is_string($type)) {
             throw new InvalidArgumentException(
-                'HTML input type must be a string.'
+                'HTML Input Type must be a string.'
             );
         }
 
@@ -672,7 +667,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * Alias of the `property` method.
+     * Alias of {@see self::property()}
      *
      * @return PropertyInterface
      */

@@ -132,12 +132,12 @@ class LoginTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return string|null
+     * @return Translation|string|null
      */
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translate('Log In'));
+            $this->setTitle($this->translator()->translation('Log In'));
         }
 
         return $this->title;

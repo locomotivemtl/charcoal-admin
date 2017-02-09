@@ -45,14 +45,14 @@ class DeleteAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $failMessage = $this->translate('Failed to delete object');
-            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            $failMessage = $this->translator()->translation('Failed to delete object');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
-            $reqMessage  = $this->translate(
+            $reqMessage  = $this->translator()->translation(
                 '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
             );
-            $typeMessage = $this->translate(
+            $typeMessage = $this->translator()->translation(
                 '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
             );
 
@@ -94,7 +94,7 @@ class DeleteAction extends AdminAction
 
             if (!$obj->id()) {
                 $this->addFeedback('error', strtr($errorThrown, [
-                    '{{ errorThrown }}' => $this->translate('No object found.')
+                    '{{ errorThrown }}' => $this->translator()->translate('No object found.')
                 ]));
                 $this->setSuccess(false);
 
@@ -103,8 +103,8 @@ class DeleteAction extends AdminAction
 
             $result = $obj->delete();
             if ($result) {
-                $this->addFeedback('success', $this->translate('Object permanently deleted.'));
-                $this->addFeedback('success', strtr($this->translate('Deleted Object: {{ objId }}'), [
+                $this->addFeedback('success', $this->translator()->translate('Object permanently deleted.'));
+                $this->addFeedback('success', strtr($this->translator()->translate('Deleted Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
                 $this->setSuccess(true);

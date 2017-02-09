@@ -11,8 +11,6 @@ use Psr\Http\Message\RequestInterface;
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
@@ -78,7 +76,12 @@ class CollectionTemplate extends AdminTemplate implements
 
         if (!$obj->source()->tableExists()) {
             $obj->source()->createTable();
-            $this->addFeedback('notice', $this->translate('The "{{ objType }}" table has been created.'));
+            $this->addFeedback('notice', strtr(
+                $this->translator()->translate('The "{{ objType }}" table has been created.'),
+                [
+                    '{{ objType }}' => $obj->objType()
+                ]
+            ));
         }
     }
 
@@ -208,7 +211,7 @@ class CollectionTemplate extends AdminTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation
      */
     public function title()
     {
@@ -220,8 +223,7 @@ class CollectionTemplate extends AdminTemplate implements
             $config = $this->objCollectionDashboardConfig();
 
             if (isset($config['title'])) {
-                $this->title = new TranslationString($config['title']);
-
+                $this->title = $this->translator()->translation($config['title']);
                 return $this->title;
             }
         } catch (Exception $e) {
@@ -241,29 +243,18 @@ class CollectionTemplate extends AdminTemplate implements
             }
 
             if (isset($adminMetadata['lists'][$listIdent]['label'])) {
-                $objLabel = $adminMetadata['lists'][$listIdent]['label'];
-
-                if (TranslationString::isTranslatable($objLabel)) {
-                    $objLabel = new TranslationString($objLabel);
-                }
+                $objLabel = $this->translator()->translation($adminMetadata['lists'][$listIdent]['label']);
             }
         }
 
         if (!$objLabel && isset($metadata['labels']['all_items'])) {
-            $objLabel = $metadata['labels']['all_items'];
-
-            if (TranslationString::isTranslatable($objLabel)) {
-                $objLabel = new TranslationString($objLabel);
-            }
+            $objLabel = $this->translator()->translation($metadata['labels']['all_items']);
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['name']) ? $metadata['labels']['name'] : null);
-            if (TranslationString::isTranslatable($objType)) {
-                $objType = new TranslationString($objType);
-            }
+            $objType = (isset($metadata['labels']['name']) ? $this->translator()->translation($metadata['labels']['name']) : null);
 
-            $objLabel = $this->translate('Collection: {{ objType }}');
+            $objLabel = $this->translator()->translation('Collection: {{ objType }}');
 
             if ($objType) {
                 $objLabel = strtr($objLabel, [

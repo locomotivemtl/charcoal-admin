@@ -14,9 +14,6 @@ use \Charcoal\Factory\FactoryInterface;
 // From `charcoal-property`
 use \Charcoal\Property\PropertyInterface;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationConfig;
-
 // From 'charcoal-ui'
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\FormGroup\FormGroupTrait;
@@ -343,7 +340,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function description()
     {
@@ -351,7 +348,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return TranslationString|string|null
+     * @return Translation|string|null
      */
     public function notes()
     {
@@ -432,26 +429,17 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return array
-     */
-    public function availableLanguages()
-    {
-        $trans = TranslationConfig::instance();
-
-        return $trans->availableLanguages();
-    }
-
-    /**
      * Determine if the form control's active language should be displayed.
      *
+     * @see    FormSidebarWidget::showLanguageSwitch()
      * @return boolean
      */
     public function showActiveLanguage()
     {
-        $prop  = $this->prop();
-        $trans = TranslationConfig::instance();
+        $property = $this->prop();
+        $locales  = count($this->translator()->availableLocales());
 
-        return ($trans->isMultilingual() && $prop->l10n());
+        return ($locales > 1 && $property->l10n());
     }
 
     /**
@@ -517,12 +505,12 @@ class FormPropertyWidget extends AdminWidget implements
         $GLOBALS['widget_template'] = $inputType;
 
         if ($this->loopL10n() && $prop->l10n()) {
-            $langs = $this->availableLanguages();
+            $locales = $this->translator()->availableLocales();
             $inputId = $input->inputId();
-            foreach ($langs as $lang) {
+            foreach ($locales as $langCode) {
                 // Set a unique input ID for language.
-                $input->setInputId($inputId.'_'.$lang);
-                $input->setLang($lang);
+                $input->setInputId($inputId.'_'.$langCode);
+                $input->setLang($langCode);
 
                 yield $input;
             }

@@ -39,12 +39,12 @@ class LostPasswordTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return TranslationString|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translate('Lost Password'));
+            $this->setTitle($this->translator()->translation('Lost Password'));
         }
 
         return $this->title;

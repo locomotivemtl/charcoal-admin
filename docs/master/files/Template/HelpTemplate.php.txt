@@ -28,7 +28,7 @@ class HelpTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translate('Support'));
+            $this->setTitle($this->translator()->translation('Support'));
         }
 
         return $this->title;

@@ -7,10 +7,6 @@ use \InvalidArgumentException;
 // From Pimple
 use \Pimple\Container;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-use \Charcoal\Translation\TranslationConfig;
-
 // From 'charcoal-ui'
 use \Charcoal\Ui\Form\FormInterface;
 
@@ -18,18 +14,14 @@ use \Charcoal\Ui\Form\FormInterface;
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\ActionContainerTrait;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
-use \Charcoal\Admin\User\AuthAwareInterface;
-use \Charcoal\Admin\User\AuthAwareTrait;
 
 /**
  * Form Sidebar Widget
  */
 class FormSidebarWidget extends AdminWidget implements
-    FormSidebarInterface,
-    AuthAwareInterface
+    FormSidebarInterface
 {
     use ActionContainerTrait;
-    use AuthAwareTrait;
 
     /**
      * Default sorting priority for an action.
@@ -92,17 +84,21 @@ class FormSidebarWidget extends AdminWidget implements
     /**
      * The sidebar's title.
      *
-     * @var string
+     * @var \Charcoal\Translator\Translation|string|null
      */
     protected $title;
 
     /**
-     * @var boolean $showSubtitle
+     * The subtitle is displayed by default.
+     *
+     * @var boolean
      */
     private $showSubtitle = true;
 
     /**
-     * @var string $subtitle
+     * The sidebar's subtitle.
+     *
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $subtitle;
 
@@ -112,28 +108,11 @@ class FormSidebarWidget extends AdminWidget implements
     protected $showFooter = true;
 
     /**
-     * The required Acl permissions fetch from sidebar for specif parts.
-     *
-     * @var string[] $requiredAclPermissions
-     */
-    private $requiredAclPermissions = [];
-
-    /**
      * The required Acl permissions for the whole sidebar.
      *
      * @var string[] $requiredGlobalAclPermissions
      */
     private $requiredGlobalAclPermissions = [];
-
-    /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->setAuthDependencies($container);
-    }
 
     /**
      * @param array|ArrayInterface $data Class data.
@@ -572,22 +551,18 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        } else {
-            $this->title = null;
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translate('Actions'));
+            $this->setTitle($this->translator()->translation('Actions'));
         }
 
         return $this->title;
@@ -621,17 +596,13 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function setSubtitle($subtitle)
     {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->subtitle = new TranslationString($subtitle);
-        } else {
-            $this->subtitle = null;
-        }
+        $this->subtitle = $this->translator()->translation($subtitle);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function subtitle()
     {
@@ -663,13 +634,13 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * @see    FormPropertyWidget::showActiveLanguage()
      * @return boolean
      */
     public function showLanguageSwitch()
     {
-        $trans = TranslationConfig::instance();
-
-        if ($trans->isMultilingual()) {
+        $locales = count($this->translator()->availableLocales());
+        if ($locales > 1) {
             foreach ($this->form()->formProperties() as $prop) {
                 if ($prop->prop()->l10n()) {
                     return true;
@@ -683,21 +654,28 @@ class FormSidebarWidget extends AdminWidget implements
     /**
      * Retrieve the available languages, formatted for the sidebar language-switcher.
      *
-     * @return array|Generator
+     * @see    FormGroupWidget::languages()
+     * @return array
      */
     public function languages()
     {
-        $trans   = TranslationConfig::instance();
-        $curLang = $trans->currentLanguage();
-        $langs   = $trans->languages();
+        $currentLocale = $this->translator()->getLocale();
+        $languages = [];
+        foreach ($this->translator()->locales() as $locale => $localeConfig) {
+            if (isset($localeConfig['name'])) {
+                $label = $localeConfig['name'];
+            } else {
+                $label = 'locale.'.$locale;
+            }
 
-        foreach ($langs as $lang) {
-            yield [
-                'ident'   => $lang->ident(),
-                'name'    => $lang->name(),
-                'current' => ($lang->ident() === $curLang)
+            $languages[] = [
+                'ident'   => $locale,
+                'name'    => $this->translator()->translation($label),
+                'current' => ($locale === $currentLocale)
             ];
         }
+
+        return $languages;
     }
 
 
@@ -729,25 +707,6 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         return true;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function requiredAclPermissions()
-    {
-        return $this->requiredAclPermissions;
-    }
-
-    /**
-     * @param array $permissions The Acl permissions required pby the form group.
-     * @return self
-     */
-    public function setRequiredAclPermissions(array $permissions)
-    {
-        $this->requiredAclPermissions = $permissions;
-
-        return $this;
     }
 
     /**

@@ -93,14 +93,14 @@ class UpdateAction extends AbstractSaveAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $failMessage = $this->translate('Failed to update object');
-            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            $failMessage = $this->translator()->translation('Failed to update object');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
-            $reqMessage  = $this->translate(
+            $reqMessage  = $this->translator()->translation(
                 '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
             );
-            $typeMessage = $this->translate(
+            $typeMessage = $this->translator()->translation(
                 '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
             );
 
@@ -123,7 +123,7 @@ class UpdateAction extends AbstractSaveAction
                 $actualType = is_object($objId) ? get_class($objId) : gettype($objId);
                 $this->addFeedback('error', strtr($reqMessage, [
                     '{{ parameter }}'    => '"obj_id"',
-                    '{{ expectedType }}' => 'string or numeric',
+                    '{{ expectedType }}' => 'ID',
                     '{{ actualType }}'   => $actualType,
                 ]));
                 $this->setSuccess(false);
@@ -141,7 +141,7 @@ class UpdateAction extends AbstractSaveAction
             if (!$valid) {
                 if (!$this->hasFeedbacks()) {
                     $this->addFeedback('error', strtr($errorThrown, [
-                        '{{ errorThrown }}' => $this->translate('Invalid Data')
+                        '{{ errorThrown }}' => $this->translator()->translate('Invalid Data')
                     ]));
                 }
 
@@ -161,8 +161,8 @@ class UpdateAction extends AbstractSaveAction
             $result = $obj->update();
 
             if ($result) {
-                $this->addFeedback('success', $this->translate('Object has been successfully updated.'));
-                $this->addFeedback('success', strtr($this->translate('Updated Object: {{ objId }}'), [
+                $this->addFeedback('success', $this->translator()->translate('Object has been successfully updated.'));
+                $this->addFeedback('success', strtr($this->translator()->translate('Updated Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
                 $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);

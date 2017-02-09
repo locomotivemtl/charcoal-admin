@@ -85,9 +85,9 @@ class LoginAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $doneMessage = $this->translate('You have logged in successfully.');
-            $failMessage = $this->translate('An error occurred while logging in');
-            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            $doneMessage = $this->translator()->translation('You have logged in successfully.');
+            $failMessage = $this->translator()->translation('An error occurred while logging in');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
 
@@ -97,7 +97,7 @@ class LoginAction extends AdminAction
             $password = $request->getParam('password');
 
             if (!$username || !$password) {
-                $this->addFeedback('error', $this->translate('Invalid username or password'));
+                $this->addFeedback('error', $this->translator()->translate('Invalid username or password'));
                 $this->setSuccess(false);
 
                 return $response->withStatus(400);

@@ -82,8 +82,8 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         try {
-            $failMessage = $this->translate('Failed to restore revision');
-            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            $failMessage = $this->translator()->translation('Failed to restore revision');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
 
@@ -96,17 +96,17 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
             $result = $obj->revertToRevision($revNum);
 
             if ($result) {
-                $doneMessage = $this->translate(
+                $doneMessage = $this->translator()->translation(
                     'Object has been successfully restored to revision from {{ revisionDate }}'
                 );
 
                 $this->addFeedback('success', strtr($doneMessage, [
                     '{{ revisionDate }}' => $revTs->format('Y-m-d @ H:i:s')
                 ]));
-                $this->addFeedback('success', strtr($this->translate('Restored Revision: {{ revisionNum }}'), [
+                $this->addFeedback('success', strtr($this->translator()->translation('Restored Revision: {{ revisionNum }}'), [
                     '{{ revisionNum }}' => $revNum
                 ]));
-                $this->addFeedback('success', strtr($this->translate('Reverted Object: {{ objId }}'), [
+                $this->addFeedback('success', strtr($this->translator()->translation('Reverted Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
                 $this->setSuccess(true);

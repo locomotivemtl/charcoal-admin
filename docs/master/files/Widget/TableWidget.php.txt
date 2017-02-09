@@ -16,9 +16,6 @@ use \Charcoal\Factory\FactoryInterface;
 // From 'charcoal-property'
 use \Charcoal\Property\PropertyInterface;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\ActionContainerTrait;
@@ -77,6 +74,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @var boolean $showTableFoot
      */
     protected $showTableFoot = false;
+
+    /**
+     * Store the factory instance for the current class.
+     *
+     * @var FactoryInterface
+     */
+    private $widgetFactory;
 
     /**
      * @var FactoryInterface $propertyFactory
@@ -139,8 +143,38 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         parent::setDependencies($container);
 
         $this->setView($container['view']);
+        $this->setWidgetFactory($container['widget/factory']);
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyDisplayFactory($container['property/display/factory']);
+    }
+    /**
+     * Set an widget factory.
+     *
+     * @param FactoryInterface $factory The factory to create widgets.
+     * @return self
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the widget factory.
+     *
+     * @throws RuntimeException If the widget factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new RuntimeException(
+                sprintf('Widget Factory is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->widgetFactory;
     }
 
     /**
@@ -667,7 +701,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         if ($this->defaultObjectActions === null) {
             $edit = [
-                'label'    => $this->translate('Modify'),
+                'label'    => $this->translator()->translation('Modify'),
                 'url'      => $this->objectEditUrl().'&obj_id={{id}}',
                 'ident'    => 'edit',
                 'priority' => 1
@@ -853,14 +887,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function paginationWidget()
     {
-        $pagination = new PaginationWidget([
-            'logger' => $this->logger
-        ]);
+        $pagination = $this->widgetFactory()->create(PaginationWidget::class);
         $pagination->setData([
             'page'         => $this->page(),
             'num_per_page' => $this->numPerPage(),
             'num_total'    => $this->numTotal(),
-            'label'        => $this->translate('Objects list navigation')
+            'label'        => $this->translator()->translation('Objects list navigation')
         ]);
 
         return $pagination;

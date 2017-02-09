@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Widget;
 
-// From 'charcoal-translation'
-use \Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 
@@ -147,17 +144,13 @@ class TextWidget extends AdminWidget
      */
     public function setTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->title = new TranslationString($title);
-        } else {
-            $this->title = null;
-        }
+        $this->title = $this->translator()->translation($title);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function title()
     {
@@ -170,17 +163,13 @@ class TextWidget extends AdminWidget
      */
     public function setSubtitle($subtitle)
     {
-        if (TranslationString::isTranslatable($subtitle)) {
-            $this->subtitle = new TranslationString($subtitle);
-        } else {
-            $this->subtitle = null;
-        }
+        $this->subtitle = $this->translator()->translation($subtitle);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function subtitle()
     {
@@ -193,17 +182,13 @@ class TextWidget extends AdminWidget
      */
     public function setDescription($description)
     {
-        if (TranslationString::isTranslatable($description)) {
-            $this->description = new TranslationString($description);
-        } else {
-            $this->description = null;
-        }
+        $this->description = $this->translator()->translation($description);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function description()
     {
@@ -216,17 +201,13 @@ class TextWidget extends AdminWidget
      */
     public function setNotes($notes)
     {
-        if (TranslationString::isTranslatable($notes)) {
-            $this->notes = new TranslationString($notes);
-        } else {
-            $this->notes = null;
-        }
+        $this->notes = $this->translator()->translation($notes);
 
         return $this;
     }
 
     /**
-     * @return TranslationString
+     * @return Translation
      */
     public function notes()
     {

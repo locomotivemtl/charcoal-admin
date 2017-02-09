@@ -76,14 +76,14 @@ class InlineMultiAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $failMessage = $this->translate('Failed to load quick edit');
-        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+        $failMessage = $this->translator()->translation('Failed to load quick edit');
+        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage
         ]);
-        $reqMessage  = $this->translate(
+        $reqMessage  = $this->translator()->translation(
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
-        $typeMessage = $this->translate(
+        $typeMessage = $this->translator()->translation(
             '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
         );
 
@@ -154,7 +154,7 @@ class InlineMultiAction extends AdminAction
                 throw new UnexpectedValueException('No editable properties.');
             }
 
-            $this->addFeedback('success', $this->translate('Widgets Loaded'));
+            $this->addFeedback('success', $this->translator()->translate('Widgets Loaded'));
             $this->setSuccess(true);
 
             return $response;

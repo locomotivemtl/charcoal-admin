@@ -36,9 +36,9 @@ class LogoutAction extends AdminAction
         unset($request);
 
         try {
-            $doneMessage = $this->translate('You are now logged out.');
-            $failMessage = $this->translate('An error occurred while logging out');
-            $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+            $doneMessage = $this->translator()->translation('You are now logged out.');
+            $failMessage = $this->translator()->translation('An error occurred while logging out');
+            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
 

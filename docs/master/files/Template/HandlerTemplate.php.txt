@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Template;
 
-// From 'charcoal-translation'
-use Charcoal\Translation\TranslationString;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 
@@ -16,14 +13,14 @@ class HandlerTemplate extends AdminTemplate
     /**
      * The current error title.
      *
-     * @var string|null
+     * @var Translation|string|null
      */
     private $errorTitle;
 
     /**
      * The current error message.
      *
-     * @var string|null
+     * @var Translation|string|null
      */
     private $errorMessage;
 
@@ -43,11 +40,7 @@ class HandlerTemplate extends AdminTemplate
      */
     public function setErrorMessage($message)
     {
-        if (TranslationString::isTranslatable($message)) {
-            $this->errorMessage = new TranslationString($message);
-        } else {
-            $this->errorMessage = null;
-        }
+        $this->errorMessage = $this->translator()->translation($message);
 
         return $this;
     }
@@ -55,7 +48,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Retrieve the error message.
      *
-     * @return string|null
+     * @return Translation|string|null
      */
     public function errorMessage()
     {
@@ -70,11 +63,7 @@ class HandlerTemplate extends AdminTemplate
      */
     public function setErrorTitle($title)
     {
-        if (TranslationString::isTranslatable($title)) {
-            $this->errorTitle = new TranslationString($title);
-        } else {
-            $this->errorTitle = null;
-        }
+        $this->errorTitle = $this->translator()->translation($title);
 
         return $this;
     }
@@ -82,7 +71,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Retrieve the error title.
      *
-     * @return string|null
+     * @return Translation|string|null
      */
     public function errorTitle()
     {
@@ -92,7 +81,7 @@ class HandlerTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return string|null
+     * @return Translation|string|null
      */
     public function title()
     {

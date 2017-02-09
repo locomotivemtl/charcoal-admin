@@ -65,14 +65,14 @@ class ExportAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $failMessage = $this->translate('Failed to export object(s)');
-        $errorThrown = strtr($this->translate('{{ errorMessage }}: {{ errorThrown }}'), [
+        $failMessage = $this->translator()->translation('Failed to export object(s)');
+        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage
         ]);
-        $reqMessage  = $this->translate(
+        $reqMessage  = $this->translator()->translation(
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
-        $typeMessage = $this->translate(
+        $typeMessage = $this->translator()->translation(
             '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
         );
 

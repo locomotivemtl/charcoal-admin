@@ -555,6 +555,11 @@ trait CollectionContainerTrait
 
         // Go through each object to generate an array of properties listed in object's list metadata
         foreach ($objects as $object) {
+            if (isset($object['requiredAclPermissions']) && !empty($object['requiredAclPermissions'])) {
+                if ($this->hasPermissions($object['requiredAclPermissions']) === false) {
+                    continue;
+                }
+            }
             $objectProperties = [];
 
             foreach ($properties as $propertyIdent => $propertyData) {

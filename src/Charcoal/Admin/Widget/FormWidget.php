@@ -25,8 +25,6 @@ use \Charcoal\Ui\Layout\LayoutAwareTrait;
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
-use \Charcoal\Admin\User\AuthAwareInterface;
-use \Charcoal\Admin\User\AuthAwareTrait;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
@@ -38,11 +36,9 @@ use \Charcoal\Admin\Widget\FormPropertyWidget;
  */
 class FormWidget extends AdminWidget implements
     FormInterface,
-    AuthAwareInterface,
     LayoutAwareInterface
 {
     use FormTrait;
-    use AuthAwareTrait;
     use LayoutAwareTrait;
 
     /**

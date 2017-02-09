@@ -214,6 +214,7 @@ trait SidemenuGroupTrait
             $active = true;
             $name = null;
             $url = null;
+            $permissions = [];
 
             if (isset($link['active'])) {
                 $active = !!$link['active'];
@@ -225,6 +226,10 @@ trait SidemenuGroupTrait
 
             if (isset($link['url'])) {
                 $url = $this->translator()->translation($link['url']);
+            }
+
+            if (isset($link['required_acl_permissions'])) {
+                $permissions = $link['required_acl_permissions'];
             }
 
             if ($name === null && $url === null) {
@@ -241,7 +246,8 @@ trait SidemenuGroupTrait
                 'active'   => $active,
                 'name'     => $name,
                 'url'      => $url,
-                'selected' => $isSelected
+                'selected' => $isSelected,
+                'required_acl_permissions' => $permissions
             ];
         } else {
             throw new InvalidArgumentException(sprintf(
@@ -267,6 +273,11 @@ trait SidemenuGroupTrait
         foreach ($this->links as $link) {
             if (isset($link['active']) && !$link['active']) {
                 continue;
+            }
+            if (isset($link['required_acl_permissions'])) {
+                if ($this->hasPermissions($link['required_acl_permissions']) === false) {
+                    continue;
+                }
             }
 
             yield $link;

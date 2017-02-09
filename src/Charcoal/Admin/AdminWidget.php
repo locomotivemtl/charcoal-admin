@@ -17,14 +17,22 @@ use Charcoal\Factory\FactoryInterface;
 use Charcoal\Translator\Translator;
 use Charcoal\Translator\TranslatorAwareTrait;
 
+// From 'charcoal-user'
+use Charcoal\User\AuthAwareInterface;
+use Charcoal\User\AuthAwareTrait;
+
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractWidget;
+
+
 
 /**
  * The base Widget for the `admin` module.
  */
-class AdminWidget extends AbstractWidget
+class AdminWidget extends AbstractWidget implements
+    AuthAwareInterface
 {
+    use AuthAwareTrait;
     use TranslatorAwareTrait;
 
     const DATA_SOURCE_REQUEST = 'request';
@@ -121,6 +129,10 @@ class AdminWidget extends AbstractWidget
 
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
+
+        // AuthAware dependencies
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
     }
 
     /**

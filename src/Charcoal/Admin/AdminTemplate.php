@@ -15,20 +15,22 @@ use Pimple\Container;
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-user'
-use Charcoal\User\Authenticator;
-use Charcoal\User\Authorizer;
+use Charcoal\User\AuthAwareInterface;
+use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translator;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
 
+// From 'charcoal-ui'
+use Charcoal\Ui\Menu\GenericMenu;
+use Charcoal\Ui\MenuItem\GenericMenuItem;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
-use Charcoal\Admin\User\AuthAwareInterface;
-use Charcoal\Admin\User\AuthAwareTrait;
+
 
 /**
  * Base class for all `admin` Templates.
@@ -139,6 +141,9 @@ class AdminTemplate extends AbstractTemplate implements
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
 
+        $this->menuBuilder = $container['menu/builder'];
+        $this->menuItemBuilder = $container['menu/item/builder'];
+
         // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
@@ -164,41 +169,21 @@ class AdminTemplate extends AbstractTemplate implements
             session_start();
         }
 
+        // Initialize data with GET
+        $this->setData($request->getParams());
+
         if ($this->authRequired() !== false) {
-            // This can reset headers / die if unauthorized.
-            if (!$this->authenticator()->authenticate()) {
-                header('HTTP/1.0 403 Forbidden');
-                header('Location: '.$this->adminUrl().'login');
-                exit;
-            }
-
-            // Initialize data with GET
-            $this->setData($request->getParams());
-
             // Test template vs. ACL roles
-            $authUser = $this->authenticator()->authenticate();
-            if (!$this->authorizer()->userAllowed($authUser, $this->requiredAclPermissions())) {
+            if (!$this->isAuthorized()) {
                 header('HTTP/1.0 403 Forbidden');
                 header('Location: '.$this->adminUrl().'login');
                 exit;
             }
-        } else {
-            // Initialize data with GET
-            $this->setData($request->getParams());
         }
 
         return parent::init($request);
     }
 
-    /**
-     * @return string[]
-     */
-    protected function requiredAclPermissions()
-    {
-        return [
-            'template'
-        ];
-    }
 
     /**
      * As a convenience, all admin templates have a model factory to easily create objects.
@@ -386,9 +371,14 @@ class AdminTemplate extends AbstractTemplate implements
                 'Header menu was not property configured.'
             );
         }
-
+        $menu = $this->menuBuilder->build([]);
         $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
         foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
+            $menuItem['menu'] = $menu;
+            $item = $this->menuItemBuilder->build($menuItem);
+            if ($item->isAuthorized() === false) {
+                continue;
+            }
             if (isset($menuItem['active']) && $menuItem['active'] === false) {
                 continue;
             }

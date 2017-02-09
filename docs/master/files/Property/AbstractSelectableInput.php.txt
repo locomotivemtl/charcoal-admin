@@ -69,10 +69,6 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             $choice['label'] = ucwords(strtolower(str_replace('_', ' ', $ident)));
         }
 
-        if (!isset($choice['title'])) {
-            $choice['title'] = $choice['label'];
-        }
-
         $choice['checked'] = $this->isChoiceSelected($choice);
         $choice['selected'] = $choice['checked'];
 
@@ -93,10 +89,6 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
 
         if ($value instanceof DateTimeInterface) {
             $value = $value->format('Y-m-d-H:i');
-        }
-
-        if ($value instanceof Translation) {
-            $value = $value->fallback();
         }
 
         if (method_exists($value, '__toString')) {

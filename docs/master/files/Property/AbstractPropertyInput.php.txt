@@ -18,6 +18,9 @@ use Pimple\Container;
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\Translation;
+
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewableTrait;
@@ -112,7 +115,7 @@ abstract class AbstractPropertyInput implements
     protected $inputClass = '';
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $placeholder
+     * @var Translation|string|null $placeholder
      */
     private $placeholder;
 
@@ -377,7 +380,7 @@ abstract class AbstractPropertyInput implements
     /**
      * Retrieve the placeholder.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function placeholder()
     {
@@ -412,6 +415,8 @@ abstract class AbstractPropertyInput implements
             }
 
             $this->placeholder->isRendered = true;
+        } elseif (is_string($this->placeholder)) {
+            $this->placeholder = $this->view()->render($this->placeholder, $this->viewController());
         }
 
         return $this;

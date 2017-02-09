@@ -22,7 +22,6 @@ use \Charcoal\Admin\Action\Object\ReorderAction;
 use \Charcoal\Admin\Tests\ContainerProvider;
 use \Charcoal\Admin\Tests\Mock\SortableModel as Model;
 
-
 /**
  *
  */

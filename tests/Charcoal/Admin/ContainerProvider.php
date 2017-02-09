@@ -484,29 +484,6 @@ class ContainerProvider
         };
     }
 
-    public function registerTranslator(Container $container)
-    {
-        $container['language/manager'] = function (Container $container) {
-            return new LanguageManager([
-                'languages' => [
-                    'en'=>['locale'=>'en-US']
-                ],
-                'default_language' => 'en',
-                'fallback_languages' => ['en']
-            ]);
-        };
-
-        $container['translator'] = function (Container $container) {
-            return new Translator([
-                'locale'            => 'en',
-                'message_selector'  => new MessageSelector(),
-                'cache_dir'         => null,
-                'debug'             => false,
-                'language_manager'  => $container['language/manager']
-            ]);
-        };
-    }
-
     public function registerActionDependencies(Container $container)
     {
         $this->registerLogger($container);
@@ -533,8 +510,6 @@ class ContainerProvider
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
-
-
     }
 
     public function registerWidgetDependencies(Container $container)
@@ -544,6 +519,5 @@ class ContainerProvider
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
         $this->registerModelFactory($container);
-
     }
 }

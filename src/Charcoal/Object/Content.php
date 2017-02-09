@@ -288,6 +288,11 @@ class Content extends AbstractModel implements
         return true;
     }
 
+
+    /**
+     * @param string|string[] $permissions The required ACL permissions.
+     * @return Content Chainable
+     */
     public function setRequiredAclPermissions($permissions)
     {
         if ($permissions === null || !$permissions) {
@@ -305,6 +310,9 @@ class Content extends AbstractModel implements
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function requiredAclPermissions()
     {
         return $this->requiredAclPermissions;

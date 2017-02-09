@@ -2,21 +2,21 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\AbstractUiItem;
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
-use \Charcoal\Ui\FormGroup\FormGroupTrait;
-use \Charcoal\Ui\FormInput\FormInputInterface;
-use \Charcoal\Ui\Layout\LayoutAwareInterface;
-use \Charcoal\Ui\Layout\LayoutAwareTrait;
+use Charcoal\Ui\AbstractUiItem;
+use Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\FormGroup\FormGroupTrait;
+use Charcoal\Ui\FormInput\FormInputInterface;
+use Charcoal\Ui\Layout\LayoutAwareInterface;
+use Charcoal\Ui\Layout\LayoutAwareTrait;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
 
 /**
  * Form Group Widget Controller

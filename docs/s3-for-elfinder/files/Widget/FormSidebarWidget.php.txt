@@ -14,18 +14,14 @@ use \Charcoal\Ui\Form\FormInterface;
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\ActionContainerTrait;
 use \Charcoal\Admin\Ui\FormSidebarInterface;
-use \Charcoal\Admin\User\AuthAwareInterface;
-use \Charcoal\Admin\User\AuthAwareTrait;
 
 /**
  * Form Sidebar Widget
  */
 class FormSidebarWidget extends AdminWidget implements
-    FormSidebarInterface,
-    AuthAwareInterface
+    FormSidebarInterface
 {
     use ActionContainerTrait;
-    use AuthAwareTrait;
 
     /**
      * Default sorting priority for an action.
@@ -112,28 +108,11 @@ class FormSidebarWidget extends AdminWidget implements
     protected $showFooter = true;
 
     /**
-     * The required Acl permissions fetch from sidebar for specif parts.
-     *
-     * @var string[] $requiredAclPermissions
-     */
-    private $requiredAclPermissions = [];
-
-    /**
      * The required Acl permissions for the whole sidebar.
      *
      * @var string[] $requiredGlobalAclPermissions
      */
     private $requiredGlobalAclPermissions = [];
-
-    /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->setAuthDependencies($container);
-    }
 
     /**
      * @param array|ArrayInterface $data Class data.
@@ -728,25 +707,6 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         return true;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function requiredAclPermissions()
-    {
-        return $this->requiredAclPermissions;
-    }
-
-    /**
-     * @param array $permissions The Acl permissions required pby the form group.
-     * @return self
-     */
-    public function setRequiredAclPermissions(array $permissions)
-    {
-        $this->requiredAclPermissions = $permissions;
-
-        return $this;
     }
 
     /**

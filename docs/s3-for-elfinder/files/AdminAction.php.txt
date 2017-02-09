@@ -14,8 +14,8 @@ use Pimple\Container;
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-user'
-use Charcoal\User\Authenticator;
-use Charcoal\User\Authorizer;
+use Charcoal\User\AuthAwareInterface;
+use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
 use Charcoal\Translator\Translator;
@@ -26,8 +26,6 @@ use Charcoal\App\Action\AbstractAction;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
-use Charcoal\Admin\User\AuthAwareInterface;
-use Charcoal\Admin\User\AuthAwareTrait;
 
 /**
  * The base class for the `admin` Actions.
@@ -121,38 +119,18 @@ abstract class AdminAction extends AbstractAction implements
             session_start();
         }
 
+        // Initialize data with GET / POST parameters.
+        $this->setData($request->getParams());
+
         if ($this->authRequired() !== false) {
-            // This can reset headers / die if unauthorized.
-            if (!$this->authenticator()->authenticate()) {
+            // Test action vs. ACL roles
+            if (!$this->isAuthorized()) {
                 header('HTTP/1.0 403 Forbidden');
                 exit;
             }
-
-            // Initialize data with GET / POST parameters.
-            $this->setData($request->getParams());
-
-            // Test template vs. ACL roles
-            $authUser = $this->authenticator()->authenticate();
-            if (!$this->authorizer()->userAllowed($authUser, $this->requiredAclPermissions())) {
-                header('HTTP/1.0 403 Forbidden');
-                exit;
-            }
-        } else {
-            // Initialize data with GET / POST parameters.
-            $this->setData($request->getParams());
         }
 
         return parent::init($request);
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function requiredAclPermissions()
-    {
-        return [
-            'action'
-        ];
     }
 
     /**

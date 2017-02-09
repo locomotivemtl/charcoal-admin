@@ -266,6 +266,7 @@ class SidemenuWidget extends AdminWidget implements
             $active = true;
             $name   = null;
             $url    = null;
+            $permissions = [];
 
             if (isset($link['active'])) {
                 $active = !!$link['active'];
@@ -279,6 +280,10 @@ class SidemenuWidget extends AdminWidget implements
                 $url = $this->translator()->translation($link['url']);
             }
 
+            if (isset($link['required_acl_permissions'])) {
+                $permissions = $link['required_acl_permissions'];
+            }
+
             if ($name === null && $url === null) {
                 return $this;
             }
@@ -287,7 +292,8 @@ class SidemenuWidget extends AdminWidget implements
                 'active'   => $active,
                 'name'     => $name,
                 'url'      => $url,
-                'selected' => ($linkIdent === $objType)
+                'selected' => ($linkIdent === $objType),
+                'required_acl_permissions' => $permissions
             ];
         } else {
             throw new InvalidArgumentException(sprintf(
@@ -323,6 +329,12 @@ class SidemenuWidget extends AdminWidget implements
         foreach ($this->links as $link) {
             if (isset($link['active']) && !$link['active']) {
                 continue;
+            }
+
+            if (isset($link['required_acl_permissions'])) {
+                if ($this->hasPermissions($link['required_acl_permissions']) === false) {
+                    continue;
+                }
             }
 
             yield $link;
@@ -526,7 +538,7 @@ class SidemenuWidget extends AdminWidget implements
             $g->setSidemenu($this);
             $g->setData($group);
 
-            $this->groups[] = $g;
+            $group = $g;
         } elseif ($group === false || $group === null) {
             return $this;
         } else {
@@ -536,6 +548,12 @@ class SidemenuWidget extends AdminWidget implements
                 (is_object($group) ? get_class($group) : gettype($group))
             ));
         }
+
+        if ($g->isAuthorized() === false) {
+            return $this;
+        }
+
+        $this->groups[] = $g;
 
         return $this;
     }

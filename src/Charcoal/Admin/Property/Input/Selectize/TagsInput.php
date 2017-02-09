@@ -163,7 +163,7 @@ class TagsInput extends AbstractSelectableInput
     public function choices()
     {
         if ($this->p()->allowNull() && !$this->p()->multiple()) {
-            $prepend = $this->emptyChoice();
+            $prepend = $this->parseChoice('', $this->emptyChoice());
 
             yield $prepend;
         }

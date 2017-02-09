@@ -32,7 +32,7 @@ class SelectInput extends AbstractSelectableInput
     public function choices()
     {
         if ($this->p()->allowNull() && !$this->p()->multiple()) {
-            $prepend = $this->emptyChoice();
+            $prepend = $this->parseChoice('', $this->emptyChoice());
 
             yield $prepend;
         }
@@ -43,6 +43,28 @@ class SelectInput extends AbstractSelectableInput
         foreach ($choices as $choice) {
             yield $choice;
         }
+    }
+
+    /**
+     * Prepare a single selectable option for output.
+     *
+     * @param  string|integer $ident  The choice key.
+     * @param  array|object   $choice The choice structure.
+     * @return array|null
+     */
+    protected function parseChoice($ident, $choice)
+    {
+        $choice = parent::parseChoice($ident, $choice);
+
+        if (!isset($choice['title'])) {
+            $choice['title'] = '';
+        }
+
+        if (!isset($choice['icon'])) {
+            $choice['icon'] = '';
+        }
+
+        return $choice;
     }
 
     /**

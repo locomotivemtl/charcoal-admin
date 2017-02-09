@@ -72,6 +72,8 @@ class Content extends AbstractModel implements
      */
     private $modelFactory;
 
+    private $requiredAclPermissions = [];
+
     /**
      * Dependencies
      * @param Container $container DI Container.
@@ -284,5 +286,27 @@ class Content extends AbstractModel implements
         $this->setLastModified('now');
 
         return true;
+    }
+
+    public function setRequiredAclPermissions($permissions)
+    {
+        if ($permissions === null || !$permissions) {
+            $this->permissions = [];
+            return $this;
+        }
+        if (is_string($permissions)) {
+            $permissions = explode(',', $permissions);
+            $permissions = array_map('trim', $permissions);
+        }
+        if (!is_array($permissions)) {
+            throw new InvalidArgumentException('Invalid acl permissions');
+        }
+        $this->requiredAclPermissions = $permissions;
+        return $this;
+    }
+
+    public function requiredAclPermissions()
+    {
+        return $this->requiredAclPermissions;
     }
 }

@@ -367,7 +367,7 @@ trait RoutableTrait
         }
 
         if ($slug instanceof Translation) {
-            $slugs = $slug->all();
+            $slugs = $slug->data();
         }
 
         $origLang = $this->translator()->getLocale();

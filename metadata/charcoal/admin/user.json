@@ -193,6 +193,11 @@
                         "type": "charcoal/admin/widget/objectForm",
                         "obj_type": "charcoal/admin/user"
                     }
+                },
+                "sidemenu": {
+                    "widget_options": {
+                        "ident": "system"
+                    }
                 }
             },
             "admin.collection": {
@@ -207,6 +212,11 @@
                         "type": "charcoal/admin/widget/table",
                         "label": "Admin user list",
                         "obj_type": "charcoal/admin/user"
+                    }
+                },
+                "sidemenu": {
+                    "widget_options": {
+                        "ident": "system"
                     }
                 }
             }

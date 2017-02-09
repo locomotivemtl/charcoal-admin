@@ -62,7 +62,9 @@
                     }
                 },
                 "sidemenu": {
-                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/map"
+                    "widget_options": {
+                        "ident": "system"
+                    }
                 }
             },
             "admin.table": {
@@ -83,7 +85,9 @@
                     }
                 },
                 "sidemenu": {
-                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/map"
+                    "widget_options": {
+                        "ident": "system"
+                    }
                 }
             }
         },

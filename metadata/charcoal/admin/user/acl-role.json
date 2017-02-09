@@ -21,6 +21,7 @@
                 },
                 "properties": [
                     "ident",
+                    "name",
                     "parent"
                 ]
             }
@@ -86,6 +87,11 @@
                         "form_ident": "default",
                         "obj_type": "charcoal/admin/user/acl-role"
                     }
+                },
+                "sidemenu": {
+                    "widget_options": {
+                        "ident": "system"
+                    }
                 }
             },
             "admin.table": {
@@ -103,6 +109,11 @@
                         "type": "charcoal/admin/widget/table",
                         "collection_ident": "default",
                         "obj_type": "charcoal/admin/user/acl-role"
+                    }
+                },
+                "sidemenu": {
+                    "widget_options": {
+                        "ident": "system"
                     }
                 }
             }

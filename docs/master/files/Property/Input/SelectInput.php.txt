@@ -57,7 +57,7 @@ class SelectInput extends AbstractSelectableInput
         $choice = parent::parseChoice($ident, $choice);
 
         if (!isset($choice['title'])) {
-            $choice['title'] = '';
+            $choice['title'] = $choice['label'];
         }
 
         if (!isset($choice['icon'])) {

@@ -127,12 +127,18 @@ class StructureFormGroup extends FormGroupWidget
             if ($formGroup instanceof self) {
                 $prop = $formGroup->storageProperty();
                 $val  = $formGroup->obj()->propertyValue($prop->ident());
+
                 $this->obj = $prop->structureVal($val);
+                if ($this->obj === null) {
+                    $this->obj = clone $prop->structureProto();
+                }
             } elseif ($this->form() instanceof ObjectContainerInterface) {
                 $this->obj = $this->form()->obj();
-            } else {
+            }
+
+            if ($this->obj === null) {
                 throw new RuntimeException(sprintf(
-                    'The %1$s widget has no data model.',
+                    'The [%1$s] widget has no data model.',
                     static::CLASS
                 ));
             }

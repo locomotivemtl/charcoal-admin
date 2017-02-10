@@ -105,7 +105,7 @@ class ElfinderConnectorAction extends AdminAction
      * Set a property factory.
      *
      * @param FactoryInterface $factory The property factory,
-     *     to createable property values.
+     *                                  to createable property values.
      * @return self
      */
     protected function setPropertyFactory(FactoryInterface $factory)
@@ -168,7 +168,7 @@ class ElfinderConnectorAction extends AdminAction
     /**
      * Retrieve the default elFinder Connector options.
      *
-     * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+     * @link    https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
      *     Documentation for connector options.
      * @example https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
      *     The Connector can be customized by defining a "elfinder" structure in
@@ -219,7 +219,7 @@ class ElfinderConnectorAction extends AdminAction
     /**
      * Retrieve the default elFinder Connector options from the configured flysystem filesystems.
      *
-     * @link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+     * @link    https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
      *     Documentation for connector options.
      * @example https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
      *     The Connector can be customized by defining a "elfinder" structure in
@@ -237,23 +237,30 @@ class ElfinderConnectorAction extends AdminAction
         $filesystems = $this->filesystems;
 
         $roots = [];
-        foreach ($filesystemConfig['connections'] as $filesystem => $config) {
-            if (isset($config['public']) && !$config['public']) {
-                continue;
-            }
-            $label = isset($config['label']) ? $this->translator()->translation($config['label']) : ucfirst($filesystem);
+        $currentFileSystem = $this->formProperty() ? $this->formProperty()->fileSystem() : false;
+
+        if ($currentFileSystem && isset($filesystems[$currentFileSystem])) {
+            $config = $filesystemConfig['connections'][$currentFileSystem];
+            $label = isset($config['label']) ?
+                $this->translator()->translation($config['label']) : ucfirst($currentFileSystem);
             $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
 
-            $roots[$filesystem] = [
-                'driver' => 'Flysystem',
-                'filesystem'    => $filesystems[$filesystem],
+            $startPath = $this->formProperty()->uploadPath();
 
-                'alias'         => (string)$label,
-                'cache'         => false,
+            if (!$startPath) {
+                $startPath = isset($config['path']) ? $config['path'] : '/';
+            }
+
+            $roots[$currentFileSystem] = [
+                'driver'     => 'Flysystem',
+                'filesystem' => $filesystems[$currentFileSystem],
+
+                'alias'          => (string)$label,
+                'cache'          => false,
 
                 // Path to files (REQUIRED)
-                'path'          => $uploadPath,
-                'startPath'     => $config['path'],
+                'path'           => $uploadPath,
+                'startPath'      => $startPath,
 
                 // Jpg Compression quality
                 'jpgQuality'     => 80,
@@ -261,7 +268,7 @@ class ElfinderConnectorAction extends AdminAction
                 'i18nFolderName' => true,
                 // URL to files (REQUIRED)
                 'URL'            => $baseUrl.'/'.$uploadPath,
-                'tmbURL'         => $baseUrl.'/'.$uploadPath.'/.tmb',
+                'tmbURL'         => $defaultBaseUrl.'/'.$uploadPath.'/.tmb',
                 'tmbPath'        => $uploadPath.'/.tmb',
                 'tmbSize'        => 200,
                 'tmbBgColor'     => 'transparent',
@@ -277,9 +284,60 @@ class ElfinderConnectorAction extends AdminAction
                 'attributes'     => [
                     $this->attributesForHiddenFiles()
                 ]
+            ];
+
+            return [
+                'debug' => true,
+                'roots' => $roots
+            ];
+        }
+
+        foreach ($filesystemConfig['connections'] as $filesystem => $config) {
+            if (isset($config['public']) && !$config['public']) {
+                continue;
+            }
+            $label = isset($config['label']) ?
+                $this->translator()->translation($config['label']) : ucfirst($filesystem);
+            $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
+
+            $roots[$filesystem] = [
+                'driver'     => 'Flysystem',
+                'filesystem' => $filesystems[$filesystem],
+
+                'alias'          => (string)$label,
+                'cache'          => false,
+
+                // Path to files (REQUIRED)
+                'path'           => $uploadPath,
+                'startPath'      => isset($config['path']) ? $config['path'] : '/',
+
+                // Jpg Compression quality
+                'jpgQuality'     => 80,
+                // Enable localized folder names
+                'i18nFolderName' => true,
+                // URL to files (REQUIRED)
+                'URL'            => $baseUrl.'/'.$uploadPath,
+                'tmbURL'         => $defaultBaseUrl.'/'.$uploadPath.'/.tmb',
+                'tmbPath'        => $uploadPath.'/.tmb',
+                'tmbSize'        => 200,
+                'tmbBgColor'     => 'transparent',
+                // All MIME types not allowed to upload
+                'uploadDeny'     => [ 'all' ],
+                // MIME type `image` and `text/plain` allowed to upload
+                'uploadAllow'    => $this->defaultUploadAllow(),
+                // Allowed MIME type `image` and `text/plain` only
+                'uploadOrder'    => [ 'deny', 'allow' ],
+                // Disable and hide dot starting files
+                'accessControl'  => 'access',
+                // File permission attributes
+
+                'attributes' => [
+                    $this->attributesForHiddenFiles()
+                ]
 
             ];
         }
+
         return [
             'debug' => true,
             'roots' => $roots
@@ -330,11 +388,11 @@ class ElfinderConnectorAction extends AdminAction
             $opts = $this->elfinderOptions['plugin']['Sanitizer'];
 
             if (isset($opts['enable']) && $opts['enable']) {
-                $mask  = (is_array($opts['replace']) ? implode($opts['replace']) : $opts['replace']);
-                $ext   = '.'.pathinfo($name, PATHINFO_EXTENSION);
+                $mask = (is_array($opts['replace']) ? implode($opts['replace']) : $opts['replace']);
+                $ext = '.'.pathinfo($name, PATHINFO_EXTENSION);
 
                 // Strip leading and trailing dashes or underscores
-                $name  = trim(str_replace($ext, '', $name), $mask);
+                $name = trim(str_replace($ext, '', $name), $mask);
 
                 // Squeeze multiple delimiters and whitespace with a single separator
                 $name = preg_replace('!['.preg_quote($mask, '!').'\.\s]{2,}!', $opts['replace'], $name);

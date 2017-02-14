@@ -33,6 +33,10 @@
                 "template": "charcoal/admin/template/media",
                 "controller": "charcoal/admin/template/elfinder"
             },
+            "system/cache": {
+                "template": "charcoal/admin/template/system/clear-cache",
+                "controller": "charcoal/admin/template/system/clear-cache"
+            },
             "system/users":{
                 "template": "charcoal/admin/template/system/users",
                 "controller": "charcoal/admin/template/system/users"
@@ -91,6 +95,9 @@
             "elfinder-connector": {
                 "methods": [ "GET", "POST" ],
                 "ident": "charcoal/admin/action/elfinder-connector"
+            },
+            "system/clear-cache": {
+                "ident": "charcoal/admin/action/system/clear-cache"
             }
         },
         "scripts": {

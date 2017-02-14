@@ -44,10 +44,7 @@
             "system/user-permissions":{
                 "template": "charcoal/admin/template/system/user-permissions",
                 "controller": "charcoal/admin/template/system/userpermissions"
-            },
-
-            "contents": {},
-            "envoie": {}
+            }
         },
         "actions": {
             "login": {

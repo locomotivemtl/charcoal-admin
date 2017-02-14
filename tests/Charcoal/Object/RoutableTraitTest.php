@@ -206,7 +206,8 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
             [ '"Hello-#-{$}-£™¡¢∞§¶•ªº-World"', 'hello-world' ],
             [ '&quot;', 'quot' ],
             [ 'fr/14/Services Santé et Sécurité au Travail', 'fr/14/services-sante-et-securite-au-travail' ],
-            [ 'fr/ 14/Services S   anté et Sécurité au Travail', 'fr/14/services-s-ante-et-securite-au-travail' ]
+            [ 'fr/ 14/Services S   anté et Sécurité au Travail', 'fr/14/services-s-ante-et-securite-au-travail' ],
+            [ 'ÓóÔô Œœ Ææ', 'oooo-oeoe-aeae']
         ];
     }
 

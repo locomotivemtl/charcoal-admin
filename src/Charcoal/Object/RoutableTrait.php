@@ -545,6 +545,9 @@ trait RoutableTrait
             htmlentities($slug, ENT_COMPAT, 'UTF-8')
         );
 
+        // &oelig;, &aelig;, etc...
+        $slug = preg_replace('!&([a-zA-Z])([a-zA-Z])(lig);!', '$1$2', $slug);
+
         // Remove unescaped HTML characters
         $unescaped = '!&(raquo|laquo|rsaquo|lsaquo|rdquo|ldquo|rsquo|lsquo|hellip|amp|nbsp|quot|ordf|ordm);!';
         $slug      = preg_replace($unescaped, '', $slug);

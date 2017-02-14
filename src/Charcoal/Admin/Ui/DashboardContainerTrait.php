@@ -33,11 +33,6 @@ trait DashboardContainerTrait
     protected $dashboard;
 
     /**
-     * @var FactoryInterface $widgetFactory
-     */
-    private $widgetFactory;
-
-    /**
      * @var DashboardBuilder $dashboardBuilder
      */
     private $dashboardBuilder;
@@ -112,32 +107,6 @@ trait DashboardContainerTrait
         $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
 
         return $dashboard;
-    }
-
-    /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
-     * @return void
-     */
-    protected function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
-    }
-
-    /**
-     * Safe Widget Factory getter.
-     * Create the widget factory if it was not preiously injected / set.
-     *
-     * @throws Exception If the widget factory dependency was not previously set / injected.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new Exception(
-                'Widget factory was not set.'
-            );
-        }
-        return $this->widgetFactory;
     }
 
     /**

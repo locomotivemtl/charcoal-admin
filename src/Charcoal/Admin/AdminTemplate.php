@@ -124,6 +124,11 @@ class AdminTemplate extends AbstractTemplate implements
     private $modelFactory;
 
     /**
+     * @var FactoryInterface $widgetFactory
+     */
+    private $widgetFactory;
+
+    /**
      * Set common dependencies (services) used in all admin templates.
      *
      * @param Container $container DI Container.
@@ -140,6 +145,8 @@ class AdminTemplate extends AbstractTemplate implements
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
+
+        $this->setWidgetFactory($container['widget/factory']);
 
         $this->menuBuilder = $container['menu/builder'];
         $this->menuItemBuilder = $container['menu/item/builder'];
@@ -670,5 +677,28 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return (string)$key;
+    }
+
+    /**
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return void
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+    }
+
+    /**
+     * @throws Exception If the widget factory dependency was not previously set / injected.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new Exception(
+                'Widget factory was not set.'
+            );
+        }
+        return $this->widgetFactory;
     }
 }

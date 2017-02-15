@@ -337,7 +337,7 @@ class Exporter
 
     /**
      * CSV rows from collection
-     * @return Array Rows with data from collection.
+     * @return array Rows with data from collection.
      */
     private function rows()
     {

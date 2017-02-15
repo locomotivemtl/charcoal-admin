@@ -510,6 +510,9 @@ class ContainerProvider
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+
+        $container['menu/builder'] = null;
+        $container['menu/item/builder'] = null;
     }
 
     public function registerWidgetDependencies(Container $container)
@@ -519,5 +522,8 @@ class ContainerProvider
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
         $this->registerModelFactory($container);
+
+        $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
     }
 }

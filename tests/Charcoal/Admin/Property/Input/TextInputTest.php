@@ -45,8 +45,8 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(42, $obj->size());
         $this->assertEquals(10, $obj->minLength());
         $this->assertEquals(100, $obj->maxLength());
-        $this->assertEquals('foo', $obj->pattern());
-        $this->assertEquals('bar', $obj->placeholder());
+        $this->assertEquals('foo', (string)$obj->pattern());
+        $this->assertEquals('bar', (string)$obj->placeholder());
     }
 
     public function testSetSize()
@@ -98,6 +98,6 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $ret = $obj->setPlaceholder('foo');
         $this->assertSame($ret, $obj);
-        $this->assertEquals('foo', $obj->placeholder());
+        $this->assertEquals('foo', (string)$obj->placeholder());
     }
 }

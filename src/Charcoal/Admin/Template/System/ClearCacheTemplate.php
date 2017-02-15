@@ -140,7 +140,6 @@ class ClearCacheTemplate extends AdminTemplate
             $sizeTotal += $item['mem_size'];
             $hitsTotal += $item['num_hits'];
             $ttlTotal += $item['ttl'];
-
         }
         $sizeAvg = $numEntries ? ($sizeTotal / $numEntries) : 0;
         $hitsAvg = $numEntries ? ($hitsTotal / $numEntries) : 0;

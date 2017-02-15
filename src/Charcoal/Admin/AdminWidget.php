@@ -24,8 +24,6 @@ use Charcoal\User\AuthAwareTrait;
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractWidget;
 
-
-
 /**
  * The base Widget for the `admin` module.
  */

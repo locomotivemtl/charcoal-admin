@@ -410,13 +410,13 @@ abstract class AbstractPropertyInput implements
         if ($this->placeholder instanceof Translation) {
             foreach ($this->placeholder->data() as $lang => $value) {
                 if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
-                    $this->placeholder[$lang] = $this->view()->render($value, $this->viewController());
+                    $this->placeholder[$lang] = $this->view()->renderTemplate($value, $this->viewController()) ?: $value;
                 }
             }
 
             $this->placeholder->isRendered = true;
         } elseif (is_string($this->placeholder)) {
-            $this->placeholder = $this->view()->render($this->placeholder, $this->viewController());
+            $this->placeholder = $this->view()->renderTemplate($this->placeholder, $this->viewController()) ?: $value;
         }
 
         return $this;

@@ -66,6 +66,7 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
             $containerProvider->registerTemplateDependencies($container);
             $containerProvider->registerMetadataLoader($container);
             $containerProvider->registerElfinderConfig($container);
+            $container['widget/factory'] = $this->getMock('\Charcoal\Factory\FactoryInterface');
 
             $this->container = $container;
         }

@@ -31,7 +31,6 @@ use Charcoal\Ui\MenuItem\GenericMenuItem;
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
 
-
 /**
  * Base class for all `admin` Templates.
  *

@@ -30,6 +30,9 @@ use Charcoal\Admin\Property\Input\SelectInput;
  */
 class SearchInput extends SelectInput
 {
+    /**
+     * @var array
+     */
     private $selectizeOptions = [];
 
     /**

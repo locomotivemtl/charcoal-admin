@@ -27,7 +27,7 @@
         "psr/log": "^1.0",
         "paragonie/random_compat": "^1.2",
         "zendframework/zend-permissions-acl": "^2.6",
-        "studio-42/elfinder": "2.1.14@dev",
+        "studio-42/elfinder": "2.1.21",
         "locomotivemtl/charcoal-app": "~0.3",
         "locomotivemtl/charcoal-core": "^0.2",
         "locomotivemtl/charcoal-email": "^0.1.2",

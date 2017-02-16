@@ -1,7 +1,7 @@
 /**
  * Customized Moono Theme for elFinder
  *
- * Required jquery ui "smoothness" theme and FontAwesome for icons
+ * Requires jQuery UI's "smoothness" theme and FontAwesome for icons
  * Style rules copied and edited from Moono CKEditor source
  *
  * Changes:
@@ -10,7 +10,8 @@
  * - `.elfinder-cwd-icon-postscript:before` : Removed content property.
  * - `.elfinder .elfinder-path` : Added padding property.
  *
- * @author lokothodida
+ * @link    https://github.com/lokothodida/elfinder-theme-moono/commit/f709b58
+ * @author  lokothodida
  * @package Charcoal
  */
 
@@ -65,10 +66,9 @@
 /* File Icons */
 /* default settings */
 .elfinder-cwd-icon {
-    // background-image: none !important;
     overflow: hidden;
 }
-.elfinder-cwd-icon:not(.elfinder-cwd-icon-image) {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl) {
     background-image: none !important;
 }
 .elfinder-cwd-icon:before {
@@ -125,10 +125,10 @@
     content: '\f1c3';
 }
 /* images */
-.elfinder-cwd-icon-image:before,
+.elfinder-cwd-icon-image:not(.elfinder-cwd-bgurl):before,
 .elfinder-cwd-icon-vnd-adobe-photoshop:before,
 .elfinder-cwd-icon-postscript:before {
-    // content: '\f1c5';
+    content: '\f1c5';
 }
 /* audio */
 .elfinder-cwd-icon-audio:before {
@@ -419,6 +419,9 @@
 .elfinder-button-icon-sort:before {
     content: '\f0dc';
 }
+.elfinder-button-icon-fullscreen:before {
+    content: '\f0b2';
+}
 /* menus */
 .elfinder-button-menu {
     background-color: #fff;
@@ -509,7 +512,10 @@
 .elfinder .elfinder-navbar-expanded .elfinder-navbar-arrow:before {
     content: '\f0d7';
 }
-.elfinder .elfinder-navbar-icon {
+.elfinder .elfinder-navbar-icon,
+.elfinder-lock,
+.elfinder-perms,
+.elfinder-symlink {
     background-image: none !important;
     overflow: hidden;
     height: 16px;
@@ -518,12 +524,34 @@
     line-height: 16px;
     margin-left: 3px;
 }
-.elfinder .elfinder-navbar-icon:before {
+.elfinder .elfinder-navbar-icon:before,
+.elfinder-lock:before,
+.elfinder-perms:before,
+.elfinder-symlink:before {
     font-family: FontAwesome;
     background: none;
     display: block;
     text-align: center;
     cursor: pointer;
+    font-size: smaller;
+}
+.elfinder-lock:before,
+.elfinder-perms:before,
+.elfinder-symlink:before {
+    color: grey;
+    opacity: 0.9;
+}
+/* read-only */
+.elfinder-ro .elfinder-perms:before {
+    content: '\f023';
+}
+/* not available */
+.elfinder-na .elfinder-perms:before {
+    content: '\f05e';
+}
+/* write-only available */
+.elfinder-wo .elfinder-perms:before {
+    content: '\f01a';
 }
 /* home */
 .elfinder .elfinder-navbar-root > .elfinder-navbar-icon:before,
@@ -553,7 +581,7 @@
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file *,
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file .elfinder-cwd-filename,
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file .elfinder-cwd-file-wrapper {
-    // background: none;
+    background-image: none;
     cursor: pointer;
     color: #000;
 }
@@ -888,27 +916,30 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.4) inset;
 }
 /* Context menu */
-.elfinder-contextmenu * {
+.elfinder {
+    /* item */
+    /* item hovered */
+    /* icons */
+    /* separator */
+}
+.elfinder .elfinder-contextmenu * {
     font: normal normal normal 16px Arial, Helvetica, Tahoma, Verdana, Sans-Serif;
 }
-.elfinder-contextmenu {
+.elfinder .elfinder-contextmenu {
     display: block;
     border: 1px solid #b6b6b6;
     padding: 0;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
 }
-/* item */
-.elfinder-contextmenu .elfinder-contextmenu-item {
+.elfinder .elfinder-contextmenu .elfinder-contextmenu-item {
     padding: 5px 30px 5px 30px;
     box-sizing: border-box;
     height: 24px;
 }
-/* item hovered */
-.elfinder-contextmenu .elfinder-contextmenu-item:hover {
+.elfinder .elfinder-contextmenu .elfinder-contextmenu-item:hover {
     background-color: #EFF0EF;
 }
-/* icons */
-.elfinder-contextmenu .elfinder-contextmenu-icon {
+.elfinder .elfinder-contextmenu .elfinder-contextmenu-icon {
     top: 0;
     left: 0;
     margin: 0;
@@ -922,8 +953,7 @@
     width: 24px;
     text-align: center;
 }
-/* separator */
-.elfinder-contextmenu .elfinder-contextmenu-separator {
+.elfinder .elfinder-contextmenu .elfinder-contextmenu-separator {
     border: none;
     background-color: #D3D3D3;
     height: 1px;
@@ -945,6 +975,9 @@
     filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ebebeb', endColorstr='#cfd1cf');
 }
 /* breadcrumbs */
+.elfinder .elfinder-path-other {
+    padding: 0 4px;
+}
 .elfinder .elfinder-path {
     max-width: none;
     font-size: 0;

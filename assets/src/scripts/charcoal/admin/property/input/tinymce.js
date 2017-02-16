@@ -56,8 +56,14 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
     window.elFinderCallback[this.input_id] = this.elfinder_callback.bind(this);
 
+    var locale = Charcoal.Admin.locale().replace('-', '_');
+
+    if (locale.match(/en_/)) {
+        locale = 'en';
+    }
+
     var default_opts = {
-        //language: 'fr_FR',
+        language: locale,
 
         // Plugins
         plugins: [
@@ -117,7 +123,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         // General
         browser_spellcheck: true,
         end_container_on_empty_block: true,
-        entity_encoding:'raw',
+        entity_encoding: 'raw',
 
         // Cleanup / Output
         allow_conditional_comments: true,

@@ -9,8 +9,9 @@ Charcoal.Admin = (function () {
     'use strict';
 
     var options, manager, feedback, debug,
-        currentLang = document.documentElement.lang,
-        defaultLang = 'en';
+        currentLocale = document.documentElement.getAttribute('locale'),
+        currentLang   = document.documentElement.lang,
+        defaultLang   = 'en';
 
     options = {
         base_url: null,
@@ -52,6 +53,15 @@ Charcoal.Admin = (function () {
      */
     Admin.devMode = function (mode) {
         return Admin.debug(mode);
+    };
+
+    /**
+     * Retrieve the current locale.
+     *
+     * @return {string|null}
+     */
+    Admin.locale = function () {
+        return currentLocale;
     };
 
     /**

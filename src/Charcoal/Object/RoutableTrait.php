@@ -246,19 +246,18 @@ trait RoutableTrait
             $newSlug[$lang] = $this->finalizeSlug($newSlug[$lang]);
 
             $objectRoute = $this->createRouteObject();
-            if ($objectRoute->source()->tableExists()) {
-                $objectRoute->setData([
-                    'lang'           => $lang,
-                    'slug'           => $newSlug[$lang],
-                    'route_obj_type' => $this->objType(),
-                    'route_obj_id'   => $this->id()
-                ]);
+            $objectRoute->setData([
+                'lang'           => $lang,
+                'slug'           => $newSlug[$lang],
+                'route_obj_type' => $this->objType(),
+                'route_obj_id'   => $this->id()
+            ]);
 
-                if (!$objectRoute->isSlugUnique()) {
-                    $objectRoute->generateUniqueSlug();
-                    $newSlug[$lang] = $objectRoute->slug();
-                }
+            if (!$objectRoute->isSlugUnique()) {
+                $objectRoute->generateUniqueSlug();
+                $newSlug[$lang] = $objectRoute->slug();
             }
+
         }
         $this->translator()->setLocale($origLang);
 
@@ -381,19 +380,15 @@ trait RoutableTrait
             $objectRoute = $this->createRouteObject();
 
             $source = $objectRoute->source();
-            if (!$source->tableExists()) {
-                $source->createTable();
-            } else {
-                $oldRoute = $this->getLatestObjectRoute();
+            $oldRoute = $this->getLatestObjectRoute();
 
-                // Unchanged but sync extra properties
-                if ($slug === $oldRoute->slug()) {
-                    $oldRoute->setData([
-                        'route_template' => $this->templateIdent()
-                    ]);
-                    $oldRoute->update(['route_template']);
-                    continue;
-                }
+            // Unchanged but sync extra properties
+            if ($slug === $oldRoute->slug()) {
+                $oldRoute->setData([
+                    'route_template' => $this->templateIdent()
+                ]);
+                $oldRoute->update(['route_template']);
+                continue;
             }
 
             $objectRoute->setData([
@@ -457,10 +452,6 @@ trait RoutableTrait
             'logger'  => $this->logger,
             'factory' => $this->modelFactory()
         ]);
-
-        if (!$source->tableExists()) {
-            $source->createTable();
-        }
 
         $loader
             ->setModel($model)

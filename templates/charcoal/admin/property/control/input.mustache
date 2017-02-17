@@ -8,6 +8,12 @@
         - `charcoal/admin/property/input/phone`
         - `charcoal/admin/property/input/url`
 --}}
+{{# hasInputAffix }}
+<div class="input-group">
+{{/ hasInputAffix }}
+{{# inputPrefix }}
+<span class="input-group-addon" id="{{ inputId }}_prefix">{{& . }}</span>
+{{/ inputPrefix }}
 <input
     type="{{ type }}"
     id="{{ inputId }}"
@@ -27,3 +33,9 @@
     {{# disabled }}disabled{{/ disabled }}
     value="{{ inputVal }}"
 >
+{{# inputSuffix }}
+<span class="input-group-addon" id="{{ inputId }}_suffix">{{& . }}</span>
+{{/ inputSuffix }}
+{{# hasInputAffix }}
+</div>
+{{/ hasInputAffix }}

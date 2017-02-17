@@ -679,6 +679,17 @@ trait RoutableTrait
     }
 
     /**
+     * Defaults to active property, used in the GenericRoute class.
+     * Defines if the route is active, else it sends the user to the 404 page.
+     *
+     * @return boolean
+     */
+    public function isActiveRoute()
+    {
+        return ($this->active());
+    }
+
+    /**
      * Retrieve the object model factory.
      *
      * @return \Charcoal\Factory\FactoryInterface

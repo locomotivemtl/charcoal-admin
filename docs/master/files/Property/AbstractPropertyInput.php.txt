@@ -120,6 +120,20 @@ abstract class AbstractPropertyInput implements
     private $placeholder;
 
     /**
+     * The control's prefix.
+     *
+     * @var Translation|string|null
+     */
+    protected $inputPrefix;
+
+    /**
+     * The control's suffix.
+     *
+     * @var Translation|string|null
+     */
+    protected $inputSuffix;
+
+    /**
      * @var array $propertyData
      */
     private $propertyData = [];
@@ -606,6 +620,72 @@ abstract class AbstractPropertyInput implements
             $this->inputType = 'charcoal/admin/property/input/text';
         }
         return $this->inputType;
+    }
+
+
+    /**
+     * Determine if the property has an affix.
+     *
+     * ### Textual `<input>`s only
+     *
+     * Avoid using `<select>` elements here as they cannot be fully styled in WebKit browsers.
+     *
+     * Avoid using `<textarea>` elements here as their `rows` attribute will
+     * not be respected in some cases.
+     *
+     * @return boolean
+     */
+    public function hasInputAffix()
+    {
+        return ($this->inputPrefix() || $this->inputSuffix());
+    }
+
+    /**
+     * Retrieve the control's prefix.
+     *
+     * @param  mixed $affix Text to display before the control.
+     * @throws InvalidArgumentException If the suffix is not translatable.
+     * @return self
+     */
+    public function setInputPrefix($affix)
+    {
+        $this->inputPrefix = $this->translator()->translation($affix);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the control's prefix.
+     *
+     * @return Translation|string|null
+     */
+    public function inputPrefix()
+    {
+        return $this->inputPrefix;
+    }
+
+    /**
+     * Retrieve the control's suffix.
+     *
+     * @param  mixed $affix Text to display after the control.
+     * @throws InvalidArgumentException If the suffix is not translatable.
+     * @return self
+     */
+    public function setInputSuffix($affix)
+    {
+        $this->inputSuffix = $this->translator()->translation($affix);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the control's suffix.
+     *
+     * @return Translation|string|null
+     */
+    public function inputSuffix()
+    {
+        return $this->inputSuffix;
     }
 
     /**

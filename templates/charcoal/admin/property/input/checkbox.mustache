@@ -6,8 +6,8 @@
 --}}
 {{> charcoal/admin/property/control/fallback }}
 {{# choices }}
-<label class="checkbox-inline">
+<div class="checkbox{{# inputLayouts.inline }} checkbox-inline{{/ inputLayouts.inline }}">
     {{> charcoal/admin/property/control/choice }}
-    <span>{{& label }}</span>
-</label>
+    <label for="{{ inputId }}">{{& label }}</label>
+</div>
 {{/ choices }}

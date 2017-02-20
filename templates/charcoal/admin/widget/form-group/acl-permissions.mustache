@@ -1,17 +1,20 @@
 <div>
-    {{#permission_categories}}
-    <h2>{{name}}</h2>
-        {{#permissions}}
-            <h3>{{name}}</h3>
-            <label class="radio-inline">
-                <input type="radio" name="permissions[{{ident}}]">{{#_t}}Denied{{/_t}}
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="permissions[{{ident}}]">{{#_t}}N/A{{/_t}}
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="permissions[{{ident}}]">{{#_t}}Allowed{{/_t}}
-            </label>
-        {{/permissions}}
-    {{/permission_categories}}
+{{# permissionCategories  }}
+    <h2>{{ name }}</h2>
+    {{# permissions }}
+        <h3>{{ name }}</h3>
+        <div class="radio radio-inline">
+            <input type="radio" name="permissions[{{ ident }}]"{{# isDenied }} checked{{/ isDenied }}>
+            <label for="permissions[{{ ident }}]" value="denied">{{# _t }}Denied{{/ _t }}</label>
+        </div>
+        <div class="radio radio-inline">
+            <input type="radio" name="permissions[{{ ident }}]"{{# isUnknown }} checked{{/ isUnknown }}>
+            <label for="permissions[{{ ident }}]" value="">{{# _t }}N/A{{/ _t }}</label>
+        </div>
+        <div class="radio radio-inline">
+            <input type="radio" name="permissions[{{ ident }}]"{{# isAllowed }} checked{{/ isAllowed }}>
+            <label for="permissions[{{ ident }}]" value="allowed">{{# _t }}Allowed{{/ _t }}</label>
+        </div>
+    {{/ permissions }}
+{{/ permissionCategories }}
 </div>

@@ -49,10 +49,8 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
             <div class="form-group">
                 <div class="checkbox">
                     <input type="hidden" name="remember-me" value="0">
-                    <input type="checkbox" id="remember-me" name="remember-me">
-                    <label for="remember-me">
-                        {{#_t}}Remember Me{{/_t}}
-                    </label>
+                    <input type="checkbox" name="remember-me" id="remember-me">
+                    <label for="remember-me">{{#_t}}Remember Me{{/_t}}</label>
                 </div>
             </div>
             {{/rememberMeEnabled}}

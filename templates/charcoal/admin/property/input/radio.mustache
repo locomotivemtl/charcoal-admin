@@ -5,8 +5,8 @@
     `charcoal/admin/property/input/radio`
 --}}
 {{# choices }}
-<label class="radio-inline">
+<div class="radio{{# inputLayouts.inline }} radio-inline{{/ inputLayouts.inline }}">
     {{> charcoal/admin/property/control/choice }}
-    <span>{{& label }}</span>
-</label>
+    <label for="{{ inputId }}">{{& label }}</label>
+</div>
 {{/ choices }}

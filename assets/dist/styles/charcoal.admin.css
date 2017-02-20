@@ -1579,11 +1579,6 @@ input[type="url"] {
 .control-label {
   font-weight: 400; }
 
-.radio,
-.checkbox {
-  margin-top: 0;
-  margin-bottom: 0; }
-
 .form-field {
   position: relative; }
   .form-field.-multiple > .form-control:not(.selectized) + .form-control {
@@ -1929,28 +1924,6 @@ a:focus {
 
 .bootstrap-switch.bootstrap-switch-focused {
   box-shadow: none; }
-
-.checkbox {
-  padding-left: 1.25rem;
-  cursor: pointer; }
-  .checkbox.-nolabel label {
-    padding-left: 0; }
-  .checkbox label {
-    min-height: 1.25rem; }
-    .checkbox label::before {
-      width: 1.25rem;
-      height: 1.25rem;
-      margin-left: -1.25rem;
-      border-radius: 2px; }
-    .checkbox label::after {
-      width: 1.25rem;
-      height: 1.25rem;
-      margin-left: -1.25rem;
-      font-size: 0.875rem;
-      text-align: center;
-      padding: 0; }
-  .checkbox input {
-    cursor: pointer; }
 
 /**
  * Utilities / Helpers

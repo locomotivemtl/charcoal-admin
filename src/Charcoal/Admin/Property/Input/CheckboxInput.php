@@ -2,7 +2,8 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \Charcoal\Admin\Property\AbstractSelectableInput;
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractTickableInput;
 
 /**
  * Checkbox Input Property
@@ -10,8 +11,10 @@ use \Charcoal\Admin\Property\AbstractSelectableInput;
  * The HTML _check box_ (`<input type="checkbox">`) input element represents
  * a control to select an array of different values.
  * — {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox}
+ *
+ * This form control is similar to {@see RadioInput}.
  */
-class CheckboxInput extends AbstractSelectableInput
+class CheckboxInput extends AbstractTickableInput
 {
     /**
      * Retrieve the control type for the HTML element `<input>`.
@@ -31,21 +34,5 @@ class CheckboxInput extends AbstractSelectableInput
     public function multiple()
     {
         return true;
-    }
-
-    /**
-     * Prepare a single selectable option for output.
-     *
-     * @param  string|integer $ident  The choice key.
-     * @param  array|object   $choice The choice structure.
-     * @return array|null
-     */
-    protected function parseChoice($ident, $choice)
-    {
-        $choice = parent::parseChoice($ident, $choice);
-
-        $choice['inputId'] = $this->generateInputId();
-
-        return $choice;
     }
 }

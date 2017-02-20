@@ -77,6 +77,26 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
+     * Retrieve the header menu.
+     *
+     * @return array
+     */
+    public function headerMenu()
+    {
+        if ($this->headerMenu === null) {
+            $dashboardConfig = $this->objEditDashboardConfig();
+
+            if (isset($dashboardConfig['sidemenu'])) {
+                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
+            } else {
+                $this->headerMenu = $this->createHeaderMenu();
+            }
+        }
+
+        return $this->headerMenu;
+    }
+
+    /**
      * @throws Exception If the object's admin metadata is not set.
      * @return \ArrayAccess
      */

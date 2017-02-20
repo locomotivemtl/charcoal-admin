@@ -58,23 +58,4 @@
     </div>
     {{/ showSidemenuActions }}
 </nav>
-
-{{!-- TODO: This does not belong here. --}}
-{{#addJs}}
-<script>
-    $('.js-filemanager-btn').on('click', function (e) {
-        e.preventDefault();
-
-        BootstrapDialog.show({
-            title:   '{{# _t }}Media Library{{/ _t }}',
-            size:    BootstrapDialog.SIZE_WIDE,
-            message: $(
-                '<iframe width="100%" height="400px" frameborder="0" ' +
-                'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
-            )
-        });
-
-    });
-</script>
-{{/addJs}}
 {{/ hasSidemenu }}

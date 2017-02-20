@@ -115,7 +115,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * @var boolean $headerMenu
      */
-    private $headerMenu;
+    protected $headerMenu;
 
     /**
      * @var SideMenuWidgetInterface $sidemenu
@@ -309,24 +309,6 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @param boolean $show The show header menu flag.
-     * @return AdminTemplate Chainable
-     */
-    public function setShowHeaderMenu($show)
-    {
-        $this->showHeaderMenu = !!$show;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showHeaderMenu()
-    {
-        return ($this->isAuthenticated() && $this->showHeaderMenu);
-    }
-
-    /**
      * Display or not the top right header menu.
      * @todo This is NOT used yet.
      * @param boolean $bool Display or not.
@@ -370,19 +352,60 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @throws Exception If the menu was not properly configured.
-     * @return array This method is a generator.
+     * @param boolean $show The show header menu flag.
+     * @return AdminTemplate Chainable
+     */
+    public function setShowHeaderMenu($show)
+    {
+        $this->showHeaderMenu = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showHeaderMenu()
+    {
+        return ($this->isAuthenticated() && $this->showHeaderMenu);
+    }
+
+    /**
+     * @return array
      */
     public function headerMenu()
+    {
+        if ($this->headerMenu === null) {
+            $this->headerMenu = $this->createHeaderMenu();
+        }
+
+        return $this->headerMenu;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
+     * @return array
+     */
+    protected function createHeaderMenu($options = null)
     {
         $headerMenu = $this->adminConfig['header_menu'];
 
         if (!isset($headerMenu['items'])) {
-            throw new Exception(
-                'Header menu was not property configured.'
+            throw new InvalidArgumentException(
+                'Missing "admin.header_menu.items"'
             );
         }
-        $menu = $this->menuBuilder->build([]);
+
+        $mainMenu = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if (is_string($options)) {
+            $mainMenu = $options;
+        } elseif (is_array($options)) {
+            if (isset($options['widget_options']['ident'])) {
+                $mainMenu = $options['widget_options']['ident'];
+            }
+        }
+
+        $menu   = $this->menuBuilder->build([]);
         $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
         foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
             $menuItem['menu'] = $menu;
@@ -390,11 +413,14 @@ class AdminTemplate extends AbstractTemplate implements
             if ($item->isAuthorized() === false) {
                 continue;
             }
+
             if (isset($menuItem['active']) && $menuItem['active'] === false) {
                 continue;
             }
 
-            if (!isset($menuItem['ident'])) {
+            if (isset($menuItem['ident'])) {
+                $menuIdent = $menuItem['ident'];
+            } else {
                 $menuItem['ident'] = $menuIdent;
             }
 
@@ -406,6 +432,7 @@ class AdminTemplate extends AbstractTemplate implements
             } else {
                 $url = '';
             }
+
             $menuItem['url'] = $url;
 
             if (isset($menuItem['icon'])) {
@@ -431,7 +458,7 @@ class AdminTemplate extends AbstractTemplate implements
 
             $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
 
-            $menuItem['selected'] = ($menuItem['ident'] === filter_input(INPUT_GET, 'main_menu'));
+            $menuItem['selected'] = ($menuItem['ident'] === $mainMenu);
 
             yield $menuItem;
         }

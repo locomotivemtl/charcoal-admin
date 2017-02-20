@@ -24,19 +24,33 @@
             'admin_path' : 'admin'
         });
 
-        $(document).ready(function() {
-            var $html = $(document.documentElement);
-            $html.removeClass('has-no-js').addClass('has-js');
-            if ($html.hasClass('s-admin-debug') || $html.hasClass('debug-mode')) {
-                Charcoal.Admin.debug(true);
-            }
+        $(document)
+            .ready(function() {
+                var $html = $(document.documentElement);
+                $html.removeClass('has-no-js').addClass('has-js');
+                if ($html.hasClass('s-admin-debug') || $html.hasClass('debug-mode')) {
+                    Charcoal.Admin.debug(true);
+                }
 
-            // Initialize tooltips globally
-            $('[data-toggle="tooltip"]').tooltip();
+                // Initialize tooltips globally
+                $('[data-toggle="tooltip"]').tooltip();
 
-            // Initialize bootstrap-select globally
-            $('.selectpicker').selectpicker({});
-        });
+                // Initialize bootstrap-select globally
+                $('.selectpicker').selectpicker({});
+            })
+            .on('click.charcoal.filemanager', '.js-toggle-filemanager', function (event) {
+                event.preventDefault();
+
+                BootstrapDialog.show({
+                    title:    '{{# _t }}File Manager{{/ _t }}',
+                    size:     BootstrapDialog.SIZE_WIDE,
+                    cssClass: '-elfinder',
+                    message: $(
+                        '<iframe width="100%" height="400px" frameborder="0" ' +
+                        'src="' + Charcoal.Admin.admin_url() + 'elfinder"></iframe>'
+                    )
+                });
+            });
     </script>
 
     {{!-- Scripts from widgets & templates --}}

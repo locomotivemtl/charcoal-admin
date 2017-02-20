@@ -233,10 +233,7 @@ trait ActionContainerTrait
             }
 
             $action = array_replace($this->defaultActionStruct(), $action);
-
-            if ($renderer) {
-                $action = $this->parseActionRenderables($action, $renderer);
-            }
+            $action = $this->parseActionRenderables($action, $renderer);
         }
 
         return $action;
@@ -304,16 +301,8 @@ trait ActionContainerTrait
      */
     protected function parseActionRenderables($action, $renderer)
     {
-        if (!$renderer) {
-            return $action;
-        }
-
         if ($renderer === true) {
             $renderer = $this->getActionRenderer();
-        }
-
-        if (!$renderer instanceof ViewableInterface) {
-            throw new RuntimeException('The widget has no renderer.');
         }
 
         if (isset($action['condition'])) {
@@ -404,9 +393,9 @@ trait ActionContainerTrait
             }
 
             return $url;
+        } elseif ($renderer instanceof ViewableInterface) {
+            $url = $renderer->renderTemplate($url);
         }
-
-        $url = $renderer->renderTemplate($url);
 
         if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
             $url = $this->adminUrl().$url;

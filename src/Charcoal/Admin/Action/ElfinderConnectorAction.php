@@ -251,6 +251,8 @@ class ElfinderConnectorAction extends AdminAction
                 $startPath = isset($config['path']) ? $config['path'] : '/';
             }
 
+            $filesystems[$currentFileSystem]->createDir($startPath);
+
             $roots[$currentFileSystem] = [
                 'driver'     => 'Flysystem',
                 'filesystem' => $filesystems[$currentFileSystem],

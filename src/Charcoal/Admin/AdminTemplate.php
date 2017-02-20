@@ -528,6 +528,10 @@ class AdminTemplate extends AbstractTemplate implements
             $options['widget_options']['ident'] = $mainMenuFromRequest;
         }
 
+        if (!is_string($options['widget_options']['ident'])) {
+            return null;
+        }
+
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
 
         if (isset($options['widget_type'])) {

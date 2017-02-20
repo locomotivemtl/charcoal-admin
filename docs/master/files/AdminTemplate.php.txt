@@ -396,13 +396,18 @@ class AdminTemplate extends AbstractTemplate implements
             );
         }
 
-        $mainMenu = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        $mainMenu = null;
         if (is_string($options)) {
             $mainMenu = $options;
         } elseif (is_array($options)) {
             if (isset($options['widget_options']['ident'])) {
                 $mainMenu = $options['widget_options']['ident'];
             }
+        }
+
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($mainMenuFromRequest) {
+            $mainMenu = $mainMenuFromRequest;
         }
 
         $menu   = $this->menuBuilder->build([]);
@@ -507,29 +512,20 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createSidemenu($options = null)
     {
-        if (empty($options)) {
-            $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
-            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-
-            if ($sidemenuFromRequest) {
-                $options = $sidemenuFromRequest;
-            } elseif ($mainMenuFromRequest) {
-                $options = $mainMenuFromRequest;
-            } else {
-                return null;
-            }
-        }
-
-        if (is_string($options)) {
+        if (!is_array($options)) {
             $options = [
                 'widget_options' => [
                     'ident' => $options
                 ]
             ];
-        } elseif (!is_array($options)) {
-            throw new InvalidArgumentException(
-                'The sidemenu definition must be a sidemenu identifier or sidemenu structure.'
-            );
+        }
+
+        $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($sidemenuFromRequest) {
+            $options['widget_options']['ident'] = $sidemenuFromRequest;
+        } elseif ($mainMenuFromRequest) {
+            $options['widget_options']['ident'] = $mainMenuFromRequest;
         }
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';

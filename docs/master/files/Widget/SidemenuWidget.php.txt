@@ -314,6 +314,12 @@ class SidemenuWidget extends AdminWidget implements
             $url    = null;
             $permissions = [];
 
+            if (isset($link['ident'])) {
+                $linkIdent = $link['ident'];
+            } else {
+                $link['ident'] = $linkIdent;
+            }
+
             if (isset($link['active'])) {
                 $active = !!$link['active'];
             }

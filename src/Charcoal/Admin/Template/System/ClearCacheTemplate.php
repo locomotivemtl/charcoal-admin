@@ -53,7 +53,11 @@ class ClearCacheTemplate extends AdminTemplate
      */
     public function sidemenu()
     {
-        return $this->createSidemenu('system');
+        if ($this->sidemenu === null) {
+            $this->sidemenu = $this->createSidemenu('system');
+        }
+
+        return $this->sidemenu;
     }
 
 

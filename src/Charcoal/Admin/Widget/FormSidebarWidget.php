@@ -122,11 +122,11 @@ class FormSidebarWidget extends AdminWidget implements
     {
         parent::setData($data);
 
-        if (isset($data['properties']) && $data['properties'] !== null) {
+        if (isset($data['properties'])) {
             $this->setSidebarProperties($data['properties']);
         }
 
-        if (isset($data['actions']) && $data['actions'] !== null) {
+        if (isset($data['actions'])) {
             $this->setSidebarActions($data['actions']);
         }
 
@@ -357,7 +357,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the table's default object actions.
+     * Retrieve the sidebar's default actions.
      *
      * @return array
      */

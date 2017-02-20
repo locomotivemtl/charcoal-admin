@@ -33,11 +33,6 @@ class EditTemplate extends AdminTemplate implements
     use ObjectContainerTrait;
 
     /**
-     * @var SideMenuWidgetInterface $sidemenu
-     */
-    private $sidemenu;
-
-    /**
      * @param Container $container DI container.
      * @return void
      */
@@ -62,17 +57,23 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
+     * Retrieve the sidemenu.
+     *
      * @return SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
-        $dashboardConfig = $this->objEditDashboardConfig();
+        if ($this->sidemenu === null) {
+            $dashboardConfig = $this->objEditDashboardConfig();
 
-        if (isset($dashboardConfig['sidemenu'])) {
-            return $this->createSidemenu($dashboardConfig['sidemenu']);
-        } else {
-            return $this->createSidemenu();
+            if (isset($dashboardConfig['sidemenu'])) {
+                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
+            } else {
+                $this->sidemenu = $this->createSidemenu();
+            }
         }
+
+        return $this->sidemenu;
     }
 
     /**

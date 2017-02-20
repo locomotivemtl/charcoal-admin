@@ -43,9 +43,20 @@
     {{/ groups }}
 
     {{/ hasGroups }}
-    {{# mainAction }}
-    {{> charcoal/admin/widget/sidemenu/actions }}
-    {{/ mainAction }}
+
+    {{# showSidemenuActions }}
+    <div class="btn-group-vertical btn-block" role="group">
+    {{# sidemenuActions }}
+        {{# isSeparator }}
+            </div>
+            <div class="btn-group-vertical btn-block" role="group">
+        {{/ isSeparator }}
+        {{^ isSeparator }}
+            {{> charcoal/admin/widget/actions }}
+        {{/ isSeparator }}
+    {{/ sidemenuActions }}
+    </div>
+    {{/ showSidemenuActions }}
 </nav>
 
 {{!-- TODO: This does not belong here. --}}

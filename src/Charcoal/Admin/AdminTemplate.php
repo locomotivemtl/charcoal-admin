@@ -118,6 +118,11 @@ class AdminTemplate extends AbstractTemplate implements
     private $headerMenu;
 
     /**
+     * @var SideMenuWidgetInterface $sidemenu
+     */
+    protected $sidemenu;
+
+    /**
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
@@ -459,32 +464,42 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @param  mixed $sidemenuConfig The sidemenu widget ID or config.
+     * Retrieve the sidemenu.
+     *
+     * @return SidemenuWidgetInterface|null
+     */
+    public function sidemenu()
+    {
+        return $this->sidemenu;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
      * @throws InvalidArgumentException If the sidemenu widget is invalid.
      * @return SidemenuWidgetInterface|null
      */
-    protected function createSidemenu($sidemenuConfig = null)
+    protected function createSidemenu($options = null)
     {
-        if (empty($sidemenuConfig)) {
+        if (empty($options)) {
             $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
             $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
 
             if ($sidemenuFromRequest) {
-                $sidemenuConfig = $sidemenuFromRequest;
+                $options = $sidemenuFromRequest;
             } elseif ($mainMenuFromRequest) {
-                $sidemenuConfig = $mainMenuFromRequest;
+                $options = $mainMenuFromRequest;
             } else {
                 return null;
             }
         }
 
-        if (is_string($sidemenuConfig)) {
-            $sidemenuConfig = [
+        if (is_string($options)) {
+            $options = [
                 'widget_options' => [
-                    'ident' => $sidemenuConfig
+                    'ident' => $options
                 ]
             ];
-        } elseif (!is_array($sidemenuConfig)) {
+        } elseif (!is_array($options)) {
             throw new InvalidArgumentException(
                 'The sidemenu definition must be a sidemenu identifier or sidemenu structure.'
             );
@@ -492,16 +507,16 @@ class AdminTemplate extends AbstractTemplate implements
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
 
-        if (isset($sidemenuConfig['widget_type'])) {
-            $widgetType = $sidemenuConfig['widget_type'];
+        if (isset($options['widget_type'])) {
+            $widgetType = $options['widget_type'];
         } else {
             $widgetType = 'charcoal/admin/widget/sidemenu';
         }
 
         $sidemenu = $this->widgetFactory()->create($widgetType);
 
-        if (isset($sidemenuConfig['widget_options'])) {
-            $sidemenu->setData($sidemenuConfig['widget_options']);
+        if (isset($options['widget_options'])) {
+            $sidemenu->setData($options['widget_options']);
         }
 
         return $sidemenu;

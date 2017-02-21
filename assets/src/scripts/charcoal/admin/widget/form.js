@@ -54,6 +54,8 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
 Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     var that = this;
 
+    var $sidebar = $('.c-form-sidebar', this.form_selector);
+
     // Submit the form via ajax
     $(that.form_selector).on('submit', function (e) {
         e.preventDefault();
@@ -61,19 +63,19 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     });
 
     // Any delete button should trigger the delete-object method.
-    $('.js-obj-delete').on('click', function (e) {
+    $('.js-obj-delete', $sidebar).on('click', function (e) {
         e.preventDefault();
         that.delete_object(this);
     });
 
     // Reset button
-    $('.js-reset-form').on('click', function (e) {
+    $('.js-reset-form', $sidebar).on('click', function (e) {
         e.preventDefault();
         $(that.form_selector)[0].reset();
     });
 
     // Language switcher
-    $('.js-lang-switch button').on('click', function (e) {
+    $('.js-lang-switch button', $sidebar).on('click', function (e) {
         e.preventDefault();
 
         var $this = $(this),
@@ -214,7 +216,7 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
         var error   = errorThrown || 'Unknown Error';
 
         Charcoal.Admin.feedback([{
-            msg:   message + error,
+            msg: message + error,
             level: 'error'
         }]);
     }

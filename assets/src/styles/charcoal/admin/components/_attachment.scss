@@ -50,6 +50,14 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         margin:  (-$c-attachment-pv) $c-attachment-ph (-$c-attachment-pv) (-$c-attachment-ph);
         padding: $c-attachment-pv $c-attachment-ph;
         border-right: 1px solid #ddd;
+
+        &.-right {
+            float: right;
+            margin:  (-$c-attachment-pv) (-$c-attachment-ph) (-$c-attachment-pv) ($c-attachment-ph);
+            padding: $c-attachment-pv $c-attachment-ph $c-attachment-pv $c-attachment-ph;
+            border-left: 1px solid #ddd;
+            border-right: 0;
+        }
     }
 
     .panel-headless-title {

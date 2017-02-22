@@ -91,6 +91,7 @@ trait RoutableTrait
     public function setSlugPattern($pattern)
     {
         $this->slugPattern = $this->translator()->translation($pattern);
+
         return $this;
     }
 
@@ -222,10 +223,10 @@ trait RoutableTrait
      */
     public function generateSlug()
     {
-        $languages  = $this->translator()->availableLocales();
-        $patterns   = $this->slugPattern();
-        $curSlug    = $this->slug();
-        $newSlug    = [];
+        $languages = $this->translator()->availableLocales();
+        $patterns = $this->slugPattern();
+        $curSlug = $this->slug();
+        $newSlug = [];
 
         $origLang = $this->translator()->getLocale();
         foreach ($languages as $lang) {
@@ -257,7 +258,6 @@ trait RoutableTrait
                 $objectRoute->generateUniqueSlug();
                 $newSlug[$lang] = $objectRoute->slug();
             }
-
         }
         $this->translator()->setLocale($origLang);
 
@@ -276,7 +276,7 @@ trait RoutableTrait
         if ($this instanceof ViewableInterface && $this->view() !== null) {
             $route = $this->view()->render($pattern, $this->viewController());
         } else {
-            $route = preg_replace_callback('~\{\{\s*(.*?)\s*\}\}~i', [$this, 'parseRouteToken'], $pattern);
+            $route = preg_replace_callback('~\{\{\s*(.*?)\s*\}\}~i', [ $this, 'parseRouteToken' ], $pattern);
         }
 
         return $this->slugify($route);
@@ -298,8 +298,8 @@ trait RoutableTrait
             $token = $token[1];
         }
 
-        $token  = trim($token);
-        $method = [$this, $token];
+        $token = trim($token);
+        $method = [ $this, $token ];
 
         if (is_callable($method)) {
             $value = call_user_func($method);
@@ -387,7 +387,7 @@ trait RoutableTrait
                 $oldRoute->setData([
                     'route_template' => $this->templateIdent()
                 ]);
-                $oldRoute->update(['route_template']);
+                $oldRoute->update([ 'route_template' ]);
                 continue;
             }
 
@@ -492,7 +492,7 @@ trait RoutableTrait
         $slug = $this->slug();
 
         if ($slug instanceof Translation && $lang) {
-            return $slug->val($lang);
+            return $slug[$lang];
         }
 
         return (string)$slug;
@@ -512,12 +512,12 @@ trait RoutableTrait
             return $sluggedArray[$str];
         }
 
-        $metadata    = $this->metadata();
-        $separator   = isset($metadata['routable']['separator']) ? $metadata['routable']['separator'] : '-';
-        $delimiters  = '-_|';
-        $pregDelim   = preg_quote($delimiters);
+        $metadata = $this->metadata();
+        $separator = isset($metadata['routable']['separator']) ? $metadata['routable']['separator'] : '-';
+        $delimiters = '-_|';
+        $pregDelim = preg_quote($delimiters);
         $directories = '\\/';
-        $pregDir     = preg_quote($directories);
+        $pregDir = preg_quote($directories);
 
         // Do NOT remove forward slashes.
         $slug = preg_replace('![^(\p{L}|\p{N})(\s|\/)]!u', $separator, $str);
@@ -541,7 +541,7 @@ trait RoutableTrait
 
         // Remove unescaped HTML characters
         $unescaped = '!&(raquo|laquo|rsaquo|lsaquo|rdquo|ldquo|rsquo|lsquo|hellip|amp|nbsp|quot|ordf|ordm);!';
-        $slug      = preg_replace($unescaped, '', $slug);
+        $slug = preg_replace($unescaped, '', $slug);
 
         // Unify all dashes/underscores as one separator character
         $flip = ($separator === '-') ? '_' : '-';
@@ -617,7 +617,7 @@ trait RoutableTrait
             return false;
         }
 
-        $model  = $this->modelFactory()->get($this->objectRouteClass());
+        $model = $this->modelFactory()->get($this->objectRouteClass());
         $loader = new CollectionLoader([
             'logger'  => $this->logger,
             'factory' => $this->modelFactory()

@@ -44,8 +44,8 @@ function load_collection_map() {
         use_clusterer: true,
         map: {
             center: {
-                x:45.3752754,
-                y:-73.5884044
+                x: 45.3752754,
+                y: -73.5884044
             },
             zoom: 13,
             mapType: 'roadmap',
@@ -128,6 +128,7 @@ function load_collection_map() {
     MapController.init().ready(function() {
         MapController.fit_bounds();
     });
+
     return MapController;
 }
 
@@ -144,8 +145,7 @@ if (typeof google === 'undefined') {
         '&key={{apiKey}}&callback=_tmp_google_onload_function',
         function () {}
     );
-}
-else {
+} else {
     map_controller = load_collection_map();
 }
 </script>

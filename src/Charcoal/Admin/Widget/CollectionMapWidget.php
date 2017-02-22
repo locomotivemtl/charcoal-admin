@@ -244,13 +244,17 @@ class CollectionMapWidget extends AdminWidget
             $loader->setModel($this->objProto());
 
             $that = $this;
-            $loader->setCallback(function($obj) use ($that) {
+            $loader->setCallback(function(&$obj) use ($that) {
                 $obj->mapInfoboxTemplate = $that->infoboxTemplate();
 
                 if ($that->latProperty() && $that->latProperty()) {
                     $obj->mapShowMarker = true;
-                    $obj->mapLat = call_user_func([$obj, $that->latProperty()]);
-                    $obj->mapLon = call_user_func([$obj, $that->lonProperty()]);
+                    $obj->mapLat = call_user_func([ $obj, $that->latProperty() ]);
+                    $obj->mapLon = call_user_func([ $obj, $that->lonProperty() ]);
+
+                    if (!$obj->mapLat || !$obj->mapLon) {
+                        $obj = null;
+                    }
                 } else {
                     $obj->mapShowMarker = false;
                 }
@@ -261,6 +265,10 @@ class CollectionMapWidget extends AdminWidget
                         $obj->mapShowPath = true;
                         // Same type of coords.
                         $obj->mapPath = $that->formatPolygon($mapPath);
+
+                        if (!$obj->mapPath) {
+                            $obj = null;
+                        }
                     } else {
                         $obj->mapShowPath = false;
                     }
@@ -271,6 +279,10 @@ class CollectionMapWidget extends AdminWidget
                     if ($mapPolygon) {
                         $obj->mapShowPolygon = true;
                         $obj->mapPolygon = $that->formatPolygon($mapPolygon);
+
+                        if (!$obj->mapPolygon) {
+                            $obj = null;
+                        }
                     } else {
                         $obj->mapShowPolygon = false;
                     }

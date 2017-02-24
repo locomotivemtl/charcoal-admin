@@ -4,14 +4,24 @@ namespace Charcoal\Admin\Tests;
 
 use PDO;
 
-// From Zend
+// From Mockery
+use Mockery;
+
+// From PSR-3
+use Psr\Log\NullLogger;
+
+// From 'cache/void-adapter' (PSR-6)
+use \Cache\Adapter\Void\VoidCachePool;
+
+// From 'tedivm/stash' (PSR-6)
+use \Stash\Pool;
+use \Stash\Driver\Ephemeral;
+
+// From 'zendframework/zend-permissions-acl'
 use Zend\Permissions\Acl\Acl;
 
 // From Pimple
 use Pimple\Container;
-
-// From Mockery
-use Mockery;
 
 // From 'league/climate'
 use League\CLImate\CLImate;
@@ -19,10 +29,6 @@ use League\CLImate\Util\System\Linux;
 use League\CLImate\Util\Output;
 use League\CLImate\Util\Reader\Stdin;
 use League\CLImate\Util\UtilFactory;
-
-// From PSR-3
-use Psr\Log\NullLogger;
-use Cache\Adapter\Void\VoidCachePool;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\GenericFactory as Factory;
@@ -304,7 +310,7 @@ class ContainerProvider
     public function registerCache(Container $container)
     {
         $container['cache'] = function ($container) {
-            return new VoidCachePool();
+            return new Pool(new Ephemeral());
         };
     }
 

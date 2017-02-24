@@ -1,8 +1,8 @@
 <?php
 
 session_start();
+mb_internal_encoding('UTF-8');
+date_default_timezone_set('UTC');
 
-// Composer autoloader for Charcoal's psr4-compliant Unit Tests
+/** @var \Composer\Autoload\ClassLoader $autoloader */
 $autoloader = require __DIR__.'/../vendor/autoload.php';
-$autoloader->add('Charcoal\\Admin\\', __DIR__.'/../src/');
-$autoloader->add('Charcoal\\Admin\\Tests\\', __DIR__);

@@ -29,6 +29,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
         $this->modelFactory = $container['model/factory'];
     }
 

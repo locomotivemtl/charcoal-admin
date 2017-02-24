@@ -94,7 +94,7 @@ abstract class AdminAction extends AbstractAction implements
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
 
-        // AuthAware dependencies
+        // Satisfies AuthAwareInterface dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }

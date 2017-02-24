@@ -107,6 +107,17 @@ class AdminServiceProvider implements ServiceProviderInterface
                 'token_factory' => $container['model/factory']
             ]);
         };
+
+        /**
+         * For 'charcoal-ui'
+         *
+         * @todo   Do this right!
+         * @param  Container $container The Pimple DI Container.
+         * @return Authenticator
+         */
+        $container['authenticator'] = function (Container $container) {
+            return $container['admin/authenticator'];
+        };
     }
 
     /**
@@ -127,6 +138,17 @@ class AdminServiceProvider implements ServiceProviderInterface
                 'acl'       => $container['admin/acl'],
                 'resource'  => 'admin'
             ]);
+        };
+
+        /**
+         * For 'charcoal-ui'
+         *
+         * @todo   Do this right!
+         * @param  Container $container The Pimple DI Container.
+         * @return Authorizer
+         */
+        $container['authorizer'] = function (Container $container) {
+            return $container['admin/authorizer'];
         };
     }
 

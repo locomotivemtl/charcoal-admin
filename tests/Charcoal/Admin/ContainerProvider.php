@@ -11,11 +11,11 @@ use Mockery;
 use Psr\Log\NullLogger;
 
 // From 'cache/void-adapter' (PSR-6)
-use \Cache\Adapter\Void\VoidCachePool;
+use Cache\Adapter\Void\VoidCachePool;
 
 // From 'tedivm/stash' (PSR-6)
-use \Stash\Pool;
-use \Stash\Driver\Ephemeral;
+use Stash\Pool;
+use Stash\Driver\Ephemeral;
 
 // From 'zendframework/zend-permissions-acl'
 use Zend\Permissions\Acl\Acl;
@@ -323,13 +323,6 @@ class ContainerProvider
         };
     }
 
-    public function registerAcl(Container $container)
-    {
-        $container['admin/acl'] = function (Container $container) {
-            return new Acl();
-        };
-    }
-
     public function registerMetadataLoader(Container $container)
     {
         $this->registerLogger($container);
@@ -426,6 +419,13 @@ class ContainerProvider
                     'source_factory'   => $container['source/factory']
                 ]]
             ]);
+        };
+    }
+
+    public function registerAcl(Container $container)
+    {
+        $container['admin/acl'] = function (Container $container) {
+            return new Acl();
         };
     }
 

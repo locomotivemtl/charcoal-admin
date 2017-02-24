@@ -85,9 +85,6 @@ class FormWidget extends AdminWidget implements
 
         // Satisfies LayoutAwareInterface
         $this->setLayoutBuilder($container['layout/builder']);
-
-        // Satisfies AuthAwareInterface
-        $this->setAuthDependencies($container);
     }
 
     /**

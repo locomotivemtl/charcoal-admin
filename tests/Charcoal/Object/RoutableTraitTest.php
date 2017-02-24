@@ -9,11 +9,15 @@ use DateTime;
 // From Pimple
 use Pimple\Container;
 
+// From 'charcoal-translator'
 use Charcoal\Translator\Translator;
 use Charcoal\Translator\LocalesManager;
 
+// From 'charcoal-object'
+use Charcoal\Object\ObjectRoute;
 use Charcoal\Object\RoutableTrait;
-
+use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Object\Tests\Mocks\RoutableClass as RoutableObject;
 
 /**
  *
@@ -34,38 +38,29 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
      */
     private $container;
 
-    private function translator()
-    {
-        return new Translator([
-            'manager' => new LocalesManager([
-                'locales' => [
-                    'en'=>['locale'=>'en-US'],
-                    'fr'=>['locale'=>'fr-CA']
-                ],
-                'default_language'=>'en',
-                'fallback_languages'=>['en']
-            ])
-        ]);
-    }
+    /**
+     * Store the translator service.
+     *
+     * @var Translator
+     */
+    private $translator;
 
     /**
      * Set up the test.
      */
     public function setUp()
     {
-        $this->obj = $this->getMockForTrait(
-            RoutableTrait::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            [ 'metadata' ]
-        );
+        $container = $this->container();
 
-        $this->obj->expects($this->any())
-            ->method('translator')
-            ->willReturn($this->translator());
+        $route = $container['model/factory']->get(ObjectRoute::class);
+        if ($route->source()->tableExists() === false) {
+            $route->source()->createTable();
+        }
+
+        $this->obj = new RoutableObject([
+            'factory'    => $container['model/factory'],
+            'translator' => $this->translator()
+        ]);
     }
 
     public function testSlugPattern()
@@ -81,32 +76,26 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
 
     public function testSlugPatternRoutable()
     {
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([
-                'routable' => [
-                    'pattern' => 'foofoo'
-                ]
-            ]);
+        $this->obj->setMetadata([
+            'routable' => [
+                'pattern' => 'foofoo'
+            ]
+        ]);
         $this->assertEquals('foofoo', $this->obj->slugPattern());
     }
 
     public function testSlugPatternWithoutRoutable()
     {
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([
-                'routable' => null,
-                'slug_pattern' => 'barbar'
-            ]);
+        $this->obj->setMetadata([
+            'routable'     => null,
+            'slug_pattern' => 'barbar'
+        ]);
         $this->assertEquals('barbar', $this->obj->slugPattern());
     }
 
     public function testSlugPatternWithoutMetadata()
     {
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([]);
+        $this->obj->setMetadata([]);
 
         $this->setExpectedException('\Exception');
         $this->obj->slugPattern();
@@ -116,13 +105,11 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('', $this->obj->slugPrefix());
 
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([
-                'routable' => [
-                    'prefix' => 'barfoo'
-                ]
-            ]);
+        $this->obj->setMetadata([
+            'routable' => [
+                'prefix' => 'barfoo'
+            ]
+        ]);
         $this->assertEquals('barfoo', $this->obj->slugPrefix());
     }
 
@@ -130,13 +117,11 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('', $this->obj->slugSuffix());
 
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([
-                'routable' => [
-                    'suffix' => 'barfoo'
-                ]
-            ]);
+        $this->obj->setMetadata([
+            'routable' => [
+                'suffix' => 'barfoo'
+            ]
+        ]);
         $this->assertEquals('barfoo', $this->obj->slugSuffix());
     }
 
@@ -147,12 +132,11 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
 
     public function testIsSlugEditable()
     {
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([
-                'routable' => [
-                    'editable' => true                ]
-            ]);
+        $this->obj->setMetadata([
+            'routable' => [
+                'editable' => true
+            ]
+        ]);
         $this->assertTrue($this->obj->isSlugEditable());
     }
 
@@ -172,19 +156,14 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->container();
 
-        $this->obj->expects($this->any())
-            ->method('metadata')
-            ->willReturn([
-                'routable' => [
-                    'pattern' => 'FooFoo',
-                    'prefix'  => 'bar-',
-                    'suffix'  => '-baz'
-                ]
-            ]);
+        $this->obj->setMetadata([
+            'routable' => [
+                'pattern' => 'FooFoo',
+                'prefix'  => 'bar-',
+                'suffix'  => '-baz'
+            ]
+        ]);
 
-        $this->obj->expects($this->any())
-            ->method('modelFactory')
-            ->willReturn($container['model/factory']);
         $ret = $this->obj->generateSlug();
         $this->assertEquals('barfoofoobaz', (string)$ret);
     }
@@ -209,6 +188,24 @@ class RoutableTraitTest extends PHPUnit_Framework_TestCase
             [ 'fr/ 14/Services S   anté et Sécurité au Travail', 'fr/14/services-s-ante-et-securite-au-travail' ],
             [ 'ÓóÔô Œœ Ææ', 'oooo-oeoe-aeae']
         ];
+    }
+
+    private function translator()
+    {
+        if ($this->translator === null) {
+            $this->translator = new Translator([
+                'manager' => new LocalesManager([
+                    'locales' => [
+                        'en'  => [ 'locale' => 'en-US' ],
+                        'fr'  => [ 'locale' => 'fr-CA' ]
+                    ],
+                    'default_language'   => 'en',
+                    'fallback_languages' => [ 'en' ]
+                ])
+            ]);
+        }
+
+        return $this->translator;
     }
 
     /**

@@ -10,6 +10,10 @@ use Psr\Log\NullLogger;
 // From 'cache/void-adapter' (PSR-6)
 use Cache\Adapter\Void\VoidCachePool;
 
+// From 'tedivm/stash' (PSR-6)
+use Stash\Pool;
+use Stash\Driver\Ephemeral;
+
 // From 'zendframework/zend-permissions'
 use Zend\Permissions\Acl\Acl;
 
@@ -19,13 +23,14 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\GenericFactory as Factory;
 
-use Charcoal\Translator\LocalesManager;
-use Charcoal\Translator\Translator;
-
 // From 'charcoal-core'
 use Charcoal\Model\Service\MetadataLoader;
 use Charcoal\Loader\CollectionLoader;
 use Charcoal\Source\DatabaseSource;
+
+// From 'charcoal-translator'
+use Charcoal\Translator\LocalesManager;
+use Charcoal\Translator\Translator;
 
 // From 'charcoal-app'
 use Charcoal\App\AppConfig;
@@ -102,7 +107,7 @@ class ContainerProvider
     public function registerCache(Container $container)
     {
         $container['cache'] = function ($container) {
-            return new VoidCachePool();
+            return new Pool(new Ephemeral());
         };
     }
 
@@ -197,9 +202,9 @@ class ContainerProvider
                     'suffix' => 'Property'
                 ],
                 'arguments' => [[
-                    'container' => $container,
-                    'database'  => $container['database'],
-                    'logger'    => $container['logger'],
+                    'container'  => $container,
+                    'database'   => $container['database'],
+                    'logger'     => $container['logger'],
                     'translator' => $container['translator']
                 ]]
             ]);
@@ -246,7 +251,7 @@ class ContainerProvider
         $container['language/manager'] = function (Container $container) {
             return new LocalesManager([
                 'locales' => [
-                    'en'=>['locale'=>'en-US']
+                    'en' => [ 'locale' => 'en-US' ]
                 ]
             ]);
         };

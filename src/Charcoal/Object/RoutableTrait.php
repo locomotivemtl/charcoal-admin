@@ -530,14 +530,11 @@ trait RoutableTrait
         $slug = strip_tags($slug);
 
         // Remove diacritics
-        $slug = preg_replace(
-            '!&([a-zA-Z])(uml|acute|grave|circ|tilde|cedil|ring);!',
-            '$1',
-            htmlentities($slug, ENT_COMPAT, 'UTF-8')
-        );
+        $slug = htmlentities($slug, ENT_COMPAT, 'UTF-8');
+        $slug = preg_replace('!&([a-zA-Z])(uml|acute|grave|circ|tilde|cedil|ring);!', '$1', $slug);
 
-        // &oelig;, &aelig;, etc...
-        $slug = preg_replace('!&([a-zA-Z])([a-zA-Z])(lig);!', '$1$2', $slug);
+        // Simplify ligatures
+        $slug = preg_replace('!&([a-zA-Z]{2})(lig);!', '$1', $slug);
 
         // Remove unescaped HTML characters
         $unescaped = '!&(raquo|laquo|rsaquo|lsaquo|rdquo|ldquo|rsquo|lsquo|hellip|amp|nbsp|quot|ordf|ordm);!';

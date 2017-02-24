@@ -72,6 +72,9 @@ class Content extends AbstractModel implements
      */
     private $modelFactory;
 
+    /**
+     * @var string[]
+     */
     private $requiredAclPermissions = [];
 
     /**
@@ -290,7 +293,8 @@ class Content extends AbstractModel implements
 
 
     /**
-     * @param string|string[] $permissions The required ACL permissions.
+     * @throws InvalidArgumentException If the ACL permissions are invalid.
+     * @param  string|string[] $permissions The required ACL permissions.
      * @return Content Chainable
      */
     public function setRequiredAclPermissions($permissions)
@@ -304,7 +308,7 @@ class Content extends AbstractModel implements
             $permissions = array_map('trim', $permissions);
         }
         if (!is_array($permissions)) {
-            throw new InvalidArgumentException('Invalid acl permissions');
+            throw new InvalidArgumentException('Invalid ACL permissions');
         }
         $this->requiredAclPermissions = $permissions;
         return $this;

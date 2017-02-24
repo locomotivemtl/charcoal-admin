@@ -5,20 +5,38 @@ namespace Charcoal\Object\Tests\Mocks;
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\TranslatorAwareTrait;
+
 // From 'charcoal-object'
-use Charcoal\Object\HierarchicalInterface;
-use Charcoal\Object\HierarchicalTrait;
+use Charcoal\Object\RoutableInterface;
+use Charcoal\Object\RoutableTrait;
 
 /**
  *
  */
-class HierarchicalClass implements
+class RoutableClass implements
     ModelInterface,
-    HierarchicalInterface
+    RoutableInterface
 {
-    use HierarchicalTrait;
+    use RoutableTrait;
+    use TranslatorAwareTrait;
 
     private $id;
+
+    protected $metadata;
+
+    protected $modelFactory;
+
+    public function __construct(array $data = null)
+    {
+        $this->setModelFactory($data['factory']);
+        $this->setTranslator($data['translator']);
+
+        if (isset($data['id'])) {
+            $this->setId($data['id']);
+        }
+    }
 
     public function setId($id)
     {
@@ -38,7 +56,7 @@ class HierarchicalClass implements
 
     public function objType()
     {
-        return 'charcoal/tests/object/hierarchical-class';
+        return 'charcoal/tests/object/routable-class';
     }
 
     public function loadChildren()
@@ -46,9 +64,39 @@ class HierarchicalClass implements
         return [];
     }
 
+    public function setModelFactory($factory)
+    {
+        $this->modelFactory = $factory;
+
+        return $this;
+    }
+
     public function modelFactory()
     {
+        return $this->modelFactory;
+    }
+
+    public function templateIdent()
+    {
         return null;
+    }
+
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function metadata()
+    {
+        if ($this->metadata === null) {
+            return [];
+        }
+        return $this->metadata;
     }
 
     /**

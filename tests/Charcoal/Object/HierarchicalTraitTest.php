@@ -5,7 +5,7 @@ namespace Charcoal\Object\Tests;
 // From 'charcoal-object'
 use Charcoal\Object\HierarchicalTrait;
 use Charcoal\Object\Tests\ContainerProvider;
-use Charcoal\Object\Tests\Mocks\HierarchicalClass as Hierarchical;
+use Charcoal\Object\Tests\Mocks\HierarchicalClass as HierarchicalObject;
 
 class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->obj = new Hierarchical();
+        $this->obj = new HierarchicalObject();
     }
 
     public function testSetMaster()

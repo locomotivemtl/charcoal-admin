@@ -14,9 +14,6 @@ use Cache\Adapter\Void\VoidCachePool;
 use Stash\Pool;
 use Stash\Driver\Ephemeral;
 
-// From 'zendframework/zend-permissions'
-use Zend\Permissions\Acl\Acl;
-
 // From Pimple
 use Pimple\Container;
 
@@ -32,9 +29,6 @@ use Charcoal\Source\DatabaseSource;
 use Charcoal\Translator\LocalesManager;
 use Charcoal\Translator\Translator;
 
-// From 'charcoal-app'
-use Charcoal\App\AppConfig;
-
 /**
  * Service Container for Unit Tests
  */
@@ -48,24 +42,10 @@ class ContainerProvider
      */
     public function registerBaseServices(Container $container)
     {
-        $this->registerConfig($container);
         $this->registerDatabase($container);
         $this->registerLogger($container);
         $this->registerCache($container);
         $this->registerTranslator($container);
-    }
-
-    /**
-     * Setup the application configset.
-     *
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerConfig(Container $container)
-    {
-        $container['config'] = function (Container $container) {
-            return new AppConfig();
-        };
     }
 
     /**
@@ -224,19 +204,6 @@ class ContainerProvider
                 'logger' => $container['logger'],
                 'cache'  => $container['cache']
             ]);
-        };
-    }
-
-    /**
-     * Setup the framework's ACL manager.
-     *
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerAcl(Container $container)
-    {
-        $container['acl'] = function (Container $container) {
-            return new Acl();
         };
     }
 

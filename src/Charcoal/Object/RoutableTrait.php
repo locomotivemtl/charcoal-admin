@@ -186,7 +186,7 @@ trait RoutableTrait
     public function setSlug($slug)
     {
         $slug = $this->translator()->translation($slug);
-        if ($slug != null) {
+        if ($slug !== null) {
             $this->slug = $slug;
 
             $values = $this->slug->data();
@@ -379,7 +379,6 @@ trait RoutableTrait
 
             $objectRoute = $this->createRouteObject();
 
-            $source = $objectRoute->source();
             $oldRoute = $this->getLatestObjectRoute();
 
             // Unchanged but sync extra properties
@@ -447,7 +446,6 @@ trait RoutableTrait
         }
 
         // For URL.
-        $source = $model->source();
         $loader = new CollectionLoader([
             'logger'  => $this->logger,
             'factory' => $this->modelFactory()

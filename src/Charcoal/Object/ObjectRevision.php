@@ -2,22 +2,22 @@
 
 namespace Charcoal\Object;
 
-use \InvalidArgumentException;
-use \DateTime;
-use \DateTimeInterface;
+use InvalidArgumentException;
+use DateTime;
+use DateTimeInterface;
 
-// From `pimple/pimple`
-use \Pimple\Container;
+// From 'pimple/pimple'
+use Pimple\Container;
 
-// From `charcoal-factory`
-use \Charcoal\Factory\FactoryInterface;
+// From 'charcoal-factory'
+use Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-core`
-use \Charcoal\Model\AbstractModel;
+// From 'charcoal-core'
+use Charcoal\Model\AbstractModel;
 
 // From 'charcoal-object'
-use \Charcoal\Object\ObjectRevisionInterface;
-use \Charcoal\Object\RevisionableInterface;
+use Charcoal\Object\ObjectRevisionInterface;
+use Charcoal\Object\RevisionableInterface;
 
 /**
  * Represents the changeset of an object.
@@ -410,7 +410,6 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     public function lastObjectRevision(RevisionableInterface $obj)
     {
         if ($this->source()->tableExists() === false) {
-            /** @todo Optionnally turn off for some models */
             $this->source()->createTable();
         }
 
@@ -446,7 +445,6 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     public function objectRevisionNum(RevisionableInterface $obj, $revNum)
     {
         if ($this->source()->tableExists() === false) {
-            /** @todo Optionnally turn off for some models */
             $this->source()->createTable();
         }
 

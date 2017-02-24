@@ -128,7 +128,7 @@ class AdminWidget extends AbstractWidget implements
         $this->adminConfig = $container['admin/config'];
         $this->setBaseUrl($container['base-url']);
 
-        // AuthAware dependencies
+        // Satisfies AuthAwareInterface dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }

@@ -82,7 +82,7 @@ class FormGroupWidget extends AbstractUiItem implements
     {
         parent::setDependencies($container);
 
-        // Fill LayoutAwareInterface dependencies
+        // Satisfies LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
     }
 

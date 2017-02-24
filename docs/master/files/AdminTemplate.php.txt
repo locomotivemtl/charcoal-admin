@@ -155,7 +155,7 @@ class AdminTemplate extends AbstractTemplate implements
         $this->menuBuilder = $container['menu/builder'];
         $this->menuItemBuilder = $container['menu/item/builder'];
 
-        // AuthAware dependencies
+        // Satisfies AuthAwareInterface dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }

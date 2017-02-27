@@ -1,0 +1,2875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Charcoal.html">\Charcoal</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">949</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">24</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2084779734"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-2084779734" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-743081855"></a>
+                                <a href="../namespaces/Charcoal.html" style="margin-left: 30px; padding-left: 0">Charcoal</a>
+            </div>
+            <div id="namespace-743081855" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-276449031"></a>
+                                <a href="../namespaces/Charcoal.Admin.html" style="margin-left: 30px; padding-left: 0">Admin</a>
+            </div>
+            <div id="namespace-276449031" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1547195813"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.html" style="margin-left: 30px; padding-left: 0">Action</a>
+            </div>
+            <div id="namespace-1547195813" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1152737861"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Account.html" style="margin-left: 30px; padding-left: 0">Account</a>
+            </div>
+            <div id="namespace-1152737861" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Account.LostPasswordAction.html">LostPasswordAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Account.ResetPasswordAction.html">ResetPasswordAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1288073559"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-1288073559" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html">AbstractSaveAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.DeleteAction.html">DeleteAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.ExportAction.html">ExportAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.LoadAction.html">LoadAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.ReorderAction.html">ReorderAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.RevertRevisionAction.html">RevertRevisionAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.SaveAction.html">SaveAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html">UpdateAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1703624533"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.System.html" style="margin-left: 30px; padding-left: 0">System</a>
+            </div>
+            <div id="namespace-1703624533" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.System.ClearCacheAction.html">ClearCacheAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-666935213"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
+            </div>
+            <div id="namespace-666935213" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1424710719"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Widget.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
+            </div>
+            <div id="namespace-1424710719" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Widget.Table.InlineAction.html">InlineAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html">InlineMultiAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Widget.LoadAction.html">LoadAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.ElfinderConnectorAction.html">ElfinderConnectorAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.LoginAction.html">LoginAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.LogoutAction.html">LogoutAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-484162507"></a>
+                                <a href="../namespaces/Charcoal.Admin.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-484162507" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Object.Notification.html">Notification</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1217900256"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.html" style="margin-left: 30px; padding-left: 0">Property</a>
+            </div>
+            <div id="namespace-1217900256" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-830128906"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.Display.html" style="margin-left: 30px; padding-left: 0">Display</a>
+            </div>
+            <div id="namespace-830128906" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.BooleanDisplay.html">BooleanDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.ColorSwatchDisplay.html">ColorSwatchDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.ImageDisplay.html">ImageDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.LinkDisplay.html">LinkDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.ObjectDisplay.html">ObjectDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.TextDisplay.html">TextDisplay</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1986317982"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.Input.html" style="margin-left: 30px; padding-left: 0">Input</a>
+            </div>
+            <div id="namespace-1986317982" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-258784899"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.Input.Selectize.html" style="margin-left: 30px; padding-left: 0">Selectize</a>
+            </div>
+            <div id="namespace-258784899" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.Selectize.SearchInput.html">SearchInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.Selectize.TagsInput.html">TagsInput</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.AudioInput.html">AudioInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.CheckboxColorInput.html">CheckboxColorInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.CheckboxInput.html">CheckboxInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.EmailInput.html">EmailInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.FileInput.html">FileInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.HiddenInput.html">HiddenInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.ImageInput.html">ImageInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.NumberInput.html">NumberInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.PasswordInput.html">PasswordInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.PhoneInput.html">PhoneInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.RadioColorInput.html">RadioColorInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.ReadonlyInput.html">ReadonlyInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.SelectInput.html">SelectInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.StructureWidgetInput.html">StructureWidgetInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.SwitchInput.html">SwitchInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.TextareaInput.html">TextareaInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.TextInput.html">TextInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.TinymceInput.html">TinymceInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.UrlInput.html">UrlInput</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Property.PropertyDisplayInterface.html">PropertyDisplayInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Property.PropertyInputInterface.html">PropertyInputInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Property.SelectableInputInterface.html">SelectableInputInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html">AbstractPropertyDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractPropertyInput.html">AbstractPropertyInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractSelectableInput.html">AbstractSelectableInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractTickableInput.html">AbstractTickableInput</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-823051633"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.html" style="margin-left: 30px; padding-left: 0">Script</a>
+            </div>
+            <div id="namespace-823051633" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1424141417"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Notification.html" style="margin-left: 30px; padding-left: 0">Notification</a>
+            </div>
+            <div id="namespace-1424141417" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.AbstractNotificationScript.html">AbstractNotificationScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessDailyScript.html">ProcessDailyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessHourlyScript.html">ProcessHourlyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessMinuteScript.html">ProcessMinuteScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessMonthlyScript.html">ProcessMonthlyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessWeeklyScript.html">ProcessWeeklyScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-612980860"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-612980860" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1672451283"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Object.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
+            </div>
+            <div id="namespace-1672451283" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.Table.AlterPrimaryKeyScript.html">AlterPrimaryKeyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.Table.AlterScript.html">AlterScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.Table.CreateScript.html">CreateScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.CreateScript.html">CreateScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.ProcessSchedulesScript.html">ProcessSchedulesScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1548481153"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Translation.html" style="margin-left: 30px; padding-left: 0">Translation</a>
+            </div>
+            <div id="namespace-1548481153" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Translation.TranslateScript.html">TranslateScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-805172667"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.User.html" style="margin-left: 30px; padding-left: 0">User</a>
+            </div>
+            <div id="namespace-805172667" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1903852807"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.User.AclRole.html" style="margin-left: 30px; padding-left: 0">AclRole</a>
+            </div>
+            <div id="namespace-1903852807" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.User.AclRole.CreateScript.html">CreateScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.User.CreateScript.html">CreateScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.User.ResetPasswordScript.html">ResetPasswordScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.ObjectsScript.html">ObjectsScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.ProcessNotificationsScript.html">ProcessNotificationsScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1372111454"></a>
+                                <a href="../namespaces/Charcoal.Admin.Service.html" style="margin-left: 30px; padding-left: 0">Service</a>
+            </div>
+            <div id="namespace-1372111454" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Service.Exporter.html">Exporter</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1150784675"></a>
+                                <a href="../namespaces/Charcoal.Admin.ServiceProvider.html" style="margin-left: 30px; padding-left: 0">ServiceProvider</a>
+            </div>
+            <div id="namespace-1150784675" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.ServiceProvider.AclServiceProvider.html">AclServiceProvider</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.ServiceProvider.AdminServiceProvider.html">AdminServiceProvider</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-302174648"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.html" style="margin-left: 30px; padding-left: 0">Template</a>
+            </div>
+            <div id="namespace-302174648" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-259332515"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.Account.html" style="margin-left: 30px; padding-left: 0">Account</a>
+            </div>
+            <div id="namespace-259332515" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Account.LostPasswordTemplate.html">LostPasswordTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Account.ResetPasswordTemplate.html">ResetPasswordTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1779623114"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-1779623114" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Object.CollectionTemplate.html">CollectionTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Object.EditTemplate.html">EditTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1993664300"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.System.html" style="margin-left: 30px; padding-left: 0">System</a>
+            </div>
+            <div id="namespace-1993664300" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.ClearCacheTemplate.html">ClearCacheTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.UserPermissionsTemplate.html">UserPermissionsTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.UserRolesTemplate.html">UserRolesTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.UsersTemplate.html">UsersTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.ElfinderTemplate.html">ElfinderTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.HandlerTemplate.html">HandlerTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.HelpTemplate.html">HelpTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.HomeTemplate.html">HomeTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.LoginTemplate.html">LoginTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.LogoutTemplate.html">LogoutTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-593064621"></a>
+                                <a href="../namespaces/Charcoal.Admin.Ui.html" style="margin-left: 30px; padding-left: 0">Ui</a>
+            </div>
+            <div id="namespace-593064621" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1137545820"></a>
+                                <a href="../namespaces/Charcoal.Admin.Ui.Sidemenu.html" style="margin-left: 30px; padding-left: 0">Sidemenu</a>
+            </div>
+            <div id="namespace-1137545820" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">SidemenuGroupInterface</a></li>
+                                                                            <li class="trait"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.SidemenuGroupTrait.html">SidemenuGroupTrait</a></li>
+                                                                            <li class="class"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.AbstractSidemenuGroup.html">AbstractSidemenuGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.GenericSidemenuGroup.html">GenericSidemenuGroup</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.CollectionContainerInterface.html">CollectionContainerInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.DashboardContainerInterface.html">DashboardContainerInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.FormSidebarInterface.html">FormSidebarInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.ObjectContainerInterface.html">ObjectContainerInterface</a></li>
+                                                                            <li class="trait"><a href="../classes/Charcoal.Admin.Ui.CollectionContainerTrait.html">CollectionContainerTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.DashboardContainerTrait.html">DashboardContainerTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html">FeedbackContainerTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.ImageAttributesTrait.html">ImageAttributesTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html">ObjectContainerTrait</a></li>
+                                                                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-567018968"></a>
+                                <a href="../namespaces/Charcoal.Admin.User.html" style="margin-left: 30px; padding-left: 0">User</a>
+            </div>
+            <div id="namespace-567018968" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.AclRole.html">AclRole</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.AuthToken.html">AuthToken</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.AuthTokenMetadata.html">AuthTokenMetadata</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.LostPasswordToken.html">LostPasswordToken</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.Permission.html">Permission</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.PermissionCategory.html">PermissionCategory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1743003480"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
+            </div>
+            <div id="namespace-1743003480" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1327236253"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.Dialog.html" style="margin-left: 30px; padding-left: 0">Dialog</a>
+            </div>
+            <div id="namespace-1327236253" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.Dialog.ImportlistWidget.html">ImportlistWidget</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2041875634"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.FormGroup.html" style="margin-left: 30px; padding-left: 0">FormGroup</a>
+            </div>
+            <div id="namespace-2041875634" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.AclPermissions.html">AclPermissions</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">GenericFormGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">ObjectRevisionsFormGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html">StructureFormGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.TemplateOptionsFormGroup.html">TemplateOptionsFormGroup</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1469654961"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.Graph.html" style="margin-left: 30px; padding-left: 0">Graph</a>
+            </div>
+            <div id="namespace-1469654961" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html">GraphWidgetInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Widget.Graph.TimeGraphWidgetInterface.html">TimeGraphWidgetInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.Graph.AbstractGraphWidget.html">AbstractGraphWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.Graph.AbstractTimeGraphWidget.html">AbstractTimeGraphWidget</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Widget.SidemenuWidgetInterface.html">SidemenuWidgetInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.CollectionMapWidget.html">CollectionMapWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.DashboardWidget.html">DashboardWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroupWidget.html">FormGroupWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormPropertyWidget.html">FormPropertyWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormSidebarWidget.html">FormSidebarWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormWidget.html">FormWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.LayoutWidget.html">LayoutWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.MapWidget.html">MapWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.ObjectFormWidget.html">ObjectFormWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.PaginationWidget.html">PaginationWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.QuickFormWidget.html">QuickFormWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.SearchWidget.html">SearchWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.SidemenuWidget.html">SidemenuWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TableGridWidget.html">TableGridWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TablePropertyWidget.html">TablePropertyWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TableWidget.html">TableWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TextWidget.html">TextWidget</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminAction.html">AdminAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminModule.html">AdminModule</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminScript.html">AdminScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminTemplate.html">AdminTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminWidget.html">AdminWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Config.html">Config</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.html">User</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/Charcoal.Admin.Action.Object.html">\Charcoal\Admin\Action\Object</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\Charcoal\Admin\Action\Object</small>UpdateAction</h1>
+                    <p><em>Action: Save an object and update copy in storage.</em></p>
+                    <h2>Required Parameters</h2>
+<ul>
+<li><code>obj_type</code> (<em>string</em>) — The object type, as an identifier for a \Charcoal\Model\ModelInterface.</li>
+<li><code>obj_id</code> (<em>mixed</em>) — The object ID to load and update</li>
+</ul>
+<h2>Response</h2>
+<ul>
+<li><code>success</code> (<em>boolean</em>) — TRUE if the object was properly saved, FALSE in case of any error.</li>
+</ul>
+<h2>HTTP Status Codes</h2>
+<ul>
+<li><code>200</code> — Successful; Object has been updated</li>
+<li><code>400</code> — Client error; Invalid request data</li>
+<li><code>500</code> — Server error; Object could not be updated</li>
+</ul>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html#method_setObj" class="">setObj()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html#method_addFeedbackFromValidation" class="">addFeedbackFromValidation()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_results" class="">results()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_setObjType" class="">setObjType()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_objType" class="">objType()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_setObjId" class="">setObjId()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_objId" class="">objId()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_setObjBaseClass" class="">setObjBaseClass()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_objBaseClass" class="">objBaseClass()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_proto" class="">proto()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_obj" class="">obj()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_setDependencies" class="">setDependencies()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_init" class="">init()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_siteName" class="">siteName()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_authRequired" class="">authRequired()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_isAuthenticated" class="">isAuthenticated()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_getAuthenticatedUser" class="">getAuthenticatedUser()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_adminUrl" class="">adminUrl()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_setBaseUrl" class="">setBaseUrl()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_baseUrl" class="">baseUrl()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html#method_hasFeedbacks" class="">hasFeedbacks()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html#method_numFeedbacks" class="">numFeedbacks()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html#method_feedbacks" class="">feedbacks()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html#method_addFeedback" class="">addFeedback()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html#method_clearFeedback" class="">clearFeedback()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html#method_setData" class="">setData()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html#method_setUpdateData" class="">setUpdateData()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html#method_updateData" class="">updateData()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html#method_run" class="">run()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html#method_authorIdent" class="">authorIdent()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_setModelFactory" class="">setModelFactory()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_modelFactory" class="">modelFactory()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_createOrLoadObj" class="">createOrLoadObj()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_cloneObj" class="">cloneObj()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_createObjFromBluePrint" class="">createObjFromBluePrint()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_createObj" class="">createObj()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_loadObj" class="">loadObj()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_validateObjType" class="">validateObjType()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#method_validateObjBaseClass" class="">validateObjBaseClass()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_setSiteName" class="">setSiteName()</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_validateCaptcha" class="">validateCaptcha()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#property_objType" class="">$objType</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#property_objId" class="">$objId</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#property_objBaseClass" class="">$objBaseClass</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html#property_obj" class="">$obj</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#property_adminConfig" class="">$adminConfig</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#property_appConfig" class="">$appConfig</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html#property_feedbacks" class="">$feedbacks</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html#property_updateData" class="">$updateData</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#method_auth" class="">auth()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#property_modelFactory" class="">$modelFactory</a><br />
+                                                                    <a href="../classes/Charcoal.Admin.AdminAction.html#property_siteName" class="">$siteName</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Action.Object.UpdateAction.html"><div class="path-wrapper">Action/Object/UpdateAction.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                        <div class="namespace-wrapper">\Charcoal\App\Action\AbstractAction</div>
+                                                                    
+                                        <div class="namespace-wrapper"><a href="../classes/Charcoal.Admin.AdminAction.html">\Charcoal\Admin\AdminAction</a></div>
+                                                                    
+                                        <div class="namespace-wrapper"><a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html">\Charcoal\Admin\Action\Object\AbstractSaveAction</a></div>
+                                                                                                    <div class="namespace-wrapper">\Charcoal\Admin\Action\Object\UpdateAction</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_objType" name="property_objType" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$objType</h3>
+                <pre class="signature">$objType : string|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_objId" name="property_objId" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$objId</h3>
+                <pre class="signature">$objId : string|\Charcoal\Admin\Ui\numeric|null</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string|\Charcoal\Admin\Ui\numeric|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_objBaseClass" name="property_objBaseClass" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$objBaseClass</h3>
+                <pre class="signature">$objBaseClass : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_obj" name="property_obj" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$obj</h3>
+                <pre class="signature">$obj : \Charcoal\Model\ModelInterface</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                \Charcoal\Model\ModelInterface
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_adminConfig" name="property_adminConfig" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$adminConfig</h3>
+                <pre class="signature">$adminConfig : \Charcoal\Admin\Config</pre>
+                <p><em>Store a reference to the admin configuration.</em></p>
+                
+
+                                <h4>Type</h4>
+                <a href="../classes/Charcoal.Admin.Config.html">\Charcoal\Admin\Config</a>
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_appConfig" name="property_appConfig" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$appConfig</h3>
+                <pre class="signature">$appConfig : \Charcoal\App\Config</pre>
+                <p><em>Store a reference to the application configuration.</em></p>
+                
+
+                                <h4>Type</h4>
+                \Charcoal\App\Config
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_feedbacks" name="property_feedbacks" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$feedbacks</h3>
+                <pre class="signature">$feedbacks : array</pre>
+                <p><em>Collection of feedback.</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\FeedbackContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_updateData" name="property_updateData" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$updateData</h3>
+                <pre class="signature">$updateData : array</pre>
+                <p><em>Data for the target model.</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_modelFactory" name="property_modelFactory" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$modelFactory</h3>
+                <pre class="signature">$modelFactory : \Charcoal\Factory\FactoryInterface</pre>
+                <p><em>Store the model factory.</em></p>
+                
+
+                                <h4>Type</h4>
+                \Charcoal\Factory\FactoryInterface
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_siteName" name="property_siteName" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$siteName</h3>
+                <pre class="signature">$siteName : \Charcoal\Translator\Translation|string|null</pre>
+                <p><em>The name of the project.</em></p>
+                
+
+                                <h4>Type</h4>
+                \Charcoal\Translator\Translation|string|null
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setObj" name="method_setObj" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setObj()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setObj(\Charcoal\Model\ModelInterface|null  <span class="argument">$obj</span>) : \Charcoal\Admin\Action\Object\SaveAction</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Charcoal\Model\ModelInterface|null</td>
+                                <td>$obj </td>
+                                <td><p>The object.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Action.Object.SaveAction.html">\Charcoal\Admin\Action\Object\SaveAction</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html"><div class="path-wrapper">\Charcoal\Admin\Action\Object\AbstractSaveAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addFeedbackFromValidation" name="method_addFeedbackFromValidation" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addFeedbackFromValidation()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addFeedbackFromValidation(\Charcoal\Model\ModelInterface  <span class="argument">$obj</span>, array&lt;mixed,string&gt;|string|null  <span class="argument">$filters = null</span>) : \Charcoal\Admin\Action\Object\SaveAction</pre>
+                <p><em>Merge the given object&#039;s validation results the response feedback.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Charcoal\Model\ModelInterface</td>
+                                <td>$obj </td>
+                                <td><p>The validated object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array&lt;mixed,string&gt;|string|null</td>
+                                <td>$filters </td>
+                                <td><p>Filter the levels to merge.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If the filters are invalid.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Action.Object.SaveAction.html">\Charcoal\Admin\Action\Object\SaveAction</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html"><div class="path-wrapper">\Charcoal\Admin\Action\Object\AbstractSaveAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_results" name="method_results" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">results()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">results() : array</pre>
+                <p><em>Default response stub.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setObjType" name="method_setObjType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setObjType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setObjType(string  <span class="argument">$objType</span>) : \Charcoal\Admin\Ui\ObjectContainerInterface</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$objType </td>
+                                <td><p>The object type.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If provided argument is not of type 'string'.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerInterface.html">\Charcoal\Admin\Ui\ObjectContainerInterface</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_objType" name="method_objType" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">objType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">objType() : string|null</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setObjId" name="method_setObjId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setObjId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setObjId(string|\Charcoal\Admin\Ui\numeric  <span class="argument">$objId</span>) : \Charcoal\Admin\Ui\ObjectContainerInterface</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|\Charcoal\Admin\Ui\numeric</td>
+                                <td>$objId </td>
+                                <td><p>The object id to load.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If provided argument is not of type 'scalar'.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerInterface.html">\Charcoal\Admin\Ui\ObjectContainerInterface</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_objId" name="method_objId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">objId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">objId() : string|\Charcoal\Admin\Ui\numeric|null</pre>
+                <p><em>Assign the Object ID</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string|\Charcoal\Admin\Ui\numeric|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setObjBaseClass" name="method_setObjBaseClass" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setObjBaseClass()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setObjBaseClass(string  <span class="argument">$objBaseClass</span>) : \Charcoal\Admin\Ui\ObjectContainerInterface</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$objBaseClass </td>
+                                <td><p>The base class.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If provided argument is not of type 'string'.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Ui.ObjectContainerInterface.html">\Charcoal\Admin\Ui\ObjectContainerInterface</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_objBaseClass" name="method_objBaseClass" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">objBaseClass()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">objBaseClass() : string|null</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_proto" name="method_proto" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">proto()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">proto() : \Charcoal\Model\ModelInterface</pre>
+                <p><em>Retrieve a singleton of the {self::$objType} for prototyping.</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RuntimeException</dt>
+                            <dd><p>If the class has no object type.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_obj" name="method_obj" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">obj()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">obj() : \Charcoal\Model\ModelInterface</pre>
+                <p><em>Retrieve the object.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(array  <span class="argument">$data = null</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>Optional.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                    <span class="label label-info">final</span>
+                                    <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setDependencies" name="method_setDependencies" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setDependencies()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setDependencies(\Pimple\Container  <span class="argument">$container</span>) : void</pre>
+                <p><em>Dependencies</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Pimple\Container</td>
+                                <td>$container </td>
+                                <td><p>DI Container.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_init" name="method_init" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">init()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">init(\Psr\Http\Message\RequestInterface  <span class="argument">$request</span>) : boolean</pre>
+                <p><em>Template&#039;s init method is called automatically from `charcoal-app`&#039;s Template Route.</em></p>
+                <p>For admin templates, initializations is:</p>
+<ul>
+<li>to start a session, if necessary</li>
+<li>to authenticate</li>
+<li>to initialize the template data with <code>$_GET</code></li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Psr\Http\Message\RequestInterface</td>
+                                <td>$request </td>
+                                <td><p>The request to initialize.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper"></span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_siteName" name="method_siteName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">siteName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">siteName() : \Charcoal\Translator\Translation|string|null</pre>
+                <p><em>Retrieve the name of the project.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Translator\Translation|string|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_authRequired" name="method_authRequired" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">authRequired()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">authRequired() : boolean</pre>
+                <p><em>Authentication is required by default.</em></p>
+                <p>Reimplement and change to false in templates that do not require authentication.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isAuthenticated" name="method_isAuthenticated" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">isAuthenticated()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isAuthenticated() : boolean</pre>
+                <p><em>Determine if the current user is authenticated.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAuthenticatedUser" name="method_getAuthenticatedUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAuthenticatedUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAuthenticatedUser() : \Charcoal\User\UserInterface|null</pre>
+                <p><em>Retrieve the currently authenticated user.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\User\UserInterface|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_adminUrl" name="method_adminUrl" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">adminUrl()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">adminUrl() : \Charcoal\Admin\UriInterface|string</pre>
+                <p><em>Retrieve the base URI of the administration area.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Admin\UriInterface|string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setBaseUrl" name="method_setBaseUrl" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setBaseUrl()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setBaseUrl(\Charcoal\Admin\UriInterface|string  <span class="argument">$uri</span>) : self</pre>
+                <p><em>Set the base URI of the application.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Charcoal\Admin\UriInterface|string</td>
+                                <td>$uri </td>
+                                <td><p>The base URI.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    self
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_baseUrl" name="method_baseUrl" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">baseUrl()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">baseUrl() : \Charcoal\Admin\UriInterface|string</pre>
+                <p><em>Retrieve the base URI of the application.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Admin\UriInterface|string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_hasFeedbacks" name="method_hasFeedbacks" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">hasFeedbacks()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">hasFeedbacks() : boolean</pre>
+                <p><em>Determine if there&#039;s feedback.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\FeedbackContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_numFeedbacks" name="method_numFeedbacks" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">numFeedbacks()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">numFeedbacks() : integer</pre>
+                <p><em>Count feedback.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\FeedbackContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_feedbacks" name="method_feedbacks" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">feedbacks()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">feedbacks(string|null  <span class="argument">$level = null</span>) : array</pre>
+                <p><em>Retrieve the feedback collection.</em></p>
+                <p>Optionally retrieve only the feedback for the given level.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$level </td>
+                                <td><p>Optional level to filter collection.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>If the feedback level is invalid.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\FeedbackContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_addFeedback" name="method_addFeedback" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">addFeedback()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">addFeedback(string  <span class="argument">$level</span>, mixed  <span class="argument">$message</span>) : \Charcoal\Admin\Ui\FeedbackContainerTrait</pre>
+                <p><em>Add feedback.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$level </td>
+                                <td><p>The feedback level.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$message </td>
+                                <td><p>The feedback message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html">\Charcoal\Admin\Ui\FeedbackContainerTrait</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\FeedbackContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_clearFeedback" name="method_clearFeedback" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">clearFeedback()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">clearFeedback() : \Charcoal\Admin\Ui\FeedbackContainerTrait</pre>
+                <p><em>Remove all feedback from collection.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html">\Charcoal\Admin\Ui\FeedbackContainerTrait</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\FeedbackContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setData" name="method_setData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setData(array  <span class="argument">$data</span>) : \Charcoal\Admin\Action\Object\UpdateAction</pre>
+                <p><em>Set the action&#039;s dataset.</em></p>
+                <p>Extract relevant model data from $data, excluding <em>object type</em> and <em>ID</em>.
+This \self::$updateData is merged onto the target model.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>The update action data.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html">\Charcoal\Admin\Action\Object\UpdateAction</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setUpdateData" name="method_setUpdateData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setUpdateData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setUpdateData(array  <span class="argument">$updateData</span>) : \Charcoal\Admin\Action\Object\UpdateAction</pre>
+                <p><em>Set the dataset used to update the target model.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$updateData </td>
+                                <td><p>The update data.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html">\Charcoal\Admin\Action\Object\UpdateAction</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateData" name="method_updateData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateData() : array</pre>
+                <p><em>Retrieve the dataset used to update the target model.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_run" name="method_run" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">run()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">run(\Psr\Http\Message\RequestInterface  <span class="argument">$request</span>, \Psr\Http\Message\ResponseInterface  <span class="argument">$response</span>) : \Psr\Http\Message\ResponseInterface</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Psr\Http\Message\RequestInterface</td>
+                                <td>$request </td>
+                                <td><p>A PSR-7 compatible Request instance.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>\Psr\Http\Message\ResponseInterface</td>
+                                <td>$response </td>
+                                <td><p>A PSR-7 compatible Response instance.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Psr\Http\Message\ResponseInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_authorIdent" name="method_authorIdent" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">authorIdent()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">authorIdent() : string</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html"><div class="path-wrapper">\Charcoal\Admin\Action\Object\AbstractSaveAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setModelFactory" name="method_setModelFactory" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">setModelFactory()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setModelFactory(\Charcoal\Factory\FactoryInterface  <span class="argument">$factory</span>) : \Charcoal\Admin\AdminScript</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Charcoal\Factory\FactoryInterface</td>
+                                <td>$factory </td>
+                                <td><p>The factory used to create models.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.AdminScript.html">\Charcoal\Admin\AdminScript</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_modelFactory" name="method_modelFactory" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">modelFactory()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">modelFactory() : \Charcoal\Factory\FactoryInterface</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Factory\FactoryInterface
+                                            &mdash; <p>The model factory.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createOrLoadObj" name="method_createOrLoadObj" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">createOrLoadObj()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createOrLoadObj() : \Charcoal\Model\ModelInterface</pre>
+                <p><em>Create or load the object.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_cloneObj" name="method_cloneObj" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">cloneObj()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">cloneObj() : \Charcoal\Model\ModelInterface</pre>
+                <p><em></em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd><p>If the object is not valid.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createObjFromBluePrint" name="method_createObjFromBluePrint" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">createObjFromBluePrint()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createObjFromBluePrint() : \Charcoal\Model\ModelInterface</pre>
+                <p><em></em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd><p>If the object is not valid.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createObj" name="method_createObj" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">createObj()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createObj() : \Charcoal\Model\ModelInterface</pre>
+                <p><em></em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd><p>If the object is not valid.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_loadObj" name="method_loadObj" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">loadObj()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">loadObj() : \Charcoal\Model\ModelInterface</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    \Charcoal\Model\ModelInterface
+                                            &mdash; <p>The loaded object</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateObjType" name="method_validateObjType" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">validateObjType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateObjType() : boolean</pre>
+                <p><em></em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RuntimeException</dt>
+                            <dd><p>If the object is invalid.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateObjBaseClass" name="method_validateObjBaseClass" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">validateObjBaseClass()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateObjBaseClass(mixed  <span class="argument">$obj</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$obj </td>
+                                <td><p>Object to validate.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html"><div class="path-wrapper">\Charcoal\Admin\Ui\ObjectContainerTrait</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setSiteName" name="method_setSiteName" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">setSiteName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setSiteName(string  <span class="argument">$name</span>) : \Charcoal\Admin\AdminAction</pre>
+                <p><em>Set the name of the project.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Name of the project.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/Charcoal.Admin.AdminAction.html">\Charcoal\Admin\AdminAction</a>
+                                            &mdash; <p>Chainable</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateCaptcha" name="method_validateCaptcha" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">validateCaptcha()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateCaptcha(string  <span class="argument">$response</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$response </td>
+                                <td><p>The captcha value (response) to validate.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\RuntimeException</dt>
+                            <dd><p>If Google reCAPTCHA is not configured.</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                                                            <p>{@link <a href="https://github.com/mcaskill/charcoal-recaptcha">https://github.com/mcaskill/charcoal-recaptcha</a> Implement CAPTCHA validation as a service}.</p>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_auth" name="method_auth" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">auth()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">auth() : void</pre>
+                <p><em>Determine if the current user is authenticated. If not it redirects them to the login page.</em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/Charcoal.Admin.AdminAction.html"><div class="path-wrapper">\Charcoal\Admin\AdminAction</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">UpdateAction.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Action/Object/UpdateAction.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Charcoal.html">\Charcoal</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on February 27th, 2017 at 15:56.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

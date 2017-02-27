@@ -125,13 +125,13 @@ class InlineMultiAction extends AdminAction
 
                 $objForm = [ 'id' => $obj->id() ];
 
-                $form = $this->widgetFactory()->create(ObjectForm::class);
+                $form = $this->widgetFactory()->create(ObjectFormWidget::class);
                 $form->set_objType($objType);
                 $form->set_objId($objId);
 
                 $formProperties = $form->formProperties();
                 foreach ($formProperties as $propertyIdent => $formProperty) {
-                    if (!$formProperty instanceof FormProperty) {
+                    if (!$formProperty instanceof FormPropertyWidget) {
                         continue;
                     }
 

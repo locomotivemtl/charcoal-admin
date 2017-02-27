@@ -187,24 +187,6 @@ abstract class AdminAction extends AbstractAction implements
     }
 
     /**
-     * Determine if the current user is authenticated. If not it redirects them to the login page.
-     *
-     * @return void
-     */
-    private function auth()
-    {
-        if (!session_id()) {
-            session_cache_limiter(false);
-            session_start();
-        }
-
-        $u = User::getAuthenticated();
-        if ($u === null || !$u->id()) {
-            die('Auth Required');
-        }
-    }
-
-    /**
      * Determine if the current user is authenticated.
      *
      * @return boolean

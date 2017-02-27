@@ -6,9 +6,6 @@ namespace Charcoal\Admin;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Dependency from Pimple
-use Pimple\Container;
-
 // Dependency from 'charcoal-app'
 use Charcoal\App\Handler\HandlerInterface;
 use Charcoal\App\Module\AbstractModule;

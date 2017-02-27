@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use InvalidArgumentException;
+
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 

@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Property;
 
 use Closure;
 use DateTimeInterface;
+use InvalidArgumentException;
 
 // From 'charcoal-translator'
 use Charcoal\Translator\Translation;

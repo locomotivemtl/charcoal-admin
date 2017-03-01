@@ -9024,8 +9024,8 @@ select.mobile-device {
 /**
   * bootstrap-switch - Turn checkboxes and radio buttons into toggle switches.
   *
-  * @version v3.3.3
-  * @homepage http://www.bootstrap-switch.org
+  * @version v3.3.4
+  * @homepage https://bttstrp.github.io/bootstrap-switch
   * @author Mattia Larentis <mattia@larentis.eu> (http://larentis.eu)
   * @license Apache-2.0
   */
@@ -9061,8 +9061,8 @@ select.mobile-device {
 .bootstrap-switch .bootstrap-switch-label {
   box-sizing: border-box;
   cursor: pointer;
-  display: inline-block !important;
-  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 20px; }
@@ -9110,6 +9110,9 @@ select.mobile-device {
   color: #333;
   background: #fff; }
 
+.bootstrap-switch span::before {
+  content: "\200b"; }
+
 .bootstrap-switch .bootstrap-switch-handle-on {
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px; }
@@ -9126,7 +9129,8 @@ select.mobile-device {
   margin: 0;
   z-index: -1;
   opacity: 0;
-  filter: alpha(opacity=0); }
+  filter: alpha(opacity=0);
+  visibility: hidden; }
 
 .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on,
 .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off,

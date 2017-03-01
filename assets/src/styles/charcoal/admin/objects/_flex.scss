@@ -12,12 +12,12 @@
     @media (min-width: $from-medium) {
         flex: 0 0 auto;
     }
-
 }
 
 .o-flex_main {
     @media (min-width: $from-medium) {
         min-height: calc(100vh - #{rem($unit)});
         flex: 1;
+        min-width: 0;
     }
 }

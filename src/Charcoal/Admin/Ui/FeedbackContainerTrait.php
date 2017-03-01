@@ -51,12 +51,16 @@ trait FeedbackContainerTrait
             if (!is_string($level)) {
                 throw new InvalidArgumentException('The feedback level must be a string');
             }
+
+            $level = $this->resolveFeedbackLevel($level);
+
             $subset = [];
             foreach ($this->feedbacks as $item) {
                 if ($item['level'] === $level) {
                     $subset[] = $item;
                 }
             }
+
             return $subset;
         }
 
@@ -76,7 +80,7 @@ trait FeedbackContainerTrait
             /** @deprecated "msg" */
             'msg'     => (string)$message,
             'message' => (string)$message,
-            'level'   => $level
+            'level'   => $this->resolveFeedbackLevel($level)
         ];
 
         return $this;
@@ -92,5 +96,22 @@ trait FeedbackContainerTrait
         $this->feedbacks = [];
 
         return $this;
+    }
+
+    /**
+     * Resolve the given feedback level.
+     *
+     * @param  string $level   The feedback level.
+     * @return string The level.
+     */
+    protected function resolveFeedbackLevel($level)
+    {
+        switch ($level) {
+            case 'notice':
+                return 'info';
+
+            default:
+                return $level;
+        }
     }
 }

@@ -15,6 +15,9 @@ use Charcoal\Loader\CollectionLoader;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\TranslatorAwareTrait;
+
 /**
  * Admin base exporter
  * Can export data for a given object
@@ -25,6 +28,8 @@ use Charcoal\Factory\FactoryInterface;
  */
 class Exporter
 {
+    use TranslatorAwareTrait;
+
     /**
      * Output file name
      * @var string $filename
@@ -121,6 +126,7 @@ class Exporter
 
         $this->logger = $data['logger'];
         $this->setModelFactory($data['factory']);
+        $this->setTranslator($data['translator']);
 
         return $this;
     }

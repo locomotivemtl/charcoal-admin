@@ -622,6 +622,24 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
+     * Prepend the base URI to the given path.
+     *
+     * @param  string $uri A URI path to wrap.
+     * @return UriInterface
+     */
+    public function withBaseUrl($uri)
+    {
+        $uri = strval($uri);
+        if ($uri && !parse_url($uri, PHP_URL_SCHEME)) {
+            if (!in_array($uri[0], [ '/', '#', '?' ])) {
+                return $this->baseUrl->withPath($uri);
+            }
+        }
+
+        return $uri;
+    }
+
+    /**
      * @return string
      */
     public function headerMenuLogo()

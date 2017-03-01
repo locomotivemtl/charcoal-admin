@@ -5772,9 +5772,14 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                 },
                 obj_id: id,
                 save_callback: function (response) {
+                    var label = response.obj.id;
+                    if ('name' in response.obj && response.obj.name) {
+                        label = response.obj.name[Charcoal.Admin.lang()] || response.obj.name;
+                    }
+
                     callback({
                         value: response.obj.id,
-                        text: response.obj.name[Charcoal.Admin.lang()] || response.obj.name || response.obj.id,
+                        text:  label,
                         color: response.obj.color,
                         class: 'new'
                     });
@@ -5805,9 +5810,14 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.load_tags = function (que
             var items = [];
             for (var item in res.collection) {
                 item = res.collection[item];
+                var label = item.id;
+                if ('name' in item && item.name) {
+                    label = item.name[Charcoal.Admin.lang()] || item.name;
+                }
+
                 items.push({
                     value: item.id,
-                    text: item.name[Charcoal.Admin.lang()] || item.name || item.id,
+                    text:  label,
                     color: item.color
                 });
             }

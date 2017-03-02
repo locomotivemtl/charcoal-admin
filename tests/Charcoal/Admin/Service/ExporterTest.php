@@ -25,12 +25,12 @@ class ExporterTest extends PHPUnit_Framework_TestCase
         $containerProvider->registerPropertyFactory($container);
         $containerProvider->registerModelFactory($container);
         $this->obj = new Exporter([
-           'factory'       => $container['model/factory'],
            'logger'        => $container['logger'],
+           'factory'       => $container['model/factory'],
+           'translator'    => $container['translator'],
            'obj_type'      => 'charcoal/admin/user',
            'export_ident'  => 'y',
            'propertyFactory'=> $container['property/factory']
-
         ]);
     }
 

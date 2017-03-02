@@ -101,7 +101,7 @@ trait FeedbackContainerTrait
     /**
      * Resolve the given feedback level.
      *
-     * @param  string $level   The feedback level.
+     * @param  string $level The feedback level.
      * @return string The level.
      */
     protected function resolveFeedbackLevel($level)

@@ -107,11 +107,33 @@ class StructureFormGroup extends FormGroupWidget
     protected $isStructureFinalized = false;
 
     /**
+     * The form group's raw data.
+     *
+     * @var array|null
+     */
+    protected $rawData;
+
+    /**
      * @return string
      */
     public function type()
     {
         return 'charcoal/admin/widget/form-group/structure';
+    }
+
+    /**
+     * @param  array $data Widget data.
+     * @return FormGroupWidget Chainable
+     */
+    public function setData(array $data)
+    {
+        if ($this->rawData === null) {
+            $this->rawData = $data;
+        }
+
+        parent::setData($data);
+
+        return $this;
     }
 
     /**
@@ -128,7 +150,7 @@ class StructureFormGroup extends FormGroupWidget
                 $prop = $formGroup->storageProperty();
                 $val  = $formGroup->obj()->propertyValue($prop->ident());
 
-                $this->obj = $prop->structureVal($val);
+                $this->obj = $prop->structureVal($val, [ 'default_data' => true ]);
                 if ($this->obj === null) {
                     $this->obj = clone $prop->structureProto();
                 }
@@ -287,7 +309,7 @@ class StructureFormGroup extends FormGroupWidget
                 }
 
                 if ($formGroup) {
-                    $widgetData = array_replace($formGroup, $this->data());
+                    $widgetData = array_replace($formGroup, $this->rawData);
                     $this->setData($widgetData);
                 }
             }

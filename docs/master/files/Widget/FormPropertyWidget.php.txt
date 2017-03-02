@@ -106,6 +106,7 @@ class FormPropertyWidget extends AdminWidget implements
     {
         parent::setDependencies($container);
 
+        $this->setView($container['view']);
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyInputFactory($container['property/input/factory']);
     }
@@ -344,7 +345,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function description()
     {
-        return $this->prop()->description();
+        return $this->renderTemplate((string)$this->prop()->description());
     }
 
     /**
@@ -352,7 +353,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function notes()
     {
-        return $this->prop()->notes();
+        return $this->renderTemplate((string)$this->prop()->notes());
     }
 
     /**

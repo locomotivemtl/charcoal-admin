@@ -1314,6 +1314,9 @@ ul.c-panel_table {
   .c-attachments .panel.ui-sortable-helper {
     height: auto !important; }
 
+.c-attachments .list-group-item {
+  padding-right: 60px; }
+
 .c-attachments .panel-title-icon,
 .c-attachments .list-group-item-icon {
   margin: -12px 15px -12px -15px;
@@ -1321,7 +1324,8 @@ ul.c-panel_table {
   border-right: 1px solid #ddd; }
   .c-attachments .panel-title-icon.-right,
   .c-attachments .list-group-item-icon.-right {
-    float: right;
+    position: absolute;
+    right: 15px;
     margin: -12px -15px -12px 15px;
     padding: 12px 15px 12px 15px;
     border-left: 1px solid #ddd;

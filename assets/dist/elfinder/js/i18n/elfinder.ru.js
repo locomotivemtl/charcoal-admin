@@ -4,15 +4,7 @@
  * @author Andrew Berezovsky <andrew.berezovsky@gmail.com>
  * @version 2016-06-01
  */
-(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define(['elfinder'], factory);
-	} else if (typeof exports !== 'undefined') {
-		module.exports = factory(require('elfinder'));
-	} else {
-		factory(root.elFinder);
-	}
-}(this, function(elFinder) {
+if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
 	elFinder.prototype.i18.ru = {
 		translator : 'Dmitry "dio" Levashov &lt;dio@std42.ru&gt;, Andrew Berezovsky &lt;andrew.berezovsky@gmail.com&gt;',
 		language   : 'Русский язык',
@@ -436,5 +428,5 @@
 			'kindVideoOGG'    : 'Видео Ogg'
 		}
 	};
-}));
+}
 

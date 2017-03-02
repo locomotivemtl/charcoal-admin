@@ -82,6 +82,9 @@ class FormGroupWidget extends AbstractUiItem implements
     {
         parent::setDependencies($container);
 
+        // Satisfies ViewableInterface dependencies
+        $this->setView($container['view']);
+
         // Satisfies LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
     }
@@ -276,6 +279,22 @@ class FormGroupWidget extends AbstractUiItem implements
         }
 
         return $languages;
+    }
+
+    /**
+     * @return Translation|string|null
+     */
+    public function description()
+    {
+        return $this->renderTemplate((string)parent::description());
+    }
+
+    /**
+     * @return Translation|string|null
+     */
+    public function notes()
+    {
+        return $this->renderTemplate((string)parent::notes());
     }
 
     /**

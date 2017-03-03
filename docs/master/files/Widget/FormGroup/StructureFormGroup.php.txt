@@ -309,8 +309,12 @@ class StructureFormGroup extends FormGroupWidget
                 }
 
                 if ($formGroup) {
-                    $widgetData = array_replace($formGroup, $this->rawData);
-                    $this->setData($widgetData);
+                    if (is_array($this->rawData)) {
+                        $widgetData = array_replace($formGroup, $this->rawData);
+                        $this->setData($widgetData);
+                    } else {
+                        $this->setData($formGroup);
+                    }
                 }
             }
         }

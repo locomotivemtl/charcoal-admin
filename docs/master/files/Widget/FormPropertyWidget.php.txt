@@ -218,6 +218,10 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function merge($data)
     {
+        if (isset($data['input_type'])) {
+            $this->setInputType($data['input_type']);
+        }
+
         $this->propertyData = array_replace($this->propertyData, $data);
 
         return $this;
@@ -388,10 +392,16 @@ class FormPropertyWidget extends AdminWidget implements
     public function inputType()
     {
         if ($this->inputType === null) {
-            $prop     = $this->prop();
-            $metadata = $prop->metadata();
+            $inputType = '';
+            $metadata  = $this->prop()->metadata();
 
-            $inputType = (isset($metadata['admin']) ? $metadata['admin']['input_type'] : '');
+            if (isset($metadata['input_type'])) {
+                $inputType = $metadata['input_type'];
+            }
+
+            if (!$inputType) {
+                $inputType = (isset($metadata['admin']) ? $metadata['admin']['input_type'] : '');
+            }
 
             if (!$inputType) {
                 $inputType = 'charcoal/admin/property/input/text';
@@ -399,6 +409,7 @@ class FormPropertyWidget extends AdminWidget implements
 
             $this->inputType = $inputType;
         }
+
         return $this->inputType;
     }
 

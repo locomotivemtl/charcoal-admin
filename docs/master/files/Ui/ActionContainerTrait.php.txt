@@ -10,6 +10,9 @@ use Charcoal\Translator\Translation;
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 
+// From 'charcoal-user'
+use Charcoal\User\AuthAwareInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\FormSidebarInterface;
@@ -234,6 +237,10 @@ trait ActionContainerTrait
 
             $action = array_replace($this->defaultActionStruct(), $action);
             $action = $this->parseActionRenderables($action, $renderer);
+
+            if (!empty($action['permissions']) && $this instanceof AuthAwareInterface) {
+                $action['active'] = $this->hasPermissions($action['permissions']);
+            }
         }
 
         return $action;
@@ -441,6 +448,8 @@ trait ActionContainerTrait
         return [
             'ident'         => null,
             'priority'      => null,
+            'permissions'   => [],
+            'condition'     => null,
             'active'        => true,
             'empty'         => false,
             'label'         => null,

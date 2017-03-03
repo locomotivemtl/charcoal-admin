@@ -213,17 +213,22 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function formProperties()
     {
-        $sidebarProperties = $this->sidebarProperties();
-        $obj               = $this->form()->obj();
-        $properties        = array_intersect(array_keys($obj->metadata()->properties()), $sidebarProperties);
-        $ret               = [];
-        foreach ($properties as $propertyIdent) {
-            $property = $obj->p($propertyIdent);
-            $val      = $obj[$propertyIdent];
+        $obj = $this->form()->obj();
+
+        $availableProperties = $obj->properties();
+        $sidebarProperties   = $this->sidebarProperties();
+
+        foreach ($sidebarProperties as $propertyIdent) {
+            if (!$obj->hasProperty($propertyIdent)) {
+                continue;
+            }
+
+            $property = $obj->property($propertyIdent);
+            $value    = $obj->propertyValue($propertyIdent);
 
             yield $propertyIdent => [
                 'prop'       => $property,
-                'displayVal' => $property->displayVal($val)
+                'displayVal' => $property->displayVal($value)
             ];
         }
     }

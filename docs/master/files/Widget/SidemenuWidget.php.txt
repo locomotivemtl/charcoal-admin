@@ -384,7 +384,12 @@ class SidemenuWidget extends AdminWidget implements
             }
 
             if (isset($link['required_acl_permissions'])) {
-                if ($this->hasPermissions($link['required_acl_permissions']) === false) {
+                $link['permissions'] = $link['required_acl_permissions'];
+                unset($link['required_acl_permissions']);
+            }
+
+            if (isset($link['permissions'])) {
+                if ($this->hasPermissions($link['permissions']) === false) {
                     continue;
                 }
             }

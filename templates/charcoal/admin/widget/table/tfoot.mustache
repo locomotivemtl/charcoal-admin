@@ -5,5 +5,20 @@
     @used-by `charcoal/admin/widget/table`
 --}}
 <tfoot>
-    <tr></tr>
+    <tr>
+        {{!--
+        <th class="table-cell-checkbox">
+            <div class="checkbox">
+                <input type="checkbox" class="select-all" id="checkboxall">
+                <label><span class="sr-only">[[# _t ]]Select All[[/ _t ]] / [[# _t ]]Unselect All[[/ _t ]]</span></label>
+            </div>
+        </th>
+        --}}
+        {{# collectionProperties }}
+        {{> charcoal/admin/widget/table/thead-col }}
+        {{/ collectionProperties }}
+        {{# showObjectActions }}
+        <th class="table-row-actions">{{# _t }}Actions{{/ _t }}</th>
+        {{/ showObjectActions }}
+    </tr>
 </tfoot>

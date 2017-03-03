@@ -93,6 +93,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     private $adminMetadata;
 
     /**
+     * List actions ars displayed by default.
+     *
+     * @var boolean
+     */
+    private $showListActions = true;
+
+    /**
      * Store the list actions.
      *
      * @var array|null
@@ -112,6 +119,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @var boolean
      */
     protected $parsedListActions = false;
+
+    /**
+     * Object actions ars displayed by default.
+     *
+     * @var boolean
+     */
+    private $showObjectActions = true;
 
     /**
      * Store the object actions.
@@ -576,9 +590,22 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
         $row['objectActions'] = $this->objectActions();
-        $row['showObjectActions'] = count($row['objectActions']);
+        $row['showObjectActions'] = ($this->showObjectActions === false) ? false : !!$row['objectActions'];
 
         return $row;
+    }
+
+    /**
+     * Show/hide the table's object actions.
+     *
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the actions.
+     * @return TableWidget Chainable
+     */
+    public function setShowObjectActions($show)
+    {
+        $this->showObjectActions = !!$show;
+
+        return $this;
     }
 
     /**
@@ -588,9 +615,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function showObjectActions()
     {
-        $actions = $this->objectActions();
-
-        return count($actions);
+        if ($this->showObjectActions === false) {
+            return false;
+        } else {
+            return count($this->objectActions());
+        }
     }
 
     /**
@@ -739,15 +768,30 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
+     * Show/hide the table's collection actions.
+     *
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the actions.
+     * @return TableWidget Chainable
+     */
+    public function setShowistActions($show)
+    {
+        $this->showListActions = !!$show;
+
+        return $this;
+    }
+
+    /**
      * Determine if the table's collection actions should be shown.
      *
      * @return boolean
      */
     public function showListActions()
     {
-        $actions = $this->listActions();
-
-        return count($actions);
+        if ($this->showListActions === false) {
+            return false;
+        } else {
+            return count($this->listActions());
+        }
     }
 
     /**

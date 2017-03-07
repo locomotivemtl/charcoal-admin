@@ -221,34 +221,33 @@ class FormGroupWidget extends AbstractUiItem implements
         $formProperties  = $this->parsedFormProperties();
         $propOptions     = $this->propertiesOptions();
 
-        $ret = [];
-        foreach ($formProperties as $propertyIdent => $property) {
+        foreach ($formProperties as $propertyIdent => $formProperty) {
             if (in_array($propertyIdent, $groupProperties)) {
                 if (!empty($propOptions[$propertyIdent])) {
                     $propertyOptions = $propOptions[$propertyIdent];
 
                     if (is_array($propertyOptions)) {
-                        $property->merge($propertyOptions);
+                        $formProperty->merge($propertyOptions);
                     }
                 }
 
                 if ($obj) {
                     $val = $obj[$propertyIdent];
-                    $property->setPropertyVal($val);
+                    $formProperty->setPropertyVal($val);
                 }
 
-                if (!$property->l10nMode()) {
-                    $property->setL10nMode($this->l10nMode());
+                if (!$formProperty->l10nMode()) {
+                    $formProperty->setL10nMode($this->l10nMode());
                 }
 
-                if ($property instanceof FormInputInterface) {
-                    $property->setFormGroup($this);
+                if ($formProperty instanceof FormInputInterface) {
+                    $formProperty->setFormGroup($this);
                 }
 
-                yield $propertyIdent => $property;
+                yield $propertyIdent => $formProperty;
 
-                if ($property instanceof FormInputInterface) {
-                    $property->clearFormGroup();
+                if ($formProperty instanceof FormInputInterface) {
+                    $formProperty->clearFormGroup();
                 }
             }
         }

@@ -49,6 +49,13 @@ class FormWidget extends AdminWidget implements
     protected $sidebars = [];
 
     /**
+     * The form's controls.
+     *
+     * @var array
+     */
+    protected $formProperties = [];
+
+    /**
      * Label for the form submission button.
      *
      * @var Translation|string
@@ -281,12 +288,28 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param array $properties The form properties.
+     * Replace property controls to the form.
+     *
+     * @param  array $properties The form properties.
      * @return FormInterface Chainable
      */
     public function setFormProperties(array $properties)
     {
         $this->formProperties = [];
+
+        $this->addFormProperties($properties);
+
+        return $this;
+    }
+
+    /**
+     * Add property controls to the form.
+     *
+     * @param  array $properties The form properties.
+     * @return FormInterface Chainable
+     */
+    public function addFormProperties(array $properties)
+    {
         foreach ($properties as $propertyIdent => $property) {
             $this->addFormProperty($propertyIdent, $property);
         }
@@ -295,12 +318,17 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string                      $propertyIdent The property identifier.
-     * @param array|FormPropertyInterface $property      The property object or structure.
-     * @throws InvalidArgumentException If the ident is not a string or the property not a valid object or structure.
+     * Add a property control to the form.
+     *
+     * If a given property uses a hidden form control, the form property will be
+     * added to {@see FormWidget::$hiddenProperties}.
+     *
+     * @param  string                      $propertyIdent The property identifier.
+     * @param  array|FormPropertyInterface $formProperty  The property object or structure.
+     * @throws InvalidArgumentException If the identifier or the property is invalid.
      * @return FormInterface Chainable
      */
-    public function addFormProperty($propertyIdent, $property)
+    public function addFormProperty($propertyIdent, $formProperty)
     {
         if (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
@@ -308,25 +336,26 @@ class FormWidget extends AdminWidget implements
             );
         }
 
-        if (($property instanceof FormPropertyWidget)) {
-            $this->formProperties[$propertyIdent] = $property;
-        } elseif (is_array($property)) {
-            $p = $this->createFormProperty($property);
-            $p->setPropertyIdent($propertyIdent);
-            $this->formProperties[$propertyIdent] = $p;
+        if ($formProperty instanceof FormPropertyWidget) {
+            $this->formProperties[$propertyIdent] = $formProperty;
+        } elseif (is_array($formProperty)) {
+            $formProperty = $this->createFormProperty($formProperty);
+            $formProperty->setPropertyIdent($propertyIdent);
+            $this->formProperties[$propertyIdent] = $formProperty;
         } else {
-            throw new InvalidArgumentException(
-                'Property must be a FormProperty object or an array'
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Property must be an array or an instance of FormPropertyWidget, received %s',
+                is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
+            ));
         }
 
         return $this;
     }
 
     /**
-     * Properties generator
+     * Yield the form's property controls.
      *
-     * @return FormPropertyWidget[] This method is a generator.
+     * @return FormPropertyWidget[]|Generator
      */
     public function formProperties()
     {
@@ -334,12 +363,14 @@ class FormWidget extends AdminWidget implements
         if (!is_array($this->sidebars)) {
             yield null;
         } else {
-            foreach ($this->formProperties as $prop) {
-                if ($prop->active() === false) {
+            foreach ($this->formProperties as $formProperty) {
+                if ($formProperty->active() === false) {
                     continue;
                 }
-                $GLOBALS['widget_template'] = $prop->inputType();
-                yield $prop->propertyIdent() => $prop;
+
+                $GLOBALS['widget_template'] = $formProperty->inputType();
+
+                yield $formProperty->propertyIdent() => $formProperty;
             }
         }
     }

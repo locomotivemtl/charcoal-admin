@@ -330,15 +330,33 @@ class StructureFormGroup extends FormGroupWidget
         if ($this->parsedFormProperties === null) {
             $this->finalizeStructure();
 
-            $groupProperties  = $this->groupProperties();
-            $structProperties = $this->structProperties();
+            $groupProperties     = $this->groupProperties();
+            $availableProperties = $this->structProperties();
 
-            if ($groupProperties) {
-                if (is_string(key($groupProperties))) {
-                    $structProperties = $groupProperties;
-                } else {
-                    $structProperties = array_merge(array_flip($groupProperties), $structProperties);
+            $structProperties = [];
+            if (!empty($groupProperties)) {
+                foreach ($groupProperties as $propertyIdent => $propertyMetadata) {
+                    if (is_string($propertyMetadata)) {
+                        $propertyIdent    = $propertyMetadata;
+                        $propertyMetadata = null;
+                    }
+
+                    if (!isset($availableProperties[$propertyIdent])) {
+                        continue;
+                    }
+
+                    if (is_array($propertyMetadata)) {
+                        $propertyMetadata = array_merge($propertyMetadata, $availableProperties[$propertyIdent]);
+                    } else {
+                        $propertyMetadata = $availableProperties[$propertyIdent];
+                    }
+
+                    $structProperties[$propertyIdent] = $propertyMetadata;
                 }
+            }
+
+            if (empty($structProperties)) {
+                $structProperties = $availableProperties;
             }
 
             $this->parsedFormProperties = $structProperties;

@@ -23,6 +23,12 @@
             {{> $widget_template }}
         {{/ sidebars }}
 
+        {{# hiddenProperties }}
+        {{# input }}
+        {{> $widget_template }}
+        {{/ input }}
+        {{/ hiddenProperties }}
+
         <input type="hidden" name="widget_id" value="{{ widgetId }}">
         <input type="hidden" name="obj_type" value="{{ objType }}">
         <input type="hidden" name="obj_id" value="{{ objId }}">

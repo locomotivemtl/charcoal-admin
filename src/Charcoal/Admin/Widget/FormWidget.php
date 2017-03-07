@@ -56,6 +56,13 @@ class FormWidget extends AdminWidget implements
     protected $formProperties = [];
 
     /**
+     * The form's hidden controls.
+     *
+     * @var array
+     */
+    protected $hiddenProperties = [];
+
+    /**
      * Label for the form submission button.
      *
      * @var Translation|string
@@ -336,17 +343,20 @@ class FormWidget extends AdminWidget implements
             );
         }
 
-        if ($formProperty instanceof FormPropertyWidget) {
-            $this->formProperties[$propertyIdent] = $formProperty;
-        } elseif (is_array($formProperty)) {
+        if (is_array($formProperty)) {
             $formProperty = $this->createFormProperty($formProperty);
             $formProperty->setPropertyIdent($propertyIdent);
-            $this->formProperties[$propertyIdent] = $formProperty;
-        } else {
+        } elseif (!$formProperty instanceof FormPropertyWidget) {
             throw new InvalidArgumentException(sprintf(
                 'Property must be an array or an instance of FormPropertyWidget, received %s',
                 is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
             ));
+        }
+
+        if ($formProperty->hidden()) {
+            $this->hiddenProperties[$propertyIdent] = $formProperty;
+        } else {
+            $this->formProperties[$propertyIdent] = $formProperty;
         }
 
         return $this;
@@ -372,6 +382,85 @@ class FormWidget extends AdminWidget implements
 
                 yield $formProperty->propertyIdent() => $formProperty;
             }
+        }
+    }
+
+    /**
+     * Replace hidden property controls to the form.
+     *
+     * @param  array $properties The hidden form properties.
+     * @return FormInterface Chainable
+     */
+    public function setHiddenProperties(array $properties)
+    {
+        $this->hiddenProperties = [];
+
+        $this->addHiddenProperties($properties);
+
+        return $this;
+    }
+
+    /**
+     * Add hidden property controls to the form.
+     *
+     * @param  array $properties The hidden form properties.
+     * @return FormInterface Chainable
+     */
+    public function addHiddenProperties(array $properties)
+    {
+        foreach ($properties as $propertyIdent => $property) {
+            $this->addHiddenProperty($propertyIdent, $property);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a hidden property control to the form.
+     *
+     * @param  string                      $propertyIdent The property identifier.
+     * @param  array|FormPropertyInterface $formProperty  The property object or structure.
+     * @throws InvalidArgumentException If the identifier or the property is invalid.
+     * @return FormInterface Chainable
+     */
+    public function addHiddenProperty($propertyIdent, $formProperty)
+    {
+        if (!is_string($propertyIdent)) {
+            throw new InvalidArgumentException(
+                'Property ident must be a string'
+            );
+        }
+
+        if (is_array($formProperty)) {
+            $formProperty = $this->createFormProperty($formProperty);
+            $formProperty->setPropertyIdent($propertyIdent);
+        } elseif (!$formProperty instanceof FormPropertyWidget) {
+            throw new InvalidArgumentException(sprintf(
+                'Property must be an array or an instance of FormPropertyWidget, received %s',
+                is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
+            ));
+        }
+
+        $formProperty->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
+
+        $this->hiddenProperties[$propertyIdent] = $formProperty;
+
+        return $this;
+    }
+
+    /**
+     * Yield the form's hidden property controls.
+     *
+     * @return FormPropertyWidget[]|Generator
+     */
+    public function hiddenProperties()
+    {
+        foreach ($this->hiddenProperties as $formProperty) {
+            if ($formProperty->active() === false) {
+                continue;
+            }
+
+            yield $formProperty->propertyIdent() => $formProperty;
         }
     }
 

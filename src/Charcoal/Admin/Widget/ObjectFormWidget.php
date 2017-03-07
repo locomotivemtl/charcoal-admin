@@ -325,7 +325,11 @@ class ObjectFormWidget extends FormWidget implements
             $formProperty->setData($propertyMetadata);
             $formProperty->setPropertyVal($obj[$propertyIdent]);
 
-            yield $propertyIdent => $formProperty;
+            if ($formProperty->hidden()) {
+                $this->hiddenProperties[$propertyIdent] = $formProperty;
+            } else {
+                yield $propertyIdent => $formProperty;
+            }
         }
     }
 

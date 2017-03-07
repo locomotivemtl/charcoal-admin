@@ -100,6 +100,11 @@ class FormGroupWidget extends AbstractUiItem implements
             unset($data['properties']);
         }
 
+        if (!empty($data['hidden_properties'])) {
+            $this->form()->addHiddenProperties($data['hidden_properties']);
+            unset($data['hidden_properties']);
+        }
+
         if (isset($data['permissions'])) {
             $this->setRequiredAclPermissions($data['permissions']);
             unset($data['permissions']);

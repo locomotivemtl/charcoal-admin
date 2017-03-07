@@ -30,6 +30,9 @@ use \Charcoal\Admin\AdminWidget;
 class FormPropertyWidget extends AdminWidget implements
     FormInputInterface
 {
+    const HIDDEN_FORM_CONTROL  = 'charcoal/admin/property/input/hidden';
+    const DEFAULT_FORM_CONTROL = 'charcoal/admin/property/input/text';
+
     /**
      * In memory copy of the PropertyInput object
      * @var PropertyInputInterface $input
@@ -361,6 +364,14 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
+     * @return boolean
+     */
+    public function hidden()
+    {
+        return ($this->inputType() === static::HIDDEN_FORM_CONTROL || $this->prop()->hidden());
+    }
+
+    /**
      * @return string
      */
     public function inputId()
@@ -383,6 +394,7 @@ class FormPropertyWidget extends AdminWidget implements
     public function setInputType($inputType)
     {
         $this->inputType = $inputType;
+
         return $this;
     }
 
@@ -393,10 +405,15 @@ class FormPropertyWidget extends AdminWidget implements
     {
         if ($this->inputType === null) {
             $inputType = '';
+            $isHidden  = $this->prop()->hidden();
             $metadata  = $this->prop()->metadata();
 
             if (isset($metadata['input_type'])) {
                 $inputType = $metadata['input_type'];
+            }
+
+            if (!$inputType && $isHidden) {
+                $inputType = static::HIDDEN_FORM_CONTROL;
             }
 
             if (!$inputType) {
@@ -404,7 +421,7 @@ class FormPropertyWidget extends AdminWidget implements
             }
 
             if (!$inputType) {
-                $inputType = 'charcoal/admin/property/input/text';
+                $inputType = static::DEFAULT_FORM_CONTROL;
             }
 
             $this->inputType = $inputType;

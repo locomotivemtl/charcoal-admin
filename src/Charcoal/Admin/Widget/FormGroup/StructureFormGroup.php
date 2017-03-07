@@ -449,7 +449,11 @@ class StructureFormGroup extends FormGroupWidget
                 $formProperty->setFormGroup($this);
             }
 
-            yield $propertyIdent => $formProperty;
+            if ($formProperty->hidden()) {
+                $form->addHiddenProperty($subPropertyIdent, $formProperty);
+            } else {
+                yield $propertyIdent => $formProperty;
+            }
 
             if ($formProperty instanceof FormInputInterface) {
                 $formProperty->clearFormGroup();

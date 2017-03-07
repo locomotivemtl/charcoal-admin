@@ -1,0 +1,23 @@
+{{!--
+    Affixed Input Control
+    =====================
+
+    @used-by
+        - `charcoal/admin/property/input/text`
+        - `charcoal/admin/property/input/email`
+        - `charcoal/admin/property/input/phone`
+        - `charcoal/admin/property/input/url`
+--}}
+{{# hasInputAffix }}
+<div class="input-group">
+{{/ hasInputAffix }}
+{{# inputPrefix }}
+<span class="input-group-addon" id="{{ inputId }}_prefix">{{& . }}</span>
+{{/ inputPrefix }}
+{{> charcoal/admin/property/control/input }}
+{{# inputSuffix }}
+<span class="input-group-addon" id="{{ inputId }}_suffix">{{& . }}</span>
+{{/ inputSuffix }}
+{{# hasInputAffix }}
+</div>
+{{/ hasInputAffix }}

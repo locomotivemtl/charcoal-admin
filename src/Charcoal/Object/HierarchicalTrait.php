@@ -411,6 +411,10 @@ trait HierarchicalTrait
             return $ident;
         }
 
+        if (is_array($ident) && isset($ident[$this->key()])) {
+            $ident = $ident[$this->key()];
+        }
+
         if (!is_scalar($ident)) {
             throw new InvalidArgumentException(sprintf(
                 'Can not load object (not a scalar or a "%s")',
@@ -436,7 +440,7 @@ trait HierarchicalTrait
      * Retrieve an object from the storage source by its ID.
      *
      * @param mixed $id The object id.
-     * @return null|ModelInterface
+     * @return null|HierarchicalInterface
      */
     private function loadObjectFromSource($id)
     {
@@ -454,7 +458,7 @@ trait HierarchicalTrait
      * Retrieve an object from the cache store by its ID.
      *
      * @param mixed $id The object id.
-     * @return null|ModelInterface
+     * @return null|HierarchicalInterface
      */
     private function loadObjectFromCache($id)
     {

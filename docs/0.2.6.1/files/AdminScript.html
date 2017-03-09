@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+        <script type="text/javascript">
+        function loadExternalCodeSnippets() {
+            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+                var src = pre.getAttribute('data-src');
+                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+                var language = 'php';
+
+                var code = document.createElement('code');
+                code.className = 'language-' + language;
+
+                pre.textContent = '';
+
+                code.textContent = 'Loading…';
+
+                pre.appendChild(code);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', src, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+
+                            Prism.highlightElement(code);
+                        }
+                        else if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                        }
+                        else {
+                            code.textContent = '✖ Error: File does not exist or is empty';
+                        }
+                    }
+                };
+
+                xhr.send(null);
+            });
+        }
+
+        $(document).ready(function(){
+            loadExternalCodeSnippets();
+        });
+        $('#source-view').on('shown', function () {
+            loadExternalCodeSnippets();
+        })
+    </script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/Charcoal.html">\Charcoal</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">951</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">24</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2103699573"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-2103699573" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-664499461"></a>
+                                <a href="../namespaces/Charcoal.html" style="margin-left: 30px; padding-left: 0">Charcoal</a>
+            </div>
+            <div id="namespace-664499461" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1864549640"></a>
+                                <a href="../namespaces/Charcoal.Admin.html" style="margin-left: 30px; padding-left: 0">Admin</a>
+            </div>
+            <div id="namespace-1864549640" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1140108960"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.html" style="margin-left: 30px; padding-left: 0">Action</a>
+            </div>
+            <div id="namespace-1140108960" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-826441177"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Account.html" style="margin-left: 30px; padding-left: 0">Account</a>
+            </div>
+            <div id="namespace-826441177" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Account.LostPasswordAction.html">LostPasswordAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Account.ResetPasswordAction.html">ResetPasswordAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-265018011"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-265018011" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.AbstractSaveAction.html">AbstractSaveAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.DeleteAction.html">DeleteAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.ExportAction.html">ExportAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.LoadAction.html">LoadAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.ReorderAction.html">ReorderAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.RevertRevisionAction.html">RevertRevisionAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.SaveAction.html">SaveAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Object.UpdateAction.html">UpdateAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1470845862"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.System.html" style="margin-left: 30px; padding-left: 0">System</a>
+            </div>
+            <div id="namespace-1470845862" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.System.ClearCacheAction.html">ClearCacheAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-479890760"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
+            </div>
+            <div id="namespace-479890760" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-263450948"></a>
+                                <a href="../namespaces/Charcoal.Admin.Action.Widget.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
+            </div>
+            <div id="namespace-263450948" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Widget.Table.InlineAction.html">InlineAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Widget.Table.InlineMultiAction.html">InlineMultiAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.Widget.LoadAction.html">LoadAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.ElfinderConnectorAction.html">ElfinderConnectorAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.LoginAction.html">LoginAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Action.LogoutAction.html">LogoutAction</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1251277547"></a>
+                                <a href="../namespaces/Charcoal.Admin.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-1251277547" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Object.Notification.html">Notification</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1603317025"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.html" style="margin-left: 30px; padding-left: 0">Property</a>
+            </div>
+            <div id="namespace-1603317025" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1506213233"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.Display.html" style="margin-left: 30px; padding-left: 0">Display</a>
+            </div>
+            <div id="namespace-1506213233" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.BooleanDisplay.html">BooleanDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.ColorSwatchDisplay.html">ColorSwatchDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.ImageDisplay.html">ImageDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.LinkDisplay.html">LinkDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.ObjectDisplay.html">ObjectDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Display.TextDisplay.html">TextDisplay</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2030714915"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.Input.html" style="margin-left: 30px; padding-left: 0">Input</a>
+            </div>
+            <div id="namespace-2030714915" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-890387418"></a>
+                                <a href="../namespaces/Charcoal.Admin.Property.Input.Selectize.html" style="margin-left: 30px; padding-left: 0">Selectize</a>
+            </div>
+            <div id="namespace-890387418" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.Selectize.SearchInput.html">SearchInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.Selectize.TagsInput.html">TagsInput</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.AudioInput.html">AudioInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.CheckboxColorInput.html">CheckboxColorInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.CheckboxInput.html">CheckboxInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.ColorPickerInput.html">ColorPickerInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.DateTimePickerInput.html">DateTimePickerInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.DualSelectInput.html">DualSelectInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.EmailInput.html">EmailInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.FileInput.html">FileInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.HiddenInput.html">HiddenInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.ImageInput.html">ImageInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.MapWidgetInput.html">MapWidgetInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.NumberInput.html">NumberInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.PasswordInput.html">PasswordInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.PhoneInput.html">PhoneInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.RadioColorInput.html">RadioColorInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.RadioInput.html">RadioInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.ReadonlyInput.html">ReadonlyInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.SelectInput.html">SelectInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.StructureWidgetInput.html">StructureWidgetInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.SwitchInput.html">SwitchInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.TextareaInput.html">TextareaInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.TextInput.html">TextInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.TinymceInput.html">TinymceInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.Input.UrlInput.html">UrlInput</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Property.PropertyDisplayInterface.html">PropertyDisplayInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Property.PropertyInputInterface.html">PropertyInputInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Property.SelectableInputInterface.html">SelectableInputInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractPropertyDisplay.html">AbstractPropertyDisplay</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractPropertyInput.html">AbstractPropertyInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractSelectableInput.html">AbstractSelectableInput</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Property.AbstractTickableInput.html">AbstractTickableInput</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1071330609"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.html" style="margin-left: 30px; padding-left: 0">Script</a>
+            </div>
+            <div id="namespace-1071330609" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1529320866"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Notification.html" style="margin-left: 30px; padding-left: 0">Notification</a>
+            </div>
+            <div id="namespace-1529320866" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.AbstractNotificationScript.html">AbstractNotificationScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessDailyScript.html">ProcessDailyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessHourlyScript.html">ProcessHourlyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessMinuteScript.html">ProcessMinuteScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessMonthlyScript.html">ProcessMonthlyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Notification.ProcessWeeklyScript.html">ProcessWeeklyScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1274469873"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-1274469873" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-897705957"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Object.Table.html" style="margin-left: 30px; padding-left: 0">Table</a>
+            </div>
+            <div id="namespace-897705957" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.Table.AlterPrimaryKeyScript.html">AlterPrimaryKeyScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.Table.AlterScript.html">AlterScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.Table.CreateScript.html">CreateScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.CreateScript.html">CreateScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Object.ProcessSchedulesScript.html">ProcessSchedulesScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1261755851"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.Translation.html" style="margin-left: 30px; padding-left: 0">Translation</a>
+            </div>
+            <div id="namespace-1261755851" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.Translation.TranslateScript.html">TranslateScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1267320395"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.User.html" style="margin-left: 30px; padding-left: 0">User</a>
+            </div>
+            <div id="namespace-1267320395" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-841487075"></a>
+                                <a href="../namespaces/Charcoal.Admin.Script.User.AclRole.html" style="margin-left: 30px; padding-left: 0">AclRole</a>
+            </div>
+            <div id="namespace-841487075" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.User.AclRole.CreateScript.html">CreateScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.User.CreateScript.html">CreateScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.User.ResetPasswordScript.html">ResetPasswordScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.ObjectsScript.html">ObjectsScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Script.ProcessNotificationsScript.html">ProcessNotificationsScript</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-59442290"></a>
+                                <a href="../namespaces/Charcoal.Admin.Service.html" style="margin-left: 30px; padding-left: 0">Service</a>
+            </div>
+            <div id="namespace-59442290" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Service.Exporter.html">Exporter</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-40310138"></a>
+                                <a href="../namespaces/Charcoal.Admin.ServiceProvider.html" style="margin-left: 30px; padding-left: 0">ServiceProvider</a>
+            </div>
+            <div id="namespace-40310138" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.ServiceProvider.AclServiceProvider.html">AclServiceProvider</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.ServiceProvider.AdminServiceProvider.html">AdminServiceProvider</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1695834653"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.html" style="margin-left: 30px; padding-left: 0">Template</a>
+            </div>
+            <div id="namespace-1695834653" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-732499804"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.Account.html" style="margin-left: 30px; padding-left: 0">Account</a>
+            </div>
+            <div id="namespace-732499804" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Account.LostPasswordTemplate.html">LostPasswordTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Account.ResetPasswordTemplate.html">ResetPasswordTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2118535911"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.Object.html" style="margin-left: 30px; padding-left: 0">Object</a>
+            </div>
+            <div id="namespace-2118535911" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Object.CollectionTemplate.html">CollectionTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.Object.EditTemplate.html">EditTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1188017782"></a>
+                                <a href="../namespaces/Charcoal.Admin.Template.System.html" style="margin-left: 30px; padding-left: 0">System</a>
+            </div>
+            <div id="namespace-1188017782" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.ClearCacheTemplate.html">ClearCacheTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.UserPermissionsTemplate.html">UserPermissionsTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.UserRolesTemplate.html">UserRolesTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.System.UsersTemplate.html">UsersTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.ElfinderTemplate.html">ElfinderTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.HandlerTemplate.html">HandlerTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.HelpTemplate.html">HelpTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.HomeTemplate.html">HomeTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.LoginTemplate.html">LoginTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Template.LogoutTemplate.html">LogoutTemplate</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1865346043"></a>
+                                <a href="../namespaces/Charcoal.Admin.Ui.html" style="margin-left: 30px; padding-left: 0">Ui</a>
+            </div>
+            <div id="namespace-1865346043" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-927422342"></a>
+                                <a href="../namespaces/Charcoal.Admin.Ui.Sidemenu.html" style="margin-left: 30px; padding-left: 0">Sidemenu</a>
+            </div>
+            <div id="namespace-927422342" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.SidemenuGroupInterface.html">SidemenuGroupInterface</a></li>
+                                                                            <li class="trait"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.SidemenuGroupTrait.html">SidemenuGroupTrait</a></li>
+                                                                            <li class="class"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.AbstractSidemenuGroup.html">AbstractSidemenuGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Ui.Sidemenu.GenericSidemenuGroup.html">GenericSidemenuGroup</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.CollectionContainerInterface.html">CollectionContainerInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.DashboardContainerInterface.html">DashboardContainerInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.FormSidebarInterface.html">FormSidebarInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Ui.ObjectContainerInterface.html">ObjectContainerInterface</a></li>
+                                                                            <li class="trait"><a href="../classes/Charcoal.Admin.Ui.CollectionContainerTrait.html">CollectionContainerTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.DashboardContainerTrait.html">DashboardContainerTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.FeedbackContainerTrait.html">FeedbackContainerTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.ImageAttributesTrait.html">ImageAttributesTrait</a></li>
+                                                    <li class="trait"><a href="../classes/Charcoal.Admin.Ui.ObjectContainerTrait.html">ObjectContainerTrait</a></li>
+                                                                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-44486339"></a>
+                                <a href="../namespaces/Charcoal.Admin.User.html" style="margin-left: 30px; padding-left: 0">User</a>
+            </div>
+            <div id="namespace-44486339" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.AclRole.html">AclRole</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.AuthToken.html">AuthToken</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.AuthTokenMetadata.html">AuthTokenMetadata</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.LostPasswordToken.html">LostPasswordToken</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.Permission.html">Permission</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.PermissionCategory.html">PermissionCategory</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-352194107"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.html" style="margin-left: 30px; padding-left: 0">Widget</a>
+            </div>
+            <div id="namespace-352194107" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-807675943"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.Dialog.html" style="margin-left: 30px; padding-left: 0">Dialog</a>
+            </div>
+            <div id="namespace-807675943" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.Dialog.ImportlistWidget.html">ImportlistWidget</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1943313475"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.FormGroup.html" style="margin-left: 30px; padding-left: 0">FormGroup</a>
+            </div>
+            <div id="namespace-1943313475" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.AclPermissions.html">AclPermissions</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.GenericFormGroup.html">GenericFormGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.ObjectRevisionsFormGroup.html">ObjectRevisionsFormGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.StructureFormGroup.html">StructureFormGroup</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroup.TemplateOptionsFormGroup.html">TemplateOptionsFormGroup</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-347051100"></a>
+                                <a href="../namespaces/Charcoal.Admin.Widget.Graph.html" style="margin-left: 30px; padding-left: 0">Graph</a>
+            </div>
+            <div id="namespace-347051100" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Widget.Graph.GraphWidgetInterface.html">GraphWidgetInterface</a></li>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Widget.Graph.TimeGraphWidgetInterface.html">TimeGraphWidgetInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.Graph.AbstractGraphWidget.html">AbstractGraphWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.Graph.AbstractTimeGraphWidget.html">AbstractTimeGraphWidget</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/Charcoal.Admin.Widget.SidemenuWidgetInterface.html">SidemenuWidgetInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.CollectionMapWidget.html">CollectionMapWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.DashboardWidget.html">DashboardWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormGroupWidget.html">FormGroupWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormPropertyWidget.html">FormPropertyWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormSidebarWidget.html">FormSidebarWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.FormWidget.html">FormWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.LayoutWidget.html">LayoutWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.MapWidget.html">MapWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.ObjectFormWidget.html">ObjectFormWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.PaginationWidget.html">PaginationWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.QuickFormWidget.html">QuickFormWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.SearchWidget.html">SearchWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.SidemenuWidget.html">SidemenuWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TableGridWidget.html">TableGridWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TablePropertyWidget.html">TablePropertyWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TableWidget.html">TableWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Widget.TextWidget.html">TextWidget</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminAction.html">AdminAction</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminModule.html">AdminModule</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminScript.html">AdminScript</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminTemplate.html">AdminTemplate</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.AdminWidget.html">AdminWidget</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.Config.html">Config</a></li>
+                                                    <li class="class"><a href="../classes/Charcoal.Admin.User.html">User</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content file">
+                    <nav>
+                                                                    </nav>
+
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+                    <h1><small></small>AdminScript.php</h1>
+                    <p><em></em></p>
+                    
+
+                    
+                    
+                                        <h2>Classes</h2>
+                    <table class="table table-hover">
+                                            <tr>
+                            <td><a href="../classes/Charcoal.Admin.AdminScript.html">AdminScript</a></td>
+                            <td><em></em></td>
+                        </tr>
+                                        </table>
+                                    </div>
+
+                <aside class="span4 detailsbar">
+                    <dl>
+                                                    <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">\Default</div></dd>
+                        
+                        
+                    </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                                            </table>
+
+                </aside>
+            </div>
+
+            
+            
+        </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label"></h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/AdminScript.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/Charcoal.html">\Charcoal</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on March 9th, 2017 at 20:59.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

@@ -81,7 +81,7 @@ class LogoutTemplate extends AdminTemplate
         if (isset($this->adminConfig['logout_logo'])) {
             return $this->adminConfig['logout_logo'];
         } else {
-            return $this->adminUrl().'assets/admin/images/avatar.jpg';
+            return $this->baseUrl().'assets/admin/images/avatar.jpg';
         }
     }
 

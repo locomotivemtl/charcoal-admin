@@ -63,7 +63,7 @@ class LoginTemplate extends AdminTemplate
         if (isset($this->adminConfig['login_logo'])) {
             return $this->adminConfig['login_logo'];
         } else {
-            return $this->adminUrl().'assets/admin/images/avatar.jpg';
+            return $this->baseUrl().'assets/admin/images/avatar.jpg';
         }
     }
 

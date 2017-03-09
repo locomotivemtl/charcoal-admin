@@ -18,7 +18,7 @@ use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translator;
+use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
@@ -167,7 +167,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Retrieve the name of the project.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function siteName()
     {

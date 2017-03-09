@@ -69,7 +69,7 @@ class ResetPasswordTemplate extends AdminTemplate
      */
     public function urlResetPasswordAction()
     {
-        return 'action/account/reset-password';
+        return $this->adminUrl().'action/account/reset-password';
     }
 
     /**
@@ -77,7 +77,15 @@ class ResetPasswordTemplate extends AdminTemplate
      */
     public function urlLostPassword()
     {
-        return 'account/lost-password';
+        return $this->adminUrl().'account/lost-password';
+    }
+
+    /**
+     * @return string
+     */
+    public function urlLogin()
+    {
+        return $this->adminUrl().'login';
     }
 
     /**

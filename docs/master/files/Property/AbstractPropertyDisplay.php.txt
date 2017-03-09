@@ -18,7 +18,7 @@ use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translator;
+use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-property'

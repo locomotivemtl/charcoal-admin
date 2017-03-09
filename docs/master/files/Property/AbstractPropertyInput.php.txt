@@ -18,15 +18,12 @@ use Pimple\Container;
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// From 'charcoal-translator'
-use Charcoal\Translator\Translation;
-
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewableTrait;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translator;
+use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-property'
@@ -176,9 +173,9 @@ abstract class AbstractPropertyInput implements
      */
     public function setDependencies(Container $container)
     {
+        $this->setMetadataLoader($container['metadata/loader']);
         $this->setTranslator($container['translator']);
         $this->setView($container['view']);
-        $this->setMetadataLoader($container['metadata/loader']);
     }
 
     /**

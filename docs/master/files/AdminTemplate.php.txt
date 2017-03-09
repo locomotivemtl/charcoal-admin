@@ -20,6 +20,7 @@ use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
+use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
@@ -74,7 +75,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * The name of the project.
      *
-     * @var \Charcoal\Translator\Translation|string|null
+     * @var Translation|string|null
      */
     private $siteName;
 
@@ -84,17 +85,17 @@ class AdminTemplate extends AbstractTemplate implements
     private $ident;
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $label
+     * @var Translation|string|null $label
      */
     protected $label;
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $title
+     * @var Translation|string|null $title
      */
     protected $title;
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $subtitle
+     * @var Translation|string|null $subtitle
      */
     protected $subtitle;
 
@@ -252,7 +253,7 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function label()
     {
@@ -275,7 +276,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function title()
     {
@@ -302,7 +303,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the page's sub-title.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function subtitle()
     {
@@ -668,7 +669,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the name of the project.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function siteName()
     {
@@ -678,7 +679,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the document title.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function documentTitle()
     {

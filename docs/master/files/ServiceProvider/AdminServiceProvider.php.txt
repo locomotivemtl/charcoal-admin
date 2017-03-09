@@ -6,6 +6,12 @@ namespace Charcoal\Admin\ServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
+// From PSR-7
+use Psr\Http\Message\UriInterface;
+
+// From Mustache
+use Mustache_LambdaHelper as LambdaHelper;
+
 // From 'charcoal-config'
 use Charcoal\Config\ConfigInterface;
 use Charcoal\Config\GenericConfig as Config;
@@ -213,6 +219,66 @@ class AdminServiceProvider implements ServiceProviderInterface
                 ]
             ]);
         };
+
+        if (!isset($container['view/mustache/helpers'])) {
+            $container['view/mustache/helpers'] = function () {
+                return [];
+            };
+        }
+
+        /**
+         * Extend helpers for the Mustache Engine
+         *
+         * @return array
+         */
+        $container->extend('view/mustache/helpers', function (array $helpers, Container $container) {
+            $adminUrl = clone $container['base-url'];
+            if ($container['admin/config']['base_path']) {
+                $adminUrl = $adminUrl->withBasePath($container['admin/config']['base_path']);
+            }
+
+            $urls = [
+                /**
+                 * Alias of "siteUrl"
+                 *
+                 * @return UriInterface|null
+                 */
+                'adminUrl' => $adminUrl,
+                /**
+                 * Prepend the administration-area URI to the given path.
+                 *
+                 * @see    \Charcoal\App\ServiceProvider\AppServiceProvider::registerViewServices()
+                 * @param  string $uri A URI path to wrap.
+                 * @return UriInterface|null
+                 */
+                'withAdminUrl' => function ($uri, LambdaHelper $helper = null) use ($adminUrl) {
+                    if ($helper) {
+                        $uri = $helper->render($uri);
+                    }
+
+                    $uri = strval($uri);
+                    if ($uri) {
+                        $parts = parse_url($uri);
+                        if (!isset($parts['scheme'])) {
+                            if (!in_array($uri[0], [ '/', '#', '?' ])) {
+                                $path  = isset($parts['path']) ? $parts['path'] : '';
+                                $query = isset($parts['query']) ? $parts['query'] : '';
+                                $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+
+                                return $adminUrl->baseUrl()
+                                            ->withPath($path)
+                                            ->withQuery($query)
+                                            ->withFragment($hash);
+                            }
+                        }
+                    }
+
+                    return $uri;
+                }
+            ];
+
+            return array_merge($helpers, $urls);
+        });
     }
 }
 

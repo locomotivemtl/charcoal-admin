@@ -1,0 +1,161 @@
+<?php
+
+namespace Charcoal\Admin\Support;
+
+use ArrayAccess;
+use RuntimeException;
+use InvalidArgumentException;
+
+// From PSR-7
+use Psr\Http\Message\UriInterface;
+
+// From 'charcoal-config'
+use Charcoal\Config\ConfigInterface;
+use Charcoal\Config\EntityInterface;
+
+// From 'charcoal-app'
+use Charcoal\App\AppConfig;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Config as AdminConfig;
+
+/**
+ * Common Admin Features Trait
+ */
+trait AdminTrait
+{
+    /**
+     * The admin's configuration container.
+     *
+     * @var AdminConfig
+     */
+    private $adminConfig;
+
+    /**
+     * The application's configuration container.
+     *
+     * @var AppConfig
+     */
+    private $appConfig = [];
+
+    /**
+     * Whether the debug mode is enabled.
+     *
+     * @var boolean
+     */
+    private $debug = false;
+
+    /**
+     * Set application debug mode.
+     *
+     * @param  boolean $debug The debug flag.
+     * @return void
+     */
+    protected function setDebug($debug)
+    {
+        $this->debug = !!$debug;
+    }
+
+    /**
+     * Retrieve the application debug mode.
+     *
+     * @return boolean
+     */
+    public function debug()
+    {
+        return $this->debug;
+    }
+
+    /**
+     * Set the admin's configset.
+     *
+     * @param  array|ArrayAccess $config A configset.
+     * @throws InvalidArgumentException If the configset is invalid.
+     * @return self
+     */
+    protected function setAdminConfig($config)
+    {
+        if (is_array($config)) {
+            $config = new AdminConfig($config);
+        }
+
+        if (!$config instanceof ConfigInterface) {
+            throw new InvalidArgumentException('The configset must be array-accessible.');
+        }
+
+        $this->adminConfig = $config;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the admin's configset.
+     *
+     * @param  string|null $key     Optional data key to retrieve from the configset.
+     * @param  mixed|null  $default The default value to return if data key does not exist.
+     * @return mixed|ArrayAccess
+     */
+    protected function adminConfig($key = null, $default = null)
+    {
+        if ($key) {
+            if (isset($this->adminConfig[$key])) {
+                return $this->adminConfig[$key];
+            } else {
+                if (!is_string($default) && is_callable($default)) {
+                    return $default();
+                } else {
+                    return $default;
+                }
+            }
+        }
+
+        return $this->adminConfig;
+    }
+
+    /**
+     * Set the application's configset.
+     *
+     * @param  array|ArrayAccess $config A configset.
+     * @throws InvalidArgumentException If the configset is invalid.
+     * @return self
+     */
+    protected function setAppConfig($config)
+    {
+        if (is_array($config)) {
+            $config = new AppConfig($config);
+        }
+
+        if (!$config instanceof ConfigInterface) {
+            throw new InvalidArgumentException('The configset must be array-accessible.');
+        }
+
+        $this->appConfig = $config;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the application's configset.
+     *
+     * @param  string|null $key     Optional data key to retrieve from the configset.
+     * @param  mixed|null  $default The default value to return if data key does not exist.
+     * @return mixed|ArrayAccess
+     */
+    protected function appConfig($key = null, $default = null)
+    {
+        if ($key) {
+            if (isset($this->appConfig[$key])) {
+                return $this->appConfig[$key];
+            } else {
+                if (!is_string($default) && is_callable($default)) {
+                    return $default();
+                } else {
+                    return $default;
+                }
+            }
+        }
+
+        return $this->appConfig;
+    }
+}
+

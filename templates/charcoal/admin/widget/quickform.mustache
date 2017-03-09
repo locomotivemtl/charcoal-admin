@@ -39,5 +39,17 @@
     </div>
 </form>
 
+{{# addJsRequirement }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/widget.js }}
+</script>
+{{/ addJsRequirement }}
+
+{{# addJsRequirement }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/form.js }}
+</script>
+{{/ addJsRequirement }}
+
 {{& jsRequirements }}
 {{& js }}

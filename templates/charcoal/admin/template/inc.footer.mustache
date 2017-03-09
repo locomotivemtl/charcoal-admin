@@ -14,10 +14,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     {{/ addJsRequirement }}
 
+    {{# addJsRequirement }}
+    <script rel="l10n">
+        {{> charcoal/admin/l10n/common.js }}
+    </script>
+    {{/ addJsRequirement }}
+
     {{& jsRequirements }}
 
     <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.vendors.js"></script>
+
+    <script rel="l10n">
+        {{> charcoal/admin/l10n/bootstrap3-dialog.js }}
+    </script>
+
     <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.js"></script>
+
     <script>
         Charcoal.Admin.set_data({
             'base_url'   : '{{baseUrl}}',

@@ -1,8 +1,8 @@
 /***
-* `charcoal/admin/property/input/map-widget`
-* Property_Input_Map_Widget Javascript class
-*
-*/
+ * `charcoal/admin/property/input/map-widget`
+ * Property_Input_Map_Widget Javascript class
+ *
+ */
 Charcoal.Admin.Property_Input_Map_Widget = function (data)
 {
     // Input type
@@ -142,25 +142,25 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 };
 
 /**
-* Return {BB.gmap.controller}
-*/
+ * Return {BB.gmap.controller}
+ */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function ()
 {
     return this._controller;
 };
 
 /**
-* This is to prevent any ident duplication
-* Return {Int} Object index
-*/
+ * This is to prevent any ident duplication
+ * Return {Int} Object index
+ */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.object_index = function ()
 {
     return ++this._object_inc;
 };
 
 /**
-* Return {BB.gmap.controller}
-*/
+ * Return {BB.gmap.controller}
+ */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 {
     // Scope
@@ -283,15 +283,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
         switch (type) {
             case 'marker' :
                 that.element().find('.js-display-marker-toolbox').addClass('-active');
-            break;
+                break;
 
             case 'polygon' :
                 that.element().find('.js-add-polygon').addClass('-active');
-            break;
+                break;
 
             case 'line' :
                 that.element().find('.js-add-line').addClass('-active');
-            break;
+                break;
         }
     });
 
@@ -300,24 +300,24 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controls = function ()
 Charcoal.Admin.Property_Input_Map_Widget.prototype.display_marker_toolbar = function ()
 {
     // Displays the tool bar.
-    $('.c-map-maker ').addClass('maker_header-open');
+    $('.c-map-maker').addClass('maker_header-open');
 };
 
 Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = function ()
 {
     // Displays the tool bar.
-    $('.c-map-maker ').removeClass('maker_header-open');
+    $('.c-map-maker').removeClass('maker_header-open');
 };
 
 /**
-* I believe this should fit the PHP model
-* Added the save() function to be called on form submit
-* Could be inherited from a global Charcoal.Admin.Property Prototype
-* Extra ideas:
-* - save
-* - validate
-* @return this (chainable)
-*/
+ * I believe this should fit the PHP model
+ * Added the save() function to be called on form submit
+ * Could be inherited from a global Charcoal.Admin.Property Prototype
+ * Extra ideas:
+ * - save
+ * - validate
+ * @return this (chainable)
+ */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function ()
 {
     // Get raw map datas

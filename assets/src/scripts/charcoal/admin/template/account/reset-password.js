@@ -1,11 +1,14 @@
+/* globals authL10n */
 /**
-* charcoal/admin/template/account/lost-password
-*
-* Require:
-* - jQuery
-* - Boostrap3
-* - Boostrap3-Dialog
-*/
+ * charcoal/admin/template/account/reset-password
+ *
+ * Require:
+ * - jQuery
+ * - Boostrap3
+ * - Boostrap3-Dialog
+ *
+ * @todo Implement feedback from server-side
+ */
 
 Charcoal.Admin.Template_Account_ResetPassword = function (opts)
 {
@@ -27,28 +30,28 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function ()
 {
+    $('#reset-password-form').on('submit.charcoal.password', function (event) {
+        event.preventDefault();
 
-    $('.js-reset-password-submit').on('click', function (e) {
-        e.preventDefault();
+        var $form = $(this);
+        var url   = ($form.prop('action') || window.location.href);
+        var data  = $form.serialize();
 
-        var form = $(this).parents('form');
-        var url = Charcoal.Admin.admin_url() + 'account/reset-password';
-        var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);
             BootstrapDialog.show({
-                title:   'Password reset',
-                message: 'The password was successfully reset.',
-                type:    BootstrapDialog.TYPE_SUCCESS,
+                title:    authL10n.passwordReset,
+                message:  authL10n.resetPassSuccess,
+                type:     BootstrapDialog.TYPE_SUCCESS,
                 onhidden: function () {
                     window.location.href = Charcoal.Admin.admin_url() + 'login';
                 }
             });
         }, 'json').fail(function () {
             BootstrapDialog.show({
-                title:   'Reset password error',
-                message: 'There was an error attempting to reset password.',
-                type:    BootstrapDialog.TYPE_DANGER,
+                title:    authL10n.passwordReset,
+                message:  authL10n.resetPassFailed,
+                type:     BootstrapDialog.TYPE_DANGER,
                 onhidden: function () {
                     window.grecaptcha.reset();
                 }

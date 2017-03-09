@@ -1,3 +1,4 @@
+/* globals commonL10n,audioPropertyL10n */
 /**
  * Interface for saving audio messages
  * Property_Input_Audio JavaScript class
@@ -17,7 +18,7 @@ Charcoal.Admin.Property_Input_Audio = function (data)
     Charcoal.Admin.Property.call(this, data);
 
     // Properties for each audio type
-    this.text_properties       = {};
+    this.text_properties      = {};
     this.recording_properties = {};
     this.file_properties      = {};
 
@@ -223,7 +224,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_file = function () {
  */
 Charcoal.Admin.Property_Input_Audio.prototype.file_bind_events = function ()
 {
-
     var that = this;
     that.element().on('click', '.' + that.file_properties.reset_button_class, function () {
         that.file_reset_input();
@@ -295,7 +295,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function () {
             that.recording_got_stream(stream);
         },
         function (e) {
-            window.alert('Error getting audio. Try plugging in a microphone');
+            window.alert(audioPropertyL10n.captureFailed + ' ' + commonL10n.errorOccurred);
             window.console.log(e);
         }
     );
@@ -400,7 +400,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-        break;
+            break;
 
         case 'pause_recording' :
             /**
@@ -426,7 +426,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-        break;
+            break;
 
         case 'stop_recording' :
             /**
@@ -451,7 +451,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',false);
 
-        break;
+            break;
 
         case 'start_playback' :
             /**
@@ -468,7 +468,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              * Reset button
              */
 
-        break;
+            break;
 
         case 'pause_playback' :
             /**
@@ -485,7 +485,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              * Reset button
              */
 
-        break;
+            break;
 
         case 'reset' :
             /**
@@ -512,7 +512,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
              */
             this.recording_properties.$reset_button.prop('disabled',true);
 
-        break;
+            break;
     }
 };
 
@@ -729,11 +729,11 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = functio
         case 'waves':
             this.recording_properties.$analyser_canvas.addClass('hidden');
             this.recording_properties.$waves_canvas.removeClass('hidden');
-        break;
+            break;
         default:
             this.recording_properties.$analyser_canvas.removeClass('hidden');
             this.recording_properties.$waves_canvas.addClass('hidden');
-        break;
+            break;
     }
 };
 
@@ -855,8 +855,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
             worker.postMessage({
                 command: 'record',
                 buffer: [
-                e.inputBuffer.getChannelData(0),
-                e.inputBuffer.getChannelData(1)
+                    e.inputBuffer.getChannelData(0),
+                    e.inputBuffer.getChannelData(1)
                 ]
             });
         };

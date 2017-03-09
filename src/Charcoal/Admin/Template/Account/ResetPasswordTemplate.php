@@ -69,7 +69,7 @@ class ResetPasswordTemplate extends AdminTemplate
      */
     public function urlResetPasswordAction()
     {
-        return $this->adminUrl().'action/account/reset-password';
+        return $this->adminUrl().'account/reset-password';
     }
 
     /**

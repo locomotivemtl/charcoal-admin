@@ -1,10 +1,11 @@
+/* globals commonL10n,attachmentWidgetL10n */
 /**
-* Attachment widget
-* You can associate a perticular object to another
-* using this widget.
-*
-* @see widget.js (Charcoal.Admin.Widget
-*/
+ * Attachment widget
+ * You can associate a perticular object to another
+ * using this widget.
+ *
+ * @see widget.js (Charcoal.Admin.Widget
+ */
 Charcoal.Admin.Widget_Attachment = function ()
 {
     this.glyphs = {
@@ -140,7 +141,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     that.reload();
                 });
             } else {
-                var title = $(this).data('title') || 'Edit';
+                var title = $(this).data('title') || attachmentWidgetL10n.editObject;
                 that.create_attachment(type, title, 0, function (response) {
                     if (response.success) {
                         response.obj.id = response.obj_id;
@@ -167,14 +168,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     if (!type || !id) {
                         break;
                     }
-                    var title = _this.data('title') || 'Édition';
+                    var title = _this.data('title') || attachmentWidgetL10n.editObject;
                     that.create_attachment(type, title, id, function (response) {
                         if (response.success) {
                             that.reload();
                         }
                     });
 
-                break;
+                    break;
 
                 case 'delete':
                     if (!_this.data('id')) {
@@ -183,15 +184,19 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 
                     that.confirm(
                         {
-                            title: 'Voulez-vous vraiment supprimer cet item?'
-                        },
-                        function () {
-                            that.remove_join(_this.data('id'), function () {
-                                that.reload();
-                            });
+                            title:      attachmentWidgetL10n.confirmRemoval,
+                            message:    commonL10n.confirmAction,
+                            btnOKLabel: commonL10n.removeObject,
+                            callback:   function (result) {
+                                if (result) {
+                                    that.remove_join(_this.data('id'), function () {
+                                        that.reload();
+                                    });
+                                }
+                            }
                         }
                     );
-                break;
+                    break;
 
                 case 'add-object':
                     var container_type   = _this.data('type'),
@@ -216,7 +221,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         }
                     });
 
-                break;
+                    break;
             }
         });
 };

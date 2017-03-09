@@ -5,6 +5,18 @@
     @used-by `charcoal/admin/widget/object-form`
     @used-by `charcoal/admin/widget/quick-form`
 --}}
+{{# addJsRequirement }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/widget.js }}
+</script>
+{{/ addJsRequirement }}
+
+{{# addJsRequirement }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/form.js }}
+</script>
+{{/ addJsRequirement }}
+
 {{# addJs }}
 <script>
 Charcoal.Admin.manager().add_widget({

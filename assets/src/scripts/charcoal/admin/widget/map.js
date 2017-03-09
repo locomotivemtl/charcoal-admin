@@ -1,11 +1,11 @@
 /**
-* Map sidebar
-*
-* According lat, lon or address must be specified
-* Styles might be defined as well.
-*
-* @param  {Object}  opts Options for widget
-*/
+ * Map sidebar
+ *
+ * According lat, lon or address must be specified
+ * Styles might be defined as well.
+ *
+ * @param  {Object}  opts Options for widget
+ */
 
 Charcoal.Admin.Widget_Map = function ()
 {
@@ -20,11 +20,11 @@ Charcoal.Admin.Widget_Map.prototype.constructor = Charcoal.Admin.Widget_Map;
 Charcoal.Admin.Widget_Map.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 /**
-* Called automatically by the component manager
-* Instantiation of pretty much every thing you want!
-*
-* @return this
-*/
+ * Called automatically by the component manager
+ * Instantiation of pretty much every thing you want!
+ *
+ * @return this
+ */
 Charcoal.Admin.Widget_Map.prototype.init = function ()
 {
     var that = this;

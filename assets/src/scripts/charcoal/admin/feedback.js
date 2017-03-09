@@ -1,3 +1,4 @@
+/* globals commonL10n */
 /**
  * Charcoal Feedback Manager
  *
@@ -23,20 +24,20 @@
         supported: [ 'success', 'info', 'notice', 'warning', 'error' ],
         definitions: {
             success: {
-                title: (Admin.lang('fr') ? 'Succès!' : 'Success!'),
+                title: commonL10n.success,
                 type:  BootstrapDialog.TYPE_SUCCESS
             },
             notice: {
-                title: (Admin.lang('fr') ? 'Notice!' : 'Notice!'),
+                title: commonL10n.notice,
                 type:  BootstrapDialog.TYPE_INFO,
                 alias: [ 'info' ]
             },
             warning: {
-                title: (Admin.lang('fr') ? 'Attention!' : 'Attention!'),
+                title: commonL10n.warning,
                 type:  BootstrapDialog.TYPE_WARNING
             },
             error: {
-                title: (Admin.lang('fr') ? 'Une erreur s\'est produite!' : 'An error occurred!'),
+                title: commonL10n.errorOccurred,
                 type:  BootstrapDialog.TYPE_DANGER
             }
         },
@@ -211,6 +212,38 @@
     };
 
     /**
+     * Get all messages grouped by level
+     *
+     * @example
+     * {
+     *     '<level>': [ <messages> ]
+     * }
+     *
+     * @return {object} Messages to show.
+     */
+    Manager.prototype.getMessagesMap = function () {
+        if (!this.hasMessages()) {
+            return {};
+        }
+
+        var key, entry;
+        var entries = this.getMessages();
+        var grouped = {};
+        for (var i = 0; i < entries.length; i++) {
+            entry = entries[i];
+            key   = entry.level();
+
+            if (!(key in grouped)) {
+                grouped[key] = [];
+            }
+
+            grouped[key].push(entry);
+        }
+
+        return grouped;
+    };
+
+    /**
      * Retrieve the list of supported feedback levels.
      *
      * @return {array}
@@ -359,19 +392,16 @@
             return this;
         }
 
-        var key, entry, level, buttons;
-        var entries = this.getMessages(/* key */);
-        var grouped = {};
-        for (var i = 0; i < entries.length; i++) {
-            entry = entries[i];
-            key   = entry.level();
-
-            if (!(key in grouped)) {
-                grouped[key] = [];
-            }
-
-            grouped[key].push(entry);
+        var key, level, buttons;
+        /*
+        if (key) {
+            var grouped = {};
+            grouped[key] = this.getMessages(key);
+        } else {
+            var grouped = this.getMessagesMap();
         }
+        */
+        var grouped = this.getMessagesMap();
 
         for (key in grouped) {
             level   = this.level(key);

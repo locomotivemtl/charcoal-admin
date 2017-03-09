@@ -1,13 +1,13 @@
 /**
-* TinyMCE implementation for WYSIWYG inputs
-* charcoal/admin/property/input/tinymce
-*
-* Require:
-* - jQuery
-* - tinyMCE
-*
-* @param  {Object}  opts Options for input property
-*/
+ * TinyMCE implementation for WYSIWYG inputs
+ * charcoal/admin/property/input/tinymce
+ *
+ * Require:
+ * - jQuery
+ * - tinyMCE
+ *
+ * @param  {Object}  opts Options for input property
+ */
 
 Charcoal.Admin.Property_Input_DualSelect = function (opts)
 {

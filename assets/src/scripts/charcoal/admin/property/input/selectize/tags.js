@@ -125,11 +125,11 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.set_properties = function
                 switch (splitOn[i]) {
                     case 'comma':
                         splitOn[i] = '\\s*,\\s*';
-                    break;
+                        break;
 
                     case 'tab':
                         splitOn[i] = '\\t+';
-                    break;
+                        break;
 
                     default:
                         splitOn[i] = splitOn[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');

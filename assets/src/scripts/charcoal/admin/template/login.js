@@ -1,13 +1,16 @@
+/* globals commonL10n,authL10n */
 /**
-* charcoal/admin/template/login
-*
-* Require:
-* - jQuery
-* - Boostrap3
-* - Boostrap3-Dialog
-*/
+ * charcoal/admin/template/login
+ *
+ * Require:
+ * - jQuery
+ * - Boostrap3
+ * - Boostrap3-Dialog
+ *
+ * @todo Implement feedback from server-side
+ */
 
-//Charcoal.Admin.Template_Login = new Charcoal.Admin.Widget();        // Here's where the inheritance occurs
+// Charcoal.Admin.Template_Login = new Charcoal.Admin.Widget();  // Here's where the inheritance occurs
 
 Charcoal.Admin.Template_Login = function (opts)
 {
@@ -29,13 +32,13 @@ Charcoal.Admin.Template_Login.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 {
+    $('#login-form').on('submit.charcoal.login', function (event) {
+        event.preventDefault();
 
-    $('.js-login-submit').on('click', function (e) {
-        e.preventDefault();
+        var $form = $(this);
+        var url   = ($form.prop('action') || window.location.href);
+        var data  = $form.serialize();
 
-        var form = $(this).parents('form');
-        var url = Charcoal.Admin.admin_url() + 'login';
-        var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);
             if (response.success) {
@@ -43,16 +46,16 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
             } else {
                 //window.alert('Error');
                 BootstrapDialog.show({
-                    title:   'Login error',
-                    message: 'Authentication failed. Please try again.',
+                    title:   authL10n.login,
+                    message: commonL10n.authFailed,
                     type:    BootstrapDialog.TYPE_DANGER
                 });
             }
         }, 'json').fail(function () {
             //window.alert('Error');
             BootstrapDialog.show({
-                title:   'Login error',
-                message: 'Authentication failed. Please try again.',
+                title:   authL10n.login,
+                message: commonL10n.authFailed,
                 type:    BootstrapDialog.TYPE_DANGER
             });
         });

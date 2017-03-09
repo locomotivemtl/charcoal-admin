@@ -28,7 +28,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                 <img class="c-login_avatar_image" src="{{loginLogo}}">
             </div>
         </div>
-        <form method="post" action="{{urlLoginAction}}">
+        <form id="login-form" method="POST" action="{{urlLoginAction}}">
             <input type="hidden" name="csrf_token" value="{{csrfToken}}">
 
              <div class="form-group">
@@ -55,7 +55,10 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
             </div>
             {{/rememberMeEnabled}}
             <div class="form-group">
-                <button class="btn btn-info btn-lg btn-block js-login-submit" name="login" type="submit">{{#_t}}Log In{{/_t}}</button>
+                <button type="submit" class="btn btn-info btn-lg btn-block">
+                    <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
+                    <span class="btn-label">{{#_t}}Log In{{/_t}}</span>
+                </button>
 
                 <small><a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a></small>
             </div>
@@ -64,6 +67,12 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
         {{>charcoal/admin/widget/feedbacks}}
     </div>
 </div>
+
+{{# addJsRequirement }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/auth.js }}
+</script>
+{{/ addJsRequirement }}
 
 {{#addJs}}
 <script>

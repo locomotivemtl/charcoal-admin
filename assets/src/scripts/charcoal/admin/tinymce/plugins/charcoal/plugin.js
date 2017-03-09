@@ -14,10 +14,10 @@
     isArray = tinymce.util.Tools.isArray;
 
     tinymce.create('tinymce.plugins.Charcoal', {
-        dependencies: ['advlist'],
-        listItems: ['bullist', 'numlist', 'outdent', 'indent'],
-        alignItems: ['alignleft', 'aligncenter', 'alignright', 'alignjustify'],
-        editor: null,
+        dependencies: [ 'advlist' ],
+        listItems:    [ 'bullist', 'numlist', 'outdent', 'indent' ],
+        alignItems:   [ 'alignleft', 'aligncenter', 'alignright', 'alignjustify' ],
+        editor:       null,
 
         /**
          * Plugin Initialization

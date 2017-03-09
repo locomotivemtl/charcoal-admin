@@ -133,15 +133,15 @@
             switch (component_type) {
                 case 'widgets':
                     super_class = Charcoal.Admin.Widget;
-                break;
+                    break;
 
                 case 'property_inputs':
                     super_class = Charcoal.Admin.Property;
-                break;
+                    break;
 
                 case 'templates':
                     super_class = Charcoal.Admin.Template;
-                break;
+                    break;
             }
 
             for (var i = 0, len = this.components[component_type].length; i < len; i++) {
@@ -166,7 +166,7 @@
                             // Automatic call on superclass
                             Charcoal.Admin.Widget.call(component, component_data);
                             component.init();
-                        break;
+                            break;
                     }
 
                 } catch (error) {

@@ -1,3 +1,4 @@
+/* globals commonL10n */
 /**
  * Quick form is called by JS and must be
  * added in the component manager manually.
@@ -69,10 +70,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     this.disable_form($form, $trigger);
 
     this.xhr = $.ajax({
-        type: 'POST',
-        url: this.request_url(),
-        data: form_data,
-        dataType: 'json',
+        type:        'POST',
+        url:         this.request_url(),
+        data:        form_data,
+        dataType:    'json',
         processData: false,
         contentType: false,
     });
@@ -104,11 +105,9 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
     if (response.next_url) {
         // @todo "dynamise" the label
         Charcoal.Admin.feedback().add_action({
-            label: 'Continuer',
+            label: commonL10n.continue,
             callback: function () {
-                window.location.href =
-                    Charcoal.Admin.admin_url() +
-                    response.next_url;
+                window.location.href = Charcoal.Admin.admin_url() + response.next_url;
             }
         });
     }

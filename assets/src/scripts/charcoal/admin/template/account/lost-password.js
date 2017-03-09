@@ -1,11 +1,14 @@
+/* globals authL10n */
 /**
-* charcoal/admin/template/account/lost-password
-*
-* Require:
-* - jQuery
-* - Boostrap3
-* - Boostrap3-Dialog
-*/
+ * charcoal/admin/template/account/lost-password
+ *
+ * Require:
+ * - jQuery
+ * - Boostrap3
+ * - Boostrap3-Dialog
+ *
+ * @todo Implement feedback from server-side
+ */
 
 Charcoal.Admin.Template_Account_LostPassword = function (opts)
 {
@@ -27,33 +30,28 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
 {
+    $('#lost-password-form').on('submit.charcoal.password', function (event) {
+        event.preventDefault();
 
-    $('.js-lost-password-submit').on('click', function (e) {
-        e.preventDefault();
+        var $form = $(this);
+        var url   = ($form.prop('action') || window.location.href);
+        var data  = $form.serialize();
 
-        var form = $(this).parents('form');
-        console.debug(form.attr('action'));
-        var url = Charcoal.Admin.admin_url() + 'account/lost-password';
-        var data = form.serialize();
         $.post(url, data, function (response) {
             window.console.debug(response);
             BootstrapDialog.show({
-                title:   'Password request sent',
-                message: 'If any user matches the username or ' +
-                'email given, a password request link will be sent ' +
-                'to the email adress linked with account. ' +
-                '\n' +
-                'The link will be valid for 15 minutes.',
-                type:    BootstrapDialog.TYPE_SUCCESS,
+                title:    authL10n.lostPassword,
+                message:  authL10n.lostPassSuccess,
+                type:     BootstrapDialog.TYPE_SUCCESS,
                 onhidden: function () {
                     window.location.reload();
                 }
             });
         }, 'json').fail(function () {
             BootstrapDialog.show({
-                title:   'Lost password error',
-                message: 'There was an error attempting to retrieve lost password.',
-                type:    BootstrapDialog.TYPE_DANGER,
+                title:    authL10n.lostPassword,
+                message:  authL10n.lostPassFailed,
+                type:     BootstrapDialog.TYPE_DANGER,
                 onhidden: function () {
                     window.grecaptcha.reset();
                 }

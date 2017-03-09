@@ -1,13 +1,14 @@
+/* globals commonL10n,tableWidgetL10n,widgetL10n */
 /**
-* Table widget used for listing collections of objects
-* charcoal/admin/widget/table
-*
-* Require:
-* - jQuery
-* - Boostrap3-Dialog
-*
-* @param  {Object}  opts Options for widget
-*/
+ * Table widget used for listing collections of objects
+ * charcoal/admin/widget/table
+ *
+ * Require:
+ * - jQuery
+ * - Boostrap3-Dialog
+ *
+ * @param  {Object}  opts Options for widget
+ */
 
 Charcoal.Admin.Widget_Table = function ()
 {
@@ -31,8 +32,8 @@ Charcoal.Admin.Widget_Table.prototype.constructor = Charcoal.Admin.Widget_Table;
 Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 /**
-* Necessary for a widget.
-*/
+ * Necessary for a widget.
+ */
 Charcoal.Admin.Widget_Table.prototype.init = function ()
 {
     this.set_properties().create_rows().bind_events();
@@ -89,7 +90,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 
         $.post(url, data, function (response) {
             var dlg = BootstrapDialog.show({
-                    title:   'Quick Create',
+                    title:   tableWidgetL10n.quickCreate,
                     message: '…',
                     nl2br:   false
                 });
@@ -107,7 +108,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                 dlg.setMessage(response.widget_html);
             } else {
                 dlg.setType(BootstrapDialog.TYPE_DANGER);
-                dlg.setMessage('Error');
+                dlg.setMessage(commonL10n.errorOccurred);
             }
         }, 'json');
 
@@ -156,7 +157,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         //console.debug(this.title());
 
         that.widget_dialog({
-            title: 'Importer une liste',
+            title: tableWidgetL10n.importList,
             widget_type: widget_type,
             widget_options: {
                 obj_type: that.obj_type,
@@ -235,11 +236,11 @@ Charcoal.Admin.Widget_Table.prototype.sublist = function ()
 };
 
 /**
-* As it says, it ADDs a filter to the already existing list
-* @param object
-* @return this chainable
-* @see set_filters
-*/
+ * As it says, it ADDs a filter to the already existing list
+ * @param object
+ * @return this chainable
+ * @see set_filters
+ */
 Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
 {
     var filters = this.get_filters();
@@ -258,17 +259,17 @@ Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
 };
 
 /**
-* This will overwrite existing filters
-*/
+ * This will overwrite existing filters
+ */
 Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters)
 {
     this.filters = filters;
 };
 
 /**
-* Getter
-* @return {Object | null} filters
-*/
+ * Getter
+ * @return {Object | null} filters
+ */
 Charcoal.Admin.Widget_Table.prototype.get_filters = function ()
 {
     return this.filters;
@@ -291,8 +292,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
 };
 
 /**
-*
-*/
+ *
+ */
 Charcoal.Admin.Widget_Table.prototype.reload = function (callback)
 {
     // Call supra class
@@ -303,13 +304,13 @@ Charcoal.Admin.Widget_Table.prototype.reload = function (callback)
 };
 
 /**
-* Load a widget (via ajax) into a dialog
-*
-* ## Options
-* - `title`
-* - `widget_type`
-* - `widget_options`
-*/
+ * Load a widget (via ajax) into a dialog
+ *
+ * ## Options
+ * - `title`
+ * - `widget_type`
+ * - `widget_options`
+ */
 Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
 {
     //return new Charcoal.Admin.Widget(opts).dialog(opts);
@@ -334,7 +335,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                     widget_type: widget_type,
                     widget_options: widget_options
                 },
-                $message = $('<div>Loading…</div>');
+                $message = $('<div>' + widgetL10n.loading + '</div>');
 
             dialog.getModalBody().on(
                 'click.charcoal.bs.dialog',
@@ -356,7 +357,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                     dialog.setMessage(response.widget_html);
                 } else {
                     dialog.setType(BootstrapDialog.TYPE_DANGER);
-                    dialog.setMessage('Error');
+                    dialog.setMessage(commonL10n.errorOccurred);
                 }
             });
 
@@ -366,8 +367,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
 };
 
 /**
-* Table_Row object
-*/
+ * Table_Row object
+ */
 Charcoal.Admin.Widget_Table.Table_Row = function (container, row)
 {
     this.widget_table = container;
@@ -414,7 +415,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
 
     $.post(this.load_url, data, function (response) {
         var dlg = BootstrapDialog.show({
-            title:   'Quick Edit',
+            title:   tableWidgetL10n.quickEdit,
             message: '…',
             nl2br:   false
         });
@@ -432,7 +433,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.quick_edit = function ()
             dlg.setMessage(response.widget_html);
         } else {
             dlg.setType(BootstrapDialog.TYPE_DANGER);
-            dlg.setMessage('Error');
+            dlg.setMessage(commonL10n.errorOccurred);
         }
     }, 'json');
 };
@@ -464,11 +465,10 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
     var that = this;
 
     BootstrapDialog.confirm({
-        title: 'Confirmer la suppression',
-        type: BootstrapDialog.TYPE_DANGER,
-        message:'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
-        btnOKLabel: 'Supprimer',
-        btnCancelLabel: 'Annuler',
+        title:      tableWidgetL10n.confirmDeletion,
+        type:       BootstrapDialog.TYPE_DANGER,
+        message:    $('<p>' + commonL10n.confirmAction + '</p><p>' + commonL10n.cantUndo + '</p>'),
+        btnOKLabel: commonL10n.delete,
         callback: function (result) {
             if (result) {
                 var url = that.delete_url;
@@ -476,6 +476,7 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
                     obj_type: that.obj_type,
                     obj_id: that.obj_id
                 };
+
                 $.ajax({
                     method: 'POST',
                     url: url,
@@ -486,12 +487,11 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
                     if (response.success) {
                         $(that.element).remove();
                     } else {
-                        window.alert('Erreur. Impossible de supprimer cet objet.');
+                        window.alert(tableWidgetL10n.deleteFailed);
                     }
                 });
             }
         }
     });
-
 };
 

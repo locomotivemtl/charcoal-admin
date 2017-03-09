@@ -131,14 +131,7 @@ class LostPasswordAction extends AdminAction
             return $response->withStatus(400);
         }
 
-        $doneMessage = strtr(
-            $this->translator()->translation(
-                'Instructions to reset your password have been sent to the email address registered to {{ username }}.'
-            ),
-            [
-                '{{ username }}' => $username
-            ]
-        );
+        $doneMessage = $this->translator()->translation('If a registered user matches the username or email address given, instructions to reset your password have been sent to the email address registered with that account.');
         $failMessage = $this->translator()->translation('An error occurred while processing the password reset request.');
 
         $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;

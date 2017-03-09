@@ -1,3 +1,4 @@
+/* globals widgetL10n */
 /**
  * charcoal/admin/widget
  * This should be the base for all widgets
@@ -23,7 +24,6 @@
  * - `init()`
  * - `reload( callback )`
  */
-
 Charcoal.Admin.Widget = function (opts) {
     this._element = undefined;
     this._id      = undefined;
@@ -238,12 +238,18 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
     };
 
     var dialogOptions = $.extend({}, defaultOptions, userOptions);
+    var alertTemplate = '<div class="alert alert-{type}" role="alert">{text}</div>';
 
     dialogOptions.message = function (dialog) {
         var xhr,
             url      = Charcoal.Admin.admin_url() + 'widget/load',
             data     = dialog_opts,
-            $message = $('<div>Loading...</div>');
+            $message = $(
+                alertTemplate.replaceMap({
+                    '{type}': 'warning',
+                    '{text}': widgetL10n.loading
+                })
+            );
 
         if (!showHeader) {
             dialog.getModalHeader().addClass('hidden');
@@ -263,23 +269,23 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         );
 
         xhr = $.ajax({
-            method: 'POST',
-            url: url,
-            data: data,
+            method:   'POST',
+            url:      url,
+            data:     data,
             dataType: 'json'
         });
 
         xhr.then(function (response, textStatus, jqXHR) {
-            if (!response || !response.success) {
-                if (response.feedbacks) {
-                    return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
-                } else {
-                    return $.Deferred().reject(jqXHR, textStatus, 'An unknown error occurred.');
+                if (!response || !response.success) {
+                    if (response.feedbacks) {
+                        return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                    } else {
+                        return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+                    }
                 }
-            }
 
-            return $.Deferred().resolve(response, textStatus, jqXHR);
-        })
+                return $.Deferred().resolve(response, textStatus, jqXHR);
+            })
             .done(function (response/*, textStatus, jqXHR*/) {
                 dialog.setMessage(response.widget_html);
 
@@ -291,7 +297,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 dialog.setType(BootstrapDialog.TYPE_DANGER);
-                dialog.setMessage('<div class="alert alert-danger" role="alert">An unknown error occurred.</div>');
+                dialog.setMessage(widgetL10n.loadingFailed);
 
                 var errorHtml = '';
 
@@ -307,13 +313,17 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
                             if (error.level === 'error') {
                                 error.level = 'danger';
                             }
-                            errorHtml += '<div class="alert alert-' + error.level + '" role="alert">' +
-                                error.message +
-                                '</div>';
+                            errorHtml += alertTemplate.replaceMap({
+                                '{type}': error.level,
+                                '{text}': error.message
+                            });
                         }
                     });
                 } else if ($.type(errorThrown) === 'string') {
-                    errorHtml = '<div class="alert alert-danger" role="alert">' + errorThrown + '</div>';
+                    errorHtml = alertTemplate.replaceMap({
+                        '{type}': 'danger',
+                        '{text}': errorThrown
+                    });
                 }
 
                 if (errorHtml) {
@@ -331,31 +341,21 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
 
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
     var defaults = {
-        title: 'Voulez-vous vraiment effectuer cette action?',
-        confirm_label: 'Oui',
-        cancel_label: 'Non'
+        type:     BootstrapDialog.TYPE_DANGER,
+        callback: function (result) {
+            if (result) {
+                if (typeof confirmed_callback === 'function') {
+                    confirmed_callback();
+                }
+            } else {
+                if (typeof cancel_callback === 'function') {
+                    cancel_callback();
+                }
+            }
+        }
     };
 
     var opts = $.extend(defaults, dialog_opts);
 
-    BootstrapDialog.show({
-        title: opts.title,
-        buttons: [{
-            label: opts.cancel_label,
-            action: function (dialog) {
-                if (typeof cancel_callback === 'function') {
-                    cancel_callback();
-                }
-                dialog.close();
-            }
-        }, {
-            label: opts.confirm_label,
-            action: function (dialog) {
-                if (typeof confirmed_callback === 'function') {
-                    confirmed_callback();
-                }
-                dialog.close();
-            }
-        }]
-    });
+    BootstrapDialog.confirm(opts);
 };

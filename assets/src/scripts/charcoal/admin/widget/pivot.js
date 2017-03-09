@@ -1,10 +1,11 @@
+/* globals commonL10n,pivotWidgetL10n */
 /**
-* Pivot widget
-* You can associate a specific object to another
-* using this widget.
-*
-* @see widget.js (Charcoal.Admin.Widget)
-*/
+ * Pivot widget
+ * You can associate a specific object to another
+ * using this widget.
+ *
+ * @see widget.js (Charcoal.Admin.Widget)
+ */
 Charcoal.Admin.Widget_Pivot = function ()
 {
     this.dirty = false;
@@ -99,7 +100,7 @@ Charcoal.Admin.Widget_Pivot.prototype.listeners = function ()
             if (!type) {
                 return false;
             }
-            var title = $(this).data('title') || 'Edit';
+            var title = $(this).data('title') || pivotWidgetL10n.editObject;
             that.create_pivot_dialog(type, title, 0, function (response) {
                 if (response.success) {
                     response.obj.id = response.obj_id;
@@ -127,15 +128,19 @@ Charcoal.Admin.Widget_Pivot.prototype.listeners = function ()
 
                     that.confirm(
                         {
-                            title: 'Are you certain that you want to remove this item?'
-                        },
-                        function () {
-                            that.remove_pivot(_this.data('id'), function () {
-                                that.reload();
-                            });
+                            title:      pivotWidgetL10n.confirmRemoval,
+                            message:    commonL10n.confirmAction,
+                            btnOKLabel: commonL10n.removeObject,
+                            callback:   function (result) {
+                                if (result) {
+                                    that.remove_pivot(_this.data('id'), function () {
+                                        that.reload();
+                                    });
+                                }
+                            }
                         }
                     );
-                break;
+                    break;
             }
         });
 };
@@ -200,8 +205,8 @@ Charcoal.Admin.Widget_Pivot.prototype.add = function (obj)
     var $template = this.element().find('.js-pivot-template').clone();
     $template.find('.js-pivot').data('id', obj.id).data('type', obj.type);
     this.element().find('.js-pivot-sortable').find('.js-grid-container').append($template);
-    return this;
 
+    return this;
 };
 
 /**

@@ -88,6 +88,11 @@ Audio Property Input
         value="{{alert.voiceAudio}}">
 </div>
 
+{{# addJsRequirement }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/audio.js }}
+</script>
+{{/ addJsRequirement }}
 
 {{#addJs}}
 <script>

@@ -1,12 +1,12 @@
 /**
-* Search widget used for filtering a list
-* charcoal/admin/widget/search
-*
-* Require:
-* - jQuery
-*
-* @param  {Object}  opts Options for widget
-*/
+ * Search widget used for filtering a list
+ * charcoal/admin/widget/search
+ *
+ * Require:
+ * - jQuery
+ *
+ * @param  {Object}  opts Options for widget
+ */
 Charcoal.Admin.Widget_Search = function (opts)
 {
     this._elem = undefined;
@@ -36,10 +36,10 @@ Charcoal.Admin.Widget_Search.prototype.constructor = Charcoal.Admin.Widget_Searc
 Charcoal.Admin.Widget_Search.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 /**
-* Whats the widget that should be refreshed?
-* A list, a table? Definition of a widget includes:
-* - Widget type
-*/
+ * Whats the widget that should be refreshed?
+ * A list, a table? Definition of a widget includes:
+ * - Widget type
+ */
 Charcoal.Admin.Widget_Search.prototype.set_remote_widget = function ()
 {
     // Do something about this.
@@ -65,9 +65,9 @@ Charcoal.Admin.Widget_Search.prototype.init = function ()
 };
 
 /**
-* Submit the search filters as expected to all widgets
-* @return this (chainable);
-*/
+ * Submit the search filters as expected to all widgets
+ * @return this (chainable);
+ */
 Charcoal.Admin.Widget_Search.prototype.submit = function ()
 {
     var manager = Charcoal.Admin.manager();
@@ -83,9 +83,9 @@ Charcoal.Admin.Widget_Search.prototype.submit = function ()
 };
 
 /**
-* Resets the search filters
-* @return this (chainable);
-*/
+ * Resets the search filters
+ * @return this (chainable);
+ */
 Charcoal.Admin.Widget_Search.prototype.undo = function ()
 {
     this.element().find('input').val('');
@@ -94,12 +94,11 @@ Charcoal.Admin.Widget_Search.prototype.undo = function ()
 };
 
 /**
-* Dispatches the event to all widgets that can listen to it
-* @return this (chainable)
-*/
+ * Dispatches the event to all widgets that can listen to it
+ * @return this (chainable)
+ */
 Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
 {
-
     if (!widget) {
         return this;
     }
@@ -124,16 +123,16 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
     for (; i < total; i++) {
         var single_filter = {};
         single_filter[properties[i]] = {
-            val: '%' + val + '%',
+            val:      '%' + val + '%',
             property: properties[i],
             operator: 'LIKE',
-            operand: 'OR'
+            operand:  'OR'
         };
 
         widget.add_filter(single_filter);
     }
 
-    //    widget.add_search(val, properties);
+    // widget.add_search(val, properties);
 
     widget.reload();
 

@@ -1,5 +1,4 @@
-/* global URLSearchParams */
-
+/* globals commonL10n,formWidgetL10n,URLSearchParams */
 /**
  * Form widget that manages data sending
  * charcoal/admin/widget/form
@@ -142,10 +141,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form) {
     // });
 
     this.xhr = $.ajax({
-        type: 'POST',            // ($form.prop('method') || 'POST')
-        url: this.request_url(),  // ($form.data('action') || this.request_url())
-        data: form_data,
-        dataType: 'json',
+        type:        'POST',            // ($form.prop('method') || 'POST')
+        url:         this.request_url(),  // ($form.data('action') || this.request_url())
+        data:        form_data,
+        dataType:    'json',
         processData: false,
         contentType: false,
     });
@@ -162,7 +161,7 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, r
         if (response.feedbacks) {
             return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
         } else {
-            return $.Deferred().reject(jqXHR, textStatus, 'An unknown error occurred.');
+            return $.Deferred().reject(jqXHR, textStatus, commonL10n.errorOccurred);
         }
     }
 
@@ -177,11 +176,9 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
     if (response.next_url) {
         // @todo "dynamise" the label
         Charcoal.Admin.feedback().add_action({
-            label: 'Continuer',
+            label: commonL10n.continue,
             callback: function () {
-                window.location.href =
-                    Charcoal.Admin.admin_url() +
-                    response.next_url;
+                window.location.href = Charcoal.Admin.admin_url() + response.next_url;
             }
         });
     }
@@ -190,11 +187,8 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
         this.suppress_feedback = true;
 
         if (response.next_url) {
-            window.location.href =
-                Charcoal.Admin.admin_url() +
-                response.next_url;
+            window.location.href = Charcoal.Admin.admin_url() + response.next_url;
         } else {
-
             var params = new URLSearchParams(window.location.search);
 
             window.location.href =
@@ -212,12 +206,18 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
     if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
         Charcoal.Admin.feedback(jqXHR.responseJSON.feedbacks);
     } else {
-        var message = (this.is_new_object ? 'The object could not be saved: ' : 'The object could not be updated: ');
-        var error   = errorThrown || 'Unknown Error';
+        var message = (this.is_new_object ? formWidgetL10n.createFailed : formWidgetL10n.updateFailed);
+        var error   = errorThrown || commonL10n.errorOccurred;
 
         Charcoal.Admin.feedback([{
-            msg: message + error,
-            level: 'error'
+            message: message + commonL10n.errorTemplate + error,
+            /*
+            message: commonL10n.errorTemplate.replaceMap({
+                '{{ errorMessage }}': message,
+                '{{ errorThrown }}':  error
+            }),
+            */
+            level:   'error'
         }]);
     }
 };
@@ -294,11 +294,10 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
 
     //console.debug(form);
     BootstrapDialog.confirm({
-        title: 'Confirmer la suppression',
-        type: BootstrapDialog.TYPE_DANGER,
-        message: 'Êtes-vous sûr de vouloir supprimer cet objet? Cette action est irréversible.',
-        btnOKLabel: 'Supprimer',
-        btnCancelLabel: 'Annuler',
+        title:          formWidgetL10n.confirmDeletion,
+        type:           BootstrapDialog.TYPE_DANGER,
+        message:        $('<p>' + commonL10n.confirmAction + '</p><p>' + commonL10n.cantUndo + '</p>'),
+        btnOKLabel:     commonL10n.delete,
         callback: function (result) {
             if (result) {
                 var url  = Charcoal.Admin.admin_url() + 'object/delete';
@@ -316,7 +315,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
                     if (response.success) {
                         window.location.href = successUrl;
                     } else {
-                        window.alert('Erreur. Impossible de supprimer cet objet.');
+                        window.alert(formWidgetL10n.deleteFailed);
                     }
                 });
             }

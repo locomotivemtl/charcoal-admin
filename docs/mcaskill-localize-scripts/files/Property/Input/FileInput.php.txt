@@ -69,6 +69,7 @@ class FileInput extends AbstractPropertyInput
         parent::setDependencies($container);
 
         $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['base-url']->withBasePath($container['admin/config']['base_path']));
     }
 
     /**

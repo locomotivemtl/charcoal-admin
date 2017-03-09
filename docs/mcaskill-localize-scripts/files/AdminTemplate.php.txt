@@ -397,8 +397,10 @@ class AdminTemplate extends AbstractTemplate implements
             $mainMenu = $mainMenuFromRequest;
         }
 
-        $menu   = $this->menuBuilder->build([]);
-        $svgSrc = 'assets/admin/images/svgs.svg#icon-';
+        $menu    = $this->menuBuilder->build([]);
+        $svgSrc  = 'assets/admin/images/svgs.svg';
+        $svgFrag = 'icon-';
+        $svgUri  = $this->baseUrl()->withPath($svgSrc);
         foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
             $menuItem['menu'] = $menu;
             $item = $this->menuItemBuilder->build($menuItem);
@@ -425,9 +427,12 @@ class AdminTemplate extends AbstractTemplate implements
             $menuItem['url'] = $url;
 
             if (isset($menuItem['icon'])) {
-                $icon = $this->withBaseUrl($menuItem['icon']);
+                $icon = $menuItem['icon'];
+                if ($this->isRelativeUri($icon)) {
+                    $icon = (string)$svgUri->withFragment($svgFrag.$icon);
+                }
             } else {
-                $icon = $this->withBaseUrl($svgSrc.'contents');
+                $icon = (string)$svgUri->withFragment($svgFrag.'contents');
             }
 
             if (is_string($icon) && strpos($icon, '.svg') > 0) {

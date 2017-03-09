@@ -74,13 +74,22 @@ trait BaseUrlTrait
      * Prepend the base URI to the given path.
      *
      * @param  string $uri A URI path to wrap.
-     * @return UriInterface
+     * @return UriInterface|null
      */
     public function withBaseUrl($uri)
     {
+        if (!isset($uri)) {
+            return null;
+        }
+
         $uri = strval($uri);
         if ($this->isRelativeUri($uri)) {
-            return $this->baseUrl()->withPath($uri);
+            $parts = parse_url($uri);
+            $path  = isset($parts['path']) ? $parts['path'] : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+
+            return $this->baseUrl()->withPath($path)->withQuery($query)->withFragment($hash);
         }
 
         return $uri;
@@ -124,13 +133,22 @@ trait BaseUrlTrait
      * Prepend the administration-area URI to the given path.
      *
      * @param  string $uri A URI path to wrap.
-     * @return UriInterface
+     * @return UriInterface|null
      */
     public function withAdminUrl($uri)
     {
+        if (!isset($uri)) {
+            return null;
+        }
+
         $uri = strval($uri);
         if ($this->isRelativeUri($uri)) {
-            return $this->adminUrl()->withPath($uri);
+            $parts = parse_url($uri);
+            $path  = isset($parts['path']) ? $parts['path'] : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+
+            return $this->adminUrl()->withPath($path)->withQuery($query)->withFragment($hash);
         }
 
         return $uri;
@@ -142,7 +160,7 @@ trait BaseUrlTrait
      * @param  string $uri A URI path to test.
      * @return boolean
      */
-    private function isRelativeUri($uri)
+    protected function isRelativeUri($uri)
     {
         if ($uri && !parse_url($uri, PHP_URL_SCHEME)) {
             if (!in_array($uri[0], [ '/', '#', '?' ])) {

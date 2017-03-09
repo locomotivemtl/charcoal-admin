@@ -399,12 +399,11 @@ trait ActionContainerTrait
                 $url = preg_replace('~\{\{\s*(obj_)?type\s*\}\}~', $objType, $url);
             }
 
-            return $url;
+            $url = $this->withAdminUrl($url);
         } elseif ($renderer instanceof ViewableInterface) {
             $url = $renderer->renderTemplate($url);
+            $url = $this->withAdminUrl($url);
         }
-
-        $url = $this->withAdminUrl($url);
 
         return $url;
     }

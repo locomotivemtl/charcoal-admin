@@ -18,9 +18,6 @@ use Pimple\Container;
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
-// From 'charcoal-translator'
-use Charcoal\Translator\Translation;
-
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewableTrait;

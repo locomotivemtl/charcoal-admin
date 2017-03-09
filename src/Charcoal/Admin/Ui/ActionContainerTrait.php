@@ -399,13 +399,17 @@ trait ActionContainerTrait
                 $url = preg_replace('~\{\{\s*(obj_)?type\s*\}\}~', $objType, $url);
             }
 
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
+
             return $url;
         } elseif ($renderer instanceof ViewableInterface) {
             $url = $renderer->renderTemplate($url);
-        }
 
-        if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
-            $url = $this->adminUrl().$url;
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
         }
 
         return $url;

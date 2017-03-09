@@ -54,6 +54,11 @@ class RoutableClass implements
         return $this->id;
     }
 
+    public function key()
+    {
+        return 'id';
+    }
+
     public function objType()
     {
         return 'charcoal/tests/object/routable-class';

@@ -14,7 +14,7 @@ use Pimple\Container;
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translator;
+use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-user'
@@ -71,7 +71,7 @@ class AdminWidget extends AbstractWidget implements
     private $ident = '';
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $label
+     * @var Translation|string|null $label
      */
     private $label;
 
@@ -466,7 +466,7 @@ class AdminWidget extends AbstractWidget implements
     }
 
     /**
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function label()
     {

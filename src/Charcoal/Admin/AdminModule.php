@@ -70,8 +70,7 @@ class AdminModule extends AbstractModule
     {
         $config    = $this->config();
         $container = $this->app()->getContainer();
-        $baseUrl   = $container['base-url'];
-        $adminUrl  = rtrim($baseUrl, '/\\').'/'.trim($config['base_path'], '/\\');
+        $adminUrl  = $container['base-url']->withBasePath($config['base_path']);
 
         if (isset($config['handlers'])) {
 

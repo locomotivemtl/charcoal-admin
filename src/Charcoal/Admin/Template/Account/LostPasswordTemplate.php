@@ -37,6 +37,14 @@ class LostPasswordTemplate extends AdminTemplate
     }
 
     /**
+     * @return string
+     */
+    public function urlLogin()
+    {
+        return $this->adminUrl().'login';
+    }
+
+    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation|string|null

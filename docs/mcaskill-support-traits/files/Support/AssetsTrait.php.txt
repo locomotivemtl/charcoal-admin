@@ -1,0 +1,11 @@
+<?php
+
+namespace Charcoal\Admin\Support;
+
+/**
+ * Admin Assets Trait
+ */
+trait AssetsTrait
+{
+}
+

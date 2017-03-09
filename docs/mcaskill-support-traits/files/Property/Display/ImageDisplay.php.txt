@@ -1,0 +1,46 @@
+<?php
+
+namespace Charcoal\Admin\Property\Display;
+
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Ui\ImageAttributesTrait;
+use Charcoal\Admin\Property\AbstractPropertyDisplay;
+use Charcoal\Admin\Support\BaseUrlTrait;
+
+/**
+ * Image Display Property
+ */
+class ImageDisplay extends AbstractPropertyDisplay
+{
+    use BaseUrlTrait;
+    use ImageAttributesTrait;
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['base-url']->withBasePath($container['admin/config']['base_path']));
+    }
+
+    /**
+     * Retrieve display value.
+     *
+     * @see    \Charcoal\Admin\Property\Display\LinkDisplay::hrefVal()
+     * @return string
+     */
+    public function displayVal()
+    {
+        return $this->withBaseUrl(parent::displayVal());
+    }
+}
+

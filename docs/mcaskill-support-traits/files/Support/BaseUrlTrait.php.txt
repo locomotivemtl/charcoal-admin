@@ -1,0 +1,174 @@
+<?php
+
+namespace Charcoal\Admin\Support;
+
+use ArrayAccess;
+use RuntimeException;
+use InvalidArgumentException;
+
+// From PSR-7
+use Psr\Http\Message\UriInterface;
+
+// From 'charcoal-config'
+use Charcoal\Config\ConfigInterface;
+use Charcoal\Config\EntityInterface;
+
+// From 'charcoal-app'
+use Charcoal\App\AppConfig;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Config as AdminConfig;
+
+/**
+ * Admin Support Trait
+ */
+trait BaseUrlTrait
+{
+    /**
+     * The base URI.
+     *
+     * @var UriInterface|null
+     */
+    private $baseUrl;
+
+    /**
+     * The base admin URI.
+     *
+     * @var UriInterface|null
+     */
+    private $adminUrl;
+
+    /**
+     * Set the base URI of the project.
+     *
+     * @see    \Charcoal\App\ServiceProvider\AppServiceProvider `$container['base-url']`
+     * @param  UriInterface $uri The base URI.
+     * @return self
+     */
+    protected function setBaseUrl(UriInterface $uri)
+    {
+        $this->baseUrl = $uri;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the base URI of the project.
+     *
+     * @throws RuntimeException If the base URI is missing.
+     * @return UriInterface|null
+     */
+    public function baseUrl()
+    {
+        if (!isset($this->baseUrl)) {
+            throw new RuntimeException(sprintf(
+                'The base URI is not defined for [%s]',
+                get_class($this)
+            ));
+        }
+
+        return $this->baseUrl;
+    }
+
+    /**
+     * Prepend the base URI to the given path.
+     *
+     * @param  string $uri A URI path to wrap.
+     * @return UriInterface|null
+     */
+    public function withBaseUrl($uri)
+    {
+        if (!isset($uri)) {
+            return null;
+        }
+
+        $uri = strval($uri);
+        if ($this->isRelativeUri($uri)) {
+            $parts = parse_url($uri);
+            $path  = isset($parts['path']) ? $parts['path'] : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+
+            return $this->baseUrl()->withPath($path)->withQuery($query)->withFragment($hash);
+        }
+
+        return $uri;
+    }
+
+    /**
+     * Set the URI of the administration-area.
+     *
+     * @see    \Charcoal\App\ServiceProvider\AppServiceProvider `$container['base-url']`
+     * @param  UriInterface $uri The base URI.
+     * @return self
+     */
+    protected function setAdminUrl(UriInterface $uri)
+    {
+        $this->adminUrl = $uri;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the URI of the administration-area.
+     *
+     * @return UriInterface|null
+     */
+    public function adminUrl()
+    {
+        if (!isset($this->adminUrl)) {
+            $uri  = $this->baseUrl();
+            $path = $this->adminConfig('base_path');
+            if ($path) {
+                $uri = $uri->withBasePath($path);
+            }
+
+            $this->setAdminUrl($uri);
+        }
+
+        return $this->adminUrl;
+    }
+
+    /**
+     * Prepend the administration-area URI to the given path.
+     *
+     * @param  string $uri A URI path to wrap.
+     * @return UriInterface|null
+     */
+    public function withAdminUrl($uri)
+    {
+        if (!isset($uri)) {
+            return null;
+        }
+
+        $uri = strval($uri);
+        if ($this->isRelativeUri($uri)) {
+            $parts = parse_url($uri);
+            $path  = isset($parts['path']) ? $parts['path'] : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+
+            return $this->adminUrl()->withPath($path)->withQuery($query)->withFragment($hash);
+        }
+
+        return $uri;
+    }
+
+    /**
+     * Determine if the given URI is relative.
+     *
+     * @param  string $uri A URI path to test.
+     * @return boolean
+     */
+    protected function isRelativeUri($uri)
+    {
+        if ($uri && !parse_url($uri, PHP_URL_SCHEME)) {
+            if (!in_array($uri[0], [ '/', '#', '?' ])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+

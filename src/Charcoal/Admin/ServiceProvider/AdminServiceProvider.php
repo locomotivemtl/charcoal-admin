@@ -234,7 +234,9 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container->extend('view/mustache/helpers', function (array $helpers, Container $container) {
             $adminUrl = clone $container['base-url'];
             if ($container['admin/config']['base_path']) {
-                $adminUrl = $adminUrl->withBasePath($container['admin/config']['base_path']);
+                $basePath  = rtrim($adminUrl->getBasePath(), '/');
+                $adminPath = ltrim($container['admin/config']['base_path'], '/');
+                $adminUrl  = $adminUrl->withBasePath($basePath.'/'.$adminPath);
             }
 
             $urls = [

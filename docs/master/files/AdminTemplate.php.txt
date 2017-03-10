@@ -520,6 +520,8 @@ class AdminTemplate extends AbstractTemplate implements
                     'ident' => $options
                 ]
             ];
+        } elseif (!isset($options['widget_options']['ident'])) {
+            $options['widget_options']['ident'] = null;
         }
 
         $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);

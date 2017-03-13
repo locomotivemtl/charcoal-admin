@@ -773,7 +773,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @param  boolean $show Show (TRUE) or hide (FALSE) the actions.
      * @return TableWidget Chainable
      */
-    public function setShowistActions($show)
+    public function setShowListActions($show)
     {
         $this->showListActions = !!$show;
 

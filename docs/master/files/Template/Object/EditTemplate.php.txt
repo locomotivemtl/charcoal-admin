@@ -127,23 +127,33 @@ class EditTemplate extends AdminTemplate implements
      */
     private function objEditDashboardConfig()
     {
-        $adminMetadata = $this->objAdminMetadata();
+        $adminMetadata  = $this->objAdminMetadata();
+        $dashboardIdent = $this->dashboardIdent();
 
-        $dashboardIdent  = $this->dashboardIdent();
-
-        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
+        if (empty($dashboardIdent)) {
             $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
         }
 
-        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
-            if (!isset($adminMetadata['default_edit_dashboard'])) {
-                throw new Exception(sprintf(
-                    'No default edit dashboard defined in admin metadata for %s',
-                    get_class($this->obj())
-                ));
-            }
+        if (empty($dashboardIdent)) {
+            if (!$this->objId()) {
+                if (!isset($adminMetadata['default_create_dashboard'])) {
+                    throw new Exception(sprintf(
+                        'No default create dashboard defined in admin metadata for %s',
+                        get_class($this->obj())
+                    ));
+                }
 
-            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+                $dashboardIdent = $adminMetadata['default_create_dashboard'];
+            } else {
+                if (!isset($adminMetadata['default_edit_dashboard'])) {
+                    throw new Exception(sprintf(
+                        'No default edit dashboard defined in admin metadata for %s',
+                        get_class($this->obj())
+                    ));
+                }
+
+                $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+            }
         }
 
         if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
@@ -199,12 +209,22 @@ class EditTemplate extends AdminTemplate implements
             }
         }
 
-        if (!$objLabel && isset($metadata['labels']['edit_item'])) {
-            $objLabel = $this->translator()->translation($metadata['labels']['edit_item']);
-        }
+        if ($objId) {
+            if (!$objLabel && isset($metadata['labels']['edit_item'])) {
+                $objLabel = $this->translator()->translation($metadata['labels']['edit_item']);
+            }
 
-        if (!$objLabel && isset($metadata['labels']['edit_model'])) {
-            $objLabel = $this->translator()->translation($metadata['labels']['edit_model']);
+            if (!$objLabel && isset($metadata['labels']['edit_model'])) {
+                $objLabel = $this->translator()->translation($metadata['labels']['edit_model']);
+            }
+        } else {
+            if (!$objLabel && isset($metadata['labels']['new_item'])) {
+                $objLabel = $this->translator()->translation($metadata['labels']['new_item']);
+            }
+
+            if (!$objLabel && isset($metadata['labels']['new_model'])) {
+                $objLabel = $this->translator()->translation($metadata['labels']['new_model']);
+            }
         }
 
         if (!$objLabel) {

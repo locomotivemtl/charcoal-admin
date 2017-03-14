@@ -1,6 +1,6 @@
 /*!
  * elFinder - file manager for web
- * Version 2.1.21 (2017-02-08)
+ * Version 2.1.22 (2017-02-25)
  * http://elfinder.org
  * 
  * Copyright 2009-2017, Studio 42
@@ -6906,7 +6906,7 @@ if (!Object.keys) {
  *
  * @type String
  **/
-elFinder.prototype.version = '2.1.21';
+elFinder.prototype.version = '2.1.22';
 
 
 
@@ -8104,7 +8104,7 @@ elFinder.prototype._options.commandsOptions.netmount = {
 			port     : $('<input type="text" placeholder="21"/>'),
 			path     : $('<input type="text" value="/"/>'),
 			user     : $('<input type="text"/>'),
-			pass     : $('<input type="password"/>'),
+			pass     : $('<input type="password" autocomplete="new-password"/>'),
 			encoding : $('<input type="text" placeholder="Optional"/>'),
 			locale   : $('<input type="text" placeholder="Optional"/>')
 		}
@@ -17805,7 +17805,9 @@ elFinder.prototype.commands.fullscreen = function() {
 			html.push('</div>');
 			// end help
 		},
+		useDebug = false,
 		debug = function() {
+			useDebug = true;
 			// debug tab
 			html.push('<div id="'+fm.namespace+'-help-debug" class="ui-tabs-panel ui-widget-content ui-corner-bottom">');
 			html.push('<div class="ui-widget-content elfinder-help-debug"><ul></ul></div>');
@@ -17871,7 +17873,14 @@ elFinder.prototype.commands.fullscreen = function() {
 	
 	fm.one('load', function() {
 		var parts = self.options.view || ['about', 'shortcuts', 'help', 'debug'],
-			tabDebug;
+			tabDebug, i;
+		
+		// debug tab require jQueryUI Tabs Widget
+		if (! $.fn.tabs) {
+			if ((i = $.inArray(parts, 'debug')) !== false) {
+				parts.splice(i, 1);
+			}
+		}
 		
 		$.each(parts, function(i, title) {
 			html.push(tab[r](/\{id\}/g, title)[r](/\{title\}/, fm.i18n(title)));
@@ -17907,22 +17916,24 @@ elFinder.prototype.commands.fullscreen = function() {
 			.filter(':first').click();
 		
 		// debug
-		tabDebug = content.find('.elfinder-help-tab-debug').hide();
-		debugDIV = content.find('#'+fm.namespace+'-help-debug').children('div:first').tabs();
-		debugUL = debugDIV.children('ul:first');
+		if (useDebug) {
+			tabDebug = content.find('.elfinder-help-tab-debug').hide();
+			debugDIV = content.find('#'+fm.namespace+'-help-debug').children('div:first').tabs();
+			debugUL = debugDIV.children('ul:first');
 
-		self.debug = {};
-
-		fm.bind('backenddebug', function(e) {
-			// CAUTION: DO NOT TOUCH `e.data`
-			if (e.data && e.data.debug) {
-				tabDebug.show();
-				self.debug = { options : e.data.options, debug : $.extend({ cmd : fm.currentReqCmd }, e.data.debug) };
-				if (self.dialog/* && self.dialog.is(':visible')*/) {
-					debugRender();
+			self.debug = {};
+	
+			fm.bind('backenddebug', function(e) {
+				// CAUTION: DO NOT TOUCH `e.data`
+				if (e.data && e.data.debug) {
+					tabDebug.show();
+					self.debug = { options : e.data.options, debug : $.extend({ cmd : fm.currentReqCmd }, e.data.debug) };
+					if (self.dialog/* && self.dialog.is(':visible')*/) {
+						debugRender();
+					}
 				}
-			}
-		});
+			});
+		}
 
 		content.find('#'+fm.namespace+'-help-about').find('.apiver').text(fm.api);
 		self.dialog = fm.dialog(content, {title : self.title, width : 530, autoOpen : false, destroyOnClose : false});
@@ -18519,6 +18530,7 @@ elFinder.prototype.commands.netmount = function() {
 						},
 						buttons        : {}
 					},
+					form = $('<form autocomplete="off"/>'),
 					hidden  = $('<div/>'),
 					dialog;
 
@@ -18601,7 +18613,7 @@ elFinder.prototype.commands.netmount = function() {
 				
 				content.find('select,input').addClass('elfinder-tabstop');
 				
-				dialog = fm.dialog(content, opts);
+				dialog = fm.dialog(form.append(content), opts);
 				dialogNode = dialog.closest('.ui-dialog');
 				dialog.ready(function(){
 					inputs.protocol.change();
@@ -20623,7 +20635,7 @@ d=(h[l++]|h[l++]<<8|h[l++]<<16|h[l++]<<24)>>>0;(a.length&4294967295)!==d&&n(Erro
 							.parent().removeClass('ui-state-hover');
 						fm.options.syncStart = !fm.options.syncStart;
 						fm.autoSync(fm.options.syncStart? null : 'stop');
-					}).on('ready', function(){
+					}).ready(function(){
 						$(this).parent().toggleClass('ui-state-disabled', !fm.options.syncStart).css('pointer-events', 'auto');
 					})
 			};

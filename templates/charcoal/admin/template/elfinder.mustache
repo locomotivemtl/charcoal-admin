@@ -83,14 +83,15 @@
                             '&property={{ propertyIdent }}';
 
                 defaults = {
-                    url       : actionUri,
-                    resizable : false,
-                    height    : $window.height(),
-                    handlers  : {
-                        init  : function(event, elf) {
+                    url:        actionUri,
+                    resizable:  false,
+                    height:     $window.height(),
+                    handlers:   {
+                        init:   function(event, elf) {
                             $.extend(elf.messages, i18nMsgs.en || {}, i18nMsgs[elf.lang] || {});
                         }
                     },
+                    cssAutoLoad: false,
                     getFileCallback: function (file) {
                         if (elf.option('separator') === '\\') {
                             var separator = /\\/g;

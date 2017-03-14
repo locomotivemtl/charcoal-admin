@@ -56,7 +56,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
     window.elFinderCallback[this.input_id] = this.elfinder_callback.bind(this);
 
-    var locale = Charcoal.Admin.locale().replace('-', '_');
+    var locale = Charcoal.Admin.locale().match(/([a-zA-Z]{2})(_|-)([a-zA-Z]{2})/)[0] || 'en';
+    locale = locale.replace('-', '_');
 
     if (locale.match(/en_/)) {
         locale = 'en';

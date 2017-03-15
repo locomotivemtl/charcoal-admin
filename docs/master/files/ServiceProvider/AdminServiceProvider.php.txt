@@ -263,14 +263,13 @@ class AdminServiceProvider implements ServiceProviderInterface
                         $parts = parse_url($uri);
                         if (!isset($parts['scheme'])) {
                             if (!in_array($uri[0], [ '/', '#', '?' ])) {
-                                $path  = isset($parts['path']) ? $parts['path'] : '';
+                                $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
                                 $query = isset($parts['query']) ? $parts['query'] : '';
                                 $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
 
-                                return $adminUrl->baseUrl()
-                                            ->withPath($path)
-                                            ->withQuery($query)
-                                            ->withFragment($hash);
+                                return $adminUrl->withPath($path)
+                                                ->withQuery($query)
+                                                ->withFragment($hash);
                             }
                         }
                     }

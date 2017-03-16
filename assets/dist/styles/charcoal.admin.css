@@ -1347,10 +1347,6 @@ ul.c-panel_table {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.428571429; }
-  .c-attachments .panel-body > :first-child {
-    margin-top: 0; }
-  .c-attachments .panel-body > :last-child {
-    margin-bottom: 0; }
   .c-attachments .panel-body img,
   .c-attachments .panel-body svg {
     max-width: 100%;
@@ -1640,6 +1636,12 @@ textarea.form-control {
 .table-cell-checkbox {
   width: 3.125rem;
   text-align: center; }
+
+.panel-body > :first-child {
+  margin-top: 0; }
+
+.panel-body > :last-child {
+  margin-bottom: 0; }
 
 .btn {
   font-size: 0.8125rem;

@@ -93,14 +93,6 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         font-size:   $font-size-base;
         line-height: $line-height-base;
 
-        > :first-child {
-            margin-top: 0;
-        }
-
-        > :last-child {
-            margin-bottom: 0;
-        }
-
         img,
         svg {
             max-width: 100%;

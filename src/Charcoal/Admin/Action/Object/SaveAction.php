@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Action\Object;
 
 use Exception;
+use PDOException;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
@@ -169,6 +170,21 @@ class SaveAction extends AbstractSaveAction
 
                 return $response->withStatus(500);
             }
+        } catch (PDOException $e) {
+            $this->setObj(null);
+
+            if (isset($e->errorInfo[2])) {
+                $message = $e->errorInfo[2];
+            } else {
+                $message = $e->getMessage();
+            }
+
+            $this->addFeedback('error', strtr($errorThrown, [
+                '{{ errorThrown }}' => $message
+            ]));
+            $this->setSuccess(false);
+
+            return $response->withStatus(500);
         } catch (Exception $e) {
             $this->setObj(null);
 

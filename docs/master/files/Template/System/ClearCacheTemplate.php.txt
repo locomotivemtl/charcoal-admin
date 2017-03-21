@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Template\System;
 
 use APCUIterator;
+use APCIterator;
 
 use Stash\Pool;
 use Stash\Driver\Apc;
@@ -138,7 +139,16 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function apcCacheInfo($key)
     {
-        $iter = new APCUIterator($key);
+        if (class_exists(APCUIterator::class)) {
+            $iter = new APCUIterator($key);
+        } elseif (class_exists(APCIterator::class)) {
+            $iter = new APCIterator($key);
+        } else {
+            // Shouldn't happen.
+            return [];
+        }
+
+        $iter = new APCIterator($key);
         $numEntries = 0;
         $sizeTotal  = 0;
         $hitsTotal  = 0;

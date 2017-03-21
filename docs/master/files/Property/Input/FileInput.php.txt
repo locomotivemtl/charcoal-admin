@@ -129,9 +129,10 @@ class FileInput extends AbstractPropertyInput
     {
         $val = parent::inputVal();
 
-        if (!parse_url($val, PHP_URL_SCHEME)) {
-            $uri = $this->baseUrl;
-            return $uri->withPath($val);
+        if ($val && !parse_url($val, PHP_URL_SCHEME)) {
+            if (!in_array($val[0], [ '/', '#', '?' ])) {
+                return $this->baseUrl->withPath($val);
+            }
         }
 
         return $val;

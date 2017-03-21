@@ -47,14 +47,14 @@ class FormSidebarWidget extends AdminWidget implements
      *
      * @var array|null
      */
-    private $sidebarActions;
+    protected $sidebarActions;
 
     /**
      * Store the default list actions.
      *
      * @var array|null
      */
-    private $defaultSidebarActions;
+    protected $defaultSidebarActions;
 
     /**
      * Keep track if sidebar actions are finalized.

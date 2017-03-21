@@ -104,14 +104,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      *
      * @var array|null
      */
-    private $listActions;
+    protected $listActions;
 
     /**
      * Store the default list actions.
      *
      * @var array|null
      */
-    private $defaultListActions;
+    protected $defaultListActions;
 
     /**
      * Keep track if list actions are finalized.
@@ -132,14 +132,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      *
      * @var array|null
      */
-    private $objectActions;
+    protected $objectActions;
 
     /**
      * Store the default object actions.
      *
      * @var array|null
      */
-    private $defaultObjectActions;
+    protected $defaultObjectActions;
 
     /**
      * Keep track if object actions are finalized.

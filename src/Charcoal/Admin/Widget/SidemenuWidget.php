@@ -37,14 +37,14 @@ class SidemenuWidget extends AdminWidget implements
      *
      * @var array|null
      */
-    private $sidemenuActions;
+    protected $sidemenuActions;
 
     /**
      * Store the default list actions.
      *
      * @var array|null
      */
-    private $defaultSidemenuActions;
+    protected $defaultSidemenuActions;
 
     /**
      * Keep track if sidemenu actions are finalized.

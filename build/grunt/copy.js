@@ -48,8 +48,8 @@ module.exports = {
     },
     admin  : {
         expand: true,
-        cwd   : 'assets/dist/',
-        src   : ['**', '*'],
-        dest  : '../../../www/assets/admin/'
+        cwd:   'assets/dist/',
+        src:    ['**', '*'],
+        dest:   '../../../www/assets/admin/'
     }
 };

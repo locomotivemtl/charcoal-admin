@@ -2,8 +2,8 @@ module.exports = {
     options: {
         separator: ';'
     },
-    admin  : {
-        src : [
+    admin: {
+        src: [
             'assets/src/scripts/charcoal/admin/polyfill.js',
             'assets/src/scripts/charcoal/admin/charcoal.js',
             'assets/src/scripts/charcoal/admin/component_manager.js',
@@ -20,7 +20,7 @@ module.exports = {
         dest: 'assets/dist/scripts/charcoal.admin.js'
     },
     vendors: {
-        src      : [
+        src: [
             //URL Search Params
             'node_modules/url-search-params/build/url-search-params.js',
             // Bootstrap Switch
@@ -46,7 +46,7 @@ module.exports = {
             // Selectize
             'bower_components/clipboard/dist/clipboard.min.js'
         ],
-        dest     : 'assets/dist/scripts/charcoal.admin.vendors.js',
+        dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"
     }
 };

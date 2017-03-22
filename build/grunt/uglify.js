@@ -15,6 +15,9 @@ module.exports = {
             'assets/dist/scripts/vendors/tinymce/plugins/charcoal/plugin.min.js': [
                 'assets/src/scripts/charcoal/admin/tinymce/plugins/charcoal/plugin.js'
             ],
+            'assets/dist/scripts/vendors/tinymce/plugins/placeholder/plugin.min.js': [
+                'assets/src/scripts/charcoal/admin/tinymce/plugins/placeholder/plugin.js'
+            ],
             'assets/dist/scripts/charcoal.admin.vendors.min.js': [
                 '<%= concat.vendors.dest %>'
             ]

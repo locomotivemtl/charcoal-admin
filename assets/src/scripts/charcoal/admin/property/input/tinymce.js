@@ -97,6 +97,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
             'noneditable',
             //'pagebreak',
             'paste',
+            'placeholder',
             //'preview',
             //'print',
             //'save',

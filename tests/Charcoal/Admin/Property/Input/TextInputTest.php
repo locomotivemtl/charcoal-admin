@@ -35,11 +35,11 @@ class TextInputTest extends PHPUnit_Framework_TestCase
     {
         $obj = $this->obj;
         $ret = $obj->setData([
-            'size'=>42,
-            'min_length'=>10,
-            'max_length'=>100,
-            'pattern'=>'foo',
-            'placeholder'=>'bar'
+            'size'        => 42,
+            'min_length'  => 10,
+            'max_length'  => 100,
+            'pattern'     => 'foo',
+            'placeholder' => 'bar'
         ]);
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->size());

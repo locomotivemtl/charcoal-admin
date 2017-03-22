@@ -1,0 +1,31 @@
+<fieldset>
+    {{# showHeader }}
+    <header class="o-header -border">
+        {{# showTitle }}
+        <h2>{{ title }}</h2>
+        {{/ showTitle }}
+
+        {{> charcoal/admin/template/inc.description }}
+        {{# showNotesAbove }}
+        {{> charcoal/admin/template/inc.notes }}
+        {{/ showNotesAbove }}
+    </header>
+    {{/ showHeader }}
+    {{^ showHeader }}
+    {{# showDescription }}
+    <div class="help-block o-section">{{& description }}</div>
+    {{/ showDescription }}
+    {{# showNotesAbove }}
+    {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
+    {{/ showHeader }}
+
+    {{#widget}}
+        {{>$widget_template}}
+    {{/widget}}
+
+    {{^ showNotesAbove }}
+    {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
+
+</fieldset>

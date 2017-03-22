@@ -1374,20 +1374,18 @@ ul.c-panel_table {
   box-shadow: none;
   background-color: transparent; }
 
-.radio-color-group,
-.checkbox-color-group {
-  margin-left: -10px; }
-
-.radio-color-group .radio-color,
-.checkbox-color-group .checkbox-color {
-  margin-left: 10px; }
-
 .radio-color,
 .checkbox-color {
-  padding: 10px 2px; }
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px; }
   .radio-color label,
   .checkbox-color label {
-    margin-bottom: 0; }
+    min-height: 36px;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer; }
   .radio-color .o-color-swatch,
   .checkbox-color .o-color-swatch {
     cursor: pointer;
@@ -1398,22 +1396,63 @@ ul.c-panel_table {
     .checkbox-color .o-color-swatch .minicolors-swatch-color {
       border-radius: 4px;
       border: 1px solid #cccccc; }
-  .radio-color.input-lg .o-color-swatch,
-  .checkbox-color.input-lg .o-color-swatch {
+    .radio-color .o-color-swatch + .o-swatch-label,
+    .checkbox-color .o-color-swatch + .o-swatch-label {
+      margin-left: 5px;
+      vertical-align: middle; }
+
+.radio-color input[type="radio"],
+.checkbox-color input[type="checkbox"] {
+  position: absolute; }
+
+.radio-color.radio-lg,
+.checkbox-color.checkbox-lg {
+  line-height: 1.3333333; }
+  .radio-color.radio-lg label,
+  .checkbox-color.checkbox-lg label {
+    min-height: 26px; }
+  .radio-color.radio-lg .o-color-swatch,
+  .checkbox-color.checkbox-lg .o-color-swatch {
     width: 24px;
     height: 24px;
     border-radius: 6px; }
-    .radio-color.input-lg .o-color-swatch .minicolors-swatch-color,
-    .checkbox-color.input-lg .o-color-swatch .minicolors-swatch-color {
+    .radio-color.radio-lg .o-color-swatch .minicolors-swatch-color,
+    .checkbox-color.checkbox-lg .o-color-swatch .minicolors-swatch-color {
       border-radius: 6px; }
-  .radio-color.input-sm .o-color-swatch,
-  .checkbox-color.input-sm .o-color-swatch {
+
+.radio-color.radio-sm,
+.checkbox-color.checkbox-sm {
+  line-height: 1.5; }
+  .radio-color.radio-sm label,
+  .checkbox-color.checkbox-sm label {
+    min-height: 28px; }
+  .radio-color.radio-sm .o-color-swatch,
+  .checkbox-color.checkbox-sm .o-color-swatch {
     width: 26px;
     height: 26px;
     border-radius: 3px; }
-    .radio-color.input-sm .o-color-swatch .minicolors-swatch-color,
-    .checkbox-color.input-sm .o-color-swatch .minicolors-swatch-color {
+    .radio-color.radio-sm .o-color-swatch .minicolors-swatch-color,
+    .checkbox-color.checkbox-sm .o-color-swatch .minicolors-swatch-color {
       border-radius: 3px; }
+
+.radio-color + .radio-color,
+.checkbox-color + .checkbox-color {
+  margin-top: -5px; }
+
+.radio-color.radio-inline,
+.checkbox-color.checkbox-inline {
+  position: relative;
+  display: inline-block;
+  padding-left: 0;
+  margin-right: 10px;
+  margin-top: 0;
+  margin-bottom: 10px; }
+
+.radio-color.radio-inline + .radio-color.radio-inline,
+.checkbox-color.checkbox-inline + .checkbox-color.checkbox-inline {
+  margin-top: 0;
+  margin-bottom: 10px;
+  margin-left: 0; }
 
 .radio-color input[type="radio"],
 .checkbox-color input[type="checkbox"] {
@@ -1421,7 +1460,9 @@ ul.c-panel_table {
   margin-left: .25em;
   margin-top: .25em; }
   .radio-color input[type="radio"]:checked + .o-color-swatch::after,
-  .checkbox-color input[type="checkbox"]:checked + .o-color-swatch::after {
+  .radio-color input[type="radio"]:checked + label > .o-color-swatch::after,
+  .checkbox-color input[type="checkbox"]:checked + .o-color-swatch::after,
+  .checkbox-color input[type="checkbox"]:checked + label > .o-color-swatch::after {
     position: absolute;
     content: '';
     top: -4px;
@@ -1430,15 +1471,19 @@ ul.c-panel_table {
     bottom: -4px;
     display: block;
     border: #3498DB 2px solid;
-    border-radius: 4px; }
+    border-radius: 6px; }
 
-.radio-color.input-lg input[type="radio"]:checked + .o-color-swatch::after,
-.checkbox-color.input-lg input[type="checkbox"]:checked + .o-color-swatch::after {
-  border-radius: 6px; }
+.radio-color.radio-lg input[type="radio"]:checked + .o-color-swatch::after,
+.radio-color.radio-lg input[type="radio"]:checked + label > .o-color-swatch::after,
+.checkbox-color.checkbox-lg input[type="checkbox"]:checked + .o-color-swatch::after,
+.checkbox-color.checkbox-lg input[type="checkbox"]:checked + label > .o-color-swatch::after {
+  border-radius: 8px; }
 
-.radio-color.input-sm input[type="radio"]:checked + .o-color-swatch::after,
-.checkbox-color.input-sm input[type="checkbox"]:checked + .o-color-swatch::after {
-  border-radius: 3px; }
+.radio-color.radio-sm input[type="radio"]:checked + .o-color-swatch::after,
+.radio-color.radio-sm input[type="radio"]:checked + label > .o-color-swatch::after,
+.checkbox-color.checkbox-sm input[type="checkbox"]:checked + .o-color-swatch::after,
+.checkbox-color.checkbox-sm input[type="checkbox"]:checked + label > .o-color-swatch::after {
+  border-radius: 5px; }
 
 .badge-default {
   background-color: #777777; }

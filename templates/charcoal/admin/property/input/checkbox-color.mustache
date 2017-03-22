@@ -7,7 +7,7 @@
 <fieldset class="checkbox-color-group">
     {{> charcoal/admin/property/control/fallback }}
     {{# choices }}
-    <div class="checkbox-inline checkbox-color input-lg">
+    <div class="checkbox-color{{# inputLayouts.inline }} checkbox-inline{{/ inputLayouts.inline }} checkbox-lg">
         {{> charcoal/admin/property/control/choice }}
         {{> charcoal/admin/property/input/choice/color-label }}
     </div>

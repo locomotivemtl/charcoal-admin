@@ -5,6 +5,11 @@
     `charcoal/admin/property/input/checkbox-color`
     `charcoal/admin/property/input/radio-color`
 --}}
-<label for="{{ inputId }}" class="o-color-swatch minicolors-sprite" aria-label="{{ label }}">
-    <span class="minicolors-swatch-color"{{# value }} style="background-color: {{ . }};"{{/ value }}></span>
+<label for="{{ inputId }}">
+    <span class="o-color-swatch minicolors-sprite" aria-label="{{ label }}">
+        <span class="minicolors-swatch-color"{{# color }} style="background-color: {{ . }};"{{/ color }}></span>
+    </span>
+    {{# show_label }}
+    <span class="o-swatch-label">{{ label }}</span>
+    {{/ show_label }}
 </label>

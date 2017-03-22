@@ -6,7 +6,7 @@
 --}}
 <fieldset class="radio-color-group">
     {{# choices }}
-    <div class="radio-inline radio-color input-lg">
+    <div class="radio-color{{# inputLayouts.inline }} radio-inline{{/ inputLayouts.inline }} radio-lg">
         {{> charcoal/admin/property/control/choice }}
         {{> charcoal/admin/property/input/choice/color-label }}
     </div>

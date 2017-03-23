@@ -9,10 +9,11 @@ Display the "home" dashboard.
 {{>charcoal/admin/template/inc.header}}
 
 <div class="o-flex">
-
-    {{#sidemenu}}
-        {{>charcoal/admin/widget/sidemenu}}
-    {{/sidemenu}}
+    {{#showSidemenu}}
+        {{#sidemenu}}
+            {{>charcoal/admin/widget/sidemenu}}
+        {{/sidemenu}}
+    {{/showSidemenu}}
 
     {{>charcoal/admin/widget/feedbacks}}
 

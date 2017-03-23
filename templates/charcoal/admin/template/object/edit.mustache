@@ -12,10 +12,11 @@ This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
 {{>charcoal/admin/template/inc.header}}
 
 <div class="o-flex">
-
-    {{#sidemenu}}
-        {{>$widget_template}}
-    {{/sidemenu}}
+    {{#showSidemenu}}
+        {{#sidemenu}}
+            {{>charcoal/admin/widget/sidemenu}}
+        {{/sidemenu}}
+    {{/showSidemenu}}
 
     {{>charcoal/admin/widget/feedbacks}}
 

@@ -100,6 +100,11 @@ class AdminTemplate extends AbstractTemplate implements
     protected $subtitle;
 
     /**
+     * @var boolean $showSidemenu
+     */
+    private $showSidemenu = true;
+
+    /**
      * @var boolean $showHeaderMenu
      */
     private $showHeaderMenu = true;
@@ -368,7 +373,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function showHeaderMenu()
     {
-        return ($this->isAuthenticated() && $this->showHeaderMenu);
+        return ($this->isAuthorized() && $this->showHeaderMenu);
     }
 
     /**
@@ -486,7 +491,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function showFooterMenu()
     {
-        return ($this->isAuthenticated() && $this->showFooterMenu);
+        return ($this->isAuthorized() && $this->showFooterMenu);
     }
 
     /**
@@ -495,6 +500,24 @@ class AdminTemplate extends AbstractTemplate implements
     public function footerMenu()
     {
         return [];
+    }
+
+    /**
+     * @param  boolean $show The show sidemenu flag.
+     * @return AdminTemplate Chainable
+     */
+    public function setShowSidemenu($show)
+    {
+        $this->showSidemenu = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showSidemenu()
+    {
+        return ($this->isAuthorized() && $this->showSidemenu);
     }
 
     /**

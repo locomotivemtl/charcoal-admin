@@ -23,7 +23,7 @@ use \Charcoal\Admin\Ui\CollectionContainerInterface;
 use \Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
- * The table widget displays a collection in a tabular (table) format.
+ * Displays a collection of models in a tabular (table) format.
  */
 class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
@@ -157,6 +157,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         parent::setDependencies($container);
 
         $this->setView($container['view']);
+        $this->setCollectionLoader($container['model/collection/loader']);
         $this->setWidgetFactory($container['widget/factory']);
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyDisplayFactory($container['property/display/factory']);
@@ -308,8 +309,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $collectionIdent = $this->collectionIdentFallback();
         }
 
-        $objListData = isset($adminMetadata['lists'][$collectionIdent]) ?
-            $adminMetadata['lists'][$collectionIdent] : [];
+        if (isset($adminMetadata['lists'][$collectionIdent])) {
+            $objListData = $adminMetadata['lists'][$collectionIdent];
+        } else {
+            $objListData = [];
+        }
 
         $collectionConfig = [];
 

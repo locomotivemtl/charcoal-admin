@@ -488,10 +488,9 @@ trait CollectionContainerTrait
                 get_class($this)
             ));
         }
-        $obj = $this->modelFactory()->create($objType);
 
         $loader = $this->collectionLoader();
-        $loader->setModel($obj);
+        $loader->setModel($this->proto());
 
         $collectionConfig = $this->collectionConfig();
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
@@ -513,7 +512,7 @@ trait CollectionContainerTrait
      */
     public function objects()
     {
-        return $this->collection()->values();
+        return $this->collection()->objects();
     }
 
     /**
@@ -691,10 +690,9 @@ trait CollectionContainerTrait
                     get_class($this)
                 ));
             }
-            $obj = $this->modelFactory()->create($objType);
 
             $loader = $this->collectionLoader();
-            $loader->setModel($obj);
+            $loader->setModel($this->proto());
 
             $collectionConfig = $this->collectionConfig();
             if (is_array($collectionConfig) && !empty($collectionConfig)) {

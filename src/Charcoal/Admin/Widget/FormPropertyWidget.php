@@ -208,7 +208,7 @@ class FormPropertyWidget extends AdminWidget implements
         parent::setData($data);
 
         // Keep the data in copy, this will be passed to the property and/or input later
-        $this->propertyData = $data;
+        $this->setPropertyData($data);
 
         return $this;
     }
@@ -225,7 +225,7 @@ class FormPropertyWidget extends AdminWidget implements
             $this->setInputType($data['input_type']);
         }
 
-        $this->propertyData = array_replace($this->propertyData, $data);
+        $this->mergePropertyData($data);
 
         return $this;
     }
@@ -279,12 +279,51 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
+     * @param  array $data The property data.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setPropertyData(array $data)
+    {
+        $this->propertyData = $data;
+
+        if ($this->property) {
+            $this->property->setData($data);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  array $data The property data.
+     * @return FormPropertyWidget Chainable
+     */
+    public function mergePropertyData(array $data)
+    {
+        $this->propertyData = array_replace($this->propertyData, $data);
+
+        if ($this->property) {
+            $this->property->setData($data);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function propertyData()
+    {
+        return $this->propertyData;
+    }
+
+    /**
      * @param  mixed $propertyVal The property value.
      * @return FormPropertyWidget Chainable
      */
     public function setPropertyVal($propertyVal)
     {
         $this->propertyVal = $propertyVal;
+
         return $this;
     }
 

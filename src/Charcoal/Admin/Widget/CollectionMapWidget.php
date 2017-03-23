@@ -2,22 +2,29 @@
 
 namespace Charcoal\Admin\Widget;
 
+use ArrayAccess;
 use RuntimeException;
+use InvalidArgumentException;
+use UnexpectedValueException;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-core'
-use Charcoal\Loader\CollectionLoader;
+use Charcoal\Model\ModelInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\CollectionContainerInterface;
+use Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
- *
+ * Displays a collection of models on a map.
  */
-class CollectionMapWidget extends AdminWidget
+class CollectionMapWidget extends AdminWidget implements CollectionContainerInterface
 {
+    use CollectionContainerTrait;
+
     /**
      * The API key for the mapping service.
      *
@@ -29,11 +36,6 @@ class CollectionMapWidget extends AdminWidget
      * @var \Charcoal\Model\AbstractModel[] $mapObjects
      */
     private $mapObjects;
-
-    /**
-     * @var \Charcoal\Model\AbstractModel $objProto
-     */
-    private $objProto;
 
     /**
      * The ident of the object's property for the latitude.
@@ -58,13 +60,6 @@ class CollectionMapWidget extends AdminWidget
     private $pathProperty;
 
     /**
-     * Store the collection loader for the current class.
-     *
-     * @var CollectionLoader
-     */
-    private $collectionLoader;
-
-    /**
      * @var string $infoboxTemplate
      */
     public $infoboxTemplate = '';
@@ -79,7 +74,7 @@ class CollectionMapWidget extends AdminWidget
     {
         parent::setDependencies($container);
 
-        $this->collectionLoader = $container['model/collection/loader'];
+        $this->setCollectionLoader($container['model/collection/loader']);
 
         $appConfig = $container['config'];
 
@@ -88,6 +83,19 @@ class CollectionMapWidget extends AdminWidget
         } elseif (isset($appConfig['apis.google.map.key'])) {
             $this->setApiKey($appConfig['apis.google.map.key']);
         }
+    }
+
+    /**
+     * @param array $data The widget data.
+     * @return TableWidget Chainable
+     */
+    public function setData(array $data)
+    {
+        parent::setData($data);
+
+        $this->mergeDataSources($data);
+
+        return $this;
     }
 
     /**
@@ -111,35 +119,6 @@ class CollectionMapWidget extends AdminWidget
     public function apiKey()
     {
         return $this->apiKey;
-    }
-
-    /**
-     * Retrieve the model collection loader.
-     *
-     * @throws RuntimeException If the collection loader was not previously set.
-     * @return CollectionLoader
-     */
-    protected function collectionLoader()
-    {
-        if (!isset($this->collectionLoader)) {
-            throw new RuntimeException(sprintf(
-                'Collection Loader is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->collectionLoader;
-    }
-
-    /**
-     * @return \Charcoal\Model\AbstractModel
-     */
-    private function objProto()
-    {
-        if ($this->objProto === null) {
-            $this->objProto = $this->modelFactory()->create($this->{'obj_type'});
-        }
-        return $this->objProto;
     }
 
     /**
@@ -235,22 +214,36 @@ class CollectionMapWidget extends AdminWidget
     /**
      * Return all the objs with geographical information
      *
+     * @throws UnexpectedValueException If the object type of the colletion is missing.
      * @return Collection
      */
     public function mapObjects()
     {
         if ($this->mapObjects === null) {
+            $objType = $this->objType();
+            if (!$objType) {
+                throw new UnexpectedValueException(sprintf(
+                    '%1$s cannot create collection map. Object type is not defined.',
+                    get_class($this)
+                ));
+            }
+
             $loader = $this->collectionLoader();
-            $loader->setModel($this->objProto());
+            $loader->setModel($this->proto());
 
-            $that = $this;
-            $loader->setCallback(function(&$obj) use ($that) {
-                $obj->mapInfoboxTemplate = $that->infoboxTemplate();
+            $collectionConfig = $this->collectionConfig();
+            if (is_array($collectionConfig) && !empty($collectionConfig)) {
+                unset($collectionConfig['properties']);
+                $loader->setData($collectionConfig);
+            }
 
-                if ($that->latProperty() && $that->latProperty()) {
+            $callback = function(&$obj) {
+                $obj->mapInfoboxTemplate = $this->infoboxTemplate();
+
+                if ($this->latProperty() && $this->latProperty()) {
                     $obj->mapShowMarker = true;
-                    $obj->mapLat = call_user_func([ $obj, $that->latProperty() ]);
-                    $obj->mapLon = call_user_func([ $obj, $that->lonProperty() ]);
+                    $obj->mapLat = $this->getPropertyValue($obj, $this->latProperty());
+                    $obj->mapLon = $this->getPropertyValue($obj, $this->lonProperty());
 
                     if (!$obj->mapLat || !$obj->mapLon) {
                         $obj = null;
@@ -259,12 +252,12 @@ class CollectionMapWidget extends AdminWidget
                     $obj->mapShowMarker = false;
                 }
 
-                if ($that->pathProperty()) {
-                    $mapPath = call_user_func([$obj, $that->pathProperty()]);
+                if ($this->pathProperty()) {
+                    $mapPath = $this->getPropertyValue($obj, $this->pathProperty());
                     if ($mapPath) {
                         $obj->mapShowPath = true;
                         // Same type of coords.
-                        $obj->mapPath = $that->formatPolygon($mapPath);
+                        $obj->mapPath = $this->formatPolygon($mapPath);
 
                         if (!$obj->mapPath) {
                             $obj = null;
@@ -274,11 +267,11 @@ class CollectionMapWidget extends AdminWidget
                     }
                 }
 
-                if ($that->polygonProperty()) {
-                    $mapPolygon = call_user_func([$obj, $that->polygonProperty()]);
+                if ($this->polygonProperty()) {
+                    $mapPolygon = $this->getPropertyValue($obj, $this->polygonProperty());
                     if ($mapPolygon) {
                         $obj->mapShowPolygon = true;
-                        $obj->mapPolygon = $that->formatPolygon($mapPolygon);
+                        $obj->mapPolygon = $this->formatPolygon($mapPolygon);
 
                         if (!$obj->mapPolygon) {
                             $obj = null;
@@ -287,7 +280,9 @@ class CollectionMapWidget extends AdminWidget
                         $obj->mapShowPolygon = false;
                     }
                 }
-            });
+            };
+
+            $loader->setCallback($callback->bindTo($this));
 
             $this->mapObjects = $loader->load();
         }
@@ -326,5 +321,161 @@ class CollectionMapWidget extends AdminWidget
             $ret = $rawPolygon;
         }
         return json_encode($ret, true);
+    }
+
+    /**
+     * @param  ModelInterface $obj The object with the latitude property.
+     * @param  string         $key The property to retrieve.
+     * @throws InvalidArgumentException If the data key is missing.
+     * @return mixed
+     */
+    protected function getPropertyValue(ModelInterface $obj, $key)
+    {
+        if (!is_string($key) || $key === '') {
+            throw new InvalidArgumentException('Missing latitude property.');
+        }
+
+        if (isset($obj[$key])) {
+            return $obj[$key];
+        }
+
+        $data     = null;
+        $segments = explode('.', $key);
+        if (count($segments) > 1) {
+            $data = $obj;
+            foreach (explode('.', $key) as $segment) {
+                $accessible = is_array($data) || $data instanceof ArrayAccess;
+                if ($data instanceof ArrayAccess) {
+                    $exists = $data->offsetExists($segment);
+                } else {
+                    $exists = array_key_exists($segment, $data);
+                }
+
+                if ($accessible && $exists) {
+                    $data = $data[$segment];
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * Note: Adapted from {@see \Slim\CallableResolver}.
+     *
+     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
+     * @param  mixed $toResolve A callable used when merging data.
+     * @return callable|null
+     */
+    protected function resolveDataSourceFilter($toResolve)
+    {
+        if (is_string($toResolve)) {
+            $model = $this->proto();
+
+            $resolved = [ $model, $toResolve ];
+
+            // check for slim callable as "class:method"
+            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+            if (preg_match($callablePattern, $toResolve, $matches)) {
+                $class = $matches[1];
+                $method = $matches[2];
+
+                if ($class === 'parent') {
+                    $resolved = [ $model, $class.'::'.$method ];
+                }
+            }
+
+            $toResolve = $resolved;
+        }
+
+        return parent::resolveDataSourceFilter($toResolve);
+    }
+
+    /**
+     * Fetch metadata from the current request.
+     *
+     * @return array
+     */
+    public function dataFromRequest()
+    {
+        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
+    }
+
+    /**
+     * Retrieve the accepted metadata from the current request.
+     *
+     * @return array
+     */
+    public function acceptedRequestData()
+    {
+        return [
+            'collection_ident',
+            'obj_id',
+            'obj_type'
+        ];
+    }
+
+    /**
+     * Fetch metadata from the current object type.
+     *
+     * @return array
+     */
+    public function dataFromObject()
+    {
+        $objMetadata = $this->proto()->metadata();
+        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
+
+        if (empty($adminMetadata['lists'])) {
+            return [];
+        }
+
+        $collectionIdent = $this->collectionIdent();
+        if (!$collectionIdent) {
+            $collectionIdent = $this->collectionIdentFallback();
+        }
+
+        if (isset($adminMetadata['lists'][$collectionIdent])) {
+            $objListData = $adminMetadata['lists'][$collectionIdent];
+        } else {
+            $objListData = [];
+        }
+
+        $collectionConfig = [];
+
+        if (isset($objListData['orders']) && isset($adminMetadata['list_orders'])) {
+            $extraOrders = array_intersect(
+                array_keys($adminMetadata['list_orders']),
+                array_keys($objListData['orders'])
+            );
+            foreach ($extraOrders as $listIdent) {
+                $collectionConfig['orders'][$listIdent] = array_replace_recursive(
+                    $adminMetadata['list_orders'][$listIdent],
+                    $objListData['orders'][$listIdent]
+                );
+            }
+        }
+
+        if (isset($objListData['filters']) && isset($adminMetadata['list_filters'])) {
+            $extraFilters = array_intersect(
+                array_keys($adminMetadata['list_filters']),
+                array_keys($objListData['filters'])
+            );
+            foreach ($extraFilters as $listIdent) {
+                $collectionConfig['filters'][$listIdent] = array_replace_recursive(
+                    $adminMetadata['list_filters'][$listIdent],
+                    $objListData['filters'][$listIdent]
+                );
+            }
+        }
+
+        if ($collectionConfig) {
+            $this->mergeCollectionConfig($collectionConfig);
+        }
+
+        return $objListData;
     }
 }

@@ -111,6 +111,7 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
+            $containerProvider->registerCollectionLoader($container);
             $containerProvider->registerWidgetDependencies($container);
             $containerProvider->registerWidgetFactory($container);
             $containerProvider->registerPropertyFactory($container);

@@ -427,6 +427,8 @@ abstract class AbstractPropertyInput implements
                     }
                 }
             }
+
+            $this->placeholder->isRendered = true;
         } elseif (is_string($this->placeholder)) {
             $value = $this->placeholder;
             if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
@@ -436,8 +438,6 @@ abstract class AbstractPropertyInput implements
                 }
             }
         }
-
-        $this->placeholder->isRendered = true;
 
         return $this;
     }

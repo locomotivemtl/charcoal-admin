@@ -259,7 +259,9 @@ class AdminServiceProvider implements ServiceProviderInterface
                     }
 
                     $uri = strval($uri);
-                    if ($uri) {
+                    if ($uri === '') {
+                        $uri = $adminUrl->withPath('');
+                    } else {
                         $parts = parse_url($uri);
                         if (!isset($parts['scheme'])) {
                             if (!in_array($uri[0], [ '/', '#', '?' ])) {

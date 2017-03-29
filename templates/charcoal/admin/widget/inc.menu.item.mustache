@@ -2,7 +2,7 @@
     Primary Menu \ Item
     ===================
 --}}
-<li class="c-nav-main_item">
+<li class="c-nav-main_item{{# ident }} s-nav-main_item--{{ . }}{{/ ident }}">
     <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
         <span class="c-nav-main_link_wrap">
             {{# svg }}<svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>{{/ svg }}

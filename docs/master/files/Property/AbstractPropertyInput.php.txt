@@ -403,43 +403,11 @@ abstract class AbstractPropertyInput implements
             }
         }
 
-        if (isset($this->placeholder->isRendered) && !$this->placeholder->isRendered) {
-            $this->renderPlaceholder();
+        if (isset($this->placeholder->isRendered) && $this->placeholder->isRendered === false) {
+            $this->placeholder = $this->renderTranslatableTemplate($this->placeholder);
         }
 
         return $this->placeholder;
-    }
-
-    /**
-     * Render the placeholders.
-     *
-     * @todo   Implement data presenter as a better alternative.
-     * @return AbstractPropertyInput Chainable
-     */
-    protected function renderPlaceholder()
-    {
-        if ($this->placeholder instanceof Translation) {
-            foreach ($this->placeholder->data() as $lang => $value) {
-                if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
-                    $value = $this->view()->renderTemplate($value, $this->viewController());
-                    if ($value !== null) {
-                        $this->placeholder[$lang] = $value;
-                    }
-                }
-            }
-
-            $this->placeholder->isRendered = true;
-        } elseif (is_string($this->placeholder)) {
-            $value = $this->placeholder;
-            if ($value && $this instanceof ViewableInterface && $this->view() !== null) {
-                $value = $this->view()->renderTemplate($value, $this->viewController());
-                if ($value !== null) {
-                    $this->placeholder = $value;
-                }
-            }
-        }
-
-        return $this;
     }
 
     /**
@@ -656,6 +624,7 @@ abstract class AbstractPropertyInput implements
     public function setInputPrefix($affix)
     {
         $this->inputPrefix = $this->translator()->translation($affix);
+        $this->inputPrefix->isRendered = false;
 
         return $this;
     }
@@ -667,6 +636,12 @@ abstract class AbstractPropertyInput implements
      */
     public function inputPrefix()
     {
+        if ($this->inputPrefix !== null) {
+            if (isset($this->inputPrefix->isRendered) && $this->inputPrefix->isRendered === false) {
+                $this->inputPrefix = $this->renderTranslatableTemplate($this->inputPrefix);
+            }
+        }
+
         return $this->inputPrefix;
     }
 
@@ -680,6 +655,7 @@ abstract class AbstractPropertyInput implements
     public function setInputSuffix($affix)
     {
         $this->inputSuffix = $this->translator()->translation($affix);
+        $this->inputSuffix->isRendered = false;
 
         return $this;
     }
@@ -691,6 +667,12 @@ abstract class AbstractPropertyInput implements
      */
     public function inputSuffix()
     {
+        if ($this->inputSuffix !== null) {
+            if (isset($this->inputSuffix->isRendered) && $this->inputSuffix->isRendered === false) {
+                $this->inputSuffix = $this->renderTranslatableTemplate($this->inputSuffix);
+            }
+        }
+
         return $this->inputSuffix;
     }
 
@@ -765,6 +747,34 @@ abstract class AbstractPropertyInput implements
     public function p()
     {
         return $this->property();
+    }
+
+    /**
+     * Render the given template from string.
+     *
+     * @see    \Charcoal\View\ViewableInterface::renderTemplate()
+     * @param  mixed $templateString The template to render.
+     * @return string The rendered template.
+     */
+    public function renderTranslatableTemplate($templateString)
+    {
+        if ($templateString instanceof Translation) {
+            foreach ($templateString->data() as $lang => $translation) {
+                $isBlank = empty($translation) && !is_numeric($translation);
+                if (!$isBlank) {
+                    $translation = $this->renderTemplate($translation);
+                    if ($translation !== null) {
+                        $templateString[$lang] = $translation;
+                    }
+                }
+            }
+
+            $templateString->isRendered = true;
+
+            return $templateString;
+        } else {
+            return $this->renderTemplate($templateString);
+        }
     }
 
     /**

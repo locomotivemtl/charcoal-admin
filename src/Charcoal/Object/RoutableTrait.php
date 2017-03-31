@@ -363,9 +363,10 @@ trait RoutableTrait
      * Saves all routes to {@see \Charcoal\Object\ObjectRoute}.
      *
      * @param  mixed $slug Slug by langs.
+     * @param  array $data Object route custom data.
      * @return void
      */
-    protected function generateObjectRoute($slug = null)
+    protected function generateObjectRoute($slug = null, $data = [])
     {
         if (!$slug) {
             $slug = $this->generateSlug();
@@ -373,6 +374,19 @@ trait RoutableTrait
 
         if ($slug instanceof Translation) {
             $slugs = $slug->data();
+        } else {
+            throw new InvalidArgumentException(
+                sprintf('[%s::%s] slug parameter must be an instance of %s, received %s',
+                    get_called_class(),
+                    __FUNCTION__,
+                    Translation::class,
+                    gettype($slug)
+                )
+            );
+        }
+
+        if (!is_array($data)) {
+            $data = [];
         }
 
         $origLang = $this->translator()->getLocale();
@@ -387,17 +401,7 @@ trait RoutableTrait
 
             $oldRoute = $this->getLatestObjectRoute();
 
-            // Unchanged but sync extra properties
-            if ($slug === $oldRoute->slug()) {
-                $oldRoute->setData([
-                    'route_template' => $this->templateIdent(),
-                    'route_options'  => $this->routeOptions()
-                ]);
-                $oldRoute->update([ 'route_template', 'route_options' ]);
-                continue;
-            }
-
-            $objectRoute->setData([
+            $defaultData = [
                 'lang'           => $lang,
                 'slug'           => $slug,
                 'route_obj_type' => $this->objType(),
@@ -406,7 +410,21 @@ trait RoutableTrait
                 'route_template' => $this->templateIdent(),
                 'route_options'  => $this->routeOptions(),
                 'active'         => true
-            ]);
+            ];
+
+            $data = array_merge($defaultData, $data);
+
+            // Unchanged but sync extra properties
+            if ($slug === $oldRoute->slug()) {
+                $oldRoute->setData([
+                    'route_template' => $data['route_template'],
+                    'route_options'  => $data['route_options']
+                ]);
+                $oldRoute->update([ 'route_template', 'route_options' ]);
+                continue;
+            }
+
+            $objectRoute->setData($data);
 
             if (!$objectRoute->isSlugUnique()) {
                 $objectRoute->generateUniqueSlug();

@@ -297,7 +297,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function dataFromObject()
     {
-        $objMetadata = $this->proto()->metadata();
+        $proto = $this->proto();
+        $objMetadata = $proto->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
 
         if (empty($adminMetadata['lists'])) {
@@ -307,6 +308,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
             $collectionIdent = $this->collectionIdentFallback();
+        }
+
+        if ($collectionIdent && $proto->view()) {
+            $collectionIdent = $proto->render($collectionIdent);
+        }
+
+        if (!$collectionIdent) {
+            return [];
         }
 
         if (isset($adminMetadata['lists'][$collectionIdent])) {
@@ -1032,7 +1041,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 if (isset($action['ident']) && $action['ident'] === 'create') {
                     if (isset($action['url'])) {
                         $model = $this->proto();
-                        if ($model->view() !== null) {
+                        if ($model->view()) {
                             $action['url'] = $model->render((string)$action['url']);
                         } else {
                             $action['url'] = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $action['url']);

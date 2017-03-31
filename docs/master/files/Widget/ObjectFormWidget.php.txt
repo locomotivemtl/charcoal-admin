@@ -160,14 +160,24 @@ class ObjectFormWidget extends FormWidget implements
      */
     protected function dataFromObject()
     {
-        $objMetadata = $this->obj()->metadata();
+        $obj           = $this->obj();
+        $objMetadata   = $obj->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
+
         $formIdent = $this->formIdent();
         if (!$formIdent) {
             $formIdent = $this->formIdentFallback();
         }
 
-        $objFormData = (isset($adminMetadata['forms'][$formIdent]) ? $adminMetadata['forms'][$formIdent] : []);
+        if ($formIdent && $obj->view()) {
+            $formIdent = $obj->render($formIdent);
+        }
+
+        if (isset($adminMetadata['forms'][$formIdent])) {
+            $objFormData = $adminMetadata['forms'][$formIdent];
+        } else {
+            $objFormData = [];
+        }
 
         if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
             $extraFormGroups = array_intersect(
@@ -199,7 +209,7 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * Set the identifier of the form to use.
+     * Set the key for the form structure to use.
      *
      * @param  string $formIdent The form identifier.
      * @throws InvalidArgumentException If the identifier is not a string.
@@ -219,7 +229,9 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * Retrieve the identifier of the form to use, or its fallback.
+     * Retrieve a key for the form structure to use.
+     *
+     * If the form key is undefined, resolve a fallback.
      *
      * @return string
      */
@@ -235,7 +247,7 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * Retrieve the identifier of the form to use.
+     * Retrieve the key for the form structure to use.
      *
      * @return string
      */
@@ -263,7 +275,10 @@ class ObjectFormWidget extends FormWidget implements
             return $this;
         }
 
-        $this->nextUrl = $this->obj()->render($url);
+        $obj = $this->obj();
+        if ($obj->view()) {
+            $this->nextUrl = $obj->render($url);
+        }
 
         return $this;
     }

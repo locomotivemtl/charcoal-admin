@@ -198,9 +198,9 @@ class EditTemplate extends AdminTemplate implements
 
         if (!$objLabel && isset($metadata['admin']['forms'])) {
             $adminMetadata = $metadata['admin'];
-            $formIdent     = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
 
-            if ($formIdent === false || $formIdent === null || $formIdent === '') {
+            $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
+            if (!$formIdent) {
                 $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
             }
 
@@ -243,7 +243,7 @@ class EditTemplate extends AdminTemplate implements
             }
         }
 
-        if ($obj && $obj->view()) {
+        if ($obj->view()) {
             $this->title = $obj->render((string)$objLabel, $obj);
         } else {
             $this->title = (string)$objLabel;

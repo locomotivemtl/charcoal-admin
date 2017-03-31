@@ -92,6 +92,13 @@ class ObjectRoute extends AbstractModel implements
     protected $routeTemplate;
 
     /**
+     * Retrieve the foreign object's routes options.
+     *
+     * @return array
+     */
+    protected $routeOptions;
+
+    /**
      * Store a copy of the original—_preferred_—slug before alterations are made.
      *
      * @var string
@@ -362,6 +369,22 @@ class ObjectRoute extends AbstractModel implements
 
         return $this;
     }
+    /**
+     * Customize the template's options.
+     *
+     * @param  mixed $options Template options.
+     * @return self
+     */
+    public function setRouteOptions($options)
+    {
+        if (is_string($options)) {
+            $options = json_decode($options, true);
+        }
+
+        $this->routeOptions = $options;
+
+        return $this;
+    }
 
     /**
      * Retrieve the object model factory.
@@ -463,6 +486,16 @@ class ObjectRoute extends AbstractModel implements
     public function routeTemplate()
     {
         return $this->routeTemplate;
+    }
+
+    /**
+     * Retrieve the template's customized options.
+     *
+     * @return array
+     */
+    public function routeOptions()
+    {
+        return $this->routeOptions;
     }
 
     /**

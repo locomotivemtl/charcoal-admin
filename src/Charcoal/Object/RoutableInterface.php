@@ -44,6 +44,21 @@ interface RoutableInterface
     public function slug();
 
     /**
+     * Set the object's route options
+     *
+     * @param array $routeOptions The object routes's options.
+     * @return self
+     */
+    public function setRouteOptions($routeOptions);
+
+    /**
+     * Retrieve the object's route options
+     *
+     * @return array|null
+     */
+    public function routeOptions();
+
+    /**
      * Generate a URL slug from the object's URL slug pattern.
      *
      * @return string|null

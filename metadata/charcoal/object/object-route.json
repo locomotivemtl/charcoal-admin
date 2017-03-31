@@ -74,6 +74,15 @@
                 "fr": "Identifiant du garabrit",
                 "en": "Template ident"
             }
+        },
+        "route_options": {
+            "type": "structure",
+            "input_type": "charcoal/admin/property/input/textarea",
+            "rows": 8,
+            "label": {
+                "en": "Route options",
+                "fr": "Options de route"
+            }
         }
     },
 

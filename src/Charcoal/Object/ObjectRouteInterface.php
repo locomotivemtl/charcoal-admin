@@ -57,4 +57,11 @@ interface ObjectRouteInterface
      * @return string
      */
     public function routeTemplate();
+
+    /**
+     * Retrieve the foreign object's route options.
+     *
+     * @return array
+     */
+    public function routeOptions();
 }

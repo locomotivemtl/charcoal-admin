@@ -83,6 +83,13 @@ trait RoutableTrait
     private $objectRouteClass = ObjectRoute::class;
 
     /**
+     * The object's route options.
+     *
+     * @var array
+     */
+    protected $routeOptions;
+
+    /**
      * Set the object's URL slug pattern.
      *
      * @param  mixed $pattern The slug pattern.
@@ -360,7 +367,6 @@ trait RoutableTrait
      */
     protected function generateObjectRoute($slug = null)
     {
-
         if (!$slug) {
             $slug = $this->generateSlug();
         }
@@ -384,9 +390,10 @@ trait RoutableTrait
             // Unchanged but sync extra properties
             if ($slug === $oldRoute->slug()) {
                 $oldRoute->setData([
-                    'route_template' => $this->templateIdent()
+                    'route_template' => $this->templateIdent(),
+                    'route_options'  => $this->routeOptions()
                 ]);
-                $oldRoute->update([ 'route_template' ]);
+                $oldRoute->update([ 'route_template', 'route_options' ]);
                 continue;
             }
 
@@ -397,6 +404,7 @@ trait RoutableTrait
                 'route_obj_id'   => $this->id(),
                 // Not used, might be too much.
                 'route_template' => $this->templateIdent(),
+                'route_options'  => $this->routeOptions(),
                 'active'         => true
             ]);
 
@@ -671,6 +679,29 @@ trait RoutableTrait
     public function objectRouteClass()
     {
         return $this->objectRouteClass;
+    }
+
+    /**
+     * Set the object's route options
+     *
+     * @param array $routeOptions The object routes's options.
+     * @return self
+     */
+    public function setRouteOptions($routeOptions)
+    {
+        $this->routeOptions = is_array($routeOptions) ? json_encode($routeOptions) : null;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the object's route options
+     *
+     * @return array|null
+     */
+    public function routeOptions()
+    {
+        return $this->routeOptions;
     }
 
     /**

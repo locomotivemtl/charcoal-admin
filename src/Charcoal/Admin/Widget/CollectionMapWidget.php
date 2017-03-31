@@ -426,7 +426,8 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
      */
     public function dataFromObject()
     {
-        $objMetadata = $this->proto()->metadata();
+        $proto         = $this->proto();
+        $objMetadata   = $proto->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
 
         if (empty($adminMetadata['lists'])) {
@@ -436,6 +437,14 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
         $collectionIdent = $this->collectionIdent();
         if (!$collectionIdent) {
             $collectionIdent = $this->collectionIdentFallback();
+        }
+
+        if ($collectionIdent && $proto->view()) {
+            $collectionIdent = $proto->render($collectionIdent);
+        }
+
+        if (!$collectionIdent) {
+            return [];
         }
 
         if (isset($adminMetadata['lists'][$collectionIdent])) {

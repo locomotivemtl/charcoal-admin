@@ -257,10 +257,18 @@ class CollectionTemplate extends AdminTemplate implements
 
         if (!$objLabel && isset($metadata['admin']['lists'])) {
             $adminMetadata = $metadata['admin'];
-            $listIdent     = filter_input(INPUT_GET, 'collection_ident', FILTER_SANITIZE_STRING);
 
-            if ($listIdent === false || $listIdent === null || $listIdent === '') {
-                $listIdent = (isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '');
+            $listIdent = filter_input(INPUT_GET, 'collection_ident', FILTER_SANITIZE_STRING);
+            if (!$listIdent) {
+                $listIdent = $this->collectionIdent();
+            }
+
+            if (!$listIdent) {
+                $listIdent = $this->collectionIdentFallback();
+            }
+
+            if ($listIdent && $model->view()) {
+                $listIdent = $model->render($listIdent);
             }
 
             if (isset($adminMetadata['lists'][$listIdent]['label'])) {
@@ -284,7 +292,7 @@ class CollectionTemplate extends AdminTemplate implements
             }
         }
 
-        if ($model && $model->view()) {
+        if ($model->view()) {
             $this->title = $model->render((string)$objLabel, $model);
         } else {
             $this->title = (string)$objLabel;

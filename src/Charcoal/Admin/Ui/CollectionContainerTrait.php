@@ -246,7 +246,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Set the identifier of the collection to use.
+     * Set the key for the collection structure to use.
      *
      * @param  string $collectionIdent The collection identifier.
      * @throws InvalidArgumentException If the identifier argument is not a string.
@@ -265,7 +265,9 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Retrieve the identifier of the collection to use, or its fallback.
+     * Retrieve a key for the collection structure to use.
+     *
+     * If the collection key is undefined, resolve a fallback.
      *
      * @return string
      */
@@ -281,7 +283,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Retrieve the identifier of the collection to use.
+     * Retrieve the key for the collection structure to use.
      *
      * @return string|null
      */
@@ -297,17 +299,22 @@ trait CollectionContainerTrait
      */
     public function collectionMetadata()
     {
+        $proto = $this->proto();
         $collectionIdent = $this->collectionIdent();
 
         if (!$collectionIdent) {
             $collectionIdent = $this->collectionIdentFallback();
         }
 
+        if ($collectionIdent && $proto->view()) {
+            $collectionIdent = $proto->render($collectionIdent);
+        }
+
         if (!$collectionIdent) {
             return [];
         }
 
-        $objMeta = $this->proto()->metadata();
+        $objMeta = $proto->metadata();
 
         if (isset($objMeta['admin']['lists'][$collectionIdent])) {
             return $objMeta['admin']['lists'][$collectionIdent];

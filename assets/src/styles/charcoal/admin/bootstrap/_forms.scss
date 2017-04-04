@@ -58,9 +58,9 @@ textarea.form-control {
 }
 
 .c-structure {
-    .form-field > & {
-        padding: $panel-body-padding $panel-body-padding 0;
-        border: 1px solid $input-border;
+    .form-field > &.c-structure--bordered {
+        padding:       $panel-body-padding $panel-body-padding 0;
+        border:        1px solid $input-border;
         border-radius: $input-border-radius;
     }
 }
@@ -69,4 +69,8 @@ textarea.form-control {
     > .o-section {
         margin-bottom: 0;
     }
+}
+
+.c-structure_empty {
+    margin-bottom: $panel-body-padding;
 }

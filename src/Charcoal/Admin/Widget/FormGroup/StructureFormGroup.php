@@ -2,21 +2,24 @@
 
 namespace Charcoal\Admin\Widget\FormGroup;
 
-use \RuntimeException;
-use \UnexpectedValueException;
-use \InvalidArgumentException;
+use RuntimeException;
+use OutOfBoundsException;
+use UnexpectedValueException;
+use InvalidArgumentException;
 
 // From 'charcoal-property'
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\FormGroup\AbstractFormGroup;
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
-use \Charcoal\Ui\FormInput\FormInputInterface;
+use Charcoal\Ui\FormGroup\AbstractFormGroup;
+use Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\FormInput\FormInputInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\FormGroupWidget;
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Widget\FormGroupWidget;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Ui\StructureContainerInterface;
+use Charcoal\Admin\Ui\StructureContainerTrait;
 
 /**
  * Form Group Structure Property
@@ -69,8 +72,11 @@ use \Charcoal\Admin\Ui\ObjectContainerInterface;
  * ```
  *
  */
-class StructureFormGroup extends FormGroupWidget
+class StructureFormGroup extends FormGroupWidget implements
+    StructureContainerInterface
 {
+    use StructureContainerTrait;
+
     /**
      * The form group's storage model.
      *
@@ -134,6 +140,34 @@ class StructureFormGroup extends FormGroupWidget
         parent::setData($data);
 
         return $this;
+    }
+
+    /**
+     * Determine if the header is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a title.
+     */
+    public function showHeader()
+    {
+        if ($this->display() === self::SEAMLESS_STRUCT_DISPLAY) {
+            return false;
+        } else {
+            return parent::showHeader();
+        }
+    }
+
+    /**
+     * Determine if the footer is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there are notes.
+     */
+    public function showFooter()
+    {
+        if ($this->display() === self::SEAMLESS_STRUCT_DISPLAY) {
+            return false;
+        } else {
+            return parent::showFooter();
+        }
     }
 
     /**

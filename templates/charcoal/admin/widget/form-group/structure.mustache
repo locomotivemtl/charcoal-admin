@@ -5,7 +5,7 @@
     `charcoal/admin/widget/form-group/structure-form-group`
 --}}
 
-<fieldset class="c-structure">
+<fieldset class="c-structure{{^ displays.seamless }} c-structure--bordered{{/ displays.seamless }}">
     {{# showHeader }}
     <header class="o-header -border">
         {{# showTitle }}
@@ -19,6 +19,7 @@
     </header>
     {{/ showHeader }}
     {{^ showHeader }}
+    <h2 class="sr-only">{{ title }}</h2>
     {{# showDescription }}
     <div class="help-block o-section">{{& description }}</div>
     {{/ showDescription }}

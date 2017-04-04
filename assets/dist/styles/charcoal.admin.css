@@ -1700,13 +1700,16 @@ textarea.form-control {
   letter-spacing: 1px;
   text-transform: uppercase; }
 
-.form-field > .c-structure {
+.form-field > .c-structure.c-structure--bordered {
   padding: 15px 15px 0;
   border: 1px solid #ccc;
   border-radius: 4px; }
 
 .c-structure_entry_content > .o-section {
   margin-bottom: 0; }
+
+.c-structure_empty {
+  margin-bottom: 15px; }
 
 .table > thead > tr > th,
 .table > thead > tr > td,

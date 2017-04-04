@@ -1,0 +1,131 @@
+// ==========================================================================
+// chips
+// ==========================================================================
+
+$chip-line-height:           1 !default;
+$chip-border-radius:         1em !default;
+$chip-active-border:         2px solid #FFF !default;
+
+//** Default chip background color
+$chip-bg:                    $badge-bg !default;
+//** Primary chip background color
+$chip-primary-bg:            $brand-primary !default;
+//** Success chip background color
+$chip-success-bg:            $brand-success !default;
+//** Info chip background color
+$chip-info-bg:               $brand-info !default;
+//** Warning chip background color
+$chip-warning-bg:            $brand-warning !default;
+//** Danger chip background color
+$chip-danger-bg:             $brand-danger !default;
+
+
+@mixin chip-variant($color) {
+    &::before {
+        background-color: $color;
+    }
+
+    &[href] {
+        &:hover,
+        &:focus {
+            &::before {
+                background-color: darken($color, 10%);
+            }
+        }
+    }
+}
+
+
+// Catchall Base Class
+.chip {
+    display:        inline-block;
+    font-style:     normal;
+    font-weight:    normal;
+    line-height:    $chip-line-height;
+    vertical-align: middle;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    &::before {
+        content:          "";
+        display:          block;
+        width:            1em;
+        height:           1em;
+        white-space:      nowrap;
+        background-color: $chip-bg;
+        border-radius:    $chip-border-radius;
+    }
+
+    // Quick fix for chips in buttons
+    .btn & {
+        position: relative;
+        top: -1px;
+    }
+
+    .btn-xs &,
+    .btn-group-xs > .btn & {
+        top: 0;
+
+        &::before {
+            width:  0.75em;
+            height: 0.75em;
+        }
+    }
+
+    // Account for chips in navs
+    .list-group-item.active > &,
+    .nav-pills > .active > a > & {
+        &::before {
+            border: $chip-active-border;
+        }
+    }
+
+    .list-group-item > & {
+        float: right;
+    }
+
+    .list-group-item > & + & {
+        margin-right: 5px;
+    }
+
+    .nav-pills > li > a > & {
+        margin-left: 3px;
+    }
+}
+
+// Hover state, but only for links
+a.chip {
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        cursor: pointer;
+
+        &::before {
+            background-color: darken($color, 10%);
+        }
+    }
+}
+
+// Colors
+// Contextual variations (linked labels get darker on :hover)
+
+.chip-primary {
+    @include chip-variant($chip-primary-bg);
+}
+
+.chip-success {
+    @include chip-variant($chip-success-bg);
+}
+
+.chip-info {
+    @include chip-variant($chip-info-bg);
+}
+
+.chip-warning {
+  @include chip-variant($chip-warning-bg);
+}
+
+.chip-danger {
+  @include chip-variant($chip-danger-bg);
+}

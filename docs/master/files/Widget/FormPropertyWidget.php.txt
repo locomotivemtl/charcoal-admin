@@ -340,7 +340,13 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function showLabel()
     {
-        return true;
+        $prop = $this->prop();
+        $show = $prop['show_label'];
+        if (is_bool($show)) {
+            return $show;
+        } else {
+            return true;
+        }
     }
 
     /**

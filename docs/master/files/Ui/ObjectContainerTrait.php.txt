@@ -68,6 +68,8 @@ trait ObjectContainerTrait
     }
 
     /**
+     * Set the object type.
+     *
      * @param string $objType The object type.
      * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return ObjectContainerInterface Chainable
@@ -87,6 +89,8 @@ trait ObjectContainerTrait
     }
 
     /**
+     * Retrieve the object type.
+     *
      * @return string|null
      */
     public function objType()
@@ -95,7 +99,9 @@ trait ObjectContainerTrait
     }
 
     /**
-     * @param  string|numeric $objId The object id to load.
+     * Set the object ID.
+     *
+     * @param  string|numeric $objId The object ID to load.
      * @throws InvalidArgumentException If provided argument is not of type 'scalar'.
      * @return ObjectContainerInterface Chainable
      */
@@ -114,7 +120,7 @@ trait ObjectContainerTrait
     }
 
     /**
-     * Assign the Object ID
+     * Retrieve the object ID.
      *
      * @return string|numeric|null
      */
@@ -161,6 +167,16 @@ trait ObjectContainerTrait
         }
 
         return $this->modelFactory()->get($objType);
+    }
+
+    /**
+     * Determine if the class has a concrete object.
+     *
+     * @return boolean
+     */
+    public function hasObj()
+    {
+        return ($this->obj() && $this->obj()->id());
     }
 
     /**

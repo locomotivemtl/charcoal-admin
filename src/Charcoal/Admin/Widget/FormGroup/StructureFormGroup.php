@@ -73,6 +73,7 @@ use Charcoal\Admin\Ui\StructureContainerTrait;
  *
  */
 class StructureFormGroup extends FormGroupWidget implements
+    FormInputInterface,
     StructureContainerInterface
 {
     use StructureContainerTrait;

@@ -6,7 +6,7 @@ $c-attachment-panel-width:  85%;
 $c-attachment-aside-width:  16%;
 $c-attachment-gutter-width: 2%;
 
-$c-attachment-pv: (nth($panel-heading-padding, 1) + 2px);
+$c-attachment-pv: (nth($panel-heading-padding, 1) + 3px);
 $c-attachment-ph: nth($panel-heading-padding, 2);
 
 .c-attachments {
@@ -33,10 +33,6 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         list-style: none;
     }
 
-    .panel-group {
-        width: $c-attachment-panel-width;
-    }
-
     .panel {
         position: relative;
 
@@ -51,17 +47,26 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
 
     .panel-title-icon,
     .list-group-item-icon {
-        margin:  (-$c-attachment-pv) $c-attachment-ph (-$c-attachment-pv) (-$c-attachment-ph);
         padding: $c-attachment-pv $c-attachment-ph;
-        border-right: 1px solid #ddd;
+    }
 
-        &.-right {
-            position: absolute;
-            right: $c-attachment-ph;
-            margin:  (-$c-attachment-pv) (-$c-attachment-ph) (-$c-attachment-pv) ($c-attachment-ph);
-            padding: $c-attachment-pv $c-attachment-ph $c-attachment-pv $c-attachment-ph;
+    .panel-title-icon,
+    .list-group-item > .list-group-item-icon {
+        margin: (-$c-attachment-pv) $c-attachment-ph (-$c-attachment-pv) (-$c-attachment-ph);
+        border-right: 1px solid #ddd;
+    }
+
+    .panel-heading > .panel-actions,
+    .list-group-item-actions {
+        position: absolute;
+        top:      0;
+        right:    0;
+
+        .list-group-item-action {
+            display:     block;
+            float:       left;
             border-left: 1px solid #ddd;
-            border-right: 0;
+            padding:     nth($panel-heading-padding, 1) $c-attachment-ph;
         }
     }
 
@@ -101,24 +106,35 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
     }
 
     .panel-actions {
-        position: absolute;
-        top:      ceil($font-size * 0.25);
-        left:     100% + $c-attachment-gutter-width;
-        width:    $c-attachment-aside-width;
-
         .glyphicon {
             vertical-align: text-top;
         }
     }
 
+    .panel-actions-float {
+        position: absolute;
+        top:      ceil($font-size * 0.25);
+        left:     100% + $c-attachment-gutter-width;
+        width:    $c-attachment-aside-width;
+    }
+
+    .panel-actions-inline {
+        padding: ceil($font-size * 0.25);
+    }
 }
 
 .c-attachments_header {
     margin-bottom: 2em;
 }
 
-.js-attachment-container .js-grid-container {
-    min-height: 100px;
+.js-attachment-container {
+    .js-grid-container {
+        min-height: 100px;
+    }
+
+    > .panel-group {
+        width: $c-attachment-panel-width;
+    }
 }
 
 .js-attachment-placeholder {

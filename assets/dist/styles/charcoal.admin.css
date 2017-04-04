@@ -1378,9 +1378,6 @@ ul.c-panel_table {
   padding: 0;
   list-style: none; }
 
-.c-attachments .panel-group {
-  width: 85%; }
-
 .c-attachments .panel {
   position: relative; }
   .c-attachments .panel.ui-sortable-helper {
@@ -1391,17 +1388,24 @@ ul.c-panel_table {
 
 .c-attachments .panel-title-icon,
 .c-attachments .list-group-item-icon {
-  margin: -12px 15px -12px -15px;
-  padding: 12px 15px;
+  padding: 13px 15px; }
+
+.c-attachments .panel-title-icon,
+.c-attachments .list-group-item > .list-group-item-icon {
+  margin: -13px 15px -13px -15px;
   border-right: 1px solid #ddd; }
-  .c-attachments .panel-title-icon.-right,
-  .c-attachments .list-group-item-icon.-right {
-    position: absolute;
-    right: 15px;
-    margin: -12px -15px -12px 15px;
-    padding: 12px 15px 12px 15px;
+
+.c-attachments .panel-heading > .panel-actions,
+.c-attachments .list-group-item-actions {
+  position: absolute;
+  top: 0;
+  right: 0; }
+  .c-attachments .panel-heading > .panel-actions .list-group-item-action,
+  .c-attachments .list-group-item-actions .list-group-item-action {
+    display: block;
+    float: left;
     border-left: 1px solid #ddd;
-    border-right: 0; }
+    padding: 10px 15px; }
 
 .c-attachments .panel-headless-title {
   display: none; }
@@ -1424,19 +1428,26 @@ ul.c-panel_table {
     max-width: 100%;
     height: auto; }
 
-.c-attachments .panel-actions {
+.c-attachments .panel-actions .glyphicon {
+  vertical-align: text-top; }
+
+.c-attachments .panel-actions-float {
   position: absolute;
   top: 4px;
   left: 102%;
   width: 16%; }
-  .c-attachments .panel-actions .glyphicon {
-    vertical-align: text-top; }
+
+.c-attachments .panel-actions-inline {
+  padding: 4px; }
 
 .c-attachments_header {
   margin-bottom: 2em; }
 
 .js-attachment-container .js-grid-container {
   min-height: 100px; }
+
+.js-attachment-container > .panel-group {
+  width: 85%; }
 
 .js-attachment-placeholder {
   height: 40px;
@@ -1742,6 +1753,11 @@ textarea.form-control {
   .btn > .fa + .btn-label,
   .btn > .glyphicon + .btn-label {
     margin-left: 0.25em; }
+
+.btn-mock {
+  cursor: inherit; }
+  .btn-mock + .btn-group {
+    margin-left: -1px; }
 
 .btn-link-primary,
 .btn-link-success,

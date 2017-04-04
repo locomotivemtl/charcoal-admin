@@ -17,6 +17,17 @@
 }
 
 
+// Fake button
+// -------------------------
+
+.btn-mock {
+    cursor: inherit;
+
+    & + .btn-group {
+        margin-left: -1px;
+    }
+}
+
 // Alternate Link buttons
 // -------------------------
 

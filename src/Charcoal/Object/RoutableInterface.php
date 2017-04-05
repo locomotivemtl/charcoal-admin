@@ -46,10 +46,10 @@ interface RoutableInterface
     /**
      * Set the object's route options
      *
-     * @param array $routeOptions The object routes's options.
+     * @param  mixed $options The object routes's options.
      * @return self
      */
-    public function setRouteOptions($routeOptions);
+    public function setRouteOptions($options);
 
     /**
      * Retrieve the object's route options
@@ -85,4 +85,11 @@ interface RoutableInterface
      * @return string
      */
     public function objectRouteClass();
+
+    /**
+     * Determine if the routable object is active.
+     *
+     * @return boolean
+     */
+    public function isActiveRoute();
 }

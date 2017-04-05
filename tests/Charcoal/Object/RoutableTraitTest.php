@@ -2,8 +2,6 @@
 
 namespace Charcoal\Object\Tests;
 
-use PHPUnit_Framework_TestCase;
-
 use DateTime;
 
 // From Pimple
@@ -22,7 +20,7 @@ use Charcoal\Object\Tests\Mocks\RoutableClass as RoutableObject;
 /**
  *
  */
-class RoutableTraitTest extends PHPUnit_Framework_TestCase
+class RoutableTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Tested Class.

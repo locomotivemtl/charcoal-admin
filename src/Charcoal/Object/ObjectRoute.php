@@ -2,6 +2,8 @@
 namespace Charcoal\Object;
 
 use DateTime;
+use DateTimeInterface;
+use Exception;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -94,7 +96,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Retrieve the foreign object's routes options.
      *
-     * @return array
+     * @var array
      */
     protected $routeOptions;
 
@@ -129,7 +131,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Inject dependencies from a DI Container.
      *
-     * @param Container $container A dependencies container instance.
+     * @param  Container $container A dependencies container instance.
      * @return void
      */
     public function setDependencies(Container $container)
@@ -226,7 +228,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Set an object model factory.
      *
-     * @param FactoryInterface $factory The model factory, to create objects.
+     * @param  FactoryInterface $factory The model factory, to create objects.
      * @return self
      */
     protected function setModelFactory(FactoryInterface $factory)
@@ -238,7 +240,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Set a model collection loader.
      *
-     * @param CollectionLoader $loader The collection loader.
+     * @param  CollectionLoader $loader The collection loader.
      * @return self
      */
     protected function setCollectionLoader(CollectionLoader $loader)
@@ -250,7 +252,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Set the object route URI.
      *
-     * @param string|null $slug The route.
+     * @param  string|null $slug The route.
      * @throws InvalidArgumentException If the slug argument is not a string.
      * @return self
      */
@@ -273,7 +275,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Set the locale of the object route.
      *
-     * @param string $lang The route's locale.
+     * @param  string $lang The route's locale.
      * @return self
      */
     public function setLang($lang)
@@ -284,57 +286,81 @@ class ObjectRoute extends AbstractModel implements
     }
 
     /**
-     * @param \DateTime|string|null $creationDate The Creation Date date/time.
-     * @throws InvalidArgumentException If the date/time is invalid.
+     * Set the route's last creation date.
+     *
+     * @param  string|DateTimeInterface|null $time The date/time value.
+     * @throws InvalidArgumentException If the date/time value is invalid.
      * @return self
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate($time)
     {
-        if ($creationDate === null) {
+        if (empty($time) && !is_numeric($time)) {
             $this->creationDate = null;
             return $this;
         }
 
-        if (is_string($creationDate)) {
-            $creationDate = new DateTime($creationDate);
+        if (is_string($time)) {
+            try {
+                $time = new DateTime($time);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid Creation Date: %s',
+                    $e->getMessage()
+                ), $e->getCode(), $e);
+            }
         }
-        if (!($creationDate instanceof DateTime)) {
+
+        if (!$time instanceof DateTimeInterface) {
             throw new InvalidArgumentException(
-                'Invalid "Creation Date" value. Must be a date/time string or a DateTime object.'
+                'Creation Date must be a date/time string or an instance of DateTimeInterface'
             );
         }
-        $this->creationDate = $creationDate;
+
+        $this->creationDate = $time;
 
         return $this;
     }
 
     /**
-     * @param \DateTime|string|null $lastModificationDate The Last modification date date/time.
-     * @throws InvalidArgumentException If the date/time is invalid.
+     * Set the route's last modification date.
+     *
+     * @param  string|DateTimeInterface|null $time The date/time value.
+     * @throws InvalidArgumentException If the date/time value is invalid.
      * @return self
      */
-    public function setLastModificationDate($lastModificationDate)
+    public function setLastModificationDate($time)
     {
-        if ($lastModificationDate === null) {
+        if (empty($time) && !is_numeric($time)) {
             $this->lastModificationDate = null;
             return $this;
         }
-        if (is_string($lastModificationDate)) {
-            $lastModificationDate = new DateTime($lastModificationDate);
+
+        if (is_string($time)) {
+            try {
+                $time = new DateTime($time);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException(sprintf(
+                    'Invalid Updated Date: %s',
+                    $e->getMessage()
+                ), $e->getCode(), $e);
+            }
         }
-        if (!($lastModificationDate instanceof DateTime)) {
+
+        if (!$time instanceof DateTimeInterface) {
             throw new InvalidArgumentException(
-                'Invalid "Creation Date" value. Must be a date/time string or a DateTime object.'
+                'Updated Date must be a date/time string or an instance of DateTimeInterface'
             );
         }
-        $this->lastModificationDate = $lastModificationDate;
+
+        $this->lastModificationDate = $time;
+
         return $this;
     }
 
     /**
      * Set the foreign object type related to this route.
      *
-     * @param string $type The object type.
+     * @param  string $type The object type.
      * @return self
      */
     public function setRouteObjType($type)
@@ -347,7 +373,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Set the foreign object ID related to this route.
      *
-     * @param string $id The object ID.
+     * @param  string $id The object ID.
      * @return self
      */
     public function setRouteObjId($id)
@@ -360,7 +386,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * Set the foreign object's template identifier.
      *
-     * @param string $template The template identifier.
+     * @param  string $template The template identifier.
      * @return self
      */
     public function setRouteTemplate($template)
@@ -441,8 +467,9 @@ class ObjectRoute extends AbstractModel implements
     }
 
     /**
-     * Creation date.
-     * @return DateTime Creation date.
+     * Retrieve the route's creation date.
+     *
+     * @return DateTimeInterface|null
      */
     public function creationDate()
     {
@@ -450,8 +477,9 @@ class ObjectRoute extends AbstractModel implements
     }
 
     /**
-     * Last modification date.
-     * @return DateTime Last modification date.
+     * Retrieve the route's last modification date.
+     *
+     * @return DateTimeInterface|null
      */
     public function lastModificationDate()
     {

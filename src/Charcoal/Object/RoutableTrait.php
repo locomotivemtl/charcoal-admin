@@ -85,7 +85,7 @@ trait RoutableTrait
     /**
      * The object's route options.
      *
-     * @var array
+     * @var array|null
      */
     protected $routeOptions;
 
@@ -364,9 +364,10 @@ trait RoutableTrait
      *
      * @param  mixed $slug Slug by langs.
      * @param  array $data Object route custom data.
+     * @throws InvalidArgumentException If the slug is invalid.
      * @return void
      */
-    protected function generateObjectRoute($slug = null, $data = [])
+    protected function generateObjectRoute($slug = null, array $data = [])
     {
         if (!$slug) {
             $slug = $this->generateSlug();
@@ -375,14 +376,12 @@ trait RoutableTrait
         if ($slug instanceof Translation) {
             $slugs = $slug->data();
         } else {
-            throw new InvalidArgumentException(
-                sprintf('[%s::%s] slug parameter must be an instance of %s, received %s',
-                    get_called_class(),
-                    __FUNCTION__,
-                    Translation::class,
-                    gettype($slug)
-                )
-            );
+            throw new InvalidArgumentException(sprintf(
+                '[%s] slug parameter must be an instance of %s, received %s',
+                get_called_class().'::'.__FUNCTION__,
+                Translation::class,
+                is_object($slug) ? get_class($slug) : gettype($slug)
+            ));
         }
 
         if (!is_array($data)) {
@@ -702,12 +701,16 @@ trait RoutableTrait
     /**
      * Set the object's route options
      *
-     * @param array $routeOptions The object routes's options.
+     * @param  mixed $options The object routes's options.
      * @return self
      */
-    public function setRouteOptions($routeOptions)
+    public function setRouteOptions($options)
     {
-        $this->routeOptions = is_array($routeOptions) ? json_encode($routeOptions) : null;
+        if (is_string($options)) {
+            $options = json_decode($options, true);
+        }
+
+        $this->routeOptions = $options;
 
         return $this;
     }
@@ -723,14 +726,23 @@ trait RoutableTrait
     }
 
     /**
-     * Defaults to active property, used in the GenericRoute class.
-     * Defines if the route is active, else it sends the user to the 404 page.
+     * Determine if the routable object is active.
+     *
+     * The route controller will validate the object via this method. If the routable object
+     * is NOT active, the route controller will usually default to _404 Not Found_.
+     *
+     * By default — if the object has an "active" property, that value is checked, else —
+     * the route is always _active_.
      *
      * @return boolean
      */
     public function isActiveRoute()
     {
-        return ($this->active());
+        if (isset($this['active'])) {
+            return !!$this['active'];
+        } else {
+            return true;
+        }
     }
 
     /**

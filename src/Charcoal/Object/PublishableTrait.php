@@ -2,54 +2,80 @@
 
 namespace Charcoal\Object;
 
-use \DateTime;
-use \DateTimeInterface;
-use \InvalidArgumentException;
+use DateTime;
+use DateTimeInterface;
+use InvalidArgumentException;
+use UnexpectedValueException;
+use Exception;
 
 /**
- * A full implementation, as trait, of the `PublishableInterface`.
+ * Publishable Object
+ *
+ * A full implementation, as trait, of the {@see \Charcoal\Object\PublishableInterface}.
  */
 trait PublishableTrait
 {
     /**
+     * The publication date.
+     *
      * @var DateTimeInterface $publishDate
      */
     protected $publishDate;
 
     /**
+     * The expiration date.
+     *
      * @var DateTimeInterface $expiryDate
      */
     protected $expiryDate;
 
     /**
-     * @var string $publishStatus
+     * The publication status.
+     *
+     * @var string|null
      */
     protected $publishStatus;
 
     /**
-     * @param string|DateTimeInterface|null $publishDate The publishing date.
-     * @throws InvalidArgumentException If the date/time is invalid.
+     * Set the object's publication date.
+     *
+     * @param  string|DateTimeInterface|null $time The date/time value.
+     * @throws UnexpectedValueException If the date/time value is invalid.
+     * @throws InvalidArgumentException If the value is not a date/time instance.
      * @return PublishableInterface Chainable
      */
-    public function setPublishDate($publishDate)
+    public function setPublishDate($time)
     {
-        if ($publishDate === null || $publishDate === '') {
+        if ($time === null || $time === '') {
             $this->publishDate = null;
             return $this;
         }
-        if (is_string($publishDate)) {
-            $publishDate = new DateTime($publishDate);
+
+        if (is_string($time)) {
+            try {
+                $time = new DateTime($time);
+            } catch (Exception $e) {
+                throw new UnexpectedValueException(sprintf(
+                    'Invalid Publication Date: %s',
+                    $e->getMessage()
+                ), $e->getCode(), $e);
+            }
         }
-        if (!($publishDate instanceof DateTimeInterface)) {
+
+        if (!$time instanceof DateTimeInterface) {
             throw new InvalidArgumentException(
-                'Invalid "Publish Date" value. Must be a date/time string or a DateTime object.'
+                'Publication Date must be a date/time string or an instance of DateTimeInterface'
             );
         }
-        $this->publishDate = $publishDate;
+
+        $this->publishDate = $time;
+
         return $this;
     }
 
     /**
+     * Retrieve the object's publication date.
+     *
      * @return DateTimeInterface|null
      */
     public function publishDate()
@@ -58,29 +84,45 @@ trait PublishableTrait
     }
 
     /**
-     * @param string|DateTimeInterface|null $expiryDate The expiry date.
-     * @throws InvalidArgumentException If the date/time is invalid.
+     * Set the object's expiration date.
+     *
+     * @param  string|DateTimeInterface|null $time The date/time value.
+     * @throws UnexpectedValueException If the date/time value is invalid.
+     * @throws InvalidArgumentException If the value is not a date/time instance.
      * @return PublishableInterface Chainable
      */
-    public function setExpiryDate($expiryDate)
+    public function setExpiryDate($time)
     {
-        if ($expiryDate === null || $expiryDate === '') {
+        if ($time === null || $time === '') {
             $this->expiryDate = null;
             return $this;
         }
-        if (is_string($expiryDate)) {
-            $expiryDate = new DateTime($expiryDate);
+
+        if (is_string($time)) {
+            try {
+                $time = new DateTime($time);
+            } catch (Exception $e) {
+                throw new UnexpectedValueException(sprintf(
+                    'Invalid Expiration Date: %s',
+                    $e->getMessage()
+                ), $e->getCode(), $e);
+            }
         }
-        if (!($expiryDate instanceof DateTimeInterface)) {
+
+        if (!$time instanceof DateTimeInterface) {
             throw new InvalidArgumentException(
-                'Invalid "Expiry Date" value. Must be a date/time string or a DateTime object.'
+                'Expiration Date must be a date/time string or an instance of DateTimeInterface'
             );
         }
-        $this->expiryDate = $expiryDate;
+
+        $this->expiryDate = $time;
+
         return $this;
     }
 
     /**
+     * Retrieve the object's expiration date.
+     *
      * @return DateTimeInterface|null
      */
     public function expiryDate()
@@ -89,58 +131,77 @@ trait PublishableTrait
     }
 
     /**
-     * @param string $status The publish status (draft, pending or published).
-     * @throws InvalidArgumentException If the status is not one of the 3 valid status.
+     * Set the object's publication status.
+     *
+     * @param  string $status A publication status.
+     * @throws InvalidArgumentException If the status is invalid.
      * @return PublishableInterface Chainable
      */
     public function setPublishStatus($status)
     {
-        $validStatus = [
-            '',
-            'draft',
-            'pending',
-            'expired',
-            'published'
+        if ($status === null || $status === '') {
+            $this->publishStatus = null;
+            return $this;
+        }
+
+        $specialStatus = [
+            static::STATUS_EXPIRED  => static::STATUS_PUBLISHED,
+            static::STATUS_UPCOMING => static::STATUS_PUBLISHED
         ];
+
+        if (isset($specialStatus[$status])) {
+            $status = $specialStatus[$status];
+        }
+
+        $validStatus = [
+            static::STATUS_DRAFT,
+            static::STATUS_PENDING,
+            static::STATUS_PUBLISHED
+        ];
+
         if (!in_array($status, $validStatus)) {
             throw new InvalidArgumentException(sprintf(
                 'Status "%s" is not a valid publish status.',
                 $status
             ));
         }
+
         $this->publishStatus = $status;
+
         return $this;
     }
 
     /**
-     * Get the object's publish status.
+     * Retrieve the object's publication status.
      *
-     * Status can be:
-     * - `draft`
-     * - `pending`
-     * - `published`
-     * - `upcoming`
-     * - `expired`
+     * Default statuses are:
+     * - `draft` — Incomplete object viewable by a limited userbase.
+     * - `pending` — Awaiting a user with higher access to publish.
+     * - `published` — Publiclly viewable by everyone.
+     * - `upcoming` — Scheduled to be published at a future date.
+     * - `expired` — Removed from public viewing.
      *
-     * Note that the `upcoming` and `expired` status are specialized status when
-     * the object is set to `published` but the `publishDate` or `expiryDate` do not match.
+     * Note that the `upcoming` and `expired` are specialized statuses when the object
+     * is set to `published` but the publication date or expiration date do not match.
      *
      * @return string
      */
     public function publishStatus()
     {
         $status = $this->publishStatus;
-        if (!$status || $status == 'published') {
+        if ($status !== null && (!$status || $status === static::STATUS_PUBLISHED)) {
             $status = $this->publishDateStatus();
         }
+
         return $status;
     }
 
     /**
-     * Get the "publish status" from the publish date / expiry date.
+     * Retrieve the object's publication status based on publication and expiration dates.
      *
-     * - If no publish date is set, then it is assumed to be "always published." (or expired)
-     * - If no expiry date is set, then it is assumed to never expire.
+     * - If no publication date is set, then it's assumed to be always published (or "expired").
+     * - If no expiration date is set, then it's assumed to never expire.
+     * - If a publication date is set to a future date, then it's assumed to be scheduled to be published ("upcoming").
      *
      * @return string
      */
@@ -148,32 +209,34 @@ trait PublishableTrait
     {
         $now = new DateTime();
         $publish = $this->publishDate();
-        $expiry = $this->expiryDate();
+        $expiry  = $this->expiryDate();
 
         if (!$publish) {
             if (!$expiry || $now < $expiry) {
-                return 'published';
+                return static::STATUS_PUBLISHED;
             } else {
-                return 'expired';
+                return static::STATUS_EXPIRED;
             }
         } else {
             if ($now < $publish) {
-                return 'pending';
+                return static::STATUS_UPCOMING;
             } else {
                 if (!$expiry || $now < $expiry) {
-                    return 'published';
+                    return static::STATUS_PUBLISHED;
                 } else {
-                    return 'expired';
+                    return static::STATUS_EXPIRED;
                 }
             }
         }
     }
 
     /**
+     * Determine if the object is published.
+     *
      * @return boolean
      */
     public function isPublished()
     {
-        return ($this->publishStatus() == 'published');
+        return ($this->publishStatus() === static::STATUS_PUBLISHED);
     }
 }

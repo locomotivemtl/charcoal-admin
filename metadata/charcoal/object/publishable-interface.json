@@ -35,7 +35,7 @@
             "input_type": "charcoal/admin/property/input/select",
             "label": {
                 "en": "Publication Status",
-                "fr": "Status de publication"
+                "fr": "Statut de publication"
             },
             "choices": {
                 "draft": {

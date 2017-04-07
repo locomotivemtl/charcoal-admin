@@ -114,7 +114,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 
     });
 
-    $('.js-sublist-inline-edit').on('click', function (e) {
+    $('.js-sublist-inline-edit', that.table_selector).on('click', function (e) {
         e.preventDefault();
 
         var sublist = that.sublist(),
@@ -125,14 +125,9 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             };
 
         $.post(url, data, function (response) {
-            //console.debug(response);
             if (response.success) {
                 var objects = response.objects;
-                //console.debug(objects);
-                //console.debug(objects.length);
                 for (var i = 0;i <= objects.length -1;i++) {
-                    //console.debug(i);
-                    window.console.debug(objects[i]);
 
                     var formControls = objects[i].properties,
                         row = $(sublist.elems[i]).parents('tr'),
@@ -153,8 +148,6 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 
         var $this = $(this);
         var widget_type = $this.data('widget-type');
-        console.debug(widget_type);
-        //console.debug(this.title());
 
         that.widget_dialog({
             title: tableWidgetL10n.importList,
@@ -166,7 +159,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         });
     });
 
-    $('tbody.js-sortable').sortable({
+    $('tbody.js-sortable', that.table_selector).sortable({
         cursor: 'ns-resize',
         delay: 150,
         distance: 5,
@@ -179,12 +172,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             });
             return ui;
         },
-        change: function (e, ui) {
-            // Update UI with position
-            console.debug(e, ui);
-        },
-        update: function (e, ui) {
-            console.debug(e, ui);
+        update: function () {
             var rows = $(this).sortable('toArray', {
                 attribute: 'data-id'
             });
@@ -219,8 +207,6 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 
 Charcoal.Admin.Widget_Table.prototype.sublist = function ()
 {
-    //var that = this;
-
     var selected = $('.select-row:checked'),
         ret = {
             elems: [],
@@ -352,7 +338,6 @@ Charcoal.Admin.Widget_Table.prototype.widget_dialog = function (opts)
                 data:     data,
                 dataType: 'json'
             }).done(function (response) {
-                console.debug(response);
                 if (response.success) {
                     dialog.setMessage(response.widget_html);
                 } else {
@@ -483,7 +468,6 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
                     data: data,
                     dataType: 'json'
                 }).done(function (response) {
-                    //console.debug(response);
                     if (response.success) {
                         $(that.element).remove();
                     } else {

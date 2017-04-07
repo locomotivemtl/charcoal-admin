@@ -32,7 +32,7 @@
         "locomotivemtl/charcoal-app": "~0.3",
         "locomotivemtl/charcoal-core": "^0.2",
         "locomotivemtl/charcoal-email": "^0.1.2",
-        "locomotivemtl/charcoal-object": "~0.1",
+        "locomotivemtl/charcoal-object": "~0.2",
         "locomotivemtl/charcoal-ui": "~0.2",
         "locomotivemtl/charcoal-user": "~0.1"
     },

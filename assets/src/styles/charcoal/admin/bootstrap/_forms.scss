@@ -65,9 +65,11 @@ textarea.form-control {
     }
 }
 
-.c-structure_entry_content {
-    > .o-section {
-        margin-bottom: 0;
+.c-structure--bordered {
+    .c-structure_entry_content {
+        > .o-section {
+            margin-bottom: 0;
+        }
     }
 }
 

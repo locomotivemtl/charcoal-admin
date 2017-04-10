@@ -1716,7 +1716,7 @@ textarea.form-control {
   border: 1px solid #ccc;
   border-radius: 4px; }
 
-.c-structure_entry_content > .o-section {
+.c-structure--bordered .c-structure_entry_content > .o-section {
   margin-bottom: 0; }
 
 .c-structure_empty {

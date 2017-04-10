@@ -26,7 +26,7 @@ Charcoal.Admin.manager().add_widget({
     data: {
         form_selector: '#{{ widgetId }}',
         obj_type:      '{{ objType }}',
-        obj_id:        '{{ objId }}',
+        obj_id:        '{{ objIdWithSlashes }}',
         tab:           {{# isTabbable }}true{{/ isTabbable }}{{^ isTabbable }}false{{/ isTabbable }}
     }
 });

@@ -130,6 +130,18 @@ trait ObjectContainerTrait
     }
 
     /**
+     * Retrieve the object ID and addslashes.
+     * Used in template/charcoal/admin/template/form/js.mustache to
+     * prevent problems with ID with single or double quotes.
+     *
+     * @return string Escaped ID.
+     */
+    public function objIdWithSlashes()
+    {
+        return addslashes($this->objId());
+    }
+
+    /**
      * @param string $objBaseClass The base class.
      * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return ObjectContainerInterface Chainable

@@ -6,6 +6,9 @@ use Closure;
 use DateTimeInterface;
 use InvalidArgumentException;
 
+// From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
+
 // From 'charcoal-translator'
 use Charcoal\Translator\Translation;
 
@@ -86,6 +89,10 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     protected function parseChoiceVal($value)
     {
+        if ($value instanceof ModelInterface) {
+            $value = $value->id();
+        }
+
         if ($value instanceof Closure) {
             $value = $value();
         }

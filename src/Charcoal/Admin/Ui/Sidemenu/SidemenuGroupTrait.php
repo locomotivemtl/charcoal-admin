@@ -307,7 +307,30 @@ trait SidemenuGroupTrait
      */
     public function numLinks()
     {
-        return count($this->links);
+        if (!is_array($this->links) && !($this->links instanceof \Traversable)) {
+            return 0;
+        }
+
+        $links = array_filter($this->links, function ($link) {
+            if (isset($link['active']) && !$link['active']) {
+                return false;
+            }
+
+            if (isset($link['required_acl_permissions'])) {
+                $link['permissions'] = $link['required_acl_permissions'];
+                unset($link['required_acl_permissions']);
+            }
+
+            if (isset($link['permissions'])) {
+                if ($this->hasPermissions($link['permissions']) === false) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        return count($links);
     }
 
     /**
@@ -325,6 +348,16 @@ trait SidemenuGroupTrait
         }
 
         return $this->isSelected;
+    }
+
+    /**
+     * Determine if the sidemenu groups should be displayed as panels.
+     *
+     * @return boolean
+     */
+    public function displayAsPanel()
+    {
+        return in_array($this->displayType(), [ 'panel', 'collapsible' ]);
     }
 
     /**

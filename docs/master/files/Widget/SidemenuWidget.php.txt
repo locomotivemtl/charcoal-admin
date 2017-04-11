@@ -699,6 +699,10 @@ class SidemenuWidget extends AdminWidget implements
      */
     public function numLinks()
     {
+        if (!is_array($this->links) && !($this->links instanceof \Traversable)) {
+            return 0;
+        }
+
         $links = array_filter($this->links, function ($link) {
             if (isset($link['active']) && !$link['active']) {
                 return false;

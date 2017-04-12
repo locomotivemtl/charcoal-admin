@@ -360,7 +360,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu links.
      *
-     * @return ArrayIterator|Generator
+     * @return array
      */
     public function links()
     {
@@ -378,6 +378,8 @@ class SidemenuWidget extends AdminWidget implements
             }
         }
 
+        $out = [];
+
         foreach ($this->links as $link) {
             if (isset($link['active']) && !$link['active']) {
                 continue;
@@ -394,8 +396,11 @@ class SidemenuWidget extends AdminWidget implements
                 }
             }
 
-            yield $link;
+            $out[] = $link;
         }
+
+        $this->links = $out;
+        return $this->links;
     }
 
     /**
@@ -699,7 +704,7 @@ class SidemenuWidget extends AdminWidget implements
      */
     public function numLinks()
     {
-        if (!is_array($this->links) && !($this->links instanceof \Traversable)) {
+        if (!is_array($this->links()) && !($this->links() instanceof \Traversable)) {
             return 0;
         }
 

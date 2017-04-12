@@ -8,12 +8,19 @@
 <ul class="nav nav-tabs{{^ showHeader }} bootstrap-dialog-title{{/ showHeader }}" role="tablist">
 {{# groups }}
     <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation">
-        <a href="#form_group_{{ widgetId }}" aria-controls="form_group_{{ widgetId }}" class="js-group-tabs"
-           role="tab" data-toggle="tab" data-tab-ident="{{ident}}">
-            {{# icon }}<i class="fa fa-{{ . }}" aria-hidden="true"></i>{{/ icon }}
-            {{# showTitle }}{{& title }}{{/ showTitle }}
+        <a href="#form_group_{{ widgetId }}"
+           class="tab-link js-group-tabs"
+           role="tab"
+           data-toggle="tab"
+           data-tab-ident="{{ident}}"
+           aria-controls="form_group_{{ widgetId }}">
+            {{# icon }}<span class="tab-icon fa fa-{{ . }}" aria-hidden="true"></span>{{/ icon }}
+            {{# showTitle }}
+            <span class="tab-title">{{& title }}</span>
+            {{/ showTitle }}
             {{^ showTitle }}
-                <div class="-hide-tab-title"><span>{{& title }}</span></div>{{/ showTitle }}
+            <div class="tab-title-hidden"><span>{{& title }}</span></div>
+            {{/ showTitle }}
         </a>
     </li>
 {{/ groups }}

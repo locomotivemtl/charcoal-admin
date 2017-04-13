@@ -393,7 +393,6 @@ trait RoutableTrait
             if (!in_array($lang, $this->translator()->availableLocales())) {
                 continue;
             }
-
             $this->translator()->setLocale($lang);
 
             $objectRoute = $this->createRouteObject();
@@ -402,7 +401,6 @@ trait RoutableTrait
 
             $defaultData = [
                 'lang'           => $lang,
-                'slug'           => $slug,
                 'route_obj_type' => $this->objType(),
                 'route_obj_id'   => $this->id(),
                 // Not used, might be too much.
@@ -424,6 +422,7 @@ trait RoutableTrait
             }
 
             $objectRoute->setData($data);
+            $objectRoute->setSlug($slug);
 
             if (!$objectRoute->isSlugUnique()) {
                 $objectRoute->generateUniqueSlug();

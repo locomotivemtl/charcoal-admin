@@ -423,6 +423,7 @@ trait RoutableTrait
 
             $objectRoute->setData($data);
             $objectRoute->setSlug($slug);
+            $objectRoute->setLang($lang);
 
             if (!$objectRoute->isSlugUnique()) {
                 $objectRoute->generateUniqueSlug();

@@ -1804,7 +1804,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                 });
             } else {
                 var title = $(this).data('title') || attachmentWidgetL10n.editObject;
-                that.create_attachment(type, title, 0, function (response) {
+                that.create_attachment(type, 0, null, { title: title }, function (response) {
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
@@ -1824,14 +1824,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             e.preventDefault();
             var action = _this.data('action');
             switch (action) {
-                case 'edit' :
+                case 'edit':
                     var type = _this.data('type');
                     var id = _this.data('id');
                     if (!type || !id) {
                         break;
                     }
                     var title = _this.data('title') || attachmentWidgetL10n.editObject;
-                    that.create_attachment(type, title, id, function (response) {
+                    that.create_attachment(type, id, null, { title: title }, function (response) {
                         if (response.success) {
                             that.reload();
                         }
@@ -1844,44 +1844,49 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         break;
                     }
 
-                    that.confirm(
-                        {
-                            title:      attachmentWidgetL10n.confirmRemoval,
-                            message:    commonL10n.confirmAction,
-                            btnOKLabel: commonL10n.removeObject,
-                            callback:   function (result) {
-                                if (result) {
-                                    that.remove_join(_this.data('id'), function () {
-                                        that.reload();
-                                    });
-                                }
+                    that.confirm({
+                        title:      attachmentWidgetL10n.confirmRemoval,
+                        message:    commonL10n.confirmAction,
+                        btnOKLabel: commonL10n.removeObject,
+                        callback:   function (result) {
+                            if (result) {
+                                that.remove_join(_this.data('id'), function () {
+                                    that.reload();
+                                });
                             }
                         }
-                    );
+                    });
                     break;
 
                 case 'add-object':
-                    var container_type   = _this.data('type'),
-                        container_group  = _this.data('group'),
+                    var attachment_title = _this.data('title'),
+                        attachment_type  = _this.data('attachment'),
+                        container_type   = _this.data('type'),
                         container_id     = _this.data('id'),
-                        attachment_title = _this.data('title'),
-                        attachment_type  = _this.data('attachment');
+                        container_group  = _this.data('group'),
+                        container_struct = {
+                            id:    container_id,
+                            type:  container_type,
+                            group: container_group
+                        };
 
-                    that.create_attachment(attachment_type, attachment_title, 0, function (response) {
-                        if (response.success) {
-                            that.add_object_to_container(
-                                {
-                                    id:   response.obj_id,
-                                    type: response.obj.type
-                                },
-                                {
-                                    id:    container_id,
-                                    type:  container_type,
-                                    group: container_group
-                                }
-                            );
+                    that.create_attachment(
+                        attachment_type,
+                        0,
+                        { title: attachment_title },
+                        container_struct,
+                        function (response) {
+                            if (response.success) {
+                                that.add_object_to_container(
+                                    {
+                                        id:   response.obj_id,
+                                        type: response.obj.type
+                                    },
+                                    container_struct
+                                );
+                            }
                         }
-                    });
+                    );
 
                     break;
             }
@@ -1902,24 +1907,45 @@ Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
     }
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, title, id, cb)
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, id, parent, customOpts, callback)
 {
     // Id = EDIT mod.
     if (!id) {
         id = 0;
     }
 
-    var data = {
-        title:          title,
+    if (!customOpts) {
+        customOpts = {};
+    }
+
+    // Scope
+    var that = this;
+
+    if (!parent) {
+        var opts = that.opts();
+        parent   = {
+            obj_type: opts.data.obj_type,
+            obj_id:   opts.data.obj_id,
+            group:    opts.data.group
+        };
+    }
+
+    var defaultOpts = {
         size:           BootstrapDialog.SIZE_WIDE,
         cssClass:       '-quick-form',
         widget_type:    'charcoal/admin/widget/quickForm',
         widget_options: {
-            obj_type:   type,
-            obj_id:     id
+            obj_type:  type,
+            obj_id:    id,
+            form_data: {
+                pivot: parent
+            }
         }
     };
-    this.dialog(data, function (response) {
+    var immutableOpts = {};
+    var dialogOpts = $.extend({}, defaultOpts, customOpts, immutableOpts);
+
+    this.dialog(dialogOpts, function (response) {
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.
@@ -1935,7 +1961,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, t
                 },
                 obj_id: id,
                 save_callback: function (response) {
-                    cb(response);
+                    callback(response);
                     BootstrapDialog.closeAll();
                 }
             });

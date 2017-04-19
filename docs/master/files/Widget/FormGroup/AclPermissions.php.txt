@@ -232,22 +232,16 @@ class AclPermissions extends AdminWidget implements
             $ident = $perm->id();
 
             $permission = [
-                'ident'     => $ident,
-                'name'      => $perm->name(),
-                'isDenied'  => false,
-                'isUnknown' => false,
-                'isAllowed' => false,
+                'ident' => $ident,
+                'name'  => $perm->name()
             ];
 
             if (in_array($ident, $this->roleAllowed)) {
-                $permission['status']    = 'allowed';
-                $permission['isAllowed'] = true;
+                $permission['status'] = 'allowed';
             } elseif (in_array($ident, $this->roleDenied)) {
-                $permission['status']   = 'denied';
-                $permission['isDenied'] = true;
+                $permission['status'] = 'denied';
             } else {
-                $permission['status']    = '';
-                $permission['isUnknown'] = true;
+                $permission['status'] = '';
             }
 
             if ($adminAcl->hasResource($ident)) {

@@ -14,7 +14,6 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
-use Charcoal\Admin\Ui\ActionContainerTrait;
 use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 
 /**
@@ -23,36 +22,6 @@ use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 class SidemenuWidget extends AdminWidget implements
     SidemenuWidgetInterface
 {
-    use ActionContainerTrait;
-
-    /**
-     * Default sorting priority for an action.
-     *
-     * @const integer
-     */
-    const DEFAULT_ACTION_PRIORITY = 10;
-
-    /**
-     * Store the sidemenu actions.
-     *
-     * @var array|null
-     */
-    protected $sidemenuActions;
-
-    /**
-     * Store the default list actions.
-     *
-     * @var array|null
-     */
-    protected $defaultSidemenuActions;
-
-    /**
-     * Keep track if sidemenu actions are finalized.
-     *
-     * @var boolean
-     */
-    protected $parsedSidemenuActions = false;
-
     /**
      * The sidemenu's display type.
      *
@@ -161,21 +130,6 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
-     * @param  array $data Class data.
-     * @return self
-     */
-    public function setData(array $data)
-    {
-        parent::setData($data);
-
-        if (isset($data['actions'])) {
-            $this->setSidemenuActions($data['actions']);
-        }
-
-        return $this;
-    }
-
-    /**
      * Determine if the sidemenu has anything.
      *
      * @return boolean
@@ -215,8 +169,8 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Show/hide the widget's title.
      *
-     * @param  boolean $show Show (TRUE) or hide (FALSE) the title.
-     * @return self
+     * @param boolean $show Show (TRUE) or hide (FALSE) the title.
+     * @return UiItemInterface Chainable
      */
     public function setShowTitle($show)
     {
@@ -293,8 +247,8 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Set the sidemenu links.
      *
-     * @param  string       $linkIdent The link identifier.
-     * @param  array|object $link      The link object or structure.
+     * @param string       $linkIdent The link identifier.
+     * @param array|object $link      The link object or structure.
      * @throws InvalidArgumentException If the link is invalid.
      * @return self
      */
@@ -313,12 +267,6 @@ class SidemenuWidget extends AdminWidget implements
             $name   = null;
             $url    = null;
             $permissions = [];
-
-            if (isset($link['ident'])) {
-                $linkIdent = $link['ident'];
-            } else {
-                $link['ident'] = $linkIdent;
-            }
 
             if (isset($link['active'])) {
                 $active = !!$link['active'];
@@ -360,7 +308,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu links.
      *
-     * @return array
+     * @return ArrayIterator|Generator
      */
     public function links()
     {
@@ -378,29 +326,19 @@ class SidemenuWidget extends AdminWidget implements
             }
         }
 
-        $out = [];
-
         foreach ($this->links as $link) {
             if (isset($link['active']) && !$link['active']) {
                 continue;
             }
 
             if (isset($link['required_acl_permissions'])) {
-                $link['permissions'] = $link['required_acl_permissions'];
-                unset($link['required_acl_permissions']);
-            }
-
-            if (isset($link['permissions'])) {
-                if ($this->hasPermissions($link['permissions']) === false) {
+                if ($this->hasPermissions($link['required_acl_permissions']) === false) {
                     continue;
                 }
             }
 
-            $out[] = $link;
+            yield $link;
         }
-
-        $this->links = $out;
-        return $this->links;
     }
 
     /**
@@ -440,16 +378,6 @@ class SidemenuWidget extends AdminWidget implements
         }
 
         return $this->displayType;
-    }
-
-    /**
-     * Determine if the sidemenu groups should be displayed as panels.
-     *
-     * @return boolean
-     */
-    public function displayAsPanel()
-    {
-        return in_array($this->displayType(), [ 'panel', 'collapsible' ]);
     }
 
     /**
@@ -563,8 +491,8 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Add a sidemenu group.
      *
-     * @param  string                       $groupIdent The group identifier.
-     * @param  array|SidemenuGroupInterface $group      The group object or structure.
+     * @param string                       $groupIdent The group identifier.
+     * @param array|SidemenuGroupInterface $group      The group object or structure.
      * @throws InvalidArgumentException If the identifier is not a string or the group is invalid.
      * @return self
      */
@@ -704,30 +632,7 @@ class SidemenuWidget extends AdminWidget implements
      */
     public function numLinks()
     {
-        if (!is_array($this->links()) && !($this->links() instanceof \Traversable)) {
-            return 0;
-        }
-
-        $links = array_filter($this->links, function ($link) {
-            if (isset($link['active']) && !$link['active']) {
-                return false;
-            }
-
-            if (isset($link['required_acl_permissions'])) {
-                $link['permissions'] = $link['required_acl_permissions'];
-                unset($link['required_acl_permissions']);
-            }
-
-            if (isset($link['permissions'])) {
-                if ($this->hasPermissions($link['permissions']) === false) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-
-        return count($links);
+        return count($this->links());
     }
 
     /**
@@ -751,25 +656,13 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
-     * Alias for {@see self::showSidemenuActions()}
+     * Determine if the sidemenu has any actions.
      *
      * @return boolean
      */
     public function hasActions()
     {
-        return $this->showSidemenuActions();
-    }
-
-    /**
-     * Determine if the sidemenu's actions should be shown.
-     *
-     * @return boolean
-     */
-    public function showSidemenuActions()
-    {
-        $actions = $this->sidemenuActions();
-
-        return count($actions);
+        return false;
     }
 
     /**
@@ -777,87 +670,9 @@ class SidemenuWidget extends AdminWidget implements
      *
      * @return array
      */
-    public function sidemenuActions()
+    public function actions()
     {
-        if ($this->sidemenuActions === null) {
-            $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
-            if (isset($metadata[$ident]['actions'])) {
-                $actions = $metadata[$ident]['actions'];
-            } else {
-                $actions = [];
-            }
-            $this->setSidemenuActions($actions);
-        }
-
-        if ($this->parsedSidemenuActions === false) {
-            $this->parsedSidemenuActions = true;
-            $this->sidemenuActions = $this->createSidemenuActions($this->sidemenuActions);
-        }
-
-        return $this->sidemenuActions;
-    }
-
-    /**
-     * Set the sidemenu's actions.
-     *
-     * @param  array $actions One or more actions.
-     * @return FormSidemenuWidget Chainable.
-     */
-    protected function setSidemenuActions(array $actions)
-    {
-        $this->parsedSidemenuActions = false;
-
-        $this->sidemenuActions = $this->mergeActions($this->defaultSidemenuActions(), $actions);
-
-        return $this;
-    }
-
-    /**
-     * Build the sidemenu's actions.
-     *
-     * Sidemenu actions should come from the form settings defined by the "sidemenus".
-     * It is still possible to completly override those externally by setting the "actions"
-     * with the {@see self::setSidemenuActions()} method.
-     *
-     * @param  array $actions Actions to resolve.
-     * @return array Sidemenu actions.
-     */
-    protected function createSidemenuActions(array $actions)
-    {
-        $sidemenuActions = $this->parseActions($actions);
-
-        return $sidemenuActions;
-    }
-
-    /**
-     * Retrieve the sidemenu's default actions.
-     *
-     * @return array
-     */
-    protected function defaultSidemenuActions()
-    {
-        if ($this->defaultSidemenuActions === null) {
-            $library = [
-                'active'     => false,
-                'label'      => $this->translator()->translation('File Manager'),
-                'ident'      => 'filemanager',
-                'url'        => $this->adminUrl().'media',
-                'cssClasses' => 'js-toggle-filemanager',
-                'priority'   => 90
-            ];
-            $this->defaultSidemenuActions = [ $library ];
-        }
-
-        return $this->defaultSidemenuActions;
-    }
-
-    /**
-     * @return string
-     */
-    public function jsActionPrefix()
-    {
-        return 'js-sidemenu';
+        return [];
     }
 }
 

@@ -18,7 +18,7 @@ use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translation;
+use Charcoal\Translator\Translator;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
@@ -94,7 +94,7 @@ abstract class AdminAction extends AbstractAction implements
         $this->setBaseUrl($container['base-url']);
         $this->setSiteName($container['config']['project_name']);
 
-        // Satisfies AuthAwareInterface dependencies
+        // AuthAware dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }
@@ -167,7 +167,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Retrieve the name of the project.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function siteName()
     {
@@ -184,6 +184,24 @@ abstract class AdminAction extends AbstractAction implements
     public function authRequired()
     {
         return true;
+    }
+
+    /**
+     * Determine if the current user is authenticated. If not it redirects them to the login page.
+     *
+     * @return void
+     */
+    private function auth()
+    {
+        if (!session_id()) {
+            session_cache_limiter(false);
+            session_start();
+        }
+
+        $u = User::getAuthenticated();
+        if ($u === null || !$u->id()) {
+            die('Auth Required');
+        }
     }
 
     /**

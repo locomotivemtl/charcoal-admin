@@ -31,6 +31,11 @@ class CollectionTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
 
     /**
+     * @var SidemenuWidgetInterface $sidemenu
+     */
+    private $sidemenu;
+
+    /**
      * @param Container $container DI Container.
      * @return void
      */
@@ -43,7 +48,6 @@ class CollectionTemplate extends AdminTemplate implements
         $this->setCollectionLoader($container['model/collection/loader']);
 
         // Required dashboard dependencies.
-        $this->setWidgetFactory($container['widget/factory']);
         $this->setDashboardBuilder($container['dashboard/builder']);
     }
 
@@ -89,43 +93,17 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * Retrieve the sidemenu.
-     *
      * @return SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->objCollectionDashboardConfig();
+        $dashboardConfig = $this->dashboardConfig();
 
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
+        if (isset($dashboardConfig['sidemenu'])) {
+            return $this->createSidemenu($dashboardConfig['sidemenu']);
+        } else {
+            return $this->createSidemenu();
         }
-
-        return $this->sidemenu;
-    }
-
-    /**
-     * Retrieve the header menu.
-     *
-     * @return array
-     */
-    public function headerMenu()
-    {
-        if ($this->headerMenu === null) {
-            $dashboardConfig = $this->objCollectionDashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->headerMenu = $this->createHeaderMenu();
-            }
-        }
-
-        return $this->headerMenu;
     }
 
     /**
@@ -257,18 +235,10 @@ class CollectionTemplate extends AdminTemplate implements
 
         if (!$objLabel && isset($metadata['admin']['lists'])) {
             $adminMetadata = $metadata['admin'];
+            $listIdent     = filter_input(INPUT_GET, 'collection_ident', FILTER_SANITIZE_STRING);
 
-            $listIdent = filter_input(INPUT_GET, 'collection_ident', FILTER_SANITIZE_STRING);
-            if (!$listIdent) {
-                $listIdent = $this->collectionIdent();
-            }
-
-            if (!$listIdent) {
-                $listIdent = $this->collectionIdentFallback();
-            }
-
-            if ($listIdent && $model->view()) {
-                $listIdent = $model->render($listIdent);
+            if ($listIdent === false || $listIdent === null || $listIdent === '') {
+                $listIdent = (isset($adminMetadata['default_list']) ? $adminMetadata['default_list'] : '');
             }
 
             if (isset($adminMetadata['lists'][$listIdent]['label'])) {
@@ -292,7 +262,7 @@ class CollectionTemplate extends AdminTemplate implements
             }
         }
 
-        if ($model->view()) {
+        if ($model && $model->view()) {
             $this->title = $model->render((string)$objLabel, $model);
         } else {
             $this->title = (string)$objLabel;

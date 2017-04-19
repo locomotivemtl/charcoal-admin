@@ -2,24 +2,21 @@
 
 namespace Charcoal\Admin\Widget\FormGroup;
 
-use RuntimeException;
-use OutOfBoundsException;
-use UnexpectedValueException;
-use InvalidArgumentException;
+use \RuntimeException;
+use \UnexpectedValueException;
+use \InvalidArgumentException;
 
 // From 'charcoal-property'
-use Charcoal\Property\PropertyInterface;
+use \Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-ui'
-use Charcoal\Ui\FormGroup\AbstractFormGroup;
-use Charcoal\Ui\FormGroup\FormGroupInterface;
-use Charcoal\Ui\FormInput\FormInputInterface;
+use \Charcoal\Ui\FormGroup\AbstractFormGroup;
+use \Charcoal\Ui\FormGroup\FormGroupInterface;
+use \Charcoal\Ui\FormInput\FormInputInterface;
 
 // From 'charcoal-admin'
-use Charcoal\Admin\Widget\FormGroupWidget;
-use Charcoal\Admin\Ui\ObjectContainerInterface;
-use Charcoal\Admin\Ui\StructureContainerInterface;
-use Charcoal\Admin\Ui\StructureContainerTrait;
+use \Charcoal\Admin\Widget\FormGroupWidget;
+use \Charcoal\Admin\Ui\ObjectContainerInterface;
 
 /**
  * Form Group Structure Property
@@ -72,12 +69,8 @@ use Charcoal\Admin\Ui\StructureContainerTrait;
  * ```
  *
  */
-class StructureFormGroup extends FormGroupWidget implements
-    FormInputInterface,
-    StructureContainerInterface
+class StructureFormGroup extends FormGroupWidget
 {
-    use StructureContainerTrait;
-
     /**
      * The form group's storage model.
      *
@@ -114,61 +107,11 @@ class StructureFormGroup extends FormGroupWidget implements
     protected $isStructureFinalized = false;
 
     /**
-     * The form group's raw data.
-     *
-     * @var array|null
-     */
-    protected $rawData;
-
-    /**
      * @return string
      */
     public function type()
     {
         return 'charcoal/admin/widget/form-group/structure';
-    }
-
-    /**
-     * @param  array $data Widget data.
-     * @return FormGroupWidget Chainable
-     */
-    public function setData(array $data)
-    {
-        if ($this->rawData === null) {
-            $this->rawData = $data;
-        }
-
-        parent::setData($data);
-
-        return $this;
-    }
-
-    /**
-     * Determine if the header is to be displayed.
-     *
-     * @return boolean If TRUE or unset, check if there is a title.
-     */
-    public function showHeader()
-    {
-        if ($this->display() === self::SEAMLESS_STRUCT_DISPLAY) {
-            return false;
-        } else {
-            return parent::showHeader();
-        }
-    }
-
-    /**
-     * Determine if the footer is to be displayed.
-     *
-     * @return boolean If TRUE or unset, check if there are notes.
-     */
-    public function showFooter()
-    {
-        if ($this->display() === self::SEAMLESS_STRUCT_DISPLAY) {
-            return false;
-        } else {
-            return parent::showFooter();
-        }
     }
 
     /**
@@ -185,7 +128,7 @@ class StructureFormGroup extends FormGroupWidget implements
                 $prop = $formGroup->storageProperty();
                 $val  = $formGroup->obj()->propertyValue($prop->ident());
 
-                $this->obj = $prop->structureVal($val, [ 'default_data' => true ]);
+                $this->obj = $prop->structureVal($val);
                 if ($this->obj === null) {
                     $this->obj = clone $prop->structureProto();
                 }
@@ -344,12 +287,8 @@ class StructureFormGroup extends FormGroupWidget implements
                 }
 
                 if ($formGroup) {
-                    if (is_array($this->rawData)) {
-                        $widgetData = array_replace($formGroup, $this->rawData);
-                        $this->setData($widgetData);
-                    } else {
-                        $this->setData($formGroup);
-                    }
+                    $widgetData = array_replace($formGroup, $this->data());
+                    $this->setData($widgetData);
                 }
             }
         }
@@ -365,33 +304,15 @@ class StructureFormGroup extends FormGroupWidget implements
         if ($this->parsedFormProperties === null) {
             $this->finalizeStructure();
 
-            $groupProperties     = $this->groupProperties();
-            $availableProperties = $this->structProperties();
+            $groupProperties  = $this->groupProperties();
+            $structProperties = $this->structProperties();
 
-            $structProperties = [];
-            if (!empty($groupProperties)) {
-                foreach ($groupProperties as $propertyIdent => $propertyMetadata) {
-                    if (is_string($propertyMetadata)) {
-                        $propertyIdent    = $propertyMetadata;
-                        $propertyMetadata = null;
-                    }
-
-                    if (!isset($availableProperties[$propertyIdent])) {
-                        continue;
-                    }
-
-                    if (is_array($propertyMetadata)) {
-                        $propertyMetadata = array_merge($propertyMetadata, $availableProperties[$propertyIdent]);
-                    } else {
-                        $propertyMetadata = $availableProperties[$propertyIdent];
-                    }
-
-                    $structProperties[$propertyIdent] = $propertyMetadata;
+            if ($groupProperties) {
+                if (is_string(key($groupProperties))) {
+                    $structProperties = $groupProperties;
+                } else {
+                    $structProperties = array_merge(array_flip($groupProperties), $structProperties);
                 }
-            }
-
-            if (empty($structProperties)) {
-                $structProperties = $availableProperties;
             }
 
             $this->parsedFormProperties = $structProperties;
@@ -484,11 +405,7 @@ class StructureFormGroup extends FormGroupWidget implements
                 $formProperty->setFormGroup($this);
             }
 
-            if ($formProperty->hidden()) {
-                $form->addHiddenProperty($subPropertyIdent, $formProperty);
-            } else {
-                yield $propertyIdent => $formProperty;
-            }
+            yield $propertyIdent => $formProperty;
 
             if ($formProperty instanceof FormInputInterface) {
                 $formProperty->clearFormGroup();

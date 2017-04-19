@@ -11,12 +11,6 @@ use \Pimple\Container;
 // From 'charcoal-factory'
 use \Charcoal\Factory\FactoryInterface;
 
-// From 'charcoal-translator'
-use \Charcoal\Translator\Translation;
-
-// From 'charcoal-property'
-use \Charcoal\Property\HtmlProperty;
-
 // From 'charcoal-admin'
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
@@ -34,13 +28,6 @@ class ReadonlyInput extends AbstractPropertyInput
      * @var boolean|null
      */
     protected $hasValue;
-
-    /**
-     * Whether the placeholder text should be shown when the value is empty.
-     *
-     * @var boolean
-     */
-    private $showPlaceholder = false;
 
     /**
      * Store the factory instance for the current class.
@@ -109,21 +96,11 @@ class ReadonlyInput extends AbstractPropertyInput
         $property    = $this->p();
         $displayType = $property->displayType();
 
-        $value = $this->propertyVal();
-        if ($value === null || $value === '') {
-            if ($this->showPlaceholder()) {
-                $value = $this->placeholder();
-                if ($property instanceof HtmlProperty) {
-                    $value = html_entity_decode($value, (ENT_QUOTES | ENT_HTML5));
-                }
-            }
-        }
-
         $display = $this->propertyDisplayFactory()->create($displayType);
         $display->setDisplayType($displayType);
         $display->setProperty($property);
         $display->setData($property->metadata()->data());
-        $display->setPropertyVal($value);
+        $display->setPropertyVal($this->propertyVal());
 
         return $this->view()->renderTemplate($displayType, $display);
     }
@@ -136,22 +113,14 @@ class ReadonlyInput extends AbstractPropertyInput
     public function inputVal()
     {
         $prop = $this->p();
-        $val  = $prop->displayVal($this->propertyVal());
+        $val  = $prop->displayVal($this->propertyVal(), [
+            'lang' => $this->lang()
+        ]);
 
-        if ($val === null || $val === '') {
-            if ($this->showPlaceholder()) {
-                $this->hasValue = true;
+        if ($val === null) {
+            $this->hasValue = false;
 
-                return $this->placeholder();
-            } else {
-                $this->hasValue = false;
-
-                return '';
-            }
-        }
-
-        if ($val instanceof Translation) {
-            $val = (string)$val;
+            return '';
         }
 
         if (!is_scalar($val)) {
@@ -164,33 +133,6 @@ class ReadonlyInput extends AbstractPropertyInput
         $this->hasValue = true;
 
         return $val;
-    }
-
-    /**
-     * Show/hide the property's placeholder text if the value is empty.
-     *
-     * @param boolean $show Show (TRUE) or hide (FALSE) the notes.
-     * @return UiItemInterface Chainable
-     */
-    public function setShowPlaceholder($show)
-    {
-        $this->showPlaceholder = !!$show;
-
-        return $this;
-    }
-
-    /**
-     * Determine if the property's placeholder text is displayed if the value is empty.
-     *
-     * @return boolean
-     */
-    public function showPlaceholder()
-    {
-        if ($this->showPlaceholder === false) {
-            return false;
-        } else {
-            return !!$this->placeholder();
-        }
     }
 }
 

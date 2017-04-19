@@ -2,8 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-// From 'charcoal-admin'
-use Charcoal\Admin\Property\AbstractTickableInput;
+use \Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
  * Radio Button Input Property
@@ -11,10 +10,8 @@ use Charcoal\Admin\Property\AbstractTickableInput;
  * The HTML _radio button_ (`<input type="radio">`) input element represents
  * a control to select a _single value_ from a list of different values.
  * — {@link https://www.w3.org/wiki/HTML/Elements/input/radio}
- *
- * This form control is similar to {@see CheckboxInput}.
  */
-class RadioInput extends AbstractTickableInput
+class RadioInput extends AbstractSelectableInput
 {
     /**
      * Retrieve the control type for the HTML element `<input>`.
@@ -34,6 +31,22 @@ class RadioInput extends AbstractTickableInput
     public function multiple()
     {
         return false;
+    }
+
+    /**
+     * Prepare a single selectable option for output.
+     *
+     * @param  string|integer $ident  The choice key.
+     * @param  array|object   $choice The choice structure.
+     * @return array|null
+     */
+    protected function parseChoice($ident, $choice)
+    {
+        $choice = parent::parseChoice($ident, $choice);
+
+        $choice['inputId'] = $this->generateInputId();
+
+        return $choice;
     }
 }
 

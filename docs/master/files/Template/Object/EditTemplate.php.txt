@@ -33,6 +33,11 @@ class EditTemplate extends AdminTemplate implements
     use ObjectContainerTrait;
 
     /**
+     * @var SideMenuWidgetInterface $sidemenu
+     */
+    private $sidemenu;
+
+    /**
      * @param Container $container DI container.
      * @return void
      */
@@ -44,7 +49,6 @@ class EditTemplate extends AdminTemplate implements
         $this->setModelFactory($container['model/factory']);
 
         // Required dependencies.
-        $this->setWidgetFactory($container['widget/factory']);
         $this->dashboardBuilder = $container['dashboard/builder'];
     }
 
@@ -57,43 +61,17 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * Retrieve the sidemenu.
-     *
      * @return SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->objEditDashboardConfig();
+        $dashboardConfig = $this->objEditDashboardConfig();
 
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
+        if (isset($dashboardConfig['sidemenu'])) {
+            return $this->createSidemenu($dashboardConfig['sidemenu']);
+        } else {
+            return $this->createSidemenu();
         }
-
-        return $this->sidemenu;
-    }
-
-    /**
-     * Retrieve the header menu.
-     *
-     * @return array
-     */
-    public function headerMenu()
-    {
-        if ($this->headerMenu === null) {
-            $dashboardConfig = $this->objEditDashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->headerMenu = $this->createHeaderMenu();
-            }
-        }
-
-        return $this->headerMenu;
     }
 
     /**
@@ -127,33 +105,23 @@ class EditTemplate extends AdminTemplate implements
      */
     private function objEditDashboardConfig()
     {
-        $adminMetadata  = $this->objAdminMetadata();
-        $dashboardIdent = $this->dashboardIdent();
+        $adminMetadata = $this->objAdminMetadata();
 
-        if (empty($dashboardIdent)) {
+        $dashboardIdent  = $this->dashboardIdent();
+
+        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
             $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
         }
 
-        if (empty($dashboardIdent)) {
-            if (!$this->objId()) {
-                if (!isset($adminMetadata['default_create_dashboard'])) {
-                    throw new Exception(sprintf(
-                        'No default create dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    ));
-                }
-
-                $dashboardIdent = $adminMetadata['default_create_dashboard'];
-            } else {
-                if (!isset($adminMetadata['default_edit_dashboard'])) {
-                    throw new Exception(sprintf(
-                        'No default edit dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    ));
-                }
-
-                $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+        if ($dashboardIdent === false || $dashboardIdent === null || $dashboardIdent === '') {
+            if (!isset($adminMetadata['default_edit_dashboard'])) {
+                throw new Exception(sprintf(
+                    'No default edit dashboard defined in admin metadata for %s',
+                    get_class($this->obj())
+                ));
             }
+
+            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
         }
 
         if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
@@ -198,9 +166,9 @@ class EditTemplate extends AdminTemplate implements
 
         if (!$objLabel && isset($metadata['admin']['forms'])) {
             $adminMetadata = $metadata['admin'];
+            $formIdent     = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
 
-            $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
-            if (!$formIdent) {
+            if ($formIdent === false || $formIdent === null || $formIdent === '') {
                 $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
             }
 
@@ -209,22 +177,12 @@ class EditTemplate extends AdminTemplate implements
             }
         }
 
-        if ($objId) {
-            if (!$objLabel && isset($metadata['labels']['edit_item'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['edit_item']);
-            }
+        if (!$objLabel && isset($metadata['labels']['edit_item'])) {
+            $objLabel = $this->translator()->translation($metadata['labels']['edit_item']);
+        }
 
-            if (!$objLabel && isset($metadata['labels']['edit_model'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['edit_model']);
-            }
-        } else {
-            if (!$objLabel && isset($metadata['labels']['new_item'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['new_item']);
-            }
-
-            if (!$objLabel && isset($metadata['labels']['new_model'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['new_model']);
-            }
+        if (!$objLabel && isset($metadata['labels']['edit_model'])) {
+            $objLabel = $this->translator()->translation($metadata['labels']['edit_model']);
         }
 
         if (!$objLabel) {
@@ -243,7 +201,7 @@ class EditTemplate extends AdminTemplate implements
             }
         }
 
-        if ($obj->view()) {
+        if ($obj && $obj->view()) {
             $this->title = $obj->render((string)$objLabel, $obj);
         } else {
             $this->title = (string)$objLabel;

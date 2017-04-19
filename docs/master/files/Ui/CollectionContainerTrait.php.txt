@@ -246,7 +246,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Set the key for the collection structure to use.
+     * Set the identifier of the collection to use.
      *
      * @param  string $collectionIdent The collection identifier.
      * @throws InvalidArgumentException If the identifier argument is not a string.
@@ -265,9 +265,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Retrieve a key for the collection structure to use.
-     *
-     * If the collection key is undefined, resolve a fallback.
+     * Retrieve the identifier of the collection to use, or its fallback.
      *
      * @return string
      */
@@ -283,7 +281,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * Retrieve the key for the collection structure to use.
+     * Retrieve the identifier of the collection to use.
      *
      * @return string|null
      */
@@ -299,22 +297,17 @@ trait CollectionContainerTrait
      */
     public function collectionMetadata()
     {
-        $proto = $this->proto();
         $collectionIdent = $this->collectionIdent();
 
         if (!$collectionIdent) {
             $collectionIdent = $this->collectionIdentFallback();
         }
 
-        if ($collectionIdent && $proto->view()) {
-            $collectionIdent = $proto->render($collectionIdent);
-        }
-
         if (!$collectionIdent) {
             return [];
         }
 
-        $objMeta = $proto->metadata();
+        $objMeta = $this->proto()->metadata();
 
         if (isset($objMeta['admin']['lists'][$collectionIdent])) {
             return $objMeta['admin']['lists'][$collectionIdent];
@@ -495,9 +488,10 @@ trait CollectionContainerTrait
                 get_class($this)
             ));
         }
+        $obj = $this->modelFactory()->create($objType);
 
         $loader = $this->collectionLoader();
-        $loader->setModel($this->proto());
+        $loader->setModel($obj);
 
         $collectionConfig = $this->collectionConfig();
         if (is_array($collectionConfig) && !empty($collectionConfig)) {
@@ -519,7 +513,7 @@ trait CollectionContainerTrait
      */
     public function objects()
     {
-        return $this->collection()->objects();
+        return $this->collection()->values();
     }
 
     /**
@@ -697,9 +691,10 @@ trait CollectionContainerTrait
                     get_class($this)
                 ));
             }
+            $obj = $this->modelFactory()->create($objType);
 
             $loader = $this->collectionLoader();
-            $loader->setModel($this->proto());
+            $loader->setModel($obj);
 
             $collectionConfig = $this->collectionConfig();
             if (is_array($collectionConfig) && !empty($collectionConfig)) {

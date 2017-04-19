@@ -6,6 +6,9 @@ namespace Charcoal\Admin;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// Dependency from Pimple
+use Pimple\Container;
+
 // Dependency from 'charcoal-app'
 use Charcoal\App\Handler\HandlerInterface;
 use Charcoal\App\Module\AbstractModule;
@@ -70,7 +73,8 @@ class AdminModule extends AbstractModule
     {
         $config    = $this->config();
         $container = $this->app()->getContainer();
-        $adminUrl  = $container['base-url']->withBasePath($config['base_path']);
+        $baseUrl   = $container['base-url'];
+        $adminUrl  = rtrim($baseUrl, '/\\').'/'.trim($config['base_path'], '/\\');
 
         if (isset($config['handlers'])) {
 

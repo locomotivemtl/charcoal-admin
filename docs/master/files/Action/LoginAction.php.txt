@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Action;
 
-use Exception;
 use InvalidArgumentException;
 
 // From PSR-7
@@ -42,6 +41,11 @@ use Charcoal\Admin\User;
 class LoginAction extends AdminAction
 {
     /**
+     * @var string $nextUrl
+     */
+    protected $nextUrl;
+
+    /**
      * Authentication is required by default.
      *
      * Change to false in the login action controller; this is meant to be called before login.
@@ -51,6 +55,26 @@ class LoginAction extends AdminAction
     public function authRequired()
     {
         return false;
+    }
+
+    /**
+     * Assign the next URL.
+     *
+     * Note that any string is accepted. It should be validated before using this method.
+     *
+     * @param string $nextUrl The next URL.
+     * @throws InvalidArgumentException If the $nextUrl parameter is not a string.
+     * @return LoginAction Chainable
+     */
+    public function setNextUrl($nextUrl)
+    {
+        if (!is_string($nextUrl)) {
+            throw new InvalidArgumentException(
+                'Next URL needs to be a string'
+            );
+        }
+        $this->nextUrl = $nextUrl;
+        return $this;
     }
 
     /**
@@ -71,7 +95,6 @@ class LoginAction extends AdminAction
 
             $username = $request->getParam('username');
             $password = $request->getParam('password');
-            $nextUrl  = $request->getParam('next_url');
 
             if (!$username || !$password) {
                 $this->addFeedback('error', $this->translator()->translate('Invalid username or password'));
@@ -112,12 +135,6 @@ class LoginAction extends AdminAction
 
                 $this->addFeedback('success', $doneMessage);
                 $this->setSuccess(true);
-
-                if (is_string($nextUrl) && !empty($nextUrl)) {
-                    $this->setSuccessUrl($nextUrl);
-                } else {
-                    $this->setSuccessUrl($this->adminUrl());
-                }
 
                 return $response;
             }

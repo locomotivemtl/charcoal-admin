@@ -82,10 +82,7 @@ class FormGroupWidget extends AbstractUiItem implements
     {
         parent::setDependencies($container);
 
-        // Satisfies ViewableInterface dependencies
-        $this->setView($container['view']);
-
-        // Satisfies LayoutAwareInterface dependencies
+        // Fill LayoutAwareInterface dependencies
         $this->setLayoutBuilder($container['layout/builder']);
     }
 
@@ -98,11 +95,6 @@ class FormGroupWidget extends AbstractUiItem implements
         if (!empty($data['properties'])) {
             $this->setGroupProperties($data['properties']);
             unset($data['properties']);
-        }
-
-        if (!empty($data['hidden_properties'])) {
-            $this->form()->addHiddenProperties($data['hidden_properties']);
-            unset($data['hidden_properties']);
         }
 
         if (isset($data['permissions'])) {
@@ -226,33 +218,34 @@ class FormGroupWidget extends AbstractUiItem implements
         $formProperties  = $this->parsedFormProperties();
         $propOptions     = $this->propertiesOptions();
 
-        foreach ($formProperties as $propertyIdent => $formProperty) {
+        $ret = [];
+        foreach ($formProperties as $propertyIdent => $property) {
             if (in_array($propertyIdent, $groupProperties)) {
                 if (!empty($propOptions[$propertyIdent])) {
                     $propertyOptions = $propOptions[$propertyIdent];
 
                     if (is_array($propertyOptions)) {
-                        $formProperty->merge($propertyOptions);
+                        $property->merge($propertyOptions);
                     }
                 }
 
                 if ($obj) {
                     $val = $obj[$propertyIdent];
-                    $formProperty->setPropertyVal($val);
+                    $property->setPropertyVal($val);
                 }
 
-                if (!$formProperty->l10nMode()) {
-                    $formProperty->setL10nMode($this->l10nMode());
+                if (!$property->l10nMode()) {
+                    $property->setL10nMode($this->l10nMode());
                 }
 
-                if ($formProperty instanceof FormInputInterface) {
-                    $formProperty->setFormGroup($this);
+                if ($property instanceof FormInputInterface) {
+                    $property->setFormGroup($this);
                 }
 
-                yield $propertyIdent => $formProperty;
+                yield $propertyIdent => $property;
 
-                if ($formProperty instanceof FormInputInterface) {
-                    $formProperty->clearFormGroup();
+                if ($property instanceof FormInputInterface) {
+                    $property->clearFormGroup();
                 }
             }
         }
@@ -283,22 +276,6 @@ class FormGroupWidget extends AbstractUiItem implements
         }
 
         return $languages;
-    }
-
-    /**
-     * @return Translation|string|null
-     */
-    public function description()
-    {
-        return $this->renderTemplate((string)parent::description());
-    }
-
-    /**
-     * @return Translation|string|null
-     */
-    public function notes()
-    {
-        return $this->renderTemplate((string)parent::notes());
     }
 
     /**

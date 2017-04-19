@@ -74,18 +74,6 @@ class LogoutTemplate extends AdminTemplate
     }
 
     /**
-     * @return string
-     */
-    public function logoutLogo()
-    {
-        if (isset($this->adminConfig['logout_logo'])) {
-            return $this->adminConfig['logout_logo'];
-        } else {
-            return $this->baseUrl().'assets/admin/images/avatar.jpg';
-        }
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return Translation|string|null

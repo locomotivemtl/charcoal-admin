@@ -16,12 +16,11 @@ class HomeTemplate extends AdminTemplate implements DashboardContainerInterface
     use DashboardContainerTrait;
 
     /**
-     * @return mixed
+     * @param array $data Optional dashboard data.
+     * @return Charcoal\Ui\Dashboard\DashboardInterface
      */
-    public function createDashboardConfig()
+    public function createDashboardConfig(array $data = null)
     {
-        unset($data);
-
         return $this->dashboardConfig();
     }
 }

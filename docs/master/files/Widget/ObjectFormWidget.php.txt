@@ -8,6 +8,9 @@ use \InvalidArgumentException;
 // From Pimple
 use \Pimple\Container;
 
+// From 'charcoal-ui'
+use \Charcoal\Ui\FormGroup\FormGroupInterface;
+
 // From 'charcoal-admin'
 use \Charcoal\Admin\Widget\FormWidget;
 use \Charcoal\Admin\Widget\FormPropertyWidget;
@@ -380,6 +383,78 @@ class ObjectFormWidget extends FormWidget implements
         $p->setData($property);
 
         return $p;
+    }
+
+    /**
+     * Create a new form group widget.
+     *
+     * @see    \Charcoal\Ui\Form\FormTrait::createFormGroup()
+     * @param  array|null $data Optional. The form group data to set.
+     * @return FormPropertyWidget
+     */
+    protected function createFormGroup(array $data = null)
+    {
+        if (isset($data['type'])) {
+            $type = $data['type'];
+        } else {
+            $type = $this->defaultGroupType();
+        }
+
+        $group = $this->formGroupFactory()->create($type);
+        $group->setForm($this);
+
+        if ($group instanceof ObjectContainerInterface) {
+            if (empty($group->objType())) {
+                $group->setObjType($this->objType());
+            }
+
+            if (empty($group->objId()) && !is_numeric($group->objId())) {
+                $group->setObjId($this->objId());
+            }
+        }
+
+        if ($data !== null) {
+            $group->setData($data);
+        }
+
+        return $group;
+    }
+
+    /**
+     * Update the given form group widget.
+     *
+     * @see    \Charcoal\Ui\Form\FormTrait::updateFormGroup()
+     * @param  FormGroupInterface $group      The form group to update.
+     * @param  array|null         $groupData  Optional. The new group data to apply.
+     * @param  string|null        $groupIdent Optional. The new group identifier.
+     * @return FormPropertyWidget
+     */
+    protected function updateFormGroup(
+        FormGroupInterface $group,
+        array $groupData = null,
+        $groupIdent = null
+    ) {
+        $group->setForm($this);
+
+        if ($groupIdent !== null) {
+            $group->setIdent($groupIdent);
+        }
+
+        if ($group instanceof ObjectContainerInterface) {
+            if (empty($group->objType())) {
+                $group->setObjType($this->objType());
+            }
+
+            if (empty($group->objId()) && !is_numeric($group->objId())) {
+                $group->setObjId($this->objId());
+            }
+        }
+
+        if ($groupData !== null) {
+            $group->setData($groupData);
+        }
+
+        return $group;
     }
 
     /**

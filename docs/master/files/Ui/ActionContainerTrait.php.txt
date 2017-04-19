@@ -10,6 +10,9 @@ use Charcoal\Translator\Translation;
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 
+// From 'charcoal-user'
+use Charcoal\User\AuthAwareInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\FormSidebarInterface;
@@ -233,9 +236,10 @@ trait ActionContainerTrait
             }
 
             $action = array_replace($this->defaultActionStruct(), $action);
+            $action = $this->parseActionRenderables($action, $renderer);
 
-            if ($renderer) {
-                $action = $this->parseActionRenderables($action, $renderer);
+            if (!empty($action['permissions']) && $this instanceof AuthAwareInterface) {
+                $action['active'] = $this->hasPermissions($action['permissions']);
             }
         }
 
@@ -304,16 +308,8 @@ trait ActionContainerTrait
      */
     protected function parseActionRenderables($action, $renderer)
     {
-        if (!$renderer) {
-            return $action;
-        }
-
         if ($renderer === true) {
             $renderer = $this->getActionRenderer();
-        }
-
-        if (!$renderer instanceof ViewableInterface) {
-            throw new RuntimeException('The widget has no renderer.');
         }
 
         if (isset($action['condition'])) {
@@ -403,13 +399,17 @@ trait ActionContainerTrait
                 $url = preg_replace('~\{\{\s*(obj_)?type\s*\}\}~', $objType, $url);
             }
 
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
+
             return $url;
-        }
+        } elseif ($renderer instanceof ViewableInterface) {
+            $url = $renderer->renderTemplate($url);
 
-        $url = $renderer->renderTemplate($url);
-
-        if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
-            $url = $this->adminUrl().$url;
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
         }
 
         return $url;
@@ -452,6 +452,8 @@ trait ActionContainerTrait
         return [
             'ident'         => null,
             'priority'      => null,
+            'permissions'   => [],
+            'condition'     => null,
             'active'        => true,
             'empty'         => false,
             'label'         => null,

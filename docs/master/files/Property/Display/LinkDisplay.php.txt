@@ -33,16 +33,17 @@ class LinkDisplay extends AbstractPropertyDisplay
     /**
      * Retrieve display value for anchor link.
      *
+     * @see    \Charcoal\Admin\Property\Display\ImageDisplay::displayVal()
      * @return string
      */
     public function hrefVal()
     {
         $val = parent::displayVal();
 
-        if (!parse_url($val, PHP_URL_SCHEME)) {
-            $uri = $this->baseUrl;
-
-            return $uri->withPath($val);
+        if ($val && !parse_url($val, PHP_URL_SCHEME)) {
+            if (!in_array($val[0], [ '/', '#', '?' ])) {
+                return $this->baseUrl->withPath($val);
+            }
         }
 
         return $val;

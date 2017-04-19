@@ -30,6 +30,9 @@ use \Charcoal\Admin\AdminWidget;
 class FormPropertyWidget extends AdminWidget implements
     FormInputInterface
 {
+    const HIDDEN_FORM_CONTROL  = 'charcoal/admin/property/input/hidden';
+    const DEFAULT_FORM_CONTROL = 'charcoal/admin/property/input/text';
+
     /**
      * In memory copy of the PropertyInput object
      * @var PropertyInputInterface $input
@@ -106,6 +109,7 @@ class FormPropertyWidget extends AdminWidget implements
     {
         parent::setDependencies($container);
 
+        $this->setView($container['view']);
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyInputFactory($container['property/input/factory']);
     }
@@ -204,7 +208,7 @@ class FormPropertyWidget extends AdminWidget implements
         parent::setData($data);
 
         // Keep the data in copy, this will be passed to the property and/or input later
-        $this->propertyData = $data;
+        $this->setPropertyData($data);
 
         return $this;
     }
@@ -217,7 +221,11 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function merge($data)
     {
-        $this->propertyData = array_replace($this->propertyData, $data);
+        if (isset($data['input_type'])) {
+            $this->setInputType($data['input_type']);
+        }
+
+        $this->mergePropertyData($data);
 
         return $this;
     }
@@ -271,12 +279,51 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
+     * @param  array $data The property data.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setPropertyData(array $data)
+    {
+        $this->propertyData = $data;
+
+        if ($this->property) {
+            $this->property->setData($data);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  array $data The property data.
+     * @return FormPropertyWidget Chainable
+     */
+    public function mergePropertyData(array $data)
+    {
+        $this->propertyData = array_replace($this->propertyData, $data);
+
+        if ($this->property) {
+            $this->property->setData($data);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function propertyData()
+    {
+        return $this->propertyData;
+    }
+
+    /**
      * @param  mixed $propertyVal The property value.
      * @return FormPropertyWidget Chainable
      */
     public function setPropertyVal($propertyVal)
     {
         $this->propertyVal = $propertyVal;
+
         return $this;
     }
 
@@ -293,7 +340,13 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function showLabel()
     {
-        return true;
+        $prop = $this->prop();
+        $show = $prop['show_label'];
+        if (is_bool($show)) {
+            return $show;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -344,7 +397,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function description()
     {
-        return $this->prop()->description();
+        return $this->renderTemplate((string)$this->prop()->description());
     }
 
     /**
@@ -352,7 +405,15 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function notes()
     {
-        return $this->prop()->notes();
+        return $this->renderTemplate((string)$this->prop()->notes());
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hidden()
+    {
+        return ($this->inputType() === static::HIDDEN_FORM_CONTROL || $this->prop()->hidden());
     }
 
     /**
@@ -378,6 +439,7 @@ class FormPropertyWidget extends AdminWidget implements
     public function setInputType($inputType)
     {
         $this->inputType = $inputType;
+
         return $this;
     }
 
@@ -387,17 +449,29 @@ class FormPropertyWidget extends AdminWidget implements
     public function inputType()
     {
         if ($this->inputType === null) {
-            $prop     = $this->prop();
-            $metadata = $prop->metadata();
+            $inputType = '';
+            $isHidden  = $this->prop()->hidden();
+            $metadata  = $this->prop()->metadata();
 
-            $inputType = (isset($metadata['admin']) ? $metadata['admin']['input_type'] : '');
+            if (isset($metadata['input_type'])) {
+                $inputType = $metadata['input_type'];
+            }
+
+            if (!$inputType && $isHidden) {
+                $inputType = static::HIDDEN_FORM_CONTROL;
+            }
 
             if (!$inputType) {
-                $inputType = 'charcoal/admin/property/input/text';
+                $inputType = (isset($metadata['admin']) ? $metadata['admin']['input_type'] : '');
+            }
+
+            if (!$inputType) {
+                $inputType = static::DEFAULT_FORM_CONTROL;
             }
 
             $this->inputType = $inputType;
         }
+
         return $this->inputType;
     }
 

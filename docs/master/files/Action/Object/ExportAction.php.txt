@@ -98,7 +98,8 @@ class ExportAction extends AdminAction
             'logger'          => $this->logger,
             'factory'         => $this->modelFactory(),
             'obj_type'        => $objType,
-            'propertyFactory' => $this->propertyFactory
+            'propertyFactory' => $this->propertyFactory,
+            'translator'      => $this->translator()
         ]);
 
         if (isset($exportIdent)) {

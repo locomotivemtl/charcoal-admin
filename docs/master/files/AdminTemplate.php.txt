@@ -3,6 +3,7 @@
 namespace Charcoal\Admin;
 
 use Exception;
+use InvalidArgumentException;
 
 // From PSR-7
 use Psr\Http\Message\UriInterface;
@@ -19,6 +20,7 @@ use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
+use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
@@ -73,7 +75,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * The name of the project.
      *
-     * @var \Charcoal\Translator\Translation|string|null
+     * @var Translation|string|null
      */
     private $siteName;
 
@@ -83,19 +85,24 @@ class AdminTemplate extends AbstractTemplate implements
     private $ident;
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $label
+     * @var Translation|string|null $label
      */
     protected $label;
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $title
+     * @var Translation|string|null $title
      */
     protected $title;
 
     /**
-     * @var \Charcoal\Translator\Translation|string|null $subtitle
+     * @var Translation|string|null $subtitle
      */
     protected $subtitle;
+
+    /**
+     * @var boolean $showSidemenu
+     */
+    private $showSidemenu = true;
 
     /**
      * @var boolean $showHeaderMenu
@@ -115,7 +122,12 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * @var boolean $headerMenu
      */
-    private $headerMenu;
+    protected $headerMenu;
+
+    /**
+     * @var SideMenuWidgetInterface $sidemenu
+     */
+    protected $sidemenu;
 
     /**
      * @var FactoryInterface $modelFactory
@@ -150,7 +162,7 @@ class AdminTemplate extends AbstractTemplate implements
         $this->menuBuilder = $container['menu/builder'];
         $this->menuItemBuilder = $container['menu/item/builder'];
 
-        // AuthAware dependencies
+        // Satisfies AuthAwareInterface dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
     }
@@ -246,7 +258,7 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function label()
     {
@@ -269,7 +281,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the title of the page.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function title()
     {
@@ -296,29 +308,11 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the page's sub-title.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function subtitle()
     {
         return $this->subtitle;
-    }
-
-    /**
-     * @param boolean $show The show header menu flag.
-     * @return AdminTemplate Chainable
-     */
-    public function setShowHeaderMenu($show)
-    {
-        $this->showHeaderMenu = !!$show;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showHeaderMenu()
-    {
-        return ($this->isAuthenticated() && $this->showHeaderMenu);
     }
 
     /**
@@ -365,19 +359,65 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @throws Exception If the menu was not properly configured.
-     * @return array This method is a generator.
+     * @param boolean $show The show header menu flag.
+     * @return AdminTemplate Chainable
+     */
+    public function setShowHeaderMenu($show)
+    {
+        $this->showHeaderMenu = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showHeaderMenu()
+    {
+        return ($this->isAuthorized() && $this->showHeaderMenu);
+    }
+
+    /**
+     * @return array
      */
     public function headerMenu()
+    {
+        if ($this->headerMenu === null) {
+            $this->headerMenu = $this->createHeaderMenu();
+        }
+
+        return $this->headerMenu;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
+     * @return array
+     */
+    protected function createHeaderMenu($options = null)
     {
         $headerMenu = $this->adminConfig['header_menu'];
 
         if (!isset($headerMenu['items'])) {
-            throw new Exception(
-                'Header menu was not property configured.'
+            throw new InvalidArgumentException(
+                'Missing "admin.header_menu.items"'
             );
         }
-        $menu = $this->menuBuilder->build([]);
+
+        $mainMenu = null;
+        if (is_string($options)) {
+            $mainMenu = $options;
+        } elseif (is_array($options)) {
+            if (isset($options['widget_options']['ident'])) {
+                $mainMenu = $options['widget_options']['ident'];
+            }
+        }
+
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($mainMenuFromRequest) {
+            $mainMenu = $mainMenuFromRequest;
+        }
+
+        $menu   = $this->menuBuilder->build([]);
         $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
         foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
             $menuItem['menu'] = $menu;
@@ -385,11 +425,14 @@ class AdminTemplate extends AbstractTemplate implements
             if ($item->isAuthorized() === false) {
                 continue;
             }
+
             if (isset($menuItem['active']) && $menuItem['active'] === false) {
                 continue;
             }
 
-            if (!isset($menuItem['ident'])) {
+            if (isset($menuItem['ident'])) {
+                $menuIdent = $menuItem['ident'];
+            } else {
                 $menuItem['ident'] = $menuIdent;
             }
 
@@ -401,6 +444,7 @@ class AdminTemplate extends AbstractTemplate implements
             } else {
                 $url = '';
             }
+
             $menuItem['url'] = $url;
 
             if (isset($menuItem['icon'])) {
@@ -426,7 +470,7 @@ class AdminTemplate extends AbstractTemplate implements
 
             $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
 
-            $menuItem['selected'] = ($menuItem['ident'] === filter_input(INPUT_GET, 'main_menu'));
+            $menuItem['selected'] = ($menuItem['ident'] === $mainMenu);
 
             yield $menuItem;
         }
@@ -447,7 +491,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function showFooterMenu()
     {
-        return ($this->isAuthenticated() && $this->showFooterMenu);
+        return ($this->isAuthorized() && $this->showFooterMenu);
     }
 
     /**
@@ -459,49 +503,74 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @param  mixed $sidemenuConfig The sidemenu widget ID or config.
+     * @param  boolean $show The show sidemenu flag.
+     * @return AdminTemplate Chainable
+     */
+    public function setShowSidemenu($show)
+    {
+        $this->showSidemenu = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showSidemenu()
+    {
+        return ($this->isAuthorized() && $this->showSidemenu);
+    }
+
+    /**
+     * Retrieve the sidemenu.
+     *
+     * @return SidemenuWidgetInterface|null
+     */
+    public function sidemenu()
+    {
+        return $this->sidemenu;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
      * @throws InvalidArgumentException If the sidemenu widget is invalid.
      * @return SidemenuWidgetInterface|null
      */
-    protected function createSidemenu($sidemenuConfig = null)
+    protected function createSidemenu($options = null)
     {
-        if (empty($sidemenuConfig)) {
-            $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
-            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-
-            if ($sidemenuFromRequest) {
-                $sidemenuConfig = $sidemenuFromRequest;
-            } elseif ($mainMenuFromRequest) {
-                $sidemenuConfig = $mainMenuFromRequest;
-            } else {
-                return null;
-            }
-        }
-
-        if (is_string($sidemenuConfig)) {
-            $sidemenuConfig = [
+        if (!is_array($options)) {
+            $options = [
                 'widget_options' => [
-                    'ident' => $sidemenuConfig
+                    'ident' => $options
                 ]
             ];
-        } elseif (!is_array($sidemenuConfig)) {
-            throw new InvalidArgumentException(
-                'The sidemenu definition must be a sidemenu identifier or sidemenu structure.'
-            );
+        } elseif (!isset($options['widget_options']['ident'])) {
+            $options['widget_options']['ident'] = null;
+        }
+
+        $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($sidemenuFromRequest) {
+            $options['widget_options']['ident'] = $sidemenuFromRequest;
+        } elseif ($mainMenuFromRequest) {
+            $options['widget_options']['ident'] = $mainMenuFromRequest;
+        }
+
+        if (!is_string($options['widget_options']['ident'])) {
+            return null;
         }
 
         $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
 
-        if (isset($sidemenuConfig['widget_type'])) {
-            $widgetType = $sidemenuConfig['widget_type'];
+        if (isset($options['widget_type'])) {
+            $widgetType = $options['widget_type'];
         } else {
             $widgetType = 'charcoal/admin/widget/sidemenu';
         }
 
         $sidemenu = $this->widgetFactory()->create($widgetType);
 
-        if (isset($sidemenuConfig['widget_options'])) {
-            $sidemenu->setData($sidemenuConfig['widget_options']);
+        if (isset($options['widget_options'])) {
+            $sidemenu->setData($options['widget_options']);
         }
 
         return $sidemenu;
@@ -607,7 +676,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the name of the project.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function siteName()
     {
@@ -617,7 +686,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the document title.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function documentTitle()
     {

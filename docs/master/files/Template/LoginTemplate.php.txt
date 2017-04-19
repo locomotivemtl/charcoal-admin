@@ -56,6 +56,18 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
+     * @return string
+     */
+    public function loginLogo()
+    {
+        if (isset($this->adminConfig['login_logo'])) {
+            return $this->adminConfig['login_logo'];
+        } else {
+            return $this->baseUrl().'assets/admin/images/avatar.jpg';
+        }
+    }
+
+    /**
      * @return boolean
      */
     private function isHttps()
@@ -118,7 +130,7 @@ class LoginTemplate extends AdminTemplate
      */
     public function urlLoginAction()
     {
-        return 'action/login';
+        return $this->adminUrl().'login';
     }
 
     /**
@@ -126,7 +138,7 @@ class LoginTemplate extends AdminTemplate
      */
     public function urlLostPassword()
     {
-        return 'account/lost-password';
+        return $this->adminUrl().'account/lost-password';
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
+use Charcoal\Translator\Translation;
 use \RuntimeException;
 use \InvalidArgumentException;
 
@@ -292,10 +293,12 @@ class TagsInput extends AbstractSelectableInput
             $options = $this->parseSelectizeOptions($options);
         }
 
-        if (isset($options['options'])) {
-            $options['options'] = array_merge($options['options'], $this->selectizeVal());
-        } else {
-            $options['options'] = $this->selectizeVal();
+        if ($this->property() instanceof ObjectProperty) {
+            if (isset($options['options'])) {
+                $options['options'] = array_merge($options['options'], $this->selectizeVal());
+            } else {
+                $options['options'] = $this->selectizeVal();
+            }
         }
 
         return $options;
@@ -345,7 +348,7 @@ class TagsInput extends AbstractSelectableInput
             $val = $prop->parseVal($val);
 
             if (!$prop->multiple()) {
-                $val = [ $val ];
+                $val = (array)$val;
             }
 
             if ($prop instanceof ObjectProperty) {

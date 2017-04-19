@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Action\Object;
 
+use Charcoal\Object\RevisionableInterface;
+use Exception;
 use InvalidArgumentException;
 
 // From PSR-7
@@ -52,14 +54,14 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
      */
     protected function setRevNum($revNum)
     {
-        if (!is_int($revNum)) {
+        if (!is_numeric($revNum)) {
             throw new InvalidArgumentException(sprintf(
                 'Revision must be an integer, received %s.',
                 (is_object($revNum) ? get_class($revNum) : gettype($revNum))
             ));
         }
 
-        $this->revNum = $revNum;
+        $this->revNum = (int)$revNum;
 
         return $this;
     }

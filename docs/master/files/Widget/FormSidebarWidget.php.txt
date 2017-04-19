@@ -47,14 +47,14 @@ class FormSidebarWidget extends AdminWidget implements
      *
      * @var array|null
      */
-    private $sidebarActions;
+    protected $sidebarActions;
 
     /**
      * Store the default list actions.
      *
      * @var array|null
      */
-    private $defaultSidebarActions;
+    protected $defaultSidebarActions;
 
     /**
      * Keep track if sidebar actions are finalized.
@@ -122,11 +122,11 @@ class FormSidebarWidget extends AdminWidget implements
     {
         parent::setData($data);
 
-        if (isset($data['properties']) && $data['properties'] !== null) {
+        if (isset($data['properties'])) {
             $this->setSidebarProperties($data['properties']);
         }
 
-        if (isset($data['actions']) && $data['actions'] !== null) {
+        if (isset($data['actions'])) {
             $this->setSidebarActions($data['actions']);
         }
 
@@ -213,17 +213,22 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function formProperties()
     {
-        $sidebarProperties = $this->sidebarProperties();
-        $obj               = $this->form()->obj();
-        $properties        = array_intersect(array_keys($obj->metadata()->properties()), $sidebarProperties);
-        $ret               = [];
-        foreach ($properties as $propertyIdent) {
-            $property = $obj->p($propertyIdent);
-            $val      = $obj[$propertyIdent];
+        $obj = $this->form()->obj();
+
+        $availableProperties = $obj->properties();
+        $sidebarProperties   = $this->sidebarProperties();
+
+        foreach ($sidebarProperties as $propertyIdent) {
+            if (!$obj->hasProperty($propertyIdent)) {
+                continue;
+            }
+
+            $property = $obj->property($propertyIdent);
+            $value    = $obj->propertyValue($propertyIdent);
 
             yield $propertyIdent => [
                 'prop'       => $property,
-                'displayVal' => $property->displayVal($val)
+                'displayVal' => $property->displayVal($value)
             ];
         }
     }
@@ -357,7 +362,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the table's default object actions.
+     * Retrieve the sidebar's default actions.
      *
      * @return array
      */

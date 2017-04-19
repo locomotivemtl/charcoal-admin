@@ -222,7 +222,7 @@ class AdminTemplate extends AbstractTemplate implements
     {
         if (!$this->modelFactory) {
             throw new Exception(
-                sprintf('Model factory is not set for admin template "%s".', get_class($this))
+                sprintf('Model factory is not set for template "%s".', get_class($this))
             );
         }
         return $this->modelFactory;
@@ -773,7 +773,7 @@ class AdminTemplate extends AbstractTemplate implements
      * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return void
      */
-    private function setWidgetFactory(FactoryInterface $factory)
+    protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
     }
@@ -781,11 +781,15 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * @throws Exception If the widget factory dependency was not previously set / injected.
      * @return FactoryInterface
-
-                sprintf('Widget factory was not set for template "%s".', get_class($this))
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new Exception(
+                'Widget factory was not set.'
             );
-        }        return $this->widgetFactory;
+        }
+        return $this->widgetFactory;
     }
 }
-
 

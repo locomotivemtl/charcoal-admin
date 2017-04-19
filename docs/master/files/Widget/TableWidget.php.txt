@@ -168,7 +168,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @param FactoryInterface $factory The factory to create widgets.
      * @return self
      */
-    private function setWidgetFactory(FactoryInterface $factory)
+    protected function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
 

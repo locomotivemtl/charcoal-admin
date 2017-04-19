@@ -49,11 +49,11 @@ class ProcessWeeklyScript extends AbstractNotificationScript
     }
 
     /**
-     * @param  Notification $notification The notification object.
-     * @param  array        $objects      The objects that were modified.
+     * @param  Notification        $notification The notification object.
+     * @param  CollectionInterface $objects      The objects that were modified.
      * @return array
      */
-    protected function emailData(Notification $notification, array $objects)
+    protected function emailData(Notification $notification, CollectionInterface $objects)
     {
         $subject = sprintf(
             'Weekly Charcoal Notification - %s to %s',

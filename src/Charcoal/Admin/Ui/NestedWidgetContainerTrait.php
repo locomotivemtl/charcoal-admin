@@ -9,10 +9,6 @@ use InvalidArgumentException;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From 'charcoal-ui'
-use Charcoal\Ui\FormGroup\FormGroupInterface;
-use Charcoal\Ui\FormInput\FormInputInterface;
-
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 
@@ -85,6 +81,16 @@ trait NestedWidgetContainerTrait
     {
         $type   = $this->widgetData('type');
         $widget = $this->resolveWidget($type);
+
+        if ($this instanceof ObjectContainerInterface && $widget instanceof ObjectContainerInterface) {
+            if (empty($widget->objType())) {
+                $widget->setObjType($this->objType());
+            }
+
+            if (empty($widget->objId()) && !is_numeric($widget->objId())) {
+                $widget->setObjId($this->objId());
+            }
+        }
 
         $widget->setData($this->widgetData());
         $widget->setData($this->renderableData());

@@ -90,9 +90,9 @@
             };
 
         } else {
-            plugins = [
-                'charcoal_item'
-            ];
+            plugins = {
+                charcoal_item: {}
+            };
         }
 
         var objType = this.obj_type;
@@ -131,7 +131,7 @@
             default_opts.create = this.create_item.bind(this);
             default_opts.load = this.load_items.bind(this);
         } else {
-            default_opts.plugins.push('create_on_enter');
+            default_opts.plugins.create_on_enter = {};
             default_opts.create = function (input) {
                 return {
                     value: input,

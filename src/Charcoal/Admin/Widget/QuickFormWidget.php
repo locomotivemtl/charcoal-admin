@@ -24,6 +24,28 @@ class QuickFormWidget extends ObjectFormWidget
             return $metadata['admin']['default_quick_form'];
         }
 
+        if (isset($this->data()['form_data']['form_ident'])) {
+            $ident = $this->data()['form_data']['form_ident'];
+
+            if (is_string($ident)) {
+                return $ident;
+            }
+        }
+
         return 'quick';
+    }
+
+    /**
+     * Retrieve the label for the form submission button.
+     *
+     * @return Translation|string|null
+     */
+    public function submitLabel()
+    {
+        if (isset($this->data()['form_data']['submit_label'])) {
+            $label = $this->data()['form_data']['submit_label'];
+            $this->submitLabel = $this->translator()->translation($label);
+        }
+        return parent::submitLabel();
     }
 }

@@ -106,7 +106,7 @@ class ObjectFormWidget extends FormWidget implements
     {
         return [
             'request' => null,
-            'object'  => 'array_merge_recursive'
+            'object'  => 'array_replace_recursive'
         ];
     }
 

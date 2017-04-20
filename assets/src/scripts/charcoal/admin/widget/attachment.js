@@ -280,10 +280,11 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             }
         }
     };
+
     var immutableOpts = {};
     var dialogOpts = $.extend({}, defaultOpts, customOpts, immutableOpts);
 
-    this.dialog(dialogOpts, function (response) {
+    var dialog = this.dialog(data, function (response) {
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.
@@ -300,7 +301,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
                 obj_id: id,
                 save_callback: function (response) {
                     callback(response);
-                    BootstrapDialog.closeAll();
+                    dialog.close();
                 }
             });
 

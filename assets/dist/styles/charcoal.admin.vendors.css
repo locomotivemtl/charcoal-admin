@@ -2383,7 +2383,7 @@ input[type="search"] {
   .input-group-lg > .input-group-btn > input[type="month"].btn,
   .input-group-lg
   input[type="month"] {
-    line-height: 46px; } }
+    line-height: 48px; } }
 
 .form-group {
   margin-bottom: 15px; }
@@ -2513,7 +2513,7 @@ select[multiple].input-sm,
 .input-lg, .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {
-  height: 46px;
+  height: 48px;
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.3333333;
@@ -2522,8 +2522,8 @@ select[multiple].input-sm,
 select.input-lg, .input-group-lg > select.form-control,
 .input-group-lg > select.input-group-addon,
 .input-group-lg > .input-group-btn > select.btn {
-  height: 46px;
-  line-height: 46px; }
+  height: 48px;
+  line-height: 48px; }
 
 textarea.input-lg, .input-group-lg > textarea.form-control,
 .input-group-lg > textarea.input-group-addon,
@@ -2535,22 +2535,22 @@ select[multiple].input-lg,
   height: auto; }
 
 .form-group-lg .form-control {
-  height: 46px;
+  height: 48px;
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.3333333;
   border-radius: 6px; }
 
 .form-group-lg select.form-control {
-  height: 46px;
-  line-height: 46px; }
+  height: 48px;
+  line-height: 48px; }
 
 .form-group-lg textarea.form-control,
 .form-group-lg select[multiple].form-control {
   height: auto; }
 
 .form-group-lg .form-control-static {
-  height: 46px;
+  height: 48px;
   min-height: 38px;
   padding: 11px 16px;
   font-size: 18px;
@@ -2578,9 +2578,9 @@ select[multiple].input-lg,
 .input-group-lg > .input-group-btn > .btn + .form-control-feedback,
 .input-group-lg + .form-control-feedback,
 .form-group-lg .form-control + .form-control-feedback {
-  width: 46px;
-  height: 46px;
-  line-height: 46px; }
+  width: 48px;
+  height: 48px;
+  line-height: 48px; }
 
 .input-sm + .form-control-feedback, .input-group-sm > .form-control + .form-control-feedback,
 .input-group-sm > .input-group-addon + .form-control-feedback,
@@ -10229,6 +10229,46 @@ select.mobile-device {
   .selectize-control.plugin-remove_button [data-value] .remove {
     width: 20px;
     padding: 12px 0 0 0; }
+
+.selectize-control.plugin-buttons [data-value] {
+  position: relative; }
+  .selectize-control.plugin-buttons [data-value] .button {
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 40px;
+    padding: 12px 0 0 0;
+    z-index: 1;
+    /* fixes ie bug (see #392) */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: inherit;
+    text-decoration: none;
+    vertical-align: middle;
+    display: inline-block;
+    border-radius: 0 2px 2px 0;
+    box-sizing: border-box; }
+
+.selectize-control [data-value] .button:hover {
+  background: rgba(0, 0, 0, 0.1); }
+
+.selectize-control [data-value].active .button {
+  border-left-color: transparent; }
+
+.selectize-control .disabled [data-value] .button:hover {
+  background: none; }
+
+.selectize-control .disabled [data-value] .button {
+  border-left-color: rgba(77, 77, 77, 0.1); }
+
+.selectize-control .update-single {
+  position: absolute;
+  right: 28px;
+  top: 6px;
+  font-size: 23px; }
 
 .input-group > .selectize-control:not(:first-child):not(:last-child) .selectize-input {
   border-radius: 0; }

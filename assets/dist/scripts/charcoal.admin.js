@@ -1534,8 +1534,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         showHeader: showHeader,
         showFooter: showFooter,
         onshown: function () {
-            Charcoal.Admin.manager().render();
-        }
+                Charcoal.Admin.manager().render();
+            }
     };
 
     var dialogOptions = $.extend({}, defaultOptions, userOptions);
@@ -1637,7 +1637,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         return $message;
     };
 
-    BootstrapDialog.show(dialogOptions);
+    return new BootstrapDialog.show(dialogOptions);
 };
 
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
@@ -1942,10 +1942,11 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             }
         }
     };
+
     var immutableOpts = {};
     var dialogOpts = $.extend({}, defaultOpts, customOpts, immutableOpts);
 
-    this.dialog(dialogOpts, function (response) {
+    var dialog = this.dialog(dialogOpts, function (response) {
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.
@@ -1962,7 +1963,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
                 obj_id: id,
                 save_callback: function (response) {
                     callback(response);
-                    BootstrapDialog.closeAll();
+                    dialog.close();
                 }
             });
 
@@ -2911,20 +2912,20 @@ Charcoal.Admin.Widget_Pivot.prototype.widget_options = function ()
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
-    this.widget_type       = 'charcoal/admin/widget/quick-form';
-    this.save_callback     = opts.save_callback || '';
-    this.cancel_callback   = opts.cancel_callback || '';
-    this.form_working      = false;
-    this.suppress_feedback = false;
-    this.is_new_object     = false;
-    this.xhr               = null;
-    this.obj_id            = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
+    this.widget_type = 'charcoal/admin/widget/quick-form';
+    this.save_callback = opts.save_callback || '';
+    this.cancel_callback = opts.cancel_callback || '';
+    this.form_working = false;
+    this.suppress_feedback = opts.suppress_feedback || false;
+    this.is_new_object = false;
+    this.xhr = null;
+    this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 
     return this;
 };
-Charcoal.Admin.Widget_Quick_Form.prototype             = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
-Charcoal.Admin.Widget_Quick_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
+Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
     this.bind_events();
@@ -2958,7 +2959,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
 
     var $trigger, $form, form_data;
 
-    $form    = $(form);
+    $form = $(form);
     $trigger = $form.find('[type="submit"]');
 
     if ($trigger.prop('disabled')) {
@@ -2974,10 +2975,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     this.disable_form($form, $trigger);
 
     this.xhr = $.ajax({
-        type:        'POST',
-        url:         this.request_url(),
-        data:        form_data,
-        dataType:    'json',
+        type: 'POST',
+        url: this.request_url(),
+        data: form_data,
+        dataType: 'json',
         processData: false,
         contentType: false,
     });
@@ -3002,7 +3003,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widge
 Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
-    if (response.feedbacks) {
+    if (response.feedbacks && !this.suppress_feedback) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 
@@ -3015,6 +3016,9 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
             }
         });
     }
+
+    this.enable_form($form, $trigger);
+    this.form_working = false;
 
     if (typeof this.save_callback === 'function') {
         this.save_callback(response);
@@ -5567,6 +5571,589 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
     return this;
 };
+;/* global Clipboard */
+/**
+ * Selectize Picker
+ * Search.
+ *
+ * Require
+ * - selectize.js
+ */
+
+;(function () {
+
+    var Selectize = function (opts) {
+        this.input_type = 'charcoal/admin/property/input/selectize';
+
+        // Property_Input_Selectize properties
+        this.input_id = null;
+        this.obj_type = null;
+        this.copy_items = false;
+        this.title = null;
+        this.translations = null;
+
+        // Pattern refers to the form property that matches the text inputted through selectize.
+        this.pattern = null;
+        this.multiple = false;
+        this.separator = ',';
+
+        this.selectize = null;
+        this.selectize_selector = null;
+        this.form_ident = null;
+        this.selectize_options = {};
+
+        this.clipboard = null;
+        this.allow_update = null;
+
+        this.set_properties(opts).init();
+    };
+    Selectize.prototype = Object.create(Charcoal.Admin.Property.prototype);
+    Selectize.constructor = Charcoal.Admin.Property_Input_Selectize;
+    Selectize.parent = Charcoal.Admin.Property.prototype;
+
+    Selectize.prototype.init = function () {
+
+        if (typeof $.fn.sortable !== 'function') {
+            var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
+            Charcoal.Admin.loadScript(url, this.init.bind(this));
+
+            return this;
+        }
+
+        this.init_selectize();
+        this.init_clipboard();
+        this.init_allow_update();
+
+        var self = this;
+
+        this.selectize.on('update_item', function (e) {
+            self.create_item(null, e.callback, {
+                id: e.value,
+                step: 0
+            });
+        });
+    };
+
+    Selectize.prototype.set_properties = function (opts) {
+        this.input_id = opts.id || this.input_id;
+        this.obj_type = opts.data.obj_type || this.obj_type;
+
+        // Enables the copy button
+        this.copy_items = opts.data.copy_items || this.copy_items;
+        this.allow_update = opts.data.allow_update || this.allow_update;
+        this.title = opts.data.title || this.title;
+        this.translations = opts.data.translations || this.translations;
+        this.pattern = opts.data.pattern || this.pattern;
+        this.multiple = opts.data.multiple || this.multiple;
+        this.separator = opts.data.multiple_separator || this.multiple_separator || ',';
+        this.form_ident = opts.data.form_ident || this.form_ident;
+
+        this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
+
+        this.selectize_options = opts.data.selectize_options || this.selectize_options;
+
+        this.$input = $(this.selectize_selector || '#' + this.input_id);
+
+        var plugins;
+        if (this.multiple) {
+            plugins = {
+                // 'restore_on_backspace',
+                drag_drop: {},
+                charcoal_item: {}
+            };
+
+        } else {
+            plugins = [
+                'charcoal_item'
+            ];
+        }
+
+        var objType = this.obj_type;
+        var default_opts = {
+            plugins: plugins,
+            formData: {},
+            delimiter: this.separator,
+            persist: true,
+            preload: 'focus',
+            openOnFocus: true,
+            searchField: ['value', 'text'],
+            dropdownParent: this.$input.closest('.form-field'),
+            createFilter: function (input) {
+                for (var item in this.options) {
+                    item = this.options[item];
+                    if (item.text === input) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+            onInitialize: function () {
+                var self = this;
+                self.sifter.iterator(this.items, function (value) {
+                    var option = self.options[value];
+                    var $item = self.getItem(value);
+
+                    if (option.color) {
+                        $item.css('background-color', option.color/*[options.colorField]*/);
+                    }
+                });
+            }
+        };
+
+        if (objType) {
+            default_opts.create = this.create_item.bind(this);
+            default_opts.load = this.load_items.bind(this);
+        } else {
+            default_opts.plugins.push('create_on_enter');
+            default_opts.create = function (input) {
+                return {
+                    value: input,
+                    text: input
+                };
+            };
+        }
+
+        if (this.selectize_options.splitOn) {
+            var splitOn = this.selectize_options.splitOn;
+            if ($.type(splitOn) === 'array') {
+                for (var i = splitOn.length - 1; i >= 0; i--) {
+                    switch (splitOn[i]) {
+                        case 'comma':
+                            splitOn[i] = '\\s*,\\s*';
+                            break;
+
+                        case 'tab':
+                            splitOn[i] = '\\t+';
+                            break;
+
+                        default:
+                            splitOn[i] = splitOn[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    }
+                }
+
+                splitOn = splitOn.join('|');
+            }
+
+            this.selectize_options.splitOn = new RegExp(splitOn);
+        }
+
+        this.selectize_options = $.extend(true,{}, default_opts, this.selectize_options);
+
+        return this;
+    };
+
+    Selectize.prototype.create_item = function (input, callback, opts) {
+        var form_data = {};
+        opts = opts || {};
+        var pattern = this.pattern;
+        var self = this;
+        var type = this.obj_type;
+        var title = this.title;
+        var translations = this.translations;
+        var settings = this.selectize_options;
+        var step = opts.step || 0;
+        var form_ident = this.form_ident;
+        var submit_label = null;
+        var id = opts.id || null;
+
+        // Get the form ident
+        if (form_ident && typeof form_ident === 'object') {
+            if (!id && form_ident.create) {
+                // The object must be created using 2 pop-up
+                form_ident = form_ident.create;
+                title += ' - ' + translations.step + ' 1 ' + translations.of + ' 2';
+                step = 1;
+                submit_label = 'Next';
+            } else if (id && form_ident.update) {
+                form_ident = form_ident.update;
+
+                if (step === 2) {
+                    title += ' - ' + translations.step + ' 2 ' + translations.of + ' 2';
+                    submit_label = 'Finish';
+                }
+            } else {
+                form_ident = null;
+            }
+        }
+
+        if ($.isEmptyObject(settings.formData)) {
+            if (pattern) {
+                if (input) {
+                    form_data[pattern] = input;
+                }
+                form_data.form_ident = form_ident;
+                form_data.submit_label = submit_label;
+            } else {
+                if (input) {
+                    form_data = {
+                        name: input
+                    };
+                }
+            }
+        } else if (input) {
+            form_data = $.extend({}, settings.formData);
+            $.each(form_data, function (key, value) {
+                if (value === ':input') {
+                    form_data[key] = input;
+                }
+            });
+        }
+
+        var data = {
+            title: title,
+            size: BootstrapDialog.SIZE_WIDE,
+            cssClass: '-quick-form',
+            dialog_options: {
+                onhide: function () {
+                    callback({
+                        return: false
+                    });
+                }
+            },
+            widget_type: 'charcoal/admin/widget/quickForm',
+            widget_options: {
+                obj_type: type,
+                obj_id: id,
+                form_data: form_data
+            }
+        };
+
+        if (step > 0) {
+            data.type = BootstrapDialog.TYPE_PRIMARY;
+        }
+
+        var dialog = this.dialog(data, function (response) {
+            if (response.success) {
+                // Call the quickForm widget js.
+                // Really not a good place to do that.
+                if (!response.widget_id) {
+                    return false;
+                }
+
+                Charcoal.Admin.manager().add_widget({
+                    id: response.widget_id,
+                    type: 'charcoal/admin/widget/quick-form',
+                    data: {
+                        obj_type: type
+                    },
+                    obj_id: id,
+                    suppress_feedback: (step === 1),
+                    save_callback: function (response) {
+
+                        var label = response.obj.id;
+                        if (pattern in response.obj && response.obj[pattern]) {
+                            label = response.obj[pattern][Charcoal.Admin.lang()] || response.obj[pattern];
+                        } else if ('name' in response.obj && response.obj.name) {
+                            label = response.obj.name[Charcoal.Admin.lang()] || response.obj.name;
+                        }
+
+                        callback({
+                            value: response.obj.id,
+                            text: label,
+                            color: response.obj.color,
+                            class: 'new'
+                        });
+                        dialog.close();
+                        if (step === 1) {
+                            self.create_item(input, callback, {
+                                id: response.obj.id,
+                                step: 2
+                            });
+                        }
+                    }
+                });
+
+                // Re render.
+                // This is not good.
+                Charcoal.Admin.manager().render();
+            }
+        });
+    };
+
+    Selectize.prototype.load_items = function (query, callback) {
+        var type = this.obj_type;
+        var pattern = this.pattern;
+
+        $.ajax({
+            url: Charcoal.Admin.admin_url() + 'object/load',
+            data: {
+                obj_type: type
+            },
+            type: 'GET',
+            error: function () {
+                callback();
+            },
+            success: function (res) {
+                var items = [];
+
+                for (var item in res.collection) {
+                    item = res.collection[item];
+                    var label = item.id;
+
+                    if (pattern && pattern in item && item[pattern]) {
+                        label = item[pattern][Charcoal.Admin.lang()] || item[pattern];
+                    } else if ('name' in item && item.name) {
+                        label = item.name[Charcoal.Admin.lang()] || item.name;
+                    }
+
+                    items.push({
+                        value: item.id,
+                        text: label,
+                        color: item.color
+                    });
+                }
+                callback(items);
+            }
+        });
+    };
+
+    Selectize.prototype.dialog = Charcoal.Admin.Widget.prototype.dialog;
+
+    Selectize.prototype.init_selectize = function () {
+        var $select = this.$input.selectize(this.selectize_options);
+
+        this.selectize = $select[0].selectize;
+    };
+
+    Selectize.prototype.init_allow_update = function () {
+        if (!this.allow_update) {
+            return;
+        }
+
+        var selectize = this.selectize;
+        var $updateButton = $(this.selectize_selector + '_update');
+        var id = null;
+        var self = this;
+
+        // Start by disabling update button.
+        $updateButton[0].disabled = true;
+
+        $updateButton.on('click', function () {
+            if (id) {
+                self.create_item(null, function (item) {
+                    // Update the item.
+                    if (item && item.value) {
+                        selectize.updateOption(id, item);
+                    }
+                }, {
+                    id: id,
+                    step: 0
+                });
+            }
+        });
+
+        selectize.on('blur', function () {
+            setTimeout(function () {
+                $updateButton[0].disabled = true;
+            }, 500);
+        });
+
+        selectize.$control.on('mousedown', '*:not(input)', function (e) {
+            id = $(e.target).eq(0).data('value');
+
+            if (selectize.$control.find('.active:not(input)')) {
+                $updateButton[0].disabled = false;
+            }
+        });
+    };
+
+    Selectize.prototype.init_clipboard = function () {
+        if (!this.copy_items) {
+            return;
+        }
+
+        var selectize = this.selectize;
+
+        this.clipboard = new Clipboard(this.selectize_selector + '_copy', {
+            text: function () {
+                return selectize.$input.val();
+            }
+        });
+    };
+
+    Charcoal.Admin.Property_Input_Selectize = Selectize;
+
+}(jQuery, document));
+;/* global Selectize */
+Selectize.define('btn_remove', function (options) {
+    options = $.extend({
+        label: '<span class="glyphicon glyphicon-trash"></span>',
+        title: 'Remove',
+        className: 'btn-remove',
+        append: true,
+    }, options);
+
+    this.require('buttons');
+
+    var multiUpdate = function (thisRef, options) {
+        var self = thisRef;
+        self.addButton(thisRef, options, function (e) {
+            e.preventDefault();
+
+            if (self.isLocked) {
+                return;
+            }
+
+            var $item = $(e.currentTarget).parent();
+            self.setActiveItem($item);
+            if (self.deleteSelection()) {
+                self.setCaret(self.items.length);
+            }
+        });
+    };
+
+    if (this.settings.mode !== 'single') {
+        multiUpdate(this, options);
+    }
+});
+;/* global Selectize */
+Selectize.define('btn_update', function (options) {
+    options = $.extend({
+        label: '<span class="glyphicon glyphicon-pencil"></span>',
+        title: 'Update',
+        className: 'btn-update',
+        append: true,
+    }, options);
+
+    this.require('buttons');
+
+    var multiUpdate = function (thisRef, options) {
+        var self = thisRef;
+        self.addButton(thisRef, options, function (e) {
+            e.preventDefault();
+
+            if (self.isLocked) {
+                return;
+            }
+
+            var $item = $(e.currentTarget).parent();
+            self.setActiveItem($item);
+
+            self.trigger('update_item',{
+                item: $item,
+                value: $item.eq(0).data('value'),
+                callback: function (item) {
+                    if (item && item.value) {
+                        self.updateOption(item.value, item);
+                    }
+                }
+            });
+        });
+    };
+
+    if (this.settings.mode !== 'single') {
+        multiUpdate(this, options);
+    }
+});
+;/* global Selectize */
+Selectize.define('buttons', function () {
+    /**
+     * Escapes a string for use within HTML.
+     *
+     * @param {string} str
+     * @returns {string}
+     */
+    var escape_html = function (str) {
+        return (str + '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    };
+
+    this.buttonOffset = 40;
+    this.currentButtonOffset = 0;
+
+    this.addButton = function (thisRef, options, callback) {
+        var self = thisRef;
+        var html = '<a href="javascript:void(0)" ' +
+            'class="button ' + options.className + '" ' +
+            'tabindex="-1" ' +
+            'title="' + escape_html(options.title) + '" ' +
+            'style="right:' + self.currentButtonOffset + 'px">' +
+            options.label + '</a>';
+
+        self.currentButtonOffset += self.buttonOffset;
+
+        /**
+         * Appends an element as a child (with raw HTML).
+         *
+         * @param {string} html_container
+         * @param {string} html_element
+         * @return {string}
+         */
+        var append = function (html_container, html_element) {
+            var pos = html_container.search(/(<\/[^>]+>\s*)$/);
+            return html_container.substring(0, pos) + html_element + html_container.substring(pos);
+        };
+
+        var adjustContainerPadding = function (html_container, offset) {
+            var pos = html_container.match(/(padding-right:.*;)/);
+            if (pos && pos[0]) {
+                var endIndex = pos[0].length + pos.index;
+                return html_container.substring(0, pos.index) +
+                    'padding-right:' + (offset + 8) + 'px;' + html_container.substring(endIndex);
+            }
+
+            pos = html_container.match(/(style=")/);
+            if (pos && pos[0]) {
+                pos = pos[0].length + pos.index;
+                return html_container.substring(0, pos) +
+                    'padding-right:' + (offset + 8) + 'px;' + html_container.substring(pos);
+            }
+
+            pos = html_container.match(/(<[^>]+)/);
+            if (pos && pos[0]) {
+                pos = pos[0].length + pos.index;
+                return html_container.substring(0, pos) +
+                    'style="padding-right:' + (offset + 8) + 'px;' + '"' +
+                    html_container.substring(pos);
+            }
+        };
+
+        thisRef.setup = (function () {
+            var original = self.setup;
+            return function () {
+                // override the item rendering method to add the button to each
+                if (options.append) {
+                    var render_item = self.settings.render.item;
+
+                    self.settings.render.item = function () {
+                        return append(
+                            adjustContainerPadding(
+                                render_item.apply(thisRef, arguments),
+                                self.currentButtonOffset
+                            ), html);
+                    };
+                }
+
+                original.apply(thisRef, arguments);
+
+                // Prevent drag and drop while pressing button
+                thisRef.$control.on('mousedown', '.' + options.className, function (e) {
+                    e.preventDefault();
+                    var sortable = self.$control.data('ui-sortable');
+
+                    if (sortable) {
+                        self.$control.sortable('disable');
+
+                        $(document).on('mouseup.sortable', function () {
+                            $(document).off('mouseup.sortable');
+                            self.$control.sortable('enable');
+                        });
+                    }
+                });
+
+                // add event listener to button
+                thisRef.$control.on('click', '.' + options.className, function (e) {
+                    if (typeof callback === 'function') {
+                        callback(e);
+                    }
+                });
+            };
+        })();
+    };
+});
 ;/* global Selectize */
 /**
  * Plugin: "create_on_enter" for selectize.js

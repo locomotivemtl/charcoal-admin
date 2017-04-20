@@ -1493,11 +1493,11 @@ ul.c-panel_table {
   line-height: 1.3333333; }
   .radio-color.radio-lg label,
   .checkbox-color.checkbox-lg label {
-    min-height: 26px; }
+    min-height: 28px; }
   .radio-color.radio-lg .o-color-swatch,
   .checkbox-color.checkbox-lg .o-color-swatch {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 6px; }
     .radio-color.radio-lg .o-color-swatch .minicolors-swatch-color,
     .checkbox-color.checkbox-lg .o-color-swatch .minicolors-swatch-color {
@@ -1962,7 +1962,7 @@ a:focus {
   line-height: 38px; }
 
 .form-group-lg .bootstrap-dialog .form-field.-l10n[data-lang]::before {
-  line-height: 46px; }
+  line-height: 48px; }
 
 .bootstrap-dialog .form-field.-l10n.form-property-file[data-lang]::before, .bootstrap-dialog .form-field.-l10n.form-property-image[data-lang]::before {
   line-height: 32px; }
@@ -1991,12 +1991,12 @@ a:focus {
     height: 34px;
     border-radius: 4px; }
   .form-control.minicolors-input.input-lg {
-    padding-left: 46px; }
+    padding-left: 48px; }
     .form-control.minicolors-input.input-lg + .minicolors-swatch {
       top: 11px;
       left: 11px;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 6px; }
   .form-control.minicolors-input.input-sm {
     padding-left: 38px; }

@@ -284,7 +284,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
     var immutableOpts = {};
     var dialogOpts = $.extend({}, defaultOpts, customOpts, immutableOpts);
 
-    var dialog = this.dialog(data, function (response) {
+    var dialog = this.dialog(dialogOpts, function (response) {
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.

@@ -268,11 +268,20 @@ class FormGroupWidget extends AbstractUiItem implements
     {
         $currentLocale = $this->translator()->getLocale();
         $languages = [];
-        foreach ($this->translator()->locales() as $locale => $localeConfig) {
-            if (isset($localeConfig['name'])) {
-                $label = $localeConfig['name'];
+        foreach ($this->translator()->locales() as $locale => $localeStruct) {
+            /**
+             * @see \Charcoal\Admin\Widget\FormSidebarWidget::languages()
+             * @see \Charcoal\Property\LangProperty::localeChoices()
+             */
+            if (isset($localeStruct['name'])) {
+                $label = $this->translator()->translation($localeStruct['name']);
             } else {
-                $label = 'locale.'.$locale;
+                $trans = 'locale.'.$locale;
+                if ($trans === $this->translator()->translate($trans)) {
+                    $label = strtoupper($locale);
+                } else {
+                    $label = $this->translator()->translation($trans);
+                }
             }
 
             $languages[] = [

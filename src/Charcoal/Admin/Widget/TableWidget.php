@@ -387,8 +387,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * Sets and returns properties
+     *
      * Manages which to display, and their order, as set in object metadata
-     * @return  FormPropertyWidget  Generator function
+     *
+     * @return FormPropertyWidget[]
      */
     public function properties()
     {
@@ -500,7 +502,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
      * Properties to display in collection template, and their order, as set in object metadata
      *
-     * @return  FormPropertyWidget         Generator function
+     * @return array|Generator
      */
     public function collectionProperties()
     {

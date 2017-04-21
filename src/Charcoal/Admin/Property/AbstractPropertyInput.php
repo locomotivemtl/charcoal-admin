@@ -474,7 +474,7 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * Set the input Name.
+     * Set the input name.
      *
      * Used for the HTML "name" attribute.
      *

@@ -390,7 +390,7 @@ class ObjectFormWidget extends FormWidget implements
      *
      * @see    \Charcoal\Ui\Form\FormTrait::createFormGroup()
      * @param  array|null $data Optional. The form group data to set.
-     * @return FormPropertyWidget
+     * @return FormGroupInterface
      */
     protected function createFormGroup(array $data = null)
     {
@@ -427,7 +427,7 @@ class ObjectFormWidget extends FormWidget implements
      * @param  FormGroupInterface $group      The form group to update.
      * @param  array|null         $groupData  Optional. The new group data to apply.
      * @param  string|null        $groupIdent Optional. The new group identifier.
-     * @return FormPropertyWidget
+     * @return FormGroupInterface
      */
     protected function updateFormGroup(
         FormGroupInterface $group,

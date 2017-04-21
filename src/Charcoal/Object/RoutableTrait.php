@@ -90,6 +90,13 @@ trait RoutableTrait
     protected $routeOptions;
 
     /**
+     * Retrieve the foreign object's routes options ident.
+     *
+     * @var string
+     */
+    protected $routeOptionsIdent;
+
+    /**
      * Set the object's URL slug pattern.
      *
      * @param  mixed $pattern The slug pattern.
@@ -400,13 +407,14 @@ trait RoutableTrait
             $oldRoute = $this->getLatestObjectRoute();
 
             $defaultData = [
-                'lang'           => $lang,
-                'route_obj_type' => $this->objType(),
-                'route_obj_id'   => $this->id(),
+                'lang'                => $lang,
+                'route_obj_type'      => $this->objType(),
+                'route_obj_id'        => $this->id(),
                 // Not used, might be too much.
-                'route_template' => $this->templateIdent(),
-                'route_options'  => $this->routeOptions(),
-                'active'         => true
+                'route_template'      => $this->templateIdent(),
+                'route_options'       => $this->routeOptions(),
+                'route_options_ident' => $this->routeOptionsIdent(),
+                'active'              => true
             ];
 
             $data = array_merge($defaultData, $data);
@@ -414,8 +422,9 @@ trait RoutableTrait
             // Unchanged but sync extra properties
             if ($slug === $oldRoute->slug()) {
                 $oldRoute->setData([
-                    'route_template' => $data['route_template'],
-                    'route_options'  => $data['route_options']
+                    'route_template'      => $data['route_template'],
+                    'route_options'       => $data['route_options'],
+                    'route_options_ident' => $data['route_options_ident']
                 ]);
                 $oldRoute->update([ 'route_template', 'route_options' ]);
                 continue;
@@ -480,6 +489,7 @@ trait RoutableTrait
             ->setModel($model)
             ->addFilter('route_obj_type', $this->objType())
             ->addFilter('route_obj_id', $this->id())
+            ->addFilter('route_options_ident', '', ['operator' => 'IS NULL'])
             ->addFilter('lang', $lang)
             ->addFilter('active', true)
             ->addOrder('creation_date', 'desc')
@@ -723,6 +733,25 @@ trait RoutableTrait
     public function routeOptions()
     {
         return $this->routeOptions;
+    }
+
+    /**
+     * @param string $routeOptionsIdent Template options ident.
+     * @return self
+     */
+    public function setRouteOptionsIdent($routeOptionsIdent)
+    {
+        $this->routeOptionsIdent = $routeOptionsIdent;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function routeOptionsIdent()
+    {
+        return $this->routeOptionsIdent;
     }
 
     /**

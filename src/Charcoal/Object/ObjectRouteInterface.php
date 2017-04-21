@@ -64,4 +64,12 @@ interface ObjectRouteInterface
      * @return array
      */
     public function routeOptions();
+
+    /**
+     * Retrieve the foreign object's route options ident.
+     * To ensure the latest object route is the good one.
+     *
+     * @return array
+     */
+    public function routeOptionsIdent();
 }

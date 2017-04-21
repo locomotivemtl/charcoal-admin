@@ -83,6 +83,13 @@
                 "en": "Route options",
                 "fr": "Options de route"
             }
+        },
+        "route_options_ident": {
+            "type": "string",
+            "label": {
+                "en": "Route options Ident",
+                "fr": "Identifiant d'options de route"
+            }
         }
     },
 

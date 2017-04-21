@@ -101,6 +101,13 @@ class ObjectRoute extends AbstractModel implements
     protected $routeOptions;
 
     /**
+     * Retrieve the foreign object's routes options ident.
+     *
+     * @var string
+     */
+    protected $routeOptionsIdent;
+
+    /**
      * Store a copy of the original—_preferred_—slug before alterations are made.
      *
      * @var string
@@ -177,7 +184,7 @@ class ObjectRoute extends AbstractModel implements
      */
     public function isSlugUnique()
     {
-        $proto  = $this->modelFactory()->get(self::class);
+        $proto = $this->modelFactory()->get(self::class);
         $loader = $this->collectionLoader();
         $loader
             ->reset()
@@ -200,10 +207,13 @@ class ObjectRoute extends AbstractModel implements
         }
         if ($obj->routeObjId() === $this->routeObjId() &&
             $obj->routeObjType() === $this->routeObjType() &&
-            $obj->lang() === $this->lang()) {
+            $obj->lang() === $this->lang()
+        ) {
             $this->setId($obj->id());
+
             return true;
         }
+
         return false;
     }
 
@@ -220,8 +230,10 @@ class ObjectRoute extends AbstractModel implements
             }
             $this->slugInc++;
             $this->setSlug($this->originalSlug.'-'.$this->slugInc);
+
             return $this->generateUniqueSlug();
         }
+
         return $this;
     }
 
@@ -234,6 +246,7 @@ class ObjectRoute extends AbstractModel implements
     protected function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
+
         return $this;
     }
 
@@ -246,6 +259,7 @@ class ObjectRoute extends AbstractModel implements
     protected function setCollectionLoader(CollectionLoader $loader)
     {
         $this->collectionLoader = $loader;
+
         return $this;
     }
 
@@ -260,6 +274,7 @@ class ObjectRoute extends AbstractModel implements
     {
         if ($slug === null) {
             $this->slug = null;
+
             return $this;
         }
         if (!is_string($slug)) {
@@ -296,6 +311,7 @@ class ObjectRoute extends AbstractModel implements
     {
         if (empty($time) && !is_numeric($time)) {
             $this->creationDate = null;
+
             return $this;
         }
 
@@ -332,6 +348,7 @@ class ObjectRoute extends AbstractModel implements
     {
         if (empty($time) && !is_numeric($time)) {
             $this->lastModificationDate = null;
+
             return $this;
         }
 
@@ -395,6 +412,7 @@ class ObjectRoute extends AbstractModel implements
 
         return $this;
     }
+
     /**
      * Customize the template's options.
      *
@@ -413,6 +431,17 @@ class ObjectRoute extends AbstractModel implements
     }
 
     /**
+     * @param string $routeOptionsIdent Template options ident.
+     * @return self
+     */
+    public function setRouteOptionsIdent($routeOptionsIdent)
+    {
+        $this->routeOptionsIdent = $routeOptionsIdent;
+
+        return $this;
+    }
+
+    /**
      * Retrieve the object model factory.
      *
      * @throws RuntimeException If the model factory was not previously set.
@@ -426,6 +455,7 @@ class ObjectRoute extends AbstractModel implements
                 get_class($this)
             ));
         }
+
         return $this->modelFactory;
     }
 
@@ -443,6 +473,7 @@ class ObjectRoute extends AbstractModel implements
                 get_class($this)
             ));
         }
+
         return $this->collectionLoader;
     }
 
@@ -524,6 +555,14 @@ class ObjectRoute extends AbstractModel implements
     public function routeOptions()
     {
         return $this->routeOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function routeOptionsIdent()
+    {
+        return $this->routeOptionsIdent;
     }
 
     /**

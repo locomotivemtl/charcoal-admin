@@ -7,6 +7,12 @@
 {{# isButton }}
 <button class="btn{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
         type="{{ buttonType }}"
+        {{# name }}
+        name="{{ . }}"
+        {{/ name }}
+        {{# value }}
+        value="{{ . }}"
+        {{/ value }}
         {{# widgetType }}
         data-widget-type="{{ . }}"
         {{/ widgetType }}

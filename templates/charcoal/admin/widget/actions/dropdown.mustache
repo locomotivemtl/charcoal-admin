@@ -8,6 +8,12 @@
     {{# isButton }}
     <button class="{{ cssClasses }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}"
             type="{{ buttonType }}"
+            {{# name }}
+            name="{{ . }}"
+            {{/ name }}
+            {{# value }}
+            value="{{ . }}"
+            {{/ value }}
             {{# widgetType }}
             data-widget-type="{{ . }}"
             {{/ widgetType }}

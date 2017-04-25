@@ -25,7 +25,7 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
         $containerProvider->registerWidgetDependencies($container);
 
         $this->obj = new AdminWidget([
-            'logger'=> new NullLogger(),
+            'logger'    => new NullLogger(),
             'container' => $container
         ]);
     }
@@ -34,10 +34,10 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
     {
         $obj = $this->obj;
         $ret = $obj->setData([
-            'type'=>'foo',
-            'ident'=>'bar',
-            'label'=>'baz',
-            'show_actions'=>false
+            'type'         => 'foo',
+            'ident'        => 'bar',
+            'label'        => 'baz',
+            'show_actions' => false
         ]);
         $this->assertSame($ret, $obj);
 
@@ -57,7 +57,7 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $obj->type());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->setType(null);
+        $obj->setType(1);
     }
 
     public function testSetLabel()

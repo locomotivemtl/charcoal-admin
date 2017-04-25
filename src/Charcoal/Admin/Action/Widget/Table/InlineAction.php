@@ -140,7 +140,7 @@ class InlineAction extends AdminAction
 
                 $property = $obj->property($propertyIdent);
                 $formProperty->setPropertyVal($property->val());
-                $formProperty->setProp($property);
+                $formProperty->setProperty($property);
 
                 $inputType = $formProperty->inputType();
                 $this->inlineProperties[$propertyIdent] = $formProperty->renderTemplate($inputType);

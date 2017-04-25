@@ -137,7 +137,7 @@ class InlineMultiAction extends AdminAction
 
                     $property = $obj->property($propertyIdent);
                     $formProperty->setPropertyVal($property->val());
-                    $formProperty->setProp($property);
+                    $formProperty->setProperty($property);
 
                     $inputType = $formProperty->inputType();
                     $objForm['properties'][$propertyIdent] = $formProperty->renderTemplate($inputType);

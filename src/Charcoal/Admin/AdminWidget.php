@@ -158,12 +158,19 @@ class AdminWidget extends AbstractWidget implements
      */
     public function setTemplate($template)
     {
+        if ($template === null) {
+            $this->template = null;
+            return $this;
+        }
+
         if (!is_string($template)) {
             throw new InvalidArgumentException(
                 'The admin widget template must be a string'
             );
         }
+
         $this->template = $template;
+
         return $this;
     }
 
@@ -175,6 +182,7 @@ class AdminWidget extends AbstractWidget implements
         if ($this->template === null) {
             return $this->type();
         }
+
         return $this->template;
     }
 
@@ -185,6 +193,7 @@ class AdminWidget extends AbstractWidget implements
     public function setWidgetId($widgetId)
     {
         $this->widgetId = $widgetId;
+
         return $this;
     }
 
@@ -196,6 +205,7 @@ class AdminWidget extends AbstractWidget implements
         if (!$this->widgetId) {
             $this->widgetId = 'widget_'.uniqid();
         }
+
         return $this->widgetId;
     }
 
@@ -206,12 +216,19 @@ class AdminWidget extends AbstractWidget implements
      */
     public function setType($type)
     {
+        if ($type === null) {
+            $this->type = null;
+            return $this;
+        }
+
         if (!is_string($type)) {
             throw new InvalidArgumentException(
                 'The admin widget type must be a string'
             );
         }
+
         $this->type = $type;
+
         return $this;
     }
 
@@ -230,12 +247,19 @@ class AdminWidget extends AbstractWidget implements
      */
     public function setIdent($ident)
     {
+        if ($ident === null) {
+            $this->ident = null;
+            return $this;
+        }
+
         if (!is_string($ident)) {
             throw new InvalidArgumentException(
                 'The admin widget identifier must be a string'
             );
         }
+
         $this->ident = $ident;
+
         return $this;
     }
 

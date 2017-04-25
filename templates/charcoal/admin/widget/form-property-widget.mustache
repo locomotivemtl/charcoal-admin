@@ -6,7 +6,7 @@
 --}}
 <fieldset class="form-group">
     {{# showLabel }}
-    <label class="control-label" for="{{ prop.inputId }}">{{& prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
+    <label class="control-label" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
 
     {{# showActiveLanguage }}
     <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
@@ -17,7 +17,7 @@
     {{/ showActiveLanguage }}
     {{/ showLabel }}
     {{^ showLabel }}
-    <label class="control-label sr-only" for="{{ prop.inputId }}">{{& prop.label }}{{# prop.required }} <span class="text-danger">*</span>{{/ prop.required }}</label>
+    <label class="control-label sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
     {{/ showLabel }}
 
     {{> charcoal/admin/template/inc.description }}
@@ -25,12 +25,12 @@
     {{> charcoal/admin/template/inc.notes }}
     {{/ showNotesAbove }}
 
-    {{# input }}
+    {{# output }}
     {{!-- The actual property control (typically `PropertyInput`) --}}
-    <div id="form-field-{{ inputId }}" class="form-field form-field-{{ inputId }}{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+    <div id="form-field-{{ widgetId }}" class="form-field form-field-{{ widgetId }}{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
         {{> $widget_template }}
     </div>
-    {{/ input }}
+    {{/ output }}
     {{^ showNotesAbove }}
 
     {{> charcoal/admin/template/inc.notes }}

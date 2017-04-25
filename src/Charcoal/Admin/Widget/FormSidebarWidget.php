@@ -262,6 +262,7 @@ class FormSidebarWidget extends AdminWidget implements
 
             $formProperty = $form->createFormProperty();
             $formProperty->setOutputType($formProperty::PROPERTY_DISPLAY);
+            $formProperty->setShowNotes(false);
             $formProperty->setViewController($form->viewController());
 
             $formProperty->setProperty($property);

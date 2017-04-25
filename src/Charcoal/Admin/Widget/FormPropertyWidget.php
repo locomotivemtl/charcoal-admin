@@ -121,6 +121,27 @@ class FormPropertyWidget extends AdminWidget implements
     protected $displayType;
 
     /**
+     * The label is displayed by default.
+     *
+     * @var boolean
+     */
+    protected $showLabel;
+
+    /**
+     * The description is displayed by default.
+     *
+     * @var boolean
+     */
+    protected $showDescription;
+
+    /**
+     * The notes are displayed by default.
+     *
+     * @var boolean
+     */
+    protected $showNotes;
+
+    /**
      * The L10N display mode.
      *
      * @var string
@@ -689,40 +710,114 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * @return boolean
+     * Show/hide the property's label.
+     *
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the label.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setShowLabel($show)
+    {
+        $this->showLabel = !!$show;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the label is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a label.
      */
     public function showLabel()
     {
-        $prop = $this->prop();
-        $show = $prop['show_label'];
-        if (is_bool($show)) {
-            return $show;
+        if ($this->showLabel === null) {
+            $prop = $this->property();
+            $show = $prop['show_label'];
+            if ($show !== null) {
+                $this->showLabel = $show;
+            } else {
+                $this->showLabel = true;
+            }
+        }
+
+        if ($this->showLabel !== false) {
+            return !!strval($this->property()->label());
         } else {
-            return true;
+            return false;
         }
     }
 
     /**
-     * @return boolean
+     * Show/hide the property's description.
+     *
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the description.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setShowDescription($show)
+    {
+        $this->showDescription = !!$show;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the description is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a description.
      */
     public function showDescription()
     {
-        $description = $this->prop()->description();
-        return !!$description;
+        if ($this->showDescription === null) {
+            $prop = $this->property();
+            $show = $prop['show_description'];
+            if ($show !== null) {
+                $this->showDescription = $show;
+            } else {
+                $this->showDescription = true;
+            }
+        }
+
+        if ($this->showDescription !== false) {
+            return !!strval($this->property()->description());
+        } else {
+            return false;
+        }
     }
 
     /**
-     * @return boolean
+     * Show/hide the property's notes.
+     *
+     * @param  boolean|string $show Show (TRUE) or hide (FALSE) the notes.
+     * @return FormPropertyWidget Chainable
+     */
+    public function setShowNotes($show)
+    {
+        $this->showNotes = ($show === 'above' ? $show : !!$show);
+
+        return $this;
+    }
+
+    /**
+     * Determine if the notes is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there are notes.
      */
     public function showNotes()
     {
-        $prop = $this->prop();
-        $show = $prop['show_notes'];
-        if ($show === false) {
+        if ($this->showNotes === null) {
+            $prop = $this->property();
+            $show = $prop['show_notes'];
+            if ($show !== null) {
+                $this->showNotes = $show;
+            } else {
+                $this->showNotes = true;
+            }
+        }
+
+        if ($this->showNotes !== false) {
+            return !!strval($this->property()->notes());
+        } else {
             return false;
         }
-        $notes = $this->prop()->notes();
-        return !!$notes;
     }
 
     /**
@@ -730,12 +825,14 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function showNotesAbove()
     {
-        $prop = $this->prop();
-        $show = $prop['show_notes'];
+        $show = $this->showNotes();
+
         if ($show !== 'above') {
             return false;
         }
-        $notes = $this->prop()->notes();
+
+        $notes = $this->property()->notes();
+
         return !!$notes;
     }
 

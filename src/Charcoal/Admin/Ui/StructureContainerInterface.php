@@ -19,4 +19,11 @@ interface StructureContainerInterface
      * @return string|null
      */
     public function display();
+
+    /**
+     * Determine if a notice should be displayed when the structure is empty.
+     *
+     * @return boolean
+     */
+    public function showEmpty();
 }

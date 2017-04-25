@@ -30,10 +30,12 @@
 
     <div class="c-structure_entries">
     {{^ hasFormProperties }}
+    {{# showEmpty }}
     {{!^ hasEntries }}
         <div class="c-structure_empty alert alert-warning" role="alert">{{# _t }}No Template Options.{{/ _t }}</div>
         {{!> charcoal/admin/widget/structure/empty }}
     {{!/ hasEntries }}
+    {{/ showEmpty }}
     {{/ hasFormProperties }}
     {{!# entries }}
         <section class="c-structure_entry" id="structure-entry-{{ id }}">

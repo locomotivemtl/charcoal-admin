@@ -69,6 +69,11 @@ class FormSidebarWidget extends AdminWidget implements
     protected $sidebarProperties = [];
 
     /**
+     * @var array $propertiesOptions
+     */
+    private $propertiesOptions = [];
+
+    /**
      * Priority, or sorting index.
      * @var integer $priority
      */
@@ -168,10 +173,12 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * @param mixed $properties The sidebar properties.
+     * Set the form's object properties to show in the sidebar.
+     *
+     * @param  array $properties The form's object properties.
      * @return FormSidebarWidget Chainable
      */
-    public function setSidebarProperties($properties)
+    public function setSidebarProperties(array $properties)
     {
         $this->sidebarProperties = $properties;
 
@@ -179,6 +186,8 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * Retrieve the form's object properties to show in the sidebar.
+     *
      * @return mixed
      */
     public function sidebarProperties()
@@ -187,7 +196,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * Determine if the form has any groups.
+     * Determine if the sidebar has any object properties.
      *
      * @return boolean
      */
@@ -197,7 +206,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * Count the number of form groups.
+     * Count the number of object properties in the sidebar.
      *
      * @return integer
      */
@@ -207,16 +216,41 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * Set the map of object property customizations.
+     *
+     * @param  array $properties The options to customize the group properties.
+     * @return FormSidebarWidget Chainable
+     */
+    public function setPropertiesOptions(array $properties)
+    {
+        $this->propertiesOptions = $properties;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the map of object property customizations.
+     *
+     * @return array
+     */
+    public function propertiesOptions()
+    {
+        return $this->propertiesOptions;
+    }
+
+    /**
      * Retrieve the object's properties from the form.
      *
      * @return mixed|Generator
      */
     public function formProperties()
     {
-        $obj = $this->form()->obj();
+        $form = $this->form();
+        $obj  = $form->obj();
 
         $availableProperties = $obj->properties();
         $sidebarProperties   = $this->sidebarProperties();
+        $propertiesOptions   = $this->propertiesOptions();
 
         foreach ($sidebarProperties as $propertyIdent) {
             if (!$obj->hasProperty($propertyIdent)) {
@@ -226,10 +260,23 @@ class FormSidebarWidget extends AdminWidget implements
             $property = $obj->property($propertyIdent);
             $value    = $obj->propertyValue($propertyIdent);
 
-            yield $propertyIdent => [
-                'prop'       => $property,
-                'displayVal' => $property->displayVal($value)
-            ];
+            $formProperty = $form->createFormProperty();
+            $formProperty->setOutputType($formProperty::PROPERTY_DISPLAY);
+            $formProperty->setViewController($form->viewController());
+
+            $formProperty->setProperty($property);
+            $formProperty->setPropertyIdent($property->ident());
+            $formProperty->setPropertyVal($obj[$propertyIdent]);
+
+            if (!empty($propertiesOptions[$propertyIdent])) {
+                $propertyOptions = $propertiesOptions[$propertyIdent];
+
+                if (is_array($propertyOptions)) {
+                    $formProperty->setData($propertyOptions);
+                }
+            }
+
+            yield $propertyIdent => $formProperty;
         }
     }
 
@@ -646,8 +693,8 @@ class FormSidebarWidget extends AdminWidget implements
     {
         $locales = count($this->translator()->availableLocales());
         if ($locales > 1) {
-            foreach ($this->form()->formProperties() as $prop) {
-                if ($prop->prop()->l10n()) {
+            foreach ($this->form()->formProperties() as $formProp) {
+                if ($formProp->property()->l10n()) {
                     return true;
                 }
             }

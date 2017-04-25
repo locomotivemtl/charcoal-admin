@@ -29,8 +29,26 @@
                     <ul class="c-panel_table form-group">
                     {{#formProperties}}
                         <li class="c-panel_table_row">
-                            <p class="c-panel_table_header"><strong>{{prop.label}}</strong></p>
-                            <p class="c-panel_table_data">{{displayVal}}</p>
+                            {{# showLabel }}
+                            <label class="c-panel_table_header" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+
+                            {{# showActiveLanguage }}
+                            <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
+                                {{# languages }}
+                                <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="hidden"{{/ current }}>{{ ident }}</span>
+                                {{/ languages }}
+                            </span>
+                            {{/ showActiveLanguage }}
+                            {{/ showLabel }}
+                            {{^ showLabel }}
+                            <label class="c-panel_table_header sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+                            {{/ showLabel }}
+
+                            {{# output }}
+                            <div class="c-panel_table_data{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+                                {{> $widget_template }}
+                            </div>
+                            {{/ output }}
                         </li>
                     {{/formProperties}}
                     </ul>

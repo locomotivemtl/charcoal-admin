@@ -2107,10 +2107,6 @@ img.u-contrast-dark {
 .u-spin {
   -webkit-animation: spin 1.5s infinite linear;
           animation: spin 1.5s infinite linear; }
-  .u-spin.glyphicon-refresh {
-    -webkit-transform-origin: 50% 42%;
-        -ms-transform-origin: 50% 42%;
-            transform-origin: 50% 42%; }
 
 @-webkit-keyframes spin {
   from {

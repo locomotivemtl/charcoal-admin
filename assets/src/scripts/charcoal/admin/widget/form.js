@@ -19,6 +19,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.obj_id            = null;
     this.form_selector     = null;
     this.form_working      = false;
+    this.submitted_via     = null;
     this.suppress_feedback = false;
     this.is_new_object     = false;
     this.xhr               = null;
@@ -56,26 +57,33 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     var $sidebar = $('.c-form-sidebar', this.form_selector);
 
     // Submit the form via ajax
-    $(that.form_selector).on('submit', function (e) {
-        e.preventDefault();
-        that.submit_form(this);
-    });
+    $(that.form_selector)
+        .on('submit.charcoal.form', function (event) {
+            console.log('form.submit', event);
+            event.preventDefault();
+            that.submit_form(this);
+        })
+        .find(':submit')
+            .on('click.charcoal.form', function (event) {
+                console.log('click.submit', event);
+                that.submitted_via = this;
+            });
 
     // Any delete button should trigger the delete-object method.
-    $('.js-obj-delete', $sidebar).on('click', function (e) {
-        e.preventDefault();
+    $('.js-obj-delete', $sidebar).on('click.charcoal.form', function (event) {
+        event.preventDefault();
         that.delete_object(this);
     });
 
     // Reset button
-    $('.js-reset-form', $sidebar).on('click', function (e) {
-        e.preventDefault();
+    $('.js-reset-form', $sidebar).on('click.charcoal.form', function (event) {
+        event.preventDefault();
         $(that.form_selector)[0].reset();
     });
 
     // Language switcher
-    $('.js-lang-switch button', $sidebar).on('click', function (e) {
-        e.preventDefault();
+    $('.js-lang-switch button', $sidebar).on('click.charcoal.form', function (event) {
+        event.preventDefault();
 
         var $this = $(this),
             lang  = $this.attr('data-lang-switch');
@@ -84,13 +92,13 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     });
 
     /*if (that.isTab) {
-     $(that.form_selector).on('click', '.js-group-tabs', function (e) {
-     e.preventDefault();
-     var href = $(this).attr('href');
-     $(that.form_selector).find('.js-group-tab').addClass('hidden');
-     $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
-     $(this).parent().addClass('active').siblings('.active').removeClass('active');
-     });
+         $(that.form_selector).on('click', '.js-group-tabs', function (event) {
+             event.preventDefault();
+             var href = $(this).attr('href');
+             $(that.form_selector).find('.js-group-tab').addClass('hidden');
+             $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
+             $(this).parent().addClass('active').siblings('.active').removeClass('active');
+         });
      }*/
 
 };
@@ -123,6 +131,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form) {
     Charcoal.Admin.manager().prepare_submit();
 
     form_data = new FormData(form);
+
+    if (this.submitted_via && this.submitted_via.name) {
+        form_data.append(this.submitted_via.name, this.submitted_via.value || true);
+    }
 
     this.disable_form($form, $trigger);
 
@@ -228,6 +240,8 @@ Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigge
         this.enable_form($form, $trigger);
     }
 
+    this.submitted_via = null;
+
     this.form_working = this.is_new_object = this.suppress_feedback = false;
 };
 
@@ -242,9 +256,11 @@ Charcoal.Admin.Widget_Form.prototype.disable_form = function ($form, $trigger) {
     }
 
     if ($trigger) {
-        $trigger.prop('disabled', true)
-            .children('.glyphicon').removeClass('hidden')
-            .next('.btn-label').addClass('sr-only');
+        $trigger.prop('disabled', true);
+    }
+
+    if (this.submitted_via) {
+        this.disable_button(this.submitted_via);
     }
 
     return this;
@@ -261,10 +277,45 @@ Charcoal.Admin.Widget_Form.prototype.enable_form = function ($form, $trigger) {
     }
 
     if ($trigger) {
-        $trigger.prop('disabled', false)
-            .children('.glyphicon').addClass('hidden')
-            .next('.btn-label').removeClass('sr-only');
+        $trigger.prop('disabled', false);
     }
+
+    if (this.submitted_via) {
+        this.enable_button(this.submitted_via);
+    }
+
+    return this;
+};
+
+/**
+ * @param  Element $trigger The form's submit button.
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.disable_button = function ($trigger) {
+    if (!($trigger instanceof jQuery)) {
+        $trigger = $($trigger);
+    }
+
+    $trigger.prop('disabled', true)
+        .children('.glyphicon').removeClass('hidden')
+        .next('.btn-label').addClass('sr-only');
+
+    return this;
+};
+
+/**
+ * @param  Element $form    The submitted form.
+ * @param  Element $trigger The form's submit button.
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.enable_button = function ($trigger) {
+    if (!($trigger instanceof jQuery)) {
+        $trigger = $($trigger);
+    }
+
+    $trigger.prop('disabled', false)
+        .children('.glyphicon').addClass('hidden')
+        .next('.btn-label').removeClass('sr-only');
 
     return this;
 };

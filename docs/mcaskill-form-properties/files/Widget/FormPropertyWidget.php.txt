@@ -354,6 +354,7 @@ class FormPropertyWidget extends AdminWidget implements
      * is also accepted.
      *
      * @param  string $type The input or display property type.
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return FormPropertyWidget Chainable
      */
     public function setOutputType($type)
@@ -572,6 +573,7 @@ class FormPropertyWidget extends AdminWidget implements
      * Set the model's property type.
      *
      * @param  string $type The property type.
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return FormPropertyWidget Chainable
      */
     public function setPropertyType($type)
@@ -894,6 +896,7 @@ class FormPropertyWidget extends AdminWidget implements
      * Set the property control type.
      *
      * @param  string $type The form control type.
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return FormPropertyWidget Chainable
      */
     public function setInputType($type)
@@ -977,6 +980,7 @@ class FormPropertyWidget extends AdminWidget implements
      * Set the property display type.
      *
      * @param  string $type The property display type.
+     * @throws InvalidArgumentException If the argument is not a string.
      * @return FormPropertyWidget Chainable
      */
     public function setDisplayType($type)

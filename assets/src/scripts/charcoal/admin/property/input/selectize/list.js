@@ -37,8 +37,6 @@
     List.parent = Charcoal.Admin.Property_Input_Selectize.prototype;
 
     List.prototype.set_properties = function (opts) {
-        console.log('UBER TEST');
-
         this.input_id = opts.id || this.input_id;
         this.obj_type = opts.data.obj_type || this.obj_type;
 

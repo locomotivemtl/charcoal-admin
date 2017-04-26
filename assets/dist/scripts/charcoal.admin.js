@@ -5761,14 +5761,20 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             if (!id && form_ident.create) {
                 // The object must be created using 2 pop-up
                 form_ident = form_ident.create;
-                title += ' - ' + translations.step + ' 1 ' + translations.of + ' 2';
+                title += ' - ' + translations.statusTemplate.replaceMap({
+                        '[[ current ]]': 1,
+                        '[[ total ]]':  2
+                    });
                 step = 1;
                 submit_label = 'Next';
             } else if (id && form_ident.update) {
                 form_ident = form_ident.update;
 
                 if (step === 2) {
-                    title += ' - ' + translations.step + ' 2 ' + translations.of + ' 2';
+                    title += ' - ' + translations.statusTemplate.replaceMap({
+                            '[[ current ]]': 2,
+                            '[[ total ]]':  2
+                        });
                     submit_label = 'Finish';
                 }
             } else {

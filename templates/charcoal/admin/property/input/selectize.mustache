@@ -54,8 +54,7 @@
             data: {
                 title                 : '{{ label }}',
                 translations          : {
-                    step: '{{#_t}}step{{/_t}}',
-                    of  : '{{#_t}}of{{/_t}}'
+                    statusTemplate: '{{#_t}}Step [[ current ]] of [[ total ]]{{/_t}}',
                 },
                 {{# property.objType }}
                     pattern           : '{{ pattern }}',

@@ -234,5 +234,4 @@
 "Quick Edit";"Édition Rapide"
 "Next";"Suivant"
 "Finish";"Terminer"
-"step";"étape"
-"of";"de"
+"Step [[ current ]] of [[ total ]]";"Étape [[ current ]] sur [[ total ]]"

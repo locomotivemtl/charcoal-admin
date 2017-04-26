@@ -2289,7 +2289,8 @@ output {
   line-height: 1.428571429;
   color: #080909; }
 
-.form-control {
+.form-control, .selectize-control.selectize-list .selectize-input > input,
+.selectize-control.selectize-list .selectize-input.focus > input {
   display: block;
   width: 100%;
   height: 48px;
@@ -2304,26 +2305,33 @@ output {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s; }
-  .form-control:focus {
+  .form-control:focus, .selectize-control.selectize-list .selectize-input > input:focus {
     border-color: #3498db;
     outline: 0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(52, 152, 219, 0.6); }
-  .form-control::-moz-placeholder {
+  .form-control::-moz-placeholder, .selectize-control.selectize-list .selectize-input > input::-moz-placeholder,
+  .selectize-control.selectize-list .selectize-input.focus > input::-moz-placeholder {
     color: #999;
     opacity: 1; }
-  .form-control:-ms-input-placeholder {
+  .form-control:-ms-input-placeholder, .selectize-control.selectize-list .selectize-input > input:-ms-input-placeholder {
     color: #999; }
-  .form-control::-webkit-input-placeholder {
+  .form-control::-webkit-input-placeholder, .selectize-control.selectize-list .selectize-input > input::-webkit-input-placeholder,
+  .selectize-control.selectize-list .selectize-input.focus > input::-webkit-input-placeholder {
     color: #999; }
-  .form-control::-ms-expand {
+  .form-control::-ms-expand, .selectize-control.selectize-list .selectize-input > input::-ms-expand,
+  .selectize-control.selectize-list .selectize-input.focus > input::-ms-expand {
     border: 0;
     background-color: transparent; }
-  .form-control[disabled], .form-control[readonly],
-  fieldset[disabled] .form-control {
+  .form-control[disabled], .selectize-control.selectize-list .selectize-input > input[disabled], .form-control[readonly], .selectize-control.selectize-list .selectize-input > input[readonly],
+  fieldset[disabled] .form-control,
+  fieldset[disabled] .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list
+  fieldset[disabled] .selectize-input > input {
     background-color: #eeeeee;
     opacity: 1; }
-  .form-control[disabled],
-  fieldset[disabled] .form-control {
+  .form-control[disabled], .selectize-control.selectize-list .selectize-input > input[disabled],
+  fieldset[disabled] .form-control,
+  fieldset[disabled] .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list
+  fieldset[disabled] .selectize-input > input {
     cursor: not-allowed; }
 
 textarea.form-control {
@@ -2333,57 +2341,66 @@ input[type="search"] {
   -webkit-appearance: none; }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  input[type="date"].form-control,
+  input[type="date"].form-control, .selectize-control.selectize-list .selectize-input > input[type="date"],
   input[type="time"].form-control,
+  .selectize-control.selectize-list .selectize-input > input[type="time"],
   input[type="datetime-local"].form-control,
-  input[type="month"].form-control {
+  .selectize-control.selectize-list .selectize-input > input[type="datetime-local"],
+  input[type="month"].form-control,
+  .selectize-control.selectize-list .selectize-input > input[type="month"] {
     line-height: 48px; }
-  input[type="date"].input-sm, .input-group-sm > input[type="date"].form-control,
+  input[type="date"].input-sm, .input-group-sm > input[type="date"].form-control, .selectize-control.selectize-list .selectize-input.input-group-sm > input[type="date"],
   .input-group-sm > input[type="date"].input-group-addon,
   .input-group-sm > .input-group-btn > input[type="date"].btn,
   .input-group-sm input[type="date"],
   input[type="time"].input-sm,
   .input-group-sm > input[type="time"].form-control,
+  .selectize-control.selectize-list .selectize-input.input-group-sm > input[type="time"],
   .input-group-sm > input[type="time"].input-group-addon,
   .input-group-sm > .input-group-btn > input[type="time"].btn,
   .input-group-sm
   input[type="time"],
   input[type="datetime-local"].input-sm,
   .input-group-sm > input[type="datetime-local"].form-control,
+  .selectize-control.selectize-list .selectize-input.input-group-sm > input[type="datetime-local"],
   .input-group-sm > input[type="datetime-local"].input-group-addon,
   .input-group-sm > .input-group-btn > input[type="datetime-local"].btn,
   .input-group-sm
   input[type="datetime-local"],
   input[type="month"].input-sm,
   .input-group-sm > input[type="month"].form-control,
+  .selectize-control.selectize-list .selectize-input.input-group-sm > input[type="month"],
   .input-group-sm > input[type="month"].input-group-addon,
   .input-group-sm > .input-group-btn > input[type="month"].btn,
   .input-group-sm
   input[type="month"] {
     line-height: 38px; }
-  input[type="date"].input-lg, .input-group-lg > input[type="date"].form-control,
+  input[type="date"].input-lg, .input-group-lg > input[type="date"].form-control, .selectize-control.selectize-list .selectize-input.input-group-lg > input[type="date"],
   .input-group-lg > input[type="date"].input-group-addon,
   .input-group-lg > .input-group-btn > input[type="date"].btn,
   .input-group-lg input[type="date"],
   input[type="time"].input-lg,
   .input-group-lg > input[type="time"].form-control,
+  .selectize-control.selectize-list .selectize-input.input-group-lg > input[type="time"],
   .input-group-lg > input[type="time"].input-group-addon,
   .input-group-lg > .input-group-btn > input[type="time"].btn,
   .input-group-lg
   input[type="time"],
   input[type="datetime-local"].input-lg,
   .input-group-lg > input[type="datetime-local"].form-control,
+  .selectize-control.selectize-list .selectize-input.input-group-lg > input[type="datetime-local"],
   .input-group-lg > input[type="datetime-local"].input-group-addon,
   .input-group-lg > .input-group-btn > input[type="datetime-local"].btn,
   .input-group-lg
   input[type="datetime-local"],
   input[type="month"].input-lg,
   .input-group-lg > input[type="month"].form-control,
+  .selectize-control.selectize-list .selectize-input.input-group-lg > input[type="month"],
   .input-group-lg > input[type="month"].input-group-addon,
   .input-group-lg > .input-group-btn > input[type="month"].btn,
   .input-group-lg
   input[type="month"] {
-    line-height: 46px; } }
+    line-height: 48px; } }
 
 .form-group {
   margin-bottom: 15px; }
@@ -2456,15 +2473,15 @@ fieldset[disabled]
   padding-bottom: 7px;
   margin-bottom: 0;
   min-height: 36px; }
-  .form-control-static.input-lg, .input-group-lg > .form-control-static.form-control,
+  .form-control-static.input-lg, .input-group-lg > .form-control-static.form-control, .selectize-control.selectize-list .selectize-input.input-group-lg > input.form-control-static,
   .input-group-lg > .form-control-static.input-group-addon,
-  .input-group-lg > .input-group-btn > .form-control-static.btn, .form-control-static.input-sm, .input-group-sm > .form-control-static.form-control,
+  .input-group-lg > .input-group-btn > .form-control-static.btn, .form-control-static.input-sm, .input-group-sm > .form-control-static.form-control, .selectize-control.selectize-list .selectize-input.input-group-sm > input.form-control-static,
   .input-group-sm > .form-control-static.input-group-addon,
   .input-group-sm > .input-group-btn > .form-control-static.btn {
     padding-left: 0;
     padding-right: 0; }
 
-.input-sm, .input-group-sm > .form-control,
+.input-sm, .input-group-sm > .form-control, .selectize-control.selectize-list .selectize-input.input-group-sm > input,
 .input-group-sm > .input-group-addon,
 .input-group-sm > .input-group-btn > .btn {
   height: 38px;
@@ -2488,7 +2505,7 @@ select[multiple].input-sm,
 .input-group-sm > .input-group-btn > select[multiple].btn {
   height: auto; }
 
-.form-group-sm .form-control {
+.form-group-sm .form-control, .form-group-sm .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .form-group-sm .selectize-input > input {
   height: 38px;
   padding: 5px 10px;
   font-size: 12px;
@@ -2510,10 +2527,10 @@ select[multiple].input-sm,
   font-size: 12px;
   line-height: 1.5; }
 
-.input-lg, .input-group-lg > .form-control,
+.input-lg, .input-group-lg > .form-control, .selectize-control.selectize-list .selectize-input.input-group-lg > input,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {
-  height: 46px;
+  height: 48px;
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.3333333;
@@ -2522,8 +2539,8 @@ select[multiple].input-sm,
 select.input-lg, .input-group-lg > select.form-control,
 .input-group-lg > select.input-group-addon,
 .input-group-lg > .input-group-btn > select.btn {
-  height: 46px;
-  line-height: 46px; }
+  height: 48px;
+  line-height: 48px; }
 
 textarea.input-lg, .input-group-lg > textarea.form-control,
 .input-group-lg > textarea.input-group-addon,
@@ -2534,23 +2551,23 @@ select[multiple].input-lg,
 .input-group-lg > .input-group-btn > select[multiple].btn {
   height: auto; }
 
-.form-group-lg .form-control {
-  height: 46px;
+.form-group-lg .form-control, .form-group-lg .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .form-group-lg .selectize-input > input {
+  height: 48px;
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.3333333;
   border-radius: 6px; }
 
 .form-group-lg select.form-control {
-  height: 46px;
-  line-height: 46px; }
+  height: 48px;
+  line-height: 48px; }
 
 .form-group-lg textarea.form-control,
 .form-group-lg select[multiple].form-control {
   height: auto; }
 
 .form-group-lg .form-control-static {
-  height: 46px;
+  height: 48px;
   min-height: 38px;
   padding: 11px 16px;
   font-size: 18px;
@@ -2558,7 +2575,7 @@ select[multiple].input-lg,
 
 .has-feedback {
   position: relative; }
-  .has-feedback .form-control {
+  .has-feedback .form-control, .has-feedback .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .has-feedback .selectize-input > input {
     padding-right: 60px; }
 
 .form-control-feedback {
@@ -2573,20 +2590,24 @@ select[multiple].input-lg,
   text-align: center;
   pointer-events: none; }
 
-.input-lg + .form-control-feedback, .input-group-lg > .form-control + .form-control-feedback,
+.input-lg + .form-control-feedback, .input-group-lg > .form-control + .form-control-feedback, .selectize-control.selectize-list .selectize-input.input-group-lg > input + .form-control-feedback,
 .input-group-lg > .input-group-addon + .form-control-feedback,
 .input-group-lg > .input-group-btn > .btn + .form-control-feedback,
 .input-group-lg + .form-control-feedback,
-.form-group-lg .form-control + .form-control-feedback {
-  width: 46px;
-  height: 46px;
-  line-height: 46px; }
+.form-group-lg .form-control + .form-control-feedback,
+.form-group-lg .selectize-control.selectize-list .selectize-input > input + .form-control-feedback, .selectize-control.selectize-list
+.form-group-lg .selectize-input > input + .form-control-feedback {
+  width: 48px;
+  height: 48px;
+  line-height: 48px; }
 
-.input-sm + .form-control-feedback, .input-group-sm > .form-control + .form-control-feedback,
+.input-sm + .form-control-feedback, .input-group-sm > .form-control + .form-control-feedback, .selectize-control.selectize-list .selectize-input.input-group-sm > input + .form-control-feedback,
 .input-group-sm > .input-group-addon + .form-control-feedback,
 .input-group-sm > .input-group-btn > .btn + .form-control-feedback,
 .input-group-sm + .form-control-feedback,
-.form-group-sm .form-control + .form-control-feedback {
+.form-group-sm .form-control + .form-control-feedback,
+.form-group-sm .selectize-control.selectize-list .selectize-input > input + .form-control-feedback, .selectize-control.selectize-list
+.form-group-sm .selectize-input > input + .form-control-feedback {
   width: 38px;
   height: 38px;
   line-height: 38px; }
@@ -2603,10 +2624,10 @@ select[multiple].input-lg,
 .has-success.checkbox-inline label {
   color: #3c763d; }
 
-.has-success .form-control {
+.has-success .form-control, .has-success .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .has-success .selectize-input > input {
   border-color: #3c763d;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .has-success .form-control:focus {
+  .has-success .form-control:focus, .has-success .selectize-control.selectize-list .selectize-input > input:focus, .selectize-control.selectize-list .has-success .selectize-input > input:focus {
     border-color: #2b542c;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #67b168; }
 
@@ -2630,10 +2651,10 @@ select[multiple].input-lg,
 .has-warning.checkbox-inline label {
   color: #8a6d3b; }
 
-.has-warning .form-control {
+.has-warning .form-control, .has-warning .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .has-warning .selectize-input > input {
   border-color: #8a6d3b;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .has-warning .form-control:focus {
+  .has-warning .form-control:focus, .has-warning .selectize-control.selectize-list .selectize-input > input:focus, .selectize-control.selectize-list .has-warning .selectize-input > input:focus {
     border-color: #66512c;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b; }
 
@@ -2657,10 +2678,10 @@ select[multiple].input-lg,
 .has-error.checkbox-inline label {
   color: #a94442; }
 
-.has-error .form-control {
+.has-error .form-control, .has-error .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .has-error .selectize-input > input {
   border-color: #a94442;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
-  .has-error .form-control:focus {
+  .has-error .form-control:focus, .has-error .selectize-control.selectize-list .selectize-input > input:focus, .selectize-control.selectize-list .has-error .selectize-input > input:focus {
     border-color: #843534;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483; }
 
@@ -2689,7 +2710,7 @@ select[multiple].input-lg,
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle; }
-  .form-inline .form-control {
+  .form-inline .form-control, .form-inline .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .form-inline .selectize-input > input {
     display: inline-block;
     width: auto;
     vertical-align: middle; }
@@ -2700,9 +2721,11 @@ select[multiple].input-lg,
     vertical-align: middle; }
     .form-inline .input-group .input-group-addon,
     .form-inline .input-group .input-group-btn,
-    .form-inline .input-group .form-control {
+    .form-inline .input-group .form-control,
+    .form-inline .input-group .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list
+    .form-inline .input-group .selectize-input > input {
       width: auto; }
-  .form-inline .input-group > .form-control {
+  .form-inline .input-group > .form-control, .form-inline .selectize-control.selectize-list .selectize-input.input-group > input, .selectize-control.selectize-list .form-inline .selectize-input.input-group > input {
     width: 100%; }
   .form-inline .control-label {
     margin-bottom: 0;
@@ -3412,22 +3435,26 @@ tbody.collapse.in {
     float: none;
     padding-left: 0;
     padding-right: 0; }
-  .input-group .form-control {
+  .input-group .form-control, .input-group .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .input-group .selectize-input > input {
     position: relative;
     z-index: 2;
     float: left;
     width: 100%;
     margin-bottom: 0; }
-    .input-group .form-control:focus {
+    .input-group .form-control:focus, .input-group .selectize-control.selectize-list .selectize-input > input:focus, .selectize-control.selectize-list .input-group .selectize-input > input:focus {
       z-index: 3; }
 
 .input-group-addon,
 .input-group-btn,
-.input-group .form-control {
+.input-group .form-control,
+.input-group .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list
+.input-group .selectize-input > input {
   display: table-cell; }
   .input-group-addon:not(:first-child):not(:last-child),
   .input-group-btn:not(:first-child):not(:last-child),
-  .input-group .form-control:not(:first-child):not(:last-child) {
+  .input-group .form-control:not(:first-child):not(:last-child),
+  .input-group .selectize-control.selectize-list .selectize-input > input:not(:first-child):not(:last-child), .selectize-control.selectize-list
+  .input-group .selectize-input > input:not(:first-child):not(:last-child) {
     border-radius: 0; }
 
 .input-group-addon,
@@ -3446,13 +3473,13 @@ tbody.collapse.in {
   background-color: #eeeeee;
   border: 1px solid #ccc;
   border-radius: 4px; }
-  .input-group-addon.input-sm,
+  .input-group-addon.input-sm, .selectize-control.selectize-list .selectize-input.input-group-sm > input.input-group-addon,
   .input-group-sm > .input-group-addon,
   .input-group-sm > .input-group-btn > .input-group-addon.btn {
     padding: 5px 10px;
     font-size: 12px;
     border-radius: 3px; }
-  .input-group-addon.input-lg,
+  .input-group-addon.input-lg, .selectize-control.selectize-list .selectize-input.input-group-lg > input.input-group-addon,
   .input-group-lg > .input-group-addon,
   .input-group-lg > .input-group-btn > .input-group-addon.btn {
     padding: 10px 16px;
@@ -3462,7 +3489,7 @@ tbody.collapse.in {
   .input-group-addon input[type="checkbox"] {
     margin-top: 0; }
 
-.input-group .form-control:first-child,
+.input-group .form-control:first-child, .input-group .selectize-control.selectize-list .selectize-input > input:first-child, .selectize-control.selectize-list .input-group .selectize-input > input:first-child,
 .input-group-addon:first-child,
 .input-group-btn:first-child > .btn,
 .input-group-btn:first-child > .btn-group > .btn,
@@ -3475,7 +3502,7 @@ tbody.collapse.in {
 .input-group-addon:first-child {
   border-right: 0; }
 
-.input-group .form-control:last-child,
+.input-group .form-control:last-child, .input-group .selectize-control.selectize-list .selectize-input > input:last-child, .selectize-control.selectize-list .input-group .selectize-input > input:last-child,
 .input-group-addon:last-child,
 .input-group-btn:last-child > .btn,
 .input-group-btn:last-child > .btn-group > .btn,
@@ -3815,7 +3842,7 @@ tbody.collapse.in {
       display: inline-block;
       margin-bottom: 0;
       vertical-align: middle; }
-    .navbar-form .form-control {
+    .navbar-form .form-control, .navbar-form .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .navbar-form .selectize-input > input {
       display: inline-block;
       width: auto;
       vertical-align: middle; }
@@ -3826,9 +3853,11 @@ tbody.collapse.in {
       vertical-align: middle; }
       .navbar-form .input-group .input-group-addon,
       .navbar-form .input-group .input-group-btn,
-      .navbar-form .input-group .form-control {
+      .navbar-form .input-group .form-control,
+      .navbar-form .input-group .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list
+      .navbar-form .input-group .selectize-input > input {
         width: auto; }
-    .navbar-form .input-group > .form-control {
+    .navbar-form .input-group > .form-control, .navbar-form .selectize-control.selectize-list .selectize-input.input-group > input, .selectize-control.selectize-list .navbar-form .selectize-input.input-group > input {
       width: 100%; }
     .navbar-form .control-label {
       margin-bottom: 0;
@@ -8791,15 +8820,15 @@ input[type="radio"] .styled:checked + label::after {
   outline: 5px auto -webkit-focus-ring-color !important;
   outline-offset: -2px; }
 
-.bootstrap-select.form-control {
+.bootstrap-select.form-control, .selectize-control.selectize-list .selectize-input > input.bootstrap-select {
   margin-bottom: 0;
   padding: 0;
   border: none; }
 
-.bootstrap-select.form-control:not([class*="col-"]) {
+.bootstrap-select.form-control:not([class*="col-"]), .selectize-control.selectize-list .selectize-input > input.bootstrap-select:not([class*="col-"]) {
   width: 100%; }
 
-.bootstrap-select.form-control.input-group-btn {
+.bootstrap-select.form-control.input-group-btn, .selectize-control.selectize-list .selectize-input > input.bootstrap-select.input-group-btn {
   z-index: auto; }
 
 .bootstrap-select.btn-group:not(.input-group-btn),
@@ -8818,11 +8847,13 @@ input[type="radio"] .styled:checked + label::after {
 .form-group .bootstrap-select.btn-group {
   margin-bottom: 0; }
 
-.form-group-lg .bootstrap-select.btn-group.form-control,
-.form-group-sm .bootstrap-select.btn-group.form-control {
+.form-group-lg .bootstrap-select.btn-group.form-control, .form-group-lg .selectize-control.selectize-list .selectize-input > input.bootstrap-select.btn-group, .selectize-control.selectize-list .form-group-lg .selectize-input > input.bootstrap-select.btn-group,
+.form-group-sm .bootstrap-select.btn-group.form-control,
+.form-group-sm .selectize-control.selectize-list .selectize-input > input.bootstrap-select.btn-group, .selectize-control.selectize-list
+.form-group-sm .selectize-input > input.bootstrap-select.btn-group {
   padding: 0; }
 
-.form-inline .bootstrap-select.btn-group .form-control {
+.form-inline .bootstrap-select.btn-group .form-control, .form-inline .bootstrap-select.btn-group .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .form-inline .bootstrap-select.btn-group .selectize-input > input {
   width: 100%; }
 
 .bootstrap-select.btn-group.disabled,
@@ -9004,7 +9035,7 @@ input[type="radio"] .styled:checked + label::after {
 .bs-searchbox + .bs-actionsbox {
   padding: 0 8px 4px; }
 
-.bs-searchbox .form-control {
+.bs-searchbox .form-control, .bs-searchbox .selectize-control.selectize-list .selectize-input > input, .selectize-control.selectize-list .bs-searchbox .selectize-input > input {
   margin-bottom: 0;
   width: 100%;
   float: none; }
@@ -9835,7 +9866,7 @@ select.mobile-device {
   padding-right: 44px;
   padding-left: 12px; }
 
-.minicolors-theme-bootstrap .minicolors-input.input-lg + .minicolors-swatch, .minicolors-theme-bootstrap .input-group-lg > .minicolors-input.form-control + .minicolors-swatch, .minicolors-theme-bootstrap
+.minicolors-theme-bootstrap .minicolors-input.input-lg + .minicolors-swatch, .minicolors-theme-bootstrap .input-group-lg > .minicolors-input.form-control + .minicolors-swatch, .minicolors-theme-bootstrap .selectize-control.selectize-list .selectize-input.input-group-lg > input.minicolors-input + .minicolors-swatch, .selectize-control.selectize-list .minicolors-theme-bootstrap .selectize-input.input-group-lg > input.minicolors-input + .minicolors-swatch, .minicolors-theme-bootstrap
 .input-group-lg > .minicolors-input.input-group-addon + .minicolors-swatch, .minicolors-theme-bootstrap
 .input-group-lg > .input-group-btn > .minicolors-input.btn + .minicolors-swatch {
   top: 4px;
@@ -9844,7 +9875,7 @@ select.mobile-device {
   height: 37px;
   border-radius: 5px; }
 
-.minicolors-theme-bootstrap .minicolors-input.input-sm + .minicolors-swatch, .minicolors-theme-bootstrap .input-group-sm > .minicolors-input.form-control + .minicolors-swatch, .minicolors-theme-bootstrap
+.minicolors-theme-bootstrap .minicolors-input.input-sm + .minicolors-swatch, .minicolors-theme-bootstrap .input-group-sm > .minicolors-input.form-control + .minicolors-swatch, .minicolors-theme-bootstrap .selectize-control.selectize-list .selectize-input.input-group-sm > input.minicolors-input + .minicolors-swatch, .selectize-control.selectize-list .minicolors-theme-bootstrap .selectize-input.input-group-sm > input.minicolors-input + .minicolors-swatch, .minicolors-theme-bootstrap
 .input-group-sm > .minicolors-input.input-group-addon + .minicolors-swatch, .minicolors-theme-bootstrap
 .input-group-sm > .input-group-btn > .minicolors-input.btn + .minicolors-swatch {
   width: 24px;
@@ -10131,7 +10162,7 @@ select.mobile-device {
   opacity: 0.5;
   background-color: #fff; }
 
-.selectize-dropdown, .selectize-dropdown.form-control {
+.selectize-dropdown, .selectize-dropdown.form-control, .selectize-control.selectize-list .selectize-input > input.selectize-dropdown {
   height: auto;
   padding: 0;
   margin: 2px 0 0 0;
@@ -10190,7 +10221,7 @@ select.mobile-device {
 .selectize-control.multi .selectize-input > div {
   border-radius: 3px; }
 
-.form-control.selectize-control {
+.form-control.selectize-control, .selectize-control.selectize-list .selectize-input > input.selectize-control {
   padding: 0;
   height: auto;
   border: none;
@@ -10208,7 +10239,34 @@ select.mobile-device {
 .selectize-control .selectize-input > div.new {
   font-style: italic; }
 
-.selectize-control .selectize-input.focus {
+.selectize-control.selectize-list .selectize-input,
+.selectize-control.selectize-list .selectize-input.focus {
+  border: none;
+  box-shadow: none;
+  padding: 4px 4px 0; }
+  .selectize-control.selectize-list .selectize-input::before,
+  .selectize-control.selectize-list .selectize-input.focus::before {
+    content: none; }
+  .selectize-control.selectize-list .selectize-input > input,
+  .selectize-control.selectize-list .selectize-input.focus > input {
+    left: 0 !important;
+    position: relative !important;
+    display: block !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    padding: 6px 12px !important;
+    line-height: 1.428571429 !important;
+    color: #080909 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s; }
+
+.selectize-control.selectize-list .item {
+  width: 100%; }
+
+.selectize-control:not(.selectize-list) .selectize-input.focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(52, 152, 219, 0.6); }
 
 .selectize-control .selectize-input::before {
@@ -10229,6 +10287,46 @@ select.mobile-device {
   .selectize-control.plugin-remove_button [data-value] .remove {
     width: 20px;
     padding: 12px 0 0 0; }
+
+.selectize-control.plugin-buttons [data-value] {
+  position: relative; }
+  .selectize-control.plugin-buttons [data-value] .button {
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 40px;
+    padding: 12px 0 0 0;
+    z-index: 1;
+    /* fixes ie bug (see #392) */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: inherit;
+    text-decoration: none;
+    vertical-align: middle;
+    display: inline-block;
+    border-radius: 0 2px 2px 0;
+    box-sizing: border-box; }
+
+.selectize-control [data-value] .button:hover {
+  background: rgba(0, 0, 0, 0.1); }
+
+.selectize-control [data-value].active .button {
+  border-left-color: transparent; }
+
+.selectize-control .disabled [data-value] .button:hover {
+  background: none; }
+
+.selectize-control .disabled [data-value] .button {
+  border-left-color: rgba(77, 77, 77, 0.1); }
+
+.selectize-control .update-single {
+  position: absolute;
+  right: 28px;
+  top: 6px;
+  font-size: 23px; }
 
 .input-group > .selectize-control:not(:first-child):not(:last-child) .selectize-input {
   border-radius: 0; }

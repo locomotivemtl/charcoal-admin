@@ -233,8 +233,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         showHeader: showHeader,
         showFooter: showFooter,
         onshown: function () {
-            Charcoal.Admin.manager().render();
-        }
+                Charcoal.Admin.manager().render();
+            }
     };
 
     var dialogOptions = $.extend({}, defaultOptions, userOptions);
@@ -336,7 +336,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         return $message;
     };
 
-    BootstrapDialog.show(dialogOptions);
+    return new BootstrapDialog.show(dialogOptions);
 };
 
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {

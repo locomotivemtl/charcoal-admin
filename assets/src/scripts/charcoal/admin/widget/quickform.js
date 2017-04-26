@@ -7,20 +7,20 @@
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
-    this.widget_type       = 'charcoal/admin/widget/quick-form';
-    this.save_callback     = opts.save_callback || '';
-    this.cancel_callback   = opts.cancel_callback || '';
-    this.form_working      = false;
-    this.suppress_feedback = false;
-    this.is_new_object     = false;
-    this.xhr               = null;
-    this.obj_id            = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
+    this.widget_type = 'charcoal/admin/widget/quick-form';
+    this.save_callback = opts.save_callback || '';
+    this.cancel_callback = opts.cancel_callback || '';
+    this.form_working = false;
+    this.suppress_feedback = opts.suppress_feedback || false;
+    this.is_new_object = false;
+    this.xhr = null;
+    this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 
     return this;
 };
-Charcoal.Admin.Widget_Quick_Form.prototype             = Object.create(Charcoal.Admin.Widget.prototype);
+Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
-Charcoal.Admin.Widget_Quick_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
+Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
     this.bind_events();
@@ -54,7 +54,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
 
     var $trigger, $form, form_data;
 
-    $form    = $(form);
+    $form = $(form);
     $trigger = $form.find('[type="submit"]');
 
     if ($trigger.prop('disabled')) {
@@ -70,10 +70,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     this.disable_form($form, $trigger);
 
     this.xhr = $.ajax({
-        type:        'POST',
-        url:         this.request_url(),
-        data:        form_data,
-        dataType:    'json',
+        type: 'POST',
+        url: this.request_url(),
+        data: form_data,
+        dataType: 'json',
         processData: false,
         contentType: false,
     });
@@ -98,7 +98,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widge
 Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
-    if (response.feedbacks) {
+    if (response.feedbacks && !this.suppress_feedback) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 
@@ -111,6 +111,9 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
             }
         });
     }
+
+    this.enable_form($form, $trigger);
+    this.form_working = false;
 
     if (typeof this.save_callback === 'function') {
         this.save_callback(response);

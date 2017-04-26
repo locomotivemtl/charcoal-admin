@@ -148,6 +148,7 @@
 "You have logged in successfully.";"You have logged in successfully."
 "An error occurred while logging in";"An error occurred while logging in"
 "{{ errorMessage }}: {{ errorThrown }}";"{{ errorMessage }}: {{ errorThrown }}"
+"[[ errorMessage ]]: [[ errorThrown ]]";"[[ errorMessage ]]: [[ errorThrown ]]"
 "Invalid username or password";"Invalid username or password"
 "You are now logged out.";"You are now logged out."
 "An error occurred while logging out";"An error occurred while logging out"

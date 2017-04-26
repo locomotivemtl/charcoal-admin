@@ -222,13 +222,10 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
         var error   = errorThrown || commonL10n.errorOccurred;
 
         Charcoal.Admin.feedback([{
-            message: message + commonL10n.errorTemplate + error,
-            /*
             message: commonL10n.errorTemplate.replaceMap({
-                '{{ errorMessage }}': message,
-                '{{ errorThrown }}':  error
+                '[[ errorMessage ]]': message,
+                '[[ errorThrown ]]':  error
             }),
-            */
             level:   'error'
         }]);
     }

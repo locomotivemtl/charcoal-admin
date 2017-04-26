@@ -7,7 +7,7 @@
 --}}
 <ul class="nav nav-tabs{{^ showHeader }} bootstrap-dialog-title{{/ showHeader }}" role="tablist">
 {{# groups }}
-    <li{{^ isHidden }} class="active"{{/ isHidden }} role="presentation">
+    <li class="{{^ isHidden }}active{{/ isHidden }}{{# tabCssClasses }} {{.}}{{/ tabCssClasses }}" role="presentation">
         <a href="#form_group_{{ widgetId }}"
            class="tab-link js-group-tabs"
            role="tab"

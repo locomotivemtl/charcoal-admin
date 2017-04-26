@@ -461,6 +461,8 @@ trait ActionContainerTrait
             'icon'          => null,
             'glyphicon'     => false,
             'url'           => null,
+            'name'          => null,
+            'value'         => null,
             'target'        => null,
             'isText'        => false,
             'isLink'        => false,

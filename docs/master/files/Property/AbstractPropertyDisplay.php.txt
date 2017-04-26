@@ -42,6 +42,11 @@ abstract class AbstractPropertyDisplay implements
     use TranslatorAwareTrait;
 
     /**
+     * @var string $lang
+     */
+    private $lang;
+
+    /**
      * @var string $ident
      */
     private $ident;
@@ -180,6 +185,29 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
+     * @param string $lang The language code / ident.
+     * @return PropertyInputInterface Chainable
+     */
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+        return $this;
+    }
+
+    /**
+     * Get the input language
+     * @return string
+     */
+    public function lang()
+    {
+        if ($this->lang === null) {
+            return $this->translator()->getLocale();
+        }
+
+        return $this->lang;
+    }
+
+    /**
      * @param string $ident Display identifier.
      * @throws InvalidArgumentException If the ident is not a string.
      * @return Widget Chainable
@@ -267,20 +295,43 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
-     * The display name should always be the property's ident.
+     * Set the display name.
+     *
+     * Used for the HTML "name" attribute.
+     *
+     * @param  string $displayName HTML id attribute.
+     * @return AbstractPropertyInput Chainable
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the display name.
+     *
+     * The input name should always be the property's ident.
      *
      * @return string
      */
     public function displayName()
     {
-        $name = $this->p()->ident();
+        if ($this->displayName) {
+            $name = $this->displayName;
+        } else {
+            $name = $this->propertyIdent();
+        }
+
+        if ($this->p()->l10n()) {
+            $name .= '['.$this->lang().']';
+        }
+
         if ($this->multiple()) {
             $name .= '[]';
         }
-        if ($this->p()->l10n()) {
-            $lang = $this->transator()->getLocale();
-            $name .= '['.$lang.']';
-        }
+
         return $name;
     }
 
@@ -321,12 +372,22 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
+     * @return string
+     */
+    public function propertyIdent()
+    {
+        return $this->p()->ident();
+    }
+
+    /**
      * @param PropertyInterface $p The property.
      * @return AbstractPropertyDisplay Chainable
      */
     public function setProperty(PropertyInterface $p)
     {
         $this->property = $p;
+        $this->displayName = null;
+
         return $this;
     }
 

@@ -472,10 +472,20 @@ class FormWidget extends AdminWidget implements
     public function submitLabel()
     {
         if ($this->submitLabel === null) {
-            $this->submitLabel = $this->translator()->translation('Save');
+            $this->submitLabel = $this->defaultSubmitLabel();
         }
 
         return $this->submitLabel;
+    }
+
+    /**
+     * Retrieve the default label for the form submission button.
+     *
+     * @return \Charcoal\Translator\Translation|null
+     */
+    public function defaultSubmitLabel()
+    {
+        return $this->translator()->translation('Save');
     }
 
     /**

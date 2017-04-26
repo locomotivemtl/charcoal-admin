@@ -32,12 +32,19 @@ trait StructureContainerTrait
     protected $display;
 
     /**
+     * How to display an empty structure.
+     *
+     * @var boolean
+     */
+    protected $showEmpty = true;
+
+    /**
      * Set the property's display layout.
      *
      * @param  string $display The layout for the tickable elements.
      * @throws InvalidArgumentException If the given layout is invalid.
      * @throws OutOfBoundsException If the given layout is unsupported.
-     * @return AbstractTickableDisplay Chainable
+     * @return self
      */
     public function setDisplay($display)
     {
@@ -119,6 +126,29 @@ trait StructureContainerTrait
     protected function defaultDisplay()
     {
         return static::GROUP_STRUCT_DISPLAY;
+    }
+
+    /**
+     * Show/hide the notice when the structure is empty.
+     *
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the notice.
+     * @return self
+     */
+    public function setShowEmpty($show)
+    {
+        $this->showEmpty = !!$show;
+
+        return $this;
+    }
+
+    /**
+     * Determine if a notice should be displayed when the structure is empty.
+     *
+     * @return boolean
+     */
+    public function showEmpty()
+    {
+        return $this->showEmpty;
     }
 }
 

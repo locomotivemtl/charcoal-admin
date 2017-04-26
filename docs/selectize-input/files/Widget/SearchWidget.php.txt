@@ -81,8 +81,10 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * Sets and returns properties
+     *
      * Manages which to display, and their order, as set in object metadata
-     * @return  FormPropertyWidget  Generator function
+     *
+     * @return array
      */
     public function properties()
     {
@@ -114,7 +116,8 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * Properties to display in collection template, and their order, as set in object metadata
-     * @return  FormPropertyWidget         Generator function
+     *
+     * @return string
      */
     public function jsonPropertiesList()
     {

@@ -1235,7 +1235,7 @@ class FormPropertyWidget extends AdminWidget implements
         $type    = $this->displayType();
         $display = $this->propertyDisplayFactory()->create($type);
 
-        if ($this->formGroup() && ($display instanceof FormDisplayInterface)) {
+        if ($this->formGroup() && ($display instanceof FormInputInterface)) {
             $display->setFormGroup($this->formGroup());
         }
 

@@ -253,6 +253,18 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     }
 
     /**
+     * Retrieve the property input name without `[]` as fallback.
+     * This allows to submit empty value from select input while preventing
+     * submitting the fallback when the property is multiple.
+     *
+     * @return string
+     */
+    public function inputNameFallback()
+    {
+        return rtrim('[]', $this->inputName());
+    }
+
+    /**
      * Retrieve the default object-to-choice data map.
      *
      * @return array

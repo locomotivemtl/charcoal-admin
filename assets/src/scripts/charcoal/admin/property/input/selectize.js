@@ -164,7 +164,7 @@
             this.selectize_options.splitOn = new RegExp(splitOn);
         }
 
-        this.selectize_options = $.extend(true,{}, default_opts, this.selectize_options);
+        this.selectize_options = $.extend(true, {}, default_opts, this.selectize_options);
 
         return this;
     };
@@ -190,7 +190,7 @@
                 form_ident = form_ident.create;
                 title += ' - ' + translations.statusTemplate.replaceMap({
                         '[[ current ]]': 1,
-                        '[[ total ]]':  2
+                        '[[ total ]]': 2
                     });
                 step = 1;
                 submit_label = 'Next';
@@ -200,7 +200,7 @@
                 if (step === 2) {
                     title += ' - ' + translations.statusTemplate.replaceMap({
                             '[[ current ]]': 2,
-                            '[[ total ]]':  2
+                            '[[ total ]]': 2
                         });
                     submit_label = 'Finish';
                 }
@@ -349,6 +349,42 @@
     };
 
     Selectize.prototype.init_allow_update = function () {
+        switch (this.selectize.settings.mode) {
+            case 'single' :
+                this.allow_update_single();
+                break;
+            case 'multiple' :
+                this.allow_update_multiple();
+                break;
+        }
+    };
+
+    Selectize.prototype.allow_update_single = function () {
+        if (!this.allow_update) {
+            return;
+        }
+
+        var selectize = this.selectize;
+        var $updateButton = $(this.selectize_selector + '_update');
+        var self = this;
+
+        $updateButton.on('click', function () {
+            var selectedItem = selectize.items;
+            if (selectedItem) {
+                self.create_item(null, function (item) {
+                    // Update the item.
+                    if (item && item.value) {
+                        selectize.updateOption(selectedItem[0], item);
+                    }
+                }, {
+                    id: selectedItem[0],
+                    step: 0
+                });
+            }
+        });
+    };
+
+    Selectize.prototype.allow_update_multiple = function () {
         if (!this.allow_update) {
             return;
         }

@@ -87,7 +87,7 @@ trait NestedWidgetContainerTrait
                 $widget->setObjType($this->objType());
             }
 
-            if (empty($widget->objId()) && !is_numeric($widget->objId())) {
+            if (!empty($widget->objId())) {
                 $widget->setObjId($this->objId());
             }
         }

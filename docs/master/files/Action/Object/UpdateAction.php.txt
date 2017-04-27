@@ -152,10 +152,7 @@ class UpdateAction extends AbstractSaveAction
             }
 
             if ($obj instanceof ContentInterface) {
-                $authorIdent = $this->authorIdent();
-                if (!$obj->lastModifiedBy()) {
-                    $obj->setLastModifiedBy($authorIdent);
-                }
+                $obj->setLastModifiedBy($this->authorIdent());
             }
 
             $result = $obj->update();

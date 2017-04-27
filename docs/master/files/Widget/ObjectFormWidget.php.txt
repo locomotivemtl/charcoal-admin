@@ -57,21 +57,17 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * Retrieve the label for the form submission button.
+     * Retrieve the default label for the form submission button.
      *
      * @return Translation|string|null
      */
-    public function submitLabel()
+    public function defaultSubmitLabel()
     {
-        if ($this->submitLabel === null) {
-            if ($this->objId()) {
-                $this->submitLabel = $this->translator()->translation('Update');
-            } else {
-                $this->submitLabel = $this->translator()->translation('Save');
-            }
+        if ($this->objId()) {
+            return $this->translator()->translation('Update');
         }
 
-        return $this->submitLabel;
+        return parent::defaultSubmitLabel();
     }
 
     /**

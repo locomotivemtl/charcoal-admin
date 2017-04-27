@@ -56,6 +56,10 @@ Charcoal.Admin.Property_Input_Text.prototype.set_data = function (data) {
 
     this.set_multiple_min(min);
     this.set_multiple_max(max);
+
+    var split = (data.multiple_options) ? data.multiple_options.split_on : null;
+
+    this.set_split_on(split);
     return this;
 };
 
@@ -115,7 +119,7 @@ Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
  * @return {thisArg}      Chainable
  */
 Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input) {
-    var separator = this.multiple_separator;
+    var separator = this.split_on || this.multiple_separator;
     input         = input || this.$input;
     var val       = input.val();
 
@@ -452,5 +456,44 @@ Charcoal.Admin.Property_Input_Text.prototype.set_multiple_separator = function (
         separator = ',';
     }
     this.multiple_separator = separator;
+    return this;
+};
+
+/**
+ * Split delimiter
+ * @param {String} separator Multiple separator || undefined.
+ * @return {thisArg} Chainable
+ */
+Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
+    if (!splitOn) {
+        splitOn = this.multiple_separator;
+    } else {
+        if ($.type(splitOn) === 'array') {
+            for (var i = splitOn.length - 1; i >= 0; i--) {
+                switch (splitOn[i]) {
+                    case 'comma':
+                        splitOn[i] = '\\s*,\\s*';
+                        break;
+
+                    case 'tab':
+                        splitOn[i] = '\\t+';
+                        break;
+
+                    case 'newline':
+                        splitOn[i] = '[\\n\\r]+';
+                        break;
+
+                    default:
+                        splitOn[i] = splitOn[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                }
+            }
+
+            splitOn = splitOn.join('|');
+        }
+
+        splitOn = new RegExp(splitOn);
+    }
+
+    this.split_on = splitOn;
     return this;
 };

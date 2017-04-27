@@ -404,7 +404,7 @@ class ObjectFormWidget extends FormWidget implements
                 $group->setObjType($this->objType());
             }
 
-            if (empty($group->objId()) && !is_numeric($group->objId())) {
+            if (!empty($group->objId())) {
                 $group->setObjId($this->objId());
             }
         }
@@ -441,7 +441,7 @@ class ObjectFormWidget extends FormWidget implements
                 $group->setObjType($this->objType());
             }
 
-            if (empty($group->objId()) && !is_numeric($group->objId())) {
+            if (!empty($group->objId())) {
                 $group->setObjId($this->objId());
             }
         }

@@ -376,7 +376,7 @@ class ObjectFormWidget extends FormWidget implements
         $p = $this->createFormProperty();
         $p->setViewController($this->viewController());
         $p->setPropertyIdent($propertyIdent);
-        $p->setData($property);
+        $p->setData($propertyMetadata);
 
         return $p;
     }
@@ -404,7 +404,7 @@ class ObjectFormWidget extends FormWidget implements
                 $group->setObjType($this->objType());
             }
 
-            if (!empty($group->objId())) {
+            if (empty($group->objId()) && !empty($this->objId())) {
                 $group->setObjId($this->objId());
             }
         }
@@ -441,7 +441,7 @@ class ObjectFormWidget extends FormWidget implements
                 $group->setObjType($this->objType());
             }
 
-            if (!empty($group->objId())) {
+            if (empty($group->objId()) && !empty($this->objId())) {
                 $group->setObjId($this->objId());
             }
         }

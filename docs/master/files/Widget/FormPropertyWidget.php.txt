@@ -825,7 +825,11 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function showNotesAbove()
     {
-        $show = $this->showNotes();
+        if ($this->showNotes === null) {
+            $this->showNotes();
+        }
+
+        $show = $this->showNotes;
 
         if ($show !== 'above') {
             return false;

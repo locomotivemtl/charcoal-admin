@@ -261,7 +261,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function inputNameFallback()
     {
-        return rtrim('[]', $this->inputName());
+        return rtrim($this->inputName(), '[]');
     }
 
     /**

@@ -27,7 +27,7 @@ class QuickFormWidget extends ObjectFormWidget
         if (isset($this->data()['form_data']['form_ident'])) {
             $ident = $this->data()['form_data']['form_ident'];
 
-            if (is_string($ident)) {
+            if (is_string($ident) && !empty($ident)) {
                 return $ident;
             }
         }
@@ -46,6 +46,7 @@ class QuickFormWidget extends ObjectFormWidget
             $label = $this->data()['form_data']['submit_label'];
             $this->submitLabel = $this->translator()->translation($label);
         }
+
         return parent::submitLabel();
     }
 }

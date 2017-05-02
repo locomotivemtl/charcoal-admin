@@ -15,6 +15,14 @@ $selectize-width-item-buttons: 40px;
 
 @import "../../../../../../bower_components/selectize-scss/src/selectize.bootstrap3";
 
+.selectize-dropdown {
+    .option > .caption {
+        display: block;
+        opacity: 0.75;
+        font-size: 12px;
+    }
+}
+
 .selectize-control {
     .selectize-input {
         display: block;
@@ -29,6 +37,19 @@ $selectize-width-item-buttons: 40px;
 
     .selectize-input > div.new {
         font-style: italic;
+    }
+
+    .selectize-input .item > .email {
+        margin-left: 5px;
+        opacity: 0.75;
+
+        &:before {
+            content: "<";
+        }
+        &:after {
+            content: ">";
+        }
+
     }
 
     &.selectize-list {

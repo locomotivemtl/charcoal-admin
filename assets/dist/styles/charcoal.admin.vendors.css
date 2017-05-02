@@ -10229,6 +10229,11 @@ select.mobile-device {
   box-shadow: none;
   border-radius: 0; }
 
+.selectize-dropdown .option > .caption {
+  display: block;
+  opacity: 0.75;
+  font-size: 12px; }
+
 .selectize-control .selectize-input {
   display: block;
   padding: 4px 12px 0; }
@@ -10238,6 +10243,14 @@ select.mobile-device {
 
 .selectize-control .selectize-input > div.new {
   font-style: italic; }
+
+.selectize-control .selectize-input .item > .email {
+  margin-left: 5px;
+  opacity: 0.75; }
+  .selectize-control .selectize-input .item > .email:before {
+    content: "<"; }
+  .selectize-control .selectize-input .item > .email:after {
+    content: ">"; }
 
 .selectize-control.selectize-list .selectize-input,
 .selectize-control.selectize-list .selectize-input.focus {

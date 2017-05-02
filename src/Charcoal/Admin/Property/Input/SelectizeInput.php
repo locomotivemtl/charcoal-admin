@@ -433,7 +433,7 @@ class SelectizeInput extends SelectInput
         /** @todo Find a use for this */
         unset($options);
 
-        return $choices = [];
+        $choices = [];
 
         if ($val === null) {
             $val = $this->propertyVal();
@@ -486,7 +486,7 @@ class SelectizeInput extends SelectInput
     {
         return [
             'value' => 'id',
-            'text'  => 'name:title:label:id',
+            'text'  => $this->p()->pattern() ?: 'name:title:label:id',
             'color' => 'color'
         ];
     }

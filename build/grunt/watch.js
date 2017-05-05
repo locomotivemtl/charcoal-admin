@@ -5,25 +5,25 @@ module.exports = {
             'grunt_tasks/*.js'
         ],
         tasks: [
-            'jshint',
-            'jscs',
+            // 'jshint',
+            // 'jscs',
             'concat',
-            'uglify',
+            // 'uglify',
             'notify:javascript',
             'copy:admin'
         ]
     },
-    json: {
-        files: [
-            '*.json',
-            'config/*.json',
-            'metadata/**/*.json'
-        ],
-        tasks: [
-            'jsonlint',
-            'notify:json'
-        ]
-    },
+    // json: {
+    //     files: [
+    //         '*.json',
+    //         'config/*.json',
+    //         'metadata/**/*.json'
+    //     ],
+    //     tasks: [
+    //         'jsonlint',
+    //         'notify:json'
+    //     ]
+    // },
     sass: {
         files: [ 'assets/src/styles/**/*.scss' ],
         tasks: [

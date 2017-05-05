@@ -332,7 +332,7 @@ class ObjectFormWidget extends FormWidget implements
                     (is_object($propertyMetadata) ? get_class($propertyMetadata) : gettype($propertyMetadata))
                 ));
             }
-
+error_log(var_export($propertyMetadata));
             $formProperty = $this->createFormProperty();
             $formProperty->setViewController($this->viewController());
             $formProperty->setPropertyIdent($propertyIdent);

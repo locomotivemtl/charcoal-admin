@@ -276,6 +276,7 @@ class FormWidget extends AdminWidget implements
             }
             $GLOBALS['widget_template'] = $template;
             yield $sidebarIdent => $sidebar;
+            $GLOBALS['widget_template'] = '';
         }
     }
 
@@ -381,6 +382,8 @@ class FormWidget extends AdminWidget implements
                 $GLOBALS['widget_template'] = $formProperty->inputType();
 
                 yield $formProperty->propertyIdent() => $formProperty;
+
+                $GLOBALS['widget_template'] = '';
             }
         }
     }

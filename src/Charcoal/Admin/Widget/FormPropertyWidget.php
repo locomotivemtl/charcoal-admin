@@ -1297,10 +1297,14 @@ class FormPropertyWidget extends AdminWidget implements
                 $prop->setLang($langCode);
 
                 yield $prop;
+
+                $GLOBALS['widget_template'] = '';
             }
             $prop->{$setter}($outputId);
         } else {
             yield $prop;
+
+            $GLOBALS['widget_template'] = '';
         }
     }
 }

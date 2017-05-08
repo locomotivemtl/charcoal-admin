@@ -56,6 +56,8 @@ trait NestedWidgetContainerTrait
         $GLOBALS['widget_template'] = $widget->template();
 
         yield $widget;
+
+        $GLOBALS['widget_template'] = '';
     }
 
     /**

@@ -41,7 +41,7 @@ Charcoal.Admin.Widget = function (opts) {
 
     if (typeof opts.type === 'string') {
         this.set_type(opts.type);
-        this.widget_type = opts.type;
+        this.widget_type = opts.widget_type || opts.type;
     }
 
     this.set_opts(opts);
@@ -179,7 +179,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback) {
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
-        widget_type: that.type(),
+        widget_type: that.widget_type || that.type(),
         widget_options: that.widget_options()
     };
 

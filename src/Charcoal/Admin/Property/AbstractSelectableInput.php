@@ -233,7 +233,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function setChoiceObjMap(array $map)
     {
-        $this->choiceObjMap = $map;
+        $this->choiceObjMap = array_replace($this->defaultChoiceObjMap(), $map);
 
         return $this;
     }
@@ -246,7 +246,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     public function choiceObjMap()
     {
         if ($this->choiceObjMap === null) {
-            return $this->defaultChoiceObjMap();
+            $this->choiceObjMap = $this->defaultChoiceObjMap();
         }
 
         return $this->choiceObjMap;
@@ -275,5 +275,15 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             'value' => 'id',
             'label' => 'name:title:label'
         ];
+    }
+
+    /**
+     * Return a json
+     *
+     * @return string
+     */
+    public function choiceObjMapAsJson()
+    {
+        return json_encode($this->choiceObjMap(), true);
     }
 }

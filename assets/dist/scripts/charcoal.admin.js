@@ -5598,6 +5598,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         this.selectize_selector = null;
         this.form_ident = null;
         this.selectize_options = {};
+        this.choice_obj_map = {};
 
         this.clipboard = null;
         this.allow_update = null;
@@ -5646,8 +5647,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         this.form_ident = opts.data.form_ident || this.form_ident;
 
         this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
-
         this.selectize_options = opts.data.selectize_options || this.selectize_options;
+        this.choice_obj_map = opts.data.choice_obj_map || this.choice_obj_map;
 
         this.$input = $(this.selectize_selector || '#' + this.input_id);
 
@@ -5752,6 +5753,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         var form_ident = this.form_ident;
         var submit_label = null;
         var id = opts.id || null;
+        var choice_obj_map = this.choice_obj_map;
 
         // Get the form ident
         if (form_ident && typeof form_ident === 'object') {
@@ -5784,15 +5786,13 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 if (input) {
                     form_data[pattern] = input;
                 }
-                form_data.form_ident = form_ident;
-                form_data.submit_label = submit_label;
             } else {
                 if (input) {
-                    form_data = {
-                        name: input
-                    };
+                    form_data[this.choice_obj_map.text] = input;
                 }
             }
+            form_data.form_ident = form_ident;
+            form_data.submit_label = submit_label;
         } else if (input) {
             form_data = $.extend({}, settings.formData);
             $.each(form_data, function (key, value) {
@@ -5843,23 +5843,26 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
 
-                        var label = response.obj.id;
-                        if (pattern in response.obj && response.obj[pattern]) {
-                            label = response.obj[pattern][Charcoal.Admin.lang()] || response.obj[pattern];
-                        } else if ('name' in response.obj && response.obj.name) {
-                            label = response.obj.name[Charcoal.Admin.lang()] || response.obj.name;
+                        var callbackOptions = {
+                            class: 'new'
+                        };
+                        var map = choice_obj_map;
+                        for (var prop in map) {
+                            if (map.hasOwnProperty(prop)) {
+                                var objProp = response.obj[map[prop]];
+
+                                if (objProp) {
+                                    callbackOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
+                                }
+                            }
                         }
 
-                        callback({
-                            value: response.obj.id,
-                            text: label,
-                            color: response.obj.color,
-                            class: 'new'
-                        });
+                        callback(callbackOptions);
+
                         dialog.close();
                         if (step === 1) {
                             self.create_item(input, callback, {
-                                id: response.obj.id,
+                                id: response.obj[map.value],
                                 step: 2
                             });
                         }
@@ -5875,7 +5878,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
     Selectize.prototype.load_items = function (query, callback) {
         var type = this.obj_type;
-        var pattern = this.pattern;
+        // var pattern = this.pattern;
+        var choice_obj_map = this.choice_obj_map;
 
         $.ajax({
             url: Charcoal.Admin.admin_url() + 'object/load',
@@ -5890,20 +5894,23 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 var items = [];
 
                 for (var item in res.collection) {
-                    item = res.collection[item];
-                    var label = item.id;
+                    if (res.collection.hasOwnProperty(item)) {
+                        item = res.collection[item];
 
-                    if (pattern && pattern in item && item[pattern]) {
-                        label = item[pattern][Charcoal.Admin.lang()] || item[pattern];
-                    } else if ('name' in item && item.name) {
-                        label = item.name[Charcoal.Admin.lang()] || item.name;
+                        var itemOptions = {};
+                        var map = choice_obj_map;
+                        for (var prop in map) {
+                            if (map.hasOwnProperty(prop)) {
+                                var objProp = item[map[prop]];
+
+                                if (objProp) {
+                                    itemOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
+                                }
+                            }
+                        }
+
+                        items.push(itemOptions);
                     }
-
-                    items.push({
-                        value: item.id,
-                        text: label,
-                        color: item.color
-                    });
                 }
                 callback(items);
             }
@@ -6281,6 +6288,7 @@ Selectize.define('create_on_enter', function () {
         this.selectize_selector = null;
         this.form_ident = null;
         this.selectize_options = {};
+        this.choice_obj_map = {};
 
         this.clipboard = null;
         this.allow_update = false;
@@ -6289,7 +6297,7 @@ Selectize.define('create_on_enter', function () {
     };
     Email.prototype = Object.create(Charcoal.Admin.Property_Input_Selectize.prototype);
     Email.constructor = Charcoal.Admin.Property_Input_Selectize;
-    Email.parent = Charcoal.Admin.Property_Input_Selectize.prototype;
+    Email.parent =  Object.create(Charcoal.Admin.Property_Input_Selectize.prototype);
 
     Email.prototype.set_properties = function (opts) {
         this.input_id = opts.id || this.input_id;
@@ -6306,8 +6314,8 @@ Selectize.define('create_on_enter', function () {
         this.form_ident = opts.data.form_ident || this.form_ident;
 
         this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
-
         this.selectize_options = opts.data.selectize_options || this.selectize_options;
+        this.choice_obj_map = opts.data.choice_obj_map || this.choice_obj_map;
 
         this.$input = $(this.selectize_selector || '#' + this.input_id);
 
@@ -6412,179 +6420,6 @@ Selectize.define('create_on_enter', function () {
         this.selectize_options = $.extend(true,{}, default_opts, this.selectize_options);
 
         return this;
-    };
-
-    Email.parent.create_item = function (input, callback, opts) {
-        var form_data = {};
-        opts = opts || {};
-        var pattern = this.pattern;
-        var self = this;
-        var type = this.obj_type;
-        var title = this.title;
-        var translations = this.translations;
-        var settings = this.selectize_options;
-        var step = opts.step || 0;
-        var form_ident = this.form_ident;
-        var submit_label = null;
-        var id = opts.id || null;
-
-        // Get the form ident
-        if (form_ident && typeof form_ident === 'object') {
-            if (!id && form_ident.create) {
-                // The object must be created using 2 pop-up
-                form_ident = form_ident.create;
-                title += ' - ' + translations.statusTemplate.replaceMap({
-                        '[[ current ]]': 1,
-                        '[[ total ]]': 2
-                    });
-                step = 1;
-                submit_label = 'Next';
-            } else if (id && form_ident.update) {
-                form_ident = form_ident.update;
-
-                if (step === 2) {
-                    title += ' - ' + translations.statusTemplate.replaceMap({
-                            '[[ current ]]': 2,
-                            '[[ total ]]': 2
-                        });
-                    submit_label = 'Finish';
-                }
-            } else {
-                form_ident = null;
-            }
-        }
-
-        if ($.isEmptyObject(settings.formData)) {
-            if (pattern) {
-                if (input) {
-                    form_data[pattern] = input;
-                }
-                form_data.form_ident = form_ident;
-                form_data.submit_label = submit_label;
-            } else {
-                if (input) {
-                    form_data = {
-                        name: input
-                    };
-                }
-            }
-        } else if (input) {
-            form_data = $.extend({}, settings.formData);
-            $.each(form_data, function (key, value) {
-                if (value === ':input') {
-                    form_data[key] = input;
-                }
-            });
-        }
-
-        var data = {
-            title: title,
-            size: BootstrapDialog.SIZE_WIDE,
-            cssClass: '-quick-form',
-            dialog_options: {
-                onhide: function () {
-                    callback({
-                        return: false
-                    });
-                }
-            },
-            widget_type: 'charcoal/admin/widget/quickForm',
-            widget_options: {
-                obj_type: type,
-                obj_id: id,
-                form_data: form_data
-            }
-        };
-
-        if (step > 0) {
-            data.type = BootstrapDialog.TYPE_PRIMARY;
-        }
-
-        var dialog = this.dialog(data, function (response) {
-            if (response.success) {
-                // Call the quickForm widget js.
-                // Really not a good place to do that.
-                if (!response.widget_id) {
-                    return false;
-                }
-
-                Charcoal.Admin.manager().add_widget({
-                    id: response.widget_id,
-                    type: 'charcoal/admin/widget/quick-form',
-                    data: {
-                        obj_type: type
-                    },
-                    obj_id: id,
-                    suppress_feedback: (step === 1),
-                    save_callback: function (response) {
-
-                        var label = response.obj.id;
-                        if (pattern in response.obj && response.obj[pattern]) {
-                            label = response.obj[pattern][Charcoal.Admin.lang()] || response.obj[pattern];
-                        } else if ('name' in response.obj && response.obj.name) {
-                            label = response.obj.name[Charcoal.Admin.lang()] || response.obj.name;
-                        }
-
-                        callback({
-                            value: response.obj.id,
-                            text: label,
-                            email: response.obj.email,
-                            color: response.obj.color,
-                            class: 'new'
-                        });
-                        dialog.close();
-                        if (step === 1) {
-                            self.create_item(input, callback, {
-                                id: response.obj.id,
-                                step: 2
-                            });
-                        }
-                    }
-                });
-
-                // Re render.
-                // This is not good.
-                Charcoal.Admin.manager().render();
-            }
-        });
-    };
-
-    Email.parent.load_items = function (query, callback) {
-        var type = this.obj_type;
-        var pattern = this.pattern;
-
-        $.ajax({
-            url: Charcoal.Admin.admin_url() + 'object/load',
-            data: {
-                obj_type: type
-            },
-            type: 'GET',
-            error: function () {
-                callback();
-            },
-            success: function (res) {
-                var items = [];
-
-                for (var item in res.collection) {
-                    item = res.collection[item];
-                    var label = item.id;
-
-                    if (pattern && pattern in item && item[pattern]) {
-                        label = item[pattern][Charcoal.Admin.lang()] || item[pattern];
-                    } else if ('name' in item && item.name) {
-                        label = item.name[Charcoal.Admin.lang()] || item.name;
-                    }
-
-                    items.push({
-                        value: item.id,
-                        text: label,
-                        email: item.email,
-                        color: item.color
-                    });
-                }
-                callback(items);
-            }
-        });
     };
 
     Charcoal.Admin.Property_Input_Selectize_Email = Email;

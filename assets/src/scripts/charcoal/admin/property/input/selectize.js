@@ -28,6 +28,7 @@
         this.selectize_selector = null;
         this.form_ident = null;
         this.selectize_options = {};
+        this.choice_obj_map = {};
 
         this.clipboard = null;
         this.allow_update = null;
@@ -76,8 +77,8 @@
         this.form_ident = opts.data.form_ident || this.form_ident;
 
         this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
-
         this.selectize_options = opts.data.selectize_options || this.selectize_options;
+        this.choice_obj_map = opts.data.choice_obj_map || this.choice_obj_map;
 
         this.$input = $(this.selectize_selector || '#' + this.input_id);
 
@@ -182,6 +183,7 @@
         var form_ident = this.form_ident;
         var submit_label = null;
         var id = opts.id || null;
+        var choice_obj_map = this.choice_obj_map;
 
         // Get the form ident
         if (form_ident && typeof form_ident === 'object') {
@@ -214,15 +216,13 @@
                 if (input) {
                     form_data[pattern] = input;
                 }
-                form_data.form_ident = form_ident;
-                form_data.submit_label = submit_label;
             } else {
                 if (input) {
-                    form_data = {
-                        name: input
-                    };
+                    form_data[this.choice_obj_map.text] = input;
                 }
             }
+            form_data.form_ident = form_ident;
+            form_data.submit_label = submit_label;
         } else if (input) {
             form_data = $.extend({}, settings.formData);
             $.each(form_data, function (key, value) {
@@ -273,23 +273,26 @@
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
 
-                        var label = response.obj.id;
-                        if (pattern in response.obj && response.obj[pattern]) {
-                            label = response.obj[pattern][Charcoal.Admin.lang()] || response.obj[pattern];
-                        } else if ('name' in response.obj && response.obj.name) {
-                            label = response.obj.name[Charcoal.Admin.lang()] || response.obj.name;
+                        var callbackOptions = {
+                            class: 'new'
+                        };
+                        var map = choice_obj_map;
+                        for (var prop in map) {
+                            if (map.hasOwnProperty(prop)) {
+                                var objProp = response.obj[map[prop]];
+
+                                if (objProp) {
+                                    callbackOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
+                                }
+                            }
                         }
 
-                        callback({
-                            value: response.obj.id,
-                            text: label,
-                            color: response.obj.color,
-                            class: 'new'
-                        });
+                        callback(callbackOptions);
+
                         dialog.close();
                         if (step === 1) {
                             self.create_item(input, callback, {
-                                id: response.obj.id,
+                                id: response.obj[map.value],
                                 step: 2
                             });
                         }
@@ -305,7 +308,8 @@
 
     Selectize.prototype.load_items = function (query, callback) {
         var type = this.obj_type;
-        var pattern = this.pattern;
+        // var pattern = this.pattern;
+        var choice_obj_map = this.choice_obj_map;
 
         $.ajax({
             url: Charcoal.Admin.admin_url() + 'object/load',
@@ -320,20 +324,23 @@
                 var items = [];
 
                 for (var item in res.collection) {
-                    item = res.collection[item];
-                    var label = item.id;
+                    if (res.collection.hasOwnProperty(item)) {
+                        item = res.collection[item];
 
-                    if (pattern && pattern in item && item[pattern]) {
-                        label = item[pattern][Charcoal.Admin.lang()] || item[pattern];
-                    } else if ('name' in item && item.name) {
-                        label = item.name[Charcoal.Admin.lang()] || item.name;
+                        var itemOptions = {};
+                        var map = choice_obj_map;
+                        for (var prop in map) {
+                            if (map.hasOwnProperty(prop)) {
+                                var objProp = item[map[prop]];
+
+                                if (objProp) {
+                                    itemOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
+                                }
+                            }
+                        }
+
+                        items.push(itemOptions);
                     }
-
-                    items.push({
-                        value: item.id,
-                        text: label,
-                        color: item.color
-                    });
                 }
                 callback(items);
             }

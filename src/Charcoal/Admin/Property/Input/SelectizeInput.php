@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Property\Input;
 
 use Charcoal\Admin\Property\Input\SelectInput;
+use Charcoal\Model\ModelInterface;
 use Charcoal\Translator\Translation;
 use \RuntimeException;
 use \InvalidArgumentException;
@@ -83,6 +84,13 @@ class SelectizeInput extends SelectInput
      * @var mixed
      */
     private $formIdent;
+
+    /**
+     * Check used to parse multi Choice map against the obj properties.
+     *
+     * @var boolean
+     */
+    protected $isChoiceObjMapFinalized = false;
 
     /**
      * Inject dependencies from a DI Container.
@@ -454,11 +462,14 @@ class SelectizeInput extends SelectInput
                 }
                 $loader = $this->collectionLoader();
                 $loader->reset()->setModel($model);
-                $loader->addFilter([
-                    'property' => $model->key(),
-                    'operator' => 'IN',
-                    'val'      => $val
-                ]);
+                if ($this->deferred()) {
+                    $loader->addFilter([
+                        'property' => $model->key(),
+                        'operator' => 'IN',
+                        'val'      => $val
+                    ]);
+                }
+
                 $collection = $loader->load();
                 $choices = [];
                 foreach ($collection as $obj) {
@@ -478,6 +489,45 @@ class SelectizeInput extends SelectInput
     }
 
     /**
+     * Retrieve the object-to-choice data map.
+     *
+     * @return array Returns a data map to abide.
+     */
+    public function choiceObjMap()
+    {
+        $map = parent::choiceObjMap();
+
+        if (!$this->isChoiceObjMapFinalized) {
+            $this->isChoiceObjMapFinalized = true;
+
+            $prop = $this->property();
+            if ($prop instanceof ObjectProperty) {
+                /** @var ModelInterface $model */
+                $model = $this->modelFactory()->get($prop->objType());
+                $objProperties = $model->properties();
+
+                if ($objProperties instanceof \Iterator) {
+                    $objProperties = iterator_to_array($objProperties);
+                }
+
+                foreach ($map as &$mapProp) {
+                    $props = explode(':', $mapProp);
+                    foreach ($props as $p) {
+                        if (isset($objProperties[$p])) {
+                            $mapProp = $p;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            $this->choiceObjMap = $map;
+        }
+
+        return $this->choiceObjMap;
+    }
+
+    /**
      * Retrieve the default object-to-choice data map.
      *
      * @return array
@@ -486,7 +536,7 @@ class SelectizeInput extends SelectInput
     {
         return [
             'value' => 'id',
-            'text'  => $this->p()->pattern() ?: 'name:title:label:id',
+            'text'  => 'name:title:label:id',
             'color' => 'color'
         ];
     }

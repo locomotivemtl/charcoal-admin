@@ -162,7 +162,7 @@ Charcoal.Admin.Widget_Relation.prototype.listeners = function ()
 
                     break;
 
-                case 'delete':
+                case 'unlink':
                     if (!_this.data('id')) {
                         break;
                     }

@@ -1719,7 +1719,7 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 
     $container.sortable({
         handle:      '[draggable="true"]',
-        placeholder: 'panel js-attachment-placeholder',
+        placeholder: 'panel c-attachment_placeholder',
         start:       function (event, ui) {
             var $heading     = ui.item.children('.panel-heading'),
                 $collapsible = $heading.find('[data-toggle="collapse"]');
@@ -2778,7 +2778,7 @@ Charcoal.Admin.Widget_Relation.prototype.init = function ()
 
     $container.sortable({
         handle:      '[draggable="true"]',
-        placeholder: 'panel js-relation-placeholder',
+        placeholder: 'panel c-attachment_placeholder',
         start:       function (event, ui) {
             var $heading     = ui.item.children('.panel-heading'),
                 $collapsible = $heading.find('[data-toggle="collapse"]');

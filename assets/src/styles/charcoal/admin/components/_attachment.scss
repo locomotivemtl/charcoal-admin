@@ -127,7 +127,7 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
     margin-bottom: 2em;
 }
 
-.js-attachment-container {
+.c-attachments_container {
     .js-grid-container {
         min-height: 100px;
     }
@@ -137,7 +137,7 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
     }
 }
 
-.js-attachment-placeholder {
+.c-attachment_placeholder {
     height:           ceil(($font-size * 1.1) + (nth($panel-heading-padding, 1) * 2)) + 2px;
     padding:          $panel-heading-padding;
     border-color:     #BBB;

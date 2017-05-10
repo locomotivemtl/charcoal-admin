@@ -1425,13 +1425,13 @@ ul.c-panel_table {
 .c-attachments_header {
   margin-bottom: 2em; }
 
-.js-attachment-container .js-grid-container {
+.c-attachments_container .js-grid-container {
   min-height: 100px; }
 
-.js-attachment-container > .panel-group {
+.c-attachments_container > .panel-group {
   width: 85%; }
 
-.js-attachment-placeholder {
+.c-attachment_placeholder {
   height: 40px;
   padding: 10px 15px;
   border-color: #BBB;

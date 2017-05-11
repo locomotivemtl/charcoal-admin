@@ -155,7 +155,6 @@ td {
   background-color: rgba(0, 0, 0, 0.78);
   opacity: 0;
   visibility: hidden;
-  -webkit-transition: opacity 0.45s, visibility 0.45s;
   transition: opacity 0.45s, visibility 0.45s;
   z-index: 98; }
 
@@ -224,7 +223,6 @@ td {
       -webkit-transform: translateX(calc(-100% - 1px));
           -ms-transform: translateX(calc(-100% - 1px));
               transform: translateX(calc(-100% - 1px));
-      -webkit-transition: -webkit-transform 0.3s;
       transition: -webkit-transform 0.3s;
       transition: transform 0.3s;
       transition: transform 0.3s, -webkit-transform 0.3s;
@@ -263,7 +261,6 @@ td {
 .o-toolbox_icon {
   fill: #000000;
   height: 2.5rem;
-  -webkit-transition: fill 0.5s;
   transition: fill 0.5s;
   width: 1.5625rem; }
 
@@ -398,7 +395,6 @@ a.chip:hover, a.chip:focus {
   -webkit-transform-origin: center left;
       -ms-transform-origin: center left;
           transform-origin: center left;
-  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
   transition: opacity 0.3s, -webkit-transform 0.3s;
   transition: transform 0.3s, opacity 0.3s;
   transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s; }
@@ -466,7 +462,6 @@ a.chip:hover, a.chip:focus {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s; }
   @media (max-width: 699px) {
     .c-header-main_user {
@@ -499,7 +494,6 @@ a.chip:hover, a.chip:focus {
   border-radius: 50%;
   margin-bottom: 0.25rem;
   display: block;
-  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
   transition: opacity 0.3s, -webkit-transform 0.3s;
   transition: transform 0.3s, opacity 0.3s;
   transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
@@ -661,7 +655,6 @@ a.chip:hover, a.chip:focus {
       -ms-flex-align: center;
           align-items: center;
   height: 3.6875rem;
-  -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s;
   border-top-width: 1px;
   border-top-style: solid; }
@@ -706,7 +699,6 @@ a.chip:hover, a.chip:focus {
     text-decoration: none; }
   .panel-heading .c-nav_list_link {
     color: #262626;
-    -webkit-transition: color 0.2s;
     transition: color 0.2s; }
     .panel-heading .c-nav_list_link:hover {
       color: #3498db; }
@@ -720,7 +712,6 @@ a.chip:hover, a.chip:focus {
   display: inline-block;
   padding: 0.1875rem 0.625rem;
   border-radius: 2px;
-  -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s;
   max-width: 100%;
   word-wrap: normal;
@@ -764,14 +755,12 @@ a.chip:hover, a.chip:focus {
   border-radius: 2px;
   background-color: #ffffff;
   margin: 0 0.625rem;
-  -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s; }
   .c-nav_list_link_plus::before, .c-nav_list_link_plus::after {
     content: "";
     display: inline-block;
     position: absolute;
     background-color: #1a252d;
-    -webkit-transition: background-color 0.3s, opacity 0.3s;
     transition: background-color 0.3s, opacity 0.3s; }
   .c-nav_list_link_plus::before {
     top: 50%;
@@ -821,7 +810,6 @@ a.chip:hover, a.chip:focus {
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       z-index: 999;
-      -webkit-transition: -webkit-transform 0.2s;
       transition: -webkit-transform 0.2s;
       transition: transform 0.2s;
       transition: transform 0.2s, -webkit-transform 0.2s; }
@@ -859,7 +847,6 @@ a.chip:hover, a.chip:focus {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-transition: background-color 0.3s, color 0.3s;
   transition: background-color 0.3s, color 0.3s; }
   .c-nav-main_link:focus {
     color: #ffffff; }
@@ -880,7 +867,6 @@ a.chip:hover, a.chip:focus {
     -webkit-transform: translateX(0);
         -ms-transform: translateX(0);
             transform: translateX(0);
-    -webkit-transition: -webkit-transform 0.3s;
     transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
     transition: transform 0.3s, -webkit-transform 0.3s; }
@@ -958,7 +944,6 @@ a.chip:hover, a.chip:focus {
       -webkit-transform: translateX(-100%);
           -ms-transform: translateX(-100%);
               transform: translateX(-100%);
-      -webkit-transition: -webkit-transform 0.5s;
       transition: -webkit-transform 0.5s;
       transition: transform 0.5s;
       transition: transform 0.5s, -webkit-transform 0.5s; }
@@ -982,7 +967,6 @@ a.chip:hover, a.chip:focus {
   -webkit-transform: translateX(100%);
       -ms-transform: translateX(100%);
           transform: translateX(100%);
-  -webkit-transition: -webkit-transform 0.45s;
   transition: -webkit-transform 0.45s;
   transition: transform 0.45s;
   transition: transform 0.45s, -webkit-transform 0.45s;
@@ -1168,7 +1152,6 @@ ul.c-panel_table {
       -ms-flex-pack: center;
           justify-content: center;
   font-size: 0.8125rem;
-  -webkit-transition: color 0.3s;
   transition: color 0.3s; }
   .c-panel_footer_item:hover.-red {
     color: #ed5564; }
@@ -1222,7 +1205,6 @@ ul.c-panel_table {
   vertical-align: middle;
   width: 2.8125rem; }
   .c-audio-player_button.-record {
-    background: -webkit-linear-gradient(bottom, #f1f1f1, #ffffff);
     background: linear-gradient(to top, #f1f1f1, #ffffff);
     border: 1px solid #d7d7d7;
     font-size: 1.875rem;
@@ -1443,13 +1425,13 @@ ul.c-panel_table {
 .c-attachments_header {
   margin-bottom: 2em; }
 
-.js-attachment-container .js-grid-container {
+.c-attachments_container .js-grid-container {
   min-height: 100px; }
 
-.js-attachment-container > .panel-group {
+.c-attachments_container > .panel-group {
   width: 85%; }
 
-.js-attachment-placeholder {
+.c-attachment_placeholder {
   height: 40px;
   padding: 10px 15px;
   border-color: #BBB;
@@ -1636,7 +1618,6 @@ ul.c-panel_table {
     -webkit-transform: translateX(-50%);
         -ms-transform: translateX(-50%);
             transform: translateX(-50%);
-    -webkit-transition: opacity 0.1s ease-out, top 0.15s ease-out;
     transition: opacity 0.1s ease-out, top 0.15s ease-out;
     white-space: nowrap;
     background-color: #3498db;
@@ -1748,7 +1729,6 @@ textarea.form-control {
 
 .btn {
   font-size: 0.8125rem;
-  -webkit-transition: background-color 0.3s;
   transition: background-color 0.3s; }
   .btn.btn-lg {
     font-size: 1rem; }

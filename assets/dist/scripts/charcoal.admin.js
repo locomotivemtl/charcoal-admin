@@ -2852,11 +2852,11 @@ Charcoal.Admin.Widget_Relation.prototype.listeners = function ()
                             target_object_id: null
                         }
                     }
-                }, function(response) {
+                }, function (response) {
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
-                        that.create_relation(function() {
+                        that.create_relation(function () {
                             that.reload();
                         });
                     }
@@ -2938,11 +2938,11 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
             obj_type:           'charcoal/relation/pivot',
             obj_id:             0,
             form_data: {
-                group              : sourceOptions.group,
-                source_object_type : sourceOptions.obj_type,
-                source_object_id   : sourceOptions.obj_id,
-                target_object_type : '',
-                target_object_id   :   0
+                group: sourceOptions.group,
+                source_object_type: sourceOptions.obj_type,
+                source_object_id: sourceOptions.obj_id,
+                target_object_type: '',
+                target_object_id:   0
             }
         }
     };
@@ -3011,7 +3011,6 @@ Charcoal.Admin.Widget_Relation.prototype.save = function ()
     }
 
     // Create relations from current list.
-    console.log('Saving for some reason?')
     this.create_relation();
 };
 
@@ -3022,13 +3021,13 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb)
 
     var opts = that.opts();
     var data = {
-        obj_type : opts.data.obj_type,
-        obj_id   : opts.data.obj_id,
-        group    : opts.data.group,
-        pivots   : []
+        obj_type: opts.data.obj_type,
+        obj_id: opts.data.obj_id,
+        group: opts.data.group,
+        pivots: []
     };
 
-    this.element().find('.js-relation-container').find('.js-relation').each(function(i) {
+    this.element().find('.js-relation-container').find('.js-relation').each(function (i) {
         var $this = $(this);
         var id    = $this.attr('data-id');
         var type  = $this.attr('data-type');
@@ -5670,13 +5669,12 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     Selectize.parent = Charcoal.Admin.Property.prototype;
 
     Selectize.prototype.init = function () {
-
-        if (typeof $.fn.sortable !== 'function') {
-            var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
-            Charcoal.Admin.loadScript(url, this.init.bind(this));
-
-            return this;
-        }
+        // if (typeof $.fn.sortable !== 'function') {
+        //     var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
+        //     Charcoal.Admin.loadScript(url, this.init.bind(this));
+        //
+        //     return this;
+        // }
 
         this.init_selectize();
         this.init_clipboard();

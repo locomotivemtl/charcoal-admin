@@ -21,6 +21,8 @@ module.exports = {
     },
     vendors: {
         src: [
+            // Jquery Ui
+            'assets/dist/scripts/vendors/jquery/jquery-ui.min.js',
             //URL Search Params
             'node_modules/url-search-params/build/url-search-params.js',
             // Bootstrap Switch

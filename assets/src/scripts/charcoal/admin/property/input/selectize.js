@@ -40,13 +40,12 @@
     Selectize.parent = Charcoal.Admin.Property.prototype;
 
     Selectize.prototype.init = function () {
-
-        if (typeof $.fn.sortable !== 'function') {
-            var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
-            Charcoal.Admin.loadScript(url, this.init.bind(this));
-
-            return this;
-        }
+        // if (typeof $.fn.sortable !== 'function') {
+        //     var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
+        //     Charcoal.Admin.loadScript(url, this.init.bind(this));
+        //
+        //     return this;
+        // }
 
         this.init_selectize();
         this.init_clipboard();

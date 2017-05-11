@@ -5674,12 +5674,13 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             persist: true,
             preload: 'focus',
             openOnFocus: true,
-            searchField: ['value', 'text'],
+            labelField: 'label',
+            searchField: ['value', 'label'],
             dropdownParent: this.$input.closest('.form-field'),
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
-                    if (item.text === input) {
+                    if (item.label === input) {
                         return false;
                     }
                 }
@@ -5706,7 +5707,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             default_opts.create = function (input) {
                 return {
                     value: input,
-                    text: input
+                    label: input
                 };
             };
         }
@@ -5788,7 +5789,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 }
             } else {
                 if (input) {
-                    form_data[this.choice_obj_map.text] = input;
+                    form_data[this.choice_obj_map.label] = input;
                 }
             }
             form_data.form_ident = form_ident;
@@ -6341,13 +6342,13 @@ Selectize.define('create_on_enter', function () {
             persist: true,
             preload: 'focus',
             openOnFocus: true,
-            searchField: ['value', 'text', 'email'],
+            searchField: ['value', 'label', 'email'],
             dropdownParent: this.$input.closest('.form-field'),
 
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
-                    if (item.text === input) {
+                    if (item.label === input) {
                         return false;
                     }
                 }
@@ -6367,13 +6368,13 @@ Selectize.define('create_on_enter', function () {
             render: {
                 item: function (item, escape) {
                     return '<div class="item">' +
-                        (item.text ? '<span class="name">' + escape(item.text) + '</span>' : '') +
+                        (item.label ? '<span class="name">' + escape(item.label) + '</span>' : '') +
                         (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') +
                             '</div>';
                 },
                 option: function (item, escape) {
                     return '<div class="option">' +
-                        (item.text ? '<span class="name">' + escape(item.text) + '</span>' : '') +
+                        (item.label ? '<span class="name">' + escape(item.label) + '</span>' : '') +
                         (item.email ? '<span class="caption">' + escape(item.email) + '</span>' : '') +
                         '</div>';
                 }
@@ -6388,7 +6389,7 @@ Selectize.define('create_on_enter', function () {
             default_opts.create = function (input) {
                 return {
                     value: input,
-                    text: input
+                    label: input
                 };
             };
         }

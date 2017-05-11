@@ -184,11 +184,12 @@ class SelectizeInput extends SelectInput
             yield $prepend;
         }
 
-        $choices = parent::choices();
+        $choices = $this->selectizeVal($this->p()->choices());
 
         /* Pass along the Generator from the parent method [^1] */
         /* Filter the all options down to those *not* selected */
-        foreach ($choices as $choice) {
+        foreach ($choices as $ident => $choice) {
+            $choice = $this->parseChoice($ident, $choice);
             if (($choice['selected'] && $this->deferred()) || !$this->deferred()) {
                 yield $choice;
             }
@@ -389,9 +390,9 @@ class SelectizeInput extends SelectInput
 
         if ($this->property() instanceof ObjectProperty) {
             if (isset($options['options'])) {
-                $options['options'] = array_merge($options['options'], $this->selectizeVal());
+                $options['options'] = array_merge($options['options'], $this->selectizeVal($this->p()->choices()));
             } else {
-                $options['options'] = $this->selectizeVal();
+                $options['options'] = $this->selectizeVal($this->p()->choices());
             }
         }
 
@@ -436,7 +437,7 @@ class SelectizeInput extends SelectInput
      * @param  array $options Optional structure options.
      * @return array
      */
-    private function selectizeVal($val = null, array $options = [])
+    private function selectizeVal($val, array $options = [])
     {
         /** @todo Find a use for this */
         unset($options);
@@ -462,15 +463,9 @@ class SelectizeInput extends SelectInput
                 }
                 $loader = $this->collectionLoader();
                 $loader->reset()->setModel($model);
-                if ($this->deferred()) {
-                    $loader->addFilter([
-                        'property' => $model->key(),
-                        'operator' => 'IN',
-                        'val'      => $val
-                    ]);
-                }
 
                 $collection = $loader->load();
+
                 $choices = [];
                 foreach ($collection as $obj) {
                     $choices[] = $this->mapObjToChoice($obj);
@@ -479,7 +474,7 @@ class SelectizeInput extends SelectInput
                 foreach ($val as $v) {
                     $choices[] = [
                         'value' => $v,
-                        'text'  => $v
+                        'label'  => $v
                     ];
                 }
             }
@@ -536,7 +531,7 @@ class SelectizeInput extends SelectInput
     {
         return [
             'value' => 'id',
-            'text'  => 'name:title:label:id',
+            'label'  => 'name:title:label:id',
             'color' => 'color'
         ];
     }

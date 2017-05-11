@@ -79,13 +79,13 @@
             persist: true,
             preload: 'focus',
             openOnFocus: true,
-            searchField: ['value', 'text', 'email'],
+            searchField: ['value', 'label', 'email'],
             dropdownParent: this.$input.closest('.form-field'),
 
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
-                    if (item.text === input) {
+                    if (item.label === input) {
                         return false;
                     }
                 }
@@ -105,13 +105,13 @@
             render: {
                 item: function (item, escape) {
                     return '<div class="item">' +
-                        (item.text ? '<span class="name">' + escape(item.text) + '</span>' : '') +
+                        (item.label ? '<span class="name">' + escape(item.label) + '</span>' : '') +
                         (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') +
                             '</div>';
                 },
                 option: function (item, escape) {
                     return '<div class="option">' +
-                        (item.text ? '<span class="name">' + escape(item.text) + '</span>' : '') +
+                        (item.label ? '<span class="name">' + escape(item.label) + '</span>' : '') +
                         (item.email ? '<span class="caption">' + escape(item.email) + '</span>' : '') +
                         '</div>';
                 }
@@ -126,7 +126,7 @@
             default_opts.create = function (input) {
                 return {
                     value: input,
-                    text: input
+                    label: input
                 };
             };
         }

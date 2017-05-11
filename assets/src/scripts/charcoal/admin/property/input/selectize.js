@@ -104,12 +104,13 @@
             persist: true,
             preload: 'focus',
             openOnFocus: true,
-            searchField: ['value', 'text'],
+            labelField: 'label',
+            searchField: ['value', 'label'],
             dropdownParent: this.$input.closest('.form-field'),
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
-                    if (item.text === input) {
+                    if (item.label === input) {
                         return false;
                     }
                 }
@@ -136,7 +137,7 @@
             default_opts.create = function (input) {
                 return {
                     value: input,
-                    text: input
+                    label: input
                 };
             };
         }
@@ -218,7 +219,7 @@
                 }
             } else {
                 if (input) {
-                    form_data[this.choice_obj_map.text] = input;
+                    form_data[this.choice_obj_map.label] = input;
                 }
             }
             form_data.form_ident = form_ident;

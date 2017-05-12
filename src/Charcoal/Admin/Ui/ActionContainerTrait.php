@@ -308,6 +308,10 @@ trait ActionContainerTrait
      */
     protected function parseActionRenderables($action, $renderer)
     {
+        if ($renderer === false) {
+            return $action;
+        }
+
         if ($renderer === true) {
             $renderer = $this->getActionRenderer();
         }
@@ -346,14 +350,24 @@ trait ActionContainerTrait
         if (is_bool($condition)) {
             return $condition;
         } elseif (is_string($condition)) {
+            $not = ($condition[0] === '!');
+            if ($not) {
+                $condition = ltrim($condition, '!');
+            }
+
+            $result = null;
             if ($renderer && is_callable([ $renderer, $condition ])) {
-                return $renderer->{$condition}();
+                $result = !!$renderer->{$condition}();
             } elseif (is_callable([ $this, $condition ])) {
-                return $this->{$condition}();
+                $result = !!$this->{$condition}();
             } elseif (is_callable($condition)) {
-                return $condition();
+                $result = !!$condition();
             } elseif ($renderer) {
-                return $renderer->renderTemplate($condition);
+                $result = !!$renderer->renderTemplate($condition);
+            }
+
+            if ($result !== null) {
+                return $not ? !$result : $result;
             }
         }
 

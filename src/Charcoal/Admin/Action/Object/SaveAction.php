@@ -157,7 +157,7 @@ class SaveAction extends AbstractSaveAction
                 $this->addFeedback('success', strtr($this->translator()->translate('Created Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
-                $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);
+                $this->addFeedbackFromValidation($obj, [ ModelValidator::NOTICE, ModelValidator::WARNING ]);
                 $this->setSuccess(true);
 
                 return $response;

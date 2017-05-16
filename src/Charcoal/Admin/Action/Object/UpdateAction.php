@@ -162,7 +162,7 @@ class UpdateAction extends AbstractSaveAction
                 $this->addFeedback('success', strtr($this->translator()->translate('Updated Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
-                $this->addFeedbackFromValidation($obj, ModelValidator::NOTICE);
+                $this->addFeedbackFromValidation($obj, [ ModelValidator::NOTICE, ModelValidator::WARNING ]);
                 $this->setSuccess(true);
 
                 return $response;

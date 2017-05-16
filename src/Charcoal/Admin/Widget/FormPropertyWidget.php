@@ -553,10 +553,10 @@ class FormPropertyWidget extends AdminWidget implements
     /**
      * Merge widget and property data.
      *
-     * @param  array|\Traversable $data Widget and property data.
+     * @param  array $data Widget and property data.
      * @return FormPropertyWidget Chainable
      */
-    public function merge($data)
+    public function merge(array $data)
     {
         $this->isMergingWidgetData = true;
 

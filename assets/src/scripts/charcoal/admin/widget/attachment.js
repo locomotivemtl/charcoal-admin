@@ -41,32 +41,25 @@ Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.protot
  */
 Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 {
-    // Necessary assets.
-    if (typeof $.fn.sortable !== 'function') {
-        var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
-        Charcoal.Admin.loadScript(url, this.init.bind(this));
+    var $container = this.element().find('.js-attachment-sortable > .js-grid-container');
+    if ($container.length) {
+        this.element().on('hidden.bs.collapse', '[data-toggle="collapse"]', function () {
+            $container.sortable('refreshPositions');
+        });
 
-        return this;
-    }
-    // var config = this.opts();
-    var $container = this.element().find('.js-attachment-sortable .js-grid-container');
+        $container.sortable({
+            handle:      '[draggable="true"]',
+            placeholder: 'panel c-attachment_placeholder',
+            start:       function (event, ui) {
+                var $heading     = ui.item.children('.panel-heading'),
+                    $collapsible = $heading.find('[data-toggle="collapse"]');
 
-    this.element().on('hidden.bs.collapse', '[data-toggle="collapse"]', function () {
-        $container.sortable('refreshPositions');
-    });
-
-    $container.sortable({
-        handle:      '[draggable="true"]',
-        placeholder: 'panel c-attachment_placeholder',
-        start:       function (event, ui) {
-            var $heading     = ui.item.children('.panel-heading'),
-                $collapsible = $heading.find('[data-toggle="collapse"]');
-
-            if (!$collapsible.hasClass('collapsed')) {
-                ui.item.children('.panel-collapse').collapse('hide');
+                if (!$collapsible.hasClass('collapsed')) {
+                    ui.item.children('.panel-collapse').collapse('hide');
+                }
             }
-        }
-    }).disableSelection();
+        }).disableSelection();
+    }
 
     this.listeners();
     return this;
@@ -102,7 +95,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 {
     // Scope
     var that = this,
-        $container = this.element().find('.js-attachment-sortable .js-grid-container');
+        $container = this.element().find('.c-attachments_container > .js-grid-container');
 
     // Prevent multiple binds
     this.element()
@@ -354,7 +347,7 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
 
     var template = this.element().find('.js-attachment-template').clone();
     template.find('.js-attachment').data('id', obj.id).data('type', obj.type);
-    this.element().find('.js-attachment-sortable').find('.js-grid-container').append(template);
+    this.element().find('.c-attachments_container > .js-grid-container').append(template);
 
     return this;
 
@@ -387,7 +380,7 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
         group:       opts.data.group
     };
 
-    this.element().find('.js-attachment-container').find('.js-attachment').each(function (i)
+    this.element().find('.c-attachments_container').find('.js-attachment').each(function (i)
     {
         var $this = $(this);
         var id    = $this.data('id');

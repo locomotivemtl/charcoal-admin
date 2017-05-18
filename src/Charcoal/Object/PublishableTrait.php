@@ -149,6 +149,7 @@ trait PublishableTrait
             static::STATUS_UPCOMING => static::STATUS_PUBLISHED
         ];
 
+        /** Resolve any special statuses */
         if (isset($specialStatus[$status])) {
             $status = $specialStatus[$status];
         }
@@ -174,42 +175,33 @@ trait PublishableTrait
     /**
      * Retrieve the object's publication status.
      *
-     * Default statuses are:
-     * - `draft` — Incomplete object viewable by a limited userbase.
-     * - `pending` — Awaiting a user with higher access to publish.
-     * - `published` — Publiclly viewable by everyone.
-     * - `upcoming` — Scheduled to be published at a future date.
-     * - `expired` — Removed from public viewing.
-     *
-     * Note that the `upcoming` and `expired` are specialized statuses when the object
-     * is set to `published` but the publication date or expiration date do not match.
-     *
-     * @return string
+     * @return string|null
      */
     public function publishStatus()
     {
-        $status = $this->publishStatus;
-        if ($status !== null && (!$status || $status === static::STATUS_PUBLISHED)) {
-            $status = $this->publishDateStatus();
-        }
-
-        return $status;
+        return $this->publishStatus;
     }
 
     /**
      * Retrieve the object's publication status based on publication and expiration dates.
      *
+     * - If the publication status is not "published", that status is returned (e.g., "draft", "pending", NULL).
      * - If no publication date is set, then it's assumed to be always published (or "expired").
      * - If no expiration date is set, then it's assumed to never expire.
      * - If a publication date is set to a future date, then it's assumed to be scheduled to be published ("upcoming").
      *
-     * @return string
+     * @return string|null
      */
-    private function publishDateStatus()
+    public function publishDateStatus()
     {
         $now = new DateTime();
         $publish = $this->publishDate();
         $expiry  = $this->expiryDate();
+        $status  = $this->publishStatus();
+
+        if ($status !== static::STATUS_PUBLISHED) {
+            return $status;
+        }
 
         if (!$publish) {
             if (!$expiry || $now < $expiry) {
@@ -237,6 +229,6 @@ trait PublishableTrait
      */
     public function isPublished()
     {
-        return ($this->publishStatus() === static::STATUS_PUBLISHED);
+        return ($this->publishDateStatus() === static::STATUS_PUBLISHED);
     }
 }

@@ -6,6 +6,20 @@ use DateTimeInterface;
 
 /**
  * Defines an object as publishable via date/time values and statuses.
+ *
+ * Default statuses:
+ *
+ * - `draft` — Incomplete object viewable by a limited userbase.
+ * - `pending` — Awaiting a user with higher access to publish.
+ * - `published` — Publiclly viewable by everyone.
+ *
+ * Special statuses:
+ *
+ * - `upcoming` — Scheduled to be published at a future date.
+ * - `expired` — Removed from public viewing.
+ *
+ * Note: the specialized statuses are used when the object is set to `published`
+ * but the publication date or expiration date do not match.
  */
 interface PublishableInterface
 {

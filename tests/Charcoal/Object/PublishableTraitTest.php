@@ -11,6 +11,7 @@ use Pimple\Container;
 
 // From 'charcoal-object'
 use Charcoal\Object\PublishableTrait;
+use Charcoal\Object\PublishableInterface as Publishable;
 use Charcoal\Object\Tests\ContainerProvider;
 use Charcoal\Object\Tests\Mocks\PublishableClass as PublishableObject;
 
@@ -63,7 +64,7 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($time, $obj->publishDate());
 
         $obj->setPublishDate('');
-        $this->assertEquals(null, $obj->publishDate());
+        $this->assertNull($obj->publishDate());
 
         $obj->setPublishDate($time);
         $this->assertEquals($time, $obj->publishDate());
@@ -102,7 +103,7 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($time, $obj->expiryDate());
 
         $obj->setExpiryDate('');
-        $this->assertEquals(null, $obj->expiryDate());
+        $this->assertNull($obj->expiryDate());
 
         $obj->setExpiryDate($time);
         $this->assertEquals($time, $obj->expiryDate());
@@ -127,25 +128,24 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
     public function testPublishStatus()
     {
         $obj = $this->obj;
-        $obj->setPublishStatus('draft');
-        $this->assertEquals('draft', $obj->publishStatus());
 
-        $obj->setPublishStatus('pending');
-        $this->assertEquals('pending', $obj->publishStatus());
+        $obj->setPublishStatus(Publishable::STATUS_DRAFT);
+        $this->assertEquals(Publishable::STATUS_DRAFT, $obj->publishStatus());
 
-        $obj->setPublishStatus('published');
-        $this->assertEquals('published', $obj->publishStatus());
+        $obj->setPublishStatus(Publishable::STATUS_PENDING);
+        $this->assertEquals(Publishable::STATUS_PENDING, $obj->publishStatus());
 
-        $obj->setPublishStatus('upcoming');
-        $this->assertEquals('published', $obj->publishStatus());
+        $obj->setPublishStatus(Publishable::STATUS_PUBLISHED);
+        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->publishStatus());
 
-        $obj->setPublishStatus('expired');
-        $this->assertEquals('published', $obj->publishStatus());
+        $obj->setPublishStatus(Publishable::STATUS_UPCOMING);
+        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->publishStatus());
 
-        $obj->setPublishDate(null);
-        $obj->setExpiryDate(null);
+        $obj->setPublishStatus(Publishable::STATUS_EXPIRED);
+        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->publishStatus());
+
         $obj->setPublishStatus('');
-        $this->assertEquals(null, $obj->publishStatus());
+        $this->assertNull($obj->publishStatus());
 
         $this->setExpectedException(InvalidArgumentException::class);
         $obj->setPublishStatus('foobar');
@@ -164,26 +164,29 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
             $obj->setExpiryDate($expiryDate);
         }
 
-        $obj->setPublishStatus('draft');
-        $this->assertEquals('draft', $obj->publishStatus());
+        $obj->setPublishStatus(null);
+        $this->assertNull($obj->publishDateStatus());
 
-        $obj->setPublishStatus('pending');
-        $this->assertEquals('pending', $obj->publishStatus());
+        $obj->setPublishStatus(Publishable::STATUS_DRAFT);
+        $this->assertEquals(Publishable::STATUS_DRAFT, $obj->publishDateStatus());
 
-        $obj->setPublishStatus('published');
-        $this->assertEquals($expectedStatus, $obj->publishStatus());
+        $obj->setPublishStatus(Publishable::STATUS_PENDING);
+        $this->assertEquals(Publishable::STATUS_PENDING, $obj->publishDateStatus());
+
+        $obj->setPublishStatus(Publishable::STATUS_PUBLISHED);
+        $this->assertEquals($expectedStatus, $obj->publishDateStatus());
     }
 
     public function providerPublishStatus()
     {
         return [
-            [ null, null, 'published' ],
-            [ 'yesterday', 'tomorrow', 'published' ],
-            [ '2 days ago', 'yesterday', 'expired' ],
-            [ 'tomorrow', '+1 week', 'upcoming' ],
-            [ 'tomorrow', null, 'upcoming' ],
-            [ null, 'tomorrow', 'published' ],
-            [ null, 'yesterday', 'expired' ]
+            [ null, null, Publishable::STATUS_PUBLISHED ],
+            [ 'yesterday', 'tomorrow', Publishable::STATUS_PUBLISHED ],
+            [ '2 days ago', 'yesterday', Publishable::STATUS_EXPIRED ],
+            [ 'tomorrow', '+1 week', Publishable::STATUS_UPCOMING ],
+            [ 'tomorrow', null, Publishable::STATUS_UPCOMING ],
+            [ null, 'tomorrow', Publishable::STATUS_PUBLISHED ],
+            [ null, 'yesterday', Publishable::STATUS_EXPIRED ]
         ];
     }
 
@@ -196,10 +199,10 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $obj->setPublishStatus(null);
         $this->assertFalse($obj->isPublished());
 
-        $obj->setPublishStatus('draft');
+        $obj->setPublishStatus(Publishable::STATUS_DRAFT);
         $this->assertFalse($obj->isPublished());
 
-        $obj->setPublishStatus('published');
+        $obj->setPublishStatus(Publishable::STATUS_PUBLISHED);
         $this->assertTrue($obj->isPublished());
 
         $obj->setPublishDate('tomorrow');

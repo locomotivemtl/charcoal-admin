@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 use Charcoal\Admin\Docs\Widget\DocFormPropertyWidget;
+use Charcoal\Admin\Ui\FormSidebarInterface;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use \UnexpectedValueException;
 use \InvalidArgumentException;
@@ -236,7 +237,7 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * @return FormSidebarInterface[]|Generator
+     * @return FormSidebarInterface[]|\Generator
      */
     public function sidebars()
     {
@@ -260,8 +261,7 @@ class DocWidget extends FormWidget implements
                 'actions'        => [
                     [
                         'label' => (string)$label,
-                        'url'   => 'object/edit?main_menu='.$this->obj()['main_menu'].
-                            '&obj_type={{obj_type}}&obj_id={{id}}'
+                        'url'   => 'object/edit?main_menu='.$this->obj()['main_menu'].'&obj_type={{obj_type}}&obj_id={{id}}'
                     ]
                 ]
             ];
@@ -274,19 +274,6 @@ class DocWidget extends FormWidget implements
             yield $sidebar;
             $GLOBALS['widget_template'] = '';
         }
-
-        // $sidebars = $this->sidebars;
-        // uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
-        // foreach ($sidebars as $sidebarIdent => $sidebar) {
-        //     if ($sidebar->template()) {
-        //         $template = $sidebar->template();
-        //     } else {
-        //         $template = 'charcoal/admin/widget/form.sidebar';
-        //     }
-        //     $GLOBALS['widget_template'] = $template;
-        //     yield $sidebarIdent => $sidebar;
-        //     $GLOBALS['widget_template'] = '';
-        // }
     }
 
     /**
@@ -662,7 +649,7 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * @param boolean $showHeader
+     * @param boolean $showHeader Is the Header to be shown.
      * @return self
      */
     public function setShowHeader($showHeader)
@@ -681,7 +668,7 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * @param boolean $showTitle
+     * @param boolean $showTitle Is the title to be shown.
      * @return self
      */
     public function setShowTitle($showTitle)

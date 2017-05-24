@@ -503,7 +503,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjSavable()
     {
         // Overridden by permissions
-        if (!$this->checkPermission('save') || !$this->form() ) {
+        if (!$this->checkPermission('save') || !$this->form()) {
             return false;
         }
 
@@ -759,11 +759,11 @@ class FormSidebarWidget extends AdminWidget implements
      */
     protected function checkPermission($permissionName)
     {
-        if (!isset($this->requiredAclPermissions[$permissionName])) {
+        if (!isset($this->requiredGlobalAclPermissions[$permissionName])) {
             return true;
         }
 
-        $permissions = $this->requiredAclPermissions[$permissionName];
+        $permissions = $this->requiredGlobalAclPermissions[$permissionName];
 
         // Test sidebar vs. ACL roles
         $authUser = $this->authenticator()->authenticate();

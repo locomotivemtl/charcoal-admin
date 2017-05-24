@@ -33,6 +33,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
     public function collapsible()
     {
         $displayOps = $this->displayOptions();
+
         return isset($displayOps['collapsible']) ? $displayOps['collapsible'] : false;
     }
 
@@ -42,6 +43,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
     public function collapsed()
     {
         $displayOps = $this->displayOptions();
+
         return isset($displayOps['collapsed']) ? $displayOps['collapsed'] : false;
     }
 
@@ -51,6 +53,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
     public function parented()
     {
         $displayOps = $this->displayOptions();
+
         return isset($displayOps['parented']) ? $displayOps['parented'] : false;
     }
 
@@ -134,7 +137,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
     }
 
     /**
-     * @return array
+     * @return array|mixed
      */
     public function displayOptions()
     {
@@ -142,11 +145,16 @@ class DocFormPropertyWidget extends FormPropertyWidget
     }
 
     /**
-     * @param array $displayOptions
+     * @param array|mixed $displayOptions The display options array.
+     * @throws \InvalidArgumentException If argument is not of type "array".
      * @return self
      */
     public function setDisplayOptions($displayOptions)
     {
+        if (!is_array($displayOptions)) {
+            throw new \InvalidArgumentException('display_options should be of type array');
+        }
+
         $this->displayOptions = $displayOptions;
 
         return $this;

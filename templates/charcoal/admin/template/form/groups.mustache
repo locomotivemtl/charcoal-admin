@@ -7,6 +7,7 @@
 --}}
 <div class="o-form-groups{{# isTabbable }} tab-content{{/ isTabbable }}">
 {{# groups }}
+    {{^ hidden }}
     {{# form.layout }}
     {{> charcoal/admin/widget/layout.start }}
     {{/ form.layout }}
@@ -18,5 +19,6 @@
     {{# form.layout }}
     {{> charcoal/admin/widget/layout.end }}
     {{/ form.layout }}
+    {{/ hidden }}
 {{/ groups }}
 </div>

@@ -1,0 +1,91 @@
+{{!--
+    Form Property Widget
+    ====================
+
+    @used-by `charcoal/admin/widget/form-group-widget`
+--}}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{# collapsible }}
+        <a role="button" data-toggle="collapse"
+           {{# parented }}data-parent="#panel_group_{{ formGroup.widgetId }}"{{/ parented }} href="#panel_{{widgetId}}"
+           aria-expanded="false" aria-controls="panel_{{widgetId}}" class="c-nav_list_link c-nav_header_arrow">
+        {{/ collapsible }}
+        <h3 class="panel-title">{{> charcoal/admin/property/control/label }} ({{prop.type}})</h3>
+        {{# collapsible }}</a>{{/ collapsible }}
+    </div>
+    <div class="panel-collapse {{# collapsible }} collapse{{/ collapsible }} {{# collapsed }} in{{/ collapsed }}"
+         id="panel_{{widgetId}}" role="tabpanel">
+        <div class="panel-body">
+            {{# typeDescription }}
+                <p><strong>{{ prop.type }}</strong> - {{& . }}</p>
+            {{/ typeDescription }}
+
+            {{# description }}
+                <h4>Description</h4>
+                <p>{{& . }}</p>
+            {{/ description }}
+
+            {{# notes }}
+                <h4>Note</h4>
+                <p>{{& . }}</p>
+            {{/ notes }}
+
+            {{# hasExtraData }}
+                <div class="panel-group" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a role="button" data-toggle="collapse" href="#more_{{widgetId}}" aria-expanded="false"
+                               aria-controls="more_{{widgetId}}">
+                                <h3 class="panel-title">Voir plus</h3>
+                            </a>
+                        </div>
+
+                        <div class="panel-collapse collapse" id="more_{{widgetId}}" role="tabpanel">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        {{#_t}}Feature{{/_t}}
+                                    </th>
+                                    <th>
+                                        {{#_t}}Description{{/_t}}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{# extraData }}
+                                    <tr>
+                                        <td>
+                                            {{ feature }}
+                                        </td>
+                                        <td>
+                                            {{& description }}
+                                        </td>
+                                    </tr>
+                                {{/ extraData }}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {{/ hasExtraData }}
+        </div>
+    </div>
+</div>
+
+<!--
+    {{# showLabel }}
+    <label class="control-label" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+    {{/ showLabel }}
+    {{^ showLabel }}
+        <label class="control-label sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+    {{/ showLabel }}
+    {{# showActiveLanguage }}
+    <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
+        {{# languages }}
+        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="hidden"{{/ current }}>{{ ident }}</span>
+        {{/ languages }}
+    </span>
+    {{/ showActiveLanguage }}
+        -->

@@ -273,7 +273,7 @@ class ContainerProvider
      */
     public function registerTranslator(Container $container)
     {
-        $container['language/manager'] = function (Container $container) {
+        $container['locales/manager'] = function (Container $container) {
             return new LocalesManager([
                 'locales' => [
                     'en' => [ 'locale' => 'en-US' ]
@@ -283,7 +283,7 @@ class ContainerProvider
 
         $container['translator'] = function (Container $container) {
             return new Translator([
-                'manager' => $container['language/manager']
+                'manager' => $container['locales/manager']
             ]);
         };
     }

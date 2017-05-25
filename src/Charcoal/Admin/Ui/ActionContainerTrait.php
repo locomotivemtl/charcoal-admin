@@ -282,8 +282,11 @@ trait ActionContainerTrait
      */
     protected function getActionRenderer()
     {
+        $obj = null;
         if ($this instanceof FormSidebarInterface) {
-            $obj = $this->form()->obj();
+            if ($this->form()) {
+                $obj = $this->form()->obj();
+            }
         }
 
         if ($this instanceof ObjectContainerInterface) {

@@ -417,13 +417,17 @@ class FormSidebarWidget extends AdminWidget implements
     protected function defaultSidebarActions()
     {
         if ($this->defaultSidebarActions === null) {
-            $save = [
-                'label'      => $this->form()->submitLabel(),
-                'ident'      => 'save',
-                'buttonType' => 'submit',
-                'priority'   => 90
-            ];
-            $this->defaultSidebarActions = [ $save ];
+            $this->defaultSidebarActions = [];
+
+            if ($this->form()) {
+                $save = [
+                    'label'      => $this->form()->submitLabel(),
+                    'ident'      => 'save',
+                    'buttonType' => 'submit',
+                    'priority'   => 90
+                ];
+                $this->defaultSidebarActions[] = $save;
+            }
         }
 
         return $this->defaultSidebarActions;
@@ -448,7 +452,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjDeletable()
     {
         // Overridden by permissions
-        if (!$this->checkPermission('delete')) {
+        if (!$this->checkPermission('delete') || !$this->form()) {
             return false;
         }
 
@@ -474,7 +478,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjResettable()
     {
         // Overridden by permissions
-        if (!$this->checkPermission('reset')) {
+        if (!$this->checkPermission('reset') || !$this->form()) {
             return false;
         }
 
@@ -499,7 +503,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjSavable()
     {
         // Overridden by permissions
-        if (!$this->checkPermission('save')) {
+        if (!$this->checkPermission('save') || !$this->form()) {
             return false;
         }
 
@@ -524,7 +528,7 @@ class FormSidebarWidget extends AdminWidget implements
     public function isObjViewable()
     {
         // Overridden by permissions
-        if (!$this->checkPermission('view')) {
+        if (!$this->checkPermission('view') || !$this->form()) {
             return false;
         }
 
@@ -692,11 +696,13 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function showLanguageSwitch()
     {
-        $locales = count($this->translator()->availableLocales());
-        if ($locales > 1) {
-            foreach ($this->form()->formProperties() as $formProp) {
-                if ($formProp->property()->l10n()) {
-                    return true;
+        if ($this->form()) {
+            $locales = count($this->translator()->availableLocales());
+            if ($locales > 1) {
+                foreach ($this->form()->formProperties() as $formProp) {
+                    if ($formProp->property()->l10n()) {
+                        return true;
+                    }
                 }
             }
         }
@@ -753,11 +759,11 @@ class FormSidebarWidget extends AdminWidget implements
      */
     protected function checkPermission($permissionName)
     {
-        if (!isset($this->requiredAclPermissions[$permissionName])) {
+        if (!isset($this->requiredGlobalAclPermissions[$permissionName])) {
             return true;
         }
 
-        $permissions = $this->requiredAclPermissions[$permissionName];
+        $permissions = $this->requiredGlobalAclPermissions[$permissionName];
 
         // Test sidebar vs. ACL roles
         $authUser = $this->authenticator()->authenticate();

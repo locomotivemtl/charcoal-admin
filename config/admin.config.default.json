@@ -23,6 +23,9 @@
             "object/edit": {
                 "ident": "charcoal/admin/template/object/edit"
             },
+            "object/doc": {
+                "ident": "charcoal/admin/docs/template/object/doc"
+            },
             "object/collection": {
                 "ident": "charcoal/admin/template/object/collection"
             },

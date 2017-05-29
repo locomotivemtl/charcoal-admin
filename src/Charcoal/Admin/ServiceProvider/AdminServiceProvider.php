@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\ServiceProvider;
 
 // From Pimple
+use Charcoal\Admin\Service\SelectizeRenderer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -66,6 +67,7 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['admin/config'] = function (Container $container) {
             $appConfig = $container['config'];
+
             return new AdminConfig($appConfig['admin']);
         };
 
@@ -86,10 +88,28 @@ class AdminServiceProvider implements ServiceProviderInterface
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
         $this->registerUtilities($container);
-
+        $this->registerSelectizeRenderer($container);
 
         // Register Access-Control-List (acl)
         $container->register(new AclServiceProvider());
+    }
+
+    /**
+     * Registers the selectize renderer service.
+     *
+     * @param Container $container The Pimple DI Container.
+     * @return void
+     */
+    protected function registerSelectizeRenderer(Container $container)
+    {
+        $container['selectize/renderer'] = function (Container $container) {
+            return new SelectizeRenderer([
+                'logger'           => $container['logger'],
+                'translator'       => $container['translator'],
+                'template_factory' => $container['template/factory'],
+                'view'             => $container['view']
+            ]);
+        };
     }
 
     /**
@@ -140,9 +160,9 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['admin/authorizer'] = function (Container $container) {
             return new Authorizer([
-                'logger'    => $container['logger'],
-                'acl'       => $container['admin/acl'],
-                'resource'  => 'admin'
+                'logger'   => $container['logger'],
+                'acl'      => $container['admin/acl'],
+                'resource' => 'admin'
             ]);
         };
 
@@ -172,11 +192,11 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['property/input/factory'] = function (Container $container) {
             return new Factory([
-                'base_class' => PropertyInputInterface::class,
-                'arguments' => [[
+                'base_class'       => PropertyInputInterface::class,
+                'arguments'        => [ [
                     'container' => $container,
                     'logger'    => $container['logger']
-                ]],
+                ] ],
                 'resolver_options' => [
                     'suffix' => 'Input'
                 ]
@@ -189,11 +209,11 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['property/display/factory'] = function (Container $container) {
             return new Factory([
-                'base_class' => PropertyDisplayInterface::class,
-                'arguments' => [[
+                'base_class'       => PropertyDisplayInterface::class,
+                'arguments'        => [ [
                     'container' => $container,
                     'logger'    => $container['logger']
-                ]],
+                ] ],
                 'resolver_options' => [
                     'suffix' => 'Display'
                 ]
@@ -204,16 +224,16 @@ class AdminServiceProvider implements ServiceProviderInterface
          * @param Container $container A Pimple DI container.
          * @return \Charcoal\Factory\FactoryInterface
          */
-        $container['sidemenu/group/factory'] = function(Container $container) {
+        $container['sidemenu/group/factory'] = function (Container $container) {
             return new Factory([
-                'base_class'    => SidemenuGroupInterface::class,
-                'default_class' => GenericSidemenuGroup::class,
-                'arguments'     => [[
+                'base_class'       => SidemenuGroupInterface::class,
+                'default_class'    => GenericSidemenuGroup::class,
+                'arguments'        => [ [
                     'container'      => $container,
                     'logger'         => $container['logger'],
                     'view'           => $container['view'],
                     'layout_builder' => $container['layout/builder']
-                ]],
+                ] ],
                 'resolver_options' => [
                     'suffix' => 'SidemenuGroup'
                 ]
@@ -234,9 +254,9 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container->extend('view/mustache/helpers', function (array $helpers, Container $container) {
             $adminUrl = clone $container['base-url'];
             if ($container['admin/config']['base_path']) {
-                $basePath  = rtrim($adminUrl->getBasePath(), '/');
+                $basePath = rtrim($adminUrl->getBasePath(), '/');
                 $adminPath = ltrim($container['admin/config']['base_path'], '/');
-                $adminUrl  = $adminUrl->withBasePath($basePath.'/'.$adminPath);
+                $adminUrl = $adminUrl->withBasePath($basePath.'/'.$adminPath);
             }
 
             $urls = [
@@ -245,7 +265,7 @@ class AdminServiceProvider implements ServiceProviderInterface
                  *
                  * @return UriInterface|null
                  */
-                'adminUrl' => $adminUrl,
+                'adminUrl'     => $adminUrl,
                 /**
                  * Prepend the administration-area URI to the given path.
                  *
@@ -265,13 +285,13 @@ class AdminServiceProvider implements ServiceProviderInterface
                         $parts = parse_url($uri);
                         if (!isset($parts['scheme'])) {
                             if (!in_array($uri[0], [ '/', '#', '?' ])) {
-                                $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
+                                $path = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
                                 $query = isset($parts['query']) ? $parts['query'] : '';
-                                $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+                                $hash = isset($parts['fragment']) ? $parts['fragment'] : '';
 
                                 return $adminUrl->withPath($path)
-                                                ->withQuery($query)
-                                                ->withFragment($hash);
+                                    ->withQuery($query)
+                                    ->withFragment($hash);
                             }
                         }
                     }

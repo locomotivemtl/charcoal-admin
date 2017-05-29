@@ -2121,6 +2121,8 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.widget_id         = null;
     this.obj_type          = null;
     this.obj_id            = null;
+    this.save_action       = 'object/save';
+    this.update_action     = 'object/update';
     this.form_selector     = null;
     this.form_working      = false;
     this.submitted_via     = null;
@@ -2426,9 +2428,9 @@ Charcoal.Admin.Widget_Form.prototype.enable_button = function ($trigger) {
  */
 Charcoal.Admin.Widget_Form.prototype.request_url = function () {
     if (this.is_new_object) {
-        return Charcoal.Admin.admin_url() + 'object/save';
+        return Charcoal.Admin.admin_url() + this.save_action;
     } else {
-        return Charcoal.Admin.admin_url() + 'object/update';
+        return Charcoal.Admin.admin_url() + this.update_action;
     }
 };
 
@@ -2615,6 +2617,11 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.widget_type = 'charcoal/admin/widget/quick-form';
     this.save_callback = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
+
+    this.save_action   = opts.save_action || 'object/save';
+    this.update_action = opts.update_action || 'object/update';
+    this.extra_form_data = opts.extra_form_data || {};
+
     this.form_working = false;
     this.suppress_feedback = opts.suppress_feedback || false;
     this.is_new_object = false;
@@ -2673,6 +2680,14 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     form_data = new FormData(form);
 
     this.disable_form($form, $trigger);
+
+    var extraFormData = this.extra_form_data;
+
+    for (var data in extraFormData) {
+        if (extraFormData.hasOwnProperty(data)){
+            form_data.append(data, extraFormData[data]);
+        }
+    }
 
     this.xhr = $.ajax({
         type: 'POST',
@@ -5651,6 +5666,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         this.form_ident = null;
         this.selectize_options = {};
         this.choice_obj_map = {};
+        this.selectize_property_ident = null;
+        this.selectize_obj_type = null;
+        this.selectize_templates = {};
 
         this.clipboard = null;
         this.allow_update = null;
@@ -5700,6 +5718,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
         this.selectize_options = opts.data.selectize_options || this.selectize_options;
         this.choice_obj_map = opts.data.choice_obj_map || this.choice_obj_map;
+        this.selectize_property_ident = opts.data.selectize_property_ident || this.selectize_property_ident;
+        this.selectize_obj_type = opts.data.selectize_obj_type || this.selectize_obj_type;
+        this.selectize_templates = opts.data.selectize_templates || this.selectize_templates;
 
         this.$input = $(this.selectize_selector || '#' + this.input_id);
 
@@ -5728,6 +5749,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             labelField: 'label',
             searchField: ['value', 'label'],
             dropdownParent: this.$input.closest('.form-field'),
+            render: {},
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
@@ -5749,6 +5771,24 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 });
             }
         };
+
+        if (this.selectize_templates.item) {
+            default_opts.render.item = function (item, escape) {
+                if (item.item_render) {
+                    return '<div class="item">' + item.item_render + '</div>';
+                }
+                return '<div class="item">' + escape(item[default_opts.labelField]) + '</div>';
+            }
+        }
+
+        if (this.selectize_templates.option) {
+            default_opts.render.option = function (option, escape) {
+                if (option.option_render) {
+                    return '<div class="option">' + option.option_render + '</div>';
+                }
+                return '<div class="option">' + escape(option[default_opts.labelField]) + '</div>';
+            }
+        }
 
         if (objType) {
             default_opts.create = this.create_item.bind(this);
@@ -5806,6 +5846,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         var submit_label = null;
         var id = opts.id || null;
         var choice_obj_map = this.choice_obj_map;
+        var selectize_property_ident = this.selectize_property_ident;
+        var selectize_obj_type = this.selectize_obj_type;
 
         // Get the form ident
         if (form_ident && typeof form_ident === 'object') {
@@ -5892,21 +5934,23 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                         obj_type: type
                     },
                     obj_id: id,
+                    extra_form_data: {
+                        selectize_obj_type: selectize_obj_type,
+                        selectize_prop_ident: selectize_property_ident
+                    },
+                    save_action: 'selectize/save',
+                    update_action: 'selectize/update',
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
 
                         var callbackOptions = {
                             class: 'new'
                         };
-                        var map = choice_obj_map;
-                        for (var prop in map) {
-                            if (map.hasOwnProperty(prop)) {
-                                var objProp = response.obj[map[prop]];
 
-                                if (objProp) {
-                                    callbackOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
-                                }
-                            }
+                        var selectizeResponse = response.selectize[0];
+
+                        if (selectizeResponse) {
+                            $.extend(true, callbackOptions, selectizeResponse);
                         }
 
                         callback(callbackOptions);
@@ -5914,7 +5958,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                         dialog.close();
                         if (step === 1) {
                             self.create_item(input, callback, {
-                                id: response.obj[map.value],
+                                id: selectizeResponse.value,
                                 step: 2
                             });
                         }
@@ -5932,36 +5976,32 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         var type = this.obj_type;
         // var pattern = this.pattern;
         var choice_obj_map = this.choice_obj_map;
+        var selectize_property_ident = this.selectize_property_ident;
+        var selectize_obj_type = this.selectize_obj_type;
+
+        var form_data = {
+            obj_type: type,
+            selectize_obj_type: selectize_obj_type,
+            selectize_prop_ident: selectize_property_ident
+        };
 
         $.ajax({
-            url: Charcoal.Admin.admin_url() + 'object/load',
-            data: {
-                obj_type: type
-            },
+            url: Charcoal.Admin.admin_url() + 'selectize/load',
+            data: form_data,
             type: 'GET',
             error: function () {
                 callback();
             },
-            success: function (res) {
+            success: function (response) {
                 var items = [];
 
-                for (var item in res.collection) {
-                    if (res.collection.hasOwnProperty(item)) {
-                        item = res.collection[item];
+                var selectizeResponse = response.selectize;
 
-                        var itemOptions = {};
-                        var map = choice_obj_map;
-                        for (var prop in map) {
-                            if (map.hasOwnProperty(prop)) {
-                                var objProp = item[map[prop]];
+                for (var item in selectizeResponse) {
+                    if (selectizeResponse.hasOwnProperty(item)) {
+                        item = selectizeResponse[item];
 
-                                if (objProp) {
-                                    itemOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
-                                }
-                            }
-                        }
-
-                        items.push(itemOptions);
+                        items.push(item);
                     }
                 }
                 callback(items);

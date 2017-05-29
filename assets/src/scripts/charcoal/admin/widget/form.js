@@ -17,6 +17,8 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.widget_id         = null;
     this.obj_type          = null;
     this.obj_id            = null;
+    this.save_action       = 'object/save';
+    this.update_action     = 'object/update';
     this.form_selector     = null;
     this.form_working      = false;
     this.submitted_via     = null;
@@ -322,9 +324,9 @@ Charcoal.Admin.Widget_Form.prototype.enable_button = function ($trigger) {
  */
 Charcoal.Admin.Widget_Form.prototype.request_url = function () {
     if (this.is_new_object) {
-        return Charcoal.Admin.admin_url() + 'object/save';
+        return Charcoal.Admin.admin_url() + this.save_action;
     } else {
-        return Charcoal.Admin.admin_url() + 'object/update';
+        return Charcoal.Admin.admin_url() + this.update_action;
     }
 };
 

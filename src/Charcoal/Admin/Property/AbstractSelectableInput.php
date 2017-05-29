@@ -70,9 +70,9 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
         }
 
         if (isset($choice['label'])) {
-            $choice['label'] = $this->translator()->translation($choice['label']);
+            $choice['label'] = (string)$this->translator()->translation($choice['label']);
         } else {
-            $choice['label'] = $this->translator()->translation($choice['value']);
+            $choice['label'] = (string)$this->translator()->translation($choice['value']);
         }
 
         $choice['checked'] = $this->isChoiceSelected($choice);

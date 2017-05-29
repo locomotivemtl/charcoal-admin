@@ -72,6 +72,12 @@
             "object/update": {
                 "ident": "charcoal/admin/action/object/update"
             },
+            "selectize/save": {
+                "ident": "charcoal/admin/action/selectize/save"
+            },
+            "selectize/update": {
+                "ident": "charcoal/admin/action/selectize/update"
+            },
             "object/reorder": {
                 "ident": "charcoal/admin/action/object/reorder"
             },
@@ -85,6 +91,10 @@
             "object/load": {
                 "methods": [ "GET", "POST" ],
                 "ident": "charcoal/admin/action/object/load"
+            },
+            "selectize/load": {
+                "methods": [ "GET", "POST" ],
+                "ident": "charcoal/admin/action/selectize/load"
             },
             "widget/load": {
                 "ident": "charcoal/admin/action/widget/load"

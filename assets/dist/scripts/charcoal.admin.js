@@ -1757,7 +1757,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
 {
     // Scope
     var that = this,
-        $container = this.element().find('.js-attachment-container > .js-grid-container');
+        $container = this.element().find('.c-attachments_container > .js-grid-container');
 
     // Prevent multiple binds
     this.element()
@@ -2009,7 +2009,7 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
 
     var template = this.element().find('.js-attachment-template').clone();
     template.find('.js-attachment').data('id', obj.id).data('type', obj.type);
-    this.element().find('.js-attachment-container > .js-grid-container').append(template);
+    this.element().find('.c-attachments_container > .js-grid-container').append(template);
 
     return this;
 
@@ -2042,7 +2042,7 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
         group:       opts.data.group
     };
 
-    this.element().find('.js-attachment-container').find('.js-attachment').each(function (i)
+    this.element().find('.c-attachments_container').find('.js-attachment').each(function (i)
     {
         var $this = $(this);
         var id    = $this.data('id');
@@ -7412,6 +7412,7 @@ Charcoal.Admin.Property_Input_Text.prototype.remove_item_listeners = function (i
 Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
     var input      = this.$input;
     var classes    = input.attr('class');
+    var type       = input.attr('type');
     var min_length = this.min_length;
     var max_length = this.max_length;
     // var size = this.size;
@@ -7419,8 +7420,11 @@ Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
     var readonly   = this.readonly;
     var input_name = this.input_name;
 
-    var clone = $('<input type="text" />');
+    var clone = $('<input />');
 
+    if (type) {
+        clone.attr('type', type);
+    }
     if (classes) {
         clone.attr('class', classes);
     }
@@ -7434,7 +7438,7 @@ Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
         clone.attr('required', 'required');
     }
     if (readonly) {
-        clone.attr('read_only', 'read_only');
+        clone.attr('readonly', 'readonly');
     }
     if (val) {
         clone.val(val);

@@ -280,6 +280,7 @@ Charcoal.Admin.Property_Input_Text.prototype.remove_item_listeners = function (i
 Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
     var input      = this.$input;
     var classes    = input.attr('class');
+    var type       = input.attr('type');
     var min_length = this.min_length;
     var max_length = this.max_length;
     // var size = this.size;
@@ -287,8 +288,11 @@ Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
     var readonly   = this.readonly;
     var input_name = this.input_name;
 
-    var clone = $('<input type="text" />');
+    var clone = $('<input />');
 
+    if (type) {
+        clone.attr('type', type);
+    }
     if (classes) {
         clone.attr('class', classes);
     }
@@ -302,7 +306,7 @@ Charcoal.Admin.Property_Input_Text.prototype.input_clone = function (val) {
         clone.attr('required', 'required');
     }
     if (readonly) {
-        clone.attr('read_only', 'read_only');
+        clone.attr('readonly', 'readonly');
     }
     if (val) {
         clone.val(val);

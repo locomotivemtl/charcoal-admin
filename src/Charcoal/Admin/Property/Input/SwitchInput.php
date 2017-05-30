@@ -7,6 +7,9 @@ use \InvalidArgumentException;
 // Intra-module (`charcoal-admin`) dependencies
 use \Charcoal\Admin\Property\AbstractPropertyInput;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\Translation;
+
 /**
  * Switch Input Property
  *
@@ -14,6 +17,20 @@ use \Charcoal\Admin\Property\AbstractPropertyInput;
  */
 class SwitchInput extends AbstractPropertyInput
 {
+    /**
+     * The label, for "On".
+     *
+     * @var \Charcoal\Translator\Translation
+     */
+    private $switchOnText;
+
+    /**
+     * The label, for "Off".
+     *
+     * @var \Charcoal\Translator\Translation
+     */
+    private $switchOffText;
+
     /**
      * Settings for {@link http://www.bootstrap-switch.org Bootstrap Switch}.
      *
@@ -45,6 +62,52 @@ class SwitchInput extends AbstractPropertyInput
     public function value()
     {
         return $this->inputVal() ? 1 : 0;
+    }
+
+    /**
+     * @param mixed $label The "On" label.
+     * @return BooleanProperty Chainable
+     */
+    public function setswitchOnText($label)
+    {
+        $this->switchOnText = $this->translator()->translation($label);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function switchOnText()
+    {
+        if ($this->switchOnText === null) {
+            // Default value
+            $this->setSwitchOnText($this->property()->trueLabel());
+        }
+        return $this->switchOnText;
+    }
+
+    /**
+     * @param mixed $label The "Off" label.
+     * @return BooleanProperty Chainable
+     */
+    public function setswitchOffText($label)
+    {
+        $this->switchOffText = $this->translator()->translation($label);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function switchOffText()
+    {
+        if ($this->switchOffText === null) {
+            // Default value
+            $this->setSwitchOffText($this->property()->falseLabel());
+        }
+        return $this->switchOffText;
     }
 
     /**
@@ -122,7 +185,10 @@ class SwitchInput extends AbstractPropertyInput
      */
     public function defaultSwitchOptions()
     {
-        return [];
+        return [
+            'onText' => (string)$this->switchOnText(),
+            'offText' => (string)$this->switchOffText()
+        ];
     }
 
     /**

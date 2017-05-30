@@ -1698,7 +1698,6 @@ textarea.form-control {
   border-radius: 4px; }
 
 .c-structure_entry_content > .o-section:last-child,
-.c-structure_entry_content > .o-section:last-child > .row:last-child > div > .form-group,
 .c-structure--bordered .c-structure_entry_content > .o-section {
   margin-bottom: 0; }
 

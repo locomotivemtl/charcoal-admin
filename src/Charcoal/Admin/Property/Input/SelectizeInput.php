@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use Charcoal\Admin\Property\Input\SelectInput;
+use Charcoal\Admin\Service\SelectizeRenderer;
 use Charcoal\Model\ModelInterface;
-use Charcoal\Translator\Translation;
+use Charcoal\Property\AbstractProperty;
 use \RuntimeException;
 use \InvalidArgumentException;
 
@@ -19,9 +19,6 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
 use Charcoal\Property\ObjectProperty;
-
-// From 'charcoal-admin'
-use Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
  * Tags Input Property
@@ -93,6 +90,16 @@ class SelectizeInput extends SelectInput
     protected $isChoiceObjMapFinalized = false;
 
     /**
+     * @var array
+     */
+    private $selectizeTemplates;
+
+    /**
+     * @var SelectizeRenderer
+     */
+    private $selectizeRenderer;
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.
@@ -104,6 +111,7 @@ class SelectizeInput extends SelectInput
 
         $this->setModelFactory($container['model/factory']);
         $this->setCollectionLoader($container['model/collection/loader']);
+        $this->selectizeRenderer = $container['selectize/renderer'];
     }
 
     /**
@@ -174,7 +182,7 @@ class SelectizeInput extends SelectInput
      * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
      *
      * @todo   [^1]: With PHP7 we can simply do `yield from $choices;`.
-     * @return Generator|array
+     * @return \Generator|array
      */
     public function choices()
     {
@@ -301,7 +309,7 @@ class SelectizeInput extends SelectInput
      * This method overwrites existing helpers.
      *
      * @param  array $settings The selectize picker options.
-     * @return TagsInput Chainable
+     * @return self Chainable
      */
     public function setSelectizeOptions(array $settings)
     {
@@ -317,7 +325,7 @@ class SelectizeInput extends SelectInput
      * Merge (replacing or adding) selectize picker options.
      *
      * @param  array $settings The selectize picker options.
-     * @return TagsInput Chainable
+     * @return self Chainable
      */
     public function mergeSelectizeOptions(array $settings)
     {
@@ -348,10 +356,6 @@ class SelectizeInput extends SelectInput
         // Make sure default options are loaded.
         if ($this->selectizeOptions === null) {
             $this->selectizeOptions();
-        }
-
-        if ($key === 'options') {
-            $val = $this->parseSelectizeAvailableChoices($val);
         }
 
         $this->selectizeOptions[$key] = $val;
@@ -389,10 +393,12 @@ class SelectizeInput extends SelectInput
         }
 
         if ($this->property() instanceof ObjectProperty) {
+            $choices = iterator_to_array($this->choices());
+
             if (isset($options['options'])) {
-                $options['options'] = array_merge($options['options'], $this->selectizeVal($this->p()->choices()));
+                $options['options'] = array_merge($options['options'], $choices);
             } else {
-                $options['options'] = $this->selectizeVal($this->p()->choices());
+                $options['options'] = $choices;
             }
         }
 
@@ -431,13 +437,50 @@ class SelectizeInput extends SelectInput
     }
 
     /**
+     * @return array
+     */
+    public function selectizeTemplates()
+    {
+        return $this->selectizeTemplates;
+    }
+
+    /**
+     * @param array|object|mixed $selectizeTemplates Selectize Templates array.
+     * @throws \InvalidArgumentException If the supplied argument is not of type object.
+     * @return self
+     */
+    public function setSelectizeTemplates($selectizeTemplates)
+    {
+        if (!is_object($selectizeTemplates) && !is_array($selectizeTemplates)) {
+            throw new \InvalidArgumentException(sprintf(
+                '%s::%s given argument was of type %s instead of object',
+                __CLASS__,
+                __FUNCTION__,
+                gettype($selectizeTemplates)
+            ));
+        }
+        $this->selectizeTemplates = $selectizeTemplates;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function selectizeTemplatesAsJson()
+    {
+        return json_encode($this->selectizeTemplates());
+    }
+
+    /**
      * Convert the given value into selectize picker choices.
      *
      * @param  mixed $val     The value to parse into selectize choices.
      * @param  array $options Optional structure options.
+     * @throws InvalidArgumentException If the choice structure is missing a value.
      * @return array
      */
-    private function selectizeVal($val, array $options = [])
+    public function selectizeVal($val, array $options = [])
     {
         /** @todo Find a use for this */
         unset($options);
@@ -445,38 +488,82 @@ class SelectizeInput extends SelectInput
         $choices = [];
 
         if ($val === null) {
-            $val = $this->propertyVal();
+            return [];
         }
 
-        if ($val !== null) {
-            $prop = $this->property();
+        $prop = $this->property();
+
+        if ($prop instanceof AbstractProperty) {
             $val = $prop->parseVal($val);
 
-            if (!$prop->multiple()) {
-                $val = (array)$val;
+            if (is_string($val)) {
+                $val = explode($prop->multipleSeparator(), $val);
+            }
+        }
+
+        if (!$prop->multiple()) {
+            $val = (array)$val;
+        }
+
+        if ($prop instanceof ObjectProperty) {
+            foreach ($val as &$v) {
+                if (is_array($v)) {
+                    if (!isset($v['value'])) {
+                        throw new InvalidArgumentException('Missing [value] on choice structure.');
+                    }
+                    $v = $v['value'];
+                }
             }
 
-            if ($prop instanceof ObjectProperty) {
-                $model = $this->modelFactory()->get($prop->objType());
-                if (!$model->source()->tableExists()) {
-                    return $choices;
-                }
-                $loader = $this->collectionLoader();
-                $loader->reset()->setModel($model);
+            $model = $this->modelFactory()->get($prop->objType());
+            if (!$model->source()->tableExists()) {
+                return $choices;
+            }
+            $loader = $this->collectionLoader();
+            $loader->reset()
+                ->setModel($model)
+                ->addFilter([
+                    'property' => $model->key(),
+                    'val' => $val,
+                    'operator' => 'IN'
+                ]);
 
-                $collection = $loader->load();
+            $collection = $loader->load();
 
-                $choices = [];
-                foreach ($collection as $obj) {
-                    $choices[] = $this->mapObjToChoice($obj);
+            $selectizeTemplates = $this->selectizeTemplates();
+            $itemTemplate = isset($selectizeTemplates['item']) ? $selectizeTemplates['item'] : null;
+            $optionTemplate = isset($selectizeTemplates['option']) ? $selectizeTemplates['option'] : null;
+            $selectizeController = isset($selectizeTemplates['controller']) ?
+                $selectizeTemplates['controller'] : null;
+
+            $choices = [];
+            foreach ($collection as $obj) {
+                $c = $this->mapObjToChoice($obj);
+
+                if ($itemTemplate) {
+                    $c['item_render'] = $this->selectizeRenderer->renderTemplate(
+                        $itemTemplate,
+                        $obj,
+                        $selectizeController
+                    );
                 }
-            } else {
-                foreach ($val as $v) {
-                    $choices[] = [
-                        'value' => $v,
-                        'label'  => $v
-                    ];
+
+                if ($optionTemplate) {
+                    $c['option_render'] = $this->selectizeRenderer->renderTemplate(
+                        $optionTemplate,
+                        $obj,
+                        $selectizeController
+                    );
                 }
+
+                $choices[] = $c;
+            }
+        } else {
+            foreach ($val as $v) {
+                $choices[] = [
+                    'value' => $v,
+                    'label' => $v
+                ];
             }
         }
 
@@ -531,7 +618,7 @@ class SelectizeInput extends SelectInput
     {
         return [
             'value' => 'id',
-            'label'  => 'name:title:label:id',
+            'label' => 'name:title:label:id',
             'color' => 'color'
         ];
     }

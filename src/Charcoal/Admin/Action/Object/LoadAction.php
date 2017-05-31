@@ -97,6 +97,8 @@ class LoadAction extends AdminAction
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
 
+        $this->setData($request->getParams());
+
         $objType = $request->getParam('obj_type');
         $objId   = $request->getParam('obj_id');
 

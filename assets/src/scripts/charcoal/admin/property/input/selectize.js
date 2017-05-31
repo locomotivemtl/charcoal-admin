@@ -29,6 +29,9 @@
         this.form_ident = null;
         this.selectize_options = {};
         this.choice_obj_map = {};
+        this.selectize_property_ident = null;
+        this.selectize_obj_type = null;
+        this.selectize_templates = {};
 
         this.clipboard = null;
         this.allow_update = null;
@@ -78,6 +81,9 @@
         this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
         this.selectize_options = opts.data.selectize_options || this.selectize_options;
         this.choice_obj_map = opts.data.choice_obj_map || this.choice_obj_map;
+        this.selectize_property_ident = opts.data.selectize_property_ident || this.selectize_property_ident;
+        this.selectize_obj_type = opts.data.selectize_obj_type || this.selectize_obj_type;
+        this.selectize_templates = opts.data.selectize_templates || this.selectize_templates;
 
         this.$input = $(this.selectize_selector || '#' + this.input_id);
 
@@ -106,6 +112,7 @@
             labelField: 'label',
             searchField: ['value', 'label'],
             dropdownParent: this.$input.closest('.form-field'),
+            render: {},
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
@@ -127,6 +134,24 @@
                 });
             }
         };
+
+        if (this.selectize_templates.item) {
+            default_opts.render.item = function (item, escape) {
+                if (item.item_render) {
+                    return '<div class="item">' + item.item_render + '</div>';
+                }
+                return '<div class="item">' + escape(item[default_opts.labelField]) + '</div>';
+            }
+        }
+
+        if (this.selectize_templates.option) {
+            default_opts.render.option = function (option, escape) {
+                if (option.option_render) {
+                    return '<div class="option">' + option.option_render + '</div>';
+                }
+                return '<div class="option">' + escape(option[default_opts.labelField]) + '</div>';
+            }
+        }
 
         if (objType) {
             default_opts.create = this.create_item.bind(this);
@@ -184,6 +209,8 @@
         var submit_label = null;
         var id = opts.id || null;
         var choice_obj_map = this.choice_obj_map;
+        var selectize_property_ident = this.selectize_property_ident;
+        var selectize_obj_type = this.selectize_obj_type;
 
         // Get the form ident
         if (form_ident && typeof form_ident === 'object') {
@@ -270,21 +297,23 @@
                         obj_type: type
                     },
                     obj_id: id,
+                    extra_form_data: {
+                        selectize_obj_type: selectize_obj_type,
+                        selectize_prop_ident: selectize_property_ident
+                    },
+                    save_action: 'selectize/save',
+                    update_action: 'selectize/update',
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
 
                         var callbackOptions = {
                             class: 'new'
                         };
-                        var map = choice_obj_map;
-                        for (var prop in map) {
-                            if (map.hasOwnProperty(prop)) {
-                                var objProp = response.obj[map[prop]];
 
-                                if (objProp) {
-                                    callbackOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
-                                }
-                            }
+                        var selectizeResponse = response.selectize[0];
+
+                        if (selectizeResponse) {
+                            $.extend(true, callbackOptions, selectizeResponse);
                         }
 
                         callback(callbackOptions);
@@ -292,7 +321,7 @@
                         dialog.close();
                         if (step === 1) {
                             self.create_item(input, callback, {
-                                id: response.obj[map.value],
+                                id: selectizeResponse.value,
                                 step: 2
                             });
                         }
@@ -310,36 +339,32 @@
         var type = this.obj_type;
         // var pattern = this.pattern;
         var choice_obj_map = this.choice_obj_map;
+        var selectize_property_ident = this.selectize_property_ident;
+        var selectize_obj_type = this.selectize_obj_type;
+
+        var form_data = {
+            obj_type: type,
+            selectize_obj_type: selectize_obj_type,
+            selectize_prop_ident: selectize_property_ident
+        };
 
         $.ajax({
-            url: Charcoal.Admin.admin_url() + 'object/load',
-            data: {
-                obj_type: type
-            },
+            url: Charcoal.Admin.admin_url() + 'selectize/load',
+            data: form_data,
             type: 'GET',
             error: function () {
                 callback();
             },
-            success: function (res) {
+            success: function (response) {
                 var items = [];
 
-                for (var item in res.collection) {
-                    if (res.collection.hasOwnProperty(item)) {
-                        item = res.collection[item];
+                var selectizeResponse = response.selectize;
 
-                        var itemOptions = {};
-                        var map = choice_obj_map;
-                        for (var prop in map) {
-                            if (map.hasOwnProperty(prop)) {
-                                var objProp = item[map[prop]];
+                for (var item in selectizeResponse) {
+                    if (selectizeResponse.hasOwnProperty(item)) {
+                        item = selectizeResponse[item];
 
-                                if (objProp) {
-                                    itemOptions[prop] = objProp[Charcoal.Admin.lang()] || objProp;
-                                }
-                            }
-                        }
-
-                        items.push(itemOptions);
+                        items.push(item);
                     }
                 }
                 callback(items);

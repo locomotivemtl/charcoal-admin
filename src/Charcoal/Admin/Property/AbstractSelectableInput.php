@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Property;
 
+use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewInterface;
 use Closure;
 use DateTimeInterface;
 use InvalidArgumentException;
@@ -70,9 +72,9 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
         }
 
         if (isset($choice['label'])) {
-            $choice['label'] = $this->translator()->translation($choice['label']);
+            $choice['label'] = (string)$this->translator()->translation($choice['label']);
         } else {
-            $choice['label'] = $this->translator()->translation($choice['value']);
+            $choice['label'] = (string)$this->translator()->translation($choice['value']);
         }
 
         $choice['checked'] = $this->isChoiceSelected($choice);
@@ -199,9 +201,50 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     }
 
     /**
+     * Render the given object.
+     *
+     * @param  ModelInterface|ViewableInterface $obj  The object or view to render as a label.
+     * @param  string|null                      $prop Optional. The render pattern to render.
+     * @throws InvalidArgumentException If the prop is not a string.
+     * @return mixed|string
+     */
+    protected function renderChoiceObjMap($obj, $prop)
+    {
+        if (!is_string($prop)) {
+            throw new InvalidArgumentException(
+                'The render pattern must be a string.'
+            );
+        }
+
+        if ($prop === '') {
+            return '';
+        }
+
+        if (strpos($prop, '{{') === false) {
+            if (isset($obj[$prop])) {
+                return $this->parseChoiceVal($obj[$prop]);
+            }
+        }
+
+        if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {
+            return $obj->renderTemplate($prop);
+        } else {
+            $callback = function ($matches) use ($obj) {
+                $prop = trim($matches[1]);
+                if (isset($obj[$prop])) {
+                    return $this->parseChoiceVal($obj[$prop]);
+                }
+                return [];
+            };
+
+            return preg_replace_callback('~\{\{\s*(.*?)\s*\}\}~i', $callback, $prop);
+        }
+    }
+
+    /**
      * Convert the given object into a choice structure.
      *
-     * @param  array|\ArrayAccess $obj The object to map to a choice.
+     * @param  array|\ArrayAccess|ModelInterface $obj The object to map to a choice.
      * @return array
      */
     public function mapObjToChoice($obj)
@@ -215,10 +258,8 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
 
             $props = explode(':', $props);
             foreach ($props as $prop) {
-                if (isset($obj[$prop])) {
-                    $choice[$key] = $this->parseChoiceVal($obj[$prop]);
-                    break;
-                }
+                $choice[$key] = $this->renderChoiceObjMap($obj, $prop);
+                break;
             }
         }
 

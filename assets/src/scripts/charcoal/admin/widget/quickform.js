@@ -10,6 +10,11 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.widget_type = 'charcoal/admin/widget/quick-form';
     this.save_callback = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
+
+    this.save_action   = opts.save_action || 'object/save';
+    this.update_action = opts.update_action || 'object/update';
+    this.extra_form_data = opts.extra_form_data || {};
+
     this.form_working = false;
     this.suppress_feedback = opts.suppress_feedback || false;
     this.is_new_object = false;
@@ -68,6 +73,14 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     form_data = new FormData(form);
 
     this.disable_form($form, $trigger);
+
+    var extraFormData = this.extra_form_data;
+
+    for (var data in extraFormData) {
+        if (extraFormData.hasOwnProperty(data)){
+            form_data.append(data, extraFormData[data]);
+        }
+    }
 
     this.xhr = $.ajax({
         type: 'POST',

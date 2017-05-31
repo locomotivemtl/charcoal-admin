@@ -53,7 +53,7 @@
             data: {
                 title                 : '{{ label }}',
                 translations          : {
-                    statusTemplate: '{{#_t}}Step [[ current ]] of [[ total ]]{{/_t}}',
+                    statusTemplate: '{{#_t}}Step [[ current ]] of [[ total ]]{{/_t}}'
                 },
                 {{# property.objType }}
                     pattern           : '{{ pattern }}',
@@ -72,7 +72,10 @@
                 selectize_selector    : '#{{ inputId }}',
                 form_ident            : {{& formIdentAsJson}},
                 selectize_options     : {{& selectizeOptionsAsJson }},
-                choice_obj_map        : {{& choiceObjMapAsJson }}
+                choice_obj_map        : {{& choiceObjMapAsJson }},
+                selectize_property_ident : '{{& property.ident }}',
+                selectize_obj_type       : '{{& objType }}',
+                selectize_templates   : {{& selectizeTemplatesAsJson }}
             }
         });
     </script>

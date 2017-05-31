@@ -27,26 +27,6 @@ class LoadAction extends DefaultLoadAction
     }
 
     /**
-     * Sets the entity data, from associative array map (or any other Traversable).
-     *
-     * This function takes an array and fill the property with its value.
-     *
-     * @param array $data The entity data. Will call setters.
-     * @return self Chainable
-     * @see self::offsetSet()
-     */
-    public function setData(array $data)
-    {
-        parent::setData($data);
-
-        if (isset($data['selectize_input_ident'])) {
-            error_log(var_export($data['selectize_prop_ident'], true));
-        }
-
-        return $this;
-    }
-
-    /**
      * Fetch ids from Object Collection.
      *
      * @return array

@@ -4,6 +4,7 @@ namespace Charcoal\Admin\ServiceProvider;
 
 // From Pimple
 use Charcoal\Admin\Service\SelectizeRenderer;
+use Charcoal\Factory\FactoryInterface;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -193,10 +194,10 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container['property/input/factory'] = function (Container $container) {
             return new Factory([
                 'base_class'       => PropertyInputInterface::class,
-                'arguments'        => [ [
+                'arguments'        => [[
                     'container' => $container,
                     'logger'    => $container['logger']
-                ] ],
+                ]],
                 'resolver_options' => [
                     'suffix' => 'Input'
                 ]
@@ -210,10 +211,10 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container['property/display/factory'] = function (Container $container) {
             return new Factory([
                 'base_class'       => PropertyDisplayInterface::class,
-                'arguments'        => [ [
+                'arguments'        => [[
                     'container' => $container,
                     'logger'    => $container['logger']
-                ] ],
+                ]],
                 'resolver_options' => [
                     'suffix' => 'Display'
                 ]
@@ -228,12 +229,12 @@ class AdminServiceProvider implements ServiceProviderInterface
             return new Factory([
                 'base_class'       => SidemenuGroupInterface::class,
                 'default_class'    => GenericSidemenuGroup::class,
-                'arguments'        => [ [
+                'arguments'        => [[
                     'container'      => $container,
                     'logger'         => $container['logger'],
                     'view'           => $container['view'],
                     'layout_builder' => $container['layout/builder']
-                ] ],
+                ]],
                 'resolver_options' => [
                     'suffix' => 'SidemenuGroup'
                 ]
@@ -254,9 +255,9 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container->extend('view/mustache/helpers', function (array $helpers, Container $container) {
             $adminUrl = clone $container['base-url'];
             if ($container['admin/config']['base_path']) {
-                $basePath = rtrim($adminUrl->getBasePath(), '/');
+                $basePath  = rtrim($adminUrl->getBasePath(), '/');
                 $adminPath = ltrim($container['admin/config']['base_path'], '/');
-                $adminUrl = $adminUrl->withBasePath($basePath.'/'.$adminPath);
+                $adminUrl  = $adminUrl->withBasePath($basePath.'/'.$adminPath);
             }
 
             $urls = [
@@ -284,14 +285,14 @@ class AdminServiceProvider implements ServiceProviderInterface
                     } else {
                         $parts = parse_url($uri);
                         if (!isset($parts['scheme'])) {
-                            if (!in_array($uri[0], [ '/', '#', '?' ])) {
-                                $path = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
+                            if (!in_array($uri[0], ['/', '#', '?'])) {
+                                $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
                                 $query = isset($parts['query']) ? $parts['query'] : '';
-                                $hash = isset($parts['fragment']) ? $parts['fragment'] : '';
+                                $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
 
                                 return $adminUrl->withPath($path)
-                                    ->withQuery($query)
-                                    ->withFragment($hash);
+                                                ->withQuery($query)
+                                                ->withFragment($hash);
                             }
                         }
                     }

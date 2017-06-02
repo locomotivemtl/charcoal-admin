@@ -517,18 +517,18 @@ trait RoutableTrait
      */
     public function url($lang = null)
     {
-        $url = (string)$this->getLatestObjectRoute($lang)->slug();
-        if ($url) {
-            return $url;
-        }
-
         $slug = $this->slug();
 
         if ($slug instanceof Translation && $lang) {
             return $slug[$lang];
         }
 
-        return (string)$slug;
+        if ($slug) {
+            return $slug;
+        }
+
+        $url = (string)$this->getLatestObjectRoute($lang)->slug();
+        return $url;
     }
 
     /**

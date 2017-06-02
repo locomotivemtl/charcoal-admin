@@ -14,7 +14,9 @@
            data-toggle="tab"
            data-tab-ident="{{ident}}"
            aria-controls="form_group_{{ widgetId }}">
+            {{# showIcon }}
             {{# icon }}<span class="tab-icon fa fa-{{ . }}" aria-hidden="true"></span>{{/ icon }}
+            {{/ showIcon }}
             {{# showTitle }}
             <span class="tab-title">{{& title }}</span>
             {{/ showTitle }}

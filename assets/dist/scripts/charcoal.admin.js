@@ -5778,7 +5778,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     return '<div class="item">' + item.item_render + '</div>';
                 }
                 return '<div class="item">' + escape(item[default_opts.labelField]) + '</div>';
-            }
+            };
         }
 
         if (this.selectize_templates.option) {
@@ -5787,7 +5787,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     return '<div class="option">' + option.option_render + '</div>';
                 }
                 return '<div class="option">' + escape(option[default_opts.labelField]) + '</div>';
-            }
+            };
         }
 
         if (objType) {
@@ -5845,7 +5845,6 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         var form_ident = this.form_ident;
         var submit_label = null;
         var id = opts.id || null;
-        var choice_obj_map = this.choice_obj_map;
         var selectize_property_ident = this.selectize_property_ident;
         var selectize_obj_type = this.selectize_obj_type;
 
@@ -5974,8 +5973,6 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
     Selectize.prototype.load_items = function (query, callback) {
         var type = this.obj_type;
-        // var pattern = this.pattern;
-        var choice_obj_map = this.choice_obj_map;
         var selectize_property_ident = this.selectize_property_ident;
         var selectize_obj_type = this.selectize_obj_type;
 

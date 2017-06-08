@@ -400,6 +400,14 @@ class SelectizeInput extends SelectInput
             } else {
                 $options['options'] = $choices;
             }
+
+            $items = $this->propertyVal();
+
+            if (isset($options['items'])) {
+                $options['items'] = array_merge($options['items'], $items);
+            } else {
+                $options['items'] = $items;
+            }
         }
 
         return $options;

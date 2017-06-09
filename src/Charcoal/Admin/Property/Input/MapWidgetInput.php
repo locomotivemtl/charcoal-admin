@@ -46,6 +46,10 @@ class MapWidgetInput extends AbstractPropertyInput
         } elseif (isset($appConfig['apis.google.map.key'])) {
             $this->setApiKey($appConfig['apis.google.map.key']);
         }
+
+        if (isset($appConfig['alert.map.map'])) {
+            $this->setMapOptions($appConfig['alert.map.map']);
+        }
     }
 
     /**
@@ -85,8 +89,12 @@ class MapWidgetInput extends AbstractPropertyInput
             $this->setApiKey($settings['api_key']);
         }
 
-        $this->mapOptions = array_merge($this->defaultMapOptions(), $settings);
+        if ($this->mapOptions) {
+            $this->mapOptions = array_merge($this->mapOptions, $settings);
+        } else {
 
+            $this->mapOptions = array_merge($this->defaultMapOptions(), $settings);
+        }
         return $this;
     }
 
@@ -147,7 +155,6 @@ class MapWidgetInput extends AbstractPropertyInput
         if ($this->mapOptions === null) {
             $this->mapOptions = $this->defaultMapOptions();
         }
-
         return $this->mapOptions;
     }
 

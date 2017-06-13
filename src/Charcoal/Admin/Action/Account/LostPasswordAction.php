@@ -274,7 +274,7 @@ class LostPasswordAction extends AdminAction
         $emailObj->setData([
             'campaign'          => 'admin.lost-password',
             'to'                => $userEmail,
-            'subject'           => $subject,
+            'subject'           => (string)$subject,
             'from'              => $from,
             'log'               => true,
             'template_ident'    => 'charcoal/admin/email/user.lost-password',

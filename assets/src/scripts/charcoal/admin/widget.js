@@ -186,24 +186,30 @@ Charcoal.Admin.Widget.prototype.reload = function (callback) {
     // Response from the reload action should always include a
     // widget_id and widget_html in order to work accordingly.
     // @todo add nice styles and stuffs.
-    $.post(url, data, function (response) {
-        if (typeof response.widget_id === 'string') {
-            that.set_id(response.widget_id);
-            that.anim_out(function () {
-                that.element().replaceWith(response.widget_html);
-                that.set_element($('#' + that.id()));
+    $.ajax({
+        type:        'POST',
+        url:         url,
+        data:        JSON.stringify(data),
+        dataType:    'json',
+        contentType: 'application/json',
+        success: function (response) {
+            if (typeof response.widget_id === 'string') {
+                that.set_id(response.widget_id);
+                that.anim_out(function () {
+                    that.element().replaceWith(response.widget_html);
+                    that.set_element($('#' + that.id()));
 
-                // Pure dompe.
-                that.element().hide().fadeIn();
-                that.init();
-            });
+                    // Pure dompe.
+                    that.element().hide().fadeIn();
+                    that.init();
+                });
+            }
+            // Callback
+            if (typeof callback === 'function') {
+                callback.call(that, response);
+            }
         }
-        // Callback
-        if (typeof callback === 'function') {
-            callback.call(that, response);
-        }
-    }, 'json');
-
+    });
 };
 
 /**

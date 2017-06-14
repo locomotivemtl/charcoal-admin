@@ -1,9 +1,23 @@
+{{!--
+Loop notifications, by object types.
+--}}
 {{# objects }}
-<div>
-    <strong>{{# _t }}Date:{{/ _t }}</strong> {{ dateStr }}<br>
-    <strong>{{# _t }}Author:{{/ _t }}</strong> {{ userObject.username }} ({{ userObject.email }})
-    <strong>{{# _t }}Object Type:{{/ _t }}</strong> {{ targetType }}<br>
-    <strong>{{# _t }}Object ID:{{/ _t }}</strong> {{ targetId }}
-    <strong>{{# _t }}№ Properties:{{/ _t }}</strong> {{ numProperties }}
-</div>
+    <h4>{{# _t }}{{ num }} object(s) of type <em>{{ type }}</em>{{/ _t }}</h4>
+    {{# objects }}
+        <div>
+            <p><strong>{{# _t }}Date:{{/ _t }}</strong> {{ dateStr }}</p>
+            <p><strong>{{# _t }}Author:{{/ _t }}</strong> {{ userObject.username }} ({{ userObject.email }})</p>
+            <p><strong>{{# _t }}Object Type:{{/ _t }}</strong> {{ targetType }}</p>
+            <p><strong>{{# _t }}Object ID:{{/ _t }}</strong> {{ targetId }}</p>
+            <p><strong>{{# _t }}№ Properties:{{/ _t }}</strong> {{ numProperties }}</p>
+
+            {{# publicUrl }}
+                <p><strong>{{# _t }}URL: {{/ _t }}<a href="{{ publicUrl }}">{{ publicUrl }}</a></p>
+            {{/ publicUrl }}
+
+            {{# charcoalUrl }}
+                <p><a href="{{ charcoalUrl }}">{{# _t }}Voir dans Charcoal{{/ _t }}</a></p>
+            {{/ charcoalUrl }}
+        </div>
+    {{/ objects }}
 {{/ objects }}

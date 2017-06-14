@@ -146,19 +146,38 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         if (empty($notification->targetTypes())) {
             return;
         }
+        $objectsByTypes = [];
+        $numTotal = 0;
         foreach ($notification->targetTypes() as $objType) {
+            $objType = trim($objType);
             $objects = $this->updatedObjects($objType);
-            $this->sendEmail($notification, $objects);
+            $num = count($objects);
+            if ($num == 0) {
+                continue;
+            }
+            $obj = [];
+            $obj['objects'] = $objects;
+            $obj['num'] = $num;
+            $obj['type'] = $objType;
+
+            $objectsByTypes[$objType] = $obj;
+            $numTotal += $num;
         }
+        $this->sendEmail($notification, $objectsByTypes, $numTotal);
     }
 
     /**
-     * @param Notification        $notification The notification object.
-     * @param CollectionInterface $objects      The objects that were modified.
+     * @param Notification $notification The notification object.
+     * @param array        $objects      The objects that were modified.
+     * @param integer      $numTotal     Total number of modified objects.
      * @return void
      */
-    private function sendEmail(Notification $notification, CollectionInterface $objects)
+    private function sendEmail(Notification $notification, array $objects, $numTotal)
     {
+        if ($numTotal == 0) {
+            return;
+        }
+
         $email = $this->emailFactory->create('email');
 
         $defaultEmailData = [
@@ -166,8 +185,8 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             'subject'       => 'Charcoal Notification',
             'from'          => 'charcoal@example.com',
             'template_data' => [
-                'objects'       => $objects,
-                'numObjects'    => count($objects),
+                'objects'       => new \ArrayIterator($objects),
+                'numObjects'    => $numTotal,
                 'frequency'     => $this->frequency(),
                 'startString'   => $this->startDate()->format('Y-m-d H:i:s'),
                 'endString'     => $this->endDate()->format('Y-m-d H:i:s')
@@ -180,16 +199,16 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         foreach ($notification->users() as $userId) {
             $user = $this->userFactory->create(User::class);
             $user->load($userId);
-            $email->setTo($user->email());
-            $email->queue();
-            $email->send();
+            if (!$user->id() || !$user->email()) {
+                continue;
+            }
+            $email->addTo($user->email());
         }
 
         foreach ($notification->extraEmails() as $extraEmail) {
-            $email->setTo($extraEmail);
-            $email->queue();
-            $email->send();
+            $email->addBcc($extraEmail);
         }
+        $email->send();
     }
 
     /**
@@ -223,11 +242,19 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         ]);
         $objFactory = $this->objectFactory;
         $userFactory = $this->userFactory;
-        $loader->setCallback(function (&$obj) use ($objFactory, $userFactory) {
+        $baseUrl = $this->baseUrl;
+
+        $loader->setCallback(function (&$obj) use ($objFactory, $userFactory, $baseUrl) {
             $obj->dateStr = $obj['rev_ts']->format('Y-m-d H:i:s');
             $obj->numProperties = count($obj->dataDiff());
             $obj->targetObject = $objFactory->create($obj['target_type'])->load($obj['target_id']);
             $obj->userObject = $userFactory->create(User::class)->load($obj['rev_user']);
+            $obj->publicUrl = is_callable([$obj->targetObject, 'url']) ? $baseUrl.$obj->targetObject->url() : null;
+            $obj->charcoalUrl = sprintf(
+                $baseUrl.'admin/object/edit?obj_type=%s&obj_id=%s',
+                $obj['target_type'],
+                $obj['target_id']
+            );
         });
         return $loader->load();
     }
@@ -286,9 +313,9 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     abstract protected function endDate();
 
     /**
-     * @param Notification        $notification The notification object.
-     * @param CollectionInterface $objects      The objects that were modified.
+     * @param Notification $notification The notification object.
+     * @param array        $objects      The objects that were modified.
      * @return array
      */
-    abstract protected function emailData(Notification $notification, CollectionInterface $objects);
+    abstract protected function emailData(Notification $notification, array $objects);
 }

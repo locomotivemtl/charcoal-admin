@@ -49,11 +49,11 @@ class ProcessHourlyScript extends AbstractNotificationScript
     }
 
     /**
-     * @param Notification        $notification The notification object.
-     * @param CollectionInterface $objects      The objects that were modified.
+     * @param Notification $notification The notification object.
+     * @param array        $objects      The objects that were modified.
      * @return array
      */
-    protected function emailData(Notification $notification, CollectionInterface $objects)
+    protected function emailData(Notification $notification, array $objects)
     {
         return [
             'subject'         => sprintf('Hourly Charcoal Notification - %s', $this->startDate()->format('Y-m-d H:m')),

@@ -97,6 +97,7 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         font-family: $font-family-base;
         font-size:   $font-size-base;
         line-height: $line-height-base;
+        min-height:  32px;
 
         img,
         svg {
@@ -105,15 +106,25 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         }
     }
 
-    .panel-actions {
+    .panel-actions,
+    .dropdown-menu {
         .glyphicon {
             vertical-align: text-top;
         }
+        .fa {
+            width: rem(20px);
+            text-align: left;
+        }
+    }
+
+    .panel-title .fa {
+        width: rem(50px);
+        text-align: center;
     }
 
     .panel-actions-float {
         position: absolute;
-        top:      ceil($font-size * 0.25);
+        top:      0;
         left:     100% + $c-attachment-gutter-width;
         width:    $c-attachment-aside-width;
     }

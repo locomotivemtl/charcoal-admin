@@ -92,7 +92,6 @@ class MapWidgetInput extends AbstractPropertyInput
         if ($this->mapOptions) {
             $this->mapOptions = array_merge($this->mapOptions, $settings);
         } else {
-
             $this->mapOptions = array_merge($this->defaultMapOptions(), $settings);
         }
         return $this;

@@ -14,11 +14,16 @@ use Charcoal\App\Script\AbstractScript;
 // Module `charcoal-property` dependencies
 use Charcoal\Property\PropertyInterface;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\TranslatorAwareTrait;
+
 /**
  *
  */
 abstract class AdminScript extends AbstractScript
 {
+    use TranslatorAwareTrait;
+
     /**
      * @var FactoryInterface $modelFactory
      */
@@ -31,6 +36,8 @@ abstract class AdminScript extends AbstractScript
     public function setDependencies(Container $container)
     {
         $this->modelFactory = $container['model/factory'];
+        $this->setTranslator($container['translator']);
+        
         parent::setDependencies($container);
     }
 

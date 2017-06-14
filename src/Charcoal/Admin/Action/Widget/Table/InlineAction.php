@@ -180,13 +180,11 @@ class InlineAction extends AdminAction
      * Set the widget factory.
      *
      * @param  FactoryInterface $factory The factory to create widgets.
-     * @return self
+     * @return void
      */
-    protected function setWidgetFactory(FactoryInterface $factory)
+    private function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
-
-        return $this;
     }
 
     /**

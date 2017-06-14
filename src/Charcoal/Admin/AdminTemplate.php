@@ -773,7 +773,7 @@ class AdminTemplate extends AbstractTemplate implements
      * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
      * @return void
      */
-    protected function setWidgetFactory(FactoryInterface $factory)
+    private function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
     }

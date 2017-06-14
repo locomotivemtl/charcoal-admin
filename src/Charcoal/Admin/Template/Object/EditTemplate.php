@@ -44,7 +44,6 @@ class EditTemplate extends AdminTemplate implements
         $this->setModelFactory($container['model/factory']);
 
         // Required dependencies.
-        $this->setWidgetFactory($container['widget/factory']);
         $this->dashboardBuilder = $container['dashboard/builder'];
     }
 

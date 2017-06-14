@@ -43,7 +43,6 @@ class CollectionTemplate extends AdminTemplate implements
         $this->setCollectionLoader($container['model/collection/loader']);
 
         // Required dashboard dependencies.
-        $this->setWidgetFactory($container['widget/factory']);
         $this->setDashboardBuilder($container['dashboard/builder']);
     }
 

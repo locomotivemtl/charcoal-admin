@@ -277,13 +277,11 @@ class LoadAction extends AdminAction
      * Set the widget renderer.
      *
      * @param  ViewInterface $view The view renderer to create widgets.
-     * @return self
+     * @return void
      */
-    protected function setWidgetView(ViewInterface $view)
+    private function setWidgetView(ViewInterface $view)
     {
         $this->widgetView = $view;
-
-        return $this;
     }
 
     /**
@@ -305,13 +303,11 @@ class LoadAction extends AdminAction
      * Set the widget factory.
      *
      * @param  FactoryInterface $factory The factory to create widgets.
-     * @return self
+     * @return void
      */
-    protected function setWidgetFactory(FactoryInterface $factory)
+    private function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
-
-        return $this;
     }
 
     /**

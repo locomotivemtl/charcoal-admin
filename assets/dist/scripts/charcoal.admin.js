@@ -1796,8 +1796,9 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     that.reload();
                 });
             } else {
-                var title = $(this).data('title') || attachmentWidgetL10n.editObject;
-                that.create_attachment(type, 0, null, { title: title }, function (response) {
+                var title = $(this).data('title') || attachmentWidgetL10n.editObject,
+                skip_form = $(this).data('skip-form');
+                that.create_attachment(type, 0, null, { title: title, skipForm:skip_form }, function (response) {
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
@@ -1851,22 +1852,28 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     });
                     break;
 
+                    console.log(_this);
+
                 case 'add-object':
                     var attachment_title = _this.data('title'),
                         attachment_type  = _this.data('attachment'),
                         container_type   = _this.data('type'),
                         container_id     = _this.data('id'),
                         container_group  = _this.data('group'),
+                        skip_form        = _this.data('skip-form'),
                         container_struct = {
                             id:    container_id,
                             type:  container_type,
-                            group: container_group
+                            group: container_group,
+                            skipForm: skip_form
                         };
 
                     that.create_attachment(
                         attachment_type,
                         0,
-                        { title: attachment_title },
+                        {
+                            title: attachment_title
+                        },
                         container_struct,
                         function (response) {
                             if (response.success) {
@@ -1921,6 +1928,29 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             obj_id:   opts.data.obj_id,
             group:    opts.data.group
         };
+    }
+
+    // Skip quick form
+    if (customOpts.skipForm) {
+        this.xhr = $.ajax({
+            type: 'POST',
+            url: 'object/save',
+            data: {
+                obj_type:  type,
+                obj_id:    id,
+                pivot:     parent
+            }
+        });
+
+        this.xhr.done((response) => {
+            if (response.feedbacks) {
+                Charcoal.Admin.feedback(response.feedbacks).dispatch();
+            }
+            callback(response);
+        });
+
+        Charcoal.Admin.manager().render();
+        return;
     }
 
     var defaultOpts = {

@@ -190,8 +190,6 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     });
                     break;
 
-                    console.log(_this);
-
                 case 'add-object':
                     var attachment_title = _this.data('title'),
                         attachment_type  = _this.data('attachment'),
@@ -280,7 +278,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             }
         });
 
-        this.xhr.done((response) => {
+        this.xhr.done(function (response) {
             if (response.feedbacks) {
                 Charcoal.Admin.feedback(response.feedbacks).dispatch();
             }

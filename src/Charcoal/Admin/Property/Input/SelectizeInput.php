@@ -402,12 +402,14 @@ class SelectizeInput extends SelectInput
             }
 
             $items = $this->propertyVal();
-
-            if (isset($options['items'])) {
-                $options['items'] = array_merge($options['items'], $items);
-            } else {
-                $options['items'] = $items;
+            if (count($items) === 1) {
+                $items = [$items];
             }
+
+            if (!isset($options['items'])) {
+                $options['items'] = [];
+            }
+            $options['items'] = array_merge($options['items'], $items);
         }
 
         return $options;

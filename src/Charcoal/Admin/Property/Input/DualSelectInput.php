@@ -2,10 +2,11 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
+use OutOfBoundsException;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Property\AbstractSelectableInput;
+use Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
  * List Builder Input Property
@@ -17,6 +18,17 @@ use \Charcoal\Admin\Property\AbstractSelectableInput;
  */
 class DualSelectInput extends AbstractSelectableInput
 {
+    const ROWS_INPUT_LAYOUT    = 'rows';
+    const COLS_INPUT_LAYOUT    = 'cols';
+    const DEFAULT_INPUT_LAYOUT = self::COLS_INPUT_LAYOUT;
+
+    /**
+     * How the dual-select controls should be displayed.
+     *
+     * @var string|null
+     */
+    private $inputLayout;
+
     /**
      * Whether the lists can be filtered.
      *
@@ -149,6 +161,96 @@ class DualSelectInput extends AbstractSelectableInput
         }
 
         return $this->reorderable;
+    }
+
+    /**
+     * Set the property's input layout.
+     *
+     * @param  string $layout The layout for the tickable elements.
+     * @throws InvalidArgumentException If the given layout is invalid.
+     * @throws OutOfBoundsException If the given layout is unsupported.
+     * @return AbstractTickableInput Chainable
+     */
+    public function setInputLayout($layout)
+    {
+        if ($layout === null) {
+            $this->inputLayout = null;
+
+            return $this;
+        }
+
+        if (!is_string($layout)) {
+            throw new InvalidArgumentException(sprintf(
+                'Layout must be a string, received %s',
+                (is_object($layout) ? get_class($layout) : gettype($layout))
+            ));
+        }
+
+        $supportedLayouts = $this->supportedInputLayouts();
+        if (!in_array($layout, $supportedLayouts)) {
+            throw new OutOfBoundsException(sprintf(
+                'Unsupported layout [%s]; must be one of %s',
+                $layout,
+                implode(', ', $supportedLayouts)
+            ));
+        }
+
+        $this->inputLayout = $layout;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the property's input layout.
+     *
+     * @return string|null
+     */
+    public function inputLayout()
+    {
+        if ($this->inputLayout === null) {
+            return $this->defaultInputLayout();
+        }
+
+        return $this->inputLayout;
+    }
+
+    /**
+     * Retrieve the input layouts; for templating.
+     *
+     * @return array
+     */
+    public function inputLayouts()
+    {
+        $supported = $this->supportedInputLayouts();
+        $layouts   = [];
+        foreach ($supported as $layout) {
+            $layouts[$layout] = ($layout === $this->inputLayout());
+        }
+
+        return $layouts;
+    }
+
+    /**
+     * Retrieve the supported input layouts.
+     *
+     * @return array
+     */
+    protected function supportedInputLayouts()
+    {
+        return [
+            self::COLS_INPUT_LAYOUT,
+            self::ROWS_INPUT_LAYOUT
+        ];
+    }
+
+    /**
+     * Retrieve the default input layout.
+     *
+     * @return array
+     */
+    protected function defaultInputLayout()
+    {
+        return static::DEFAULT_INPUT_LAYOUT;
     }
 
     /**

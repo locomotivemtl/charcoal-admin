@@ -4,8 +4,8 @@
 
     `charcoal/admin/property/input/dual-select`
 --}}
-<div class="row c-dualselect bootstrap-multiselect">
-    <div class="c-dualselect_list -left col-xs-5">
+<div class="row c-dualselect{{# inputLayouts.rows }} c-dualselect--vertical{{/ inputLayouts.rows }} bootstrap-multiselect">
+    <div class="c-dualselect_list col-sm-5">
         <label class="sr-only" for="{{ inputId }}">{{# _t }}Unselected Options{{/ _t }}</label>
 
         {{# searchable }}
@@ -20,11 +20,11 @@
         </select>
     </div>
 
-    <div class="c-dualselect_transfer col-xs-2">
+    <div class="c-dualselect_transfer col-sm-2">
         {{> charcoal/admin/property/input/dual-select/transfer }}
     </div>
 
-    <div class="c-dualselect_list -right col-xs-5">
+    <div class="c-dualselect_list col-sm-5">
         <label class="sr-only" for="{{ inputId }}_to">{{# _t }}Selected Options{{/ _t }}</label>
 
         {{# searchable }}

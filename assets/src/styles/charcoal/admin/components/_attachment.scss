@@ -107,7 +107,9 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
     }
 
     .panel-actions,
-    .dropdown-menu {
+    .dropdown-menu,
+    .panel-title,
+    .panel-body {
         .glyphicon {
             vertical-align: text-top;
         }
@@ -115,11 +117,12 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
             width: rem(20px);
             text-align: left;
         }
-    }
-
-    .panel-title .fa {
-        width: rem(50px);
-        text-align: center;
+        .fa.-wide {
+            width: rem(50px);
+        }
+        .fa.-center {
+            text-align: center;
+        }
     }
 
     .panel-actions-float {

@@ -53,6 +53,7 @@
         this.init_selectize();
         this.init_clipboard();
         this.init_allow_update();
+        this.init_allow_create();
 
         var self = this;
 
@@ -71,6 +72,7 @@
         // Enables the copy button
         this.copy_items = opts.data.copy_items || this.copy_items;
         this.allow_update = opts.data.allow_update || this.allow_update;
+        this.allow_create = opts.data.allow_create || this.allow_create;
         this.title = opts.data.title || this.title;
         this.translations = opts.data.translations || this.translations;
         this.pattern = opts.data.pattern || this.pattern;
@@ -375,6 +377,26 @@
         var $select = this.$input.selectize(this.selectize_options);
 
         this.selectize = $select[0].selectize;
+    };
+
+    Selectize.prototype.init_allow_create = function () {
+        if(!this.allow_create) {
+            return;
+        }
+
+        var selectize = this.selectize;
+        var $createButton = $(this.selectize_selector + '_create');
+        var self = this;
+
+        $createButton.on('click', function () {
+            self.create_item(null, function (item) {
+                // Create the item.
+                if (item && item.value) {
+                    selectize.addOption(item);
+                    selectize.addItem(item.value);
+                }
+            });
+        });
     };
 
     Selectize.prototype.init_allow_update = function () {

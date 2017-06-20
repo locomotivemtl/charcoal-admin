@@ -71,6 +71,13 @@ class SelectizeInput extends SelectInput
     protected $allowUpdate;
 
     /**
+     * Whether to show a button to allow item create.
+     *
+     * @var boolean
+     */
+    protected $allowCreate;
+
+    /**
      * The form idents to use while creating objects through Selectize.
      *
      * Can either be a single value,
@@ -258,6 +265,27 @@ class SelectizeInput extends SelectInput
     }
 
     /**
+     * @param boolean $allowCreate Show (TRUE) or hide (FALSE) the create button.
+     * @return self
+     */
+    public function setAllowCreate($allowCreate)
+    {
+        $this->allowCreate = !!$allowCreate;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the property allows "Update items".
+     *
+     * @return boolean
+     */
+    public function allowCreate()
+    {
+        return $this->allowCreate;
+    }
+
+    /**
      * @return boolean
      */
     public function deferred()
@@ -402,7 +430,12 @@ class SelectizeInput extends SelectInput
             }
 
             $items = $this->propertyVal();
-            if (count($items) === 1) {
+
+            if (!$items) {
+                $items = [];
+            }
+
+            if (is_scalar($items)) {
                 $items = [$items];
             }
 

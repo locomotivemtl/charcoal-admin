@@ -34,13 +34,20 @@
             <span class="btn-label sr-only">{{# _t }}Copy To Clipboard{{/ _t }}</span>
         </button>
     {{/ allowClipboardCopy }}
-            {{# allowUpdate }}
-                <button id="{{ inputId }}_update" class="btn btn-info" type="button"
+    {{# allowUpdate }}
+        <button id="{{ inputId }}_update" class="btn btn-info" type="button"
                         data-update-target="#{{ inputId }}">
             <span class="fa fa-pencil" aria-hidden="true"></span>
             <span class="btn-label sr-only">{{# _t }}Update selected item{{/ _t }}</span>
         </button>
-            {{/ allowUpdate }}
+    {{/ allowUpdate }}
+    {{# allowUpdate }}
+        <button id="{{ inputId }}_create" class="btn btn-info" type="button"
+                        data-update-target="#{{ inputId }}">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            <span class="btn-label sr-only">{{# _t }}Create a new item{{/ _t }}</span>
+        </button>
+    {{/ allowUpdate }}
     </span>
     </div>
 {{/ inputGroup }}
@@ -69,6 +76,9 @@
                 {{# allowUpdate }}
                     allow_update      : true,
                 {{/ allowUpdate }}
+                {{# allowCreate }}
+                    allow_create      : true,
+                {{/ allowCreate }}
                 selectize_selector    : '#{{ inputId }}',
                 form_ident            : {{& formIdentAsJson}},
                 selectize_options     : {{& selectizeOptionsAsJson }},

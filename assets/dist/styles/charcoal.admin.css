@@ -1374,6 +1374,7 @@ ul.c-panel_table {
 
 .c-attachments .panel-title-icon,
 .c-attachments .list-group-item > .list-group-item-icon {
+  width: 45px;
   margin: -13px 15px -13px -15px;
   border-right: 1px solid #ddd; }
 
@@ -1411,29 +1412,17 @@ ul.c-panel_table {
     max-width: 100%;
     height: auto; }
 
-.c-attachments .panel-actions .glyphicon,
-.c-attachments .dropdown-menu .glyphicon,
-.c-attachments .panel-title .glyphicon,
-.c-attachments .panel-body .glyphicon {
-  vertical-align: text-top; }
-
 .c-attachments .panel-actions .fa,
-.c-attachments .dropdown-menu .fa,
-.c-attachments .panel-title .fa,
-.c-attachments .panel-body .fa {
+.c-attachments .dropdown-menu .fa {
   width: 1.25rem;
   text-align: left; }
 
 .c-attachments .panel-actions .fa.-wide,
-.c-attachments .dropdown-menu .fa.-wide,
-.c-attachments .panel-title .fa.-wide,
-.c-attachments .panel-body .fa.-wide {
+.c-attachments .dropdown-menu .fa.-wide {
   width: 3.125rem; }
 
 .c-attachments .panel-actions .fa.-center,
-.c-attachments .dropdown-menu .fa.-center,
-.c-attachments .panel-title .fa.-center,
-.c-attachments .panel-body .fa.-center {
+.c-attachments .dropdown-menu .fa.-center {
   text-align: center; }
 
 .c-attachments .panel-actions-float {

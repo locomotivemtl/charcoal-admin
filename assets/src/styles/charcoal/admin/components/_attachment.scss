@@ -52,6 +52,7 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
 
     .panel-title-icon,
     .list-group-item > .list-group-item-icon {
+        width:  ($c-attachment-ph * 3);
         margin: (-$c-attachment-pv) $c-attachment-ph (-$c-attachment-pv) (-$c-attachment-ph);
         border-right: 1px solid #ddd;
     }
@@ -107,12 +108,7 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
     }
 
     .panel-actions,
-    .dropdown-menu,
-    .panel-title,
-    .panel-body {
-        .glyphicon {
-            vertical-align: text-top;
-        }
+    .dropdown-menu {
         .fa {
             width: rem(20px);
             text-align: left;

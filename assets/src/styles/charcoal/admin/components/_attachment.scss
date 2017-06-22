@@ -119,6 +119,10 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
         .fa.-center {
             text-align: center;
         }
+        .disabled {
+            pointer-events: none;
+            color: $gray-light;
+        }
     }
 
     .panel-actions-float {

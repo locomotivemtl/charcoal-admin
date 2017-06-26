@@ -5,7 +5,6 @@ namespace Charcoal\Admin\Template\System;
 use APCUIterator;
 use APCIterator;
 
-use Stash\Pool;
 use Stash\Driver\Apc;
 use Stash\Driver\Memcache;
 
@@ -20,7 +19,7 @@ use Charcoal\Admin\AdminTemplate;
 class ClearCacheTemplate extends AdminTemplate
 {
     /**
-     * @var Stash\Pool
+     * @var \Stash\Pool
      */
     private $cache;
 

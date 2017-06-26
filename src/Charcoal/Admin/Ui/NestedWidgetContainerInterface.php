@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Ui;
 
-use Traversable;
-
 // From 'charcoal-app'
 use Charcoal\App\Template\WidgetInterface;
 

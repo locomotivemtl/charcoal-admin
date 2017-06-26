@@ -2,24 +2,6 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
-use \RuntimeException;
-use \InvalidArgumentException;
-
-// From Pimple
-use Pimple\Container;
-
-// From 'charcoal-core'
-use \Charcoal\Loader\CollectionLoader;
-
-// From 'charcoal-factory'
-use Charcoal\Factory\FactoryInterface;
-
-// From 'charcoal-property'
-use Charcoal\Property\ObjectProperty;
-
-// From 'charcoal-admin'
-use Charcoal\Admin\Property\AbstractSelectableInput;
-
 use Charcoal\Admin\Property\Input\SelectInput;
 
 /**

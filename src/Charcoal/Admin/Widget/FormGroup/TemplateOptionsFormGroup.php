@@ -15,12 +15,9 @@ use \Charcoal\Model\MetadataInterface;
 
 // From 'charcoal-property'
 use \Charcoal\Property\PropertyInterface;
-use \Charcoal\Property\SelectablePropertyInterface;
 use \Charcoal\Property\Structure\StructureMetadata;
 use \Charcoal\Property\TemplateProperty;
 
-// From 'charcoal-app'
-use \Charcoal\App\Template\TemplateInterface;
 
 // From 'charcoal-cms'
 use \Charcoal\Cms\TemplateableInterface;
@@ -34,7 +31,7 @@ use \Charcoal\Admin\Widget\FormGroup\StructureFormGroup;
  * The form group widget displays a set of form controls based on properties
  * assigned to a template controller's metadata.
  *
- * This works best (minimal setup) if your model implements {@see TemplateInterface}.
+ * This works best (minimal setup) if your model implements {@see \Charcoal\App\Template\TemplateInterface}.
  *
  * ## Examples
  *

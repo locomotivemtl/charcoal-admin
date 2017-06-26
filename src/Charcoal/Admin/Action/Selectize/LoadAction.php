@@ -2,11 +2,13 @@
 
 namespace Charcoal\Admin\Action\Selectize;
 
-use Charcoal\Admin\Action\Object\LoadAction as DefaultLoadAction;
-use Charcoal\Admin\Service\SelectizeRenderer;
 use Pimple\Container;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+
+use Charcoal\Admin\Action\Object\LoadAction as DefaultLoadAction;
+
+use Charcoal\Admin\Action\Selectize\SelectizeRendererAwareTrait;
 
 /**
  * Selectize Load Action

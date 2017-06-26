@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Ui;
 use Exception;
 use InvalidArgumentException;
 
-// From 'charcoal-factory'
-use Charcoal\Factory\FactoryInterface;
-
 // From 'charcoal-ui'
 use Charcoal\Ui\Dashboard\DashboardBuilder;
 use Charcoal\Ui\Dashboard\DashboardInterface;

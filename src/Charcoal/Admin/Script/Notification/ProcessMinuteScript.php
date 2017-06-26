@@ -4,9 +4,6 @@ namespace Charcoal\Admin\Script\Notification;
 
 use DateTime;
 
-// Module `charcoal-core` dependencies
-use Charcoal\Model\CollectionInterface;
-
 // Intra-module (`charcoal-admin`) dependencies
 use Charcoal\Admin\Object\Notification;
 use Charcoal\Admin\Script\Notification\AbstractNotificationScript;

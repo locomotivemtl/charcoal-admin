@@ -2,15 +2,14 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
-use Charcoal\Translator\Translation;
-use \RuntimeException;
-use \InvalidArgumentException;
+use RuntimeException;
+use InvalidArgumentException;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-core'
-use \Charcoal\Loader\CollectionLoader;
+use Charcoal\Loader\CollectionLoader;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;

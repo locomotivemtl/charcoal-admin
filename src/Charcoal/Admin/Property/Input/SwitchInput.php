@@ -2,13 +2,10 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\Property\AbstractPropertyInput;
-
-// From 'charcoal-translator'
-use Charcoal\Translator\Translation;
+use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  * Switch Input Property

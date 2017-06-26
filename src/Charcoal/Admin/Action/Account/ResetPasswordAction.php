@@ -8,12 +8,6 @@ use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From Pimple
-use Pimple\Container;
-
-// From 'charcoal-factory'
-use Charcoal\Factory\FactoryInterface;
-
 // Intra-module (`charcoal-admin`) dependencies
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;

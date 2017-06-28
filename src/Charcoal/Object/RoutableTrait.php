@@ -66,13 +66,6 @@ trait RoutableTrait
     private $slugSuffix = '';
 
     /**
-     * Latest ObjectRoute object concerning the current object.
-     *
-     * @var ObjectRouteInterface
-     */
-    private $latestObjectRoute;
-
-    /**
      * The class name of the object route model.
      *
      * Must be a fully-qualified PHP namespace and an implementation of
@@ -467,16 +460,10 @@ trait RoutableTrait
             ));
         }
 
-        if (isset($this->latestObjectRoute[$lang])) {
-            return $this->latestObjectRoute[$lang];
-        }
-
         $model = $this->createRouteObject();
 
         if (!$this->objType() || !$this->id()) {
-            $this->latestObjectRoute[$lang] = $model;
-
-            return $this->latestObjectRoute[$lang];
+            return $model;
         }
 
         // For URL.
@@ -499,14 +486,10 @@ trait RoutableTrait
         $collection = $loader->load()->objects();
 
         if (!count($collection)) {
-            $this->latestObjectRoute[$lang] = $model;
-
-            return $this->latestObjectRoute[$lang];
+            return $model;
         }
 
-        $this->latestObjectRoute[$lang] = $collection[0];
-
-        return $this->latestObjectRoute[$lang];
+        return $collection[0];
     }
 
     /**

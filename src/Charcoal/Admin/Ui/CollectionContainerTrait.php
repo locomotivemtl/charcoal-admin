@@ -458,6 +458,61 @@ trait CollectionContainerTrait
     }
 
     /**
+     * @return boolean
+     */
+    public function hasFilters()
+    {
+        return count($this->filters()) > 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function filters()
+    {
+        $collectionConfig = $this->collectionConfig();
+        if (isset($collectionConfig['filters'])) {
+            return array_map(function($key, $filter) {
+                return [
+                    'ident' => $key,
+                    'property' => $filter['property'],
+                    'val' => $filter['val'],
+                    'mode' => $filter['mode']
+                ];
+            }, array_keys($collectionConfig['filters']), array_values($collectionConfig['filters']));
+        }
+
+        return [];
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasOrders()
+    {
+        return count($this->orders()) > 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function orders()
+    {
+        $collectionConfig = $this->collectionConfig();
+        if (isset($collectionConfig['orders'])) {
+            return array_map(function($key, $order) {
+                return [
+                    'ident' => $key,
+                    'property' => $order['property'],
+                    'mode' => $order['mode']
+                ];
+            }, array_keys($collectionConfig['orders']), array_values($collectionConfig['orders']));
+        }
+
+        return [];
+    }
+
+    /**
      * @param mixed $collection The collection.
      * @return CollectionContainerInterface Chainable
      */

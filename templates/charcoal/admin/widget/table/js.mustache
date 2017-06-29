@@ -30,6 +30,27 @@ Charcoal.Admin.manager().add_widget({
         obj_type: '{{ objType }}',
         template: '{{ template }}',
         collection_ident: '{{ collectionIdent }}',
+        {{# hasFilters }}
+        filters: {
+            {{# filters }}
+            {{ ident }} : {
+                property: '{{ property }}',
+                val: '{{ val }}',
+                operator: '{{ operator }}'
+            },
+            {{/ filters }}
+        },
+        {{/ hasFilters }}
+        {{# hasOrders }}
+        orders: {
+            {{# orders }}
+            {{ ident }} : {
+                property: '{{ property }}',
+                mode: '{{ mode }}'
+            },
+            {{/ orders }}
+        },
+        {{/ hasOrders }}
         pagination: {
             page: {{ page }},
             num_per_page: {{ numPerPage }}

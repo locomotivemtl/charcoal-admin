@@ -65,7 +65,7 @@ class SwitchInput extends AbstractPropertyInput
      * @param mixed $label The "On" label.
      * @return BooleanProperty Chainable
      */
-    public function setswitchOnText($label)
+    public function setSwitchOnText($label)
     {
         $this->switchOnText = $this->translator()->translation($label);
 
@@ -88,7 +88,7 @@ class SwitchInput extends AbstractPropertyInput
      * @param mixed $label The "Off" label.
      * @return BooleanProperty Chainable
      */
-    public function setswitchOffText($label)
+    public function setSwitchOffText($label)
     {
         $this->switchOffText = $this->translator()->translation($label);
 

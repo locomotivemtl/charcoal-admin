@@ -474,10 +474,9 @@ trait CollectionContainerTrait
         if (isset($collectionConfig['filters'])) {
             return array_map(function($key, $filter) {
                 return [
-                    'ident' => $key,
+                    'ident'    => $key,
                     'property' => $filter['property'],
-                    'val' => $filter['val'],
-                    'mode' => $filter['mode']
+                    'val'      => $filter['val']
                 ];
             }, array_keys($collectionConfig['filters']), array_values($collectionConfig['filters']));
         }
@@ -502,9 +501,9 @@ trait CollectionContainerTrait
         if (isset($collectionConfig['orders'])) {
             return array_map(function($key, $order) {
                 return [
-                    'ident' => $key,
+                    'ident'    => $key,
                     'property' => $order['property'],
-                    'mode' => $order['mode']
+                    'mode'     => $order['mode']
                 ];
             }, array_keys($collectionConfig['orders']), array_values($collectionConfig['orders']));
         }

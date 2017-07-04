@@ -86,7 +86,8 @@
 
 .c-dualselect_list {
     // Vertically space out multiple block controls
-    .form-control + .form-control {
+    // Use general sibling selector to skip hidden inputs
+    .form-control ~ .form-control {
         margin-top: 5px;
     }
 }

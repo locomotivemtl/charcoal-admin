@@ -1425,6 +1425,11 @@ ul.c-panel_table {
 .c-attachments .dropdown-menu .fa.-center {
   text-align: center; }
 
+.c-attachments .panel-actions .disabled,
+.c-attachments .dropdown-menu .disabled {
+  pointer-events: none;
+  color: #cccccc; }
+
 .c-attachments .panel-actions-float {
   position: absolute;
   top: 0;
@@ -1888,7 +1893,7 @@ a:focus {
   .table-header-group > .btn-group:first-child {
     margin-left: 0; }
 
-.c-dualselect_list .form-control + .form-control {
+.c-dualselect_list .form-control ~ .form-control {
   margin-top: 5px; }
 
 .c-dualselect--vertical .c-dualselect_list,

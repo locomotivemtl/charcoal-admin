@@ -380,7 +380,7 @@
     };
 
     Selectize.prototype.init_allow_create = function () {
-        if(!this.allow_create) {
+        if (!this.allow_create) {
             return;
         }
 

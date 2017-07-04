@@ -20,56 +20,38 @@ use Charcoal\Object\HierarchicalCollection;
 class HierarchicalObjectProperty extends ObjectProperty
 {
     /**
-     * Retrieve the choices segmented as a tree.
+     * Retrieve the available choice structures, segmented as a tree.
      *
      * @return array
      */
     public function choices()
     {
-        $loader = $this->collectionLoader();
-        $orders = $this->orders();
-        if ($orders) {
-            $loader->setOrders($orders);
+        $choices = [];
+
+        $proto = $this->proto();
+        if (!$proto->source()->tableExists()) {
+            return $choices;
         }
 
-        $filters = $this->filters();
-        if ($filters) {
-            $loader->setFilters($filters);
-        }
+        $loader = $this->collectionModelLoader();
 
         $collection = new HierarchicalCollection($loader->load(), false);
-        $collection
-            ->setPage($loader->page())
-            ->setNumPerPage($loader->numPerPage())
-            ->sortTree();
+        $collection->setPage($loader->page())
+                   ->setNumPerPage($loader->numPerPage())
+                   ->sortTree();
 
-        $choices = [];
-        foreach ($collection as $obj) {
-            $choice = $this->choice($obj);
-
-            if ($choice !== null) {
-                $choices[$obj->id()] = $choice;
-            }
-        }
-
-        return $choices;
+        return $this->parseChoices($collection);
     }
 
     /**
-     * Returns a choice structure for a given ident.
+     * Parse the given value into a choice structure.
      *
-     * @param string|ModelInterface $choiceIdent The choice ident or object to format.
-     * @return mixed The matching choice.
+     * @param  ModelInterface $obj An object to format.
+     * @return array Returns a choice structure.
      */
-    public function choice($choiceIdent)
+    protected function parseChoice(ModelInterface $obj)
     {
-        $obj = $this->loadObject($choiceIdent);
-
-        if ($obj === null) {
-            return null;
-        }
-
-        $choice = parent::choice($obj);
+        $choice = parent::parseChoice($obj);
 
         if (property_exists($obj, 'auxiliary') && $obj->auxiliary) {
             $choice['parent'] = true;

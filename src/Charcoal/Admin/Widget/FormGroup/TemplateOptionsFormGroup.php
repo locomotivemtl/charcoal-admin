@@ -17,7 +17,7 @@ use \Charcoal\Model\MetadataInterface;
 use \Charcoal\Property\PropertyInterface;
 use \Charcoal\Property\Structure\StructureMetadata;
 use \Charcoal\Property\TemplateProperty;
-
+use \Charcoal\Property\SelectablePropertyInterface;
 
 // From 'charcoal-cms'
 use \Charcoal\Cms\TemplateableInterface;
@@ -313,16 +313,20 @@ class TemplateOptionsFormGroup extends StructureFormGroup
             if (!$finalize) {
                 $obj = $this->obj();
                 $property = $this->templateProperty();
+                /** @see TemplateProperty::__toString() Similar structure interface resolution. */
                 if ($property) {
                     $template = $obj[$property->ident()];
-                    if ($property instanceof TemplateProperty) {
-                        $choice = $property->choice($template);
-                        if (isset($choice['controller'])) {
-                            $finalize = true;
-                            $template = $choice['controller'];
-                        } elseif (isset($choice['template'])) {
-                            $finalize = true;
-                            $template = $choice['template'];
+                    if ($property instanceof SelectablePropertyInterface) {
+                        if ($property->hasChoice($template)) {
+                            $choice = $property->choice($template);
+                            $keys   = [ 'controller', 'template', 'class' ];
+                            foreach ($keys as $key) {
+                                if (isset($choice[$key])) {
+                                    $finalize = true;
+                                    $template = $choice[$key];
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

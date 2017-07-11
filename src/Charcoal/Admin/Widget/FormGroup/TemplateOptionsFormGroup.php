@@ -2,28 +2,28 @@
 
 namespace Charcoal\Admin\Widget\FormGroup;
 
-use \RuntimeException;
-use \UnexpectedValueException;
-use \InvalidArgumentException;
+use RuntimeException;
+use UnexpectedValueException;
+use InvalidArgumentException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-core'
-use \Charcoal\Model\Service\MetadataLoader;
-use \Charcoal\Model\MetadataInterface;
+use Charcoal\Model\Service\MetadataLoader;
+use Charcoal\Model\MetadataInterface;
 
 // From 'charcoal-property'
-use \Charcoal\Property\PropertyInterface;
-use \Charcoal\Property\Structure\StructureMetadata;
-use \Charcoal\Property\TemplateProperty;
-use \Charcoal\Property\SelectablePropertyInterface;
+use Charcoal\Property\PropertyInterface;
+use Charcoal\Property\Structure\StructureMetadata;
+use Charcoal\Property\TemplateProperty;
+use Charcoal\Property\SelectablePropertyInterface;
 
 // From 'charcoal-cms'
-use \Charcoal\Cms\TemplateableInterface;
+use Charcoal\Cms\TemplateableInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\FormGroup\StructureFormGroup;
+use Charcoal\Admin\Widget\FormGroup\StructureFormGroup;
 
 /**
  * Template Options Form Group

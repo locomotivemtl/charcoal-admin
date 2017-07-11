@@ -21,6 +21,8 @@ use Charcoal\Object\UserDataInterface;
 
 /**
  * User Data is a base model for objects typically submitted by the end-user of the application.
+ *
+ * Although it is not abstract, it is typically used by extending into a subclass.
  */
 class UserData extends AbstractModel implements
     UserDataInterface

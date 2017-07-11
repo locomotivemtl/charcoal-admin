@@ -2,8 +2,6 @@
 
 namespace Charcoal\Object;
 
-use DateTime;
-use DateTimeInterface;
 use InvalidArgumentException;
 
 // From Pimple
@@ -20,18 +18,26 @@ use Charcoal\Translator\TranslatorAwareTrait;
 
 // From `charcoal-object`
 use Charcoal\Object\ContentInterface;
+use Charcoal\Object\AuthorableInterface;
+use Charcoal\Object\AuthorableTrait;
 use Charcoal\Object\RevisionableInterface;
 use Charcoal\Object\RevisionableTrait;
+use Charcoal\Object\TimestampableInterface;
+use Charcoal\Object\TimestampableTrait;
 
 /**
  *
  */
 class Content extends AbstractModel implements
+    AuthorableInterface,
     ContentInterface,
-    RevisionableInterface
+    RevisionableInterface,
+    TimestampableInterface
 {
+    use AuthorableTrait;
     use RevisionableTrait;
     use TranslatorAwareTrait;
+    use TimestampableTrait;
 
     /**
      * Objects are active by default
@@ -45,27 +51,6 @@ class Content extends AbstractModel implements
      */
     private $position = 0;
 
-    /**
-     * Object creation date (set automatically on save)
-     * @var DateTimeInterface
-     */
-    private $created;
-
-    /**
-     * @var mixed
-     */
-    private $createdBy;
-
-    /**
-     * Object last modified date (set automatically on save and update)
-     * @var DateTimeInterface
-     */
-    private $lastModified;
-
-    /**
-     * @var mixed
-     */
-    private $lastModifiedBy;
 
     /**
      * @var FactoryInterface
@@ -157,106 +142,41 @@ class Content extends AbstractModel implements
         return $this->position;
     }
 
+
     /**
-     * @param \DateTimeInterface|string|null $created The date/time at object's creation.
-     * @throws InvalidArgumentException If the date/time is invalid.
+     * @throws InvalidArgumentException If the ACL permissions are invalid.
+     * @param  string|string[] $permissions The required ACL permissions.
      * @return Content Chainable
      */
-    public function setCreated($created)
+    public function setRequiredAclPermissions($permissions)
     {
-        if ($created === null) {
-            $this->created = null;
+        if ($permissions === null || !$permissions) {
+            $this->permissions = [];
             return $this;
         }
-        if (is_string($created)) {
-            $created = new DateTime($created);
+        if (is_string($permissions)) {
+            $permissions = explode(',', $permissions);
+            $permissions = array_map('trim', $permissions);
         }
-        if (!($created instanceof DateTimeInterface)) {
+        if (!is_array($permissions)) {
             throw new InvalidArgumentException(
-                'Invalid "Created" value. Must be a date/time string or a DateTime object.'
+                sprintf('Invalid ACL permissions. Permissions need to be an array (%s given)', gettype($permissions))
             );
         }
-        $this->created = $created;
+        $this->requiredAclPermissions = $permissions;
         return $this;
     }
 
     /**
-     * @return DateTimeInterface|null
+     * @return string[]
      */
-    public function created()
+    public function requiredAclPermissions()
     {
-        return $this->created;
+        return $this->requiredAclPermissions;
     }
 
     /**
-     * @param mixed $createdBy The creator of the content object.
-     * @return Content Chainable
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function createdBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * @param \DateTimeInterface|string|null $lastModified The last modified date/time.
-     * @throws InvalidArgumentException If the date/time is invalid.
-     * @return Content Chainable
-     */
-    public function setLastModified($lastModified)
-    {
-        if ($lastModified === null) {
-            $this->lastModified = null;
-            return $this;
-        }
-        if (is_string($lastModified)) {
-            $lastModified = new DateTime($lastModified);
-        }
-        if (!($lastModified instanceof DateTimeInterface)) {
-            throw new InvalidArgumentException(
-                'Invalid "Last Modified" value. Must be a date/time string or a DateTime object.'
-            );
-        }
-        $this->lastModified = $lastModified;
-        return $this;
-    }
-
-    /**
-     * @return DateTimeInterface
-     */
-    public function lastModified()
-    {
-        return $this->lastModified;
-    }
-
-    /**
-     * @param mixed $lastModifiedBy The last modification's username.
-     * @return Content Chainable
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function lastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * StorableTrait > preSavƒe(): Called automatically before saving the object to source.
+     * StorableTrait > preSave(): Called automatically before saving the object to source.
      * For content object, set the `created` and `lastModified` properties automatically
      * @return boolean
      */
@@ -264,6 +184,7 @@ class Content extends AbstractModel implements
     {
         parent::preSave();
 
+        // Timestampable properties
         $this->setCreated('now');
         $this->setLastModified('now');
 
@@ -286,39 +207,9 @@ class Content extends AbstractModel implements
             $this->generateRevision();
         }
 
+        // Timestampable propertiees
         $this->setLastModified('now');
 
         return true;
-    }
-
-
-    /**
-     * @throws InvalidArgumentException If the ACL permissions are invalid.
-     * @param  string|string[] $permissions The required ACL permissions.
-     * @return Content Chainable
-     */
-    public function setRequiredAclPermissions($permissions)
-    {
-        if ($permissions === null || !$permissions) {
-            $this->permissions = [];
-            return $this;
-        }
-        if (is_string($permissions)) {
-            $permissions = explode(',', $permissions);
-            $permissions = array_map('trim', $permissions);
-        }
-        if (!is_array($permissions)) {
-            throw new InvalidArgumentException('Invalid ACL permissions');
-        }
-        $this->requiredAclPermissions = $permissions;
-        return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function requiredAclPermissions()
-    {
-        return $this->requiredAclPermissions;
     }
 }

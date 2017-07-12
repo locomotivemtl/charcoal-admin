@@ -151,7 +151,7 @@ class Content extends AbstractModel implements
     public function setRequiredAclPermissions($permissions)
     {
         if ($permissions === null || !$permissions) {
-            $this->permissions = [];
+            $this->requiredAclPermissions = [];
             return $this;
         }
         if (is_string($permissions)) {

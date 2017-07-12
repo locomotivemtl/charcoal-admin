@@ -43,26 +43,38 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(Content::class);
     }
 
+    public function testDefaults()
+    {
+        $this->assertTrue($this->obj->active());
+        $this->assertEquals(0, $this->obj->position());
+        $this->assertNull($this->obj->created());
+        $this->assertNull($this->obj->createdBy());
+        $this->assertNull($this->obj->lastModified());
+        $this->assertNull($this->obj->lastModifiedBy());
+        $this->assertEquals([], $this->obj->requiredAclPermissions());
+    }
+
     public function testSetData()
     {
-        $obj = $this->obj;
-        $ret = $obj->setData([
+        $ret = $this->obj->setData([
             'active'          => false,
             'position'        => 42,
             'created'         => '2015-01-01 13:05:45',
             'created_by'      => 'Me',
             'last_modified'   => '2015-04-01 22:10:30',
-            'lastModified_by' => 'You'
+            'lastModified_by' => 'You',
+            'required_acl_permissions' => ['foo', 'bar']
         ]);
-        $this->assertSame($ret, $obj);
-        $this->assertNotTrue($obj->active());
-        $this->assertEquals(42, $obj->position());
+        $this->assertSame($ret, $this->obj);
+        $this->assertNotTrue($this->obj->active());
+        $this->assertEquals(42, $this->obj->position());
         $expected = new DateTime('2015-01-01 13:05:45');
-        $this->assertEquals($expected, $obj->created());
-        $this->assertEquals('Me', $obj->createdBy());
+        $this->assertEquals($expected, $this->obj->created());
+        $this->assertEquals('Me', $this->obj->createdBy());
         $expected = new DateTime('2015-04-01 22:10:30');
-        $this->assertEquals($expected, $obj->lastModified());
-        $this->assertEquals('You', $obj->lastModifiedBy());
+        $this->assertEquals($expected, $this->obj->lastModified());
+        $this->assertEquals('You', $this->obj->lastModifiedBy());
+        $this->assertEquals(['foo', 'bar'], $this->obj->requiredAclPermissions());
     }
 
     public function testSetActive()
@@ -84,19 +96,22 @@ class ContentTest extends PHPUnit_Framework_TestCase
 
     public function testSetPosition()
     {
-        $obj = $this->obj;
+        $this->obj = $this->obj;
         $this->assertEquals(0, $this->obj->position());
-        $ret = $obj->setPosition(42);
+        $ret = $this->obj->setPosition(42);
         $this->assertSame($ret, $this->obj);
         $this->assertEquals(42, $this->obj->position());
 
-        $this->obj['position'] = 3;
+        $this->obj['position'] = '3';
         $this->assertEquals(3, $this->obj->position());
 
         $this->obj->set('position', 1);
         $this->assertEquals(1, $this->obj['position']);
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->obj->setPosition(null);
+        $this->assertEquals(0, $this->obj->position());
+
+        $this->setExpectedException(\InvalidArgumentException::class);
         $this->obj->setPosition('foo');
     }
 
@@ -113,7 +128,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->obj->set('created', 'tomorrow');
         $this->assertEquals(new DateTime('tomorrow'), $this->obj['created']);
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException(\InvalidArgumentException::class);
         $this->obj->setCreated(false);
     }
 
@@ -125,22 +140,20 @@ class ContentTest extends PHPUnit_Framework_TestCase
 
     public function testSetCreatedBy()
     {
-        $obj = $this->obj;
-        $ret = $obj->setCreatedBy('Me');
-        $this->assertSame($ret, $obj);
-        $this->assertEquals('Me', $obj->createdBy());
+        $ret = $this->obj->setCreatedBy('Me');
+        $this->assertSame($ret, $this->obj);
+        $this->assertEquals('Me', $this->obj->createdBy());
 
-        //$this->setExpectedException('\InvalidArgumentException');
-        //$obj->setCreatedBy(false);
+        //$this->setExpectedException(\InvalidArgumentException::class);
+        //$this->obj->setCreatedBy(false);
     }
 
     public function testSetLastModified()
     {
-        $obj = $this->obj;
-        $ret = $obj->setLastModified('2015-01-01 13:05:45');
-        $this->assertSame($ret, $obj);
+        $ret = $this->obj->setLastModified('2015-01-01 13:05:45');
+        $this->assertSame($ret, $this->obj);
         $expected = new DateTime('2015-01-01 13:05:45');
-        $this->assertEquals($expected, $obj->lastModified());
+        $this->assertEquals($expected, $this->obj->lastModified());
 
         $this->obj['last_modified'] = 'today';
         $this->assertEquals(new DateTime('today'), $this->obj->lastModified());
@@ -148,8 +161,8 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->obj->set('last_modified', 'tomorrow');
         $this->assertEquals(new DateTime('tomorrow'), $this->obj['last_modified']);
 
-        $this->setExpectedException('\InvalidArgumentException');
-        $obj->setLastModified(false);
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->obj->setLastModified(false);
     }
 
     public function testSetLastModifiedInvalidDate()
@@ -160,35 +173,52 @@ class ContentTest extends PHPUnit_Framework_TestCase
 
     public function testSetLastModifiedBy()
     {
-        $obj = $this->obj;
-        $ret = $obj->setLastModifiedBy('Me');
-        $this->assertSame($ret, $obj);
-        $this->assertEquals('Me', $obj->lastModifiedBy());
+        $ret = $this->obj->setLastModifiedBy('Me');
+        $this->assertSame($ret, $this->obj);
+        $this->assertEquals('Me', $this->obj->lastModifiedBy());
 
-        //$this->setExpectedException('\InvalidArgumentException');
-        //$obj->setLastModifiedBy(false);
+        //$this->setExpectedException(\InvalidArgumentException::class);
+        //$this->obj->setLastModifiedBy(false);
+    }
+
+    public function testSetRequiredAclPermissions()
+    {
+        $ret = $this->obj->setRequiredAclPermissions(['a', 'b', 'c']);
+        $this->assertSame($ret, $this->obj);
+
+        $this->assertEquals(['a', 'b', 'c'], $this->obj['required_acl_permissions']);
+
+        $this->obj->setRequiredAclPermissions('foo, bar');
+        $this->assertEquals(['foo', 'bar'], $this->obj->requiredAclPermissions());
+
+        $this->obj->setRequiredAclPermissions(null);
+        $this->assertEquals([], $this->obj->requiredAclPermissions());
+        
+        $this->obj->setRequiredAclPermissions(false);
+        $this->assertEquals([], $this->obj->requiredAclPermissions());
+
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->obj->setRequiredAclPermissions(true);
     }
 
     public function testSetPreSave()
     {
-        $obj = $this->obj;
-        $this->assertSame(null, $obj->created());
-        $this->assertSame(null, $obj->lastModified());
+        $this->assertSame(null, $this->obj->created());
+        $this->assertSame(null, $this->obj->lastModified());
 
-        $obj->preSave();
-        $this->assertNotSame(null, $obj->created());
-        $this->assertNotSame(null, $obj->lastModified());
+        $this->obj->preSave();
+        $this->assertNotSame(null, $this->obj->created());
+        $this->assertNotSame(null, $this->obj->lastModified());
     }
 
-    // public function testSetPreUpdate()
-    // {
-    //     $obj = $this->obj;
-    //     $this->assertSame(null, $obj->lastModified());
+    public function testSetPreUpdate()
+    {
+         $this->assertSame(null, $this->obj->lastModified());
 
-    //     $obj->preUpdate();
-    //     $this->assertNotSame(null, $obj->lastModified());
+         $this->obj->preUpdate();
+         $this->assertNotSame(null, $this->obj->lastModified());
 
-    // }
+    }
 
     /**
      * Set up the service container.

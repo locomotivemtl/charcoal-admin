@@ -717,6 +717,7 @@ trait CollectionContainerTrait
         return [
             'object'           => $object,
             'objectId'         => $object->id(),
+            'objectType'       => $object->objType(),
             'objectProperties' => $objectProperties
         ];
     }

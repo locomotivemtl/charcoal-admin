@@ -147,7 +147,6 @@ class ClearCacheTemplate extends AdminTemplate
             return [];
         }
 
-        $iter = new APCIterator($key);
         $numEntries = 0;
         $sizeTotal  = 0;
         $hitsTotal  = 0;

@@ -34,13 +34,6 @@ class ElfinderTemplate extends AdminTemplate
     protected $elfinderConfig;
 
     /**
-     * Store the factory instance for the current class.
-     *
-     * @var FactoryInterface
-     */
-    private $propertyFactory;
-
-    /**
      * Store the current property instance for the current class.
      *
      * @var PropertyInterface
@@ -141,39 +134,6 @@ class ElfinderTemplate extends AdminTemplate
         parent::setDependencies($container);
 
         $this->elfinderConfig = $container['elfinder/config'];
-        $this->setPropertyFactory($container['property/factory']);
-    }
-
-    /**
-     * Set a property factory.
-     *
-     * @param FactoryInterface $factory The property factory,
-     *     to createable property values.
-     * @return self
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the property factory.
-     *
-     * @throws RuntimeException If the property factory was not previously set.
-     * @return FactoryInterface
-     */
-    public function propertyFactory()
-    {
-        if (!isset($this->propertyFactory)) {
-            throw new RuntimeException(sprintf(
-                'Property Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->propertyFactory;
     }
 
     /**
@@ -401,17 +361,8 @@ class ElfinderTemplate extends AdminTemplate
                 $propertyIdent = $this->propertyIdent();
 
                 $model = $this->modelFactory()->create($this->objType());
-                $props = $model->metadata()->properties();
-
-                if (isset($props[$propertyIdent])) {
-                    $propertyMetadata = $props[$propertyIdent];
-
-                    $property = $this->propertyFactory()->create($propertyMetadata['type']);
-
-                    $property->setIdent($propertyIdent);
-                    $property->setData($propertyMetadata);
-
-                    $this->formProperty = $property;
+                if ($model->hasProperty($propertyIdent)) {
+                    $this->formProperty = $model->property($propertyIdent);
                 }
             }
         }

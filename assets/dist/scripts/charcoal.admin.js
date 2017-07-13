@@ -3743,12 +3743,6 @@ Charcoal.Admin.Widget_Table.Table_Row.prototype.delete_object = function ()
     });
 };
 
-;Charcoal.Admin.Widget_Wysiwyg = function ()
-{
-    $('.js-wysiwyg').summernote({
-        height: 300
-    });
-};
 ;/**
  * charcoal/admin/property
  * Should mimic the PHP equivalent AbstractProperty
@@ -6051,7 +6045,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     };
 
     Selectize.prototype.init_allow_create = function () {
-        if(!this.allow_create) {
+        if (!this.allow_create) {
             return;
         }
 

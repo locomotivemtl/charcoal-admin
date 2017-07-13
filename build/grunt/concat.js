@@ -32,8 +32,6 @@ module.exports = {
             // Bootstrap 3 Datepicker
             'bower_components/moment/min/moment.min.js',
             'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            // Summernote
-            // 'bower_components/summernote/dist/summernote.js',
             // BB Map
             'bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
             // Bootstrap Select

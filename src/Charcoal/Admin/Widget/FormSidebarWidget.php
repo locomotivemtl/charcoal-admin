@@ -10,6 +10,9 @@ use \Pimple\Container;
 // From 'charcoal-ui'
 use \Charcoal\Ui\Form\FormInterface;
 
+// From 'charcoal-translator'
+use \Charcoal\Translator\Translation;
+
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
 use \Charcoal\Admin\Ui\ActionContainerTrait;
@@ -38,11 +41,6 @@ class FormSidebarWidget extends AdminWidget implements
     private $form;
 
     /**
-     * @var string
-     */
-    private $widgetType = 'properties';
-
-    /**
      * Store the sidebar actions.
      *
      * @var array|null
@@ -64,18 +62,23 @@ class FormSidebarWidget extends AdminWidget implements
     protected $parsedSidebarActions = false;
 
     /**
-     * @var array $sidebarProperties
+     * The properties to show.
+     *
+     * @var array
      */
     protected $sidebarProperties = [];
 
     /**
-     * @var array $propertiesOptions
+     * Customize the shown properties.
+     *
+     * @var array
      */
     private $propertiesOptions = [];
 
     /**
      * Priority, or sorting index.
-     * @var integer $priority
+     *
+     * @var integer
      */
     protected $priority;
 
@@ -89,7 +92,7 @@ class FormSidebarWidget extends AdminWidget implements
     /**
      * The sidebar's title.
      *
-     * @var \Charcoal\Translator\Translation|string|null
+     * @var Translation|string|null
      */
     protected $title;
 
@@ -103,11 +106,13 @@ class FormSidebarWidget extends AdminWidget implements
     /**
      * The sidebar's subtitle.
      *
-     * @var \Charcoal\Translator\Translation|string|null
+     * @var Translation|string|null
      */
     private $subtitle;
 
     /**
+     * The footer is displayed by default.
+     *
      * @var boolean
      */
     protected $showFooter = true;
@@ -115,7 +120,7 @@ class FormSidebarWidget extends AdminWidget implements
     /**
      * The required Acl permissions for the whole sidebar.
      *
-     * @var string[] $requiredGlobalAclPermissions
+     * @var string[]
      */
     private $requiredGlobalAclPermissions = [];
 
@@ -614,7 +619,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function title()
     {
@@ -659,7 +664,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function subtitle()
     {
@@ -667,6 +672,8 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * Determine if the sidebar's footer is visible.
+     *
      * @return boolean
      */
     public function showFooter()
@@ -680,12 +687,14 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * @param mixed $showFooter The show footer flag.
+     * Enable / Disable the sidebar's footer.
+     *
+     * @param  mixed $show The show footer flag.
      * @return FormSidebarWidget
      */
-    public function setShowFooter($showFooter)
+    public function setShowFooter($show)
     {
-        $this->showFooter = !!$showFooter;
+        $this->showFooter = !!$show;
 
         return $this;
     }

@@ -804,6 +804,31 @@ class FormSidebarWidget extends AdminWidget implements
         return $languages;
     }
 
+    /**
+     * Parse the widget's conditional logic.
+     *
+     * @see    AdminWidget::resolveConditionalLogic()
+     * @param  callable|string $condition The callable or renderable condition.
+     * @return boolean
+     */
+    protected function resolveConditionalLogic($condition)
+    {
+        $renderer = $this->getActionRenderer();
+        if ($renderer && is_callable([ $renderer, $condition ])) {
+            return !!$renderer->{$condition}();
+        } elseif (is_callable([ $this, $condition ])) {
+            return !!$this->{$condition}();
+        } elseif (is_callable($condition)) {
+            return !!$condition();
+        } elseif ($renderer) {
+            return !!$renderer->renderTemplate($condition);
+        } elseif ($this->view()) {
+            return !!$this->renderTemplate($condition);
+        }
+
+        return !!$condition;
+    }
+
 
 
     // ACL Permissions

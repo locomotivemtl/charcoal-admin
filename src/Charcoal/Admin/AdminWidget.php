@@ -91,6 +91,13 @@ class AdminWidget extends AbstractWidget implements
     private $showActions;
 
     /**
+     * The widget's conditional logic.
+     *
+     * @var callable|string|null
+     */
+    private $activeCondition;
+
+    /**
      * @var integer $priority
      */
     private $priority;
@@ -149,6 +156,87 @@ class AdminWidget extends AbstractWidget implements
     protected function modelFactory()
     {
         return $this->modelFactory;
+    }
+
+    /**
+     * Enable / Disable the widget.
+     *
+     * Accepts, as a string, a callable or renderable condition.
+     *
+     * @param  mixed $active The active flag or condition.
+     * @return AdminWidget Chainable
+     */
+    public function setActive($active)
+    {
+        if (is_callable($active) || is_string($active)) {
+            $condition = $active;
+        } else {
+            $condition = null;
+        }
+
+        $this->activeCondition = $condition;
+
+        return parent::setActive($active);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function active()
+    {
+        if ($this->activeCondition !== null) {
+            return $this->parseConditionalLogic($this->activeCondition);
+        }
+
+        return parent::active();
+    }
+
+    /**
+     * Resolve the conditional logic.
+     *
+     * @param  mixed $condition The condition.
+     * @return boolean|null
+     */
+    final protected function parseConditionalLogic($condition)
+    {
+        if ($condition === null) {
+            return null;
+        }
+
+        if (is_bool($condition)) {
+            return $condition;
+        }
+
+        $not = false;
+        if (is_string($condition)) {
+            $not = ($condition[0] === '!');
+            if ($not) {
+                $condition = ltrim($condition, '!');
+            }
+        }
+
+        $result = $this->resolveConditionalLogic($condition);
+
+        return $not ? !$result : $result;
+    }
+
+    /**
+     * Parse the widget's conditional logic.
+     *
+     * @param  callable|string $condition The callable or renderable condition.
+     * @return boolean
+     */
+    protected function resolveConditionalLogic($condition)
+    {
+        if (is_callable([ $this, $condition ])) {
+            return !!$this->{$condition}();
+        } elseif (is_callable($condition)) {
+            return !!$condition();
+        } elseif ($this->view()) {
+            return !!$this->renderTemplate($condition);
+        }
+
+        return !!$condition;
     }
 
     /**

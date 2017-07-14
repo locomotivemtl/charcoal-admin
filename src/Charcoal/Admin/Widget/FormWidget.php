@@ -260,6 +260,8 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Yield the form sidebar(s).
+     *
      * @return FormSidebarInterface[]|Generator
      */
     public function sidebars()
@@ -267,11 +269,16 @@ class FormWidget extends AdminWidget implements
         $sidebars = $this->sidebars;
         uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
+            if (!$sidebar->active()) {
+                continue;
+            }
+
             if ($sidebar->template()) {
                 $template = $sidebar->template();
             } else {
                 $template = 'charcoal/admin/widget/form.sidebar';
             }
+
             $GLOBALS['widget_template'] = $template;
             yield $sidebarIdent => $sidebar;
             $GLOBALS['widget_template'] = '';

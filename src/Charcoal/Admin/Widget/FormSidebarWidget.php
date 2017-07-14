@@ -118,6 +118,34 @@ class FormSidebarWidget extends AdminWidget implements
     protected $showFooter = true;
 
     /**
+     * Whether the object is viewable.
+     *
+     * @var boolean
+     */
+    private $isObjViewable;
+
+    /**
+     * Whether the object is savable.
+     *
+     * @var boolean
+     */
+    private $isObjSavable;
+
+    /**
+     * Whether the object is resettable.
+     *
+     * @var boolean
+     */
+    private $isObjResettable;
+
+    /**
+     * Whether the object is deletable.
+     *
+     * @var boolean
+     */
+    private $isObjDeletable;
+
+    /**
      * The required Acl permissions for the whole sidebar.
      *
      * @var string[]
@@ -456,19 +484,23 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function isObjDeletable()
     {
-        // Overridden by permissions
-        if (!$this->checkPermission('delete') || !$this->form()) {
-            return false;
+        if ($this->isObjDeletable === null) {
+            // Overridden by permissions
+            if (!$this->checkPermission('delete') || !$this->form()) {
+                $this->isObjDeletable = false;
+            }
+
+            $obj    = $this->form()->obj();
+            $method = [ $obj, 'isDeletable' ];
+
+            if (is_callable($method)) {
+                $this->isObjDeletable = call_user_func($method);
+            }
+
+            $this->isObjDeletable = !!$obj->id();
         }
 
-        $obj    = $this->form()->obj();
-        $method = [ $obj, 'isDeletable' ];
-
-        if (is_callable($method)) {
-            return call_user_func($method);
-        }
-
-        return !!$obj->id();
+        return $this->isObjDeletable;
     }
 
     /**
@@ -482,19 +514,23 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function isObjResettable()
     {
-        // Overridden by permissions
-        if (!$this->checkPermission('reset') || !$this->form()) {
-            return false;
+        if ($this->isObjResettable === null) {
+            // Overridden by permissions
+            if (!$this->checkPermission('reset') || !$this->form()) {
+                $this->isObjResettable = false;
+            }
+
+            $obj    = $this->form()->obj();
+            $method = [ $obj, 'isResettable' ];
+
+            if (is_callable($method)) {
+                $this->isObjResettable = call_user_func($method);
+            }
+
+            $this->isObjResettable = true;
         }
 
-        $obj    = $this->form()->obj();
-        $method = [ $obj, 'isResettable' ];
-
-        if (is_callable($method)) {
-            return call_user_func($method);
-        }
-
-        return true;
+        return $this->isObjResettable;
     }
 
     /**
@@ -507,19 +543,23 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function isObjSavable()
     {
-        // Overridden by permissions
-        if (!$this->checkPermission('save') || !$this->form()) {
-            return false;
+        if ($this->isObjSavable === null) {
+            // Overridden by permissions
+            if (!$this->checkPermission('save') || !$this->form()) {
+                $this->isObjSavable = false;
+            }
+
+            $obj    = $this->form()->obj();
+            $method = [ $obj, 'isSavable' ];
+
+            if (is_callable($method)) {
+                $this->isObjSavable = call_user_func($method);
+            }
+
+            $this->isObjSavable = true;
         }
 
-        $obj    = $this->form()->obj();
-        $method = [ $obj, 'isSavable' ];
-
-        if (is_callable($method)) {
-            return call_user_func($method);
-        }
-
-        return true;
+        return $this->isObjSavable;
     }
 
     /**
@@ -532,22 +572,26 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function isObjViewable()
     {
-        // Overridden by permissions
-        if (!$this->checkPermission('view') || !$this->form()) {
-            return false;
+        if ($this->isObjViewable === null) {
+            // Overridden by permissions
+            if (!$this->checkPermission('view') || !$this->form()) {
+                $this->isObjViewable = false;
+            }
+
+            $obj = $this->form()->obj();
+            if (!$obj->id()) {
+                $this->isObjViewable = false;
+            }
+
+            $method = [ $obj, 'isViewable' ];
+            if (is_callable($method)) {
+                $this->isObjViewable = call_user_func($method);
+            }
+
+            $this->isObjViewable = true;
         }
 
-        $obj = $this->form()->obj();
-        if (!$obj->id()) {
-            return false;
-        }
-
-        $method = [ $obj, 'isViewable' ];
-        if (is_callable($method)) {
-            return call_user_func($method);
-        }
-
-        return true;
+        return $this->isObjViewable;
     }
 
     /**
@@ -680,6 +724,11 @@ class FormSidebarWidget extends AdminWidget implements
     {
         // Overridden by permissions
         if (!$this->checkPermission('footer')) {
+            return false;
+        }
+
+        // Overridden by conditionals
+        if (!$this->isObjDeletable() && !$this->isObjResettable()) {
             return false;
         }
 

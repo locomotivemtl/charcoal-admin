@@ -241,12 +241,20 @@ class ElfinderConnectorAction extends AdminAction
 
         if ($currentFileSystem && isset($filesystems[$currentFileSystem])) {
             $config = $filesystemConfig['connections'][$currentFileSystem];
-            $label = isset($config['label']) ?
-                $this->translator()->translation($config['label']) : ucfirst($currentFileSystem);
-            $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
+
+            if (isset($config['label'])) {
+                $label = $this->translator()->translation($config['label']);
+            } else {
+                $label = ucfirst($filesystem);
+            }
+
+            if (isset($config['base_url'])) {
+                $baseUrl = $config['base_url'];
+            } else {
+                $baseUrl = $defaultBaseUrl;
+            }
 
             $startPath = $this->formProperty()->uploadPath();
-
             if (!$startPath) {
                 $startPath = isset($config['path']) ? $config['path'] : '/';
             }
@@ -254,8 +262,8 @@ class ElfinderConnectorAction extends AdminAction
             $filesystems[$currentFileSystem]->createDir($startPath);
 
             $roots[$currentFileSystem] = [
-                'driver'     => 'Flysystem',
-                'filesystem' => $filesystems[$currentFileSystem],
+                'driver'         => 'Flysystem',
+                'filesystem'     => $filesystems[$currentFileSystem],
 
                 'alias'          => (string)$label,
                 'cache'          => false,
@@ -295,16 +303,26 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         foreach ($filesystemConfig['connections'] as $filesystem => $config) {
-            if (isset($config['public']) && !$config['public']) {
+            if (isset($config['public']) && $config['public'] !== true) {
                 continue;
             }
-            $label = isset($config['label']) ?
-                $this->translator()->translation($config['label']) : ucfirst($filesystem);
-            $baseUrl = isset($config['base_url']) ? $config['base_url'] : $defaultBaseUrl;
+
+            if (isset($config['label'])) {
+                $label = $this->translator()->translation($config['label']);
+            } else {
+                $label = ucfirst($filesystem);
+            }
+
+            if (isset($config['base_url'])) {
+                $baseUrl = $config['base_url'];
+            } else {
+                $baseUrl = $defaultBaseUrl;
+            }
+
 
             $roots[$filesystem] = [
-                'driver'     => 'Flysystem',
-                'filesystem' => $filesystems[$filesystem],
+                'driver'         => 'Flysystem',
+                'filesystem'     => $filesystems[$filesystem],
 
                 'alias'          => (string)$label,
                 'cache'          => false,
@@ -332,7 +350,6 @@ class ElfinderConnectorAction extends AdminAction
                 // Disable and hide dot starting files
                 'accessControl'  => 'access',
                 // File permission attributes
-
                 'attributes' => [
                     $this->attributesForHiddenFiles()
                 ]

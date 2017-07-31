@@ -40,82 +40,76 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(UserData::class);
     }
 
-    public function testConstructor()
+    public function testDefaults()
     {
-        $obj = $this->obj;
-        $this->assertInstanceOf(UserData::class, $obj);
-
-        $this->assertSame(null, $obj->ip());
-        $this->assertSame(null, $obj->lang());
-        $this->assertSame(null, $obj->ts());
+        $this->assertNull($this->obj->ip());
+        $this->assertNull($this->obj->lang());
+        $this->assertNull($this->obj->ts());
     }
 
     public function testSetData()
     {
-        $obj = $this->obj;
-        $ret = $obj->setData(
-            [
+        $ret = $this->obj->setData([
             'ip'=>'192.168.1.1',
             'lang'=>'fr',
             'ts'=>'2015-01-01 15:05:20'
-            ]
-        );
-        $this->assertSame($ret, $obj);
-        $this->assertEquals(ip2long('192.168.1.1'), $obj->ip());
-        $this->assertEquals('fr', $obj->lang());
+        ]);
+        $this->assertSame($ret, $this->obj);
+        $this->assertEquals(ip2long('192.168.1.1'), $this->obj->ip());
+        $this->assertEquals('fr', $this->obj->lang());
         $expected = new DateTime('2015-01-01 15:05:20');
-        $this->assertEquals($expected, $obj->ts());
+        $this->assertEquals($expected, $this->obj->ts());
     }
 
     public function testSetIp()
     {
-        $obj = $this->obj;
-        $ret = $obj->setIp('1.1.1.1');
-        $this->assertSame($ret, $obj);
-        $this->assertEquals(ip2long('1.1.1.1'), $obj->ip());
+        $this->obj = $this->obj;
+        $ret = $this->obj->setIp('1.1.1.1');
+        $this->assertSame($ret, $this->obj);
+        $this->assertEquals(ip2long('1.1.1.1'), $this->obj->ip());
 
-        $obj->setIp(2349255);
-        $this->assertEquals(2349255, $obj->ip());
+        $this->obj->setIp(2349255);
+        $this->assertEquals(2349255, $this->obj->ip());
     }
 
     public function testSetLang()
     {
-        $obj = $this->obj;
-        $ret = $obj->setLang('en');
-        $this->assertSame($ret, $obj);
-        $this->assertEquals('en', $obj->lang());
+        $this->obj = $this->obj;
+        $ret = $this->obj->setLang('en');
+        $this->assertSame($ret, $this->obj);
+        $this->assertEquals('en', $this->obj->lang());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->setLang(false);
+        $this->obj->setLang(false);
     }
 
     public function testSetTs()
     {
-        $obj = $this->obj;
-        $ret = $obj->setTs('July 1st, 2014');
-        $this->assertSame($ret, $obj);
+        $this->obj = $this->obj;
+        $ret = $this->obj->setTs('July 1st, 2014');
+        $this->assertSame($ret, $this->obj);
         $expected = new DateTime('July 1st, 2014');
-        $this->assertEquals($expected, $obj->ts());
+        $this->assertEquals($expected, $this->obj->ts());
 
         $this->setExpectedException('\InvalidArgumentException');
-        $obj->setTs(false);
+        $this->obj->setTs(false);
     }
 
     public function testPreSave()
     {
-        $obj = $this->obj
+        $this->obj = $this->obj
         ;
-        $this->assertSame(null, $obj->ip());
-        $this->assertSame(null, $obj->origin());
-        $this->assertSame(null, $obj->lang());
-        $this->assertSame(null, $obj->ts());
+        $this->assertSame(null, $this->obj->ip());
+        $this->assertSame(null, $this->obj->origin());
+        $this->assertSame(null, $this->obj->lang());
+        $this->assertSame(null, $this->obj->ts());
 
-        $obj->preSave();
+        $this->obj->preSave();
 
-        $this->assertSame(null, $obj->ip());
-        $this->assertSame($obj->resolveOrigin(), $obj->origin());
-        $this->assertSame(null, $obj->lang());
-        $this->assertNotSame(null, $obj->ts());
+        $this->assertSame(null, $this->obj->ip());
+        $this->assertSame($this->obj->resolveOrigin(), $this->obj->origin());
+        $this->assertSame(null, $this->obj->lang());
+        $this->assertNotSame(null, $this->obj->ts());
     }
 
     /**

@@ -47,11 +47,18 @@ class ContentTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->obj->active());
         $this->assertEquals(0, $this->obj->position());
-        $this->assertNull($this->obj->created());
-        $this->assertNull($this->obj->createdBy());
-        $this->assertNull($this->obj->lastModified());
-        $this->assertNull($this->obj->lastModifiedBy());
         $this->assertEquals([], $this->obj->requiredAclPermissions());
+
+        // Timestampable properties
+        $this->assertNull($this->obj->created());
+        $this->assertNull($this->obj->lastModified());
+
+        // Authorable properties
+        $this->assertNull($this->obj->createdBy());
+        $this->assertNull($this->obj->lastModifiedBy());
+
+        // Revisionable properties
+        $this->assertFalse($this->obj->revisionEnabled());
     }
 
     public function testSetData()
@@ -193,7 +200,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
 
         $this->obj->setRequiredAclPermissions(null);
         $this->assertEquals([], $this->obj->requiredAclPermissions());
-        
+
         $this->obj->setRequiredAclPermissions(false);
         $this->assertEquals([], $this->obj->requiredAclPermissions());
 

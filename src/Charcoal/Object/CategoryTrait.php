@@ -11,19 +11,19 @@ use InvalidArgumentException;
 trait CategoryTrait
 {
     /**
-     * @var string $itemType
+     * @var string
      */
     private $categoryItemType;
 
     /**
-     * @var Collection $categoryItems
+     * @var \Charcoal\Object\CategorizableInterface[]|array
      */
     private $categoryItems;
 
     /**
      * @param string $type The category item type.
      * @throws InvalidArgumentException If the type argument is not a string.
-     * @return CategoryInterface Chainable
+     * @return self
      */
     public function setCategoryItemType($type)
     {
@@ -51,6 +51,8 @@ trait CategoryTrait
     }
 
     /**
+     * Gets the number of items, directly within this category.
+     *
      * @return integer
      */
     public function numCategoryItems()
@@ -60,6 +62,8 @@ trait CategoryTrait
     }
 
     /**
+     * Gets wether the category has any items, directly within it.
+     *
      * @return boolean
      */
     public function hasCategoryItems()
@@ -69,7 +73,9 @@ trait CategoryTrait
     }
 
     /**
-     * @return Collection A list of `CategorizableInterface` objects
+     * Retrieves the category items, directly within it.
+     *
+     * @return \Charcoal\Object\CategorizableInterface[]|array A list of `CategorizableInterface` objects
      */
     public function categoryItems()
     {
@@ -80,7 +86,12 @@ trait CategoryTrait
     }
 
     /**
-     * @return Collection
+     * Loads the category items (directly within it).
+     *
+     * This method is abstract so must be reimplemented.
+     * Typically, a class would use a CollectionLoader to load the category items.
+     *
+     * @return \Charcoal\Object\CategorizableInterface[]|array
      */
-    abstract public function loadCategoryItems();
+    abstract protected function loadCategoryItems();
 }

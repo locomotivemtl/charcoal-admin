@@ -196,7 +196,7 @@ class UserData extends AbstractModel implements
     /**
      * Set when the object was created.
      *
-     * @param  DateTime|string|null $timestamp The timestamp at object's creation.
+     * @param  DateTimeInterface|string|null $timestamp The timestamp at object's creation.
      *     NULL is accepted and instances of DateTimeInterface are recommended;
      *     any other value will be converted (if possible) into one.
      * @throws InvalidArgumentException If the timestamp is invalid.
@@ -234,7 +234,7 @@ class UserData extends AbstractModel implements
     /**
      * Retrieve the creation timestamp.
      *
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     public function ts()
     {

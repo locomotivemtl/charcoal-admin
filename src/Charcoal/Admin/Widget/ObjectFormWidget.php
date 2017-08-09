@@ -304,6 +304,25 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
+     * Parse a form group.
+     *
+     * @param  string                   $groupIdent The group identifier.
+     * @param  array|FormGroupInterface $group      The group object or structure.
+     * @throws InvalidArgumentException If the identifier is not a string or the group is invalid.
+     * @return FormGroupInterface
+     */
+    protected function parseFormGroup($groupIdent, $group)
+    {
+        $group = parent::parseFormGroup($groupIdent, $group);
+
+        if (method_exists($this->obj(), 'filterAdminFormGroup')) {
+            $group = $this->obj()->filterAdminFormGroup($group, $groupIdent);
+        }
+
+        return $group;
+    }
+
+    /**
      * Retrieve the object's properties as form controls.
      *
      * @param  array $group An optional group to use.

@@ -41,7 +41,7 @@ class HierarchicalDisplay extends AbstractPropertyDisplay
         $pad   = str_repeat($this->indentation(), ($this->currentLevel() - 1));
         $value = $prop->displayVal($this->propertyVal());
 
-        return $pad . $value;
+        return $pad.$value;
     }
 
     /**

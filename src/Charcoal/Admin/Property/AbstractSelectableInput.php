@@ -35,6 +35,14 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     protected $choiceObjMap;
 
     /**
+     * Parsed property value
+     * Execute only once.
+     *
+     * @var mixed
+     */
+    protected $parsedVal = [];
+
+    /**
      * Retrieve the selectable options.
      *
      * @return Generator|array
@@ -42,7 +50,6 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     public function choices()
     {
         $choices = $this->p()->choices();
-
         foreach ($choices as $ident => $choice) {
             $choice = $this->parseChoice($ident, $choice);
 
@@ -111,6 +118,38 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
     }
 
     /**
+     * Keep parsed val in memory per lang
+     *
+     * @return mixed Parsed property value.
+     */
+    public function parsedVal()
+    {
+        if (!isset($this->parsedVal[$this->lang()])) {
+            $val = $this->propertyVal();
+
+            if ($val === null) {
+                return null;
+            }
+            $val = $this->p()->parseVal($val);
+
+            // Could be Translation instance
+            // Could be array
+            if (isset($val[$this->lang()])) {
+                $val = $val[$this->lang()];
+            }
+
+            // Doing this in the parseVal method of abstract property
+            // was causing multiple && l10n properties not to save.
+            if (!is_array($val) && $this->p()->multiple()) {
+                $val = explode($this->p()->multipleSeparator(), $val);
+            }
+
+            $this->parsedVal[$this->lang()] = $val;
+        }
+        return $this->parsedVal[$this->lang()];
+    }
+
+    /**
      * Determine if the provided option is a selected value.
      *
      * @param  mixed $choice The choice to check.
@@ -118,13 +157,11 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function isChoiceSelected($choice)
     {
-        $val = $this->propertyVal();
+        $val = $this->parsedVal();
 
         if ($val === null) {
             return false;
         }
-
-        $val = $this->p()->parseVal($val);
 
         if (isset($choice['value'])) {
             $choice = $choice['value'];

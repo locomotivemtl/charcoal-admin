@@ -4,8 +4,12 @@ namespace Charcoal\Admin;
 
 use InvalidArgumentException;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Config\AbstractConfig;
+
+// From 'charcoal-app'
+use Charcoal\App\Handler\HandlerConfig;
+use Charcoal\App\Route\RouteConfig;
 
 /**
  * Admin Config.
@@ -29,7 +33,7 @@ class Config extends AbstractConfig
     /**
      * @var array
      */
-    public $handlers = [];
+    private $handlers = [];
 
     /**
      * @var array
@@ -98,7 +102,7 @@ class Config extends AbstractConfig
      */
     public function setRoutes(array $routes)
     {
-        $toIterate = [ 'templates', 'actions', 'scripts' ];
+        $toIterate = RouteConfig::defaultRouteTypes();
         foreach ($routes as $key => $val) {
             if (in_array($key, $toIterate) && isset($this->routes[$key])) {
                 $this->routes[$key] = array_merge($this->routes[$key], $val);
@@ -108,5 +112,41 @@ class Config extends AbstractConfig
         }
 
         return $this;
+    }
+
+    /**
+     * Define custom response and error handlers.
+     *
+     * Charcoal overrides four of Slim's standard handlers:
+     *
+     * - "notFoundHandler"
+     * - "notAllowedHandler"
+     * - "errorHandler"
+     * - "phpErrorHandler"
+     *
+     * @param  array $handlers The handlers configuration structure to set.
+     * @return AppConfig Chainable
+     */
+    public function setHandlers(array $handlers)
+    {
+        $this->handlers = array_fill_keys(HandlerConfig::defaultHandlerTypes(), []);
+        $this->handlers['defaults'] = [];
+
+        foreach ($handlers as $handler => $data) {
+            $this->handlers[$handler] = array_replace(
+                $this->handlers[$handler],
+                $data
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function handlers()
+    {
+        return $this->handlers;
     }
 }

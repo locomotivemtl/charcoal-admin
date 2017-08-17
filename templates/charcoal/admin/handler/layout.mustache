@@ -1,15 +1,17 @@
 {{!--
+
 Error Handler Template
 ======================
 
 This template expects a `Charcoal\Admin\Template\HandlerTemplate` model as context.
+
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
 <section class="section error jumbotron">
     <div class="content o-container">
-        {{& errorMessage }}
+        {{> $handlerMessage }}
     </div>
 </section>
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

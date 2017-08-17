@@ -161,8 +161,11 @@
 
     "handlers": {
         "defaults": {
-            "template": "charcoal/admin/template/handler",
+            "template": "charcoal/admin/handler/layout",
             "controller": "charcoal/admin/template/handler"
+        },
+        "notFound": {
+            "partial": "charcoal/admin/handler/404"
         }
     },
 

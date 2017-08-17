@@ -1,0 +1,18 @@
+{{!--
+
+Page Not Found Template
+=======================
+
+--}}
+{{> charcoal/admin/template/inc.header }}
+
+<section class="section error jumbotron">
+    <div class="content o-container">
+        <h1>{{# _t }}Page Not Found{{/ _t }}</h1>
+        <p>{{# _t }}The page you are looking for could not be found.{{/ _t }}</p>
+        <p>{{# _t }}Check the address bar to ensure your URL is spelled correctly. If all else fails, you can visit our home page at the link below.{{/ _t }}</p>
+        <p><a href="{{ adminUrl }}">{{# _t }}Visit the Dashboard{{/ _t }}</a></p>
+    </div>
+</section>
+
+{{> charcoal/admin/template/inc.footer }}

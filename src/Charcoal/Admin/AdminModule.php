@@ -29,7 +29,7 @@ class AdminModule extends AbstractModule
      * ## Dependencies
      * - `charcoal/config` Provided by \Charcoal\CharcoalModule
      *
-     * @return AdminModule
+     * @return AdminModule Chainable
      */
     public function setup()
     {
@@ -59,6 +59,23 @@ class AdminModule extends AbstractModule
     }
 
     /**
+     * Set up the module's routes and handlers.
+     *
+     * @return AdminModule Chainable
+     */
+    public function setupRoutes()
+    {
+        if ($this->routeManager === null) {
+            parent::setupRoutes();
+
+            // Serve the Admin's "Not Found" handler for the Admin's route group.
+            $this->app()->any('{catchall:.*}', 'notFoundHandler');
+        }
+
+        return $this;
+    }
+
+    /**
      * Set up the module's handlers, via group middleware.
      *
      * @param  RequestInterface  $request  A PSR7 request object.
@@ -66,91 +83,121 @@ class AdminModule extends AbstractModule
      * @param  callable          $next     The next callable middleware.
      * @return ResponseInterface A PSR7 response object.
      */
-    public function setupHandlers(RequestInterface $request, ResponseInterface $response, callable $next)
-    {
-        $config    = $this->config();
-        $container = $this->app()->getContainer();
-        $adminUrl  = $container['base-url']->withBasePath($config['base_path']);
+    public function setupHandlers(
+        RequestInterface $request,
+        ResponseInterface $response,
+        callable $next
+    ) {
+        $container   = $this->app()->getContainer();
+        $appConfig   = $container['config'];
+        $adminConfig = $this->config();
 
-        if (isset($config['handlers'])) {
+        /**
+         * HTTP 404 (Not Found) handler.
+         *
+         * @param  object|HandlerInterface $handler An error handler instance.
+         * @return HandlerInterface
+         */
+        $container->extend('notFoundHandler', function ($handler) use ($appConfig, $adminConfig) {
+            if ($handler instanceof HandlerInterface) {
+                $config = $handler->createConfig($appConfig['handlers.defaults']);
+                $config->merge($adminConfig['handlers.defaults']);
 
-            /**
-             * HTTP 404 (Not Found) handler.
-             *
-             * @param  object|HandlerInterface $handler An error handler instance.
-             * @return HandlerInterface
-             */
-            $container->extend('notFoundHandler', function ($handler) use ($config, $adminUrl) {
-                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
-                    $handler->config()->merge($config['handlers.defaults']);
-                    $handler->setBaseUrl($adminUrl);
+                if (!empty($adminConfig['handlers.notFound'])) {
+                    $config->merge($adminConfig['handlers.notFound']);
                 }
 
-                return $handler;
-            });
+                $handler->setConfig($config)->init();
+            }
 
-            /**
-             * HTTP 405 (Not Allowed) handler.
-             *
-             * @param  object|HandlerInterface $handler An error handler instance.
-             * @return HandlerInterface
-             */
-            $container->extend('notAllowedHandler', function ($handler) use ($config, $adminUrl) {
-                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
-                    $handler->config()->merge($config['handlers.defaults']);
-                    $handler->setBaseUrl($adminUrl);
+            return $handler;
+        });
+
+        /**
+         * HTTP 405 (Not Allowed) handler.
+         *
+         * @param  object|HandlerInterface $handler An error handler instance.
+         * @return HandlerInterface
+         */
+        $container->extend('notAllowedHandler', function ($handler) use ($appConfig, $adminConfig) {
+            if ($handler instanceof HandlerInterface) {
+                $config = $handler->createConfig($appConfig['handlers.defaults']);
+                $config->merge($adminConfig['handlers.defaults']);
+
+                if (!empty($adminConfig['handlers.notAllowed'])) {
+                    $config->merge($adminConfig['handlers.notAllowed']);
                 }
 
-                return $handler;
-            });
+                $handler->setConfig($config)->init();
+            }
 
-            /**
-             * HTTP 500 (Error) handler for PHP 7+ Throwables.
-             *
-             * @param  object|HandlerInterface $handler An error handler instance.
-             * @return HandlerInterface
-             */
-            $container->extend('phpErrorHandler', function ($handler) use ($config, $adminUrl) {
-                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
-                    $handler->config()->merge($config['handlers.defaults']);
-                    $handler->setBaseUrl($adminUrl);
+            return $handler;
+        });
+
+        /**
+         * HTTP 500 (Error) handler for PHP 7+ Throwables.
+         *
+         * @param  object|HandlerInterface $handler An error handler instance.
+         * @return HandlerInterface
+         */
+        $container->extend('phpErrorHandler', function ($handler) use ($appConfig, $adminConfig) {
+            if ($handler instanceof HandlerInterface) {
+                $config = $handler->createConfig($appConfig['handlers.defaults']);
+                $config->merge($adminConfig['handlers.defaults']);
+
+                if (!empty($adminConfig['handlers.phpError'])) {
+                    $config->merge($adminConfig['handlers.phpError']);
                 }
 
-                return $handler;
-            });
+                $handler->setConfig($config)->init();
+            }
 
-            /**
-             * HTTP 500 (Error) handler.
-             *
-             * @param  object|HandlerInterface $handler An error handler instance.
-             * @return HandlerInterface
-             */
-            $container->extend('errorHandler', function ($handler) use ($config, $adminUrl) {
-                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
-                    $handler->config()->merge($config['handlers.defaults']);
-                    $handler->setBaseUrl($adminUrl);
+            return $handler;
+        });
+
+        /**
+         * HTTP 500 (Error) handler.
+         *
+         * @param  object|HandlerInterface $handler An error handler instance.
+         * @return HandlerInterface
+         */
+        $container->extend('errorHandler', function ($handler) use ($appConfig, $adminConfig) {
+            if ($handler instanceof HandlerInterface) {
+                $config = $handler->createConfig($appConfig['handlers.defaults']);
+                $config->merge($adminConfig['handlers.defaults']);
+
+                if (!empty($adminConfig['handlers.error'])) {
+                    $config->merge($adminConfig['handlers.error']);
                 }
 
-                return $handler;
-            });
+                $handler->setConfig($config)->init();
+            }
 
-            /**
-             * HTTP 503 (Service Unavailable) handler.
-             *
-             * This handler is not part of Slim.
-             *
-             * @param  object|HandlerInterface $handler An error handler instance.
-             * @return HandlerInterface
-             */
-            $container->extend('shutdownHandler', function ($handler) use ($config, $adminUrl) {
-                if ($handler instanceof HandlerInterface && isset($config['handlers.defaults'])) {
-                    $handler->config()->merge($config['handlers.defaults']);
-                    $handler->setBaseUrl($adminUrl);
+            return $handler;
+        });
+
+        /**
+         * HTTP 503 (Service Unavailable) handler.
+         *
+         * This handler is not part of Slim.
+         *
+         * @param  object|HandlerInterface $handler An error handler instance.
+         * @return HandlerInterface
+         */
+        $container->extend('maintenanceHandler', function ($handler) use ($appConfig, $adminConfig) {
+            if ($handler instanceof HandlerInterface) {
+                $config = $handler->createConfig($appConfig['handlers.defaults']);
+                $config->merge($adminConfig['handlers.defaults']);
+
+                if (!empty($adminConfig['handlers.maintenance'])) {
+                    $config->merge($adminConfig['handlers.maintenance']);
                 }
 
-                return $handler;
-            });
-        }
+                $handler->setConfig($config)->init();
+            }
+
+            return $handler;
+        });
 
         return $next($request, $response);
     }

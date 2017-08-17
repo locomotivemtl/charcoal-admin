@@ -377,7 +377,9 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @return array
+     * Yield the header menu.
+     *
+     * @return array|Generator
      */
     public function headerMenu()
     {
@@ -385,13 +387,15 @@ class AdminTemplate extends AbstractTemplate implements
             $this->headerMenu = $this->createHeaderMenu();
         }
 
-        return $this->headerMenu;
+        foreach ($this->headerMenu as $menuIdent => $menuItem) {
+            yield $menuIdent => $menuItem;
+        }
     }
 
     /**
      * @param  mixed $options The sidemenu widget ID or config.
      * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
-     * @return array
+     * @return array|Generator
      */
     protected function createHeaderMenu($options = null)
     {
@@ -417,63 +421,80 @@ class AdminTemplate extends AbstractTemplate implements
             $mainMenu = $mainMenuFromRequest;
         }
 
-        $menu   = $this->menuBuilder->build([]);
-        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
+        $menu  = $this->menuBuilder->build([]);
         foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
+            error_log('+ '.var_export($menuIdent, true));
             $menuItem['menu'] = $menu;
-            $item = $this->menuItemBuilder->build($menuItem);
-            if ($item->isAuthorized() === false) {
+            $test = $this->menuItemBuilder->build($menuItem);
+            if ($test->isAuthorized() === false) {
                 continue;
             }
+            unset($menuItem['menu']);
 
             if (isset($menuItem['active']) && $menuItem['active'] === false) {
                 continue;
             }
 
-            if (isset($menuItem['ident'])) {
-                $menuIdent = $menuItem['ident'];
-            } else {
-                $menuItem['ident'] = $menuIdent;
-            }
+            $menuItem  = $this->parseHeaderMenuItem($menuItem, $menuIdent, $mainMenu);
+            $menuIdent = $menuItem['ident'];
 
-            if (!empty($menuItem['url'])) {
-                $url = $menuItem['url'];
-                if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
-                    $url = $this->adminUrl().$url;
-                }
-            } else {
-                $url = '';
-            }
-
-            $menuItem['url'] = $url;
-
-            if (isset($menuItem['icon'])) {
-                $icon = $menuItem['icon'];
-                if ($icon && strpos($icon, ':') === false && !in_array($icon[0], [ '/', '#', '?' ])) {
-                    $icon = $svgUri.$icon;
-                }
-            } else {
-                $icon = $svgUri.'contents';
-            }
-
-            if (is_string($icon) && strpos($icon, '.svg') > 0) {
-                unset($menuItem['icon']);
-                $menuItem['svg'] = $icon;
-            } else {
-                unset($menuItem['svg']);
-                $menuItem['icon'] = $icon;
-            }
-
-            if (isset($menuItem['label'])) {
-                $menuItem['label'] = $this->translator()->translation($menuItem['label']);
-            }
-
-            $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
-
-            $menuItem['selected'] = ($menuItem['ident'] === $mainMenu);
-
-            yield $menuItem;
+            yield $menuIdent => $menuItem;
         }
+    }
+
+    /**
+     * @param  array       $menuItem     The menu structure.
+     * @param  string|null $menuIdent    The menu identifier.
+     * @param  string|null $currentIdent The current menu identifier.
+     * @return array Finalized menu structure.
+     */
+    private function parseHeaderMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
+    {
+        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
+
+        if (isset($menuItem['ident'])) {
+            $menuIdent = $menuItem['ident'];
+        } else {
+            $menuItem['ident'] = $menuIdent;
+        }
+
+        if (!empty($menuItem['url'])) {
+            $url = $menuItem['url'];
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
+        } else {
+            $url = '';
+        }
+
+        $menuItem['url'] = $url;
+
+        if (isset($menuItem['icon'])) {
+            $icon = $menuItem['icon'];
+            if ($icon && strpos($icon, ':') === false && !in_array($icon[0], [ '/', '#', '?' ])) {
+                $icon = $svgUri.$icon;
+            }
+        } else {
+            $icon = $svgUri.'contents';
+        }
+
+        if (is_string($icon) && strpos($icon, '.svg') > 0) {
+            unset($menuItem['icon']);
+            $menuItem['svg'] = $icon;
+        } else {
+            unset($menuItem['svg']);
+            $menuItem['icon'] = $icon;
+        }
+
+        if (isset($menuItem['label'])) {
+            $menuItem['label'] = $this->translator()->translation($menuItem['label']);
+        }
+
+        $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
+
+        $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
+
+        return $menuItem;
     }
 
     /**

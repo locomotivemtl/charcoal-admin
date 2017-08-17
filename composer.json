@@ -19,7 +19,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.5.x-dev"
+            "dev-master": "0.6.x-dev"
         }
     },
     "require": {
@@ -29,7 +29,7 @@
         "paragonie/random_compat": "^1.2",
         "studio-42/elfinder": "2.1.22",
         "barryvdh/elfinder-flysystem-driver": "^0.2.0",
-        "locomotivemtl/charcoal-app": "~0.3",
+        "locomotivemtl/charcoal-app": "~0.5",
         "locomotivemtl/charcoal-core": "^0.2",
         "locomotivemtl/charcoal-email": "^0.1",
         "locomotivemtl/charcoal-object": "~0.2",

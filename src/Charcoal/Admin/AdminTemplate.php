@@ -423,7 +423,6 @@ class AdminTemplate extends AbstractTemplate implements
 
         $menu  = $this->menuBuilder->build([]);
         foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
-            error_log('+ '.var_export($menuIdent, true));
             $menuItem['menu'] = $menu;
             $test = $this->menuItemBuilder->build($menuItem);
             if ($test->isAuthorized() === false) {

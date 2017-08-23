@@ -173,81 +173,106 @@ class EditTemplate extends AdminTemplate implements
      */
     public function title()
     {
-        if (isset($this->title)) {
-            return $this->title;
-        }
+        if ($this->title === null) {
+            $title = null;
 
-        try {
             $config = $this->objEditDashboardConfig();
-
             if (isset($config['title'])) {
-                $this->title = $this->translator()->translation($config['title']);
-
-                return $this->title;
-            }
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
-        }
-
-        $obj      = $this->obj();
-        $objId    = $this->objId();
-        $objType  = $this->objType();
-        $metadata = $obj->metadata();
-        $objLabel = null;
-
-        if (!$objLabel && isset($metadata['admin']['forms'])) {
-            $adminMetadata = $metadata['admin'];
-
-            $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
-            if (!$formIdent) {
-                $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
-            }
-
-            if (isset($adminMetadata['forms'][$formIdent]['label'])) {
-                $objLabel = $this->translator()->translation($adminMetadata['forms'][$formIdent]['label']);
-            }
-        }
-
-        if ($objId) {
-            if (!$objLabel && isset($metadata['labels']['edit_item'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['edit_item']);
-            }
-
-            if (!$objLabel && isset($metadata['labels']['edit_model'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['edit_model']);
-            }
-        } else {
-            if (!$objLabel && isset($metadata['labels']['new_item'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['new_item']);
-            }
-
-            if (!$objLabel && isset($metadata['labels']['new_model'])) {
-                $objLabel = $this->translator()->translation($metadata['labels']['new_model']);
-            }
-        }
-
-        if (!$objLabel) {
-            $objType = (isset($metadata['labels']['singular_name']) ? $this->translator()->translation($metadata['labels']['singular_name']) : null);
-
-            if ($objId) {
-                $objLabel = $this->translator()->translation('Edit: {{ objType }} #{{ id }}');
+                $title = $this->translator()->translation($config['title']);
             } else {
-                $objLabel = $this->translator()->translation('Create: {{ objType }}');
+                $obj      = $this->obj();
+                $objId    = $this->objId();
+                $objType  = $this->objType();
+                $metadata = $obj->metadata();
+
+                if (!$title && isset($metadata['admin']['forms'])) {
+                    $adminMetadata = $metadata['admin'];
+
+                    $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
+                    if (!$formIdent) {
+                        $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+                    }
+
+                    if (isset($adminMetadata['forms'][$formIdent]['label'])) {
+                        $title = $this->translator()->translation($adminMetadata['forms'][$formIdent]['label']);
+                    }
+                }
+
+                if ($objId) {
+                    if (!$title && isset($metadata['labels']['edit_item'])) {
+                        $title = $this->translator()->translation($metadata['labels']['edit_item']);
+                    }
+
+                    if (!$title && isset($metadata['labels']['edit_model'])) {
+                        $title = $this->translator()->translation($metadata['labels']['edit_model']);
+                    }
+                } else {
+                    if (!$title && isset($metadata['labels']['new_item'])) {
+                        $title = $this->translator()->translation($metadata['labels']['new_item']);
+                    }
+
+                    if (!$title && isset($metadata['labels']['new_model'])) {
+                        $title = $this->translator()->translation($metadata['labels']['new_model']);
+                    }
+                }
+
+                if (!$title) {
+                    $objType = (isset($metadata['labels']['singular_name']) ? $this->translator()->translation($metadata['labels']['singular_name']) : null);
+
+                    if ($objId) {
+                        $title = $this->translator()->translation('Edit: {{ objType }} #{{ id }}');
+                    } else {
+                        $title = $this->translator()->translation('Create: {{ objType }}');
+                    }
+
+                    if ($objType) {
+                        $title = strtr($title, [
+                            '{{ objType }}' => $objType
+                        ]);
+                    }
+                }
             }
 
-            if ($objType) {
-                $objLabel = strtr($objLabel, [
-                    '{{ objType }}' => $objType
-                ]);
-            }
-        }
-
-        if ($obj->view()) {
-            $this->title = $obj->render((string)$objLabel, $obj);
-        } else {
-            $this->title = (string)$objLabel;
+            $this->title = $this->renderTitle($title);
         }
 
         return $this->title;
+    }
+
+    /**
+     * Retrieve the page's sub-title.
+     *
+     * @return Translation|string|null
+     */
+    public function subtitle()
+    {
+        if ($this->subtitle === null) {
+            $config = $this->objEditDashboardConfig();
+            if (isset($config['subtitle'])) {
+                $title = $this->translator()->translation($config['subtitle']);
+            } else {
+                $title = '';
+            }
+
+            $this->subtitle = $this->renderTitle($title);
+        }
+
+        return $this->subtitle;
+    }
+
+    /**
+     * Retrieve the page's sub-title.
+     *
+     * @param  mixed $title The title to render.
+     * @return string|null
+     */
+    protected function renderTitle($title)
+    {
+        $obj = $this->obj();
+        if ($obj->view()) {
+            return $obj->render((string)$title, $obj);
+        } else {
+            return (string)$title;
+        }
     }
 }

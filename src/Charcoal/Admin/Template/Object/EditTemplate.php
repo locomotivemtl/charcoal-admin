@@ -176,7 +176,13 @@ class EditTemplate extends AdminTemplate implements
         if ($this->title === null) {
             $title = null;
 
-            $config = $this->objEditDashboardConfig();
+            try {
+                $config = $this->objEditDashboardConfig();
+            } catch (Exception $e) {
+                $this->logger->error($e->getMessage());
+                $config = [];
+            }
+
             if (isset($config['title'])) {
                 $title = $this->translator()->translation($config['title']);
             } else {
@@ -247,7 +253,13 @@ class EditTemplate extends AdminTemplate implements
     public function subtitle()
     {
         if ($this->subtitle === null) {
-            $config = $this->objEditDashboardConfig();
+            try {
+                $config = $this->objEditDashboardConfig();
+            } catch (Exception $e) {
+                $this->logger->error($e->getMessage());
+                $config = [];
+            }
+
             if (isset($config['subtitle'])) {
                 $title = $this->translator()->translation($config['subtitle']);
             } else {

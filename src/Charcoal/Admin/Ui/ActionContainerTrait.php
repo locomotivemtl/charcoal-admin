@@ -238,7 +238,7 @@ trait ActionContainerTrait
             $action = array_replace($this->defaultActionStruct(), $action);
             $action = $this->parseActionRenderables($action, $renderer);
 
-            if (!empty($action['permissions']) && $this instanceof AuthAwareInterface) {
+            if ($action['active'] === true && !empty($action['permissions']) && $this instanceof AuthAwareInterface) {
                 $action['active'] = $this->hasPermissions($action['permissions']);
             }
         }
@@ -319,7 +319,7 @@ trait ActionContainerTrait
             $renderer = $this->getActionRenderer();
         }
 
-        if (isset($action['condition'])) {
+        if ($action['active'] === true && isset($action['condition'])) {
             $action['active'] = $this->parseActionCondition($action['condition'], $action, $renderer);
             unset($action['condition']);
         }

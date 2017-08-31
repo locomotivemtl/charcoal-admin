@@ -382,8 +382,17 @@ abstract class AbstractPropertyInput implements
      */
     public function setPlaceholder($placeholder)
     {
+        if ($placeholder === null || $placeholder === '') {
+            $this->placeholder = '';
+            return $this;
+        }
+
         $this->placeholder = $this->translator()->translation($placeholder);
-        $this->placeholder->isRendered = false;
+        if ($this->placeholder instanceof Translation) {
+            $this->placeholder->isRendered = false;
+        } else {
+            $this->placeholder = '';
+        }
 
         return $this;
     }
@@ -400,11 +409,15 @@ abstract class AbstractPropertyInput implements
 
             if (isset($metadata['data']['placeholder'])) {
                 $this->setPlaceholder($metadata['data']['placeholder']);
+            } else {
+                $this->placeholder = '';
             }
         }
 
-        if (isset($this->placeholder->isRendered) && $this->placeholder->isRendered === false) {
-            $this->placeholder = $this->renderTranslatableTemplate($this->placeholder);
+        if ($this->placeholder instanceof Translation) {
+            if (isset($this->placeholder->isRendered) && $this->placeholder->isRendered === false) {
+                $this->placeholder = $this->renderTranslatableTemplate($this->placeholder);
+            }
         }
 
         return $this->placeholder;
@@ -772,9 +785,14 @@ abstract class AbstractPropertyInput implements
             $templateString->isRendered = true;
 
             return $templateString;
-        } else {
-            return $this->renderTemplate($templateString);
+        } elseif (is_string($templateString)) {
+            $isBlank = empty($templateString) && !is_numeric($templateString);
+            if (!$isBlank) {
+                return $this->renderTemplate($templateString);
+            }
         }
+
+        return '';
     }
 
     /**

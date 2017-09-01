@@ -671,13 +671,20 @@ trait CollectionContainerTrait
 
         $metadata = $property->metadata();
         $objMetadata = $object->metadata()->property($property->ident());
-
         if ($objMetadata) {
             $metadata->setData($objMetadata);
         }
 
         $this->display->setData($metadata->data());
-        $this->display->setData($property->viewOptions($displayType));
+
+        $viewOptions = $property->viewOptions($displayType);
+        $this->display->setData($viewOptions);
+
+        $propertyIdent = $property->ident();
+        $propertiesOptions = $this->propertiesOptions();
+        if (isset($propertiesOptions[$propertyIdent])) {
+            $this->display->setData(array_diff_key($propertiesOptions[$propertyIdent], [ 'view_options' => true ]));
+        }
     }
 
     /**

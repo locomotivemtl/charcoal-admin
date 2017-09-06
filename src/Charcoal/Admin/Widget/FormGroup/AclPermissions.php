@@ -113,7 +113,7 @@ class AclPermissions extends AdminWidget implements
      */
     protected function adminAcl()
     {
-        if (!isset($this->modelFactory)) {
+        if (!isset($this->aclManager)) {
             throw new RuntimeException(sprintf(
                 'ACL Manager is not defined for "%s"',
                 get_class($this)

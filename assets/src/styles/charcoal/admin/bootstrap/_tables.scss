@@ -23,3 +23,16 @@
     width: rem(20px + 30px);
     text-align: center;
 }
+
+.table-row-actions {
+    .dropdown-menu {
+        left:  auto;
+        right: 0;
+    }
+}
+
+.charcoal-admin-widget-table {
+    .table-container > .table {
+        margin-bottom: ($line-height-computed * 3);
+    }
+}

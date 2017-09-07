@@ -1737,6 +1737,13 @@ textarea.form-control {
   width: 3.125rem;
   text-align: center; }
 
+.table-row-actions .dropdown-menu {
+  left: auto;
+  right: 0; }
+
+.charcoal-admin-widget-table .table-container > .table {
+  margin-bottom: 60px; }
+
 .panel-body > :first-child {
   margin-top: 0; }
 

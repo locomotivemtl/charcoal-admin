@@ -41,13 +41,13 @@
             <span class="btn-label sr-only">{{# _t }}Update selected item{{/ _t }}</span>
         </button>
     {{/ allowUpdate }}
-    {{# allowUpdate }}
+    {{# allowCreate }}
         <button id="{{ inputId }}_create" class="btn btn-info" type="button"
                         data-update-target="#{{ inputId }}">
             <span class="fa fa-plus" aria-hidden="true"></span>
             <span class="btn-label sr-only">{{# _t }}Create a new item{{/ _t }}</span>
         </button>
-    {{/ allowUpdate }}
+    {{/ allowCreate }}
     </span>
     </div>
 {{/ inputGroup }}

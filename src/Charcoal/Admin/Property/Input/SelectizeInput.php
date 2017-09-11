@@ -217,7 +217,7 @@ class SelectizeInput extends SelectInput
      */
     public function inputGroup()
     {
-        return !!($this->allowClipboardCopy() || $this->allowUpdate());
+        return !!($this->allowClipboardCopy() || $this->allowUpdate() || $this->allowCreate());
     }
 
     /**

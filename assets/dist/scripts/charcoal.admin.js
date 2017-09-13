@@ -3235,28 +3235,26 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
         widget.pagination.page = 1;
     }
 
-    var $input = this.element().find('input');
-    var val = $input.val();
+    var $input, words, props, filters = [];
 
-    var properties = this.opts.data.list || [];
+    $input = this.element().find('input');
+    words  = $input.val().split(/\s/);
+    props  = this.opts.data.list || [];
 
-    var i = 0;
-    var total = properties.length;
+    $.each(words, function (i, word) {
+        $.each(props, function (j, prop) {
+            filters.push({
+                val:      '%' + word + '%',
+                property: prop,
+                operator: 'LIKE',
+                operand:  'OR'
+            });
+        });
+    });
 
-    // Dumb loop
-    for (; i < total; i++) {
-        var single_filter = {};
-        single_filter[properties[i]] = {
-            val:      '%' + val + '%',
-            property: properties[i],
-            operator: 'LIKE',
-            operand:  'OR'
-        };
+    widget.set_filters(filters);
 
-        widget.add_filter(single_filter);
-    }
-
-    // widget.add_search(val, properties);
+    // widget.add_search(val, props);
 
     widget.reload();
 

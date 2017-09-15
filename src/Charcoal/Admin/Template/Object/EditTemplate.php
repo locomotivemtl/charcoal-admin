@@ -48,83 +48,10 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return array
-     */
-    protected function createDashboardConfig()
-    {
-        return $this->objEditDashboardConfig();
-    }
-
-    /**
-     * Retrieve the sidemenu.
-     *
-     * @return SidemenuWidgetInterface|null
-     */
-    public function sidemenu()
-    {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->objEditDashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
-        }
-
-        return $this->sidemenu;
-    }
-
-    /**
-     * Retrieve the header menu.
-     *
-     * @return array
-     */
-    public function headerMenu()
-    {
-        if ($this->headerMenu === null) {
-            $dashboardConfig = $this->objEditDashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->headerMenu = $this->createHeaderMenu();
-            }
-        }
-
-        return $this->headerMenu;
-    }
-
-    /**
-     * @throws Exception If the object's admin metadata is not set.
-     * @return \ArrayAccess
-     */
-    private function objAdminMetadata()
-    {
-        $obj = $this->obj();
-
-        $objMetadata = $obj->metadata();
-
-        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
-        if ($adminMetadata === null) {
-            throw new Exception(sprintf(
-                'The object %s does not have an admin metadata.',
-                get_class($obj)
-            ));
-        }
-
-        return $adminMetadata;
-    }
-
-    /**
-     * Get the dashboard config for the current object.
-     *
-     * This method loads the "dashboard config" from the object's admin metadata.
-     *
      * @throws Exception If the object's dashboard config can not be loaded.
      * @return array
      */
-    private function objEditDashboardConfig()
+    protected function createDashboardConfig()
     {
         $adminMetadata  = $this->objAdminMetadata();
         $dashboardIdent = $this->dashboardIdent();
@@ -167,6 +94,67 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
+     * Retrieve the sidemenu.
+     *
+     * @return SidemenuWidgetInterface|null
+     */
+    public function sidemenu()
+    {
+        if ($this->sidemenu === null) {
+            $dashboardConfig = $this->dashboardConfig();
+
+            if (isset($dashboardConfig['sidemenu'])) {
+                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
+            } else {
+                $this->sidemenu = $this->createSidemenu();
+            }
+        }
+
+        return $this->sidemenu;
+    }
+
+    /**
+     * Retrieve the header menu.
+     *
+     * @return array
+     */
+    public function headerMenu()
+    {
+        if ($this->headerMenu === null) {
+            $dashboardConfig = $this->dashboardConfig();
+
+            if (isset($dashboardConfig['sidemenu'])) {
+                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
+            } else {
+                $this->headerMenu = $this->createHeaderMenu();
+            }
+        }
+
+        return $this->headerMenu;
+    }
+
+    /**
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
+     */
+    private function objAdminMetadata()
+    {
+        $obj = $this->obj();
+
+        $objMetadata = $obj->metadata();
+
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
+        if ($adminMetadata === null) {
+            throw new Exception(sprintf(
+                'The object %s does not have an admin metadata.',
+                get_class($obj)
+            ));
+        }
+
+        return $adminMetadata;
+    }
+
+    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation
@@ -177,7 +165,7 @@ class EditTemplate extends AdminTemplate implements
             $title = null;
 
             try {
-                $config = $this->objEditDashboardConfig();
+                $config = $this->dashboardConfig();
             } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
                 $config = [];
@@ -254,7 +242,7 @@ class EditTemplate extends AdminTemplate implements
     {
         if ($this->subtitle === null) {
             try {
-                $config = $this->objEditDashboardConfig();
+                $config = $this->dashboardConfig();
             } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
                 $config = [];

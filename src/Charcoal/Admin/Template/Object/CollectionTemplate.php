@@ -80,11 +80,27 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
+     * @throws Exception If the dashboard config can not be loaded.
      * @return array
      */
     protected function createDashboardConfig()
     {
-        return $this->objCollectionDashboardConfig();
+        $adminMetadata  = $this->objAdminMetadata();
+        $dashboardIdent = $this->dashboardIdent();
+
+        if (!$dashboardIdent) {
+            $dashboardIdent = $this->metadataDashboardIdent();
+        }
+
+        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
+            throw new Exception(
+                'Dashboard config is not defined.'
+            );
+        }
+
+        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
+
+        return $dashboardConfig;
     }
 
     /**
@@ -95,7 +111,7 @@ class CollectionTemplate extends AdminTemplate implements
     public function sidemenu()
     {
         if ($this->sidemenu === null) {
-            $dashboardConfig = $this->objCollectionDashboardConfig();
+            $dashboardConfig = $this->dashboardConfig();
 
             if (isset($dashboardConfig['sidemenu'])) {
                 $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
@@ -115,7 +131,7 @@ class CollectionTemplate extends AdminTemplate implements
     public function headerMenu()
     {
         if ($this->headerMenu === null) {
-            $dashboardConfig = $this->objCollectionDashboardConfig();
+            $dashboardConfig = $this->dashboardConfig();
 
             if (isset($dashboardConfig['sidemenu'])) {
                 $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
@@ -172,7 +188,6 @@ class CollectionTemplate extends AdminTemplate implements
      */
     private function metadataDashboardIdent()
     {
-
         $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
         if ($dashboardIdent) {
             return $dashboardIdent;
@@ -205,30 +220,6 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @throws Exception If the dashboard config can not be loaded.
-     * @return array
-     */
-    private function objCollectionDashboardConfig()
-    {
-        $adminMetadata = $this->objAdminMetadata();
-
-        $dashboardIdent = $this->dashboardIdent();
-        if (!$dashboardIdent) {
-            $dashboardIdent = $this->metadataDashboardIdent();
-        }
-
-        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
-            throw new Exception(
-                'Dashboard config is not defined.'
-            );
-        }
-
-        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
-
-        return $dashboardConfig;
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation
@@ -240,7 +231,7 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         try {
-            $config = $this->objCollectionDashboardConfig();
+            $config = $this->dashboardConfig();
 
             if (isset($config['title'])) {
                 $this->title = $this->translator()->translation($config['title']);

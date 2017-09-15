@@ -49,85 +49,12 @@ class DocTemplate extends AdminTemplate implements
     }
 
     /**
+     * @throws Exception If the object's dashboard config can not be loaded.
      * @return array
      */
     protected function createDashboardConfig()
     {
-        return $this->objDocDashboardConfig();
-    }
-
-    /**
-     * Retrieve the sidemenu.
-     *
-     * @return SidemenuWidgetInterface|null
-     */
-    public function sidemenu()
-    {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->objDocDashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
-        }
-
-        return $this->sidemenu;
-    }
-
-    /**
-     * Retrieve the header menu.
-     *
-     * @return array
-     */
-    public function headerMenu()
-    {
-        if ($this->headerMenu === null) {
-            $dashboardConfig = $this->objDocDashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->headerMenu = $this->createHeaderMenu();
-            }
-        }
-
-        return $this->headerMenu;
-    }
-
-    /**
-     * @throws Exception If the object's admin metadata is not set.
-     * @return \ArrayAccess
-     */
-    private function objAdminMetadata()
-    {
-        $obj = $this->obj();
-
-        $objMetadata = $obj->metadata();
-
-        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
-        if ($adminMetadata === null) {
-            throw new Exception(sprintf(
-                'The object %s does not have an admin metadata.',
-                get_class($obj)
-            ));
-        }
-
-        return $adminMetadata;
-    }
-
-    /**
-     * Get the dashboard config for the current object.
-     *
-     * This method loads the "dashboard config" from the object's admin metadata.
-     *
-     * @throws Exception If the object's dashboard config can not be loaded.
-     * @return array
-     */
-    private function objDocDashboardConfig()
-    {
-        $adminMetadata = $this->objAdminMetadata();
+        $adminMetadata  = $this->objAdminMetadata();
         $dashboardIdent = $this->dashboardIdent();
 
         if (empty($dashboardIdent)) {
@@ -174,6 +101,67 @@ class DocTemplate extends AdminTemplate implements
     }
 
     /**
+     * Retrieve the sidemenu.
+     *
+     * @return SidemenuWidgetInterface|null
+     */
+    public function sidemenu()
+    {
+        if ($this->sidemenu === null) {
+            $dashboardConfig = $this->dashboardConfig();
+
+            if (isset($dashboardConfig['sidemenu'])) {
+                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
+            } else {
+                $this->sidemenu = $this->createSidemenu();
+            }
+        }
+
+        return $this->sidemenu;
+    }
+
+    /**
+     * Retrieve the header menu.
+     *
+     * @return array
+     */
+    public function headerMenu()
+    {
+        if ($this->headerMenu === null) {
+            $dashboardConfig = $this->dashboardConfig();
+
+            if (isset($dashboardConfig['sidemenu'])) {
+                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
+            } else {
+                $this->headerMenu = $this->createHeaderMenu();
+            }
+        }
+
+        return $this->headerMenu;
+    }
+
+    /**
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
+     */
+    private function objAdminMetadata()
+    {
+        $obj = $this->obj();
+
+        $objMetadata = $obj->metadata();
+
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
+        if ($adminMetadata === null) {
+            throw new Exception(sprintf(
+                'The object %s does not have an admin metadata.',
+                get_class($obj)
+            ));
+        }
+
+        return $adminMetadata;
+    }
+
+    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation
@@ -185,7 +173,7 @@ class DocTemplate extends AdminTemplate implements
         }
 
         try {
-            $config = $this->objDocDashboardConfig();
+            $config = $this->dashboardConfig();
 
             if (isset($config['title'])) {
                 $this->title = $this->translator()->translation($config['title']);

@@ -1480,7 +1480,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback) {
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
-        widget_type: that.widget_type || that.type(),
+        widget_type:    that.widget_type || that.type(),
         widget_options: that.widget_options()
     };
 
@@ -1687,6 +1687,15 @@ Charcoal.Admin.Widget_Attachment = function ()
         container:  'glyphicon-list',
         accordion:  'glyphicon-list'
     };
+
+    var that = this;
+    $(document).on('switch_language.charcoal', function(event) {
+        var opts = that.opts();
+        // Set widget lang to current Charcoal Admin Lang
+        opts.widget_options.lang = Charcoal.Admin.lang();
+        that.set_opts(opts);
+        that.reload();
+    });
 
     this.dirty = false;
     return this;
@@ -2515,17 +2524,24 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    Charcoal.Admin.setLang(lang);
-    $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
-    $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
+    var currentLang = Charcoal.Admin.lang();
+    if (currentLang !== lang) {
+        Charcoal.Admin.setLang(lang);
+        $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
+        $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 
-    $('[data-lang-switch][data-lang-switch!=' + lang + ']')
-        .removeClass('btn-info')
-        .addClass('btn-default');
+        $('[data-lang-switch][data-lang-switch!=' + lang + ']')
+            .removeClass('btn-info')
+            .addClass('btn-default');
 
-    $('[data-lang-switch][data-lang-switch=' + lang + ']')
-        .removeClass('btn-default')
-        .addClass('btn-info');
+        $('[data-lang-switch][data-lang-switch=' + lang + ']')
+            .removeClass('btn-default')
+            .addClass('btn-info');
+
+        $(document).triggerHandler({
+            type: 'switch_language.charcoal'
+        });
+    }
 };
 ;/**
  * Map sidebar

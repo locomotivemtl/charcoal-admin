@@ -377,15 +377,22 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    Charcoal.Admin.setLang(lang);
-    $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
-    $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
+    var currentLang = Charcoal.Admin.lang();
+    if (currentLang !== lang) {
+        Charcoal.Admin.setLang(lang);
+        $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
+        $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
 
-    $('[data-lang-switch][data-lang-switch!=' + lang + ']')
-        .removeClass('btn-info')
-        .addClass('btn-default');
+        $('[data-lang-switch][data-lang-switch!=' + lang + ']')
+            .removeClass('btn-info')
+            .addClass('btn-default');
 
-    $('[data-lang-switch][data-lang-switch=' + lang + ']')
-        .removeClass('btn-default')
-        .addClass('btn-info');
+        $('[data-lang-switch][data-lang-switch=' + lang + ']')
+            .removeClass('btn-default')
+            .addClass('btn-info');
+
+        $(document).triggerHandler({
+            type: 'switch_language.charcoal'
+        });
+    }
 };

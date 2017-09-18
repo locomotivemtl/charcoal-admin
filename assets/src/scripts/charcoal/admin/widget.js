@@ -179,7 +179,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback) {
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
-        widget_type: that.widget_type || that.type(),
+        widget_type:    that.widget_type || that.type(),
         widget_options: that.widget_options()
     };
 

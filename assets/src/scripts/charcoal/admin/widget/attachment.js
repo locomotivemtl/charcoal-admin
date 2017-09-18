@@ -20,6 +20,15 @@ Charcoal.Admin.Widget_Attachment = function ()
         accordion:  'glyphicon-list'
     };
 
+    var that = this;
+    $(document).on('switch_language.charcoal', function(event) {
+        var opts = that.opts();
+        // Set widget lang to current Charcoal Admin Lang
+        opts.widget_options.lang = Charcoal.Admin.lang();
+        that.set_opts(opts);
+        that.reload();
+    });
+
     this.dirty = false;
     return this;
 };

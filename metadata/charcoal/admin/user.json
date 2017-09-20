@@ -210,7 +210,7 @@
                 "widgets": {
                     "list": {
                         "type": "charcoal/admin/widget/table",
-                        "label": "Admin user list",
+                        "label": "Admin user (website manager) list",
                         "obj_type": "charcoal/admin/user"
                     }
                 },
@@ -221,6 +221,7 @@
                 }
             }
         },
+        "default_create_dashboard":"admin.edit",
         "default_edit_dashboard": "admin.edit",
         "default_collection_dashboard": "admin.collection"
     }

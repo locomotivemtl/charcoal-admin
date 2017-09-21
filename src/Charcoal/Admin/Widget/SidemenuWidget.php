@@ -9,6 +9,10 @@ use InvalidArgumentException;
 // From Pimple
 use Pimple\Container;
 
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
+
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
@@ -89,6 +93,13 @@ class SidemenuWidget extends AdminWidget implements
     private $showTitle = true;
 
     /**
+     * The admin's current route.
+     *
+     * @var UriInterface
+     */
+    protected $adminRoute;
+
+    /**
      * The sidemenu's title.
      *
      * @var string
@@ -117,6 +128,13 @@ class SidemenuWidget extends AdminWidget implements
     protected $sidemenuGroupFactory;
 
     /**
+     * Store the HTTP request object.
+     *
+     * @var RequestInterface
+     */
+    private $httpRequest;
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.
@@ -126,7 +144,39 @@ class SidemenuWidget extends AdminWidget implements
     {
         parent::setDependencies($container);
 
+        $this->setHttpRequest($container['request']);
         $this->setSidemenuGroupFactory($container['sidemenu/group/factory']);
+    }
+
+    /**
+     * Set an HTTP request object.
+     *
+     * @param RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
+     */
+    protected function setHttpRequest(RequestInterface $request)
+    {
+        $this->httpRequest = $request;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the HTTP request object.
+     *
+     * @throws RuntimeException If an HTTP request was not previously set.
+     * @return RequestInterface
+     */
+    public function httpRequest()
+    {
+        if (!isset($this->httpRequest)) {
+            throw new RuntimeException(sprintf(
+                'A PSR-7 Request instance is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->httpRequest;
     }
 
     /**
@@ -203,13 +253,34 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
+     * Retrieve the current route path.
+     *
+     * @return UriInterface|null
+     */
+    public function adminRoute()
+    {
+        if ($this->adminRoute === null) {
+            $uri = $this->httpRequest()->getUri();
+            $uri = $uri->withBasePath($this->adminConfig['base_path']);
+
+            $path = str_replace($uri->getBasePath(), '', $uri->getPath());
+            $path = ltrim($path, '/');
+            $uri  = $uri->withPath($path);
+
+            $this->adminRoute = $uri;
+        }
+
+        return $this->adminRoute;
+    }
+
+    /**
      * Retrieve the current object type from the GET parameters.
      *
      * @return string|null
      */
     public function objType()
     {
-        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+        return $this->httpRequest()->getParam('obj_type');
     }
 
     /**
@@ -306,6 +377,7 @@ class SidemenuWidget extends AdminWidget implements
             );
         }
 
+        $uriPath = $this->adminRoute()->getPath();
         $objType = $this->objType();
 
         if (is_array($link)) {
@@ -344,7 +416,7 @@ class SidemenuWidget extends AdminWidget implements
                 'active'   => $active,
                 'name'     => $name,
                 'url'      => $url,
-                'selected' => ($linkIdent === $objType),
+                'selected' => ($linkIdent === $objType || $linkIdent === $uriPath),
                 'required_acl_permissions' => $permissions
             ];
         } else {

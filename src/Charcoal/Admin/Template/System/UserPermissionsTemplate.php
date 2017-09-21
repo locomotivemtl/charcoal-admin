@@ -81,15 +81,15 @@ class UserPermissionsTemplate extends AdminTemplate implements
     public function createDashboardConfig()
     {
         return [
-            'layout'=>[
-                'structure'=>[[
-                    'columns' => [0]
-                ]]
+            'layout' => [
+                'structure' => [
+                    [ 'columns' => [ 0 ] ]
+                ]
             ],
-            'widgets'=>[
-                'list'=>[
-                    'type'=>'charcoal/support/admin/widget/table',
-                    'obj_type'=>'charcoal/admin/user/permission'
+            'widgets' => [
+                'list' => [
+                    'type'     => 'charcoal/support/admin/widget/table',
+                    'obj_type' => 'charcoal/admin/user/permission'
                 ]
             ]
         ];

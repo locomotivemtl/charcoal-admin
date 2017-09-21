@@ -57,14 +57,12 @@ class UsersTemplate extends AdminTemplate implements
         return [
             'layout' => [
                 'structure' => [
-                    [
-                        'columns' => [ 0 ]
-                    ]
+                    [ 'columns' => [ 0 ] ]
                 ]
             ],
             'widgets' => [
                 'list' => [
-                    'type'     => 'charcoal/support/admin/widget/table',
+                    'type'     => 'charcoal/admin/widget/table',
                     'obj_type' => 'charcoal/admin/user'
                 ]
             ]

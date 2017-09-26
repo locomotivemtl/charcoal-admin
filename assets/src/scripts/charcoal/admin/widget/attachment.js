@@ -21,7 +21,7 @@ Charcoal.Admin.Widget_Attachment = function ()
     };
 
     var that = this;
-    $(document).on('switch_language.charcoal', function(event) {
+    $(document).on('switch_language.charcoal', function () {
         var opts = that.opts();
         // Set widget lang to current Charcoal Admin Lang
         opts.widget_options.lang = Charcoal.Admin.lang();

@@ -13,6 +13,9 @@
             "logout": {
                 "ident": "charcoal/admin/template/logout"
             },
+            "help": {
+                "ident": "charcoal/admin/template/help"
+            },
             "account/lost-password":{
                 "ident": "charcoal/admin/template/account/lost-password"
             },

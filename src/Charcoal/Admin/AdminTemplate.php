@@ -41,8 +41,8 @@ use Charcoal\Admin\Ui\FeedbackContainerTrait;
  * - `subtitle` (Translation) The page subtitle
  * - `showHeaderMenu` (bool) - Display the header menu or not
  * - `headerMenu` (iterator) - The header menu data
- * - `showFooterMenu` (bool) - Display the footer menu or not
- * - `footerMenu` (iterator) - The footer menu data
+ * - `showSystemMenu` (bool) - Display the footer menu or not
+ * - `systemMenu` (iterator) - The footer menu data
  */
 class AdminTemplate extends AbstractTemplate implements
     AuthAwareInterface
@@ -100,32 +100,37 @@ class AdminTemplate extends AbstractTemplate implements
     protected $subtitle;
 
     /**
-     * @var boolean $showSidemenu
+     * @var boolean
      */
     private $showSidemenu = true;
 
     /**
-     * @var boolean $showHeaderMenu
+     * @var boolean
      */
     private $showHeaderMenu = true;
 
     /**
-     * @var boolean $showFooterMenu
+     * @var boolean
      */
-    private $showFooterMenu = true;
+    private $showSystemMenu = true;
 
     /**
-     * @var boolean $showTopHeaderMenu
+     * @var boolean
      */
     private $showTopHeaderMenu;
 
     /**
-     * @var boolean $headerMenu
+     * @var boolean
      */
     protected $headerMenu;
 
     /**
-     * @var SideMenuWidgetInterface $sidemenu
+     * @var boolean
+     */
+    protected $systemMenu;
+
+    /**
+     * @var SideMenuWidgetInterface
      */
     protected $sidemenu;
 
@@ -500,26 +505,105 @@ class AdminTemplate extends AbstractTemplate implements
      * @param boolean $show The show footer menu flag.
      * @return AdminTemplate Chainable
      */
-    public function setShowFooterMenu($show)
+    public function setShowSystemMenu($show)
     {
-        $this->showFooterMenu = !!$show;
+        $this->showSystemMenu = !!$show;
         return $this;
     }
 
     /**
      * @return boolean
      */
-    public function showFooterMenu()
+    public function showSystemMenu()
     {
-        return ($this->isAuthorized() && $this->showFooterMenu);
+        return ($this->isAuthorized() && $this->showSystemMenu);
     }
 
     /**
      * @return array
      */
-    public function footerMenu()
+    public function systemMenu()
     {
-        return [];
+        if ($this->systemMenu === null) {
+            $this->systemMenu = $this->createSystemMenu();
+        }
+
+        foreach ($this->systemMenu as $menuIdent => $menuItem) {
+            yield $menuIdent => $menuItem;
+        }
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
+     * @return array|Generator
+     */
+    protected function createSystemMenu($options = null)
+    {
+        $systemMenu = $this->adminConfig['system_menu'];
+
+        if (!isset($systemMenu['items'])) {
+            return [];
+        }
+
+
+        $menu  = $this->menuBuilder->build([]);
+        foreach ($systemMenu['items'] as $menuIdent => $menuItem) {
+            $menuItem['menu'] = $menu;
+            $test = $this->menuItemBuilder->build($menuItem);
+            if ($test->isAuthorized() === false) {
+                continue;
+            }
+            unset($menuItem['menu']);
+
+            if (isset($menuItem['active']) && $menuItem['active'] === false) {
+                continue;
+            }
+
+            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent);
+            $menuIdent = $menuItem['ident'];
+
+            yield $menuIdent => $menuItem;
+        }
+    }
+
+    /**
+     * @param  array       $menuItem     The menu structure.
+     * @param  string|null $menuIdent    The menu identifier.
+     * @param  string|null $currentIdent The current menu identifier.
+     * @return array Finalized menu structure.
+     */
+    private function parseSystemMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
+    {
+        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
+
+        if (!isset($menuItem['ident'])) {
+            $menuItem['ident'] = $menuIdent;
+        }
+
+        if (!empty($menuItem['url'])) {
+            $url = $menuItem['url'];
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
+        } else {
+            $url = '#';
+        }
+
+        $menuItem['url'] = $url;
+
+        if ($menuItem['icon_css']) {
+            $menuItem['iconCss'] = $menuItem['icon_css'];
+        }
+
+        if (isset($menuItem['label'])) {
+            $menuItem['label'] = $this->translator()->translation($menuItem['label']);
+        }
+
+        $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
+
+
+        return $menuItem;
     }
 
     /**

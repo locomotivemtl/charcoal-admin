@@ -8,11 +8,23 @@ var Charcoal = Charcoal || {};
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback, debug,
+    var options, manager, feedback, cache, store, debug,
         currentLocale = document.documentElement.getAttribute('locale'),
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
 
+    /**
+     * Centralized Store
+     *
+     * @type {Object}
+     */
+    store = {};
+
+    /**
+     * Application Options
+     *
+     * @type {Object}
+     */
     options = {
         base_url: null,
         admin_path: null,
@@ -22,13 +34,6 @@ Charcoal.Admin = (function () {
      * Object function that acts as a container for public methods
      */
     function Admin() {}
-
-    /**
-     * Simple cache store.
-     *
-     * @type {Object}
-     */
-    Admin.cachePool = {};
 
     /**
      * Application Debug Mode.
@@ -244,7 +249,7 @@ Charcoal.Admin = (function () {
      * @param   {function}  callback - Fires multiple times
      */
     Admin.loadScript = function (src, callback) {
-        this.cache(src, function (defer) {
+        this.store(src, function (defer) {
             $.ajax({
                 url: src,
                 dataType: 'script',
@@ -255,27 +260,46 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Retrieve or cache a value shared across all instances.
+     * Retrieve or store a value shared across the application.
      *
-     * @param   {string}    key      - The key for the cached value.
-     * @param   {function}  value    - The value to store. If a function, fires once when promise is completed.
+     * @param   {string}    key      - The key for the stored value.
+     * @param   {function}  value    - The value to store.
+     *     If a function, fires once when promise is completed.
      * @param   {function}  callback - Fires multiple times.
      * @return  {mixed}     Returns the stored value.
      */
-    Admin.cache = function (key, value, callback) {
-        if (!this.cachePool[key]) {
+    Admin.store = function (key, value, callback) {
+        if (!store[key]) {
             if (typeof value === 'function') {
-                this.cachePool[key] = $.Deferred(function (defer) {
+                store[key] = $.Deferred(function (defer) {
                     value(defer);
                 }).promise();
             }
         }
 
-        if (typeof this.cachePool[key] === 'function') {
-            return this.cachePool[key].done(callback);
+        if (typeof store[key] === 'function') {
+            return store[key].done(callback);
         }
 
-        return this.cachePool[key];
+        return store[key];
+    };
+
+    /**
+     * Provides access to the cache manager.
+     *
+     * @param  {string} [type] Optional cache type to purge.
+     * @return {Cache}
+     */
+    Admin.cache = function (/* type */) {
+        if (typeof cache === 'undefined') {
+            cache = new Charcoal.Admin.Cache();
+        }
+
+        if (arguments.length) {
+            cache.purge.apply(cache, arguments);
+        }
+
+        return cache;
     };
 
     /**

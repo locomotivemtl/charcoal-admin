@@ -66,33 +66,14 @@ Header menu Widget
 
 {{#addJs}}
 <script>
-    $(document).ready(function() {
+    $(function() {
         var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
 
-        $('#btn-clear-cache').on('click', function(e) {
-            e.preventDefault();
-            var url = Charcoal.Admin.admin_url() + 'system/clear-cache';
-            var data = {
-                cache_type: 'global'
-            };
-            $.post(url, data, function (response) {
-                window.console.debug(response);
+        $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
+            event.preventDefault();
+            event.cacheType = 'global';
 
-                var feedback = response.feedbacks.shift();
-                if (response.success) {
-                    BootstrapDialog.show({
-                        title:   '{{#_t}}Cache cleared{{/_t}}',
-                        message: feedback.message,
-                        type:    BootstrapDialog.TYPE_SUCCESS
-                    });
-                } else {
-                    BootstrapDialog.show({
-                        title:   '{{#_t}}Error clearing cache{{/_t}}',
-                        message: feedback.message,
-                        type:    BootstrapDialog.TYPE_DANGER
-                    });
-                }
-            }, 'json');
+            Charcoal.Admin.cache().onPurge(event);
         });
     });
 </script>

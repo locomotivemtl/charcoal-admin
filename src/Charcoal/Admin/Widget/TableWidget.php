@@ -5,22 +5,22 @@ namespace Charcoal\Admin\Widget;
 use \RuntimeException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-core'
-use \Charcoal\Model\ModelInterface;
+use Charcoal\Model\ModelInterface;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
-use \Charcoal\Property\PropertyInterface;
+use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\ActionContainerTrait;
-use \Charcoal\Admin\Ui\CollectionContainerInterface;
-use \Charcoal\Admin\Ui\CollectionContainerTrait;
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\ActionContainerTrait;
+use Charcoal\Admin\Ui\CollectionContainerInterface;
+use Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
  * Displays a collection of models in a tabular (table) format.
@@ -419,25 +419,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $this->properties;
-    }
-
-    /**
-     * @param boolean $sortable The sortable flag.
-     * @return TableWidget Chainable
-     */
-    public function setSortable($sortable)
-    {
-        $this->sortable = !!$sortable;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function sortable()
-    {
-        return $this->sortable;
     }
 
     /**
@@ -1010,6 +991,25 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function showTableFoot()
     {
         return $this->showTableFoot;
+    }
+
+    /**
+     * @param boolean $sortable The sortable flag.
+     * @return TableWidget Chainable
+     */
+    public function setSortable($sortable)
+    {
+        $this->sortable = !!$sortable;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function sortable()
+    {
+        return $this->sortable;
     }
 
     /**

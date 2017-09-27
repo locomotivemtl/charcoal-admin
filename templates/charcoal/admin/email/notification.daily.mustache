@@ -1,12 +1,30 @@
 {{>charcoal/admin/email/inc.header}}
 
-<h1>{{#_t}}Daily Updates{{/_t}}</h1>
-<h2>{{dateString}}</h2>
+<table class="body-wrap">
+    <tr>
+        <td></td>
+        <td class="container" bgcolor="#FFFFFF">
+            <div class="content">
+                <table>
+                    <tr>
+                        <td>
+                        <div class="body">
+                            <h1>{{#_t}}Daily Updates{{/_t}}</h1>
+                            <h2>{{dateString}}</h2>
 
-<h3>{{#_t}}{{ numObjects }} update(s) in the last day{{/_t}}</h3>
+                            <h3>{{#_t}}{{ numObjects }} update(s) in the last day{{/_t}}</h3>
 
-<div>
-    {{>charcoal/admin/email/inc.notifications}}
-</div>
+                            <div>
+                                {{>charcoal/admin/email/inc.notifications}}
+                            </div>
+                        </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+        <td></td>
+    </tr>
+</table>
 
 {{>charcoal/admin/email/inc.footer}}

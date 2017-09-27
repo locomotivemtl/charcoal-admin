@@ -159,6 +159,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             $obj['objects'] = $objects;
             $obj['num'] = $num;
             $obj['type'] = $objType;
+            $obj['typeLabel'] = isset($objects[0]['targetTypeLabel']) ? $objects[0]['targetTypeLabel'] : $objType;
 
             $objectsByTypes[$objType] = $obj;
             $numTotal += $num;
@@ -242,12 +243,25 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         ]);
         $objFactory = $this->objectFactory;
         $userFactory = $this->userFactory;
-        $baseUrl = $this->baseUrl;
+        $baseUrl = $this->baseUrl();
 
         $loader->setCallback(function (&$obj) use ($objFactory, $userFactory, $baseUrl) {
+            $diff = $obj->dataDiff();
+            $obj->updatedProperties = isset($diff[0]) ? array_keys($diff[0]) : [];
             $obj->dateStr = $obj['rev_ts']->format('Y-m-d H:i:s');
-            $obj->numProperties = count($obj->dataDiff());
+            $obj->numProperties = count($obj->updatedProperties);
+            $obj->propertiesString = implode(', ', $obj->updatedProperties);
             $obj->targetObject = $objFactory->create($obj['target_type'])->load($obj['target_id']);
+            if (is_callable([$obj->targetObject, 'title'])) {
+                $obj['title'] = $obj->targetObject->title();
+            } elseif (is_callable([$obj->targetObject, 'name'])) {
+                $obj['title'] = $obj->targetObject->name();
+            }
+            if (isset($obj->targetObject->metadata()['label'])) {
+                $obj->targetTypeLabel = $this->translator()->translation($obj->targetObject->metadata()['label']);
+            } else {
+                $obj->targetTypeLabel = $obj['target_type'];
+            }
             $obj->userObject = $userFactory->create(User::class)->load($obj['rev_user']);
             $obj->publicUrl = is_callable([$obj->targetObject, 'url']) ? $baseUrl.$obj->targetObject->url() : null;
             $obj->charcoalUrl = sprintf(

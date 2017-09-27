@@ -31,6 +31,9 @@
                 {{# widgetType }}
                 data-widget-type="{{ . }}"
                 {{/ widgetType }}
+                {{# dataAttributes }}
+                data-{{ key }}="{{ value }}"
+                {{/ dataAttributes }}
                 >{{> charcoal/admin/widget/actions/label }}</button>
         {{/ isButton }}
         {{# isLink }}
@@ -42,6 +45,9 @@
            {{# widgetType }}
            data-widget-type="{{ . }}"
            {{/ widgetType }}
+           {{# dataAttributes }}
+           data-{{ key }}="{{ value }}"
+           {{/ dataAttributes }}
            >{{> charcoal/admin/widget/actions/label }}</a>
         {{/ isLink }}
         {{# isText }}

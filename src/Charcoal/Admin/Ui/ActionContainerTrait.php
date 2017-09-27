@@ -225,6 +225,17 @@ trait ActionContainerTrait
                 }
             }
 
+            if (isset($action['dataAttributes']) && is_array($action['dataAttributes'])) {
+                $action['dataAttributes'] = array_filter($action['dataAttributes'], function ($attribute) {
+                    return  !empty($attribute['key']) &&
+                            is_string($attribute['key']) &&
+                            !empty($attribute['value']) &&
+                            is_string($attribute['value']);
+                });
+            } else {
+                $action['dataAttributes'] = [];
+            }
+
             if (isset($action['actions']) && is_array($action['actions'])) {
                 $action['actions']    = $this->parseActions($action['actions']);
                 $action['hasActions'] = !!array_filter($action['actions'], function ($action) {

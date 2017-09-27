@@ -16,6 +16,9 @@
         {{# widgetType }}
         data-widget-type="{{ . }}"
         {{/ widgetType }}
+        {{# dataAttributes }}
+        data-{{ key }}="{{ value }}"
+        {{/ dataAttributes }}
         tabindex="-1"
         aria-haspopup="true"
         aria-expanded="false"
@@ -30,6 +33,9 @@
    {{# widgetType }}
    data-widget-type="{{ . }}"
    {{/ widgetType }}
+   {{# dataAttributes }}
+   data-{{ key }}="{{ value }}"
+   {{/ dataAttributes }}
    tabindex="-1"
    aria-haspopup="true"
    aria-expanded="false"

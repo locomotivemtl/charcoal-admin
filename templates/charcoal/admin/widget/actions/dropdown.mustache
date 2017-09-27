@@ -17,6 +17,9 @@
             {{# widgetType }}
             data-widget-type="{{ . }}"
             {{/ widgetType }}
+            {{# dataAttributes }}
+            data-{{ key }}="{{ value }}"
+            {{/ dataAttributes }}
             {{^ splitButton }}
             data-toggle="dropdown"
             aria-haspopup="true"
@@ -37,6 +40,9 @@
        {{# widgetType }}
        data-widget-type="{{ . }}"
        {{/ widgetType }}
+       {{# dataAttributes }}
+       data-{{ key }}="{{ value }}"
+       {{/ dataAttributes }}
        {{^ splitButton }}
        data-toggle="dropdown"
        aria-haspopup="true"

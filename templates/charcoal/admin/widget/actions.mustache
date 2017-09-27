@@ -24,6 +24,9 @@
                 {{# widgetType }}
                 data-widget-type="{{ . }}"
                 {{/ widgetType }}
+                {{# dataAttributes }}
+                data-{{ key }}="{{ value }}"
+                {{/ dataAttributes }}
             >{{> charcoal/admin/widget/actions/label }}</button>
         {{/ isButton }}
         {{^ isButton }}
@@ -33,8 +36,11 @@
                 target="{{ . }}"
                 {{/ target }}
                 {{# widgetType }}
-               data-widget-type="{{ . }}"
+                data-widget-type="{{ . }}"
                 {{/ widgetType }}
+                {{# dataAttributes }}
+                data-{{ key }}="{{ value }}"
+                {{/ dataAttributes }}
             >{{> charcoal/admin/widget/actions/label }}</a>
         {{/ isButton }}
     {{/ hasActions }}

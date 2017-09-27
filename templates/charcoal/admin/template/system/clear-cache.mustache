@@ -21,8 +21,21 @@
             </header>
 
             <div class="dashboard">
+
                 <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <div class="col-md-12">
+                        <dl>
+                            <dt>{{#_t}}Active?{{/_t}}</dt>
+                            <dd>{{#cacheInfo.active}}Yes{{/cacheInfo.active}}{{^cacheInfo.active}}No{{/cacheInfo.active}}</dd>
+                            <dt>{{#_t}}Cache type{{/_t}}</dt>
+                            <dd>{{cacheInfo.type}}</dd>
+                        </dl>
+                    </div>
+                    </div>
+                <div class="row">
+
+
+                    <div class="col-md-12">
                         <section class="panel panel-default">
                             <header class="panel-heading">
                                 <h3 class="panel-title">{{#_t}}Global cache{{/_t}}</h3>
@@ -31,8 +44,6 @@
                                 <p>{{#_t}}Clearing this cache will clear *all* entries in the cache. In other words, it completely erase all items in the cache (pages, objects and everything else).{{/_t}}</p>
                                 <p>
                                     <dl>
-                                        <dt>Type</dt>
-                                        <dd>{{cacheInfo.type}}</dd>
                                         <dt>{{#_t}}Num entries{{/_t}}</dt>
                                         <dd>{{cacheInfo.global.num_entries}}</dd>
                                         <dt>{{#_t}}Total size{{/_t}}</dt>
@@ -40,11 +51,11 @@
                                         <dd></dd>
                                     </dl>
                                 <p>
-                                <p><a class="btn btn-info js-clear-cache" data-type="global">{{#_t}}Clear global cache{{/_t}}</a></p>
+                                <p><a class="btn btn-info btn-lg js-clear-cache" data-type="global"><i class="fa fa-refresh" aria-hidden="true"></i> {{#_t}}Clear global cache{{/_t}}</a></p>
                             </div>
                         </section>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <div class="col-xs-12 col-sm-6 col-lg-6">
                         <section class="panel panel-default">
                             <header class="panel-heading">
                                 <h3 class="panel-title">{{#_t}}Pages cache{{/_t}}</h3>
@@ -64,7 +75,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <div class="col-xs-12 col-sm-6 col-lg-6">
                         <section class="panel panel-default">
                             <header class="panel-heading">
                                 <h3 class="panel-title">{{#_t}}Objects cache{{/_t}}</h3>
@@ -103,13 +114,13 @@ $('.js-clear-cache').on('click', function() {
         var feedback = response.feedbacks.shift();
         if (response.success) {
             BootstrapDialog.show({
-                title:   'Cache cleared',
+                title:   '{{#_t}}Cache cleared{{/_t}}',
                 message: feedback.message,
                 type:    BootstrapDialog.TYPE_SUCCESS
             });
         } else {
             BootstrapDialog.show({
-                title:   'Error clearing cache',
+                title:   '{{#_t}}Error clearing cache{{/_t}}',
                 message: feedback.message,
                 type:    BootstrapDialog.TYPE_DANGER
             });

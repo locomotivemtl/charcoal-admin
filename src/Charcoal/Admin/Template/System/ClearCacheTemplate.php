@@ -30,8 +30,10 @@ class ClearCacheTemplate extends AdminTemplate
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+        $this->availableCacheDrivers = $container['cache/available-drivers'];
         $this->cacheDriver = $container['cache/driver'];
         $this->cache = $container['cache'];
+        $this->cacheConfig = $container['cache/config'];
     }
 
     /**
@@ -42,7 +44,7 @@ class ClearCacheTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translator()->translation('Clear cache'));
+            $this->setTitle($this->translator()->translation('Cache information'));
         }
 
         return $this->title;
@@ -66,8 +68,13 @@ class ClearCacheTemplate extends AdminTemplate
      */
     public function cacheInfo()
     {
+        $flip = array_flip($this->availableCacheDrivers);
+        $driver = get_class($this->cache->getDriver());
+
+        $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
         return [
-            'type'    => get_class($this->cache->getDriver()),
+            'type'    => $cacheType,
+            'active'  => true,
             'global'  => $this->globalCacheInfo(),
             'pages'   => $this->pagesCacheInfo(),
             'objects' => $this->objectsCacheInfo()

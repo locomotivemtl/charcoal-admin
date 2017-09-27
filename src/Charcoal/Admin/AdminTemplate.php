@@ -516,7 +516,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function showSystemMenu()
     {
-        return ($this->isAuthorized() && $this->showSystemMenu);
+        return ($this->isAuthorized() && $this->showSystemMenu && (count($this->systemMenu()) > 0));
     }
 
     /**
@@ -528,9 +528,8 @@ class AdminTemplate extends AbstractTemplate implements
             $this->systemMenu = $this->createSystemMenu();
         }
 
-        foreach ($this->systemMenu as $menuIdent => $menuItem) {
-            yield $menuIdent => $menuItem;
-        }
+        return new \ArrayIterator($this->systemMenu);
+
     }
 
     /**
@@ -540,15 +539,17 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createSystemMenu($options = null)
     {
-        $systemMenu = $this->adminConfig['system_menu'];
+        $systemMenuConfig = $this->adminConfig['system_menu'];
 
-        if (!isset($systemMenu['items'])) {
+
+        if (!isset($systemMenuConfig['items'])) {
             return [];
         }
 
-
+        $systemMenu = [];
         $menu  = $this->menuBuilder->build([]);
-        foreach ($systemMenu['items'] as $menuIdent => $menuItem) {
+
+        foreach ($systemMenuConfig['items'] as $menuIdent => $menuItem) {
             $menuItem['menu'] = $menu;
             $test = $this->menuItemBuilder->build($menuItem);
             if ($test->isAuthorized() === false) {
@@ -563,8 +564,9 @@ class AdminTemplate extends AbstractTemplate implements
             $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent);
             $menuIdent = $menuItem['ident'];
 
-            yield $menuIdent => $menuItem;
+            $systemMenu[$menuIdent] = $menuItem;
         }
+        return $systemMenu;
     }
 
     /**

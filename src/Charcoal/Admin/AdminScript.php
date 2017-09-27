@@ -25,6 +25,13 @@ abstract class AdminScript extends AbstractScript
     use TranslatorAwareTrait;
 
     /**
+     * The base URI.
+     *
+     * @var UriInterface
+     */
+    protected $baseUrl;
+    
+    /**
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
@@ -37,7 +44,9 @@ abstract class AdminScript extends AbstractScript
     {
         $this->modelFactory = $container['model/factory'];
         $this->setTranslator($container['translator']);
-        
+
+        $this->setBaseUrl($container['base-url']);
+
         parent::setDependencies($container);
     }
 
@@ -58,6 +67,30 @@ abstract class AdminScript extends AbstractScript
     {
         return $this->modelFactory;
     }
+
+    /**
+     * Set the base URI of the application.
+     *
+     * @param UriInterface|string $uri The base URI.
+     * @return self
+     */
+    public function setBaseUrl($uri)
+    {
+        $this->baseUrl = $uri;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the base URI of the application.
+     *
+     * @return UriInterface|string
+     */
+    public function baseUrl()
+    {
+        return rtrim($this->baseUrl, '/').'/';
+    }
+
 
     /**
      * @param PropertyInterface $prop The property to retrieve input from.

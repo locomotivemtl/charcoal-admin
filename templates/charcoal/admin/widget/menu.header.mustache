@@ -23,24 +23,37 @@ Header menu Widget
 
     {{# isAuthenticated }}
         {{# showSystemMenu }}
-
-            <div class="dropdown pull-right control-group c-header-main_user">
-                <button class="btn btn-primary btn-lg dropdown-toggle c-header-main_user" type="button" data-toggle="dropdown"><i class="fa fa-gears" aria-hidden="true"></i> <span class="sr-only">{{#_t}}Settings{{/_t}}</span>
-                    <span class="caret"></span></button>
+            <div class="dropdown pull-right c-header-main_system">
+                <button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
+                    <i class="fa fa-gears" aria-hidden="true"></i>
+                    <span class="btn-label sr-only">{{# _t }}Settings{{/ _t }}</span>
+                    &nbsp;
+                    <span class="caret"></span>
+                </button>
                 <ul class="dropdown-menu">
-                    {{#systemMenu}}
-                        <li>
-                            <a href="{{ url }}" {{# id }}id="{{ . }}"{{/ id }}>
-                                {{# iconCss }}<i class="{{ . }}" aria-hidden="true"></i> {{/iconCss}}{{ label }}
-                            </a>
-                        </li>
-                    {{/systemMenu}}
+                    {{# systemMenu }}
+                    <li>
+                        <a href="{{ url }}"{{# ident }} class="s-nav-system_item--{{ . }}"{{/ ident }}{{# id }} id="{{ . }}"{{/ id }}>
+                            {{# iconCss }}<i class="{{ . }}" aria-hidden="true"></i>{{/ iconCss }}
+                            <span>{{ label }}</span>
+                        </a>
+                    </li>
+                    {{/ systemMenu }}
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="{{adminUrl}}logout">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <span class="btn-label">{{# _t }}Log Out{{/ _t }}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
-
         {{/ showSystemMenu }}
         {{^ showSystemMenu }}
-            <button type="button" class="c-header-main_user btn btn-danger" id="btn-logout">{{#_t}}Log Out{{/_t}}</button>
+            <a href="{{adminUrl}}logout" class="c-header-main_user btn btn-danger">
+                <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
+                <span class="btn-label">{{# _t }}Log Out{{/ _t }}</span>
+            </a>
         {{/ showSystemMenu }}
     {{/ isAuthenticated }}
 </header>
@@ -62,10 +75,6 @@ Header menu Widget
 <script>
     $(document).ready(function() {
         var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
-
-        $('#btn-logout').on('click', function() {
-            window.location.href = '{{adminUrl}}logout';
-        })
 
         $('#btn-clear-cache').on('click', function(e) {
             e.preventDefault();

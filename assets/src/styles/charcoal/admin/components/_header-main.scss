@@ -109,6 +109,30 @@
     }
 }
 
+.c-header-main_system {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+
+    &.btn,
+    > .btn {
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+        height: 100%;
+        color: $white;
+        border: none;
+        outline: none;
+        background-color: $black;
+        transition: background-color $speed;
+
+        &:hover, .has-nav-user & {
+            background-color: $charcoal-darkblue;
+        }
+    }
+}
+
 .c-header-main_user {
     @extend .c-nav;
     position: absolute;

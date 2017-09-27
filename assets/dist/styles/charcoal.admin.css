@@ -446,6 +446,27 @@ a.chip:hover, a.chip:focus {
     text-decoration: underline;
     color: #ffffff; }
 
+.c-header-main_system {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%; }
+  .c-header-main_system.btn,
+  .c-header-main_system > .btn {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    height: 100%;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background-color: #000000;
+    transition: background-color 0.3s; }
+    .c-header-main_system.btn:hover, .has-nav-user .c-header-main_system.btn,
+    .c-header-main_system > .btn:hover, .has-nav-user
+    .c-header-main_system > .btn {
+      background-color: #080909; }
+
 .c-header-main_user {
   position: absolute;
   top: 0;

@@ -540,7 +540,6 @@ class AdminTemplate extends AbstractTemplate implements
     {
         $systemMenuConfig = $this->adminConfig['system_menu'];
 
-
         if (!isset($systemMenuConfig['items'])) {
             return [];
         }
@@ -576,8 +575,6 @@ class AdminTemplate extends AbstractTemplate implements
      */
     private function parseSystemMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
     {
-        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
-
         if (!isset($menuItem['ident'])) {
             $menuItem['ident'] = $menuIdent;
         }
@@ -600,9 +597,6 @@ class AdminTemplate extends AbstractTemplate implements
         if (isset($menuItem['label'])) {
             $menuItem['label'] = $this->translator()->translation($menuItem['label']);
         }
-
-        $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
-
 
         return $menuItem;
     }

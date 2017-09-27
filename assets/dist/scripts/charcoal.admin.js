@@ -167,10 +167,12 @@ Charcoal.Admin = (function () {
      * @return {boolean}
      */
     Admin.debug = function (mode) {
-        if (typeof mode === 'boolean') {
-            debug = mode;
-        } else {
-            throw new TypeError('Must be a boolean, received ' + (typeof mode));
+        if (arguments.length) {
+            if (typeof mode === 'boolean') {
+                debug = mode;
+            } else {
+                throw new TypeError('Must be a boolean, received ' + (typeof mode));
+            }
         }
 
         return debug || false;

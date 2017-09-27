@@ -35,6 +35,7 @@ class ProcessDailyScriptTest extends PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
+        $containerProvider->registerBaseUrl($container);
         $containerProvider->registerModelFactory($container);
         $containerProvider->registerClimate($container);
 

@@ -529,7 +529,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return new \ArrayIterator($this->systemMenu);
-
     }
 
     /**

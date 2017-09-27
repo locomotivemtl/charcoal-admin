@@ -1,9 +1,0 @@
-{
-    "parent": "charcoal/admin/widget",
-
-    "properties": {
-        "structure": {
-            "type": "structure"
-        }
-    }
-}

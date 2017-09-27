@@ -1,9 +1,0 @@
-{
-    "parent": "charcoal/admin/template",
-
-    "properties": {
-        "obj_type": {
-            "type": "string"
-        }
-    }
-}

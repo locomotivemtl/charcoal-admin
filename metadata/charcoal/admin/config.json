@@ -1,9 +1,0 @@
-{
-    "parent": "charcoal/config/abstract.config",
-
-    "properties": {
-        "base_path": {
-            "type": "string"
-        }
-    }
-}

@@ -10,23 +10,23 @@
     <div class="o-flex">
         <div class="o-flex_main">
             {{# isTabbable }}
-            {{> charcoal/admin/template/form/nav-tabs }}
+                {{> charcoal/admin/template/form/nav-tabs }}
             {{/ isTabbable }}
 
             {{# hasGroups }}
-            {{> charcoal/admin/template/form/groups }}
+                {{> charcoal/admin/template/form/groups }}
             {{/ hasGroups }}
         </div>
 
         {{!-- Get the FormSidebarWidget object --}}
         {{# sidebars }}
-            {{> $widget_template }}
+            {{> $formSidebarWidget }}
         {{/ sidebars }}
 
         {{# hiddenProperties }}
-        {{# output }}
-        {{> $widget_template }}
-        {{/ output }}
+            {{# output }}
+                {{> $formPropertyWidget }}
+            {{/ output }}
         {{/ hiddenProperties }}
 
         <input type="hidden" name="widget_id" value="{{ widgetId }}">

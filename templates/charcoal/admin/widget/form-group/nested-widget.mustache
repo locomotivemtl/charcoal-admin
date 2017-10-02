@@ -26,9 +26,9 @@
     {{/ showNotesAbove }}
     {{/ showHeader }}
 
-    {{#widget}}
-        {{>$widget_template}}
-    {{/widget}}
+    {{# widget }}
+        {{> $nestedWidget }}
+    {{/ widget }}
 
     {{^ showNotesAbove }}
     {{> charcoal/admin/template/inc.notes }}

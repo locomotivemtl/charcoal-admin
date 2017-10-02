@@ -75,4 +75,11 @@ interface NestedWidgetContainerInterface
      * @return self
      */
     public function setRenderableData(array $data);
+
+    /**
+     * Retrieve the renderable view.
+     *
+     * @return \Charcoal\View\ViewInterface The object's View instance.
+     */
+    public function view();
 }

@@ -27,11 +27,7 @@ This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
                 </div>
             {{/showActions}}
 
-            {{!--
-            Include the widget's partial (template).
-            Magic (global) variable $widget_template, set by dashboard's controller
-            --}}
-            {{>$widget_template}}
+            {{>$dashboardWidget}}
 
         </div>
 

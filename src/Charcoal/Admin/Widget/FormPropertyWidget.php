@@ -1115,7 +1115,7 @@ class FormPropertyWidget extends AdminWidget implements
                 break;
         }
 
-        $GLOBALS['widget_template'] = $type;
+        $this->view()->templateRegistry()->once('formPropertyWidget', $type);
 
         if ($this->l10n() && $this->loopL10n()) {
             $locales  = $this->translator()->availableLocales();
@@ -1128,12 +1128,9 @@ class FormPropertyWidget extends AdminWidget implements
                 yield $prop;
             }
 
-            $GLOBALS['widget_template'] = '';
             $prop->{$setter}($outputId);
         } else {
             yield $prop;
-
-            $GLOBALS['widget_template'] = '';
         }
     }
 

@@ -28,7 +28,7 @@
     {{# output }}
     {{!-- The actual property control (typically `PropertyInput`) --}}
     <div id="form-field-{{ widgetId }}" class="{{ formFieldCssClass }}{{# hidden }} hidden{{/ hidden }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
-        {{> $widget_template }}
+        {{> $formPropertyWidget }}
     </div>
     {{/ output }}
     {{^ showNotesAbove }}

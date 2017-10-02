@@ -53,11 +53,9 @@ trait NestedWidgetContainerTrait
     {
         $widget = $this->getWidget();
 
-        $GLOBALS['widget_template'] = $widget->template();
+        $this->view()->templateRegistry()->once('nestedWidget', $this->widget->template());
 
         yield $widget;
-
-        $GLOBALS['widget_template'] = '';
     }
 
     /**
@@ -372,4 +370,11 @@ trait NestedWidgetContainerTrait
      * @return FactoryInterface
      */
     abstract protected function widgetFactory();
+
+    /**
+     * Retrieve the renderable view.
+     *
+     * @return \Charcoal\View\ViewInterface The object's View instance.
+     */
+    abstract public function view();
 }

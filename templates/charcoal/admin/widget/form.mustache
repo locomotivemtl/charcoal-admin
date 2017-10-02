@@ -8,21 +8,19 @@
 --}}
 <div class="form charcoal-admin-widget-form">
     <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
-
         {{# isTabbable }}
-        {{> charcoal/admin/template/form/nav-tabs }}
+            {{> charcoal/admin/template/form/nav-tabs }}
         {{/ isTabbable }}
 
         {{# hasGroups }}
-        {{> charcoal/admin/template/form/groups }}
+            {{> charcoal/admin/template/form/groups }}
         {{/ hasGroups }}
 
         {{# hiddenProperties }}
-        {{# output }}
-        {{> $widget_template }}
-        {{/ output }}
+            {{# output }}
+                {{> $formPropertyWidget }}
+            {{/ output }}
         {{/ hiddenProperties }}
-
         <button type="submit" class="btn btn-info">{{ submitLabel }}</button>
     </form>
 </div>

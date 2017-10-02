@@ -51,7 +51,7 @@
 
                             {{# output }}
                             <div class="c-panel_table_data{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
-                                {{> $widget_template }}
+                                {{> $formPropertyWidget }}
                             </div>
                             {{/ output }}
 

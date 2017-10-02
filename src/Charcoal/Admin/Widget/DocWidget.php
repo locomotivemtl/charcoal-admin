@@ -123,8 +123,7 @@ class DocWidget extends FormWidget implements
         if ($objId) {
             $translator = $this->translator();
 
-            $template = 'charcoal/admin/widget/form.sidebar';
-            $GLOBALS['widget_template'] = $template;
+            $this->view()->setDynamicTemplate('docSidebarWidget', 'charcoal/admin/widget/form.sidebar');
 
             $metadata = $this->obj()->metadata();
             $objType  = (isset($metadata['labels']['singular_name'])
@@ -155,9 +154,11 @@ class DocWidget extends FormWidget implements
             $sidebar->setViewController($this->viewController());
             $sidebar->setData($out);
 
-            yield $sidebar;
+            if ($sidebar->template()) {
+                $this->view()->templateRegistry()->once('formSidebarWidget', $sidebar->template());
+            }
 
-            $GLOBALS['widget_template'] = '';
+            yield $sidebar;
         }
     }
 

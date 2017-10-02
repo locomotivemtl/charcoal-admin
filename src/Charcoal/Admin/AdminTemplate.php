@@ -791,8 +791,6 @@ class AdminTemplate extends AbstractTemplate implements
             return null;
         }
 
-        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-
         if (isset($options['widget_type'])) {
             $widgetType = $options['widget_type'];
         } else {

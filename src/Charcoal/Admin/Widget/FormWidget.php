@@ -163,20 +163,19 @@ class FormWidget extends AdminWidget implements
     {
         $sidebars = $this->sidebars;
         uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
+
+        $this->view()->setDynamicTemplate('formSidebarWidget', 'charcoal/admin/widget/form.sidebar');
+
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             if (!$sidebar->active()) {
                 continue;
             }
 
             if ($sidebar->template()) {
-                $template = $sidebar->template();
-            } else {
-                $template = 'charcoal/admin/widget/form.sidebar';
+                $this->view()->templateRegistry()->once('formSidebarWidget', $sidebar->template());
             }
 
-            $GLOBALS['widget_template'] = $template;
             yield $sidebarIdent => $sidebar;
-            $GLOBALS['widget_template'] = '';
         }
     }
 
@@ -265,11 +264,7 @@ class FormWidget extends AdminWidget implements
                     continue;
                 }
 
-                $GLOBALS['widget_template'] = $formProperty->inputType();
-
                 yield $formProperty->propertyIdent() => $formProperty;
-
-                $GLOBALS['widget_template'] = '';
             }
         }
     }

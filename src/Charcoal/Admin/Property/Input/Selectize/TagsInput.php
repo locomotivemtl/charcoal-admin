@@ -21,7 +21,7 @@ use Charcoal\Property\ObjectProperty;
 use Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
- * Tags Input Property
+ * Tags Input Selectize
  *
  * The HTML form control can be either an `<input type="text">` (for multiple values)
  * or a `<select>` (single value).

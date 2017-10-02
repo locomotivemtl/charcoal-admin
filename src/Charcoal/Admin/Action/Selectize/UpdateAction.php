@@ -2,14 +2,17 @@
 
 namespace Charcoal\Admin\Action\Selectize;
 
-use Charcoal\Admin\Action\Object\UpdateAction as DefaultUpdateAction;
-use Charcoal\Admin\Service\SelectizeRenderer;
+// From Pimple
 use Pimple\Container;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Action\Object\UpdateAction as BaseUpdateAction;
+use Charcoal\Admin\Service\SelectizeRenderer;
 
 /**
  * Selectize Update Action
  */
-class UpdateAction extends DefaultUpdateAction
+class UpdateAction extends BaseUpdateAction
 {
     use SelectizeRendererAwareTrait;
 

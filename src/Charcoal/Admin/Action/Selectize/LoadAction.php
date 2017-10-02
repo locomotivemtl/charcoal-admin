@@ -2,18 +2,21 @@
 
 namespace Charcoal\Admin\Action\Selectize;
 
+// From Pimple
 use Pimple\Container;
+
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-use Charcoal\Admin\Action\Object\LoadAction as DefaultLoadAction;
-
+// From 'charcoal-admin'
+use Charcoal\Admin\Action\Object\LoadAction as BaseLoadAction;
 use Charcoal\Admin\Action\Selectize\SelectizeRendererAwareTrait;
 
 /**
  * Selectize Load Action
  */
-class LoadAction extends DefaultLoadAction
+class LoadAction extends BaseLoadAction
 {
     use SelectizeRendererAwareTrait;
 

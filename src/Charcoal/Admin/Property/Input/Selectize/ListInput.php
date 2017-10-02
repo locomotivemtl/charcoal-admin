@@ -2,10 +2,11 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Property\Input\SelectizeInput;
 
 /**
- * Class ListInput
+ * Listable Input Selectize
  */
 class ListInput extends SelectizeInput
 {

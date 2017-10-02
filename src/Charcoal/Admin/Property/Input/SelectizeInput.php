@@ -2,23 +2,25 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use Charcoal\Admin\Service\SelectizeRenderer;
-use Charcoal\Model\ModelInterface;
-use Charcoal\Property\AbstractProperty;
-use \RuntimeException;
-use \InvalidArgumentException;
+use RuntimeException;
+use InvalidArgumentException;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-core'
-use \Charcoal\Loader\CollectionLoader;
+use Charcoal\Model\ModelInterface;
+use Charcoal\Loader\CollectionLoader;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
 use Charcoal\Property\ObjectProperty;
+use Charcoal\Property\AbstractProperty;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Service\SelectizeRenderer;
 
 /**
  * Tags Input Property

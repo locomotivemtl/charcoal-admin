@@ -2,20 +2,22 @@
 
 namespace Charcoal\Admin\Action\Selectize;
 
-// Dependencies from `charcoal-admin`
+use RuntimeException;
+
+// From 'charcoal-factory'
+use Charcoal\Factory\FactoryInterface;
+
+// From 'charcoal-property'
+use Charcoal\Property\PropertyInterface;
+
+// From 'charcoal-admin'
 use Charcoal\Admin\Property\Input\SelectizeInput;
 use Charcoal\Admin\Property\PropertyInputInterface;
 use Charcoal\Admin\Service\SelectizeRenderer;
 
-// Dependencies from `charcoal-factory`
-use Charcoal\Factory\FactoryInterface;
-
-// Dependencies from `charcoal-property`
-use Charcoal\Property\PropertyInterface;
-
-// PSR-7 dependencies
-use RuntimeException;
-
+/**
+ *
+ */
 trait SelectizeRendererAwareTrait
 {
     /**

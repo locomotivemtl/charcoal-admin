@@ -2,15 +2,20 @@
 
 namespace Charcoal\Admin\Action\Selectize;
 
-use Charcoal\Admin\Action\Object\SaveAction as DefaultSaveAction;
-use Charcoal\Admin\Service\SelectizeRenderer;
-use Charcoal\Model\ModelInterface;
+// From Pimple
 use Pimple\Container;
+
+// From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Action\Object\SaveAction as BaseSaveAction;
+use Charcoal\Admin\Service\SelectizeRenderer;
 
 /**
  * Selectize Save Action
  */
-class SaveAction extends DefaultSaveAction
+class SaveAction extends BaseSaveAction
 {
     use SelectizeRendererAwareTrait;
 

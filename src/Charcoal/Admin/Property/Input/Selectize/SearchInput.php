@@ -2,13 +2,11 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Property\Input\SelectInput;
 
 /**
- * Tags Input Property
- *
- * The HTML form control can be either an `<input type="text">` (for multiple values)
- * or a `<select>` (single value).
+ * Searchable Input Selectize
  */
 class SearchInput extends SelectInput
 {

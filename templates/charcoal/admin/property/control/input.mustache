@@ -15,9 +15,9 @@
     class="form-control {{ inputClass }}"
     {{# inputMode }}inputmode="{{ . }}"{{/ inputMode }}
     {{# size }}size="{{ . }}"{{/ size }}
-    {{# min }}min="{{ . }}"{{/ min }}
-    {{# max }}max="{{ . }}"{{/ max }}
-    {{# step }}step="{{ . }}"{{/ step }}
+    {{# hasMin }}min="{{ min }}"{{/ hasMin }}
+    {{# hasMax }}max="{{ max }}"{{/ hasMax }}
+    {{# hasStep }}step="{{ step }}"{{/ hasStep }}
     {{# minLength }}minlength="{{ . }}"{{/ minLength }}
     {{# maxLength }}maxlength="{{ . }}"{{/ maxLength }}
     {{# pattern }}pattern="{{ . }}"{{/ pattern }}

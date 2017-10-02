@@ -17,12 +17,25 @@ class TextInput extends AbstractPropertyInput
     private $size = 0;
 
     /**
-     * @var integer $minLength
+     * The minimum number of characters allowed.
+     *
+     * Note:
+     * - In Unicode code points.
+     * - If zero or a negative value is specified, the length is ignored.
+     *
+     * @var integer
      */
     private $minLength = 0;
 
     /**
-     * @var integer $maxLength
+     * The maximum number of characters allowed.
+     *
+     * Note:
+     * - In UTF-16 code units.
+     * - If it is not specified, the control allows an unlimited number of characters.
+     * - If zero or a negative value is specified, the length is ignored.
+     *
+     * @var integer
      */
     private $maxLength = 0;
 
@@ -55,7 +68,7 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $minLength The min length.
+     * @param  integer $minLength The min length.
      * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
@@ -66,6 +79,7 @@ class TextInput extends AbstractPropertyInput
                 'Minimum length needs to be an integer'
             );
         }
+
         $this->minLength = (int)$minLength;
         return $this;
     }
@@ -79,7 +93,7 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $maxLength The max length.
+     * @param  integer $maxLength The max length.
      * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
@@ -90,6 +104,7 @@ class TextInput extends AbstractPropertyInput
                 'Maximum length needs to be an integer'
             );
         }
+
         $this->maxLength = (int)$maxLength;
         return $this;
     }
@@ -103,7 +118,7 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param integer $size The text size.
+     * @param  integer $size The text size.
      * @throws InvalidArgumentException If the argument is not a number.
      * @return Text Chainable
      */
@@ -127,7 +142,7 @@ class TextInput extends AbstractPropertyInput
     }
 
     /**
-     * @param string $pattern The pattern.
+     * @param  string $pattern The pattern.
      * @throws InvalidArgumentException If the argument is not a string.
      * @return Text Chainable
      */

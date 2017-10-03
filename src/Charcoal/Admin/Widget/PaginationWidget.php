@@ -2,10 +2,14 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
+
+// From 'charcoal-core'
+use Charcoal\Source\Pagination;
+use Charcoal\Source\PaginationInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\AdminWidget;
 
 /**
  *
@@ -13,107 +17,141 @@ use \Charcoal\Admin\AdminWidget;
 class PaginationWidget extends AdminWidget
 {
     /**
-     * @var integer $page
+     * The pager object.
+     *
+     * @var PaginationInterface
      */
-    private $page = 1;
+    private $pager;
 
     /**
-     * @var integer $numPerPage
-     */
-    private $numPerPage = 0;
-
-    /**
-     * @var integer $numTotal
+     * The total number of items.
+     *
+     * @var integer
      */
     private $numTotal;
 
     /**
-     * @param integer $page The page number, of the items to load.
-     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
+     * Retrieve the Paginationb object.
+     *
+     * @return PaginationInterface
+     */
+    protected function pager()
+    {
+        if ($this->pager === null) {
+            $this->pager = $this->createPagination();
+        }
+
+        return $this->pager;
+    }
+
+    /**
+     * Create the Pagination object.
+     *
+     * @return PaginationInterface
+     */
+    protected function createPagination()
+    {
+        $pagination = new Pagination();
+        return $pagination;
+    }
+
+    /**
+     * Set the page number.
+     *
+     * @param  integer $page The current page. Pages should start at 1.
      * @return PaginationWidget Chainable
      */
     public function setPage($page)
     {
-        if (!is_numeric($page)) {
-            throw new InvalidArgumentException(
-                'Page must be an integer value.'
-            );
-        }
-        if ($page < 1) {
-            throw new InvalidArgumentException(
-                'Page must be 1 or greater.'
-            );
-        }
-        $this->page = (int)$page;
+        $this->pager()->setPage($page);
+
         return $this;
     }
 
     /**
+     * Retrieve the page number.
+     *
      * @return integer
      */
     public function page()
     {
-        return (int)$this->page;
+        return $this->pager()->page();
     }
 
     /**
+     * Retrieve the previous page number.
+     *
      * @return integer
      */
     public function pagePrev()
     {
-        return max(1, ($this->page()-1));
+        return max(1, ($this->page() - 1));
     }
 
     /**
+     * Retrieve the next page number.
+     *
      * @return integer
      */
     public function pageNext()
     {
-        return min($this->numPages(), ($this->page()+1));
+        return min($this->numPages(), ($this->page() + 1));
     }
 
     /**
-     * @param integer $numPerPage The number of items per page to load.
-     * @throws InvalidArgumentException If the argument is not a number or lower than 0.
+     * Set the number of results per page.
+     *
+     * @param  integer $count The number of results to return, per page.
+     *     Use 0 to request all results.
      * @return PaginationWidget Chainable
      */
-    public function setNumPerPage($numPerPage)
+    public function setNumPerPage($count)
     {
-        if (!is_numeric($numPerPage)) {
-            throw new InvalidArgumentException(sprintf(
-                'Num per page must be a numeric value. (%s sent)',
-                gettype($numPerPage)
-            ));
-        }
-        $this->numPerPage = (int)$numPerPage;
+        $this->pager()->setNumPerPage($count);
+
         return $this;
     }
 
     /**
+     * Retrieve the number of results per page.
+     *
      * @return integer
      */
     public function numPerPage()
     {
-        return (int)$this->numPerPage;
+        return $this->pager()->numPerPage();
     }
 
     /**
-     * @param integer $num The total number of items (to count pages).
+     * Set the total number of items (for counting pages).
+     *
+     * @param  integer $total The total number of items.
      * @throws InvalidArgumentException If the argument is not a number or lower than 0.
      * @return PaginationWidget Chainable
      */
-    public function setNumTotal($num)
+    public function setNumTotal($total)
     {
-        if (!is_numeric($num)) {
+        if (!is_numeric($total)) {
             throw new InvalidArgumentException(
-                'Num total must be an integer value.'
+                'Total Number must be numeric.'
             );
         }
-        $this->numTotal = (int)$num;
+
+        $total = (int)$total;
+        if ($total < 0) {
+            throw new InvalidArgumentException(
+                'Total Number must be greater than zero.'
+            );
+        }
+
+        $this->numTotal = $total;
+
         return $this;
     }
 
     /**
+     * Retrieve the total number of items (for counting pages).
+     *
      * @return integer
      */
     public function numTotal()
@@ -122,9 +160,9 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
-     * Page generator
+     * Yield each page.
      *
-     * @return array This is a generator
+     * @return array|Generator
      */
     public function pages()
     {
@@ -139,6 +177,8 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
+     * Retrieve the number of pages.
+     *
      * @return integer
      */
     public function numPages()
@@ -146,10 +186,13 @@ class PaginationWidget extends AdminWidget
         if ($this->numPerPage() == 0) {
             return 1;
         }
+
         return ceil($this->numTotal() / $this->numPerPage());
     }
 
     /**
+     * Determine if pagination can be displayed.
+     *
      * @return boolean
      */
     public function showPagination()
@@ -158,6 +201,8 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
+     * Determine if the "previous page" link can be displayed.
+     *
      * @return boolean
      */
     public function previousEnabled()
@@ -166,6 +211,8 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
+     * Determine if the "next page" link can be displayed.
+     *
      * @return boolean
      */
     public function nextEnabled()

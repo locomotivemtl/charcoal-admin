@@ -53,7 +53,7 @@ class NumberInput extends AbstractPropertyInput
             );
         }
 
-        $this->min = $min + 0;
+        $this->min = ($min + 0);
         return $this;
     }
 
@@ -91,7 +91,7 @@ class NumberInput extends AbstractPropertyInput
             );
         }
 
-        $this->max = $max + 0;
+        $this->max = ($max + 0);
         return $this;
     }
 
@@ -134,7 +134,7 @@ class NumberInput extends AbstractPropertyInput
             );
         }
 
-        $this->step = $step + 0;
+        $this->step = ($step + 0);
         return $this;
     }
 

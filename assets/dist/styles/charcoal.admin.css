@@ -1764,6 +1764,8 @@ textarea.form-control {
 
 .charcoal-admin-widget-table .table-container > .table {
   margin-bottom: 60px; }
+  .charcoal-admin-widget-table .table-container > .table + .table-foot {
+    margin-top: -60px; }
 
 .panel-body > :first-child {
   margin-top: 0; }

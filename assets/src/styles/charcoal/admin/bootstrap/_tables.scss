@@ -34,5 +34,9 @@
 .charcoal-admin-widget-table {
     .table-container > .table {
         margin-bottom: ($line-height-computed * 3);
+
+        & + .table-foot {
+            margin-top: -($line-height-computed * 3);
+        }
     }
 }

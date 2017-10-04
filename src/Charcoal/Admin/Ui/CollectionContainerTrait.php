@@ -522,7 +522,7 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @return Collection
+     * @return CollectionLoader
      */
     public function collection()
     {

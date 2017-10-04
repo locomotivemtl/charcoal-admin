@@ -34,6 +34,12 @@ module.exports = {
             },
             {
                 expand: true,
+                cwd   : 'bower_components/jquery-minicolors/',
+                src   : ['jquery.minicolors.png'],
+                dest  : 'assets/dist/styles/'
+            },
+            {
+                expand: true,
                 cwd   : 'bower_components/tinymce/',
                 src   : ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/modern/theme.min.js', 'tinymce.min.js'],
                 dest  : 'assets/dist/scripts/vendors/tinymce/'

@@ -11,7 +11,7 @@
         "uglify",
         "svg_sprite",
         "copy:admin",
-        "notify:build"
+        "notify:copy"
     ],
 
     "sync": [

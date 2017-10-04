@@ -5,7 +5,7 @@ Pagination Widget
 `charcoal/admin/widget/pagination`
 --}}
 
-<nav id="{{ widgetId }}">
+<nav id="{{ widgetId }}" class="pagination-wrapper">
     <ul class="pagination"{{# showLabel }} aria-label="{{ label }}"{{/ showLabel }}>
         <li data-page-num="{{pagePrev}}" class="page-item js-page-switch{{^previousEnabled}} disabled{{/previousEnabled}}">
             <a href="#" class="page-link">

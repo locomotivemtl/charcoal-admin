@@ -1340,6 +1340,7 @@ Charcoal.Admin.Widget = function (opts) {
     if (typeof opts.id === 'string') {
         this.set_element($('#' + opts.id));
         this.set_id(opts.id);
+        this.widget_id = opts.widget_id || opts.id;
     }
 
     if (typeof opts.type === 'string') {
@@ -1364,12 +1365,26 @@ Charcoal.Admin.Widget.prototype.set_opts = function (opts) {
 };
 
 /**
+ * Add option
+ * @param {String} ident
+ * @param {Mixed} val
+ * @return this (chainable)
+ */
+Charcoal.Admin.Widget.prototype.add_opts = function (ident, val) {
+    if (typeof ident === 'string') {
+        this._opts[ident] = val;
+    }
+
+    return this;
+};
+
+/**
  * If a ident is specified, the method tries to return
  * the options pointed out.
  * If no ident is specified, the method returns
  * the whole opts object
  *
- * @param {String} ident | falcultative
+ * @param {String} [ident]
  * @return {Object|Mixed|false}
  */
 Charcoal.Admin.Widget.prototype.opts = function (ident) {
@@ -1497,7 +1512,11 @@ Charcoal.Admin.Widget.prototype.reload = function (callback) {
         contentType: 'application/json',
         success: function (response) {
             if (typeof response.widget_id === 'string') {
-                that.set_id(response.widget_id);
+                var wid = response.widget_id;
+                that.set_id(wid);
+                that.add_opts('id', wid);
+                that.add_opts('widget_id', wid);
+                that.widget_id = wid;
                 that.anim_out(function () {
                     that.element().replaceWith(response.widget_html);
                     that.set_element($('#' + that.id()));
@@ -3474,8 +3493,8 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         }
     }).disableSelection();
 
-    $('.js-page-switch').on('click', function (e) {
-        e.preventDefault();
+    $('.js-page-switch', that.table_selector).on('click', function (event) {
+        event.preventDefault();
 
         var $this = $(this);
         var page_num = $this.data('page-num');

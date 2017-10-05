@@ -194,8 +194,8 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
         }
     }).disableSelection();
 
-    $('.js-page-switch').on('click', function (e) {
-        e.preventDefault();
+    $('.js-page-switch', that.table_selector).on('click', function (event) {
+        event.preventDefault();
 
         var $this = $(this);
         var page_num = $this.data('page-num');

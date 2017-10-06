@@ -51,7 +51,6 @@ Header menu Widget
     {{/ isAuthenticated }}
 </header>
 
-
 {{#showHeaderMenu}}
 {{!-- Charcoal Main Menu --}}
 <div class="c-nav-main-overlay js-toggle-class" data-target="body" data-class="has-nav-open"></div>
@@ -64,7 +63,7 @@ Header menu Widget
 </nav>
 {{/showHeaderMenu}}
 
-{{#addJs}}
+{{#addJsRequirement}}
 <script>
     $(function() {
         var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
@@ -77,4 +76,4 @@ Header menu Widget
         });
     });
 </script>
-{{/addJs}}
+{{/addJsRequirement}}

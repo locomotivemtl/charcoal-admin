@@ -8,6 +8,9 @@ use Pimple\Container;
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 
+// From 'charcoal-object'
+use Charcoal\Object\HierarchicalInterface;
+
 // From 'charcoal-property'
 use Charcoal\Property\ObjectProperty;
 
@@ -55,8 +58,10 @@ class HierarchicalObjectProperty extends ObjectProperty
 
         if (property_exists($obj, 'auxiliary') && $obj->auxiliary) {
             $choice['parent'] = true;
+        } elseif ($obj instanceof HierarchicalInterface && $obj->hasMaster()) {
+            $choice['group'] = parent::parseChoice($obj->master());
         } else {
-            $choice['group'] = ($obj->hasMaster() ? $obj->master()->id() : null);
+            $choice['group'] = null;
         }
 
         if (is_callable([ $obj, 'name' ])) {

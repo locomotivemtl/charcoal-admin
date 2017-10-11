@@ -293,7 +293,9 @@ class ElfinderConnectorAction extends AdminAction
                 // File permission attributes
                 'attributes'     => [
                     $this->attributesForHiddenFiles()
-                ]
+                ],
+                // Overwrite default duplicate suffix to be html friendly
+                'duplicateSuffix'=> '_%s_'
             ];
 
             return [

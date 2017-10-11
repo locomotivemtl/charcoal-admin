@@ -8,6 +8,7 @@ use UnexpectedValueException;
 use InvalidArgumentException;
 
 // From 'charcoal-property'
+use Charcoal\Property\ModelStructureProperty;
 use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-ui'
@@ -95,7 +96,7 @@ class StructureFormGroup extends FormGroupWidget implements
     /**
      * The form group's storage target. {@deprecated In favor of $storage.}
      *
-     * @var PropertyInterface|null
+     * @var ModelStructureProperty|null
      */
     protected $storageProperty;
 
@@ -245,9 +246,9 @@ class StructureFormGroup extends FormGroupWidget implements
      * Must be a property of the form's object model that will receive an associative array
      * of the form group's data.
      *
-     * @param  string|PropertyInterface $propertyIdent The property identifier—or instance—of a storage property.
+     * @param  string|ModelStructureProperty $propertyIdent The property identifier—or instance—of a storage property.
      * @throws InvalidArgumentException If the property identifier is not a string.
-     * @throws UnexpectedValueException If a property data is invalid.
+     * @throws UnexpectedValueException If a property is invalid.
      * @return StructureFormGroup
      */
     public function setStorageProperty($propertyIdent)
@@ -258,7 +259,7 @@ class StructureFormGroup extends FormGroupWidget implements
             $propertyIdent = $property->ident();
         } elseif (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
-                'Property identifier must be a string'
+                'Storage Property identifier must be a string'
             );
         }
 
@@ -267,7 +268,7 @@ class StructureFormGroup extends FormGroupWidget implements
             throw new UnexpectedValueException(sprintf(
                 'The "%1$s" property is not defined on [%2$s]',
                 $propertyIdent,
-                get_class($this->obj())
+                get_class($obj)
             ));
         }
 
@@ -275,7 +276,16 @@ class StructureFormGroup extends FormGroupWidget implements
             $property = $obj->property($propertyIdent);
         }
 
-        $this->storageProperty = $property;
+        if ($property instanceof ModelStructureProperty) {
+            $this->storageProperty = $property;
+        } else {
+            throw new UnexpectedValueException(sprintf(
+                '"%s" [%s] is not a model structure property on [%s].',
+                $propertyIdent,
+                (is_object($property) ? get_class($property) : gettype($property)),
+                (is_object($obj) ? get_class($obj) : gettype($obj))
+            ));
+        }
 
         return $this;
     }
@@ -284,7 +294,7 @@ class StructureFormGroup extends FormGroupWidget implements
      * Retrieve the form group's storage property master.
      *
      * @throws RuntimeException If the storage property was not previously set.
-     * @return PropertyInterface
+     * @return ModelStructureProperty
      */
     public function storageProperty()
     {

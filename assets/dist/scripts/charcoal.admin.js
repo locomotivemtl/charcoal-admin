@@ -3300,14 +3300,14 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
 
     $input = this.element().find('input');
     words  = $input.val().split(/\s/);
-    props  = this.opts.data.list || [];
+    props  = this.opts.data.properties || [];
 
     $.each(words, function (i, word) {
         $.each(props, function (j, prop) {
             filters.push({
-                val:      '%' + word + '%',
                 property: prop,
                 operator: 'LIKE',
+                value:    ('%' + word + '%'),
                 operand:  'OR'
             });
         });

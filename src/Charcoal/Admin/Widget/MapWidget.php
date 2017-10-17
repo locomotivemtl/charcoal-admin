@@ -74,6 +74,20 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     }
 
     /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return [
+            'obj_id'   => null,
+            'obj_type' => null,
+            'coords'   => $this->coords(),
+        ];
+    }
+
+    /**
      * Set the $obj property key for the latitude.
      *
      * @param  string|null $key The latitude property ident.

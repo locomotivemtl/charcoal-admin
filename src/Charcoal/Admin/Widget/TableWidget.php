@@ -384,6 +384,24 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return [
+            'obj_type'         => $this->objType(),
+            'template'         => $this->template(),
+            'collection_ident' => $this->collectionIdent(),
+            'properties'       => $this->propertiesIdents(),
+            'filters'          => $this->filters(),
+            'orders'           => $this->orders(),
+            'pagination'       => $this->pagination(),
+        ];
+    }
+
+    /**
      * Sets and returns properties
      *
      * Manages which to display, and their order, as set in object metadata
@@ -419,6 +437,21 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $this->properties;
+    }
+
+    /**
+     * Retrieve the property keys shown in the collection.
+     *
+     * @return array
+     */
+    public function propertiesIdents()
+    {
+        $collectionConfig = $this->collectionConfig();
+        if (isset($collectionConfig['properties'])) {
+            return $collectionConfig['properties'];
+        }
+
+        return [];
     }
 
     /**

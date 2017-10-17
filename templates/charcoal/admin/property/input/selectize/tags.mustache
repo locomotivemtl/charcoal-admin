@@ -51,21 +51,7 @@
 Charcoal.Admin.manager().add_property_input({
     id:   '{{ inputId }}',
     type: 'charcoal/admin/property/input/selectize/tags',
-    data: {
-        title: '{{ label }}',
-        {{# property.objType }}
-        obj_type: '{{ . }}',
-        {{/ property.objType }}
-        {{# multiple }}
-        multiple: true,
-        multiple_separator: '{{ property.multipleSeparator }}',
-        {{/ multiple }}
-        {{# allowClipboardCopy }}
-        copy_items: true,
-        {{/ allowClipboardCopy }}
-        selectize_selector: '#{{ inputId }}',
-        selectize_options: {{& selectizeOptionsAsJson }}
-    }
+    data: {{& controlDataForJsAsJson }}
 });
 </script>
 {{/ addJs }}

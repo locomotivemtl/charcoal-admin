@@ -164,4 +164,31 @@ class TextInput extends AbstractPropertyInput
     {
         return $this->pattern;
     }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        return [
+            // Text Control
+            'size'               => $this->size(),
+            'min_length'         => $this->minLength(),
+            'max_length'         => $this->maxLength(),
+
+            // Base Control
+            'input_name'         => $this->inputName(),
+            'input_val'          => $this->inputVal(),
+
+            // Base Property
+            'readOnly'           => $this->readOnly(),
+            'required'           => $this->required(),
+            'l10n'               => $this->property()->l10n(),
+            'multiple'           => $this->multiple(),
+            'multiple_separator' => $this->property()->multipleSeparator(),
+            'multiple_options'   => $this->property()->multipleOptions(),
+        ];
+    }
 }

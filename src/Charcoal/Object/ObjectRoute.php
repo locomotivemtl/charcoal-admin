@@ -191,9 +191,11 @@ class ObjectRoute extends AbstractModel implements
             ->setModel($proto)
             ->addFilter('active', true)
             ->addFilter('slug', $this->slug())
+            ->addFilter('lang', $this->lang())
             ->addOrder('creation_date', 'desc')
             ->setPage(1)
             ->setNumPerPage(1);
+
         $routes = $loader->load()->objects();
         if (!$routes) {
             return true;

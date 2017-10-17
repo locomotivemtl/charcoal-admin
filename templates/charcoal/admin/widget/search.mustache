@@ -18,14 +18,9 @@
 {{#addJs}}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '{{widgetId}}',
+    id:   '{{widgetId}}',
     type: 'charcoal/admin/widget/search',
-    data: {
-        obj_type: '{{objType}}',
-        list: {{&jsonPropertiesList}}
-    }
+    data: {{& widgetDataForJsAsJson }}
 });
 </script>
 {{/addJs}}
-
-

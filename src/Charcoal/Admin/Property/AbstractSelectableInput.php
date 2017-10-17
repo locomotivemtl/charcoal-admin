@@ -367,6 +367,6 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function choiceObjMapAsJson()
     {
-        return json_encode($this->choiceObjMap(), true);
+        return json_encode($this->choiceObjMap());
     }
 }

@@ -55,38 +55,9 @@
 {{# addJs }}
     <script>
         Charcoal.Admin.manager().add_property_input({
-            id  : '{{ inputId }}',
+            id:   '{{ inputId }}',
             type: 'charcoal/admin/property/input/selectize',
-            data: {
-                title                 : '{{ label }}',
-                translations          : {
-                    statusTemplate: '{{#_t}}Step [[ current ]] of [[ total ]]{{/_t}}'
-                },
-                {{# property.objType }}
-                    pattern           : '{{ pattern }}',
-                    obj_type          : '{{ . }}',
-                {{/ property.objType }}
-                {{# multiple }}
-                    multiple          : true,
-                    multiple_separator: '{{ property.multipleSeparator }}',
-                {{/ multiple }}
-                {{# allowClipboardCopy }}
-                    copy_items        : true,
-                {{/ allowClipboardCopy }}
-                {{# allowUpdate }}
-                    allow_update      : true,
-                {{/ allowUpdate }}
-                {{# allowCreate }}
-                    allow_create      : true,
-                {{/ allowCreate }}
-                selectize_selector    : '#{{ inputId }}',
-                form_ident            : {{& formIdentAsJson}},
-                selectize_options     : {{& selectizeOptionsAsJson }},
-                choice_obj_map        : {{& choiceObjMapAsJson }},
-                selectize_property_ident : '{{& property.ident }}',
-                selectize_obj_type       : '{{& objType }}',
-                selectize_templates   : {{& selectizeTemplatesAsJson }}
-            }
+            data: {{& controlDataForJsAsJson }}
         });
     </script>
 {{/ addJs }}

@@ -393,4 +393,39 @@ class TagsInput extends AbstractSelectableInput
             'color' => 'color'
         ];
     }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        $prop = $this->property();
+
+        $data = [
+            // Selectize Control
+            'title'                    => (string)$prop->label(),
+            'copy_items'               => $this->allowClipboardCopy(),
+
+            'selectize_selector'       => '#'.$this->inputId(),
+            'selectize_options'        => $this->selectizeOptions(),
+
+            // Base Property
+            'required'                 => $this->required(),
+            'l10n'                     => $this->property()->l10n(),
+            'multiple'                 => $this->multiple(),
+            'multiple_separator'       => $this->property()->multipleSeparator(),
+            'multiple_options'         => $this->property()->multipleOptions(),
+        ];
+
+        if ($prop instanceof ObjectProperty) {
+            if ($prop->objType()) {
+                $data['pattern']  = $prop->pattern();
+                $data['obj_type'] = $prop->objType();
+            }
+        }
+
+        return $data;
+    }
 }

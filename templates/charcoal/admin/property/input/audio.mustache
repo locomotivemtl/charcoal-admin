@@ -99,10 +99,7 @@ Audio Property Input
 Charcoal.Admin.manager().add_property_input({
     id: '{{inputId}}',
     type: 'charcoal/admin/property/input/audio',
-    data: {
-        active_pane: 'text',
-        hidden_input_id: 'hidden_{{inputId}}'
-    }
+    data: {{& controlDataForJsAsJson }}
 });
 </script>
 {{/addJs}}

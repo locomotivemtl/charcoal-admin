@@ -38,7 +38,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * Create a new hierarchically-sorted collection.
      *
-     * @param  array|Traversable|null $objs Array of objects to pre-populate this collection.
+     * @param  array|\Traversable|null $objs Array of objects to pre-populate this collection.
      * @param  boolean                $sort Whether to sort the collection immediately.
      * @return void
      */
@@ -281,7 +281,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * @param  integer $page The current page. Start at 0.
      * @throws InvalidArgumentException If the parameter is not numeric or < 0.
-     * @return Pagination (Chainable)
+     * @return self
      */
     public function setPage($page)
     {
@@ -314,7 +314,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * @param  integer $num The number of results to retrieve, per page.
      * @throws InvalidArgumentException If the parameter is not numeric or < 0.
-     * @return Pagination (Chainable)
+     * @return self
      */
     public function setNumPerPage($num)
     {

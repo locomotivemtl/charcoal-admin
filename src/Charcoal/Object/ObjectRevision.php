@@ -52,13 +52,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
 
     /**
      * Timestamp; when this revision was created
-     * @var DateTimeInterface $revTs
+     * @var DateTimeInterface|null $revTs
      */
     private $revTs;
 
     /**
      * The (admin) user that was
-     * @var string $revUser
+     * @var string|null $revUser
      */
     private $revUser;
 
@@ -165,7 +165,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
                 'Revision number must be an integer (numeric).'
             );
         }
-        $this->revNum = (int)$revNum;
+        $this->revNum = intval($revNum);
         return $this;
     }
 
@@ -448,7 +448,6 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
             $this->source()->createTable();
         }
 
-        $revNum = (int)$revNum;
 
         $rev = $this->modelFactory()->create(self::class);
 
@@ -467,7 +466,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
         $rev->loadFromQuery($sql, [
             'target_type' => $obj->objType(),
             'target_id'   => $obj->id(),
-            'rev_num'     => $revNum
+            'rev_num'     => intval($revNum)
         ]);
 
         return $rev;

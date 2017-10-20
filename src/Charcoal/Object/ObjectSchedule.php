@@ -2,20 +2,20 @@
 
 namespace Charcoal\Object;
 
-use \DateTime;
-use \DateTimeInterface;
-use \Exception;
-use \RuntimeException;
-use \InvalidArgumentException;
+use DateTime;
+use DateTimeInterface;
+use Exception;
+use RuntimeException;
+use InvalidArgumentException;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-core'
-use \Charcoal\Model\AbstractModel;
+use Charcoal\Model\AbstractModel;
 
 // From 'charcoal-object'
-use \Charcoal\Object\ObjectScheduleInterface;
+use Charcoal\Object\ObjectScheduleInterface;
 
 /**
  * The object schedule class allows object properties to be changed at a scheduled time.
@@ -60,7 +60,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
     /**
      * The property identifier of the scheduled object (required).
      *
-     * @var string
+     * @var array
      */
     private $dataDiff = [];
 
@@ -308,7 +308,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * Presets the item as _to-be_ processed and queued now.
      *
-     * @return ObjectScheduleInterface Chainable
+     * @return boolean
      */
     public function preSave()
     {
@@ -325,7 +325,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      * @param  callable $callback        An optional callback routine executed after the item is processed.
      * @param  callable $successCallback An optional callback routine executed when the item is resolved.
      * @param  callable $failureCallback An optional callback routine executed when the item is rejected.
-     * @return boolean  Success / Failure
+     * @return boolean|null  Success / Failure, or null in case of a skipped item.
      */
     public function process(
         callable $callback = null,

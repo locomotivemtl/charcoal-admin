@@ -86,7 +86,7 @@ class UserData extends AbstractModel implements
         if (is_string($ip)) {
             $ip = ip2long($ip);
         } elseif (is_numeric($ip)) {
-            $ip = (int)$ip;
+            $ip = intval($ip);
         } else {
             $ip = 0;
         }

@@ -125,9 +125,8 @@ trait RevisionableTrait
      */
     public function revisionNum($revNum)
     {
-        $revNum = (int)$revNum;
         $rev = $this->createRevisionObject();
-        $rev = $rev->objectRevisionNum($this, $revNum);
+        $rev = $rev->objectRevisionNum($this, intval($revNum));
 
         return $rev;
     }
@@ -163,14 +162,13 @@ trait RevisionableTrait
      */
     public function revertToRevision($revNum)
     {
-        $revNum = (int)$revNum;
         if (!$revNum) {
             throw new InvalidArgumentException(
                 'Invalid revision number'
             );
         }
 
-        $rev = $this->revisionNum($revNum);
+        $rev = $this->revisionNum(intval($revNum));
 
         if (!$rev->id()) {
             return false;

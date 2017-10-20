@@ -9,7 +9,7 @@ interface ObjectScheduleInterface
 {
     /**
      * @param string $targetType The object type (type-ident).
-     * @return ObjectScheduleInterface Chainable
+     * @return self
      */
     public function setTargetType($targetType);
 
@@ -20,7 +20,7 @@ interface ObjectScheduleInterface
 
     /**
      * @param mixed $targetId The object ID.
-     * @return ObjectScheduleInterface Chainable
+     * @return self
      */
     public function setTargetId($targetId);
 
@@ -32,9 +32,9 @@ interface ObjectScheduleInterface
     /**
      * Set the date/time the item should be processed at.
      *
-     * @param  null|string|DateTimeInterface $ts A date/time string or object.
+     * @param  null|string|\DateTimeInterface $ts A date/time string or object.
      * @throws InvalidArgumentException If the date/time is invalid.
-     * @return ObjectScheduleInterface Chainable
+     * @return self
      */
     public function setScheduledDate($ts);
 
@@ -47,7 +47,7 @@ interface ObjectScheduleInterface
 
     /**
      * @param array|string $data The data diff.
-     * @return ObjectScheduleInterface Chainable
+     * @return self
      */
     public function setDataDiff($data);
 
@@ -59,9 +59,9 @@ interface ObjectScheduleInterface
     /**
      * Set the date/time the item was processed at.
      *
-     * @param  null|string|DateTimeInterface $ts A date/time string or object.
+     * @param  null|string|\DateTimeInterface $ts A date/time string or object.
      * @throws InvalidArgumentException If the date/time is invalid.
-     * @return ObjectScheduleInterface Chainable
+     * @return self
      */
     public function setProcessedDate($ts);
 

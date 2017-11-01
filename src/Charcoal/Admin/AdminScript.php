@@ -42,7 +42,7 @@ abstract class AdminScript extends AbstractScript
      */
     public function setDependencies(Container $container)
     {
-        $this->modelFactory = $container['model/factory'];
+        $this->setModelFactory($container['model/factory']);
         $this->setTranslator($container['translator']);
 
         $this->setBaseUrl($container['base-url']);
@@ -50,15 +50,6 @@ abstract class AdminScript extends AbstractScript
         parent::setDependencies($container);
     }
 
-    /**
-     * @param FactoryInterface $factory The factory used to create models.
-     * @return AdminScript Chainable
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-        return $this;
-    }
 
     /**
      * @return FactoryInterface The model factory.
@@ -69,46 +60,37 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-     * Set the base URI of the application.
-     *
-     * @param UriInterface|string $uri The base URI.
-     * @return self
-     */
-    public function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the base URI of the application.
      *
      * @return UriInterface|string
      */
-    public function baseUrl()
+    protected function baseUrl()
     {
         return rtrim($this->baseUrl, '/').'/';
     }
 
-
     /**
-     * @param PropertyInterface $prop The property to retrieve input from.
+     * @param PropertyInterface $prop  The property to retrieve input from.
+     * @param string            $label The input label.
      * @return mixed
      */
-    protected function propertyToInput(PropertyInterface $prop)
+    protected function propertyToInput(PropertyInterface $prop, $label = null)
     {
         $climate = $this->climate();
 
-        if ($prop->type() == 'password') {
-            return $this->passwordInput($prop);
-        } elseif ($prop->type() == 'boolean') {
-            return $this->booleanInput($prop);
-        } else {
-            $input = $climate->input(sprintf(
+        if ($label === null) {
+            $label = sprintf(
                 'Enter value for "%s":',
                 $prop->label()
-            ));
+            );
+        }
+
+        if ($prop->type() == 'password') {
+            return $this->passwordInput($prop, $label);
+        } elseif ($prop->type() == 'boolean') {
+            return $this->booleanInput($prop, $label);
+        } else {
+            $input = $climate->input($label);
             if ($prop->type() == 'text' || $prop->type == 'html') {
                 $input->multiLine();
             }
@@ -119,10 +101,11 @@ abstract class AdminScript extends AbstractScript
     /**
      * Get a CLI input from a boolean property.
      *
-     * @param PropertyInterface $prop The property to retrieve input from.
+     * @param PropertyInterface $prop  The property to retrieve input from.
+     * @param string            $label The input label.
      * @return \League\CLImate\TerminalObject\Dynamic\Input
      */
-    private function booleanInput(PropertyInterface $prop)
+    private function booleanInput(PropertyInterface $prop, $label)
     {
         $climate = $this->climate();
 
@@ -131,7 +114,7 @@ abstract class AdminScript extends AbstractScript
             0 => $prop->falseLabel()
         ];
         $input = $climate->radio(
-            sprintf('Enter value for "%s":', $prop->label()),
+            $label,
             $opts
         );
         return $input;
@@ -140,18 +123,40 @@ abstract class AdminScript extends AbstractScript
     /**
      * Get a CLI password input (hidden) from a password property.
      *
-     * @param PropertyInterface $prop The property to retrieve input from.
+     * @param PropertyInterface $prop  The property to retrieve input from.
+     * @param string            $label The input label.
      * @return \League\CLImate\TerminalObject\Dynamic\Input
      */
-    private function passwordInput(PropertyInterface $prop)
+    private function passwordInput(PropertyInterface $prop, $label)
     {
         $climate = $this->climate();
 
-        $input = $climate->password(sprintf(
-            'Enter value for "%s":',
-            $prop->label()
-        ));
+        $input = $climate->password($label);
 
         return $input;
     }
+
+    /**
+     * Set the base URI of the application.
+     *
+     * @param UriInterface|string $uri The base URI.
+     * @return self
+     */
+    private function setBaseUrl($uri)
+    {
+        $this->baseUrl = $uri;
+
+        return $this;
+    }
+
+        /**
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return void
+     */
+    private function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        ;
+    }
+
 }

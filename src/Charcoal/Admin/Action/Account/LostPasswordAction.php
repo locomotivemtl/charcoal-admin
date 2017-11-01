@@ -136,7 +136,7 @@ class LostPasswordAction extends AdminAction
 
         $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
         $user = $this->loadUser($username);
-        if ($user === null) {
+        if ($user === false) {
             /**
              * Fail silently — Never confirm or deny the existence
              * of an account with a given email or username.

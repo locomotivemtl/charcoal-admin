@@ -418,6 +418,10 @@ abstract class AbstractPropertyInput implements
             if (isset($this->placeholder->isRendered) && $this->placeholder->isRendered === false) {
                 $this->placeholder = $this->renderTranslatableTemplate($this->placeholder);
             }
+
+            if ($this->lang()) {
+                return $this->placeholder[$this->lang()];
+            }
         }
 
         return $this->placeholder;
@@ -649,9 +653,13 @@ abstract class AbstractPropertyInput implements
      */
     public function inputPrefix()
     {
-        if ($this->inputPrefix !== null) {
+        if ($this->inputPrefix instanceof Translation) {
             if (isset($this->inputPrefix->isRendered) && $this->inputPrefix->isRendered === false) {
                 $this->inputPrefix = $this->renderTranslatableTemplate($this->inputPrefix);
+            }
+
+            if ($this->lang()) {
+                return $this->inputPrefix[$this->lang()];
             }
         }
 
@@ -680,9 +688,13 @@ abstract class AbstractPropertyInput implements
      */
     public function inputSuffix()
     {
-        if ($this->inputSuffix !== null) {
+        if ($this->inputSuffix instanceof Translation) {
             if (isset($this->inputSuffix->isRendered) && $this->inputSuffix->isRendered === false) {
                 $this->inputSuffix = $this->renderTranslatableTemplate($this->inputSuffix);
+            }
+
+            if ($this->lang()) {
+                return $this->inputPrefix[$this->lang()];
             }
         }
 
@@ -772,16 +784,18 @@ abstract class AbstractPropertyInput implements
     public function renderTranslatableTemplate($templateString)
     {
         if ($templateString instanceof Translation) {
+            $origLang = $this->translator()->getLocale();
             foreach ($templateString->data() as $lang => $translation) {
                 $isBlank = empty($translation) && !is_numeric($translation);
                 if (!$isBlank) {
+                    $this->translator()->setLocale($lang);
                     $translation = $this->renderTemplate($translation);
                     if ($translation !== null) {
                         $templateString[$lang] = $translation;
                     }
                 }
             }
-
+            $this->translator()->setLocale($origLang);
             $templateString->isRendered = true;
 
             return $templateString;

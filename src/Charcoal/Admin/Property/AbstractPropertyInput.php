@@ -785,7 +785,11 @@ abstract class AbstractPropertyInput implements
     {
         if ($templateString instanceof Translation) {
             $origLang = $this->translator()->getLocale();
-            foreach ($templateString->data() as $lang => $translation) {
+            foreach ($this->translator()->availableLocales() as $lang) {
+                if (!isset($templateString[$lang])) {
+                    continue;
+                }
+                $translation = $templateString[$lang];
                 $isBlank = empty($translation) && !is_numeric($translation);
                 if (!$isBlank) {
                     $this->translator()->setLocale($lang);

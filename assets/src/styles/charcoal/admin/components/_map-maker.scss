@@ -46,5 +46,9 @@
 
 .c-map-maker_input {
     display: inline-block;
-    width: calc(100% - 242px);
+    width: calc(100% - 276px);
+
+    [lang='en'] & {
+        width: calc(100% - 244px);
+    }
 }

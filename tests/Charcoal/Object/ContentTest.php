@@ -58,7 +58,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->obj->lastModifiedBy());
 
         // Revisionable properties
-        $this->assertFalse($this->obj->revisionEnabled());
+        $this->assertTrue($this->obj->revisionEnabled());
     }
 
     public function testSetData()
@@ -206,25 +206,6 @@ class ContentTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException(\InvalidArgumentException::class);
         $this->obj->setRequiredAclPermissions(true);
-    }
-
-    public function testSetPreSave()
-    {
-        $this->assertSame(null, $this->obj->created());
-        $this->assertSame(null, $this->obj->lastModified());
-
-        $this->obj->preSave();
-        $this->assertNotSame(null, $this->obj->created());
-        $this->assertNotSame(null, $this->obj->lastModified());
-    }
-
-    public function testSetPreUpdate()
-    {
-         $this->assertSame(null, $this->obj->lastModified());
-
-         $this->obj->preUpdate();
-         $this->assertNotSame(null, $this->obj->lastModified());
-
     }
 
     /**

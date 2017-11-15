@@ -95,23 +95,6 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->obj->setTs(false);
     }
 
-    public function testPreSave()
-    {
-        $this->obj = $this->obj
-        ;
-        $this->assertSame(null, $this->obj->ip());
-        $this->assertSame(null, $this->obj->origin());
-        $this->assertSame(null, $this->obj->lang());
-        $this->assertSame(null, $this->obj->ts());
-
-        $this->obj->preSave();
-
-        $this->assertSame(null, $this->obj->ip());
-        $this->assertSame($this->obj->resolveOrigin(), $this->obj->origin());
-        $this->assertSame(null, $this->obj->lang());
-        $this->assertNotSame(null, $this->obj->ts());
-    }
-
     /**
      * Set up the service container.
      *

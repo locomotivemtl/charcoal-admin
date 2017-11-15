@@ -39,7 +39,7 @@ class HierarchicalCollection extends CharcoalCollection
      * Create a new hierarchically-sorted collection.
      *
      * @param  array|\Traversable|null $objs Array of objects to pre-populate this collection.
-     * @param  boolean                $sort Whether to sort the collection immediately.
+     * @param  boolean                 $sort Whether to sort the collection immediately.
      * @return void
      */
     public function __construct($objs = [], $sort = true)

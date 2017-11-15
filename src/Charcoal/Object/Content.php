@@ -180,7 +180,7 @@ class Content extends AbstractModel implements
      * For content object, set the `created` and `lastModified` properties automatically
      * @return boolean
      */
-    public function preSave()
+    protected function preSave()
     {
         parent::preSave();
 
@@ -198,7 +198,7 @@ class Content extends AbstractModel implements
      * @param array $properties The properties (ident) set for update.
      * @return boolean
      */
-    public function preUpdate(array $properties = null)
+    protected function preUpdate(array $properties = null)
     {
         parent::preUpdate($properties);
 

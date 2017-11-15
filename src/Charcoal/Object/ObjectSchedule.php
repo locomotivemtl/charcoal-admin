@@ -310,7 +310,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @return boolean
      */
-    public function preSave()
+    protected function preSave()
     {
         parent::preSave();
 

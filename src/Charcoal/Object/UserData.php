@@ -69,7 +69,6 @@ class UserData extends AbstractModel implements
         $this->setTranslator($container['translator']);
     }
 
-
     /**
      * Set the client IP address.
      *
@@ -247,7 +246,7 @@ class UserData extends AbstractModel implements
      * @see    Charcoal\Source\StorableTrait::preSave() For the "create" Event.
      * @return boolean
      */
-    public function preSave()
+    protected function preSave()
     {
         $result = parent::preSave();
 

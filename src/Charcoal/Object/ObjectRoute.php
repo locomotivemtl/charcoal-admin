@@ -153,7 +153,7 @@ class ObjectRoute extends AbstractModel implements
      * @see    Charcoal\Source\StorableTrait::preSave() For the "create" Event.
      * @return boolean
      */
-    public function preSave()
+    protected function preSave()
     {
         $this->generateUniqueSlug();
         $this->setCreationDate('now');
@@ -169,7 +169,7 @@ class ObjectRoute extends AbstractModel implements
      * @param  array $properties Optional. The list of properties to update.
      * @return boolean
      */
-    public function preUpdate(array $properties = null)
+    protected function preUpdate(array $properties = null)
     {
         $this->setCreationDate('now');
         $this->setLastModificationDate('now');

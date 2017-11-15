@@ -147,9 +147,11 @@ class RoutableClass implements
     }
 
     /**
-     * @return array
+     * @param  array $propertyIdents Optional. List of property identifiers
+     *     for retrieving a subset of property objects.
+     * @return null
      */
-    public function properties()
+    public function properties(array $propertyIdents = null)
     {
         return null;
     }
@@ -161,6 +163,15 @@ class RoutableClass implements
     public function property($propertyIdent)
     {
         return null;
+    }
+
+    /**
+     * @param string $propertyIdent The property (ident) to check.
+     * @return bool
+     */
+    public function hasProperty($propertyIdent)
+    {
+        return false;
     }
 
     /**

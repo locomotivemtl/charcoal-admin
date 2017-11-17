@@ -2,16 +2,19 @@
 
 namespace Charcoal\Admin;
 
-// Module `pimple/pimple` dependencies
+// From Pimple
 use Pimple\Container;
 
-// Module `charcoal-factory` dependencies
+// From 'league/climate'
+use League\CLImate\TerminalObject\Dynamic\Input as LeagueInput;
+
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Module `charcoal-app` dependencies
+// From 'charcoal-app'
 use Charcoal\App\Script\AbstractScript;
 
-// Module `charcoal-property` dependencies
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-translator'
@@ -30,21 +33,22 @@ abstract class AdminScript extends AbstractScript
      * @var UriInterface
      */
     protected $baseUrl;
-    
+
     /**
-     * @var FactoryInterface $modelFactory
+     * The model factory.
+     *
+     * @var FactoryInterface
      */
     private $modelFactory;
 
     /**
-     * @param Container $container Pimple DI container.
+     * @param  Container $container Pimple DI container.
      * @return void
      */
     public function setDependencies(Container $container)
     {
         $this->setModelFactory($container['model/factory']);
         $this->setTranslator($container['translator']);
-
         $this->setBaseUrl($container['base-url']);
 
         parent::setDependencies($container);
@@ -52,7 +56,9 @@ abstract class AdminScript extends AbstractScript
 
 
     /**
-     * @return FactoryInterface The model factory.
+     * Retrieve the model factory.
+     *
+     * @return FactoryInterface
      */
     protected function modelFactory()
     {
@@ -70,9 +76,9 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-     * @param PropertyInterface $prop  The property to retrieve input from.
-     * @param string            $label The input label.
-     * @return mixed
+     * @param  PropertyInterface $prop  The property to retrieve input from.
+     * @param  string|null       $label Optional. The input label.
+     * @return LeagueInput The League's terminal input object.
      */
     protected function propertyToInput(PropertyInterface $prop, $label = null)
     {
@@ -85,13 +91,13 @@ abstract class AdminScript extends AbstractScript
             );
         }
 
-        if ($prop->type() == 'password') {
+        if ($prop->type() === 'password') {
             return $this->passwordInput($prop, $label);
-        } elseif ($prop->type() == 'boolean') {
+        } elseif ($prop->type() === 'boolean') {
             return $this->booleanInput($prop, $label);
         } else {
             $input = $climate->input($label);
-            if ($prop->type() == 'text' || $prop->type == 'html') {
+            if ($prop->type() === 'text' || $prop->type === 'html') {
                 $input->multiLine();
             }
         }
@@ -101,9 +107,9 @@ abstract class AdminScript extends AbstractScript
     /**
      * Get a CLI input from a boolean property.
      *
-     * @param PropertyInterface $prop  The property to retrieve input from.
-     * @param string            $label The input label.
-     * @return \League\CLImate\TerminalObject\Dynamic\Input
+     * @param  PropertyInterface $prop  The property to retrieve input from.
+     * @param  string            $label The input label.
+     * @return LeagueInput The League's terminal input object.
      */
     private function booleanInput(PropertyInterface $prop, $label)
     {
@@ -123,40 +129,39 @@ abstract class AdminScript extends AbstractScript
     /**
      * Get a CLI password input (hidden) from a password property.
      *
-     * @param PropertyInterface $prop  The property to retrieve input from.
-     * @param string            $label The input label.
-     * @return \League\CLImate\TerminalObject\Dynamic\Input
+     * @param  PropertyInterface $prop  The property to retrieve input from.
+     * @param  string            $label The input label.
+     * @return LeagueInput The League's terminal input object.
      */
     private function passwordInput(PropertyInterface $prop, $label)
     {
         $climate = $this->climate();
 
         $input = $climate->password($label);
-
         return $input;
     }
 
     /**
      * Set the base URI of the application.
      *
-     * @param UriInterface|string $uri The base URI.
+     * @param  UriInterface|string $uri The base URI.
      * @return self
      */
     private function setBaseUrl($uri)
     {
         $this->baseUrl = $uri;
-
         return $this;
     }
 
-        /**
-     * @param FactoryInterface $factory The factory used to create models.
-     * @return void
+    /**
+     * Set the model factory.
+     *
+     * @param  FactoryInterface $factory The factory used to create models.
+     * @return self
      */
     private function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
-        ;
+        return $this;
     }
-
 }

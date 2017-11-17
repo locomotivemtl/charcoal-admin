@@ -44,14 +44,9 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         $container = $this->container();
 
         $this->obj = $this->getMockForAbstractClass(AdminAction::class, [[
-            'logger'          => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
+            'logger'    => $container['logger'],
+            'container' => $container
         ]]);
-        $this->obj->setDependencies($container);
-
-        $this->obj->expects($this->any())
-            ->method('isAuthenticated')
-            ->will($this->returnValue(true));
     }
 
     public static function getMethod($obj, $name)
@@ -69,7 +64,7 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $request = $this->getMock(RequestInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         //$this->obj->init($request);
     }
 

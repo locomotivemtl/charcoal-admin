@@ -27,7 +27,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
     public function testSetMaster()
     {
         $obj = $this->obj;
-        $master = $this->getMock(get_class($obj));
+        $master = $this->createMock(get_class($obj));
         $ret = $obj->setMaster($master);
         $this->assertSame($ret, $obj);
         $this->assertSame($master, $obj->master());
@@ -52,7 +52,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertFalse($obj->hasMaster());
 
-        $master = $this->getMock(get_class($obj));
+        $master = $this->createMock(get_class($obj));
         $obj->setMaster($master);
         $this->assertTrue($obj->hasMaster());
     }
@@ -62,7 +62,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertTrue($obj->isTopLevel());
 
-        $master = $this->getMock(get_class($obj));
+        $master = $this->createMock(get_class($obj));
         $obj->setMaster($master);
         $this->assertFalse($obj->isTopLevel());
     }
@@ -72,7 +72,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertTrue($obj->isLastLevel());
 
-        $children = array_fill(0, 4, $this->getMock(get_class($obj)));
+        $children = array_fill(0, 4, $this->createMock(get_class($obj)));
         $obj->setChildren($children);
         $this->assertFalse($obj->isLastLevel());
     }
@@ -82,13 +82,13 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertEquals(1, $obj->hierarchyLevel());
 
-        $master = $this->getMock(get_class($obj));
-        $children = array_fill(0, 4, $this->getMock(get_class($obj)));
+        $master = $this->createMock(get_class($obj));
+        $children = array_fill(0, 4, $this->createMock(get_class($obj)));
         $obj->setMaster($master);
         $obj->setChildren($children);
         $this->assertEquals(2, $obj->hierarchyLevel());
 
-        $master2 = $this->getMock(get_class($obj));
+        $master2 = $this->createMock(get_class($obj));
         $obj->master()->setMaster($master2);
 
         //$this->assertEquals(3, $obj->hierarchyLevel());
@@ -99,8 +99,8 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertSame(null, $obj->toplevelMaster());
 
-        $master1 = $this->getMock(get_class($obj));
-        $master2 = $this->getMock(get_class($obj));
+        $master1 = $this->createMock(get_class($obj));
+        $master2 = $this->createMock(get_class($obj));
 
         $obj->setMaster($master1);
         $this->assertSame($master1, $obj->toplevelMaster());
@@ -114,8 +114,8 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertEquals([], $obj->hierarchy());
 
-        $master1 = $this->getMock(get_class($obj));
-        $master2 = $this->getMock(get_class($obj));
+        $master1 = $this->createMock(get_class($obj));
+        $master2 = $this->createMock(get_class($obj));
 
         $obj->setMaster($master1);
         $this->assertSame([$master1], $obj->hierarchy());
@@ -129,8 +129,8 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertEquals([], $obj->invertedHierarchy());
 
-        $master1 = $this->getMock(get_class($obj));
-        $master2 = $this->getMock(get_class($obj));
+        $master1 = $this->createMock(get_class($obj));
+        $master2 = $this->createMock(get_class($obj));
 
         $obj->setMaster($master1);
         $this->assertSame([$master1], $obj->invertedHierarchy());
@@ -142,7 +142,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
     public function testIsMasterOf()
     {
         $obj = $this->obj;
-        $master = $this->getMock(get_class($obj));
+        $master = $this->createMock(get_class($obj));
 
         //$this->assertFalse($master->isMasterOf($obj));
         $obj->setMaster($master);
@@ -155,7 +155,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj = $this->obj;
         $this->assertFalse($obj->hasChildren());
 
-        $children = array_fill(0, 4, $this->getMock(get_class($obj)));
+        $children = array_fill(0, 4, $this->createMock(get_class($obj)));
         $obj->setChildren($children);
         $this->assertTrue($obj->hasChildren());
     }
@@ -166,11 +166,11 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $obj->numChildren());
 
 
-        $children = array_fill(0, 4, $this->getMock(get_class($obj)));
+        $children = array_fill(0, 4, $this->createMock(get_class($obj)));
         $obj->setChildren($children);
         $this->assertEquals(4, $obj->numChildren());
 
-        $child5 = $this->getMock(get_class($obj));
+        $child5 = $this->createMock(get_class($obj));
         $obj->addChild($child5);
         $this->assertEquals(5, $obj->numChildren());
     }
@@ -178,7 +178,7 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
     public function testIsChildOf()
     {
         $obj = $this->obj;
-        $master = $this->getMock(get_class($obj));
+        $master = $this->createMock(get_class($obj));
 
         $this->assertFalse($obj->isChildOf($master));
         $obj->setMaster($master);

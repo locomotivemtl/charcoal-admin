@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Action\Selectize;
 
+use Exception;
+
 // From Pimple
 use Pimple\Container;
 

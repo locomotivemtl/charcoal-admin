@@ -40,11 +40,10 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->container();
 
-        $this->obj = $this->getMock(ElfinderTemplate::class, null, [[
-            'logger'          => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
-        ]]);
-        $this->obj->setDependencies($container);
+        $this->obj = new ElfinderTemplate([
+            'logger'    => $container['logger'],
+            'container' => $container
+        ]);
     }
 
     public function testAdminAssertsUrl()
@@ -66,7 +65,7 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
             $containerProvider->registerTemplateDependencies($container);
             $containerProvider->registerMetadataLoader($container);
             $containerProvider->registerElfinderConfig($container);
-            $container['widget/factory'] = $this->getMock('\Charcoal\Factory\FactoryInterface');
+            $container['widget/factory'] = $this->createMock('\Charcoal\Factory\FactoryInterface');
 
             $this->container = $container;
         }

@@ -117,7 +117,7 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
             $containerProvider->registerPropertyFactory($container);
             $containerProvider->registerPropertyDisplayFactory($container);
 
-            $container['view'] = $this->getMock('\Charcoal\View\ViewInterface');
+            $container['view'] = $this->createMock('\Charcoal\View\ViewInterface');
 
             $this->container = $container;
         }

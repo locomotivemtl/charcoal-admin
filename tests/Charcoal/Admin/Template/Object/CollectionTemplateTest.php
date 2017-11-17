@@ -40,7 +40,7 @@ class CollectionTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->container();
 
-        $this->obj = $this->getMock(CollectionTemplate::class, null, [[
+        $this->obj = $this->createMock(CollectionTemplate::class, null, [[
             'logger'          => $container['logger'],
             'metadata_loader' => $container['metadata/loader']
         ]]);

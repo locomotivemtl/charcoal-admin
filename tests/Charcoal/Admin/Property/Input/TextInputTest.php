@@ -22,7 +22,7 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $containerProvider->registerTranslator($container);
         $containerProvider->registerLogger($container);
         $containerProvider->registerMetadataLoader($container);
-        $container['view'] = $this->getMock('\Charcoal\View\ViewInterface');
+        $container['view'] = $this->createMock('\Charcoal\View\ViewInterface');
 
         $this->obj = new TextInput([
             'logger' => $container['logger'],

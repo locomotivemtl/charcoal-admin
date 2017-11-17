@@ -55,6 +55,11 @@ use Charcoal\Ui\Layout\LayoutFactory;
 use Charcoal\Email\Email;
 use Charcoal\Email\EmailConfig;
 
+// From 'charcoal-view'
+use Charcoal\View\GenericView;
+use Charcoal\View\Mustache\MustacheEngine;
+use Charcoal\View\Mustache\MustacheLoader;
+
 // From 'charcoal-translator'
 use Charcoal\Translator\LocalesManager;
 use Charcoal\Translator\Translator;
@@ -262,6 +267,40 @@ class ContainerProvider
             $climate->setReader($container['climate/reader']);
 
             return $climate;
+        };
+    }
+
+    /**
+     * Setup the framework's view renderer.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerView(Container $container)
+    {
+        $container['view/loader'] = function (Container $container) {
+            return new MustacheLoader([
+                'logger'    => $container['logger'],
+                'base_path' => realpath(__DIR__.'/../../../'),
+                'paths'     => [
+                    'views'
+                ]
+            ]);
+        };
+
+        $container['view/engine'] = function (Container $container) {
+            return new MustacheEngine([
+                'logger' => $container['logger'],
+                'cache'  => $container['cache'],
+                'loader' => $container['view/loader']
+            ]);
+        };
+
+        $container['view'] = function (Container $container) {
+            return new GenericView([
+                'logger' => $container['logger'],
+                'engine' => $container['view/engine']
+            ]);
         };
     }
 
@@ -523,8 +562,9 @@ class ContainerProvider
 
     public function registerWidgetDependencies(Container $container)
     {
-        $this->registerTranslator($container);
         $this->registerLogger($container);
+        $this->registerTranslator($container);
+        $this->registerView($container);
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
         $this->registerModelFactory($container);

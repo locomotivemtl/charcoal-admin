@@ -2,13 +2,15 @@
 
 namespace Charcoal\Admin\Tests;
 
+// From PHPUnit
 use PHPUnit_Framework_TestCase;
 
-use Psr\Log\NullLogger;
-
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Tests\ContainerProvider;
 
 /**
  *
@@ -16,16 +18,28 @@ use Charcoal\Admin\AdminWidget;
 class AdminWidgetTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Tested Class.
      *
+     * @var AdminWidget
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * Set up the test.
      */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerWidgetDependencies($container);
+        $container = $this->container();
 
         $this->obj = new AdminWidget([
-            'logger'    => new NullLogger(),
+            'logger'    => $container['logger'],
             'container' => $container
         ]);
     }
@@ -74,5 +88,23 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
 
         //$this->setExpectedException('\InvalidArgumentException');
         //$obj->set_label(null);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    private function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerWidgetDependencies($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

@@ -99,8 +99,8 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
     //     // Ensure that no admin user exists in test database
     //     $this->assertEquals(0, $this->numAdminUsersInSource());
 
-    //     $request = $this->getMock('\Psr\Http\Message\RequestInterface');
-    //     $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
+    //     $request = $this->createMock('\Psr\Http\Message\RequestInterface');
+    //     $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
 
     //     $obj = $this->obj;
     //     $ret = $obj($request, $response);
@@ -133,8 +133,8 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
     //     // Ensure that no admin user exists in test database
     //     $this->assertEquals(0, $this->numAdminUsersInSource());
 
-    //     $request = $this->getMock('\Psr\Http\Message\RequestInterface');
-    //     $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
+    //     $request = $this->createMock('\Psr\Http\Message\RequestInterface');
+    //     $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
 
     //     $obj = $this->obj;
     //     $ret = $obj($request, $response);
@@ -154,8 +154,8 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
     //     // Ensure that no admin user exists in test database
     //     $this->assertEquals(0, $this->numAdminUsersInSource());
 
-    //     $request = $this->getMock('\Psr\Http\Message\RequestInterface');
-    //     $response = $this->getMock('\Psr\Http\Message\ResponseInterface');
+    //     $request = $this->createMock('\Psr\Http\Message\RequestInterface');
+    //     $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
 
     //     $ret = $this->obj->run($request, $response);
 

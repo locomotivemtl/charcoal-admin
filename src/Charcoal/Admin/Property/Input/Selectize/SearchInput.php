@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize;
 
+// From 'charcoal-property'
+use Charcoal\Property\ObjectProperty;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Property\Input\SelectInput;
 

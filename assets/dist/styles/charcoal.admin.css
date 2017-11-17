@@ -1330,7 +1330,9 @@ ul.c-panel_table {
 
 .c-map-maker_input {
   display: inline-block;
-  width: calc(100% - 242px); }
+  width: calc(100% - 276px); }
+  [lang="en"] .c-map-maker_input {
+    width: calc(100% - 244px); }
 
 .stats__title {
   font-size: 6.25rem;

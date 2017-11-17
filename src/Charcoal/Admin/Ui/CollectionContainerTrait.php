@@ -12,6 +12,12 @@ use Charcoal\Factory\FactoryInterface;
 use Charcoal\Loader\CollectionLoader;
 use Charcoal\Model\Collection;
 use Charcoal\Model\ModelInterface;
+use Charcoal\Source\Filter;
+use Charcoal\Source\FilterInterface;
+use Charcoal\Source\Order;
+use Charcoal\Source\OrderInterface;
+use Charcoal\Source\Pagination;
+use Charcoal\Source\PaginationInterface;
 
 // From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
@@ -62,6 +68,27 @@ trait CollectionContainerTrait
      * @var integer $numTotal
      */
     private $numTotal;
+
+    /**
+     * The collection's prepared filters.
+     *
+     * @var FilterInterface[]
+     */
+    protected $filters;
+
+    /**
+     * The collection's prepared orders.
+     *
+     * @var OrderInterface[]
+     */
+    protected $orders;
+
+    /**
+     * The collection's prepared pagiantion.
+     *
+     * @var PaginationInterface
+     */
+    protected $pagination;
 
     /**
      * @var Collection $collection
@@ -420,16 +447,44 @@ trait CollectionContainerTrait
     }
 
     /**
+     * @return boolean
+     */
+    public function hasPagination()
+    {
+        return ($this->pagination() instanceof Pagination);
+    }
+
+    /**
+     * @return PaginationInterface
+     */
+    public function pagination()
+    {
+        if ($this->pagination === null) {
+            $this->pagination = $this->createPagination();
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['pagination'])) {
+                $this->pagination->setData($collectionConfig['pagination']);
+            }
+        }
+
+        return $this->pagination;
+    }
+
+    /**
+     * @return PaginationInterface
+     */
+    protected function createPagination()
+    {
+        $pagination = new Pagination();
+        return $pagination;
+    }
+
+    /**
      * @return integer
      */
     public function page()
     {
-        $collectionConfig = $this->collectionConfig();
-        if (isset($collectionConfig['pagination']['page'])) {
-            return $collectionConfig['pagination']['page'];
-        }
-
-        return 1;
+        return $this->pagination()->page();
     }
 
     /**
@@ -437,12 +492,7 @@ trait CollectionContainerTrait
      */
     public function numPerPage()
     {
-        $collectionConfig = $this->collectionConfig();
-        if (isset($collectionConfig['pagination']['num_per_page'])) {
-            return $collectionConfig['pagination']['num_per_page'];
-        }
-
-        return 0;
+        return $this->pagination()->numPerPage();
     }
 
     /**
@@ -466,22 +516,36 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @return array
+     * @return FilterInterface[]
      */
     public function filters()
     {
-        $collectionConfig = $this->collectionConfig();
-        if (isset($collectionConfig['filters'])) {
-            return array_map(function($key, $filter) {
-                return [
-                    'ident'    => $key,
-                    'property' => $filter['property'],
-                    'val'      => $filter['val']
-                ];
-            }, array_keys($collectionConfig['filters']), array_values($collectionConfig['filters']));
+        if ($this->filters === null) {
+            $this->filters = [];
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['filters'])) {
+                foreach ($collectionConfig['filters'] as $key => $data) {
+                    if ($data instanceof FilterInterface) {
+                        $filter = $data;
+                    } elseif (is_array($data)) {
+                        $filter = $this->createFilter();
+                        $filter->setData($data);
+                    }
+                    $this->filters[$key] = $filter;
+                }
+            }
         }
 
-        return [];
+        return $this->filters;
+    }
+
+    /**
+     * @return FilterInterface
+     */
+    protected function createFilter()
+    {
+        $filter = new Filter();
+        return $filter;
     }
 
     /**
@@ -493,22 +557,36 @@ trait CollectionContainerTrait
     }
 
     /**
-     * @return array
+     * @return OrderInterface[]
      */
     public function orders()
     {
-        $collectionConfig = $this->collectionConfig();
-        if (isset($collectionConfig['orders'])) {
-            return array_map(function($key, $order) {
-                return [
-                    'ident'    => $key,
-                    'property' => $order['property'],
-                    'mode'     => $order['mode']
-                ];
-            }, array_keys($collectionConfig['orders']), array_values($collectionConfig['orders']));
+        if ($this->orders === null) {
+            $this->orders = [];
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['orders'])) {
+                foreach ($collectionConfig['orders'] as $key => $data) {
+                    if ($data instanceof OrderInterface) {
+                        $order = $data;
+                    } elseif (is_array($data)) {
+                        $order = $this->createOrder();
+                        $order->setData($data);
+                    }
+                    $this->orders[$key] = $order;
+                }
+            }
         }
 
-        return [];
+        return $this->orders;
+    }
+
+    /**
+     * @return OrderInterface
+     */
+    protected function createOrder()
+    {
+        $order = new Order();
+        return $order;
     }
 
     /**

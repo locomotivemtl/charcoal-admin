@@ -35,16 +35,6 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     protected $propertiesOptions;
 
     /**
-     * @var array $orders
-     */
-    protected $orders;
-
-    /**
-     * @var array $filters
-     */
-    protected $filters;
-
-    /**
      * @param array $data The search widget data.
      * @return TableWidget Chainable
      */
@@ -89,13 +79,12 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     public function properties()
     {
         if ($this->properties === null) {
-            $obj   = $this->proto();
-            $props = $obj->metadata()->properties();
+            $model = $this->proto();
+            $props = $model->metadata()->properties();
 
             $collectionIdent = $this->collectionIdent();
-
             if ($collectionIdent) {
-                $metadata      = $obj->metadata();
+                $metadata      = $model->metadata();
                 $adminMetadata = isset($metadata['admin']) ? $metadata['admin'] : null;
 
                 if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
@@ -115,23 +104,34 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Properties to display in collection template, and their order, as set in object metadata
+     * Retrieve the property keys to search in the collection.
      *
-     * @return string
+     * @return array
      */
-    public function jsonPropertiesList()
+    public function propertiesIdents()
     {
-        $obj             = $this->proto();
-        $metadata        = $obj->metadata();
-        $adminMetadata   = isset($metadata['admin']) ? $metadata['admin'] : null;
-        $collectionIdent = $this->collectionIdent();
-
-        $props = [];
-
-        if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
-            $props = $adminMetadata['lists'][$collectionIdent]['properties'];
+        $metadata = $this->proto()->metadata();
+        if (isset($metadata['admin']['lists'])) {
+            $adminMetadata   = $metadata['admin'];
+            $collectionIdent = $this->collectionIdent();
+            if (isset($adminMetadata['lists'][$collectionIdent]['properties'])) {
+                return $adminMetadata['lists'][$collectionIdent]['properties'];
+            }
         }
 
-        return json_encode($props);
+        return [];
+    }
+
+    /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return [
+            'obj_type'   => $this->objType(),
+            'properties' => $this->propertiesIdents()
+        ];
     }
 }

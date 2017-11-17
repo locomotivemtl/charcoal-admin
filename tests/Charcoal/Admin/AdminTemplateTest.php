@@ -39,16 +39,10 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->container();
 
-        $this->obj = $this->getMock(AdminTemplate::class, null, [[
-            'logger'          => $container['logger'],
-            'metadata_loader' => $container['metadata/loader'],
-            'container'       => $container
-        ]]);
-        $this->obj->setDependencies($container);
-
-        $this->obj->expects($this->any())
-            ->method('isAuthenticated')
-            ->will($this->returnValue(true));
+        $this->obj = new AdminTemplate([
+            'logger'    => $container['logger'],
+            'container' => $container
+        ]);
     }
 
     public static function getMethod($obj, $name)
@@ -61,23 +55,22 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
 
     public function testSetIdent()
     {
-        $this->assertEquals('', $this->obj->ident());
+        $this->assertNull($this->obj->ident());
         $ret = $this->obj->setIdent('foobar');
-        $this->assertSame($ret, $this->obj);
+        $this->assertSame($this->obj, $ret);
         $this->assertEquals('foobar', $this->obj->ident());
     }
 
     public function testSetLabel()
     {
-        $this->assertEquals(null, $this->obj->label());
+        $this->assertNull($this->obj->label());
         $ret = $this->obj->setLabel('foobar');
-        $this->assertSame($ret, $this->obj);
+        $this->assertSame($this->obj, $ret);
         $this->assertEquals('foobar', (string)$this->obj->label());
     }
 
     public function testAuthRequiredIsTrue()
     {
-
         $foo = self::getMethod($this->obj, 'authRequired');
         $res = $foo->invoke($this->obj);
         $this->assertTrue($res);
@@ -96,7 +89,7 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
             $containerProvider->registerTemplateDependencies($container);
             $containerProvider->registerCollectionLoader($container);
 
-            $container['widget/factory'] = $this->getMock('\Charcoal\Factory\FactoryInterface');
+            $container['widget/factory'] = $this->createMock('\Charcoal\Factory\FactoryInterface');
 
             $this->container = $container;
         }

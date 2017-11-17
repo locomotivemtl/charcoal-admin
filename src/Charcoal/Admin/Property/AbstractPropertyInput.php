@@ -223,6 +223,26 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        return [];
+    }
+
+    /**
+     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function controlDataForJsAsJson()
+    {
+        return json_encode($this->controlDataForJs(), JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * @param mixed $val The property value.
      * @return PropertyInputInterface Chainable
      */

@@ -118,4 +118,18 @@ class AudioInput extends AbstractPropertyInput
     {
         return $this->fileEnabled;
     }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        return [
+            // Audio Control
+            'active_pane'     => 'next',
+            'hidden_input_id' => 'hidden_'.$this->inputId(),
+        ];
+    }
 }

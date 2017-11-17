@@ -667,4 +667,49 @@ class SelectizeInput extends SelectInput
             'color' => 'color'
         ];
     }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        $prop = $this->property();
+
+        $data = [
+            // Selectize Control
+            'title'                    => (string)$prop->label(),
+            'translations'             => [
+                'statusTemplate'       => $this->translator()->translate('Step [[ current ]] of [[ total ]]'),
+            ],
+            'copy_items'               => $this->allowClipboardCopy(),
+            'allow_update'             => $this->allowUpdate(),
+            'allow_create'             => $this->allowCreate(),
+
+            'form_ident'               => $this->formIdent(),
+            'selectize_selector'       => '#'.$this->inputId(),
+            'selectize_options'        => $this->selectizeOptions(),
+            'choice_obj_map'           => $this->choiceObjMap(),
+            'selectize_property_ident' => $prop->ident(),
+            'selectize_obj_type'       => $this->render('{{& objType }}'),
+            'selectize_templates'      => $this->selectizeTemplates(),
+
+            // Base Property
+            'required'                 => $this->required(),
+            'l10n'                     => $this->property()->l10n(),
+            'multiple'                 => $this->multiple(),
+            'multiple_separator'       => $this->property()->multipleSeparator(),
+            'multiple_options'         => $this->property()->multipleOptions(),
+        ];
+
+        if ($prop instanceof ObjectProperty) {
+            if ($prop->objType()) {
+                $data['pattern']  = $prop->pattern();
+                $data['obj_type'] = $prop->objType();
+            }
+        }
+
+        return $data;
+    }
 }

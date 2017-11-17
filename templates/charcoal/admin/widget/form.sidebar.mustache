@@ -110,12 +110,9 @@
 [[#addJs]]
 <script>
 Charcoal.Admin.manager().add_widget({
-    id: '[[widgetId]]',
+    id: '[[ widgetId ]]',
     type: 'charcoal/admin/widget/form.sidebar',
-    data: {
-        obj_type: '[[objType]]',
-        collection_ident: '[[collectionIdent]]'
-    }
+    data: [[& widgetDataForJsAsJson ]]
 });
 </script>
 [[/addJs]]

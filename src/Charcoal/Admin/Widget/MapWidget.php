@@ -24,91 +24,309 @@ class MapWidget extends AdminWidget implements FormGroupInterface
     use FormGroupTrait;
 
     /**
-     * @var ModelInterface $obj
+     * The related model.
+     *
+     * @var ModelInterface
      */
     protected $obj;
 
     /**
-     * @var object styles (concerning the marker style)
+     * The styles for the marker.
+     *
+     * @var array|null
      */
     private $styles;
 
     /**
-     * The ident of the object's property for the latitude.
-     * @var string $latProperty
+     * Latitude
+     *
+     * @var float|null
      */
-    private $latProperty;
-
-     /**
-      * The ident of the object's property for the longitude.
-      * @var string $latProperty
-      */
-    private $lonProperty;
+    private $lat;
 
     /**
-     * @param string $p The latitude property ident.
-     * @return MapWidget Chainable
+     * Lontitude
+     *
+     * @var float|null
      */
-    public function setLatProperty($p)
+    private $lng;
+
+    /**
+     * The $obj property key for the latitude.
+     *
+     * @var string
+     */
+    private $latProperty = 'lat';
+
+    /**
+     * The $obj property key for the longitude.
+     *
+     * @var string
+     */
+    private $lngProperty = 'lng';
+
+    /**
+     * @return string
+     */
+    public function widgetType()
     {
-        $this->latProperty = $p;
+        return 'charcoal/admin/widget/map';
+    }
+
+    /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return [
+            'obj_id'   => null,
+            'obj_type' => null,
+            'coords'   => $this->coords(),
+        ];
+    }
+
+    /**
+     * Set the $obj property key for the latitude.
+     *
+     * @param  string|null $key The latitude property ident.
+     * @throws InvalidArgumentException If the property key is not a string.
+     * @return self
+     */
+    public function setLatProperty($key)
+    {
+        if ($key === null) {
+            $this->latProperty = $key;
+            return $this;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidArgumentException(
+                'The "lat_property" must be a string'
+            );
+        }
+
+        $this->latProperty = $key;
         return $this;
     }
 
     /**
-     * @return string
+     * Retrieve the $obj property key for the latitude.
+     *
+     * @return string|null
      */
     public function latProperty()
     {
         return $this->latProperty;
     }
 
-     /**
-      * @param string $p The longitude property ident.
-      * @return MapWidget Chainable
-      */
-    public function setLonProperty($p)
+    /**
+     * Set the $obj property key for the longitude.
+     *
+     * @param  string|null $key The longitude property key.
+     * @throws InvalidArgumentException If the property key is not a string.
+     * @return self
+     */
+    public function setLngProperty($key)
     {
-        $this->lonProperty = $p;
+        if ($key === null) {
+            $this->lngProperty = $key;
+            return $this;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidArgumentException(
+                'The "lng_property" must be a string'
+            );
+        }
+
+        $this->lngProperty = $key;
         return $this;
     }
 
     /**
-     * @return string
+     * Set the $obj property key for the longitude.
+     *
+     * @deprecated In favour of {@see self::setLngProperty()}.
+     * @param  string $key The longitude property key.
+     * @return self
      */
-    public function lonProperty()
+    public function setLonProperty($key)
     {
-        return $this->lonProperty;
+        $this->logger->warning(
+            'MapWidget "lon_property" is deprecated. Use "lng_property".',
+            [ 'package' => 'locomotivemtl/charcoal-admin' ]
+        );
+        $this->setLngProperty($key);
+        return $this;
     }
 
     /**
-     * Get the latitude, from the object's lat property.
-     * @return float
+     * Retrieve the $obj property key for the longitude.
+     *
+     * @return string|null
+     */
+    public function lngProperty()
+    {
+        return $this->lngProperty;
+    }
+
+    /**
+     * Set the latitude for the widget.
+     *
+     * @param  float $coord The latitude of a location.
+     * @throws InvalidArgumentException If the longitude is not a number.
+     * @return self
+     */
+    public function setLat($coord)
+    {
+        if ($coord === null) {
+            $this->lat = $coord;
+            return $this;
+        }
+
+        if (!is_numeric($coord)) {
+            throw new InvalidArgumentException(
+                'The "lat" must be a number'
+            );
+        }
+
+        $this->lat = (float)$coord;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the latitude from the object's latitude property.
+     *
+     * @return float|null
      */
     public function lat()
     {
-        if (!$this->obj() || !$this->latProperty()) {
-            return false;
+        if ($this->lat !== null) {
+            return $this->lat;
         }
-        $obj = $this->obj();
-        return call_user_func([$obj, $this->latProperty()]);
+
+        if (!$this->hasObj() || !$this->latProperty()) {
+            return null;
+        }
+
+        return $this->obj()[$this->latProperty()];
     }
 
     /**
-     * Get the longitude, from the object's lon property.
-     * @return float
+     * Set the longitude of the object's geolocation.
+     *
+     * @param  float $coord The longitude of a location.
+     * @throws InvalidArgumentException If the longitude is not a number.
+     * @return self
+     */
+    public function setLng($coord)
+    {
+        if ($coord === null) {
+            $this->lng = $coord;
+            return $this;
+        }
+
+        if (!is_numeric($coord)) {
+            throw new InvalidArgumentException(
+                'The "lng" must be a number'
+            );
+        }
+
+        $this->lng = (float)$coord;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the longitude from the object's longitude property.
+     *
+     * @return float|null
+     */
+    public function lng()
+    {
+        if ($this->lng !== null) {
+            return $this->lng;
+        }
+
+        if (!$this->hasObj() || !$this->lngProperty()) {
+            return null;
+        }
+
+        return $this->obj()[$this->lngProperty()];
+    }
+
+    /**
+     * Set the $obj property key for the longitude.
+     *
+     * @deprecated In favour of {@see self::lng()}.
+     * @return self
      */
     public function lon()
     {
-        if (!$this->obj() || !$this->lonProperty()) {
-            return false;
-        }
-        $obj = $this->obj();
-        return call_user_func([$obj, $this->lonProperty()]);
+        $this->logger->warning(
+            'MapWidget "lon" is deprecated. Use "lng".',
+            [ 'package' => 'locomotivemtl/charcoal-admin' ]
+        );
+        return $this->lng();
     }
 
     /**
-     * Get the widget's associated object.
+     * Retrieve the latitude / longitude as an array.
+     *
+     * @return float[]|null
+     */
+    public function latLng()
+    {
+        $lat = $this->lat();
+        $lng = $this->lng();
+
+        if ($lat && $lng) {
+            return [ $lat, $lng ];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retrieve the latitude / longitude as an associative array.
+     *
+     * @return float[]|null
+     */
+    public function coords()
+    {
+        $lat = $this->lat();
+        $lng = $this->lng();
+
+        if ($lat && $lng) {
+            return [ 'lat' => $lat, 'lng' => $lng ];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Determine if the widget has a related object.
+     *
+     * @return boolean
+     */
+    public function hasObj()
+    {
+        if ($this->obj === null) {
+            try {
+                $this->obj();
+            } catch (InvalidArgumentException $e) {
+                return false;
+            }
+        }
+
+        return !empty($this->obj);
+    }
+
+    /**
+     * Retrieve the widget's related object.
      *
      * @throws InvalidArgumentException If the object type or ID are invalid or missing.
      * @return ModelInterface
@@ -129,57 +347,5 @@ class MapWidget extends AdminWidget implements FormGroupInterface
         }
 
         return $this->obj;
-    }
-
-    /**
-     * Title and subtitle getter/setters
-     *
-     * @param mixed $subtitle The map widget subtitle.
-     * @return MapWidget Chainable
-     */
-    public function setSubtitle($subtitle)
-    {
-        $this->subtitle = $this->translator()->translation($subtitle);
-
-        return $this;
-    }
-
-    /**
-     * @return Translation
-     */
-    public function subtitle()
-    {
-        return $this->subtitle;
-    }
-
-    /**
-     * @param mixed $title The map widget title.
-     * @return MapWidget Chainable
-     */
-    public function setTitle($title)
-    {
-        $this->title = $this->translator()->translation($title);
-
-        return $this;
-    }
-
-    /**
-     * @return Translation
-     */
-    public function title()
-    {
-        if ($this->title === null) {
-            $this->setTitle($this->translator()->translation('Map'));
-        }
-
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function widgetType()
-    {
-        return 'charcoal/admin/widget/map';
     }
 }

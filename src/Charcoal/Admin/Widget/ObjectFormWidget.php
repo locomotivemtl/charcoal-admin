@@ -523,4 +523,19 @@ class ObjectFormWidget extends FormWidget implements
     {
         return $this->obj()->data();
     }
+
+    /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return [
+            'obj_id'        => $this->objId(),
+            'obj_type'      => $this->objType(),
+            'form_selector' => '#'.$this->widgetId(),
+            'tab'           => $this->isTabbable(),
+        ];
+    }
 }

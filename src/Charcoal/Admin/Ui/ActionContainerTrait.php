@@ -168,7 +168,7 @@ trait ActionContainerTrait
             $buttonTypes = [ 'button', 'menu', 'reset', 'submit' ];
             // Normalize structure keys
             foreach ($action as $key => $val) {
-                $attr = $this->getter($key);
+                $attr = $this->camelize($key);
                 if ($key !== $attr) {
                     $action[$attr] = $val;
                     unset($action[$key]);
@@ -554,4 +554,12 @@ trait ActionContainerTrait
      * @return string
      */
     abstract public function jsActionPrefix();
+
+    /**
+     * Transform a snake_case string to camelCase.
+     *
+     * @param  string $str The snake_case string to camelize.
+     * @return string The camelcase'd string.
+     */
+    abstract protected function camelize($str);
 }

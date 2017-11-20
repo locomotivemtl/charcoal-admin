@@ -524,7 +524,7 @@ trait ActionContainerTrait
      * @param  array $b Second action object to sort.
      * @return integer
      */
-    protected static function sortActionsByPriority(array $a, array $b)
+    protected function sortActionsByPriority(array $a, array $b)
     {
         $a = isset($a['priority']) ? $a['priority'] : 0;
         $b = isset($b['priority']) ? $b['priority'] : 0;
@@ -541,7 +541,7 @@ trait ActionContainerTrait
      * @param  array $b Second action object to sort.
      * @return boolean Returns TRUE if $a has priority. Otherwise, FALSE for $b.
      */
-    protected static function compareActions(array $a, array $b)
+    protected function compareActions(array $a, array $b)
     {
         $a = isset($a['priority']) ? $a['priority'] : 0;
         $b = isset($b['priority']) ? $b['priority'] : 0;

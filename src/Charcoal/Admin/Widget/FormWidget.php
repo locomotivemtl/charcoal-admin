@@ -21,6 +21,7 @@ use \Charcoal\Ui\Form\FormTrait;
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
+use \Charcoal\Ui\UiItemInterface;
 
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
@@ -288,11 +289,11 @@ class FormWidget extends AdminWidget implements
     /**
      * To be called with uasort().
      *
-     * @param FormSidebarInterface $a Item "a" to compare, for sorting.
-     * @param FormSidebarInterface $b Item "b" to compaer, for sorting.
+     * @param  FormSidebarInterface $a Item "a" to compare, for sorting.
+     * @param  FormSidebarInterface $b Item "b" to compaer, for sorting.
      * @return integer Sorting value: -1, 0, or 1
      */
-    protected static function sortSidebarsByPriority(FormSidebarInterface $a, FormSidebarInterface $b)
+    protected function sortSidebarsByPriority(FormSidebarInterface $a, FormSidebarInterface $b)
     {
         $a = $a->priority();
         $b = $b->priority();
@@ -502,5 +503,23 @@ class FormWidget extends AdminWidget implements
     public function defaultGroupType()
     {
         return 'charcoal/admin/widget/form-group/generic';
+    }
+
+    /**
+     * Static comparison function used by {@see uasort()}.
+     *
+     * @param  UiItemInterface $a Widget A.
+     * @param  UiItemInterface $b Widget B.
+     * @return integer Sorting value: -1 or 1
+     */
+    protected function sortItemsByPriority(UiItemInterface $a, UiItemInterface $b)
+    {
+        $priorityA = $a->priority();
+        $priorityB = $b->priority();
+
+        if ($priorityA === $priorityB) {
+            return 0;
+        }
+        return ($priorityA < $priorityB) ? (-1) : 1;
     }
 }

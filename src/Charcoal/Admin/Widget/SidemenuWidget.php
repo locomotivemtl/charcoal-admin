@@ -749,7 +749,7 @@ class SidemenuWidget extends AdminWidget implements
      * @param  SidemenuGroupInterface $b Second group object to sort.
      * @return integer
      */
-    protected static function sortGroupsByPriority(
+    protected function sortGroupsByPriority(
         SidemenuGroupInterface $a,
         SidemenuGroupInterface $b
     ) {

@@ -34,7 +34,7 @@
         "locomotivemtl/charcoal-email": "^0.1",
         "locomotivemtl/charcoal-object": "~0.4",
         "locomotivemtl/charcoal-translator": "~0.2",
-        "locomotivemtl/charcoal-ui": "~0.2",
+        "locomotivemtl/charcoal-ui": "~0.3",
         "locomotivemtl/charcoal-user": "~0.2"
     },
     "require-dev": {

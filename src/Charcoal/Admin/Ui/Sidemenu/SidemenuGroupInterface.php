@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Ui\Sidemenu;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Widget\SidemenuWidgetInterface;
 
 /**
@@ -12,7 +13,7 @@ interface SidemenuGroupInterface
     /**
      * Set the sidemenu widget.
      *
-     * @param SidemenuWidgetInterface $sidemenu The related sidemenu widget.
+     * @param  SidemenuWidgetInterface $sidemenu The related sidemenu widget.
      * @return SidemenuGroupInterface Chainable
      */
     public function setSidemenu(SidemenuWidgetInterface $sidemenu);
@@ -27,7 +28,7 @@ interface SidemenuGroupInterface
     /**
      * Set the identifier of the group.
      *
-     * @param string $ident Sidemenu group identifier.
+     * @param  string $ident Sidemenu group identifier.
      * @return UiGroupingInterface Chainable
      */
     public function setIdent($ident);

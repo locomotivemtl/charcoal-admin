@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Charcoal\Admin\Widget\SidemenuWidgetInterface;
 
 /**
- *
+ * Provides an implementation of {@see \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface}.
  */
 trait SidemenuGroupTrait
 {
@@ -116,7 +116,7 @@ trait SidemenuGroupTrait
     /**
      * Set the group ID.
      *
-     * @param string $id The group ID.
+     * @param  string $id The group ID.
      * @throws InvalidArgumentException If the group ID argument is not a string.
      * @return self
      */
@@ -195,8 +195,8 @@ trait SidemenuGroupTrait
     /**
      * Set the sidemenu links.
      *
-     * @param string       $linkIdent The link identifier.
-     * @param array|object $link      The link object or structure.
+     * @param  string       $linkIdent The link identifier.
+     * @param  array|object $link      The link object or structure.
      * @throws InvalidArgumentException If the link is invalid.
      * @return self
      */
@@ -262,7 +262,7 @@ trait SidemenuGroupTrait
     /**
      * Retrieve the sidemenu links.
      *
-     * @return ArrayIterator|Generator
+     * @return ArrayIterator|\Generator
      */
     public function links()
     {
@@ -429,7 +429,7 @@ trait SidemenuGroupTrait
     /**
      * Set the identifier of the group.
      *
-     * @param string $ident The group identifier.
+     * @param  string $ident The group identifier.
      * @return self
      */
     public function setIdent($ident)

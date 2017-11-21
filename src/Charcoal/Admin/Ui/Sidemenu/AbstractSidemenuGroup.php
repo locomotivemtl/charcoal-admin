@@ -17,9 +17,9 @@ abstract class AbstractSidemenuGroup extends AbstractUiItem implements
     /**
      * Returns a new sidemenu group.
      *
-     * @param array|ArrayAccess $data The class depdendencies.
+     * @param array $data The class depdendencies.
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
         if (isset($data['sidemenu'])) {
             $this->setSidemenu($data['sidemenu']);

@@ -413,11 +413,13 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $mainMenu = null;
-        if (is_string($options)) {
-            $mainMenu = $options;
-        } elseif (is_array($options)) {
-            if (isset($options['widget_options']['ident'])) {
-                $mainMenu = $options['widget_options']['ident'];
+        if (!(empty($options) && !is_numeric($options))) {
+            if (is_string($options)) {
+                $mainMenu = $options;
+            } elseif (is_array($options)) {
+                if (isset($options['widget_options']['ident'])) {
+                    $mainMenu = $options['widget_options']['ident'];
+                }
             }
         }
 
@@ -538,17 +540,25 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createSystemMenu($options = null)
     {
-        $systemMenuConfig = $this->adminConfig['system_menu'];
+        $menuConfig = $this->adminConfig['system_menu'];
 
-        if (!isset($systemMenuConfig['items'])) {
+        if (!isset($menuConfig['items'])) {
             return [];
         }
 
-        $systemMenu = [];
-        $menu  = $this->menuBuilder->build([]);
+        $currentIdent = null;
+        if (!(empty($options) && !is_numeric($options))) {
+            if (is_string($options)) {
+                $currentIdent = $options;
+            } elseif (is_array($options)) {
+                $menuConfig = array_replace_recursive($menuConfig, $options);
+            }
+        }
 
-        foreach ($systemMenuConfig['items'] as $menuIdent => $menuItem) {
-            $menuItem['menu'] = $menu;
+        $systemMenu = $this->menuBuilder->build([]);
+        $menuItems  = [];
+        foreach ($menuConfig['items'] as $menuIdent => $menuItem) {
+            $menuItem['menu'] = $systemMenu;
             $test = $this->menuItemBuilder->build($menuItem);
             if ($test->isAuthorized() === false) {
                 continue;
@@ -559,12 +569,12 @@ class AdminTemplate extends AbstractTemplate implements
                 continue;
             }
 
-            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent);
+            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent, $currentIdent);
             $menuIdent = $menuItem['ident'];
 
-            $systemMenu[$menuIdent] = $menuItem;
+            $menuItems[$menuIdent] = $menuItem;
         }
-        return $systemMenu;
+        return $menuItems;
     }
 
     /**
@@ -597,6 +607,8 @@ class AdminTemplate extends AbstractTemplate implements
         if (isset($menuItem['label'])) {
             $menuItem['label'] = $this->translator()->translation($menuItem['label']);
         }
+
+        $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
 
         return $menuItem;
     }

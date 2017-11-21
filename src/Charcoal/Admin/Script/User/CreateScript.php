@@ -141,25 +141,27 @@ class CreateScript extends AdminScript
      */
     private function userPrompts()
     {
+        $translator = $this->translator();
+
         return [
             'username' => [
-                'label' => $this->translator()->translate('Please enter username: '),
-                'property' => $this->climate()->arguments->get('username'),
+                'label'      => $translator->translate('Please enter username: '),
+                'property'   => $this->climate()->arguments->get('username'),
                 'validation' => [$this, 'validateUsername']
             ],
-            'email'    => [
-                'label' => $this->translator()->translate('Please enter email: '),
-                'property' => $this->climate()->arguments->get('email'),
+            'email' => [
+                'label'      => $translator->translate('Please enter email: '),
+                'property'   => $this->climate()->arguments->get('email'),
                 'validation' => [$this, 'validateEmail']
             ],
             'password' => [
-                'label' => $this->translator()->translate('Please enter password: '),
-                'property' => $this->climate()->arguments->get('password'),
+                'label'      => $translator->translate('Please enter password: '),
+                'property'   => $this->climate()->arguments->get('password'),
                 'validation' => [$this, 'validatePassword']
             ],
-            'roles'    => [
-                'label' => $this->translator()->translate('Please enter role(s) [ex: admin], comma separated: '),
-                'property' => $this->climate()->arguments->get('roles'),
+            'roles' => [
+                'label'      => $translator->translate('Please enter role(s) [ex: admin], comma separated: '),
+                'property'   => $this->climate()->arguments->get('roles'),
                 'validation' => null
             ]
         ];
@@ -196,9 +198,10 @@ class CreateScript extends AdminScript
         $user       = $this->modelFactory()->create(User::class);
         $user->load($username);
         if ($user->username()) {
-            throw new Exception(
-                sprintf($this->translator()->translate('Username "%s" already exists in database.'), $username)
-            );
+            throw new Exception(sprintf(
+                $this->translator()->translate('Username "%s" already exists in database.'),
+                $username
+            ));
         }
     }
 
@@ -215,9 +218,10 @@ class CreateScript extends AdminScript
             );
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception(
-                sprintf($this->translator()->translate('Invalid email "%s".'), $email)
-            );
+            throw new Exception(sprintf(
+                $this->translator()->translate('Invalid email "%s".'),
+                $email
+            ));
         }
     }
 
@@ -235,7 +239,10 @@ class CreateScript extends AdminScript
         }
         if (mb_strlen($password) < self::MIN_PASSWORD_LENGTH) {
             throw new Exception(
-                $this->translator()->translate(sprintf('Password must be at least %d characters.', self::MIN_PASSWORD_LENGTH))
+                $this->translator()->translate(sprintf(
+                    'Password must be at least %d characters.',
+                    self::MIN_PASSWORD_LENGTH
+                ))
             );
         }
     }

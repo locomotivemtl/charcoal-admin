@@ -244,24 +244,31 @@ class DocWidget extends FormWidget implements
         $objId = $this->obj()->id();
 
         if ($objId) {
+            $translator = $this->translator();
+
             $template = 'charcoal/admin/widget/form.sidebar';
             $GLOBALS['widget_template'] = $template;
-            $metadata = $this->obj()->metadata();
-            $objType = (isset($metadata['labels']['singular_name']) ?
-                $this->translator()->translation($metadata['labels']['singular_name']) : null);
 
-            $label = $this->translator()->translation('Back to {{name}} id: {{id}}');
+            $metadata = $this->obj()->metadata();
+            $objType  = (isset($metadata['labels']['singular_name'])
+                        ? $translator->translate($metadata['labels']['singular_name'])
+                        : null);
+
+            $label = $translator->translate('Back to {{name}} id: {{id}}');
             $label = strtr($label, [
                 '{{name}}' => $objType ?: $this->obj()['obj_type'],
-                '{{id}}' => $this->obj()->id()
+                '{{id}}'   => $this->obj()->id()
             ]);
+
+            $url = 'object/edit?main_menu='.$this->obj()['main_menu'].'&obj_type={{obj_type}}&obj_id={{id}}';
+
             $out = [
-                'title'          => 'Actions',
-                'show_footer'    => false,
-                'actions'        => [
+                'title'       => $translator->translate('Actions'),
+                'show_footer' => false,
+                'actions'     => [
                     [
-                        'label' => (string)$label,
-                        'url'   => 'object/edit?main_menu='.$this->obj()['main_menu'].'&obj_type={{obj_type}}&obj_id={{id}}'
+                        'label' => $label,
+                        'url'   => $url
                     ]
                 ]
             ];
@@ -272,6 +279,7 @@ class DocWidget extends FormWidget implements
             $sidebar->setData($out);
 
             yield $sidebar;
+
             $GLOBALS['widget_template'] = '';
         }
     }

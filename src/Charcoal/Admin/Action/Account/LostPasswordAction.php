@@ -107,10 +107,11 @@ class LostPasswordAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $username = $request->getParam('username');
+        $translator = $this->translator();
 
+        $username = $request->getParam('username');
         if (!$username) {
-            $this->addFeedback('error', $this->translator()->translate('Missing username.'));
+            $this->addFeedback('error', $translator->translate('Missing username.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -118,21 +119,21 @@ class LostPasswordAction extends AdminAction
 
         $recaptchaValue = $request->getParam('g-recaptcha-response');
         if (!$recaptchaValue) {
-            $this->addFeedback('error', $this->translator()->translate('Missing CAPTCHA response.'));
+            $this->addFeedback('error', $translator->translate('Missing CAPTCHA response.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$this->validateCaptcha($recaptchaValue)) {
-            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed CAPTCHA response.'));
+            $this->addFeedback('error', $translator->translate('Invalid or malformed CAPTCHA response.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
-        $doneMessage = $this->translator()->translation('If a registered user matches the username or email address given, instructions to reset your password have been sent to the email address registered with that account.');
-        $failMessage = $this->translator()->translation('An error occurred while processing the password reset request.');
+        $doneMessage = $translator->translate('If a registered user matches the username or email address given, instructions to reset your password have been sent to the email address registered with that account.');
+        $failMessage = $translator->translate('An error occurred while processing the password reset request.');
 
         $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
         $user = $this->loadUser($username);
@@ -254,14 +255,16 @@ class LostPasswordAction extends AdminAction
      */
     private function sendLostPasswordEmail(User $user, $token)
     {
-        $userEmail = $user->email();
-        $siteName  = $this->siteName();
+        $translator = $this->translator();
+        $userEmail  = $user->email();
+        $siteName   = $this->siteName();
+
         if ($siteName) {
-            $subject = strtr($this->translator()->translation('{{ siteName }} — Password Reset'), [
+            $subject = strtr($translator->translate('{{ siteName }} — Password Reset'), [
                 '{{ siteName }}' => $siteName
             ]);
         } else {
-            $subject = $this->translator()->translation('Charcoal — Password Reset');
+            $subject = $translator->translate('Charcoal — Password Reset');
         }
 
         $from = [

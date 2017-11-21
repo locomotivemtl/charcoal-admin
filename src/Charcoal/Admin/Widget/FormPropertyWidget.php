@@ -1091,11 +1091,6 @@ class FormPropertyWidget extends AdminWidget implements
         $prop->setIdent($this->propertyIdent());
         $prop->setData($this->propertyData());
 
-        /**
-         * @todo Needs fix. Must be manually triggered after setting data for metadata to work.
-         */
-        # $metadata = $prop->metadata();
-
         return $prop;
     }
 

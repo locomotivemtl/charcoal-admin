@@ -37,7 +37,7 @@ class AdminModule extends AbstractModule
     {
         // Hack: skip if the request does not start with '/admin'
         $container = $this->app()->getContainer();
-        if (substr($container['request']->getUri()->getPath(), 0, 6) == '/admin') {
+        if (substr($container['request']->getUri()->getPath(), 0, 6) !== '/admin') {
             return $this;
         }
 

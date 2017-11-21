@@ -59,7 +59,7 @@ class AdminServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        // Ensure depencies are set
+        // Ensure dependencies are set
         $container->register(new EmailServiceProvider());
 
         /**
@@ -67,7 +67,11 @@ class AdminServiceProvider implements ServiceProviderInterface
          * @return ConfigInterface
          */
         $container['admin/config'] = function (Container $container) {
+
             $appConfig = $container['config'];
+
+            // The `admin.json` file is not part of regular config
+            $appConfig->addFile($appConfig['base_path'].$appConfig['admin_config']);
 
             return new AdminConfig($appConfig['admin']);
         };

@@ -89,7 +89,7 @@
     <!-- Do not test scalar typehint (php-7 only feature) -->
     <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" >
         <severity >0</severity >
-    </rule >
+    </rule>
     <!-- Verifies that a @throws tag exists for a function that throws exceptions -->
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
     <!-- Checks that there is adequate spacing between comments -->
@@ -135,7 +135,7 @@
         <properties >
             <property name="eolChar" value="\n" />
         </properties >
-    </rule >
+    </rule>
     <!-- Make sure all files are a certain max length -->
     <!--<rule ref="Generic.Files.LineLength">
         <properties>
@@ -177,7 +177,7 @@
         <properties >
             <property name="equalsSpacing" value="1" />
         </properties >
-    </rule >
+    </rule>
     <!-- @todo doc me -->
     <rule ref="Squiz.Functions.FunctionDeclaration" />
     <!-- @todo doc me -->
@@ -191,7 +191,7 @@
     <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction" >
         <!-- This check is disabled; it breaks lambda functions -->
         <severity >0></severity >
-    </rule >
+    </rule>
     <rule ref="PEAR.Functions.ValidDefaultValue" />
 
     <!-- Metrics Sniffs -->
@@ -220,7 +220,7 @@
     <!-- Ensures objects are assigned to a variable when instantiated. -->
     <rule ref="Squiz.Objects.ObjectInstantiation" >
         <exclude name="Squiz.Objects.ObjectInstantiation.NotAssigned" />
-    </rule >
+    </rule>
 
     <!-- Operators Sniffs -->
 
@@ -271,7 +271,7 @@
     <rule ref="Squiz.PHP.EmbeddedPhp" />
     <rule ref="Squiz.PHP.EmbeddedPhp.Indent" >
         <severity >0</severity >
-    </rule >
+    </rule>
     <rule ref="Squiz.PHP.Eval" />
     <!-- Disallow usage of functions that should be obsolete but kept for compatibility. -->
     <rule ref="Squiz.PHP.ForbiddenFunctions" />
@@ -295,17 +295,25 @@
     <!-- Strings Sniffs -->
 
     <!-- Use one string instead of concatenating 2 strings together -->
-    <rule ref="Generic.Strings.UnnecessaryStringConcat" />
+    <rule ref="Generic.Strings.UnnecessaryStringConcat">
+        <properties>
+            <property name="allowMultiline" value="true" />
+        </properties>
+    </rule>
     <rule ref="Generic.Strings.UnnecessaryStringConcat.Found" >
         <type >warning</type >
         <message >Only concatenate strings if they would be too long on a single line.</message >
-    </rule >
+    </rule>
     <!-- Makes sure there are no spaces between the concatenation operator (.) the strings -->
-    <rule ref="Squiz.Strings.ConcatenationSpacing" />
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
     <rule ref="Squiz.Strings.ConcatenationSpacing.PaddingFound" >
         <type >warning</type >
         <message >Concat operator should not be surrounded by spaces</message >
-    </rule >
+    </rule>
     <!-- Makes sure that any use of Double Quotes ("") are warranted. -->
     <rule ref="Squiz.Strings.DoubleQuoteUsage" />
     <!-- Makes sure that any strings that are "echoed" are not enclosed in brackets -->
@@ -329,15 +337,15 @@
         <properties >
             <property name="ignoreBlankLines" value="true" />
         </properties >
-    </rule >
+    </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile" >
         <severity >0</severity >
-    </rule >
+    </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile" >
         <severity >0</severity >
-    </rule >
+    </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines" >
         <severity >0</severity >
-    </rule >
+    </rule>
 
 </ruleset >

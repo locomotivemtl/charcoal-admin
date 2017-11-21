@@ -21,7 +21,7 @@ use \Charcoal\Ui\Form\FormTrait;
 use \Charcoal\Ui\FormGroup\FormGroupInterface;
 use \Charcoal\Ui\Layout\LayoutAwareInterface;
 use \Charcoal\Ui\Layout\LayoutAwareTrait;
-use \Charcoal\Ui\UiItemInterface;
+use \Charcoal\Ui\PrioritizableInterface;
 
 // From 'charcoal-admin'
 use \Charcoal\Admin\AdminWidget;
@@ -287,17 +287,22 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * To be called with uasort().
+     * To be called with {@see uasort()}.
      *
-     * @param  FormSidebarInterface $a Item "a" to compare, for sorting.
-     * @param  FormSidebarInterface $b Item "b" to compaer, for sorting.
+     * @param  FormSidebarInterface $a Sortable entity A.
+     * @param  FormSidebarInterface $b Sortable entity B.
      * @return integer Sorting value: -1, 0, or 1
      */
-    protected function sortSidebarsByPriority(FormSidebarInterface $a, FormSidebarInterface $b)
-    {
+    protected function sortSidebarsByPriority(
+        FormSidebarInterface $a,
+        FormSidebarInterface $b
+    ) {
         $a = $a->priority();
         $b = $b->priority();
 
+        if ($a === $b) {
+            return 0;
+        }
         return ($a < $b) ? (-1) : 1;
     }
 
@@ -508,12 +513,14 @@ class FormWidget extends AdminWidget implements
     /**
      * Comparison function used by {@see uasort()}.
      *
-     * @param  UiItemInterface $a Widget A.
-     * @param  UiItemInterface $b Widget B.
-     * @return integer Sorting value: -1 or 1
+     * @param  PrioritizableInterface $a Sortable entity A.
+     * @param  PrioritizableInterface $b Sortable entity B.
+     * @return integer Sorting value: -1 or 1.
      */
-    protected function sortItemsByPriority(UiItemInterface $a, UiItemInterface $b)
-    {
+    protected function sortItemsByPriority(
+        PrioritizableInterface $a,
+        PrioritizableInterface $b
+    ) {
         $priorityA = $a->priority();
         $priorityB = $b->priority();
 

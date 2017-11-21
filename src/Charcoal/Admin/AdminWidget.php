@@ -21,6 +21,10 @@ use Charcoal\Translator\TranslatorAwareTrait;
 use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
+// From 'charcoal-ui'
+use Charcoal\Ui\PrioritizableInterface;
+use Charcoal\Ui\PrioritizableTrait;
+
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractWidget;
 
@@ -28,9 +32,11 @@ use Charcoal\App\Template\AbstractWidget;
  * The base Widget for the `admin` module.
  */
 class AdminWidget extends AbstractWidget implements
-    AuthAwareInterface
+    AuthAwareInterface,
+    PrioritizableInterface
 {
     use AuthAwareTrait;
+    use PrioritizableTrait;
     use TranslatorAwareTrait;
 
     const DATA_SOURCE_REQUEST = 'request';
@@ -96,11 +102,6 @@ class AdminWidget extends AbstractWidget implements
      * @var callable|string|null
      */
     private $activeCondition;
-
-    /**
-     * @var integer $priority
-     */
-    private $priority;
 
     /**
      * Extra data sources to merge when setting data on an entity.
@@ -690,23 +691,5 @@ class AdminWidget extends AbstractWidget implements
     public function baseUrl()
     {
         return rtrim($this->baseUrl, '/').'/';
-    }
-
-    /**
-     * @param integer $priority The widget's sorting priority.
-     * @return AdminWidget Chainable
-     */
-    public function setPriority($priority)
-    {
-        $this->priority = (int)$priority;
-        return $this;
-    }
-
-    /**
-     * @return integer
-     */
-    public function priority()
-    {
-        return $this->priority;
     }
 }

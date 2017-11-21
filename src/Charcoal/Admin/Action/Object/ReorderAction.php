@@ -62,14 +62,16 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $failMessage = $this->translator()->translation('Failed to sort object(s)');
-        $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+        $translator = $this->translator();
+
+        $failMessage = $translator->translate('Failed to sort object(s)');
+        $errorThrown = strtr($translator->translate('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage
         ]);
-        $reqMessage = $this->translator()->translation(
+        $reqMessage = $translator->translate(
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
-        $typeMessage = $this->translator()->translation(
+        $typeMessage = $translator->translate(
             '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
         );
 
@@ -119,7 +121,7 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
             $proto = $this->proto();
 
             if (!$proto->hasProperty($orderProperty)) {
-                $feedback = $this->translator()->translate('Missing "{{ propIdent }}" property for sorting on {{ objType }}');
+                $feedback = $translator->translate('Missing "{{ propIdent }}" property for sorting on {{ objType }}');
                 $this->addFeedback('error', strtr($feedback, [
                     '{{ propIdent }}' => $orderProperty,
                     '{{ objType }}'   => $objType
@@ -147,9 +149,9 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
             }
 
             if (count($objOrders) === 1) {
-                $this->addFeedback('success', $this->translator()->translate('Object has been successfully updated.'));
+                $this->addFeedback('success', $translator->translate('Object has been successfully updated.'));
             } else {
-                $this->addFeedback('success', $this->translator()->translate('Objects have been successfully reordered.'));
+                $this->addFeedback('success', $translator->translate('Objects have been successfully reordered.'));
             }
             $this->setSuccess(true);
 

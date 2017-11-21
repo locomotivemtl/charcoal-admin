@@ -77,7 +77,8 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         $arguments = [
             'now' => [
                 'longPrefix'    => 'now',
-                'description'   => 'The "relative" time this script should run at. If nothing is provided, default "now" is used.',
+                'description'   => 'The "relative" time this script should run at. '.
+                                   'If nothing is provided, default "now" is used.',
                 'defaultValue'  => 'now'
             ]
         ];

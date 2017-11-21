@@ -230,11 +230,13 @@ class CollectionTemplate extends AdminTemplate implements
             return $this->title;
         }
 
+        $translator = $this->translator();
+
         try {
             $config = $this->dashboardConfig();
 
             if (isset($config['title'])) {
-                $this->title = $this->translator()->translation($config['title']);
+                $this->title = $translator->translation($config['title']);
                 return $this->title;
             }
         } catch (Exception $e) {
@@ -262,18 +264,20 @@ class CollectionTemplate extends AdminTemplate implements
             }
 
             if (isset($adminMetadata['lists'][$listIdent]['label'])) {
-                $objLabel = $this->translator()->translation($adminMetadata['lists'][$listIdent]['label']);
+                $objLabel = $translator->translation($adminMetadata['lists'][$listIdent]['label']);
             }
         }
 
         if (!$objLabel && isset($metadata['labels']['all_items'])) {
-            $objLabel = $this->translator()->translation($metadata['labels']['all_items']);
+            $objLabel = $translator->translation($metadata['labels']['all_items']);
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['name']) ? $this->translator()->translation($metadata['labels']['name']) : null);
+            $objType = (isset($metadata['labels']['name'])
+                        ? $translator->translation($metadata['labels']['name'])
+                        : null);
 
-            $objLabel = $this->translator()->translation('Collection: {{ objType }}');
+            $objLabel = $translator->translation('Collection: {{ objType }}');
 
             if ($objType) {
                 $objLabel = strtr($objLabel, [

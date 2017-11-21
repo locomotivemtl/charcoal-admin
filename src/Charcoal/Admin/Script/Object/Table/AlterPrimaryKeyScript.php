@@ -66,7 +66,8 @@ class AlterPrimaryKeyScript extends AdminScript
         parent::init();
 
         $this->setDescription(
-            'The <underline>object/table/alter-primary-key</underline> script replaces the existing primary key with the new definition from the given model\'s metadata.'
+            'The <underline>object/table/alter-primary-key</underline> script replaces '.
+            'the existing primary key with the new definition from the given model\'s metadata.'
         );
     }
 

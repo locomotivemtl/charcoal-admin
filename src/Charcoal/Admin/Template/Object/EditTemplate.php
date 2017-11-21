@@ -164,6 +164,8 @@ class EditTemplate extends AdminTemplate implements
         if ($this->title === null) {
             $title = null;
 
+            $translator = $this->translator();
+
             try {
                 $config = $this->dashboardConfig();
             } catch (Exception $e) {
@@ -172,7 +174,7 @@ class EditTemplate extends AdminTemplate implements
             }
 
             if (isset($config['title'])) {
-                $title = $this->translator()->translation($config['title']);
+                $title = $translator->translation($config['title']);
             } else {
                 $obj      = $this->obj();
                 $objId    = $this->objId();
@@ -188,35 +190,37 @@ class EditTemplate extends AdminTemplate implements
                     }
 
                     if (isset($adminMetadata['forms'][$formIdent]['label'])) {
-                        $title = $this->translator()->translation($adminMetadata['forms'][$formIdent]['label']);
+                        $title = $translator->translation($adminMetadata['forms'][$formIdent]['label']);
                     }
                 }
 
                 if ($objId) {
                     if (!$title && isset($metadata['labels']['edit_item'])) {
-                        $title = $this->translator()->translation($metadata['labels']['edit_item']);
+                        $title = $translator->translation($metadata['labels']['edit_item']);
                     }
 
                     if (!$title && isset($metadata['labels']['edit_model'])) {
-                        $title = $this->translator()->translation($metadata['labels']['edit_model']);
+                        $title = $translator->translation($metadata['labels']['edit_model']);
                     }
                 } else {
                     if (!$title && isset($metadata['labels']['new_item'])) {
-                        $title = $this->translator()->translation($metadata['labels']['new_item']);
+                        $title = $translator->translation($metadata['labels']['new_item']);
                     }
 
                     if (!$title && isset($metadata['labels']['new_model'])) {
-                        $title = $this->translator()->translation($metadata['labels']['new_model']);
+                        $title = $translator->translation($metadata['labels']['new_model']);
                     }
                 }
 
                 if (!$title) {
-                    $objType = (isset($metadata['labels']['singular_name']) ? $this->translator()->translation($metadata['labels']['singular_name']) : null);
+                    $objType = (isset($metadata['labels']['singular_name'])
+                                ? $translator->translation($metadata['labels']['singular_name'])
+                                : null);
 
                     if ($objId) {
-                        $title = $this->translator()->translation('Edit: {{ objType }} #{{ id }}');
+                        $title = $translator->translation('Edit: {{ objType }} #{{ id }}');
                     } else {
-                        $title = $this->translator()->translation('Create: {{ objType }}');
+                        $title = $translator->translation('Create: {{ objType }}');
                     }
 
                     if ($objType) {

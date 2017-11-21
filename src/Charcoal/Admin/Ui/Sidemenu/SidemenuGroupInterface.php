@@ -2,13 +2,17 @@
 
 namespace Charcoal\Admin\Ui\Sidemenu;
 
+// From 'charcoal-ui'
+use Charcoal\Ui\PrioritizableInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Widget\SidemenuWidgetInterface;
 
 /**
  * Defines an admin sidemenu group
  */
-interface SidemenuGroupInterface
+interface SidemenuGroupInterface extends
+    PrioritizableInterface
 {
     /**
      * Set the sidemenu widget.
@@ -54,19 +58,4 @@ interface SidemenuGroupInterface
      * @return boolean
      */
     public function active();
-
-    /**
-     * Set the group's priority or sorting index.
-     *
-     * @param integer $priority An index, for sorting.
-     * @return UiGroupingInterface Chainable
-     */
-    public function setPriority($priority);
-
-    /**
-     * Retrieve the group's priority or sorting index.
-     *
-     * @return integer
-     */
-    public function priority();
 }

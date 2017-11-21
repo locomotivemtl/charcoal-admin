@@ -2,12 +2,17 @@
 
 namespace Charcoal\Admin\Ui;
 
+// From 'charcoal-ui'
+use Charcoal\Ui\PrioritizableInterface;
+
+// From 'charcoal-admin'
 use Charcoal\Ui\Form\FormInterface;
 
 /**
- * Form Sidebar Interface
+ * Defines an admin form sidebar
  */
-interface FormSidebarInterface
+interface FormSidebarInterface extends
+    PrioritizableInterface
 {
     /**
      * Set the form widget the sidebar belongs to.
@@ -34,19 +39,4 @@ interface FormSidebarInterface
      * @return boolean
      */
     public function active();
-
-    /**
-     * Set the widget's priority or sorting index.
-     *
-     * @param integer $priority An index, for sorting.
-     * @return FormSidebarInterface Chainable
-     */
-    public function setPriority($priority);
-
-    /**
-     * Retrieve the widget's priority or sorting index.
-     *
-     * @return integer
-     */
-    public function priority();
 }

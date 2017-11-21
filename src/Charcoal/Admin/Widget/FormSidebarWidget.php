@@ -76,13 +76,6 @@ class FormSidebarWidget extends AdminWidget implements
     private $propertiesOptions = [];
 
     /**
-     * Priority, or sorting index.
-     *
-     * @var integer
-     */
-    protected $priority;
-
-    /**
      * The title is displayed by default.
      *
      * @var boolean
@@ -585,36 +578,6 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         return $this->isObjViewable;
-    }
-
-    /**
-     * Set the widget's priority or sorting index.
-     *
-     * @param integer $priority An index, for sorting.
-     * @throws InvalidArgumentException If the priority is not a number.
-     * @return FormSidebarWidget Chainable
-     */
-    public function setPriority($priority)
-    {
-        if (!is_numeric($priority)) {
-            throw new InvalidArgumentException(
-                'Priority must be an integer'
-            );
-        }
-
-        $this->priority = (int)$priority;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the widget's priority or sorting index.
-     *
-     * @return integer
-     */
-    public function priority()
-    {
-        return $this->priority;
     }
 
     /**

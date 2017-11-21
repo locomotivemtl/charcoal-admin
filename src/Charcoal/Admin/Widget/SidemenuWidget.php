@@ -743,11 +743,11 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
-     * To be called with uasort()
+     * To be called with {@see uasort()}.
      *
-     * @param  SidemenuGroupInterface $a First group object to sort.
-     * @param  SidemenuGroupInterface $b Second group object to sort.
-     * @return integer
+     * @param  SidemenuGroupInterface $a Sortable entity A.
+     * @param  SidemenuGroupInterface $b Sortable entity B.
+     * @return integer Sorting value: -1, 0, or 1
      */
     protected function sortGroupsByPriority(
         SidemenuGroupInterface $a,
@@ -756,6 +756,9 @@ class SidemenuWidget extends AdminWidget implements
         $a = $a->priority();
         $b = $b->priority();
 
+        if ($a === $b) {
+            return 0;
+        }
         return ($a < $b) ? (-1) : 1;
     }
 

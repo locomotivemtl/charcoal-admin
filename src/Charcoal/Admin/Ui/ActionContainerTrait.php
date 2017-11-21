@@ -518,10 +518,10 @@ trait ActionContainerTrait
     }
 
     /**
-     * To be called with uasort()
+     * To be called with {@see uasort()}.
      *
-     * @param  array $a First action object to sort.
-     * @param  array $b Second action object to sort.
+     * @param  array $a Sortable action A.
+     * @param  array $b Sortable action B.
      * @return integer
      */
     protected function sortActionsByPriority(array $a, array $b)
@@ -529,6 +529,9 @@ trait ActionContainerTrait
         $a = isset($a['priority']) ? $a['priority'] : 0;
         $b = isset($b['priority']) ? $b['priority'] : 0;
 
+        if ($a === $b) {
+            return 0;
+        }
         return ($a < $b) ? (-1) : 1;
     }
 

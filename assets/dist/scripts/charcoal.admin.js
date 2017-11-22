@@ -3296,7 +3296,7 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
         widget.pagination.page = 1;
     }
 
-    var $input, words, props, filters = [];
+    var $input, words, props, query, filters = [];
 
     $input = this.element().find('input');
     words  = $input.val().split(/\s/);
@@ -3307,13 +3307,17 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget)
             filters.push({
                 property: prop,
                 operator: 'LIKE',
-                value:    ('%' + word + '%'),
-                operand:  'OR'
+                value:    ('%' + word + '%')
             });
         });
     });
 
-    widget.set_filters(filters);
+    query = {
+        conjunction: 'OR',
+        filters: filters
+    };
+
+    widget.set_filters([ query ]);
 
     // widget.add_search(val, props);
 

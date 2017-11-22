@@ -360,7 +360,7 @@ class TagsInput extends AbstractSelectableInput
                 $loader->addFilter([
                     'property' => $model->key(),
                     'operator' => 'IN',
-                    'val'      => $val
+                    'value'      => $val
                 ]);
                 $collection = $loader->load();
                 $choices = [];

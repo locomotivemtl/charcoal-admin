@@ -40,20 +40,16 @@
                 "controller": "charcoal/admin/template/elfinder"
             },
             "system/cache": {
-                "template": "charcoal/admin/template/system/clear-cache",
-                "controller": "charcoal/admin/template/system/clear-cache"
+                "ident": "charcoal/admin/template/system/clear-cache"
             },
             "system/users":{
-                "template": "charcoal/admin/template/system/users",
-                "controller": "charcoal/admin/template/system/users"
+                "ident": "charcoal/admin/template/system/users"
             },
             "system/user-roles":{
-                "template": "charcoal/admin/template/system/user-roles",
-                "controller": "charcoal/admin/template/system/user-roles"
+                "ident": "charcoal/admin/template/system/user-roles"
             },
             "system/user-permissions":{
-                "template": "charcoal/admin/template/system/user-permissions",
-                "controller": "charcoal/admin/template/system/userpermissions"
+                "ident": "charcoal/admin/template/system/user-permissions"
             }
         },
         "actions": {

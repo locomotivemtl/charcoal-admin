@@ -448,7 +448,7 @@ class AdminWidget extends AbstractWidget implements
      */
     protected function acceptedDataSources()
     {
-        return [ self::DATA_SOURCE_REQUEST, self::DATA_SOURCE_OBJECT ];
+        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT ];
     }
 
     /**

@@ -119,7 +119,7 @@ class DocWidget extends FormWidget implements
      */
     protected function defaultDataSources()
     {
-        return [ 'request', 'object' ];
+        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT ];
     }
 
     /**

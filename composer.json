@@ -48,7 +48,8 @@
         "league/csv": "^8.1"
     },
     "suggest": {
-        "league/csv": "To use the exporter (to CSV)"
+        "league/csv": "To use the exporter (to CSV).",
+        "fabpot/goutte": "To use the various crawler-based tools."
     },
     "autoload": {
         "psr-4": {

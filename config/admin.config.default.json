@@ -158,6 +158,18 @@
             },
             "user/reset-password": {
                 "ident": "charcoal/admin/script/user/reset-password"
+            },
+            "tools/generate-static-website": {
+                "ident": "charcoal/admin/script/tools/generate-static-website"
+            },
+            "tools/check-links": {
+                "ident": "charcoal/admin/script/tools/check-links"
+            },
+            "tools/optimize-images": {
+                "ident": "charcoal/admin/script/tools/optimize-images"
+            },
+            "tools/resize-images": {
+                "ident": "charcoal/admin/script/tools/resize-images"
             }
         }
     },

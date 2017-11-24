@@ -18,6 +18,9 @@ use Mustache_LambdaHelper as LambdaHelper;
 use Charcoal\Config\ConfigInterface;
 use Charcoal\Config\GenericConfig as Config;
 
+// From 'charcoal-ui'
+use Charcoal\Ui\ServiceProvider\UiServiceProvider;
+
 // From 'charcoal-email'
 use Charcoal\Email\ServiceProvider\EmailServiceProvider;
 
@@ -61,13 +64,13 @@ class AdminServiceProvider implements ServiceProviderInterface
     {
         // Ensure dependencies are set
         $container->register(new EmailServiceProvider());
+        $container->register(new UiServiceProvider());
 
         /**
          * @param  Container $container The Pimple DI Container.
          * @return ConfigInterface
          */
         $container['admin/config'] = function (Container $container) {
-
             $appConfig = $container['config'];
 
             // The `admin.json` file is not part of regular config

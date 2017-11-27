@@ -124,6 +124,20 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
+     * Retrieve the title of the page.
+     *
+     * @return \Charcoal\Translator\Translation
+     */
+    public function title()
+    {
+        if ($this->title === null) {
+            $this->title = $this->translator()->translation('Media Manager');
+        }
+
+        return $this->title;
+    }
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.

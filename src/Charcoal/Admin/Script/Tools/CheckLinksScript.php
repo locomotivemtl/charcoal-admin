@@ -136,6 +136,7 @@ class CheckLinksScript extends AdminScript
 
         try {
             $response = $this->guzzleClient->request('GET', $url, [
+                'http_errors' => false,
                 'on_stats' => function (TransferStats $stats) {
                     if ($stats->hasResponse()) {
                         $code = $stats->getResponse()->getStatusCode();

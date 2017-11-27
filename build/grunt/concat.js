@@ -45,7 +45,9 @@ module.exports = {
             'bower_components/selectize/dist/js/standalone/selectize.min.js',
             // 'assets/dist/scripts/vendors/selectize/selectize-item-color/src/plugin.js',
             // Selectize
-            'bower_components/clipboard/dist/clipboard.min.js'
+            'bower_components/clipboard/dist/clipboard.min.js',
+            // Timeago
+            'bower_components/jquery-timeago/jquery.timeago.js'
         ],
         dest: 'assets/dist/scripts/charcoal.admin.vendors.js',
         separator: "\n"

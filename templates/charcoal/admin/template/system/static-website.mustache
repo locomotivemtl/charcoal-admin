@@ -1,0 +1,240 @@
+{{!--
+`charcoal/admin/template/system/static-website`
+--}}
+{{>charcoal/admin/template/inc.header}}
+
+<div class="o-flex">
+    {{#showSidemenu}}
+        {{#sidemenu}}
+            {{>charcoal/admin/widget/sidemenu}}
+        {{/sidemenu}}
+    {{/showSidemenu}}
+
+    {{>charcoal/admin/widget/feedbacks}}
+
+    {{!-- Object list section --}}
+    <div class="o-flex_main">
+        <section class="o-container -bottom">
+            <header class="o-header">
+                <h1>{{title}}</h1>
+                {{#searchWidget}}
+                    {{>charcoal/admin/widget/search}}
+                {{/searchWidget}}
+            </header>
+
+            <div>
+                {{#_t}}Static website is a filesystem cache of the content, based on URL. For apache, it must be properly set up in the `.htaccess` file of the server.{{/_t}}
+            </div>
+
+            {{#isStaticWebsiteEnabled}}
+                <div class="alert alert-success">
+                {{#_t}}Static website is currently enabled. To disable, remove the `www/static` symlink.{{/_t}} <button class="btn js-static-deactivate">Deactivate</button>.
+                </div>
+            {{/isStaticWebsiteEnabled}}
+            {{^isStaticWebsiteEnabled}}
+                <div class="alert alert-danger">
+                    {{#_t}}Static website is currently disabled. To enable, create a symlink from `cache/static` to `www/static`.{{/_t}} <button class="btn js-static-activate">Activate</button>
+                </div>
+            {{/isStaticWebsiteEnabled}}
+
+            <h2>{{#_t}}Generated files{{/_t}}</h2>
+
+            <div>
+                <button class="btn js-static-add">Add URL</button>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">URL</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Generated</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#staticWebsiteFiles}}
+                <tr>
+                    <th scope="row">{{name}}</th>
+                    <td>{{type}}</td>
+                    <td><time class="timeago" datetime="{{mtime}}">{{generated}}</time></td>
+                    <td>{{size}}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default js-static-update" data-static-url="{{name}}">{{#_t}}Regenerate{{/_t}}</button>
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="js-static-preview" data-static-url="{{name}}">{{#_t}}Preview{{/_t}}</a></li>
+                                <li><a href="#" class="js-static-delete" data-static-url="{{name}}">{{#_t}}Delete{{/_t}}</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {{/staticWebsiteFiles}}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4">&nbsp;</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default js-static-update-all">{{#_t}}Regenerate all{{/_t}}</button>
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="js-static-delete-all">Delete all</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </section>
+    </div>
+</div>
+
+{{#addJs}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.1/jquery.timeago.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("time.timeago").timeago();
+        });
+        $('.js-static-activate').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/activate', {},
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-deactivate').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/deactivate', {},
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-update').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/update', {
+                    url: $(this).data('static-url')
+                },
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-preview').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/preview', {
+                    url: $(this).data('static-url')
+                },
+                function (data) {
+                    if (data.success == true) {
+                        alert(data.content);
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-delete').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/delete', {
+                    url: $(this).data('static-url')
+                },
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-add').click(function(el) {
+            el.preventDefault();
+            var url = window.prompt('URL?');
+            $.post('{{adminUrl}}system/static-website/add', {
+                    url: url
+                },
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-update-all').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/update-all', {},
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+        $('.js-static-delete-all').click(function(el) {
+            el.preventDefault();
+            $.post('{{adminUrl}}system/static-website/delete-all', {},
+                function (data) {
+                    if (data.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert('Error');
+                    }
+
+                },
+                'json'
+            ).fail(function() {
+                alert('Error');
+            });
+        });
+    </script>
+{{/addJs}}
+
+{{>charcoal/admin/template/inc.footer}}

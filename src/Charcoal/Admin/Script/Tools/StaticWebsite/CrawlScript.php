@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Script\Tools;
+namespace Charcoal\Admin\Script\Tools\StaticWebsite;
 
 use InvalidArgumentException;
 
@@ -18,7 +18,7 @@ use Charcoal\Admin\AdminScript;
 /**
  *
  */
-class GenerateStaticWebsiteScript extends AdminScript
+class CrawlScript extends AdminScript
 {
     /**
      * @var string
@@ -91,7 +91,7 @@ class GenerateStaticWebsiteScript extends AdminScript
         $arguments = [
             'url' => [
                 'longPrefix' => 'url',
-                'description' => 'Object type',
+                'description' => 'Base URL to start crawling from.',
                 'defaultValue' => $this->baseUrl()
             ],
             'output-dir' => [
@@ -130,7 +130,7 @@ class GenerateStaticWebsiteScript extends AdminScript
         $this->maxLevel = $climate->arguments->get('max-level');
 
         $climate->underline()->out(
-            sprintf('Generate Static Website ("%s")', $this->startUrl)
+            sprintf('Generate Static Website ("%s") with crawler', $this->startUrl)
         );
 
         $this->cacheUrl($this->startUrl);
@@ -152,6 +152,14 @@ class GenerateStaticWebsiteScript extends AdminScript
         $relativeUrl = str_replace($this->startUrl, '', $url);
         $url = $this->startUrl.$relativeUrl;
         $outputDir = $this->outputDir.'/'.$relativeUrl;
+
+        // Previous static version must be deleted in order to generate a new one.
+        if (file_exists($outputDir.'/index.php')) {
+            unlink($outputDir.'/index.php');
+        }
+        if (file_exists($outputDir.'/index.html')) {
+            unlink($outputDir.'/index.html');
+        }
 
         $response = $this->guzzleClient->request('GET', $url);
 

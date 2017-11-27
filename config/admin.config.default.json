@@ -42,6 +42,9 @@
             "system/cache": {
                 "ident": "charcoal/admin/template/system/clear-cache"
             },
+            "system/static-website": {
+                "ident": "charcoal/admin/template/system/static-website"
+            },
             "system/users":{
                 "ident": "charcoal/admin/template/system/users"
             },
@@ -110,6 +113,33 @@
             },
             "system/clear-cache": {
                 "ident": "charcoal/admin/action/system/clear-cache"
+            },
+            "system/static-website/activate": {
+                "ident": "charcoal/admin/action/system/static-website/activate"
+            },
+            "system/static-website/deactivate": {
+                "ident": "charcoal/admin/action/system/static-website/deactivate"
+            },
+            "system/static-website/add": {
+                "ident": "charcoal/admin/action/system/static-website/add"
+            },
+            "system/static-website/update": {
+                "ident": "charcoal/admin/action/system/static-website/update"
+            },
+            "system/static-website/preview": {
+                "ident": "charcoal/admin/action/system/static-website/preview"
+            },
+            "system/static-website/delete": {
+                "ident": "charcoal/admin/action/system/static-website/delete"
+            },
+            "system/static-website/update-all": {
+                "ident": "charcoal/admin/action/system/static-website/update-all"
+            },
+            "system/static-website/delete-all": {
+                "ident": "charcoal/admin/action/system/static-website/delete-all"
+            },
+            "system/static-website/crawl": {
+                "ident": "charcoal/admin/action/system/static-website/crawl"
             }
         },
         "scripts": {
@@ -155,8 +185,17 @@
             "user/reset-password": {
                 "ident": "charcoal/admin/script/user/reset-password"
             },
-            "tools/generate-static-website": {
-                "ident": "charcoal/admin/script/tools/generate-static-website"
+            "tools/static-website/add": {
+                "ident": "charcoal/admin/script/tools/static-website/add"
+            },
+            "tools/static-website/delete": {
+                "ident": "charcoal/admin/script/tools/static-website/delete"
+            },
+            "tools/static-website/update": {
+                "ident": "charcoal/admin/script/tools/static-website/update"
+            },
+            "tools/static-website/crawl": {
+                "ident": "charcoal/admin/script/tools/static-website/crawl"
             },
             "tools/check-links": {
                 "ident": "charcoal/admin/script/tools/check-links"

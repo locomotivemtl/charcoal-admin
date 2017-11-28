@@ -48,7 +48,7 @@ class MapWidgetInput extends AbstractPropertyInput
         }
 
         if (isset($appConfig['alert.map.map'])) {
-            $this->setMapOptions($appConfig['alert.map.map']);
+            $this->setMapOptions($appConfig['alert.map']);
         }
     }
 
@@ -90,10 +90,11 @@ class MapWidgetInput extends AbstractPropertyInput
         }
 
         if ($this->mapOptions) {
-            $this->mapOptions = array_merge($this->mapOptions, $settings);
+            $this->mapOptions = array_replace_recursive($this->mapOptions, $settings);
         } else {
-            $this->mapOptions = array_merge($this->defaultMapOptions(), $settings);
+            $this->mapOptions = array_replace_recursive($this->defaultMapOptions(), $settings);
         }
+
         return $this;
     }
 

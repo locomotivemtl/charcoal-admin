@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin;
 
+use Charcoal\Ui\ConditionalizableInterface;
+use Charcoal\Ui\ConditionalizableTrait;
 use InvalidArgumentException;
 
 // From PSR-7 (HTTP Messaging)
@@ -33,10 +35,12 @@ use Charcoal\App\Template\AbstractWidget;
  */
 class AdminWidget extends AbstractWidget implements
     AuthAwareInterface,
-    PrioritizableInterface
+    PrioritizableInterface,
+    ConditionalizableInterface
 {
     use AuthAwareTrait;
     use PrioritizableTrait;
+    use ConditionalizableTrait;
     use TranslatorAwareTrait;
 
     const DATA_SOURCE_REQUEST = 'request';

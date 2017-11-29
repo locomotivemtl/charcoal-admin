@@ -1,6 +1,9 @@
 {{!--
 `charcoal/admin/template/system/users`
 --}}
+{{#addCss}}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+{{/addCss}}
 {{>charcoal/admin/template/inc.header}}
 
 <div class="o-flex">
@@ -61,6 +64,7 @@
                             </div>
                         </section>
                     </div>
+
                     <div class="col-xs-12 col-sm-6 col-lg-6">
                         <section class="panel panel-default">
                             <header class="panel-heading">
@@ -82,9 +86,11 @@
                                         <span class="btn-label">{{# _t }}Clear pages cache{{/ _t }}</span>
                                     </button>
                                 </p>
+
                             </div>
                         </section>
                     </div>
+
                     <div class="col-xs-12 col-sm-6 col-lg-6">
                         <section class="panel panel-default">
                             <header class="panel-heading">
@@ -106,13 +112,59 @@
                                         <span class="btn-label">{{# _t }}Clear objects cache{{/ _t }}</span>
                                     </button>
                                 </p>
+
                             </div>
                         </section>
                     </div>
                 </div>
+
+                {{#cacheInfo.global.num_entries}}
+                <div class="col-md-12">
+                    <section class="panel panel-default">
+                        <header class="panel-heading">
+                            <h3 class="panel-title">{{#_t}}Cache entries{{/_t}}</h3>
+                        </header>
+                        <div class="panel-body" style="padding:0">
+                            <table class="table" data-toggle="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" data-sortable="true">{{#_t}}Key{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Hits{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Size{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Created{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Timeout{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Expiry{{/_t}}</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{#cacheInfo.objects_items}}
+                                    <tr>
+                                        <td><strong>{{ident}}</strong></td>
+                                        <td>{{num_hits}}</td>
+                                        <td><span data-value="{{mem_size}}">{{size}}<span></td>
+                                        <td>{{created}}</td>
+                                        <td>{{ttl}}</td>
+                                        <td>{{expiry}}</td>
+                                        <td><!--<a class="btn btn-default">Delete</a>--></td>
+                                    </tr>
+                                {{/cacheInfo.objects_items}}
+
+                            </table>
+                        </div>
+                    </section>
+                </div>
+                {{/cacheInfo.global.num_entries}}
+
+
+
+
             </div>
         </div>
     </div>
 </div>
 
+{{#addJs}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+{{/addJs}}
 {{>charcoal/admin/template/inc.footer}}

@@ -74,10 +74,12 @@ class ClearCacheTemplate extends AdminTemplate
         $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
         return [
             'type'    => $cacheType,
-            'active'  => true,
+            'active'  => $this->cacheConfig['active'],
             'global'  => $this->globalCacheInfo(),
             'pages'   => $this->pagesCacheInfo(),
-            'objects' => $this->objectsCacheInfo()
+            'objects' => $this->objectsCacheInfo(),
+            'pages_items' => $this->pagesCacheItems(),
+            'objects_items' => $this->objectsCacheItems()
         ];
     }
 
@@ -86,7 +88,7 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function globalCacheInfo()
     {
-        if ($this->isApc()) {
+        if ($this->isApc() === true) {
             return $this->apcCacheInfo('/::'.$this->cache->getNamespace().'::/');
         } else {
             return [
@@ -104,7 +106,7 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function pagesCacheInfo()
     {
-        if ($this->isApc()) {
+        if ($this->isApc() === true) {
             return $this->apcCacheInfo(
                 '/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/'
             );
@@ -122,9 +124,21 @@ class ClearCacheTemplate extends AdminTemplate
     /**
      * @return array
      */
+    private function pagesCacheItems()
+    {
+        if ($this->isApc() === true) {
+            return $this->apcCacheItems('/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/');
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @return array
+     */
     private function objectsCacheInfo()
     {
-        if ($this->isApc()) {
+        if ($this->isApc() === true) {
             return $this->apcCacheInfo(
                 '/::'.$this->cache->getNamespace().'::object::|::'.$this->cache->getNamespace().'::metadata::/'
             );
@@ -136,6 +150,18 @@ class ClearCacheTemplate extends AdminTemplate
                 'total_hits'   => 0,
                 'average_hits' => 0
             ];
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function objectsCacheItems()
+    {
+        if ($this->isApc()) {
+            return $this->apcCacheItems('/::'.$this->cache->getNamespace().'::objects::|::'.$this->cache->getNamespace().'::metadata::/');
+        } else {
+            return [];
         }
     }
 
@@ -176,6 +202,29 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * @param string $key The cache key to look at.
+     * @return array|\Generator
+     */
+    private function apcCacheItems($key)
+    {
+        if (class_exists(APCUIterator::class)) {
+            $iter = new APCUIterator($key);
+        } elseif (class_exists(APCIterator::class)) {
+            $iter = new APCIterator($key);
+        } else {
+            return [];
+        }
+
+        foreach ($iter as $item) {
+            $item['ident'] = str_replace('::', '⇒', str_replace('.', '/', trim(str_replace($this->cache->getNamespace(), '', strstr($item['key'], $this->cache->getNamespace().'::')), ':')));
+            $item['size'] = $this->formatBytes($item['mem_size']);
+            $item['created'] = date('Y-m-d H:i:s', $item['creation_time']);
+            $item['expiry'] = date('Y-m-d H:i:s', ($item['creation_time']+$item['ttl']));
+            yield $item;
+        }
+    }
+
+    /**
      * @return boolean
      */
     private function isApc()
@@ -203,9 +252,9 @@ class ClearCacheTemplate extends AdminTemplate
             return 0;
         }
         $base = log($size, 1024);
-        $suffixes = [ '', 'K', 'M', 'G', 'T' ];
+        $suffixes = [ 'b', 'k', 'M', 'G', 'T' ];
 
         $floor = floor($base);
-        return round(pow(1024, ($base - $floor)), 2).' '.$suffixes[$floor];
+        return round(pow(1024, ($base - $floor)), 2).''.$suffixes[$floor];
     }
 }

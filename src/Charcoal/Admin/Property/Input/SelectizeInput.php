@@ -569,7 +569,7 @@ class SelectizeInput extends SelectInput
                 ->setModel($model)
                 ->addFilter([
                     'property' => $model->key(),
-                    'val' => $val,
+                    'value' => $val,
                     'operator' => 'IN'
                 ]);
 

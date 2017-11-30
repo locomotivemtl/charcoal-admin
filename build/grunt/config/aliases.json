@@ -1,0 +1,22 @@
+{
+    "default": [
+        "copy:vendors",
+        "sass",
+        "postcss",
+        "cssmin",
+        "concat",
+        "jscs",
+        "jshint",
+        "jsonlint",
+        "uglify",
+        "svg_sprite",
+        "copy:admin",
+        "notify:build"
+    ],
+
+    "sync": [
+        "browserSync",
+        "watch",
+        "notify:watch"
+    ]
+}

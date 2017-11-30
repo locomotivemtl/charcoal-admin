@@ -1,44 +1,46 @@
 module.exports = {
+    notify_hooks: {
+        options: {
+            enabled  : true,
+            success  : true,
+            duration : 3,
+            title    : '<%= package.name %>',
+            max_jshint_notifications : 5
+        }
+    },
     javascript: {
         options: {
-            // title: '<%= pkg.title %>',
-            message: 'JavaScript is linted and cleaned up'
+            message: 'JavaScript is compiled'
         }
     },
     json: {
         options: {
-            // title: '<%= pkg.title %>',
             message: 'JSON is linted'
         }
     },
     php: {
         options: {
-            // title: '<%= pkg.title %>',
             message: 'PHP linted and cleaned up'
         }
     },
     sass: {
         options: {
-            // title: '<%= pkg.title %>',
-            message: 'Sass compiled to CSS.'
+            message: 'CSS is compiled'
         }
     },
     svg: {
         options: {
-            // title: '<%= pkg.title %>',
-            message: 'SVG is now concatenated'
+            message: 'SVG is concatenated'
         }
     },
     copy: {
         options: {
-            // title: '<%= pkg.title %>',
             message: 'Admin assets are copied'
         }
     },
     watch: {
         options: {
-            // title: '<%= pkg.title %>',
-            message: 'Keeping an eye out, Chief!'
+            message: 'Assets are being watched for changes'
         }
     }
 };

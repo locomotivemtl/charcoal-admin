@@ -108,12 +108,12 @@
 
 .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer {
     .btn-toolbar {
-        @media (max-width: $screen-xs-max) {
+        @include media-breakpoint-down(xs) {
             @include c-dualselect-toolbar--row;
         }
 
         /// @see _button-groups.scss#.btn-group-vertical
-        @media (min-width: $screen-sm) {
+        @include media-breakpoint-up(sm) {
             @include c-dualselect-toolbar--col;
         }
     }

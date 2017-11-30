@@ -6,8 +6,8 @@ $c-attachment-panel-width:  85%;
 $c-attachment-aside-width:  16%;
 $c-attachment-gutter-width: 2%;
 
-$c-attachment-pv: (nth($panel-heading-padding, 1) + 3px);
-$c-attachment-ph: nth($panel-heading-padding, 2);
+$c-attachment-pv: $card-spacer-y;
+$c-attachment-ph: $card-spacer-x;
 
 .c-attachments {
 
@@ -67,7 +67,7 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
             display:     block;
             float:       left;
             border-left: 1px solid #ddd;
-            padding:     nth($panel-heading-padding, 1) $c-attachment-ph;
+            padding:     $card-spacer-y $c-attachment-ph;
         }
     }
 
@@ -152,8 +152,9 @@ $c-attachment-ph: nth($panel-heading-padding, 2);
 }
 
 .c-attachment_placeholder {
-    height:           ceil(($font-size * 1.1) + (nth($panel-heading-padding, 1) * 2)) + 2px;
-    padding:          $panel-heading-padding;
+    // height:           ceil(($font-size * 1.1) + (nth($panel-heading-padding, 1) * 2)) + 2px;
+    height:           $card-spacer-y * 2;
+    padding:          $card-spacer-y;
     border-color:     #BBB;
     border-style:     dashed;
     box-shadow:       none;

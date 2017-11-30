@@ -2,9 +2,9 @@
 // Color-inputs
 // ==========================================================================
 
-$radio-color-size-small:   $input-height-small - ($padding-small-vertical * 2);
-$radio-color-size-base:    $input-height-base  - ($padding-base-vertical  * 2);
-$radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
+$radio-color-size-small:   $input-height-small ;//- ($padding-small-vertical * 2);
+$radio-color-size-base:    $input-height-base  ;//- ($padding-base-vertical  * 2);
+$radio-color-size-large:   $input-height-large ;//- ($padding-large-vertical * 2);
 
 .radio-color-group,
 .checkbox-color-group {
@@ -52,7 +52,8 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
 .radio-color.radio-lg,
 .checkbox-color.checkbox-lg {
     // font-size: $font-size-large;
-    line-height: $line-height-large;
+    // line-height: $line-height-large;
+    line-height: $line-height-base;
 
     label {
         min-height: $radio-color-size-large;
@@ -61,10 +62,10 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
     .o-color-swatch {
         width:         $radio-color-size-large - 2px;
         height:        $radio-color-size-large - 2px;
-        border-radius: $input-border-radius-large;
+        border-radius: $input-border-radius-lg;
 
         .minicolors-swatch-color {
-            border-radius: $input-border-radius-large;
+            border-radius: $input-border-radius-lg;
         }
     }
 }
@@ -72,7 +73,8 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
 .radio-color.radio-sm,
 .checkbox-color.checkbox-sm {
     // font-size: $font-size-small;
-    line-height: $line-height-small;
+    // line-height: $line-height-small;
+    line-height: $line-height-base;
 
     label {
         min-height: $radio-color-size-small;
@@ -81,10 +83,10 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
     .o-color-swatch {
         width:         $radio-color-size-small - 2px;
         height:        $radio-color-size-small - 2px;
-        border-radius: $input-border-radius-small;
+        border-radius: $input-border-radius-sm;
 
         .minicolors-swatch-color {
-            border-radius: $input-border-radius-small;
+            border-radius: $input-border-radius-sm;
         }
     }
 }
@@ -127,7 +129,7 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
         bottom:        -4px;
         display:       block;
         border:        #3498DB 2px solid;
-        border-radius: $input-border-radius + 2px;
+        border-radius: calc(#{$input-border-radius} + 2px);
     }
 }
 
@@ -135,7 +137,7 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
 .checkbox-color.checkbox-lg input[type="checkbox"] {
     &:checked + .o-color-swatch::after,
     &:checked + label >.o-color-swatch::after {
-        border-radius: $input-border-radius-large + 2px;
+        border-radius: calc(#{$input-border-radius-lg} + 2px);
     }
 }
 
@@ -143,6 +145,6 @@ $radio-color-size-large:   $input-height-large - ($padding-large-vertical * 2);
 .checkbox-color.checkbox-sm input[type="checkbox"] {
     &:checked + .o-color-swatch::after,
     &:checked + label >.o-color-swatch::after {
-        border-radius: $input-border-radius-small + 2px;
+        border-radius: calc(#{$input-border-radius-sm} + 2px);
     }
 }

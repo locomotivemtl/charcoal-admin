@@ -13,7 +13,7 @@ $selectize-offset-item-remove: 28px;
 
 $selectize-width-item-buttons: 40px;
 
-@import "../../../../../../bower_components/selectize-scss/src/selectize.bootstrap3";
+// @import "../../../../../../bower_components/selectize-scss/src/selectize.bootstrap3";
 
 .selectize-dropdown {
     .option > .caption {
@@ -26,7 +26,7 @@ $selectize-width-item-buttons: 40px;
 .selectize-control {
     .selectize-input {
         display: block;
-        padding: 4px $selectize-padding-x 0;
+        // padding: 4px $selectize-padding-x 0;
     }
 
     &.multi {
@@ -91,7 +91,7 @@ $selectize-width-item-buttons: 40px;
         .selectize-input.focus {
             $color: $input-border-focus;
             $color-rgba: rgba(red($color), green($color), blue($color), .6);
-            @include selectize-box-shadow(unquote("inset 0 1px 1px #{rgba(black, .075)}, 0 0 8px #{$color-rgba}"));
+            // @include selectize-box-shadow(unquote("inset 0 1px 1px #{rgba(black, .075)}, 0 0 8px #{$color-rgba}"));
         }
     }
 
@@ -116,7 +116,7 @@ $selectize-width-item-buttons: 40px;
 
             .remove {
                 width:   $selectize-width-item-remove;
-                padding: $selectize-padding-x 0 0 0;
+                // padding: $selectize-padding-x 0 0 0;
             }
         }
     }
@@ -128,7 +128,7 @@ $selectize-width-item-buttons: 40px;
             .button {
                 background-color: rgba(black, 0.05);
                 width:            $selectize-width-item-buttons;
-                padding:          $selectize-padding-x 0 0 0;
+                // padding:          $selectize-padding-x 0 0 0;
                 z-index:          1; /* fixes ie bug (see #392) */
                 position:         absolute;
                 top:              0;
@@ -142,8 +142,8 @@ $selectize-width-item-buttons: 40px;
                 vertical-align:   middle;
                 display:          inline-block;
                                   //border-left: 1px solid $selectize-color-item-border;
-                @include selectize-border-radius (0 2px 2px 0);
-                @include selectize-box-sizing (border-box);
+                // @include selectize-border-radius (0 2px 2px 0);
+                // @include selectize-box-sizing (border-box);
             }
         }
     }
@@ -151,13 +151,13 @@ $selectize-width-item-buttons: 40px;
         background: rgba(black, 0.1);
     }
     [data-value].active .button {
-        border-left-color: $selectize-color-item-active-border;
+        // border-left-color: $selectize-color-item-active-border;
     }
     .disabled [data-value] .button:hover {
         background: none;
     }
     .disabled [data-value] .button {
-        border-left-color: lighten(desaturate($selectize-color-item-border, 100%), $selectize-lighten-disabled-item-border);
+        // border-left-color: lighten(desaturate($selectize-color-item-border, 100%), $selectize-lighten-disabled-item-border);
     }
     .update-single {
         position:  absolute;

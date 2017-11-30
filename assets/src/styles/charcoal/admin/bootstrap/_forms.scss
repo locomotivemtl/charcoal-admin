@@ -42,7 +42,8 @@ input[type="url"] {
 }
 
 textarea.form-control {
-    padding: $padding-base-horizontal;
+    // padding: $padding-base-horizontal;
+    padding: $spacer;
 }
 
 .active-lang {
@@ -50,7 +51,7 @@ textarea.form-control {
         display:        inline-block;
         margin-bottom:  5px;
         color:          #959595;
-        font-size:      $font-size-small;
+        font-size:      $font-size-sm;
         font-weight:    700;
         letter-spacing: 1px;
         text-transform: uppercase;
@@ -59,8 +60,8 @@ textarea.form-control {
 
 .c-structure {
     .form-field > &.c-structure--bordered {
-        padding:       $panel-body-padding $panel-body-padding 0;
-        border:        1px solid $input-border;
+        padding:       $card-spacer-y $card-spacer-x 0;
+        border:        1px solid $input-border-color;
         border-radius: $input-border-radius;
     }
 }
@@ -71,5 +72,5 @@ textarea.form-control {
 }
 
 .c-structure_empty {
-    margin-bottom: $panel-body-padding;
+    margin-bottom: $card-spacer-y;
 }

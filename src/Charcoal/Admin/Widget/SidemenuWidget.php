@@ -93,6 +93,13 @@ class SidemenuWidget extends AdminWidget implements
     private $showTitle = true;
 
     /**
+     * The currently highlighted item.
+     *
+     * @var mixed
+     */
+    protected $currentItem;
+
+    /**
      * The admin's current route.
      *
      * @var UriInterface
@@ -179,22 +186,59 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the current route path.
      *
-     * @return UriInterface|null
+     * @return string|null
      */
     public function adminRoute()
     {
         if ($this->adminRoute === null) {
-            $uri = $this->httpRequest()->getUri();
-            $uri = $uri->withBasePath($this->adminConfig('base_path'));
+            $requestUri = (string)$this->httpRequest()->getUri();
+            $requestUri = str_replace($this->adminUrl(), '', $requestUri);
 
-            $path = str_replace($uri->getBasePath(), '', $uri->getPath());
-            $path = ltrim($path, '/');
-            $uri  = $uri->withPath($path);
-
-            $this->adminRoute = $uri;
+            $this->adminRoute = $requestUri;
         }
 
         return $this->adminRoute;
+    }
+
+    /**
+     * @param  string $ident The ident for the current item to highlight.
+     * @return self
+     */
+    public function setCurrentItem($ident)
+    {
+        $this->currentItem = $ident;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function currentItem()
+    {
+        if ($this->currentItem === null) {
+            return $this->objType() ?: $this->adminRoute()->getPath();
+        }
+
+        return $this->currentItem;
+    }
+
+    /**
+     * Computes the intersection of values to determine if the link is the current item.
+     *
+     * @param  mixed $linkIdent The link's value(s) to check.
+     * @return boolean
+     */
+    public function isCurrentItem($linkIdent)
+    {
+        $context = array_filter([
+            $this->currentItem,
+            $this->objType(),
+            $this->adminRoute(),
+        ]);
+
+        $matches = array_intersect((array)$linkIdent, $context);
+
+        return !!$matches;
     }
 
     /**
@@ -301,9 +345,6 @@ class SidemenuWidget extends AdminWidget implements
             );
         }
 
-        $uriPath = $this->adminRoute()->getPath();
-        $objType = $this->objType();
-
         if (is_array($link)) {
             $active = true;
             $name   = null;
@@ -340,7 +381,7 @@ class SidemenuWidget extends AdminWidget implements
                 'active'   => $active,
                 'name'     => $name,
                 'url'      => $url,
-                'selected' => ($linkIdent === $objType || $linkIdent === $uriPath),
+                'selected' => $this->isCurrentItem([ $linkIdent, (string)$url ]),
                 'required_acl_permissions' => $permissions
             ];
         } else {

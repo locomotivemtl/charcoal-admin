@@ -569,6 +569,10 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $mainMenu = null;
+        if (isset($this['header_menu_item'])){
+            $mainMenu = $this['header_menu_item'];
+        }
+
         if (!(empty($options) && !is_numeric($options))) {
             if (is_string($options)) {
                 $mainMenu = $options;
@@ -621,6 +625,14 @@ class AdminTemplate extends AbstractTemplate implements
             $options['widget_options']['ident'] = null;
         }
 
+        if (isset($this['side_menu_item'])) {
+            $options['widget_options']['current_item'] = $this['side_menu_item'];
+        }
+
+        if (isset($this['header_menu_item'])) {
+           $options['widget_options']['ident'] = $this['header_menu_item'];
+        }
+
         $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
         $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
         if ($sidemenuFromRequest) {
@@ -664,6 +676,10 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $currentIdent = null;
+        if (isset($this['system_menu_item'])){
+            $currentIdent = $this['system_menu_item'];
+        }
+
         if (!(empty($options) && !is_numeric($options))) {
             if (is_string($options)) {
                 $currentIdent = $options;

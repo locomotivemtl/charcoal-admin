@@ -4,9 +4,6 @@ namespace Charcoal\Admin;
 
 use InvalidArgumentException;
 
-// From PSR-7 (HTTP Messaging)
-use Psr\Http\Message\UriInterface;
-
 // From Pimple
 use Pimple\Container;
 
@@ -29,6 +26,8 @@ use Charcoal\Ui\PrioritizableTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractWidget;
+use Charcoal\Admin\Support\AdminTrait;
+use Charcoal\Admin\Support\BaseUrlTrait;
 
 /**
  * The base Widget for the `admin` module.
@@ -38,27 +37,15 @@ class AdminWidget extends AbstractWidget implements
     PrioritizableInterface,
     ConditionalizableInterface
 {
+    use AdminTrait;
     use AuthAwareTrait;
+    use BaseUrlTrait;
     use PrioritizableTrait;
     use ConditionalizableTrait;
     use TranslatorAwareTrait;
 
     const DATA_SOURCE_REQUEST = 'request';
     const DATA_SOURCE_OBJECT  = 'object';
-
-    /**
-     * The base URI.
-     *
-     * @var UriInterface|string
-     */
-    protected $baseUrl;
-
-    /**
-     * Store a reference to the admin configuration.
-     *
-     * @var \Charcoal\Admin\Config
-     */
-    protected $adminConfig;
 
     /**
      * @var string $widgetId
@@ -306,8 +293,6 @@ class AdminWidget extends AbstractWidget implements
         return $this;
     }
 
-
-
     /**
      * Retrieve the extra data sources to merge when setting data on an entity.
      *
@@ -436,57 +421,33 @@ class AdminWidget extends AbstractWidget implements
     }
 
     /**
-     * Retrieve the base URI of the administration area.
+     * Set common dependencies used in all admin widgets.
      *
-     * @return UriInterface|string
-     */
-    public function adminUrl()
-    {
-        $adminPath = $this->adminConfig['base_path'];
-
-        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
-    }
-
-    /**
-     * Set the base URI of the application.
-     *
-     * @param UriInterface|string $uri The base URI.
-     * @return self
-     */
-    public function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the base URI of the application.
-     *
-     * @return UriInterface|string
-     */
-    public function baseUrl()
-    {
-        return rtrim($this->baseUrl, '/').'/';
-    }
-
-    /**
-     * @param Container $container Pimple DI container.
+     * @param  Container $container DI Container.
      * @return void
      */
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 
-        $this->setModelFactory($container['model/factory']);
+        // Satisfies TranslatorAwareTrait dependencies
         $this->setTranslator($container['translator']);
-
-        $this->adminConfig = $container['admin/config'];
-        $this->setBaseUrl($container['base-url']);
 
         // Satisfies AuthAwareInterface dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
+
+        // Satisfies AdminTrait dependencies
+        $this->setDebug($container['config']);
+        $this->setAppConfig($container['config']);
+        $this->setAdminConfig($container['admin/config']);
+
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
+
+        // Satisfies AdminWidget dependencies
+        $this->setModelFactory($container['model/factory']);
     }
 
     /**

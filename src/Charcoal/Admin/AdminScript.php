@@ -20,19 +20,16 @@ use Charcoal\Property\PropertyInterface;
 // From 'charcoal-translator'
 use Charcoal\Translator\TranslatorAwareTrait;
 
+// From 'charcoal-admin'
+use Charcoal\Admin\Support\BaseUrlTrait;
+
 /**
  *
  */
 abstract class AdminScript extends AbstractScript
 {
+    use BaseUrlTrait;
     use TranslatorAwareTrait;
-
-    /**
-     * The base URI.
-     *
-     * @var UriInterface
-     */
-    protected $baseUrl;
 
     /**
      * The model factory.
@@ -47,32 +44,17 @@ abstract class AdminScript extends AbstractScript
      */
     protected function setDependencies(Container $container)
     {
-        $this->setModelFactory($container['model/factory']);
-        $this->setTranslator($container['translator']);
-        $this->setBaseUrl($container['base-url']);
-
         parent::setDependencies($container);
-    }
 
+        // Satisfies TranslatorAwareTrait dependencies
+        $this->setTranslator($container['translator']);
 
-    /**
-     * Retrieve the model factory.
-     *
-     * @return FactoryInterface
-     */
-    protected function modelFactory()
-    {
-        return $this->modelFactory;
-    }
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
 
-    /**
-     * Retrieve the base URI of the application.
-     *
-     * @return UriInterface|string
-     */
-    protected function baseUrl()
-    {
-        return rtrim($this->baseUrl, '/').'/';
+        // Satisfies AdminScript dependencies
+        $this->setModelFactory($container['model/factory']);
     }
 
     /**
@@ -142,17 +124,6 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-     * Set the base URI of the application.
-     *
-     * @param  UriInterface|string $uri The base URI.
-     * @return void
-     */
-    private function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-    }
-
-    /**
      * Set the model factory.
      *
      * @param  FactoryInterface $factory The factory used to create models.
@@ -161,5 +132,15 @@ abstract class AdminScript extends AbstractScript
     private function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
+    }
+
+    /**
+     * Retrieve the model factory.
+     *
+     * @return FactoryInterface
+     */
+    protected function modelFactory()
+    {
+        return $this->modelFactory;
     }
 }

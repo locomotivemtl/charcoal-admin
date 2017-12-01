@@ -173,7 +173,7 @@ class SidemenuWidget extends AdminWidget implements
      */
     public function adminSidemenu()
     {
-        return $this->adminConfig['sidemenu'];
+        return $this->adminConfig('sidemenu', []);
     }
 
     /**
@@ -185,7 +185,7 @@ class SidemenuWidget extends AdminWidget implements
     {
         if ($this->adminRoute === null) {
             $uri = $this->httpRequest()->getUri();
-            $uri = $uri->withBasePath($this->adminConfig['base_path']);
+            $uri = $uri->withBasePath($this->adminConfig('base_path'));
 
             $path = str_replace($uri->getBasePath(), '', $uri->getPath());
             $path = ltrim($path, '/');

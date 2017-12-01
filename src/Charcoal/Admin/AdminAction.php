@@ -26,6 +26,9 @@ use Charcoal\App\Action\AbstractAction;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
+use Charcoal\Admin\Support\AdminTrait;
+use Charcoal\Admin\Support\BaseUrlTrait;
+use Charcoal\Admin\Support\SecurityTrait;
 
 /**
  * The base class for the `admin` Actions.
@@ -33,23 +36,12 @@ use Charcoal\Admin\Ui\FeedbackContainerTrait;
 abstract class AdminAction extends AbstractAction implements
     AuthAwareInterface
 {
+    use AdminTrait;
     use AuthAwareTrait;
+    use BaseUrlTrait;
     use FeedbackContainerTrait;
+    use SecurityTrait;
     use TranslatorAwareTrait;
-
-    /**
-     * Store a reference to the admin configuration.
-     *
-     * @var \Charcoal\Admin\Config
-     */
-    protected $adminConfig;
-
-    /**
-     * Store a reference to the application configuration.
-     *
-     * @var \Charcoal\App\AppConfig
-     */
-    protected $appConfig;
 
     /**
      * The name of the project.
@@ -122,38 +114,6 @@ abstract class AdminAction extends AbstractAction implements
     }
 
     /**
-     * Authentication is required by default.
-     *
-     * Reimplement and change to false in templates that do not require authentication.
-     *
-     * @return boolean
-     */
-    public function authRequired()
-    {
-        return true;
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return boolean
-     */
-    public function isAuthenticated()
-    {
-        return !!$this->authenticator()->authenticate();
-    }
-
-    /**
-     * Retrieve the currently authenticated user.
-     *
-     * @return \Charcoal\User\UserInterface|null
-     */
-    public function getAuthenticatedUser()
-    {
-        return $this->authenticator()->authenticate();
-    }
-
-    /**
      * Default response stub.
      *
      * @return array
@@ -169,67 +129,44 @@ abstract class AdminAction extends AbstractAction implements
     }
 
     /**
-     * Retrieve the base URI of the administration area.
+     * Set common dependencies used in all admin actions.
      *
-     * @return UriInterface|string
-     */
-    public function adminUrl()
-    {
-        $adminPath = $this->adminConfig['base_path'];
-        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
-    }
-
-    /**
-     * Set the base URI of the application.
-     *
-     * @param  UriInterface|string $uri The base URI.
-     * @return self
-     */
-    public function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-        return $this;
-    }
-
-    /**
-     * Retrieve the base URI of the application.
-     *
-     * @return UriInterface|string
-     */
-    public function baseUrl()
-    {
-        return rtrim($this->baseUrl, '/').'/';
-    }
-
-    /**
-     * @param Container $container DI Container.
+     * @param  Container $container DI Container.
      * @return void
      */
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 
-        $this->setModelFactory($container['model/factory']);
+        // Satisfies TranslatorAwareTrait dependencies
         $this->setTranslator($container['translator']);
 
-        $this->appConfig = $container['config'];
-        $this->adminConfig = $container['admin/config'];
-        $this->setBaseUrl($container['base-url']);
-        $this->setSiteName($container['config']['project_name']);
-
-        // Satisfies AuthAwareInterface dependencies
+        // Satisfies AuthAwareInterface + SecurityTrait dependencies
         $this->setAuthenticator($container['admin/authenticator']);
         $this->setAuthorizer($container['admin/authorizer']);
+
+        // Satisfies AdminTrait dependencies
+        $this->setDebug($container['config']);
+        $this->setAppConfig($container['config']);
+        $this->setAdminConfig($container['admin/config']);
+
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
+
+
+        // Satisfies AdminAction dependencies
+        $this->setSiteName($container['config']['project_name']);
+        $this->setModelFactory($container['model/factory']);
     }
 
     /**
      * @param FactoryInterface $factory The factory used to create models.
-     * @return AdminScript Chainable
+     * @return void
      */
     protected function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
-        return $this;
     }
 
     /**
@@ -262,7 +199,7 @@ abstract class AdminAction extends AbstractAction implements
     protected function validateCaptcha($response)
     {
         $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
 
         if (isset($recaptcha['private_key'])) {
             $secret = $recaptcha['private_key'];

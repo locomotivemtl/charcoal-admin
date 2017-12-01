@@ -18,19 +18,12 @@ class LoginTemplate extends AdminTemplate
      */
     public function backgroundImage()
     {
-        if (!isset($this->adminConfig['login'])) {
+        $backdrop = $this->adminConfig('login.background_image');
+        if (empty($backdrop)) {
             return '';
         }
-        $loginConfig = $this->adminConfig['login'];
-        if (!isset($loginConfig['background_image']) || !is_string($loginConfig['background_image'])) {
-            return '';
-        }
-        $bg = $loginConfig['background_image'];
-        if (strstr($bg, 'http')) {
-            return $bg;
-        } else {
-            return $this->baseUrl().$bg;
-        }
+
+        return $this->baseUrl($backdrop);
     }
 
     /**
@@ -40,19 +33,12 @@ class LoginTemplate extends AdminTemplate
      */
     public function backgroundVideo()
     {
-        if (!isset($this->adminConfig['login'])) {
+        $backdrop = $this->adminConfig('login.background_video');
+        if (empty($backdrop)) {
             return '';
         }
-        $loginConfig = $this->adminConfig['login'];
-        if (!isset($loginConfig['background_video']) || !is_string($loginConfig['background_video'])) {
-            return '';
-        }
-        $bg = $loginConfig['background_video'];
-        if (strstr($bg, 'http')) {
-            return $bg;
-        } else {
-            return $this->baseUrl().$bg;
-        }
+
+        return $this->baseUrl($backdrop);
     }
 
     /**
@@ -60,11 +46,14 @@ class LoginTemplate extends AdminTemplate
      */
     public function loginLogo()
     {
-        if (isset($this->adminConfig['login_logo'])) {
-            return $this->adminConfig['login_logo'];
-        } else {
-            return $this->baseUrl().'assets/admin/images/avatar.jpg';
+        $logo = $this->adminConfig('login.logo') ?:
+                $this->adminConfig('login_logo', 'assets/admin/images/avatar.jpg');
+
+        if (empty($logo)) {
+            return '';
         }
+
+        return $this->baseUrl($logo);
     }
 
     /**
@@ -130,7 +119,7 @@ class LoginTemplate extends AdminTemplate
      */
     public function urlLoginAction()
     {
-        return $this->adminUrl().'login';
+        return $this->adminUrl('login');
     }
 
     /**
@@ -138,7 +127,7 @@ class LoginTemplate extends AdminTemplate
      */
     public function urlLostPassword()
     {
-        return $this->adminUrl().'account/lost-password';
+        return $this->adminUrl('account/lost-password');
     }
 
     /**

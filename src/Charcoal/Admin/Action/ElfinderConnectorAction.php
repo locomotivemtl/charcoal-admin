@@ -39,13 +39,6 @@ class ElfinderConnectorAction extends AdminAction
     use CallableResolverAwareTrait;
 
     /**
-     * The base URI for the Charcoal application.
-     *
-     * @var UriInterface|string
-     */
-    protected $baseUrl;
-
-    /**
      * The relative path (from filesystem's root) to the storage directory.
      *
      * @var string
@@ -80,8 +73,6 @@ class ElfinderConnectorAction extends AdminAction
      * @var PropertyInterface
      */
     private $formProperty;
-
-
 
     /**
      * Retrieve the property factory.
@@ -530,5 +521,37 @@ class ElfinderConnectorAction extends AdminAction
             'hidden'  => true,
             'locked'  => false
         ];
+    }
+
+    /**
+     * Set a property factory.
+     *
+     * @param FactoryInterface $factory The property factory,
+     *                                  to createable property values.
+     * @return self
+     */
+    protected function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the property factory.
+     *
+     * @throws RuntimeException If the property factory was not previously set.
+     * @return FactoryInterface
+     */
+    public function propertyFactory()
+    {
+        if (!isset($this->propertyFactory)) {
+            throw new RuntimeException(sprintf(
+                'Property Factory is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->propertyFactory;
     }
 }

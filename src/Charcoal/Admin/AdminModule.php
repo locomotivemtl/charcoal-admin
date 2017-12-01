@@ -95,7 +95,7 @@ class AdminModule extends AbstractModule
         ResponseInterface $response,
         callable $next
     ) {
-        $container   = $this->app()->getContainer();
+        $container = $this->app()->getContainer();
 
         /**
          * HTTP 404 (Not Found) handler.

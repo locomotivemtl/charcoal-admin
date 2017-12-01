@@ -6,7 +6,6 @@ use Exception;
 use InvalidArgumentException;
 
 // From PSR-7
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 
 // From Pimple
@@ -32,6 +31,9 @@ use Charcoal\Ui\MenuItem\GenericMenuItem;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
+use Charcoal\Admin\Support\AdminTrait;
+use Charcoal\Admin\Support\BaseUrlTrait;
+use Charcoal\Admin\Support\SecurityTrait;
 
 /**
  * Base class for all `admin` Templates.
@@ -47,30 +49,12 @@ use Charcoal\Admin\Ui\FeedbackContainerTrait;
 class AdminTemplate extends AbstractTemplate implements
     AuthAwareInterface
 {
+    use AdminTrait;
     use AuthAwareTrait;
+    use BaseUrlTrait;
     use FeedbackContainerTrait;
+    use SecurityTrait;
     use TranslatorAwareTrait;
-
-    /**
-     * The base URI.
-     *
-     * @var UriInterface
-     */
-    protected $baseUrl;
-
-    /**
-     * Store a reference to the admin configuration.
-     *
-     * @var \Charcoal\Admin\Config
-     */
-    protected $adminConfig;
-
-    /**
-     * Store a reference to the application configuration.
-     *
-     * @var \Charcoal\App\Config
-     */
-    protected $appConfig;
 
     /**
      * The name of the project.
@@ -284,7 +268,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function showTopHeaderMenu()
     {
-        $showTopHeaderMenu = $this->adminConfig['show_top_header_menu'];
+        $showTopHeaderMenu = $this->adminConfig('show_top_header_menu');
         return $showTopHeaderMenu;
     }
 
@@ -343,8 +327,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
     }
 
-
-
     /**
      * @param boolean $show The show footer menu flag.
      * @return AdminTemplate Chainable
@@ -375,7 +357,6 @@ class AdminTemplate extends AbstractTemplate implements
         return new \ArrayIterator($this->systemMenu);
     }
 
-
     /**
      * @param  boolean $show The show sidemenu flag.
      * @return AdminTemplate Chainable
@@ -405,69 +386,13 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * Determine if the current user is authenticated.
-     *
-     * @return boolean
-     */
-    public function isAuthenticated()
-    {
-        return !!$this->authenticator()->authenticate();
-    }
-
-    /**
-     * Retrieve the currently authenticated user.
-     *
-     * @return \Charcoal\User\UserInterface|null
-     */
-    public function getAuthenticatedUser()
-    {
-        return $this->authenticator()->authenticate();
-    }
-
-    /**
-     * Retrieve the base URI of the administration area.
-     *
-     * @return UriInterface|string
-     */
-    public function adminUrl()
-    {
-        $adminPath = $this->adminConfig['base_path'];
-
-        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
-    }
-
-    /**
-     * Set the base URI of the application.
-     *
-     * @param UriInterface|string $uri The base URI.
-     * @return self
-     */
-    public function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the base URI of the application.
-     *
-     * @return UriInterface|string
-     */
-    public function baseUrl()
-    {
-        return rtrim($this->baseUrl, '/').'/';
-    }
-
-    /**
      * @return string
      */
     public function headerMenuLogo()
     {
-        if (isset($this->adminConfig['menu_logo'])) {
-            if (is_string($this->adminConfig['menu_logo'])) {
-                return $this->adminConfig['menu_logo'];
-            }
+        $logo = $this->adminConfig('menu_logo');
+        if (!empty($logo)) {
+            return $logo;
         }
 
         return 'assets/admin/images/identicon.png';
@@ -502,23 +427,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return $siteName;
-    }
-
-    /**
-     * Application Debug Mode.
-     *
-     * @return boolean
-     */
-    public function devMode()
-    {
-        if (!$this->appConfig) {
-            return false;
-        }
-
-        $debug   = isset($this->appConfig['debug'])    ? $this->appConfig['debug']    : false;
-        $devMode = isset($this->appConfig['dev_mode']) ? $this->appConfig['dev_mode'] : false;
-
-        return $debug || $devMode;
     }
 
     /**
@@ -558,7 +466,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function recaptchaKey()
     {
-        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
 
         if (isset($recaptcha['public_key'])) {
             $key = $recaptcha['public_key'];
@@ -567,22 +475,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return (string)$key;
-    }
-
-    /**
-     * Determine if user authentication is required.
-     *
-     * Authentication is required by default. If unnecessary,
-     * replace this method in the inherited template class.
-     *
-     * For example, the "Login" / "Reset Password" templates
-     * should return `false`.
-     *
-     * @return boolean
-     */
-    protected function authRequired()
-    {
-        return true;
     }
 
     /**
@@ -595,22 +487,30 @@ class AdminTemplate extends AbstractTemplate implements
     {
         parent::setDependencies($container);
 
-        $this->setModelFactory($container['model/factory']);
+        // Satisfies TranslatorAwareTrait dependencies
         $this->setTranslator($container['translator']);
 
-        $this->appConfig = $container['config'];
-        $this->adminConfig = $container['admin/config'];
+        // Satisfies AuthAwareInterface + SecurityTrait dependencies
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
+
+        // Satisfies AdminTrait dependencies
+        $this->setDebug($container['config']);
+        $this->setAppConfig($container['config']);
+        $this->setAdminConfig($container['admin/config']);
+
+        // Satisfies BaseUrlTrait dependencies
         $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
+
+        // Satisfies AdminTemplate dependencies
         $this->setSiteName($container['config']['project_name']);
 
+        $this->setModelFactory($container['model/factory']);
         $this->setWidgetFactory($container['widget/factory']);
 
         $this->menuBuilder = $container['menu/builder'];
         $this->menuItemBuilder = $container['menu/item/builder'];
-
-        // Satisfies AuthAwareInterface dependencies
-        $this->setAuthenticator($container['admin/authenticator']);
-        $this->setAuthorizer($container['admin/authorizer']);
     }
 
     /**
@@ -660,7 +560,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createHeaderMenu($options = null)
     {
-        $headerMenu = $this->adminConfig['header_menu'];
+        $headerMenu = $this->adminConfig('header_menu');
 
         if (!isset($headerMenu['items'])) {
             throw new InvalidArgumentException(
@@ -757,7 +657,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createSystemMenu($options = null)
     {
-        $menuConfig = $this->adminConfig['system_menu'];
+        $menuConfig = $this->adminConfig('system_menu');
 
         if (!isset($menuConfig['items'])) {
             return [];

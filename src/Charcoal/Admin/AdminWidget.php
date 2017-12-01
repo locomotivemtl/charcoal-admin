@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin;
 
-use Charcoal\Ui\ConditionalizableInterface;
-use Charcoal\Ui\ConditionalizableTrait;
 use InvalidArgumentException;
 
 // From PSR-7 (HTTP Messaging)
@@ -24,6 +22,8 @@ use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-ui'
+use Charcoal\Ui\ConditionalizableInterface;
+use Charcoal\Ui\ConditionalizableTrait;
 use Charcoal\Ui\PrioritizableInterface;
 use Charcoal\Ui\PrioritizableTrait;
 

@@ -5,6 +5,32 @@ Header menu Widget
 `charcoal/admin/widget/menu.header`
 
 --}}
+
+<nav class="c-nav">
+    <div class="c-nav_header">
+        <a class="c-nav_logo" href="{{adminUrl}}">
+            <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
+        </a>
+    </div>
+    <div class="c-nav_main">
+        <div class="c-nav_main_wrap">
+            <ul class="c-nav_list o-load">
+                {{# mainMenu }}
+                <li class="c-nav_item">
+                    <a class="c-nav_link{{# isActive }} is-active{{/ isActive }}" target="{{# isExternal }}_blank{{/ isExternal }}" href="{{ url }}">
+                        <span>{{ title }}</span>
+                    </a>
+                </li>
+                {{/ mainMenu }}
+            </ul>
+        </div>
+    </div>
+    <button class="c-nav_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
+        <span class="c-nav_button_icon"></span>
+    </button>
+</nav>
+
+<!--
 <header class="c-header-main">
     <div class="c-header-main_button js-toggle-class" data-target="body" data-class="has-nav-open">
         <span class="c-header-main_button_line"></span>
@@ -77,3 +103,5 @@ Header menu Widget
     });
 </script>
 {{/addJsRequirement}}
+
+-->

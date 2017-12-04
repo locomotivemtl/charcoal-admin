@@ -1,9 +1,21 @@
 // ==========================================================================
-// Imports
+// Admin / Vendors
 // ==========================================================================
 
-// Global tools
-@import "settings/tools";
+// Settings
+// ==========================================================================
+@import "settings/config.colors";
+@import "settings/config";
+
+// ==========================================================================
+// Tools
+// ==========================================================================
+@import "tools/functions";
+@import "tools/mixins";
+@import "tools/fonts";
+@import "tools/layout";
+// @import "tools/ratio";
+@import "tools/widths";
 
 // ==========================================================================
 // Bootstrap
@@ -13,8 +25,7 @@
 
 // Core variables
 // @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
-// Charcoal variables
-@import "settings/settings";
+
 // Core variables overwrites
 @import "bootstrap/variables";
 

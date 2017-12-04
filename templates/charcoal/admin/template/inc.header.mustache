@@ -9,9 +9,7 @@ Open the HTML document and include meta tags and required external resources.
 Based on the HTML5 boilerplate.
 
 --}}
-{{# addJsRequirement }}
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-{{/ addJsRequirement }}<!doctype html>
+<!doctype html>
 <html class="has-no-js{{# devMode }} s-admin-debug{{/ devMode }}" lang="{{ lang }}" locale="{{ locale }}">
 <head>
     <meta charset="utf-8">
@@ -25,12 +23,12 @@ Based on the HTML5 boilerplate.
     <base href="{{adminUrl}}" />
 
     <!-- Theming -->
-    <meta name="theme-color" content="#1A252D">
+    <meta name="theme-color" content="#393939">
 
     {{>charcoal/admin/template/inc.favicon}}
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,400italic" rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    {{! <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> }}
     <link href="{{baseUrl}}assets/admin/styles/charcoal.admin.vendors.css" rel="stylesheet" type="text/css">
     <link href="{{baseUrl}}assets/admin/styles/charcoal.admin.css" rel="stylesheet" type="text/css">
 

@@ -13,7 +13,6 @@ use Charcoal\Object\HierarchicalTrait;
  *
  */
 class HierarchicalClass implements
-    ModelInterface,
     HierarchicalInterface
 {
     use HierarchicalTrait;
@@ -68,7 +67,7 @@ class HierarchicalClass implements
     /**
      * @return array
      */
-    public function data()
+    public function data(array $filters=null)
     {
         return null;
     }

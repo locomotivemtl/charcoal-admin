@@ -32,19 +32,8 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertSame($master, $obj->master());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setMaster(['foobar']);
-    }
-
-    public function testParadoxes()
-    {
-        $obj = $this->obj;
-
-        $this->setExpectedException('\UnexpectedValueException');
-        $ret = $obj->setMaster($obj);
-
-        $this->setExpectedException('\UnexpectedValueException');
-        $ret = $obj->addChild($obj);
     }
 
     public function testHasMaster()

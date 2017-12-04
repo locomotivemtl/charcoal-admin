@@ -16,7 +16,6 @@ use Charcoal\Object\RoutableTrait;
  *
  */
 class RoutableClass implements
-    ModelInterface,
     RoutableInterface
 {
     use RoutableTrait;
@@ -116,7 +115,7 @@ class RoutableClass implements
     /**
      * @return array
      */
-    public function data()
+    public function data(array $filters=null)
     {
         return null;
     }

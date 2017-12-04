@@ -16,7 +16,6 @@ use Charcoal\Object\PublishableTrait;
  *
  */
 class PublishableClass implements
-    ModelInterface,
     PublishableInterface
 {
     use PublishableTrait;
@@ -106,7 +105,7 @@ class PublishableClass implements
     /**
      * @return array
      */
-    public function data()
+    public function data(array $filters = null)
     {
         return null;
     }

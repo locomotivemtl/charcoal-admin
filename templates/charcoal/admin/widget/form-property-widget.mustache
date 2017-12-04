@@ -4,7 +4,7 @@
 
     @used-by `charcoal/admin/widget/form-group-widget`
 --}}
-<fieldset class="form-group">
+<fieldset class="{{ formGroupCssClass }}">
     {{# showLabel }}
     <label class="control-label" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
 
@@ -27,7 +27,7 @@
 
     {{# output }}
     {{!-- The actual property control (typically `PropertyInput`) --}}
-    <div id="form-field-{{ widgetId }}" class="form-field form-field-{{ widgetId }}{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+    <div id="form-field-{{ widgetId }}" class="{{ formFieldCssClass }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
         {{> $widget_template }}
     </div>
     {{/ output }}

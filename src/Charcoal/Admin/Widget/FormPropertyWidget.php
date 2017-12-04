@@ -139,6 +139,20 @@ class FormPropertyWidget extends AdminWidget implements
     protected $showNotes;
 
     /**
+     * The CSS class names for the `.form-field`.
+     *
+     * @var string[]
+     */
+    protected $formFieldCssClass = [];
+
+    /**
+     * The CSS class names for the `.form-group`.
+     *
+     * @var string[]
+     */
+    protected $formGroupCssClass = [];
+
+    /**
      * The L10N display mode.
      *
      * @var string
@@ -1116,6 +1130,161 @@ class FormPropertyWidget extends AdminWidget implements
         $locales  = count($this->translator()->availableLocales());
 
         return ($locales > 1 && $property->l10n());
+    }
+
+    /**
+     * Generate a CSS class name for the property's input name.
+     *
+     * @return string
+     */
+    public function inputNameAsCssClass()
+    {
+        $name = str_replace([ ']', '[' ], [ '', '-' ],  $this->propertyIdent());
+        $name = $this->camelize($name);
+
+        return $name;
+    }
+
+    /**
+     * Set the CSS class name(s) for the `.form-field`.
+     *
+     * @param  mixed $cssClass One or more CSS class names.
+     * @return self
+     */
+    public function setFormFieldCssClass($cssClass)
+    {
+        $cssClass = array_merge($this->defaultFormFieldCssClasses(), $this->parseCssClasses($cssClass));
+        $this->formFieldCssClass = array_unique($cssClass);
+        return $this;
+    }
+
+    /**
+     * Add CSS class name(s) for the `.form-field`.
+     *
+     * @param  mixed $cssClass One or more CSS class names.
+     * @return self
+     */
+    public function addFormFieldCssClass($cssClass)
+    {
+        $cssClass = array_merge($this->formFieldCssClass, $this->parseCssClasses($cssClass));
+        $this->formFieldCssClass = array_unique($cssClass);
+        return $this;
+    }
+
+    /**
+     * Retrieve the default CSS class name(s) for the `.form-field`.
+     *
+     * @return string[]
+     */
+    protected function defaultFormFieldCssClasses()
+    {
+        $classes = [ 'form-field', 'form-field-'.$this->widgetId() ];
+
+        if ($this->prop()) {
+            $classes[] = 'form-property-'.$this->inputNameAsCssClass();
+
+            if ($this->prop()->type()) {
+                $classes[] = 'form-property-'.$this->prop()->type();
+            }
+
+            if ($this->prop()->multiple()) {
+                $classes[] = '-multiple';
+            }
+        }
+
+        if ($this->showActiveLanguage()) {
+            $classes[] = '-l10n';
+        }
+
+        if ($this->hidden()) {
+            $classes[] = 'hidden';
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Retrieve the CSS class name(s) for the `.form-field`.
+     *
+     * @return string
+     */
+    public function formFieldCssClass()
+    {
+        if (empty($this->formFieldCssClass)) {
+            $this->formFieldCssClass = $this->defaultFormFieldCssClasses();
+        }
+
+        return implode(' ', $this->formFieldCssClass);
+    }
+
+    /**
+     * Set the CSS class name(s) for the `.form-group`.
+     *
+     * @param  mixed $cssClass One or more CSS class names.
+     * @return self
+     */
+    public function setFormGroupCssClass($cssClass)
+    {
+        $cssClass = array_merge($this->defaultFormGroupCssClasses(), $this->parseCssClasses($cssClass));
+        $this->formGroupCssClass = array_unique($cssClass);
+        return $this;
+    }
+
+    /**
+     * Add CSS class name(s) for the `.form-group`.
+     *
+     * @param  mixed $cssClass One or more CSS class names.
+     * @return self
+     */
+    public function addFormGroupCssClass($cssClass)
+    {
+        $cssClass = array_merge($this->formGroupCssClass, $this->parseCssClasses($cssClass));
+        $this->formGroupCssClass = array_unique($cssClass);
+        return $this;
+    }
+
+    /**
+     * Retrieve the default CSS class name(s) for the `.form-group`.
+     *
+     * @return string[]
+     */
+    protected function defaultFormGroupCssClasses()
+    {
+        return [ 'form-group' ];
+    }
+
+    /**
+     * Retrieve the CSS class name(s) for the `.form-group`.
+     *
+     * @return string
+     */
+    public function formGroupCssClass()
+    {
+        if (empty($this->formGroupCssClass)) {
+            $this->formGroupCssClass = $this->defaultFormGroupCssClasses();
+        }
+
+        return implode(' ', $this->formGroupCssClass);
+    }
+
+    /**
+     * Parse the CSS class name(s).
+     *
+     * @param  mixed $classes One or more CSS class names.
+     * @throws InvalidArgumentException If a class name is not a string.
+     * @return string[]
+     */
+    protected function parseCssClasses($classes)
+    {
+        if (is_string($classes)) {
+            $classes = explode(' ', $classes);
+        }
+
+        if (!is_array($classes)) {
+            throw new InvalidArgumentException('CSS Class(es) must be a space-delimited string or an array');
+        }
+
+        return array_filter($classes, 'strlen');
     }
 
     /**

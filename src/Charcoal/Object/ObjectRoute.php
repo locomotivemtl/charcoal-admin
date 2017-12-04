@@ -141,8 +141,10 @@ class ObjectRoute extends AbstractModel implements
      * @param  Container $container A dependencies container instance.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
+        parent::setDependencies($container);
+
         $this->setModelFactory($container['model/factory']);
         $this->setCollectionLoader($container['model/collection/loader']);
     }

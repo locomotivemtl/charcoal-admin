@@ -87,7 +87,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
      * @param Container $container DI Container.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 

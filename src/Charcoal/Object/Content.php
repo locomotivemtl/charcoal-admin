@@ -67,7 +67,7 @@ class Content extends AbstractModel implements
      * @param Container $container DI Container.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 

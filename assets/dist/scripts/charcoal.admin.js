@@ -8079,6 +8079,10 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
     };
 
     if (('plugins' in default_opts) && ('plugins' in this.editor_options)) {
+        if ($.type(this.editor_options.plugins) === 'string') {
+            this.editor_options.plugins = this.editor_options.plugins.split(' ');
+        }
+
         $.each(this.editor_options.plugins, function (i, pattern) {
             // If the first character is ! it should be omitted
             var exclusion = pattern.indexOf('!') === 0;

@@ -41,7 +41,7 @@ module.exports = {
             {
                 expand: true,
                 cwd   : 'bower_components/tinymce/',
-                src   : ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/modern/theme.min.js', 'tinymce.min.js'],
+                src   : ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/**/theme.min.js', 'tinymce.min.js'],
                 dest  : 'assets/dist/scripts/vendors/tinymce/'
             },
             {

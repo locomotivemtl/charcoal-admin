@@ -39,11 +39,16 @@ class LinkDisplay extends AbstractPropertyDisplay
     public function hrefVal()
     {
         $val = parent::displayVal();
+        if (empty($val)) {
+            return '';
+        }
 
-        if ($val && !parse_url($val, PHP_URL_SCHEME)) {
-            if (!in_array($val[0], [ '/', '#', '?' ])) {
-                return $this->baseUrl->withPath($val);
-            }
+        $parts = parse_url($val);
+        if (empty($parts['scheme']) && !in_array($val[0], [ '/', '#', '?' ])) {
+            $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+            $val   = $this->baseUrl->withPath($path)->withQuery($query)->withFragment($hash);
         }
 
         return $val;

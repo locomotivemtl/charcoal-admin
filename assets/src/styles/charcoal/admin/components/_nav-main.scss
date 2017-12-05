@@ -16,7 +16,7 @@
     }
 
     @media (min-width: $from-small) {
-        width: rem(90px);
+        width: rem($nav-main-width);
     }
 
     @media (min-width: $from-small) and (max-width: $to-large) {

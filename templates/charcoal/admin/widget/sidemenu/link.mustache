@@ -1,18 +1,17 @@
 {{!--
+
     Sidemenu Widget \ Link
     ======================
 
     @used-by `charcoal/admin/widget/sidemenu`
+
 --}}
-<li class="c-nav_list_item">
-    <div class="c-nav_list_header{{# selected }} is-active{{/ selected }}">
-        <a class="c-nav_list_link" href="{{ adminUrl }}{{ url }}">
-            <span class="c-nav_list_link_main">
-                <span class="c-nav_list_link_text">{{ name }}</span>
-            </span>
-            {{# num }}
-            <span class="c-nav_list_link_number{{# numNew }} is-new{{/ numNew }}">{{ . }}</span>
-            {{/ num }}
-        </a>
-    </div>
+
+<li class="c-nav-secondary_list_item">
+    <a class="c-nav-secondary_link{{# selected }} is-active{{/ selected }}" href="{{ adminUrl }}{{ url }}">
+        <span class="c-nav-secondary_link_text">{{ name }}</span>
+        {{# num }}
+        <span class="c-nav-secondary_link_number{{# numNew }} is-new{{/ numNew }}">{{ . }}</span>
+        {{/ num }}
+    </a>
 </li>

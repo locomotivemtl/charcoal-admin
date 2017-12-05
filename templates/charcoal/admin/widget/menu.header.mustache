@@ -1,8 +1,7 @@
 {{!--
-Header menu Widget
-==================
 
-`charcoal/admin/widget/menu.header`
+    Header Menu Widget
+    ==================
 
 --}}
 
@@ -77,6 +76,12 @@ Header menu Widget
         </ul>
     </nav>
     {{/ showHeaderMenu }}
+
+    {{# showSidemenu }}
+        {{# sidemenu }}
+            {{> charcoal/admin/widget/sidemenu }}
+        {{/ sidemenu }}
+    {{/ showSidemenu }}
 </div>
 
 {{#addJsRequirement}}

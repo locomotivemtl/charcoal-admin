@@ -1,18 +1,21 @@
 {{!--
+
     Sidemenu Widget
     ===============
 
     @see `charcoal/admin/widget/sidemenu`
+
 --}}
+
 {{# hasSidemenu }}
 <nav class="c-nav-secondary" id="{{ widget_id }}">
     {{# showTitle }}
-    <header class="o-header">
-        <h1 class="c-nav_heading">{{ title }}</h1>
+    <header class="o-header c-nav-secondary_header">
+        <h1 class="c-nav-secondary_heading">{{ title }}</h1>
     </header>
     {{/ showTitle }}
     {{# hasLinks }}
-    <ul class="c-nav_list -light -secondary">
+    <ul class="c-nav-secondary_list">
     {{# links }}
         {{> charcoal/admin/widget/sidemenu/link }}
     {{/ links }}
@@ -21,20 +24,26 @@
     {{/ hasLinks }}
     {{# hasGroups }}
     {{# groups }}
-    <div class="{{# displayAsPanel }}panel panel-default -light{{/ displayAsPanel }}">
+    <div class="{{# displayAsPanel }}panel panel-default{{/ displayAsPanel }}">
         {{# showTitle }}
         <div class="{{# displayAsPanel }}panel-heading{{/ displayAsPanel }}{{^ displayAsPanel }} o-section{{/ displayAsPanel }}">
             {{# collapsible }}
-            <a class="c-nav_list_link{{# collapsible }} c-nav_header_arrow{{/ collapsible }} "
-               href="#{{ groupId }}"
-               data-toggle="collapse"
-               {{# parented }} data-parent="#{{ widget_id }}"{{/ parented }}
-               >{{/ collapsible }}<h2 class="c-nav_heading">{{ title }}</h2>{{# collapsible }}</a>{{/ collapsible }}
+            <a class="c-nav-secondary_link{{# collapsible }} -arrow{{/ collapsible }}"
+                href="#{{ groupId }}"
+                data-toggle="collapse"
+                {{# parented }}
+                data-parent="#{{ widget_id }}"
+                {{/ parented }}>
+            {{/ collapsible }}
+            <h2 class="h3 c-nav-secondary_heading">{{ title }}</h2>
+            {{# collapsible }}
+            </a>
+            {{/ collapsible }}
         </div>
         {{/ showTitle }}
         <div id="{{ groupId }}" class="{{# displayAsPanel }}panel-collapse{{/ displayAsPanel }}{{# collapsible }} collapse{{/ collapsible }}{{^ collapsed }} in{{/ collapsed }}">
             <div class="{{# displayAsPanel }}panel-body{{/ displayAsPanel }}">
-                <ul class="c-nav_list -light -secondary -inpanel">
+                <ul class="c-nav-secondary_list">
                 {{# links }}
                     {{> charcoal/admin/widget/sidemenu/link }}
                 {{/ links }}

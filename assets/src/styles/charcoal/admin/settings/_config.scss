@@ -5,10 +5,18 @@
 // Fonts
 // ==========================================================================
 $roboto: 'Roboto', sans-serif;
+
 $weight-light: 300;
 $weight-normal: 400;
 $weight-semi: 500;
 $weight-bold: 700;
+
+$heading1: 24px;
+$heading2: 20px;
+$heading3: 19px;
+$heading4: 16px;
+$heading5: 13px;
+$heading6: 11px;
 
 // Base
 // ==========================================================================
@@ -30,23 +38,16 @@ $to-large: $from-large - 1;
 $from-huge: 1600px;
 $to-huge: $from-huge - 1;
 
-
-$heading1: rem(31px); // .alpha
-$heading2: rem(20px); // .beta
-$heading3: rem(19px); // .gamma
-$heading4: rem(16px); // .delta
-$heading5: rem(13px); // .epsilon
-$heading6: rem(11px); // .zeta
-
 // Units
 // ==========================================================================
 $unit: 60px;
 $unit-small: 15px;
 $spacer-x: 25px;
 
-// Componenets
+// Components
 // ==========================================================================
 $nav-width: 390px;
+$nav-main-width: 90px;
 $nav-header-height: 95px;
 
 $nav-small: 80px;

@@ -20,12 +20,12 @@ $font-family-sans-serif:  $font-family;
 
 $font-size-base:          $font-size;
 
-$font-size-h1:            $heading1;
-$font-size-h2:            $heading2; // ~30px
-$font-size-h3:            $heading3; // ~24px
-$font-size-h4:            $heading4; // ~18px
-$font-size-h5:            $heading5;
-$font-size-h6:            $heading6; // ~12px
+$font-size-h1:            rem($heading1);
+$font-size-h2:            rem($heading2);
+$font-size-h3:            rem($heading3);
+$font-size-h4:            rem($heading4);
+$font-size-h5:            rem($heading5);
+$font-size-h6:            rem($heading6);
 
 $headings-font-weight:    $weight-semi;
 

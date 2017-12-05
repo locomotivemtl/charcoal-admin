@@ -1,53 +1,7 @@
 // ==========================================================================
 // Nav component
+// @todo Remove
 // ==========================================================================
-
-.c-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: $blue;
-    z-index: 900;
-    @include o-vertical-center;
-    // font-family: $font-proxima;
-    backface-visibility: hidden;
-
-    @media (max-width: $to-large) {
-        right: 0;
-        height: 80px;
-    }
-
-    @media (min-width: $from-large) {
-        bottom: 0;
-        width: rem($nav);
-    }
-}
-
-.c-nav_logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1100;
-
-    @media (max-width: $to-large) {
-        padding: 15px;
-
-        svg {
-            width: 81px;
-            height: 48px;
-        }
-    }
-
-    @media (min-width: $from-large) {
-        padding: rem(22px) rem(30px);
-        right: 0;
-
-        svg {
-            width: rem(120px);
-            height: rem(69px);
-        }
-    }
-}
 
 .c-nav_main {
     @media (max-width: $to-large) {

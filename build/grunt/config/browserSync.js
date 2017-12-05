@@ -1,7 +1,7 @@
 module.exports = {
     options: {
         open      : false,
-        proxy     : 'localhost',
+        proxy     : 'charcoal-project-boilerplate.test',
         port      : 3000,
         watchTask : true,
         notify    : false

@@ -23,13 +23,13 @@ html {
 body {
     font-family: $font-family;
     font-size: 1rem;
-    padding-top: rem($unit);
+    // padding-top: rem($unit);
 
-    &.has-nav-main {
-        @media (min-width: $from-large) {
-            padding-left: rem($unit * 2);
-        }
-    }
+    // &.has-nav-main {
+    //     @media (min-width: $from-large) {
+    //         padding-left: rem($unit * 2);
+    //     }
+    // }
 }
 
 ::selection {

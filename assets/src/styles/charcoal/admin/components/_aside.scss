@@ -3,6 +3,6 @@
 // ==========================================================================
 .c-aside {
     @media (min-width: $from-medium) {
-        width: rem($nav);
+        width: rem($nav-width);
     }
 }

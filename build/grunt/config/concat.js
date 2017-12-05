@@ -21,7 +21,13 @@ module.exports = {
     },
     vendors: {
         src: [
-            //URL Search Params
+            // jQuery
+            'node_modules/jquery/dist/jquery.js',
+            // jQuery UI
+            'node_modules/jquery-ui-bundle/jquery-ui.js',
+            // Bootstrap
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
+            // URL Search Params
             'node_modules/url-search-params/build/url-search-params.js',
             // Bootstrap Switch
             // 'bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js',

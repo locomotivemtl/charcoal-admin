@@ -1,0 +1,102 @@
+// ==========================================================================
+// Nav / Container
+// ==========================================================================
+
+.c-nav-container {
+    background-color: $charcoal-gray-6;
+    // position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    backface-visibility: hidden;
+
+    @media (max-width: $to-large) {
+        right: 0;
+        height: 80px;
+    }
+
+    @media (min-width: $from-large) {
+        bottom: 0;
+        width: rem($nav-width);
+    }
+}
+
+.c-nav-container_button {
+    width: 45px;
+    padding: 16.5px 13.5px;
+    text-align: center;
+    cursor: pointer;
+    height: 100%;
+
+    @media (min-width: $from-large) {
+        display: none;
+    }
+}
+
+.c-nav-container_button_line {
+    display: block;
+    height: 2px;
+    background-color: $white;
+    margin-bottom: 3px;
+    transform-origin: center left;
+    transition: transform $speed, opacity $speed;
+
+    &:nth-child(1) {
+        .has-nav-open & {
+            transform: translateY(-1px) rotate(42deg);
+        }
+    }
+
+    &:nth-child(2) {
+        .has-nav-open & {
+            opacity: 0;
+        }
+    }
+
+    &:nth-child(3) {
+        .has-nav-open & {
+            transform: translateY(1px) rotate(-42deg);
+            margin-bottom: 0;
+        }
+    }
+}
+
+
+.c-nav-container_header {
+    background-color: $charcoal-gray-4;
+    height: rem($nav-header-height);
+    position: relative;
+    overflow: visible;
+}
+
+.c-nav-container_logo {
+    position: absolute;
+    bottom: 0;
+    font-size: 0;
+    line-height: 1;
+    left: 0;
+    z-index: 1100;
+
+    svg {
+        fill: $charcoal-gray-1;
+    }
+
+    @media (max-width: $to-large) {
+        padding: 15px;
+
+        svg {
+            width: 81px;
+            height: 48px;
+        }
+    }
+
+    @media (min-width: $from-large) {
+        padding: rem(22px) rem($spacer-x);
+        // right: 0;
+
+        svg {
+            width: rem(130px);
+            height: rem(24px);
+        }
+    }
+}

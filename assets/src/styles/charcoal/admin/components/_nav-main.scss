@@ -1,179 +1,143 @@
 // ==========================================================================
-// Nav main Components
+// Nav / Main
 // ==========================================================================
-// .c-nav-main {
-//     background-color: $charcoal-darkblue;
-//     position: fixed;
-//     top: rem($unit);
-//     bottom: 0;
-//     left: 0;
-//     line-height: 1;
 
-//     @media (max-width: $to-small) {
-//         top: 45px;
-//         left: -45px;
-//         width: 45px;
-//     }
+.c-nav-main {
+    position: absolute;
+    top: rem($nav-header-height);
+    bottom: 0;
+    left: 0;
+    line-height: 1;
 
-//     @media (min-width: $from-small) {
-//         width: rem($unit * 2);
-//     }
+    @media (max-width: $to-small) {
+        top: 45px;
+        left: -45px;
+        width: 45px;
+    }
 
-//     @media (min-width: $from-small) and (max-width: $to-large) {
-//         top: rem($unit);
-//         left: rem(-$unit * 2);
-//     }
+    @media (min-width: $from-small) {
+        width: rem(90px);
+    }
 
-//     @media (max-width: $to-large) {
-//         position: fixed;
-//         bottom: 0;
-//         overflow-y: auto;
-//         -webkit-overflow-scrolling: touch;
-//         z-index: 999;
-//         transition: transform 0.2s;
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        top: rem($unit);
+        left: rem(-$unit * 2);
+    }
 
-//         .has-nav-open & {
-//             transform: translateX(100%);
-//         }
-//     }
-// }
+    @media (max-width: $to-large) {
+        position: fixed;
+        bottom: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        z-index: 999;
+        transition: transform 0.2s;
 
-// .c-nav-main_list {
-//     list-style: none;
-//     margin: 0;
-//     padding: 0;
-// }
+        .has-nav-open & {
+            transform: translateX(100%);
+        }
+    }
+}
 
-// .c-nav-main_item {
-//     border-bottom: 1px solid $gray-dark;
+.c-nav-main_list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 
-//     @media (max-width: $to-small) {
-//         height: 65px;
-//     }
+.c-nav-main_item {
+    & + & {
+        border-top: 1px solid transparent;
+    }
 
-//     @media (min-width: $from-small) {
-//         height: rem($unit * 2);
-//     }
-// }
+    @media (max-width: $to-small) {
+        height: 65px;
+    }
 
-// .c-nav-main_link {
-//     position: relative;
-//     display: flex;
-//     text-align: center;
-//     font-size: rem(12px);
-//     color: $gray;
-//     height: 100%;
-//     align-items: center;
-//     justify-content: center;
-//     transition: background-color $speed, color $speed;
+    @media (min-width: $from-small) {
+        height: rem(95px);
+    }
+}
 
-//     &:focus {
-//         color: $white;
-//     }
+.c-nav-main_link {
+    background-color: $charcoal-gray-5;
+    position: relative;
+    display: flex;
+    text-align: center;
+    font-size: 10px;
+    color: $charcoal-gray-3;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    transition: background-color $speed, color $speed;
 
-//     &:hover,
-//     &:active,
-//     &.is-active {
-//         color: $blue;
-//     }
+    &:focus {
+        color: $white;
+    }
 
-//     &:focus,
-//     &:hover,
-//     &:active,
-//     &.is-active {
-//         text-decoration: none;
+    &:hover,
+    &:active,
+    &.is-active {
+        color: $charcoal-blue-1;
+    }
 
-//         &::before {
-//             transform: translateX(100%);
-//         }
-//     }
+    &:focus,
+    &:hover,
+    &:active,
+    &.is-active {
+        text-decoration: none;
+    }
 
-//     &::before {
-//         content: "";
-//         position: absolute;
-//         background-color: currentColor;
-//         top: 0;
-//         bottom: 0;
-//         transform: translateX(0);
-//         transition: transform $speed;
+    &.is-active {
+        background-color: transparent;
+    }
+}
 
-//         @media (max-width: $to-small) {
-//             width: 3px;
-//             left: -3px;
-//         }
+.c-nav-main_link_wrap {}
 
-//         @media (min-width: $from-small) {
-//             width: rem(5px);
-//             left: rem(-5px);
-//         }
-//     }
+.c-nav-main_link_icon {
+    fill: currentColor;
+    transition: fill $speed;
 
-//     &.is-active {
-//         @extend .c-nav_arrow;
-//         background-color: $black;
+    .c-nav-main_link.is-active & {
+        // fill: $charcoal-blue-2;
+    }
 
-//         &::after {
-//             border-right-color: $charcoal-lightblue;
-//         }
+    @media (max-width: $to-small) {
+        width:  21px;
+        height: 21px;
+    }
 
-//         .c-nav-main_list:hover & {
-//             &::before {
-//                 transform: translateX(0);
-//             }
+    @media (min-width: $from-small) {
+        width:  rem(35px);
+        height: rem(35px);
+    }
+}
 
-//             &:focus,
-//             &:hover {
-//                 &::before {
-//                     transform: translateX(100%);
-//                 }
-//             }
-//         }
-//     }
-// }
+.c-nav-main_link_text {
+    @media (max-width: $to-small) {
+        display: none;
+    }
 
-// .c-nav-main_link_wrap {
+    @media (min-width: $from-small) {
+        display: block;
+    }
 
-// }
+    .c-nav-main_link_icon + & {
+        @media (min-width: $from-small) {
+            margin-top: rem(7px);
+        }
+    }
+}
 
-// .c-nav-main_link_icon {
-//     fill: currentColor;
+.c-nav-main_overlay {
+    @extend .o-overlay;
 
-//     @media (max-width: $to-small) {
-//         width:  21px;
-//         height: 21px;
-//     }
+    @media (min-width: $from-large) {
+        display: none;
+    }
 
-//     @media (min-width: $from-small) {
-//         width:  rem(35px);
-//         height: rem(35px);
-//     }
-// }
-
-// .c-nav-main_link_text {
-//     @media (max-width: $to-small) {
-//         display: none;
-//     }
-
-//     @media (min-width: $from-small) {
-//         display: block;
-//     }
-
-//     .c-nav-main_link_icon + & {
-//         @media (min-width: $from-small) {
-//             margin-top: rem(7px);
-//         }
-//     }
-// }
-
-// .c-nav-main-overlay {
-//     @extend .o-overlay;
-
-//     @media (min-width: $from-large) {
-//         display: none;
-//     }
-
-//     .has-nav-open & {
-//         opacity: 1;
-//         visibility: visible;
-//     }
-// }
+    .has-nav-open & {
+        opacity: 1;
+        visibility: visible;
+    }
+}

@@ -16,7 +16,8 @@
 
 .o-flex_main {
     @media (min-width: $from-medium) {
-        min-height: calc(100vh - #{rem($unit)});
+        // min-height: calc(100vh - #{rem($unit)});
+        min-height: 100vh;
         flex: 1;
         min-width: 0;
     }

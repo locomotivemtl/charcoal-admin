@@ -42,18 +42,21 @@ $heading6: rem(11px); // .zeta
 // ==========================================================================
 $unit: 60px;
 $unit-small: 15px;
+$spacer-x: 25px;
 
 // Componenets
 // ==========================================================================
-$nav: 390px;
+$nav-width: 390px;
+$nav-header-height: 95px;
+
 $nav-small: 80px;
 $nav-page: 100px;
 
 // Transitions
 // ==========================================================================
-$speed: 0.3s;
-$speed-medium: 0.45s;
+$speed: 0.2s;
+$speed-medium: 0.3s;
 $slow-speed: $speed-medium;
-$speed-large: 0.6s;
+$speed-large: 0.4s;
 $slower-speed: $speed-large;
 $easing: linear;

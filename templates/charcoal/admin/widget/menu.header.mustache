@@ -6,90 +6,81 @@ Header menu Widget
 
 --}}
 
-<nav class="c-nav">
-    <div class="c-nav_header">
-        <a class="c-nav_logo" href="{{adminUrl}}">
+<div class="c-nav-container o-flex_aside">
+    <div class="c-nav-container_button js-toggle-class" data-target="body" data-class="has-nav-open">
+        <span class="c-nav-container_button_line"></span>
+        <span class="c-nav-container_button_line"></span>
+        <span class="c-nav-container_button_line"></span>
+    </div>
+    <div class="c-nav-container_header">
+        <a class="c-nav-container_logo" href="{{adminUrl}}">
             <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
         </a>
+        {{# isAuthenticated }}
+            {{# showSystemMenu }}
+                <nav class="btn-group c-nav-system">
+                    <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
+                        <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
+                        {{# systemMenu }}
+                        <li class="dropdown-item c-nav-system_item">
+                            <a
+                                href="{{ url }}"
+                                class="c-nav-system_link{{# ident }} -{{ . }}{{/ ident }}"
+                                {{# id }}
+                                id="{{ . }}"
+                                {{/ id }}
+                                {{# iconCss }}
+                                data-icon="{{ . }}"
+                                {{/ iconCss }}>
+                                <span>{{ label }}</span>
+                            </a>
+                        </li>
+                        {{/ systemMenu }}
+                    </ul>
+                </nav>
+            {{/ showSystemMenu }}
+            {{^ showSystemMenu }}
+                <a href="{{adminUrl}}logout" class="c-nav-system_logout btn">
+                    <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
+                    <span class="btn-label">{{# _t }}Log Out{{/ _t }}</span>
+                </a>
+            {{/ showSystemMenu }}
+        {{/ isAuthenticated }}
     </div>
-    <div class="c-nav_main">
-        <div class="c-nav_main_wrap">
-            <ul class="c-nav_list o-load">
-                {{# mainMenu }}
-                <li class="c-nav_item">
-                    <a class="c-nav_link{{# isActive }} is-active{{/ isActive }}" target="{{# isExternal }}_blank{{/ isExternal }}" href="{{ url }}">
-                        <span>{{ title }}</span>
-                    </a>
-                </li>
-                {{/ mainMenu }}
-            </ul>
-        </div>
-    </div>
-    <button class="c-nav_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
-        <span class="c-nav_button_icon"></span>
-    </button>
-</nav>
-
-<!--
-<header class="c-header-main">
-    <div class="c-header-main_button js-toggle-class" data-target="body" data-class="has-nav-open">
-        <span class="c-header-main_button_line"></span>
-        <span class="c-header-main_button_line"></span>
-        <span class="c-header-main_button_line"></span>
-    </div>
-    <a class="c-header-main_link" href="{{adminUrl}}">
-        <svg class="c-header-main_logo_img" role="img" title="Charcoal"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
-    </a>
-    {{#baseUrl}}
-    <a class="btn btn-link" href="{{baseUrl}}" target="_blank">
-        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-        <span class="btn-label">{{# _t }}Visit Site{{/ _t }}</span>
-    </a>
-    {{/baseUrl}}
-
-    {{# isAuthenticated }}
-        {{# showSystemMenu }}
-            <div class="dropdown pull-right c-header-main_system">
-                <button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fa fa-gears" aria-hidden="true"></i>
-                    <span class="btn-label sr-only">{{# _t }}Settings{{/ _t }}</span>
-                    &nbsp;
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    {{# systemMenu }}
-                    <li>
-                        <a href="{{ url }}"{{# ident }} class="s-nav-system_item--{{ . }}"{{/ ident }}{{# id }} id="{{ . }}"{{/ id }}>
-                            {{# iconCss }}<i class="{{ . }}" aria-hidden="true"></i>{{/ iconCss }}
-                            <span>{{ label }}</span>
-                        </a>
-                    </li>
-                    {{/ systemMenu }}
-                </ul>
-            </div>
-        {{/ showSystemMenu }}
-        {{^ showSystemMenu }}
-            <a href="{{adminUrl}}logout" class="c-header-main_user btn btn-danger">
-                <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
-                <span class="btn-label">{{# _t }}Log Out{{/ _t }}</span>
-            </a>
-        {{/ showSystemMenu }}
-    {{/ isAuthenticated }}
-</header>
-
-{{#showHeaderMenu}}
-{{!-- Charcoal Main Menu --}}
-<div class="c-nav-main-overlay js-toggle-class" data-target="body" data-class="has-nav-open"></div>
-<nav class="c-nav-main">
-    <ul class="c-nav-main_list">
-        {{#headerMenu}}
-           {{>charcoal/admin/widget/inc.menu.item}}
-       {{/headerMenu}}
-    </ul>
-</nav>
-{{/showHeaderMenu}}
+    {{# showHeaderMenu }}
+    <div class="c-nav-main_overlay js-toggle-class" data-target="body" data-class="has-nav-open"></div>
+    <nav class="c-nav-main">
+        <ul class="c-nav-main_list">
+            {{# headerMenu }}
+               <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
+                   <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
+                       <span class="c-nav-main_link_wrap">
+                           {{# svg }}
+                           <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>
+                           {{/ svg }}
+                           {{# icon }}
+                           <img class="c-nav-main_link_icon" src="{{ . }}">
+                           {{/ icon }}
+                           {{# iconCss }}
+                           <i class="{{ . }}" aria-hidden="true"></i>
+                           {{/ iconCss }}
+                           {{# label }}
+                           <span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>
+                           {{/ label }}
+                       </span>
+                   </a>
+               </li>
+           {{/ headerMenu }}
+        </ul>
+    </nav>
+    {{/ showHeaderMenu }}
+</div>
 
 {{#addJsRequirement}}
+<!--
 <script>
     $(function() {
         var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
@@ -102,6 +93,5 @@ Header menu Widget
         });
     });
 </script>
-{{/addJsRequirement}}
-
 -->
+{{/addJsRequirement}}

@@ -4,7 +4,7 @@
 
 .btn {
     font-size: rem(13px);
-    transition: background-color $speed;
+    transition: background-color $speed, color $speed;
 
     &.btn-lg {
         font-size: 1rem;

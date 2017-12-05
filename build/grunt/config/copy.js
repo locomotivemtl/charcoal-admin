@@ -3,16 +3,6 @@ module.exports = {
         files: [
             {
                 expand : true,
-                src    : [ 'node_modules/jquery/dist/jquery.min.js' ],
-                dest   : '<%= paths.js.dist %>/vendors/jquery/'
-            },
-            {
-                expand : true,
-                src    : [ 'node_modules/jquery-ui-bundle/jquery-ui.min.js' ],
-                dest   : '<%= paths.js.dist %>/vendors/jquery/'
-            },
-            {
-                expand : true,
                 cwd    : 'node_modules/echarts/dist/',
                 src    : [
                     '**/*.*',

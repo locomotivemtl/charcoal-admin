@@ -1,0 +1,83 @@
+// ==========================================================================
+// Nav / System
+// ==========================================================================
+
+.c-nav-system {
+    position: absolute;
+    z-index: 1200;
+    right: 0;
+    bottom: 0;
+}
+
+.c-nav-system_button {
+    background-color: transparent;
+    cursor: pointer;
+    padding: rem(22px) rem($spacer-x);
+
+    &::after {
+        content: none;
+    }
+
+    svg {
+        fill: $charcoal-gray-1;
+        width: 16px;
+        height: 4px;
+        transform: rotate(90deg);
+    }
+}
+
+.c-nav-system_list {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    top: -1px !important;
+}
+
+.c-nav-system_item {
+    line-height: 1;
+    padding: 0;
+
+    & + & {
+        border-top: 1px solid transparent;
+    }
+
+    &:hover {
+        background-color: transparent;
+        color: inherit;
+    }
+}
+
+.c-nav-system_link {
+    background-color: $charcoal-gray-4;
+    color: $charcoal-gray-2;
+    display: block;
+    font-size: 13px;
+    padding: rem(12px) rem(18px);
+    text-decoration: none;
+    transition: color $speed $easing, background-color $speed $easing;
+
+    &:hover {
+        background-color: $charcoal-gray-3;
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+    &.-logout:hover {
+        background-color: $red;
+    }
+}
+
+.c-nav-system_logout {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: $charcoal-gray-1;
+    position: absolute;
+    z-index: 1200;
+    right: rem(10px);
+    bottom: rem(10px);
+
+    &:hover {
+        color: $charcoal-gray-2;
+    }
+}

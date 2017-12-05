@@ -17,7 +17,6 @@
 @import "tools/widths";
 
 // ==========================================================================
-// ==========================================================================
 // Bootstrap
 // ==========================================================================
 
@@ -37,9 +36,6 @@
 
 // ==========================================================================
 // Charcoal
-// ==========================================================================
-
-// Settings
 // ==========================================================================
 
 
@@ -68,11 +64,12 @@
 
 // Components
 // ==========================================================================
-@import "components/header-main";
-@import "components/nav";
+// @import "components/header-main";
+@import "components/nav-container";
+@import "components/nav-system";
 @import "components/nav-main";
-@import "components/nav-secondary";
-@import "components/nav-user";
+// @import "components/nav-secondary";
+// @import "components/nav-user";
 @import "components/aside";
 @import "components/login";
 @import "components/panel";

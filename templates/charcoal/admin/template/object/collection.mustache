@@ -11,17 +11,13 @@ This template expects a `Charcoal\Admin\Template\Object\Collection` model as con
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+{{>charcoal/admin/widget/feedbacks}}
 
-    {{>charcoal/admin/widget/feedbacks}}
+<main class="o-flex_main">
+{{! <div class="o-flex"> }}
 
     {{!-- Object list section --}}
-    <div class="o-flex_main">
+    {{! <div class="o-flex_main"> }}
         <section class="o-container -bottom">
             <header class="o-header">
                 <h1>{{title}}</h1>
@@ -34,7 +30,8 @@ This template expects a `Charcoal\Admin\Template\Object\Collection` model as con
             {{/dashboard}}
 
         </section>
-    </div>
-</div>
+    {{! </div> }}
+{{! </div> }}
+</main>
 
 {{>charcoal/admin/template/inc.footer}}

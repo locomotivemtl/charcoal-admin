@@ -634,7 +634,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Retrieve the sidemenu.
      *
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
@@ -644,7 +644,7 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * @param  mixed $options The sidemenu widget ID or config.
      * @throws InvalidArgumentException If the sidemenu widget is invalid.
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     protected function createSidemenu($options = null)
     {

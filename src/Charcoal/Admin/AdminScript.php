@@ -145,23 +145,21 @@ abstract class AdminScript extends AbstractScript
      * Set the base URI of the application.
      *
      * @param  UriInterface|string $uri The base URI.
-     * @return self
+     * @return void
      */
     private function setBaseUrl($uri)
     {
         $this->baseUrl = $uri;
-        return $this;
     }
 
     /**
      * Set the model factory.
      *
      * @param  FactoryInterface $factory The factory used to create models.
-     * @return self
+     * @return void
      */
     private function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
-        return $this;
     }
 }

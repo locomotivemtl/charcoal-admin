@@ -1139,7 +1139,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function inputNameAsCssClass()
     {
-        $name = str_replace([ ']', '[' ], [ '', '-' ],  $this->propertyIdent());
+        $name = str_replace([ ']', '[' ], [ '', '-' ], $this->propertyIdent());
         $name = $this->camelize($name);
 
         return $name;

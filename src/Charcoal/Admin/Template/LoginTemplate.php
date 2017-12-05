@@ -144,7 +144,7 @@ class LoginTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {

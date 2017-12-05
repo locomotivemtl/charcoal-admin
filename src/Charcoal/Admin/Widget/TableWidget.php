@@ -162,59 +162,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $this->setPropertyFactory($container['property/factory']);
         $this->setPropertyDisplayFactory($container['property/display/factory']);
     }
-    /**
-     * Set an widget factory.
-     *
-     * @param FactoryInterface $factory The factory to create widgets.
-     * @return void
-     */
-    private function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
-    }
-
-    /**
-     * Retrieve the widget factory.
-     *
-     * @throws RuntimeException If the widget factory was not previously set.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new RuntimeException(
-                sprintf('Widget Factory is not defined for "%s"', get_class($this))
-            );
-        }
-
-        return $this->widgetFactory;
-    }
-
-    /**
-     * @param FactoryInterface $factory The property factory, to create properties.
-     * @return TableWidget Chainable
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * @throws RuntimeException If the property factory was not previously set / injected.
-     * @return FactoryInterface
-     */
-    public function propertyFactory()
-    {
-        if ($this->propertyFactory === null) {
-            throw new RuntimeException(
-                'Property factory is not set for table widget'
-            );
-        }
-
-        return $this->propertyFactory;
-    }
 
     /**
      * @param array $data The widget data.
@@ -227,39 +174,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $this->mergeDataSources($data);
 
         return $this;
-    }
-
-    /**
-     * Retrieve the default data source filters (when setting data on an entity).
-     *
-     * Note: Adapted from {@see \Slim\CallableResolver}.
-     *
-     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
-     * @param  mixed $toResolve A callable used when merging data.
-     * @return callable|null
-     */
-    protected function resolveDataSourceFilter($toResolve)
-    {
-        if (is_string($toResolve)) {
-            $model = $this->proto();
-
-            $resolved = [ $model, $toResolve ];
-
-            // check for slim callable as "class:method"
-            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
-            if (preg_match($callablePattern, $toResolve, $matches)) {
-                $class = $matches[1];
-                $method = $matches[2];
-
-                if ($class === 'parent') {
-                    $resolved = [ $model, $class.'::'.$method ];
-                }
-            }
-
-            $toResolve = $resolved;
-        }
-
-        return parent::resolveDataSourceFilter($toResolve);
     }
 
     /**
@@ -468,23 +382,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $this->propertiesOptions;
     }
 
-    /**
-     * Retrieve the default property customizations.
-     *
-     * The default configset is determined by the collection ident and object type, if assigned.
-     *
-     * @return array|null
-     */
-    protected function defaultPropertiesOptions()
-    {
-        $collectionConfig = $this->collectionConfig();
 
-        if (empty($collectionConfig['properties_options'])) {
-            return [];
-        }
-
-        return $collectionConfig['properties_options'];
-    }
 
     /**
      * Retrieve the view options for the given property.
@@ -542,84 +440,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
             yield $column;
         }
-    }
-
-    /**
-     * Filter the property before its assigned to the object row.
-     *
-     * This method is useful for classes using this trait.
-     *
-     * @param  ModelInterface    $object        The current row's object.
-     * @param  PropertyInterface $property      The current property.
-     * @param  string            $propertyValue The property $key's display value.
-     * @return array
-     */
-    protected function parsePropertyCell(
-        ModelInterface $object,
-        PropertyInterface $property,
-        $propertyValue
-    ) {
-        $cell = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
-
-        $cell['classes'] = $this->parsePropertyCellClasses($property, $object);
-        if (is_array($cell['classes'])) {
-            $cell['classes'] = implode(' ', array_unique($cell['classes']));
-        }
-
-        if (empty($cell['classes'])) {
-            unset($cell['classes']);
-        }
-
-        return $cell;
-    }
-
-    /**
-     * Filter the table cell's CSS classes before the property is assigned
-     * to the object row.
-     *
-     * This method is useful for classes using this trait.
-     *
-     * @param  PropertyInterface   $property The current property.
-     * @param  ModelInterface|null $object   Optional. The current row's object.
-     * @return array
-     */
-    protected function parsePropertyCellClasses(
-        PropertyInterface $property,
-        ModelInterface $object = null
-    ) {
-        unset($object);
-
-        $ident = $property->ident();
-        $classes = [ sprintf('property-%s', $ident) ];
-        $options = $this->viewOptions($ident);
-
-        if (isset($options['classes'])) {
-            if (is_array($options['classes'])) {
-                $classes = array_merge($classes, $options['classes']);
-            } else {
-                $classes[] = $options['classes'];
-            }
-        }
-
-        return $classes;
-    }
-
-    /**
-     * Filter the object before its assigned to the row.
-     *
-     * This method is useful for classes using this trait.
-     *
-     * @param  ModelInterface $object           The current row's object.
-     * @param  array          $objectProperties The $object's display properties.
-     * @return array
-     */
-    protected function parseObjectRow(ModelInterface $object, array $objectProperties)
-    {
-        $row = $this->parseCollectionObjectRow($object, $objectProperties);
-        $row['objectActions'] = $this->objectActions();
-        $row['showObjectActions'] = ($this->showObjectActions === false) ? false : !!$row['objectActions'];
-
-        return $row;
     }
 
     /**
@@ -748,25 +568,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $objectActions;
     }
 
-    /**
-     * Retrieve the table's default object actions.
-     *
-     * @return array
-     */
-    protected function defaultObjectActions()
-    {
-        if ($this->defaultObjectActions === null) {
-            $edit = [
-                'label'    => $this->translator()->translation('Modify'),
-                'url'      => $this->objectEditUrl().'&obj_id={{id}}',
-                'ident'    => 'edit',
-                'priority' => 1
-            ];
-            $this->defaultObjectActions = [ $edit ];
-        }
 
-        return $this->defaultObjectActions;
-    }
 
     /**
      * Determine if the table's empty collection actions should be shown.
@@ -846,112 +648,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $this->listActions;
     }
 
-    /**
-     * Set the table's collection actions.
-     *
-     * @param  array $actions One or more actions.
-     * @return TableWidget Chainable.
-     */
-    protected function setListActions(array $actions)
-    {
-        $this->parsedListActions = false;
-
-        $this->listActions = $this->mergeActions($this->defaultListActions(), $actions);
-
-        return $this;
-    }
-
-    /**
-     * Build the table collection actions.
-     *
-     * List actions should come from the collection settings defined by the "collection_ident".
-     * It is still possible to completly override those externally by setting the "list_actions"
-     * with the {@see self::setListActions()} method.
-     *
-     * @param  array $actions Actions to resolve.
-     * @return array List actions.
-     */
-    protected function createListActions(array $actions)
-    {
-        $this->actionsPriority = $this->defaultActionPriority();
-
-        $listActions = $this->parseAsListActions($actions);
-
-        return $listActions;
-    }
-
-    /**
-     * Parse the given actions as collection actions.
-     *
-     * @param  array $actions Actions to resolve.
-     * @return array
-     */
-    protected function parseAsListActions(array $actions)
-    {
-        $listActions = [];
-        foreach ($actions as $ident => $action) {
-            $ident  = $this->parseActionIdent($ident, $action);
-            $action = $this->parseActionItem($action, $ident, true);
-
-            if (!isset($action['priority'])) {
-                $action['priority'] = $this->actionsPriority++;
-            }
-
-            if ($action['ident'] === 'create') {
-                $action['empty'] = true;
-
-                if (!$this->isObjCreatable()) {
-                    $action['active'] = false;
-                }
-            } else {
-                $action['empty'] = (isset($action['empty']) ? boolval($action['empty']) : false);
-            }
-
-            if (is_array($action['actions'])) {
-                $action['actions']    = $this->parseAsListActions($action['actions']);
-                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
-                    return $action['active'];
-                });
-            }
-
-            if (isset($listActions[$ident])) {
-                $hasPriority = ($action['priority'] > $listActions[$ident]['priority']);
-                if ($hasPriority || $action['isSubmittable']) {
-                    $listActions[$ident] = array_replace($listActions[$ident], $action);
-                } else {
-                    $listActions[$ident] = array_replace($action, $listActions[$ident]);
-                }
-            } else {
-                $listActions[$ident] = $action;
-            }
-        }
-
-        usort($listActions, [ $this, 'sortActionsByPriority' ]);
-
-        while (($first = reset($listActions)) && $first['isSeparator']) {
-            array_shift($listActions);
-        }
-
-        while (($last = end($listActions)) && $last['isSeparator']) {
-            array_pop($listActions);
-        }
-
-        return $listActions;
-    }
-
-    /**
-     * Retrieve the table's default collection actions.
-     *
-     * @return array
-     */
-    protected function defaultListActions()
-    {
-        if ($this->defaultListActions === null) {
-            $this->defaultListActions = [];
-        }
-
-        return $this->defaultListActions;
-    }
 
     /**
      * @return PaginationWidget
@@ -1170,5 +866,314 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return true;
+    }
+
+    /**
+     * Retrieve the widget factory.
+     *
+     * @throws RuntimeException If the widget factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new RuntimeException(
+                sprintf('Widget Factory is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->widgetFactory;
+    }
+
+    /**
+     * @throws RuntimeException If the property factory was not previously set / injected.
+     * @return FactoryInterface
+     */
+    protected function propertyFactory()
+    {
+        if ($this->propertyFactory === null) {
+            throw new RuntimeException(
+                'Property factory is not set for table widget'
+            );
+        }
+
+        return $this->propertyFactory;
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * Note: Adapted from {@see \Slim\CallableResolver}.
+     *
+     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
+     * @param  mixed $toResolve A callable used when merging data.
+     * @return callable|null
+     */
+    protected function resolveDataSourceFilter($toResolve)
+    {
+        if (is_string($toResolve)) {
+            $model = $this->proto();
+
+            $resolved = [ $model, $toResolve ];
+
+            // check for slim callable as "class:method"
+            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+            if (preg_match($callablePattern, $toResolve, $matches)) {
+                $class = $matches[1];
+                $method = $matches[2];
+
+                if ($class === 'parent') {
+                    $resolved = [ $model, $class.'::'.$method ];
+                }
+            }
+
+            $toResolve = $resolved;
+        }
+
+        return parent::resolveDataSourceFilter($toResolve);
+    }
+
+    /**
+     * Set the table's collection actions.
+     *
+     * @param  array $actions One or more actions.
+     * @return TableWidget Chainable.
+     */
+    protected function setListActions(array $actions)
+    {
+        $this->parsedListActions = false;
+
+        $this->listActions = $this->mergeActions($this->defaultListActions(), $actions);
+
+        return $this;
+    }
+
+    /**
+     * Build the table collection actions.
+     *
+     * List actions should come from the collection settings defined by the "collection_ident".
+     * It is still possible to completly override those externally by setting the "list_actions"
+     * with the {@see self::setListActions()} method.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array List actions.
+     */
+    protected function createListActions(array $actions)
+    {
+        $this->actionsPriority = $this->defaultActionPriority();
+
+        $listActions = $this->parseAsListActions($actions);
+
+        return $listActions;
+    }
+
+    /**
+     * Parse the given actions as collection actions.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array
+     */
+    protected function parseAsListActions(array $actions)
+    {
+        $listActions = [];
+        foreach ($actions as $ident => $action) {
+            $ident  = $this->parseActionIdent($ident, $action);
+            $action = $this->parseActionItem($action, $ident, true);
+
+            if (!isset($action['priority'])) {
+                $action['priority'] = $this->actionsPriority++;
+            }
+
+            if ($action['ident'] === 'create') {
+                $action['empty'] = true;
+
+                if (!$this->isObjCreatable()) {
+                    $action['active'] = false;
+                }
+            } else {
+                $action['empty'] = (isset($action['empty']) ? boolval($action['empty']) : false);
+            }
+
+            if (is_array($action['actions'])) {
+                $action['actions']    = $this->parseAsListActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
+            }
+
+            if (isset($listActions[$ident])) {
+                $hasPriority = ($action['priority'] > $listActions[$ident]['priority']);
+                if ($hasPriority || $action['isSubmittable']) {
+                    $listActions[$ident] = array_replace($listActions[$ident], $action);
+                } else {
+                    $listActions[$ident] = array_replace($action, $listActions[$ident]);
+                }
+            } else {
+                $listActions[$ident] = $action;
+            }
+        }
+
+        usort($listActions, [ $this, 'sortActionsByPriority' ]);
+
+        while (($first = reset($listActions)) && $first['isSeparator']) {
+            array_shift($listActions);
+        }
+
+        while (($last = end($listActions)) && $last['isSeparator']) {
+            array_pop($listActions);
+        }
+
+        return $listActions;
+    }
+
+    /**
+     * Retrieve the table's default collection actions.
+     *
+     * @return array
+     */
+    protected function defaultListActions()
+    {
+        if ($this->defaultListActions === null) {
+            $this->defaultListActions = [];
+        }
+
+        return $this->defaultListActions;
+    }
+
+    /**
+     * Retrieve the table's default object actions.
+     *
+     * @return array
+     */
+    protected function defaultObjectActions()
+    {
+        if ($this->defaultObjectActions === null) {
+            $edit = [
+                'label'    => $this->translator()->translation('Modify'),
+                'url'      => $this->objectEditUrl().'&obj_id={{id}}',
+                'ident'    => 'edit',
+                'priority' => 1
+            ];
+            $this->defaultObjectActions = [ $edit ];
+        }
+
+        return $this->defaultObjectActions;
+    }
+
+    /**
+     * Retrieve the default property customizations.
+     *
+     * The default configset is determined by the collection ident and object type, if assigned.
+     *
+     * @return array|null
+     */
+    protected function defaultPropertiesOptions()
+    {
+        $collectionConfig = $this->collectionConfig();
+
+        if (empty($collectionConfig['properties_options'])) {
+            return [];
+        }
+
+        return $collectionConfig['properties_options'];
+    }
+    /**
+     * Filter the property before its assigned to the object row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface    $object        The current row's object.
+     * @param  PropertyInterface $property      The current property.
+     * @param  string            $propertyValue The property $key's display value.
+     * @return array
+     */
+    protected function parsePropertyCell(
+        ModelInterface $object,
+        PropertyInterface $property,
+        $propertyValue
+    ) {
+        $cell = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
+
+        $cell['classes'] = $this->parsePropertyCellClasses($property, $object);
+        if (is_array($cell['classes'])) {
+            $cell['classes'] = implode(' ', array_unique($cell['classes']));
+        }
+
+        if (empty($cell['classes'])) {
+            unset($cell['classes']);
+        }
+
+        return $cell;
+    }
+
+    /**
+     * Filter the table cell's CSS classes before the property is assigned
+     * to the object row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  PropertyInterface   $property The current property.
+     * @param  ModelInterface|null $object   Optional. The current row's object.
+     * @return array
+     */
+    protected function parsePropertyCellClasses(
+        PropertyInterface $property,
+        ModelInterface $object = null
+    ) {
+        unset($object);
+
+        $ident = $property->ident();
+        $classes = [ sprintf('property-%s', $ident) ];
+        $options = $this->viewOptions($ident);
+
+        if (isset($options['classes'])) {
+            if (is_array($options['classes'])) {
+                $classes = array_merge($classes, $options['classes']);
+            } else {
+                $classes[] = $options['classes'];
+            }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Filter the object before its assigned to the row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface $object           The current row's object.
+     * @param  array          $objectProperties The $object's display properties.
+     * @return array
+     */
+    protected function parseObjectRow(ModelInterface $object, array $objectProperties)
+    {
+        $row = $this->parseCollectionObjectRow($object, $objectProperties);
+        $row['objectActions'] = $this->objectActions();
+        $row['showObjectActions'] = ($this->showObjectActions === false) ? false : !!$row['objectActions'];
+
+        return $row;
+    }
+
+    /**
+     * Set an widget factory.
+     *
+     * @param FactoryInterface $factory The factory to create widgets.
+     * @return void
+     */
+    private function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+    }
+
+    /**
+     * @param FactoryInterface $factory The property factory, to create properties.
+     * @return TableWidget Chainable
+     */
+    private function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+
+        return $this;
     }
 }

@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Template\System;
 
 use APCUIterator;
 use APCIterator;
+use RuntimeException;
 
 use Stash\Driver\Apc;
 use Stash\Driver\Memcache;
@@ -14,7 +15,7 @@ use Pimple\Container;
 use Charcoal\Admin\AdminTemplate;
 
 /**
- *
+ * Cache information.
  */
 class ClearCacheTemplate extends AdminTemplate
 {
@@ -39,7 +40,7 @@ class ClearCacheTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
@@ -51,7 +52,7 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
@@ -203,6 +204,7 @@ class ClearCacheTemplate extends AdminTemplate
 
     /**
      * @param string $key The cache key to look at.
+     * @throws RuntimeException If the APC iterator class can not be found.
      * @return array|\Generator
      */
     private function apcCacheItems($key)
@@ -212,7 +214,7 @@ class ClearCacheTemplate extends AdminTemplate
         } elseif (class_exists(APCIterator::class)) {
             $iter = new APCIterator($key);
         } else {
-            return [];
+            throw new RuntimeException('Cache uses APC but no iterator could be found.');
         }
 
         foreach ($iter as $item) {

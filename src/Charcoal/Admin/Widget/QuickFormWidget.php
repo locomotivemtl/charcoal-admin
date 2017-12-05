@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\ObjectFormWidget;
+use Charcoal\Admin\Widget\ObjectFormWidget;
 
 /**
  * The quick form widget for editing objects on the go.
@@ -38,7 +38,7 @@ class QuickFormWidget extends ObjectFormWidget
     /**
      * Retrieve the label for the form submission button.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function submitLabel()
     {

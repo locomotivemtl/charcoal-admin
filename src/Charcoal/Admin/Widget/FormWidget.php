@@ -2,31 +2,31 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \Exception;
-use \InvalidArgumentException;
-use \RuntimeException;
+use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From PSR-7
-use \Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestInterface;
 
 // From `charcoal-app`
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 /// From `charcoal-ui`
-use \Charcoal\Ui\Form\FormInterface;
-use \Charcoal\Ui\Form\FormTrait;
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
-use \Charcoal\Ui\Layout\LayoutAwareInterface;
-use \Charcoal\Ui\Layout\LayoutAwareTrait;
-use \Charcoal\Ui\PrioritizableInterface;
+use Charcoal\Ui\Form\FormInterface;
+use Charcoal\Ui\Form\FormTrait;
+use Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\Layout\LayoutAwareInterface;
+use Charcoal\Ui\Layout\LayoutAwareTrait;
+use Charcoal\Ui\PrioritizableInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\FormSidebarInterface;
-use \Charcoal\Admin\Widget\FormPropertyWidget;
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\FormSidebarInterface;
+use Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
  * A Basic Admin Form
@@ -66,7 +66,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Label for the form submission button.
      *
-     * @var Translation|string
+     * @var \Charcoal\Translator\Translation|string
      */
     protected $submitLabel;
 
@@ -103,66 +103,6 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * Set an HTTP request object.
-     *
-     * @param RequestInterface $request A PSR-7 compatible Request instance.
-     * @return self
-     */
-    protected function setHttpRequest(RequestInterface $request)
-    {
-        $this->httpRequest = $request;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the HTTP request object.
-     *
-     * @throws RuntimeException If an HTTP request was not previously set.
-     * @return RequestInterface
-     */
-    public function httpRequest()
-    {
-        if (!isset($this->httpRequest)) {
-            throw new RuntimeException(sprintf(
-                'A PSR-7 Request instance is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->httpRequest;
-    }
-
-    /**
-     * Set an widget factory.
-     *
-     * @param FactoryInterface $factory The factory to create widgets.
-     * @return void
-     */
-    private function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
-    }
-
-    /**
-     * Retrieve the widget factory.
-     *
-     * @throws RuntimeException If the widget factory was not previously set.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new RuntimeException(sprintf(
-                'Widget Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->widgetFactory;
-    }
-
-    /**
      * @param array $data Optional. The form property data to set.
      * @return FormPropertyWidget
      */
@@ -177,31 +117,8 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * Fetch metadata from the current request.
-     *
-     *
-     * @return array
-     */
-    protected function dataFromRequest()
-    {
-        $request = $this->httpRequest();
-
-        return array_intersect_key($request->getParams(), array_flip($this->acceptedRequestData()));
-    }
-
-    /**
-     * Retrieve the accepted metadata from the current request.
-     *
-     * @return array
-     */
-    protected function acceptedRequestData()
-    {
-        return [ 'next_url', 'form_ident', 'form_data', 'l10n_mode', 'group_display_mode' ];
-    }
-
-    /**
      * @param array $sidebars The form sidebars.
-     * @return FormWidget Chainable
+     * @return self
      */
     public function setSidebars(array $sidebars)
     {
@@ -217,7 +134,7 @@ class FormWidget extends AdminWidget implements
      * @param string                     $sidebarIdent The sidebar identifier.
      * @param array|FormSidebarInterface $sidebar      The sidebar data or object.
      * @throws InvalidArgumentException If the ident is not a string or the sidebar is not valid.
-     * @return FormWidget Chainable
+     * @return self
      */
     public function addSidebar($sidebarIdent, $sidebar)
     {
@@ -263,7 +180,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Yield the form sidebar(s).
      *
-     * @return FormSidebarInterface[]|Generator
+     * @return \Generator
      */
     public function sidebars()
     {
@@ -286,31 +203,12 @@ class FormWidget extends AdminWidget implements
         }
     }
 
-    /**
-     * To be called with {@see uasort()}.
-     *
-     * @param  FormSidebarInterface $a Sortable entity A.
-     * @param  FormSidebarInterface $b Sortable entity B.
-     * @return integer Sorting value: -1, 0, or 1
-     */
-    protected function sortSidebarsByPriority(
-        FormSidebarInterface $a,
-        FormSidebarInterface $b
-    ) {
-        $a = $a->priority();
-        $b = $b->priority();
-
-        if ($a === $b) {
-            return 0;
-        }
-        return ($a < $b) ? (-1) : 1;
-    }
 
     /**
      * Replace property controls to the form.
      *
      * @param  array $properties The form properties.
-     * @return FormInterface Chainable
+     * @return self
      */
     public function setFormProperties(array $properties)
     {
@@ -325,7 +223,7 @@ class FormWidget extends AdminWidget implements
      * Add property controls to the form.
      *
      * @param  array $properties The form properties.
-     * @return FormInterface Chainable
+     * @return self
      */
     public function addFormProperties(array $properties)
     {
@@ -342,8 +240,8 @@ class FormWidget extends AdminWidget implements
      * If a given property uses a hidden form control, the form property will be
      * added to {@see FormWidget::$hiddenProperties}.
      *
-     * @param  string                      $propertyIdent The property identifier.
-     * @param  array|FormPropertyInterface $formProperty  The property object or structure.
+     * @param  string                   $propertyIdent The property identifier.
+     * @param  array|FormPropertyWidget $formProperty  The property object or structure.
      * @throws InvalidArgumentException If the identifier or the property is invalid.
      * @return FormInterface Chainable
      */
@@ -377,7 +275,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Yield the form's property controls.
      *
-     * @return FormPropertyWidget[]|Generator
+     * @return \Generator
      */
     public function formProperties()
     {
@@ -465,7 +363,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Yield the form's hidden property controls.
      *
-     * @return FormPropertyWidget[]|Generator
+     * @return \Generator
      */
     public function hiddenProperties()
     {
@@ -481,7 +379,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Retrieve the label for the form submission button.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function submitLabel()
     {
@@ -511,6 +409,71 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Retrieve the HTTP request object.
+     *
+     * @throws RuntimeException If an HTTP request was not previously set.
+     * @return RequestInterface
+     */
+    protected function httpRequest()
+    {
+        if (!isset($this->httpRequest)) {
+            throw new RuntimeException(sprintf(
+                'A PSR-7 Request instance is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->httpRequest;
+    }
+
+    /**
+     * Retrieve the widget factory.
+     *
+     * @throws RuntimeException If the widget factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new RuntimeException(sprintf(
+                'Widget Factory is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->widgetFactory;
+    }
+
+    /**
+     * Fetch metadata from the current request.
+     *
+     *
+     * @return array
+     */
+    protected function dataFromRequest()
+    {
+        $request = $this->httpRequest();
+
+        return array_intersect_key($request->getParams(), array_flip($this->acceptedRequestData()));
+    }
+
+    /**
+     * Retrieve the accepted metadata from the current request.
+     *
+     * @return array
+     */
+    protected function acceptedRequestData()
+    {
+        return [
+            'next_url',
+            'form_ident',
+            'form_data',
+            'l10n_mode',
+            'group_display_mode'
+        ];
+    }
+
+    /**
      * Comparison function used by {@see uasort()}.
      *
      * @param  PrioritizableInterface $a Sortable entity A.
@@ -528,5 +491,47 @@ class FormWidget extends AdminWidget implements
             return 0;
         }
         return ($priorityA < $priorityB) ? (-1) : 1;
+    }
+
+    /**
+     * To be called with {@see uasort()}.
+     *
+     * @param  FormSidebarInterface $a Sortable entity A.
+     * @param  FormSidebarInterface $b Sortable entity B.
+     * @return integer Sorting value: -1, 0, or 1
+     */
+    protected function sortSidebarsByPriority(
+        FormSidebarInterface $a,
+        FormSidebarInterface $b
+    ) {
+        $a = $a->priority();
+        $b = $b->priority();
+
+        if ($a === $b) {
+            return 0;
+        }
+        return ($a < $b) ? (-1) : 1;
+    }
+
+    /**
+     * Set an widget factory.
+     *
+     * @param FactoryInterface $factory The factory to create widgets.
+     * @return void
+     */
+    private function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+    }
+
+    /**
+     * Set an HTTP request object.
+     *
+     * @param RequestInterface $request A PSR-7 compatible Request instance.
+     * @return void
+     */
+    private function setHttpRequest(RequestInterface $request)
+    {
+        $this->httpRequest = $request;
     }
 }

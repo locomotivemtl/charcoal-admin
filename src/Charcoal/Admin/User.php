@@ -7,6 +7,7 @@ use Charcoal\User\AbstractUser;
 
 /**
  * Admin User class.
+ *
  */
 class User extends AbstractUser
 {

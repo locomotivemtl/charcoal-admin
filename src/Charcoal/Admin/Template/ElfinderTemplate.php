@@ -36,7 +36,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Store the current property instance for the current class.
      *
-     * @var PropertyInterface
+     * @var \Charcoal\Property\PropertyInterface
      */
     private $formProperty;
 
@@ -213,7 +213,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the default custom localizations.
      *
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return array
      */
     protected function defaultLocalizations()
     {
@@ -364,7 +364,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the current property.
      *
-     * @return PropertyInterface
+     * @return \Charcoal\Property\PropertyInterface
      */
     public function formProperty()
     {

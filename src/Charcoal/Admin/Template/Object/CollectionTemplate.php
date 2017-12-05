@@ -106,7 +106,7 @@ class CollectionTemplate extends AdminTemplate implements
     /**
      * Retrieve the sidemenu.
      *
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
@@ -148,7 +148,7 @@ class CollectionTemplate extends AdminTemplate implements
      * Uses the "default_search_list" ident that should point
      * on ident in the "lists"
      *
-     * @return widget
+     * @return \Charcoal\Admin\Widget\SearchWidget
      */
     public function searchWidget()
     {

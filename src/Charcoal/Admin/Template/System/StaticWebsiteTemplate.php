@@ -30,7 +30,7 @@ class StaticWebsiteTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
@@ -42,7 +42,7 @@ class StaticWebsiteTemplate extends AdminTemplate
     }
 
     /**
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {

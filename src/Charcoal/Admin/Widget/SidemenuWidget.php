@@ -102,7 +102,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * The sidemenu's title.
      *
-     * @var string
+     * @var \Charcoal\Translator\Translation|string|null
      */
     protected $title;
 
@@ -146,68 +146,6 @@ class SidemenuWidget extends AdminWidget implements
 
         $this->setHttpRequest($container['request']);
         $this->setSidemenuGroupFactory($container['sidemenu/group/factory']);
-    }
-
-    /**
-     * Set an HTTP request object.
-     *
-     * @param RequestInterface $request A PSR-7 compatible Request instance.
-     * @return self
-     */
-    protected function setHttpRequest(RequestInterface $request)
-    {
-        $this->httpRequest = $request;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the HTTP request object.
-     *
-     * @throws RuntimeException If an HTTP request was not previously set.
-     * @return RequestInterface
-     */
-    public function httpRequest()
-    {
-        if (!isset($this->httpRequest)) {
-            throw new RuntimeException(sprintf(
-                'A PSR-7 Request instance is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->httpRequest;
-    }
-
-    /**
-     * Set an sidemenu group factory.
-     *
-     * @param FactoryInterface $factory The group factory, to create objects.
-     * @return self
-     */
-    public function setSidemenuGroupFactory(FactoryInterface $factory)
-    {
-        $this->sidemenuGroupFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the sidemenu group factory.
-     *
-     * @throws RuntimeException If the sidemenu group factory was not previously set.
-     * @return FactoryInterface
-     */
-    protected function sidemenuGroupFactory()
-    {
-        if (!isset($this->sidemenuGroupFactory)) {
-            throw new RuntimeException(sprintf(
-                'Sidemenu Group Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->sidemenuGroupFactory;
     }
 
     /**
@@ -326,7 +264,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the title of the sidemenu.
      *
-     * @return Translation|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
@@ -705,7 +643,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu groups.
      *
-     * @return SidemenuGroupInterface[]|Generator
+     * @return \Generator
      */
     public function groups()
     {
@@ -740,26 +678,6 @@ class SidemenuWidget extends AdminWidget implements
     public function defaultGroupType()
     {
         return 'charcoal/ui/sidemenu/generic';
-    }
-
-    /**
-     * To be called with {@see uasort()}.
-     *
-     * @param  SidemenuGroupInterface $a Sortable entity A.
-     * @param  SidemenuGroupInterface $b Sortable entity B.
-     * @return integer Sorting value: -1, 0, or 1
-     */
-    protected function sortGroupsByPriority(
-        SidemenuGroupInterface $a,
-        SidemenuGroupInterface $b
-    ) {
-        $a = $a->priority();
-        $b = $b->priority();
-
-        if ($a === $b) {
-            return 0;
-        }
-        return ($a < $b) ? (-1) : 1;
     }
 
     /**
@@ -874,10 +792,54 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
+     * @return string
+     */
+    public function jsActionPrefix()
+    {
+        return 'js-sidemenu';
+    }
+
+    /**
+     * Retrieve the HTTP request object.
+     *
+     * @throws RuntimeException If an HTTP request was not previously set.
+     * @return RequestInterface
+     */
+    protected function httpRequest()
+    {
+        if (!isset($this->httpRequest)) {
+            throw new RuntimeException(sprintf(
+                'A PSR-7 Request instance is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->httpRequest;
+    }
+
+    /**
+     * Retrieve the sidemenu group factory.
+     *
+     * @throws RuntimeException If the sidemenu group factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function sidemenuGroupFactory()
+    {
+        if (!isset($this->sidemenuGroupFactory)) {
+            throw new RuntimeException(sprintf(
+                'Sidemenu Group Factory is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->sidemenuGroupFactory;
+    }
+
+    /**
      * Set the sidemenu's actions.
      *
      * @param  array $actions One or more actions.
-     * @return FormSidemenuWidget Chainable.
+     * @return self
      */
     protected function setSidemenuActions(array $actions)
     {
@@ -928,10 +890,44 @@ class SidemenuWidget extends AdminWidget implements
     }
 
     /**
-     * @return string
+     * To be called with {@see uasort()}.
+     *
+     * @param  SidemenuGroupInterface $a Sortable entity A.
+     * @param  SidemenuGroupInterface $b Sortable entity B.
+     * @return integer Sorting value: -1, 0, or 1
      */
-    public function jsActionPrefix()
+    protected function sortGroupsByPriority(
+        SidemenuGroupInterface $a,
+        SidemenuGroupInterface $b
+    ) {
+        $a = $a->priority();
+        $b = $b->priority();
+
+        if ($a === $b) {
+            return 0;
+        }
+        return ($a < $b) ? (-1) : 1;
+    }
+
+    /**
+     * Set an HTTP request object.
+     *
+     * @param RequestInterface $request A PSR-7 compatible Request instance.
+     * @return void
+     */
+    private function setHttpRequest(RequestInterface $request)
     {
-        return 'js-sidemenu';
+        $this->httpRequest = $request;
+    }
+
+    /**
+     * Set an sidemenu group factory.
+     *
+     * @param FactoryInterface $factory The group factory, to create objects.
+     * @return void
+     */
+    private function setSidemenuGroupFactory(FactoryInterface $factory)
+    {
+        $this->sidemenuGroupFactory = $factory;
     }
 }

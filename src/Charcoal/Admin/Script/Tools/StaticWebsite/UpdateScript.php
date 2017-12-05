@@ -26,7 +26,7 @@ class UpdateScript extends AdminScript
     private $basePath;
 
     /**
-     * @var GuzzleClient
+     * @var \GuzzleHttp\Client
      */
     private $guzzleClient;
 

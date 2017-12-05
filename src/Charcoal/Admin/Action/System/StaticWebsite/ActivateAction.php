@@ -41,16 +41,32 @@ class ActivateAction extends AdminAction
     {
         $baseCache = $this->basePath.'cache/static';
         if (!file_exists($baseCache)) {
-            mkdir($baseCache, null, true);
+            $ret = mkdir($baseCache, null, true);
+            if ($ret === false) {
+                $this->setSuccess(false);
+                return $response->withStatus(500);
+            }
         }
         $staticLink = $this->basePath.'www/static';
         if (file_exists($staticLink)) {
             $this->setSuccess(false);
-            return $response;
+            return $response->withStatus(409);
+        }
+        if (!file_exists(dirname($staticLink))) {
+            $ret = mkdir(dirname($staticLink));
+            if ($ret === false) {
+                $this->setSuccess(false);
+                return $response->withStatus(500);
+            }
         }
         $ret = symlink($baseCache, $staticLink);
-        $this->setSuccess($ret);
-        return $response;
+        if ($ret === false) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        } else {
+            $this->setSuccess(true);
+            return $response;
+        }
     }
 
     /**

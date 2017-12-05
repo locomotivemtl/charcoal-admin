@@ -23,7 +23,7 @@ class HelpTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {

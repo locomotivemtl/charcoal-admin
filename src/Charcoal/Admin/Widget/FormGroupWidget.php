@@ -67,11 +67,6 @@ class FormGroupWidget extends AbstractUiItem implements
         if (isset($data['form'])) {
             $this->setForm($data['form']);
         }
-
-        $this->setFormInputBuilder($data['form_input_builder']);
-
-        // Set up layout builder (to fulfill LayoutAware Interface)
-        $this->setLayoutBuilder($data['layout_builder']);
     }
 
     /**
@@ -81,6 +76,8 @@ class FormGroupWidget extends AbstractUiItem implements
     public function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        $this->setFormInputBuilder($container['form/input/builder']);
 
         // Satisfies ViewableInterface dependencies
         $this->setView($container['view']);

@@ -147,12 +147,11 @@ class AdminWidget extends AbstractWidget implements
 
     /**
      * @param FactoryInterface $factory The factory used to create models.
-     * @return AdminScript Chainable
+     * @return void
      */
     protected function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
-        return $this;
     }
 
     /**

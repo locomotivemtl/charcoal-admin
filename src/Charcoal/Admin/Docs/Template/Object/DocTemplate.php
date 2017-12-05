@@ -44,60 +44,7 @@ class DocTemplate extends AdminTemplate implements
         $this->setModelFactory($container['model/factory']);
 
         // Required dependencies.
-        $this->setWidgetFactory($container['widget/factory']);
         $this->dashboardBuilder = $container['dashboard/builder'];
-    }
-
-    /**
-     * @throws Exception If the object's dashboard config can not be loaded.
-     * @return array
-     */
-    protected function createDashboardConfig()
-    {
-        $adminMetadata  = $this->objAdminMetadata();
-        $dashboardIdent = $this->dashboardIdent();
-
-        if (empty($dashboardIdent)) {
-            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
-        }
-
-        if (empty($dashboardIdent)) {
-            if (isset($adminMetadata['default_doc_dashboard'])) {
-                $dashboardIdent = $adminMetadata['default_doc_dashboard'];
-            }
-        }
-
-        $overrideType = false;
-
-        if (empty($dashboardIdent)) {
-            if (!isset($adminMetadata['default_edit_dashboard'])) {
-                throw new Exception(sprintf(
-                    'No default doc dashboard defined in admin metadata for %s',
-                    get_class($this->obj())
-                ));
-            }
-            $overrideType = true;
-            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
-        }
-
-        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
-            throw new Exception(
-                'Dashboard config is not defined.'
-            );
-        }
-
-        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
-
-        if ($overrideType) {
-            $widgets = $dashboardConfig['widgets'];
-            foreach ($widgets as $ident => $widget) {
-                $dashboardConfig['widgets'][$ident]['type'] = 'charcoal/admin/widget/doc';
-                $dashboardConfig['widgets'][$ident]['show_header'] = true;
-                $dashboardConfig['widgets'][$ident]['show_title'] = true;
-            }
-        }
-
-        return $dashboardConfig;
     }
 
     /**
@@ -138,27 +85,6 @@ class DocTemplate extends AdminTemplate implements
         }
 
         return $this->headerMenu;
-    }
-
-    /**
-     * @throws Exception If the object's admin metadata is not set.
-     * @return \ArrayAccess
-     */
-    private function objAdminMetadata()
-    {
-        $obj = $this->obj();
-
-        $objMetadata = $obj->metadata();
-
-        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
-        if ($adminMetadata === null) {
-            throw new Exception(sprintf(
-                'The object %s does not have an admin metadata.',
-                get_class($obj)
-            ));
-        }
-
-        return $adminMetadata;
     }
 
     /**
@@ -221,5 +147,78 @@ class DocTemplate extends AdminTemplate implements
         }
 
         return $this->title;
+    }
+
+    /**
+     * @throws Exception If the object's dashboard config can not be loaded.
+     * @return array
+     */
+    protected function createDashboardConfig()
+    {
+        $adminMetadata  = $this->objAdminMetadata();
+        $dashboardIdent = $this->dashboardIdent();
+
+        if (empty($dashboardIdent)) {
+            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        }
+
+        if (empty($dashboardIdent)) {
+            if (isset($adminMetadata['default_doc_dashboard'])) {
+                $dashboardIdent = $adminMetadata['default_doc_dashboard'];
+            }
+        }
+
+        $overrideType = false;
+
+        if (empty($dashboardIdent)) {
+            if (!isset($adminMetadata['default_edit_dashboard'])) {
+                throw new Exception(sprintf(
+                    'No default doc dashboard defined in admin metadata for %s',
+                    get_class($this->obj())
+                ));
+            }
+            $overrideType = true;
+            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+        }
+
+        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
+            throw new Exception(
+                'Dashboard config is not defined.'
+            );
+        }
+
+        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
+
+        if ($overrideType) {
+            $widgets = $dashboardConfig['widgets'];
+            foreach ($widgets as $ident => $widget) {
+                $dashboardConfig['widgets'][$ident]['type'] = 'charcoal/admin/widget/doc';
+                $dashboardConfig['widgets'][$ident]['show_header'] = true;
+                $dashboardConfig['widgets'][$ident]['show_title'] = true;
+            }
+        }
+
+        return $dashboardConfig;
+    }
+
+    /**
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
+     */
+    private function objAdminMetadata()
+    {
+        $obj = $this->obj();
+
+        $objMetadata = $obj->metadata();
+
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
+        if ($adminMetadata === null) {
+            throw new Exception(sprintf(
+                'The object %s does not have an admin metadata.',
+                get_class($obj)
+            ));
+        }
+
+        return $adminMetadata;
     }
 }

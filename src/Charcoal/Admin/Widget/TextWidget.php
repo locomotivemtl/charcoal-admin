@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\AdminWidget;
 
 /**
  *
@@ -11,48 +11,48 @@ use \Charcoal\Admin\AdminWidget;
 class TextWidget extends AdminWidget
 {
     /**
-     * @var boolean $showTitle
+     * @var boolean
      */
     private $showTitle = true;
 
     /**
-     * @var boolean $showSubtitle
+     * @var boolean
      */
     private $showSubtitle = true;
 
     /**
-     * @var boolean $showDescription
+     * @var boolean
      */
     private $showDescription = true;
 
     /**
-     * @var boolean $showNotes
+     * @var boolean
      */
     private $showNotes = true;
 
     /**
-     * @var string $title
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $title;
 
     /**
-     * @var string $subtitle
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $subtitle;
 
     /**
-     * @var string $description
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $description;
 
     /**
-     * @var string $notes
+     * @var \Charcoal\Translator\Translation|string|null
      */
     private $notes;
 
     /**
      * @param boolean $show The show title flag.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setShowTitle($show)
     {
@@ -74,7 +74,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The show subtitle flag.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setShowSubtitle($show)
     {
@@ -96,7 +96,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The show description flag.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setShowDescription($show)
     {
@@ -118,7 +118,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param boolean $show The "show notes" flag.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setShowNotes($show)
     {
@@ -140,7 +140,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param mixed $title The text widget title.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setTitle($title)
     {
@@ -150,7 +150,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @return Translation
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
@@ -159,7 +159,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param mixed $subtitle The text widget subtitle.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setSubtitle($subtitle)
     {
@@ -169,7 +169,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @return Translation
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function subtitle()
     {
@@ -178,7 +178,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param mixed $description The text widget description (main content).
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setDescription($description)
     {
@@ -188,7 +188,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @return Translation
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function description()
     {
@@ -197,7 +197,7 @@ class TextWidget extends AdminWidget
 
     /**
      * @param mixed $notes The text widget notes.
-     * @return TextWidget Chainable
+     * @return self
      */
     public function setNotes($notes)
     {
@@ -207,7 +207,7 @@ class TextWidget extends AdminWidget
     }
 
     /**
-     * @return Translation
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function notes()
     {

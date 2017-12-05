@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Action\System\StaticWebsite;
 
+use Exception;
+
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -41,6 +43,10 @@ class UpdateAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        if (!$this->baseUrl()) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        }
         $url = $request->getParam('url');
         $relativeUrl = str_replace($this->baseUrl(), '', $url);
         $url = $this->baseUrl().$relativeUrl;
@@ -88,9 +94,13 @@ class UpdateAction extends AdminAction
             unlink($outputDir.'/index.html');
         }
 
-        $guzzleClient = new GuzzleClient();
-        $static = $guzzleClient->request('GET', $url);
-
+        try {
+            $guzzleClient = new GuzzleClient();
+            $static = $guzzleClient->request('GET', $url);
+        } catch (Exception $e) {
+            $this->setSuccess(false);
+            return false;
+        }
         if ($static->getStatusCode() !== 200) {
             $this->setSuccess(false);
             $this->addFeedback('error', 'Can not generate static page: response status not 200.');

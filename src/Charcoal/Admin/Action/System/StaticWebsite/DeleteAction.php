@@ -51,16 +51,26 @@ class DeleteAction extends AdminAction
             return $response->withStatus(404);
         }
 
-        // Previous static version must be deleted in order to generate a new one.
+        $ret = null;
         if (file_exists($outputDir.'/index.php')) {
-            unlink($outputDir.'/index.php');
+            $ret = unlink($outputDir.'/index.php');
         }
         if (file_exists($outputDir.'/index.html')) {
-            unlink($outputDir.'/index.html');
+            $ret = unlink($outputDir.'/index.html');
         }
 
-        $this->setSuccess(($ret !== false));
-        return $response;
+        if ($ret === null) {
+            $this->setSuccess(false);
+            return $response->withStatus(404);
+        }
+
+        if ($ret === false) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        } else {
+            $this->setSuccess(true);
+            return $response;
+        }
     }
 
     /**

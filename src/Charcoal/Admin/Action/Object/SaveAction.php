@@ -100,9 +100,6 @@ class SaveAction extends AbstractSaveAction
             $reqMessage  = $this->translator()->translation(
                 '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
             );
-            $typeMessage = $this->translator()->translation(
-                '{{ parameter }} must be a {{ expectedType }}, received {{ actualType }}'
-            );
 
             $objType = $request->getParam('obj_type');
             if (!$objType) {

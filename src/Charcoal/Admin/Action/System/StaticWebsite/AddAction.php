@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Action\System\StaticWebsite;
 
+use Exception;
+
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -41,39 +43,57 @@ class AddAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        if (!$this->baseUrl()) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        }
         $url = $request->getParam('url');
         $relativeUrl = str_replace($this->baseUrl(), '', $url);
         $url = $this->baseUrl().$relativeUrl;
 
         $outputDir = $this->basePath.'cache/static/'.$relativeUrl;
         if (!file_exists($outputDir)) {
-            mkdir($outputDir, null, true);
+            $ret = mkdir($outputDir, null, true);
+            if ($ret === false) {
+                $this->setSuccess(false);
+                return $response->withStatus(500);
+            }
         }
 
+        $ret = true;
         // Previous static version must be deleted in order to generate a new one.
         if (file_exists($outputDir.'/index.php')) {
-            unlink($outputDir.'/index.php');
+            $ret =unlink($outputDir.'/index.php');
         }
         if (file_exists($outputDir.'/index.html')) {
-            unlink($outputDir.'/index.html');
+            $ret = unlink($outputDir.'/index.html');
+        }
+        if ($ret === false) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
         }
 
-        $guzzleClient = new GuzzleClient();
-        $static = $guzzleClient->request('GET', $url, [
-            'http_errors' => false
-        ]);
+        try {
+            $guzzleClient = new GuzzleClient();
+            $static = $guzzleClient->request('GET', $url, [
+                'http_errors' => false
+            ]);
+        } catch (Exception $e) {
+            $this->setSuccess(false);
+            return $response->withStatus(404);
+        }
 
         if ($static->getStatusCode() !== 200) {
             $this->setSuccess(false);
             $this->addFeedback('error', sprintf('Can not generate static page: response status was %s (needs a 200 OK response).', $static->getStatusCode()));
-            return $response->withStatus(500);
+            return $response->withStatus(404);
         }
 
         $headers = $static->getHeaders();
         if (!isset($headers['Content-Type'][0])) {
             $this->setSuccess(false);
             $this->addFeedback('error', 'Can not generate static page: content-type was not set on response.');
-            return $response->withStatus(500);
+            return $response->withStatus(404);
         }
 
         if (strstr($headers['Content-Type'][0], 'text/html') !== false) {
@@ -91,13 +111,18 @@ class AddAction extends AdminAction
         if (!$body) {
             $this->setSuccess(false);
             $this->addFeedback('error', 'Can not generate static page: body is empty.');
-            return $response->withStatus(500);
+            return $response->withStatus(404);
         }
 
         $ret = file_put_contents($outputFile, $prefix.$body);
 
-        $this->setSuccess(($ret !== false));
-        return $response;
+        if ($ret === false) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        } else {
+            $this->setSuccess(true);
+            return $response;
+        }
     }
 
     /**

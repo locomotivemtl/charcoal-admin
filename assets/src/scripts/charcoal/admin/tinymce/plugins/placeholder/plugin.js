@@ -8,14 +8,12 @@
 
     tinymce.PluginManager.add('placeholder', function (editor) {
         editor.on('init', function () {
+            if (editor.settings.readonly === true || editor.settings.inline === true) {
+                return;
+            }
+
             var placeholder = editor.getElement().getAttribute('placeholder') || editor.settings.placeholder;
-            if (
-                typeof placeholder === 'undefined' ||
-                placeholder === null ||
-                placeholder === '' ||
-                placeholder === [] ||
-                placeholder === {}
-            ) {
+            if (typeof placeholder === 'undefined') {
                 return;
             }
 
@@ -52,30 +50,25 @@
             editor.on('setcontent', onSetContent);
 
             function onFocus() {
-                console.log('onFocus', label.text);
                 label.hide();
                 editor.focus();
             }
 
             function onBlur() {
-                console.log('onBlur', label.text);
                 label.check();
             }
 
             function onChange() {
-                console.log('onChange', label.text);
                 label.check();
             }
 
             function onSetContent() {
-                console.log('onSetContent', label.text);
                 label.check();
             }
 
             // Add 1 second timeout to delay execution until after
             // vendor plugings adjust the toolbars
             setTimeout(function () {
-                console.log('timeOut', label.text);
                 label.check();
             }, 1000);
         });
@@ -99,11 +92,14 @@
         };
 
         Label.prototype.check = function () {
-            var textContent = editor.getBody().textContent.replace(this.el.textContent, '').trim();
-            if (textContent === '') {
-                this.show();
-            } else {
-                this.hide();
+            var bodyElement = editor.getBody();
+            if (bodyElement !== null) {
+                var textContent = editor.getBody().textContent.replace(this.el.textContent, '').trim();
+                if (textContent === '') {
+                    this.show();
+                } else {
+                    this.hide();
+                }
             }
         };
     });

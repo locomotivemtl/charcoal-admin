@@ -733,8 +733,12 @@ class FormSidebarWidget extends AdminWidget implements
     public function languages()
     {
         $currentLocale = $this->translator()->getLocale();
+        $locales = $this->translator()->locales();
         $languages = [];
-        foreach ($this->translator()->locales() as $locale => $localeStruct) {
+
+        uasort($locales, [ $this, 'sortLanguagesByPriority' ]);
+
+        foreach ($locales as $locale => $localeStruct) {
             /**
              * @see \Charcoal\Admin\Widget\FormGroupWidget::languages()
              * @see \Charcoal\Property\LangProperty::localeChoices()
@@ -758,6 +762,24 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         return $languages;
+    }
+
+    /**
+     * To be called with {@see uasort()}.
+     *
+     * @param  array $a Sortable action A.
+     * @param  array $b Sortable action B.
+     * @return integer
+     */
+    protected function sortLanguagesByPriority(array $a, array $b)
+    {
+        $a = isset($a['priority']) ? $a['priority'] : 0;
+        $b = isset($b['priority']) ? $b['priority'] : 0;
+
+        if ($a === $b) {
+            return 0;
+        }
+        return ($a < $b) ? (-1) : 1;
     }
 
     /**

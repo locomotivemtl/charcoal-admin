@@ -13,11 +13,12 @@ use Psr\Http\Message\UriInterface;
 use Pimple\Container;
 
 // From elFinder
-use elFinderConnector;
 use elFinder;
+use elFinderConnector;
+use elFinderVolumeDriver;
 
 // From 'charcoal-config'
-use Charcoal\Config\GenericConfig as Config;
+use Charcoal\Config\ConfigInterface;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
@@ -39,26 +40,61 @@ class ElfinderConnectorAction extends AdminAction
     use CallableResolverAwareTrait;
 
     /**
-     * The relative path (from filesystem's root) to the storage directory.
+     * The default relative path (from filesystem's root) to the storage directory.
      *
-     * @var string
+     * @const string
      */
-    protected $uploadPath = 'uploads/';
+    const DEFAULT_STORAGE_PATH = 'uploads';
 
     /**
-     * Store the elFinder configuration from the admin configuration.
+     * The base path for the Charcoal installation.
      *
-     * @var \Charcoal\Config\ConfigInterface
+     * @var string|null
+     */
+    protected $basePath;
+
+    /**
+     * The path to the public / web directory.
+     *
+     * @var string|null
+     */
+    protected $publicPath;
+
+    /**
+     * Store the collection of filesystem adapters.
+     *
+     * @var \League\Flysystem\FilesystemInterface[]
+     */
+    protected $filesystems;
+
+    /**
+     * Store the filesystem configset.
+     *
+     * @var \Charcoal\App\Config\FilesystemConfig
+     */
+    protected $filesystemConfig;
+
+    /**
+     * Store the elFinder configuration from the admin / app configset.
+     *
+     * @var ConfigInterface
      */
     protected $elfinderConfig;
 
     /**
-     * The elFinder class settings.
+     * Store the compiled elFinder configuration settings.
      *
      * @var array
      * - {@link https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options}
      */
     protected $elfinderOptions;
+
+    /**
+     * Store the elFinder connector instance.
+     *
+     * @var \elFinderConnector
+     */
+    protected $elfinderConnector;
 
     /**
      * Store the factory instance for the current class.
@@ -75,25 +111,55 @@ class ElfinderConnectorAction extends AdminAction
     private $formProperty;
 
     /**
-     * Retrieve the property factory.
+     * The related object type.
      *
-     * @throws RuntimeException If the property factory was not previously set.
-     * @return FactoryInterface
+     * @var string
      */
-    public function propertyFactory()
+    private $objType;
+
+    /**
+     * The related object ID.
+     *
+     * @var string
+     */
+    private $objId;
+
+    /**
+     * The related property identifier.
+     *
+     * @var string
+     */
+    private $propertyIdent;
+
+    /**
+     * Sets the action data.
+     *
+     * From the HTTP Request:
+     * - "obj_type"
+     * - "obj_id"
+     * - "property"
+     *
+     * @param  array $data The action data.
+     * @return self
+     */
+    public function setData(array $data)
     {
-        if (!isset($this->propertyFactory)) {
-            throw new RuntimeException(sprintf(
-                'Property Factory is not defined for "%s"',
-                get_class($this)
-            ));
+        if (isset($data['obj_type'])) {
+            $this->objType = $data['obj_type'];
         }
 
-        return $this->propertyFactory;
+        if (isset($data['obj_id'])) {
+            $this->objId = $data['obj_id'];
+        }
+
+        if (isset($data['property'])) {
+            $this->propertyIdent = $data['property'];
+        }
+
+        return $this;
     }
 
     /**
-     * @todo   Implement {@see self::$httpRequest} to replace `filter_input(INPUT_GET)`.
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -102,7 +168,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         unset($request);
 
-        $this->setupElfinder();
+        $this->connector = $this->setupElfinder();
 
         return $response;
     }
@@ -115,7 +181,7 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function setupElfinder(array $extraOptions = [])
     {
-        $options = $this->connectorOptions($extraOptions);
+        $options = $this->buildConnectorOptions($extraOptions);
 
         // Run elFinder
         $connector = new elFinderConnector(new elFinder($options));
@@ -125,58 +191,21 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
-     * Retrieve the default elFinder Connector options.
+     * Retrieve the elFinder Connector options.
      *
-     * @link    https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
-     *     Documentation for connector options.
-     * @example https://gist.github.com/mcaskill/5944478b1894a5bf1349bfa699387cd4
-     *     The Connector can be customized by defining a "elfinder" structure in
-     *     your application's admin configuration.
-     *
-     * @param  array|null $extraOptions Additional settings to pass to elFinder.
      * @return array
      */
-    public function connectorOptions(array $extraOptions = [])
+    public function getConnectorOptions()
     {
-        if ($this->elfinderOptions === null || !empty($extraOptions)) {
-            $options = $this->defaultConnectorOptions();
-
-            if (isset($this->elfinderConfig['connector'])) {
-                $options = array_replace_recursive(
-                    $options,
-                    $this->elfinderConfig['connector'],
-                    $extraOptions
-                );
-            } else {
-                /** @todo Remove this deprecation notice for the next release */
-                $keys = $this->elfinderConfig->keys();
-                if (!empty($keys) && array_intersect([ 'bind', 'plugin', 'roots' ], $keys)) {
-                    trigger_error(
-                        'elFinder connector settings must be nested under [admin.elfinder.connector].',
-                        E_USER_DEPRECATED
-                    );
-                }
-            }
-
-            if ($extraOptions) {
-                $options = array_replace_recursive(
-                    $options,
-                    $extraOptions
-                );
-            }
-
-            if (isset($options['bind'])) {
-                $options['bind'] = $this->resolveBoundCallbacks($options['bind']);
-            }
-
-            $this->elfinderOptions = $options;
+        if ($this->elfinderOptions === null) {
+            $this->elfinderOptions = $this->buildConnectorOptions();
         }
 
         return $this->elfinderOptions;
     }
 
     /**
-     * Retrieve the default elFinder Connector options from the configured flysystem filesystems.
+     * Build and retrieve the elFinder Connector options.
      *
      * @link    https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
      *     Documentation for connector options.
@@ -184,144 +213,322 @@ class ElfinderConnectorAction extends AdminAction
      *     The Connector can be customized by defining a "elfinder" structure in
      *     your application's admin configuration.
      *
+     * @param  array $extraOptions Additional settings to pass to elFinder.
      * @return array
      */
-    public function defaultConnectorOptions()
+    public function buildConnectorOptions(array $extraOptions = [])
     {
-        $uploadPath = $this->uploadPath();
+        $options = [
+            'debug' => false,
+            'roots' => $this->getCurrentRoots()
+        ];
 
-        $defaultBaseUrl = rtrim((string)$this->baseUrl, '/');
+        $adminOptions = $this->getAdminConnectorOptions();
+        $adminOptions = $this->parseAdminOptionsForConnectorBuild($adminOptions);
+        $extraOptions = $this->parseExtraOptionsForConnectorBuild($extraOptions);
 
-        $filesystemConfig = $this->filesystemConfig;
-        $filesystems = $this->filesystems;
+        $options = $this->mergeConnectorOptions($options, $adminOptions);
+        $options = $this->mergeConnectorOptions($options, $extraOptions);
 
-        $roots = [];
-        $currentFileSystem = $this->formProperty() ? $this->formProperty()->fileSystem() : false;
-
-        if ($currentFileSystem && isset($filesystems[$currentFileSystem])) {
-            $config = $filesystemConfig['connections'][$currentFileSystem];
-
-            if (isset($config['label'])) {
-                $label = $this->translator()->translation($config['label']);
-            } else {
-                $label = ucfirst($filesystem);
-            }
-
-            if (isset($config['base_url'])) {
-                $baseUrl = $config['base_url'];
-            } else {
-                $baseUrl = $defaultBaseUrl;
-            }
-
-            $startPath = $this->formProperty()->uploadPath();
-            if (!$startPath) {
-                $startPath = isset($config['path']) ? $config['path'] : '/';
-            }
-
-            $filesystems[$currentFileSystem]->createDir($startPath);
-
-            $roots[$currentFileSystem] = [
-                'driver'         => 'Flysystem',
-                'filesystem'     => $filesystems[$currentFileSystem],
-
-                'alias'          => (string)$label,
-                'cache'          => false,
-
-                // Path to files (REQUIRED)
-                'path'           => $uploadPath,
-                'startPath'      => $startPath,
-
-                // Jpg Compression quality
-                'jpgQuality'     => 80,
-                // Enable localized folder names
-                'i18nFolderName' => true,
-                // URL to files (REQUIRED)
-                'URL'            => $baseUrl.'/'.$uploadPath,
-                'tmbURL'         => $defaultBaseUrl.'/'.$uploadPath.'/.tmb',
-                'tmbPath'        => $uploadPath.'/.tmb',
-                'tmbSize'        => 200,
-                'tmbBgColor'     => 'transparent',
-                // All MIME types not allowed to upload
-                'uploadDeny'     => [ 'all' ],
-                // MIME type `image` and `text/plain` allowed to upload
-                'uploadAllow'    => $this->defaultUploadAllow(),
-                // Allowed MIME type `image` and `text/plain` only
-                'uploadOrder'    => [ 'deny', 'allow' ],
-                // Disable and hide dot starting files
-                'accessControl'  => 'access',
-                // File permission attributes
-                'attributes'     => [
-                    $this->attributesForHiddenFiles()
-                ],
-                // Overwrite default duplicate suffix to be html friendly
-                'duplicateSuffix'=> '_%s_'
-            ];
-
-            return [
-                'debug' => true,
-                'roots' => $roots
-            ];
+        if (isset($options['bind'])) {
+            $options['bind'] = $this->resolveCallbacksForBindOption($options['bind']);
         }
 
-        foreach ($filesystemConfig['connections'] as $filesystem => $config) {
-            if (isset($config['public']) && $config['public'] !== true) {
-                continue;
-            }
+        $this->elfinderOptions = $options;
 
-            if (isset($config['label'])) {
-                $label = $this->translator()->translation($config['label']);
-            } else {
-                $label = ucfirst($filesystem);
-            }
+        return $options;
+    }
 
-            if (isset($config['base_url'])) {
-                $baseUrl = $config['base_url'];
-            } else {
-                $baseUrl = $defaultBaseUrl;
-            }
+    /**
+     * Merge the elFinder Connector options.
+     *
+     * @param  array $options1 The settings in which data is replaced.
+     * @param  array $options2 The settings from which data is extracted.
+     * @return array The merged settings.
+     */
+    protected function mergeConnectorOptions(array $options1, array $options2)
+    {
+        return array_replace_recursive($options1, $options2);
+    }
 
+    /**
+     * Parse the admin options for the elFinder Connector.
+     *
+     * @param  array $options The admin settings to parse.
+     * @return array The parsed settings.
+     */
+    protected function parseAdminOptionsForConnectorBuild(array $options)
+    {
+        // Root settings are already merged when retrieving available roots.
+        unset($options['roots']);
 
-            $roots[$filesystem] = [
-                'driver'         => 'Flysystem',
-                'filesystem'     => $filesystems[$filesystem],
+        return $options;
+    }
 
-                'alias'          => (string)$label,
-                'cache'          => false,
+    /**
+     * Parse the extra options for the elFinder Connector.
+     *
+     * @param  array $options The extra settings to parse.
+     * @return array The parsed settings.
+     */
+    protected function parseExtraOptionsForConnectorBuild(array $options)
+    {
+        // Resolve callbacks on extra options
+        if (isset($options['roots'])) {
+            $options['roots'] = $this->resolveCallbacksForRoots($options['roots']);
+        }
 
-                // Path to files (REQUIRED)
-                'path'           => $uploadPath,
-                'startPath'      => isset($config['path']) ? $config['path'] : '/',
+        return $options;
+    }
 
-                // Jpg Compression quality
-                'jpgQuality'     => 80,
-                // Enable localized folder names
-                'i18nFolderName' => true,
-                // URL to files (REQUIRED)
-                'URL'            => $baseUrl.'/'.$uploadPath,
-                'tmbURL'         => $defaultBaseUrl.'/'.$uploadPath.'/.tmb',
-                'tmbPath'        => $uploadPath.'/.tmb',
-                'tmbSize'        => 200,
-                'tmbBgColor'     => 'transparent',
-                // All MIME types not allowed to upload
-                'uploadDeny'     => [ 'all' ],
-                // MIME type `image` and `text/plain` allowed to upload
-                'uploadAllow'    => $this->defaultUploadAllow(),
-                // Allowed MIME type `image` and `text/plain` only
-                'uploadOrder'    => [ 'deny', 'allow' ],
-                // Disable and hide dot starting files
-                'accessControl'  => 'access',
-                // File permission attributes
-                'attributes' => [
-                    $this->attributesForHiddenFiles()
-                ]
+    /**
+     * Retrieve the admin's elFinder Connector options.
+     *
+     * Path: `config.admin.elfinder.connector`
+     *
+     * @return array
+     */
+    public function getAdminConnectorOptions()
+    {
+        $config = $this->elfinderConfig('connector');
+        if (!is_array($config)) {
+            return [];
+        }
 
-            ];
+        return $config;
+    }
+
+    /**
+     * Retrieve the default elFinder Connector options.
+     *
+     * @return array
+     */
+    protected function getDefaultElfinderRootSettings()
+    {
+        return [
+            'driver'          => 'LocalFileSystem',
+            'i18nFolderName'  => true,
+
+            'jpgQuality'      => 80,
+            'tmbSize'         => 200,
+            'tmbCrop'         => true,
+            'tmbBgColor'      => 'transparent',
+
+            'uploadDeny'      => $this->defaultUploadDeny(),
+            'uploadAllow'     => $this->defaultUploadAllow(),
+            'uploadOrder'     => [ 'deny', 'allow' ],
+            'accessControl'   => [ $this, 'checkAccess' ],
+            'duplicateSuffix' => '_%s_'
+        ];
+    }
+
+    /**
+     * Retrieve the default Flysystem / elFinder options.
+     *
+     * @return array
+     */
+    protected function getDefaultFlysystemRootSettings()
+    {
+        return [
+            'driver'      => 'Flysystem',
+            'filesystem'  => null,
+            'cache'       => false,
+            'URL'         => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
+            'path'        => self::DEFAULT_STORAGE_PATH,
+        ];
+    }
+
+    /**
+     * Retrieve the default Flysystem / elFinder options.
+     *
+     * @param  string $ident The disk identifier.
+     * @return array
+     */
+    protected function resolveFallbackRootSettings($ident)
+    {
+        $fsConfig   = $this->getFilesystemConfig($ident);
+        $uploadPath = $this->defaultUploadPath();
+
+        if (isset($fsConfig['base_url'])) {
+            $baseUrl = rtrim($fsConfig['base_url'], '/').'/';
+        } else {
+            $baseUrl = $this->baseUrl();
         }
 
         return [
-            'debug' => true,
-            'roots' => $roots
+            'URL'     => $baseUrl.'/'.$uploadPath,
+            'path'    => $uploadPath,
+            'tmbURL'  => $this->baseUrl($uploadPath.'/.tmb'),
+            'tmbPath' => $uploadPath.'/.tmb'
         ];
+    }
+
+    /**
+     * Retrieve the elFinder root options for the given file system.
+     *
+     * Merges `config.filesystem.connections` with
+     * {@see self::getDefaultDiskSettings() default root settings}.
+     *
+     * @param  string $ident The disk identifier.
+     * @return array|null Returns an elFinder root structure or NULL.
+     */
+    public function getNamedRoot($ident)
+    {
+        if ($this->hasFilesystem($ident) === false) {
+            return null;
+        }
+
+        $filesystem = $this->getFilesystem($ident);
+        $fsConfig   = $this->getFilesystemConfig($ident);
+        $elfConfig  = $this->getFilesystemAdminConfig($ident);
+
+        if (isset($elfConfig['label'])) {
+            $label = $elfConfig['label'];
+        } elseif (isset($fsConfig['label'])) {
+            $label = $fsConfig['label'];
+        } else {
+            $label = 'filesystem.disk.'.$ident;
+        }
+
+        $immutableSettings = [
+            'filesystem'  => $filesystem,
+            'alias'       => $this->translator()->translate($label),
+        ];
+
+        $root = array_replace_recursive(
+            $this->getDefaultElfinderRootSettings(),
+            $this->getDefaultFlysystemRootSettings(),
+            $elfConfig
+        );
+
+        $root = array_replace_recursive(
+            $this->resolveFallbackRootSettings($ident),
+            $root,
+            $immutableSettings
+        );
+
+        return $this->resolveCallbacksForRoot($root);
+    }
+
+    /**
+     * Retrieve only the public elFinder root volumes.
+     *
+     * @return array
+     */
+    public function getPublicRoots()
+    {
+        $roots = [];
+        foreach ($this->filesystems->keys() as $ident) {
+            if ($this->isFilesystemPublic($ident)) {
+                $disk = $this->getNamedRoot($ident);
+                if ($disk !== null) {
+                    $roots[$ident] = $disk;
+                }
+            }
+        }
+
+        return $roots;
+    }
+
+    /**
+     * Retrieve all elFinder root volumes.
+     *
+     * @return array
+     */
+    public function getAllRoots()
+    {
+        $roots = [];
+        foreach ($this->filesystems->keys() as $ident) {
+            $disk = $this->getNamedRoot($ident);
+            if ($disk !== null) {
+                $roots[$ident] = $disk;
+            }
+        }
+
+        return $roots;
+    }
+
+    /**
+     * Retrieve only the current context's elFinder root volumes.
+     *
+     * @return array Returns all public root volumes
+     *     or a subset if the context has a related form property.
+     */
+    public function getCurrentRoots()
+    {
+        $formProperty     = $this->formProperty();
+        $targetFilesystem = $formProperty ? $formProperty->filesystem() : null;
+
+        if ($this->isFilesystemPublic($targetFilesystem)) {
+            $disk = $this->getNamedRoot($targetFilesystem);
+
+            $startPath = $formProperty->uploadPath();
+            if ($startPath) {
+                $disk['startPath'] = $startPath;
+            }
+
+            return [ $disk ];
+        }
+
+        return $this->getPublicRoots();
+    }
+
+    /**
+     * Resolve callables in a collection of elFinder's root volumes.
+     *
+     * @param  array $roots One or many roots with possible unresolved callables.
+     * @return array Returns the root(s) with resolved callables.
+     */
+    protected function resolveCallbacksForRoots(array $roots)
+    {
+        foreach ($roots as $i => $root) {
+            $roots[$i] = $this->resolveCallbacksForRoot($root);
+        }
+
+        return $roots;
+    }
+
+    /**
+     * Resolve callables in one elFinder root volume.
+     *
+     * @param  array $root A root structure with possible unresolved callables.
+     * @return array Returns the root with resolved callables.
+     */
+    protected function resolveCallbacksForRoot(array $root)
+    {
+        if (isset($root['accessControl'])) {
+            $callable = $root['accessControl'];
+            if (!is_callable($callable) && is_string($callable)) {
+                $root['accessControl'] = $this->resolveCallable($callable);
+            }
+        }
+
+        return $root;
+    }
+
+    /**
+     * Resolve callables in elFinder's "bind" option.
+     *
+     * @param  array $toResolve One or many pairs of callbacks.
+     * @return array Returns the parsed event listeners.
+     */
+    protected function resolveCallbacksForBindOption(array $toResolve)
+    {
+        $resolved = $toResolve;
+
+        foreach ($toResolve as $actions => $callables) {
+            foreach ($callables as $i => $callable) {
+                if (!is_callable($callable) && is_string($callable)) {
+                    if (0 === strpos($callable, 'Plugin.')) {
+                        continue;
+                    }
+
+                    $resolved[$actions][$i] = $this->resolveCallable($callable);
+                }
+            }
+        }
+
+        return $resolved;
     }
 
     /**
@@ -361,13 +568,42 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
+     * Control file access.
+     *
+     * This method will disable accessing files/folders starting from '.' (dot)
+     *
+     * @param  string                $attr    Attribute name ("read", "write", "locked", "hidden").
+     * @param  string                $path    Absolute file path.
+     * @param  string                $data    Value of volume option `accessControlData`.
+     * @param  \elFinderVolumeDriver $volume  ElFinder volume driver object.
+     * @param  boolean|null          $isDir   Whether the path is a directory
+     *     (TRUE: directory, FALSE: file, NULL: unknown).
+     * @param  string                $relPath File path relative to the volume root directory
+     *     started with directory separator.
+     * @return boolean|null TRUE to allow, FALSE to deny, NULL to let elFinder decide.
+     **/
+    public function checkAccess($attr, $path, $data, elFinderVolumeDriver $volume, $isDir, $relPath)
+    {
+        $basename = basename($path);
+        /**
+         * If file/folder begins with '.' (dot) but without volume root,
+         * set to FALSE if attributes are "read" or "write",
+         * set to TRUE if attributes are other ("locked" + "hidden"),
+         * set to NULL to let elFinder decide itself.
+         */
+        return ($basename[0] === '.' && strlen($relPath) !== 1)
+                ? !($attr === 'read' || $attr === 'write')
+                :  null;
+    }
+
+    /**
      * Retrieve the current object type from the GET parameters.
      *
      * @return string|null
      */
     public function objType()
     {
-        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+        return $this->objType;
     }
 
     /**
@@ -377,7 +613,7 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function objId()
     {
-        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
+        return $this->objId;
     }
 
     /**
@@ -387,7 +623,7 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function propertyIdent()
     {
-        return filter_input(INPUT_GET, 'property', FILTER_SANITIZE_STRING);
+        return $this->propertyIdent;
     }
 
     /**
@@ -427,82 +663,36 @@ class ElfinderConnectorAction extends AdminAction
      *
      * @return string
      */
-    public function uploadPath()
+    public function defaultUploadPath()
     {
-        return trim($this->uploadPath, '/');
+        return self::DEFAULT_STORAGE_PATH;
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    protected function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->baseUrl = $container['base-url'];
-        $this->elfinderConfig = $container['elfinder/config'];
-        $this->setPropertyFactory($container['property/factory']);
-        $this->setCallableResolver($container['callableResolver']);
-
-        // From filesystem provider
-        $this->filesystemConfig = $container['filesystem/config'];
-        $this->filesystems = $container['filesystems'];
-    }
-
-    /**
-     * Set a property factory.
-     *
-     * @param FactoryInterface $factory The property factory,
-     *                                  to createable property values.
-     * @return self
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Resolve elFinder event listeners.
-     *
-     * @param  array $toResolve One or many pairs of callbacks.
-     * @return array Returns the parsed event listeners.
-     */
-    protected function resolveBoundCallbacks(array $toResolve)
-    {
-        $resolved = $toResolve;
-
-        foreach ($toResolve as $actions => $callables) {
-            foreach ($callables as $i => $callable) {
-                if (!is_callable($callable) && is_string($callable)) {
-                    if (0 === strpos($callable, 'Plugin.')) {
-                        continue;
-                    }
-
-                    $resolved[$actions][$i] = $this->resolveCallable($callable);
-                }
-            }
-        }
-
-        return $resolved;
-    }
-
-    /**
-     * Default acceptable files to upload.
+     * Allow upload for a subset MIME types.
      *
      * @return array
      */
     protected function defaultUploadAllow()
     {
-        // By default, all images, pdf and plaintext files are allowed.
+        // By default, all images, PDF, and plain-text files are allowed.
         return [
             'image',
             'application/pdf',
             'text/plain'
+        ];
+    }
+
+    /**
+     * Deny upload for all MIME types.
+     *
+     * @return array
+     */
+    protected function defaultUploadDeny()
+    {
+        // By default, all files are rejected.
+        return [
+            'all'
         ];
     }
 
@@ -524,17 +714,160 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    public function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['base_path'];
+        $this->publicPath = $container['config']['public_path'];
+
+        $this->setElfinderConfig($container['elfinder/config']);
+        $this->setPropertyFactory($container['property/factory']);
+        $this->setCallableResolver($container['callableResolver']);
+
+        /** @see \Charcoal\App\ServiceProvide\FilesystemServiceProvider */
+        $this->filesystemConfig = $container['filesystem/config'];
+        $this->filesystems = $container['filesystems'];
+    }
+
+    /**
+     * Get the named filesystem object.
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return \League\Flysystem\FilesystemInterface|null Returns the filesystem instance
+     *     or NULL if not found.
+     */
+    protected function getFilesystem($ident)
+    {
+        if (isset($this->filesystems[$ident])) {
+            return $this->filesystems[$ident];
+        }
+
+        return null;
+    }
+
+    /**
+     * Determine if the named filesystem object exists.
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return boolean TRUE if the filesystem instance exists, otherwise FALSE.
+     */
+    protected function hasFilesystem($ident)
+    {
+        return ($this->getFilesystem($ident) !== null);
+    }
+
+    /**
+     * Get the given filesystem's storage configset.
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return array|null Returns the filesystem configset
+     *     or NULL if the filesystem is not found.
+     */
+    protected function getFilesystemConfig($ident)
+    {
+        if ($this->hasFilesystem($ident) === false) {
+            return null;
+        }
+
+        if (isset($this->filesystemConfig['connections'][$ident])) {
+            return $this->filesystemConfig['connections'][$ident];
+        }
+
+        return [];
+    }
+
+    /**
+     * Determine if the named filesystem is public (from its configset).
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return boolean TRUE if the filesystem is public, otherwise FALSE.
+     */
+    protected function isFilesystemPublic($ident)
+    {
+        if ($this->hasFilesystem($ident) === false) {
+            return false;
+        }
+
+        $config = $this->getFilesystemConfig($ident);
+        if (isset($config['public']) && $config['public'] === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the given filesystem's admin configset.
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return array|null Returns the filesystem configset
+     *     or NULL if the filesystem is not found.
+     */
+    protected function getFilesystemAdminConfig($ident)
+    {
+        if ($this->hasFilesystem($ident) === false) {
+            return null;
+        }
+
+        $elfConfig = $this->getAdminConnectorOptions();
+        if (isset($elfConfig['roots'][$ident])) {
+            return $elfConfig['roots'][$ident];
+        }
+
+        return [];
+    }
+
+    /**
+     * Set the elFinder's configset.
+     *
+     * @param  ConfigInterface $config A configset.
+     * @return void
+     */
+    protected function setElfinderConfig(ConfigInterface $config)
+    {
+        $this->elfinderConfig = $config;
+    }
+
+    /**
+     * Retrieve the elFinder's configset.
+     *
+     * @param  string|null $key     Optional data key to retrieve from the configset.
+     * @param  mixed|null  $default The default value to return if data key does not exist.
+     * @return mixed|AdminConfig
+     */
+    protected function elfinderConfig($key = null, $default = null)
+    {
+        if ($key) {
+            if (isset($this->elfinderConfig[$key])) {
+                return $this->elfinderConfig[$key];
+            } else {
+                if (!is_string($default) && is_callable($default)) {
+                    return $default();
+                } else {
+                    return $default;
+                }
+            }
+        }
+
+        return $this->elfinderConfig;
+    }
+
+    /**
      * Set a property factory.
      *
      * @param FactoryInterface $factory The property factory,
      *                                  to createable property values.
-     * @return self
+     * @return void
      */
     protected function setPropertyFactory(FactoryInterface $factory)
     {
         $this->propertyFactory = $factory;
-
-        return $this;
     }
 
     /**

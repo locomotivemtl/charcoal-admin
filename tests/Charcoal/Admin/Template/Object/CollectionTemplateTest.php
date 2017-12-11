@@ -40,15 +40,11 @@ class CollectionTemplateTest extends PHPUnit_Framework_TestCase
     {
         $container = $this->container();
 
-        $this->obj = $this->createMock(CollectionTemplate::class, null, [[
+        $this->obj = new CollectionTemplate([
             'logger'          => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
-        ]]);
-        $this->obj->setDependencies($container);
-
-        $this->obj->expects($this->any())
-            ->method('isAuthenticated')
-            ->will($this->returnValue(true));
+            'metadata_loader' => $container['metadata/loader'],
+            'container'       => $container
+        ]);
     }
 
     public static function getMethod($obj, $name)

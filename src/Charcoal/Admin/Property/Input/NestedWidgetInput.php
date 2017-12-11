@@ -55,7 +55,7 @@ class NestedWidgetInput extends AbstractPropertyInput implements
      *
      * @var FormGroupInterface
      */
-    private $formGroup;q
+    private $formGroup;
 
     /**
      * Set the form input's parent group.

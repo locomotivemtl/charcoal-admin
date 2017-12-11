@@ -45,7 +45,7 @@ abstract class AdminScript extends AbstractScript
      * @param  Container $container Pimple DI container.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         $this->setModelFactory($container['model/factory']);
         $this->setTranslator($container['translator']);

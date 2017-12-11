@@ -195,35 +195,6 @@ class FormPropertyWidget extends AdminWidget implements
     private $isMergingWidgetData = false;
 
     /**
-     * Set the widget's dependencies.
-     *
-     * @param  Container $container Service container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setView($container['view']);
-        $this->setPropertyFactory($container['property/factory']);
-        $this->setPropertyInputFactory($container['property/input/factory']);
-        $this->setPropertyDisplayFactory($container['property/display/factory']);
-    }
-
-    /**
-     * Set a property factory.
-     *
-     * @param  FactoryInterface $factory The factory to create property values.
-     * @return FormPropertyWidget Chainable
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the property factory.
      *
      * @throws RuntimeException If the property factory is missing.
@@ -240,18 +211,7 @@ class FormPropertyWidget extends AdminWidget implements
         return $this->propertyFactory;
     }
 
-    /**
-     * Set a property control factory.
-     *
-     * @param  FactoryInterface $factory The factory to create form controls for property values.
-     * @return FormPropertyWidget Chainable
-     */
-    protected function setPropertyInputFactory(FactoryInterface $factory)
-    {
-        $this->propertyInputFactory = $factory;
 
-        return $this;
-    }
 
     /**
      * Retrieve the property control factory.
@@ -270,18 +230,6 @@ class FormPropertyWidget extends AdminWidget implements
         return $this->propertyInputFactory;
     }
 
-    /**
-     * Set a property display factory.
-     *
-     * @param  FactoryInterface $factory The factory to create displayable property values.
-     * @return FormPropertyWidget Chainable
-     */
-    protected function setPropertyDisplayFactory(FactoryInterface $factory)
-    {
-        $this->propertyDisplayFactory = $factory;
-
-        return $this;
-    }
 
     /**
      * Retrieve the property display factory.
@@ -422,48 +370,6 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Resolve the property output type.
-     *
-     * Note: The "input_type" or "display_type" will be set
-     * if the output type is a valid output property.
-     *
-     * @param  string $type The input or display property type.
-     * @throws InvalidArgumentException If the property output type is invalid.
-     * @return string Returns either "input" or "display".
-     */
-    protected function resolveOutputType($type)
-    {
-        if ($this->propertyInputFactory()->isResolvable($type)) {
-            $this->setInputType($type);
-            return static::PROPERTY_CONTROL;
-        } elseif ($this->propertyDisplayFactory()->isResolvable($type)) {
-            $this->setDisplayType($type);
-            return static::PROPERTY_DISPLAY;
-        } else {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid form property output type, received %s',
-                is_object($type) ? get_class($type) : gettype($type)
-            ));
-        }
-    }
-
-    /**
-     * Retrieved the resolved the property output type.
-     *
-     * @return string|null Returns the property's "input_type" or "display_type".
-     */
-    protected function resolvedOutputType()
-    {
-        switch ($this->outputType()) {
-            case static::PROPERTY_DISPLAY:
-                return $this->displayType();
-
-            case static::PROPERTY_CONTROL:
-                return $this->inputType();
-        }
-    }
-
-    /**
      * Retrieve the supported property output types.
      *
      * @return array
@@ -508,36 +414,7 @@ class FormPropertyWidget extends AdminWidget implements
         return $this;
     }
 
-    /**
-     * Set the core data for the widget and property's first.
-     *
-     * @param  array $data The widget and property data.
-     * @return array The widget and property data.
-     */
-    private function setCoreData(array $data)
-    {
-        if (isset($data['input_type'])) {
-            $this->setInputType($data['input_type']);
-        }
 
-        if (isset($data['display_type'])) {
-            $this->setDisplayType($data['display_type']);
-        }
-
-        if (isset($data['property_type'])) {
-            $this->setPropertyType($data['property_type']);
-        }
-
-        if (isset($data['output_type'])) {
-            $this->setOutputType($data['output_type']);
-        }
-
-        if (isset($data['type'])) {
-            $this->setType($data['type']);
-        }
-
-        return $data;
-    }
 
     /**
      * Set the widget and property data.
@@ -947,51 +824,6 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Resolve the property control type.
-     *
-     * @return string
-     */
-    private function resolveInputType()
-    {
-        $type = null;
-
-        /** Attempt input type resolution without instantiating the property, at first. */
-        $metadata = $this->propertyData();
-        if ($metadata) {
-            if (isset($metadata['hidden']) && $metadata['hidden']) {
-                $type = static::HIDDEN_FORM_CONTROL;
-            }
-
-            if (!$type && isset($metadata['input_type'])) {
-                $type = $metadata['input_type'];
-            }
-        }
-
-        if ($this->propertyType || $this->property) {
-            $property = $this->property();
-            $metadata = $property->metadata();
-
-            if ($property->hidden()) {
-                $type = static::HIDDEN_FORM_CONTROL;
-            }
-
-            if (!$type && isset($metadata['input_type'])) {
-                $type = $metadata['input_type'];
-            }
-
-            if (!$type && isset($metadata['admin']['input_type'])) {
-                $type = $metadata['admin']['input_type'];
-            }
-        }
-
-        if (!$type) {
-            $type = static::DEFAULT_FORM_CONTROL;
-        }
-
-        return $type;
-    }
-
-    /**
      * Set the property display type.
      *
      * @param  string $type The property display type.
@@ -1031,30 +863,6 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Resolve the property display type.
-     *
-     * @return string
-     */
-    private function resolveDisplayType()
-    {
-        $type = null;
-
-        /** Attempt display type resolution without instantiating the property, at first. */
-        $metadata = $this->propertyData();
-        if ($metadata) {
-            if (isset($metadata['display_type'])) {
-                $type = $metadata['display_type'];
-            }
-        }
-
-        if ($this->propertyType || $this->property) {
-            $type = $this->property()->displayType();
-        }
-
-        return $type;
-    }
-
-    /**
      * Set the widget's model property.
      *
      * @param  PropertyInterface $property The property.
@@ -1091,21 +899,6 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         return $this->property;
-    }
-
-    /**
-     * Create the widget's model property from the property's dataset.
-     *
-     * @return PropertyInterface
-     */
-    private function createProperty()
-    {
-        $prop = $this->propertyFactory()->create($this->propertyType());
-
-        $prop->setIdent($this->propertyIdent());
-        $prop->setData($this->propertyData());
-
-        return $prop;
     }
 
     /**
@@ -1172,38 +965,6 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the default CSS class name(s) for the `.form-field`.
-     *
-     * @return string[]
-     */
-    protected function defaultFormFieldCssClasses()
-    {
-        $classes = [ 'form-field', 'form-field-'.$this->widgetId() ];
-
-        if ($this->prop()) {
-            $classes[] = 'form-property-'.$this->inputNameAsCssClass();
-
-            if ($this->prop()->type()) {
-                $classes[] = 'form-property-'.$this->prop()->type();
-            }
-
-            if ($this->prop()->multiple()) {
-                $classes[] = '-multiple';
-            }
-        }
-
-        if ($this->showActiveLanguage()) {
-            $classes[] = '-l10n';
-        }
-
-        if ($this->hidden()) {
-            $classes[] = 'hidden';
-        }
-
-        return $classes;
-    }
-
-    /**
      * Retrieve the CSS class name(s) for the `.form-field`.
      *
      * @return string
@@ -1244,16 +1005,6 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the default CSS class name(s) for the `.form-group`.
-     *
-     * @return string[]
-     */
-    protected function defaultFormGroupCssClasses()
-    {
-        return [ 'form-group' ];
-    }
-
-    /**
      * Retrieve the CSS class name(s) for the `.form-group`.
      *
      * @return string
@@ -1265,26 +1016,6 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         return implode(' ', $this->formGroupCssClass);
-    }
-
-    /**
-     * Parse the CSS class name(s).
-     *
-     * @param  mixed $classes One or more CSS class names.
-     * @throws InvalidArgumentException If a class name is not a string.
-     * @return string[]
-     */
-    protected function parseCssClasses($classes)
-    {
-        if (is_string($classes)) {
-            $classes = explode(' ', $classes);
-        }
-
-        if (!is_array($classes)) {
-            throw new InvalidArgumentException('CSS Class(es) must be a space-delimited string or an array');
-        }
-
-        return array_filter($classes, 'strlen');
     }
 
     /**
@@ -1344,38 +1075,6 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Create the widget's form control property.
-     *
-     * @return PropertyInputInterface
-     */
-    private function createInputProperty()
-    {
-        $prop  = $this->property();
-        $type  = $this->inputType();
-        $input = $this->propertyInputFactory()->create($type);
-
-        if ($this->formGroup() && ($input instanceof FormInputInterface)) {
-            $input->setFormGroup($this->formGroup());
-        }
-
-        if ($input instanceof ViewableInterface) {
-            $input->setViewController($this->viewController());
-        }
-
-        $input->setInputType($type);
-        $input->setProperty($prop);
-        $input->setPropertyVal($this->propertyVal());
-        $input->setData($prop->data());
-
-        $metadata = $prop->metadata();
-        if (isset($metadata['admin'])) {
-            $input->setData($metadata['admin']);
-        }
-
-        return $input;
-    }
-
-    /**
      * Retrieve the display property.
      *
      * @return PropertyDisplayInterface
@@ -1387,38 +1086,6 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         return $this->displayProperty;
-    }
-
-    /**
-     * Create the widget's display property.
-     *
-     * @return PropertyDisplayInterface
-     */
-    private function createDisplayProperty()
-    {
-        $prop    = $this->property();
-        $type    = $this->displayType();
-        $display = $this->propertyDisplayFactory()->create($type);
-
-        if ($this->formGroup() && ($display instanceof FormInputInterface)) {
-            $display->setFormGroup($this->formGroup());
-        }
-
-        if ($display instanceof ViewableInterface) {
-            $display->setViewController($this->viewController());
-        }
-
-        $display->setDisplayType($type);
-        $display->setProperty($prop);
-        $display->setPropertyVal($this->propertyVal());
-        $display->setData($prop->data());
-
-        $metadata = $prop->metadata();
-        if (isset($metadata['admin'])) {
-            $display->setData($metadata['admin']);
-        }
-
-        return $display;
     }
 
     /**
@@ -1467,5 +1134,344 @@ class FormPropertyWidget extends AdminWidget implements
 
             $GLOBALS['widget_template'] = '';
         }
+    }
+
+    /**
+     * Set the widget's dependencies.
+     *
+     * @param  Container $container Service container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setView($container['view']);
+        $this->setPropertyFactory($container['property/factory']);
+        $this->setPropertyInputFactory($container['property/input/factory']);
+        $this->setPropertyDisplayFactory($container['property/display/factory']);
+    }
+
+    /**
+     * Set a property factory.
+     *
+     * @param  FactoryInterface $factory The factory to create property values.
+     * @return FormPropertyWidget Chainable
+     */
+    protected function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Set a property control factory.
+     *
+     * @param  FactoryInterface $factory The factory to create form controls for property values.
+     * @return FormPropertyWidget Chainable
+     */
+    protected function setPropertyInputFactory(FactoryInterface $factory)
+    {
+        $this->propertyInputFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Set a property display factory.
+     *
+     * @param  FactoryInterface $factory The factory to create displayable property values.
+     * @return FormPropertyWidget Chainable
+     */
+    protected function setPropertyDisplayFactory(FactoryInterface $factory)
+    {
+        $this->propertyDisplayFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Resolve the property output type.
+     *
+     * Note: The "input_type" or "display_type" will be set
+     * if the output type is a valid output property.
+     *
+     * @param  string $type The input or display property type.
+     * @throws InvalidArgumentException If the property output type is invalid.
+     * @return string Returns either "input" or "display".
+     */
+    protected function resolveOutputType($type)
+    {
+        if ($this->propertyInputFactory()->isResolvable($type)) {
+            $this->setInputType($type);
+            return static::PROPERTY_CONTROL;
+        } elseif ($this->propertyDisplayFactory()->isResolvable($type)) {
+            $this->setDisplayType($type);
+            return static::PROPERTY_DISPLAY;
+        } else {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid form property output type, received %s',
+                is_object($type) ? get_class($type) : gettype($type)
+            ));
+        }
+    }
+
+    /**
+     * Retrieved the resolved the property output type.
+     *
+     * @return string|null Returns the property's "input_type" or "display_type".
+     */
+    protected function resolvedOutputType()
+    {
+        switch ($this->outputType()) {
+            case static::PROPERTY_DISPLAY:
+                return $this->displayType();
+
+            case static::PROPERTY_CONTROL:
+                return $this->inputType();
+        }
+    }
+
+    /**
+     * Retrieve the default CSS class name(s) for the `.form-field`.
+     *
+     * @return string[]
+     */
+    protected function defaultFormFieldCssClasses()
+    {
+        $classes = [ 'form-field', 'form-field-'.$this->widgetId() ];
+
+        if ($this->prop()) {
+            $classes[] = 'form-property-'.$this->inputNameAsCssClass();
+
+            if ($this->prop()->type()) {
+                $classes[] = 'form-property-'.$this->prop()->type();
+            }
+
+            if ($this->prop()->multiple()) {
+                $classes[] = '-multiple';
+            }
+        }
+
+        if ($this->showActiveLanguage()) {
+            $classes[] = '-l10n';
+        }
+
+        if ($this->hidden()) {
+            $classes[] = 'hidden';
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Retrieve the default CSS class name(s) for the `.form-group`.
+     *
+     * @return string[]
+     */
+    protected function defaultFormGroupCssClasses()
+    {
+        return [ 'form-group' ];
+    }
+
+    /**
+     * Parse the CSS class name(s).
+     *
+     * @param  mixed $classes One or more CSS class names.
+     * @throws InvalidArgumentException If a class name is not a string.
+     * @return string[]
+     */
+    protected function parseCssClasses($classes)
+    {
+        if (is_string($classes)) {
+            $classes = explode(' ', $classes);
+        }
+
+        if (!is_array($classes)) {
+            throw new InvalidArgumentException('CSS Class(es) must be a space-delimited string or an array');
+        }
+
+        return array_filter($classes, 'strlen');
+    }
+
+    /**
+     * Set the core data for the widget and property's first.
+     *
+     * @param  array $data The widget and property data.
+     * @return array The widget and property data.
+     */
+    private function setCoreData(array $data)
+    {
+        if (isset($data['input_type'])) {
+            $this->setInputType($data['input_type']);
+        }
+
+        if (isset($data['display_type'])) {
+            $this->setDisplayType($data['display_type']);
+        }
+
+        if (isset($data['property_type'])) {
+            $this->setPropertyType($data['property_type']);
+        }
+
+        if (isset($data['output_type'])) {
+            $this->setOutputType($data['output_type']);
+        }
+
+        if (isset($data['type'])) {
+            $this->setType($data['type']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Resolve the property control type.
+     *
+     * @return string
+     */
+    private function resolveInputType()
+    {
+        $type = null;
+
+        /** Attempt input type resolution without instantiating the property, at first. */
+        $metadata = $this->propertyData();
+        if ($metadata) {
+            if (isset($metadata['hidden']) && $metadata['hidden']) {
+                $type = static::HIDDEN_FORM_CONTROL;
+            }
+
+            if (!$type && isset($metadata['input_type'])) {
+                $type = $metadata['input_type'];
+            }
+        }
+
+        if ($this->propertyType || $this->property) {
+            $property = $this->property();
+            $metadata = $property->metadata();
+
+            if ($property->hidden()) {
+                $type = static::HIDDEN_FORM_CONTROL;
+            }
+
+            if (!$type && isset($metadata['input_type'])) {
+                $type = $metadata['input_type'];
+            }
+
+            if (!$type && isset($metadata['admin']['input_type'])) {
+                $type = $metadata['admin']['input_type'];
+            }
+        }
+
+        if (!$type) {
+            $type = static::DEFAULT_FORM_CONTROL;
+        }
+
+        return $type;
+    }
+
+    /**
+     * Resolve the property display type.
+     *
+     * @return string
+     */
+    private function resolveDisplayType()
+    {
+        $type = null;
+
+        /** Attempt display type resolution without instantiating the property, at first. */
+        $metadata = $this->propertyData();
+        if ($metadata) {
+            if (isset($metadata['display_type'])) {
+                $type = $metadata['display_type'];
+            }
+        }
+
+        if ($this->propertyType || $this->property) {
+            $type = $this->property()->displayType();
+        }
+
+        return $type;
+    }
+
+
+    /**
+     * Create the widget's model property from the property's dataset.
+     *
+     * @return PropertyInterface
+     */
+    private function createProperty()
+    {
+        $prop = $this->propertyFactory()->create($this->propertyType());
+
+        $prop->setIdent($this->propertyIdent());
+        $prop->setData($this->propertyData());
+
+        return $prop;
+    }
+
+    /**
+     * Create the widget's form control property.
+     *
+     * @return PropertyInputInterface
+     */
+    private function createInputProperty()
+    {
+        $prop  = $this->property();
+        $type  = $this->inputType();
+        $input = $this->propertyInputFactory()->create($type);
+
+        if ($this->formGroup() && ($input instanceof FormInputInterface)) {
+            $input->setFormGroup($this->formGroup());
+        }
+
+        if ($input instanceof ViewableInterface) {
+            $input->setViewController($this->viewController());
+        }
+
+        $input->setInputType($type);
+        $input->setProperty($prop);
+        $input->setPropertyVal($this->propertyVal());
+        $input->setData($prop->data());
+
+        $metadata = $prop->metadata();
+        if (isset($metadata['admin'])) {
+            $input->setData($metadata['admin']);
+        }
+
+        return $input;
+    }
+
+    /**
+     * Create the widget's display property.
+     *
+     * @return PropertyDisplayInterface
+     */
+    private function createDisplayProperty()
+    {
+        $prop    = $this->property();
+        $type    = $this->displayType();
+        $display = $this->propertyDisplayFactory()->create($type);
+
+        if ($this->formGroup() && ($display instanceof FormInputInterface)) {
+            $display->setFormGroup($this->formGroup());
+        }
+
+        if ($display instanceof ViewableInterface) {
+            $display->setViewController($this->viewController());
+        }
+
+        $display->setDisplayType($type);
+        $display->setProperty($prop);
+        $display->setPropertyVal($this->propertyVal());
+        $display->setData($prop->data());
+
+        $metadata = $prop->metadata();
+        if (isset($metadata['admin'])) {
+            $display->setData($metadata['admin']);
+        }
+
+        return $display;
     }
 }

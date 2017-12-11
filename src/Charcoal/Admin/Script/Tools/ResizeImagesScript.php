@@ -35,17 +35,6 @@ class ResizeImagesScript extends AdminScript
     private $dir;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['basePath'];
-    }
-
-    /**
      * @return array
      */
     public function defaultArguments()
@@ -182,6 +171,17 @@ class ResizeImagesScript extends AdminScript
 
 
         return $response;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['basePath'];
     }
 
     /**

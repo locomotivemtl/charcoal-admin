@@ -82,14 +82,14 @@ class StructureFormGroup extends FormGroupWidget implements
     /**
      * The form group's storage model.
      *
-     * @var ModelInterface|null
+     * @var \Charcoal\Model\ModelInterface|null
      */
     protected $obj;
 
     /**
      * The form group's storage medium.
      *
-     * @var array|PropertyInterface|SourceInterface|null
+     * @var array|PropertyInterface|\Charcoal\Source\SourceInterface|null
      */
     protected $storage;
 

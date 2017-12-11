@@ -50,46 +50,6 @@ class LostPasswordAction extends AdminAction
     private $emailFactory;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->setEmailFactory($container['email/factory']);
-    }
-
-    /**
-     * Set an email model factory.
-     *
-     * @param FactoryInterface $factory The email factory, to create emails.
-     * @return self
-     */
-    private function setEmailFactory(FactoryInterface $factory)
-    {
-        $this->emailFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the email model factory.
-     *
-     * @throws RuntimeException If the model factory was not previously set.
-     * @return FactoryInterface
-     */
-    protected function emailFactory()
-    {
-        if (!isset($this->emailFactory)) {
-            throw new RuntimeException(
-                sprintf('Email Factory is not defined for "%s"', get_class($this))
-            );
-        }
-
-        return $this->emailFactory;
-    }
-
-    /**
      * @return boolean
      */
     public function authRequired()
@@ -206,6 +166,47 @@ class LostPasswordAction extends AdminAction
 
         return $ret;
     }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->setEmailFactory($container['email/factory']);
+    }
+
+    /**
+     * Retrieve the email model factory.
+     *
+     * @throws RuntimeException If the model factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function emailFactory()
+    {
+        if (!isset($this->emailFactory)) {
+            throw new RuntimeException(
+                sprintf('Email Factory is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->emailFactory;
+    }
+
+    /**
+     * Set an email model factory.
+     *
+     * @param FactoryInterface $factory The email factory, to create emails.
+     * @return self
+     */
+    private function setEmailFactory(FactoryInterface $factory)
+    {
+        $this->emailFactory = $factory;
+
+        return $this;
+    }
+
 
     /**
      * @param string $username Username or email.

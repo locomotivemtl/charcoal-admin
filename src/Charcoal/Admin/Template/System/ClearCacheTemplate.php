@@ -25,19 +25,6 @@ class ClearCacheTemplate extends AdminTemplate
     private $cache;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->availableCacheDrivers = $container['cache/available-drivers'];
-        $this->cacheDriver = $container['cache/driver'];
-        $this->cache = $container['cache'];
-        $this->cacheConfig = $container['cache/config'];
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation|string|null
@@ -82,6 +69,19 @@ class ClearCacheTemplate extends AdminTemplate
             'pages_items' => $this->pagesCacheItems(),
             'objects_items' => $this->objectsCacheItems()
         ];
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->availableCacheDrivers = $container['cache/available-drivers'];
+        $this->cacheDriver = $container['cache/driver'];
+        $this->cache = $container['cache'];
+        $this->cacheConfig = $container['cache/config'];
     }
 
     /**

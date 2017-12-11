@@ -24,17 +24,6 @@ class DeleteAction extends AdminAction
     private $basePath;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['base_path'];
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -84,5 +73,16 @@ class DeleteAction extends AdminAction
         ];
 
         return $ret;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['base_path'];
     }
 }

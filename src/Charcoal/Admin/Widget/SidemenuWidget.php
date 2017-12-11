@@ -135,20 +135,6 @@ class SidemenuWidget extends AdminWidget implements
     private $httpRequest;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setHttpRequest($container['request']);
-        $this->setSidemenuGroupFactory($container['sidemenu/group/factory']);
-    }
-
-    /**
      * @param  array $data Class data.
      * @return self
      */
@@ -797,6 +783,20 @@ class SidemenuWidget extends AdminWidget implements
     public function jsActionPrefix()
     {
         return 'js-sidemenu';
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setHttpRequest($container['request']);
+        $this->setSidemenuGroupFactory($container['sidemenu/group/factory']);
     }
 
     /**

@@ -38,16 +38,6 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
     private $scheduleFactory;
 
     /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->setScheduleFactory($container['model/factory']);
-    }
-
-    /**
      * @return array
      */
     public function defaultArguments()
@@ -115,9 +105,45 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
     }
 
     /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setScheduleFactory($container['model/factory']);
+    }
+
+    /**
+     * @return FactoryInterface
+     */
+    protected function scheduleFactory()
+    {
+        return $this->scheduleFactory;
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create queue items.
+     * @return void
+     */
+    private function setScheduleFactory(FactoryInterface $factory)
+    {
+        $this->scheduleFactory = $factory;
+    }
+
+    /**
+     * @return ObjectSchedule
+     */
+    private function scheduleProto()
+    {
+        return $this->modelFactory()->create(ObjectSchedule::class);
+    }
+
+    /**
      * @param string $objType Optional object type to load.
      * @param string $objId   Optional object id to loader.
-     * @return Charcoal\Model\CollectionInterface
+     * @return \Charcoal\Model\Collection|array
      */
     private function loadSchedules($objType = null, $objId = null)
     {
@@ -144,9 +170,9 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
             'val'      => 0
         ]);
         $loader->addFilter([
-             'property' => 'scheduled_date',
-             'val'      => date('Y-m-d H:i:s'),
-             'operator' => '<'
+            'property' => 'scheduled_date',
+            'val'      => date('Y-m-d H:i:s'),
+            'operator' => '<'
         ]);
 
         $loader->addOrder([
@@ -155,31 +181,5 @@ class ProcessSchedulesScript extends AdminScript implements CronScriptInterface
         ]);
         $schedules = $loader->load();
         return $schedules;
-    }
-
-    /**
-     * @param FactoryInterface $factory The factory used to create queue items.
-     * @return ScheduleInterface Chainable
-     */
-    protected function setScheduleFactory(FactoryInterface $factory)
-    {
-        $this->scheduleFactory = $factory;
-        return $this;
-    }
-
-    /**
-     * @return FactoryInterface
-     */
-    protected function scheduleFactory()
-    {
-        return $this->scheduleFactory;
-    }
-
-    /**
-     * @return ObjectSchedule
-     */
-    private function scheduleProto()
-    {
-        return $this->modelFactory()->create(ObjectSchedule::class);
     }
 }

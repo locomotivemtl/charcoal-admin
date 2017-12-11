@@ -85,24 +85,6 @@ class FormWidget extends AdminWidget implements
     private $widgetFactory;
 
     /**
-     * @param  Container $container The DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setHttpRequest($container['request']);
-        $this->setWidgetFactory($container['widget/factory']);
-
-        // Satisfies FormInterface
-        $this->setFormGroupFactory($container['form/group/factory']);
-
-        // Satisfies LayoutAwareInterface
-        $this->setLayoutBuilder($container['layout/builder']);
-    }
-
-    /**
      * @param array $data Optional. The form property data to set.
      * @return FormPropertyWidget
      */
@@ -407,6 +389,25 @@ class FormWidget extends AdminWidget implements
     {
         return 'charcoal/admin/widget/form-group/generic';
     }
+
+    /**
+     * @param  Container $container The DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setHttpRequest($container['request']);
+        $this->setWidgetFactory($container['widget/factory']);
+
+        // Satisfies FormInterface
+        $this->setFormGroupFactory($container['form/group/factory']);
+
+        // Satisfies LayoutAwareInterface
+        $this->setLayoutBuilder($container['layout/builder']);
+    }
+
 
     /**
      * Retrieve the HTTP request object.

@@ -73,12 +73,43 @@ class AclPermissions extends AdminWidget implements
     private $database;
 
     /**
+     * Retrieve the current object ID from the GET parameters.
+     *
+     * @return string
+     */
+    public function objId()
+    {
+        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
+    }
+
+    /**
+     * @return array
+     */
+    public function permissionCategories()
+    {
+        $loader = $this->collectionLoader();
+        $loader->setModel(PermissionCategory::class);
+        $categories = $loader->load();
+
+        $ret = [];
+        foreach ($categories as $c) {
+            $ret[] = [
+                'ident'       => $c->id(),
+                'name'        => $c->name(),
+                'permissions' => $this->loadCategoryPermissions($c->id())
+            ];
+        }
+
+        return $ret;
+    }
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 
@@ -141,15 +172,7 @@ class AclPermissions extends AdminWidget implements
         return $this->collectionLoader;
     }
 
-    /**
-     * Retrieve the current object ID from the GET parameters.
-     *
-     * @return string
-     */
-    public function objId()
-    {
-        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
-    }
+
 
     /**
      * @return Acl
@@ -190,27 +213,6 @@ class AclPermissions extends AdminWidget implements
             }
         }
         return $this->roleAcl;
-    }
-
-    /**
-     * @return array
-     */
-    public function permissionCategories()
-    {
-        $loader = $this->collectionLoader();
-        $loader->setModel(PermissionCategory::class);
-        $categories = $loader->load();
-
-        $ret = [];
-        foreach ($categories as $c) {
-            $ret[] = [
-                'ident'       => $c->id(),
-                'name'        => $c->name(),
-                'permissions' => $this->loadCategoryPermissions($c->id())
-            ];
-        }
-
-        return $ret;
     }
 
     /**

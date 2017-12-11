@@ -18,16 +18,6 @@ class StaticWebsiteTemplate extends AdminTemplate
     private $basePath;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->basePath = $container['config']['base_path'];
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation|string|null
@@ -77,6 +67,16 @@ class StaticWebsiteTemplate extends AdminTemplate
                 'type' => pathinfo($file, PATHINFO_EXTENSION)
             ];
         }
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->basePath = $container['config']['base_path'];
     }
 
     /**

@@ -70,23 +70,6 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
-     * @param Container $container The DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setFormInputBuilder($container['form/input/builder']);
-
-        // Satisfies ViewableInterface dependencies
-        $this->setView($container['view']);
-
-        // Satisfies LayoutAwareInterface dependencies
-        $this->setLayoutBuilder($container['layout/builder']);
-    }
-
-    /**
      * @param  array $data Widget data.
      * @return FormGroupWidget Chainable
      */
@@ -182,22 +165,6 @@ class FormGroupWidget extends AbstractUiItem implements
         return $this->propertiesOptions;
     }
 
-    /**
-     * Parse the form group and model properties.
-     *
-     * @return array
-     */
-    protected function parsedFormProperties()
-    {
-        if ($this->parsedFormProperties === null) {
-            $groupProperties = $this->groupProperties();
-            $formProperties  = $this->form()->formProperties($groupProperties);
-
-            $this->parsedFormProperties = $formProperties;
-        }
-
-        return $this->parsedFormProperties;
-    }
 
     /**
      * Determine if the form group has properties.
@@ -326,5 +293,39 @@ class FormGroupWidget extends AbstractUiItem implements
     public function showNotesAbove()
     {
         return $this->showNotesAbove;
+    }
+
+    /**
+     * @param Container $container The DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setFormInputBuilder($container['form/input/builder']);
+
+        // Satisfies ViewableInterface dependencies
+        $this->setView($container['view']);
+
+        // Satisfies LayoutAwareInterface dependencies
+        $this->setLayoutBuilder($container['layout/builder']);
+    }
+
+    /**
+     * Parse the form group and model properties.
+     *
+     * @return array
+     */
+    protected function parsedFormProperties()
+    {
+        if ($this->parsedFormProperties === null) {
+            $groupProperties = $this->groupProperties();
+            $formProperties  = $this->form()->formProperties($groupProperties);
+
+            $this->parsedFormProperties = $formProperties;
+        }
+
+        return $this->parsedFormProperties;
     }
 }

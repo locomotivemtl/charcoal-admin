@@ -111,72 +111,6 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setMetadataLoader($container['metadata/loader']);
-    }
-
-    /**
-     * Set a metadata loader.
-     *
-     * @param  MetadataLoader $loader The loader instance, used to load metadata.
-     * @return self
-     */
-    protected function setMetadataLoader(MetadataLoader $loader)
-    {
-        $this->metadataLoader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the metadata loader.
-     *
-     * @throws RuntimeException If the metadata loader was not previously set.
-     * @return MetadataLoader
-     */
-    protected function metadataLoader()
-    {
-        if ($this->metadataLoader === null) {
-            throw new RuntimeException(sprintf(
-                'Metadata Loader is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->metadataLoader;
-    }
-
-    /**
-     * Load a metadata file.
-     *
-     * @param  string $metadataIdent A metadata file path or namespace.
-     * @return MetadataInterface
-     */
-    protected function loadMetadata($metadataIdent)
-    {
-        $metadataLoader = $this->metadataLoader();
-        $metadata = $metadataLoader->load($metadataIdent, $this->createMetadata());
-
-        return $metadata;
-    }
-
-    /**
-     * @return MetadataInterface
-     */
-    protected function createMetadata()
-    {
-        return new StructureMetadata();
-    }
-
-    /**
      * Set the form object's template controller identifier.
      *
      * @param  mixed $ident The template controller identifier.
@@ -288,6 +222,72 @@ class TemplateOptionsFormGroup extends StructureFormGroup
         }
 
         return $this->storageProperty;
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setMetadataLoader($container['metadata/loader']);
+    }
+
+    /**
+     * Set a metadata loader.
+     *
+     * @param  MetadataLoader $loader The loader instance, used to load metadata.
+     * @return self
+     */
+    protected function setMetadataLoader(MetadataLoader $loader)
+    {
+        $this->metadataLoader = $loader;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the metadata loader.
+     *
+     * @throws RuntimeException If the metadata loader was not previously set.
+     * @return MetadataLoader
+     */
+    protected function metadataLoader()
+    {
+        if ($this->metadataLoader === null) {
+            throw new RuntimeException(sprintf(
+                'Metadata Loader is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->metadataLoader;
+    }
+
+    /**
+     * Load a metadata file.
+     *
+     * @param  string $metadataIdent A metadata file path or namespace.
+     * @return MetadataInterface
+     */
+    protected function loadMetadata($metadataIdent)
+    {
+        $metadataLoader = $this->metadataLoader();
+        $metadata = $metadataLoader->load($metadataIdent, $this->createMetadata());
+
+        return $metadata;
+    }
+
+    /**
+     * @return MetadataInterface
+     */
+    protected function createMetadata()
+    {
+        return new StructureMetadata();
     }
 
     /**

@@ -24,22 +24,6 @@ class UsersTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Required collection dependencies
-        $this->setModelFactory($container['model/factory']);
-        $this->setCollectionLoader($container['model/collection/loader']);
-
-        // Required dashboard dependencies.
-        $this->setDashboardBuilder($container['dashboard/builder']);
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation|string|null
@@ -67,5 +51,20 @@ class UsersTemplate extends AdminTemplate implements
                 ]
             ]
         ];
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required collection dependencies
+        $this->setCollectionLoader($container['model/collection/loader']);
+
+        // Required dashboard dependencies.
+        $this->setDashboardBuilder($container['dashboard/builder']);
     }
 }

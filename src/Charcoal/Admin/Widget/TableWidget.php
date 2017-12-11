@@ -149,21 +149,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $parsedObjectActions = false;
 
     /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setView($container['view']);
-        $this->setCollectionLoader($container['model/collection/loader']);
-        $this->setWidgetFactory($container['widget/factory']);
-        $this->setPropertyFactory($container['property/factory']);
-        $this->setPropertyDisplayFactory($container['property/display/factory']);
-    }
-
-    /**
      * @param array $data The widget data.
      * @return TableWidget Chainable
      */
@@ -866,6 +851,21 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setView($container['view']);
+        $this->setCollectionLoader($container['model/collection/loader']);
+        $this->setWidgetFactory($container['widget/factory']);
+        $this->setPropertyFactory($container['property/factory']);
+        $this->setPropertyDisplayFactory($container['property/display/factory']);
     }
 
     /**

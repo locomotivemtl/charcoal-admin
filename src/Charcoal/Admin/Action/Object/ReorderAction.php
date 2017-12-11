@@ -44,18 +44,6 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
-     * @param  Container $container A DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Fulfills `ObjectContainerTrait` dependencies.
-        $this->setModelFactory($container['model/factory']);
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -175,5 +163,17 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
             'success'   => $this->success(),
             'feedbacks' => $this->feedbacks()
         ];
+    }
+
+    /**
+     * @param  Container $container A DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Fulfills `ObjectContainerTrait` dependencies.
+        $this->setModelFactory($container['model/factory']);
     }
 }

@@ -24,19 +24,6 @@ class ImageDisplay extends AbstractPropertyDisplay
     public $baseUrl;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->baseUrl = $container['base-url'];
-    }
-
-    /**
      * Retrieve display value.
      *
      * @see    \Charcoal\Admin\Property\Display\LinkDisplay::hrefVal()
@@ -58,5 +45,18 @@ class ImageDisplay extends AbstractPropertyDisplay
         }
 
         return $val;
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->baseUrl = $container['base-url'];
     }
 }

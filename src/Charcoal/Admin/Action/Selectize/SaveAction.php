@@ -20,19 +20,6 @@ class SaveAction extends BaseSaveAction
     use SelectizeRendererAwareTrait;
 
     /**
-     * Dependencies
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setSelectizeRenderer($container['selectize/renderer']);
-        $this->setPropertyInputFactory($container['property/input/factory']);
-    }
-
-    /**
      * @return array
      */
     public function results()
@@ -44,5 +31,18 @@ class SaveAction extends BaseSaveAction
         }
 
         return $results;
+    }
+
+    /**
+     * Dependencies
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setSelectizeRenderer($container['selectize/renderer']);
+        $this->setPropertyInputFactory($container['property/input/factory']);
     }
 }

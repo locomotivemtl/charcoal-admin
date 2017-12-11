@@ -46,19 +46,6 @@ class ExportAction extends AdminAction
     private $propertyFactory;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        $this->propertyFactory = $container['property/factory'];
-
-        parent::setDependencies($container);
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -135,5 +122,18 @@ class ExportAction extends AdminAction
             'success'   => $this->success(),
             'feedbacks' => $this->feedbacks()
         ];
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->propertyFactory = $container['property/factory'];
     }
 }

@@ -30,7 +30,7 @@ class DashboardWidget extends AdminWidget implements
      * @param Container $container The DI container.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 

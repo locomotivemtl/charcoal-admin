@@ -33,67 +33,6 @@ class EditTemplate extends AdminTemplate implements
     use ObjectContainerTrait;
 
     /**
-     * @param Container $container DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Required ObjectContainerInterface dependencies
-        $this->setModelFactory($container['model/factory']);
-
-        // Required dependencies.
-        $this->dashboardBuilder = $container['dashboard/builder'];
-    }
-
-    /**
-     * @throws Exception If the object's dashboard config can not be loaded.
-     * @return array
-     */
-    protected function createDashboardConfig()
-    {
-        $adminMetadata  = $this->objAdminMetadata();
-        $dashboardIdent = $this->dashboardIdent();
-
-        if (empty($dashboardIdent)) {
-            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
-        }
-
-        if (empty($dashboardIdent)) {
-            if (!$this->objId()) {
-                if (!isset($adminMetadata['default_create_dashboard'])) {
-                    throw new Exception(sprintf(
-                        'No default create dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    ));
-                }
-
-                $dashboardIdent = $adminMetadata['default_create_dashboard'];
-            } else {
-                if (!isset($adminMetadata['default_edit_dashboard'])) {
-                    throw new Exception(sprintf(
-                        'No default edit dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    ));
-                }
-
-                $dashboardIdent = $adminMetadata['default_edit_dashboard'];
-            }
-        }
-
-        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
-            throw new Exception(
-                'Dashboard config is not defined.'
-            );
-        }
-
-        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
-
-        return $dashboardConfig;
-    }
-
-    /**
      * Retrieve the sidemenu.
      *
      * @return SidemenuWidgetInterface|null
@@ -131,27 +70,6 @@ class EditTemplate extends AdminTemplate implements
         }
 
         return $this->headerMenu;
-    }
-
-    /**
-     * @throws Exception If the object's admin metadata is not set.
-     * @return \ArrayAccess
-     */
-    private function objAdminMetadata()
-    {
-        $obj = $this->obj();
-
-        $objMetadata = $obj->metadata();
-
-        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
-        if ($adminMetadata === null) {
-            throw new Exception(sprintf(
-                'The object %s does not have an admin metadata.',
-                get_class($obj)
-            ));
-        }
-
-        return $adminMetadata;
     }
 
     /**
@@ -265,6 +183,67 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
+     * @param Container $container DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required ObjectContainerInterface dependencies
+        $this->setModelFactory($container['model/factory']);
+
+        // Required dependencies.
+        $this->dashboardBuilder = $container['dashboard/builder'];
+    }
+
+    /**
+     * @throws Exception If the object's dashboard config can not be loaded.
+     * @return array
+     */
+    protected function createDashboardConfig()
+    {
+        $adminMetadata  = $this->objAdminMetadata();
+        $dashboardIdent = $this->dashboardIdent();
+
+        if (empty($dashboardIdent)) {
+            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        }
+
+        if (empty($dashboardIdent)) {
+            if (!$this->objId()) {
+                if (!isset($adminMetadata['default_create_dashboard'])) {
+                    throw new Exception(sprintf(
+                        'No default create dashboard defined in admin metadata for %s',
+                        get_class($this->obj())
+                    ));
+                }
+
+                $dashboardIdent = $adminMetadata['default_create_dashboard'];
+            } else {
+                if (!isset($adminMetadata['default_edit_dashboard'])) {
+                    throw new Exception(sprintf(
+                        'No default edit dashboard defined in admin metadata for %s',
+                        get_class($this->obj())
+                    ));
+                }
+
+                $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+            }
+        }
+
+        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
+            throw new Exception(
+                'Dashboard config is not defined.'
+            );
+        }
+
+        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
+
+        return $dashboardConfig;
+    }
+
+    /**
      * Retrieve the page's sub-title.
      *
      * @param  mixed $title The title to render.
@@ -278,5 +257,26 @@ class EditTemplate extends AdminTemplate implements
         } else {
             return (string)$title;
         }
+    }
+
+    /**
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
+     */
+    private function objAdminMetadata()
+    {
+        $obj = $this->obj();
+
+        $objMetadata = $obj->metadata();
+
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : null;
+        if ($adminMetadata === null) {
+            throw new Exception(sprintf(
+                'The object %s does not have an admin metadata.',
+                get_class($obj)
+            ));
+        }
+
+        return $adminMetadata;
     }
 }

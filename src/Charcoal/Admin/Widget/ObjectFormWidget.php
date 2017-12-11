@@ -37,18 +37,6 @@ class ObjectFormWidget extends FormWidget implements
     protected $formData;
 
     /**
-     * @param Container $container The DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Fill ObjectContainerInterface dependencies
-        $this->setModelFactory($container['model/factory']);
-    }
-
-    /**
      * @return string
      */
     public function widgetType()
@@ -324,6 +312,17 @@ class ObjectFormWidget extends FormWidget implements
         ];
     }
 
+    /**
+     * @param Container $container The DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Fill ObjectContainerInterface dependencies
+        $this->setModelFactory($container['model/factory']);
+    }
 
     /**
      * Retrieve the default data sources (when setting data on an entity).

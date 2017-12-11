@@ -138,19 +138,6 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->elfinderConfig = $container['elfinder/config'];
-    }
-
-    /**
      * Set the custom localization messages.
      *
      * @param  array $localizations An associative array of localizations.
@@ -208,18 +195,6 @@ class ElfinderTemplate extends AdminTemplate
         unset($this->localizations[$ident]);
 
         return $this;
-    }
-
-    /**
-     * Retrieve the default custom localizations.
-     *
-     * @return array
-     */
-    protected function defaultLocalizations()
-    {
-        return [
-            'volume_default' => $this->translator()->translation('Library')
-        ];
     }
 
     /**
@@ -417,5 +392,30 @@ class ElfinderTemplate extends AdminTemplate
         }
 
         return json_encode($settings, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->elfinderConfig = $container['elfinder/config'];
+    }
+
+    /**
+     * Retrieve the default custom localizations.
+     *
+     * @return array
+     */
+    protected function defaultLocalizations()
+    {
+        return [
+            'volume_default' => $this->translator()->translation('Library')
+        ];
     }
 }

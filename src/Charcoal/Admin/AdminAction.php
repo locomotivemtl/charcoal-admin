@@ -47,7 +47,7 @@ abstract class AdminAction extends AbstractAction implements
     /**
      * Store a reference to the application configuration.
      *
-     * @var \Charcoal\App\Config
+     * @var \Charcoal\App\AppConfig
      */
     protected $appConfig;
 
@@ -75,28 +75,6 @@ abstract class AdminAction extends AbstractAction implements
         if ($data !== null) {
             $this->setData($data);
         }
-    }
-
-    /**
-     * Dependencies
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setModelFactory($container['model/factory']);
-        $this->setTranslator($container['translator']);
-
-        $this->appConfig = $container['config'];
-        $this->adminConfig = $container['admin/config'];
-        $this->setBaseUrl($container['base-url']);
-        $this->setSiteName($container['config']['project_name']);
-
-        // Satisfies AuthAwareInterface dependencies
-        $this->setAuthenticator($container['admin/authenticator']);
-        $this->setAuthorizer($container['admin/authorizer']);
     }
 
     /**
@@ -131,37 +109,6 @@ abstract class AdminAction extends AbstractAction implements
         }
 
         return parent::init($request);
-    }
-
-    /**
-     * @param FactoryInterface $factory The factory used to create models.
-     * @return AdminScript Chainable
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-        return $this;
-    }
-
-    /**
-     * @return FactoryInterface The model factory.
-     */
-    protected function modelFactory()
-    {
-        return $this->modelFactory;
-    }
-
-    /**
-     * Set the name of the project.
-     *
-     * @param  string $name Name of the project.
-     * @return AdminAction Chainable
-     */
-    protected function setSiteName($name)
-    {
-        $this->siteName = $this->translator()->translation($name);
-
-        return $this;
     }
 
     /**
@@ -204,34 +151,6 @@ abstract class AdminAction extends AbstractAction implements
     public function getAuthenticatedUser()
     {
         return $this->authenticator()->authenticate();
-    }
-
-    /**
-     * @todo   {@link https://github.com/mcaskill/charcoal-recaptcha Implement CAPTCHA validation as a service}.
-     * @param  string $response The captcha value (response) to validate.
-     * @throws RuntimeException If Google reCAPTCHA is not configured.
-     * @return boolean
-     */
-    protected function validateCaptcha($response)
-    {
-        $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-        $recaptcha = $this->appConfig['apis.google.recaptcha'];
-
-        if (isset($recaptcha['private_key'])) {
-            $secret = $recaptcha['private_key'];
-        } else {
-            $secret = $recaptcha['secret'];
-        }
-
-        if (!$secret) {
-            throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] not configured.');
-        }
-
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-        $response = file_get_contents($validationUrl.'?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
-        $response = json_decode($response, true);
-
-        return !!$response['success'];
     }
 
     /**
@@ -280,5 +199,85 @@ abstract class AdminAction extends AbstractAction implements
     public function baseUrl()
     {
         return rtrim($this->baseUrl, '/').'/';
+    }
+
+    /**
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setModelFactory($container['model/factory']);
+        $this->setTranslator($container['translator']);
+
+        $this->appConfig = $container['config'];
+        $this->adminConfig = $container['admin/config'];
+        $this->setBaseUrl($container['base-url']);
+        $this->setSiteName($container['config']['project_name']);
+
+        // Satisfies AuthAwareInterface dependencies
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
+    }
+
+    /**
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return AdminScript Chainable
+     */
+    protected function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+        return $this;
+    }
+
+    /**
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        return $this->modelFactory;
+    }
+
+    /**
+     * Set the name of the project.
+     *
+     * @param  string $name Name of the project.
+     * @return AdminAction Chainable
+     */
+    protected function setSiteName($name)
+    {
+        $this->siteName = $this->translator()->translation($name);
+
+        return $this;
+    }
+
+    /**
+     * @todo   {@link https://github.com/mcaskill/charcoal-recaptcha Implement CAPTCHA validation as a service}.
+     * @param  string $response The captcha value (response) to validate.
+     * @throws RuntimeException If Google reCAPTCHA is not configured.
+     * @return boolean
+     */
+    protected function validateCaptcha($response)
+    {
+        $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        $recaptcha = $this->appConfig['apis.google.recaptcha'];
+
+        if (isset($recaptcha['private_key'])) {
+            $secret = $recaptcha['private_key'];
+        } else {
+            $secret = $recaptcha['secret'];
+        }
+
+        if (!$secret) {
+            throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] not configured.');
+        }
+
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+        $response = file_get_contents($validationUrl.'?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
+        $response = json_decode($response, true);
+
+        return !!$response['success'];
     }
 }

@@ -73,17 +73,6 @@ class CrawlScript extends AdminScript
     }
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['basePath'];
-    }
-
-    /**
      * @return array
      */
     public function defaultArguments()
@@ -137,6 +126,17 @@ class CrawlScript extends AdminScript
         $this->retrieveLinks($this->startUrl, 0);
 
         return $response;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['basePath'];
     }
 
     /**

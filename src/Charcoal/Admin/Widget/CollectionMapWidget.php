@@ -63,28 +63,6 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
      * @var string $infoboxTemplate
      */
     public $infoboxTemplate = '';
-
-    /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setCollectionLoader($container['model/collection/loader']);
-
-        $appConfig = $container['config'];
-
-        if (isset($appConfig['google.console.api_key'])) {
-            $this->setApiKey($appConfig['google.console.api_key']);
-        } elseif (isset($appConfig['apis.google.map.key'])) {
-            $this->setApiKey($appConfig['apis.google.map.key']);
-        }
-    }
-
     /**
      * @param array $data The widget data.
      * @return TableWidget Chainable
@@ -302,99 +280,6 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
         return ($this->infoboxTemplate != '');
     }
 
-    /**
-     * @param mixed $rawPolygon The polygon information.
-     * @return string
-     */
-    private function formatPolygon($rawPolygon)
-    {
-        if (is_string($rawPolygon)) {
-            $polygon = explode(' ', $rawPolygon);
-            $ret = [];
-            foreach ($polygon as $poly) {
-                $coords = explode(',', $poly);
-                if (count($coords) < 2) {
-                    continue;
-                }
-                $ret[] = [(float)$coords[0], (float)$coords[1]];
-            }
-        } else {
-            $ret = $rawPolygon;
-        }
-        return json_encode($ret, true);
-    }
-
-    /**
-     * @param  ModelInterface $obj The object with the latitude property.
-     * @param  string         $key The property to retrieve.
-     * @throws InvalidArgumentException If the data key is missing.
-     * @return mixed
-     */
-    protected function getPropertyValue(ModelInterface $obj, $key)
-    {
-        if (!is_string($key) || $key === '') {
-            throw new InvalidArgumentException('Missing latitude property.');
-        }
-
-        if (isset($obj[$key])) {
-            return $obj[$key];
-        }
-
-        $data     = null;
-        $segments = explode('.', $key);
-        if (count($segments) > 1) {
-            $data = $obj;
-            foreach (explode('.', $key) as $segment) {
-                $accessible = is_array($data) || $data instanceof ArrayAccess;
-                if ($data instanceof ArrayAccess) {
-                    $exists = $data->offsetExists($segment);
-                } else {
-                    $exists = array_key_exists($segment, $data);
-                }
-
-                if ($accessible && $exists) {
-                    $data = $data[$segment];
-                } else {
-                    return null;
-                }
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * Retrieve the default data source filters (when setting data on an entity).
-     *
-     * Note: Adapted from {@see \Slim\CallableResolver}.
-     *
-     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
-     * @param  mixed $toResolve A callable used when merging data.
-     * @return callable|null
-     */
-    protected function resolveDataSourceFilter($toResolve)
-    {
-        if (is_string($toResolve)) {
-            $model = $this->proto();
-
-            $resolved = [ $model, $toResolve ];
-
-            // check for slim callable as "class:method"
-            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
-            if (preg_match($callablePattern, $toResolve, $matches)) {
-                $class = $matches[1];
-                $method = $matches[2];
-
-                if ($class === 'parent') {
-                    $resolved = [ $model, $class.'::'.$method ];
-                }
-            }
-
-            $toResolve = $resolved;
-        }
-
-        return parent::resolveDataSourceFilter($toResolve);
-    }
 
     /**
      * Fetch metadata from the current request.
@@ -487,5 +372,122 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
         }
 
         return $objListData;
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setCollectionLoader($container['model/collection/loader']);
+
+        $appConfig = $container['config'];
+
+        if (isset($appConfig['google.console.api_key'])) {
+            $this->setApiKey($appConfig['google.console.api_key']);
+        } elseif (isset($appConfig['apis.google.map.key'])) {
+            $this->setApiKey($appConfig['apis.google.map.key']);
+        }
+    }
+
+
+    /**
+     * @param  ModelInterface $obj The object with the latitude property.
+     * @param  string         $key The property to retrieve.
+     * @throws InvalidArgumentException If the data key is missing.
+     * @return mixed
+     */
+    protected function getPropertyValue(ModelInterface $obj, $key)
+    {
+        if (!is_string($key) || $key === '') {
+            throw new InvalidArgumentException('Missing latitude property.');
+        }
+
+        if (isset($obj[$key])) {
+            return $obj[$key];
+        }
+
+        $data     = null;
+        $segments = explode('.', $key);
+        if (count($segments) > 1) {
+            $data = $obj;
+            foreach (explode('.', $key) as $segment) {
+                $accessible = is_array($data) || $data instanceof ArrayAccess;
+                if ($data instanceof ArrayAccess) {
+                    $exists = $data->offsetExists($segment);
+                } else {
+                    $exists = array_key_exists($segment, $data);
+                }
+
+                if ($accessible && $exists) {
+                    $data = $data[$segment];
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * Note: Adapted from {@see \Slim\CallableResolver}.
+     *
+     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
+     * @param  mixed $toResolve A callable used when merging data.
+     * @return callable|null
+     */
+    protected function resolveDataSourceFilter($toResolve)
+    {
+        if (is_string($toResolve)) {
+            $model = $this->proto();
+
+            $resolved = [ $model, $toResolve ];
+
+            // check for slim callable as "class:method"
+            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+            if (preg_match($callablePattern, $toResolve, $matches)) {
+                $class = $matches[1];
+                $method = $matches[2];
+
+                if ($class === 'parent') {
+                    $resolved = [ $model, $class.'::'.$method ];
+                }
+            }
+
+            $toResolve = $resolved;
+        }
+
+        return parent::resolveDataSourceFilter($toResolve);
+    }
+
+
+    /**
+     * @param mixed $rawPolygon The polygon information.
+     * @return string
+     */
+    private function formatPolygon($rawPolygon)
+    {
+        if (is_string($rawPolygon)) {
+            $polygon = explode(' ', $rawPolygon);
+            $ret = [];
+            foreach ($polygon as $poly) {
+                $coords = explode(',', $poly);
+                if (count($coords) < 2) {
+                    continue;
+                }
+                $ret[] = [(float)$coords[0], (float)$coords[1]];
+            }
+        } else {
+            $ret = $rawPolygon;
+        }
+        return json_encode($ret, true);
     }
 }

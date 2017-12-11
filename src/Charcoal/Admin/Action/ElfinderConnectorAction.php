@@ -81,39 +81,7 @@ class ElfinderConnectorAction extends AdminAction
      */
     private $formProperty;
 
-    /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
 
-        $this->baseUrl = $container['base-url'];
-        $this->elfinderConfig = $container['elfinder/config'];
-        $this->setPropertyFactory($container['property/factory']);
-        $this->setCallableResolver($container['callableResolver']);
-
-        // From filesystem provider
-        $this->filesystemConfig = $container['filesystem/config'];
-        $this->filesystems = $container['filesystems'];
-    }
-
-    /**
-     * Set a property factory.
-     *
-     * @param FactoryInterface $factory The property factory,
-     *                                  to createable property values.
-     * @return self
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-
-        return $this;
-    }
 
     /**
      * Retrieve the property factory.
@@ -366,31 +334,6 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
-     * Resolve elFinder event listeners.
-     *
-     * @param  array $toResolve One or many pairs of callbacks.
-     * @return array Returns the parsed event listeners.
-     */
-    protected function resolveBoundCallbacks(array $toResolve)
-    {
-        $resolved = $toResolve;
-
-        foreach ($toResolve as $actions => $callables) {
-            foreach ($callables as $i => $callable) {
-                if (!is_callable($callable) && is_string($callable)) {
-                    if (0 === strpos($callable, 'Plugin.')) {
-                        continue;
-                    }
-
-                    $resolved[$actions][$i] = $this->resolveCallable($callable);
-                }
-            }
-        }
-
-        return $resolved;
-    }
-
-    /**
      * Trim a file name.
      *
      * @param  string $path     The target path.
@@ -496,6 +439,65 @@ class ElfinderConnectorAction extends AdminAction
     public function uploadPath()
     {
         return trim($this->uploadPath, '/');
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->baseUrl = $container['base-url'];
+        $this->elfinderConfig = $container['elfinder/config'];
+        $this->setPropertyFactory($container['property/factory']);
+        $this->setCallableResolver($container['callableResolver']);
+
+        // From filesystem provider
+        $this->filesystemConfig = $container['filesystem/config'];
+        $this->filesystems = $container['filesystems'];
+    }
+
+    /**
+     * Set a property factory.
+     *
+     * @param FactoryInterface $factory The property factory,
+     *                                  to createable property values.
+     * @return self
+     */
+    protected function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Resolve elFinder event listeners.
+     *
+     * @param  array $toResolve One or many pairs of callbacks.
+     * @return array Returns the parsed event listeners.
+     */
+    protected function resolveBoundCallbacks(array $toResolve)
+    {
+        $resolved = $toResolve;
+
+        foreach ($toResolve as $actions => $callables) {
+            foreach ($callables as $i => $callable) {
+                if (!is_callable($callable) && is_string($callable)) {
+                    if (0 === strpos($callable, 'Plugin.')) {
+                        continue;
+                    }
+
+                    $resolved[$actions][$i] = $this->resolveCallable($callable);
+                }
+            }
+        }
+
+        return $resolved;
     }
 
     /**

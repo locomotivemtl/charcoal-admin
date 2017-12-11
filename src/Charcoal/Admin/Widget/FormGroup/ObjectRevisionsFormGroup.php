@@ -21,19 +21,6 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     private $modelFatory;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->modelFactory = $container['model/factory'];
-    }
-
-    /**
      * @return boolean
      */
     public function active()
@@ -107,5 +94,18 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
         };
 
         return $target->allRevisions($callback);
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->modelFactory = $container['model/factory'];
     }
 }

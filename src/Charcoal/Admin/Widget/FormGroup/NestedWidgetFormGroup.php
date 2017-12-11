@@ -80,51 +80,6 @@ class NestedWidgetFormGroup extends AbstractFormGroup implements
     private $showNotesAbove = false;
 
     /**
-     * @param  Container $container The DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setWidgetFactory($container['widget/factory']);
-
-        // Satisfies {@see Charcoal\View\ViewableInterface} dependencies
-        $this->setView($container['view']);
-    }
-
-    /**
-     * Set the widget factory.
-     *
-     * @param FactoryInterface $factory The factory to create widgets.
-     * @return self
-     */
-    protected function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the widget factory.
-     *
-     * @throws RuntimeException If the widget factory was not previously set.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new RuntimeException(sprintf(
-                'Widget Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->widgetFactory;
-    }
-
-    /**
      * Retrieve the widget's ID.
      *
      * @return string
@@ -186,5 +141,50 @@ class NestedWidgetFormGroup extends AbstractFormGroup implements
     public function showNotesAbove()
     {
         return $this->showNotesAbove;
+    }
+
+    /**
+     * @param  Container $container The DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setWidgetFactory($container['widget/factory']);
+
+        // Satisfies {@see Charcoal\View\ViewableInterface} dependencies
+        $this->setView($container['view']);
+    }
+
+    /**
+     * Set the widget factory.
+     *
+     * @param FactoryInterface $factory The factory to create widgets.
+     * @return self
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the widget factory.
+     *
+     * @throws RuntimeException If the widget factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new RuntimeException(sprintf(
+                'Widget Factory is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->widgetFactory;
     }
 }

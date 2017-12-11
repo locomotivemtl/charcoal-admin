@@ -30,29 +30,6 @@ class MapWidgetInput extends AbstractPropertyInput
     private $mapOptions;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $appConfig = $container['config'];
-
-        if (isset($appConfig['google.console.api_key'])) {
-            $this->setApiKey($appConfig['google.console.api_key']);
-        } elseif (isset($appConfig['apis.google.map.key'])) {
-            $this->setApiKey($appConfig['apis.google.map.key']);
-        }
-
-        if (isset($appConfig['alert.map.map'])) {
-            $this->setMapOptions($appConfig['alert.map']);
-        }
-    }
-
-    /**
      * Sets the API key for the mapping service.
      *
      * @param  string $key An API key.
@@ -176,5 +153,28 @@ class MapWidgetInput extends AbstractPropertyInput
     public function mapOptionsAsJson()
     {
         return json_encode($this->mapOptions());
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $appConfig = $container['config'];
+
+        if (isset($appConfig['google.console.api_key'])) {
+            $this->setApiKey($appConfig['google.console.api_key']);
+        } elseif (isset($appConfig['apis.google.map.key'])) {
+            $this->setApiKey($appConfig['apis.google.map.key']);
+        }
+
+        if (isset($appConfig['alert.map.map'])) {
+            $this->setMapOptions($appConfig['alert.map']);
+        }
     }
 }

@@ -42,29 +42,34 @@ abstract class AbstractPropertyDisplay implements
     use TranslatorAwareTrait;
 
     /**
-     * @var string $lang
+     * @var string
      */
     private $lang;
 
     /**
-     * @var string $ident
+     * @var string
      */
     private $ident;
 
     /**
-     * @var boolean $multiple
+     * @var boolean
      */
     private $multiple;
 
     /**
-     * @var string $type
+     * @var string
      */
     protected $type;
 
     /**
-     * @var string $displayType
+     * @var string
      */
     protected $displayType;
+
+    /**
+     * @var string
+     */
+    protected $displayName;
 
     /**
      * @var string $displayId
@@ -112,17 +117,6 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        $this->setTranslator($container['translator']);
-    }
-
-    /**
      * This function takes an array and fill the model object with its value.
      *
      * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
@@ -134,7 +128,7 @@ abstract class AbstractPropertyDisplay implements
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
      * @param array $data The display data.
-     * @return Display Chainable
+     * @return self
      */
     public function setData(array $data)
     {
@@ -154,21 +148,8 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
-     * @param array $data Optional. Metadata data.
-     * @return PropertyMetadata
-     */
-    protected function createMetadata(array $data = null)
-    {
-        $metadata = new PropertyMetadata();
-        if (is_array($data)) {
-            $metadata->setData($data);
-        }
-        return $metadata;
-    }
-
-    /**
      * @param mixed $val The property value.
-     * @return PropertyDisplayInterface Chainable
+     * @return self
      */
     public function setPropertyVal($val)
     {
@@ -186,7 +167,7 @@ abstract class AbstractPropertyDisplay implements
 
     /**
      * @param string $lang The language code / ident.
-     * @return PropertyInputInterface Chainable
+     * @return self
      */
     public function setLang($lang)
     {
@@ -210,12 +191,14 @@ abstract class AbstractPropertyDisplay implements
     /**
      * @param string $ident Display identifier.
      * @throws InvalidArgumentException If the ident is not a string.
-     * @return Widget Chainable
+     * @return self
      */
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException('Property Display identifier must be string');
+            throw new InvalidArgumentException(
+                'Property Display identifier must be string'
+            );
         }
         $this->ident = $ident;
         return $this;
@@ -231,7 +214,7 @@ abstract class AbstractPropertyDisplay implements
 
     /**
      * @param boolean $multiple Multiple flag.
-     * @return Widget (Chainable)
+     * @return self
      */
     public function setMultiple($multiple)
     {
@@ -249,7 +232,7 @@ abstract class AbstractPropertyDisplay implements
 
     /**
      * @param string $displayId HTML id attribute.
-     * @return Display Chainable
+     * @return self
      */
     public function setDisplayId($displayId)
     {
@@ -275,7 +258,7 @@ abstract class AbstractPropertyDisplay implements
     /**
      * @param string $displayClass The display class attribute.
      * @throws InvalidArgumentException If the class is not a string.
-     * @return AbstractPropertyDisplay Chainable
+     * @return self
      */
     public function setDisplayClass($displayClass)
     {
@@ -300,7 +283,7 @@ abstract class AbstractPropertyDisplay implements
      * Used for the HTML "name" attribute.
      *
      * @param  string $displayName HTML id attribute.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setDisplayName($displayName)
     {
@@ -407,6 +390,31 @@ abstract class AbstractPropertyDisplay implements
     public function p()
     {
         return $this->property();
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        // Fullfill TranslatorAwareTrait dependencies
+        $this->setTranslator($container['translator']);
+    }
+
+    /**
+     * @param array $data Optional. Metadata data.
+     * @return PropertyMetadata
+     */
+    protected function createMetadata(array $data = null)
+    {
+        $metadata = new PropertyMetadata();
+        if (is_array($data)) {
+            $metadata->setData($data);
+        }
+        return $metadata;
     }
 
     /**

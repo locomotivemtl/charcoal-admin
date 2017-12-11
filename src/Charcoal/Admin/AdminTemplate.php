@@ -145,34 +145,6 @@ class AdminTemplate extends AbstractTemplate implements
     private $widgetFactory;
 
     /**
-     * Set common dependencies (services) used in all admin templates.
-     *
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setModelFactory($container['model/factory']);
-        $this->setTranslator($container['translator']);
-
-        $this->appConfig = $container['config'];
-        $this->adminConfig = $container['admin/config'];
-        $this->setBaseUrl($container['base-url']);
-        $this->setSiteName($container['config']['project_name']);
-
-        $this->setWidgetFactory($container['widget/factory']);
-
-        $this->menuBuilder = $container['menu/builder'];
-        $this->menuItemBuilder = $container['menu/item/builder'];
-
-        // Satisfies AuthAwareInterface dependencies
-        $this->setAuthenticator($container['admin/authenticator']);
-        $this->setAuthorizer($container['admin/authorizer']);
-    }
-
-    /**
      * Template's init method is called automatically from `charcoal-app`'s Template Route.
      *
      * For admin templates, initializations is:
@@ -205,32 +177,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return parent::init($request);
-    }
-
-
-    /**
-     * As a convenience, all admin templates have a model factory to easily create objects.
-     *
-     * @param FactoryInterface $factory The factory used to create models.
-     * @return void
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-    }
-
-    /**
-     * @throws Exception If the factory is not set.
-     * @return FactoryInterface The model factory.
-     */
-    protected function modelFactory()
-    {
-        if (!$this->modelFactory) {
-            throw new Exception(
-                sprintf('Model factory is not set for template "%s".', get_class($this))
-            );
-        }
-        return $this->modelFactory;
     }
 
     /**
@@ -397,111 +343,7 @@ class AdminTemplate extends AbstractTemplate implements
         }
     }
 
-    /**
-     * @param  mixed $options The sidemenu widget ID or config.
-     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
-     * @return array|Generator
-     */
-    protected function createHeaderMenu($options = null)
-    {
-        $headerMenu = $this->adminConfig['header_menu'];
 
-        if (!isset($headerMenu['items'])) {
-            throw new InvalidArgumentException(
-                'Missing "admin.header_menu.items"'
-            );
-        }
-
-        $mainMenu = null;
-        if (!(empty($options) && !is_numeric($options))) {
-            if (is_string($options)) {
-                $mainMenu = $options;
-            } elseif (is_array($options)) {
-                if (isset($options['widget_options']['ident'])) {
-                    $mainMenu = $options['widget_options']['ident'];
-                }
-            }
-        }
-
-        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-        if ($mainMenuFromRequest) {
-            $mainMenu = $mainMenuFromRequest;
-        }
-
-        $menu  = $this->menuBuilder->build([]);
-        foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
-            $menuItem['menu'] = $menu;
-            $test = $this->menuItemBuilder->build($menuItem);
-            if ($test->isAuthorized() === false) {
-                continue;
-            }
-            unset($menuItem['menu']);
-
-            if (isset($menuItem['active']) && $menuItem['active'] === false) {
-                continue;
-            }
-
-            $menuItem  = $this->parseHeaderMenuItem($menuItem, $menuIdent, $mainMenu);
-            $menuIdent = $menuItem['ident'];
-
-            yield $menuIdent => $menuItem;
-        }
-    }
-
-    /**
-     * @param  array       $menuItem     The menu structure.
-     * @param  string|null $menuIdent    The menu identifier.
-     * @param  string|null $currentIdent The current menu identifier.
-     * @return array Finalized menu structure.
-     */
-    private function parseHeaderMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
-    {
-        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
-
-        if (isset($menuItem['ident'])) {
-            $menuIdent = $menuItem['ident'];
-        } else {
-            $menuItem['ident'] = $menuIdent;
-        }
-
-        if (!empty($menuItem['url'])) {
-            $url = $menuItem['url'];
-            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
-                $url = $this->adminUrl().$url;
-            }
-        } else {
-            $url = '';
-        }
-
-        $menuItem['url'] = $url;
-
-        if (isset($menuItem['icon'])) {
-            $icon = $menuItem['icon'];
-            if ($icon && strpos($icon, ':') === false && !in_array($icon[0], [ '/', '#', '?' ])) {
-                $icon = $svgUri.$icon;
-            }
-        } else {
-            $icon = $svgUri.'contents';
-        }
-
-        if (is_string($icon) && strpos($icon, '.svg') > 0) {
-            unset($menuItem['icon']);
-            $menuItem['svg'] = $icon;
-        } else {
-            unset($menuItem['svg']);
-            $menuItem['icon'] = $icon;
-        }
-
-        if (isset($menuItem['label'])) {
-            $menuItem['label'] = $this->translator()->translation($menuItem['label']);
-        }
-
-        $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
-
-        $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
-
-        return $menuItem;
-    }
 
     /**
      * @param boolean $show The show footer menu flag.
@@ -533,85 +375,6 @@ class AdminTemplate extends AbstractTemplate implements
         return new \ArrayIterator($this->systemMenu);
     }
 
-    /**
-     * @param  mixed $options The sidemenu widget ID or config.
-     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
-     * @return array|Generator
-     */
-    protected function createSystemMenu($options = null)
-    {
-        $menuConfig = $this->adminConfig['system_menu'];
-
-        if (!isset($menuConfig['items'])) {
-            return [];
-        }
-
-        $currentIdent = null;
-        if (!(empty($options) && !is_numeric($options))) {
-            if (is_string($options)) {
-                $currentIdent = $options;
-            } elseif (is_array($options)) {
-                $menuConfig = array_replace_recursive($menuConfig, $options);
-            }
-        }
-
-        $systemMenu = $this->menuBuilder->build([]);
-        $menuItems  = [];
-        foreach ($menuConfig['items'] as $menuIdent => $menuItem) {
-            $menuItem['menu'] = $systemMenu;
-            $test = $this->menuItemBuilder->build($menuItem);
-            if ($test->isAuthorized() === false) {
-                continue;
-            }
-            unset($menuItem['menu']);
-
-            if (isset($menuItem['active']) && $menuItem['active'] === false) {
-                continue;
-            }
-
-            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent, $currentIdent);
-            $menuIdent = $menuItem['ident'];
-
-            $menuItems[$menuIdent] = $menuItem;
-        }
-        return $menuItems;
-    }
-
-    /**
-     * @param  array       $menuItem     The menu structure.
-     * @param  string|null $menuIdent    The menu identifier.
-     * @param  string|null $currentIdent The current menu identifier.
-     * @return array Finalized menu structure.
-     */
-    private function parseSystemMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
-    {
-        if (!isset($menuItem['ident'])) {
-            $menuItem['ident'] = $menuIdent;
-        }
-
-        if (!empty($menuItem['url'])) {
-            $url = $menuItem['url'];
-            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
-                $url = $this->adminUrl().$url;
-            }
-        } else {
-            $url = '#';
-        }
-
-        $menuItem['url'] = $url;
-
-        if ($menuItem['icon_css']) {
-            $menuItem['iconCss'] = $menuItem['icon_css'];
-        }
-
-        if (isset($menuItem['label'])) {
-            $menuItem['label'] = $this->translator()->translation($menuItem['label']);
-        }
-
-        $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
-
-        return $menuItem;
-    }
 
     /**
      * @param  boolean $show The show sidemenu flag.
@@ -639,68 +402,6 @@ class AdminTemplate extends AbstractTemplate implements
     public function sidemenu()
     {
         return $this->sidemenu;
-    }
-
-    /**
-     * @param  mixed $options The sidemenu widget ID or config.
-     * @throws InvalidArgumentException If the sidemenu widget is invalid.
-     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
-     */
-    protected function createSidemenu($options = null)
-    {
-        if (!is_array($options)) {
-            $options = [
-                'widget_options' => [
-                    'ident' => $options
-                ]
-            ];
-        } elseif (!isset($options['widget_options']['ident'])) {
-            $options['widget_options']['ident'] = null;
-        }
-
-        $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
-        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-        if ($sidemenuFromRequest) {
-            $options['widget_options']['ident'] = $sidemenuFromRequest;
-        } elseif ($mainMenuFromRequest) {
-            $options['widget_options']['ident'] = $mainMenuFromRequest;
-        }
-
-        if (!is_string($options['widget_options']['ident'])) {
-            return null;
-        }
-
-        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-
-        if (isset($options['widget_type'])) {
-            $widgetType = $options['widget_type'];
-        } else {
-            $widgetType = 'charcoal/admin/widget/sidemenu';
-        }
-
-        $sidemenu = $this->widgetFactory()->create($widgetType);
-
-        if (isset($options['widget_options'])) {
-            $sidemenu->setData($options['widget_options']);
-        }
-
-        return $sidemenu;
-    }
-
-    /**
-     * Determine if user authentication is required.
-     *
-     * Authentication is required by default. If unnecessary,
-     * replace this method in the inherited template class.
-     *
-     * For example, the "Login" / "Reset Password" templates
-     * should return `false`.
-     *
-     * @return boolean
-     */
-    protected function authRequired()
-    {
-        return true;
     }
 
     /**
@@ -770,18 +471,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return 'assets/admin/images/identicon.png';
-    }
-
-    /**
-     * Set the name of the project.
-     *
-     * @param  string $name Name of the project.
-     * @return AdminTemplate Chainable
-     */
-    protected function setSiteName($name)
-    {
-        $this->siteName = $this->translator()->translation($name);
-        return $this;
     }
 
     /**
@@ -881,12 +570,61 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * Determine if user authentication is required.
+     *
+     * Authentication is required by default. If unnecessary,
+     * replace this method in the inherited template class.
+     *
+     * For example, the "Login" / "Reset Password" templates
+     * should return `false`.
+     *
+     * @return boolean
+     */
+    protected function authRequired()
+    {
+        return true;
+    }
+
+    /**
+     * Set common dependencies (services) used in all admin templates.
+     *
+     * @param Container $container DI Container.
      * @return void
      */
-    private function setWidgetFactory(FactoryInterface $factory)
+    protected function setDependencies(Container $container)
     {
-        $this->widgetFactory = $factory;
+        parent::setDependencies($container);
+
+        $this->setModelFactory($container['model/factory']);
+        $this->setTranslator($container['translator']);
+
+        $this->appConfig = $container['config'];
+        $this->adminConfig = $container['admin/config'];
+        $this->setBaseUrl($container['base-url']);
+        $this->setSiteName($container['config']['project_name']);
+
+        $this->setWidgetFactory($container['widget/factory']);
+
+        $this->menuBuilder = $container['menu/builder'];
+        $this->menuItemBuilder = $container['menu/item/builder'];
+
+        // Satisfies AuthAwareInterface dependencies
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
+    }
+
+    /**
+     * @throws Exception If the factory is not set.
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        if (!$this->modelFactory) {
+            throw new Exception(
+                sprintf('Model factory is not set for template "%s".', get_class($this))
+            );
+        }
+        return $this->modelFactory;
     }
 
     /**
@@ -901,5 +639,269 @@ class AdminTemplate extends AbstractTemplate implements
             );
         }
         return $this->widgetFactory;
+    }
+
+    /**
+     * Set the name of the project.
+     *
+     * @param  string $name Name of the project.
+     * @return AdminTemplate Chainable
+     */
+    protected function setSiteName($name)
+    {
+        $this->siteName = $this->translator()->translation($name);
+        return $this;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
+     * @return array|Generator
+     */
+    protected function createHeaderMenu($options = null)
+    {
+        $headerMenu = $this->adminConfig['header_menu'];
+
+        if (!isset($headerMenu['items'])) {
+            throw new InvalidArgumentException(
+                'Missing "admin.header_menu.items"'
+            );
+        }
+
+        $mainMenu = null;
+        if (!(empty($options) && !is_numeric($options))) {
+            if (is_string($options)) {
+                $mainMenu = $options;
+            } elseif (is_array($options)) {
+                if (isset($options['widget_options']['ident'])) {
+                    $mainMenu = $options['widget_options']['ident'];
+                }
+            }
+        }
+
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($mainMenuFromRequest) {
+            $mainMenu = $mainMenuFromRequest;
+        }
+
+        $menu  = $this->menuBuilder->build([]);
+        foreach ($headerMenu['items'] as $menuIdent => $menuItem) {
+            $menuItem['menu'] = $menu;
+            $test = $this->menuItemBuilder->build($menuItem);
+            if ($test->isAuthorized() === false) {
+                continue;
+            }
+            unset($menuItem['menu']);
+
+            if (isset($menuItem['active']) && $menuItem['active'] === false) {
+                continue;
+            }
+
+            $menuItem  = $this->parseHeaderMenuItem($menuItem, $menuIdent, $mainMenu);
+            $menuIdent = $menuItem['ident'];
+
+            yield $menuIdent => $menuItem;
+        }
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the sidemenu widget is invalid.
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
+     */
+    protected function createSidemenu($options = null)
+    {
+        if (!is_array($options)) {
+            $options = [
+                'widget_options' => [
+                    'ident' => $options
+                ]
+            ];
+        } elseif (!isset($options['widget_options']['ident'])) {
+            $options['widget_options']['ident'] = null;
+        }
+
+        $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($sidemenuFromRequest) {
+            $options['widget_options']['ident'] = $sidemenuFromRequest;
+        } elseif ($mainMenuFromRequest) {
+            $options['widget_options']['ident'] = $mainMenuFromRequest;
+        }
+
+        if (!is_string($options['widget_options']['ident'])) {
+            return null;
+        }
+
+        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
+
+        if (isset($options['widget_type'])) {
+            $widgetType = $options['widget_type'];
+        } else {
+            $widgetType = 'charcoal/admin/widget/sidemenu';
+        }
+
+        $sidemenu = $this->widgetFactory()->create($widgetType);
+
+        if (isset($options['widget_options'])) {
+            $sidemenu->setData($options['widget_options']);
+        }
+
+        return $sidemenu;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
+     * @return array|Generator
+     */
+    protected function createSystemMenu($options = null)
+    {
+        $menuConfig = $this->adminConfig['system_menu'];
+
+        if (!isset($menuConfig['items'])) {
+            return [];
+        }
+
+        $currentIdent = null;
+        if (!(empty($options) && !is_numeric($options))) {
+            if (is_string($options)) {
+                $currentIdent = $options;
+            } elseif (is_array($options)) {
+                $menuConfig = array_replace_recursive($menuConfig, $options);
+            }
+        }
+
+        $systemMenu = $this->menuBuilder->build([]);
+        $menuItems  = [];
+        foreach ($menuConfig['items'] as $menuIdent => $menuItem) {
+            $menuItem['menu'] = $systemMenu;
+            $test = $this->menuItemBuilder->build($menuItem);
+            if ($test->isAuthorized() === false) {
+                continue;
+            }
+            unset($menuItem['menu']);
+
+            if (isset($menuItem['active']) && $menuItem['active'] === false) {
+                continue;
+            }
+
+            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent, $currentIdent);
+            $menuIdent = $menuItem['ident'];
+
+            $menuItems[$menuIdent] = $menuItem;
+        }
+        return $menuItems;
+    }
+
+    /**
+     * As a convenience, all admin templates have a model factory to easily create objects.
+     *
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return void
+     */
+    private function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+    }
+
+    /**
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return void
+     */
+    private function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+    }
+
+    /**
+     * @param  array       $menuItem     The menu structure.
+     * @param  string|null $menuIdent    The menu identifier.
+     * @param  string|null $currentIdent The current menu identifier.
+     * @return array Finalized menu structure.
+     */
+    private function parseHeaderMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
+    {
+        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
+
+        if (isset($menuItem['ident'])) {
+            $menuIdent = $menuItem['ident'];
+        } else {
+            $menuItem['ident'] = $menuIdent;
+        }
+
+        if (!empty($menuItem['url'])) {
+            $url = $menuItem['url'];
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
+        } else {
+            $url = '';
+        }
+
+        $menuItem['url'] = $url;
+
+        if (isset($menuItem['icon'])) {
+            $icon = $menuItem['icon'];
+            if ($icon && strpos($icon, ':') === false && !in_array($icon[0], [ '/', '#', '?' ])) {
+                $icon = $svgUri.$icon;
+            }
+        } else {
+            $icon = $svgUri.'contents';
+        }
+
+        if (is_string($icon) && strpos($icon, '.svg') > 0) {
+            unset($menuItem['icon']);
+            $menuItem['svg'] = $icon;
+        } else {
+            unset($menuItem['svg']);
+            $menuItem['icon'] = $icon;
+        }
+
+        if (isset($menuItem['label'])) {
+            $menuItem['label'] = $this->translator()->translation($menuItem['label']);
+        }
+
+        $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
+
+        $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
+
+        return $menuItem;
+    }
+
+    /**
+     * @param  array       $menuItem     The menu structure.
+     * @param  string|null $menuIdent    The menu identifier.
+     * @param  string|null $currentIdent The current menu identifier.
+     * @return array Finalized menu structure.
+     */
+    private function parseSystemMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
+    {
+        if (!isset($menuItem['ident'])) {
+            $menuItem['ident'] = $menuIdent;
+        }
+
+        if (!empty($menuItem['url'])) {
+            $url = $menuItem['url'];
+            if ($url && strpos($url, ':') === false && !in_array($url[0], [ '/', '#', '?' ])) {
+                $url = $this->adminUrl().$url;
+            }
+        } else {
+            $url = '#';
+        }
+
+        $menuItem['url'] = $url;
+
+        if ($menuItem['icon_css']) {
+            $menuItem['iconCss'] = $menuItem['icon_css'];
+        }
+
+        if (isset($menuItem['label'])) {
+            $menuItem['label'] = $this->translator()->translation($menuItem['label']);
+        }
+
+        $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
+
+        return $menuItem;
     }
 }

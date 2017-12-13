@@ -2,20 +2,23 @@
 
 namespace Charcoal\Admin\Property\Display;
 
-use Charcoal\Admin\Property\AbstractPropertyDisplay;
+// From Pimple
 use Pimple\Container;
+
+// From 'charcoal-property'
+use Charcoal\Property\FileProperty;
+use Charcoal\Property\ImageProperty;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractPropertyDisplay;
+use Charcoal\Admin\Support\BaseUrlTrait;
 
 /**
  * Link Display Property
  */
 class LinkDisplay extends AbstractPropertyDisplay
 {
-    /**
-     * The base URI for the Charcoal application.
-     *
-     * @var string|\Psr\Http\Message\UriInterface
-     */
-    public $baseUrl;
+    use BaseUrlTrait;
 
     /**
      * Retrieve display value for anchor link.
@@ -30,15 +33,32 @@ class LinkDisplay extends AbstractPropertyDisplay
             return '';
         }
 
-        $parts = parse_url($val);
-        if (empty($parts['scheme']) && !in_array($val[0], [ '/', '#', '?' ])) {
-            $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
-            $query = isset($parts['query']) ? $parts['query'] : '';
-            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
-            $val   = $this->baseUrl->withPath($path)->withQuery($query)->withFragment($hash);
-        }
+        $val = $this->getLocalUrl($val);
 
         return $val;
+    }
+
+
+    /**
+     * Get the URL for the file at the given path.
+     *
+     * @param  string $path The file path.
+     * @return string
+     */
+    protected function getLocalUrl($path)
+    {
+        $prop = $this->property();
+        if ($prop instanceof FileProperty) {
+            if ($prop->publicAccess() === false) {
+                $query = http_build_query([
+                    'disk' => $prop->filesystem(),
+                    'path' => $path,
+                ]);
+                return $this->adminUrl('filesystem/download')->withQuery($query);
+            }
+        }
+
+        return $this->baseUrl($path);
     }
 
     /**
@@ -51,6 +71,8 @@ class LinkDisplay extends AbstractPropertyDisplay
     {
         parent::setDependencies($container);
 
-        $this->baseUrl = $container['base-url'];
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
     }
 }

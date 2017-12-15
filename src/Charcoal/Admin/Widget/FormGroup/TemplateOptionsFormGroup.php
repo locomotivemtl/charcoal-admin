@@ -302,41 +302,25 @@ class TemplateOptionsFormGroup extends StructureFormGroup
             $template = null;
             $finalize = false;
 
-            if (!$finalize) {
-                $controller = $this->controllerIdent();
-                if ($controller) {
-                    $finalize = true;
-                    $template = $controller;
-                }
+            $obj = $this->obj();
+            if ($obj instanceof TemplateableInterface) {
+                $structureMetadata = $obj->templateOptionsMetadata();
+            } else {
+                $structureMetadata = $this->createMetadata();
             }
 
-            if (!$finalize) {
-                $obj = $this->obj();
-                $property = $this->templateProperty();
-                /** @see TemplateProperty::__toString() Similar structure interface resolution. */
-                if ($property) {
-                    $template = $obj[$property->ident()];
-                    if ($property instanceof SelectablePropertyInterface) {
-                        if ($property->hasChoice($template)) {
-                            $choice = $property->choice($template);
-                            $keys   = [ 'controller', 'template', 'class' ];
-                            foreach ($keys as $key) {
-                                if (isset($choice[$key])) {
-                                    $finalize = true;
-                                    $template = $choice[$key];
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+            $controllerInterface = $this->controllerIdent();
+            if ($controllerInterface) {
+                $controllerStructIdent = sprintf('widget/form-group/structure/%s/%s', $obj->objType(), $obj->id());
+                $structureMetadata     = $this->metadataLoader()->load(
+                    $controllerStructIdent,
+                    $structureMetadata,
+                    (array)$controllerInterface
+                );
             }
 
-            if ($template) {
-                $metadata = $this->loadMetadata($template);
-                $property = $this->storageProperty();
-                $property->setStructureMetadata($metadata);
-            }
+            $storageProperty = $this->storageProperty();
+            $storageProperty->setStructureMetadata($structureMetadata);
 
             parent::finalizeStructure();
         }

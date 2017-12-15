@@ -120,7 +120,7 @@ class PermalinkInput extends TextInput
             $translator->setLocale($origLocale);
         }
 
-        return rtrim((string)$link, '/') . '/';
+        return rtrim((string)$link, '/').'/';
     }
 
     /**
@@ -180,7 +180,7 @@ class PermalinkInput extends TextInput
             $locales  = $this->translator()->availableLocales();
             $sampleId = $this->sampleId();
             foreach ($locales as $langCode) {
-                $this->setSampleId($sampleId . '_' . $langCode);
+                $this->setSampleId($sampleId.'_'.$langCode);
                 $this->setLang($langCode);
 
                 yield $this;
@@ -229,6 +229,6 @@ class PermalinkInput extends TextInput
      */
     protected function generateSampleId()
     {
-        return 'sample_' . uniqid();
+        return 'sample_'.uniqid();
     }
 }

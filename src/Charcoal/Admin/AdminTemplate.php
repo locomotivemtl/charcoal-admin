@@ -569,7 +569,7 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $mainMenu = null;
-        if (isset($this['header_menu_item'])){
+        if (isset($this['header_menu_item'])) {
             $mainMenu = $this['header_menu_item'];
         }
 
@@ -630,7 +630,7 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         if (isset($this['header_menu_item'])) {
-           $options['widget_options']['ident'] = $this['header_menu_item'];
+            $options['widget_options']['ident'] = $this['header_menu_item'];
         }
 
         $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
@@ -676,7 +676,7 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $currentIdent = null;
-        if (isset($this['system_menu_item'])){
+        if (isset($this['system_menu_item'])) {
             $currentIdent = $this['system_menu_item'];
         }
 

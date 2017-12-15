@@ -29,11 +29,13 @@ class DeactivateAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         unset($request);
+
         $staticLink = $this->basePath.'www/static';
         if (!file_exists($staticLink)) {
             $this->setSuccess(false);
             return $response->withStatus(409);
         }
+
         $ret = unlink($staticLink);
         if ($ret === false) {
             $this->setSuccess(false);

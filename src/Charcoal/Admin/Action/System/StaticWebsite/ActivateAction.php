@@ -28,27 +28,45 @@ class ActivateAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $baseCache = $this->basePath.'cache/static';
-        if (!file_exists($baseCache)) {
-            $ret = mkdir($baseCache, null, true);
+        $cachePath = $this->basePath.'cache';
+        // Ensure 'cache' directory exists
+        if (!file_exists($cachePath)) {
+            $ret = mkdir($cachePath);
             if ($ret === false) {
                 $this->setSuccess(false);
                 return $response->withStatus(500);
             }
         }
-        $staticLink = $this->basePath.'www/static';
+
+        $staticPath = $cachePath.'/static';
+        // Ensure 'cache/static' directory exists
+        if (!file_exists($staticPath)) {
+            $ret = mkdir($staticPath);
+            if ($ret === false) {
+                $this->setSuccess(false);
+                return $response->withStatus(500);
+            }
+        }
+
+        $publicPath = $this->basePath.'www';
+        $staticLink = $publicPath.'/static';
+        // Ensure 'www/static' directory does NOT exist
         if (file_exists($staticLink)) {
             $this->setSuccess(false);
             return $response->withStatus(409);
         }
-        if (!file_exists(dirname($staticLink))) {
-            $ret = mkdir(dirname($staticLink));
+
+        // Ensure 'www' directory exists
+        if (!file_exists($publicPath)) {
+            $ret = mkdir($publicPath);
             if ($ret === false) {
                 $this->setSuccess(false);
                 return $response->withStatus(500);
             }
         }
-        $ret = symlink($baseCache, $staticLink);
+
+        // Create a symbolic link from 'www/static' to 'cache/static'
+        $ret = symlink($staticPath, $staticLink);
         if ($ret === false) {
             $this->setSuccess(false);
             return $response->withStatus(500);

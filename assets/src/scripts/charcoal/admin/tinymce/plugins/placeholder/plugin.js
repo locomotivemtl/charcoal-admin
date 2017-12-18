@@ -50,7 +50,7 @@
             editor.on('setcontent', onSetContent);
 
             function onFocus() {
-                label.hide();
+                label.check();
                 editor.focus();
             }
 
@@ -94,7 +94,7 @@
         Label.prototype.check = function () {
             var bodyElement = editor.getBody();
             if (bodyElement !== null) {
-                var textContent = editor.getBody().textContent.replace(this.el.textContent, '').trim();
+                var textContent = bodyElement.textContent.trim();
                 if (textContent === '') {
                     this.show();
                 } else {

@@ -2,31 +2,31 @@
   "private": true,
   "name": "@locomotivemtl/charcoal-admin",
   "devDependencies": {
-    "autoprefixer": "^6.3",
-    "glob": "^7.0.5",
+    "autoprefixer": "^7.2",
+    "glob": "^7.1.2",
     "grunt": "^1.0.1",
     "grunt-browser-sync": "^2.2.0",
     "grunt-composer": "^0.4.5",
     "grunt-concat": "^0.1.6",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-cssmin": "^1.0.1",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-qunit": "^1.2.0",
-    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-qunit": "^2.0.0",
+    "grunt-contrib-uglify": "^3.2.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-githooks": "^0.6.0",
     "grunt-jscs": "^3.0.1",
     "grunt-jsonlint": "^1.1.0",
     "grunt-notify": "^0.4.5",
-    "grunt-postcss": "^0.8.0",
-    "grunt-sass": "^1.2.0",
-    "grunt-svgmin": "^3.3.0",
+    "grunt-postcss": "^0.9.0",
+    "grunt-sass": "^2.0.0",
+    "grunt-svgmin": "^5.0.0",
     "grunt-svgstore": "^1.0.0",
     "grunt-yaml-validate": "^0.1.1",
-    "load-grunt-tasks": "^3.5.0"
+    "load-grunt-tasks": "^3.5.2"
   },
   "dependencies": {
-    "url-search-params": "^0.6.1"
+    "url-search-params": "^0.10.0"
   }
 }

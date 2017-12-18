@@ -2104,11 +2104,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();
-            var type = $(this).data('type');
+            var _this = $(this);
+
+            var type = _this.data('type');
             if (!type) {
                 return false;
             }
-            var id = $(this).data('id');
+
+            var id = _this.data('id');
             if (id) {
                 that.add({
                     id:   id,
@@ -2118,9 +2121,13 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     that.reload();
                 });
             } else {
-                var title = $(this).data('title') || attachmentWidgetL10n.editObject,
-                skip_form = $(this).data('skip-form');
-                that.create_attachment(type, 0, null, { title: title, skipForm:skip_form }, function (response) {
+                var attachment_struct = {
+                    title:     _this.data('title') || attachmentWidgetL10n.editObject,
+                    formIdent: _this.data('form-ident'),
+                    skipForm:  _this.data('skip-form')
+                };
+
+                that.create_attachment(type, 0, null, attachment_struct, function (response) {
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
@@ -2141,13 +2148,19 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             var action = _this.data('action');
             switch (action) {
                 case 'edit':
-                    var type = _this.data('type');
-                    var id = _this.data('id');
+                    var type = _this.data('type'),
+                        id = _this.data('id');
+
                     if (!type || !id) {
                         break;
                     }
-                    var title = _this.data('title') || attachmentWidgetL10n.editObject;
-                    that.create_attachment(type, id, null, { title: title }, function (response) {
+
+                    var attachment_struct = {
+                        title:     _this.data('title') || attachmentWidgetL10n.editObject,
+                        formIdent: _this.data('form-ident')
+                    };
+
+                    that.create_attachment(type, id, null, attachment_struct, function (response) {
                         if (response.success) {
                             that.reload();
                         }
@@ -2180,21 +2193,24 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         container_type   = _this.data('type'),
                         container_id     = _this.data('id'),
                         container_group  = _this.data('group'),
+                        form_ident       = _this.data('form-ident'),
                         skip_form        = _this.data('skip-form'),
                         container_struct = {
-                            id:    container_id,
-                            type:  container_type,
-                            group: container_group,
-                            skipForm: skip_form
+                            id:       container_id,
+                            type:     container_type,
+                            group:    container_group
                         };
+                    attachment_struct = {
+                        title:     attachment_title,
+                        formIdent: form_ident,
+                        skipForm:  skip_form
+                    };
 
                     that.create_attachment(
                         attachment_type,
                         0,
-                        {
-                            title: attachment_title
-                        },
                         container_struct,
+                        attachment_struct,
                         function (response) {
                             if (response.success) {
                                 that.add_object_to_container(
@@ -2280,6 +2296,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
         widget_options: {
             obj_type:  type,
             obj_id:    id,
+            form_ident: customOpts.formIdent || null,
             form_data: {
                 pivot: parent
             }

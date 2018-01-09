@@ -23,6 +23,8 @@ Charcoal.Admin.Widget_Table = function ()
         page: 1,
         num_per_page: 50
     };
+    this.list_actions = {};
+    this.object_actions = {};
 
     this.template = this.properties = this.properties_options = undefined;
 };
@@ -52,6 +54,8 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
     this.filters            = opts.data.filters            || this.filters;
     this.orders             = opts.data.orders             || this.orders;
     this.pagination         = opts.data.pagination         || this.pagination;
+    this.list_actions       = opts.data.list_actions       || this.list_actions;
+    this.object_actions     = opts.data.object_actions     || this.object_actions;
 
     // @todo remove the hardcoded shit
     this.collection_ident = opts.data.collection_ident || 'default';
@@ -272,7 +276,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
             properties_options: this.properties_options,
             filters:            this.filters,
             orders:             this.orders,
-            pagination:         this.pagination
+            pagination:         this.pagination,
+            list_actions:       this.list_actions
         }
     };
 };

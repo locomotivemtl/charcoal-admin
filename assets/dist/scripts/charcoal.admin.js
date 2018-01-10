@@ -8052,6 +8052,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 };
 ;Charcoal.Admin.Template_MenuHeader = function ()
 {
+    $('body').toggleClass('has-nav-open');
     // toggle-class.js
     // ==========================================================================
     $('.js-toggle-class').click(function (event) {

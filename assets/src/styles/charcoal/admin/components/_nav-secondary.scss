@@ -3,38 +3,40 @@
 // ==========================================================================
 
 .c-nav-secondary {
-    margin-left: rem($nav-main-width);
-    padding: 0 rem($unit / 2);
-    padding-bottom: rem($unit);
-    width: calc(100% - #{rem($nav-main-width)});
-
     @media (max-width: $to-small) {
-        top: 45px;
-        margin-left: 45px;
+        width: calc(100% - #{$unit});
+        left: $unit;
     }
 
     @media (min-width: $from-small) and (max-width: $to-large) {
-        top: rem($unit);
-        margin-left: 97px;
+        width: calc(#{$nav-width - $nav-main-width});
+        left: $nav-main-width;
     }
 
     @media (max-width: $to-large) {
+        background-color: $charcoal-gray-6;
         position: fixed;
+        top: $unit;
         bottom: 0;
-        left: rem(-$nav-main-width);
+        padding: 0 $unit / 2;
+        padding-bottom: $unit;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         z-index: 998;
-        transform: translateX(-100%);
+        transform: translateX(-100%) translateX(-$unit);
         transition: transform 0.5s;
 
         .has-nav-open & {
-            transform: translateX(100%);
+            transform: translateX(0%);
         }
     }
 
     @media (min-width: $from-large) {
         left: rem($nav-main-width);
+        margin-left: rem($nav-main-width);
+        width: calc(100% - #{rem($nav-main-width)});
+        padding: 0 rem($unit / 2);
+        padding-bottom: rem($unit);
     }
 
     .panel {
@@ -43,14 +45,27 @@
 }
 
 .c-nav-secondary_header {
-    height: rem($nav-header-height);
+    @media (max-width: $to-small) {
+        height: $unit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0;
+    }
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        height: $nav-main-width;
+    }
+    @media (min-width: $from-large) {
+        height: rem($nav-header-height);
+    }
 }
 
 .c-nav-secondary_heading {
     color: $white;
     margin: 0;
     opacity: 0.6;
-    padding: 0 rem(10px);
+    padding: 0 rem(5px);
+    line-height: 1;
 
     .panel & {
         color: $charcoal-gray-5;
@@ -111,8 +126,8 @@
     }
 
     &.-arrow {
-        // padding-top: rem(10px);
-        // padding-bottom: rem(10px);
+        padding-top: rem(15px);
+        padding-bottom: rem(15px);
         position: relative;
 
         &::after {

@@ -7,12 +7,23 @@
     z-index: 1200;
     right: 0;
     bottom: 0;
+
+    @media (max-width: $to-large) {
+        top: 0;
+    }
 }
 
 .c-nav-system_button {
     background-color: transparent;
     cursor: pointer;
-    padding: rem(22px) rem($spacer-x);
+
+    @media (max-width: $to-large) {
+        padding: 6px 20px;
+    }
+
+    @media (min-width: $from-large) {
+        padding: rem(22px) rem($spacer-x);
+    }
 
     &::after {
         content: none;

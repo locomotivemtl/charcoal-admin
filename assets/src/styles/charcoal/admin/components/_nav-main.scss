@@ -10,31 +10,30 @@
     line-height: 1;
 
     @media (max-width: $to-small) {
-        top: 45px;
-        left: -45px;
-        width: 45px;
-    }
-
-    @media (min-width: $from-small) {
-        width: rem($nav-main-width);
+        width: $unit;
     }
 
     @media (min-width: $from-small) and (max-width: $to-large) {
-        top: rem($unit);
-        left: rem(-$unit * 2);
+        width: $nav-main-width;
     }
 
     @media (max-width: $to-large) {
+        background-color: $charcoal-gray-6;
         position: fixed;
-        bottom: 0;
+        top: $unit;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         z-index: 999;
         transition: transform 0.2s;
+        transform: translateX(-100%);
 
         .has-nav-open & {
-            transform: translateX(100%);
+            transform: translateX(0);
         }
+    }
+
+    @media (min-width: $from-large) {
+        width: rem($nav-main-width);
     }
 }
 
@@ -50,10 +49,14 @@
     }
 
     @media (max-width: $to-small) {
-        height: 65px;
+        height: $unit;
     }
 
-    @media (min-width: $from-small) {
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        height: $nav-main-width;
+    }
+
+    @media (min-width: $from-large) {
         height: rem(95px);
     }
 }
@@ -88,7 +91,13 @@
     }
 
     &.is-active {
-        background-color: transparent;
+        // @media (max-width: $to-large) {
+        //     background-color: $black;
+        // }
+
+        // @media (min-width: $from-large) {
+            background-color: transparent;
+        // }
     }
 }
 
@@ -120,6 +129,7 @@
 
     @media (min-width: $from-small) {
         display: block;
+        padding: 0 3px;
     }
 
     .c-nav-main_link_icon + & {

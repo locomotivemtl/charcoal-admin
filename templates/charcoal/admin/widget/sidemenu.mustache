@@ -8,7 +8,7 @@
 --}}
 
 {{# hasSidemenu }}
-<nav class="c-nav-secondary" id="{{ widget_id }}">
+<nav class="c-nav-secondary" id="{{ widget_id }}" data-children=".panel">
     {{# showTitle }}
     <header class="o-header c-nav-secondary_header">
         <h1 class="c-nav-secondary_heading">{{ title }}</h1>
@@ -29,8 +29,11 @@
         <div class="{{# displayAsPanel }}panel-heading{{/ displayAsPanel }}{{^ displayAsPanel }} o-section{{/ displayAsPanel }}">
             {{# collapsible }}
             <a class="c-nav-secondary_link{{# collapsible }} -arrow{{/ collapsible }}"
-                href="#{{ groupId }}"
                 data-toggle="collapse"
+                href="#{{ groupId }}"
+                role="button"
+                aria-expanded="{{# collapsed }}false{{/ collapsed }}{{^ collapsed }}true{{/ collapsed }}"
+                aria-controls="{{ groupId }}"
                 {{# parented }}
                 data-parent="#{{ widget_id }}"
                 {{/ parented }}>
@@ -41,7 +44,7 @@
             {{/ collapsible }}
         </div>
         {{/ showTitle }}
-        <div id="{{ groupId }}" class="{{# displayAsPanel }}panel-collapse{{/ displayAsPanel }}{{# collapsible }} collapse{{/ collapsible }}{{^ collapsed }} in{{/ collapsed }}">
+        <div id="{{ groupId }}" class="{{# displayAsPanel }}panel-collapse{{/ displayAsPanel }}{{# collapsible }} collapse{{/ collapsible }}{{^ collapsed }} show{{/ collapsed }}">
             <div class="{{# displayAsPanel }}panel-body{{/ displayAsPanel }}">
                 <ul class="c-nav-secondary_list">
                 {{# links }}

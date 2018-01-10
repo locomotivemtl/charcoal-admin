@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2017-12-05 
+ * ! Charcoal Admin - 2018-01-09 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -224,16 +224,35 @@ td {
 
 .o-overlay, .c-nav-main_overlay {
   position: fixed;
-  top: 3.75rem;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.78);
+  background-color: rgba(0, 0, 0, 0.8);
   opacity: 0;
   visibility: hidden;
   -webkit-transition: opacity 0.3s, visibility 0.3s;
   transition: opacity 0.3s, visibility 0.3s;
   z-index: 98;
+}
+
+@media (max-width: 1199px) {
+  .o-overlay, .c-nav-main_overlay {
+    top: 60px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .o-overlay, .c-nav-main_overlay {
+    top: 3.75rem;
+  }
+}
+
+.o-overlay.-light, .-light.c-nav-main_overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.o-overlay.-transparent, .-transparent.c-nav-main_overlay {
+  background-color: transparent;
 }
 
 .o-background {
@@ -504,7 +523,6 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-nav-container {
-  background-color: #202020;
   top: 0;
   left: 0;
   z-index: 900;
@@ -514,24 +532,35 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (max-width: 1199px) {
   .c-nav-container {
+    background-color: #393939;
+    position: fixed;
     right: 0;
-    height: 80px;
+    height: 60px;
   }
 }
 
 @media (min-width: 1200px) {
   .c-nav-container {
+    background-color: #202020;
     bottom: 0;
     width: 24.375rem;
   }
 }
 
-.c-nav-container_button {
-  width: 45px;
-  padding: 16.5px 13.5px;
-  text-align: center;
-  cursor: pointer;
-  height: 100%;
+@media (max-width: 1199px) {
+  .c-nav-container_button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    padding: 0;
+    padding-bottom: 6px;
+    text-align: center;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -540,42 +569,79 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
-.c-nav-container_button_line {
-  display: block;
+.c-nav-container_button_icon {
+  position: relative;
+  display: inline-block;
+  width: 20px;
   height: 2px;
   background-color: #ffffff;
-  margin-bottom: 3px;
-  -webkit-transform-origin: center left;
-      -ms-transform-origin: center left;
-          transform-origin: center left;
-  -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
-  transition: opacity 0.2s, -webkit-transform 0.2s;
-  transition: transform 0.2s, opacity 0.2s;
-  transition: transform 0.2s, opacity 0.2s, -webkit-transform 0.2s;
+  -webkit-transition: background-color 0.2s linear, -webkit-transform 0.2s linear;
+  transition: background-color 0.2s linear, -webkit-transform 0.2s linear;
+  transition: background-color 0.2s linear, transform 0.2s linear;
+  transition: background-color 0.2s linear, transform 0.2s linear, -webkit-transform 0.2s linear;
 }
 
-.has-nav-open .c-nav-container_button_line:nth-child(1) {
-  -webkit-transform: translateY(-1px) rotate(42deg);
-      -ms-transform: translateY(-1px) rotate(42deg);
-          transform: translateY(-1px) rotate(42deg);
+.has-nav-open .c-nav-container_button_icon {
+  background-color: transparent;
+  -webkit-transform: translateX(-3px);
+      -ms-transform: translateX(-3px);
+          transform: translateX(-3px);
 }
 
-.has-nav-open .c-nav-container_button_line:nth-child(2) {
-  opacity: 0;
+.c-nav-container_button_icon::before, .c-nav-container_button_icon::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #ffffff;
+  height: 2px;
+  -webkit-transform-origin: center right;
+      -ms-transform-origin: center right;
+          transform-origin: center right;
+  -webkit-transition: -webkit-transform 0.2s linear;
+  transition: -webkit-transform 0.2s linear;
+  transition: transform 0.2s linear;
+  transition: transform 0.2s linear, -webkit-transform 0.2s linear;
 }
 
-.has-nav-open .c-nav-container_button_line:nth-child(3) {
-  -webkit-transform: translateY(1px) rotate(-42deg);
-      -ms-transform: translateY(1px) rotate(-42deg);
-          transform: translateY(1px) rotate(-42deg);
-  margin-bottom: 0;
+.c-nav-container_button_icon::before {
+  top: -6px;
 }
 
-.c-nav-container_header {
-  background-color: #393939;
-  height: 5.9375rem;
-  position: relative;
-  overflow: visible;
+.has-nav-open .c-nav-container_button_icon::before {
+  -webkit-transform: translateY(-1px) rotate(-45deg);
+      -ms-transform: translateY(-1px) rotate(-45deg);
+          transform: translateY(-1px) rotate(-45deg);
+}
+
+.c-nav-container_button_icon::after {
+  bottom: -6px;
+}
+
+.has-nav-open .c-nav-container_button_icon::after {
+  -webkit-transform: translateY(1px) rotate(45deg);
+      -ms-transform: translateY(1px) rotate(45deg);
+          transform: translateY(1px) rotate(45deg);
+}
+
+@media (max-width: 1199px) {
+  .c-nav-container_header {
+    position: absolute;
+    top: 0;
+    left: 60px;
+    right: 0;
+    height: 60px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-nav-container_header {
+    background-color: #393939;
+    height: 5.9375rem;
+    overflow: visible;
+    position: relative;
+  }
 }
 
 .c-nav-container_logo {
@@ -593,7 +659,7 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (max-width: 1199px) {
   .c-nav-container_logo {
-    padding: 15px;
+    padding: 6px 20px;
   }
   .c-nav-container_logo svg {
     width: 81px;
@@ -618,10 +684,27 @@ a.chip:hover::before, a.chip:focus::before {
   bottom: 0;
 }
 
+@media (max-width: 1199px) {
+  .c-nav-system {
+    top: 0;
+  }
+}
+
 .c-nav-system_button {
   background-color: transparent;
   cursor: pointer;
-  padding: 1.375rem 1.5625rem;
+}
+
+@media (max-width: 1199px) {
+  .c-nav-system_button {
+    padding: 6px 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-nav-system_button {
+    padding: 1.375rem 1.5625rem;
+  }
 }
 
 .c-nav-system_button::after {
@@ -705,29 +788,21 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (max-width: 699px) {
   .c-nav-main {
-    top: 45px;
-    left: -45px;
-    width: 45px;
-  }
-}
-
-@media (min-width: 700px) {
-  .c-nav-main {
-    width: 5.625rem;
+    width: 60px;
   }
 }
 
 @media (min-width: 700px) and (max-width: 1199px) {
   .c-nav-main {
-    top: 3.75rem;
-    left: -7.5rem;
+    width: 90px;
   }
 }
 
 @media (max-width: 1199px) {
   .c-nav-main {
+    background-color: #202020;
     position: fixed;
-    bottom: 0;
+    top: 60px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     z-index: 999;
@@ -735,11 +810,20 @@ a.chip:hover::before, a.chip:focus::before {
     transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
     transition: transform 0.2s, -webkit-transform 0.2s;
+    -webkit-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+            transform: translateX(-100%);
   }
   .has-nav-open .c-nav-main {
-    -webkit-transform: translateX(100%);
-        -ms-transform: translateX(100%);
-            transform: translateX(100%);
+    -webkit-transform: translateX(0);
+        -ms-transform: translateX(0);
+            transform: translateX(0);
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-nav-main {
+    width: 5.625rem;
   }
 }
 
@@ -755,11 +839,17 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (max-width: 699px) {
   .c-nav-main_item {
-    height: 65px;
+    height: 60px;
   }
 }
 
-@media (min-width: 700px) {
+@media (min-width: 700px) and (max-width: 1199px) {
+  .c-nav-main_item {
+    height: 90px;
+  }
+}
+
+@media (min-width: 1200px) {
   .c-nav-main_item {
     height: 5.9375rem;
   }
@@ -830,6 +920,7 @@ a.chip:hover::before, a.chip:focus::before {
 @media (min-width: 700px) {
   .c-nav-main_link_text {
     display: block;
+    padding: 0 3px;
   }
 }
 
@@ -850,53 +941,53 @@ a.chip:hover::before, a.chip:focus::before {
   visibility: visible;
 }
 
-.c-nav-secondary {
-  margin-left: 5.625rem;
-  padding: 0 1.875rem;
-  padding-bottom: 3.75rem;
-  width: calc(100% - 5.625rem);
-}
-
 @media (max-width: 699px) {
   .c-nav-secondary {
-    top: 45px;
-    margin-left: 45px;
+    width: calc(100% - 60px);
+    left: 60px;
   }
 }
 
 @media (min-width: 700px) and (max-width: 1199px) {
   .c-nav-secondary {
-    top: 3.75rem;
-    margin-left: 97px;
+    width: calc(300px);
+    left: 90px;
   }
 }
 
 @media (max-width: 1199px) {
   .c-nav-secondary {
+    background-color: #202020;
     position: fixed;
+    top: 60px;
     bottom: 0;
-    left: -5.625rem;
+    padding: 0 30px;
+    padding-bottom: 60px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     z-index: 998;
-    -webkit-transform: translateX(-100%);
-        -ms-transform: translateX(-100%);
-            transform: translateX(-100%);
+    -webkit-transform: translateX(-100%) translateX(-60px);
+        -ms-transform: translateX(-100%) translateX(-60px);
+            transform: translateX(-100%) translateX(-60px);
     -webkit-transition: -webkit-transform 0.5s;
     transition: -webkit-transform 0.5s;
     transition: transform 0.5s;
     transition: transform 0.5s, -webkit-transform 0.5s;
   }
   .has-nav-open .c-nav-secondary {
-    -webkit-transform: translateX(100%);
-        -ms-transform: translateX(100%);
-            transform: translateX(100%);
+    -webkit-transform: translateX(0%);
+        -ms-transform: translateX(0%);
+            transform: translateX(0%);
   }
 }
 
 @media (min-width: 1200px) {
   .c-nav-secondary {
     left: 5.625rem;
+    margin-left: 5.625rem;
+    width: calc(100% - 5.625rem);
+    padding: 0 1.875rem;
+    padding-bottom: 3.75rem;
   }
 }
 
@@ -904,15 +995,40 @@ a.chip:hover::before, a.chip:focus::before {
   background-color: #f9f9f9;
 }
 
-.c-nav-secondary_header {
-  height: 5.9375rem;
+@media (max-width: 699px) {
+  .c-nav-secondary_header {
+    height: 60px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    margin: 0;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1199px) {
+  .c-nav-secondary_header {
+    height: 90px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-nav-secondary_header {
+    height: 5.9375rem;
+  }
 }
 
 .c-nav-secondary_heading {
   color: #ffffff;
   margin: 0;
   opacity: 0.6;
-  padding: 0 0.625rem;
+  padding: 0 0.3125rem;
+  line-height: 1;
 }
 
 .panel .c-nav-secondary_heading {
@@ -980,6 +1096,8 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-nav-secondary_link.-arrow {
+  padding-top: 0.9375rem;
+  padding-bottom: 0.9375rem;
   position: relative;
 }
 

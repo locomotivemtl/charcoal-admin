@@ -3,70 +3,102 @@
 // ==========================================================================
 
 .c-nav-container {
-    background-color: $charcoal-gray-6;
-    // position: fixed;
     top: 0;
     left: 0;
     z-index: 900;
     backface-visibility: hidden;
 
     @media (max-width: $to-large) {
+        background-color: $charcoal-gray-4;
+        position: fixed;
         right: 0;
-        height: 80px;
+        height: $unit;
     }
 
     @media (min-width: $from-large) {
+        background-color: $charcoal-gray-6;
         bottom: 0;
         width: rem($nav-width);
     }
 }
 
 .c-nav-container_button {
-    width: 45px;
-    padding: 16.5px 13.5px;
-    text-align: center;
-    cursor: pointer;
-    height: 100%;
+    @media (max-width: $to-large) {
+        cursor: pointer;
+        background: none;
+        border: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: $nav-button-width;
+        padding: 0;
+        padding-bottom: 6px;
+        text-align: center;
+    }
 
     @media (min-width: $from-large) {
         display: none;
     }
 }
 
-.c-nav-container_button_line {
-    display: block;
+
+.c-nav-container_button_icon {
+    position: relative;
+    display: inline-block;
+    width: 20px;
     height: 2px;
     background-color: $white;
-    margin-bottom: 3px;
-    transform-origin: center left;
-    transition: transform $speed, opacity $speed;
+    transition: background-color $speed $easing, transform $speed $easing;
 
-    &:nth-child(1) {
+    .has-nav-open & {
+        background-color: transparent;
+        transform: translateX(-3px);
+    }
+
+    &::before, &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: $white;
+        height: 2px;
+        transform-origin: center right;
+        transition: transform $speed $easing;
+    }
+
+    &::before {
+        top: -6px;
+
         .has-nav-open & {
-            transform: translateY(-1px) rotate(42deg);
+            transform: translateY(-1px) rotate(-45deg);
         }
     }
 
-    &:nth-child(2) {
-        .has-nav-open & {
-            opacity: 0;
-        }
-    }
+    &::after {
+        bottom: -6px;
 
-    &:nth-child(3) {
         .has-nav-open & {
-            transform: translateY(1px) rotate(-42deg);
-            margin-bottom: 0;
+            transform: translateY(1px) rotate(45deg);
         }
     }
 }
 
-
 .c-nav-container_header {
-    background-color: $charcoal-gray-4;
-    height: rem($nav-header-height);
-    position: relative;
-    overflow: visible;
+    @media (max-width: $to-large) {
+        position: absolute;
+        top: 0;
+        left: $nav-button-width;
+        right: 0;
+        height: $unit;
+    }
+    @media (min-width: $from-large) {
+        background-color: $charcoal-gray-4;
+        height: rem($nav-header-height);
+        overflow: visible;
+        position: relative;
+    }
 }
 
 .c-nav-container_logo {
@@ -82,7 +114,7 @@
     }
 
     @media (max-width: $to-large) {
-        padding: 15px;
+        padding: 6px 20px;
 
         svg {
             width: 81px;

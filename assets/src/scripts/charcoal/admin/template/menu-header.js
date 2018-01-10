@@ -1,5 +1,6 @@
 Charcoal.Admin.Template_MenuHeader = function ()
 {
+    $('body').toggleClass('has-nav-open');
     // toggle-class.js
     // ==========================================================================
     $('.js-toggle-class').click(function (event) {

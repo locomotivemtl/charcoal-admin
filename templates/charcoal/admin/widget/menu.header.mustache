@@ -6,11 +6,9 @@
 --}}
 
 <div class="c-nav-container o-flex_aside">
-    <div class="c-nav-container_button js-toggle-class" data-target="body" data-class="has-nav-open">
-        <span class="c-nav-container_button_line"></span>
-        <span class="c-nav-container_button_line"></span>
-        <span class="c-nav-container_button_line"></span>
-    </div>
+    <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
+        <span class="c-nav-container_button_icon"></span>
+    </button>
     <div class="c-nav-container_header">
         <a class="c-nav-container_logo" href="{{adminUrl}}">
             <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
@@ -50,7 +48,7 @@
         {{/ isAuthenticated }}
     </div>
     {{# showHeaderMenu }}
-    <div class="c-nav-main_overlay js-toggle-class" data-target="body" data-class="has-nav-open"></div>
+    <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
     <nav class="c-nav-main">
         <ul class="c-nav-main_list">
             {{# headerMenu }}
@@ -84,8 +82,7 @@
     {{/ showSidemenu }}
 </div>
 
-{{#addJsRequirement}}
-<!--
+{{#addJs}}
 <script>
     $(function() {
         var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
@@ -98,5 +95,4 @@
         });
     });
 </script>
--->
-{{/addJsRequirement}}
+{{/addJs}}

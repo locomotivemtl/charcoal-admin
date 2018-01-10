@@ -8,7 +8,7 @@
     }
 
     @media (min-width: $from-small) {
-        padding: 0 rem($unit);
+        padding: 0 rem($unit / 2);
     }
 
     &.-right {
@@ -54,9 +54,9 @@
     }
 }
 
-.o-container_aside {
-    width: rem($nav-width - $unit);
-}
+// .o-container_aside {
+//     width: rem($nav-width - $unit);
+// }
 
 .o-section {
     margin-bottom: rem(40px);

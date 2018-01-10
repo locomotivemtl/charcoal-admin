@@ -3,16 +3,28 @@
 // ==========================================================================
 
 .o-header {
-    @media (max-width: $to-small) {
-        min-height: 34px;
-        margin: 25px 0;
+    // @media (max-width: $to-small) {
+    //     min-height: 34px;
+    //     margin: 25px 0;
+    // }
+
+    // @media (min-width: $from-small) {
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: space-between;
+    // }
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: $unit;
+
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        height: $nav-main-width;
     }
 
-    @media (min-width: $from-small) {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: rem($unit * 2 - 1);
+    @media (min-width: $from-large) {
+        height: rem($header-height);
     }
 
     &.-border {

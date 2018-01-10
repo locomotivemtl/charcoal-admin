@@ -1,0 +1,11 @@
+// ==========================================================================
+// Page / Container
+// ==========================================================================
+
+.c-page-container {
+    background-color: $charcoal-white-1;
+
+    @media (max-width: $to-large) {
+        padding-top: $unit;
+    }
+}

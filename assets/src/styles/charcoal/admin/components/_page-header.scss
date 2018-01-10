@@ -1,0 +1,29 @@
+// ==========================================================================
+// Page / Header
+// ==========================================================================
+
+.c-page-header {
+    position: relative;
+
+    // @media (max-width: $to-medium) {
+    //     display: block;
+    // }
+    @media (min-width: $from-large) {
+        align-items: flex-end;
+        background-color: $charcoal-gray-0;
+    }
+}
+
+.c-page-header_title {
+    color: $charcoal-gray-4;
+    line-height: 1;
+    margin: 0;
+
+    @media (max-width: $to-large) {
+        // margin-bottom: 6px;
+    }
+
+    @media (min-width: $from-large) {
+        margin-bottom: rem(16px);
+    }
+}

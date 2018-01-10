@@ -13,25 +13,20 @@ This template expects a `Charcoal\Admin\Template\Object\Collection` model as con
 
 {{>charcoal/admin/widget/feedbacks}}
 
-<main class="o-flex_main">
-{{! <div class="o-flex"> }}
-
-    {{!-- Object list section --}}
-    {{! <div class="o-flex_main"> }}
-        <section class="o-container -bottom">
-            <header class="o-header">
-                <h1>{{title}}</h1>
-                {{#searchWidget}}
-                    {{>charcoal/admin/widget/search}}
-                {{/searchWidget}}
-            </header>
-            {{#dashboard}}
-                {{>charcoal/admin/widget/dashboard}}
-            {{/dashboard}}
-
-        </section>
-    {{! </div> }}
-{{! </div> }}
+<main class="c-page-container o-flex_main">
+    <header class="c-page-header o-header">
+        <div class="o-container">
+            <h1 class="c-page-header_title">{{title}}</h1>
+        </div>
+    </header>
+    {{#searchWidget}}
+        {{>charcoal/admin/widget/search}}
+    {{/searchWidget}}
+    <section class="o-container -bottom">
+        {{#dashboard}}
+            {{>charcoal/admin/widget/dashboard}}
+        {{/dashboard}}
+    </section>
 </main>
 
 {{>charcoal/admin/template/inc.footer}}

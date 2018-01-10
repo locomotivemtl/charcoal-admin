@@ -22,7 +22,7 @@
 }
 
 .form-control.minicolors-input {
-    padding-left: $input-height-base;
+    padding-left: $input-height;
 
     + .minicolors-swatch {
         // top:           $padding-base-vertical + 1px;
@@ -33,7 +33,7 @@
     }
 
     &.input-lg {
-        padding-left: $input-height-large;
+        padding-left: $input-height-lg;
 
         + .minicolors-swatch {
             // top:           $padding-large-vertical + 1px;
@@ -45,7 +45,7 @@
     }
 
     &.input-sm {
-        padding-left: $input-height-small;
+        padding-left: $input-height-sm;
 
         + .minicolors-swatch {
             // top:           $padding-small-vertical + 1px;

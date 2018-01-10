@@ -270,8 +270,6 @@ trait ActionContainerTrait
             case 'save':
             case 'submit':
             case 'update':
-                return 'info';
-
             case 'edit':
                 return 'primary';
 
@@ -282,7 +280,7 @@ trait ActionContainerTrait
                 return 'danger';
 
             default:
-                return 'default';
+                return 'dark';
         }
     }
 

@@ -3,7 +3,7 @@
 // ==========================================================================
 
 .btn {
-    font-size: rem(13px);
+    font-size: rem(12px);
     transition: background-color $speed, color $speed;
 
     &.btn-lg {
@@ -69,47 +69,47 @@
 }
 
 .btn-link-primary {
-    color: $btn-primary-bg;
+    // color: $btn-primary-bg;
 
     &:focus,
     &:hover {
-        color: darken($btn-primary-bg, 15%);
+        // color: darken($btn-primary-bg, 15%);
     }
 }
 // Success appears as green
 .btn-link-success {
-    color: $btn-success-bg;
+    // color: $btn-success-bg;
 
     &:focus,
     &:hover {
-        color: darken($btn-success-bg, 15%);
+        // color: darken($btn-success-bg, 15%);
     }
 }
 // Info appears as blue-green
 .btn-link-info {
-    color: $btn-info-bg;
+    // color: $btn-info-bg;
 
     &:focus,
     &:hover {
-        color: darken($btn-info-bg, 15%);
+        // color: darken($btn-info-bg, 15%);
     }
 }
 // Warning appears as orange
 .btn-link-warning {
-    color: $btn-warning-bg;
+    // color: $btn-warning-bg;
 
     &:focus,
     &:hover {
-        color: darken($btn-warning-bg, 15%);
+        // color: darken($btn-warning-bg, 15%);
     }
 }
 // Danger and error appear as red
 .btn-link-danger {
-    color: $btn-danger-bg;
+    // color: $btn-danger-bg;
 
     &:focus,
     &:hover {
-        color: darken($btn-danger-bg, 15%);
+        // color: darken($btn-danger-bg, 15%);
     }
 }
 

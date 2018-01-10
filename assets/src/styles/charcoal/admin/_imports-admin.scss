@@ -64,15 +64,14 @@
 
 // Components
 // ==========================================================================
-// @import "components/header-main";
 @import "components/nav-container";
 @import "components/nav-system";
 @import "components/nav-main";
 @import "components/nav-secondary";
-// @import "components/nav-user";
 @import "components/page-header";
 @import "components/page-container";
 @import "components/search";
+@import "components/table-header";
 @import "components/aside";
 @import "components/login";
 @import "components/panel";
@@ -95,7 +94,6 @@
 
 // Bootstrap custom components
 // ==========================================================================
-@import "bootstrap-custom/table-header";
 @import "bootstrap-custom/multiselect";
 @import "bootstrap-custom/dialog";
 

@@ -89,7 +89,8 @@ $selectize-width-item-buttons: 40px;
 
     &:not(.selectize-list) {
         .selectize-input.focus {
-            $color: $input-border-focus;
+            // $color: $input-focus-color;
+            $color: $input-focus-border-color;
             $color-rgba: rgba(red($color), green($color), blue($color), .6);
             // @include selectize-box-shadow(unquote("inset 0 1px 1px #{rgba(black, .075)}, 0 0 8px #{$color-rgba}"));
         }

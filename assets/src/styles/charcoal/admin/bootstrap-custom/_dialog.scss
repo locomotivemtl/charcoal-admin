@@ -73,18 +73,18 @@
                 font-size:      $font-size-sm;
                 font-weight:    700;
                 letter-spacing: 1px;
-                line-height:    $input-height-base;
+                line-height:    $input-height;
                 text-transform: uppercase;
                 // vertical-align: middle;
             }
         }
 
         .form-group-sm &[data-lang]::before {
-            line-height: $input-height-small;
+            line-height: $input-height-sm;
         }
 
         .form-group-lg &[data-lang]::before {
-            line-height: $input-height-large;
+            line-height: $input-height-lg;
         }
 
         &.form-property-file[data-lang]::before,

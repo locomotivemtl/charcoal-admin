@@ -2,10 +2,6 @@
 // Color-inputs
 // ==========================================================================
 
-$radio-color-size-small:   $input-height-small ;//- ($padding-small-vertical * 2);
-$radio-color-size-base:    $input-height-base  ;//- ($padding-base-vertical  * 2);
-$radio-color-size-large:   $input-height-large ;//- ($padding-large-vertical * 2);
-
 .radio-color-group,
 .checkbox-color-group {
     // margin-left: -10px;
@@ -19,7 +15,7 @@ $radio-color-size-large:   $input-height-large ;//- ($padding-large-vertical * 2
     margin-bottom: 10px;
 
     label {
-        min-height: $radio-color-size-base;
+        min-height: $input-height;
         // padding-left: 20px;
         margin-bottom: 0;
         font-weight: normal;
@@ -28,8 +24,8 @@ $radio-color-size-large:   $input-height-large ;//- ($padding-large-vertical * 2
 
     .o-color-swatch {
         cursor:        pointer;
-        width:         $radio-color-size-base - 2px;
-        height:        $radio-color-size-base - 2px;
+        width:         $input-height - 2px;
+        height:        $input-height - 2px;
         border-radius: $input-border-radius;
 
         .minicolors-swatch-color {
@@ -56,12 +52,12 @@ $radio-color-size-large:   $input-height-large ;//- ($padding-large-vertical * 2
     line-height: $line-height-base;
 
     label {
-        min-height: $radio-color-size-large;
+        min-height: $input-height-lg;
     }
 
     .o-color-swatch {
-        width:         $radio-color-size-large - 2px;
-        height:        $radio-color-size-large - 2px;
+        width:         $input-height-lg - 2px;
+        height:        $input-height-lg - 2px;
         border-radius: $input-border-radius-lg;
 
         .minicolors-swatch-color {
@@ -77,12 +73,12 @@ $radio-color-size-large:   $input-height-large ;//- ($padding-large-vertical * 2
     line-height: $line-height-base;
 
     label {
-        min-height: $radio-color-size-small;
+        min-height: $input-height-sm;
     }
 
     .o-color-swatch {
-        width:         $radio-color-size-small - 2px;
-        height:        $radio-color-size-small - 2px;
+        width:         $input-height-sm - 2px;
+        height:        $input-height-sm - 2px;
         border-radius: $input-border-radius-sm;
 
         .minicolors-swatch-color {

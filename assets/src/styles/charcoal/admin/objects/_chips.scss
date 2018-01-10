@@ -9,15 +9,15 @@ $chip-active-border:         2px solid #FFF !default;
 //** Default chip background color
 $chip-bg:                    $gray-400 !default;
 //** Primary chip background color
-$chip-primary-bg:            $brand-primary !default;
+$chip-primary-bg:            $primary !default;
 //** Success chip background color
-$chip-success-bg:            $brand-success !default;
+$chip-success-bg:            $success !default;
 //** Info chip background color
-$chip-info-bg:               $brand-info !default;
+$chip-info-bg:               $info !default;
 //** Warning chip background color
-$chip-warning-bg:            $brand-warning !default;
+$chip-warning-bg:            $warning !default;
 //** Danger chip background color
-$chip-danger-bg:             $brand-danger !default;
+$chip-danger-bg:             $danger !default;
 
 
 @mixin chip-variant($color) {

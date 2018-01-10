@@ -62,13 +62,13 @@
         }
 
         &:first-child:not(:last-child) {
-            @include border-top-radius($btn-border-radius-base);
+            @include border-top-radius($btn-border-radius);
             @include border-bottom-radius(0);
         }
 
         &:last-child:not(:first-child) {
             @include border-top-radius(0);
-            @include border-bottom-radius($btn-border-radius-base);
+            @include border-bottom-radius($btn-border-radius);
         }
     }
 

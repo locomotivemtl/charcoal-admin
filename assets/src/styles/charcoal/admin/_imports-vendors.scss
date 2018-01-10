@@ -21,13 +21,13 @@
 // Bootstrap
 // ==========================================================================
 
+// Core variables overwrites
+@import "bootstrap/variables";
+
 @import "../../../../../node_modules/bootstrap/scss/bootstrap";
 
 // Core variables
 // @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
-
-// Core variables overwrites
-@import "bootstrap/variables";
 
 // // Core mixins
 // @import "../../../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";

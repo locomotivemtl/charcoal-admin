@@ -4,89 +4,93 @@
 
 // Colors
 // ==========================================================================
-$brand-primary:         $charcoal-blue;
-$brand-success:         #5cb85c !default;
-$brand-info:            $blue;
-$brand-warning:         #f0ad4e !default;
-$brand-danger:          $red;
+// $brand-primary:         $charcoal-blue;
+// $brand-success:         #5cb85c !default;
+// $brand-info:            $blue;
+// $brand-warning:         #f0ad4e !default;
+// $brand-danger:          $red;
+
+$theme-colors: (
+    "primary": $charcoal-blue-1
+);
 
 // Scaffolding
 // ==========================================================================
-$text-color:            $color;
+// $text-color:            $color;
 
 // Typography
 // ==========================================================================
-$font-family-sans-serif:  $font-family;
+// $font-family-sans-serif:  $font-family;
 
-$font-size-base:          $font-size;
+// $font-size-base:          $font-size;
 
-$font-size-h1:            rem($heading1);
-$font-size-h2:            rem($heading2);
-$font-size-h3:            rem($heading3);
-$font-size-h4:            rem($heading4);
-$font-size-h5:            rem($heading5);
-$font-size-h6:            rem($heading6);
+$h1-font-size: $font-size-h1;
+$h2-font-size: $font-size-h2;
+$h3-font-size: $font-size-h3;
+$h4-font-size: $font-size-h4;
+$h5-font-size: $font-size-h5;
+$h6-font-size: $font-size-h6;
 
-$headings-font-weight:    $weight-semi;
+// $headings-font-weight:    $weight-semi;
 
 // Iconography
 // ==========================================================================
-$icon-font-path: "../fonts/";
+// $icon-font-path: "../fonts/";
 
 // Components
 // ==========================================================================
-$border-radius-base:        $radius;
+// $border-radius-base:        $radius;
 
 // ==========================================================================
 // Tables
 // ==========================================================================
-$table-cell-padding:            rem(15px);
-$table-bg-accent:               $charcoal-lightblue;
-$table-bg-hover:                $charcoal-lightblue;
+// $table-cell-padding:            rem(15px);
+// $table-bg-accent:               $charcoal-lightblue;
+// $table-bg-hover:                $charcoal-lightblue;
 
 
 // ==========================================================================
 // Buttons
 // ==========================================================================
-$btn-primary-color:              $white;
-$btn-primary-bg:                 $brand-primary;
-$btn-primary-border:             darken($btn-primary-bg, 10%);
+// $btn-primary-color:              $white;
+// $btn-primary-bg:                 $brand-primary;
+// $btn-primary-border:             darken($btn-primary-bg, 10%);
 
-$btn-success-color:              #fff !default;
-$btn-success-bg:                 $brand-success !default;
-$btn-success-border:             darken($btn-success-bg, 5%) !default;
+// $btn-success-color:              #fff !default;
+// $btn-success-bg:                 $brand-success !default;
+// $btn-success-border:             darken($btn-success-bg, 5%) !default;
 
-$btn-info-color:                 $white;
-$btn-info-bg:                    $brand-info;
-$btn-info-border:                darken($btn-info-bg, 10%);
+// $btn-info-color:                 $white;
+// $btn-info-bg:                    $brand-info;
+// $btn-info-border:                darken($btn-info-bg, 10%);
 
-$btn-warning-color:              $white;
-$btn-warning-bg:                 $brand-warning !default;
-$btn-warning-border:             darken($btn-warning-bg, 5%) !default;
+// $btn-warning-color:              $white;
+// $btn-warning-bg:                 $brand-warning !default;
+// $btn-warning-border:             darken($btn-warning-bg, 5%) !default;
 
-$btn-danger-color:               $white;
-$btn-danger-bg:                  $brand-danger;
-$btn-danger-border:              darken($btn-danger-bg, 10%);
+// $btn-danger-color:               $white;
+// $btn-danger-bg:                  $brand-danger;
+// $btn-danger-border:              darken($btn-danger-bg, 10%);
 
-$btn-border-radius-base:         $border-radius-base;
-$btn-border-radius-large:        $border-radius-base;
-$btn-border-radius-small:        $border-radius-base;
+// $btn-border-radius-base:         $border-radius-base;
+// $btn-border-radius-large:        $border-radius-base;
+// $btn-border-radius-small:        $border-radius-base;
 
-$panel-danger-border:            $brand-danger;
+// $panel-danger-border:            $brand-danger;
 
 
 // Forms
 // ==========================================================================
-$input-color:                    $color;
+// $input-color:                    $color;
 
-$input-border-focus:             $blue;
+// $input-border-focus:             $blue;
 
-$input-height-base:              48px;
-$input-height-large:             48px;
-$input-height-small:             38px;
+// $input-height-base:              48px;
+// $input-height-large:             48px;
+// $input-height-small:             38px;
 
-$form-group-margin-bottom:       15px;
+// $form-group-margin-bottom:       15px;
 
 // Grid system
 // ==========================================================================
-$grid-gutter-width:         15px;
+// $grid-gutter-width:         15px;

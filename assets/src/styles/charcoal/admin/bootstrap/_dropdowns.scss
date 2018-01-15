@@ -2,70 +2,77 @@
 // Dropdowns
 // ==========================================================================
 
-%dropdown-menu-item {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: $line-height-base;
-    white-space: nowrap;
-}
+// %dropdown-item {
+//     display: block;
+//     padding: 3px 20px;
+//     clear: both;
+//     font-weight: normal;
+//     line-height: $line-height-base;
+//     white-space: nowrap;
+// }
 
 // as with .dropdown-menu > li > a
-.dropdown-menu-item {
-    @extend %dropdown-menu-item;
-    color: $dropdown-link-color;
+.dropdown-item {
+    font-size: 12px;
+//     @extend %dropdown-item;
+//     color: $dropdown-link-color;
 
-    > a,
-    > button {
-        margin: -3px -20px;
+//     > a,
+//     > button {
+//         margin: -3px -20px;
+//     }
+}
+
+.dropdown-toggle {
+    &::after {
+        vertical-align: 0.1em;
     }
 }
 
 // as with .dropdown-menu > li > a
-.dropdown-menu > li > button {
-    @extend %dropdown-menu-item;
-    color: $dropdown-link-color;
-    width: calc(100% + 40px);
-    font-size: inherit;
-    text-align: inherit;
-    border-radius: 0;
-    background-color: transparent;
-    @include box-shadow(none);
+// .dropdown-menu > li > button {
+//     @extend %dropdown-item;
+//     color: $dropdown-link-color;
+//     width: calc(100% + 40px);
+//     font-size: inherit;
+//     text-align: inherit;
+//     border-radius: 0;
+//     background-color: transparent;
+//     @include box-shadow(none);
 
-    &:hover,
-    &:focus {
-        text-decoration: none;
-        color: $dropdown-link-hover-color;
-        background-color: $dropdown-link-hover-bg;
-    }
-}
+//     &:hover,
+//     &:focus {
+//         text-decoration: none;
+//         color: $dropdown-link-hover-color;
+//         background-color: $dropdown-link-hover-bg;
+//     }
+// }
 
 // Active state
-.dropdown-menu > .active > button {
-    &,
-    &:hover,
-    &:focus {
-        color: $dropdown-link-active-color;
-        text-decoration: none;
-        outline: 0;
-        background-color: $dropdown-link-active-bg;
-    }
-}
+// .dropdown-menu > .active > button {
+//     &,
+//     &:hover,
+//     &:focus {
+//         color: $dropdown-link-active-color;
+//         text-decoration: none;
+//         outline: 0;
+//         background-color: $dropdown-link-active-bg;
+//     }
+// }
 
 // Disabled state
-.dropdown-menu > .disabled > button {
-    &,
-    &:hover,
-    &:focus {
-        color: $dropdown-link-disabled-color;
-    }
+// .dropdown-menu > .disabled > button {
+//     &,
+//     &:hover,
+//     &:focus {
+//         color: $dropdown-link-disabled-color;
+//     }
 
-    // Nuke hover/focus effects
-    &:hover,
-    &:focus {
-        text-decoration: none;
-        background-color: transparent;
-        background-image: none; // Remove CSS gradient
-    }
-}
+//     // Nuke hover/focus effects
+//     &:hover,
+//     &:focus {
+//         text-decoration: none;
+//         background-color: transparent;
+//         background-image: none; // Remove CSS gradient
+//     }
+// }

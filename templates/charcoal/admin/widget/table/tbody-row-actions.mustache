@@ -4,10 +4,10 @@
 
     @used-by `charcoal/admin/widget/tbody-row`
 --}}
-<td class="table-row-actions">
+<td class="c-table-container_actions">
 {{# object }}
     {{# showObjectActions }}
-    <div class="btn-group" role="group">
+    {{! <div class="btn-group" role="group"> }}
     {{# objectActions }}
         {{# isSeparator }}
             </div>
@@ -17,7 +17,7 @@
             {{> charcoal/admin/widget/actions }}
         {{/ isSeparator }}
     {{/ objectActions }}
-    </div>
+    {{! </div> }}
     {{/ showObjectActions }}
 {{/ object }}
 </td>

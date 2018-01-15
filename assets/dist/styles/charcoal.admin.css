@@ -1294,6 +1294,16 @@ a.chip:hover::before, a.chip:focus::before {
   padding: 0 0.75rem;
 }
 
+.c-table-container_actions {
+  padding: 0 !important;
+}
+
+@media (min-width: 700px) {
+  .c-table-container_actions {
+    width: 100px;
+  }
+}
+
 .c-table-pagination {
   color: #393939;
   font-size: 12px;
@@ -2015,54 +2025,12 @@ ul.c-panel_table {
   border-radius: calc(0.2rem + 2px);
 }
 
-.dropdown-menu-item, .dropdown-menu > li > button {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: normal;
-  line-height: 1.5;
-  white-space: nowrap;
+.dropdown-item {
+  font-size: 12px;
 }
 
-.dropdown-menu-item {
-  color: #212529;
-}
-
-.dropdown-menu-item > a,
-.dropdown-menu-item > button {
-  margin: -3px -20px;
-}
-
-.dropdown-menu > li > button {
-  color: #212529;
-  width: calc(100% + 40px);
-  font-size: inherit;
-  text-align: inherit;
-  border-radius: 0;
-  background-color: transparent;
-}
-
-.dropdown-menu > li > button:hover, .dropdown-menu > li > button:focus {
-  text-decoration: none;
-  color: #16181b;
-  background-color: #f8f9fa;
-}
-
-.dropdown-menu > .active > button, .dropdown-menu > .active > button:hover, .dropdown-menu > .active > button:focus {
-  color: #ffffff;
-  text-decoration: none;
-  outline: 0;
-  background-color: #007bff;
-}
-
-.dropdown-menu > .disabled > button, .dropdown-menu > .disabled > button:hover, .dropdown-menu > .disabled > button:focus {
-  color: #868e96;
-}
-
-.dropdown-menu > .disabled > button:hover, .dropdown-menu > .disabled > button:focus {
-  text-decoration: none;
-  background-color: transparent;
-  background-image: none;
+.dropdown-toggle::after {
+  vertical-align: 0.1em;
 }
 
 .nav-tabs {
@@ -2243,18 +2211,13 @@ textarea.form-control {
   font-weight: 700;
 }
 
-.table td.table-row-actions {
-  padding: 0;
+.table-hover tbody tr:hover {
+  background-color: #f0f0f0;
 }
 
 .table-cell-checkbox {
   width: 3.125rem;
   text-align: center;
-}
-
-.table-row-actions .dropdown-menu {
-  left: auto;
-  right: 0;
 }
 
 .panel-body > :first-child {
@@ -2266,7 +2229,7 @@ textarea.form-control {
 }
 
 .btn {
-  font-size: 0.75rem;
+  font-size: 12px;
   -webkit-transition: background-color 0.2s, color 0.2s;
   transition: background-color 0.2s, color 0.2s;
 }
@@ -2278,6 +2241,11 @@ textarea.form-control {
 .btn > .fa + .btn-label,
 .btn > .glyphicon + .btn-label {
   margin-left: 0.25em;
+}
+
+.btn-seamless {
+  background-color: transparent;
+  color: #6092f5;
 }
 
 .btn-mock {

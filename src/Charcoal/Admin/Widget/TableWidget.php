@@ -663,6 +663,12 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             } else {
                 $actions = [];
             }
+
+            /** Enable seamless button group */
+            if (isset($actions['edit'])) {
+                $actions['edit']['actionType'] = 'seamless';
+            }
+
             $this->setObjectActions($actions);
         }
 

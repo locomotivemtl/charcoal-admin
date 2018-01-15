@@ -7,29 +7,26 @@
 <div class="btn-group" role="group">
     {{# isButton }}
     <button class="{{ cssClasses }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}"
-            type="{{ buttonType }}"
-            {{# name }}
-            name="{{ . }}"
-            {{/ name }}
-            {{# value }}
-            value="{{ . }}"
-            {{/ value }}
-            {{# widgetType }}
-            data-widget-type="{{ . }}"
-            {{/ widgetType }}
-            {{# dataAttributes }}
-            data-{{ key }}="{{ value }}"
-            {{/ dataAttributes }}
-            {{^ splitButton }}
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            {{/ splitButton }}>
-            {{> charcoal/admin/widget/actions/label }}
-            {{^ splitButton }}
-            <span class="caret" aria-hidden="true"></span>
-            {{/ splitButton }}
-        </button>
+        type="{{ buttonType }}"
+        {{# name }}
+        name="{{ . }}"
+        {{/ name }}
+        {{# value }}
+        value="{{ . }}"
+        {{/ value }}
+        {{# widgetType }}
+        data-widget-type="{{ . }}"
+        {{/ widgetType }}
+        {{# dataAttributes }}
+        data-{{ key }}="{{ value }}"
+        {{/ dataAttributes }}
+        {{^ splitButton }}
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+        {{/ splitButton }}>
+        {{> charcoal/admin/widget/actions/label }}
+    </button>
     {{/ isButton }}
     {{^ isButton }}
     <a class="{{ cssClasses }}{{^ splitButton }} dropdown-toggle{{/ splitButton }}"
@@ -44,29 +41,26 @@
        data-{{ key }}="{{ value }}"
        {{/ dataAttributes }}
        {{^ splitButton }}
+       role="button"
        data-toggle="dropdown"
        aria-haspopup="true"
        aria-expanded="false"
        {{/ splitButton }}>
         {{> charcoal/admin/widget/actions/label }}
-        {{^ splitButton }}
-        <span class="caret" aria-hidden="true"></span>
-        {{/ splitButton }}
     </a>
     {{/ isButton }}
     {{# splitButton }}
-    <button class="btn{{# actionType }} btn-{{ . }}{{/ actionType }} dropdown-toggle"
-            type="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-        <span class="caret"></span>
+    <button class="btn{{# actionType }} btn-{{ . }}{{/ actionType }} dropdown-toggle dropdown-toggle-split"
+        type="button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false">
         <span class="sr-only">{{# _t }}Toggle Dropdown{{/ _t }}</span>
     </button>
     {{/ splitButton }}
-    <ul class="dropdown-menu">
+    <div class="dropdown-menu dropdown-menu-right">
     {{# actions }}
         {{> charcoal/admin/widget/actions/dropdown-menu }}
     {{/ actions }}
-    </ul>
+    </div>
 </div>

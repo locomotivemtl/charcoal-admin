@@ -7,3 +7,11 @@
     border-radius: $border-radius;
     padding: 0 $table-cell-padding;
 }
+
+.c-table-container_actions {
+    padding: 0 !important;
+
+    @media (min-width: $from-small) {
+        width: 100px;
+    }
+}

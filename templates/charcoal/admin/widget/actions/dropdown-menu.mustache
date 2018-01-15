@@ -6,21 +6,21 @@
 --}}
 {{# active }}
 {{# isSeparator }}
-<li role="separator" class="divider"></li>
+<div class="divider"></div>
 {{/ isSeparator }}
 {{^ isSeparator }}
     {{# isHeader }}
-    <li class="dropdown-header">{{& label }}</li>
+    <h3 class="dropdown-header">{{& label }}</h3>
     {{/ isHeader }}
     {{# hasActions }}
-    <li class="dropdown-submenu dropdown-menu-item">
+    <div class="dropdown-submenu dropdown-item">
         {{> charcoal/admin/widget/actions/dropdown-submenu }}
-    </li>
+    </div>
     {{/ hasActions }}
     {{^ hasActions }}
-    <li class="dropdown-menu-item">
+    {{! <li class="dropdown-item"> }}
         {{# isButton }}
-        <button class="btn{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
+        <button class="dropdown-item btn{{# ident }} {{ jsActionPrefix }}-{{ . }}{{/ ident }}"
                 type="{{ buttonType }}"
                 {{# name }}
                 name="{{ . }}"
@@ -37,7 +37,7 @@
                 >{{> charcoal/admin/widget/actions/label }}</button>
         {{/ isButton }}
         {{# isLink }}
-        <a{{# ident }} class="{{ jsActionPrefix }}-{{ . }}"{{/ ident }}
+        <a{{# ident }} class="dropdown-item {{ jsActionPrefix }}-{{ . }}"{{/ ident }}
            href="{{ url }}"
            {{# target }}
            target="{{ . }}"
@@ -51,9 +51,11 @@
            >{{> charcoal/admin/widget/actions/label }}</a>
         {{/ isLink }}
         {{# isText }}
+        <div class="dropdown-item">
         {{> charcoal/admin/widget/actions/label }}
+        </div>
         {{/ isText }}
-    </li>
+    {{! </li> }}
     {{/ hasActions }}
 {{/ isSeparator }}
 {{/ active }}

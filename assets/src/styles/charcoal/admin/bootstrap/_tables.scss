@@ -27,22 +27,19 @@
         border-bottom-width: 1px;
         font-weight: $weight-bold;
     }
+}
 
-    td.table-row-actions {
-        padding: 0;
+.table-hover {
+    tbody {
+        tr:hover {
+            background-color: $charcoal-white-1;
+        }
     }
 }
 
 .table-cell-checkbox {
     width: rem(20px + 30px);
     text-align: center;
-}
-
-.table-row-actions {
-    .dropdown-menu {
-        left:  auto;
-        right: 0;
-    }
 }
 
 // .charcoal-admin-widget-table {

@@ -1083,8 +1083,8 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-nav-secondary_link.-arrow {
-  padding-top: 0.9375rem;
-  padding-bottom: 0.9375rem;
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
   position: relative;
 }
 
@@ -1294,13 +1294,20 @@ a.chip:hover::before, a.chip:focus::before {
   padding: 0 0.75rem;
 }
 
+.c-table-container .property-active {
+  text-align: center;
+  width: 1px;
+  white-space: nowrap;
+}
+
 .c-table-container_actions {
   padding: 0 !important;
 }
 
 @media (min-width: 700px) {
   .c-table-container_actions {
-    width: 100px;
+    width: 1px;
+    white-space: nowrap;
   }
 }
 

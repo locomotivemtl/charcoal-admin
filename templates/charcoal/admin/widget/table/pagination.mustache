@@ -5,7 +5,12 @@
     @used-by `charcoal/admin/widget/table`
 --}}
 {{# showPagination }}
-<div class="table-foot pull-right">
-    {{> charcoal/admin/widget/pagination }}
+<div class="table-foot">
+    <div class="pull-left">
+        {{> charcoal/admin/widget/table/counter }}
+    </div>
+    <div class="pull-right">
+        {{> charcoal/admin/widget/pagination }}
+    </div>
 </div>
 {{/ showPagination }}

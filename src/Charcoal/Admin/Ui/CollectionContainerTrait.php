@@ -65,6 +65,13 @@ trait CollectionContainerTrait
     private $defaultCollectionConfig;
 
     /**
+     * Object labels.
+     *
+     * @var array|null
+     */
+    private $objLabels;
+
+    /**
      * @var integer $numTotal
      */
     private $numTotal;
@@ -850,6 +857,39 @@ trait CollectionContainerTrait
         }
 
         return $this->numTotal;
+    }
+
+    /**
+     * Retrieve the object's labelling.
+     *
+     * @return array
+     */
+
+    /**
+     * Retrieve the object's labels.
+     *
+     * @return array|null
+     */
+    public function objLabels()
+    {
+        if ($this->objLabels === null) {
+            $objLabels = [];
+            $proto = $this->proto();
+            $objMetadata = $proto->metadata();
+            if (isset($objMetadata['labels'])) {
+                $objLabels = $objMetadata['labels'];
+                array_walk($labels, function(&$value) {
+                    // die();
+                    $value = $this->translator()->translation($value);
+                });
+                var_dump($labels);
+                // die();
+                // return
+                $this->objLabels = $objLabels;
+            }
+        }
+
+        return $this->objLabels;
     }
 
     /**

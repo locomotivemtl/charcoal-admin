@@ -140,6 +140,7 @@
 "Loading Widget…";"Loading Widget…"
 "Errors:";"Errors:"
 "No ""{{ objType }}"" objects found.";"No ""{{ objType }}"" objects found."
+"No ""{{ objLabels.singular_name }}"" objects found.";"No ""{{ objLabels.singular_name }}"" objects found."
 "Add New Object";"Add New Object"
 "Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total)";"Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total)"
 "{{ numTotal }} in total";"{{ numTotal }} in total"

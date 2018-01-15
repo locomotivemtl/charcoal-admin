@@ -148,6 +148,7 @@
 "Loading Widget…";"Chargement du widget…"
 "Errors:";"Erreurs :"
 "No ""{{ objType }}"" objects found.";"Aucun objet de type ""{{ objType }}"" n'existe."
+"No ""{{ objLabels.singular_name }}"" objects found.";"Aucun objet de type ""{{ objLabels.singular_name }}"" n'existe."
 "Add New Object";"Ajouter un nouvel objet"
 "Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total)";"Page: {{ page }} / {{ numPages }} ({{ numTotal }} au total)"
 "{{ numTotal }} in total";"{{ numTotal }} au total"

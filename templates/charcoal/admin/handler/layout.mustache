@@ -8,10 +8,17 @@ This template expects a `Charcoal\Admin\Template\HandlerTemplate` model as conte
 --}}{{ purgeAssets }}
 {{> charcoal/admin/template/inc.header }}
 
-<section class="section error jumbotron">
-    <div class="content o-container">
-        {{> $handlerMessage }}
-    </div>
-</section>
+<main class="c-page-container o-flex_main">
+    <div class="c-page-header o-header"></div>
+    <section class="o-container -bottom">
+        <div class="o-section">
+            <div class="o-header">
+                <div>
+                    {{> $handlerMessage }}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
 {{> charcoal/admin/template/inc.footer }}

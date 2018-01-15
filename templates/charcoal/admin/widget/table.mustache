@@ -7,10 +7,11 @@
     This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 --}}
 <div class="o-section" id="{{ widgetId }}">
-    {{# hasObjects }}
     {{# showTableHeader }}
     {{> charcoal/admin/widget/table/header }}
     {{/ showTableHeader }}
+
+    {{# hasObjects }}
 
     {{!--
     @TODO Implement a better responsive table solution (Tablesaw?)
@@ -35,12 +36,7 @@
         </div>
         --}}
         <div class="c-table-pagination">
-            {{# numPerPage }}
-                {{# _t }}Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total){{/ _t }}
-            {{/ numPerPage }}
-            {{^ numPerPage }}
-                {{# _t }}{{ numTotal }} in total{{/ _t }}
-            {{/ numPerPage }}
+            {{> charcoal/admin/widget/table/counter }}
         </div>
 
         <table class="table table-bordered table-hover">

@@ -11,7 +11,8 @@
 // $brand-danger:          $red;
 
 $theme-colors: (
-    "primary": $charcoal-blue-1
+    "primary": $charcoal-blue-1,
+    "danger":  $charcoal-red-1
 );
 
 // Scaffolding
@@ -53,7 +54,6 @@ $table-border-color: #cccccc;
 // $table-bg-accent:               $charcoal-lightblue;
 // $table-bg-hover:                $charcoal-lightblue;
 
-
 // ==========================================================================
 // Buttons
 // ==========================================================================
@@ -86,7 +86,6 @@ $btn-padding-x: rem(12px);
 // $btn-border-radius-small:        $border-radius-base;
 
 // $panel-danger-border:            $brand-danger;
-
 
 // Forms
 // ==========================================================================

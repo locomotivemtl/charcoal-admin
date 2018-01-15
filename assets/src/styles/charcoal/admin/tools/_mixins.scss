@@ -228,3 +228,13 @@
     display: $display $important;
     visibility: visible  $important;
 }
+
+//
+// Limit a table cell's width to its content's width.
+//
+// @output `width`, `white-space`
+//
+@mixin u-auto-cell-width {
+    width: 1px;
+    white-space: nowrap;
+}

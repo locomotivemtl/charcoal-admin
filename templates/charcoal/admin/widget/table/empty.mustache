@@ -4,10 +4,12 @@
 
     @used-by `charcoal/admin/widget/table`
 --}}
+
 <div class="alert alert-danger" role="alert">
-    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    {{! <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> }}
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
     <span class="sr-only">{{# _t }}Errors:{{/ _t }}</span>
-    <span>{{# _t }}No "{{ objType }}" objects found.{{/ _t }}</span>
+    <span>{{# _t }}No "{{ objLabels.singular_name }}" objects found.{{/ _t }}</span>
     <div class="btn-group" role="group">
     {{# emptyListActions }}
         {{# isSeparator }}

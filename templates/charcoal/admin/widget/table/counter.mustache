@@ -1,0 +1,13 @@
+{{!--
+    Table Widget \ Counter
+    ======================
+
+    @used-by `charcoal/admin/widget/table`
+    @used-by `charcoal/admin/widget/table/pagination`
+--}}
+{{# numPerPage }}
+    {{# _t }}Page: {{ page }} / {{ numPages }} ({{ numTotal }} in total){{/ _t }}
+{{/ numPerPage }}
+{{^ numPerPage }}
+    {{# _t }}{{ numTotal }} in total{{/ _t }}
+{{/ numPerPage }}

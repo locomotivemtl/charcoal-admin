@@ -113,9 +113,15 @@
         fill: $charcoal-gray-1;
     }
 
-    @media (max-width: $to-large) {
-        padding: 6px 20px;
+    @media (max-width: $to-small) {
+        padding: 6px;
+    }
 
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        padding: 6px 20px;
+    }
+
+    @media (max-width: $to-large) {
         svg {
             width: 81px;
             height: 48px;

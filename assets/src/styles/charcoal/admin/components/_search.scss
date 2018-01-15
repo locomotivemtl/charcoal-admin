@@ -30,17 +30,20 @@
 
     @media (max-width: $to-small) {
         padding-top: 0;
+        padding-bottom: 0;
     }
     @media (min-width: $from-small) {
         padding-right: rem($unit / 2);
     }
 
     &.-bottom {
+        text-align: right;
+
         @media (max-width: $to-small) {
             display: none;
         }
 
-        @media (max-width: $to-large) {
+        @media (max-width: $to-huge) {
             padding-top: 0;
         }
     }

@@ -5,10 +5,17 @@
     @used-by `charcoal/admin/widget/table`
 --}}
 <div class="c-table-header o-header">
-    <div class="table-header-group pull-left">
-        {{> charcoal/admin/widget/table/header-left }}
+    {{# showListActions }}
+    <div class="___btn-group" role="group">
+    {{# listActions }}
+        {{# isSeparator }}
+            </div>
+            <div class="___btn-group" role="group">
+        {{/ isSeparator }}
+        {{^ isSeparator }}
+            {{> charcoal/admin/widget/actions }}
+        {{/ isSeparator }}
+    {{/ listActions }}
     </div>
-    <div class="table-header-group pull-right">
-        {{> charcoal/admin/widget/table/header-right }}
-    </div>
+    {{/ showListActions }}
 </div>

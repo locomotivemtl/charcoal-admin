@@ -44,6 +44,9 @@ $h6-font-size: $font-size-h6;
 // ==========================================================================
 // Tables
 // ==========================================================================
+
+$table-border-color: #cccccc;
+
 // $table-cell-padding:            rem(15px);
 // $table-bg-accent:               $charcoal-lightblue;
 // $table-bg-hover:                $charcoal-lightblue;
@@ -52,6 +55,10 @@ $h6-font-size: $font-size-h6;
 // ==========================================================================
 // Buttons
 // ==========================================================================
+
+$btn-padding-y: rem(8px);
+$btn-padding-x: rem(12px);
+
 // $btn-primary-color:              $white;
 // $btn-primary-bg:                 $brand-primary;
 // $btn-primary-border:             darken($btn-primary-bg, 10%);

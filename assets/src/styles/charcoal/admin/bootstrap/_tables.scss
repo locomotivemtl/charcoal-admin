@@ -2,6 +2,16 @@
 // Tables
 // ==========================================================================
 .table {
+    margin-top: $table-cell-padding;
+    margin-bottom: $table-cell-padding;
+    border-radius: $border-radius;
+    box-shadow: 0 0 0 1px $table-border-color;
+    border-style: hidden !important;
+
+    th {
+        padding: $table-cell-padding;
+    }
+
     > thead,
     > tbody,
     > tfoot {
@@ -17,6 +27,10 @@
         border-bottom-width: 1px;
         font-weight: $weight-bold;
     }
+
+    td.table-row-actions {
+        padding: 0;
+    }
 }
 
 .table-cell-checkbox {
@@ -31,12 +45,12 @@
     }
 }
 
-.charcoal-admin-widget-table {
-    .table-container > .table {
-        margin-bottom: ($line-height-base * 3);
+// .charcoal-admin-widget-table {
+//     .table-container > .table {
+//         margin-bottom: ($line-height-base * 3);
 
-        & + .table-foot {
-            margin-top: -($line-height-base * 3);
-        }
-    }
-}
+//         & + .table-foot {
+//             margin-top: -($line-height-base * 3);
+//         }
+//     }
+// }

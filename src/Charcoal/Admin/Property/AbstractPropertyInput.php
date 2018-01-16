@@ -680,7 +680,7 @@ abstract class AbstractPropertyInput implements
             }
 
             if ($this->lang()) {
-                return $this->inputPrefix[$this->lang()];
+                return $this->inputSuffix[$this->lang()];
             }
         }
 

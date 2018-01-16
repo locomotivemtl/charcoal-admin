@@ -1,0 +1,24 @@
+// ==========================================================================
+// Form Widget
+// ==========================================================================
+
+.c-form-widget {
+    position: relative;
+}
+
+.c-form-widget_nav {
+    @media (min-width: $from-small) {
+        justify-content: flex-end;
+        transform: translateY(-100%);
+    }
+
+    @media (min-width: $from-large) {
+        position: absolute;
+        width: 100%;
+    }
+}
+
+.c-form-widget_groups {
+    @media (min-width: $from-small) {
+    }
+}

@@ -5,10 +5,11 @@
     @used-by charcoal/admin/template/object-form
     @used-by charcoal/admin/template/quick-form
 --}}
-<ul class="c-form-group_tabs nav nav-tabs justify-content-end{{^ showHeader }} bootstrap-dialog-title{{/ showHeader }}{{# tabCssClasses }} {{.}}{{/ tabCssClasses }}" role="tablist" id="{{widgetId}}-tabs">
+<ul class="c-form-widget_nav nav nav-tabs{{^ showHeader }} bootstrap-dialog-title{{/ showHeader }}{{# tabCssClasses }} {{.}}{{/ tabCssClasses }}" role="tablist">
 {{# groups }}
     <li class="nav-item">
         <a class="nav-link{{^ showTitle }} hide-title{{/ showTitle }}{{^ isHidden }} active{{/ isHidden }} js-group-tabs"
+           id="form_group_{{ widgetId }}_tab_{{ident}}"
            href="#form_group_{{ widgetId }}"
            role="tab"
            data-toggle="tab"

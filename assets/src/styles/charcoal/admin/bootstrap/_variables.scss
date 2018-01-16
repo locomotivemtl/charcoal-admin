@@ -102,3 +102,11 @@ $btn-padding-x: rem(12px);
 // Grid system
 // ==========================================================================
 // $grid-gutter-width:         15px;
+
+// Navs
+// ==========================================================================
+
+$nav-tabs-border-color:             $charcoal-gray-2;
+$nav-tabs-link-hover-border-color:  $nav-tabs-border-color;
+$nav-tabs-link-active-bg:           $charcoal-white-1;
+$nav-tabs-link-active-border-color: $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-link-active-bg;

@@ -3819,7 +3819,7 @@ tbody.collapse.show {
 }
 
 .nav-tabs {
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #bcbcbc;
 }
 
 .nav-tabs .nav-item {
@@ -3833,7 +3833,7 @@ tbody.collapse.show {
 }
 
 .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
-  border-color: #e9ecef #e9ecef #dee2e6;
+  border-color: #bcbcbc;
 }
 
 .nav-tabs .nav-link.disabled {
@@ -3845,8 +3845,8 @@ tbody.collapse.show {
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #495057;
-  background-color: #ffffff;
-  border-color: #dee2e6 #dee2e6 #ffffff;
+  background-color: #f0f0f0;
+  border-color: #bcbcbc #bcbcbc #f0f0f0;
 }
 
 .nav-tabs .dropdown-menu {

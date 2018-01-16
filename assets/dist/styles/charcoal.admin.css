@@ -1319,16 +1319,26 @@ a.chip:hover::before, a.chip:focus::before {
   margin: 1.5rem 0;
 }
 
-.c-form-group {
+.c-form-widget {
   position: relative;
 }
 
-.c-form-group_tabs {
-  position: absolute;
-  -webkit-transform: translateY(-100%);
-      -ms-transform: translateY(-100%);
-          transform: translateY(-100%);
-  width: 100%;
+@media (min-width: 700px) {
+  .c-form-widget_nav {
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+    -webkit-transform: translateY(-100%);
+        -ms-transform: translateY(-100%);
+            transform: translateY(-100%);
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-form-widget_nav {
+    position: absolute;
+    width: 100%;
+  }
 }
 
 @media (min-width: 1000px) {
@@ -2054,8 +2064,16 @@ ul.c-panel_table {
   vertical-align: 0.1em;
 }
 
-.nav-tabs {
-  border-color: transparent;
+@media (max-width: 699px) {
+  .nav-tabs {
+    margin-bottom: 30px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .nav-tabs {
+    border-color: transparent;
+  }
 }
 
 .nav-tabs .nav-item {
@@ -2073,11 +2091,6 @@ ul.c-panel_table {
   padding: 10px 15px;
 }
 
-.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
-  background-color: #dadadb;
-  border-color: #dadadb;
-}
-
 .nav-tabs .nav-link .nav-icon {
   display: inline-block;
   vertical-align: center;
@@ -2093,8 +2106,12 @@ ul.c-panel_table {
 
 .nav-tabs .nav-link.active {
   color: #000000;
-  background-color: #f0f0f0;
-  border-color: #f0f0f0;
+}
+
+@media (min-width: 1200px) {
+  .nav-tabs .nav-link.active {
+    border-color: #f0f0f0;
+  }
 }
 
 .nav-tabs .nav-link.active.hide-title .nav-title {

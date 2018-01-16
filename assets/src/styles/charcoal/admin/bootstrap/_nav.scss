@@ -1,9 +1,16 @@
-// ==========================================================================
-// Navs
-// ==========================================================================
+
+//
+// Tabs
+//
 
 .nav-tabs {
-    border-color: transparent;
+    @media (max-width: $to-small) {
+        margin-bottom: 30px;
+    }
+
+    @media (min-width: $from-large) {
+        border-color: transparent;
+    }
 
     .nav-item {
         position: relative;
@@ -18,11 +25,6 @@
         display: block;
         font-size: 14px;
         padding: 10px 15px;
-
-        @include hover-focus {
-            background-color: $charcoal-gray-1;
-            border-color: $charcoal-gray-1;
-        }
 
         .nav-icon {
             display: inline-block;
@@ -41,8 +43,10 @@
 
         &.active {
             color: $black;
-            background-color: $charcoal-white-1;
-            border-color: $charcoal-white-1;
+
+            @media (min-width: $from-large) {
+                border-color: $charcoal-white-1;
+            }
 
             &.hide-title {
                 .nav-title {

@@ -5,14 +5,19 @@
     @used-by charcoal/admin/template/object-form
     @used-by charcoal/admin/template/quick-form
 --}}
-<div class="o-form-groups{{# isTabbable }} tab-content{{/ isTabbable }}">
+<div class="c-form-widget_groups{{# isTabbable }} tab-content{{/ isTabbable }}">
 {{# groups }}
     {{^ hidden }}
     {{# form.layout }}
     {{> charcoal/admin/widget/layout.start }}
     {{/ form.layout }}
 
-    <div id="form_group_{{ widgetId }}" class="o-form-group{{# ident }} form-group-{{ . }}{{/ ident }}{{# form.layout.cellSpanBy12 }} col-md-{{ . }}{{/ form.layout.cellSpanBy12 }} js-group-tab{{# isTabbable }} tab-pane{{^ isHidden }} active{{/ isHidden }}{{/ isTabbable }}{{^ isTabbable }}{{# isHidden }} hidden{{/ isHidden }}{{/ isTabbable }}">
+    <div class="c-form-widget_group{{# ident }} form-group-{{ . }}{{/ ident }}{{# form.layout.cellSpanBy12 }} col-md-{{ . }}{{/ form.layout.cellSpanBy12 }} js-group-tab{{# isTabbable }} tab-pane{{^ isHidden }} active{{/ isHidden }}{{/ isTabbable }}{{^ isTabbable }}{{# isHidden }} hidden{{/ isHidden }}{{/ isTabbable }}"
+         id="form_group_{{ widgetId }}"
+         {{# isTabbable }}
+         role="tabpanel"
+         aria-labelledby="form_group_{{ widgetId }}_tab_{{ident}}"
+         {{/ isTabbable }}>
         {{> $widget_template }}
     </div>
 

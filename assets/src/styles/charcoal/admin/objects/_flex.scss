@@ -3,19 +3,19 @@
 // ==========================================================================
 
 .o-flex {
-    @media (min-width: $from-medium) {
+    @media (min-width: $from-small) {
         display: flex;
     }
 }
 
 .o-flex_aside {
-    @media (min-width: $from-medium) {
+    @media (min-width: $from-small) {
         flex: 0 0 auto;
     }
 }
 
 .o-flex_main {
-    @media (min-width: $from-medium) {
+    @media (min-width: $from-small) {
         flex: 1;
         min-width: 0;
     }

@@ -4,15 +4,15 @@
 
 html {
     @media (max-width: $to-small) {
-        font-size: 12px;
+        font-size: $font-size - 2px;
     }
 
-    @media (min-width: $from-small) and (max-width: $to-large) {
-        font-size: 13px;
+    @media (min-width: $from-small) and (max-width: $to-medium) {
+        font-size: $font-size - 4px;
     }
 
-    @media (min-width: $from-large) and (max-width: $to-huge) {
-        font-size: 12px;
+    @media (min-width: $from-medium) and (max-width: $to-huge) {
+        font-size: $font-size - 2px;
     }
 
     @media (min-width: $from-huge) {

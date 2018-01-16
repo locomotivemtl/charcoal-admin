@@ -1,14 +1,18 @@
 {{!--
+    Form Sidebar Widget
+    ===================
 
+    @see charcoal/admin/widget/form
+    @see charcoal/admin/widget/object-form
 --}}
-<aside class="c-form-sidebar c-aside o-flex_aside" id="{{widgetId}}">
-    <div class="o-container -top -right">
-        <div class="c-panel -fixed">
+<aside class="o-flex_aside c-sidebar-widget" id="{{widgetId}}">
+    {{! <div class="o-container -top -right"> }}
+        <div class="c-sidebar-widget_inner">
             {{# showTitle }}
-            <header class="c-panel_header">{{& title }}</header>
+            <header class="c-sidebar-widget_header">{{& title }}</header>
             {{/ showTitle }}
 
-            <div class="c-panel_main">
+            <div class="c-sidebar-widget_main">
                 {{# showSubtitle }}
                 <p>{{& subtitle }}</p>
                 {{/ showSubtitle }}
@@ -26,11 +30,11 @@
                 {{/showLanguageSwitch}}
 
                 {{#hasSidebarProperties}}
-                    <ul class="c-panel_table form-group">
+                    <ul class="c-sidebar-widget_table form-group">
                     {{#formProperties}}
-                        <li class="c-panel_table_row">
+                        <li class="c-sidebar-widget_table_row">
                             {{# showLabel }}
-                            <label class="c-panel_table_header" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+                            <label class="c-sidebar-widget_table_header" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
 
                             {{# showActiveLanguage }}
                             <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
@@ -41,7 +45,7 @@
                             {{/ showActiveLanguage }}
                             {{/ showLabel }}
                             {{^ showLabel }}
-                            <label class="c-panel_table_header sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+                            <label class="c-sidebar-widget_table_header sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
                             {{/ showLabel }}
 
                             {{> charcoal/admin/template/inc.description }}
@@ -50,7 +54,7 @@
                             {{/ showNotesAbove }}
 
                             {{# output }}
-                            <div class="c-panel_table_data{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+                            <div class="c-sidebar-widget_table_data{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
                                 {{> $widget_template }}
                             </div>
                             {{/ output }}
@@ -80,12 +84,12 @@
             </div>
 
             {{# showFooter }}
-                <footer class="c-panel_footer">
+                <footer class="c-sidebar-widget_footer">
                 {{!--
                 @todo Only show the "delete" button if there's an object's ID.
                 --}}
                 {{#isObjDeletable}}
-                    <div class="c-panel_footer_item -red">
+                    <div class="c-sidebar-widget_footer_item -red">
                         <span role="button" class="js-obj-delete" aria-label="{{# _t }}Delete Object{{/ _t }}">
                            <span class="fa fa-trash-o" aria-hidden="true"></span>
                            <span class="btn-label" aria-hidden="true">{{# _t }}Delete{{/ _t }}</span>
@@ -93,7 +97,7 @@
                     </div>
                 {{/isObjDeletable}}
                 {{#isObjResettable}}
-                    <div class="c-panel_footer_item -blue">
+                    <div class="c-sidebar-widget_footer_item -blue">
                         <span role="button" class="js-reset-form" aria-label="{{# _t }}Reset Form{{/ _t }}">
                             <span class="fa fa-refresh" aria-hidden="true"></span>
                             <span class="btn-label" aria-hidden="true">{{# _t }}Reset{{/ _t }}</span>
@@ -103,7 +107,7 @@
                 </footer>
             {{/ showFooter }}
         </div>
-    </div>
+    {{! </div> }}
 </aside>
 
 {{!--

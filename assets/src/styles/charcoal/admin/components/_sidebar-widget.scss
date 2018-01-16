@@ -1,39 +1,62 @@
 // ==========================================================================
-// Panel
+// Form Widget \ Sidebar
 // ==========================================================================
 
-.c-panel {
+.c-sidebar-widget {
+    @media (min-width: $from-medium) {
+        width: rem($sidebar-width);
+    }
+}
+
+.c-sidebar-widget_inner {
     background-color: $charcoal-lightblue;
     border-radius: $radius;
     overflow: hidden;
+    width: 100%;
 
-    &.-fixed {
-        @media (max-width: $to-small) {
-            width: 100%;
-        }
+    @media (max-width: $to-small) {
+    }
 
-        @media (min-width: $from-small) and (max-width: $to-medium) {
-           width: 50%;
-        }
+    @media (min-width: $from-medium) {
+        width: rem($sidebar-width);
+    }
+    @media (min-width: $from-small) and (max-width: $to-medium) {
+       // width: 50%;
+    }
 
-        @media (max-width: $to-medium) {
-            margin-top: rem($unit / 2);
-            margin-bottom: rem($unit);
-        }
+    @media (max-width: $to-medium) {
+        margin-top: rem($unit / 2);
+        margin-bottom: rem($unit);
+    }
 
-        @media (min-width: $from-medium) {
-            position: fixed;
-            top: rem($unit * 2);
-            right: rem($unit);
-            width: rem(280px);
-        }
+    @media (min-width: $from-medium) {
+        position: fixed;
+        top: 0;
+        // top: rem($unit * 2);
+        // right: rem($unit);
+        // width: rem(280px);
+    }
 
+    // @media (max-width: $to-small) {
+        // padding: 0 $unit-small;
+    // }
+
+    @media (min-width: $from-medium) {
+        right: 0;
+    }
+
+    @media (min-width: $from-small) and (max-width: $to-large) {
+        top: $nav-main-width;
+    }
+
+    @media (min-width: $from-large) {
+        top: rem($header-height);
     }
 }
 
 // Header
 // ==========================================================================
-.c-panel_header {
+.c-sidebar-widget_header {
     background-color: $black;
     padding: 0 rem(30px);
     display: flex;
@@ -44,25 +67,25 @@
 
 // Main
 // ==========================================================================
-.c-panel_main {
+.c-sidebar-widget_main {
     padding: 0 rem(30px);
     margin: rem(30px) 0;
 }
 
-.c-panel_table {
+.c-sidebar-widget_table {
     width: 100%;
     margin-top: rem(15px);
     margin-bottom: rem(25px);
     font-size: rem(13px);
 }
 
-ol.c-panel_table,
-ul.c-panel_table {
+ol.c-sidebar-widget_table,
+ul.c-sidebar-widget_table {
     padding-left: 0;
     list-style: none;
 }
 
-.c-panel_table_row {
+.c-sidebar-widget_table_row {
     border-top: 1px solid $gray-light;
     border-bottom: 1px solid $gray-light;
 
@@ -75,12 +98,12 @@ ul.c-panel_table {
     }
 }
 
-.c-panel_table_header,
-.c-panel_table_data {
+.c-sidebar-widget_table_header,
+.c-sidebar-widget_table_data {
     padding: rem(8px) 0;
 }
 
-.c-panel_table_header {
+.c-sidebar-widget_table_header {
     opacity: 0.4;
 
     :not(table) & {
@@ -90,7 +113,7 @@ ul.c-panel_table {
 
 // Footer
 // ==========================================================================
-.c-panel_footer {
+.c-sidebar-widget_footer {
     background-color: $charcoal-lightblue-dark;
     padding: 0 rem(30px);
     height: rem(50px);
@@ -98,7 +121,7 @@ ul.c-panel_table {
     justify-content: center;
 }
 
-.c-panel_footer_item {
+.c-sidebar-widget_footer_item {
     width: 50%;
     height: 100%;
     cursor: pointer;

@@ -11,28 +11,21 @@ This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+{{>charcoal/admin/widget/feedbacks}}
 
-    {{>charcoal/admin/widget/feedbacks}}
-
-    <div class="o-flex_main">
-        <div class="o-container -top -bottom clearfix">
-            <header class="o-container_header">
-                {{# title }}<h2>{{&.}}</h2>{{/ title }}
-                {{# subtitle }}<h3>{{&.}}</h3>{{/ subtitle }}
-            </header>
-            {{#dashboard}}
-                {{>charcoal/admin/widget/dashboard}}
-            {{/dashboard}}
-
+<main class="c-page-container o-flex_main">
+    <header class="c-page-header o-header">
+        <div class="o-container">
+            {{#title}}<h1 class="c-page-header_title">{{&.}}</h1>{{/title}}
+            {{# subtitle }}<h2>{{&.}}</h2>{{/ subtitle }}
         </div>
-    </div>
+    </header>
 
-</div>
+    <section class="o-container -bottom">
+        {{#dashboard}}
+            {{>charcoal/admin/widget/dashboard}}
+        {{/dashboard}}
+    </section>
+</main>
 
 {{>charcoal/admin/template/inc.footer}}

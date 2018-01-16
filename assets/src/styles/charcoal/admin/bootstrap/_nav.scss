@@ -1,0 +1,83 @@
+// ==========================================================================
+// Navs
+// ==========================================================================
+
+.nav-tabs {
+    border-color: transparent;
+
+    .nav-item {
+        position: relative;
+
+        & + .nav-item {
+            margin-left: 4px;
+        }
+    }
+
+    .nav-link {
+        color: $black;
+        display: block;
+        font-size: 14px;
+        padding: 10px 15px;
+
+        @include hover-focus {
+            background-color: $charcoal-gray-1;
+            border-color: $charcoal-gray-1;
+        }
+
+        .nav-icon {
+            display: inline-block;
+            vertical-align: center;
+
+            ~ .nav-title {
+                padding: 0 0 0 4px;
+            }
+        }
+
+        &.hide-title {
+            .nav-title {
+                display: none;
+            }
+        }
+
+        &.active {
+            color: $black;
+            background-color: $charcoal-white-1;
+            border-color: $charcoal-white-1;
+
+            &.hide-title {
+                .nav-title {
+                    display: inline-block;
+                }
+            }
+        }
+
+        &:not(.active) {
+            @include hover-focus {
+                ~ .tooltip {
+                    opacity: 1;
+                }
+            }
+        }
+
+        ~ .tooltip {
+            font-family: $font-family;
+            font-size: 14px;
+            pointer-events: none;
+            top: calc(100% - #{$tooltip-arrow-height});
+            left: 50%;
+            width: auto;
+            transform: translateX(-50%);
+            transition: opacity 0.1s ease-out, top 0.15s ease-out;
+
+            .arrow {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    }
+
+    .nav-icon + .nav-title,
+    .nav-title + .nav-icon {
+        margin-left: 4px;
+    }
+}

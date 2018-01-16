@@ -32,12 +32,12 @@ Audio Property Input
     </div>
     <div class="o-toolbox_content">
         {{#textEnabled}}
-        <div class="o-toolbox_pane js-pane hidden" data-pane="text">
+        <div class="o-toolbox_pane js-pane d-none" data-pane="text">
             <textarea id="voice_message_input_{{inputId}}" class="form-control -norounded -noborder js-text-voice-message" name="voice_message" style="height:100%;" name="voice_message[fr]">{{&alert.voiceMessage.fr}}</textarea>
         </div>
         {{/textEnabled}}
         {{#recordingEnabled}}
-        <div class="o-toolbox_pane js-pane hidden" data-pane="recording">
+        <div class="o-toolbox_pane js-pane d-none" data-pane="recording">
             {{!-- Here be the recording widget --}}
             <div class="c-audio-player -complex">
                 <div class="c-audio-player_wrap">
@@ -64,12 +64,12 @@ Audio Property Input
                     <span class="c-audio-player_time js-recording-timer">00:00</span>
                 </div>
                 <canvas class="c-audio-player_canvas -analyser js-recording-analyser"></canvas>
-                <canvas class="c-audio-player_canvas -waves hidden js-recording-waves"></canvas>
+                <canvas class="c-audio-player_canvas -waves d-none js-recording-waves"></canvas>
             </div>
         </div>
         {{/recordingEnabled}}
         {{#fileEnabled}}
-        <div class="o-toolbox_pane js-pane hidden" data-pane="file">
+        <div class="o-toolbox_pane js-pane d-none" data-pane="file">
             <audio class="js-file-audio{{^alert.voiceAudio}} hide{{/alert.voiceAudio}}" src="{{alert.voiceAudio}}" controls></audio> <br>
             <button type="button" class="btn btn-danger js-file-reset{{^alert.voiceAudio}} hide{{/alert.voiceAudio}}">{{#_t}}Delete{{/_t}}</button>
             <input type="file" name="voice_audio" class="form-control js-file-input{{#alert.voiceAudio}} hide{{/alert.voiceAudio}}">

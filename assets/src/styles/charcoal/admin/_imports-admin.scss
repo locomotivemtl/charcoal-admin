@@ -74,6 +74,7 @@
 @import "components/table-header";
 @import "components/table-container";
 @import "components/table-pagination";
+@import "components/form-group";
 @import "components/aside";
 @import "components/login";
 @import "components/panel";
@@ -86,8 +87,8 @@
 
 // Bootstrap overwrites
 // ==========================================================================
-@import "bootstrap/dropdowns";
-@import "bootstrap/navs";
+@import "bootstrap/dropdown";
+@import "bootstrap/nav";
 @import "bootstrap/forms";
 @import "bootstrap/tables";
 @import "bootstrap/panels";

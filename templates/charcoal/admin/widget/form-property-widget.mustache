@@ -11,7 +11,7 @@
     {{# showActiveLanguage }}
     <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
         {{# languages }}
-        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="hidden"{{/ current }}>{{ ident }}</span>
+        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="d-none"{{/ current }}>{{ ident }}</span>
         {{/ languages }}
     </span>
     {{/ showActiveLanguage }}
@@ -27,7 +27,7 @@
 
     {{# output }}
     {{!-- The actual property control (typically `PropertyInput`) --}}
-    <div id="form-field-{{ widgetId }}" class="form-field form-field-{{ widgetId }}{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} hidden{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+    <div id="form-field-{{ widgetId }}" class="form-field form-field-{{ widgetId }}{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} d-none{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
         {{> $widget_template }}
     </div>
     {{/ output }}

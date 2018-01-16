@@ -4,6 +4,7 @@
 
 .c-page-container {
     background-color: $charcoal-white-1;
+    min-height: 100vh;
 
     @media (max-width: $to-large) {
         padding-top: $unit;

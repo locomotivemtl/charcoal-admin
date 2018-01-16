@@ -1,7 +1,3 @@
-// ==========================================================================
-// Dropdowns
-// ==========================================================================
-
 // %dropdown-item {
 //     display: block;
 //     padding: 3px 20px;
@@ -11,7 +7,7 @@
 //     white-space: nowrap;
 // }
 
-// as with .dropdown-menu > li > a
+// Links, buttons, and more within the dropdown menu
 .dropdown-item {
     font-size: 12px;
 //     @extend %dropdown-item;
@@ -23,6 +19,7 @@
 //     }
 }
 
+// Override the caret positionning
 .dropdown-toggle {
     &::after {
         vertical-align: 0.1em;

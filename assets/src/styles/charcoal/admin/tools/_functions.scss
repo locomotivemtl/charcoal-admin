@@ -56,6 +56,17 @@
 }
 
 //
+// Removes units (px, em, etc.) from a given number.
+//
+// @param  {Number} $value - The numeric value to strip units from.
+// @return {Number} A unitless numeric value.
+//
+@function strip-unit($value)
+{
+    @return $value / ($value * 0 + 1);
+}
+
+//
 // Converts a number to a percentage.
 //
 // @alias  percentage()
@@ -87,6 +98,24 @@
     }
 
     @return true;
+}
+
+//
+// Resolve whether a rule is important or not.
+//
+// @param  {Boolean}     $flag - Whether a rule is important (TRUE) or not (FALSE).
+// @return {String|Null} Returns `!important` or NULL.
+//
+
+@function important($flag: false)
+{
+    @if ($flag == true) {
+        @return !important;
+    } @elseif ($important == false) {
+        @return null;
+    } @else {
+        @error "`#{$flag}` needs to be `true` or `false`."
+    }
 }
 
 //

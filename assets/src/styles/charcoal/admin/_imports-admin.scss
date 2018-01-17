@@ -8,6 +8,31 @@
 @import "settings/config";
 
 // ==========================================================================
+// Bootstrap
+// ==========================================================================
+
+// Core variables & utilities
+// ==========================================================================
+@import "../../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../../node_modules/bootstrap/scss/mixins";
+
+// Overwrites
+// ==========================================================================
+@import "bootstrap/variables";
+@import "bootstrap/type";
+@import "bootstrap/tables";
+@import "bootstrap/forms";
+@import "bootstrap/buttons";
+@import "bootstrap/dropdown";
+@import "bootstrap/nav";
+@import "bootstrap/panels"; // @todo Migrate
+@import "bootstrap/scaffolding"; // @todo Migrate
+
+// ==========================================================================
+// Charcoal
+// ==========================================================================
+
 // Tools
 // ==========================================================================
 @import "tools/functions";
@@ -15,37 +40,6 @@
 @import "tools/fonts";
 @import "tools/layout";
 @import "tools/widths";
-
-// ==========================================================================
-// Bootstrap
-// ==========================================================================
-
-// Core variables
-@import "../../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../../node_modules/bootstrap/scss/mixins";
-// @import "../../../../../node_modules/bootstrap/scss/mixins/vendor-prefixes";
-// @import "../../../../../node_modules/bootstrap/scss/mixins/reset-filter";
-// @import "../../../../../node_modules/bootstrap/scss/mixins/border-radius";
-// @import "../../../../../node_modules/bootstrap/scss/mixins/nav-divider";
-// @import "../../../../../node_modules/bootstrap/scss/mixins/labels";
-
-// Core variables overwrites
-@import "bootstrap/variables";
-@import "bootstrap/type";
-
-// ==========================================================================
-// Charcoal
-// ==========================================================================
-
-
-// Tools
-// ==========================================================================
-@import "tools/tools";
-
-// Generic
-// ==========================================================================
-
 
 // Base
 // ==========================================================================
@@ -83,16 +77,6 @@
 @import "components/stats";
 @import "components/attachment";
 @import "components/color-inputs";
-
-// Bootstrap overwrites
-// ==========================================================================
-@import "bootstrap/dropdown";
-@import "bootstrap/nav";
-@import "bootstrap/forms";
-@import "bootstrap/tables";
-@import "bootstrap/panels";
-@import "bootstrap/buttons";
-@import "bootstrap/scaffolding";
 
 // Bootstrap custom components
 // ==========================================================================

@@ -28,16 +28,18 @@ $radius: 2px;
 
 // Screen widths
 // ==========================================================================
-$from-tiny: 500px;
-$to-tiny: $from-tiny - 1;
-$from-small: 700px;
-$to-small: $from-small - 1;
-$from-medium: 1000px;
-$to-medium: $from-medium - 1;
-$from-large: 1200px;
-$to-large: $from-large - 1;
-$from-huge: 1600px;
-$to-huge: $from-huge - 1;
+$from-tiny:   500px             !default;
+$to-tiny:     $from-tiny - 1    !default;
+$from-small:  700px             !default;
+$to-small:    $from-small - 1   !default;
+$from-medium: 1000px            !default;
+$to-medium:   $from-medium - 1  !default;
+$from-large:  1200px            !default;
+$to-large:    $from-large - 1   !default;
+$from-big:    1400px            !default;
+$to-big:      $from-big - 1     !default;
+$from-huge:   1600px            !default;
+$to-huge:     $from-huge - 1    !default;
 
 // Units
 // ==========================================================================
@@ -57,7 +59,7 @@ $nav-button-width: $unit;
 $nav-small: 80px;
 $nav-page: 100px;
 
-$sidebar-width: 245px;
+$sidebar-width: 250px;
 
 // Transitions
 // ==========================================================================

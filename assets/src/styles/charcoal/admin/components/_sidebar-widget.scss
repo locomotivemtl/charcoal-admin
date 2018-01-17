@@ -4,13 +4,13 @@
 
 .c-sidebar-widget {
     @media (min-width: $from-medium) {
-        width: rem($sidebar-width);
+        width: $sidebar-width;
     }
 }
 
 .c-sidebar-widget_inner {
-    background-color: $charcoal-lightblue;
-    border-radius: $radius;
+    background-color: $black;
+    border-bottom-left-radius: $radius;
     overflow: hidden;
     width: 100%;
 
@@ -18,7 +18,7 @@
     }
 
     @media (min-width: $from-medium) {
-        width: rem($sidebar-width);
+        width: $sidebar-width;
     }
     @media (min-width: $from-small) and (max-width: $to-medium) {
        // width: 50%;
@@ -57,87 +57,100 @@
 // Header
 // ==========================================================================
 .c-sidebar-widget_header {
-    background-color: $black;
-    padding: 0 rem(30px);
-    display: flex;
-    align-items: center;
-    color: $white;
-    height: rem(50px);
+    color: $charcoal-gray-0;
+    padding: rem(24px) rem($unit / 2) rem(14px);
+}
+
+.c-sidebar-widget_heading {
+    margin: 0;
 }
 
 // Main
 // ==========================================================================
-.c-sidebar-widget_main {
-    padding: 0 rem(30px);
-    margin: rem(30px) 0;
+.c-sidebar-widget_wrapper {
+    border-top: 1px solid $charcoal-gray-5;
+    padding: rem($unit / 2);
+
+    &:last-child {
+        border-bottom: 1px solid $charcoal-gray-5;
+    }
+}
+
+.c-sidebar-widget_subtitle {
+    color: $charcoal-gray-0;
 }
 
 .c-sidebar-widget_table {
+    font-size: 10px;
     width: 100%;
-    margin-top: rem(15px);
-    margin-bottom: rem(25px);
-    font-size: rem(13px);
-}
-
-ol.c-sidebar-widget_table,
-ul.c-sidebar-widget_table {
-    padding-left: 0;
-    list-style: none;
+    margin-bottom: 0;
 }
 
 .c-sidebar-widget_table_row {
-    border-top: 1px solid $gray-light;
-    border-bottom: 1px solid $gray-light;
+    padding: rem(8px) 0;
 
-    :not(table) &:not(:last-child) {
-        border-bottom: 0;
-    }
-
-    > p {
-        margin: 0;
+    & + & {
+        border-top: 1px solid $charcoal-gray-5;
     }
 }
 
 .c-sidebar-widget_table_header,
 .c-sidebar-widget_table_data {
-    padding: rem(8px) 0;
+    color: $charcoal-gray-0;
 }
 
 .c-sidebar-widget_table_header {
-    opacity: 0.4;
-
-    :not(table) & {
-        padding-bottom: 0;
-    }
+    opacity: 0.7;
+    margin-bottom: rem(5px);
 }
 
 // Footer
 // ==========================================================================
 .c-sidebar-widget_footer {
-    background-color: $charcoal-lightblue-dark;
-    padding: 0 rem(30px);
+    border-top: 1px solid $charcoal-gray-5;
+    // background-color: $charcoal-lightblue-dark;
+    padding: 0 rem($unit / 2);
     height: rem(50px);
-    display: flex;
-    justify-content: center;
+    // display: flex;
+    // justify-content: center;
 }
 
-.c-sidebar-widget_footer_item {
-    width: 50%;
-    height: 100%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: rem(13px);
-    transition: color $speed;
+.c-sidebar-widget_button {
+    border: none;
+    color: $charcoal-gray-0;
+    background-color: transparent !important;
+    font-size: 10px;
 
-    &:hover {
-        &.-red {
-            color: $red;
+    &.-delete {
+        @include hover-focus {
+            color: $primary;
         }
+    }
 
-        &.-blue {
-            color: $blue;
+    &.-reset {
+        @include hover-focus {
+            color: $danger;
         }
     }
 }
+
+// .c-sidebar-widget_footer_item {
+//     width: 50%;
+//     height: 100%;
+//     cursor: pointer;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     font-size: rem(13px);
+//     transition: color $speed;
+
+//     &:hover {
+//         &.-red {
+//             color: $red;
+//         }
+
+//         &.-blue {
+//             color: $blue;
+//         }
+//     }
+// }

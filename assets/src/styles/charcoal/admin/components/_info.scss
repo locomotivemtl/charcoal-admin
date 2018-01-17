@@ -5,19 +5,19 @@
 .c-info {
     display: inline-block;
 
-    width: rem(23px);
-    height: rem(23px);
+    width: rem(18px);
+    height: rem(18px);
 
     text-align: center;
 
     border: 1px solid $gray-light;
     border-radius: 50%;
 
-    color:$gray-light;
+    color: $gray-light;
 
-    margin-left:rem(10px);
-    cursor:help;
-    font-size:rem(16px);
+    margin-left: rem(10px);
+    cursor: help;
+    font-size: rem(12px);
     font-weight: normal;
-    line-height:rem(22px);
+    line-height: rem(16px);
 }

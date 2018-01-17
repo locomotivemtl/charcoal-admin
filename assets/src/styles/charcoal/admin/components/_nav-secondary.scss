@@ -66,6 +66,7 @@
         color: $charcoal-gray-5;
         opacity: 1;
         padding: 0;
+        font-size: 14px;
     }
 }
 
@@ -121,8 +122,8 @@
     }
 
     &.-arrow {
-        padding-top: rem(14px);
-        padding-bottom: rem(14px);
+        padding-top: rem(16px);
+        padding-bottom: rem(16px);
         position: relative;
 
         &::after {

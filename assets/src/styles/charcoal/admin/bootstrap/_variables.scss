@@ -4,45 +4,41 @@
 
 // Colors
 // ==========================================================================
-// $brand-primary:         $charcoal-blue;
-// $brand-success:         #5cb85c !default;
-// $brand-info:            $blue;
-// $brand-warning:         #f0ad4e !default;
-// $brand-danger:          $red;
+
+$primary:      $charcoal-blue-1;
+$danger:       $charcoal-red-1;
 
 $theme-colors: (
-    "primary": $charcoal-blue-1,
-    "danger":  $charcoal-red-1
+    "primary": $primary,
+    "danger":  $danger
 );
 
 // Scaffolding
 // ==========================================================================
+
 // $text-color:            $color;
 
 // Typography
 // ==========================================================================
-// $font-family-sans-serif:  $font-family;
 
-// $font-size-base:          $font-size;
+$font-family-sans-serif: $font-family;
 
-$h1-font-size: $font-size-h1;
-$h2-font-size: $font-size-h2;
-$h3-font-size: $font-size-h3;
-$h4-font-size: $font-size-h4;
-$h5-font-size: $font-size-h5;
-$h6-font-size: $font-size-h6;
-
-// $headings-font-weight:    $weight-semi;
+$h1-font-size:           $font-size-h1;
+$h2-font-size:           $font-size-h2;
+$h3-font-size:           $font-size-h3;
+$h4-font-size:           $font-size-h4;
+$h5-font-size:           $font-size-h5;
+$h6-font-size:           $font-size-h6;
 
 // Iconography
 // ==========================================================================
+
 // $icon-font-path: "../fonts/";
 
 // Components
 // ==========================================================================
-$caret-width: .35em;
 
-// $border-radius-base:        $radius;
+$caret-width: .35em;
 
 // ==========================================================================
 // Tables
@@ -60,32 +56,6 @@ $table-border-color: #cccccc;
 
 $btn-padding-y: rem(8px);
 $btn-padding-x: rem(12px);
-
-// $btn-primary-color:              $white;
-// $btn-primary-bg:                 $brand-primary;
-// $btn-primary-border:             darken($btn-primary-bg, 10%);
-
-// $btn-success-color:              #fff !default;
-// $btn-success-bg:                 $brand-success !default;
-// $btn-success-border:             darken($btn-success-bg, 5%) !default;
-
-// $btn-info-color:                 $white;
-// $btn-info-bg:                    $brand-info;
-// $btn-info-border:                darken($btn-info-bg, 10%);
-
-// $btn-warning-color:              $white;
-// $btn-warning-bg:                 $brand-warning !default;
-// $btn-warning-border:             darken($btn-warning-bg, 5%) !default;
-
-// $btn-danger-color:               $white;
-// $btn-danger-bg:                  $brand-danger;
-// $btn-danger-border:              darken($btn-danger-bg, 10%);
-
-// $btn-border-radius-base:         $border-radius-base;
-// $btn-border-radius-large:        $border-radius-base;
-// $btn-border-radius-small:        $border-radius-base;
-
-// $panel-danger-border:            $brand-danger;
 
 // Forms
 // ==========================================================================
@@ -110,3 +80,10 @@ $nav-tabs-border-color:             $charcoal-gray-2;
 $nav-tabs-link-hover-border-color:  $nav-tabs-border-color;
 $nav-tabs-link-active-bg:           $charcoal-white-1;
 $nav-tabs-link-active-border-color: $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-link-active-bg;
+
+
+// Tooltips
+// ==========================================================================
+
+$tooltip-bg:      $charcoal-gray-5;
+$tooltip-opacity: 1;

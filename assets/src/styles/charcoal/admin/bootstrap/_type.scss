@@ -1,6 +1,6 @@
-// ==========================================================================
-// Type
-// ==========================================================================
+//
+// Headings
+//
 
 h1, .h1 {
     @media (max-width: $to-small) {
@@ -29,18 +29,5 @@ h3, .h3 {
 
     @media (min-width: $from-small) {
         font-size: rem($h3-font-size);
-    }
-}
-
-.lead {
-    margin-bottom: $line-height-base;
-    font-size: floor(($font-size-base * 1.15));
-    font-weight: 300;
-    line-height: 1.4;
-    display:inline-block;
-    margin-bottom:5px;
-
-    @include media-breakpoint-up(sm) {
-        font-size: ($font-size-base * 1.5);
     }
 }

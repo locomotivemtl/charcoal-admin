@@ -5,7 +5,7 @@
 
 .nav-tabs {
     @media (max-width: $to-small) {
-        margin-bottom: 30px;
+        margin-bottom: $unit / 2;
     }
 
     @media (min-width: $from-large) {
@@ -23,17 +23,21 @@
     .nav-link {
         color: $black;
         display: block;
-        font-size: 14px;
-        font-weight: $weight-semi;
-        padding: 10px 15px;
+
+        @media (max-width: $to-small) {
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+        @media (min-width: $from-small) {
+            font-size: 14px;
+            font-weight: $weight-semi;
+            padding: 10px 15px;
+        }
 
         .nav-icon {
             display: inline-block;
             vertical-align: center;
-
-            ~ .nav-title {
-                padding: 0 0 0 4px;
-            }
         }
 
         &.hide-title {

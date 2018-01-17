@@ -5,113 +5,109 @@
     @see charcoal/admin/widget/form
     @see charcoal/admin/widget/object-form
 --}}
-<aside class="o-flex_aside c-sidebar-widget" id="{{widgetId}}">
-    {{! <div class="o-container -top -right"> }}
-        <div class="c-sidebar-widget_inner">
-            {{# showTitle }}
-            <header class="c-sidebar-widget_header">
-                <h2 class="h1 c-sidebar-widget_heading">{{& title }}</h2>
-            </header>
-            {{/ showTitle }}
+<aside class="o-flex_aside c-form-widget_sidebar" id="{{widgetId}}">
+    <div class="c-sidebar-widget">
+        {{# showTitle }}
+        <header class="c-sidebar-widget_header">
+            <h2 class="h1 c-sidebar-widget_heading">{{& title }}</h2>
+        </header>
+        {{/ showTitle }}
 
-            <div class="c-sidebar-widget_wrapper">
-                {{# showSubtitle }}
-                <p class="c-sidebar-widget_subtitle">{{& subtitle }}</p>
-                {{/ showSubtitle }}
+        <div class="c-sidebar-widget_wrapper -properties">
+            {{# showSubtitle }}
+            <p class="c-sidebar-widget_subtitle">{{& subtitle }}</p>
+            {{/ showSubtitle }}
 
-                {{#hasSidebarProperties}}
-                <ul class="c-sidebar-widget_table list-unstyled form-group">
+            {{#hasSidebarProperties}}
+            <ul class="c-sidebar-widget_table list-unstyled form-group">
                 {{#formProperties}}
-                    <li class="c-sidebar-widget_table_row">
-                        {{# showLabel }}
-                        <label class="c-sidebar-widget_table_header" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+                <li class="c-sidebar-widget_table_row">
+                    {{# showLabel }}
+                    <label class="c-sidebar-widget_table_header" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
 
-                        {{# showActiveLanguage }}
-                        <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
-                            {{# languages }}
-                            <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="d-none"{{/ current }}>{{ ident }}</span>
-                            {{/ languages }}
-                        </span>
-                        {{/ showActiveLanguage }}
-                        {{/ showLabel }}
-                        {{^ showLabel }}
-                        <label class="c-sidebar-widget_table_header sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
-                        {{/ showLabel }}
+                    {{# showActiveLanguage }}
+                    <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
+                        {{# languages }}
+                        <span aria-label="{{ name }}" data-lang="{{ ident }}"{{^ current }} class="d-none"{{/ current }}>{{ ident }}</span>
+                        {{/ languages }}
+                    </span>
+                    {{/ showActiveLanguage }}
+                    {{/ showLabel }}
+                    {{^ showLabel }}
+                    <label class="c-sidebar-widget_table_header sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+                    {{/ showLabel }}
 
-                        {{> charcoal/admin/template/inc.description }}
-                        {{# showNotesAbove }}
-                        {{> charcoal/admin/template/inc.notes }}
-                        {{/ showNotesAbove }}
+                    {{> charcoal/admin/template/inc.description }}
+                    {{# showNotesAbove }}
+                    {{> charcoal/admin/template/inc.notes }}
+                    {{/ showNotesAbove }}
 
-                        {{# output }}
-                        <div class="c-sidebar-widget_table_data{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} d-none{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
-                            {{> $widget_template }}
-                        </div>
-                        {{/ output }}
-
-                        {{^ showNotesAbove }}
-
-                        {{> charcoal/admin/template/inc.notes }}
-                        {{/ showNotesAbove }}
-                    </li>
-                {{/formProperties}}
-                </ul>
-                {{/hasSidebarProperties}}
-            </div>
-
-            <div class="c-sidebar-widget_wrapper">
-                {{#showLanguageSwitch}}
-                    <div class="btn-group d-flex form-group js-lang-switch" role="group" aria-label="{{#_t}}Languages{{/_t}}">
-                    {{#languages}}
-                        <button type="button" data-lang-switch="{{ident}}" class="btn{{#current}} btn-info{{/current}}{{^current}} btn-default{{/current}} w-100">
-                            <span class="btn-label">{{name}}</span>
-                        </button>
-                    {{/languages}}
+                    {{# output }}
+                    <div class="c-sidebar-widget_table_data{{# prop.type }} form-property-{{ . }}{{/ prop.type }}{{# hidden }} d-none{{/ hidden }}{{# showActiveLanguage }} -l10n{{/ showActiveLanguage }}{{# prop.multiple }} -multiple{{/ prop.multiple }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+                        {{> $widget_template }}
                     </div>
-                {{/showLanguageSwitch}}
+                    {{/ output }}
 
-                {{# showSidebarActions }}
-                <div class="btn-group-vertical btn-block" role="group">
+                    {{^ showNotesAbove }}
+
+                    {{> charcoal/admin/template/inc.notes }}
+                    {{/ showNotesAbove }}
+                </li>
+                {{/formProperties}}
+            </ul>
+            {{/hasSidebarProperties}}
+        </div>
+
+        <div class="c-sidebar-widget_wrapper -actions">
+            {{#showLanguageSwitch}}
+            <div class="btn-group d-flex mb-sm-3 js-lang-switch" role="group" aria-label="{{#_t}}Languages{{/_t}}">
+                {{#languages}}
+                <button class="btn {{#current}}btn-primary{{/current}}{{^current}}btn-outline-primary{{/current}}"
+                    type="button"
+                    data-lang-switch="{{ident}}">
+                    <span class="btn-label">{{name}}</span>
+                </button>
+                {{/languages}}
+            </div>
+            {{/showLanguageSwitch}}
+
+            {{# showSidebarActions }}
+            <div class="btn-group-vertical c-sidebar-widget_actions" role="group">
                 {{# sidebarActions }}
                     {{# isSeparator }}
-                        </div>
-                        <div class="btn-group-vertical btn-block" role="group">
+            </div>
+            <div class="btn-group-vertical c-sidebar-widget_actions" role="group">
                     {{/ isSeparator }}
                     {{^ isSeparator }}
-                        {{> charcoal/admin/widget/actions }}
+                    {{> charcoal/admin/widget/actions }}
                     {{/ isSeparator }}
                 {{/ sidebarActions }}
-                </div>
-                {{/ showSidebarActions }}
             </div>
-
-            {{# showFooter }}
-            <footer class="c-sidebar-widget_footer btn-group d-flex" role="group">
-                {{!--
-                @todo Only show the "delete" button if there's an object's ID.
-                --}}
-                {{#isObjDeletable}}
-                {{! <div class="c-sidebar-widget_footer_item -red"> }}
-                    <button class="c-sidebar-widget_button -delete btn btn-primary w-100 js-obj-delete" type="button">
-                        <span class="fa fa-trash-o" aria-hidden="true"></span>
-                        <span class="btn-label" aria-hidden="true">{{# _t }}Delete{{/ _t }}</span>
-                        <span class="sr-only">{{# _t }}Delete Object{{/ _t }}</span>
-                    </button>
-                {{! </div> }}
-                {{/isObjDeletable}}
-                {{#isObjResettable}}
-                {{! <div class="c-sidebar-widget_footer_item -blue"> }}
-                    <button class="c-sidebar-widget_button -reset btn btn-danger w-100 js-reset-form" type="button">
-                        <span class="fa fa-refresh" aria-hidden="true"></span>
-                        <span class="btn-label" aria-hidden="true">{{# _t }}Reset{{/ _t }}</span>
-                        <span class="sr-only">{{# _t }}Reset Form{{/ _t }}</span>
-                    </button>
-                {{! </div> }}
-                {{/isObjResettable}}
-            </footer>
-            {{/ showFooter }}
+            {{/ showSidebarActions }}
         </div>
-    {{! </div> }}
+
+        {{# showFooter }}
+        <footer class="c-sidebar-widget_footer btn-group d-flex justify-content-center" role="group">
+            {{!--
+            @todo Only show the "delete" button if there's an object's ID.
+            --}}
+            {{#isObjDeletable}}
+            <button class="c-sidebar-widget_button -delete btn js-obj-delete" type="button">
+                <span class="fa fa-trash-o" aria-hidden="true"></span>
+                <span class="btn-label" aria-hidden="true">{{# _t }}Delete{{/ _t }}</span>
+                <span class="sr-only">{{# _t }}Delete Object{{/ _t }}</span>
+            </button>
+            {{/isObjDeletable}}
+            {{#isObjResettable}}
+            <button class="c-sidebar-widget_button -reset btn js-reset-form" type="button">
+                <span class="fa fa-refresh" aria-hidden="true"></span>
+                <span class="btn-label" aria-hidden="true">{{# _t }}Reset{{/ _t }}</span>
+                <span class="sr-only">{{# _t }}Reset Form{{/ _t }}</span>
+            </button>
+            {{/isObjResettable}}
+        </footer>
+        {{/ showFooter }}
+    </div>
 </aside>
 
 {{!--

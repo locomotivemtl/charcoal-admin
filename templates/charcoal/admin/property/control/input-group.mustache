@@ -12,11 +12,11 @@
 <div class="input-group">
 {{/ hasInputAffix }}
 {{# inputPrefix }}
-<span class="input-group-addon" id="{{ inputId }}_prefix">{{& . }}</span>
+<span class="input-group-prepend" id="{{ inputId }}_prefix">{{& . }}</span>
 {{/ inputPrefix }}
 {{> charcoal/admin/property/control/input }}
 {{# inputSuffix }}
-<span class="input-group-addon" id="{{ inputId }}_suffix">{{& . }}</span>
+<span class="input-group-append" id="{{ inputId }}_suffix">{{& . }}</span>
 {{/ inputSuffix }}
 {{# hasInputAffix }}
 </div>

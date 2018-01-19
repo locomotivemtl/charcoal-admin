@@ -12,7 +12,7 @@
     type="{{ type }}"
     id="{{ inputId }}"
     name="{{ inputName }}"
-    class="form-control {{ inputClass }}"
+    class="form-control{{# inputClass }}{{ . }}{{/ inputClass }}"
     {{# inputMode }}inputmode="{{ . }}"{{/ inputMode }}
     {{# size }}size="{{ . }}"{{/ size }}
     {{# hasMin }}min="{{ min }}"{{/ hasMin }}

@@ -7,7 +7,7 @@
 <textarea
     id="{{ inputId }}"
     name="{{ inputName }}"
-    class="form-control {{ inputClass }}"
+    class="form-control{{# inputClass }} {{ . }}{{/ inputClass }}"
     {{# cols }}cols="{{ . }}"{{/ cols }}
     {{# rows }}rows="{{ . }}"{{/ rows }}
     {{# minLength }}minlength="{{ . }}"{{/ minLength }}

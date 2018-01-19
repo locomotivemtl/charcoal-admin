@@ -4,32 +4,18 @@
 
     `charcoal/admin/property/input/switch`
 --}}
-<input
-    id="switch_{{ inputId }}"
-    type="checkbox"
-    class="form-control {{ inputClass }}"
-    {{# checked }}checked{{/ checked }}
-    {{# readOnly }}readonly{{/ readOnly }}
-    {{# required }}required{{/ required }}
-    {{# disabled }}disabled{{/ disabled }}
->
-<input
-    type="hidden"
-    id="{{ inputId }}"
-    name="{{ inputName }}"
-    value="{{ value }}"
->
 
-{{# addJs }}
-<script>
-Charcoal.Admin.manager().add_property_input({
-    id: '{{ inputId }}',
-    type: 'charcoal/admin/property/input/switch',
-    data: {
-        input_selector:  '#{{ inputId }}',
-        switch_selector: '#switch_{{ inputId }}',
-        switch_options:  {{& switchOptionsAsJson }}
-    }
-});
-</script>
-{{/ addJs }}
+<div class="form-group">
+    <span class="switch switch-lg{{# inputClass }} {{ . }}{{/ inputClass }}">
+        <input
+            class="switch"
+            type="checkbox"
+            id="{{ inputId }}"
+            name="{{ inputName }}"
+            {{# checked }}checked{{/ checked }}
+            {{# readOnly }}readonly{{/ readOnly }}
+            {{# required }}required{{/ required }}
+            {{# disabled }}disabled{{/ disabled }}>
+        <label for="{{ inputId }}"><span class="sr-only">{{# _t }}Toggle Value{{/ _t }}</span></label>
+    </span>
+</div>

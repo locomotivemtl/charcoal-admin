@@ -1,10 +1,9 @@
 /**
- * Switch looking input that manages boolean properties
- * charcoal/admin/property/input/switch
+ * Basic text input that also manages multiple (split) values
+ * charcoal/admin/property/input/text
  *
  * Require:
  * - jQuery
- * - bootstrapSwitch
  *
  * @param  {Object}  opts Options for input property
  */

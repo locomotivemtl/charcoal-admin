@@ -13,6 +13,10 @@ input[type="url"] {
     // font-family: monospace;
 }
 
+label {
+    font-size: 12px;
+}
+
 .form-control {
     box-shadow: $input-box-shadow;
 

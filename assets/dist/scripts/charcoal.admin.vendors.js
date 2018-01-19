@@ -28957,37 +28957,73 @@ var effectsEffectTransfer = effect;
 
 
 }));;/*!
-  * Bootstrap v4.0.0-beta.2 (https://getbootstrap.com)
-  * Copyright 2011-2017 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap v4.0.0 (https://getbootstrap.com)
+  * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
-var bootstrap = (function (exports,$) {
-'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'jquery'], factory) :
+	(factory((global.bootstrap = {}),global.jQuery));
+}(this, (function (exports,$) { 'use strict';
 
 $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): util.js
+ * Bootstrap (v4.0.0): util.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Util = function () {
+var Util = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Private TransitionEnd Helpers
    * ------------------------------------------------------------------------
    */
   var transition = false;
-  var MAX_UID = 1000000;
-  var TransitionEndEvent = {
-    WebkitTransition: 'webkitTransitionEnd',
-    MozTransition: 'transitionend',
-    OTransition: 'oTransitionEnd otransitionend',
-    transition: 'transitionend' // shoutout AngusCroll (https://goo.gl/pxwQGp)
-
-  };
+  var MAX_UID = 1000000; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
 
   function toType(obj) {
     return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
@@ -28998,7 +29034,7 @@ var Util = function () {
       bindType: transition.end,
       delegateType: transition.end,
       handle: function handle(event) {
-        if ($(event.target).is(this)) {
+        if ($$$1(event.target).is(this)) {
           return event.handleObj.handler.apply(this, arguments); // eslint-disable-line prefer-rest-params
         }
 
@@ -29008,28 +29044,20 @@ var Util = function () {
   }
 
   function transitionEndTest() {
-    if (window.QUnit) {
+    if (typeof window !== 'undefined' && window.QUnit) {
       return false;
     }
 
-    var el = document.createElement('bootstrap');
-
-    for (var name in TransitionEndEvent) {
-      if (typeof el.style[name] !== 'undefined') {
-        return {
-          end: TransitionEndEvent[name]
-        };
-      }
-    }
-
-    return false;
+    return {
+      end: 'transitionend'
+    };
   }
 
   function transitionEndEmulator(duration) {
     var _this = this;
 
     var called = false;
-    $(this).one(Util.TRANSITION_END, function () {
+    $$$1(this).one(Util.TRANSITION_END, function () {
       called = true;
     });
     setTimeout(function () {
@@ -29042,11 +29070,18 @@ var Util = function () {
 
   function setTransitionEndSupport() {
     transition = transitionEndTest();
-    $.fn.emulateTransitionEnd = transitionEndEmulator;
+    $$$1.fn.emulateTransitionEnd = transitionEndEmulator;
 
     if (Util.supportsTransitionEnd()) {
-      $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
+      $$$1.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
     }
+  }
+
+  function escapeId(selector) {
+    // We escape IDs in case of special selectors (selector = '#myId:something')
+    // $.escapeSelector does not exist in jQuery < 3
+    selector = typeof $$$1.escapeSelector === 'function' ? $$$1.escapeSelector(selector).substr(1) : selector.replace(/(:|\.|\[|\]|,|=|@)/g, '\\$1');
+    return selector;
   }
   /**
    * --------------------------------------------------------------------------
@@ -29070,12 +29105,17 @@ var Util = function () {
 
       if (!selector || selector === '#') {
         selector = element.getAttribute('href') || '';
+      } // If it's an ID
+
+
+      if (selector.charAt(0) === '#') {
+        selector = escapeId(selector);
       }
 
       try {
-        var $selector = $(document).find(selector);
+        var $selector = $$$1(document).find(selector);
         return $selector.length > 0 ? selector : null;
-      } catch (error) {
+      } catch (err) {
         return null;
       }
     },
@@ -29083,7 +29123,7 @@ var Util = function () {
       return element.offsetHeight;
     },
     triggerTransitionEnd: function triggerTransitionEnd(element) {
-      $(element).trigger(transition.end);
+      $$$1(element).trigger(transition.end);
     },
     supportsTransitionEnd: function supportsTransitionEnd() {
       return Boolean(transition);
@@ -29109,51 +29149,25 @@ var Util = function () {
   return Util;
 }($);
 
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-var createClass = _createClass;
-
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-
-var inheritsLoose = _inheritsLoose;
-
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): alert.js
+ * Bootstrap (v4.0.0): alert.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Alert = function () {
+var Alert = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'alert';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.alert';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var TRANSITION_DURATION = 150;
   var Selector = {
     DISMISS: '[data-dismiss="alert"]'
@@ -29180,12 +29194,12 @@ var Alert = function () {
   function () {
     function Alert(element) {
       this._element = element;
-    } // getters
+    } // Getters
 
 
     var _proto = Alert.prototype;
 
-    // public
+    // Public
     _proto.close = function close(element) {
       element = element || this._element;
 
@@ -29201,9 +29215,9 @@ var Alert = function () {
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
       this._element = null;
-    }; // private
+    }; // Private
 
 
     _proto._getRootElement = function _getRootElement(element) {
@@ -29211,46 +29225,46 @@ var Alert = function () {
       var parent = false;
 
       if (selector) {
-        parent = $(selector)[0];
+        parent = $$$1(selector)[0];
       }
 
       if (!parent) {
-        parent = $(element).closest("." + ClassName.ALERT)[0];
+        parent = $$$1(element).closest("." + ClassName.ALERT)[0];
       }
 
       return parent;
     };
 
     _proto._triggerCloseEvent = function _triggerCloseEvent(element) {
-      var closeEvent = $.Event(Event.CLOSE);
-      $(element).trigger(closeEvent);
+      var closeEvent = $$$1.Event(Event.CLOSE);
+      $$$1(element).trigger(closeEvent);
       return closeEvent;
     };
 
     _proto._removeElement = function _removeElement(element) {
       var _this = this;
 
-      $(element).removeClass(ClassName.SHOW);
+      $$$1(element).removeClass(ClassName.SHOW);
 
-      if (!Util.supportsTransitionEnd() || !$(element).hasClass(ClassName.FADE)) {
+      if (!Util.supportsTransitionEnd() || !$$$1(element).hasClass(ClassName.FADE)) {
         this._destroyElement(element);
 
         return;
       }
 
-      $(element).one(Util.TRANSITION_END, function (event) {
+      $$$1(element).one(Util.TRANSITION_END, function (event) {
         return _this._destroyElement(element, event);
       }).emulateTransitionEnd(TRANSITION_DURATION);
     };
 
     _proto._destroyElement = function _destroyElement(element) {
-      $(element).detach().trigger(Event.CLOSED).remove();
-    }; // static
+      $$$1(element).detach().trigger(Event.CLOSED).remove();
+    }; // Static
 
 
     Alert._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var $element = $(this);
+        var $element = $$$1(this);
         var data = $element.data(DATA_KEY);
 
         if (!data) {
@@ -29274,7 +29288,7 @@ var Alert = function () {
       };
     };
 
-    createClass(Alert, null, [{
+    _createClass(Alert, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -29289,18 +29303,18 @@ var Alert = function () {
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DISMISS, Alert._handleDismiss(new Alert()));
+  $$$1(document).on(Event.CLICK_DATA_API, Selector.DISMISS, Alert._handleDismiss(new Alert()));
   /**
    * ------------------------------------------------------------------------
    * jQuery
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Alert._jQueryInterface;
-  $.fn[NAME].Constructor = Alert;
+  $$$1.fn[NAME] = Alert._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Alert;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Alert._jQueryInterface;
   };
 
@@ -29309,23 +29323,23 @@ var Alert = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): button.js
+ * Bootstrap (v4.0.0): button.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Button = function () {
+var Button = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'button';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.button';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var ClassName = {
     ACTIVE: 'active',
     BUTTON: 'btn',
@@ -29354,29 +29368,29 @@ var Button = function () {
   function () {
     function Button(element) {
       this._element = element;
-    } // getters
+    } // Getters
 
 
     var _proto = Button.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle() {
       var triggerChangeEvent = true;
       var addAriaPressed = true;
-      var rootElement = $(this._element).closest(Selector.DATA_TOGGLE)[0];
+      var rootElement = $$$1(this._element).closest(Selector.DATA_TOGGLE)[0];
 
       if (rootElement) {
-        var input = $(this._element).find(Selector.INPUT)[0];
+        var input = $$$1(this._element).find(Selector.INPUT)[0];
 
         if (input) {
           if (input.type === 'radio') {
-            if (input.checked && $(this._element).hasClass(ClassName.ACTIVE)) {
+            if (input.checked && $$$1(this._element).hasClass(ClassName.ACTIVE)) {
               triggerChangeEvent = false;
             } else {
-              var activeElement = $(rootElement).find(Selector.ACTIVE)[0];
+              var activeElement = $$$1(rootElement).find(Selector.ACTIVE)[0];
 
               if (activeElement) {
-                $(activeElement).removeClass(ClassName.ACTIVE);
+                $$$1(activeElement).removeClass(ClassName.ACTIVE);
               }
             }
           }
@@ -29386,8 +29400,8 @@ var Button = function () {
               return;
             }
 
-            input.checked = !$(this._element).hasClass(ClassName.ACTIVE);
-            $(input).trigger('change');
+            input.checked = !$$$1(this._element).hasClass(ClassName.ACTIVE);
+            $$$1(input).trigger('change');
           }
 
           input.focus();
@@ -29396,27 +29410,27 @@ var Button = function () {
       }
 
       if (addAriaPressed) {
-        this._element.setAttribute('aria-pressed', !$(this._element).hasClass(ClassName.ACTIVE));
+        this._element.setAttribute('aria-pressed', !$$$1(this._element).hasClass(ClassName.ACTIVE));
       }
 
       if (triggerChangeEvent) {
-        $(this._element).toggleClass(ClassName.ACTIVE);
+        $$$1(this._element).toggleClass(ClassName.ACTIVE);
       }
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
       this._element = null;
-    }; // static
+    }; // Static
 
 
     Button._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
         if (!data) {
           data = new Button(this);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (config === 'toggle') {
@@ -29425,7 +29439,7 @@ var Button = function () {
       });
     };
 
-    createClass(Button, null, [{
+    _createClass(Button, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -29440,18 +29454,18 @@ var Button = function () {
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE_CARROT, function (event) {
+  $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE_CARROT, function (event) {
     event.preventDefault();
     var button = event.target;
 
-    if (!$(button).hasClass(ClassName.BUTTON)) {
-      button = $(button).closest(Selector.BUTTON);
+    if (!$$$1(button).hasClass(ClassName.BUTTON)) {
+      button = $$$1(button).closest(Selector.BUTTON);
     }
 
-    Button._jQueryInterface.call($(button), 'toggle');
+    Button._jQueryInterface.call($$$1(button), 'toggle');
   }).on(Event.FOCUS_BLUR_DATA_API, Selector.DATA_TOGGLE_CARROT, function (event) {
-    var button = $(event.target).closest(Selector.BUTTON)[0];
-    $(button).toggleClass(ClassName.FOCUS, /^focus(in)?$/.test(event.type));
+    var button = $$$1(event.target).closest(Selector.BUTTON)[0];
+    $$$1(button).toggleClass(ClassName.FOCUS, /^focus(in)?$/.test(event.type));
   });
   /**
    * ------------------------------------------------------------------------
@@ -29459,11 +29473,11 @@ var Button = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Button._jQueryInterface;
-  $.fn[NAME].Constructor = Button;
+  $$$1.fn[NAME] = Button._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Button;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Button._jQueryInterface;
   };
 
@@ -29472,23 +29486,23 @@ var Button = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): carousel.js
+ * Bootstrap (v4.0.0): carousel.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Carousel = function () {
+var Carousel = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'carousel';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.carousel';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var TRANSITION_DURATION = 600;
   var ARROW_LEFT_KEYCODE = 37; // KeyboardEvent.which value for left arrow key
 
@@ -29563,16 +29577,16 @@ var Carousel = function () {
       this._isSliding = false;
       this.touchTimeout = null;
       this._config = this._getConfig(config);
-      this._element = $(element)[0];
-      this._indicatorsElement = $(this._element).find(Selector.INDICATORS)[0];
+      this._element = $$$1(element)[0];
+      this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
 
       this._addEventListeners();
-    } // getters
+    } // Getters
 
 
     var _proto = Carousel.prototype;
 
-    // public
+    // Public
     _proto.next = function next() {
       if (!this._isSliding) {
         this._slide(Direction.NEXT);
@@ -29582,7 +29596,7 @@ var Carousel = function () {
     _proto.nextWhenVisible = function nextWhenVisible() {
       // Don't call next when the page isn't visible
       // or the carousel or its parent isn't visible
-      if (!document.hidden && $(this._element).is(':visible') && $(this._element).css('visibility') !== 'hidden') {
+      if (!document.hidden && $$$1(this._element).is(':visible') && $$$1(this._element).css('visibility') !== 'hidden') {
         this.next();
       }
     };
@@ -29598,7 +29612,7 @@ var Carousel = function () {
         this._isPaused = true;
       }
 
-      if ($(this._element).find(Selector.NEXT_PREV)[0] && Util.supportsTransitionEnd()) {
+      if ($$$1(this._element).find(Selector.NEXT_PREV)[0] && Util.supportsTransitionEnd()) {
         Util.triggerTransitionEnd(this._element);
         this.cycle(true);
       }
@@ -29625,7 +29639,7 @@ var Carousel = function () {
     _proto.to = function to(index) {
       var _this = this;
 
-      this._activeElement = $(this._element).find(Selector.ACTIVE_ITEM)[0];
+      this._activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
 
       var activeIndex = this._getItemIndex(this._activeElement);
 
@@ -29634,7 +29648,7 @@ var Carousel = function () {
       }
 
       if (this._isSliding) {
-        $(this._element).one(Event.SLID, function () {
+        $$$1(this._element).one(Event.SLID, function () {
           return _this.to(index);
         });
         return;
@@ -29652,8 +29666,8 @@ var Carousel = function () {
     };
 
     _proto.dispose = function dispose() {
-      $(this._element).off(EVENT_KEY);
-      $.removeData(this._element, DATA_KEY);
+      $$$1(this._element).off(EVENT_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
       this._items = null;
       this._config = null;
       this._element = null;
@@ -29662,11 +29676,11 @@ var Carousel = function () {
       this._isSliding = null;
       this._activeElement = null;
       this._indicatorsElement = null;
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
-      config = $.extend({}, Default, config);
+      config = _extends({}, Default, config);
       Util.typeCheckConfig(NAME, config, DefaultType);
       return config;
     };
@@ -29675,27 +29689,27 @@ var Carousel = function () {
       var _this2 = this;
 
       if (this._config.keyboard) {
-        $(this._element).on(Event.KEYDOWN, function (event) {
+        $$$1(this._element).on(Event.KEYDOWN, function (event) {
           return _this2._keydown(event);
         });
       }
 
       if (this._config.pause === 'hover') {
-        $(this._element).on(Event.MOUSEENTER, function (event) {
+        $$$1(this._element).on(Event.MOUSEENTER, function (event) {
           return _this2.pause(event);
         }).on(Event.MOUSELEAVE, function (event) {
           return _this2.cycle(event);
         });
 
         if ('ontouchstart' in document.documentElement) {
-          // if it's a touch-enabled device, mouseenter/leave are fired as
+          // If it's a touch-enabled device, mouseenter/leave are fired as
           // part of the mouse compatibility events on first tap - the carousel
           // would stop cycling until user tapped out of it;
           // here, we listen for touchend, explicitly pause the carousel
           // (as if it's the second time we tap on it, mouseenter compat event
           // is NOT fired) and after a timeout (to allow for mouse compatibility
           // events to fire) we explicitly restart cycling
-          $(this._element).on(Event.TOUCHEND, function () {
+          $$$1(this._element).on(Event.TOUCHEND, function () {
             _this2.pause();
 
             if (_this2.touchTimeout) {
@@ -29727,12 +29741,11 @@ var Carousel = function () {
           break;
 
         default:
-          return;
       }
     };
 
     _proto._getItemIndex = function _getItemIndex(element) {
-      this._items = $.makeArray($(element).parent().find(Selector.ITEM));
+      this._items = $$$1.makeArray($$$1(element).parent().find(Selector.ITEM));
       return this._items.indexOf(element);
     };
 
@@ -29757,26 +29770,26 @@ var Carousel = function () {
     _proto._triggerSlideEvent = function _triggerSlideEvent(relatedTarget, eventDirectionName) {
       var targetIndex = this._getItemIndex(relatedTarget);
 
-      var fromIndex = this._getItemIndex($(this._element).find(Selector.ACTIVE_ITEM)[0]);
+      var fromIndex = this._getItemIndex($$$1(this._element).find(Selector.ACTIVE_ITEM)[0]);
 
-      var slideEvent = $.Event(Event.SLIDE, {
+      var slideEvent = $$$1.Event(Event.SLIDE, {
         relatedTarget: relatedTarget,
         direction: eventDirectionName,
         from: fromIndex,
         to: targetIndex
       });
-      $(this._element).trigger(slideEvent);
+      $$$1(this._element).trigger(slideEvent);
       return slideEvent;
     };
 
     _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
       if (this._indicatorsElement) {
-        $(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+        $$$1(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
 
         var nextIndicator = this._indicatorsElement.children[this._getItemIndex(element)];
 
         if (nextIndicator) {
-          $(nextIndicator).addClass(ClassName.ACTIVE);
+          $$$1(nextIndicator).addClass(ClassName.ACTIVE);
         }
       }
     };
@@ -29784,7 +29797,7 @@ var Carousel = function () {
     _proto._slide = function _slide(direction, element) {
       var _this3 = this;
 
-      var activeElement = $(this._element).find(Selector.ACTIVE_ITEM)[0];
+      var activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
 
       var activeElementIndex = this._getItemIndex(activeElement);
 
@@ -29807,7 +29820,7 @@ var Carousel = function () {
         eventDirectionName = Direction.RIGHT;
       }
 
-      if (nextElement && $(nextElement).hasClass(ClassName.ACTIVE)) {
+      if (nextElement && $$$1(nextElement).hasClass(ClassName.ACTIVE)) {
         this._isSliding = false;
         return;
       }
@@ -29819,7 +29832,7 @@ var Carousel = function () {
       }
 
       if (!activeElement || !nextElement) {
-        // some weirdness is happening, so we bail
+        // Some weirdness is happening, so we bail
         return;
       }
 
@@ -29831,61 +29844,61 @@ var Carousel = function () {
 
       this._setActiveIndicatorElement(nextElement);
 
-      var slidEvent = $.Event(Event.SLID, {
+      var slidEvent = $$$1.Event(Event.SLID, {
         relatedTarget: nextElement,
         direction: eventDirectionName,
         from: activeElementIndex,
         to: nextElementIndex
       });
 
-      if (Util.supportsTransitionEnd() && $(this._element).hasClass(ClassName.SLIDE)) {
-        $(nextElement).addClass(orderClassName);
+      if (Util.supportsTransitionEnd() && $$$1(this._element).hasClass(ClassName.SLIDE)) {
+        $$$1(nextElement).addClass(orderClassName);
         Util.reflow(nextElement);
-        $(activeElement).addClass(directionalClassName);
-        $(nextElement).addClass(directionalClassName);
-        $(activeElement).one(Util.TRANSITION_END, function () {
-          $(nextElement).removeClass(directionalClassName + " " + orderClassName).addClass(ClassName.ACTIVE);
-          $(activeElement).removeClass(ClassName.ACTIVE + " " + orderClassName + " " + directionalClassName);
+        $$$1(activeElement).addClass(directionalClassName);
+        $$$1(nextElement).addClass(directionalClassName);
+        $$$1(activeElement).one(Util.TRANSITION_END, function () {
+          $$$1(nextElement).removeClass(directionalClassName + " " + orderClassName).addClass(ClassName.ACTIVE);
+          $$$1(activeElement).removeClass(ClassName.ACTIVE + " " + orderClassName + " " + directionalClassName);
           _this3._isSliding = false;
           setTimeout(function () {
-            return $(_this3._element).trigger(slidEvent);
+            return $$$1(_this3._element).trigger(slidEvent);
           }, 0);
         }).emulateTransitionEnd(TRANSITION_DURATION);
       } else {
-        $(activeElement).removeClass(ClassName.ACTIVE);
-        $(nextElement).addClass(ClassName.ACTIVE);
+        $$$1(activeElement).removeClass(ClassName.ACTIVE);
+        $$$1(nextElement).addClass(ClassName.ACTIVE);
         this._isSliding = false;
-        $(this._element).trigger(slidEvent);
+        $$$1(this._element).trigger(slidEvent);
       }
 
       if (isCycling) {
         this.cycle();
       }
-    }; // static
+    }; // Static
 
 
     Carousel._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
-        var _config = $.extend({}, Default, $(this).data());
+        var _config = _extends({}, Default, $$$1(this).data());
 
         if (typeof config === 'object') {
-          $.extend(_config, config);
+          _config = _extends({}, _config, config);
         }
 
         var action = typeof config === 'string' ? config : _config.slide;
 
         if (!data) {
           data = new Carousel(this, _config);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'number') {
           data.to(config);
         } else if (typeof action === 'string') {
           if (typeof data[action] === 'undefined') {
-            throw new Error("No method named \"" + action + "\"");
+            throw new TypeError("No method named \"" + action + "\"");
           }
 
           data[action]();
@@ -29903,29 +29916,29 @@ var Carousel = function () {
         return;
       }
 
-      var target = $(selector)[0];
+      var target = $$$1(selector)[0];
 
-      if (!target || !$(target).hasClass(ClassName.CAROUSEL)) {
+      if (!target || !$$$1(target).hasClass(ClassName.CAROUSEL)) {
         return;
       }
 
-      var config = $.extend({}, $(target).data(), $(this).data());
+      var config = _extends({}, $$$1(target).data(), $$$1(this).data());
       var slideIndex = this.getAttribute('data-slide-to');
 
       if (slideIndex) {
         config.interval = false;
       }
 
-      Carousel._jQueryInterface.call($(target), config);
+      Carousel._jQueryInterface.call($$$1(target), config);
 
       if (slideIndex) {
-        $(target).data(DATA_KEY).to(slideIndex);
+        $$$1(target).data(DATA_KEY).to(slideIndex);
       }
 
       event.preventDefault();
     };
 
-    createClass(Carousel, null, [{
+    _createClass(Carousel, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -29945,10 +29958,10 @@ var Carousel = function () {
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
-  $(window).on(Event.LOAD_DATA_API, function () {
-    $(Selector.DATA_RIDE).each(function () {
-      var $carousel = $(this);
+  $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
+  $$$1(window).on(Event.LOAD_DATA_API, function () {
+    $$$1(Selector.DATA_RIDE).each(function () {
+      var $carousel = $$$1(this);
 
       Carousel._jQueryInterface.call($carousel, $carousel.data());
     });
@@ -29959,11 +29972,11 @@ var Carousel = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Carousel._jQueryInterface;
-  $.fn[NAME].Constructor = Carousel;
+  $$$1.fn[NAME] = Carousel._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Carousel;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Carousel._jQueryInterface;
   };
 
@@ -29972,23 +29985,23 @@ var Carousel = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): collapse.js
+ * Bootstrap (v4.0.0): collapse.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Collapse = function () {
+var Collapse = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'collapse';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.collapse';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var TRANSITION_DURATION = 600;
   var Default = {
     toggle: true,
@@ -30033,14 +30046,16 @@ var Collapse = function () {
       this._isTransitioning = false;
       this._element = element;
       this._config = this._getConfig(config);
-      this._triggerArray = $.makeArray($("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
-      var tabToggles = $(Selector.DATA_TOGGLE);
+      this._triggerArray = $$$1.makeArray($$$1("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+      var tabToggles = $$$1(Selector.DATA_TOGGLE);
 
       for (var i = 0; i < tabToggles.length; i++) {
         var elem = tabToggles[i];
         var selector = Util.getSelectorFromElement(elem);
 
-        if (selector !== null && $(selector).filter(element).length > 0) {
+        if (selector !== null && $$$1(selector).filter(element).length > 0) {
+          this._selector = selector;
+
           this._triggerArray.push(elem);
         }
       }
@@ -30054,14 +30069,14 @@ var Collapse = function () {
       if (this._config.toggle) {
         this.toggle();
       }
-    } // getters
+    } // Getters
 
 
     var _proto = Collapse.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle() {
-      if ($(this._element).hasClass(ClassName.SHOW)) {
+      if ($$$1(this._element).hasClass(ClassName.SHOW)) {
         this.hide();
       } else {
         this.show();
@@ -30071,7 +30086,7 @@ var Collapse = function () {
     _proto.show = function show() {
       var _this = this;
 
-      if (this._isTransitioning || $(this._element).hasClass(ClassName.SHOW)) {
+      if (this._isTransitioning || $$$1(this._element).hasClass(ClassName.SHOW)) {
         return;
       }
 
@@ -30079,54 +30094,54 @@ var Collapse = function () {
       var activesData;
 
       if (this._parent) {
-        actives = $.makeArray($(this._parent).children().children(Selector.ACTIVES));
+        actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
 
-        if (!actives.length) {
+        if (actives.length === 0) {
           actives = null;
         }
       }
 
       if (actives) {
-        activesData = $(actives).data(DATA_KEY);
+        activesData = $$$1(actives).not(this._selector).data(DATA_KEY);
 
         if (activesData && activesData._isTransitioning) {
           return;
         }
       }
 
-      var startEvent = $.Event(Event.SHOW);
-      $(this._element).trigger(startEvent);
+      var startEvent = $$$1.Event(Event.SHOW);
+      $$$1(this._element).trigger(startEvent);
 
       if (startEvent.isDefaultPrevented()) {
         return;
       }
 
       if (actives) {
-        Collapse._jQueryInterface.call($(actives), 'hide');
+        Collapse._jQueryInterface.call($$$1(actives).not(this._selector), 'hide');
 
         if (!activesData) {
-          $(actives).data(DATA_KEY, null);
+          $$$1(actives).data(DATA_KEY, null);
         }
       }
 
       var dimension = this._getDimension();
 
-      $(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
+      $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
       this._element.style[dimension] = 0;
 
-      if (this._triggerArray.length) {
-        $(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
+      if (this._triggerArray.length > 0) {
+        $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
       }
 
       this.setTransitioning(true);
 
       var complete = function complete() {
-        $(_this._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).addClass(ClassName.SHOW);
+        $$$1(_this._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).addClass(ClassName.SHOW);
         _this._element.style[dimension] = '';
 
         _this.setTransitioning(false);
 
-        $(_this._element).trigger(Event.SHOWN);
+        $$$1(_this._element).trigger(Event.SHOWN);
       };
 
       if (!Util.supportsTransitionEnd()) {
@@ -30136,19 +30151,19 @@ var Collapse = function () {
 
       var capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
       var scrollSize = "scroll" + capitalizedDimension;
-      $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
+      $$$1(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
       this._element.style[dimension] = this._element[scrollSize] + "px";
     };
 
     _proto.hide = function hide() {
       var _this2 = this;
 
-      if (this._isTransitioning || !$(this._element).hasClass(ClassName.SHOW)) {
+      if (this._isTransitioning || !$$$1(this._element).hasClass(ClassName.SHOW)) {
         return;
       }
 
-      var startEvent = $.Event(Event.HIDE);
-      $(this._element).trigger(startEvent);
+      var startEvent = $$$1.Event(Event.HIDE);
+      $$$1(this._element).trigger(startEvent);
 
       if (startEvent.isDefaultPrevented()) {
         return;
@@ -30158,18 +30173,18 @@ var Collapse = function () {
 
       this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
       Util.reflow(this._element);
-      $(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
+      $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
 
-      if (this._triggerArray.length) {
+      if (this._triggerArray.length > 0) {
         for (var i = 0; i < this._triggerArray.length; i++) {
           var trigger = this._triggerArray[i];
           var selector = Util.getSelectorFromElement(trigger);
 
           if (selector !== null) {
-            var $elem = $(selector);
+            var $elem = $$$1(selector);
 
             if (!$elem.hasClass(ClassName.SHOW)) {
-              $(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
+              $$$1(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
             }
           }
         }
@@ -30180,7 +30195,7 @@ var Collapse = function () {
       var complete = function complete() {
         _this2.setTransitioning(false);
 
-        $(_this2._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).trigger(Event.HIDDEN);
+        $$$1(_this2._element).removeClass(ClassName.COLLAPSING).addClass(ClassName.COLLAPSE).trigger(Event.HIDDEN);
       };
 
       this._element.style[dimension] = '';
@@ -30190,7 +30205,7 @@ var Collapse = function () {
         return;
       }
 
-      $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
+      $$$1(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
     };
 
     _proto.setTransitioning = function setTransitioning(isTransitioning) {
@@ -30198,25 +30213,25 @@ var Collapse = function () {
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
       this._config = null;
       this._parent = null;
       this._element = null;
       this._triggerArray = null;
       this._isTransitioning = null;
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
-      config = $.extend({}, Default, config);
-      config.toggle = Boolean(config.toggle); // coerce string values
+      config = _extends({}, Default, config);
+      config.toggle = Boolean(config.toggle); // Coerce string values
 
       Util.typeCheckConfig(NAME, config, DefaultType);
       return config;
     };
 
     _proto._getDimension = function _getDimension() {
-      var hasWidth = $(this._element).hasClass(Dimension.WIDTH);
+      var hasWidth = $$$1(this._element).hasClass(Dimension.WIDTH);
       return hasWidth ? Dimension.WIDTH : Dimension.HEIGHT;
     };
 
@@ -30226,17 +30241,17 @@ var Collapse = function () {
       var parent = null;
 
       if (Util.isElement(this._config.parent)) {
-        parent = this._config.parent; // it's a jQuery object
+        parent = this._config.parent; // It's a jQuery object
 
         if (typeof this._config.parent.jquery !== 'undefined') {
           parent = this._config.parent[0];
         }
       } else {
-        parent = $(this._config.parent)[0];
+        parent = $$$1(this._config.parent)[0];
       }
 
       var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
-      $(parent).find(selector).each(function (i, element) {
+      $$$1(parent).find(selector).each(function (i, element) {
         _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
       });
       return parent;
@@ -30244,26 +30259,26 @@ var Collapse = function () {
 
     _proto._addAriaAndCollapsedClass = function _addAriaAndCollapsedClass(element, triggerArray) {
       if (element) {
-        var isOpen = $(element).hasClass(ClassName.SHOW);
+        var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-        if (triggerArray.length) {
-          $(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
+        if (triggerArray.length > 0) {
+          $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
         }
       }
-    }; // static
+    }; // Static
 
 
     Collapse._getTargetFromElement = function _getTargetFromElement(element) {
       var selector = Util.getSelectorFromElement(element);
-      return selector ? $(selector)[0] : null;
+      return selector ? $$$1(selector)[0] : null;
     };
 
     Collapse._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var $this = $(this);
+        var $this = $$$1(this);
         var data = $this.data(DATA_KEY);
 
-        var _config = $.extend({}, Default, $this.data(), typeof config === 'object' && config);
+        var _config = _extends({}, Default, $this.data(), typeof config === 'object' && config);
 
         if (!data && _config.toggle && /show|hide/.test(config)) {
           _config.toggle = false;
@@ -30276,7 +30291,7 @@ var Collapse = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -30284,7 +30299,7 @@ var Collapse = function () {
       });
     };
 
-    createClass(Collapse, null, [{
+    _createClass(Collapse, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -30304,16 +30319,16 @@ var Collapse = function () {
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
+  $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
     // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
     if (event.currentTarget.tagName === 'A') {
       event.preventDefault();
     }
 
-    var $trigger = $(this);
+    var $trigger = $$$1(this);
     var selector = Util.getSelectorFromElement(this);
-    $(selector).each(function () {
-      var $target = $(this);
+    $$$1(selector).each(function () {
+      var $target = $$$1(this);
       var data = $target.data(DATA_KEY);
       var config = data ? 'toggle' : $trigger.data();
 
@@ -30326,11 +30341,11 @@ var Collapse = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Collapse._jQueryInterface;
-  $.fn[NAME].Constructor = Collapse;
+  $$$1.fn[NAME] = Collapse._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Collapse;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Collapse._jQueryInterface;
   };
 
@@ -30339,7 +30354,7 @@ var Collapse = function () {
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.5
+ * @version 1.12.9
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -30361,22 +30376,7 @@ var Collapse = function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var nativeHints = ['native code', '[object MutationObserverConstructor]'];
-
-/**
- * Determine if a function is implemented natively (as opposed to a polyfill).
- * @method
- * @memberof Popper.Utils
- * @argument {Function | undefined} fn the function to check
- * @returns {Boolean}
- */
-var isNative = (function (fn) {
-  return nativeHints.some(function (hint) {
-    return (fn || '').toString().indexOf(hint) > -1;
-  });
-});
-
-var isBrowser = typeof window !== 'undefined';
+var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -30387,26 +30387,16 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  var scheduled = false;
-  var i = 0;
-  var elem = document.createElement('span');
-
-  // MutationObserver provides a mechanism for scheduling microtasks, which
-  // are scheduled *before* the next task. This gives us a way to debounce
-  // a function but ensure it's called *before* the next paint.
-  var observer = new MutationObserver(function () {
-    fn();
-    scheduled = false;
-  });
-
-  observer.observe(elem, { attributes: true });
-
+  var called = false;
   return function () {
-    if (!scheduled) {
-      scheduled = true;
-      elem.setAttribute('x-index', i);
-      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
+    if (called) {
+      return;
     }
+    called = true;
+    window.Promise.resolve().then(function () {
+      called = false;
+      fn();
+    });
   };
 }
 
@@ -30423,11 +30413,7 @@ function taskDebounce(fn) {
   };
 }
 
-// It's common for MutationObserver polyfills to be seen in the wild, however
-// these rely on Mutation Events which only occur when an element is connected
-// to the DOM. The algorithm used in this module does not use a connected element,
-// and so we must ensure that a *native* MutationObserver is available.
-var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
+var supportsMicroTasks = isBrowser && window.Promise;
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
@@ -30438,7 +30424,7 @@ var supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserv
 * @argument {Function} fn
 * @returns {Function}
 */
-var debounce = supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;
+var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
 
 /**
  * Check if the given variable is a function
@@ -30464,7 +30450,7 @@ function getStyleComputedProperty(element, property) {
     return [];
   }
   // NOTE: 1 DOM access here
-  var css = window.getComputedStyle(element, null);
+  var css = getComputedStyle(element, null);
   return property ? css[property] : css;
 }
 
@@ -30491,8 +30477,16 @@ function getParentNode(element) {
  */
 function getScrollParent(element) {
   // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-  if (!element || ['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
-    return window.document.body;
+  if (!element) {
+    return document.body;
+  }
+
+  switch (element.nodeName) {
+    case 'HTML':
+    case 'BODY':
+      return element.ownerDocument.body;
+    case '#document':
+      return element.body;
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
@@ -30522,7 +30516,11 @@ function getOffsetParent(element) {
   var nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
-    return window.document.documentElement;
+    if (element) {
+      return element.ownerDocument.documentElement;
+    }
+
+    return document.documentElement;
   }
 
   // .offsetParent will return the closest TD or TABLE in case
@@ -30569,7 +30567,7 @@ function getRoot(node) {
 function findCommonOffsetParent(element1, element2) {
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason
   if (!element1 || !element1.nodeType || !element2 || !element2.nodeType) {
-    return window.document.documentElement;
+    return document.documentElement;
   }
 
   // Here we make sure to give as "start" the element that comes first in the DOM
@@ -30617,8 +30615,8 @@ function getScroll(element) {
   var nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    var html = window.document.documentElement;
-    var scrollingElement = window.document.scrollingElement || html;
+    var html = element.ownerDocument.documentElement;
+    var scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
   }
 
@@ -30661,7 +30659,7 @@ function getBordersSize(styles, axis) {
   var sideA = axis === 'x' ? 'Left' : 'Top';
   var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
 
-  return +styles['border' + sideA + 'Width'].split('px')[0] + +styles['border' + sideB + 'Width'].split('px')[0];
+  return parseFloat(styles['border' + sideA + 'Width'], 10) + parseFloat(styles['border' + sideB + 'Width'], 10);
 }
 
 /**
@@ -30684,9 +30682,9 @@ function getSize(axis, body, html, computedStyle) {
 }
 
 function getWindowSizes() {
-  var body = window.document.body;
-  var html = window.document.documentElement;
-  var computedStyle = isIE10$1() && window.getComputedStyle(html);
+  var body = document.body;
+  var html = document.documentElement;
+  var computedStyle = isIE10$1() && getComputedStyle(html);
 
   return {
     height: getSize('Height', body, html, computedStyle),
@@ -30700,7 +30698,7 @@ var classCallCheck = function (instance, Constructor) {
   }
 };
 
-var createClass$1 = function () {
+var createClass = function () {
   function defineProperties(target, props) {
     for (var i = 0; i < props.length; i++) {
       var descriptor = props[i];
@@ -30829,8 +30827,8 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   var scrollParent = getScrollParent(children);
 
   var styles = getStyleComputedProperty(parent);
-  var borderTopWidth = +styles.borderTopWidth.split('px')[0];
-  var borderLeftWidth = +styles.borderLeftWidth.split('px')[0];
+  var borderTopWidth = parseFloat(styles.borderTopWidth, 10);
+  var borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
 
   var offsets = getClientRect({
     top: childrenRect.top - parentRect.top - borderTopWidth,
@@ -30846,8 +30844,8 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   // differently when margins are applied to it. The margins are included in
   // the box of the documentElement, in the other cases not.
   if (!isIE10 && isHTML) {
-    var marginTop = +styles.marginTop.split('px')[0];
-    var marginLeft = +styles.marginLeft.split('px')[0];
+    var marginTop = parseFloat(styles.marginTop, 10);
+    var marginLeft = parseFloat(styles.marginLeft, 10);
 
     offsets.top -= borderTopWidth - marginTop;
     offsets.bottom -= borderTopWidth - marginTop;
@@ -30867,7 +30865,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
 }
 
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  var html = window.document.documentElement;
+  var html = element.ownerDocument.documentElement;
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
@@ -30926,12 +30924,12 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
     // Handle other cases based on DOM element used as boundaries
     var boundariesNode = void 0;
     if (boundariesElement === 'scrollParent') {
-      boundariesNode = getScrollParent(getParentNode(popper));
+      boundariesNode = getScrollParent(getParentNode(reference));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = window.document.documentElement;
+        boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = window.document.documentElement;
+      boundariesNode = popper.ownerDocument.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -31052,7 +31050,7 @@ function getReferenceOffsets(state, popper, reference) {
  * @returns {Object} object containing width and height properties
  */
 function getOuterSizes(element) {
-  var styles = window.getComputedStyle(element);
+  var styles = getComputedStyle(element);
   var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
   var result = {
@@ -31172,10 +31170,11 @@ function runModifiers(modifiers, data, ends) {
   var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(function (modifier) {
-    if (modifier.function) {
+    if (modifier['function']) {
+      // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    var fn = modifier.function || modifier.fn;
+    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
@@ -31268,7 +31267,7 @@ function getSupportedPropertyName(property) {
   for (var i = 0; i < prefixes.length - 1; i++) {
     var prefix = prefixes[i];
     var toCheck = prefix ? '' + prefix + upperProp : property;
-    if (typeof window.document.body.style[toCheck] !== 'undefined') {
+    if (typeof document.body.style[toCheck] !== 'undefined') {
       return toCheck;
     }
   }
@@ -31302,9 +31301,19 @@ function destroy() {
   return this;
 }
 
+/**
+ * Get the window associated with the element
+ * @argument {Element} element
+ * @returns {Window}
+ */
+function getWindow(element) {
+  var ownerDocument = element.ownerDocument;
+  return ownerDocument ? ownerDocument.defaultView : window;
+}
+
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   var isBody = scrollParent.nodeName === 'BODY';
-  var target = isBody ? window : scrollParent;
+  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
@@ -31322,7 +31331,7 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
 function setupEventListeners(reference, options, state, updateBound) {
   // Resize event listener on window
   state.updateBound = updateBound;
-  window.addEventListener('resize', state.updateBound, { passive: true });
+  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   var scrollElement = getScrollParent(reference);
@@ -31353,7 +31362,7 @@ function enableEventListeners() {
  */
 function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  getWindow(reference).removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(function (target) {
@@ -31377,7 +31386,7 @@ function removeEventListeners(reference, state) {
  */
 function disableEventListeners() {
   if (this.state.eventsEnabled) {
-    window.cancelAnimationFrame(this.scheduleUpdate);
+    cancelAnimationFrame(this.scheduleUpdate);
     this.state = removeEventListeners(this.reference, this.state);
   }
 }
@@ -31617,6 +31626,8 @@ function isModifierRequired(modifiers, requestingName, requestedName) {
  * @returns {Object} The data object, properly modified
  */
 function arrow(data, options) {
+  var _data$offsets$arrow;
+
   // arrow depends on keepTogether in order to work
   if (!isModifierRequired(data.instance.modifiers, 'arrow', 'keepTogether')) {
     return data;
@@ -31668,22 +31679,23 @@ function arrow(data, options) {
   if (reference[side] + arrowElementSize > popper[opSide]) {
     data.offsets.popper[side] += reference[side] + arrowElementSize - popper[opSide];
   }
+  data.offsets.popper = getClientRect(data.offsets.popper);
 
   // compute center of the popper
   var center = reference[side] + reference[len] / 2 - arrowElementSize / 2;
 
   // Compute the sideValue using the updated popper offsets
   // take popper margin in account because we don't have this info available
-  var popperMarginSide = getStyleComputedProperty(data.instance.popper, 'margin' + sideCapitalized).replace('px', '');
-  var sideValue = center - getClientRect(data.offsets.popper)[side] - popperMarginSide;
+  var css = getStyleComputedProperty(data.instance.popper);
+  var popperMarginSide = parseFloat(css['margin' + sideCapitalized], 10);
+  var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width'], 10);
+  var sideValue = center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
 
   // prevent arrowElement from being placed not contiguously to its popper
   sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
 
   data.arrowElement = arrowElement;
-  data.offsets.arrow = {};
-  data.offsets.arrow[side] = Math.round(sideValue);
-  data.offsets.arrow[altSide] = ''; // make sure to unset any eventual altSide value from the DOM node
+  data.offsets.arrow = (_data$offsets$arrow = {}, defineProperty(_data$offsets$arrow, side, Math.round(sideValue)), defineProperty(_data$offsets$arrow, altSide, ''), _data$offsets$arrow);
 
   return data;
 }
@@ -32655,8 +32667,8 @@ var Popper = function () {
     };
 
     // get reference and popper elements (allow jQuery wrappers)
-    this.reference = reference.jquery ? reference[0] : reference;
-    this.popper = popper.jquery ? popper[0] : popper;
+    this.reference = reference && reference.jquery ? reference[0] : reference;
+    this.popper = popper && popper.jquery ? popper[0] : popper;
 
     // Deep merge modifiers options
     this.options.modifiers = {};
@@ -32701,7 +32713,7 @@ var Popper = function () {
   // class prototype and break stuff like Sinon stubs
 
 
-  createClass$1(Popper, [{
+  createClass(Popper, [{
     key: 'update',
     value: function update$$1() {
       return update.call(this);
@@ -32777,32 +32789,23 @@ Popper.Defaults = Defaults;
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): dropdown.js
+ * Bootstrap (v4.0.0): dropdown.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Dropdown = function () {
-  /**
-   * Check for Popper dependency
-   * Popper - https://popper.js.org
-   */
-  if (typeof Popper === 'undefined') {
-    throw new Error('Bootstrap dropdown require Popper.js (https://popper.js.org)');
-  }
+var Dropdown = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
-
-
   var NAME = 'dropdown';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.dropdown';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
 
   var SPACE_KEYCODE = 32; // KeyboardEvent.which value for space key
@@ -32830,8 +32833,11 @@ var Dropdown = function () {
     DISABLED: 'disabled',
     SHOW: 'show',
     DROPUP: 'dropup',
+    DROPRIGHT: 'dropright',
+    DROPLEFT: 'dropleft',
     MENURIGHT: 'dropdown-menu-right',
-    MENULEFT: 'dropdown-menu-left'
+    MENULEFT: 'dropdown-menu-left',
+    POSITION_STATIC: 'position-static'
   };
   var Selector = {
     DATA_TOGGLE: '[data-toggle="dropdown"]',
@@ -32844,15 +32850,21 @@ var Dropdown = function () {
     TOP: 'top-start',
     TOPEND: 'top-end',
     BOTTOM: 'bottom-start',
-    BOTTOMEND: 'bottom-end'
+    BOTTOMEND: 'bottom-end',
+    RIGHT: 'right-start',
+    RIGHTEND: 'right-end',
+    LEFT: 'left-start',
+    LEFTEND: 'left-end'
   };
   var Default = {
     offset: 0,
-    flip: true
+    flip: true,
+    boundary: 'scrollParent'
   };
   var DefaultType = {
     offset: '(number|string|function)',
-    flip: 'boolean'
+    flip: 'boolean',
+    boundary: '(string|element)'
     /**
      * ------------------------------------------------------------------------
      * Class Definition
@@ -32872,20 +32884,20 @@ var Dropdown = function () {
       this._inNavbar = this._detectNavbar();
 
       this._addEventListeners();
-    } // getters
+    } // Getters
 
 
     var _proto = Dropdown.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle() {
-      if (this._element.disabled || $(this._element).hasClass(ClassName.DISABLED)) {
+      if (this._element.disabled || $$$1(this._element).hasClass(ClassName.DISABLED)) {
         return;
       }
 
       var parent = Dropdown._getParentFromElement(this._element);
 
-      var isActive = $(this._menu).hasClass(ClassName.SHOW);
+      var isActive = $$$1(this._menu).hasClass(ClassName.SHOW);
 
       Dropdown._clearMenus();
 
@@ -32896,49 +32908,68 @@ var Dropdown = function () {
       var relatedTarget = {
         relatedTarget: this._element
       };
-      var showEvent = $.Event(Event.SHOW, relatedTarget);
-      $(parent).trigger(showEvent);
+      var showEvent = $$$1.Event(Event.SHOW, relatedTarget);
+      $$$1(parent).trigger(showEvent);
 
       if (showEvent.isDefaultPrevented()) {
         return;
-      }
+      } // Disable totally Popper.js for Dropdown in Navbar
 
-      var element = this._element; // for dropup with alignment we use the parent as popper container
 
-      if ($(parent).hasClass(ClassName.DROPUP)) {
-        if ($(this._menu).hasClass(ClassName.MENULEFT) || $(this._menu).hasClass(ClassName.MENURIGHT)) {
-          element = parent;
+      if (!this._inNavbar) {
+        /**
+         * Check for Popper dependency
+         * Popper - https://popper.js.org
+         */
+        if (typeof Popper === 'undefined') {
+          throw new TypeError('Bootstrap dropdown require Popper.js (https://popper.js.org)');
         }
-      }
 
-      this._popper = new Popper(element, this._menu, this._getPopperConfig()); // if this is a touch-enabled device we add extra
+        var element = this._element; // For dropup with alignment we use the parent as popper container
+
+        if ($$$1(parent).hasClass(ClassName.DROPUP)) {
+          if ($$$1(this._menu).hasClass(ClassName.MENULEFT) || $$$1(this._menu).hasClass(ClassName.MENURIGHT)) {
+            element = parent;
+          }
+        } // If boundary is not `scrollParent`, then set position to `static`
+        // to allow the menu to "escape" the scroll parent's boundaries
+        // https://github.com/twbs/bootstrap/issues/24251
+
+
+        if (this._config.boundary !== 'scrollParent') {
+          $$$1(parent).addClass(ClassName.POSITION_STATIC);
+        }
+
+        this._popper = new Popper(element, this._menu, this._getPopperConfig());
+      } // If this is a touch-enabled device we add extra
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
       // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
-      if ('ontouchstart' in document.documentElement && !$(parent).closest(Selector.NAVBAR_NAV).length) {
-        $('body').children().on('mouseover', null, $.noop);
+
+      if ('ontouchstart' in document.documentElement && $$$1(parent).closest(Selector.NAVBAR_NAV).length === 0) {
+        $$$1('body').children().on('mouseover', null, $$$1.noop);
       }
 
       this._element.focus();
 
       this._element.setAttribute('aria-expanded', true);
 
-      $(this._menu).toggleClass(ClassName.SHOW);
-      $(parent).toggleClass(ClassName.SHOW).trigger($.Event(Event.SHOWN, relatedTarget));
+      $$$1(this._menu).toggleClass(ClassName.SHOW);
+      $$$1(parent).toggleClass(ClassName.SHOW).trigger($$$1.Event(Event.SHOWN, relatedTarget));
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
-      $(this._element).off(EVENT_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
+      $$$1(this._element).off(EVENT_KEY);
       this._element = null;
       this._menu = null;
 
       if (this._popper !== null) {
         this._popper.destroy();
-      }
 
-      this._popper = null;
+        this._popper = null;
+      }
     };
 
     _proto.update = function update() {
@@ -32947,13 +32978,13 @@ var Dropdown = function () {
       if (this._popper !== null) {
         this._popper.scheduleUpdate();
       }
-    }; // private
+    }; // Private
 
 
     _proto._addEventListeners = function _addEventListeners() {
       var _this = this;
 
-      $(this._element).on(Event.CLICK, function (event) {
+      $$$1(this._element).on(Event.CLICK, function (event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -32962,7 +32993,7 @@ var Dropdown = function () {
     };
 
     _proto._getConfig = function _getConfig(config) {
-      config = $.extend({}, this.constructor.Default, $(this._element).data(), config);
+      config = _extends({}, this.constructor.Default, $$$1(this._element).data(), config);
       Util.typeCheckConfig(NAME, config, this.constructor.DefaultType);
       return config;
     };
@@ -32971,23 +33002,27 @@ var Dropdown = function () {
       if (!this._menu) {
         var parent = Dropdown._getParentFromElement(this._element);
 
-        this._menu = $(parent).find(Selector.MENU)[0];
+        this._menu = $$$1(parent).find(Selector.MENU)[0];
       }
 
       return this._menu;
     };
 
     _proto._getPlacement = function _getPlacement() {
-      var $parentDropdown = $(this._element).parent();
+      var $parentDropdown = $$$1(this._element).parent();
       var placement = AttachmentMap.BOTTOM; // Handle dropup
 
       if ($parentDropdown.hasClass(ClassName.DROPUP)) {
         placement = AttachmentMap.TOP;
 
-        if ($(this._menu).hasClass(ClassName.MENURIGHT)) {
+        if ($$$1(this._menu).hasClass(ClassName.MENURIGHT)) {
           placement = AttachmentMap.TOPEND;
         }
-      } else if ($(this._menu).hasClass(ClassName.MENURIGHT)) {
+      } else if ($parentDropdown.hasClass(ClassName.DROPRIGHT)) {
+        placement = AttachmentMap.RIGHT;
+      } else if ($parentDropdown.hasClass(ClassName.DROPLEFT)) {
+        placement = AttachmentMap.LEFT;
+      } else if ($$$1(this._menu).hasClass(ClassName.MENURIGHT)) {
         placement = AttachmentMap.BOTTOMEND;
       }
 
@@ -32995,7 +33030,7 @@ var Dropdown = function () {
     };
 
     _proto._detectNavbar = function _detectNavbar() {
-      return $(this._element).closest('.navbar').length > 0;
+      return $$$1(this._element).closest('.navbar').length > 0;
     };
 
     _proto._getPopperConfig = function _getPopperConfig() {
@@ -33005,7 +33040,7 @@ var Dropdown = function () {
 
       if (typeof this._config.offset === 'function') {
         offsetConf.fn = function (data) {
-          data.offsets = $.extend({}, data.offsets, _this2._config.offset(data.offsets) || {});
+          data.offsets = _extends({}, data.offsets, _this2._config.offset(data.offsets) || {});
           return data;
         };
       } else {
@@ -33018,35 +33053,30 @@ var Dropdown = function () {
           offset: offsetConf,
           flip: {
             enabled: this._config.flip
+          },
+          preventOverflow: {
+            boundariesElement: this._config.boundary
           }
-        } // Disable Popper.js for Dropdown in Navbar
-
+        }
       };
-
-      if (this._inNavbar) {
-        popperConfig.modifiers.applyStyle = {
-          enabled: !this._inNavbar
-        };
-      }
-
       return popperConfig;
-    }; // static
+    }; // Static
 
 
     Dropdown._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
         var _config = typeof config === 'object' ? config : null;
 
         if (!data) {
           data = new Dropdown(this, _config);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -33059,12 +33089,12 @@ var Dropdown = function () {
         return;
       }
 
-      var toggles = $.makeArray($(Selector.DATA_TOGGLE));
+      var toggles = $$$1.makeArray($$$1(Selector.DATA_TOGGLE));
 
       for (var i = 0; i < toggles.length; i++) {
         var parent = Dropdown._getParentFromElement(toggles[i]);
 
-        var context = $(toggles[i]).data(DATA_KEY);
+        var context = $$$1(toggles[i]).data(DATA_KEY);
         var relatedTarget = {
           relatedTarget: toggles[i]
         };
@@ -33075,30 +33105,30 @@ var Dropdown = function () {
 
         var dropdownMenu = context._menu;
 
-        if (!$(parent).hasClass(ClassName.SHOW)) {
+        if (!$$$1(parent).hasClass(ClassName.SHOW)) {
           continue;
         }
 
-        if (event && (event.type === 'click' && /input|textarea/i.test(event.target.tagName) || event.type === 'keyup' && event.which === TAB_KEYCODE) && $.contains(parent, event.target)) {
+        if (event && (event.type === 'click' && /input|textarea/i.test(event.target.tagName) || event.type === 'keyup' && event.which === TAB_KEYCODE) && $$$1.contains(parent, event.target)) {
           continue;
         }
 
-        var hideEvent = $.Event(Event.HIDE, relatedTarget);
-        $(parent).trigger(hideEvent);
+        var hideEvent = $$$1.Event(Event.HIDE, relatedTarget);
+        $$$1(parent).trigger(hideEvent);
 
         if (hideEvent.isDefaultPrevented()) {
           continue;
-        } // if this is a touch-enabled device we remove the extra
+        } // If this is a touch-enabled device we remove the extra
         // empty mouseover listeners we added for iOS support
 
 
         if ('ontouchstart' in document.documentElement) {
-          $('body').children().off('mouseover', null, $.noop);
+          $$$1('body').children().off('mouseover', null, $$$1.noop);
         }
 
         toggles[i].setAttribute('aria-expanded', 'false');
-        $(dropdownMenu).removeClass(ClassName.SHOW);
-        $(parent).removeClass(ClassName.SHOW).trigger($.Event(Event.HIDDEN, relatedTarget));
+        $$$1(dropdownMenu).removeClass(ClassName.SHOW);
+        $$$1(parent).removeClass(ClassName.SHOW).trigger($$$1.Event(Event.HIDDEN, relatedTarget));
       }
     };
 
@@ -33107,53 +33137,61 @@ var Dropdown = function () {
       var selector = Util.getSelectorFromElement(element);
 
       if (selector) {
-        parent = $(selector)[0];
+        parent = $$$1(selector)[0];
       }
 
       return parent || element.parentNode;
-    };
+    }; // eslint-disable-next-line complexity
+
 
     Dropdown._dataApiKeydownHandler = function _dataApiKeydownHandler(event) {
-      if (!REGEXP_KEYDOWN.test(event.which) || /button/i.test(event.target.tagName) && event.which === SPACE_KEYCODE || /input|textarea/i.test(event.target.tagName)) {
+      // If not input/textarea:
+      //  - And not a key in REGEXP_KEYDOWN => not a dropdown command
+      // If input/textarea:
+      //  - If space key => not a dropdown command
+      //  - If key is other than escape
+      //    - If key is not up or down => not a dropdown command
+      //    - If trigger inside the menu => not a dropdown command
+      if (/input|textarea/i.test(event.target.tagName) ? event.which === SPACE_KEYCODE || event.which !== ESCAPE_KEYCODE && (event.which !== ARROW_DOWN_KEYCODE && event.which !== ARROW_UP_KEYCODE || $$$1(event.target).closest(Selector.MENU).length) : !REGEXP_KEYDOWN.test(event.which)) {
         return;
       }
 
       event.preventDefault();
       event.stopPropagation();
 
-      if (this.disabled || $(this).hasClass(ClassName.DISABLED)) {
+      if (this.disabled || $$$1(this).hasClass(ClassName.DISABLED)) {
         return;
       }
 
       var parent = Dropdown._getParentFromElement(this);
 
-      var isActive = $(parent).hasClass(ClassName.SHOW);
+      var isActive = $$$1(parent).hasClass(ClassName.SHOW);
 
       if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
         if (event.which === ESCAPE_KEYCODE) {
-          var toggle = $(parent).find(Selector.DATA_TOGGLE)[0];
-          $(toggle).trigger('focus');
+          var toggle = $$$1(parent).find(Selector.DATA_TOGGLE)[0];
+          $$$1(toggle).trigger('focus');
         }
 
-        $(this).trigger('click');
+        $$$1(this).trigger('click');
         return;
       }
 
-      var items = $(parent).find(Selector.VISIBLE_ITEMS).get();
+      var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
 
-      if (!items.length) {
+      if (items.length === 0) {
         return;
       }
 
       var index = items.indexOf(event.target);
 
       if (event.which === ARROW_UP_KEYCODE && index > 0) {
-        // up
+        // Up
         index--;
       }
 
       if (event.which === ARROW_DOWN_KEYCODE && index < items.length - 1) {
-        // down
+        // Down
         index++;
       }
 
@@ -33164,7 +33202,7 @@ var Dropdown = function () {
       items[index].focus();
     };
 
-    createClass(Dropdown, null, [{
+    _createClass(Dropdown, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -33189,11 +33227,11 @@ var Dropdown = function () {
    */
 
 
-  $(document).on(Event.KEYDOWN_DATA_API, Selector.DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(Event.KEYDOWN_DATA_API, Selector.MENU, Dropdown._dataApiKeydownHandler).on(Event.CLICK_DATA_API + " " + Event.KEYUP_DATA_API, Dropdown._clearMenus).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
+  $$$1(document).on(Event.KEYDOWN_DATA_API, Selector.DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(Event.KEYDOWN_DATA_API, Selector.MENU, Dropdown._dataApiKeydownHandler).on(Event.CLICK_DATA_API + " " + Event.KEYUP_DATA_API, Dropdown._clearMenus).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
     event.preventDefault();
     event.stopPropagation();
 
-    Dropdown._jQueryInterface.call($(this), 'toggle');
+    Dropdown._jQueryInterface.call($$$1(this), 'toggle');
   }).on(Event.CLICK_DATA_API, Selector.FORM_CHILD, function (e) {
     e.stopPropagation();
   });
@@ -33203,11 +33241,11 @@ var Dropdown = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Dropdown._jQueryInterface;
-  $.fn[NAME].Constructor = Dropdown;
+  $$$1.fn[NAME] = Dropdown._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Dropdown;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Dropdown._jQueryInterface;
   };
 
@@ -33216,23 +33254,23 @@ var Dropdown = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): modal.js
+ * Bootstrap (v4.0.0): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Modal = function () {
+var Modal = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'modal';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.modal';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var TRANSITION_DURATION = 300;
   var BACKDROP_TRANSITION_DURATION = 150;
   var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
@@ -33290,19 +33328,19 @@ var Modal = function () {
     function Modal(element, config) {
       this._config = this._getConfig(config);
       this._element = element;
-      this._dialog = $(element).find(Selector.DIALOG)[0];
+      this._dialog = $$$1(element).find(Selector.DIALOG)[0];
       this._backdrop = null;
       this._isShown = false;
       this._isBodyOverflowing = false;
       this._ignoreBackdropClick = false;
       this._originalBodyPadding = 0;
       this._scrollbarWidth = 0;
-    } // getters
+    } // Getters
 
 
     var _proto = Modal.prototype;
 
-    // public
+    // Public
     _proto.toggle = function toggle(relatedTarget) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     };
@@ -33314,14 +33352,14 @@ var Modal = function () {
         return;
       }
 
-      if (Util.supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE)) {
+      if (Util.supportsTransitionEnd() && $$$1(this._element).hasClass(ClassName.FADE)) {
         this._isTransitioning = true;
       }
 
-      var showEvent = $.Event(Event.SHOW, {
+      var showEvent = $$$1.Event(Event.SHOW, {
         relatedTarget: relatedTarget
       });
-      $(this._element).trigger(showEvent);
+      $$$1(this._element).trigger(showEvent);
 
       if (this._isShown || showEvent.isDefaultPrevented()) {
         return;
@@ -33335,18 +33373,18 @@ var Modal = function () {
 
       this._adjustDialog();
 
-      $(document.body).addClass(ClassName.OPEN);
+      $$$1(document.body).addClass(ClassName.OPEN);
 
       this._setEscapeEvent();
 
       this._setResizeEvent();
 
-      $(this._element).on(Event.CLICK_DISMISS, Selector.DATA_DISMISS, function (event) {
+      $$$1(this._element).on(Event.CLICK_DISMISS, Selector.DATA_DISMISS, function (event) {
         return _this.hide(event);
       });
-      $(this._dialog).on(Event.MOUSEDOWN_DISMISS, function () {
-        $(_this._element).one(Event.MOUSEUP_DISMISS, function (event) {
-          if ($(event.target).is(_this._element)) {
+      $$$1(this._dialog).on(Event.MOUSEDOWN_DISMISS, function () {
+        $$$1(_this._element).one(Event.MOUSEUP_DISMISS, function (event) {
+          if ($$$1(event.target).is(_this._element)) {
             _this._ignoreBackdropClick = true;
           }
         });
@@ -33368,15 +33406,15 @@ var Modal = function () {
         return;
       }
 
-      var hideEvent = $.Event(Event.HIDE);
-      $(this._element).trigger(hideEvent);
+      var hideEvent = $$$1.Event(Event.HIDE);
+      $$$1(this._element).trigger(hideEvent);
 
       if (!this._isShown || hideEvent.isDefaultPrevented()) {
         return;
       }
 
       this._isShown = false;
-      var transition = Util.supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE);
+      var transition = Util.supportsTransitionEnd() && $$$1(this._element).hasClass(ClassName.FADE);
 
       if (transition) {
         this._isTransitioning = true;
@@ -33386,13 +33424,13 @@ var Modal = function () {
 
       this._setResizeEvent();
 
-      $(document).off(Event.FOCUSIN);
-      $(this._element).removeClass(ClassName.SHOW);
-      $(this._element).off(Event.CLICK_DISMISS);
-      $(this._dialog).off(Event.MOUSEDOWN_DISMISS);
+      $$$1(document).off(Event.FOCUSIN);
+      $$$1(this._element).removeClass(ClassName.SHOW);
+      $$$1(this._element).off(Event.CLICK_DISMISS);
+      $$$1(this._dialog).off(Event.MOUSEDOWN_DISMISS);
 
       if (transition) {
-        $(this._element).one(Util.TRANSITION_END, function (event) {
+        $$$1(this._element).one(Util.TRANSITION_END, function (event) {
           return _this2._hideModal(event);
         }).emulateTransitionEnd(TRANSITION_DURATION);
       } else {
@@ -33401,8 +33439,8 @@ var Modal = function () {
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
-      $(window, document, this._element, this._backdrop).off(EVENT_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
+      $$$1(window, document, this._element, this._backdrop).off(EVENT_KEY);
       this._config = null;
       this._element = null;
       this._dialog = null;
@@ -33415,11 +33453,11 @@ var Modal = function () {
 
     _proto.handleUpdate = function handleUpdate() {
       this._adjustDialog();
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
-      config = $.extend({}, Default, config);
+      config = _extends({}, Default, config);
       Util.typeCheckConfig(NAME, config, DefaultType);
       return config;
     };
@@ -33427,10 +33465,10 @@ var Modal = function () {
     _proto._showElement = function _showElement(relatedTarget) {
       var _this3 = this;
 
-      var transition = Util.supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE);
+      var transition = Util.supportsTransitionEnd() && $$$1(this._element).hasClass(ClassName.FADE);
 
       if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
-        // don't move modals dom position
+        // Don't move modal's DOM position
         document.body.appendChild(this._element);
       }
 
@@ -33444,13 +33482,13 @@ var Modal = function () {
         Util.reflow(this._element);
       }
 
-      $(this._element).addClass(ClassName.SHOW);
+      $$$1(this._element).addClass(ClassName.SHOW);
 
       if (this._config.focus) {
         this._enforceFocus();
       }
 
-      var shownEvent = $.Event(Event.SHOWN, {
+      var shownEvent = $$$1.Event(Event.SHOWN, {
         relatedTarget: relatedTarget
       });
 
@@ -33460,11 +33498,11 @@ var Modal = function () {
         }
 
         _this3._isTransitioning = false;
-        $(_this3._element).trigger(shownEvent);
+        $$$1(_this3._element).trigger(shownEvent);
       };
 
       if (transition) {
-        $(this._dialog).one(Util.TRANSITION_END, transitionComplete).emulateTransitionEnd(TRANSITION_DURATION);
+        $$$1(this._dialog).one(Util.TRANSITION_END, transitionComplete).emulateTransitionEnd(TRANSITION_DURATION);
       } else {
         transitionComplete();
       }
@@ -33473,9 +33511,9 @@ var Modal = function () {
     _proto._enforceFocus = function _enforceFocus() {
       var _this4 = this;
 
-      $(document).off(Event.FOCUSIN) // guard against infinite focus loop
+      $$$1(document).off(Event.FOCUSIN) // Guard against infinite focus loop
       .on(Event.FOCUSIN, function (event) {
-        if (document !== event.target && _this4._element !== event.target && !$(_this4._element).has(event.target).length) {
+        if (document !== event.target && _this4._element !== event.target && $$$1(_this4._element).has(event.target).length === 0) {
           _this4._element.focus();
         }
       });
@@ -33485,7 +33523,7 @@ var Modal = function () {
       var _this5 = this;
 
       if (this._isShown && this._config.keyboard) {
-        $(this._element).on(Event.KEYDOWN_DISMISS, function (event) {
+        $$$1(this._element).on(Event.KEYDOWN_DISMISS, function (event) {
           if (event.which === ESCAPE_KEYCODE) {
             event.preventDefault();
 
@@ -33493,7 +33531,7 @@ var Modal = function () {
           }
         });
       } else if (!this._isShown) {
-        $(this._element).off(Event.KEYDOWN_DISMISS);
+        $$$1(this._element).off(Event.KEYDOWN_DISMISS);
       }
     };
 
@@ -33501,11 +33539,11 @@ var Modal = function () {
       var _this6 = this;
 
       if (this._isShown) {
-        $(window).on(Event.RESIZE, function (event) {
+        $$$1(window).on(Event.RESIZE, function (event) {
           return _this6.handleUpdate(event);
         });
       } else {
-        $(window).off(Event.RESIZE);
+        $$$1(window).off(Event.RESIZE);
       }
     };
 
@@ -33519,19 +33557,19 @@ var Modal = function () {
       this._isTransitioning = false;
 
       this._showBackdrop(function () {
-        $(document.body).removeClass(ClassName.OPEN);
+        $$$1(document.body).removeClass(ClassName.OPEN);
 
         _this7._resetAdjustments();
 
         _this7._resetScrollbar();
 
-        $(_this7._element).trigger(Event.HIDDEN);
+        $$$1(_this7._element).trigger(Event.HIDDEN);
       });
     };
 
     _proto._removeBackdrop = function _removeBackdrop() {
       if (this._backdrop) {
-        $(this._backdrop).remove();
+        $$$1(this._backdrop).remove();
         this._backdrop = null;
       }
     };
@@ -33539,7 +33577,7 @@ var Modal = function () {
     _proto._showBackdrop = function _showBackdrop(callback) {
       var _this8 = this;
 
-      var animate = $(this._element).hasClass(ClassName.FADE) ? ClassName.FADE : '';
+      var animate = $$$1(this._element).hasClass(ClassName.FADE) ? ClassName.FADE : '';
 
       if (this._isShown && this._config.backdrop) {
         var doAnimate = Util.supportsTransitionEnd() && animate;
@@ -33547,11 +33585,11 @@ var Modal = function () {
         this._backdrop.className = ClassName.BACKDROP;
 
         if (animate) {
-          $(this._backdrop).addClass(animate);
+          $$$1(this._backdrop).addClass(animate);
         }
 
-        $(this._backdrop).appendTo(document.body);
-        $(this._element).on(Event.CLICK_DISMISS, function (event) {
+        $$$1(this._backdrop).appendTo(document.body);
+        $$$1(this._element).on(Event.CLICK_DISMISS, function (event) {
           if (_this8._ignoreBackdropClick) {
             _this8._ignoreBackdropClick = false;
             return;
@@ -33572,7 +33610,7 @@ var Modal = function () {
           Util.reflow(this._backdrop);
         }
 
-        $(this._backdrop).addClass(ClassName.SHOW);
+        $$$1(this._backdrop).addClass(ClassName.SHOW);
 
         if (!callback) {
           return;
@@ -33583,9 +33621,9 @@ var Modal = function () {
           return;
         }
 
-        $(this._backdrop).one(Util.TRANSITION_END, callback).emulateTransitionEnd(BACKDROP_TRANSITION_DURATION);
+        $$$1(this._backdrop).one(Util.TRANSITION_END, callback).emulateTransitionEnd(BACKDROP_TRANSITION_DURATION);
       } else if (!this._isShown && this._backdrop) {
-        $(this._backdrop).removeClass(ClassName.SHOW);
+        $$$1(this._backdrop).removeClass(ClassName.SHOW);
 
         var callbackRemove = function callbackRemove() {
           _this8._removeBackdrop();
@@ -33595,8 +33633,8 @@ var Modal = function () {
           }
         };
 
-        if (Util.supportsTransitionEnd() && $(this._element).hasClass(ClassName.FADE)) {
-          $(this._backdrop).one(Util.TRANSITION_END, callbackRemove).emulateTransitionEnd(BACKDROP_TRANSITION_DURATION);
+        if (Util.supportsTransitionEnd() && $$$1(this._element).hasClass(ClassName.FADE)) {
+          $$$1(this._backdrop).one(Util.TRANSITION_END, callbackRemove).emulateTransitionEnd(BACKDROP_TRANSITION_DURATION);
         } else {
           callbackRemove();
         }
@@ -33639,52 +33677,52 @@ var Modal = function () {
         // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
         //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
         // Adjust fixed content padding
-        $(Selector.FIXED_CONTENT).each(function (index, element) {
-          var actualPadding = $(element)[0].style.paddingRight;
-          var calculatedPadding = $(element).css('padding-right');
-          $(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
+        $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+          var actualPadding = $$$1(element)[0].style.paddingRight;
+          var calculatedPadding = $$$1(element).css('padding-right');
+          $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
         }); // Adjust sticky content margin
 
-        $(Selector.STICKY_CONTENT).each(function (index, element) {
-          var actualMargin = $(element)[0].style.marginRight;
-          var calculatedMargin = $(element).css('margin-right');
-          $(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
+        $$$1(Selector.STICKY_CONTENT).each(function (index, element) {
+          var actualMargin = $$$1(element)[0].style.marginRight;
+          var calculatedMargin = $$$1(element).css('margin-right');
+          $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
         }); // Adjust navbar-toggler margin
 
-        $(Selector.NAVBAR_TOGGLER).each(function (index, element) {
-          var actualMargin = $(element)[0].style.marginRight;
-          var calculatedMargin = $(element).css('margin-right');
-          $(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
+        $$$1(Selector.NAVBAR_TOGGLER).each(function (index, element) {
+          var actualMargin = $$$1(element)[0].style.marginRight;
+          var calculatedMargin = $$$1(element).css('margin-right');
+          $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
         }); // Adjust body padding
 
         var actualPadding = document.body.style.paddingRight;
-        var calculatedPadding = $('body').css('padding-right');
-        $('body').data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + this._scrollbarWidth + "px");
+        var calculatedPadding = $$$1('body').css('padding-right');
+        $$$1('body').data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + this._scrollbarWidth + "px");
       }
     };
 
     _proto._resetScrollbar = function _resetScrollbar() {
       // Restore fixed content padding
-      $(Selector.FIXED_CONTENT).each(function (index, element) {
-        var padding = $(element).data('padding-right');
+      $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+        var padding = $$$1(element).data('padding-right');
 
         if (typeof padding !== 'undefined') {
-          $(element).css('padding-right', padding).removeData('padding-right');
+          $$$1(element).css('padding-right', padding).removeData('padding-right');
         }
       }); // Restore sticky content and navbar-toggler margin
 
-      $(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
-        var margin = $(element).data('margin-right');
+      $$$1(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
+        var margin = $$$1(element).data('margin-right');
 
         if (typeof margin !== 'undefined') {
-          $(element).css('margin-right', margin).removeData('margin-right');
+          $$$1(element).css('margin-right', margin).removeData('margin-right');
         }
       }); // Restore body padding
 
-      var padding = $('body').data('padding-right');
+      var padding = $$$1('body').data('padding-right');
 
       if (typeof padding !== 'undefined') {
-        $('body').css('padding-right', padding).removeData('padding-right');
+        $$$1('body').css('padding-right', padding).removeData('padding-right');
       }
     };
 
@@ -33696,23 +33734,23 @@ var Modal = function () {
       var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
       document.body.removeChild(scrollDiv);
       return scrollbarWidth;
-    }; // static
+    }; // Static
 
 
     Modal._jQueryInterface = function _jQueryInterface(config, relatedTarget) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
-        var _config = $.extend({}, Modal.Default, $(this).data(), typeof config === 'object' && config);
+        var _config = _extends({}, Modal.Default, $$$1(this).data(), typeof config === 'object' && config);
 
         if (!data) {
           data = new Modal(this, _config);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config](relatedTarget);
@@ -33722,7 +33760,7 @@ var Modal = function () {
       });
     };
 
-    createClass(Modal, null, [{
+    _createClass(Modal, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -33742,36 +33780,36 @@ var Modal = function () {
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
+  $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
     var _this10 = this;
 
     var target;
     var selector = Util.getSelectorFromElement(this);
 
     if (selector) {
-      target = $(selector)[0];
+      target = $$$1(selector)[0];
     }
 
-    var config = $(target).data(DATA_KEY) ? 'toggle' : $.extend({}, $(target).data(), $(this).data());
+    var config = $$$1(target).data(DATA_KEY) ? 'toggle' : _extends({}, $$$1(target).data(), $$$1(this).data());
 
     if (this.tagName === 'A' || this.tagName === 'AREA') {
       event.preventDefault();
     }
 
-    var $target = $(target).one(Event.SHOW, function (showEvent) {
+    var $target = $$$1(target).one(Event.SHOW, function (showEvent) {
       if (showEvent.isDefaultPrevented()) {
-        // only register focus restorer if modal will actually get shown
+        // Only register focus restorer if modal will actually get shown
         return;
       }
 
       $target.one(Event.HIDDEN, function () {
-        if ($(_this10).is(':visible')) {
+        if ($$$1(_this10).is(':visible')) {
           _this10.focus();
         }
       });
     });
 
-    Modal._jQueryInterface.call($(target), config, this);
+    Modal._jQueryInterface.call($$$1(target), config, this);
   });
   /**
    * ------------------------------------------------------------------------
@@ -33779,11 +33817,11 @@ var Modal = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Modal._jQueryInterface;
-  $.fn[NAME].Constructor = Modal;
+  $$$1.fn[NAME] = Modal._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Modal;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Modal._jQueryInterface;
   };
 
@@ -33792,31 +33830,22 @@ var Modal = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): tooltip.js
+ * Bootstrap (v4.0.0): tooltip.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Tooltip = function () {
-  /**
-   * Check for Popper dependency
-   * Popper - https://popper.js.org
-   */
-  if (typeof Popper === 'undefined') {
-    throw new Error('Bootstrap tooltips require Popper.js (https://popper.js.org)');
-  }
+var Tooltip = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
-
-
   var NAME = 'tooltip';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.tooltip';
   var EVENT_KEY = "." + DATA_KEY;
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var TRANSITION_DURATION = 150;
   var CLASS_PREFIX = 'bs-tooltip';
   var BSCLS_PREFIX_REGEX = new RegExp("(^|\\s)" + CLASS_PREFIX + "\\S+", 'g');
@@ -33831,7 +33860,8 @@ var Tooltip = function () {
     placement: '(string|function)',
     offset: '(number|string)',
     container: '(string|element|boolean)',
-    fallbackPlacement: '(string|array)'
+    fallbackPlacement: '(string|array)',
+    boundary: '(string|element)'
   };
   var AttachmentMap = {
     AUTO: 'auto',
@@ -33851,7 +33881,8 @@ var Tooltip = function () {
     placement: 'top',
     offset: 0,
     container: false,
-    fallbackPlacement: 'flip'
+    fallbackPlacement: 'flip',
+    boundary: 'scrollParent'
   };
   var HoverState = {
     SHOW: 'show',
@@ -33895,24 +33926,32 @@ var Tooltip = function () {
   /*#__PURE__*/
   function () {
     function Tooltip(element, config) {
-      // private
+      /**
+       * Check for Popper dependency
+       * Popper - https://popper.js.org
+       */
+      if (typeof Popper === 'undefined') {
+        throw new TypeError('Bootstrap tooltips require Popper.js (https://popper.js.org)');
+      } // private
+
+
       this._isEnabled = true;
       this._timeout = 0;
       this._hoverState = '';
       this._activeTrigger = {};
-      this._popper = null; // protected
+      this._popper = null; // Protected
 
       this.element = element;
       this.config = this._getConfig(config);
       this.tip = null;
 
       this._setListeners();
-    } // getters
+    } // Getters
 
 
     var _proto = Tooltip.prototype;
 
-    // public
+    // Public
     _proto.enable = function enable() {
       this._isEnabled = true;
     };
@@ -33932,11 +33971,11 @@ var Tooltip = function () {
 
       if (event) {
         var dataKey = this.constructor.DATA_KEY;
-        var context = $(event.currentTarget).data(dataKey);
+        var context = $$$1(event.currentTarget).data(dataKey);
 
         if (!context) {
           context = new this.constructor(event.currentTarget, this._getDelegateConfig());
-          $(event.currentTarget).data(dataKey, context);
+          $$$1(event.currentTarget).data(dataKey, context);
         }
 
         context._activeTrigger.click = !context._activeTrigger.click;
@@ -33947,7 +33986,7 @@ var Tooltip = function () {
           context._leave(null, context);
         }
       } else {
-        if ($(this.getTipElement()).hasClass(ClassName.SHOW)) {
+        if ($$$1(this.getTipElement()).hasClass(ClassName.SHOW)) {
           this._leave(null, this);
 
           return;
@@ -33959,12 +33998,12 @@ var Tooltip = function () {
 
     _proto.dispose = function dispose() {
       clearTimeout(this._timeout);
-      $.removeData(this.element, this.constructor.DATA_KEY);
-      $(this.element).off(this.constructor.EVENT_KEY);
-      $(this.element).closest('.modal').off('hide.bs.modal');
+      $$$1.removeData(this.element, this.constructor.DATA_KEY);
+      $$$1(this.element).off(this.constructor.EVENT_KEY);
+      $$$1(this.element).closest('.modal').off('hide.bs.modal');
 
       if (this.tip) {
-        $(this.tip).remove();
+        $$$1(this.tip).remove();
       }
 
       this._isEnabled = null;
@@ -33985,15 +34024,15 @@ var Tooltip = function () {
     _proto.show = function show() {
       var _this = this;
 
-      if ($(this.element).css('display') === 'none') {
+      if ($$$1(this.element).css('display') === 'none') {
         throw new Error('Please use show on visible elements');
       }
 
-      var showEvent = $.Event(this.constructor.Event.SHOW);
+      var showEvent = $$$1.Event(this.constructor.Event.SHOW);
 
       if (this.isWithContent() && this._isEnabled) {
-        $(this.element).trigger(showEvent);
-        var isInTheDom = $.contains(this.element.ownerDocument.documentElement, this.element);
+        $$$1(this.element).trigger(showEvent);
+        var isInTheDom = $$$1.contains(this.element.ownerDocument.documentElement, this.element);
 
         if (showEvent.isDefaultPrevented() || !isInTheDom) {
           return;
@@ -34006,7 +34045,7 @@ var Tooltip = function () {
         this.setContent();
 
         if (this.config.animation) {
-          $(tip).addClass(ClassName.FADE);
+          $$$1(tip).addClass(ClassName.FADE);
         }
 
         var placement = typeof this.config.placement === 'function' ? this.config.placement.call(this, tip, this.element) : this.config.placement;
@@ -34014,14 +34053,14 @@ var Tooltip = function () {
         var attachment = this._getAttachment(placement);
 
         this.addAttachmentClass(attachment);
-        var container = this.config.container === false ? document.body : $(this.config.container);
-        $(tip).data(this.constructor.DATA_KEY, this);
+        var container = this.config.container === false ? document.body : $$$1(this.config.container);
+        $$$1(tip).data(this.constructor.DATA_KEY, this);
 
-        if (!$.contains(this.element.ownerDocument.documentElement, this.tip)) {
-          $(tip).appendTo(container);
+        if (!$$$1.contains(this.element.ownerDocument.documentElement, this.tip)) {
+          $$$1(tip).appendTo(container);
         }
 
-        $(this.element).trigger(this.constructor.Event.INSERTED);
+        $$$1(this.element).trigger(this.constructor.Event.INSERTED);
         this._popper = new Popper(this.element, tip, {
           placement: attachment,
           modifiers: {
@@ -34033,6 +34072,9 @@ var Tooltip = function () {
             },
             arrow: {
               element: Selector.ARROW
+            },
+            preventOverflow: {
+              boundariesElement: this.config.boundary
             }
           },
           onCreate: function onCreate(data) {
@@ -34044,13 +34086,13 @@ var Tooltip = function () {
             _this._handlePopperPlacementChange(data);
           }
         });
-        $(tip).addClass(ClassName.SHOW); // if this is a touch-enabled device we add extra
+        $$$1(tip).addClass(ClassName.SHOW); // If this is a touch-enabled device we add extra
         // empty mouseover listeners to the body's immediate children;
         // only needed because of broken event delegation on iOS
         // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
         if ('ontouchstart' in document.documentElement) {
-          $('body').children().on('mouseover', null, $.noop);
+          $$$1('body').children().on('mouseover', null, $$$1.noop);
         }
 
         var complete = function complete() {
@@ -34060,15 +34102,15 @@ var Tooltip = function () {
 
           var prevHoverState = _this._hoverState;
           _this._hoverState = null;
-          $(_this.element).trigger(_this.constructor.Event.SHOWN);
+          $$$1(_this.element).trigger(_this.constructor.Event.SHOWN);
 
           if (prevHoverState === HoverState.OUT) {
             _this._leave(null, _this);
           }
         };
 
-        if (Util.supportsTransitionEnd() && $(this.tip).hasClass(ClassName.FADE)) {
-          $(this.tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(Tooltip._TRANSITION_DURATION);
+        if (Util.supportsTransitionEnd() && $$$1(this.tip).hasClass(ClassName.FADE)) {
+          $$$1(this.tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(Tooltip._TRANSITION_DURATION);
         } else {
           complete();
         }
@@ -34079,7 +34121,7 @@ var Tooltip = function () {
       var _this2 = this;
 
       var tip = this.getTipElement();
-      var hideEvent = $.Event(this.constructor.Event.HIDE);
+      var hideEvent = $$$1.Event(this.constructor.Event.HIDE);
 
       var complete = function complete() {
         if (_this2._hoverState !== HoverState.SHOW && tip.parentNode) {
@@ -34090,7 +34132,7 @@ var Tooltip = function () {
 
         _this2.element.removeAttribute('aria-describedby');
 
-        $(_this2.element).trigger(_this2.constructor.Event.HIDDEN);
+        $$$1(_this2.element).trigger(_this2.constructor.Event.HIDDEN);
 
         if (_this2._popper !== null) {
           _this2._popper.destroy();
@@ -34101,25 +34143,25 @@ var Tooltip = function () {
         }
       };
 
-      $(this.element).trigger(hideEvent);
+      $$$1(this.element).trigger(hideEvent);
 
       if (hideEvent.isDefaultPrevented()) {
         return;
       }
 
-      $(tip).removeClass(ClassName.SHOW); // if this is a touch-enabled device we remove the extra
+      $$$1(tip).removeClass(ClassName.SHOW); // If this is a touch-enabled device we remove the extra
       // empty mouseover listeners we added for iOS support
 
       if ('ontouchstart' in document.documentElement) {
-        $('body').children().off('mouseover', null, $.noop);
+        $$$1('body').children().off('mouseover', null, $$$1.noop);
       }
 
       this._activeTrigger[Trigger.CLICK] = false;
       this._activeTrigger[Trigger.FOCUS] = false;
       this._activeTrigger[Trigger.HOVER] = false;
 
-      if (Util.supportsTransitionEnd() && $(this.tip).hasClass(ClassName.FADE)) {
-        $(tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
+      if (Util.supportsTransitionEnd() && $$$1(this.tip).hasClass(ClassName.FADE)) {
+        $$$1(tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
       } else {
         complete();
       }
@@ -34131,7 +34173,7 @@ var Tooltip = function () {
       if (this._popper !== null) {
         this._popper.scheduleUpdate();
       }
-    }; // protected
+    }; // Protected
 
 
     _proto.isWithContent = function isWithContent() {
@@ -34139,16 +34181,16 @@ var Tooltip = function () {
     };
 
     _proto.addAttachmentClass = function addAttachmentClass(attachment) {
-      $(this.getTipElement()).addClass(CLASS_PREFIX + "-" + attachment);
+      $$$1(this.getTipElement()).addClass(CLASS_PREFIX + "-" + attachment);
     };
 
     _proto.getTipElement = function getTipElement() {
-      this.tip = this.tip || $(this.config.template)[0];
+      this.tip = this.tip || $$$1(this.config.template)[0];
       return this.tip;
     };
 
     _proto.setContent = function setContent() {
-      var $tip = $(this.getTipElement());
+      var $tip = $$$1(this.getTipElement());
       this.setElementContent($tip.find(Selector.TOOLTIP_INNER), this.getTitle());
       $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
     };
@@ -34157,13 +34199,13 @@ var Tooltip = function () {
       var html = this.config.html;
 
       if (typeof content === 'object' && (content.nodeType || content.jquery)) {
-        // content is a DOM node or a jQuery
+        // Content is a DOM node or a jQuery
         if (html) {
-          if (!$(content).parent().is($element)) {
+          if (!$$$1(content).parent().is($element)) {
             $element.empty().append(content);
           }
         } else {
-          $element.text($(content).text());
+          $element.text($$$1(content).text());
         }
       } else {
         $element[html ? 'html' : 'text'](content);
@@ -34178,7 +34220,7 @@ var Tooltip = function () {
       }
 
       return title;
-    }; // private
+    }; // Private
 
 
     _proto._getAttachment = function _getAttachment(placement) {
@@ -34191,26 +34233,26 @@ var Tooltip = function () {
       var triggers = this.config.trigger.split(' ');
       triggers.forEach(function (trigger) {
         if (trigger === 'click') {
-          $(_this3.element).on(_this3.constructor.Event.CLICK, _this3.config.selector, function (event) {
+          $$$1(_this3.element).on(_this3.constructor.Event.CLICK, _this3.config.selector, function (event) {
             return _this3.toggle(event);
           });
         } else if (trigger !== Trigger.MANUAL) {
           var eventIn = trigger === Trigger.HOVER ? _this3.constructor.Event.MOUSEENTER : _this3.constructor.Event.FOCUSIN;
           var eventOut = trigger === Trigger.HOVER ? _this3.constructor.Event.MOUSELEAVE : _this3.constructor.Event.FOCUSOUT;
-          $(_this3.element).on(eventIn, _this3.config.selector, function (event) {
+          $$$1(_this3.element).on(eventIn, _this3.config.selector, function (event) {
             return _this3._enter(event);
           }).on(eventOut, _this3.config.selector, function (event) {
             return _this3._leave(event);
           });
         }
 
-        $(_this3.element).closest('.modal').on('hide.bs.modal', function () {
+        $$$1(_this3.element).closest('.modal').on('hide.bs.modal', function () {
           return _this3.hide();
         });
       });
 
       if (this.config.selector) {
-        this.config = $.extend({}, this.config, {
+        this.config = _extends({}, this.config, {
           trigger: 'manual',
           selector: ''
         });
@@ -34230,18 +34272,18 @@ var Tooltip = function () {
 
     _proto._enter = function _enter(event, context) {
       var dataKey = this.constructor.DATA_KEY;
-      context = context || $(event.currentTarget).data(dataKey);
+      context = context || $$$1(event.currentTarget).data(dataKey);
 
       if (!context) {
         context = new this.constructor(event.currentTarget, this._getDelegateConfig());
-        $(event.currentTarget).data(dataKey, context);
+        $$$1(event.currentTarget).data(dataKey, context);
       }
 
       if (event) {
         context._activeTrigger[event.type === 'focusin' ? Trigger.FOCUS : Trigger.HOVER] = true;
       }
 
-      if ($(context.getTipElement()).hasClass(ClassName.SHOW) || context._hoverState === HoverState.SHOW) {
+      if ($$$1(context.getTipElement()).hasClass(ClassName.SHOW) || context._hoverState === HoverState.SHOW) {
         context._hoverState = HoverState.SHOW;
         return;
       }
@@ -34263,11 +34305,11 @@ var Tooltip = function () {
 
     _proto._leave = function _leave(event, context) {
       var dataKey = this.constructor.DATA_KEY;
-      context = context || $(event.currentTarget).data(dataKey);
+      context = context || $$$1(event.currentTarget).data(dataKey);
 
       if (!context) {
         context = new this.constructor(event.currentTarget, this._getDelegateConfig());
-        $(event.currentTarget).data(dataKey, context);
+        $$$1(event.currentTarget).data(dataKey, context);
       }
 
       if (event) {
@@ -34304,7 +34346,7 @@ var Tooltip = function () {
     };
 
     _proto._getConfig = function _getConfig(config) {
-      config = $.extend({}, this.constructor.Default, $(this.element).data(), config);
+      config = _extends({}, this.constructor.Default, $$$1(this.element).data(), config);
 
       if (typeof config.delay === 'number') {
         config.delay = {
@@ -34340,7 +34382,7 @@ var Tooltip = function () {
     };
 
     _proto._cleanTipClass = function _cleanTipClass() {
-      var $tip = $(this.getTipElement());
+      var $tip = $$$1(this.getTipElement());
       var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
       if (tabClass !== null && tabClass.length > 0) {
@@ -34362,17 +34404,17 @@ var Tooltip = function () {
         return;
       }
 
-      $(tip).removeClass(ClassName.FADE);
+      $$$1(tip).removeClass(ClassName.FADE);
       this.config.animation = false;
       this.hide();
       this.show();
       this.config.animation = initConfigAnimation;
-    }; // static
+    }; // Static
 
 
     Tooltip._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
         var _config = typeof config === 'object' && config;
 
@@ -34382,12 +34424,12 @@ var Tooltip = function () {
 
         if (!data) {
           data = new Tooltip(this, _config);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -34395,7 +34437,7 @@ var Tooltip = function () {
       });
     };
 
-    createClass(Tooltip, null, [{
+    _createClass(Tooltip, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -34440,11 +34482,11 @@ var Tooltip = function () {
    */
 
 
-  $.fn[NAME] = Tooltip._jQueryInterface;
-  $.fn[NAME].Constructor = Tooltip;
+  $$$1.fn[NAME] = Tooltip._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Tooltip;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Tooltip._jQueryInterface;
   };
 
@@ -34453,31 +34495,31 @@ var Tooltip = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): popover.js
+ * Bootstrap (v4.0.0): popover.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Popover = function () {
+var Popover = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'popover';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.popover';
   var EVENT_KEY = "." + DATA_KEY;
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var CLASS_PREFIX = 'bs-popover';
   var BSCLS_PREFIX_REGEX = new RegExp("(^|\\s)" + CLASS_PREFIX + "\\S+", 'g');
-  var Default = $.extend({}, Tooltip.Default, {
+  var Default = _extends({}, Tooltip.Default, {
     placement: 'right',
     trigger: 'click',
     content: '',
     template: '<div class="popover" role="tooltip">' + '<div class="arrow"></div>' + '<h3 class="popover-header"></h3>' + '<div class="popover-body"></div></div>'
   });
-  var DefaultType = $.extend({}, Tooltip.DefaultType, {
+  var DefaultType = _extends({}, Tooltip.DefaultType, {
     content: '(string|element|function)'
   });
   var ClassName = {
@@ -34510,7 +34552,7 @@ var Popover = function () {
   var Popover =
   /*#__PURE__*/
   function (_Tooltip) {
-    inheritsLoose(Popover, _Tooltip);
+    _inheritsLoose(Popover, _Tooltip);
 
     function Popover() {
       return _Tooltip.apply(this, arguments) || this;
@@ -34518,46 +34560,53 @@ var Popover = function () {
 
     var _proto = Popover.prototype;
 
-    // overrides
+    // Overrides
     _proto.isWithContent = function isWithContent() {
       return this.getTitle() || this._getContent();
     };
 
     _proto.addAttachmentClass = function addAttachmentClass(attachment) {
-      $(this.getTipElement()).addClass(CLASS_PREFIX + "-" + attachment);
+      $$$1(this.getTipElement()).addClass(CLASS_PREFIX + "-" + attachment);
     };
 
     _proto.getTipElement = function getTipElement() {
-      this.tip = this.tip || $(this.config.template)[0];
+      this.tip = this.tip || $$$1(this.config.template)[0];
       return this.tip;
     };
 
     _proto.setContent = function setContent() {
-      var $tip = $(this.getTipElement()); // we use append for html objects to maintain js events
+      var $tip = $$$1(this.getTipElement()); // We use append for html objects to maintain js events
 
       this.setElementContent($tip.find(Selector.TITLE), this.getTitle());
-      this.setElementContent($tip.find(Selector.CONTENT), this._getContent());
+
+      var content = this._getContent();
+
+      if (typeof content === 'function') {
+        content = content.call(this.element);
+      }
+
+      this.setElementContent($tip.find(Selector.CONTENT), content);
       $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
-    }; // private
+    }; // Private
 
 
     _proto._getContent = function _getContent() {
-      return this.element.getAttribute('data-content') || (typeof this.config.content === 'function' ? this.config.content.call(this.element) : this.config.content);
+      return this.element.getAttribute('data-content') || this.config.content;
     };
 
     _proto._cleanTipClass = function _cleanTipClass() {
-      var $tip = $(this.getTipElement());
+      var $tip = $$$1(this.getTipElement());
       var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
       if (tabClass !== null && tabClass.length > 0) {
         $tip.removeClass(tabClass.join(''));
       }
-    }; // static
+    }; // Static
 
 
     Popover._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
         var _config = typeof config === 'object' ? config : null;
 
@@ -34567,12 +34616,12 @@ var Popover = function () {
 
         if (!data) {
           data = new Popover(this, _config);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -34580,9 +34629,9 @@ var Popover = function () {
       });
     };
 
-    createClass(Popover, null, [{
+    _createClass(Popover, null, [{
       key: "VERSION",
-      // getters
+      // Getters
       get: function get() {
         return VERSION;
       }
@@ -34626,11 +34675,11 @@ var Popover = function () {
    */
 
 
-  $.fn[NAME] = Popover._jQueryInterface;
-  $.fn[NAME].Constructor = Popover;
+  $$$1.fn[NAME] = Popover._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Popover;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Popover._jQueryInterface;
   };
 
@@ -34639,23 +34688,23 @@ var Popover = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): scrollspy.js
+ * Bootstrap (v4.0.0): scrollspy.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var ScrollSpy = function () {
+var ScrollSpy = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'scrollspy';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.scrollspy';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var Default = {
     offset: 10,
     method: 'auto',
@@ -34712,42 +34761,42 @@ var ScrollSpy = function () {
       this._targets = [];
       this._activeTarget = null;
       this._scrollHeight = 0;
-      $(this._scrollElement).on(Event.SCROLL, function (event) {
+      $$$1(this._scrollElement).on(Event.SCROLL, function (event) {
         return _this._process(event);
       });
       this.refresh();
 
       this._process();
-    } // getters
+    } // Getters
 
 
     var _proto = ScrollSpy.prototype;
 
-    // public
+    // Public
     _proto.refresh = function refresh() {
       var _this2 = this;
 
-      var autoMethod = this._scrollElement !== this._scrollElement.window ? OffsetMethod.POSITION : OffsetMethod.OFFSET;
+      var autoMethod = this._scrollElement === this._scrollElement.window ? OffsetMethod.OFFSET : OffsetMethod.POSITION;
       var offsetMethod = this._config.method === 'auto' ? autoMethod : this._config.method;
       var offsetBase = offsetMethod === OffsetMethod.POSITION ? this._getScrollTop() : 0;
       this._offsets = [];
       this._targets = [];
       this._scrollHeight = this._getScrollHeight();
-      var targets = $.makeArray($(this._selector));
+      var targets = $$$1.makeArray($$$1(this._selector));
       targets.map(function (element) {
         var target;
         var targetSelector = Util.getSelectorFromElement(element);
 
         if (targetSelector) {
-          target = $(targetSelector)[0];
+          target = $$$1(targetSelector)[0];
         }
 
         if (target) {
           var targetBCR = target.getBoundingClientRect();
 
           if (targetBCR.width || targetBCR.height) {
-            // todo (fat): remove sketch reliance on jQuery position/offset
-            return [$(target)[offsetMethod]().top + offsetBase, targetSelector];
+            // TODO (fat): remove sketch reliance on jQuery position/offset
+            return [$$$1(target)[offsetMethod]().top + offsetBase, targetSelector];
           }
         }
 
@@ -34764,8 +34813,8 @@ var ScrollSpy = function () {
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
-      $(this._scrollElement).off(EVENT_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
+      $$$1(this._scrollElement).off(EVENT_KEY);
       this._element = null;
       this._scrollElement = null;
       this._config = null;
@@ -34774,18 +34823,18 @@ var ScrollSpy = function () {
       this._targets = null;
       this._activeTarget = null;
       this._scrollHeight = null;
-    }; // private
+    }; // Private
 
 
     _proto._getConfig = function _getConfig(config) {
-      config = $.extend({}, Default, config);
+      config = _extends({}, Default, config);
 
       if (typeof config.target !== 'string') {
-        var id = $(config.target).attr('id');
+        var id = $$$1(config.target).attr('id');
 
         if (!id) {
           id = Util.getUID(NAME);
-          $(config.target).attr('id', id);
+          $$$1(config.target).attr('id', id);
         }
 
         config.target = "#" + id;
@@ -34856,7 +34905,7 @@ var ScrollSpy = function () {
       queries = queries.map(function (selector) {
         return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
       });
-      var $link = $(queries.join(','));
+      var $link = $$$1(queries.join(','));
 
       if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
         $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
@@ -34871,30 +34920,30 @@ var ScrollSpy = function () {
         $link.parents(Selector.NAV_LIST_GROUP).prev(Selector.NAV_ITEMS).children(Selector.NAV_LINKS).addClass(ClassName.ACTIVE);
       }
 
-      $(this._scrollElement).trigger(Event.ACTIVATE, {
+      $$$1(this._scrollElement).trigger(Event.ACTIVATE, {
         relatedTarget: target
       });
     };
 
     _proto._clear = function _clear() {
-      $(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
-    }; // static
+      $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+    }; // Static
 
 
     ScrollSpy._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $$$1(this).data(DATA_KEY);
 
         var _config = typeof config === 'object' && config;
 
         if (!data) {
           data = new ScrollSpy(this, _config);
-          $(this).data(DATA_KEY, data);
+          $$$1(this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -34902,7 +34951,7 @@ var ScrollSpy = function () {
       });
     };
 
-    createClass(ScrollSpy, null, [{
+    _createClass(ScrollSpy, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -34922,11 +34971,11 @@ var ScrollSpy = function () {
    */
 
 
-  $(window).on(Event.LOAD_DATA_API, function () {
-    var scrollSpys = $.makeArray($(Selector.DATA_SPY));
+  $$$1(window).on(Event.LOAD_DATA_API, function () {
+    var scrollSpys = $$$1.makeArray($$$1(Selector.DATA_SPY));
 
     for (var i = scrollSpys.length; i--;) {
-      var $spy = $(scrollSpys[i]);
+      var $spy = $$$1(scrollSpys[i]);
 
       ScrollSpy._jQueryInterface.call($spy, $spy.data());
     }
@@ -34937,11 +34986,11 @@ var ScrollSpy = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = ScrollSpy._jQueryInterface;
-  $.fn[NAME].Constructor = ScrollSpy;
+  $$$1.fn[NAME] = ScrollSpy._jQueryInterface;
+  $$$1.fn[NAME].Constructor = ScrollSpy;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return ScrollSpy._jQueryInterface;
   };
 
@@ -34950,23 +34999,23 @@ var ScrollSpy = function () {
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.0.0-beta.2): tab.js
+ * Bootstrap (v4.0.0): tab.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
 
-var Tab = function () {
+var Tab = function ($$$1) {
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
   var NAME = 'tab';
-  var VERSION = '4.0.0-beta.2';
+  var VERSION = '4.0.0';
   var DATA_KEY = 'bs.tab';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
   var TRANSITION_DURATION = 150;
   var Event = {
     HIDE: "hide" + EVENT_KEY,
@@ -35003,62 +35052,62 @@ var Tab = function () {
   function () {
     function Tab(element) {
       this._element = element;
-    } // getters
+    } // Getters
 
 
     var _proto = Tab.prototype;
 
-    // public
+    // Public
     _proto.show = function show() {
       var _this = this;
 
-      if (this._element.parentNode && this._element.parentNode.nodeType === Node.ELEMENT_NODE && $(this._element).hasClass(ClassName.ACTIVE) || $(this._element).hasClass(ClassName.DISABLED)) {
+      if (this._element.parentNode && this._element.parentNode.nodeType === Node.ELEMENT_NODE && $$$1(this._element).hasClass(ClassName.ACTIVE) || $$$1(this._element).hasClass(ClassName.DISABLED)) {
         return;
       }
 
       var target;
       var previous;
-      var listElement = $(this._element).closest(Selector.NAV_LIST_GROUP)[0];
+      var listElement = $$$1(this._element).closest(Selector.NAV_LIST_GROUP)[0];
       var selector = Util.getSelectorFromElement(this._element);
 
       if (listElement) {
         var itemSelector = listElement.nodeName === 'UL' ? Selector.ACTIVE_UL : Selector.ACTIVE;
-        previous = $.makeArray($(listElement).find(itemSelector));
+        previous = $$$1.makeArray($$$1(listElement).find(itemSelector));
         previous = previous[previous.length - 1];
       }
 
-      var hideEvent = $.Event(Event.HIDE, {
+      var hideEvent = $$$1.Event(Event.HIDE, {
         relatedTarget: this._element
       });
-      var showEvent = $.Event(Event.SHOW, {
+      var showEvent = $$$1.Event(Event.SHOW, {
         relatedTarget: previous
       });
 
       if (previous) {
-        $(previous).trigger(hideEvent);
+        $$$1(previous).trigger(hideEvent);
       }
 
-      $(this._element).trigger(showEvent);
+      $$$1(this._element).trigger(showEvent);
 
       if (showEvent.isDefaultPrevented() || hideEvent.isDefaultPrevented()) {
         return;
       }
 
       if (selector) {
-        target = $(selector)[0];
+        target = $$$1(selector)[0];
       }
 
       this._activate(this._element, listElement);
 
       var complete = function complete() {
-        var hiddenEvent = $.Event(Event.HIDDEN, {
+        var hiddenEvent = $$$1.Event(Event.HIDDEN, {
           relatedTarget: _this._element
         });
-        var shownEvent = $.Event(Event.SHOWN, {
+        var shownEvent = $$$1.Event(Event.SHOWN, {
           relatedTarget: previous
         });
-        $(previous).trigger(hiddenEvent);
-        $(_this._element).trigger(shownEvent);
+        $$$1(previous).trigger(hiddenEvent);
+        $$$1(_this._element).trigger(shownEvent);
       };
 
       if (target) {
@@ -35069,9 +35118,9 @@ var Tab = function () {
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+      $$$1.removeData(this._element, DATA_KEY);
       this._element = null;
-    }; // private
+    }; // Private
 
 
     _proto._activate = function _activate(element, container, callback) {
@@ -35080,36 +35129,32 @@ var Tab = function () {
       var activeElements;
 
       if (container.nodeName === 'UL') {
-        activeElements = $(container).find(Selector.ACTIVE_UL);
+        activeElements = $$$1(container).find(Selector.ACTIVE_UL);
       } else {
-        activeElements = $(container).children(Selector.ACTIVE);
+        activeElements = $$$1(container).children(Selector.ACTIVE);
       }
 
       var active = activeElements[0];
-      var isTransitioning = callback && Util.supportsTransitionEnd() && active && $(active).hasClass(ClassName.FADE);
+      var isTransitioning = callback && Util.supportsTransitionEnd() && active && $$$1(active).hasClass(ClassName.FADE);
 
       var complete = function complete() {
-        return _this2._transitionComplete(element, active, isTransitioning, callback);
+        return _this2._transitionComplete(element, active, callback);
       };
 
       if (active && isTransitioning) {
-        $(active).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
+        $$$1(active).one(Util.TRANSITION_END, complete).emulateTransitionEnd(TRANSITION_DURATION);
       } else {
         complete();
       }
-
-      if (active) {
-        $(active).removeClass(ClassName.SHOW);
-      }
     };
 
-    _proto._transitionComplete = function _transitionComplete(element, active, isTransitioning, callback) {
+    _proto._transitionComplete = function _transitionComplete(element, active, callback) {
       if (active) {
-        $(active).removeClass(ClassName.ACTIVE);
-        var dropdownChild = $(active.parentNode).find(Selector.DROPDOWN_ACTIVE_CHILD)[0];
+        $$$1(active).removeClass(ClassName.SHOW + " " + ClassName.ACTIVE);
+        var dropdownChild = $$$1(active.parentNode).find(Selector.DROPDOWN_ACTIVE_CHILD)[0];
 
         if (dropdownChild) {
-          $(dropdownChild).removeClass(ClassName.ACTIVE);
+          $$$1(dropdownChild).removeClass(ClassName.ACTIVE);
         }
 
         if (active.getAttribute('role') === 'tab') {
@@ -35117,24 +35162,20 @@ var Tab = function () {
         }
       }
 
-      $(element).addClass(ClassName.ACTIVE);
+      $$$1(element).addClass(ClassName.ACTIVE);
 
       if (element.getAttribute('role') === 'tab') {
         element.setAttribute('aria-selected', true);
       }
 
-      if (isTransitioning) {
-        Util.reflow(element);
-        $(element).addClass(ClassName.SHOW);
-      } else {
-        $(element).removeClass(ClassName.FADE);
-      }
+      Util.reflow(element);
+      $$$1(element).addClass(ClassName.SHOW);
 
-      if (element.parentNode && $(element.parentNode).hasClass(ClassName.DROPDOWN_MENU)) {
-        var dropdownElement = $(element).closest(Selector.DROPDOWN)[0];
+      if (element.parentNode && $$$1(element.parentNode).hasClass(ClassName.DROPDOWN_MENU)) {
+        var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
 
         if (dropdownElement) {
-          $(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
+          $$$1(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
         }
 
         element.setAttribute('aria-expanded', true);
@@ -35143,12 +35184,12 @@ var Tab = function () {
       if (callback) {
         callback();
       }
-    }; // static
+    }; // Static
 
 
     Tab._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var $this = $(this);
+        var $this = $$$1(this);
         var data = $this.data(DATA_KEY);
 
         if (!data) {
@@ -35158,7 +35199,7 @@ var Tab = function () {
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
-            throw new Error("No method named \"" + config + "\"");
+            throw new TypeError("No method named \"" + config + "\"");
           }
 
           data[config]();
@@ -35166,7 +35207,7 @@ var Tab = function () {
       });
     };
 
-    createClass(Tab, null, [{
+    _createClass(Tab, null, [{
       key: "VERSION",
       get: function get() {
         return VERSION;
@@ -35181,10 +35222,10 @@ var Tab = function () {
    */
 
 
-  $(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
+  $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_TOGGLE, function (event) {
     event.preventDefault();
 
-    Tab._jQueryInterface.call($(this), 'show');
+    Tab._jQueryInterface.call($$$1(this), 'show');
   });
   /**
    * ------------------------------------------------------------------------
@@ -35192,11 +35233,11 @@ var Tab = function () {
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Tab._jQueryInterface;
-  $.fn[NAME].Constructor = Tab;
+  $$$1.fn[NAME] = Tab._jQueryInterface;
+  $$$1.fn[NAME].Constructor = Tab;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $$$1.fn[NAME].noConflict = function () {
+    $$$1.fn[NAME] = JQUERY_NO_CONFLICT;
     return Tab._jQueryInterface;
   };
 
@@ -35210,12 +35251,12 @@ var Tab = function () {
  * --------------------------------------------------------------------------
  */
 
-(function () {
-  if (typeof $ === 'undefined') {
-    throw new Error('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
+(function ($$$1) {
+  if (typeof $$$1 === 'undefined') {
+    throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
   }
 
-  var version = $.fn.jquery.split(' ')[0].split('.');
+  var version = $$$1.fn.jquery.split(' ')[0].split('.');
   var minMajor = 1;
   var ltMajor = 2;
   var minMinor = 9;
@@ -35239,13 +35280,1902 @@ exports.Scrollspy = ScrollSpy;
 exports.Tab = Tab;
 exports.Tooltip = Tooltip;
 
-return exports;
+Object.defineProperty(exports, '__esModule', { value: true });
 
-}({},$));
+})));
 //# sourceMappingURL=bootstrap.bundle.js.map
 ;/*! (C) Andrea Giammarchi - Mit Style License */
 var URLSearchParams=URLSearchParams||function(){"use strict";function URLSearchParams(query){var index,key,value,pairs,i,length,dict=Object.create(null);this[secret]=dict;if(!query)return;if(typeof query==="string"){if(query.charAt(0)==="?"){query=query.slice(1)}for(pairs=query.split("&"),i=0,length=pairs.length;i<length;i++){value=pairs[i];index=value.indexOf("=");if(-1<index){appendTo(dict,decode(value.slice(0,index)),decode(value.slice(index+1)))}else if(value.length){appendTo(dict,decode(value),"")}}}else{if(isArray(query)){for(i=0,length=query.length;i<length;i++){value=query[i];appendTo(dict,value[0],value[1])}}else{for(key in query){appendTo(dict,key,query[key])}}}}var isArray=Array.isArray,URLSearchParamsProto=URLSearchParams.prototype,find=/[!'\(\)~]|%20|%00/g,plus=/\+/g,replace={"!":"%21","'":"%27","(":"%28",")":"%29","~":"%7E","%20":"+","%00":"\0"},replacer=function(match){return replace[match]},secret="__URLSearchParams__:"+Math.random();function appendTo(dict,name,value){if(name in dict){dict[name].push(""+value)}else{dict[name]=isArray(value)?value:[""+value]}}function decode(str){return decodeURIComponent(str.replace(plus," "))}function encode(str){return encodeURIComponent(str).replace(find,replacer)}URLSearchParamsProto.append=function append(name,value){appendTo(this[secret],name,value)};URLSearchParamsProto["delete"]=function del(name){delete this[secret][name]};URLSearchParamsProto.get=function get(name){var dict=this[secret];return name in dict?dict[name][0]:null};URLSearchParamsProto.getAll=function getAll(name){var dict=this[secret];return name in dict?dict[name].slice(0):[]};URLSearchParamsProto.has=function has(name){return name in this[secret]};URLSearchParamsProto.set=function set(name,value){this[secret][name]=[""+value]};URLSearchParamsProto.forEach=function forEach(callback,thisArg){var dict=this[secret];Object.getOwnPropertyNames(dict).forEach(function(name){dict[name].forEach(function(value){callback.call(thisArg,value,name,this)},this)},this)};URLSearchParamsProto.toJSON=function toJSON(){return{}};URLSearchParamsProto.toString=function toString(){var dict=this[secret],query=[],i,key,name,value;for(key in dict){name=encode(key);for(i=0,value=dict[key];i<value.length;i++){query.push(name+"="+encode(value[i]))}}return query.join("&")};var dP=Object.defineProperty,gOPD=Object.getOwnPropertyDescriptor,createSearchParamsPollute=function(search){function append(name,value){URLSearchParamsProto.append.call(this,name,value);name=this.toString();search.set.call(this._usp,name?"?"+name:"")}function del(name){URLSearchParamsProto["delete"].call(this,name);name=this.toString();search.set.call(this._usp,name?"?"+name:"")}function set(name,value){URLSearchParamsProto.set.call(this,name,value);name=this.toString();search.set.call(this._usp,name?"?"+name:"")}return function(sp,value){sp.append=append;sp["delete"]=del;sp.set=set;return dP(sp,"_usp",{configurable:true,writable:true,value:value})}},createSearchParamsCreate=function(polluteSearchParams){return function(obj,sp){dP(obj,"_searchParams",{configurable:true,writable:true,value:polluteSearchParams(sp,obj)});return sp}},updateSearchParams=function(sp){var append=sp.append;sp.append=URLSearchParamsProto.append;URLSearchParams.call(sp,sp._usp.search.slice(1));sp.append=append},verifySearchParams=function(obj,Class){if(!(obj instanceof Class))throw new TypeError("'searchParams' accessed on an object that "+"does not implement interface "+Class.name)},upgradeClass=function(Class){var ClassProto=Class.prototype,searchParams=gOPD(ClassProto,"searchParams"),href=gOPD(ClassProto,"href"),search=gOPD(ClassProto,"search"),createSearchParams;if(!searchParams&&search&&search.set){createSearchParams=createSearchParamsCreate(createSearchParamsPollute(search));Object.defineProperties(ClassProto,{href:{get:function(){return href.get.call(this)},set:function(value){var sp=this._searchParams;href.set.call(this,value);if(sp)updateSearchParams(sp)}},search:{get:function(){return search.get.call(this)},set:function(value){var sp=this._searchParams;search.set.call(this,value);if(sp)updateSearchParams(sp)}},searchParams:{get:function(){verifySearchParams(this,Class);return this._searchParams||createSearchParams(this,new URLSearchParams(this.search.slice(1)))},set:function(sp){verifySearchParams(this,Class);createSearchParams(this,sp)}}})}};upgradeClass(HTMLAnchorElement);if(/^function|object$/.test(typeof URL)&&URL.prototype)upgradeClass(URL);return URLSearchParams}();(function(URLSearchParamsProto){var iterable=function(){try{return!!Symbol.iterator}catch(error){return false}}();if(!("forEach"in URLSearchParamsProto)){URLSearchParamsProto.forEach=function forEach(callback,thisArg){var names=Object.create(null);this.toString().replace(/=[\s\S]*?(?:&|$)/g,"=").split("=").forEach(function(name){if(!name.length||name in names)return;(names[name]=this.getAll(name)).forEach(function(value){callback.call(thisArg,value,name,this)},this)},this)}}if(!("keys"in URLSearchParamsProto)){URLSearchParamsProto.keys=function keys(){var items=[];this.forEach(function(value,name){items.push(name)});var iterator={next:function(){var value=items.shift();return{done:value===undefined,value:value}}};if(iterable){iterator[Symbol.iterator]=function(){return iterator}}return iterator}}if(!("values"in URLSearchParamsProto)){URLSearchParamsProto.values=function values(){var items=[];this.forEach(function(value){items.push(value)});var iterator={next:function(){var value=items.shift();return{done:value===undefined,value:value}}};if(iterable){iterator[Symbol.iterator]=function(){return iterator}}return iterator}}if(!("entries"in URLSearchParamsProto)){URLSearchParamsProto.entries=function entries(){var items=[];this.forEach(function(value,name){items.push([name,value])});var iterator={next:function(){var value=items.shift();return{done:value===undefined,value:value}}};if(iterable){iterator[Symbol.iterator]=function(){return iterator}}return iterator}}if(iterable&&!(Symbol.iterator in URLSearchParamsProto)){URLSearchParamsProto[Symbol.iterator]=URLSearchParamsProto.entries}if(!("sort"in URLSearchParamsProto)){URLSearchParamsProto.sort=function sort(){var entries=this.entries(),entry=entries.next(),done=entry.done,keys=[],values=Object.create(null),i,key,value;while(!done){value=entry.value;key=value[0];keys.push(key);if(!(key in values)){values[key]=[]}values[key].push(value[1]);entry=entries.next();done=entry.done}keys.sort();for(i=0;i<keys.length;i++){this["delete"](keys[i])}for(i=0;i<keys.length;i++){key=keys[i];this.append(key,values[key].shift())}}}})(URLSearchParams.prototype);
-;function init_infoBox(){BB.gmap.infobox.prototype=new google.maps.OverlayView,BB.gmap.infobox.prototype.remove=function(){if(this._div){try{this._div.parentNode.removeChild(this._div)}catch(t){}this._div=null}},BB.gmap.infobox.prototype.set_map=function(t){this.__MAP=t,this.setMap(this.__MAP)},BB.gmap.infobox.prototype.map=function(){return this.__MAP},BB.gmap.infobox.prototype.draw=function(){this.createElement();var t=this.getProjection().fromLatLngToDivPixel(this.opts.position);t&&(this._div.style.width=this._width+"px",this._div.style.left=t.x+this._offsetX+"px",this._div.style.height=this._height+"px",this._div.style.top=t.y+this._offsetY+"px",this._div.style.display="block",this._div.style.zIndex=1)},BB.gmap.infobox.prototype.createElement=function(){var t=this.getPanes(),e=this._div;if(e){if(e.parentNode!=t.floatPane){try{e.parentNode.removeChild(e)}catch(t){}t.floatPane.appendChild(e)}}else{(e=this._div=document.createElement("div")).style.border="0",e.style.position="absolute",e.style.width=this._width+"px",e.style.height=this._height+"px";e.setAttribute("class","gmap_infobox"),e.appendChild(this.__ELEM),t.floatPane.appendChild(e),this._height=this.__ELEM.offsetHeight,this._width=this.__ELEM.offsetWidth;var o=this.opts.placement.split(" ");switch(o[0]){case"top":this._offsetY=-parseFloat(this.opts.offsetY);break;case"over":this._offsetY=-parseFloat(this.opts.offsetY)-parseInt(this._height);break;case"bottom":this._offsetY=-parseFloat(this._height);break;case"under":this._offsetY=0;break;case"center":this._offsetY=-parseFloat(this.opts.offsetY)/2-parseInt(this._height)/2}switch(o[1]){case"right":this._offsetX=parseFloat(this.opts.offsetX)-parseInt(this._width);break;case"left":this._offsetX=-parseFloat(this.opts.offsetX);break;case"center":this._offsetX=-parseInt(this._width)/2;break;case"out-right":this._offsetX=parseFloat(this.opts.offsetX);break;case"out-left":this._offsetX=-parseFloat(this.opts.offsetX)-parseInt(this._width)}this.panMap()}},BB.gmap.infobox.prototype.panMap=function(){var t=this.map,e=t.getBounds();if(e){var o=this.opts.position,i=this._width,s=this._height,r=this._offsetX,a=this._offsetY,n=t.getDiv(),p=n.offsetWidth,h=n.offsetHeight,l=e.toSpan(),c=l.lng()/p,d=l.lat()/h,g=e.getSouthWest().lng(),f=e.getNorthEast().lng(),u=e.getNorthEast().lat(),_=e.getSouthWest().lat(),m=o.lng()+(r-0)*c,B=o.lng()+(r+i+0)*c,y=o.lat()-(a-0)*d,v=o.lat()-(a+s+0)*d,b=(m<g?g-m:0)+(B>f?f-B:0),k=(y>u?u-y:0)+(v<_?_-v:0),w=t.getCenter();if(!w||void 0===w)return!1;w.lng(),w.lat();null!==this._bounds_changed_listener&&google.maps.event.removeListener(this._bounds_changed_listener),this._bounds_changed_listener=null}}}var BB=BB||{};BB.base=function(){this.__BB_DEBUG__=!1,this.__PROTECTED__=[],this._data=void 0},BB.base.prototype.set_data=function(t){return void 0===this._data&&(this._data=new BB.data),"object"!=typeof t?this:(this._data.set_data(t),this)},BB.base.prototype.remove_data=function(t){return this._data.remove_data(t),this},BB.base.prototype.get_data=function(t){var e=this.data();return void 0!==e[t]&&e[t]},BB.base.prototype.data=function(t){return this._data.get_data(t)},BB.base.prototype.sanitize=function(){var t=this.data();return t=this._escape_data(t),this.set_data(t),this},BB.base.prototype._escape_data=function(t){if(void 0===t)return"";if("object"==typeof t&&t.length)for(var e=0,o=t.length;e<o;e++)t[e]=this._escape_data(t[e]);if("object"==typeof t)for(var i in t)t[i]=this._escape_data(t[i]);return"string"==typeof t?escape(t):t},BB.base.prototype._unescape_data=function(t){if(void 0===t)return"";if("object"==typeof t)for(var e in t)t[e]=this._unescape_data(t[e]);return"string"==typeof t?unescape(t):t},BB.base.prototype.ident=function(){var t=this.data();return"string"!=typeof t.ident?(this.error("Ident is not a String which is odd. "+t.ident),""):t.ident},BB.base.prototype.set_ident=function(t){return"string"!=typeof t&&(t=""+t,this.error("Ident must be a string. Automatically converted to : "+t)),this.set_data({ident:t}),this},BB.base.prototype.error=function(t){if(this.__BB_DEBUG__)throw Error(t);return this},BB.base.prototype.is_empty_object=function(t){if("object"!=typeof t)return this.error("Invalid argument, Object expected at BB.base.is_empty_object()"),!0;for(var e in t)if(t.hasOwnProperty(e))return!1;return!0},BB.base.prototype.extend=function(t,e){var o,i={};for(o in t)Object.prototype.hasOwnProperty.call(t,o)&&(i[o]=t[o]);for(o in e)Object.prototype.hasOwnProperty.call(e,o)&&(i[o]=e[o]);return i},(BB=BB||{}).data=function(t){if(this.__PROTECTED__=[],this.__HIDDEN_DATA__=!0,this.__HIDDEN_DATA__){var e=t||{};return{set_data:function(t){for(var o in t)e[o]=t[o]},get_data:function(t){return t?void 0!==e[t]?e[t]:"":e},remove_data:function(t){t||(e={}),void 0!==e[t]&&(e[t]=void 0,delete e[t])}}}return this.__DATA=t||{},this.set_data=function(t){if(this.__DATA){if(t)for(var e in t)this.__DATA[e]=t[e]}else this.__DATA=t||{}},this.get_data=function(t){return t?void 0!==this.__DATA[t]?this.__DATA[t]:void 0:this.__DATA},this.remove_data=function(t){t||(this.__DATA={}),void 0!==this.__DATA[t]&&(this.__DATA[t]=void 0,delete this.__DATA[t])},this},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.controller=function(t,e){return this._MAP=void 0,this.__CONTAINER=t,this.__EDITABLE=!1,this.__PLACES={markers:{},polygons:{},lines:{}},this.__FOCUSED_ITEM=void 0,this.__CLUSTERER=void 0,this.set_data(e),this},BB.gmap.controller.prototype=new BB.base,BB.gmap.controller.prototype.map=function(){return this._MAP?this._MAP:(this.error("No map associated to the current controller at BB.gmap.controller.map()"),!1)},BB.gmap.controller.prototype.loading_place=function(t){var e=this.get_place(t);return e?(e.set_data({loaded:!1}),this):this},BB.gmap.controller.prototype.place_loaded=function(t){return t?!t.data("loaded")&&(t.set_data({loaded:!0}),this.check_loaded_places()&&this._ready(),this):this},BB.gmap.controller.prototype.check_loaded_places=function(){var t=!0;return this._loop_all(function(e){t=!(!t||!e.data("loaded"))}),t=t&&this.data("tiles_loaded")},BB.gmap.controller.prototype.ready=function(t){return"function"==typeof t&&this.set_data({map_ready:t}),this},BB.gmap.controller.prototype._ready=function(){var t=this.data();return this.data("loaded")?this:("function"==typeof t.map_ready&&t.map_ready(this),this.set_data({loaded:!0}),this)},BB.gmap.controller.prototype.set_zoom=function(t){return this.map().setZoom(t),this},BB.gmap.controller.prototype.container=function(){return this.__CONTAINER},BB.gmap.controller.prototype.init=function(){var t=this.data();if(this.map())return this;var e=this.data("map");return e.center=new google.maps.LatLng(parseFloat(e.center.x),parseFloat(e.center.y)),this._MAP=new google.maps.Map(this.container(),e),"object"!=typeof t.places?this.error("You haven't set any places yet"):this.add_places(t.places),this.listeners(),this},BB.gmap.controller.prototype.set_styles=function(t){"object"!=typeof t&&this.error("Invalid type styles in BB.gmap.set_styles()"+t);var e=this.data("map");return e.styles=t,this.data("map",e),this.map()&&this.map().setOptions({styles:t}),this},BB.gmap.controller.prototype.add_places=function(t){if(!t)return this.error("Invalid places specified :"+t),this;for(var e in t)this.add_place(e,t[e]);return this},BB.gmap.controller.prototype.set_place=function(t,e,o){return e&&o?void 0===this.__PLACES[t]?(this.error("Invalid data type at BB.gmap.controlle.set_place( "+t+", "+e+", "+o+")"),this):(void 0===this.__PLACES[t][e]&&(this.__PLACES[t][e]={}),o.set_ident(e),this.__PLACES[t][e]=o,this):(this.error("Missing parameters in BB.gmap.controller.set_place( "+t+", "+e+", "+o+")"),this)},BB.gmap.controller.prototype.add_place=function(t,e){if(!e)return this.error("Missing parameter BB.gmap.controller.prototype.add_place ( ident, data ) : ( "+t+", "+e+" )"),this;if("string"!=typeof e.type)return this.error('Missing parameter "type" in BB.gmap.controller.prototype.add_place'),this;switch(e.ident=t,e.type){case"marker":o=new BB.gmap.marker(e,this);this.set_place("markers",t,o);break;case"richmarker":var o=new BB.gmap.richmarker(e,this);this.set_place("markers",t,o);break;case"line":this.set_place("lines",t,new BB.gmap.line(e,this));break;case"polygon":this.set_place("polygons",t,new BB.gmap.polygon(e,this))}return this},BB.gmap.controller.prototype.get_places=function(){return this.__PLACES},BB.gmap.controller.prototype.get_places_by_type=function(t){return this.__PLACES[t]},BB.gmap.controller.prototype.add_place_by_address=function(t,e,o){var i=this;this.geocode_address(e,function(e){o.coords=e,i.add_place(t,o)})},BB.gmap.controller.prototype.geocode_address=function(t,e){var o=Array();if("undefined"==typeof google)return error;(new google.maps.Geocoder).geocode({address:t},function(t,i){if(i==google.maps.GeocoderStatus.OK){var s=t[0].geometry.location.lat(),r=t[0].geometry.location.lng();"function"==typeof e&&e([s,r])}return o})},BB.gmap.controller.prototype.get_place=function(t){var e=this.get_places(),o=!1;for(var i in e){var s=this.get_places_by_type(i);this.is_empty_object(s)||(o="object"==typeof s[t]?s[t]:o)}return o||(this.error("Invalid ident at BB.gmap.controller.get_place( ident ) : "+t),!1)},BB.gmap.controller.prototype.remove_focus=function(){var t=this.focused();return t&&("function"==typeof this.data("onblur")&&this.data("onblur")(t,this),t.blur(),this.__FOCUSED_ITEM=void 0),this},BB.gmap.controller.prototype.set_focus=function(t){return this.remove_focus(),this.__FOCUSED_ITEM=t,"function"==typeof this.data("onfocus")&&this.data("onfocus")(t,this),this},BB.gmap.controller.prototype.focused=function(){return this.__FOCUSED_ITEM},BB.gmap.controller.prototype.translate_coords=function(t){if("object"==typeof t&&2==t.length)return new google.maps.LatLng(t[0],t[1])},BB.gmap.controller.prototype.listeners=function(){var t=this;return google.maps.event.clearListeners(this.map(),"click"),google.maps.event.addListener(this.map(),"click",function(e){t.map_click(e)}),google.maps.event.addListenerOnce(this.map(),"tilesloaded",function(e){t.set_data({tiles_loaded:!0}),t._ready()}),google.maps.event.addDomListener(document,"keyup",function(e){switch(e.keyCode?e.keyCode:e.which){case 46:t.focused()&&t.focused().data("editable")&&(t.focused().delete(),t.remove_focus());break;case 27:t.focused()&&t.remove_focus()}}),this},BB.gmap.controller.prototype.create_new=function(t,e){var o=this;e||(e="new_object");var i=this.data("default_styles");switch(i||(i={strokeColor:"#000000",strokeOpacity:.8,strokeWeight:2,fillColor:"#FFFFFF",fillOpacity:.35,hover:{strokeColor:"#000000",strokeOpacity:.8,strokeWeight:2,fillColor:"#FFFFFF",fillOpacity:1},focused:{fillOpacity:1}}),t){case"polygon":var s={type:"polygon",editable:!0,styles:i},r=new BB.gmap.polygon(s,o);o.set_place("polygons",e,r),o.set_focus(r);break;case"line":var s={type:"line",editable:!0,styles:i},a=new BB.gmap.line(s,o);o.set_place("lines",e,a),o.set_focus(a);break;default:this.set_data({marker_creation:e})}},BB.gmap.controller.prototype.on=function(t,e){var o={};o["on"+t]=e,this.set_data(o)},BB.gmap.controller.prototype.map_click=function(t){this.data("marker_creation")&&(this.add_place(this.data("marker_creation"),{coords:[t.latLng.lat(),t.latLng.lng()],draggable:!0,editable:!0,type:"marker"}),this.set_focus(this.get_place(this.data("marker_creation"))),"function"==typeof this.data("marker_creation_callback")&&this.data("marker_creation_callback")(this.get_place(this.data("marker_creation"))),this.set_data({marker_creation:!1}));var e=this.focused();return e?(e.data("editable")?e.map_click(t):this.remove_focus(),this):this},BB.gmap.controller.prototype._loop_all=function(t){if("function"!=typeof t)return this;var e=this.get_places();for(var o in e){var i=this.get_places_by_type(o);if(!this.is_empty_object(i))for(var s in i)t(i[s])}return this},BB.gmap.controller.prototype.filter=function(t){this._loop_all(function(e){if(!t)return e.show(),!1;var o=e.data("categories");if(!o)return e.hide(),!1;"string"==typeof o&&(o=o.split(",")),o||e.hide();var i=!1;for(var s in o)t==o[s]&&(i=!0);i?e.show():e.hide()})},BB.gmap.controller.prototype.fit_bounds=function(){var t=new google.maps.LatLngBounds,e=0;if(this._loop_all(function(o){var i=o.get_position();if(!i)return!1;for(var s,r=0;r<i.getLength();r++){s=i.getAt(r);for(var a=0;a<s.getLength();a++)t.extend(s.getAt(a))}e++}),e>0&&(this.map().fitBounds(t),this.data("max_fitbounds_zoom"))){var o=this.data("max_fitbounds_zoom");this.map().getZoom()>o&&this.map().setZoom(o)}return this},BB.gmap.controller.prototype.get_all_markers=function(){var t=this.get_places_by_type("markers"),e=[];for(var o in t)e.push(t[o].object());return e},BB.gmap.controller.prototype.activate_clusterer=function(t){this.clusterer()&&this.clusterer().clearMarkers();var e=this.get_all_markers();return this.set_clusterer(new MarkerClusterer(this.map(),e)),this},BB.gmap.controller.prototype.set_clusterer=function(t){this.__CLUSTERER=t},BB.gmap.controller.prototype.clusterer=function(){return this.__CLUSTERER},BB.gmap.controller.prototype._delete=function(t,e){switch(t){case"marker":if(void 0===this.__PLACES.markers[e])return!1;delete this.__PLACES.markers[e];break;case"line":if(void 0===this.__PLACES.lines[e])return!1;delete this.__PLACES.lines[e];break;case"polygon":if(void 0===this.__PLACES.polygons[e])return!1;delete this.__PLACES.polygons[e]}},BB.gmap.controller.prototype.export=function(){var t=this.data();void 0!==t.places&&delete t.places,void 0!==t.center&&delete t.center;var e=this.map().getCenter();return t.map.center.x=e.lat(),t.map.center.y=e.lng(),t.map.zoom=this.map().getZoom(),t.places={},this._loop_all(function(e){t.places[e.ident()]=e.export()}),t},BB.gmap.controller.prototype.get_map_image=function(){var t=this.data();void 0!==t.places&&delete t.places,void 0!==t.center&&delete t.center;var e=this.map().getCenter(),o="https://maps.googleapis.com/maps/api/staticmap?",i=[];return i.push("center="+e.lat()+","+e.lng()),i.push("zoom="+this.map().getZoom()),i.push("size=640x400"),this._loop_all(function(t){if("marker"==t.data("type")){if(!t.data("icon").src)return!1;var e=new Image;e.src=t.data("icon").src;var o=t.data("icon").width+"x"+t.data("icon").height,s=t.data("coords"),r="markers=size:"+o+"|icon:"+e.src+"|"+s[0]+","+s[1];i.push(r)}if("polygon"==t.data("type")){var a=t.data("paths");if(!a)return!1;var n=[],p=t.data("styles"),h=(p.strokeColor,p.strokeWeight);p.fillColor;n.push("color:black"),n.push("weight:"+h),n.push("fillcolor:white");for(var l=0,c=a.length;l<c;l++)n.push(a[l].join(","));n.push(a[0].join(",")),i.push("path="+n.join("|"))}}),o+=i.join("&")},BB.gmap.controller.prototype.reset=function(){return this._loop_all(function(t){t.hide(),t.delete()}),this.set_data({places:void 0}),this.remove_focus(),this},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.infobox=function(t,e){BB.gmap.statics,this.__MAP=void 0,t instanceof jQuery&&(t=t.get(0)),this.__ELEM=t,google.maps.OverlayView.call(this),e.offsetY=e.offsetY||0,e.offsetX=e.offsetX||0,this.opts=e,void 0===this.opts.placement&&(this.opts.placement="top center"),this.__MAP=e.map;var o=this;this._bounds_changed_listener=google.maps.event.addListener(this.__MAP,"bounds_changed",function(){return o.panMap.apply(o)}),this.set_map(e.map)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.object=function(t,e){return this.__OBJECT=void 0,this.__CONTROLLER=e,this.__DELETED=!1,this.set_data(t),this.init(),this.controller().loading_place(this.ident()),this},BB.gmap.object.prototype=new BB.base,BB.gmap.object.prototype.set_object=function(t){return this.__OBJECT=t,this},BB.gmap.object.prototype.object=function(){return this.__OBJECT},BB.gmap.object.prototype.controller=function(){return this.__CONTROLLER},BB.gmap.object.prototype.set_controller=function(t){return this.__CONTROLLER=t,this},BB.gmap.object.prototype.set_map=function(t){return this.object().setMap(t),this},BB.gmap.object.prototype.map_click=function(t){return this},BB.gmap.object.prototype.show=function(){var t=this.object();return void 0===t?(this.error("No object defined at BB.gmap.object.show()"),this):(t.setMap(this.controller().map()),this)},BB.gmap.object.prototype.hide=function(){var t=this.object();return void 0===t?(this.error("No object defined at BB.gmap.object.hide()"),this):(t.setMap(null),this)},BB.gmap.object.prototype.delete=function(){this.__DELETED=!0;var t=this.object();if(void 0===t)return this.error("No object defined at BB.gmap.object.delete()"),this;this.clear_listeners(),t.setMap(null);var e=this.data();return"function"==typeof e.ondelete&&e.ondelete(this),this.controller()._delete(this.data("type"),this.ident()),delete t,this},BB.gmap.object.prototype.init=function(){return this},BB.gmap.object.prototype.display=function(){return this},BB.gmap.object.prototype.focus=function(){return this},BB.gmap.object.prototype.blur=function(){return this},BB.gmap.object.prototype.get_bounds=function(){return this},BB.gmap.object.prototype.get_position=function(){return this},BB.gmap.object.prototype.clear_listeners=function(){return this},BB.gmap.object.prototype.export=function(){return this.data()},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.marker=function(t,e){return BB.gmap.object.call(this,t,e),this.__MEDIA=void 0,this.__ICON=void 0,this._image_loaded=!1,this._marker_loaded=!1,this.__INFOBOX=void 0,this._listeners=!1,this},BB.gmap.marker.prototype=Object.create(BB.gmap.object.prototype),BB.gmap.marker.prototype.init=function(){var t=this.data();return"string"==typeof t.icon?this.set_image(t.icon):"object"==typeof t.icon?this.set_icon(t.icon):this.display(),this},BB.gmap.marker.prototype.icon=function(){return this.__ICON?this.__ICON:new Image},BB.gmap.marker.prototype.set_icon=function(t){if("object"!=typeof t)return this.error("Invalid icon at BB.gmap.marker.prototype.set_icon( "+t+" )"),this;if(!(t instanceof Image)&&void 0===t.path){var e;return t.width&&t.height&&(e={width:t.width,height:t.height}),this.set_image(t.src,e),this}return this.__ICON=t,this.display(),this},BB.gmap.marker.prototype.set_image=function(t,e){var o=new Image;return o.data=this,o.onload=function(){this.data.set_icon(this),this.data.display()},o.onerror=function(){this.data.set_data({icon:void 0}),this.data.display()},o.src=t,e&&(o.height=e.height,o.width=e.width),this},BB.gmap.marker.prototype.display=function(){var t=this.data();if("object"!=typeof t.coords)return this.error("Requires coordinates [lat, lng] at BB.gmap.marker.display()"),!1;var e={map:this.controller().map(),position:new google.maps.LatLng(t.coords[0],t.coords[1])};e=this.extend(e,t);var o=this.icon();if(!(o instanceof Image)&&"string"==typeof o.path){var i=0,s=0;"string"==typeof o.height&&(i=parseInt(o.height)),"string"==typeof o.width&&(s=parseInt(o.width)),o.anchor=new google.maps.Point(s/2,i),e.icon=o}var r="object"==typeof t.options?t.options:{};for(var a in r)e[a]=r[a];if(this.icon().src){var s=this.icon().width,i=this.icon().height;e.icon=new google.maps.MarkerImage(this.icon().src,new google.maps.Size(s,i),new google.maps.Point(0,0),new google.maps.Point(s/2,i),new google.maps.Size(s,i))}if(void 0!==this.object())this.object().setOptions(e);else{var n=new google.maps.Marker(e);this.set_marker(n)}return this._listeners||(this.listeners(),this._listeners=!0,this.marker_loaded()),this.data("hidden")&&this.hide(),this},BB.gmap.marker.prototype.marker_loaded=function(){var t=this.data();if("function"==typeof t.loaded_callback&&t.loaded_callback(this),this.controller().data("use_clusterer")){this.controller().data("clusterer_options");this.controller().activate_clusterer({gridSize:10,maxZoom:15})}return this.controller().place_loaded(this),this},BB.gmap.marker.prototype.set_marker=function(t){return this._marker_loaded?(this.error("There is already a marker affected to this instanciation of a [BB.gmap.marker] ( "+this.ident()+" )"),this):(this._marker_loaded=!0,this.set_object(t),this)},BB.gmap.marker.prototype.listeners=function(){var t=this,e=this.object();e.bbmarker=this,this.data("draggable")&&google.maps.event.addListener(e,"dragend",t.dragend),google.maps.event.addListener(e,"click",t.onclick)},BB.gmap.marker.prototype.clear_listeners=function(){var t=this.object();return google.maps.event.clearListeners(t,"dragend"),google.maps.event.clearListeners(t,"click"),this},BB.gmap.marker.prototype.dragend=function(t){var e=this.bbmarker,o=e.data();"function"==typeof o.ondragend&&o.ondragend(e,t),e.set_data({coords:[t.latLng.lat(),t.latLng.lng()]}),e.focus()},BB.gmap.marker.prototype.onclick=function(t){var e=this.bbmarker,o=e.data();if("function"==typeof o.onclick?o.onclick(t,e):"string"==typeof o.onclick&&"function"==typeof window[o.onclick]&&window[o.onclick](e,t),o.infobox){if(e.__INFOBOX)return e.__INFOBOX.map?e.__INFOBOX.set_map(null):e.__INFOBOX.set_map(e.controller().map()),e.focus(),this;if(BB.gmap.statics.infobox_loaded||(init_infoBox(),BB.gmap.statics.infobox_loaded=!0),"function"==typeof o.infobox&&(o.infobox=o.infobox(e.data())),"string"==typeof o.infobox){var i=document.getElementById(o.infobox);i||((i=document.createElement("div")).style.position="absolute",i.innerHTML=o.infobox),o.infobox=i}var s={};o.infobox_options&&(s=o.infobox_options),s.offsetY||(s.offsetY=e.icon().height),s.offsetX||(s.offsetX=e.icon().width/2),s.map=e.controller().map(),s.position=e.get_position().getAt(0).getAt(0),e.__INFOBOX=new BB.gmap.infobox(o.infobox,s)}e.focus()},BB.gmap.marker.prototype.focus=function(){var t=this;t.controller().set_focus(t);var e=this.data();e.icon_selected&&("object"==typeof e.icon_selected?this.set_icon(e.icon_selected):this.set_image(e.icon_selected))},BB.gmap.marker.prototype.blur=function(){if(!this.controller().get_place(this.ident()))return!1;var t=this.data();t.icon_selected&&("object"==typeof t.icon?this.set_icon(t.icon):this.set_image(t.icon))},BB.gmap.marker.prototype.get_bounds=function(){var t=this,e=new google.maps.LatLngBounds;return e.extend(t.object().getPosition()),e},BB.gmap.marker.prototype.get_position=function(){var t=new google.maps.MVCArray,e=new google.maps.MVCArray;return!!this.object()&&(t.push(this.object().getPosition()),e.push(t),e)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.richmarker=function(t,e){return BB.gmap.marker.call(this,t,e),this._listeners=!1,this},BB.gmap.richmarker.prototype=Object.create(BB.gmap.marker.prototype),BB.gmap.richmarker.prototype.init=function(){var t=this.data();return this.set_content(t.content),this.display(),this},BB.gmap.richmarker.prototype.set_content=function(t){return this._content=t,this},BB.gmap.richmarker.prototype.content=function(){return this._content},BB.gmap.richmarker.prototype.display=function(){var t=this.data();if("object"!=typeof t.coords)return this.error("Requires coordinates [lat, lng] at BB.gmap.richmarker.display()"),!1;var e={map:this.controller().map(),position:new google.maps.LatLng(t.coords[0],t.coords[1])};if("function"==typeof(e=this.extend(e,t)).html&&(console.log(e.html(t)),e.html=e.html(t)),"function"==typeof e.selected_html&&(e.selected_html=e.selected_html(t)),void 0!==this.object())this.object().setOptions(e);else{var o=customMarker(e);this.set_marker(o)}return this._listeners||(this.listeners(),this._listeners=!0),this.data("hidden")&&this.hide(),this},BB.gmap.richmarker.prototype.listeners=function(){var t=this,e=this.object();e.bbmarker=this,this.data("draggable")&&google.maps.event.addListener(e,"dragend",t.dragend),google.maps.event.addListener(e,"click",t.onclick)},BB.gmap.richmarker.prototype.clear_listeners=function(){var t=this.object();return google.maps.event.clearListeners(t,"dragend"),google.maps.event.clearListeners(t,"click"),this},BB.gmap.richmarker.prototype.focus=function(){if(this.controller().focused()&&this.controller().focused().ident()==this.ident())return this;this.controller().set_focus(this),this.object().setHtml(this.data("selected_html"))},BB.gmap.richmarker.prototype.blur=function(){if(!this.controller().get_place(this.ident()))return!1;this.object().setHtml(this.data("html"))},BB.gmap.richmarker.prototype.icon=function(){return{height:this.object().div.offsetHeight,width:this.object().div.offsetWidth}},customMarker=function(t){return"function"!=typeof BB.gmap.customMarker&&(BB.gmap.customMarker=function(t){this.MAP=t.map,void 0!==t.map&&this.setMap(this.MAP),void 0!==t.position&&(this.latlng=t.position),void 0!==t.html&&(this.html=t.html)},BB.gmap.customMarker.prototype=new google.maps.OverlayView,BB.gmap.customMarker.prototype.draw=function(){this.setHtml(this.html)},BB.gmap.customMarker.prototype.setHtml=function(t){var e=this,o=this.div;o||((o=document.createElement("div")).style.position="absolute",o.style.cursor="pointer",google.maps.event.addDomListener(o,"click",function(t){t.stopPropagation(),t.preventDefault(),google.maps.event.trigger(e,"click")}),this.getPanes().overlayImage.appendChild(o)),o.innerHTML=this.html;var i=this.getProjection().fromLatLngToDivPixel(this.latlng);if(i){var s=o.offsetHeight,r=o.offsetWidth;o.style.left=i.x-r/2+"px",o.style.top=i.y-s+"px"}this.div=o},BB.gmap.customMarker.prototype.remove=function(){this.div&&(this.div.parentNode.removeChild(this.div),this.div=null)},BB.gmap.customMarker.prototype.getPosition=function(){return this.latlng}),new BB.gmap.customMarker(t)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.line=function(t,e){return this.__STYLES=void 0,this.__PATHS=void 0,this.__MARKERS=[],BB.gmap.object.call(this,t,e),this},BB.gmap.line.prototype=Object.create(BB.gmap.object.prototype),BB.gmap.line.prototype.init=function(){var t=this.data();if("object"!=typeof t.styles&&this.set_data({styles:this.controller().data("default_styles")}),this.add_styles(t.styles),this.set_paths([]),"object"==typeof t.paths)for(var e=0,o=t.paths.length;e<o;e++)this.add_point(t.paths[e]);return this.get_paths()&&this.get_styles()&&this.display(),t.editable&&this.set_editable(t.editable),this.listeners(),this.controller().place_loaded(this),this},BB.gmap.line.prototype.redraw=function(){for(var t=this.get_paths(),e=0,o=t.length,i=[];e<o;e++)i.push([t.getAt(e).lat(),t.getAt(e).lng()]);this.set_data({paths:i})},BB.gmap.line.prototype.add_styles=function(t){this.__STYLES=t},BB.gmap.line.prototype.set_styles=function(t){return this.add_styles(t),this.display(),this},BB.gmap.line.prototype.get_styles=function(){return this.__STYLES},BB.gmap.line.prototype.set_paths=function(t){if("object"==typeof t){if(!(t[0]instanceof google.maps.LatLng)){for(var e=0,o=t.length,i=new google.maps.MVCArray;e<o&&"object"==typeof t[e];e++){var s=this.controller().translate_coords(t[e]);i.insertAt(i.length,s)}t=i}this.__PATHS=t}else this.error("Invalid paths at BB.gmap.line.set_paths :"+t)},BB.gmap.line.prototype.get_paths=function(){return this.__PATHS},BB.gmap.line.prototype.display=function(){this.data();var t=this.get_styles();void 0===t&&this.error("Undefined styles at BB.gmap.line.display : "+t);var e=this.get_paths();if(void 0===e&&this.error("Undefined paths at BB.gmap.line.display : "+e),t.path=e,void 0!==this.object())this.object().setOptions(t);else{var o=new google.maps.Polyline(t);this.set_object(o)}return this.set_map(this.controller().map()),this.update_coords(),this},BB.gmap.line.prototype.refresh=function(){var t=this.data("_opts");this.object().setOptions(t)},BB.gmap.line.prototype.add_point=function(t,e){if("object"!=typeof t)return!1;if(t instanceof google.maps.LatLng||(t=this.controller().translate_coords(t)),!(t instanceof google.maps.LatLng||void 0!==t[0]&&void 0!==t[1]))return!1;var o=this,i=this.get_paths();void 0===i&&this.set_paths([[t.lat(),t.lng()]]),i=this.get_paths(),"number"!=typeof e&&(e=i.length),i.insertAt(e,t);var s=new BB.gmap.marker({coords:[t.lat(),t.lng()],draggable:!0,icon:{path:google.maps.SymbolPath.CIRCLE,scale:4},hidden:!this.data("editable"),editable:!0,ondragend:function(t,e){o.move_point(t.object().index,[e.latLng.lat(),e.latLng.lng()])},ondelete:function(t){o.remove_point(t.object().index),o.focus(),o.get_paths().length||o.delete()},index:e},o.controller());return this.__MARKERS||(this.__MARKERS=[]),this.__MARKERS[e]=s,this},BB.gmap.line.prototype.move_point=function(t,e){var o=this.get_paths();if("object"!=typeof o)return this.error("You can not move a point when no path is given at BB.gmap.line.move_point( index, path )"),!1;if(!e)return this.error("Required arguments index:integer and path:object at BB.gmap.line.move_point( index, path )"),!1;if(e instanceof google.maps.LatLng||(e=this.controller().translate_coords(e)),!(e instanceof google.maps.LatLng||void 0!==e[0]&&void 0!==e[1]))return!1;return o.setAt(t,e),this.update_coords(),this},BB.gmap.line.prototype.remove_point=function(t){var e=this.get_paths();if("object"!=typeof e)return this.error("You can not move a point when no path is given at BB.gmap.line.remove_point( index, path )"),!1;e.removeAt(t),void 0!==this.__MARKERS[t]&&(this.__MARKERS[t].hide(),this.__MARKERS.splice(t,1));var o=this.__MARKERS;for(var i in o)o[i].object().index=parseInt(i);return this.redraw(),this.update_coords(),this},BB.gmap.line.prototype.set_editable=function(t){return t?(this.set_data({editable:!0}),this.show_markers(),this.focus(),this):(this.set_data({editable:!1}),this.hide_markers(),this)},BB.gmap.line.prototype.show_markers=function(){for(var t=0;t<this.__MARKERS.length;t++)this.__MARKERS[t].show();return this},BB.gmap.line.prototype.hide_markers=function(){this.controller().focused();for(var t=0;t<this.__MARKERS.length;t++)this.__MARKERS[t].hide();return this},BB.gmap.line.prototype.map_click=function(t){this.add_point(t.latLng)},BB.gmap.line.prototype.set_draggable=function(t){var e=this.get_styles();return e.draggable=!!t,this.set_styles(e),this},BB.gmap.line.prototype.listeners=function(){var t=this;t.object().bbobject=t,this.clear_listeners(),google.maps.event.addListener(t.object(),"mouseover",t.mouse_over),google.maps.event.addListener(t.object(),"mouseout",t.mouse_out),google.maps.event.addListener(t.object(),"click",t.click)},BB.gmap.line.prototype.clear_listeners=function(){var t=this;return google.maps.event.clearListeners(t.object(),"mouseover"),google.maps.event.clearListeners(t.object(),"mouseout"),google.maps.event.clearListeners(t.object(),"click"),this},BB.gmap.line.prototype.mouse_over=function(t){var e=this.bbobject,o=e.data();"function"==typeof o.onmouseover&&o.onmouseover(e,t);var i=e.get_styles();"object"==typeof i.hover&&e.set_styles(i.hover)},BB.gmap.line.prototype.mouse_out=function(t){var e=this.bbobject,o=e.data();if("function"==typeof o.onmouseout&&o.onmouseout(e,t),e.controller().focused()==e)return!1;e.get_data("styles");e.set_styles(e.get_data("styles"))},BB.gmap.line.prototype.mouse_down=function(t){this.bbobject},BB.gmap.line.prototype.mouse_up=function(t){this.bbobject},BB.gmap.line.prototype.click=function(t){var e=this.bbobject,o=e.data();e.focus(),"function"==typeof o.onclick?o.onclick(e,t):"string"==typeof o.onclick&&"function"==typeof window[o.onclick]&&window[o.onclick](e,t)},BB.gmap.line.prototype.focus=function(){if(this.__DELETED)return!1;this.controller().set_focus(this);var t=this.get_data("styles");return"object"==typeof t.focused&&this.set_styles(t.focused),this.data("editable")&&this.show_markers(),this},BB.gmap.line.prototype.blur=function(){return!this.__DELETED&&(this.set_styles(this.get_data("styles")),this)},BB.gmap.line.prototype.get_bounds=function(){for(var t,e=this,o=new google.maps.LatLngBounds,i=e.object().getPaths(),s=0;s<i.getLength();s++){t=i.getAt(s);for(var r=0;r<t.getLength();r++)o.extend(t.getAt(r))}return o},BB.gmap.line.prototype.get_position=function(){var t=new google.maps.MVCArray;return t.push(this.object().getPath()),t},BB.gmap.line.prototype.update_coords=function(){var t=[];return this.get_paths().forEach(function(e){t.push([e.lat(),e.lng()])}),this.set_data({paths:t}),this},BB.gmap.line.prototype.export=function(){this.update_coords();var t=this.data();return void 0!==t.styles.path&&delete t.styles.path,this.data()},BB.gmap.line.prototype.delete=function(){var t=0,e=this.__MARKERS.length;if(e)for(;t<e;t++)this.remove_point(t);this.hide_markers(),BB.gmap.object.prototype.delete.call(this)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.polygon=function(t,e){return BB.gmap.line.call(this,t,e),this},BB.gmap.polygon.prototype=Object.create(BB.gmap.line.prototype),BB.gmap.polygon.prototype.display=function(){this.data();var t=this.get_styles();void 0===t&&this.error("Undefined styles at BB.gmap.polygon.display : "+t);var e=this.get_paths();if(void 0===e&&this.error("Undefined paths at BB.gmap.polygon.display : "+e),void 0!==this.object())this.object().setOptions(t);else{var o=new google.maps.Polygon(t);this.set_object(o)}return this.object().setPaths(new google.maps.MVCArray([e])),this.set_map(this.controller().map()),this.listeners(),this},BB.gmap.polygon.prototype.get_position=function(){return this.object().getPaths()},function(){function t(t){return function(e){this[t]=e}}function e(t){return function(){return this[t]}}function o(t,e,s){this.extend(o,google.maps.OverlayView),this.c=t,this.a=[],this.f=[],this.ca=[53,56,66,78,90],this.j=[],this.A=!1,s=s||{},this.g=s.gridSize||60,this.l=s.minimumClusterSize||2,this.J=s.maxZoom||f,this.j=s.styles||[],this.X=s.imagePath||this.Q,this.W=s.imageExtension||this.P,this.O=!0,void 0!=s.zoomOnClick&&(this.O=s.zoomOnClick),this.r=!1,void 0!=s.averageCenter&&(this.r=s.averageCenter),i(this),this.setMap(t),this.K=this.c.getZoom();var r=this;google.maps.event.addListener(this.c,"zoom_changed",function(){var t=r.c.getZoom();r.K!=t&&(r.K=t,r.m())}),google.maps.event.addListener(this.c,"idle",function(){r.i()}),e&&e.length&&this.C(e,!1)}function i(t){if(!t.j.length)for(var e,o=0;e=t.ca[o];o++)t.j.push({url:t.X+(o+1)+"."+t.W,height:e,width:e})}function s(t,e){e.s=!1,e.draggable&&google.maps.event.addListener(e,"dragend",function(){e.s=!1,t.L()}),t.a.push(e)}function r(t,e){var o=-1;if(t.a.indexOf)o=t.a.indexOf(e);else for(var i,s=0;i=t.a[s];s++)if(i==e){o=s;break}return-1!=o&&(e.setMap(f),t.a.splice(o,1),!0)}function a(t){if(t.A)for(var e,o=t.v(new google.maps.LatLngBounds(t.c.getBounds().getSouthWest(),t.c.getBounds().getNorthEast())),i=0;e=t.a[i];i++)if(!e.s&&o.contains(e.getPosition())){for(var s=t,r=4e4,a=f,p=0,h=void 0;h=s.f[p];p++)if(g=h.getCenter()){var l=e.getPosition();if(g&&l)var c=(l.lat()-g.lat())*Math.PI/180,d=(l.lng()-g.lng())*Math.PI/180,g=Math.sin(c/2)*Math.sin(c/2)+Math.cos(g.lat()*Math.PI/180)*Math.cos(l.lat()*Math.PI/180)*Math.sin(d/2)*Math.sin(d/2),g=12742*Math.atan2(Math.sqrt(g),Math.sqrt(1-g));else g=0;g<r&&(r=g,a=h)}a&&a.F.contains(e.getPosition())?a.q(e):((h=new n(s)).q(e),s.f.push(h))}}function n(t){this.k=t,this.c=t.getMap(),this.g=t.w(),this.l=t.l,this.r=t.r,this.d=f,this.a=[],this.F=f,this.n=new h(this,t.z(),t.w())}function p(t){t.F=t.k.v(new google.maps.LatLngBounds(t.d,t.d))}function h(t,e,o){t.k.extend(h,google.maps.OverlayView),this.j=e,this.fa=o||0,this.u=t,this.d=f,this.c=t.getMap(),this.B=this.b=f,this.t=!1,this.setMap(this.c)}function l(t,e){var o=t.getProjection().fromLatLngToDivPixel(e);return o.x-=parseInt(t.p/2,10),o.y-=parseInt(t.h/2,10),o}function c(t){t.b&&(t.b.style.display="none"),t.t=!1}function d(t,e){var o=[];return o.push("background-image:url("+t.da+");"),o.push("background-position:"+(t.D?t.D:"0 0")+";"),"object"==typeof t.e?("number"==typeof t.e[0]&&t.e[0]>0&&t.e[0]<t.h?o.push("height:"+(t.h-t.e[0])+"px; padding-top:"+t.e[0]+"px;"):o.push("height:"+t.h+"px; line-height:"+t.h+"px;"),"number"==typeof t.e[1]&&t.e[1]>0&&t.e[1]<t.p?o.push("width:"+(t.p-t.e[1])+"px; padding-left:"+t.e[1]+"px;"):o.push("width:"+t.p+"px; text-align:center;")):o.push("height:"+t.h+"px; line-height:"+t.h+"px; width:"+t.p+"px; text-align:center;"),o.push("cursor:pointer; top:"+e.y+"px; left:"+e.x+"px; color:"+(t.M?t.M:"black")+"; position:absolute; font-size:"+(t.N?t.N:11)+"px; font-family:Arial,sans-serif; font-weight:bold"),o.join("")}var g,f=null;(g=o.prototype).Q="https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m",g.P="png",g.extend=function(t,e){return function(t){for(var e in t.prototype)this.prototype[e]=t.prototype[e];return this}.apply(t,[e])},g.onAdd=function(){this.A||(this.A=!0,a(this))},g.draw=function(){},g.S=function(){for(var t,e=this.o(),o=new google.maps.LatLngBounds,i=0;t=e[i];i++)o.extend(t.getPosition());this.c.fitBounds(o)},g.z=e("j"),g.o=e("a"),g.V=function(){return this.a.length},g.ba=t("J"),g.I=e("J"),g.G=function(t,e){for(var o=0,i=t.length,s=i;0!==s;)s=parseInt(s/10,10),o++;return o=Math.min(o,e),{text:i,index:o}},g.$=t("G"),g.H=e("G"),g.C=function(t,e){for(var o,i=0;o=t[i];i++)s(this,o);e||this.i()},g.q=function(t,e){s(this,t),e||this.i()},g.Y=function(t,e){var o=r(this,t);return!(e||!o)&&(this.m(),this.i(),!0)},g.Z=function(t,e){for(var o,i=!1,s=0;o=t[s];s++)o=r(this,o),i=i||o;if(!e&&i)return this.m(),this.i(),!0},g.U=function(){return this.f.length},g.getMap=e("c"),g.setMap=t("c"),g.w=e("g"),g.aa=t("g"),g.v=function(t){var e=this.getProjection(),o=new google.maps.LatLng(t.getNorthEast().lat(),t.getNorthEast().lng()),i=new google.maps.LatLng(t.getSouthWest().lat(),t.getSouthWest().lng());return(o=e.fromLatLngToDivPixel(o)).x+=this.g,o.y-=this.g,i=e.fromLatLngToDivPixel(i),i.x-=this.g,i.y+=this.g,o=e.fromDivPixelToLatLng(o),e=e.fromDivPixelToLatLng(i),t.extend(o),t.extend(e),t},g.R=function(){this.m(!0),this.a=[]},g.m=function(t){for(var e,o=0;e=this.f[o];o++)e.remove();for(o=0;e=this.a[o];o++)e.s=!1,t&&e.setMap(f);this.f=[]},g.L=function(){var t=this.f.slice();this.f.length=0,this.m(),this.i(),window.setTimeout(function(){for(var e,o=0;e=t[o];o++)e.remove()},0)},g.i=function(){a(this)},(g=n.prototype).q=function(t){var e;t:if(this.a.indexOf)e=-1!=this.a.indexOf(t);else{e=0;for(var o;o=this.a[e];e++)if(o==t){e=!0;break t}e=!1}if(e)return!1;if(this.d?this.r&&(o=this.a.length+1,e=(this.d.lat()*(o-1)+t.getPosition().lat())/o,o=(this.d.lng()*(o-1)+t.getPosition().lng())/o,this.d=new google.maps.LatLng(e,o),p(this)):(this.d=t.getPosition(),p(this)),t.s=!0,this.a.push(t),(e=this.a.length)<this.l&&t.getMap()!=this.c&&t.setMap(this.c),e==this.l)for(o=0;o<e;o++)this.a[o].setMap(f);if(e>=this.l&&t.setMap(f),t=this.c.getZoom(),(e=this.k.I())&&t>e)for(t=0;e=this.a[t];t++)e.setMap(this.c);else this.a.length<this.l?c(this.n):(e=this.k.H()(this.a,this.k.z().length),this.n.setCenter(this.d),(t=this.n).B=e,t.ga=e.text,t.ea=e.index,t.b&&(t.b.innerHTML=e.text),e=Math.max(0,t.B.index-1),e=Math.min(t.j.length-1,e),e=t.j[e],t.da=e.url,t.h=e.height,t.p=e.width,t.M=e.textColor,t.e=e.anchor,t.N=e.textSize,t.D=e.backgroundPosition,this.n.show());return!0},g.getBounds=function(){for(var t,e=new google.maps.LatLngBounds(this.d,this.d),o=this.o(),i=0;t=o[i];i++)e.extend(t.getPosition());return e},g.remove=function(){this.n.remove(),this.a.length=0,delete this.a},g.T=function(){return this.a.length},g.o=e("a"),g.getCenter=e("d"),g.getMap=e("c"),(g=h.prototype).onAdd=function(){this.b=document.createElement("DIV"),this.t&&(this.b.style.cssText=d(this,l(this,this.d)),this.b.innerHTML=this.B.text),this.getPanes().overlayMouseTarget.appendChild(this.b);var t=this;google.maps.event.addDomListener(this.b,"click",function(){var e=t.u.k;google.maps.event.trigger(e,"clusterclick",t.u),e.O&&t.c.fitBounds(t.u.getBounds())})},g.draw=function(){if(this.t){var t=l(this,this.d);this.b.style.top=t.y+"px",this.b.style.left=t.x+"px"}},g.show=function(){this.b&&(this.b.style.cssText=d(this,l(this,this.d)),this.b.style.display=""),this.t=!0},g.remove=function(){this.setMap(f)},g.onRemove=function(){this.b&&this.b.parentNode&&(c(this),this.b.parentNode.removeChild(this.b),this.b=f)},g.setCenter=t("d"),window.MarkerClusterer=o,o.prototype.addMarker=o.prototype.q,o.prototype.addMarkers=o.prototype.C,o.prototype.clearMarkers=o.prototype.R,o.prototype.fitMapToMarkers=o.prototype.S,o.prototype.getCalculator=o.prototype.H,o.prototype.getGridSize=o.prototype.w,o.prototype.getExtendedBounds=o.prototype.v,o.prototype.getMap=o.prototype.getMap,o.prototype.getMarkers=o.prototype.o,o.prototype.getMaxZoom=o.prototype.I,o.prototype.getStyles=o.prototype.z,o.prototype.getTotalClusters=o.prototype.U,o.prototype.getTotalMarkers=o.prototype.V,o.prototype.redraw=o.prototype.i,o.prototype.removeMarker=o.prototype.Y,o.prototype.removeMarkers=o.prototype.Z,o.prototype.resetViewport=o.prototype.m,o.prototype.repaint=o.prototype.L,o.prototype.setCalculator=o.prototype.$,o.prototype.setGridSize=o.prototype.aa,o.prototype.setMaxZoom=o.prototype.ba,o.prototype.onAdd=o.prototype.onAdd,o.prototype.draw=o.prototype.draw,n.prototype.getCenter=n.prototype.getCenter,n.prototype.getSize=n.prototype.T,n.prototype.getMarkers=n.prototype.o,h.prototype.onAdd=h.prototype.onAdd,h.prototype.draw=h.prototype.draw,h.prototype.onRemove=h.prototype.onRemove}();;/*
+;function init_infoBox(){BB.gmap.infobox.prototype=new google.maps.OverlayView,BB.gmap.infobox.prototype.remove=function(){if(this._div){try{this._div.parentNode.removeChild(this._div)}catch(t){}this._div=null}},BB.gmap.infobox.prototype.set_map=function(t){this.__MAP=t,this.setMap(this.__MAP)},BB.gmap.infobox.prototype.map=function(){return this.__MAP},BB.gmap.infobox.prototype.draw=function(){this.createElement();var t=this.getProjection().fromLatLngToDivPixel(this.opts.position);t&&(this._div.style.width=this._width+"px",this._div.style.left=t.x+this._offsetX+"px",this._div.style.height=this._height+"px",this._div.style.top=t.y+this._offsetY+"px",this._div.style.display="block",this._div.style.zIndex=1)},BB.gmap.infobox.prototype.createElement=function(){var t=this.getPanes(),e=this._div;if(e){if(e.parentNode!=t.floatPane){try{e.parentNode.removeChild(e)}catch(t){}t.floatPane.appendChild(e)}}else{(e=this._div=document.createElement("div")).style.border="0",e.style.position="absolute",e.style.width=this._width+"px",e.style.height=this._height+"px";e.setAttribute("class","gmap_infobox"),e.appendChild(this.__ELEM),t.floatPane.appendChild(e),this._height=this.__ELEM.offsetHeight,this._width=this.__ELEM.offsetWidth;var o=this.opts.placement.split(" ");switch(o[0]){case"top":this._offsetY=-parseFloat(this.opts.offsetY);break;case"over":this._offsetY=-parseFloat(this.opts.offsetY)-parseInt(this._height);break;case"bottom":this._offsetY=-parseFloat(this._height);break;case"under":this._offsetY=0;break;case"center":this._offsetY=-parseFloat(this.opts.offsetY)/2-parseInt(this._height)/2}switch(o[1]){case"right":this._offsetX=parseFloat(this.opts.offsetX)-parseInt(this._width);break;case"left":this._offsetX=-parseFloat(this.opts.offsetX);break;case"center":this._offsetX=-parseInt(this._width)/2;break;case"out-right":this._offsetX=parseFloat(this.opts.offsetX);break;case"out-left":this._offsetX=-parseFloat(this.opts.offsetX)-parseInt(this._width)}this.panMap()}},BB.gmap.infobox.prototype.panMap=function(){var t=this.map,e=t.getBounds();if(e){var o=this.opts.position,i=this._width,s=this._height,r=this._offsetX,a=this._offsetY,n=t.getDiv(),p=n.offsetWidth,h=n.offsetHeight,l=e.toSpan(),c=l.lng()/p,d=l.lat()/h,g=e.getSouthWest().lng(),f=e.getNorthEast().lng(),u=e.getNorthEast().lat(),_=e.getSouthWest().lat(),m=o.lng()+(r-0)*c,B=o.lng()+(r+i+0)*c,y=o.lat()-(a-0)*d,v=o.lat()-(a+s+0)*d,b=(m<g?g-m:0)+(B>f?f-B:0),k=(y>u?u-y:0)+(v<_?_-v:0),w=t.getCenter();if(!w||void 0===w)return!1;w.lng(),w.lat();null!==this._bounds_changed_listener&&google.maps.event.removeListener(this._bounds_changed_listener),this._bounds_changed_listener=null}}}var BB=BB||{};BB.base=function(){this.__BB_DEBUG__=!1,this.__PROTECTED__=[],this._data=void 0},BB.base.prototype.set_data=function(t){return void 0===this._data&&(this._data=new BB.data),"object"!=typeof t?this:(this._data.set_data(t),this)},BB.base.prototype.remove_data=function(t){return this._data.remove_data(t),this},BB.base.prototype.get_data=function(t){var e=this.data();return void 0!==e[t]&&e[t]},BB.base.prototype.data=function(t){return this._data.get_data(t)},BB.base.prototype.sanitize=function(){var t=this.data();return t=this._escape_data(t),this.set_data(t),this},BB.base.prototype._escape_data=function(t){if(void 0===t)return"";if("object"==typeof t&&t.length)for(var e=0,o=t.length;e<o;e++)t[e]=this._escape_data(t[e]);if("object"==typeof t)for(var i in t)t[i]=this._escape_data(t[i]);return"string"==typeof t?escape(t):t},BB.base.prototype._unescape_data=function(t){if(void 0===t)return"";if("object"==typeof t)for(var e in t)t[e]=this._unescape_data(t[e]);return"string"==typeof t?unescape(t):t},BB.base.prototype.ident=function(){var t=this.data();return"string"!=typeof t.ident?(this.error("Ident is not a String which is odd. "+t.ident),""):t.ident},BB.base.prototype.set_ident=function(t){return"string"!=typeof t&&(t=""+t,this.error("Ident must be a string. Automatically converted to : "+t)),this.set_data({ident:t}),this},BB.base.prototype.error=function(t){if(this.__BB_DEBUG__)throw Error(t);return this},BB.base.prototype.is_empty_object=function(t){if("object"!=typeof t)return this.error("Invalid argument, Object expected at BB.base.is_empty_object()"),!0;for(var e in t)if(t.hasOwnProperty(e))return!1;return!0},BB.base.prototype.extend=function(t,e){var o,i={};for(o in t)Object.prototype.hasOwnProperty.call(t,o)&&(i[o]=t[o]);for(o in e)Object.prototype.hasOwnProperty.call(e,o)&&(i[o]=e[o]);return i},(BB=BB||{}).data=function(t){if(this.__PROTECTED__=[],this.__HIDDEN_DATA__=!0,this.__HIDDEN_DATA__){var e=t||{};return{set_data:function(t){for(var o in t)e[o]=t[o]},get_data:function(t){return t?void 0!==e[t]?e[t]:"":e},remove_data:function(t){t||(e={}),void 0!==e[t]&&(e[t]=void 0,delete e[t])}}}return this.__DATA=t||{},this.set_data=function(t){if(this.__DATA){if(t)for(var e in t)this.__DATA[e]=t[e]}else this.__DATA=t||{}},this.get_data=function(t){return t?void 0!==this.__DATA[t]?this.__DATA[t]:void 0:this.__DATA},this.remove_data=function(t){t||(this.__DATA={}),void 0!==this.__DATA[t]&&(this.__DATA[t]=void 0,delete this.__DATA[t])},this},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.controller=function(t,e){return this._MAP=void 0,this.__CONTAINER=t,this.__EDITABLE=!1,this.__PLACES={markers:{},polygons:{},lines:{}},this.__FOCUSED_ITEM=void 0,this.__CLUSTERER=void 0,this.set_data(e),this},BB.gmap.controller.prototype=new BB.base,BB.gmap.controller.prototype.map=function(){return this._MAP?this._MAP:(this.error("No map associated to the current controller at BB.gmap.controller.map()"),!1)},BB.gmap.controller.prototype.loading_place=function(t){var e=this.get_place(t);return e?(e.set_data({loaded:!1}),this):this},BB.gmap.controller.prototype.place_loaded=function(t){return t?!t.data("loaded")&&(t.set_data({loaded:!0}),this.check_loaded_places()&&this._ready(),this):this},BB.gmap.controller.prototype.check_loaded_places=function(){var t=!0;return this._loop_all(function(e){t=!(!t||!e.data("loaded"))}),t=t&&this.data("tiles_loaded")},BB.gmap.controller.prototype.ready=function(t){return"function"==typeof t&&this.set_data({map_ready:t}),this},BB.gmap.controller.prototype._ready=function(){var t=this.data();return this.data("loaded")?this:("function"==typeof t.map_ready&&t.map_ready(this),this.set_data({loaded:!0}),this)},BB.gmap.controller.prototype.set_zoom=function(t){return this.map().setZoom(t),this},BB.gmap.controller.prototype.container=function(){return this.__CONTAINER},BB.gmap.controller.prototype.init=function(){var t=this.data();if(this.map())return this;var e=this.data("map");return e.center=new google.maps.LatLng(parseFloat(e.center.x),parseFloat(e.center.y)),this._MAP=new google.maps.Map(this.container(),e),"object"!=typeof t.places?this.error("You haven't set any places yet"):this.add_places(t.places),this.listeners(),this},BB.gmap.controller.prototype.set_styles=function(t){"object"!=typeof t&&this.error("Invalid type styles in BB.gmap.set_styles()"+t);var e=this.data("map");return e.styles=t,this.data("map",e),this.map()&&this.map().setOptions({styles:t}),this},BB.gmap.controller.prototype.add_places=function(t){if(!t)return this.error("Invalid places specified :"+t),this;for(var e in t)this.add_place(e,t[e]);return this},BB.gmap.controller.prototype.set_place=function(t,e,o){return e&&o?void 0===this.__PLACES[t]?(this.error("Invalid data type at BB.gmap.controlle.set_place( "+t+", "+e+", "+o+")"),this):(void 0===this.__PLACES[t][e]&&(this.__PLACES[t][e]={}),o.set_ident(e),this.__PLACES[t][e]=o,this):(this.error("Missing parameters in BB.gmap.controller.set_place( "+t+", "+e+", "+o+")"),this)},BB.gmap.controller.prototype.add_place=function(t,e){if(!e)return this.error("Missing parameter BB.gmap.controller.prototype.add_place ( ident, data ) : ( "+t+", "+e+" )"),this;if("string"!=typeof e.type)return this.error('Missing parameter "type" in BB.gmap.controller.prototype.add_place'),this;switch(e.ident=t,e.type){case"marker":o=new BB.gmap.marker(e,this);this.set_place("markers",t,o);break;case"richmarker":var o=new BB.gmap.richmarker(e,this);this.set_place("markers",t,o);break;case"line":this.set_place("lines",t,new BB.gmap.line(e,this));break;case"polygon":this.set_place("polygons",t,new BB.gmap.polygon(e,this))}return this},BB.gmap.controller.prototype.get_places=function(){return this.__PLACES},BB.gmap.controller.prototype.get_places_by_type=function(t){return this.__PLACES[t]},BB.gmap.controller.prototype.add_place_by_address=function(t,e,o){var i=this;this.geocode_address(e,function(e){o.coords=e,i.add_place(t,o)})},BB.gmap.controller.prototype.geocode_address=function(t,e){var o=Array();if("undefined"==typeof google)return error;(new google.maps.Geocoder).geocode({address:t},function(t,i){if(i==google.maps.GeocoderStatus.OK){var s=t[0].geometry.location.lat(),r=t[0].geometry.location.lng();"function"==typeof e&&e([s,r])}return o})},BB.gmap.controller.prototype.get_place=function(t){var e=this.get_places(),o=!1;for(var i in e){var s=this.get_places_by_type(i);this.is_empty_object(s)||(o="object"==typeof s[t]?s[t]:o)}return o||(this.error("Invalid ident at BB.gmap.controller.get_place( ident ) : "+t),!1)},BB.gmap.controller.prototype.remove_focus=function(){var t=this.focused();return t&&("function"==typeof this.data("onblur")&&this.data("onblur")(t,this),t.blur(),this.__FOCUSED_ITEM=void 0),this},BB.gmap.controller.prototype.set_focus=function(t){return this.remove_focus(),this.__FOCUSED_ITEM=t,"function"==typeof this.data("onfocus")&&this.data("onfocus")(t,this),this},BB.gmap.controller.prototype.focused=function(){return this.__FOCUSED_ITEM},BB.gmap.controller.prototype.translate_coords=function(t){if("object"==typeof t&&2==t.length)return new google.maps.LatLng(t[0],t[1])},BB.gmap.controller.prototype.listeners=function(){var t=this;return google.maps.event.clearListeners(this.map(),"click"),google.maps.event.addListener(this.map(),"click",function(e){t.map_click(e)}),google.maps.event.addListenerOnce(this.map(),"tilesloaded",function(e){t.set_data({tiles_loaded:!0}),t._ready()}),google.maps.event.addDomListener(document,"keyup",function(e){switch(e.keyCode?e.keyCode:e.which){case 46:t.focused()&&t.focused().data("editable")&&(t.focused().delete(),t.remove_focus());break;case 27:t.focused()&&t.remove_focus()}}),this},BB.gmap.controller.prototype.create_new=function(t,e){var o=this;e||(e="new_object");var i=this.data("default_styles");switch(i||(i={strokeColor:"#000000",strokeOpacity:.8,strokeWeight:2,fillColor:"#FFFFFF",fillOpacity:.35,hover:{strokeColor:"#000000",strokeOpacity:.8,strokeWeight:2,fillColor:"#FFFFFF",fillOpacity:1},focused:{fillOpacity:1}}),t){case"polygon":var s={type:"polygon",editable:!0,styles:i},r=new BB.gmap.polygon(s,o);o.set_place("polygons",e,r),o.set_focus(r);break;case"line":var s={type:"line",editable:!0,styles:i},a=new BB.gmap.line(s,o);o.set_place("lines",e,a),o.set_focus(a);break;default:this.set_data({marker_creation:e})}},BB.gmap.controller.prototype.on=function(t,e){var o={};o["on"+t]=e,this.set_data(o)},BB.gmap.controller.prototype.map_click=function(t){this.data("marker_creation")&&(this.add_place(this.data("marker_creation"),{coords:[t.latLng.lat(),t.latLng.lng()],draggable:!0,editable:!0,type:"marker"}),this.set_focus(this.get_place(this.data("marker_creation"))),"function"==typeof this.data("marker_creation_callback")&&this.data("marker_creation_callback")(this.get_place(this.data("marker_creation"))),this.set_data({marker_creation:!1}));var e=this.focused();return e?(e.data("editable")?e.map_click(t):this.remove_focus(),this):this},BB.gmap.controller.prototype._loop_all=function(t){if("function"!=typeof t)return this;var e=this.get_places();for(var o in e){var i=this.get_places_by_type(o);if(!this.is_empty_object(i))for(var s in i)t(i[s])}return this},BB.gmap.controller.prototype.filter=function(t){this._loop_all(function(e){if(!t)return e.show(),!1;var o=e.data("categories");if(!o)return e.hide(),!1;"string"==typeof o&&(o=o.split(",")),o||e.hide();var i=!1;for(var s in o)t==o[s]&&(i=!0);i?e.show():e.hide()})},BB.gmap.controller.prototype.fit_bounds=function(){var t=new google.maps.LatLngBounds,e=0;if(this._loop_all(function(o){var i=o.get_position();if(!i)return!1;for(var s,r=0;r<i.getLength();r++){s=i.getAt(r);for(var a=0;a<s.getLength();a++)t.extend(s.getAt(a))}e++}),e>0&&(this.map().fitBounds(t),this.data("max_fitbounds_zoom"))){var o=this.data("max_fitbounds_zoom");this.map().getZoom()>o&&this.map().setZoom(o)}return this},BB.gmap.controller.prototype.get_all_markers=function(){var t=this.get_places_by_type("markers"),e=[];for(var o in t)e.push(t[o].object());return e},BB.gmap.controller.prototype.activate_clusterer=function(t){this.clusterer()&&this.clusterer().clearMarkers();var e=this.get_all_markers();return this.set_clusterer(new MarkerClusterer(this.map(),e)),this},BB.gmap.controller.prototype.set_clusterer=function(t){this.__CLUSTERER=t},BB.gmap.controller.prototype.clusterer=function(){return this.__CLUSTERER},BB.gmap.controller.prototype._delete=function(t,e){switch(t){case"marker":if(void 0===this.__PLACES.markers[e])return!1;delete this.__PLACES.markers[e];break;case"line":if(void 0===this.__PLACES.lines[e])return!1;delete this.__PLACES.lines[e];break;case"polygon":if(void 0===this.__PLACES.polygons[e])return!1;delete this.__PLACES.polygons[e]}},BB.gmap.controller.prototype.export=function(){var t=this.data();void 0!==t.places&&delete t.places,void 0!==t.center&&delete t.center;var e=this.map().getCenter();return t.map.center.x=e.lat(),t.map.center.y=e.lng(),t.map.zoom=this.map().getZoom(),t.places={},this._loop_all(function(e){t.places[e.ident()]=e.export()}),t},BB.gmap.controller.prototype.get_map_image=function(){var t=this.data();void 0!==t.places&&delete t.places,void 0!==t.center&&delete t.center;var e=this.map().getCenter(),o="https://maps.googleapis.com/maps/api/staticmap?",i=[];return i.push("center="+e.lat()+","+e.lng()),i.push("zoom="+this.map().getZoom()),i.push("size=640x400"),this._loop_all(function(t){if("marker"==t.data("type")){if(!t.data("icon").src)return!1;var e=new Image;e.src=t.data("icon").src;var o=t.data("icon").width+"x"+t.data("icon").height,s=t.data("coords"),r="markers=size:"+o+"|icon:"+e.src+"|"+s[0]+","+s[1];i.push(r)}if("polygon"==t.data("type")){var a=t.data("paths");if(!a)return!1;var n=[],p=t.data("styles"),h=(p.strokeColor,p.strokeWeight);p.fillColor;n.push("color:black"),n.push("weight:"+h),n.push("fillcolor:white");for(var l=0,c=a.length;l<c;l++)n.push(a[l].join(","));n.push(a[0].join(",")),i.push("path="+n.join("|"))}}),o+=i.join("&")},BB.gmap.controller.prototype.reset=function(){return this._loop_all(function(t){t.hide(),t.delete()}),this.set_data({places:void 0}),this.remove_focus(),this},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.infobox=function(t,e){BB.gmap.statics,this.__MAP=void 0,t instanceof jQuery&&(t=t.get(0)),this.__ELEM=t,google.maps.OverlayView.call(this),e.offsetY=e.offsetY||0,e.offsetX=e.offsetX||0,this.opts=e,void 0===this.opts.placement&&(this.opts.placement="top center"),this.__MAP=e.map;var o=this;this._bounds_changed_listener=google.maps.event.addListener(this.__MAP,"bounds_changed",function(){return o.panMap.apply(o)}),this.set_map(e.map)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.object=function(t,e){return this.__OBJECT=void 0,this.__CONTROLLER=e,this.__DELETED=!1,this.set_data(t),this.init(),this.controller().loading_place(this.ident()),this},BB.gmap.object.prototype=new BB.base,BB.gmap.object.prototype.set_object=function(t){return this.__OBJECT=t,this},BB.gmap.object.prototype.object=function(){return this.__OBJECT},BB.gmap.object.prototype.controller=function(){return this.__CONTROLLER},BB.gmap.object.prototype.set_controller=function(t){return this.__CONTROLLER=t,this},BB.gmap.object.prototype.set_map=function(t){return this.object().setMap(t),this},BB.gmap.object.prototype.map_click=function(t){return this},BB.gmap.object.prototype.show=function(){var t=this.object();return void 0===t?(this.error("No object defined at BB.gmap.object.show()"),this):(t.setMap(this.controller().map()),this)},BB.gmap.object.prototype.hide=function(){var t=this.object();return void 0===t?(this.error("No object defined at BB.gmap.object.hide()"),this):(t.setMap(null),this)},BB.gmap.object.prototype.delete=function(){this.__DELETED=!0;var t=this.object();if(void 0===t)return this.error("No object defined at BB.gmap.object.delete()"),this;this.clear_listeners(),t.setMap(null);var e=this.data();return"function"==typeof e.ondelete&&e.ondelete(this),this.controller()._delete(this.data("type"),this.ident()),delete t,this},BB.gmap.object.prototype.init=function(){return this},BB.gmap.object.prototype.display=function(){return this},BB.gmap.object.prototype.focus=function(){return this},BB.gmap.object.prototype.blur=function(){return this},BB.gmap.object.prototype.get_bounds=function(){return this},BB.gmap.object.prototype.get_position=function(){return this},BB.gmap.object.prototype.clear_listeners=function(){return this},BB.gmap.object.prototype.export=function(){return this.data()},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.marker=function(t,e){return BB.gmap.object.call(this,t,e),this.__MEDIA=void 0,this.__ICON=void 0,this._image_loaded=!1,this._marker_loaded=!1,this.__INFOBOX=void 0,this._listeners=!1,this},BB.gmap.marker.prototype=Object.create(BB.gmap.object.prototype),BB.gmap.marker.prototype.init=function(){var t=this.data();return"string"==typeof t.icon?this.set_image(t.icon):"object"==typeof t.icon?this.set_icon(t.icon):this.display(),this},BB.gmap.marker.prototype.icon=function(){return this.__ICON?this.__ICON:new Image},BB.gmap.marker.prototype.set_icon=function(t){if("object"!=typeof t)return this.error("Invalid icon at BB.gmap.marker.prototype.set_icon( "+t+" )"),this;if(!(t instanceof Image)&&void 0===t.path){var e;return t.width&&t.height&&(e={width:t.width,height:t.height}),this.set_image(t.src,e),this}return this.__ICON=t,this.display(),this},BB.gmap.marker.prototype.set_image=function(t,e){var o=new Image;return o.data=this,o.onload=function(){this.data.set_icon(this),this.data.display()},o.onerror=function(){this.data.set_data({icon:void 0}),this.data.display()},o.src=t,e&&(o.height=e.height,o.width=e.width),this},BB.gmap.marker.prototype.display=function(){var t=this.data();if("object"!=typeof t.coords)return this.error("Requires coordinates [lat, lng] at BB.gmap.marker.display()"),!1;var e={map:this.controller().map(),position:new google.maps.LatLng(t.coords[0],t.coords[1])};e=this.extend(e,t);var o=this.icon();if(!(o instanceof Image)&&"string"==typeof o.path){var i=0,s=0;"string"==typeof o.height&&(i=parseInt(o.height)),"string"==typeof o.width&&(s=parseInt(o.width)),o.anchor=new google.maps.Point(s/2,i),e.icon=o}var r="object"==typeof t.options?t.options:{};for(var a in r)e[a]=r[a];if(this.icon().src){var s=this.icon().width,i=this.icon().height;e.icon=new google.maps.MarkerImage(this.icon().src,new google.maps.Size(s,i),new google.maps.Point(0,0),new google.maps.Point(s/2,i),new google.maps.Size(s,i))}if(void 0!==this.object())this.object().setOptions(e);else{var n=new google.maps.Marker(e);this.set_marker(n)}return this._listeners||(this.listeners(),this._listeners=!0,this.marker_loaded()),this.data("hidden")&&this.hide(),this},BB.gmap.marker.prototype.marker_loaded=function(){var t=this.data();if("function"==typeof t.loaded_callback&&t.loaded_callback(this),this.controller().data("use_clusterer")){this.controller().data("clusterer_options");this.controller().activate_clusterer({gridSize:10,maxZoom:15})}return this.controller().place_loaded(this),this},BB.gmap.marker.prototype.set_marker=function(t){return this._marker_loaded?(this.error("There is already a marker affected to this instanciation of a [BB.gmap.marker] ( "+this.ident()+" )"),this):(this._marker_loaded=!0,this.set_object(t),this)},BB.gmap.marker.prototype.listeners=function(){var t=this,e=this.object();e.bbmarker=this,this.data("draggable")&&google.maps.event.addListener(e,"dragend",t.dragend),google.maps.event.addListener(e,"click",t.onclick)},BB.gmap.marker.prototype.clear_listeners=function(){var t=this.object();return google.maps.event.clearListeners(t,"dragend"),google.maps.event.clearListeners(t,"click"),this},BB.gmap.marker.prototype.dragend=function(t){var e=this.bbmarker,o=e.data();"function"==typeof o.ondragend&&o.ondragend(e,t),e.set_data({coords:[t.latLng.lat(),t.latLng.lng()]}),e.focus()},BB.gmap.marker.prototype.onclick=function(t){var e=this.bbmarker,o=e.data();if("function"==typeof o.onclick?o.onclick(t,e):"string"==typeof o.onclick&&"function"==typeof window[o.onclick]&&window[o.onclick](e,t),o.infobox){if(e.__INFOBOX)return e.__INFOBOX.map?e.__INFOBOX.set_map(null):e.__INFOBOX.set_map(e.controller().map()),e.focus(),this;if(BB.gmap.statics.infobox_loaded||(init_infoBox(),BB.gmap.statics.infobox_loaded=!0),"function"==typeof o.infobox&&(o.infobox=o.infobox(e.data())),"string"==typeof o.infobox){var i=document.getElementById(o.infobox);i||((i=document.createElement("div")).style.position="absolute",i.innerHTML=o.infobox),o.infobox=i}var s={};o.infobox_options&&(s=o.infobox_options),s.offsetY||(s.offsetY=e.icon().height),s.offsetX||(s.offsetX=e.icon().width/2),s.map=e.controller().map(),s.position=e.get_position().getAt(0).getAt(0),e.__INFOBOX=new BB.gmap.infobox(o.infobox,s)}e.focus()},BB.gmap.marker.prototype.focus=function(){var t=this;t.controller().set_focus(t);var e=this.data();e.icon_selected&&("object"==typeof e.icon_selected?this.set_icon(e.icon_selected):this.set_image(e.icon_selected))},BB.gmap.marker.prototype.blur=function(){if(!this.controller().get_place(this.ident()))return!1;var t=this.data();t.icon_selected&&("object"==typeof t.icon?this.set_icon(t.icon):this.set_image(t.icon))},BB.gmap.marker.prototype.get_bounds=function(){var t=this,e=new google.maps.LatLngBounds;return e.extend(t.object().getPosition()),e},BB.gmap.marker.prototype.get_position=function(){var t=new google.maps.MVCArray,e=new google.maps.MVCArray;return!!this.object()&&(t.push(this.object().getPosition()),e.push(t),e)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.richmarker=function(t,e){return BB.gmap.marker.call(this,t,e),this._listeners=!1,this},BB.gmap.richmarker.prototype=Object.create(BB.gmap.marker.prototype),BB.gmap.richmarker.prototype.init=function(){var t=this.data();return this.set_content(t.content),this.display(),this},BB.gmap.richmarker.prototype.set_content=function(t){return this._content=t,this},BB.gmap.richmarker.prototype.content=function(){return this._content},BB.gmap.richmarker.prototype.display=function(){var t=this.data();if("object"!=typeof t.coords)return this.error("Requires coordinates [lat, lng] at BB.gmap.richmarker.display()"),!1;var e={map:this.controller().map(),position:new google.maps.LatLng(t.coords[0],t.coords[1])};if("function"==typeof(e=this.extend(e,t)).html&&(console.log(e.html(t)),e.html=e.html(t)),"function"==typeof e.selected_html&&(e.selected_html=e.selected_html(t)),void 0!==this.object())this.object().setOptions(e);else{var o=customMarker(e);this.set_marker(o)}return this._listeners||(this.listeners(),this._listeners=!0),this.data("hidden")&&this.hide(),this},BB.gmap.richmarker.prototype.listeners=function(){var t=this,e=this.object();e.bbmarker=this,this.data("draggable")&&google.maps.event.addListener(e,"dragend",t.dragend),google.maps.event.addListener(e,"click",t.onclick)},BB.gmap.richmarker.prototype.clear_listeners=function(){var t=this.object();return google.maps.event.clearListeners(t,"dragend"),google.maps.event.clearListeners(t,"click"),this},BB.gmap.richmarker.prototype.focus=function(){if(this.controller().focused()&&this.controller().focused().ident()==this.ident())return this;this.controller().set_focus(this),this.object().setHtml(this.data("selected_html"))},BB.gmap.richmarker.prototype.blur=function(){if(!this.controller().get_place(this.ident()))return!1;this.object().setHtml(this.data("html"))},BB.gmap.richmarker.prototype.icon=function(){return{height:this.object().div.offsetHeight,width:this.object().div.offsetWidth}},customMarker=function(t){return"function"!=typeof BB.gmap.customMarker&&(BB.gmap.customMarker=function(t){this.MAP=t.map,void 0!==t.map&&this.setMap(this.MAP),void 0!==t.position&&(this.latlng=t.position),void 0!==t.html&&(this.html=t.html)},BB.gmap.customMarker.prototype=new google.maps.OverlayView,BB.gmap.customMarker.prototype.draw=function(){this.setHtml(this.html)},BB.gmap.customMarker.prototype.setHtml=function(t){var e=this,o=this.div;o||((o=document.createElement("div")).style.position="absolute",o.style.cursor="pointer",google.maps.event.addDomListener(o,"click",function(t){t.stopPropagation(),t.preventDefault(),google.maps.event.trigger(e,"click")}),this.getPanes().overlayImage.appendChild(o)),o.innerHTML=this.html;var i=this.getProjection().fromLatLngToDivPixel(this.latlng);if(i){var s=o.offsetHeight,r=o.offsetWidth;o.style.left=i.x-r/2+"px",o.style.top=i.y-s+"px"}this.div=o},BB.gmap.customMarker.prototype.remove=function(){this.div&&(this.div.parentNode.removeChild(this.div),this.div=null)},BB.gmap.customMarker.prototype.getPosition=function(){return this.latlng}),new BB.gmap.customMarker(t)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.line=function(t,e){return this.__STYLES=void 0,this.__PATHS=void 0,this.__MARKERS=[],BB.gmap.object.call(this,t,e),this},BB.gmap.line.prototype=Object.create(BB.gmap.object.prototype),BB.gmap.line.prototype.init=function(){var t=this.data();if("object"!=typeof t.styles&&this.set_data({styles:this.controller().data("default_styles")}),this.add_styles(t.styles),this.set_paths([]),"object"==typeof t.paths)for(var e=0,o=t.paths.length;e<o;e++)this.add_point(t.paths[e]);return this.get_paths()&&this.get_styles()&&this.display(),t.editable&&this.set_editable(t.editable),this.listeners(),this.controller().place_loaded(this),this},BB.gmap.line.prototype.redraw=function(){for(var t=this.get_paths(),e=0,o=t.length,i=[];e<o;e++)i.push([t.getAt(e).lat(),t.getAt(e).lng()]);this.set_data({paths:i})},BB.gmap.line.prototype.add_styles=function(t){this.__STYLES=t},BB.gmap.line.prototype.set_styles=function(t){return this.add_styles(t),this.display(),this},BB.gmap.line.prototype.get_styles=function(){return this.__STYLES},BB.gmap.line.prototype.set_paths=function(t){if("object"==typeof t){if(!(t[0]instanceof google.maps.LatLng)){for(var e=0,o=t.length,i=new google.maps.MVCArray;e<o&&"object"==typeof t[e];e++){var s=this.controller().translate_coords(t[e]);i.insertAt(i.length,s)}t=i}this.__PATHS=t}else this.error("Invalid paths at BB.gmap.line.set_paths :"+t)},BB.gmap.line.prototype.get_paths=function(){return this.__PATHS},BB.gmap.line.prototype.display=function(){this.data();var t=this.get_styles();void 0===t&&this.error("Undefined styles at BB.gmap.line.display : "+t);var e=this.get_paths();if(void 0===e&&this.error("Undefined paths at BB.gmap.line.display : "+e),t.path=e,void 0!==this.object())this.object().setOptions(t);else{var o=new google.maps.Polyline(t);this.set_object(o)}return this.set_map(this.controller().map()),this.update_coords(),this},BB.gmap.line.prototype.refresh=function(){var t=this.data("_opts");this.object().setOptions(t)},BB.gmap.line.prototype.add_point=function(t,e){if("object"!=typeof t)return!1;if(t instanceof google.maps.LatLng||(t=this.controller().translate_coords(t)),!(t instanceof google.maps.LatLng||void 0!==t[0]&&void 0!==t[1]))return!1;var o=this,i=this.get_paths();void 0===i&&this.set_paths([[t.lat(),t.lng()]]),i=this.get_paths(),"number"!=typeof e&&(e=i.length),i.insertAt(e,t);var s=new BB.gmap.marker({coords:[t.lat(),t.lng()],draggable:!0,icon:{path:google.maps.SymbolPath.CIRCLE,scale:4},hidden:!this.data("editable"),editable:!0,ondragend:function(t,e){o.move_point(t.object().index,[e.latLng.lat(),e.latLng.lng()])},ondelete:function(t){o.remove_point(t.object().index),o.focus(),o.get_paths().length||o.delete()},index:e},o.controller());return this.__MARKERS||(this.__MARKERS=[]),this.__MARKERS[e]=s,this},BB.gmap.line.prototype.move_point=function(t,e){var o=this.get_paths();if("object"!=typeof o)return this.error("You can not move a point when no path is given at BB.gmap.line.move_point( index, path )"),!1;if(!e)return this.error("Required arguments index:integer and path:object at BB.gmap.line.move_point( index, path )"),!1;if(e instanceof google.maps.LatLng||(e=this.controller().translate_coords(e)),!(e instanceof google.maps.LatLng||void 0!==e[0]&&void 0!==e[1]))return!1;return o.setAt(t,e),this.update_coords(),this},BB.gmap.line.prototype.remove_point=function(t){var e=this.get_paths();if("object"!=typeof e)return this.error("You can not move a point when no path is given at BB.gmap.line.remove_point( index, path )"),!1;e.removeAt(t),void 0!==this.__MARKERS[t]&&(this.__MARKERS[t].hide(),this.__MARKERS.splice(t,1));var o=this.__MARKERS;for(var i in o)o[i].object().index=parseInt(i);return this.redraw(),this.update_coords(),this},BB.gmap.line.prototype.set_editable=function(t){return t?(this.set_data({editable:!0}),this.show_markers(),this.focus(),this):(this.set_data({editable:!1}),this.hide_markers(),this)},BB.gmap.line.prototype.show_markers=function(){for(var t=0;t<this.__MARKERS.length;t++)this.__MARKERS[t].show();return this},BB.gmap.line.prototype.hide_markers=function(){this.controller().focused();for(var t=0;t<this.__MARKERS.length;t++)this.__MARKERS[t].hide();return this},BB.gmap.line.prototype.map_click=function(t){this.add_point(t.latLng)},BB.gmap.line.prototype.set_draggable=function(t){var e=this.get_styles();return e.draggable=!!t,this.set_styles(e),this},BB.gmap.line.prototype.listeners=function(){var t=this;t.object().bbobject=t,this.clear_listeners(),google.maps.event.addListener(t.object(),"mouseover",t.mouse_over),google.maps.event.addListener(t.object(),"mouseout",t.mouse_out),google.maps.event.addListener(t.object(),"click",t.click)},BB.gmap.line.prototype.clear_listeners=function(){var t=this;return google.maps.event.clearListeners(t.object(),"mouseover"),google.maps.event.clearListeners(t.object(),"mouseout"),google.maps.event.clearListeners(t.object(),"click"),this},BB.gmap.line.prototype.mouse_over=function(t){var e=this.bbobject,o=e.data();"function"==typeof o.onmouseover&&o.onmouseover(e,t);var i=e.get_styles();"object"==typeof i.hover&&e.set_styles(i.hover)},BB.gmap.line.prototype.mouse_out=function(t){var e=this.bbobject,o=e.data();if("function"==typeof o.onmouseout&&o.onmouseout(e,t),e.controller().focused()==e)return!1;e.get_data("styles");e.set_styles(e.get_data("styles"))},BB.gmap.line.prototype.mouse_down=function(t){this.bbobject},BB.gmap.line.prototype.mouse_up=function(t){this.bbobject},BB.gmap.line.prototype.click=function(t){var e=this.bbobject,o=e.data();e.focus(),"function"==typeof o.onclick?o.onclick(e,t):"string"==typeof o.onclick&&"function"==typeof window[o.onclick]&&window[o.onclick](e,t)},BB.gmap.line.prototype.focus=function(){if(this.__DELETED)return!1;this.controller().set_focus(this);var t=this.get_data("styles");return"object"==typeof t.focused&&this.set_styles(t.focused),this.data("editable")&&this.show_markers(),this},BB.gmap.line.prototype.blur=function(){return!this.__DELETED&&(this.set_styles(this.get_data("styles")),this)},BB.gmap.line.prototype.get_bounds=function(){for(var t,e=this,o=new google.maps.LatLngBounds,i=e.object().getPaths(),s=0;s<i.getLength();s++){t=i.getAt(s);for(var r=0;r<t.getLength();r++)o.extend(t.getAt(r))}return o},BB.gmap.line.prototype.get_position=function(){var t=new google.maps.MVCArray;return t.push(this.object().getPath()),t},BB.gmap.line.prototype.update_coords=function(){var t=[];return this.get_paths().forEach(function(e){t.push([e.lat(),e.lng()])}),this.set_data({paths:t}),this},BB.gmap.line.prototype.export=function(){this.update_coords();var t=this.data();return void 0!==t.styles.path&&delete t.styles.path,this.data()},BB.gmap.line.prototype.delete=function(){var t=0,e=this.__MARKERS.length;if(e)for(;t<e;t++)this.remove_point(t);this.hide_markers(),BB.gmap.object.prototype.delete.call(this)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.polygon=function(t,e){return BB.gmap.line.call(this,t,e),this},BB.gmap.polygon.prototype=Object.create(BB.gmap.line.prototype),BB.gmap.polygon.prototype.display=function(){this.data();var t=this.get_styles();void 0===t&&this.error("Undefined styles at BB.gmap.polygon.display : "+t);var e=this.get_paths();if(void 0===e&&this.error("Undefined paths at BB.gmap.polygon.display : "+e),void 0!==this.object())this.object().setOptions(t);else{var o=new google.maps.Polygon(t);this.set_object(o)}return this.object().setPaths(new google.maps.MVCArray([e])),this.set_map(this.controller().map()),this.listeners(),this},BB.gmap.polygon.prototype.get_position=function(){return this.object().getPaths()},function(){function t(t){return function(e){this[t]=e}}function e(t){return function(){return this[t]}}function o(t,e,s){this.extend(o,google.maps.OverlayView),this.c=t,this.a=[],this.f=[],this.ca=[53,56,66,78,90],this.j=[],this.A=!1,s=s||{},this.g=s.gridSize||60,this.l=s.minimumClusterSize||2,this.J=s.maxZoom||f,this.j=s.styles||[],this.X=s.imagePath||this.Q,this.W=s.imageExtension||this.P,this.O=!0,void 0!=s.zoomOnClick&&(this.O=s.zoomOnClick),this.r=!1,void 0!=s.averageCenter&&(this.r=s.averageCenter),i(this),this.setMap(t),this.K=this.c.getZoom();var r=this;google.maps.event.addListener(this.c,"zoom_changed",function(){var t=r.c.getZoom();r.K!=t&&(r.K=t,r.m())}),google.maps.event.addListener(this.c,"idle",function(){r.i()}),e&&e.length&&this.C(e,!1)}function i(t){if(!t.j.length)for(var e,o=0;e=t.ca[o];o++)t.j.push({url:t.X+(o+1)+"."+t.W,height:e,width:e})}function s(t,e){e.s=!1,e.draggable&&google.maps.event.addListener(e,"dragend",function(){e.s=!1,t.L()}),t.a.push(e)}function r(t,e){var o=-1;if(t.a.indexOf)o=t.a.indexOf(e);else for(var i,s=0;i=t.a[s];s++)if(i==e){o=s;break}return-1!=o&&(e.setMap(f),t.a.splice(o,1),!0)}function a(t){if(t.A)for(var e,o=t.v(new google.maps.LatLngBounds(t.c.getBounds().getSouthWest(),t.c.getBounds().getNorthEast())),i=0;e=t.a[i];i++)if(!e.s&&o.contains(e.getPosition())){for(var s=t,r=4e4,a=f,p=0,h=void 0;h=s.f[p];p++)if(g=h.getCenter()){var l=e.getPosition();if(g&&l)var c=(l.lat()-g.lat())*Math.PI/180,d=(l.lng()-g.lng())*Math.PI/180,g=Math.sin(c/2)*Math.sin(c/2)+Math.cos(g.lat()*Math.PI/180)*Math.cos(l.lat()*Math.PI/180)*Math.sin(d/2)*Math.sin(d/2),g=12742*Math.atan2(Math.sqrt(g),Math.sqrt(1-g));else g=0;g<r&&(r=g,a=h)}a&&a.F.contains(e.getPosition())?a.q(e):((h=new n(s)).q(e),s.f.push(h))}}function n(t){this.k=t,this.c=t.getMap(),this.g=t.w(),this.l=t.l,this.r=t.r,this.d=f,this.a=[],this.F=f,this.n=new h(this,t.z(),t.w())}function p(t){t.F=t.k.v(new google.maps.LatLngBounds(t.d,t.d))}function h(t,e,o){t.k.extend(h,google.maps.OverlayView),this.j=e,this.fa=o||0,this.u=t,this.d=f,this.c=t.getMap(),this.B=this.b=f,this.t=!1,this.setMap(this.c)}function l(t,e){var o=t.getProjection().fromLatLngToDivPixel(e);return o.x-=parseInt(t.p/2,10),o.y-=parseInt(t.h/2,10),o}function c(t){t.b&&(t.b.style.display="none"),t.t=!1}function d(t,e){var o=[];return o.push("background-image:url("+t.da+");"),o.push("background-position:"+(t.D?t.D:"0 0")+";"),"object"==typeof t.e?("number"==typeof t.e[0]&&t.e[0]>0&&t.e[0]<t.h?o.push("height:"+(t.h-t.e[0])+"px; padding-top:"+t.e[0]+"px;"):o.push("height:"+t.h+"px; line-height:"+t.h+"px;"),"number"==typeof t.e[1]&&t.e[1]>0&&t.e[1]<t.p?o.push("width:"+(t.p-t.e[1])+"px; padding-left:"+t.e[1]+"px;"):o.push("width:"+t.p+"px; text-align:center;")):o.push("height:"+t.h+"px; line-height:"+t.h+"px; width:"+t.p+"px; text-align:center;"),o.push("cursor:pointer; top:"+e.y+"px; left:"+e.x+"px; color:"+(t.M?t.M:"black")+"; position:absolute; font-size:"+(t.N?t.N:11)+"px; font-family:Arial,sans-serif; font-weight:bold"),o.join("")}var g,f=null;(g=o.prototype).Q="https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m",g.P="png",g.extend=function(t,e){return function(t){for(var e in t.prototype)this.prototype[e]=t.prototype[e];return this}.apply(t,[e])},g.onAdd=function(){this.A||(this.A=!0,a(this))},g.draw=function(){},g.S=function(){for(var t,e=this.o(),o=new google.maps.LatLngBounds,i=0;t=e[i];i++)o.extend(t.getPosition());this.c.fitBounds(o)},g.z=e("j"),g.o=e("a"),g.V=function(){return this.a.length},g.ba=t("J"),g.I=e("J"),g.G=function(t,e){for(var o=0,i=t.length,s=i;0!==s;)s=parseInt(s/10,10),o++;return o=Math.min(o,e),{text:i,index:o}},g.$=t("G"),g.H=e("G"),g.C=function(t,e){for(var o,i=0;o=t[i];i++)s(this,o);e||this.i()},g.q=function(t,e){s(this,t),e||this.i()},g.Y=function(t,e){var o=r(this,t);return!(e||!o)&&(this.m(),this.i(),!0)},g.Z=function(t,e){for(var o,i=!1,s=0;o=t[s];s++)o=r(this,o),i=i||o;if(!e&&i)return this.m(),this.i(),!0},g.U=function(){return this.f.length},g.getMap=e("c"),g.setMap=t("c"),g.w=e("g"),g.aa=t("g"),g.v=function(t){var e=this.getProjection(),o=new google.maps.LatLng(t.getNorthEast().lat(),t.getNorthEast().lng()),i=new google.maps.LatLng(t.getSouthWest().lat(),t.getSouthWest().lng());return(o=e.fromLatLngToDivPixel(o)).x+=this.g,o.y-=this.g,i=e.fromLatLngToDivPixel(i),i.x-=this.g,i.y+=this.g,o=e.fromDivPixelToLatLng(o),e=e.fromDivPixelToLatLng(i),t.extend(o),t.extend(e),t},g.R=function(){this.m(!0),this.a=[]},g.m=function(t){for(var e,o=0;e=this.f[o];o++)e.remove();for(o=0;e=this.a[o];o++)e.s=!1,t&&e.setMap(f);this.f=[]},g.L=function(){var t=this.f.slice();this.f.length=0,this.m(),this.i(),window.setTimeout(function(){for(var e,o=0;e=t[o];o++)e.remove()},0)},g.i=function(){a(this)},(g=n.prototype).q=function(t){var e;t:if(this.a.indexOf)e=-1!=this.a.indexOf(t);else{e=0;for(var o;o=this.a[e];e++)if(o==t){e=!0;break t}e=!1}if(e)return!1;if(this.d?this.r&&(o=this.a.length+1,e=(this.d.lat()*(o-1)+t.getPosition().lat())/o,o=(this.d.lng()*(o-1)+t.getPosition().lng())/o,this.d=new google.maps.LatLng(e,o),p(this)):(this.d=t.getPosition(),p(this)),t.s=!0,this.a.push(t),(e=this.a.length)<this.l&&t.getMap()!=this.c&&t.setMap(this.c),e==this.l)for(o=0;o<e;o++)this.a[o].setMap(f);if(e>=this.l&&t.setMap(f),t=this.c.getZoom(),(e=this.k.I())&&t>e)for(t=0;e=this.a[t];t++)e.setMap(this.c);else this.a.length<this.l?c(this.n):(e=this.k.H()(this.a,this.k.z().length),this.n.setCenter(this.d),(t=this.n).B=e,t.ga=e.text,t.ea=e.index,t.b&&(t.b.innerHTML=e.text),e=Math.max(0,t.B.index-1),e=Math.min(t.j.length-1,e),e=t.j[e],t.da=e.url,t.h=e.height,t.p=e.width,t.M=e.textColor,t.e=e.anchor,t.N=e.textSize,t.D=e.backgroundPosition,this.n.show());return!0},g.getBounds=function(){for(var t,e=new google.maps.LatLngBounds(this.d,this.d),o=this.o(),i=0;t=o[i];i++)e.extend(t.getPosition());return e},g.remove=function(){this.n.remove(),this.a.length=0,delete this.a},g.T=function(){return this.a.length},g.o=e("a"),g.getCenter=e("d"),g.getMap=e("c"),(g=h.prototype).onAdd=function(){this.b=document.createElement("DIV"),this.t&&(this.b.style.cssText=d(this,l(this,this.d)),this.b.innerHTML=this.B.text),this.getPanes().overlayMouseTarget.appendChild(this.b);var t=this;google.maps.event.addDomListener(this.b,"click",function(){var e=t.u.k;google.maps.event.trigger(e,"clusterclick",t.u),e.O&&t.c.fitBounds(t.u.getBounds())})},g.draw=function(){if(this.t){var t=l(this,this.d);this.b.style.top=t.y+"px",this.b.style.left=t.x+"px"}},g.show=function(){this.b&&(this.b.style.cssText=d(this,l(this,this.d)),this.b.style.display=""),this.t=!0},g.remove=function(){this.setMap(f)},g.onRemove=function(){this.b&&this.b.parentNode&&(c(this),this.b.parentNode.removeChild(this.b),this.b=f)},g.setCenter=t("d"),window.MarkerClusterer=o,o.prototype.addMarker=o.prototype.q,o.prototype.addMarkers=o.prototype.C,o.prototype.clearMarkers=o.prototype.R,o.prototype.fitMapToMarkers=o.prototype.S,o.prototype.getCalculator=o.prototype.H,o.prototype.getGridSize=o.prototype.w,o.prototype.getExtendedBounds=o.prototype.v,o.prototype.getMap=o.prototype.getMap,o.prototype.getMarkers=o.prototype.o,o.prototype.getMaxZoom=o.prototype.I,o.prototype.getStyles=o.prototype.z,o.prototype.getTotalClusters=o.prototype.U,o.prototype.getTotalMarkers=o.prototype.V,o.prototype.redraw=o.prototype.i,o.prototype.removeMarker=o.prototype.Y,o.prototype.removeMarkers=o.prototype.Z,o.prototype.resetViewport=o.prototype.m,o.prototype.repaint=o.prototype.L,o.prototype.setCalculator=o.prototype.$,o.prototype.setGridSize=o.prototype.aa,o.prototype.setMaxZoom=o.prototype.ba,o.prototype.onAdd=o.prototype.onAdd,o.prototype.draw=o.prototype.draw,n.prototype.getCenter=n.prototype.getCenter,n.prototype.getSize=n.prototype.T,n.prototype.getMarkers=n.prototype.o,h.prototype.onAdd=h.prototype.onAdd,h.prototype.draw=h.prototype.draw,h.prototype.onRemove=h.prototype.onRemove}();;/*!
+ * Bootstrap-select v1.12.4 (https://silviomoreto.github.io/bootstrap-select)
+ *
+ * Copyright 2013-2017 bootstrap-select
+ * Licensed under MIT (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)
+ */
+
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module unless amdModuleId is set
+    define(["jquery"], function (a0) {
+      return (factory(a0));
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like environments that support module.exports,
+    // like Node.
+    module.exports = factory(require("jquery"));
+  } else {
+    factory(root["jQuery"]);
+  }
+}(this, function (jQuery) {
+
+/*!
+ * Bootstrap-select v1.12.13 (https://github.com/heimrichhannot/bootstrap-select)
+ *
+ * Copyright 2013-2017 bootstrap-select
+ * Licensed under MIT (https://github.com/heimrichhannot/bootstrap-select/LICENSE)
+ */
+
+(function(root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module unless amdModuleId is set
+        define(['jquery'], function(a0) {
+            return (factory(a0));
+        });
+    } else if (typeof module === 'object' && module.exports) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require('jquery'));
+    } else {
+        factory(root['jQuery']);
+    }
+}(this, function(jQuery) {
+
+    (function($) {
+        'use strict';
+
+        //<editor-fold desc="Shims">
+        if (!String.prototype.includes) {
+            (function() {
+                'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
+                var toString = {}.toString;
+                var defineProperty = (function() {
+                    // IE 8 only supports `Object.defineProperty` on DOM elements
+                    try {
+                        var object = {};
+                        var $defineProperty = Object.defineProperty;
+                        var result = $defineProperty(object, object, object) && $defineProperty;
+                    } catch (error) {
+                    }
+                    return result;
+                }());
+                var indexOf = ''.indexOf;
+                var includes = function(search) {
+                    if (this == null) {
+                        throw new TypeError();
+                    }
+                    var string = String(this);
+                    if (search && toString.call(search) == '[object RegExp]') {
+                        throw new TypeError();
+                    }
+                    var stringLength = string.length;
+                    var searchString = String(search);
+                    var searchLength = searchString.length;
+                    var position = arguments.length > 1 ? arguments[1] : undefined;
+                    // `ToInteger`
+                    var pos = position ? Number(position) : 0;
+                    if (pos != pos) { // better `isNaN`
+                        pos = 0;
+                    }
+                    var start = Math.min(Math.max(pos, 0), stringLength);
+                    // Avoid the `indexOf` call if no match is possible
+                    if (searchLength + start > stringLength) {
+                        return false;
+                    }
+                    return indexOf.call(string, searchString, pos) != -1;
+                };
+                if (defineProperty) {
+                    defineProperty(String.prototype, 'includes', {
+                        'value': includes,
+                        'configurable': true,
+                        'writable': true,
+                    });
+                } else {
+                    String.prototype.includes = includes;
+                }
+            }());
+        }
+
+        if (!String.prototype.startsWith) {
+            (function() {
+                'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
+                var defineProperty = (function() {
+                    // IE 8 only supports `Object.defineProperty` on DOM elements
+                    try {
+                        var object = {};
+                        var $defineProperty = Object.defineProperty;
+                        var result = $defineProperty(object, object, object) && $defineProperty;
+                    } catch (error) {
+                    }
+                    return result;
+                }());
+                var toString = {}.toString;
+                var startsWith = function(search) {
+                    if (this == null) {
+                        throw new TypeError();
+                    }
+                    var string = String(this);
+                    if (search && toString.call(search) == '[object RegExp]') {
+                        throw new TypeError();
+                    }
+                    var stringLength = string.length;
+                    var searchString = String(search);
+                    var searchLength = searchString.length;
+                    var position = arguments.length > 1 ? arguments[1] : undefined;
+                    // `ToInteger`
+                    var pos = position ? Number(position) : 0;
+                    if (pos != pos) { // better `isNaN`
+                        pos = 0;
+                    }
+                    var start = Math.min(Math.max(pos, 0), stringLength);
+                    // Avoid the `indexOf` call if no match is possible
+                    if (searchLength + start > stringLength) {
+                        return false;
+                    }
+                    var index = -1;
+                    while (++index < searchLength) {
+                        if (string.charCodeAt(start + index) != searchString.charCodeAt(index)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                };
+                if (defineProperty) {
+                    defineProperty(String.prototype, 'startsWith', {
+                        'value': startsWith,
+                        'configurable': true,
+                        'writable': true,
+                    });
+                } else {
+                    String.prototype.startsWith = startsWith;
+                }
+            }());
+        }
+
+        if (!Object.keys) {
+            Object.keys = function(
+                o, // object
+                k, // key
+                r  // result array
+            ) {
+                // initialize object and result
+                r = [];
+                // iterate over object keys
+                for (k in o)
+                    // fill result array with non-prototypical keys
+                    r.hasOwnProperty.call(o, k) && r.push(k);
+                // return result
+                return r;
+            };
+        }
+
+        // set data-selected on select element if the value has been programmatically selected
+        // prior to initialization of bootstrap-select
+        // * consider removing or replacing an alternative method *
+        var valHooks = {
+            useDefault: false,
+            _set: $.valHooks.select.set,
+        };
+
+        $.valHooks.select.set = function(elem, value) {
+            if (value && !valHooks.useDefault) $(elem).data('selected', true);
+
+            return valHooks._set.apply(this, arguments);
+        };
+
+        var changed_arguments = null;
+        $.fn.triggerNative = function(eventName) {
+            var el = this[0],
+                event;
+
+            if (el.dispatchEvent) { // for modern browsers & IE9+
+                if (typeof Event === 'function') {
+                    // For modern browsers
+                    event = new Event(eventName, {
+                        bubbles: true,
+                    });
+                } else {
+                    // For IE since it doesn't support Event constructor
+                    event = document.createEvent('Event');
+                    event.initEvent(eventName, true, false);
+                }
+
+                el.dispatchEvent(event);
+            } else if (el.fireEvent) { // for IE8
+                event = document.createEventObject();
+                event.eventType = eventName;
+                el.fireEvent('on' + eventName, event);
+            } else {
+                // fall back to jQuery.trigger
+                this.trigger(eventName);
+            }
+        };
+        //</editor-fold>
+
+        // Case insensitive contains search
+        $.expr.pseudos.icontains = function(obj, index, meta) {
+            var $obj = $(obj).find('span.dropdown-item-inner');
+            var haystack = ($obj.data('tokens') || $obj.text()).toString().toUpperCase();
+            return haystack.includes(meta[3].toUpperCase());
+        };
+
+        // Case insensitive begins search
+        $.expr.pseudos.ibegins = function(obj, index, meta) {
+            var $obj = $(obj).find('span.dropdown-item-inner');
+            var haystack = ($obj.data('tokens') || $obj.text()).toString().toUpperCase();
+            return haystack.startsWith(meta[3].toUpperCase());
+        };
+
+        // Case and accent insensitive contains search
+        $.expr.pseudos.aicontains = function(obj, index, meta) {
+            var $obj = $(obj).find('span.dropdown-item-inner');
+            var haystack = ($obj.data('tokens') || $obj.data('normalizedText') || $obj.text()).toString().toUpperCase();
+            return haystack.includes(meta[3].toUpperCase());
+        };
+
+        // Case and accent insensitive begins search
+        $.expr.pseudos.aibegins = function(obj, index, meta) {
+            var $obj = $(obj).find('span.dropdown-item-inner');
+            var haystack = ($obj.data('tokens') || $obj.data('normalizedText') || $obj.text()).toString().toUpperCase();
+            return haystack.startsWith(meta[3].toUpperCase());
+        };
+
+        /**
+         * Remove all diatrics from the given text.
+         * @access private
+         * @param {String} text
+         * @returns {String}
+         */
+        function normalizeToBase(text) {
+            var rExps = [
+                {re: /[\xC0-\xC6]/g, ch: 'A'},
+                {re: /[\xE0-\xE6]/g, ch: 'a'},
+                {re: /[\xC8-\xCB]/g, ch: 'E'},
+                {re: /[\xE8-\xEB]/g, ch: 'e'},
+                {re: /[\xCC-\xCF]/g, ch: 'I'},
+                {re: /[\xEC-\xEF]/g, ch: 'i'},
+                {re: /[\xD2-\xD6]/g, ch: 'O'},
+                {re: /[\xF2-\xF6]/g, ch: 'o'},
+                {re: /[\xD9-\xDC]/g, ch: 'U'},
+                {re: /[\xF9-\xFC]/g, ch: 'u'},
+                {re: /[\xC7-\xE7]/g, ch: 'c'},
+                {re: /[\xD1]/g, ch: 'N'},
+                {re: /[\xF1]/g, ch: 'n'},
+            ];
+            $.each(rExps, function() {
+                text = text ? text.replace(this.re, this.ch) : '';
+            });
+            return text;
+        }
+
+        // List of HTML entities for escaping.
+        var escapeMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            '\'': '&#x27;',
+            '`': '&#x60;',
+        };
+
+        var unescapeMap = {
+            '&amp;': '&',
+            '&lt;': '<',
+            '&gt;': '>',
+            '&quot;': '"',
+            '&#x27;': '\'',
+            '&#x60;': '`',
+        };
+
+        // Functions for escaping and unescaping strings to/from HTML interpolation.
+        var createEscaper = function(map) {
+            var escaper = function(match) {
+                return map[match];
+            };
+            // Regexes for identifying a key that needs to be escaped.
+            var source = '(?:' + Object.keys(map).join('|') + ')';
+            var testRegexp = RegExp(source);
+            var replaceRegexp = RegExp(source, 'g');
+            return function(string) {
+                string = string == null ? '' : '' + string;
+                return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+            };
+        };
+
+        var htmlEscape = createEscaper(escapeMap);
+        var htmlUnescape = createEscaper(unescapeMap);
+
+        var Selectpicker = function(element, options) {
+            // bootstrap-select has been initialized - revert valHooks.select.set back to its original function
+            if (!valHooks.useDefault) {
+                $.valHooks.select.set = valHooks._set;
+                valHooks.useDefault = true;
+            }
+
+            this.$element = $(element);
+            this.$newElement = null;
+            this.$button = null;
+            this.$menu = null;
+            this.$lis = null;
+            this.options = options;
+
+            // If we have no title yet, try to pull it from the html title attribute (jQuery doesnt' pick it up as it's not a
+            // data-attribute)
+            if (this.options.title === null) {
+                this.options.title = this.$element.attr('title');
+            }
+
+            // Format window padding
+            var winPad = this.options.windowPadding;
+            if (typeof winPad === 'number') {
+                this.options.windowPadding = [winPad, winPad, winPad, winPad];
+            }
+
+            //Expose public methods
+            this.val = Selectpicker.prototype.val;
+            this.render = Selectpicker.prototype.render;
+            this.refresh = Selectpicker.prototype.refresh;
+            this.setStyle = Selectpicker.prototype.setStyle;
+            this.selectAll = Selectpicker.prototype.selectAll;
+            this.deselectAll = Selectpicker.prototype.deselectAll;
+            this.destroy = Selectpicker.prototype.destroy;
+            this.remove = Selectpicker.prototype.remove;
+            this.show = Selectpicker.prototype.show;
+            this.hide = Selectpicker.prototype.hide;
+
+            this.init();
+        };
+
+        Selectpicker.VERSION = '1.12.2';
+
+        // part of this is duplicated in i18n/defaults-en_US.js. Make sure to update both.
+        Selectpicker.DEFAULTS = {
+            noneSelectedText: 'Nothing selected',
+            noneResultsText: 'No results matched {0}',
+            countSelectedText: function(numSelected, numTotal) {
+                return (numSelected == 1) ? '{0} item selected' : '{0} items selected';
+            },
+            maxOptionsText: function(numAll, numGroup) {
+                return [
+                    (numAll == 1) ? 'Limit reached ({n} item max)' : 'Limit reached ({n} items max)',
+                    (numGroup == 1) ? 'Group limit reached ({n} item max)' : 'Group limit reached ({n} items max)',
+                ];
+            },
+            selectAllText: 'Select All',
+            deselectAllText: 'Deselect All',
+            doneButton: false,
+            doneButtonText: 'Close',
+            multipleSeparator: ', ',
+            styleBase: 'btn',
+            style: 'btn-default btn-light', // bootstrap4: btn-default replaced by btn-light
+            size: 'auto',
+            title: null,
+            selectedTextFormat: 'values',
+            width: false,
+            container: false,
+            hideDisabled: false,
+            showSubtext: false,
+            showIcon: true,
+            showContent: true,
+            dropupAuto: true,
+            header: false,
+            liveSearch: false,
+            liveSearchPlaceholder: null,
+            liveSearchNormalize: false,
+            liveSearchStyle: 'contains',
+            actionsBox: false,
+            iconBase: 'fas',
+            tickIcon: 'fa-check',
+            showTick: false,
+            template: {
+                caret: '<span class="caret"></span>',
+            },
+            maxOptions: false,
+            mobile: false,
+            selectOnTab: false,
+            dropdownAlignRight: false,
+            windowPadding: 0,
+        };
+
+        Selectpicker.prototype = {
+
+            constructor: Selectpicker,
+
+            init: function() {
+                var that = this,
+                    id = this.$element.attr('id');
+
+                this.$element.addClass('bs-select-hidden');
+
+                // store originalIndex (key) and newIndex (value) in this.liObj for fast accessibility
+                // allows us to do this.$lis.eq(that.liObj[index]) instead of this.$lis.filter('[data-original-index="' + index + '"]')
+                this.liObj = {};
+                this.multiple = this.$element.prop('multiple');
+                this.autofocus = this.$element.prop('autofocus');
+                this.$newElement = this.createView();
+                this.$element.after(this.$newElement).appendTo(this.$newElement);
+                this.$button = this.$newElement.children('button');
+                this.$menu = this.$newElement.children('.dropdown-menu');
+                this.$menuInner = this.$menu.children('.inner');
+                this.$searchbox = this.$menu.find('input');
+
+                this.$element.removeClass('bs-select-hidden');
+
+                if (this.options.dropdownAlignRight === true) this.$menu.addClass('dropdown-menu-right');
+
+                if (typeof id !== 'undefined') {
+                    this.$button.attr('data-id', id);
+                    $('label[for="' + id + '"]').click(function(e) {
+                        e.preventDefault();
+                        that.$button.focus();
+                    });
+                }
+
+                this.checkDisabled();
+                this.clickListener();
+                if (this.options.liveSearch) this.liveSearchListener();
+                this.render();
+                this.setStyle();
+                this.setWidth();
+                if (this.options.container) this.selectPosition();
+                this.$menu.data('this', this);
+                this.$newElement.data('this', this);
+                if (this.options.mobile) this.mobile();
+
+                this.$newElement.on({
+                    'hide.bs.dropdown': function(e) {
+                        that.$menuInner.attr('aria-expanded', false);
+                        that.$element.trigger('hide.bs.select', e);
+                    },
+                    'hidden.bs.dropdown': function(e) {
+                        that.$element.trigger('hidden.bs.select', e);
+                    },
+                    'show.bs.dropdown': function(e) {
+                        that.$menuInner.attr('aria-expanded', true);
+                        that.$element.trigger('show.bs.select', e);
+                    },
+                    'shown.bs.dropdown': function(e) {
+                        that.$element.trigger('shown.bs.select', e);
+                    },
+                });
+
+                if (that.$element[0].hasAttribute('required')) {
+                    this.$element.on('invalid', function() {
+                        that.$button.addClass('bs-invalid').focus();
+
+                        that.$element.on({
+                            'focus.bs.select': function() {
+                                that.$button.focus();
+                                that.$element.off('focus.bs.select');
+                            },
+                            'shown.bs.select': function() {
+                                that.$element.val(that.$element.val()) // set the value to hide the validation message in Chrome when menu is opened
+                                    .off('shown.bs.select');
+                            },
+                            'rendered.bs.select': function() {
+                                // if select is no longer invalid, remove the bs-invalid class
+                                if (this.validity.valid) that.$button.removeClass('bs-invalid');
+                                that.$element.off('rendered.bs.select');
+                            },
+                        });
+                    });
+                }
+
+                setTimeout(function() {
+                    that.$element.trigger('loaded.bs.select');
+                });
+            },
+
+            createDropdown: function() {
+                // Options
+                // If we are multiple or showTick option is set, then add the show-tick class
+                var showTick = (this.multiple || this.options.showTick) ? ' show-tick' : '',
+                    inputGroup = this.$element.parent().hasClass('input-group') ? ' input-group-btn' : '',
+                    autofocus = this.autofocus ? ' autofocus' : '';
+                // Elements
+                var header = this.options.header ? '<div class="popover-title"><button type="button" class="close" aria-hidden="true">&times;</button>' + this.options.header + '</div>' : '';
+                var searchbox = this.options.liveSearch ?
+                    '<div class="bs-searchbox">' +
+                    '<input type="text" class="form-control" autocomplete="off"' +
+                    (null === this.options.liveSearchPlaceholder ? '' : ' placeholder="' + htmlEscape(this.options.liveSearchPlaceholder) + '"') + ' role="textbox" aria-label="Search">' +
+                    '</div>'
+                    : '';
+                var actionsbox = this.multiple && this.options.actionsBox ?
+                    '<div class="bs-actionsbox">' +
+                    '<div class="btn-group btn-group-sm btn-block">' +
+                    '<button type="button" class="actions-btn bs-select-all btn btn-default btn-light">' +
+                    this.options.selectAllText +
+                    '</button>' +
+                    '<button type="button" class="actions-btn bs-deselect-all btn btn-default btn-light">' +
+                    this.options.deselectAllText +
+                    '</button>' +
+                    '</div>' +
+                    '</div>'
+                    : '';
+                var donebutton = this.multiple && this.options.doneButton ?
+                    '<div class="bs-donebutton">' +
+                    '<div class="btn-group btn-block">' +
+                    '<button type="button" class="btn btn-sm btn-default btn-light">' +
+                    this.options.doneButtonText +
+                    '</button>' +
+                    '</div>' +
+                    '</div>'
+                    : '';
+                var drop =
+                    '<div class="btn-group bootstrap-select' + showTick + inputGroup + '">' +
+                    '<button type="button" class="' + this.options.styleBase + ' dropdown-toggle" data-toggle="dropdown"' + autofocus + ' role="button">' +
+                    '<span class="filter-option pull-left"></span>&nbsp;' +
+                    '<span class="bs-caret">' +
+                    this.options.template.caret +
+                    '</span>' +
+                    '</button>' +
+                    '<div class="dropdown-menu open" role="combobox">' +
+                    header +
+                    searchbox +
+                    actionsbox +
+                    '<div class="dropdown-menu inner" role="listbox" aria-expanded="false">' +
+                    '</div>' +
+                    donebutton +
+                    '</div>' +
+                    '</div>';
+
+                return $(drop);
+            },
+
+            createView: function() {
+                var $drop = this.createDropdown(),
+                    li = this.createLi();
+
+                $drop.find('div.inner')[0].innerHTML = li;
+                return $drop;
+            },
+
+            reloadLi: function() {
+                // rebuild
+                var li = this.createLi();
+                this.$menuInner[0].innerHTML = li;
+            },
+
+            createLi: function() {
+                var that = this,
+                    _li = [],
+                    optID = 0,
+                    titleOption = document.createElement('option'),
+                    liIndex = -1; // increment liIndex whenever a new <li> element is created to ensure liObj is correct
+
+                // Helper functions
+                /**
+                 * @param content
+                 * @param [index]
+                 * @param [classes]
+                 * @param [optgroup]
+                 * @returns {string}
+                 */
+                var generateA = function(content, index, classes, optgroup) {
+                    classes = 'dropdown-item ' + (classes || '');
+                    return '<a tabindex="0"' +
+                        ((typeof classes !== 'undefined' && '' !== classes) ? ' class="' + classes + '"' : '') +
+                        ((typeof index !== 'undefined' && null !== index) ? ' data-original-index="' + index + '"' : '') +
+                        ((typeof optgroup !== 'undefined' && null !== optgroup) ? 'data-optgroup="' + optgroup + '"' : '') +
+                        '>' + content + '</a>';
+                };
+
+                var generateDiv = function(content, classes, optgroup) {
+                    return '<div' +
+                        ((typeof classes !== 'undefined' && '' !== classes) ? ' class="' + classes + '"' : '') +
+                        ((typeof optgroup !== 'undefined' && null !== optgroup) ? ' data-optgroup="' + optgroup + '"' : '') +
+                        '>' + content + '</div>';
+                };
+
+                /**
+                 * @param text
+                 * @param [classes]
+                 * @param [inline]
+                 * @param [tokens]
+                 * @returns {string}
+                 */
+                var generateSpan = function(text, classes, inline, tokens) {
+                    // support bootstrap v4: http://v4-alpha.getbootstrap.com/components/dropdowns/#single-button-dropdowns
+                    classes = 'dropdown-item-inner ' + (classes || '');
+                    return '<span' +
+                        (typeof classes !== 'undefined' ? ' class="' + classes + '"' : '') +
+                        (inline ? ' style="' + inline + '"' : '') +
+                        (that.options.liveSearchNormalize ? ' data-normalized-text="' + normalizeToBase(htmlEscape($(text).html())) + '"' : '') +
+                        (typeof tokens !== 'undefined' || tokens !== null ? ' data-tokens="' + tokens + '"' : '') +
+                        ' role="option">' + text +
+                        '<span class="check-mark">' +
+                        '<span class="' + that.options.iconBase + ' ' + that.options.tickIcon + '"></span>' +
+                        '</span></span>';
+                };
+
+                if (this.options.title && !this.multiple) {
+                    // this option doesn't create a new <li> element, but does add a new option, so liIndex is decreased
+                    // since liObj is recalculated on every refresh, liIndex needs to be decreased even if the titleOption is already appended
+                    liIndex--;
+
+                    if (!this.$element.find('.bs-title-option').length) {
+                        // Use native JS to prepend option (faster)
+                        var element = this.$element[0];
+                        titleOption.className = 'bs-title-option';
+                        titleOption.innerHTML = this.options.title;
+                        titleOption.value = '';
+                        element.insertBefore(titleOption, element.firstChild);
+                        // Check if selected or data-selected attribute is already set on an option. If not, select the titleOption option.
+                        // the selected item may have been changed by user or programmatically before the bootstrap select plugin runs,
+                        // if so, the select will have the data-selected attribute
+                        var $opt = $(element.options[element.selectedIndex]);
+                        if ($opt.attr('selected') === undefined && this.$element.data('selected') === undefined) {
+                            titleOption.selected = true;
+                        }
+                    }
+                }
+
+                var $selectOptions = this.$element.find('option');
+
+                $selectOptions.each(function(index) {
+                    var $this = $(this);
+
+                    liIndex++;
+
+                    if ($this.hasClass('bs-title-option')) return;
+
+                    // Get the class and text for the option
+                    var optionClass = this.className || '',
+                        inline = htmlEscape(this.style.cssText),
+                        text = $this.data('content') ? $this.data('content') : $this.html(),
+                        tokens = $this.data('tokens') ? $this.data('tokens') : null,
+                        subtext = typeof $this.data('subtext') !== 'undefined' ? '<small class="text-muted">' + $this.data('subtext') + '</small>' : '',
+                        icon = typeof $this.data('icon') !== 'undefined' ? '<span class="' + that.options.iconBase + ' ' + $this.data('icon') + '"></span> ' : '',
+                        $parent = $this.parent(),
+                        isOptgroup = $parent[0].tagName === 'OPTGROUP',
+                        isOptgroupDisabled = isOptgroup && $parent[0].disabled,
+                        isDisabled = this.disabled || isOptgroupDisabled,
+                        prevHiddenIndex;
+
+                    if (icon !== '' && isDisabled) {
+                        icon = '<span>' + icon + '</span>';
+                    }
+
+                    if (that.options.hideDisabled && (isDisabled && !isOptgroup || isOptgroupDisabled)) {
+                        // set prevHiddenIndex - the index of the first hidden option in a group of hidden options
+                        // used to determine whether or not a divider should be placed after an optgroup if there are
+                        // hidden options between the optgroup and the first visible option
+                        prevHiddenIndex = $this.data('prevHiddenIndex');
+                        $this.next().data('prevHiddenIndex', (prevHiddenIndex !== undefined ? prevHiddenIndex : index));
+
+                        liIndex--;
+                        return;
+                    }
+
+                    if (!$this.data('content')) {
+                        // Prepend any icon and append any subtext to the main text.
+                        text = icon + '<span class="text">' + text + subtext + '</span>';
+                    }
+
+                    if (isOptgroup && $this.data('divider') !== true) {
+                        if (that.options.hideDisabled && isDisabled) {
+                            if ($parent.data('allOptionsDisabled') === undefined) {
+                                var $options = $parent.children();
+                                $parent.data('allOptionsDisabled', $options.filter(':disabled').length === $options.length);
+                            }
+
+                            if ($parent.data('allOptionsDisabled')) {
+                                liIndex--;
+                                return;
+                            }
+                        }
+
+                        var optGroupClass = ' ' + $parent[0].className || '';
+
+                        if ($this.index() === 0) { // Is it the first option of the optgroup?
+                            optID += 1;
+
+                            // Get the opt group label
+                            var label = $parent[0].label,
+                                labelSubtext = typeof $parent.data('subtext') !== 'undefined' ? '<small class="text-muted">' + $parent.data('subtext') + '</small>' : '',
+                                labelIcon = $parent.data('icon') ? '<span class="' + that.options.iconBase + ' ' + $parent.data('icon') + '"></span> ' : '';
+
+                            label = labelIcon + '<span class="text">' + htmlEscape(label) + labelSubtext + '</span>';
+
+                            if (index !== 0 && _li.length > 0) { // Is it NOT the first option of the select && are there elements in the dropdown?
+                                liIndex++;
+                                _li.push(generateDiv('', 'dropdown-divider', optID + 'div'));
+                            }
+                            liIndex++;
+                            _li.push(generateDiv(label, 'dropdown-header' + optGroupClass, optID));
+                        }
+
+                        if (that.options.hideDisabled && isDisabled) {
+                            liIndex--;
+                            return;
+                        }
+
+                        _li.push(generateA(generateSpan(text, 'opt ' + optionClass + optGroupClass, inline, tokens), index, '', optID));
+                    } else if ($this.data('divider') === true) {
+                        _li.push(generateDiv('', 'dropdown-divider', optID + 'div'));
+                    } else if ($this.data('hidden') === true) {
+                        // set prevHiddenIndex - the index of the first hidden option in a group of hidden options
+                        // used to determine whether or not a divider should be placed after an optgroup if there are
+                        // hidden options between the optgroup and the first visible option
+                        prevHiddenIndex = $this.data('prevHiddenIndex');
+                        $this.next().data('prevHiddenIndex', (prevHiddenIndex !== undefined ? prevHiddenIndex : index));
+
+                        _li.push(generateA(generateSpan(text, optionClass, inline, tokens), index, 'hidden is-hidden'));
+                    } else {
+                        var showDivider = this.previousElementSibling && this.previousElementSibling.tagName === 'OPTGROUP';
+
+                        // if previous element is not an optgroup and hideDisabled is true
+                        if (!showDivider && that.options.hideDisabled) {
+                            prevHiddenIndex = $this.data('prevHiddenIndex');
+
+                            if (prevHiddenIndex !== undefined) {
+                                // select the element **before** the first hidden element in the group
+                                var prevHidden = $selectOptions.eq(prevHiddenIndex)[0].previousElementSibling;
+
+                                if (prevHidden && prevHidden.tagName === 'OPTGROUP' && !prevHidden.disabled) {
+                                    showDivider = true;
+                                }
+                            }
+                        }
+
+                        if (showDivider) {
+                            liIndex++;
+                            _li.push(generateDiv('', 'dropdown-divider', optID + 'div'));
+                        }
+                        _li.push(generateA(generateSpan(text, optionClass, inline, tokens), index));
+                    }
+
+                    that.liObj[index] = liIndex;
+                });
+
+                //If we are not multiple, we don't have a selected item, and we don't have a title, select the first element so something is set in the button
+                if (!this.multiple && this.$element.find('option:selected').length === 0 && !this.options.title) {
+                    this.$element.find('option').eq(0).prop('selected', true).attr('selected', 'selected');
+                }
+
+                return _li.join('');
+            },
+
+            findLis: function() {
+                if (this.$lis == null) this.$lis = this.$menu.find('a, .dropdown-header, .dropdown-divider');
+                return this.$lis;
+            },
+
+            /**
+             * @param [updateLi] defaults to true
+             */
+            render: function(updateLi) {
+                var that = this,
+                    notDisabled,
+                    $selectOptions = this.$element.find('option');
+
+                //Update the LI to match the SELECT
+                if (updateLi !== false) {
+                    $selectOptions.each(function(index) {
+                        var $lis = that.findLis().eq(that.liObj[index]);
+
+                        that.setDisabled(index, this.disabled || this.parentNode.tagName === 'OPTGROUP' && this.parentNode.disabled, $lis);
+                        that.setSelected(index, this.selected, $lis);
+                    });
+                }
+
+                this.togglePlaceholder();
+
+                this.tabIndex();
+
+                var selectedItems = $selectOptions.map(function() {
+                    if (this.selected) {
+                        if (that.options.hideDisabled && (this.disabled || this.parentNode.tagName === 'OPTGROUP' && this.parentNode.disabled)) return;
+
+                        var $this = $(this),
+                            icon = $this.data('icon') && that.options.showIcon ? '<i class="' + that.options.iconBase + ' ' + $this.data('icon') + '"></i> ' : '',
+                            subtext;
+
+                        if (that.options.showSubtext && $this.data('subtext') && !that.multiple) {
+                            subtext = ' <small class="text-muted">' + $this.data('subtext') + '</small>';
+                        } else {
+                            subtext = '';
+                        }
+                        if (typeof $this.attr('title') !== 'undefined') {
+                            return $this.attr('title');
+                        } else if ($this.data('content') && that.options.showContent) {
+                            return $this.data('content').toString();
+                        } else {
+                            return icon + $this.html() + subtext;
+                        }
+                    }
+                }).toArray();
+
+                //Fixes issue in IE10 occurring when no default option is selected and at least one option is disabled
+                //Convert all the values into a comma delimited string
+                var title = !this.multiple ? selectedItems[0] : selectedItems.join(this.options.multipleSeparator);
+
+                //If this is multi select, and the selectText type is count, the show 1 of 2 selected etc..
+                if (this.multiple && this.options.selectedTextFormat.indexOf('count') > -1) {
+                    var max = this.options.selectedTextFormat.split('>');
+                    if ((max.length > 1 && selectedItems.length > max[1]) || (max.length == 1 && selectedItems.length >= 2)) {
+                        notDisabled = this.options.hideDisabled ? ', [disabled]' : '';
+                        var totalCount = $selectOptions.not('[data-divider="true"], [data-hidden="true"]' + notDisabled).length,
+                            tr8nText = (typeof this.options.countSelectedText === 'function') ? this.options.countSelectedText(selectedItems.length, totalCount) : this.options.countSelectedText;
+                        title = tr8nText.replace('{0}', selectedItems.length.toString()).replace('{1}', totalCount.toString());
+                    }
+                }
+
+                if (this.options.title == undefined) {
+                    this.options.title = this.$element.attr('title');
+                }
+
+                if (this.options.selectedTextFormat == 'static') {
+                    title = this.options.title;
+                }
+
+                //If we dont have a title, then use the default, or if nothing is set at all, use the not selected text
+                if (!title) {
+                    title = typeof this.options.title !== 'undefined' ? this.options.title : this.options.noneSelectedText;
+                }
+
+                //strip all HTML tags and trim the result, then unescape any escaped tags
+                this.$button.attr('title', htmlUnescape($.trim(title.replace(/<[^>]*>?/g, ''))));
+                this.$button.children('.filter-option').html(title);
+
+                this.$element.trigger('rendered.bs.select');
+            },
+
+            /**
+             * @param [style]
+             * @param [status]
+             */
+            setStyle: function(style, status) {
+                if (this.$element.attr('class')) {
+                    this.$newElement.addClass(this.$element.attr('class').replace(/selectpicker|mobile-device|bs-select-hidden|validate\[.*\]/gi, ''));
+                }
+
+                var buttonClass = style ? style : this.options.style;
+
+                if (status == 'add') {
+                    this.$button.addClass(buttonClass);
+                } else if (status == 'remove') {
+                    this.$button.removeClass(buttonClass);
+                } else {
+                    this.$button.removeClass(this.options.style);
+                    this.$button.addClass(buttonClass);
+                }
+            },
+            updatePosition: function() {
+                // this fixes https://github.com/heimrichhannot/bootstrap-select/issues/4
+                var event = this.$menu.get(0).ownerDocument.createEvent('HTMLEvents');
+                event.initEvent('resize', true, false);
+                this.$menu.get(0).ownerDocument.dispatchEvent(event);
+            },
+            liHeight: function(refresh) {
+                if (!refresh && (this.options.size === false || this.sizeInfo)) return;
+
+                var newElement = document.createElement('div'),
+                    menu = document.createElement('div'),
+                    menuInner = document.createElement('ul'),
+                    divider = document.createElement('a'),
+                    li = document.createElement('a'),
+                    a = document.createElement('span'),
+                    text = document.createElement('span'),
+                    header = this.options.header && this.$menu.find('.popover-title').length > 0 ? this.$menu.find('.popover-title')[0].cloneNode(true) : null,
+                    search = this.options.liveSearch ? document.createElement('div') : null,
+                    actions = this.options.actionsBox && this.multiple && this.$menu.find('.bs-actionsbox').length > 0 ? this.$menu.find('.bs-actionsbox')[0].cloneNode(true) : null,
+                    doneButton = this.options.doneButton && this.multiple && this.$menu.find('.bs-donebutton').length > 0 ? this.$menu.find('.bs-donebutton')[0].cloneNode(true) : null;
+
+                text.className = 'text';
+                newElement.className = this.$menu[0].parentNode.className + ' show open'; // bootstrap 4 requires show instead of open
+                menu.className = 'dropdown-menu open show';
+                menuInner.className = 'dropdown-menu inner';
+                divider.className = 'dropdown-divider';
+                a.className = 'dropdown-item-inner';
+
+                text.appendChild(document.createTextNode('Inner text'));
+
+                a.appendChild(text);
+                li.appendChild(a);
+                menuInner.appendChild(li);
+                menuInner.appendChild(divider);
+                if (header) menu.appendChild(header);
+                if (search) {
+                    var input = document.createElement('input');
+                    search.className = 'bs-searchbox';
+                    input.className = 'form-control';
+                    search.appendChild(input);
+                    menu.appendChild(search);
+                }
+                if (actions) menu.appendChild(actions);
+                menu.appendChild(menuInner);
+                if (doneButton) menu.appendChild(doneButton);
+                newElement.appendChild(menu);
+
+                document.body.appendChild(newElement);
+
+                var liHeight = a.offsetHeight,
+                    headerHeight = header ? header.offsetHeight : 0,
+                    searchHeight = search ? search.offsetHeight : 0,
+                    actionsHeight = actions ? actions.offsetHeight : 0,
+                    doneButtonHeight = doneButton ? doneButton.offsetHeight : 0,
+                    dividerHeight = $(divider).outerHeight(true),
+                    // fall back to jQuery if getComputedStyle is not supported
+                    menuStyle = typeof getComputedStyle === 'function' ? getComputedStyle(menu) : false,
+                    $menu = menuStyle ? null : $(menu),
+                    menuPadding = {
+                        vert: parseInt(menuStyle ? menuStyle.paddingTop : $menu.css('paddingTop')) +
+                        parseInt(menuStyle ? menuStyle.paddingBottom : $menu.css('paddingBottom')) +
+                        parseInt(menuStyle ? menuStyle.borderTopWidth : $menu.css('borderTopWidth')) +
+                        parseInt(menuStyle ? menuStyle.borderBottomWidth : $menu.css('borderBottomWidth')),
+                        horiz: parseInt(menuStyle ? menuStyle.paddingLeft : $menu.css('paddingLeft')) +
+                        parseInt(menuStyle ? menuStyle.paddingRight : $menu.css('paddingRight')) +
+                        parseInt(menuStyle ? menuStyle.borderLeftWidth : $menu.css('borderLeftWidth')) +
+                        parseInt(menuStyle ? menuStyle.borderRightWidth : $menu.css('borderRightWidth')),
+                    },
+                    menuExtras = {
+                        vert: menuPadding.vert +
+                        parseInt(menuStyle ? menuStyle.marginTop : $menu.css('marginTop')) +
+                        parseInt(menuStyle ? menuStyle.marginBottom : $menu.css('marginBottom')) + 2,
+                        horiz: menuPadding.horiz +
+                        parseInt(menuStyle ? menuStyle.marginLeft : $menu.css('marginLeft')) +
+                        parseInt(menuStyle ? menuStyle.marginRight : $menu.css('marginRight')) + 2,
+                    };
+
+                document.body.removeChild(newElement);
+
+                this.sizeInfo = {
+                    liHeight: liHeight,
+                    headerHeight: headerHeight,
+                    searchHeight: searchHeight,
+                    actionsHeight: actionsHeight,
+                    doneButtonHeight: doneButtonHeight,
+                    dividerHeight: dividerHeight,
+                    menuPadding: menuPadding,
+                    menuExtras: menuExtras,
+                };
+            },
+
+            setSize: function() {
+                this.findLis();
+                this.liHeight();
+
+                if (this.options.header) this.$menu.css('padding-top', 0);
+                if (this.options.size === false) return;
+
+                var that = this,
+                    $menu = this.$menu,
+                    $menuInner = this.$menuInner,
+                    $window = $(window),
+                    selectHeight = this.$newElement[0].offsetHeight,
+                    selectWidth = this.$newElement[0].offsetWidth,
+                    liHeight = this.sizeInfo['liHeight'],
+                    headerHeight = this.sizeInfo['headerHeight'],
+                    searchHeight = this.sizeInfo['searchHeight'],
+                    actionsHeight = this.sizeInfo['actionsHeight'],
+                    doneButtonHeight = this.sizeInfo['doneButtonHeight'],
+                    divHeight = this.sizeInfo['dividerHeight'],
+                    menuPadding = this.sizeInfo['menuPadding'],
+                    menuExtras = this.sizeInfo['menuExtras'],
+                    notDisabled = this.options.hideDisabled ? '.disabled' : '',
+                    menuHeight,
+                    menuWidth,
+                    getHeight,
+                    getWidth,
+                    selectOffsetTop,
+                    selectOffsetBot,
+                    selectOffsetLeft,
+                    selectOffsetRight,
+                    getPos = function() {
+                        var pos = that.$newElement.offset(),
+                            $container = $(that.options.container),
+                            containerPos;
+
+                        if (that.options.container && !$container.is('body')) {
+                            containerPos = $container.offset();
+                            containerPos.top += parseInt($container.css('borderTopWidth'));
+                            containerPos.left += parseInt($container.css('borderLeftWidth'));
+                        } else {
+                            containerPos = {top: 0, left: 0};
+                        }
+
+                        var winPad = that.options.windowPadding;
+                        selectOffsetTop = pos.top - containerPos.top - $window.scrollTop();
+                        selectOffsetBot = $window.height() - selectOffsetTop - selectHeight - containerPos.top - winPad[2];
+                        selectOffsetLeft = pos.left - containerPos.left - $window.scrollLeft();
+                        selectOffsetRight = $window.width() - selectOffsetLeft - selectWidth - containerPos.left - winPad[1];
+                        selectOffsetTop -= winPad[0];
+                        selectOffsetLeft -= winPad[3];
+                    };
+
+                getPos();
+
+                if (this.options.size === 'auto') {
+                    var getSize = function() {
+                        var minHeight,
+                            hasClass = function(className, include) {
+                                return function(element) {
+                                    if (include) {
+                                        return (element.classList ? element.classList.contains(className) : $(element).hasClass(className));
+                                    } else {
+                                        return !(element.classList ? element.classList.contains(className) : $(element).hasClass(className));
+                                    }
+                                };
+                            },
+                            lis = that.$menuInner[0].getElementsByTagName('a'),
+                            lisVisible = Array.prototype.filter ? Array.prototype.filter.call(lis, hasClass('d-none', false)) : that.$lis.not('.d-none'),
+                            optGroup = Array.prototype.filter ? Array.prototype.filter.call(lisVisible, hasClass('dropdown-header', true)) : lisVisible.filter('.dropdown-header');
+
+                        getPos();
+                        menuHeight = selectOffsetBot - menuExtras.vert;
+                        menuWidth = selectOffsetRight - menuExtras.horiz;
+
+                        if (that.options.container) {
+                            if (!$menu.data('height')) $menu.data('height', $menu.height());
+                            getHeight = $menu.data('height');
+
+                            if (!$menu.data('width')) $menu.data('width', $menu.width());
+                            getWidth = $menu.data('width');
+                        } else {
+                            getHeight = $menu.height();
+                            getWidth = $menu.width();
+                        }
+
+                        if (that.options.dropupAuto) {
+                            that.$newElement.toggleClass('dropup', selectOffsetTop > selectOffsetBot && (menuHeight - menuExtras.vert) < getHeight);
+                        }
+
+                        if (that.$newElement.hasClass('dropup')) {
+                            menuHeight = selectOffsetTop - menuExtras.vert;
+                        }
+
+                        if (that.options.dropdownAlignRight === 'auto') {
+                            $menu.toggleClass('dropdown-menu-right', selectOffsetLeft > selectOffsetRight && (menuWidth - menuExtras.horiz) < (getWidth - selectWidth));
+                        }
+
+                        if ((lisVisible.length + optGroup.length) > 3) {
+                            minHeight = liHeight * 3 + menuExtras.vert - 2;
+                        } else {
+                            minHeight = 0;
+                        }
+
+                        $menu.css({
+                            'max-height': menuHeight + 'px',
+                            'overflow': 'hidden',
+                            'min-height': minHeight + headerHeight + searchHeight + actionsHeight + doneButtonHeight + 'px',
+                        });
+                        $menuInner.css({
+                            'max-height': menuHeight - headerHeight - searchHeight - actionsHeight - doneButtonHeight - menuPadding.vert + 'px',
+                            'overflow-y': 'auto',
+                            'min-height': Math.max(minHeight - menuPadding.vert, 0) + 'px',
+                        });
+                    };
+                    getSize();
+                    this.$searchbox.off('input.getSize propertychange.getSize').on('input.getSize propertychange.getSize', getSize);
+                    $window.off('resize.getSize scroll.getSize').on('resize.getSize scroll.getSize', getSize);
+                } else if (this.options.size && this.options.size != 'auto' && this.$lis.not(notDisabled).length > this.options.size) {
+                    var optIndex = this.$lis.not('.dropdown-divider').not(notDisabled).children().slice(0, this.options.size).last().parent().index(),
+                        divLength = this.$lis.slice(0, optIndex + 1).filter('.dropdown-divider').length;
+                    menuHeight = liHeight * this.options.size + divLength * divHeight + menuPadding.vert;
+
+                    if (that.options.container) {
+                        if (!$menu.data('height')) $menu.data('height', $menu.height());
+                        getHeight = $menu.data('height');
+                    } else {
+                        getHeight = $menu.height();
+                    }
+
+                    if (that.options.dropupAuto) {
+                        //noinspection JSUnusedAssignment
+                        this.$newElement.toggleClass('dropup', selectOffsetTop > selectOffsetBot && (menuHeight - menuExtras.vert) < getHeight);
+                    }
+                    $menu.css({
+                        'max-height': menuHeight + headerHeight + searchHeight + actionsHeight + doneButtonHeight + 'px',
+                        'overflow': 'hidden',
+                        'min-height': '',
+                    });
+                    $menuInner.css({
+                        'max-height': menuHeight - menuPadding.vert + 'px',
+                        'overflow-y': 'auto',
+                        'min-height': '',
+                    });
+                }
+            },
+
+            setWidth: function() {
+                if (this.options.width === 'auto') {
+                    this.$menu.css('min-width', '0');
+
+                    // Get correct width if element is hidden
+                    var $selectClone = this.$menu.parent().clone().appendTo('body'),
+                        $selectClone2 = this.options.container ? this.$newElement.clone().appendTo('body') : $selectClone,
+                        ulWidth = $selectClone.children('.dropdown-menu').outerWidth(),
+                        btnWidth = $selectClone2.css('width', 'auto').children('button').outerWidth();
+
+                    $selectClone.remove();
+                    $selectClone2.remove();
+
+                    // Set width to whatever's larger, button title or longest option
+                    this.$newElement.css('width', Math.max(ulWidth, btnWidth) + 'px');
+                } else if (this.options.width === 'fit') {
+                    // Remove inline min-width so width can be changed from 'auto'
+                    this.$menu.css('min-width', '');
+                    this.$newElement.css('width', '').addClass('fit-width');
+                } else if (this.options.width) {
+                    // Remove inline min-width so width can be changed from 'auto'
+                    this.$menu.css('min-width', '');
+                    this.$newElement.css('width', this.options.width);
+                } else {
+                    // Remove inline min-width/width so width can be changed
+                    this.$menu.css('min-width', '');
+                    this.$newElement.css('width', '');
+                }
+                // Remove fit-width class if width is changed programmatically
+                if (this.$newElement.hasClass('fit-width') && this.options.width !== 'fit') {
+                    this.$newElement.removeClass('fit-width');
+                }
+            },
+
+            selectPosition: function() {
+                this.$bsContainer = $('<div class="bs-container" />');
+
+                var that = this,
+                    $container = $(this.options.container),
+                    pos,
+                    containerPos,
+                    actualHeight,
+                    getPlacement = function($element) {
+                        that.$bsContainer.addClass($element.attr('class').replace(/form-control|fit-width/gi, '')).toggleClass('dropup', $element.hasClass('dropup'));
+                        pos = $element.offset();
+
+                        if (!$container.is('body')) {
+                            containerPos = $container.offset();
+                            containerPos.top += parseInt($container.css('borderTopWidth')) - $container.scrollTop();
+                            containerPos.left += parseInt($container.css('borderLeftWidth')) - $container.scrollLeft();
+                        } else {
+                            containerPos = {top: 0, left: 0};
+                        }
+
+                        actualHeight = $element.hasClass('dropup') ? 0 : $element[0].offsetHeight;
+
+                        that.$bsContainer.css({
+                            'top': pos.top - containerPos.top + actualHeight,
+                            'left': pos.left - containerPos.left,
+                            'width': $element[0].offsetWidth,
+                        });
+                    };
+
+                this.$button.on('click', function() {
+                    var $this = $(this);
+
+                    if (that.isDisabled()) {
+                        return;
+                    }
+
+                    getPlacement(that.$newElement);
+
+                    that.$bsContainer.appendTo(that.options.container).toggleClass('open', !$this.hasClass('open')).append(that.$menu);
+                });
+
+                $(window).on('resize scroll', function() {
+                    getPlacement(that.$newElement);
+                });
+
+                this.$element.on('hide.bs.select', function() {
+                    that.$menu.data('height', that.$menu.height());
+                    that.$bsContainer.detach();
+                });
+            },
+
+            /**
+             * @param {number} index - the index of the option that is being changed
+             * @param {boolean} selected - true if the option is being selected, false if being deselected
+             * @param {JQuery} $lis - the 'li' element that is being modified
+             */
+            setSelected: function(index, selected, $lis) {
+                if (!$lis) {
+                    this.togglePlaceholder(); // check if setSelected is being called by changing the value of the select
+                    $lis = this.findLis().eq(this.liObj[index]);
+                }
+
+                $lis.toggleClass('selected', selected).find('span.dropdown-item-inner').attr('aria-selected', selected);
+            },
+
+            /**
+             * @param {number} index - the index of the option that is being disabled
+             * @param {boolean} disabled - true if the option is being disabled, false if being enabled
+             * @param {JQuery} $lis - the 'li' element that is being modified
+             */
+            setDisabled: function(index, disabled, $lis) {
+                if (!$lis) {
+                    $lis = this.findLis().eq(this.liObj[index]);
+                }
+
+                if (disabled) {
+                    $lis.addClass('disabled').children('span.dropdown-item-inner').attr('href', '#').attr('tabindex', -1).attr('aria-disabled', true);
+                } else {
+                    $lis.removeClass('disabled').children('span.dropdown-item-inner').removeAttr('href').attr('tabindex', 0).attr('aria-disabled', false);
+                }
+            },
+
+            isDisabled: function() {
+                return this.$element[0].disabled;
+            },
+
+            checkDisabled: function() {
+                var that = this;
+
+                if (this.isDisabled()) {
+                    this.$newElement.addClass('disabled');
+                    this.$button.addClass('disabled').attr('tabindex', -1).attr('aria-disabled', true);
+                } else {
+                    if (this.$button.hasClass('disabled')) {
+                        this.$newElement.removeClass('disabled');
+                        this.$button.removeClass('disabled').attr('aria-disabled', false);
+                    }
+
+                    if (this.$button.attr('tabindex') == -1 && !this.$element.data('tabindex')) {
+                        this.$button.removeAttr('tabindex');
+                    }
+                }
+
+                this.$button.click(function() {
+                    return !that.isDisabled();
+                });
+            },
+
+            togglePlaceholder: function() {
+                var value = this.$element.val();
+                this.$button.toggleClass('bs-placeholder', value === null || value === '' || (value.constructor === Array && value.length === 0));
+            },
+
+            tabIndex: function() {
+                if (this.$element.data('tabindex') !== this.$element.attr('tabindex') &&
+                    (this.$element.attr('tabindex') !== -98 && this.$element.attr('tabindex') !== '-98')) {
+                    this.$element.data('tabindex', this.$element.attr('tabindex'));
+                    this.$button.attr('tabindex', this.$element.data('tabindex'));
+                }
+
+                this.$element.attr('tabindex', -98);
+            },
+
+            clickListener: function() {
+                var that = this,
+                    $document = $(document);
+
+                $document.data('spaceSelect', false);
+
+                this.$button.on('keyup', function(e) {
+                    if (/(32)/.test(e.keyCode.toString(10)) && $document.data('spaceSelect')) {
+                        e.preventDefault();
+                        $document.data('spaceSelect', false);
+                    }
+                });
+
+                this.$button.on('click', function() {
+                    that.setSize();
+                });
+
+                this.$element.on('shown.bs.select', function() {
+                    if (!that.options.liveSearch && !that.multiple) {
+                        that.$menuInner.find('a.selected').focus();
+                    } else if (!that.multiple) {
+                        var selectedIndex = that.liObj[that.$element[0].selectedIndex];
+
+                        if (typeof selectedIndex !== 'number' || that.options.size === false) return;
+
+                        // scroll to selected option
+                        var offset = that.$lis.eq(selectedIndex)[0].offsetTop - that.$menuInner[0].offsetTop;
+                        offset = offset - that.$menuInner[0].offsetHeight / 2 + that.sizeInfo.liHeight / 2;
+                        that.$menuInner[0].scrollTop = offset;
+                    }
+                });
+
+                this.$menuInner.on('click', 'a', function(e) {
+                    var $this = $(this).find('span.dropdown-item-inner'),
+                        clickedIndex = $this.parent().data('originalIndex'),
+                        prevValue = that.$element.val(),
+                        prevIndex = that.$element.prop('selectedIndex'),
+                        triggerChange = true;
+
+                    // Don't close on multi choice menu
+                    if (that.multiple && that.options.maxOptions !== 1) {
+                        e.stopPropagation();
+                    }
+
+                    e.preventDefault();
+
+                    //Don't run if we have been disabled
+                    if (!that.isDisabled() && !$this.parent().hasClass('disabled')) {
+                        var $options = that.$element.find('option'),
+                            $option = $options.eq(clickedIndex),
+                            state = $option.prop('selected'),
+                            $optgroup = $option.parent('optgroup'),
+                            maxOptions = that.options.maxOptions,
+                            maxOptionsGrp = $optgroup.data('maxOptions') || false;
+
+                        if (!that.multiple) { // Deselect all others if not multi select box
+                            $options.prop('selected', false);
+                            $option.prop('selected', true);
+                            that.$menuInner.find('.selected').removeClass('selected').find('span.dropdown-item-inner').attr('aria-selected', false);
+                            that.setSelected(clickedIndex, true);
+                        } else { // Toggle the one we have chosen if we are multi select.
+                            $option.prop('selected', !state);
+                            that.setSelected(clickedIndex, !state);
+                            $this.blur();
+
+                            if (maxOptions !== false || maxOptionsGrp !== false) {
+                                var maxReached = maxOptions < $options.filter(':selected').length,
+                                    maxReachedGrp = maxOptionsGrp < $optgroup.find('option:selected').length;
+
+                                if ((maxOptions && maxReached) || (maxOptionsGrp && maxReachedGrp)) {
+                                    if (maxOptions && maxOptions == 1) {
+                                        $options.prop('selected', false);
+                                        $option.prop('selected', true);
+                                        that.$menuInner.find('.selected').removeClass('selected');
+                                        that.setSelected(clickedIndex, true);
+                                    } else if (maxOptionsGrp && maxOptionsGrp == 1) {
+                                        $optgroup.find('option:selected').prop('selected', false);
+                                        $option.prop('selected', true);
+                                        var optgroupID = $this.parent().data('optgroup');
+                                        that.$menuInner.find('[data-optgroup="' + optgroupID + '"]').removeClass('selected');
+                                        that.setSelected(clickedIndex, true);
+                                    } else {
+                                        var maxOptionsText = typeof that.options.maxOptionsText === 'string' ? [that.options.maxOptionsText, that.options.maxOptionsText] : that.options.maxOptionsText,
+                                            maxOptionsArr = typeof maxOptionsText === 'function' ? maxOptionsText(maxOptions, maxOptionsGrp) : maxOptionsText,
+                                            maxTxt = maxOptionsArr[0].replace('{n}', maxOptions),
+                                            maxTxtGrp = maxOptionsArr[1].replace('{n}', maxOptionsGrp),
+                                            $notify = $('<div class="notify"></div>');
+                                        // If {var} is set in array, replace it
+                                        /** @deprecated */
+                                        if (maxOptionsArr[2]) {
+                                            maxTxt = maxTxt.replace('{var}', maxOptionsArr[2][maxOptions > 1 ? 0 : 1]);
+                                            maxTxtGrp = maxTxtGrp.replace('{var}', maxOptionsArr[2][maxOptionsGrp > 1 ? 0 : 1]);
+                                        }
+
+                                        $option.prop('selected', false);
+
+                                        that.$menu.append($notify);
+
+                                        if (maxOptions && maxReached) {
+                                            $notify.append($('<div>' + maxTxt + '</div>'));
+                                            triggerChange = false;
+                                            that.$element.trigger('maxReached.bs.select');
+                                        }
+
+                                        if (maxOptionsGrp && maxReachedGrp) {
+                                            $notify.append($('<div>' + maxTxtGrp + '</div>'));
+                                            triggerChange = false;
+                                            that.$element.trigger('maxReachedGrp.bs.select');
+                                        }
+
+                                        setTimeout(function() {
+                                            that.setSelected(clickedIndex, false);
+                                        }, 10);
+
+                                        $notify.delay(750).fadeOut(300, function() {
+                                            $(this).remove();
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!that.multiple || (that.multiple && that.options.maxOptions === 1)) {
+                            that.$button.focus();
+                        } else if (that.options.liveSearch) {
+                            that.$searchbox.focus();
+                        }
+
+                        // Trigger select 'change'
+                        if (triggerChange) {
+                            if ((prevValue != that.$element.val() && that.multiple) || (prevIndex != that.$element.prop('selectedIndex') && !that.multiple)) {
+                                // $option.prop('selected') is current option state (selected/unselected). state is previous option state.
+                                changed_arguments = [clickedIndex, $option.prop('selected'), state];
+                                that.$element.triggerNative('change');
+                            }
+                        }
+                    }
+                });
+
+                this.$menu.on('click', 'a.disabled span.dropdown-item-inner , .popover-title, .popover-title :not(.close)', function(e) {
+                    if (e.currentTarget == this) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (that.options.liveSearch && !$(e.target).hasClass('close')) {
+                            that.$searchbox.focus();
+                        } else {
+                            that.$button.focus();
+                        }
+                    }
+                });
+
+                this.$menuInner.on('click', '.dropdown-divider, .dropdown-header', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (that.options.liveSearch) {
+                        that.$searchbox.focus();
+                    } else {
+                        that.$button.focus();
+                    }
+                });
+
+                this.$menu.on('click', '.popover-title .close', function() {
+                    that.$button.click();
+                });
+
+                this.$searchbox.on('click', function(e) {
+                    e.stopPropagation();
+                });
+
+                this.$menu.on('click', '.actions-btn', function(e) {
+                    if (that.options.liveSearch) {
+                        that.$searchbox.focus();
+                    } else {
+                        that.$button.focus();
+                    }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if ($(this).hasClass('bs-select-all')) {
+                        that.selectAll();
+                    } else {
+                        that.deselectAll();
+                    }
+                });
+
+                this.$element.change(function() {
+                    that.render(false);
+                    that.$element.trigger('changed.bs.select', changed_arguments);
+                    changed_arguments = null;
+                });
+            },
+
+            liveSearchListener: function() {
+                var that = this,
+                    $no_results = $('<li class="no-results"></li>');
+
+                this.$button.on('click.dropdown.data-api', function() {
+                    that.$menuInner.find('.active').removeClass('active');
+                    if (!!that.$searchbox.val()) {
+                        that.$searchbox.val('');
+                        that.$lis.not('.is-hidden').removeClass('d-none');
+                        if (!!$no_results.parent().length) $no_results.remove();
+                    }
+                    if (!that.multiple) that.$menuInner.find('.selected').addClass('active');
+                    setTimeout(function() {
+                        that.$searchbox.focus();
+                    }, 10);
+                });
+
+                this.$searchbox.on('click.dropdown.data-api focus.dropdown.data-api touchend.dropdown.data-api', function(e) {
+                    e.stopPropagation();
+                });
+
+                this.$searchbox.on('input propertychange', function() {
+                    that.$lis.not('.is-hidden').removeClass('d-none');
+                    that.$lis.filter('.active').removeClass('active');
+                    $no_results.remove();
+
+                    if (that.$searchbox.val()) {
+                        var $searchBase = that.$lis.not('.is-hidden, .dropdown-divider, .dropdown-header'),
+                            $hideItems;
+
+                        if (that.options.liveSearchNormalize) {
+                            $hideItems = $searchBase.not(':a' + that._searchStyle() + '("' + normalizeToBase(that.$searchbox.val()) + '")');
+                        } else {
+                            $hideItems = $searchBase.not(':' + that._searchStyle() + '("' + that.$searchbox.val() + '")');
+                        }
+
+                        if ($hideItems.length === $searchBase.length) {
+                            $no_results.html(that.options.noneResultsText.replace('{0}', '"' + htmlEscape(that.$searchbox.val()) + '"'));
+                            that.$menuInner.append($no_results);
+                            that.$lis.addClass('d-none');
+                        } else {
+                            $hideItems.addClass('d-none');
+
+                            var $lisVisible = that.$lis.not('.d-none'),
+                                $foundDiv;
+
+                            // hide divider if first or last visible, or if followed by another divider
+                            $lisVisible.each(function(index) {
+                                var $this = $(this);
+
+                                if ($this.hasClass('dropdown-divider')) {
+                                    if ($foundDiv === undefined) {
+                                        $this.addClass('d-none');
+                                    } else {
+                                        if ($foundDiv) $foundDiv.addClass('d-none');
+                                        $foundDiv = $this;
+                                    }
+                                } else if ($this.hasClass('dropdown-header') && $lisVisible.eq(index + 1).data('optgroup') !== $this.data('optgroup')) {
+                                    $this.addClass('d-none');
+                                } else {
+                                    $foundDiv = null;
+                                }
+                            });
+                            if ($foundDiv) $foundDiv.addClass('d-none');
+
+                            $searchBase.not('.d-none').first().addClass('active');
+                            that.$menuInner.scrollTop(0);
+                        }
+
+                        that.updatePosition();
+                    }
+                });
+            },
+
+            _searchStyle: function() {
+                var styles = {
+                    begins: 'ibegins',
+                    startsWith: 'ibegins',
+                };
+
+                return styles[this.options.liveSearchStyle] || 'icontains';
+            },
+
+            val: function(value) {
+                if (typeof value !== 'undefined') {
+                    this.$element.val(value);
+                    this.render();
+
+                    return this.$element;
+                } else {
+                    return this.$element.val();
+                }
+            },
+
+            changeAll: function(status) {
+                if (!this.multiple) return;
+                if (typeof status === 'undefined') status = true;
+
+                this.findLis();
+
+                var $options = this.$element.find('option'),
+                    $lisVisible = this.$lis.not('.dropdown-divider, .dropdown-header, .disabled, .d-none'),
+                    lisVisLen = $lisVisible.length,
+                    selectedOptions = [];
+
+                if (status) {
+                    if ($lisVisible.filter('.selected').length === $lisVisible.length) return;
+                } else {
+                    if ($lisVisible.filter('.selected').length === 0) return;
+                }
+
+                $lisVisible.toggleClass('selected', status);
+
+                for (var i = 0; i < lisVisLen; i++) {
+                    var origIndex = $lisVisible[i].getAttribute('data-original-index');
+                    selectedOptions[selectedOptions.length] = $options.eq(origIndex)[0];
+                }
+
+                $(selectedOptions).prop('selected', status);
+
+                this.render(false);
+
+                this.togglePlaceholder();
+
+                this.$element.triggerNative('change');
+            },
+
+            selectAll: function() {
+                return this.changeAll(true);
+            },
+
+            deselectAll: function() {
+                return this.changeAll(false);
+            },
+
+            toggle: function(e) {
+                e = e || window.event;
+
+                if (e) e.stopPropagation();
+
+                this.$button.trigger('click');
+            },
+
+            keydown: function(e) {
+                var $this = $(this),
+                    $parent = $this.is('input') ? $this.parent().parent() : $this.parent(),
+                    $items,
+                    that = $parent.data('this'),
+                    index,
+                    prevIndex,
+                    isActive,
+                    selector = ':not(.disabled, .d-none, .dropdown-header, .dropdown-divider)',
+                    keyCodeMap = {
+                        32: ' ',
+                        48: '0',
+                        49: '1',
+                        50: '2',
+                        51: '3',
+                        52: '4',
+                        53: '5',
+                        54: '6',
+                        55: '7',
+                        56: '8',
+                        57: '9',
+                        59: ';',
+                        65: 'a',
+                        66: 'b',
+                        67: 'c',
+                        68: 'd',
+                        69: 'e',
+                        70: 'f',
+                        71: 'g',
+                        72: 'h',
+                        73: 'i',
+                        74: 'j',
+                        75: 'k',
+                        76: 'l',
+                        77: 'm',
+                        78: 'n',
+                        79: 'o',
+                        80: 'p',
+                        81: 'q',
+                        82: 'r',
+                        83: 's',
+                        84: 't',
+                        85: 'u',
+                        86: 'v',
+                        87: 'w',
+                        88: 'x',
+                        89: 'y',
+                        90: 'z',
+                        96: '0',
+                        97: '1',
+                        98: '2',
+                        99: '3',
+                        100: '4',
+                        101: '5',
+                        102: '6',
+                        103: '7',
+                        104: '8',
+                        105: '9',
+                    };
+
+                isActive = that.$newElement.hasClass('open') || that.$newElement.hasClass('show');
+
+                if (!isActive && (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 96 && e.keyCode <= 105 || e.keyCode >= 65 && e.keyCode <= 90)) {
+                    if (!that.options.container) {
+                        that.setSize();
+                        that.$menu.parent().addClass('open show');
+                        isActive = true;
+                    } else {
+                        that.$button.trigger('click');
+                    }
+                    that.$searchbox.focus();
+                    return;
+                }
+
+                if (that.options.liveSearch) {
+                    if (/(^9$|27)/.test(e.keyCode.toString(10)) && isActive) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        that.$menuInner.click();
+                        that.$button.focus();
+                    }
+                }
+
+                if (/(38|40)/.test(e.keyCode.toString(10))) {
+                    $items = that.$lis.filter(selector);
+                    if (!$items.length) return;
+
+                    if (!that.options.liveSearch) {
+                        index = $items.index($items.filter(':focus'));
+                    } else {
+                        index = $items.index($items.filter('.active'));
+                    }
+
+                    prevIndex = that.$menuInner.data('prevIndex');
+
+                    if (e.keyCode == 38) {
+                        if ((that.options.liveSearch || index == prevIndex) && index != -1) index--;
+                        if (index < 0) index += $items.length;
+                    } else if (e.keyCode == 40) {
+                        if (that.options.liveSearch || index == prevIndex) index++;
+                        index = index % $items.length;
+                    }
+
+                    that.$menuInner.data('prevIndex', index);
+
+                    if (!that.options.liveSearch) {
+                        $items.eq(index).focus();
+                    } else {
+                        e.preventDefault();
+                        if (!$this.hasClass('dropdown-toggle')) {
+                            $items.removeClass('active').eq(index).addClass('active').children('span.dropdown-item-inner').focus();
+                            $this.focus();
+                        }
+                    }
+
+                } else if (!$this.is('input')) {
+                    var keyIndex = [],
+                        count,
+                        prevKey;
+
+                    $items = that.$lis.filter(selector);
+                    $items.each(function(i) {
+                        if ($.trim($(this).children('span.dropdown-item-inner').text().toLowerCase()).substring(0, 1) == keyCodeMap[e.keyCode]) {
+                            keyIndex.push(i);
+                        }
+                    });
+
+                    count = $(document).data('keycount');
+                    count++;
+                    $(document).data('keycount', count);
+
+                    prevKey = $.trim($(':focus').text().toLowerCase()).substring(0, 1);
+
+                    if (prevKey != keyCodeMap[e.keyCode]) {
+                        count = 1;
+                        $(document).data('keycount', count);
+                    } else if (count >= keyIndex.length) {
+                        $(document).data('keycount', 0);
+                        if (count > keyIndex.length) count = 1;
+                    }
+
+                    $items.eq(keyIndex[count - 1]).children('span.dropdown-item-inner').focus();
+                }
+
+                // Select focused option if "Enter", "Spacebar" or "Tab" (when selectOnTab is true) are pressed inside the menu.
+                if ((/(13|32)/.test(e.keyCode.toString(10)) || (/(^9$)/.test(e.keyCode.toString(10)) && that.options.selectOnTab)) && isActive) {
+                    if (!/(32)/.test(e.keyCode.toString(10))) e.preventDefault();
+                    if (!that.options.liveSearch) {
+                        var elem = $(':focus');
+                        elem.click();
+                        // Bring back focus for multiselects
+                        elem.focus();
+                        // Prevent screen from scrolling if the user hit the spacebar
+                        e.preventDefault();
+                        // Fixes spacebar selection of dropdown items in FF & IE
+                        $(document).data('spaceSelect', true);
+                    } else if (!/(32)/.test(e.keyCode.toString(10))) {
+                        that.$menuInner.find('a.active').click();
+                        $this.focus();
+                    }
+                    $(document).data('keycount', 0);
+                }
+
+                if ((/(^9$|27)/.test(e.keyCode.toString(10)) && isActive && (that.multiple || that.options.liveSearch)) || (/(27)/.test(e.keyCode.toString(10)) && !isActive)) {
+                    that.$menu.parent().removeClass('open');
+                    if (that.options.container) that.$newElement.removeClass('open');
+                    that.$button.focus();
+                }
+            },
+
+            mobile: function() {
+                this.$element.addClass('mobile-device');
+            },
+
+            refresh: function() {
+                this.$lis = null;
+                this.liObj = {};
+                this.reloadLi();
+                this.render();
+                this.checkDisabled();
+                this.liHeight(true);
+                this.setStyle();
+                this.setWidth();
+                if (this.$lis) this.$searchbox.trigger('propertychange');
+
+                this.$element.trigger('refreshed.bs.select');
+            },
+
+            hide: function() {
+                this.$newElement.hide();
+            },
+
+            show: function() {
+                this.$newElement.show();
+            },
+
+            remove: function() {
+                this.$newElement.remove();
+                this.$element.remove();
+            },
+
+            destroy: function() {
+                this.$newElement.before(this.$element).remove();
+
+                if (this.$bsContainer) {
+                    this.$bsContainer.remove();
+                } else {
+                    this.$menu.remove();
+                }
+
+                this.$element.off('.bs.select').removeData('selectpicker').removeClass('bs-select-hidden selectpicker');
+            },
+        };
+
+        // SELECTPICKER PLUGIN DEFINITION
+        // ==============================
+        function Plugin(option) {
+            // get the args of the outer function..
+            var args = arguments;
+            // The arguments of the function are explicitly re-defined from the argument list, because the shift causes them
+            // to get lost/corrupted in android 2.3 and IE9 #715 #775
+            var _option = option;
+
+            [].shift.apply(args);
+            [].shift.apply(args);
+
+            var value;
+            var chain = this.each(function() {
+                var $this = $(this);
+                if ($this.is('select')) {
+                    var data = $this.data('selectpicker'),
+                        options = typeof _option == 'object' && _option;
+
+                    if (!data) {
+                        var config = $.extend({}, Selectpicker.DEFAULTS, $.fn.selectpicker.defaults || {}, $this.data(), options);
+                        config.template = $.extend({}, Selectpicker.DEFAULTS.template, ($.fn.selectpicker.defaults ? $.fn.selectpicker.defaults.template : {}), $this.data().template, options.template);
+                        $this.data('selectpicker', (data = new Selectpicker(this, config)));
+                    } else if (options) {
+                        for (var i in options) {
+                            if (options.hasOwnProperty(i)) {
+                                data.options[i] = options[i];
+                            }
+                        }
+                    }
+
+                    if (typeof _option == 'string') {
+                        if (data[_option] instanceof Function) {
+                            value = data[_option].apply(data, args);
+                        } else {
+                            value = data.options[_option];
+                        }
+                    }
+                }
+            });
+
+            if (typeof value !== 'undefined') {
+                //noinspection JSUnusedAssignment
+                return value;
+            } else {
+                return chain;
+            }
+        }
+
+        var old = $.fn.selectpicker;
+        $.fn.selectpicker = Plugin;
+        $.fn.selectpicker.Constructor = Selectpicker;
+
+        // SELECTPICKER NO CONFLICT
+        // ========================
+        $.fn.selectpicker.noConflict = function() {
+            $.fn.selectpicker = old;
+            return this;
+        };
+
+        $(document).data('keycount', 0).on('keydown.bs.select', '.bootstrap-select [data-toggle=dropdown], .bootstrap-select [role="listbox"], .bs-searchbox input', Selectpicker.prototype.keydown).on('focusin.modal', '.bootstrap-select [data-toggle=dropdown], .bootstrap-select [role="listbox"], .bs-searchbox input', function(e) {
+            e.stopPropagation();
+        });
+
+        // SELECTPICKER DATA-API
+        // =====================
+        $(window).on('load.bs.select.data-api', function() {
+            $('.selectpicker').each(function() {
+                var $selectpicker = $(this);
+                Plugin.call($selectpicker, $selectpicker.data());
+            });
+        });
+    })(jQuery);
+
+}));
+
+
+
+}));
+;/*
  * jQuery MiniColors: A tiny color picker built on jQuery
  *
  * Copyright: Cory LaViska for A Beautiful Site, LLC: http://www.abeautifulsite.net/

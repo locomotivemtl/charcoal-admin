@@ -6,7 +6,7 @@
 --}}
 <fieldset class="form-group">
     {{# showLabel }}
-    <label class="control-label" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+    <label for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
 
     {{# showActiveLanguage }}
     <span class="active-lang pull-right" aria-label="{{# _t }}Languages{{/ _t }}">
@@ -17,7 +17,7 @@
     {{/ showActiveLanguage }}
     {{/ showLabel }}
     {{^ showLabel }}
-    <label class="control-label sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
+    <label class=sr-only" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
     {{/ showLabel }}
 
     {{> charcoal/admin/template/inc.description }}

@@ -1,14 +1,38 @@
 // ==========================================================================
 // Bootstrap select
 // ==========================================================================
-.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
-    width:100%;
-}
 
-.bootstrap-select.btn-group .dropdown-toggle .filter-option {
-    font-size:16px;
-}
+.bootstrap-select {
+    font-size: $font-size-base;
 
-.bootstrap-select > .dropdown-toggle {
-    padding: 12px;
+    &:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+        width: 100%;
+    }
+
+    > .dropdown-toggle {
+        background:     $input-bg;
+        border:         $input-border-width solid $input-border-color;
+        border-radius:  $input-border-radius;
+        color:          $input-color;
+        font-size:      $font-size-base;
+        line-height:    $input-line-height;
+        padding-top:    $input-padding-y;
+        padding-bottom: $input-padding-y;
+        padding-left:   $input-padding-x;
+
+        &::after {
+            margin-left: 0;
+        }
+    }
+
+    > .dropdown-toggle.bs-placeholder,
+    > .dropdown-toggle.bs-placeholder:hover,
+    > .dropdown-toggle.bs-placeholder:focus,
+    > .dropdown-toggle.bs-placeholder:active {
+        color: $input-color;
+    }
+
+    .dropdown-item {
+        outline: none !important;
+    }
 }

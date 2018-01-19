@@ -20,7 +20,7 @@ Charcoal.Admin.Property_Input_Switch = function (opts)
     this.switch_selector = null;
     this.switch_options  = null;
 
-    this.set_properties(opts).create_switch();
+    // this.set_properties(opts).create_switch();
 };
 Charcoal.Admin.Property_Input_Switch.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Switch.prototype.constructor = Charcoal.Admin.Property_Input_Switch;

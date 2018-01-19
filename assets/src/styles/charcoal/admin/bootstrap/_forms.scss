@@ -6,28 +6,16 @@
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-   outline: none;
+   // outline: none;
 }
 
 input[type="url"] {
-    font-family: monospace;
-}
-
-.control-label {
-    font-weight: 400;
-}
-
-.form-field {
-    position: relative;
-
-    &.-multiple {
-        > .form-control:not(.selectized) + .form-control {
-            margin-top: 5px;
-        }
-    }
+    // font-family: monospace;
 }
 
 .form-control {
+    box-shadow: $input-box-shadow;
+
     &:focus {
         box-shadow: none;
     }
@@ -41,36 +29,23 @@ input[type="url"] {
     }
 }
 
-textarea.form-control {
-    // padding: $padding-base-horizontal;
-    padding: $spacer;
+.form-field {
+    position: relative;
+
+    &.-multiple {
+        > .form-control:not(.selectized) + .form-control {
+            margin-top: 5px;
+        }
+    }
 }
 
 .active-lang {
     [data-lang] {
+        color:          $charcoal-gray-3;
         display:        inline-block;
-        margin-bottom:  5px;
-        color:          #959595;
-        font-size:      $font-size-sm;
-        font-weight:    700;
+        font-size:      10px;
         letter-spacing: 1px;
+        margin-bottom:  5px;
         text-transform: uppercase;
     }
-}
-
-.c-structure {
-    .form-field > &.c-structure--bordered {
-        padding:       $card-spacer-y $card-spacer-x 0;
-        border:        1px solid $input-border-color;
-        border-radius: $input-border-radius;
-    }
-}
-
-.c-structure_entry_content > .o-section:last-child,
-.c-structure--bordered .c-structure_entry_content > .o-section {
-    margin-bottom: 0;
-}
-
-.c-structure_empty {
-    margin-bottom: $card-spacer-y;
 }

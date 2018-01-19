@@ -13,10 +13,10 @@ $theme-colors: (
     "danger":  $danger
 );
 
-// Scaffolding
+// Options
 // ==========================================================================
 
-// $text-color:            $color;
+// $enable-shadows: true;
 
 // Typography
 // ==========================================================================
@@ -30,17 +30,11 @@ $h4-font-size:           $font-size-h4;
 $h5-font-size:           $font-size-h5;
 $h6-font-size:           $font-size-h6;
 
-// Iconography
-// ==========================================================================
-
-// $icon-font-path: "../fonts/";
-
 // Components
 // ==========================================================================
 
 $caret-width: .35em;
 
-// ==========================================================================
 // Tables
 // ==========================================================================
 
@@ -50,15 +44,22 @@ $table-border-color: #cccccc;
 // $table-bg-accent:               $charcoal-lightblue;
 // $table-bg-hover:                $charcoal-lightblue;
 
-// ==========================================================================
 // Buttons
 // ==========================================================================
 
-$btn-padding-y: rem(8px);
-$btn-padding-x: rem(12px);
+// $btn-padding-y: rem(8px);
+// $btn-padding-x: rem(12px);
 
 // Forms
 // ==========================================================================
+
+$input-padding-y: rem(10px);
+
+$input-color:              $charcoal-gray-6;
+$input-border-color:       $charcoal-gray-2;
+
+$input-focus-border-color: $charcoal-blue-1;
+
 // $input-color:                    $color;
 
 // $input-border-focus:             $blue;

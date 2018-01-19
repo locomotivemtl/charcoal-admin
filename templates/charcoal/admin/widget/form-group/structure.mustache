@@ -5,7 +5,7 @@
     `charcoal/admin/widget/form-group/structure-form-group`
 --}}
 
-<fieldset class="c-structure{{^ displays.seamless }} c-structure--bordered{{/ displays.seamless }}">
+<fieldset class="c-structure-property{{^ displays.seamless }} -bordered{{/ displays.seamless }}">
     {{# showHeader }}
     <header class="o-header -border">
         {{# showTitle }}
@@ -28,18 +28,18 @@
     {{/ showNotesAbove }}
     {{/ showHeader }}
 
-    <div class="c-structure_entries">
+    <div class="c-structure-property_entries">
     {{^ hasFormProperties }}
     {{# showEmpty }}
     {{!^ hasEntries }}
-        <div class="c-structure_empty alert alert-warning" role="alert">{{# _t }}No Template Options.{{/ _t }}</div>
+        <div class="c-structure-property_empty alert alert-warning" role="alert">{{# _t }}No Template Options.{{/ _t }}</div>
         {{!> charcoal/admin/widget/structure/empty }}
     {{!/ hasEntries }}
     {{/ showEmpty }}
     {{/ hasFormProperties }}
     {{!# entries }}
-        <section class="c-structure_entry" id="structure-entry-{{ id }}">
-            <div class="c-structure_entry_content">
+        <section class="c-structure-property_entry" id="structure-entry-{{ id }}">
+            <div class="c-structure-property_entry_content">
                 {{> charcoal/admin/widget/form-group/form-properties }}
             </div>
         </section>

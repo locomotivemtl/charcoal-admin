@@ -7,6 +7,14 @@
 @import "settings/config.colors";
 @import "settings/config";
 
+// Tools
+// ==========================================================================
+@import "tools/functions";
+@import "tools/mixins";
+@import "tools/fonts";
+@import "tools/layout";
+@import "tools/widths";
+
 // ==========================================================================
 // Bootstrap
 // ==========================================================================
@@ -33,14 +41,6 @@
 // Charcoal
 // ==========================================================================
 
-// Tools
-// ==========================================================================
-@import "tools/functions";
-@import "tools/mixins";
-@import "tools/fonts";
-@import "tools/layout";
-@import "tools/widths";
-
 // Base
 // ==========================================================================
 @import "base/base";
@@ -50,6 +50,7 @@
 @import "objects/flex";
 @import "objects/header";
 @import "objects/container";
+@import "objects/section";
 @import "objects/overlay";
 @import "objects/background";
 @import "objects/toolbox";
@@ -70,6 +71,7 @@
 @import "components/table-pagination";
 @import "components/form-widget";
 @import "components/sidebar-widget";
+@import "components/structure-property";
 @import "components/login";
 @import "components/info";
 @import "components/audio-player";
@@ -83,7 +85,6 @@
 @import "bootstrap-custom/multiselect";
 @import "bootstrap-custom/dialog";
 
-
 // Vendors
 // ==========================================================================
 @import "vendors/minicolors";
@@ -91,7 +92,7 @@
 @import "vendors/bootstrap-switch";
 // @import "vendors/awesome-bootstrap-checkbox";
 
-// Trumps
+// Utilities
 // ==========================================================================
 @import "utilities/align";
 @import "utilities/helpers";

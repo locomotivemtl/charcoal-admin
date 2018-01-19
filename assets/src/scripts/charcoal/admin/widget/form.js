@@ -32,7 +32,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
         $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
     }
 
-    var lang = $('[data-lang]:not(.hidden)').data('lang');
+    var lang = $('[data-lang]:not(.d-none)').data('lang');
     if (lang) {
         Charcoal.Admin.setLang(lang);
     }
@@ -56,7 +56,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
 Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     var that = this;
 
-    var $sidebar = $('.c-form-sidebar', this.form_selector);
+    var $sidebar = $('.js-sidebar-widget', this.form_selector);
 
     // Submit the form via ajax
     $(that.form_selector)
@@ -97,8 +97,8 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
          $(that.form_selector).on('click', '.js-group-tabs', function (event) {
              event.preventDefault();
              var href = $(this).attr('href');
-             $(that.form_selector).find('.js-group-tab').addClass('hidden');
-             $(that.form_selector).find('.js-group-tab.' + href).removeClass('hidden');
+             $(that.form_selector).find('.js-group-tab').addClass('d-none');
+             $(that.form_selector).find('.js-group-tab.' + href).removeClass('d-none');
              $(this).parent().addClass('active').siblings('.active').removeClass('active');
          });
      }*/
@@ -296,7 +296,7 @@ Charcoal.Admin.Widget_Form.prototype.disable_button = function ($trigger) {
     }
 
     $trigger.prop('disabled', true)
-        .children('.glyphicon').removeClass('hidden')
+        .children('.fa').removeClass('d-none')
         .next('.btn-label').addClass('sr-only');
 
     return this;
@@ -313,7 +313,7 @@ Charcoal.Admin.Widget_Form.prototype.enable_button = function ($trigger) {
     }
 
     $trigger.prop('disabled', false)
-        .children('.glyphicon').addClass('hidden')
+        .children('.fa').addClass('d-none')
         .next('.btn-label').removeClass('sr-only');
 
     return this;
@@ -361,7 +361,6 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
                     data: data,
                     dataType: 'json'
                 }).done(function (response) {
-                    //console.debug(response);
                     if (response.success) {
                         window.location.href = successUrl;
                     } else {
@@ -380,16 +379,16 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
     var currentLang = Charcoal.Admin.lang();
     if (currentLang !== lang) {
         Charcoal.Admin.setLang(lang);
-        $('[data-lang][data-lang!=' + lang + ']').addClass('hidden');
-        $('[data-lang][data-lang=' + lang + ']').removeClass('hidden');
+        $('[data-lang][data-lang!=' + lang + ']').addClass('d-none');
+        $('[data-lang][data-lang=' + lang + ']').removeClass('d-none');
 
         $('[data-lang-switch][data-lang-switch!=' + lang + ']')
-            .removeClass('btn-info')
-            .addClass('btn-default');
+            .removeClass('btn-primary')
+            .addClass('btn-outline-primary');
 
         $('[data-lang-switch][data-lang-switch=' + lang + ']')
-            .removeClass('btn-default')
-            .addClass('btn-info');
+            .removeClass('btn-outline-primary')
+            .addClass('btn-primary');
 
         $(document).triggerHandler({
             type: 'switch_language.charcoal'

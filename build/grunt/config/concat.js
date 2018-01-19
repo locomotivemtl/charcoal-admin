@@ -39,7 +39,8 @@ module.exports = {
             // BB Map
             'node_modules/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
             // Bootstrap Select
-            // 'bower_components/bootstrap-select/dist/js/bootstrap-select.js',
+            // 'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
+            'node_modules/bootstrap-select-temporary/dist/js/bootstrap-select.js',
             // Jquery Minicolors
             'node_modules/jquery-minicolors/jquery.minicolors.min.js',
             // Multiselect Two-sides

@@ -9,7 +9,13 @@
 
 // Links, buttons, and more within the dropdown menu
 .dropdown-item {
-    font-size: 12px;
+    font-size: inherit;
+
+    @include hover-focus {
+        color: $input-color;
+        background-color: $charcoal-gray-1;
+    }
+    // font-size: 12px;
 //     @extend %dropdown-item;
 //     color: $dropdown-link-color;
 

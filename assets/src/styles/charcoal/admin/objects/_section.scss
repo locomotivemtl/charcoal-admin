@@ -1,0 +1,13 @@
+// ==========================================================================
+// Section
+// ==========================================================================
+
+.o-section {
+    @media (max-width: $to-small) {
+        margin-bottom: $unit-small;
+    }
+
+    @media (min-width: $from-small) {
+        margin-bottom: rem($unit / 2);
+    }
+}

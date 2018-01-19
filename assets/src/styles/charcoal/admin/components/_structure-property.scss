@@ -1,0 +1,20 @@
+// ==========================================================================
+// Property / Structure
+// ==========================================================================
+
+.c-structure-property {
+    .form-field > &.c-structure-property--bordered {
+        padding:       $card-spacer-y $card-spacer-x 0;
+        border:        1px solid $input-border-color;
+        border-radius: $input-border-radius;
+    }
+}
+
+.c-structure-property_entry_content > .o-section:last-child,
+.c-structure-property.-bordered .c-structure-property_entry_content > .o-section {
+    margin-bottom: 0;
+}
+
+.c-structure-property_empty {
+    margin-bottom: $card-spacer-y;
+}

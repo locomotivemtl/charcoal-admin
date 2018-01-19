@@ -29,7 +29,11 @@
         // The collection of registered components
         this.components = {};
 
-        $document.on('ready', $.proxy(this.render, this));
+        var that = this;
+
+        $(document).ready(function () {
+            that.render();
+        });
     };
 
     Manager.prototype.add_property_input = function (opts)

@@ -5,7 +5,9 @@
     "version": "1.0.0",
     "author": "Locomotive <info@locomotive.ca>",
     "dependencies": {
-        "bootstrap": "4.0.0-beta.3",
+        "bootstrap": "4.0.0",
+        "bootstrap-select": "^1.13.0-alpha",
+        "bootstrap-select-temporary": "https://github.com/paramono/bootstrap-select.git",
         "beneroch-gmap": "https://github.com/BeneRoch/Gmap.git",
         "clipboard": "^1.5.16",
         "elfinder-theme-moono": "https://github.com/lokothodida/elfinder-theme-moono.git",

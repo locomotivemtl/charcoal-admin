@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-01-16 
+ * ! Charcoal Admin - 2018-01-19 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -9,7 +9,7 @@
 
 @media (min-width: 700px) {
   h1, .h1 {
-    font-size: rem(24px);
+    font-size: 1.5rem;
   }
 }
 
@@ -21,7 +21,7 @@
 
 @media (min-width: 700px) {
   h2, .h2 {
-    font-size: rem(22px);
+    font-size: 1.375rem;
   }
 }
 
@@ -33,7 +33,7 @@
 
 @media (min-width: 700px) {
   h3, .h3 {
-    font-size: rem(20px);
+    font-size: 1.25rem;
   }
 }
 
@@ -69,30 +69,13 @@
 }
 
 .table-cell-checkbox {
-  width: rem(50px);
+  width: 3.125rem;
   text-align: center;
 }
 
-input[type="file"]:focus,
-input[type="radio"]:focus,
-input[type="checkbox"]:focus {
-  outline: none;
-}
-
-input[type="url"] {
-  font-family: monospace;
-}
-
-.control-label {
-  font-weight: 400;
-}
-
-.form-field {
-  position: relative;
-}
-
-.form-field.-multiple > .form-control:not(.selectized) + .form-control {
-  margin-top: 5px;
+.form-control {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .form-control:focus {
@@ -108,39 +91,29 @@ input[type="url"] {
   border: none;
 }
 
-textarea.form-control {
-  padding: 1rem;
+.form-field {
+  position: relative;
+}
+
+.form-field.-multiple > .form-control:not(.selectized) + .form-control {
+  margin-top: 5px;
 }
 
 .active-lang [data-lang] {
+  color: #686868;
   display: inline-block;
-  margin-bottom: 5px;
-  color: #959595;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 10px;
   letter-spacing: 1px;
+  margin-bottom: 5px;
   text-transform: uppercase;
-}
-
-.form-field > .c-structure.c-structure--bordered {
-  padding: 0.75rem 1.25rem 0;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-}
-
-.c-structure_entry_content > .o-section:last-child,
-.c-structure--bordered .c-structure_entry_content > .o-section {
-  margin-bottom: 0;
-}
-
-.c-structure_empty {
-  margin-bottom: 0.75rem;
 }
 
 .btn {
   font-size: 12px;
   -webkit-transition: background-color 0.2s, color 0.2s;
   transition: background-color 0.2s, color 0.2s;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 .btn.btn-lg {
@@ -166,7 +139,12 @@ textarea.form-control {
 }
 
 .dropdown-item {
-  font-size: 12px;
+  font-size: inherit;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #202020;
+  background-color: #dadadb;
 }
 
 .dropdown-toggle::after {
@@ -236,7 +214,7 @@ textarea.form-control {
   display: inline-block;
 }
 
-.nav-tabs .nav-link:not(.active):focus ~ .tooltip, .nav-tabs .nav-link:not(.active):hover ~ .tooltip {
+.nav-tabs .nav-link:not(.active):hover ~ .tooltip, .nav-tabs .nav-link:not(.active):focus ~ .tooltip {
   opacity: 1;
 }
 
@@ -426,27 +404,15 @@ td {
 }
 
 @media (max-width: 699px) {
-  .o-container_header {
-    margin-bottom: 5px;
+  .o-section {
+    margin-bottom: 10px;
   }
 }
 
 @media (min-width: 700px) {
-  .o-container_header {
+  .o-section {
     margin-bottom: 1.875rem;
   }
-}
-
-.o-container_header :first-child {
-  margin-top: 0;
-}
-
-.o-container_header :first-child {
-  margin-bottom: 0;
-}
-
-.o-section {
-  margin-bottom: 2.5rem;
 }
 
 .o-overlay, .c-nav-main_overlay {
@@ -1488,7 +1454,7 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-search_button {
-  border-color: #ced4da !important;
+  border-color: #bcbcbc !important;
   border-left: none;
   cursor: pointer;
 }
@@ -1791,12 +1757,27 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
-.c-sidebar-widget_button.-delete:focus, .c-sidebar-widget_button.-delete:hover {
+.c-sidebar-widget_button.-delete:hover, .c-sidebar-widget_button.-delete:focus {
   color: #6092f5;
 }
 
-.c-sidebar-widget_button.-reset:focus, .c-sidebar-widget_button.-reset:hover {
+.c-sidebar-widget_button.-reset:hover, .c-sidebar-widget_button.-reset:focus {
   color: #c34747;
+}
+
+.form-field > .c-structure-property.c-structure-property--bordered {
+  padding: 0.75rem 1.25rem 0;
+  border: 1px solid #bcbcbc;
+  border-radius: 0.25rem;
+}
+
+.c-structure-property_entry_content > .o-section:last-child,
+.c-structure-property.-bordered .c-structure-property_entry_content > .o-section {
+  margin-bottom: 0;
+}
+
+.c-structure-property_empty {
+  margin-bottom: 0.75rem;
 }
 
 .c-login {
@@ -2406,7 +2387,7 @@ a.chip:hover::before, a.chip:focus::before {
   margin-left: 2px;
 }
 
-@media (max-width: 575.99px) {
+@media (max-width: 575.98px) {
   .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar {
     margin: 1em auto;
     text-align: center;
@@ -2615,16 +2596,39 @@ a.chip:hover::before, a.chip:focus::before {
   border-radius: 0.2rem;
 }
 
+.bootstrap-select {
+  font-size: 1rem;
+}
+
 .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
   width: 100%;
 }
 
-.bootstrap-select.btn-group .dropdown-toggle .filter-option {
-  font-size: 16px;
+.bootstrap-select > .dropdown-toggle {
+  background: #ffffff;
+  border: 1px solid #bcbcbc;
+  border-radius: 0.25rem;
+  color: #202020;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 0.75rem;
 }
 
-.bootstrap-select > .dropdown-toggle {
-  padding: 12px;
+.bootstrap-select > .dropdown-toggle::after {
+  margin-left: 0;
+}
+
+.bootstrap-select > .dropdown-toggle.bs-placeholder,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:focus,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:active {
+  color: #202020;
+}
+
+.bootstrap-select .dropdown-item {
+  outline: none !important;
 }
 
 .bootstrap-switch {

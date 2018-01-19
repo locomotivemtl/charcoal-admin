@@ -5,6 +5,7 @@
 .btn {
     font-size: 12px;
     transition: background-color $speed, color $speed;
+    box-shadow: none;
 
     &.btn-lg {
         font-size: 1rem;

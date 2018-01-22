@@ -705,6 +705,16 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * Determine if wrapper containing the subtitle and properties should be displayed.
+     *
+     * @return boolean
+     */
+    public function showPropertiesOrSubtitle()
+    {
+        return $this->showSubtitle() || $this->hasSidebarProperties();
+    }
+
+    /**
      * @see    FormPropertyWidget::showActiveLanguage()
      * @return boolean
      */

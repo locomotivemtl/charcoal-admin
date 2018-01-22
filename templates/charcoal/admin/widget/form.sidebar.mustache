@@ -13,7 +13,7 @@
         </header>
         {{/ showTitle }}
 
-        {{# showPropertiesOrSubtitle }}
+        {{# showPropertiesWrapper }}
         <div class="c-sidebar-widget_wrapper -properties">
             {{# showSubtitle }}
             <p class="c-sidebar-widget_subtitle">{{& subtitle }}</p>
@@ -58,8 +58,9 @@
             </ul>
             {{/hasSidebarProperties}}
         </div>
-        {{/ showPropertiesOrSubtitle }}
+        {{/ showPropertiesWrapper }}
 
+        {{# showActionsWrapper }}
         <div class="c-sidebar-widget_wrapper -actions">
             {{#showLanguageSwitch}}
             <div class="btn-group d-flex mb-sm-3 js-lang-switch" role="group" aria-label="{{#_t}}Languages{{/_t}}">
@@ -87,6 +88,7 @@
             </div>
             {{/ showSidebarActions }}
         </div>
+        {{/ showActionsWrapper }}
 
         {{# showFooter }}
         <footer class="c-sidebar-widget_footer btn-group d-flex justify-content-center" role="group">

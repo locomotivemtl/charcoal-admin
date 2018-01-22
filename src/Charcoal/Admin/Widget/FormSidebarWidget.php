@@ -709,9 +709,19 @@ class FormSidebarWidget extends AdminWidget implements
      *
      * @return boolean
      */
-    public function showPropertiesOrSubtitle()
+    public function showPropertiesWrapper()
     {
         return $this->showSubtitle() || $this->hasSidebarProperties();
+    }
+
+    /**
+     * Determine if wrapper containing the language switcher and actions should be displayed.
+     *
+     * @return boolean
+     */
+    public function showActionsWrapper()
+    {
+        return $this->showLanguageSwitch() || $this->showSidebarActions();
     }
 
     /**

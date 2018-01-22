@@ -2,6 +2,17 @@
 // Nav / Main
 // ==========================================================================
 
+@mixin c-nav-main {
+    background-color: $charcoal-gray-6;
+    position: fixed;
+    top: $unit;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 999;
+    transition: transform 0.2s;
+    transform: translateX(-100%);
+}
+
 .c-nav-main {
     position: absolute;
     top: rem($header-height);
@@ -18,22 +29,21 @@
     }
 
     @media (max-width: $to-large) {
-        background-color: $charcoal-gray-6;
-        position: fixed;
-        top: $unit;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        z-index: 999;
-        transition: transform 0.2s;
-        transform: translateX(-100%);
-
-        .has-nav-open & {
-            transform: translateX(0);
-        }
+        @include c-nav-main;
     }
 
     @media (min-width: $from-large) {
         width: rem($nav-main-width);
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            @include c-nav-main;
+        }
+    }
+
+    .has-nav-open & {
+        transform: translateX(0);
     }
 }
 
@@ -58,6 +68,12 @@
 
     @media (min-width: $from-large) {
         height: rem(95px);
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            height: $nav-main-width;
+        }
     }
 }
 
@@ -144,6 +160,12 @@
 
     @media (min-width: $from-large) {
         display: none;
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            display: block;
+        }
     }
 
     .has-nav-open & {

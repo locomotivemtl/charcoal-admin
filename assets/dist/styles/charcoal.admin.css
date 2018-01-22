@@ -737,6 +737,7 @@ a.chip:hover::before, a.chip:focus::before {
     position: fixed;
     right: 0;
     height: 60px;
+    width: auto;
   }
 }
 
@@ -748,11 +749,22 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-container {
+    background-color: #393939;
+    position: fixed;
+    right: 0;
+    height: 60px;
+    width: auto;
+  }
+}
+
 @media (max-width: 1199px) {
   .c-nav-container_button {
     cursor: pointer;
     background: none;
     border: none;
+    display: inline-block;
     position: absolute;
     top: 0;
     left: 0;
@@ -767,6 +779,23 @@ a.chip:hover::before, a.chip:focus::before {
 @media (min-width: 1200px) {
   .c-nav-container_button {
     display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-container_button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    padding: 0;
+    padding-bottom: 6px;
+    text-align: center;
   }
 }
 
@@ -845,6 +874,16 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-container_header {
+    position: absolute;
+    top: 0;
+    left: 60px;
+    right: 0;
+    height: 60px;
+  }
+}
+
 .c-nav-container_logo {
   position: absolute;
   bottom: 0;
@@ -884,6 +923,16 @@ a.chip:hover::before, a.chip:focus::before {
   .c-nav-container_logo svg {
     width: 8.125rem;
     height: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-container_logo {
+    padding: 6px 20px;
+  }
+  [data-template="elfinder"] .c-nav-container_logo svg {
+    width: 81px;
+    height: 48px;
   }
 }
 
@@ -1024,17 +1073,36 @@ a.chip:hover::before, a.chip:focus::before {
         -ms-transform: translateX(-100%);
             transform: translateX(-100%);
   }
-  .has-nav-open .c-nav-main {
-    -webkit-transform: translateX(0);
-        -ms-transform: translateX(0);
-            transform: translateX(0);
-  }
 }
 
 @media (min-width: 1200px) {
   .c-nav-main {
     width: 5.625rem;
   }
+}
+
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-main {
+    background-color: #202020;
+    position: fixed;
+    top: 60px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 999;
+    -webkit-transition: -webkit-transform 0.2s;
+    transition: -webkit-transform 0.2s;
+    transition: transform 0.2s;
+    transition: transform 0.2s, -webkit-transform 0.2s;
+    -webkit-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+            transform: translateX(-100%);
+  }
+}
+
+.has-nav-open .c-nav-main {
+  -webkit-transform: translateX(0);
+      -ms-transform: translateX(0);
+          transform: translateX(0);
 }
 
 .c-nav-main_list {
@@ -1062,6 +1130,12 @@ a.chip:hover::before, a.chip:focus::before {
 @media (min-width: 1200px) {
   .c-nav-main_item {
     height: 5.9375rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-main_item {
+    height: 90px;
   }
 }
 
@@ -1146,6 +1220,12 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-main_overlay {
+    display: block;
+  }
+}
+
 .has-nav-open .c-nav-main_overlay {
   opacity: 1;
   visibility: visible;
@@ -1187,11 +1267,6 @@ a.chip:hover::before, a.chip:focus::before {
     transition: transform 0.5s;
     transition: transform 0.5s, -webkit-transform 0.5s;
   }
-  .has-nav-open .c-nav-secondary {
-    -webkit-transform: translateX(0%);
-        -ms-transform: translateX(0%);
-            transform: translateX(0%);
-  }
 }
 
 @media (min-width: 1200px) {
@@ -1202,6 +1277,30 @@ a.chip:hover::before, a.chip:focus::before {
     padding: 0 1.875rem;
     padding-bottom: 3.75rem;
   }
+}
+
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-nav-secondary {
+    background-color: #202020;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    padding: 0 30px;
+    padding-bottom: 60px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 998;
+    -webkit-transition: -webkit-transform 0.5s;
+    transition: -webkit-transform 0.5s;
+    transition: transform 0.5s;
+    transition: transform 0.5s, -webkit-transform 0.5s;
+  }
+}
+
+.has-nav-open .c-nav-secondary {
+  -webkit-transform: translateX(0%);
+      -ms-transform: translateX(0%);
+          transform: translateX(0%);
 }
 
 .c-nav-secondary .panel {
@@ -1385,6 +1484,12 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (max-width: 1199px) {
   .c-page-container {
+    padding-top: 60px;
+  }
+}
+
+@media (min-width: 1200px) {
+  [data-template="elfinder"] .c-page-container {
     padding-top: 60px;
   }
 }

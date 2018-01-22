@@ -1,34 +1,29 @@
 {{!--
-Charcoal Admin Home Template
+Charcoal Admin Media Template
 ============================
 
-`charcoal/admin/template/home`
-
-Display the "home" dashboard.
+Display the "media" dashboard, which consists of elFinder in quasi-fullscreen.
 --}}
 {{>charcoal/admin/template/inc.header}}
 
-<div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+{{>charcoal/admin/widget/feedbacks}}
+<main class="c-page-container o-flex_main">
 
-    {{>charcoal/admin/widget/feedbacks}}
+    <div class="o-flex">
 
-    <script language="javascript" type="text/javascript">
-        function resizeIframe(obj) {
-            var ele = document.getElementsByClassName('c-header-main');
+        <script language="javascript" type="text/javascript">
+            function resizeIframe(obj) {
+                var ele = document.getElementsByClassName('c-nav-container');
 
-            obj.style.height = window.innerHeight - ele[0].clientHeight + 'px';
-            obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';
-        }
-    </script>
+                obj.style.height = window.innerHeight - ele[0].clientHeight + 'px';
+                obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';
+            }
+        </script>
 
-    {{!-- Object edit section --}}
-    <iframe width="100%" height="auto" frameborder="0" src="elfinder" onload="javascript:resizeIframe(this);"></iframe>
+        {{!-- Object edit section --}}
+        <iframe width="100%" height="auto" frameborder="0" src="elfinder" onload="javascript:resizeIframe(this);"></iframe>
 
-</div>
+    </div>
+</main>
 
 {{>charcoal/admin/template/inc.footer}}

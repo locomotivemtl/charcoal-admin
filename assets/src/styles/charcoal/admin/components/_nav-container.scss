@@ -2,6 +2,14 @@
 // Nav / Container
 // ==========================================================================
 
+@mixin c-nav-container {
+    background-color: $charcoal-gray-4;
+    position: fixed;
+    right: 0;
+    height: $unit;
+    width: auto;
+}
+
 .c-nav-container {
     top: 0;
     left: 0;
@@ -9,10 +17,7 @@
     backface-visibility: hidden;
 
     @media (max-width: $to-large) {
-        background-color: $charcoal-gray-4;
-        position: fixed;
-        right: 0;
-        height: $unit;
+        @include c-nav-container;
     }
 
     @media (min-width: $from-large) {
@@ -20,25 +25,42 @@
         bottom: 0;
         width: rem($nav-width);
     }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            @include c-nav-container;
+        }
+    }
+}
+
+@mixin c-nav-container_button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: $nav-button-width;
+    padding: 0;
+    padding-bottom: 6px;
+    text-align: center;
 }
 
 .c-nav-container_button {
     @media (max-width: $to-large) {
-        cursor: pointer;
-        background: none;
-        border: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: $nav-button-width;
-        padding: 0;
-        padding-bottom: 6px;
-        text-align: center;
+        @include c-nav-container_button;
     }
 
     @media (min-width: $from-large) {
         display: none;
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            @include c-nav-container_button;
+        }
     }
 }
 
@@ -85,19 +107,30 @@
     }
 }
 
+@mixin c-nav-container_header {
+    position: absolute;
+    top: 0;
+    left: $nav-button-width;
+    right: 0;
+    height: $unit;
+}
+
 .c-nav-container_header {
     @media (max-width: $to-large) {
-        position: absolute;
-        top: 0;
-        left: $nav-button-width;
-        right: 0;
-        height: $unit;
+        @include c-nav-container_header;
     }
+
     @media (min-width: $from-large) {
         background-color: $charcoal-gray-4;
         height: rem($header-height);
         overflow: visible;
         position: relative;
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            @include c-nav-container_header;
+        }
     }
 }
 
@@ -130,11 +163,21 @@
 
     @media (min-width: $from-large) {
         padding: rem(22px) rem($spacer-x);
-        // right: 0;
 
         svg {
             width: rem(130px);
             height: rem(24px);
+        }
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            padding: 6px 20px;
+
+            svg {
+                width: 81px;
+                height: 48px;
+            }
         }
     }
 }

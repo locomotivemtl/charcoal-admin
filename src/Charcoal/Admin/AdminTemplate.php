@@ -145,6 +145,13 @@ class AdminTemplate extends AbstractTemplate implements
     private $widgetFactory;
 
     /**
+     * The cache of parsed template names.
+     *
+     * @var array
+     */
+    protected static $templateNameCache = [];
+
+    /**
      * Set common dependencies (services) used in all admin templates.
      *
      * @param Container $container DI Container.
@@ -901,5 +908,39 @@ class AdminTemplate extends AbstractTemplate implements
             );
         }
         return $this->widgetFactory;
+    }
+
+
+
+    // Front-end helpers
+    // ============================================================
+
+    /**
+     * Retrieve the template's identifier.
+     *
+     * @return string
+     */
+    public function templateName()
+    {
+        $key = substr(strrchr('\\'.get_class($this), '\\'), 1);
+
+        if (!isset(static::$templateNameCache[$key])) {
+            $value = $key;
+
+            if (!ctype_lower($value)) {
+                $value = preg_replace('/\s+/u', '', $value);
+                $value = mb_strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1-', $value), 'UTF-8');
+            }
+
+            $value = str_replace(
+                [ 'abstract', 'trait', 'interface', 'template', '\\' ],
+                '',
+                $value
+            );
+
+            static::$templateNameCache[$key] = trim($value, '-');
+        }
+
+        return static::$templateNameCache[$key];
     }
 }

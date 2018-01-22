@@ -9,4 +9,10 @@
     @media (max-width: $to-large) {
         padding-top: $unit;
     }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            padding-top: $unit;
+        }
+    }
 }

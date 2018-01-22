@@ -2,6 +2,19 @@
 // Nav secondary Components
 // ==========================================================================
 
+@mixin c-nav-secondary {
+    background-color: $charcoal-gray-6;
+    position: fixed;
+    top: $unit;
+    bottom: 0;
+    padding: 0 $unit / 2;
+    padding-bottom: $unit;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 998;
+    transition: transform 0.5s;
+}
+
 .c-nav-secondary {
     @media (max-width: $to-small) {
         left: $unit;
@@ -16,20 +29,7 @@
     }
 
     @media (max-width: $to-large) {
-        background-color: $charcoal-gray-6;
-        position: fixed;
-        top: $unit;
-        bottom: 0;
-        padding: 0 $unit / 2;
-        padding-bottom: $unit;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        z-index: 998;
-        transition: transform 0.5s;
-
-        .has-nav-open & {
-            transform: translateX(0%);
-        }
+        @include c-nav-secondary;
     }
 
     @media (min-width: $from-large) {
@@ -38,6 +38,16 @@
         width: calc(100% - #{rem($nav-main-width)});
         padding: 0 rem($unit / 2);
         padding-bottom: rem($unit);
+    }
+
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            @include c-nav-secondary;
+        }
+    }
+
+    .has-nav-open & {
+        transform: translateX(0%);
     }
 
     .panel {

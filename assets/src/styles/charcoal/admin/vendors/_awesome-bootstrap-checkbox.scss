@@ -1,9 +1,8 @@
 // ==========================================================================
-// Checkboxes
+// Awesome Bootstrap Checkboxes
 // ==========================================================================
 
-.checkbox {
-    padding-left: rem(20px);
+.abc-checkbox {
     cursor: pointer;
 
     &.-nolabel {
@@ -13,13 +12,15 @@
     }
 
     label {
+        font-size: $font-size-base;
         min-height: rem(20px);
+        padding-left: 10px;
 
         &::before {
             width: rem(20px);
             height: rem(20px);
             margin-left: rem(-20px);
-            border-radius: $radius;
+            border-radius: $input-border-radius;
         }
 
         &::after {

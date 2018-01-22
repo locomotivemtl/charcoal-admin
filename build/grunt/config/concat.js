@@ -53,7 +53,7 @@ module.exports = {
             'node_modules/bootstrap-select-temporary/dist/js/bootstrap-select.js',
             // 'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
 
-            // Jquery Minicolors
+            // jQuery MiniColors
             'node_modules/jquery-minicolors/jquery.minicolors.min.js',
 
             // Multiselect Two-sides

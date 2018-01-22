@@ -5,11 +5,12 @@
     "version": "1.0.0",
     "author": "Locomotive <info@locomotive.ca>",
     "dependencies": {
+        "awesome-bootstrap-checkbox": "1.0.0",
+        "beneroch-gmap": "https://github.com/BeneRoch/Gmap.git",
         "bootstrap": "4.0.0",
         "bootstrap-select": "^1.13.0-alpha",
         "bootstrap-select-temporary": "https://github.com/paramono/bootstrap-select.git",
         "bootstrap-dialog-temporary": "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git",
-        "beneroch-gmap": "https://github.com/BeneRoch/Gmap.git",
         "clipboard": "^1.5.16",
         "elfinder-theme-moono": "https://github.com/lokothodida/elfinder-theme-moono.git",
         "echarts": "3.8.5",

@@ -4,11 +4,12 @@
 
     `charcoal/admin/property/input/radio-color`
 --}}
-<fieldset class="radio-color-group">
+{{! <fieldset class="radio-color-group"> }}
     {{# choices }}
-    <div class="radio-color form-check{{# inputLayouts.inline }} form-check-inline{{/ inputLayouts.inline }} radio-lg">
+    {{! <div class="radio-color radio-lg"> }}
+    <div class="form-check{{# inputLayouts.inline }} form-check-inline{{/ inputLayouts.inline }} form-check-color abc-checkbox abc-checkbox-circle">
         {{> charcoal/admin/property/control/choice }}
-        {{> charcoal/admin/property/input/choice/color-label }}
+        <label class="form-check-label" for="{{ inputId }}">{{& label }}</label>
     </div>
     {{/ choices }}
-</fieldset>
+{{! </fieldset> }}

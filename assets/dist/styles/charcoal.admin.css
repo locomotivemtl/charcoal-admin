@@ -107,6 +107,24 @@ label {
   margin-top: 5px;
 }
 
+.form-check-color input {
+  position: absolute !important;
+}
+
+.form-check-color label {
+  font-size: 0;
+  padding: 0;
+  position: relative;
+  width: calc(2.25rem + 2px);
+  height: calc(2.25rem + 2px);
+}
+
+.form-check-color label::before, .form-check-color label::after {
+  margin-left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .active-lang [data-lang] {
   color: #686868;
   display: inline-block;
@@ -2143,45 +2161,6 @@ a.chip:hover::before, a.chip:focus::before {
   width: calc(100% - 244px);
 }
 
-.stats__title {
-  font-size: 6.25rem;
-  font-weight: 100;
-}
-
-.stats__bar {
-  height: 0.375rem;
-  width: 100%;
-  background-color: #cccccc;
-}
-
-.stats__progress {
-  height: 0.375rem;
-  background-color: #007bff;
-}
-
-.stats__info {
-  margin-bottom: 0.9375rem;
-}
-
-.stats__info:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.stats__text {
-  margin-top: 0.3125rem;
-  display: block;
-}
-
-.stats__text.-left {
-  float: left;
-}
-
-.stats__text.-right {
-  float: right;
-}
-
 /**
  * Attachment Widget
  */
@@ -2263,7 +2242,7 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-attachments .panel-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Roboto", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   min-height: 32px;
@@ -2328,149 +2307,6 @@ a.chip:hover::before, a.chip:focus::before {
   -webkit-box-shadow: none;
           box-shadow: none;
   background-color: transparent;
-}
-
-.radio-color,
-.checkbox-color {
-  position: relative;
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.radio-color label,
-.checkbox-color label {
-  min-height: calc(2.25rem + 2px);
-  margin-bottom: 0;
-  font-weight: normal;
-  cursor: pointer;
-}
-
-.radio-color .o-color-swatch,
-.checkbox-color .o-color-swatch {
-  cursor: pointer;
-  width: calc(2.25rem + 2px)-2px;
-  height: calc(2.25rem + 2px)-2px;
-  border-radius: 0.25rem;
-}
-
-.radio-color .o-color-swatch .minicolors-swatch-color,
-.checkbox-color .o-color-swatch .minicolors-swatch-color {
-  border-radius: 0.25rem;
-  border: 1px solid #cccccc;
-}
-
-.radio-color .o-color-swatch + .o-swatch-label,
-.checkbox-color .o-color-swatch + .o-swatch-label {
-  margin-left: 5px;
-  vertical-align: middle;
-}
-
-.radio-color input[type="radio"],
-.checkbox-color input[type="checkbox"] {
-  position: absolute;
-}
-
-.radio-color.radio-lg,
-.checkbox-color.checkbox-lg {
-  line-height: 1.5;
-}
-
-.radio-color.radio-lg label,
-.checkbox-color.checkbox-lg label {
-  min-height: calc(2.875rem + 2px);
-}
-
-.radio-color.radio-lg .o-color-swatch,
-.checkbox-color.checkbox-lg .o-color-swatch {
-  width: calc(2.875rem + 2px)-2px;
-  height: calc(2.875rem + 2px)-2px;
-  border-radius: 0.3rem;
-}
-
-.radio-color.radio-lg .o-color-swatch .minicolors-swatch-color,
-.checkbox-color.checkbox-lg .o-color-swatch .minicolors-swatch-color {
-  border-radius: 0.3rem;
-}
-
-.radio-color.radio-sm,
-.checkbox-color.checkbox-sm {
-  line-height: 1.5;
-}
-
-.radio-color.radio-sm label,
-.checkbox-color.checkbox-sm label {
-  min-height: calc(1.8125rem + 2px);
-}
-
-.radio-color.radio-sm .o-color-swatch,
-.checkbox-color.checkbox-sm .o-color-swatch {
-  width: calc(1.8125rem + 2px)-2px;
-  height: calc(1.8125rem + 2px)-2px;
-  border-radius: 0.2rem;
-}
-
-.radio-color.radio-sm .o-color-swatch .minicolors-swatch-color,
-.checkbox-color.checkbox-sm .o-color-swatch .minicolors-swatch-color {
-  border-radius: 0.2rem;
-}
-
-.radio-color + .radio-color,
-.checkbox-color + .checkbox-color {
-  margin-top: -5px;
-}
-
-.radio-color.radio-inline,
-.checkbox-color.checkbox-inline {
-  position: relative;
-  display: inline-block;
-  padding-left: 0;
-  margin-right: 10px;
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.radio-color.radio-inline + .radio-color.radio-inline,
-.checkbox-color.checkbox-inline + .checkbox-color.checkbox-inline {
-  margin-top: 0;
-  margin-bottom: 10px;
-  margin-left: 0;
-}
-
-.radio-color input[type="radio"],
-.checkbox-color input[type="checkbox"] {
-  opacity: 0;
-  margin-left: .25em;
-  margin-top: .25em;
-}
-
-.radio-color input[type="radio"]:checked + .o-color-swatch::after,
-.radio-color input[type="radio"]:checked + label > .o-color-swatch::after,
-.checkbox-color input[type="checkbox"]:checked + .o-color-swatch::after,
-.checkbox-color input[type="checkbox"]:checked + label > .o-color-swatch::after {
-  position: absolute;
-  content: '';
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  display: block;
-  border: #3498DB 2px solid;
-  border-radius: calc(0.25rem + 2px);
-}
-
-.radio-color.radio-lg input[type="radio"]:checked + .o-color-swatch::after,
-.radio-color.radio-lg input[type="radio"]:checked + label > .o-color-swatch::after,
-.checkbox-color.checkbox-lg input[type="checkbox"]:checked + .o-color-swatch::after,
-.checkbox-color.checkbox-lg input[type="checkbox"]:checked + label > .o-color-swatch::after {
-  border-radius: calc(0.3rem + 2px);
-}
-
-.radio-color.radio-sm input[type="radio"]:checked + .o-color-swatch::after,
-.radio-color.radio-sm input[type="radio"]:checked + label > .o-color-swatch::after,
-.checkbox-color.checkbox-sm input[type="checkbox"]:checked + .o-color-swatch::after,
-.checkbox-color.checkbox-sm input[type="checkbox"]:checked + label > .o-color-swatch::after {
-  border-radius: calc(0.2rem + 2px);
 }
 
 .switch {
@@ -2797,87 +2633,6 @@ a.chip:hover::before, a.chip:focus::before {
 
 .bootstrap-dialog .form-field.-l10n.form-property-file[data-lang]::before, .bootstrap-dialog .form-field.-l10n.form-property-image[data-lang]::before {
   line-height: 32px;
-}
-
-.o-color-swatch {
-  cursor: text;
-  position: relative;
-  display: inline-block;
-  height: 17px;
-  width: 17px;
-  border: solid 1px #ccc;
-  vertical-align: middle;
-  background-position: -80px 0;
-}
-
-.o-color-swatch .minicolors-swatch-color {
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
-}
-
-.form-control.minicolors-input {
-  padding-left: calc(2.25rem + 2px);
-}
-
-.form-control.minicolors-input + .minicolors-swatch {
-  border-radius: 0.25rem;
-}
-
-.form-control.minicolors-input.input-lg {
-  padding-left: calc(2.875rem + 2px);
-}
-
-.form-control.minicolors-input.input-lg + .minicolors-swatch {
-  border-radius: 0.3rem;
-}
-
-.form-control.minicolors-input.input-sm {
-  padding-left: calc(1.8125rem + 2px);
-}
-
-.form-control.minicolors-input.input-sm + .minicolors-swatch {
-  border-radius: 0.2rem;
-}
-
-.bootstrap-select {
-  font-size: 1rem;
-}
-
-.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
-  width: 100%;
-}
-
-.bootstrap-select > .dropdown-toggle {
-  background: #ffffff;
-  border: 1px solid #bcbcbc;
-  border-radius: 0.25rem;
-  color: #202020;
-  font-size: 1rem;
-  line-height: 1.5;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-  padding-left: 0.75rem;
-}
-
-.bootstrap-select > .dropdown-toggle::after {
-  margin-left: 0;
-}
-
-.bootstrap-select > .dropdown-toggle.bs-placeholder,
-.bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
-.bootstrap-select > .dropdown-toggle.bs-placeholder:focus,
-.bootstrap-select > .dropdown-toggle.bs-placeholder:active {
-  color: #202020;
-}
-
-.bootstrap-select .dropdown-item {
-  outline: none !important;
-}
-
-.bootstrap-select.show > .dropdown-toggle {
-  background-color: #e1e1e1;
 }
 
 .u-float-left {

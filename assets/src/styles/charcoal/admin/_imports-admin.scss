@@ -2,11 +2,6 @@
 // Admin / Main
 // ==========================================================================
 
-// Settings
-// ==========================================================================
-@import "settings/config.colors";
-@import "settings/config";
-
 // Tools
 // ==========================================================================
 @import "tools/functions";
@@ -14,6 +9,15 @@
 @import "tools/fonts";
 @import "tools/layout";
 @import "tools/widths";
+
+// Settings
+// ==========================================================================
+
+@import "settings/config.colors";
+@import "settings/config";
+
+// Overwriting core Bootstrap variables
+@import "bootstrap/variables";
 
 // ==========================================================================
 // Bootstrap
@@ -27,7 +31,7 @@
 
 // Overwrites
 // ==========================================================================
-@import "bootstrap/variables";
+
 @import "bootstrap/type";
 @import "bootstrap/tables";
 @import "bootstrap/forms";
@@ -56,6 +60,7 @@
 @import "objects/toolbox";
 @import "objects/module";
 @import "objects/chips";
+@import "objects/swatch";
 
 // Components
 // ==========================================================================
@@ -76,21 +81,13 @@
 @import "components/info";
 @import "components/audio-player";
 @import "components/map-maker";
-@import "components/stats";
 @import "components/attachment";
-@import "components/color-inputs";
 
 // Bootstrap custom components
 // ==========================================================================
 @import "bootstrap-custom/switch";
 @import "bootstrap-custom/multiselect";
 @import "bootstrap-custom/dialog";
-
-// Vendors
-// ==========================================================================
-@import "vendors/minicolors";
-@import "vendors/bootstrap-select";
-// @import "vendors/awesome-bootstrap-checkbox";
 
 // Utilities
 // ==========================================================================

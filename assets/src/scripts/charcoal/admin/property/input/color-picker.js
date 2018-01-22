@@ -9,7 +9,6 @@ Charcoal.Admin.Property_Input_ColorPicker = function (opts)
 {
     this.input_type = 'charcoal/admin/property/input/colorpicker';
 
-    // Property_Input_ColorPicker properties
     this.input_id = null;
 
     this.colorpicker_selector = null;

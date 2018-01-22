@@ -47,6 +47,27 @@ label {
     }
 }
 
+.form-check-color {
+    input {
+        position: absolute !important;
+    }
+
+    label {
+        font-size: 0;
+        padding: 0;
+        position: relative;
+        width:  $input-height;
+        height: $input-height;
+
+        &::before,
+        &::after {
+            margin-left: 0;
+            width:  100%;
+            height: 100%;
+        }
+    }
+}
+
 .active-lang {
     [data-lang] {
         color:          $charcoal-gray-3;

@@ -2,56 +2,70 @@
 // Admin / Vendors
 // ==========================================================================
 
-// Settings
-// ==========================================================================
-@import "settings/config.colors";
-@import "settings/config";
-
-// ==========================================================================
 // Tools
 // ==========================================================================
+
 @import "tools/functions";
 @import "tools/mixins";
 @import "tools/fonts";
 @import "tools/layout";
 @import "tools/widths";
 
-// ==========================================================================
-// Bootstrap
+// Settings
 // ==========================================================================
 
-// Overwriting of core variables
+@import "settings/config.colors";
+@import "settings/config";
+
+// Overwriting core Bootstrap variables
 @import "bootstrap/variables";
+
+// Centralized dependencies
+// ==========================================================================
 
 // All of Bootstrap
 @import "../../../../../node_modules/bootstrap/scss/bootstrap";
 
-// ==========================================================================
-// Bootstrap plugins
-// ==========================================================================
-
 // Font Awesome
-@import "vendors/font-awesome";
 @import "../../../../../node_modules/components-font-awesome/scss/font-awesome";
 
 // Awesome Bootstrap Checkbox
-// @import "../../../../../bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";
-
-// Bootstrap Dialog
-@import "vendors/bootstrap-dialog";
+@import "../../../../../node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";
 
 // Bootstrap Select
+// @todo Update temporary import. Waiting for a real vendor to support Bootstrap 4.
 // @import "../../../../../node_modules/bootstrap-select/sass/bootstrap-select";
 @import "../../../../../node_modules/bootstrap-select-temporary/sass/bootstrap-select";
 
 // Bootstrap 3 Datepicker
+// @todo Implement datepicker & fix dependencies
 // @import "../../../../../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker";
 
-// Jquery Minicolors
-// @import "../../../../../bower_components/jquery-minicolors/jquery.minicolors";
+// jQuery MiniColors
+@import "../../../../../node_modules/jquery-minicolors/jquery.minicolors";
+
+
+// Decentralized dependencies
+// ==========================================================================
+
+// Bootstrap Dialog
+// @todo Update temporary import. Waiting for a real vendor to support Bootstrap 4.
+@import "vendors/bootstrap-dialog";
+
+// Dependency overrides
+// ==========================================================================
+
+// Awesome Bootstrap Checkbox
+@import "vendors/awesome-bootstrap-checkbox";
+
+// Bootstrap Select
+@import "vendors/bootstrap-select";
 
 // Selectize
 @import "vendors/selectize";
 
 // Tinymce
 @import "vendors/tinymce";
+
+// jQuery MiniColors
+@import "vendors/minicolors";

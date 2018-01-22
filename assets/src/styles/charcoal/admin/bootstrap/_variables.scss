@@ -44,34 +44,21 @@ $table-border-color: #cccccc;
 // $table-bg-accent:               $charcoal-lightblue;
 // $table-bg-hover:                $charcoal-lightblue;
 
-// Buttons
-// ==========================================================================
-
-// $btn-padding-y: rem(8px);
-// $btn-padding-x: rem(12px);
-
 // Forms
 // ==========================================================================
 
-$input-padding-y: rem(10px);
+$input-padding-y:    rem(10px); // .375rem
+$input-padding-y-sm: rem(7px);  //  .25rem
+$input-padding-y-lg: rem(13px); //   .5rem
 
 $input-color:              $charcoal-gray-6;
 $input-border-color:       $charcoal-gray-2;
 
 $input-focus-border-color: $charcoal-blue-1;
 
-// $input-color:                    $color;
-
-// $input-border-focus:             $blue;
-
-// $input-height-base:              48px;
-// $input-height-large:             48px;
-// $input-height-small:             38px;
-
-// $form-group-margin-bottom:       15px;
-
 // Grid system
 // ==========================================================================
+
 // $grid-gutter-width:         15px;
 
 // Navs

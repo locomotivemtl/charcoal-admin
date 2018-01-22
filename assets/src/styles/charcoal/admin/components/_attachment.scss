@@ -15,12 +15,12 @@ $c-attachment-ph: $card-spacer-x;
         cursor: move;
     }
 
-    .thumbnail img,
-    img.thumbnail {
+    .img-thumbnail img,
+    img.img-thumbnail {
         max-width:  200px;
     }
 
-    img.thumbnail {
+    img.img-thumbnail {
         display: block;
         max-width: 100%;
         height: auto;

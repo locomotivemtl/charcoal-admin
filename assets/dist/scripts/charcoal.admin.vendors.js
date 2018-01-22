@@ -35286,6 +35286,1381 @@ Object.defineProperty(exports, '__esModule', { value: true });
 //# sourceMappingURL=bootstrap.bundle.js.map
 ;/*! (C) Andrea Giammarchi - Mit Style License */
 var URLSearchParams=URLSearchParams||function(){"use strict";function URLSearchParams(query){var index,key,value,pairs,i,length,dict=Object.create(null);this[secret]=dict;if(!query)return;if(typeof query==="string"){if(query.charAt(0)==="?"){query=query.slice(1)}for(pairs=query.split("&"),i=0,length=pairs.length;i<length;i++){value=pairs[i];index=value.indexOf("=");if(-1<index){appendTo(dict,decode(value.slice(0,index)),decode(value.slice(index+1)))}else if(value.length){appendTo(dict,decode(value),"")}}}else{if(isArray(query)){for(i=0,length=query.length;i<length;i++){value=query[i];appendTo(dict,value[0],value[1])}}else{for(key in query){appendTo(dict,key,query[key])}}}}var isArray=Array.isArray,URLSearchParamsProto=URLSearchParams.prototype,find=/[!'\(\)~]|%20|%00/g,plus=/\+/g,replace={"!":"%21","'":"%27","(":"%28",")":"%29","~":"%7E","%20":"+","%00":"\0"},replacer=function(match){return replace[match]},secret="__URLSearchParams__:"+Math.random();function appendTo(dict,name,value){if(name in dict){dict[name].push(""+value)}else{dict[name]=isArray(value)?value:[""+value]}}function decode(str){return decodeURIComponent(str.replace(plus," "))}function encode(str){return encodeURIComponent(str).replace(find,replacer)}URLSearchParamsProto.append=function append(name,value){appendTo(this[secret],name,value)};URLSearchParamsProto["delete"]=function del(name){delete this[secret][name]};URLSearchParamsProto.get=function get(name){var dict=this[secret];return name in dict?dict[name][0]:null};URLSearchParamsProto.getAll=function getAll(name){var dict=this[secret];return name in dict?dict[name].slice(0):[]};URLSearchParamsProto.has=function has(name){return name in this[secret]};URLSearchParamsProto.set=function set(name,value){this[secret][name]=[""+value]};URLSearchParamsProto.forEach=function forEach(callback,thisArg){var dict=this[secret];Object.getOwnPropertyNames(dict).forEach(function(name){dict[name].forEach(function(value){callback.call(thisArg,value,name,this)},this)},this)};URLSearchParamsProto.toJSON=function toJSON(){return{}};URLSearchParamsProto.toString=function toString(){var dict=this[secret],query=[],i,key,name,value;for(key in dict){name=encode(key);for(i=0,value=dict[key];i<value.length;i++){query.push(name+"="+encode(value[i]))}}return query.join("&")};var dP=Object.defineProperty,gOPD=Object.getOwnPropertyDescriptor,createSearchParamsPollute=function(search){function append(name,value){URLSearchParamsProto.append.call(this,name,value);name=this.toString();search.set.call(this._usp,name?"?"+name:"")}function del(name){URLSearchParamsProto["delete"].call(this,name);name=this.toString();search.set.call(this._usp,name?"?"+name:"")}function set(name,value){URLSearchParamsProto.set.call(this,name,value);name=this.toString();search.set.call(this._usp,name?"?"+name:"")}return function(sp,value){sp.append=append;sp["delete"]=del;sp.set=set;return dP(sp,"_usp",{configurable:true,writable:true,value:value})}},createSearchParamsCreate=function(polluteSearchParams){return function(obj,sp){dP(obj,"_searchParams",{configurable:true,writable:true,value:polluteSearchParams(sp,obj)});return sp}},updateSearchParams=function(sp){var append=sp.append;sp.append=URLSearchParamsProto.append;URLSearchParams.call(sp,sp._usp.search.slice(1));sp.append=append},verifySearchParams=function(obj,Class){if(!(obj instanceof Class))throw new TypeError("'searchParams' accessed on an object that "+"does not implement interface "+Class.name)},upgradeClass=function(Class){var ClassProto=Class.prototype,searchParams=gOPD(ClassProto,"searchParams"),href=gOPD(ClassProto,"href"),search=gOPD(ClassProto,"search"),createSearchParams;if(!searchParams&&search&&search.set){createSearchParams=createSearchParamsCreate(createSearchParamsPollute(search));Object.defineProperties(ClassProto,{href:{get:function(){return href.get.call(this)},set:function(value){var sp=this._searchParams;href.set.call(this,value);if(sp)updateSearchParams(sp)}},search:{get:function(){return search.get.call(this)},set:function(value){var sp=this._searchParams;search.set.call(this,value);if(sp)updateSearchParams(sp)}},searchParams:{get:function(){verifySearchParams(this,Class);return this._searchParams||createSearchParams(this,new URLSearchParams(this.search.slice(1)))},set:function(sp){verifySearchParams(this,Class);createSearchParams(this,sp)}}})}};upgradeClass(HTMLAnchorElement);if(/^function|object$/.test(typeof URL)&&URL.prototype)upgradeClass(URL);return URLSearchParams}();(function(URLSearchParamsProto){var iterable=function(){try{return!!Symbol.iterator}catch(error){return false}}();if(!("forEach"in URLSearchParamsProto)){URLSearchParamsProto.forEach=function forEach(callback,thisArg){var names=Object.create(null);this.toString().replace(/=[\s\S]*?(?:&|$)/g,"=").split("=").forEach(function(name){if(!name.length||name in names)return;(names[name]=this.getAll(name)).forEach(function(value){callback.call(thisArg,value,name,this)},this)},this)}}if(!("keys"in URLSearchParamsProto)){URLSearchParamsProto.keys=function keys(){var items=[];this.forEach(function(value,name){items.push(name)});var iterator={next:function(){var value=items.shift();return{done:value===undefined,value:value}}};if(iterable){iterator[Symbol.iterator]=function(){return iterator}}return iterator}}if(!("values"in URLSearchParamsProto)){URLSearchParamsProto.values=function values(){var items=[];this.forEach(function(value){items.push(value)});var iterator={next:function(){var value=items.shift();return{done:value===undefined,value:value}}};if(iterable){iterator[Symbol.iterator]=function(){return iterator}}return iterator}}if(!("entries"in URLSearchParamsProto)){URLSearchParamsProto.entries=function entries(){var items=[];this.forEach(function(value,name){items.push([name,value])});var iterator={next:function(){var value=items.shift();return{done:value===undefined,value:value}}};if(iterable){iterator[Symbol.iterator]=function(){return iterator}}return iterator}}if(iterable&&!(Symbol.iterator in URLSearchParamsProto)){URLSearchParamsProto[Symbol.iterator]=URLSearchParamsProto.entries}if(!("sort"in URLSearchParamsProto)){URLSearchParamsProto.sort=function sort(){var entries=this.entries(),entry=entries.next(),done=entry.done,keys=[],values=Object.create(null),i,key,value;while(!done){value=entry.value;key=value[0];keys.push(key);if(!(key in values)){values[key]=[]}values[key].push(value[1]);entry=entries.next();done=entry.done}keys.sort();for(i=0;i<keys.length;i++){this["delete"](keys[i])}for(i=0;i<keys.length;i++){key=keys[i];this.append(key,values[key].shift())}}}})(URLSearchParams.prototype);
+;(function (root, factory) {
+
+    "use strict";
+
+    // CommonJS module is defined
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = factory(require('jquery'), require('bootstrap'));
+    }
+    // AMD module is defined
+    else if (typeof define === "function" && define.amd) {
+        define("bootstrap-dialog", ["jquery", "bootstrap"], function ($) {
+            return factory($);
+        });
+    } else {
+        // planted over the root!
+        root.BootstrapDialog = factory(root.jQuery);
+    }
+
+}(this, function ($) {
+
+    /* ================================================
+     * Definition of BootstrapDialogModal.
+     * Extend Bootstrap Modal and override some functions.
+     * BootstrapDialogModal === Modified Modal.
+     * ================================================ */
+    var Modal = $.fn.modal.Constructor;
+    var BootstrapDialogModal = function (element, options) {
+      if (/4\.0\.\d+(-(alpha|beta|rc)\.\d+)?/.test($.fn.modal.Constructor.VERSION)) {
+        return new Modal(element, options);
+      } else {
+        Modal.call(this, element, options);
+      }
+    };
+    BootstrapDialogModal.getModalVersion = function () {
+      var version = null;
+      if (typeof $.fn.modal.Constructor.VERSION === 'undefined') {
+        version = 'v3.1';
+      } else if (/3\.2\.\d+/.test($.fn.modal.Constructor.VERSION)) {
+        version = 'v3.2';
+      } else if (/3\.3\.[1,2]/.test($.fn.modal.Constructor.VERSION)) {
+        version = 'v3.3';  // v3.3.1, v3.3.2
+      } else if (/4\.0\.\d+(-(alpha|beta|rc)\.\d+)?/.test($.fn.modal.Constructor.VERSION)) {
+        version = 'v4.0';
+      } else {
+        version = 'v3.3.4';
+      }
+
+      return version;
+    };
+    BootstrapDialogModal.ORIGINAL_BODY_PADDING = parseInt(($('body').css('padding-right') || 0), 10);
+    BootstrapDialogModal.METHODS_TO_OVERRIDE = {};
+    BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.1'] = {};
+    BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.2'] = {
+      hide: function (e) {
+        if (e) {
+          e.preventDefault();
+        }
+        e = $.Event('hide.bs.modal');
+
+        this.$element.trigger(e);
+
+        if (!this.isShown || e.isDefaultPrevented()) {
+          return;
+        }
+
+        this.isShown = false;
+
+        // Remove css class 'modal-open' when the last opened dialog is closing.
+        var openedDialogs = this.getGlobalOpenedDialogs();
+        if (openedDialogs.length === 0) {
+          this.$body.removeClass('modal-open');
+        }
+
+        this.resetScrollbar();
+        this.escape();
+
+        $(document).off('focusin.bs.modal');
+
+        this.$element
+            .removeClass('in')
+            .attr('aria-hidden', true)
+            .off('click.dismiss.bs.modal');
+
+        $.support.transition && this.$element.hasClass('fade') ?
+          this.$element
+              .one('bsTransitionEnd', $.proxy(this.hideModal, this))
+              .emulateTransitionEnd(300) :
+          this.hideModal();
+      }
+    };
+    BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.3'] = {
+      /**
+       * Overrided.
+       *
+       * @returns {undefined}
+       */
+      setScrollbar: function () {
+        var bodyPad = BootstrapDialogModal.ORIGINAL_BODY_PADDING;
+        if (this.bodyIsOverflowing) {
+          this.$body.css('padding-right', bodyPad + this.scrollbarWidth);
+        }
+      },
+      /**
+       * Overrided.
+       *
+       * @returns {undefined}
+       */
+      resetScrollbar: function () {
+        var openedDialogs = this.getGlobalOpenedDialogs();
+        if (openedDialogs.length === 0) {
+          this.$body.css('padding-right', BootstrapDialogModal.ORIGINAL_BODY_PADDING);
+        }
+      },
+      /**
+       * Overrided.
+       *
+       * @returns {undefined}
+       */
+      hideModal: function () {
+        this.$element.hide();
+        this.backdrop($.proxy(function () {
+          var openedDialogs = this.getGlobalOpenedDialogs();
+          if (openedDialogs.length === 0) {
+            this.$body.removeClass('modal-open');
+          }
+          this.resetAdjustments();
+          this.resetScrollbar();
+          this.$element.trigger('hidden.bs.modal');
+        }, this));
+      }
+    };
+    BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.3.4'] = $.extend({}, BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.3']);
+    BootstrapDialogModal.METHODS_TO_OVERRIDE['v4.0'] = $.extend({}, BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.3']);
+    BootstrapDialogModal.prototype = {
+      constructor: BootstrapDialogModal,
+      /**
+       * New function, to get the dialogs that opened by BootstrapDialog.
+       *
+       * @returns {undefined}
+       */
+      getGlobalOpenedDialogs: function () {
+        var openedDialogs = [];
+        $.each(BootstrapDialog.dialogs, function (id, dialogInstance) {
+          if (dialogInstance.isRealized() && dialogInstance.isOpened()) {
+            openedDialogs.push(dialogInstance);
+          }
+        });
+
+        return openedDialogs;
+      }
+    };
+
+    // Add compatible methods.
+    BootstrapDialogModal.prototype = $.extend(BootstrapDialogModal.prototype, Modal.prototype, BootstrapDialogModal.METHODS_TO_OVERRIDE[BootstrapDialogModal.getModalVersion()]);
+
+    /* ================================================
+     * Definition of BootstrapDialog.
+     * ================================================ */
+    var BootstrapDialog = function (options) {
+      this.defaultOptions = $.extend(true, {
+        id: BootstrapDialog.newGuid(),
+        buttons: [],
+        data: {},
+        onshow: null,
+        onshown: null,
+        onhide: null,
+        onhidden: null
+      }, BootstrapDialog.defaultOptions);
+      this.indexedButtons = {};
+      this.registeredButtonHotkeys = {};
+      this.draggableData = {
+        isMouseDown: false,
+        mouseOffset: {}
+      };
+      this.realized = false;
+      this.opened = false;
+      this.initOptions(options);
+      this.holdThisInstance();
+    };
+
+    BootstrapDialog.BootstrapDialogModal = BootstrapDialogModal;
+
+    /**
+     *  Some constants.
+     */
+    BootstrapDialog.NAMESPACE = 'bootstrap-dialog';
+    BootstrapDialog.TYPE_DEFAULT = 'type-default';
+    BootstrapDialog.TYPE_INFO = 'type-info';
+    BootstrapDialog.TYPE_PRIMARY = 'type-primary';
+    BootstrapDialog.TYPE_SUCCESS = 'type-success';
+    BootstrapDialog.TYPE_WARNING = 'type-warning';
+    BootstrapDialog.TYPE_DANGER = 'type-danger';
+    BootstrapDialog.DEFAULT_TEXTS = {};
+    BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = 'Information';
+    BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = 'Information';
+    BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_PRIMARY] = 'Information';
+    BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = 'Success';
+    BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = 'Warning';
+    BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = 'Danger';
+    BootstrapDialog.DEFAULT_TEXTS['OK'] = 'OK';
+    BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'Cancel';
+    BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = 'Confirmation';
+    BootstrapDialog.SIZE_NORMAL = 'size-normal';
+    BootstrapDialog.SIZE_SMALL = 'size-small';
+    BootstrapDialog.SIZE_WIDE = 'size-wide';    // size-wide is equal to modal-lg
+    BootstrapDialog.SIZE_LARGE = 'size-large';
+    BootstrapDialog.BUTTON_SIZES = {};
+    BootstrapDialog.BUTTON_SIZES[BootstrapDialog.SIZE_NORMAL] = '';
+    BootstrapDialog.BUTTON_SIZES[BootstrapDialog.SIZE_SMALL] = '';
+    BootstrapDialog.BUTTON_SIZES[BootstrapDialog.SIZE_WIDE] = '';
+    BootstrapDialog.BUTTON_SIZES[BootstrapDialog.SIZE_LARGE] = 'btn-lg';
+    BootstrapDialog.ICON_SPINNER = 'glyphicon glyphicon-asterisk';
+
+    /**
+     * Default options.
+     */
+    BootstrapDialog.defaultOptions = {
+      type: BootstrapDialog.TYPE_PRIMARY,
+      size: BootstrapDialog.SIZE_NORMAL,
+      cssClass: '',
+      title: null,
+      message: null,
+      nl2br: true,
+      closable: true,
+      closeByBackdrop: true,
+      closeByKeyboard: true,
+      closeIcon: '&#215;',
+      spinicon: BootstrapDialog.ICON_SPINNER,
+      autodestroy: true,
+      draggable: false,
+      animate: true,
+      description: '',
+      tabindex: -1
+    };
+
+    /**
+     * Config default options.
+     */
+    BootstrapDialog.configDefaultOptions = function (options) {
+      BootstrapDialog.defaultOptions = $.extend(true, BootstrapDialog.defaultOptions, options);
+    };
+
+    /**
+     * Open / Close all created dialogs all at once.
+     */
+    BootstrapDialog.dialogs = {};
+    BootstrapDialog.openAll = function () {
+      $.each(BootstrapDialog.dialogs, function (id, dialogInstance) {
+        dialogInstance.open();
+      });
+    };
+    BootstrapDialog.closeAll = function () {
+      $.each(BootstrapDialog.dialogs, function (id, dialogInstance) {
+        dialogInstance.close();
+      });
+    };
+
+    /**
+     * Get dialog instance by given id.
+     *
+     * @returns dialog instance
+     */
+    BootstrapDialog.getDialog = function (id) {
+      var dialog = null;
+      if (typeof BootstrapDialog.dialogs[id] !== 'undefined') {
+        dialog = BootstrapDialog.dialogs[id];
+      }
+
+      return dialog;
+    };
+
+    /**
+     * Set a dialog.
+     *
+     * @returns the dialog that has just been set.
+     */
+    BootstrapDialog.setDialog = function (dialog) {
+      BootstrapDialog.dialogs[dialog.getId()] = dialog;
+
+      return dialog;
+    };
+
+    /**
+     * Alias of BootstrapDialog.setDialog(dialog)
+     *
+     * @param {type} dialog
+     * @returns {unresolved}
+     */
+    BootstrapDialog.addDialog = function (dialog) {
+      return BootstrapDialog.setDialog(dialog);
+    };
+
+    /**
+     * Move focus to next visible dialog.
+     */
+    BootstrapDialog.moveFocus = function () {
+      var lastDialogInstance = null;
+      $.each(BootstrapDialog.dialogs, function (id, dialogInstance) {
+        if (dialogInstance.isRealized() && dialogInstance.isOpened()) {
+          lastDialogInstance = dialogInstance;
+        }
+      });
+      if (lastDialogInstance !== null) {
+        lastDialogInstance.getModal().focus();
+      }
+    };
+
+    BootstrapDialog.METHODS_TO_OVERRIDE = {};
+    BootstrapDialog.METHODS_TO_OVERRIDE['v3.1'] = {
+      handleModalBackdropEvent: function () {
+        this.getModal().on('click', {dialog: this}, function (event) {
+          event.target === this && event.data.dialog.isClosable() && event.data.dialog.canCloseByBackdrop() && event.data.dialog.close();
+        });
+
+        return this;
+      },
+      /**
+       * To make multiple opened dialogs look better.
+       *
+       * Will be removed in later version, after Bootstrap Modal >= 3.3.0, updating z-index is unnecessary.
+       */
+      updateZIndex: function () {
+        if (this.isOpened()) {
+          var zIndexBackdrop = 1040;
+          var zIndexModal = 1050;
+          var dialogCount = 0;
+          $.each(BootstrapDialog.dialogs, function (dialogId, dialogInstance) {
+            if (dialogInstance.isRealized() && dialogInstance.isOpened()) {
+              dialogCount++;
+            }
+          });
+          var $modal = this.getModal();
+          var $backdrop = this.getModalBackdrop($modal);
+          $modal.css('z-index', zIndexModal + (dialogCount - 1) * 20);
+          $backdrop.css('z-index', zIndexBackdrop + (dialogCount - 1) * 20);
+        }
+
+        return this;
+      },
+      open: function () {
+        !this.isRealized() && this.realize();
+        this.getModal().modal('show');
+        this.updateZIndex();
+
+        return this;
+      }
+    };
+    BootstrapDialog.METHODS_TO_OVERRIDE['v3.2'] = {
+      handleModalBackdropEvent: BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']['handleModalBackdropEvent'],
+      updateZIndex: BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']['updateZIndex'],
+      open: BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']['open']
+    };
+    BootstrapDialog.METHODS_TO_OVERRIDE['v3.3'] = {};
+    BootstrapDialog.METHODS_TO_OVERRIDE['v3.3.4'] = $.extend({}, BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']);
+    BootstrapDialog.METHODS_TO_OVERRIDE['v4.0'] = {
+      getModalBackdrop: function ($modal) {
+        return $($modal.data('bs.modal')._backdrop);
+      },
+      handleModalBackdropEvent: BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']['handleModalBackdropEvent'],
+      updateZIndex: BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']['updateZIndex'],
+      open: BootstrapDialog.METHODS_TO_OVERRIDE['v3.1']['open'],
+      getModalForBootstrapDialogModal: function () {
+        return this.getModal().get(0);
+      }
+    };
+    BootstrapDialog.prototype = {
+      constructor: BootstrapDialog,
+      initOptions: function (options) {
+        this.options = $.extend(true, this.defaultOptions, options);
+
+        return this;
+      },
+      holdThisInstance: function () {
+        BootstrapDialog.addDialog(this);
+
+        return this;
+      },
+      initModalStuff: function () {
+        this.setModal(this.createModal())
+            .setModalDialog(this.createModalDialog())
+            .setModalContent(this.createModalContent())
+            .setModalHeader(this.createModalHeader())
+            .setModalBody(this.createModalBody())
+            .setModalFooter(this.createModalFooter());
+
+        this.getModal().append(this.getModalDialog());
+        this.getModalDialog().append(this.getModalContent());
+        this.getModalContent()
+            .append(this.getModalHeader())
+            .append(this.getModalBody())
+            .append(this.getModalFooter());
+
+        return this;
+      },
+      createModal: function () {
+        var $modal = $('<div class="modal" role="dialog" aria-hidden="true"></div>');
+        $modal.prop('id', this.getId());
+        $modal.attr('aria-labelledby', this.getId() + '_title');
+
+        return $modal;
+      },
+      getModal: function () {
+        return this.$modal;
+      },
+      setModal: function ($modal) {
+        this.$modal = $modal;
+
+        return this;
+      },
+      getModalBackdrop: function ($modal) {
+        return $modal.data('bs.modal').$backdrop;
+      },
+      getModalForBootstrapDialogModal: function () {
+        return this.getModal();
+      },
+      createModalDialog: function () {
+        return $('<div class="modal-dialog"></div>');
+      },
+      getModalDialog: function () {
+        return this.$modalDialog;
+      },
+      setModalDialog: function ($modalDialog) {
+        this.$modalDialog = $modalDialog;
+
+        return this;
+      },
+      createModalContent: function () {
+        return $('<div class="modal-content"></div>');
+      },
+      getModalContent: function () {
+        return this.$modalContent;
+      },
+      setModalContent: function ($modalContent) {
+        this.$modalContent = $modalContent;
+
+        return this;
+      },
+      createModalHeader: function () {
+        return $('<div class="modal-header"></div>');
+      },
+      getModalHeader: function () {
+        return this.$modalHeader;
+      },
+      setModalHeader: function ($modalHeader) {
+        this.$modalHeader = $modalHeader;
+
+        return this;
+      },
+      createModalBody: function () {
+        return $('<div class="modal-body"></div>');
+      },
+      getModalBody: function () {
+        return this.$modalBody;
+      },
+      setModalBody: function ($modalBody) {
+        this.$modalBody = $modalBody;
+
+        return this;
+      },
+      createModalFooter: function () {
+        return $('<div class="modal-footer"></div>');
+      },
+      getModalFooter: function () {
+        return this.$modalFooter;
+      },
+      setModalFooter: function ($modalFooter) {
+        this.$modalFooter = $modalFooter;
+
+        return this;
+      },
+      createDynamicContent: function (rawContent) {
+        var content = null;
+        if (typeof rawContent === 'function') {
+          content = rawContent.call(rawContent, this);
+        } else {
+          content = rawContent;
+        }
+        if (typeof content === 'string') {
+          content = this.formatStringContent(content);
+        }
+
+        return content;
+      },
+      formatStringContent: function (content) {
+        if (this.options.nl2br) {
+          return content.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
+        }
+
+        return content;
+      },
+      setData: function (key, value) {
+        this.options.data[key] = value;
+
+        return this;
+      },
+      getData: function (key) {
+        return this.options.data[key];
+      },
+      setId: function (id) {
+        this.options.id = id;
+
+        return this;
+      },
+      getId: function () {
+        return this.options.id;
+      },
+      getType: function () {
+        return this.options.type;
+      },
+      setType: function (type) {
+        this.options.type = type;
+        this.updateType();
+
+        return this;
+      },
+      updateType: function () {
+        if (this.isRealized()) {
+          var types = [BootstrapDialog.TYPE_DEFAULT,
+            BootstrapDialog.TYPE_INFO,
+            BootstrapDialog.TYPE_PRIMARY,
+            BootstrapDialog.TYPE_SUCCESS,
+            BootstrapDialog.TYPE_WARNING,
+            BootstrapDialog.TYPE_DANGER];
+
+          this.getModal().removeClass(types.join(' ')).addClass(this.getType());
+        }
+
+        return this;
+      },
+      getSize: function () {
+        return this.options.size;
+      },
+      setSize: function (size) {
+        this.options.size = size;
+        this.updateSize();
+
+        return this;
+      },
+      updateSize: function () {
+        if (this.isRealized()) {
+          var dialog = this;
+
+          // Dialog size
+          this.getModal().removeClass(BootstrapDialog.SIZE_NORMAL)
+              .removeClass(BootstrapDialog.SIZE_SMALL)
+              .removeClass(BootstrapDialog.SIZE_WIDE)
+              .removeClass(BootstrapDialog.SIZE_LARGE);
+          this.getModal().addClass(this.getSize());
+
+          // Smaller dialog.
+          this.getModalDialog().removeClass('modal-sm');
+          if (this.getSize() === BootstrapDialog.SIZE_SMALL) {
+            this.getModalDialog().addClass('modal-sm');
+          }
+
+          // Wider dialog.
+          this.getModalDialog().removeClass('modal-lg');
+          if (this.getSize() === BootstrapDialog.SIZE_WIDE) {
+            this.getModalDialog().addClass('modal-lg');
+          }
+
+          // Button size
+          $.each(this.options.buttons, function (index, button) {
+            var $button = dialog.getButton(button.id);
+            var buttonSizes = ['btn-lg', 'btn-sm', 'btn-xs'];
+            var sizeClassSpecified = false;
+            if (typeof button['cssClass'] === 'string') {
+              var btnClasses = button['cssClass'].split(' ');
+              $.each(btnClasses, function (index, btnClass) {
+                if ($.inArray(btnClass, buttonSizes) !== -1) {
+                  sizeClassSpecified = true;
+                }
+              });
+            }
+            if (!sizeClassSpecified) {
+              $button.removeClass(buttonSizes.join(' '));
+              $button.addClass(dialog.getButtonSize());
+            }
+          });
+        }
+
+        return this;
+      },
+      getCssClass: function () {
+        return this.options.cssClass;
+      },
+      setCssClass: function (cssClass) {
+        this.options.cssClass = cssClass;
+
+        return this;
+      },
+      getTitle: function () {
+        return this.options.title;
+      },
+      setTitle: function (title) {
+        this.options.title = title;
+        this.updateTitle();
+
+        return this;
+      },
+      updateTitle: function () {
+        if (this.isRealized()) {
+          var title = this.getTitle() !== null ? this.createDynamicContent(this.getTitle()) : this.getDefaultText();
+          this.getModalHeader().find('.' + this.getNamespace('title') + ' > h5').html('').append(title).prop('id', this.getId() + '_title');
+        }
+
+        return this;
+      },
+      getMessage: function () {
+        return this.options.message;
+      },
+      setMessage: function (message) {
+        this.options.message = message;
+        this.updateMessage();
+
+        return this;
+      },
+      updateMessage: function () {
+        if (this.isRealized()) {
+          var message = this.createDynamicContent(this.getMessage());
+          this.getModalBody().find('.' + this.getNamespace('message')).html('').append(message);
+        }
+
+        return this;
+      },
+      isClosable: function () {
+        return this.options.closable;
+      },
+      setClosable: function (closable) {
+        this.options.closable = closable;
+        this.updateClosable();
+
+        return this;
+      },
+      setCloseByBackdrop: function (closeByBackdrop) {
+        this.options.closeByBackdrop = closeByBackdrop;
+
+        return this;
+      },
+      canCloseByBackdrop: function () {
+        return this.options.closeByBackdrop;
+      },
+      setCloseByKeyboard: function (closeByKeyboard) {
+        this.options.closeByKeyboard = closeByKeyboard;
+
+        return this;
+      },
+      canCloseByKeyboard: function () {
+        return this.options.closeByKeyboard;
+      },
+      isAnimate: function () {
+        return this.options.animate;
+      },
+      setAnimate: function (animate) {
+        this.options.animate = animate;
+
+        return this;
+      },
+      updateAnimate: function () {
+        if (this.isRealized()) {
+          this.getModal().toggleClass('fade', this.isAnimate());
+        }
+
+        return this;
+      },
+      getSpinicon: function () {
+        return this.options.spinicon;
+      },
+      setSpinicon: function (spinicon) {
+        this.options.spinicon = spinicon;
+
+        return this;
+      },
+      addButton: function (button) {
+        this.options.buttons.push(button);
+
+        return this;
+      },
+      addButtons: function (buttons) {
+        var that = this;
+        $.each(buttons, function (index, button) {
+          that.addButton(button);
+        });
+
+        return this;
+      },
+      getButtons: function () {
+        return this.options.buttons;
+      },
+      setButtons: function (buttons) {
+        this.options.buttons = buttons;
+        this.updateButtons();
+
+        return this;
+      },
+      /**
+       * If there is id provided for a button option, it will be in dialog.indexedButtons list.
+       *
+       * In that case you can use dialog.getButton(id) to find the button.
+       *
+       * @param {type} id
+       * @returns {undefined}
+       */
+      getButton: function (id) {
+        if (typeof this.indexedButtons[id] !== 'undefined') {
+          return this.indexedButtons[id];
+        }
+
+        return null;
+      },
+      getButtonSize: function () {
+        if (typeof BootstrapDialog.BUTTON_SIZES[this.getSize()] !== 'undefined') {
+          return BootstrapDialog.BUTTON_SIZES[this.getSize()];
+        }
+
+        return '';
+      },
+      updateButtons: function () {
+        if (this.isRealized()) {
+          if (this.getButtons().length === 0) {
+            this.getModalFooter().hide();
+          } else {
+            this.getModalFooter().show().find('.' + this.getNamespace('footer')).html('').append(this.createFooterButtons());
+          }
+        }
+
+        return this;
+      },
+      isAutodestroy: function () {
+        return this.options.autodestroy;
+      },
+      setAutodestroy: function (autodestroy) {
+        this.options.autodestroy = autodestroy;
+      },
+      getDescription: function () {
+        return this.options.description;
+      },
+      setDescription: function (description) {
+        this.options.description = description;
+
+        return this;
+      },
+      setTabindex: function (tabindex) {
+        this.options.tabindex = tabindex;
+
+        return this;
+      },
+      getTabindex: function () {
+        return this.options.tabindex;
+      },
+      updateTabindex: function () {
+        if (this.isRealized()) {
+          this.getModal().attr('tabindex', this.getTabindex());
+        }
+
+        return this;
+      },
+      getDefaultText: function () {
+        return BootstrapDialog.DEFAULT_TEXTS[this.getType()];
+      },
+      getNamespace: function (name) {
+        return BootstrapDialog.NAMESPACE + '-' + name;
+      },
+      createHeaderContent: function () {
+        var $container = $('<div></div>');
+        $container.addClass(this.getNamespace('header'));
+
+        // title
+        $container.append(this.createTitleContent());
+
+        // Close button
+        $container.prepend(this.createCloseButton());
+
+        return $container;
+      },
+      createTitleContent: function () {
+        var $h5 = $('<h5>').addClass('modal-title');
+        var $title = $('<div></div>');
+        $title.addClass(this.getNamespace('title'));
+
+        $title.append($h5);
+        return $title;
+      },
+      createCloseButton: function () {
+        var $container = $('<div></div>');
+        $container.addClass(this.getNamespace('close-button'));
+        var $icon = $('<button class="close"></button>');
+        $icon.append(this.options.closeIcon);
+        $container.append($icon);
+        $container.on('click', {dialog: this}, function (event) {
+          event.data.dialog.close();
+        });
+
+        return $container;
+      },
+      createBodyContent: function () {
+        var $container = $('<div></div>');
+        $container.addClass(this.getNamespace('body'));
+
+        // Message
+        $container.append(this.createMessageContent());
+
+        return $container;
+      },
+      createMessageContent: function () {
+        var $message = $('<div></div>');
+        $message.addClass(this.getNamespace('message'));
+
+        return $message;
+      },
+      createFooterContent: function () {
+        var $container = $('<div></div>');
+        $container.addClass(this.getNamespace('footer'));
+
+        return $container;
+      },
+      createFooterButtons: function () {
+        var that = this;
+        var $container = $('<div></div>');
+        $container.addClass(this.getNamespace('footer-buttons'));
+        this.indexedButtons = {};
+        $.each(this.options.buttons, function (index, button) {
+          if (!button.id) {
+            button.id = BootstrapDialog.newGuid();
+          }
+          var $button = that.createButton(button);
+          that.indexedButtons[button.id] = $button;
+          $container.append($button);
+        });
+
+        return $container;
+      },
+      createButton: function (button) {
+        var $button = $('<button class="btn"></button>');
+        $button.prop('id', button.id);
+        $button.data('button', button);
+
+        // Icon
+        if (typeof button.icon !== 'undefined' && $.trim(button.icon) !== '') {
+          $button.append(this.createButtonIcon(button.icon));
+        }
+
+        // Label
+        if (typeof button.label !== 'undefined') {
+          $button.append(button.label);
+        }
+
+        // Css class
+        if (typeof button.cssClass !== 'undefined' && $.trim(button.cssClass) !== '') {
+          $button.addClass(button.cssClass);
+        } else {
+          $button.addClass('btn-default');
+        }
+
+        // Hotkey
+        if (typeof button.hotkey !== 'undefined') {
+          this.registeredButtonHotkeys[button.hotkey] = $button;
+        }
+
+        // Button on click
+        $button.on('click', {dialog: this, $button: $button, button: button}, function (event) {
+          var dialog = event.data.dialog;
+          var $button = event.data.$button;
+          var button = $button.data('button');
+          if (button.autospin) {
+            $button.toggleSpin(true);
+          }
+          if (typeof button.action === 'function') {
+            return button.action.call($button, dialog, event);
+          }
+        });
+
+        // Dynamically add extra functions to $button
+        this.enhanceButton($button);
+
+        //Initialize enabled or not
+        if (typeof button.enabled !== 'undefined') {
+          $button.toggleEnable(button.enabled);
+        }
+
+        return $button;
+      },
+      /**
+       * Dynamically add extra functions to $button
+       *
+       * Using '$this' to reference 'this' is just for better readability.
+       *
+       * @param {type} $button
+       * @returns {_L13.BootstrapDialog.prototype}
+       */
+      enhanceButton: function ($button) {
+        $button.dialog = this;
+
+        // Enable / Disable
+        $button.toggleEnable = function (enable) {
+          var $this = this;
+          if (typeof enable !== 'undefined') {
+            $this.prop("disabled", !enable).toggleClass('disabled', !enable);
+          } else {
+            $this.prop("disabled", !$this.prop("disabled"));
+          }
+
+          return $this;
+        };
+        $button.enable = function () {
+          var $this = this;
+          $this.toggleEnable(true);
+
+          return $this;
+        };
+        $button.disable = function () {
+          var $this = this;
+          $this.toggleEnable(false);
+
+          return $this;
+        };
+
+        // Icon spinning, helpful for indicating ajax loading status.
+        $button.toggleSpin = function (spin) {
+          var $this = this;
+          var dialog = $this.dialog;
+          var $icon = $this.find('.' + dialog.getNamespace('button-icon'));
+          if (typeof spin === 'undefined') {
+            spin = !($button.find('.icon-spin').length > 0);
+          }
+          if (spin) {
+            $icon.hide();
+            $button.prepend(dialog.createButtonIcon(dialog.getSpinicon()).addClass('icon-spin'));
+          } else {
+            $icon.show();
+            $button.find('.icon-spin').remove();
+          }
+
+          return $this;
+        };
+        $button.spin = function () {
+          var $this = this;
+          $this.toggleSpin(true);
+
+          return $this;
+        };
+        $button.stopSpin = function () {
+          var $this = this;
+          $this.toggleSpin(false);
+
+          return $this;
+        };
+
+        return this;
+      },
+      createButtonIcon: function (icon) {
+        var $icon = $('<span></span>');
+        $icon.addClass(this.getNamespace('button-icon')).addClass(icon);
+
+        return $icon;
+      },
+      /**
+       * Invoke this only after the dialog is realized.
+       *
+       * @param {type} enable
+       * @returns {undefined}
+       */
+      enableButtons: function (enable) {
+        $.each(this.indexedButtons, function (id, $button) {
+          $button.toggleEnable(enable);
+        });
+
+        return this;
+      },
+      /**
+       * Invoke this only after the dialog is realized.
+       *
+       * @returns {undefined}
+       */
+      updateClosable: function () {
+        if (this.isRealized()) {
+          // Close button
+          this.getModalHeader().find('.' + this.getNamespace('close-button')).toggle(this.isClosable());
+        }
+
+        return this;
+      },
+      /**
+       * Set handler for modal event 'show.bs.modal'.
+       * This is a setter!
+       */
+      onShow: function (onshow) {
+        this.options.onshow = onshow;
+
+        return this;
+      },
+      /**
+       * Set handler for modal event 'shown.bs.modal'.
+       * This is a setter!
+       */
+      onShown: function (onshown) {
+        this.options.onshown = onshown;
+
+        return this;
+      },
+      /**
+       * Set handler for modal event 'hide.bs.modal'.
+       * This is a setter!
+       */
+      onHide: function (onhide) {
+        this.options.onhide = onhide;
+
+        return this;
+      },
+      /**
+       * Set handler for modal event 'hidden.bs.modal'.
+       * This is a setter!
+       */
+      onHidden: function (onhidden) {
+        this.options.onhidden = onhidden;
+
+        return this;
+      },
+      isRealized: function () {
+        return this.realized;
+      },
+      setRealized: function (realized) {
+        this.realized = realized;
+
+        return this;
+      },
+      isOpened: function () {
+        return this.opened;
+      },
+      setOpened: function (opened) {
+        this.opened = opened;
+
+        return this;
+      },
+      handleModalEvents: function () {
+        this.getModal().on('show.bs.modal', {dialog: this}, function (event) {
+          var dialog = event.data.dialog;
+          dialog.setOpened(true);
+          if (dialog.isModalEvent(event) && typeof dialog.options.onshow === 'function') {
+            var openIt = dialog.options.onshow(dialog);
+            if (openIt === false) {
+              dialog.setOpened(false);
+            }
+
+            return openIt;
+          }
+        });
+        this.getModal().on('shown.bs.modal', {dialog: this}, function (event) {
+          var dialog = event.data.dialog;
+          dialog.isModalEvent(event) && typeof dialog.options.onshown === 'function' && dialog.options.onshown(dialog);
+        });
+        this.getModal().on('hide.bs.modal', {dialog: this}, function (event) {
+          var dialog = event.data.dialog;
+          dialog.setOpened(false);
+          if (dialog.isModalEvent(event) && typeof dialog.options.onhide === 'function') {
+            var hideIt = dialog.options.onhide(dialog);
+            if (hideIt === false) {
+              dialog.setOpened(true);
+            }
+
+            return hideIt;
+          }
+        });
+        this.getModal().on('hidden.bs.modal', {dialog: this}, function (event) {
+          var dialog = event.data.dialog;
+          dialog.isModalEvent(event) && typeof dialog.options.onhidden === 'function' && dialog.options.onhidden(dialog);
+          if (dialog.isAutodestroy()) {
+            dialog.setRealized(false);
+            delete BootstrapDialog.dialogs[dialog.getId()];
+            $(this).remove();
+          }
+          BootstrapDialog.moveFocus();
+        });
+
+        // Backdrop, I did't find a way to change bs3 backdrop option after the dialog is popped up, so here's a new wheel.
+        this.handleModalBackdropEvent();
+
+        // ESC key support
+        this.getModal().on('keyup', {dialog: this}, function (event) {
+          event.which === 27 && event.data.dialog.isClosable() && event.data.dialog.canCloseByKeyboard() && event.data.dialog.close();
+        });
+
+        // Button hotkey
+        this.getModal().on('keyup', {dialog: this}, function (event) {
+          var dialog = event.data.dialog;
+          if (typeof dialog.registeredButtonHotkeys[event.which] !== 'undefined') {
+            var $button = $(dialog.registeredButtonHotkeys[event.which]);
+            !$button.prop('disabled') && $button.focus().trigger('click');
+          }
+        });
+
+        return this;
+      },
+      handleModalBackdropEvent: function () {
+        this.getModal().on('click', {dialog: this}, function (event) {
+          $(event.target).hasClass('modal-backdrop') && event.data.dialog.isClosable() && event.data.dialog.canCloseByBackdrop() && event.data.dialog.close();
+        });
+
+        return this;
+      },
+      isModalEvent: function (event) {
+        return typeof event.namespace !== 'undefined' && event.namespace === 'bs.modal';
+      },
+      makeModalDraggable: function () {
+        if (this.options.draggable) {
+          this.getModalHeader().addClass(this.getNamespace('draggable')).on('mousedown', {dialog: this}, function (event) {
+            var dialog = event.data.dialog;
+            dialog.draggableData.isMouseDown = true;
+            var dialogOffset = dialog.getModalDialog().offset();
+            dialog.draggableData.mouseOffset = {
+              top: event.clientY - dialogOffset.top,
+              left: event.clientX - dialogOffset.left
+            };
+          });
+          this.getModal().on('mouseup mouseleave', {dialog: this}, function (event) {
+            event.data.dialog.draggableData.isMouseDown = false;
+          });
+          $('body').on('mousemove', {dialog: this}, function (event) {
+            var dialog = event.data.dialog;
+            if (!dialog.draggableData.isMouseDown) {
+              return;
+            }
+            dialog.getModalDialog().offset({
+              top: event.clientY - dialog.draggableData.mouseOffset.top,
+              left: event.clientX - dialog.draggableData.mouseOffset.left
+            });
+          });
+        }
+
+        return this;
+      },
+      realize: function () {
+        this.initModalStuff();
+        this.getModal().addClass(BootstrapDialog.NAMESPACE)
+            .addClass(this.getCssClass());
+        this.updateSize();
+        if (this.getDescription()) {
+          this.getModal().attr('aria-describedby', this.getDescription());
+        }
+        this.getModalFooter().append(this.createFooterContent());
+        this.getModalHeader().append(this.createHeaderContent());
+        this.getModalBody().append(this.createBodyContent());
+        this.getModal().data('bs.modal', new BootstrapDialogModal(this.getModalForBootstrapDialogModal(), {
+          backdrop: 'static',
+          keyboard: false,
+          show: false
+        }));
+        this.makeModalDraggable();
+        this.handleModalEvents();
+        this.setRealized(true);
+        this.updateButtons();
+        this.updateType();
+        this.updateTitle();
+        this.updateMessage();
+        this.updateClosable();
+        this.updateAnimate();
+        this.updateSize();
+        this.updateTabindex();
+
+        return this;
+      },
+      open: function () {
+        !this.isRealized() && this.realize();
+        this.getModal().modal('show');
+
+        return this;
+      },
+      close: function () {
+        !this.isRealized() && this.realize();
+        this.getModal().modal('hide');
+
+        return this;
+      }
+    };
+
+    // Add compatible methods.
+    BootstrapDialog.prototype = $.extend(BootstrapDialog.prototype, BootstrapDialog.METHODS_TO_OVERRIDE[BootstrapDialogModal.getModalVersion()]);
+
+    /**
+     * RFC4122 version 4 compliant unique id creator.
+     *
+     * Added by https://github.com/tufanbarisyildirim/
+     *
+     *  @returns {String}
+     */
+    BootstrapDialog.newGuid = function () {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    };
+
+    /* ================================================
+     * For lazy people
+     * ================================================ */
+
+    /**
+     * Shortcut function: show
+     *
+     * @param {type} options
+     * @returns the created dialog instance
+     */
+    BootstrapDialog.show = function (options) {
+      return new BootstrapDialog(options).open();
+    };
+
+    /**
+     * Alert window
+     *
+     * @returns the created dialog instance
+     */
+    BootstrapDialog.alert = function () {
+      var alertOptions = {};
+      var defaultAlertOptions = {
+        type: BootstrapDialog.TYPE_PRIMARY,
+        title: null,
+        message: null,
+        closable: false,
+        draggable: false,
+        buttonLabel: BootstrapDialog.DEFAULT_TEXTS.OK,
+        callback: null
+      };
+
+      if (typeof arguments[0] === 'object' && arguments[0].constructor === {}.constructor) {
+        alertOptions = $.extend(true, defaultAlertOptions, arguments[0]);
+      } else {
+        alertOptions = $.extend(true, defaultAlertOptions, {
+          message: arguments[0],
+          callback: typeof arguments[1] !== 'undefined' ? arguments[1] : null
+        });
+      }
+
+      var dialog = new BootstrapDialog(alertOptions);
+      dialog.setData('callback', alertOptions.callback);
+      dialog.addButton({
+        label: alertOptions.buttonLabel,
+        action: function (dialog) {
+          if (typeof dialog.getData('callback') === 'function' && dialog.getData('callback').call(this, true) === false) {
+            return false;
+          }
+          dialog.setData('btnClicked', true);
+
+          return dialog.close();
+        }
+      });
+      if (typeof dialog.options.onhide === 'function') {
+        dialog.onHide(function (dialog) {
+          var hideIt = true;
+          if (!dialog.getData('btnClicked') && dialog.isClosable() && typeof dialog.getData('callback') === 'function') {
+            hideIt = dialog.getData('callback')(false);
+          }
+          if (hideIt === false) {
+            return false;
+          }
+          hideIt = this.onhide(dialog);
+
+          return hideIt;
+        }.bind({
+          onhide: dialog.options.onhide
+        }));
+      } else {
+        dialog.onHide(function (dialog) {
+          var hideIt = true;
+          if (!dialog.getData('btnClicked') && dialog.isClosable() && typeof dialog.getData('callback') === 'function') {
+            hideIt = dialog.getData('callback')(false);
+          }
+
+          return hideIt;
+        });
+      }
+
+      return dialog.open();
+    };
+
+    /**
+     * Confirm window
+     *
+     * @returns the created dialog instance
+     */
+    BootstrapDialog.confirm = function () {
+      var confirmOptions = {};
+      var defaultConfirmOptions = {
+        type: BootstrapDialog.TYPE_PRIMARY,
+        title: null,
+        message: null,
+        closable: false,
+        draggable: false,
+        btnCancelLabel: BootstrapDialog.DEFAULT_TEXTS.CANCEL,
+        btnCancelClass: null,
+        btnOKLabel: BootstrapDialog.DEFAULT_TEXTS.OK,
+        btnOKClass: null,
+        callback: null
+      };
+      if (typeof arguments[0] === 'object' && arguments[0].constructor === {}.constructor) {
+        confirmOptions = $.extend(true, defaultConfirmOptions, arguments[0]);
+      } else {
+        confirmOptions = $.extend(true, defaultConfirmOptions, {
+          message: arguments[0],
+          callback: typeof arguments[1] !== 'undefined' ? arguments[1] : null
+        });
+      }
+      if (confirmOptions.btnOKClass === null) {
+        confirmOptions.btnOKClass = ['btn', confirmOptions.type.split('-')[1]].join('-');
+      }
+
+      var dialog = new BootstrapDialog(confirmOptions);
+      dialog.setData('callback', confirmOptions.callback);
+      dialog.addButton({
+        label: confirmOptions.btnCancelLabel,
+        cssClass: confirmOptions.btnCancelClass,
+        action: function (dialog) {
+          if (typeof dialog.getData('callback') === 'function' && dialog.getData('callback').call(this, false) === false) {
+            return false;
+          }
+
+          return dialog.close();
+        }
+      });
+      dialog.addButton({
+        label: confirmOptions.btnOKLabel,
+        cssClass: confirmOptions.btnOKClass,
+        action: function (dialog) {
+          if (typeof dialog.getData('callback') === 'function' && dialog.getData('callback').call(this, true) === false) {
+            return false;
+          }
+
+          return dialog.close();
+        }
+      });
+
+      return dialog.open();
+
+    };
+
+    /**
+     * Warning window
+     *
+     * @param {type} message
+     * @returns the created dialog instance
+     */
+    BootstrapDialog.warning = function (message, callback) {
+      return new BootstrapDialog({
+        type: BootstrapDialog.TYPE_WARNING,
+        message: message
+      }).open();
+    };
+
+    /**
+     * Danger window
+     *
+     * @param {type} message
+     * @returns the created dialog instance
+     */
+    BootstrapDialog.danger = function (message, callback) {
+      return new BootstrapDialog({
+        type: BootstrapDialog.TYPE_DANGER,
+        message: message
+      }).open();
+    };
+
+    /**
+     * Success window
+     *
+     * @param {type} message
+     * @returns the created dialog instance
+     */
+    BootstrapDialog.success = function (message, callback) {
+      return new BootstrapDialog({
+        type: BootstrapDialog.TYPE_SUCCESS,
+        message: message
+      }).open();
+    };
+
+    return BootstrapDialog;
+}));
 ;function init_infoBox(){BB.gmap.infobox.prototype=new google.maps.OverlayView,BB.gmap.infobox.prototype.remove=function(){if(this._div){try{this._div.parentNode.removeChild(this._div)}catch(t){}this._div=null}},BB.gmap.infobox.prototype.set_map=function(t){this.__MAP=t,this.setMap(this.__MAP)},BB.gmap.infobox.prototype.map=function(){return this.__MAP},BB.gmap.infobox.prototype.draw=function(){this.createElement();var t=this.getProjection().fromLatLngToDivPixel(this.opts.position);t&&(this._div.style.width=this._width+"px",this._div.style.left=t.x+this._offsetX+"px",this._div.style.height=this._height+"px",this._div.style.top=t.y+this._offsetY+"px",this._div.style.display="block",this._div.style.zIndex=1)},BB.gmap.infobox.prototype.createElement=function(){var t=this.getPanes(),e=this._div;if(e){if(e.parentNode!=t.floatPane){try{e.parentNode.removeChild(e)}catch(t){}t.floatPane.appendChild(e)}}else{(e=this._div=document.createElement("div")).style.border="0",e.style.position="absolute",e.style.width=this._width+"px",e.style.height=this._height+"px";e.setAttribute("class","gmap_infobox"),e.appendChild(this.__ELEM),t.floatPane.appendChild(e),this._height=this.__ELEM.offsetHeight,this._width=this.__ELEM.offsetWidth;var o=this.opts.placement.split(" ");switch(o[0]){case"top":this._offsetY=-parseFloat(this.opts.offsetY);break;case"over":this._offsetY=-parseFloat(this.opts.offsetY)-parseInt(this._height);break;case"bottom":this._offsetY=-parseFloat(this._height);break;case"under":this._offsetY=0;break;case"center":this._offsetY=-parseFloat(this.opts.offsetY)/2-parseInt(this._height)/2}switch(o[1]){case"right":this._offsetX=parseFloat(this.opts.offsetX)-parseInt(this._width);break;case"left":this._offsetX=-parseFloat(this.opts.offsetX);break;case"center":this._offsetX=-parseInt(this._width)/2;break;case"out-right":this._offsetX=parseFloat(this.opts.offsetX);break;case"out-left":this._offsetX=-parseFloat(this.opts.offsetX)-parseInt(this._width)}this.panMap()}},BB.gmap.infobox.prototype.panMap=function(){var t=this.map,e=t.getBounds();if(e){var o=this.opts.position,i=this._width,s=this._height,r=this._offsetX,a=this._offsetY,n=t.getDiv(),p=n.offsetWidth,h=n.offsetHeight,l=e.toSpan(),c=l.lng()/p,d=l.lat()/h,g=e.getSouthWest().lng(),f=e.getNorthEast().lng(),u=e.getNorthEast().lat(),_=e.getSouthWest().lat(),m=o.lng()+(r-0)*c,B=o.lng()+(r+i+0)*c,y=o.lat()-(a-0)*d,v=o.lat()-(a+s+0)*d,b=(m<g?g-m:0)+(B>f?f-B:0),k=(y>u?u-y:0)+(v<_?_-v:0),w=t.getCenter();if(!w||void 0===w)return!1;w.lng(),w.lat();null!==this._bounds_changed_listener&&google.maps.event.removeListener(this._bounds_changed_listener),this._bounds_changed_listener=null}}}var BB=BB||{};BB.base=function(){this.__BB_DEBUG__=!1,this.__PROTECTED__=[],this._data=void 0},BB.base.prototype.set_data=function(t){return void 0===this._data&&(this._data=new BB.data),"object"!=typeof t?this:(this._data.set_data(t),this)},BB.base.prototype.remove_data=function(t){return this._data.remove_data(t),this},BB.base.prototype.get_data=function(t){var e=this.data();return void 0!==e[t]&&e[t]},BB.base.prototype.data=function(t){return this._data.get_data(t)},BB.base.prototype.sanitize=function(){var t=this.data();return t=this._escape_data(t),this.set_data(t),this},BB.base.prototype._escape_data=function(t){if(void 0===t)return"";if("object"==typeof t&&t.length)for(var e=0,o=t.length;e<o;e++)t[e]=this._escape_data(t[e]);if("object"==typeof t)for(var i in t)t[i]=this._escape_data(t[i]);return"string"==typeof t?escape(t):t},BB.base.prototype._unescape_data=function(t){if(void 0===t)return"";if("object"==typeof t)for(var e in t)t[e]=this._unescape_data(t[e]);return"string"==typeof t?unescape(t):t},BB.base.prototype.ident=function(){var t=this.data();return"string"!=typeof t.ident?(this.error("Ident is not a String which is odd. "+t.ident),""):t.ident},BB.base.prototype.set_ident=function(t){return"string"!=typeof t&&(t=""+t,this.error("Ident must be a string. Automatically converted to : "+t)),this.set_data({ident:t}),this},BB.base.prototype.error=function(t){if(this.__BB_DEBUG__)throw Error(t);return this},BB.base.prototype.is_empty_object=function(t){if("object"!=typeof t)return this.error("Invalid argument, Object expected at BB.base.is_empty_object()"),!0;for(var e in t)if(t.hasOwnProperty(e))return!1;return!0},BB.base.prototype.extend=function(t,e){var o,i={};for(o in t)Object.prototype.hasOwnProperty.call(t,o)&&(i[o]=t[o]);for(o in e)Object.prototype.hasOwnProperty.call(e,o)&&(i[o]=e[o]);return i},(BB=BB||{}).data=function(t){if(this.__PROTECTED__=[],this.__HIDDEN_DATA__=!0,this.__HIDDEN_DATA__){var e=t||{};return{set_data:function(t){for(var o in t)e[o]=t[o]},get_data:function(t){return t?void 0!==e[t]?e[t]:"":e},remove_data:function(t){t||(e={}),void 0!==e[t]&&(e[t]=void 0,delete e[t])}}}return this.__DATA=t||{},this.set_data=function(t){if(this.__DATA){if(t)for(var e in t)this.__DATA[e]=t[e]}else this.__DATA=t||{}},this.get_data=function(t){return t?void 0!==this.__DATA[t]?this.__DATA[t]:void 0:this.__DATA},this.remove_data=function(t){t||(this.__DATA={}),void 0!==this.__DATA[t]&&(this.__DATA[t]=void 0,delete this.__DATA[t])},this},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.controller=function(t,e){return this._MAP=void 0,this.__CONTAINER=t,this.__EDITABLE=!1,this.__PLACES={markers:{},polygons:{},lines:{}},this.__FOCUSED_ITEM=void 0,this.__CLUSTERER=void 0,this.set_data(e),this},BB.gmap.controller.prototype=new BB.base,BB.gmap.controller.prototype.map=function(){return this._MAP?this._MAP:(this.error("No map associated to the current controller at BB.gmap.controller.map()"),!1)},BB.gmap.controller.prototype.loading_place=function(t){var e=this.get_place(t);return e?(e.set_data({loaded:!1}),this):this},BB.gmap.controller.prototype.place_loaded=function(t){return t?!t.data("loaded")&&(t.set_data({loaded:!0}),this.check_loaded_places()&&this._ready(),this):this},BB.gmap.controller.prototype.check_loaded_places=function(){var t=!0;return this._loop_all(function(e){t=!(!t||!e.data("loaded"))}),t=t&&this.data("tiles_loaded")},BB.gmap.controller.prototype.ready=function(t){return"function"==typeof t&&this.set_data({map_ready:t}),this},BB.gmap.controller.prototype._ready=function(){var t=this.data();return this.data("loaded")?this:("function"==typeof t.map_ready&&t.map_ready(this),this.set_data({loaded:!0}),this)},BB.gmap.controller.prototype.set_zoom=function(t){return this.map().setZoom(t),this},BB.gmap.controller.prototype.container=function(){return this.__CONTAINER},BB.gmap.controller.prototype.init=function(){var t=this.data();if(this.map())return this;var e=this.data("map");return e.center=new google.maps.LatLng(parseFloat(e.center.x),parseFloat(e.center.y)),this._MAP=new google.maps.Map(this.container(),e),"object"!=typeof t.places?this.error("You haven't set any places yet"):this.add_places(t.places),this.listeners(),this},BB.gmap.controller.prototype.set_styles=function(t){"object"!=typeof t&&this.error("Invalid type styles in BB.gmap.set_styles()"+t);var e=this.data("map");return e.styles=t,this.data("map",e),this.map()&&this.map().setOptions({styles:t}),this},BB.gmap.controller.prototype.add_places=function(t){if(!t)return this.error("Invalid places specified :"+t),this;for(var e in t)this.add_place(e,t[e]);return this},BB.gmap.controller.prototype.set_place=function(t,e,o){return e&&o?void 0===this.__PLACES[t]?(this.error("Invalid data type at BB.gmap.controlle.set_place( "+t+", "+e+", "+o+")"),this):(void 0===this.__PLACES[t][e]&&(this.__PLACES[t][e]={}),o.set_ident(e),this.__PLACES[t][e]=o,this):(this.error("Missing parameters in BB.gmap.controller.set_place( "+t+", "+e+", "+o+")"),this)},BB.gmap.controller.prototype.add_place=function(t,e){if(!e)return this.error("Missing parameter BB.gmap.controller.prototype.add_place ( ident, data ) : ( "+t+", "+e+" )"),this;if("string"!=typeof e.type)return this.error('Missing parameter "type" in BB.gmap.controller.prototype.add_place'),this;switch(e.ident=t,e.type){case"marker":o=new BB.gmap.marker(e,this);this.set_place("markers",t,o);break;case"richmarker":var o=new BB.gmap.richmarker(e,this);this.set_place("markers",t,o);break;case"line":this.set_place("lines",t,new BB.gmap.line(e,this));break;case"polygon":this.set_place("polygons",t,new BB.gmap.polygon(e,this))}return this},BB.gmap.controller.prototype.get_places=function(){return this.__PLACES},BB.gmap.controller.prototype.get_places_by_type=function(t){return this.__PLACES[t]},BB.gmap.controller.prototype.add_place_by_address=function(t,e,o){var i=this;this.geocode_address(e,function(e){o.coords=e,i.add_place(t,o)})},BB.gmap.controller.prototype.geocode_address=function(t,e){var o=Array();if("undefined"==typeof google)return error;(new google.maps.Geocoder).geocode({address:t},function(t,i){if(i==google.maps.GeocoderStatus.OK){var s=t[0].geometry.location.lat(),r=t[0].geometry.location.lng();"function"==typeof e&&e([s,r])}return o})},BB.gmap.controller.prototype.get_place=function(t){var e=this.get_places(),o=!1;for(var i in e){var s=this.get_places_by_type(i);this.is_empty_object(s)||(o="object"==typeof s[t]?s[t]:o)}return o||(this.error("Invalid ident at BB.gmap.controller.get_place( ident ) : "+t),!1)},BB.gmap.controller.prototype.remove_focus=function(){var t=this.focused();return t&&("function"==typeof this.data("onblur")&&this.data("onblur")(t,this),t.blur(),this.__FOCUSED_ITEM=void 0),this},BB.gmap.controller.prototype.set_focus=function(t){return this.remove_focus(),this.__FOCUSED_ITEM=t,"function"==typeof this.data("onfocus")&&this.data("onfocus")(t,this),this},BB.gmap.controller.prototype.focused=function(){return this.__FOCUSED_ITEM},BB.gmap.controller.prototype.translate_coords=function(t){if("object"==typeof t&&2==t.length)return new google.maps.LatLng(t[0],t[1])},BB.gmap.controller.prototype.listeners=function(){var t=this;return google.maps.event.clearListeners(this.map(),"click"),google.maps.event.addListener(this.map(),"click",function(e){t.map_click(e)}),google.maps.event.addListenerOnce(this.map(),"tilesloaded",function(e){t.set_data({tiles_loaded:!0}),t._ready()}),google.maps.event.addDomListener(document,"keyup",function(e){switch(e.keyCode?e.keyCode:e.which){case 46:t.focused()&&t.focused().data("editable")&&(t.focused().delete(),t.remove_focus());break;case 27:t.focused()&&t.remove_focus()}}),this},BB.gmap.controller.prototype.create_new=function(t,e){var o=this;e||(e="new_object");var i=this.data("default_styles");switch(i||(i={strokeColor:"#000000",strokeOpacity:.8,strokeWeight:2,fillColor:"#FFFFFF",fillOpacity:.35,hover:{strokeColor:"#000000",strokeOpacity:.8,strokeWeight:2,fillColor:"#FFFFFF",fillOpacity:1},focused:{fillOpacity:1}}),t){case"polygon":var s={type:"polygon",editable:!0,styles:i},r=new BB.gmap.polygon(s,o);o.set_place("polygons",e,r),o.set_focus(r);break;case"line":var s={type:"line",editable:!0,styles:i},a=new BB.gmap.line(s,o);o.set_place("lines",e,a),o.set_focus(a);break;default:this.set_data({marker_creation:e})}},BB.gmap.controller.prototype.on=function(t,e){var o={};o["on"+t]=e,this.set_data(o)},BB.gmap.controller.prototype.map_click=function(t){this.data("marker_creation")&&(this.add_place(this.data("marker_creation"),{coords:[t.latLng.lat(),t.latLng.lng()],draggable:!0,editable:!0,type:"marker"}),this.set_focus(this.get_place(this.data("marker_creation"))),"function"==typeof this.data("marker_creation_callback")&&this.data("marker_creation_callback")(this.get_place(this.data("marker_creation"))),this.set_data({marker_creation:!1}));var e=this.focused();return e?(e.data("editable")?e.map_click(t):this.remove_focus(),this):this},BB.gmap.controller.prototype._loop_all=function(t){if("function"!=typeof t)return this;var e=this.get_places();for(var o in e){var i=this.get_places_by_type(o);if(!this.is_empty_object(i))for(var s in i)t(i[s])}return this},BB.gmap.controller.prototype.filter=function(t){this._loop_all(function(e){if(!t)return e.show(),!1;var o=e.data("categories");if(!o)return e.hide(),!1;"string"==typeof o&&(o=o.split(",")),o||e.hide();var i=!1;for(var s in o)t==o[s]&&(i=!0);i?e.show():e.hide()})},BB.gmap.controller.prototype.fit_bounds=function(){var t=new google.maps.LatLngBounds,e=0;if(this._loop_all(function(o){var i=o.get_position();if(!i)return!1;for(var s,r=0;r<i.getLength();r++){s=i.getAt(r);for(var a=0;a<s.getLength();a++)t.extend(s.getAt(a))}e++}),e>0&&(this.map().fitBounds(t),this.data("max_fitbounds_zoom"))){var o=this.data("max_fitbounds_zoom");this.map().getZoom()>o&&this.map().setZoom(o)}return this},BB.gmap.controller.prototype.get_all_markers=function(){var t=this.get_places_by_type("markers"),e=[];for(var o in t)e.push(t[o].object());return e},BB.gmap.controller.prototype.activate_clusterer=function(t){this.clusterer()&&this.clusterer().clearMarkers();var e=this.get_all_markers();return this.set_clusterer(new MarkerClusterer(this.map(),e)),this},BB.gmap.controller.prototype.set_clusterer=function(t){this.__CLUSTERER=t},BB.gmap.controller.prototype.clusterer=function(){return this.__CLUSTERER},BB.gmap.controller.prototype._delete=function(t,e){switch(t){case"marker":if(void 0===this.__PLACES.markers[e])return!1;delete this.__PLACES.markers[e];break;case"line":if(void 0===this.__PLACES.lines[e])return!1;delete this.__PLACES.lines[e];break;case"polygon":if(void 0===this.__PLACES.polygons[e])return!1;delete this.__PLACES.polygons[e]}},BB.gmap.controller.prototype.export=function(){var t=this.data();void 0!==t.places&&delete t.places,void 0!==t.center&&delete t.center;var e=this.map().getCenter();return t.map.center.x=e.lat(),t.map.center.y=e.lng(),t.map.zoom=this.map().getZoom(),t.places={},this._loop_all(function(e){t.places[e.ident()]=e.export()}),t},BB.gmap.controller.prototype.get_map_image=function(){var t=this.data();void 0!==t.places&&delete t.places,void 0!==t.center&&delete t.center;var e=this.map().getCenter(),o="https://maps.googleapis.com/maps/api/staticmap?",i=[];return i.push("center="+e.lat()+","+e.lng()),i.push("zoom="+this.map().getZoom()),i.push("size=640x400"),this._loop_all(function(t){if("marker"==t.data("type")){if(!t.data("icon").src)return!1;var e=new Image;e.src=t.data("icon").src;var o=t.data("icon").width+"x"+t.data("icon").height,s=t.data("coords"),r="markers=size:"+o+"|icon:"+e.src+"|"+s[0]+","+s[1];i.push(r)}if("polygon"==t.data("type")){var a=t.data("paths");if(!a)return!1;var n=[],p=t.data("styles"),h=(p.strokeColor,p.strokeWeight);p.fillColor;n.push("color:black"),n.push("weight:"+h),n.push("fillcolor:white");for(var l=0,c=a.length;l<c;l++)n.push(a[l].join(","));n.push(a[0].join(",")),i.push("path="+n.join("|"))}}),o+=i.join("&")},BB.gmap.controller.prototype.reset=function(){return this._loop_all(function(t){t.hide(),t.delete()}),this.set_data({places:void 0}),this.remove_focus(),this},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.infobox=function(t,e){BB.gmap.statics,this.__MAP=void 0,t instanceof jQuery&&(t=t.get(0)),this.__ELEM=t,google.maps.OverlayView.call(this),e.offsetY=e.offsetY||0,e.offsetX=e.offsetX||0,this.opts=e,void 0===this.opts.placement&&(this.opts.placement="top center"),this.__MAP=e.map;var o=this;this._bounds_changed_listener=google.maps.event.addListener(this.__MAP,"bounds_changed",function(){return o.panMap.apply(o)}),this.set_map(e.map)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.object=function(t,e){return this.__OBJECT=void 0,this.__CONTROLLER=e,this.__DELETED=!1,this.set_data(t),this.init(),this.controller().loading_place(this.ident()),this},BB.gmap.object.prototype=new BB.base,BB.gmap.object.prototype.set_object=function(t){return this.__OBJECT=t,this},BB.gmap.object.prototype.object=function(){return this.__OBJECT},BB.gmap.object.prototype.controller=function(){return this.__CONTROLLER},BB.gmap.object.prototype.set_controller=function(t){return this.__CONTROLLER=t,this},BB.gmap.object.prototype.set_map=function(t){return this.object().setMap(t),this},BB.gmap.object.prototype.map_click=function(t){return this},BB.gmap.object.prototype.show=function(){var t=this.object();return void 0===t?(this.error("No object defined at BB.gmap.object.show()"),this):(t.setMap(this.controller().map()),this)},BB.gmap.object.prototype.hide=function(){var t=this.object();return void 0===t?(this.error("No object defined at BB.gmap.object.hide()"),this):(t.setMap(null),this)},BB.gmap.object.prototype.delete=function(){this.__DELETED=!0;var t=this.object();if(void 0===t)return this.error("No object defined at BB.gmap.object.delete()"),this;this.clear_listeners(),t.setMap(null);var e=this.data();return"function"==typeof e.ondelete&&e.ondelete(this),this.controller()._delete(this.data("type"),this.ident()),delete t,this},BB.gmap.object.prototype.init=function(){return this},BB.gmap.object.prototype.display=function(){return this},BB.gmap.object.prototype.focus=function(){return this},BB.gmap.object.prototype.blur=function(){return this},BB.gmap.object.prototype.get_bounds=function(){return this},BB.gmap.object.prototype.get_position=function(){return this},BB.gmap.object.prototype.clear_listeners=function(){return this},BB.gmap.object.prototype.export=function(){return this.data()},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.marker=function(t,e){return BB.gmap.object.call(this,t,e),this.__MEDIA=void 0,this.__ICON=void 0,this._image_loaded=!1,this._marker_loaded=!1,this.__INFOBOX=void 0,this._listeners=!1,this},BB.gmap.marker.prototype=Object.create(BB.gmap.object.prototype),BB.gmap.marker.prototype.init=function(){var t=this.data();return"string"==typeof t.icon?this.set_image(t.icon):"object"==typeof t.icon?this.set_icon(t.icon):this.display(),this},BB.gmap.marker.prototype.icon=function(){return this.__ICON?this.__ICON:new Image},BB.gmap.marker.prototype.set_icon=function(t){if("object"!=typeof t)return this.error("Invalid icon at BB.gmap.marker.prototype.set_icon( "+t+" )"),this;if(!(t instanceof Image)&&void 0===t.path){var e;return t.width&&t.height&&(e={width:t.width,height:t.height}),this.set_image(t.src,e),this}return this.__ICON=t,this.display(),this},BB.gmap.marker.prototype.set_image=function(t,e){var o=new Image;return o.data=this,o.onload=function(){this.data.set_icon(this),this.data.display()},o.onerror=function(){this.data.set_data({icon:void 0}),this.data.display()},o.src=t,e&&(o.height=e.height,o.width=e.width),this},BB.gmap.marker.prototype.display=function(){var t=this.data();if("object"!=typeof t.coords)return this.error("Requires coordinates [lat, lng] at BB.gmap.marker.display()"),!1;var e={map:this.controller().map(),position:new google.maps.LatLng(t.coords[0],t.coords[1])};e=this.extend(e,t);var o=this.icon();if(!(o instanceof Image)&&"string"==typeof o.path){var i=0,s=0;"string"==typeof o.height&&(i=parseInt(o.height)),"string"==typeof o.width&&(s=parseInt(o.width)),o.anchor=new google.maps.Point(s/2,i),e.icon=o}var r="object"==typeof t.options?t.options:{};for(var a in r)e[a]=r[a];if(this.icon().src){var s=this.icon().width,i=this.icon().height;e.icon=new google.maps.MarkerImage(this.icon().src,new google.maps.Size(s,i),new google.maps.Point(0,0),new google.maps.Point(s/2,i),new google.maps.Size(s,i))}if(void 0!==this.object())this.object().setOptions(e);else{var n=new google.maps.Marker(e);this.set_marker(n)}return this._listeners||(this.listeners(),this._listeners=!0,this.marker_loaded()),this.data("hidden")&&this.hide(),this},BB.gmap.marker.prototype.marker_loaded=function(){var t=this.data();if("function"==typeof t.loaded_callback&&t.loaded_callback(this),this.controller().data("use_clusterer")){this.controller().data("clusterer_options");this.controller().activate_clusterer({gridSize:10,maxZoom:15})}return this.controller().place_loaded(this),this},BB.gmap.marker.prototype.set_marker=function(t){return this._marker_loaded?(this.error("There is already a marker affected to this instanciation of a [BB.gmap.marker] ( "+this.ident()+" )"),this):(this._marker_loaded=!0,this.set_object(t),this)},BB.gmap.marker.prototype.listeners=function(){var t=this,e=this.object();e.bbmarker=this,this.data("draggable")&&google.maps.event.addListener(e,"dragend",t.dragend),google.maps.event.addListener(e,"click",t.onclick)},BB.gmap.marker.prototype.clear_listeners=function(){var t=this.object();return google.maps.event.clearListeners(t,"dragend"),google.maps.event.clearListeners(t,"click"),this},BB.gmap.marker.prototype.dragend=function(t){var e=this.bbmarker,o=e.data();"function"==typeof o.ondragend&&o.ondragend(e,t),e.set_data({coords:[t.latLng.lat(),t.latLng.lng()]}),e.focus()},BB.gmap.marker.prototype.onclick=function(t){var e=this.bbmarker,o=e.data();if("function"==typeof o.onclick?o.onclick(t,e):"string"==typeof o.onclick&&"function"==typeof window[o.onclick]&&window[o.onclick](e,t),o.infobox){if(e.__INFOBOX)return e.__INFOBOX.map?e.__INFOBOX.set_map(null):e.__INFOBOX.set_map(e.controller().map()),e.focus(),this;if(BB.gmap.statics.infobox_loaded||(init_infoBox(),BB.gmap.statics.infobox_loaded=!0),"function"==typeof o.infobox&&(o.infobox=o.infobox(e.data())),"string"==typeof o.infobox){var i=document.getElementById(o.infobox);i||((i=document.createElement("div")).style.position="absolute",i.innerHTML=o.infobox),o.infobox=i}var s={};o.infobox_options&&(s=o.infobox_options),s.offsetY||(s.offsetY=e.icon().height),s.offsetX||(s.offsetX=e.icon().width/2),s.map=e.controller().map(),s.position=e.get_position().getAt(0).getAt(0),e.__INFOBOX=new BB.gmap.infobox(o.infobox,s)}e.focus()},BB.gmap.marker.prototype.focus=function(){var t=this;t.controller().set_focus(t);var e=this.data();e.icon_selected&&("object"==typeof e.icon_selected?this.set_icon(e.icon_selected):this.set_image(e.icon_selected))},BB.gmap.marker.prototype.blur=function(){if(!this.controller().get_place(this.ident()))return!1;var t=this.data();t.icon_selected&&("object"==typeof t.icon?this.set_icon(t.icon):this.set_image(t.icon))},BB.gmap.marker.prototype.get_bounds=function(){var t=this,e=new google.maps.LatLngBounds;return e.extend(t.object().getPosition()),e},BB.gmap.marker.prototype.get_position=function(){var t=new google.maps.MVCArray,e=new google.maps.MVCArray;return!!this.object()&&(t.push(this.object().getPosition()),e.push(t),e)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.statics=BB.gmap.statics||{},BB.gmap.richmarker=function(t,e){return BB.gmap.marker.call(this,t,e),this._listeners=!1,this},BB.gmap.richmarker.prototype=Object.create(BB.gmap.marker.prototype),BB.gmap.richmarker.prototype.init=function(){var t=this.data();return this.set_content(t.content),this.display(),this},BB.gmap.richmarker.prototype.set_content=function(t){return this._content=t,this},BB.gmap.richmarker.prototype.content=function(){return this._content},BB.gmap.richmarker.prototype.display=function(){var t=this.data();if("object"!=typeof t.coords)return this.error("Requires coordinates [lat, lng] at BB.gmap.richmarker.display()"),!1;var e={map:this.controller().map(),position:new google.maps.LatLng(t.coords[0],t.coords[1])};if("function"==typeof(e=this.extend(e,t)).html&&(console.log(e.html(t)),e.html=e.html(t)),"function"==typeof e.selected_html&&(e.selected_html=e.selected_html(t)),void 0!==this.object())this.object().setOptions(e);else{var o=customMarker(e);this.set_marker(o)}return this._listeners||(this.listeners(),this._listeners=!0),this.data("hidden")&&this.hide(),this},BB.gmap.richmarker.prototype.listeners=function(){var t=this,e=this.object();e.bbmarker=this,this.data("draggable")&&google.maps.event.addListener(e,"dragend",t.dragend),google.maps.event.addListener(e,"click",t.onclick)},BB.gmap.richmarker.prototype.clear_listeners=function(){var t=this.object();return google.maps.event.clearListeners(t,"dragend"),google.maps.event.clearListeners(t,"click"),this},BB.gmap.richmarker.prototype.focus=function(){if(this.controller().focused()&&this.controller().focused().ident()==this.ident())return this;this.controller().set_focus(this),this.object().setHtml(this.data("selected_html"))},BB.gmap.richmarker.prototype.blur=function(){if(!this.controller().get_place(this.ident()))return!1;this.object().setHtml(this.data("html"))},BB.gmap.richmarker.prototype.icon=function(){return{height:this.object().div.offsetHeight,width:this.object().div.offsetWidth}},customMarker=function(t){return"function"!=typeof BB.gmap.customMarker&&(BB.gmap.customMarker=function(t){this.MAP=t.map,void 0!==t.map&&this.setMap(this.MAP),void 0!==t.position&&(this.latlng=t.position),void 0!==t.html&&(this.html=t.html)},BB.gmap.customMarker.prototype=new google.maps.OverlayView,BB.gmap.customMarker.prototype.draw=function(){this.setHtml(this.html)},BB.gmap.customMarker.prototype.setHtml=function(t){var e=this,o=this.div;o||((o=document.createElement("div")).style.position="absolute",o.style.cursor="pointer",google.maps.event.addDomListener(o,"click",function(t){t.stopPropagation(),t.preventDefault(),google.maps.event.trigger(e,"click")}),this.getPanes().overlayImage.appendChild(o)),o.innerHTML=this.html;var i=this.getProjection().fromLatLngToDivPixel(this.latlng);if(i){var s=o.offsetHeight,r=o.offsetWidth;o.style.left=i.x-r/2+"px",o.style.top=i.y-s+"px"}this.div=o},BB.gmap.customMarker.prototype.remove=function(){this.div&&(this.div.parentNode.removeChild(this.div),this.div=null)},BB.gmap.customMarker.prototype.getPosition=function(){return this.latlng}),new BB.gmap.customMarker(t)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.line=function(t,e){return this.__STYLES=void 0,this.__PATHS=void 0,this.__MARKERS=[],BB.gmap.object.call(this,t,e),this},BB.gmap.line.prototype=Object.create(BB.gmap.object.prototype),BB.gmap.line.prototype.init=function(){var t=this.data();if("object"!=typeof t.styles&&this.set_data({styles:this.controller().data("default_styles")}),this.add_styles(t.styles),this.set_paths([]),"object"==typeof t.paths)for(var e=0,o=t.paths.length;e<o;e++)this.add_point(t.paths[e]);return this.get_paths()&&this.get_styles()&&this.display(),t.editable&&this.set_editable(t.editable),this.listeners(),this.controller().place_loaded(this),this},BB.gmap.line.prototype.redraw=function(){for(var t=this.get_paths(),e=0,o=t.length,i=[];e<o;e++)i.push([t.getAt(e).lat(),t.getAt(e).lng()]);this.set_data({paths:i})},BB.gmap.line.prototype.add_styles=function(t){this.__STYLES=t},BB.gmap.line.prototype.set_styles=function(t){return this.add_styles(t),this.display(),this},BB.gmap.line.prototype.get_styles=function(){return this.__STYLES},BB.gmap.line.prototype.set_paths=function(t){if("object"==typeof t){if(!(t[0]instanceof google.maps.LatLng)){for(var e=0,o=t.length,i=new google.maps.MVCArray;e<o&&"object"==typeof t[e];e++){var s=this.controller().translate_coords(t[e]);i.insertAt(i.length,s)}t=i}this.__PATHS=t}else this.error("Invalid paths at BB.gmap.line.set_paths :"+t)},BB.gmap.line.prototype.get_paths=function(){return this.__PATHS},BB.gmap.line.prototype.display=function(){this.data();var t=this.get_styles();void 0===t&&this.error("Undefined styles at BB.gmap.line.display : "+t);var e=this.get_paths();if(void 0===e&&this.error("Undefined paths at BB.gmap.line.display : "+e),t.path=e,void 0!==this.object())this.object().setOptions(t);else{var o=new google.maps.Polyline(t);this.set_object(o)}return this.set_map(this.controller().map()),this.update_coords(),this},BB.gmap.line.prototype.refresh=function(){var t=this.data("_opts");this.object().setOptions(t)},BB.gmap.line.prototype.add_point=function(t,e){if("object"!=typeof t)return!1;if(t instanceof google.maps.LatLng||(t=this.controller().translate_coords(t)),!(t instanceof google.maps.LatLng||void 0!==t[0]&&void 0!==t[1]))return!1;var o=this,i=this.get_paths();void 0===i&&this.set_paths([[t.lat(),t.lng()]]),i=this.get_paths(),"number"!=typeof e&&(e=i.length),i.insertAt(e,t);var s=new BB.gmap.marker({coords:[t.lat(),t.lng()],draggable:!0,icon:{path:google.maps.SymbolPath.CIRCLE,scale:4},hidden:!this.data("editable"),editable:!0,ondragend:function(t,e){o.move_point(t.object().index,[e.latLng.lat(),e.latLng.lng()])},ondelete:function(t){o.remove_point(t.object().index),o.focus(),o.get_paths().length||o.delete()},index:e},o.controller());return this.__MARKERS||(this.__MARKERS=[]),this.__MARKERS[e]=s,this},BB.gmap.line.prototype.move_point=function(t,e){var o=this.get_paths();if("object"!=typeof o)return this.error("You can not move a point when no path is given at BB.gmap.line.move_point( index, path )"),!1;if(!e)return this.error("Required arguments index:integer and path:object at BB.gmap.line.move_point( index, path )"),!1;if(e instanceof google.maps.LatLng||(e=this.controller().translate_coords(e)),!(e instanceof google.maps.LatLng||void 0!==e[0]&&void 0!==e[1]))return!1;return o.setAt(t,e),this.update_coords(),this},BB.gmap.line.prototype.remove_point=function(t){var e=this.get_paths();if("object"!=typeof e)return this.error("You can not move a point when no path is given at BB.gmap.line.remove_point( index, path )"),!1;e.removeAt(t),void 0!==this.__MARKERS[t]&&(this.__MARKERS[t].hide(),this.__MARKERS.splice(t,1));var o=this.__MARKERS;for(var i in o)o[i].object().index=parseInt(i);return this.redraw(),this.update_coords(),this},BB.gmap.line.prototype.set_editable=function(t){return t?(this.set_data({editable:!0}),this.show_markers(),this.focus(),this):(this.set_data({editable:!1}),this.hide_markers(),this)},BB.gmap.line.prototype.show_markers=function(){for(var t=0;t<this.__MARKERS.length;t++)this.__MARKERS[t].show();return this},BB.gmap.line.prototype.hide_markers=function(){this.controller().focused();for(var t=0;t<this.__MARKERS.length;t++)this.__MARKERS[t].hide();return this},BB.gmap.line.prototype.map_click=function(t){this.add_point(t.latLng)},BB.gmap.line.prototype.set_draggable=function(t){var e=this.get_styles();return e.draggable=!!t,this.set_styles(e),this},BB.gmap.line.prototype.listeners=function(){var t=this;t.object().bbobject=t,this.clear_listeners(),google.maps.event.addListener(t.object(),"mouseover",t.mouse_over),google.maps.event.addListener(t.object(),"mouseout",t.mouse_out),google.maps.event.addListener(t.object(),"click",t.click)},BB.gmap.line.prototype.clear_listeners=function(){var t=this;return google.maps.event.clearListeners(t.object(),"mouseover"),google.maps.event.clearListeners(t.object(),"mouseout"),google.maps.event.clearListeners(t.object(),"click"),this},BB.gmap.line.prototype.mouse_over=function(t){var e=this.bbobject,o=e.data();"function"==typeof o.onmouseover&&o.onmouseover(e,t);var i=e.get_styles();"object"==typeof i.hover&&e.set_styles(i.hover)},BB.gmap.line.prototype.mouse_out=function(t){var e=this.bbobject,o=e.data();if("function"==typeof o.onmouseout&&o.onmouseout(e,t),e.controller().focused()==e)return!1;e.get_data("styles");e.set_styles(e.get_data("styles"))},BB.gmap.line.prototype.mouse_down=function(t){this.bbobject},BB.gmap.line.prototype.mouse_up=function(t){this.bbobject},BB.gmap.line.prototype.click=function(t){var e=this.bbobject,o=e.data();e.focus(),"function"==typeof o.onclick?o.onclick(e,t):"string"==typeof o.onclick&&"function"==typeof window[o.onclick]&&window[o.onclick](e,t)},BB.gmap.line.prototype.focus=function(){if(this.__DELETED)return!1;this.controller().set_focus(this);var t=this.get_data("styles");return"object"==typeof t.focused&&this.set_styles(t.focused),this.data("editable")&&this.show_markers(),this},BB.gmap.line.prototype.blur=function(){return!this.__DELETED&&(this.set_styles(this.get_data("styles")),this)},BB.gmap.line.prototype.get_bounds=function(){for(var t,e=this,o=new google.maps.LatLngBounds,i=e.object().getPaths(),s=0;s<i.getLength();s++){t=i.getAt(s);for(var r=0;r<t.getLength();r++)o.extend(t.getAt(r))}return o},BB.gmap.line.prototype.get_position=function(){var t=new google.maps.MVCArray;return t.push(this.object().getPath()),t},BB.gmap.line.prototype.update_coords=function(){var t=[];return this.get_paths().forEach(function(e){t.push([e.lat(),e.lng()])}),this.set_data({paths:t}),this},BB.gmap.line.prototype.export=function(){this.update_coords();var t=this.data();return void 0!==t.styles.path&&delete t.styles.path,this.data()},BB.gmap.line.prototype.delete=function(){var t=0,e=this.__MARKERS.length;if(e)for(;t<e;t++)this.remove_point(t);this.hide_markers(),BB.gmap.object.prototype.delete.call(this)},(BB=BB||{}).gmap=BB.gmap||{},BB.gmap.polygon=function(t,e){return BB.gmap.line.call(this,t,e),this},BB.gmap.polygon.prototype=Object.create(BB.gmap.line.prototype),BB.gmap.polygon.prototype.display=function(){this.data();var t=this.get_styles();void 0===t&&this.error("Undefined styles at BB.gmap.polygon.display : "+t);var e=this.get_paths();if(void 0===e&&this.error("Undefined paths at BB.gmap.polygon.display : "+e),void 0!==this.object())this.object().setOptions(t);else{var o=new google.maps.Polygon(t);this.set_object(o)}return this.object().setPaths(new google.maps.MVCArray([e])),this.set_map(this.controller().map()),this.listeners(),this},BB.gmap.polygon.prototype.get_position=function(){return this.object().getPaths()},function(){function t(t){return function(e){this[t]=e}}function e(t){return function(){return this[t]}}function o(t,e,s){this.extend(o,google.maps.OverlayView),this.c=t,this.a=[],this.f=[],this.ca=[53,56,66,78,90],this.j=[],this.A=!1,s=s||{},this.g=s.gridSize||60,this.l=s.minimumClusterSize||2,this.J=s.maxZoom||f,this.j=s.styles||[],this.X=s.imagePath||this.Q,this.W=s.imageExtension||this.P,this.O=!0,void 0!=s.zoomOnClick&&(this.O=s.zoomOnClick),this.r=!1,void 0!=s.averageCenter&&(this.r=s.averageCenter),i(this),this.setMap(t),this.K=this.c.getZoom();var r=this;google.maps.event.addListener(this.c,"zoom_changed",function(){var t=r.c.getZoom();r.K!=t&&(r.K=t,r.m())}),google.maps.event.addListener(this.c,"idle",function(){r.i()}),e&&e.length&&this.C(e,!1)}function i(t){if(!t.j.length)for(var e,o=0;e=t.ca[o];o++)t.j.push({url:t.X+(o+1)+"."+t.W,height:e,width:e})}function s(t,e){e.s=!1,e.draggable&&google.maps.event.addListener(e,"dragend",function(){e.s=!1,t.L()}),t.a.push(e)}function r(t,e){var o=-1;if(t.a.indexOf)o=t.a.indexOf(e);else for(var i,s=0;i=t.a[s];s++)if(i==e){o=s;break}return-1!=o&&(e.setMap(f),t.a.splice(o,1),!0)}function a(t){if(t.A)for(var e,o=t.v(new google.maps.LatLngBounds(t.c.getBounds().getSouthWest(),t.c.getBounds().getNorthEast())),i=0;e=t.a[i];i++)if(!e.s&&o.contains(e.getPosition())){for(var s=t,r=4e4,a=f,p=0,h=void 0;h=s.f[p];p++)if(g=h.getCenter()){var l=e.getPosition();if(g&&l)var c=(l.lat()-g.lat())*Math.PI/180,d=(l.lng()-g.lng())*Math.PI/180,g=Math.sin(c/2)*Math.sin(c/2)+Math.cos(g.lat()*Math.PI/180)*Math.cos(l.lat()*Math.PI/180)*Math.sin(d/2)*Math.sin(d/2),g=12742*Math.atan2(Math.sqrt(g),Math.sqrt(1-g));else g=0;g<r&&(r=g,a=h)}a&&a.F.contains(e.getPosition())?a.q(e):((h=new n(s)).q(e),s.f.push(h))}}function n(t){this.k=t,this.c=t.getMap(),this.g=t.w(),this.l=t.l,this.r=t.r,this.d=f,this.a=[],this.F=f,this.n=new h(this,t.z(),t.w())}function p(t){t.F=t.k.v(new google.maps.LatLngBounds(t.d,t.d))}function h(t,e,o){t.k.extend(h,google.maps.OverlayView),this.j=e,this.fa=o||0,this.u=t,this.d=f,this.c=t.getMap(),this.B=this.b=f,this.t=!1,this.setMap(this.c)}function l(t,e){var o=t.getProjection().fromLatLngToDivPixel(e);return o.x-=parseInt(t.p/2,10),o.y-=parseInt(t.h/2,10),o}function c(t){t.b&&(t.b.style.display="none"),t.t=!1}function d(t,e){var o=[];return o.push("background-image:url("+t.da+");"),o.push("background-position:"+(t.D?t.D:"0 0")+";"),"object"==typeof t.e?("number"==typeof t.e[0]&&t.e[0]>0&&t.e[0]<t.h?o.push("height:"+(t.h-t.e[0])+"px; padding-top:"+t.e[0]+"px;"):o.push("height:"+t.h+"px; line-height:"+t.h+"px;"),"number"==typeof t.e[1]&&t.e[1]>0&&t.e[1]<t.p?o.push("width:"+(t.p-t.e[1])+"px; padding-left:"+t.e[1]+"px;"):o.push("width:"+t.p+"px; text-align:center;")):o.push("height:"+t.h+"px; line-height:"+t.h+"px; width:"+t.p+"px; text-align:center;"),o.push("cursor:pointer; top:"+e.y+"px; left:"+e.x+"px; color:"+(t.M?t.M:"black")+"; position:absolute; font-size:"+(t.N?t.N:11)+"px; font-family:Arial,sans-serif; font-weight:bold"),o.join("")}var g,f=null;(g=o.prototype).Q="https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/images/m",g.P="png",g.extend=function(t,e){return function(t){for(var e in t.prototype)this.prototype[e]=t.prototype[e];return this}.apply(t,[e])},g.onAdd=function(){this.A||(this.A=!0,a(this))},g.draw=function(){},g.S=function(){for(var t,e=this.o(),o=new google.maps.LatLngBounds,i=0;t=e[i];i++)o.extend(t.getPosition());this.c.fitBounds(o)},g.z=e("j"),g.o=e("a"),g.V=function(){return this.a.length},g.ba=t("J"),g.I=e("J"),g.G=function(t,e){for(var o=0,i=t.length,s=i;0!==s;)s=parseInt(s/10,10),o++;return o=Math.min(o,e),{text:i,index:o}},g.$=t("G"),g.H=e("G"),g.C=function(t,e){for(var o,i=0;o=t[i];i++)s(this,o);e||this.i()},g.q=function(t,e){s(this,t),e||this.i()},g.Y=function(t,e){var o=r(this,t);return!(e||!o)&&(this.m(),this.i(),!0)},g.Z=function(t,e){for(var o,i=!1,s=0;o=t[s];s++)o=r(this,o),i=i||o;if(!e&&i)return this.m(),this.i(),!0},g.U=function(){return this.f.length},g.getMap=e("c"),g.setMap=t("c"),g.w=e("g"),g.aa=t("g"),g.v=function(t){var e=this.getProjection(),o=new google.maps.LatLng(t.getNorthEast().lat(),t.getNorthEast().lng()),i=new google.maps.LatLng(t.getSouthWest().lat(),t.getSouthWest().lng());return(o=e.fromLatLngToDivPixel(o)).x+=this.g,o.y-=this.g,i=e.fromLatLngToDivPixel(i),i.x-=this.g,i.y+=this.g,o=e.fromDivPixelToLatLng(o),e=e.fromDivPixelToLatLng(i),t.extend(o),t.extend(e),t},g.R=function(){this.m(!0),this.a=[]},g.m=function(t){for(var e,o=0;e=this.f[o];o++)e.remove();for(o=0;e=this.a[o];o++)e.s=!1,t&&e.setMap(f);this.f=[]},g.L=function(){var t=this.f.slice();this.f.length=0,this.m(),this.i(),window.setTimeout(function(){for(var e,o=0;e=t[o];o++)e.remove()},0)},g.i=function(){a(this)},(g=n.prototype).q=function(t){var e;t:if(this.a.indexOf)e=-1!=this.a.indexOf(t);else{e=0;for(var o;o=this.a[e];e++)if(o==t){e=!0;break t}e=!1}if(e)return!1;if(this.d?this.r&&(o=this.a.length+1,e=(this.d.lat()*(o-1)+t.getPosition().lat())/o,o=(this.d.lng()*(o-1)+t.getPosition().lng())/o,this.d=new google.maps.LatLng(e,o),p(this)):(this.d=t.getPosition(),p(this)),t.s=!0,this.a.push(t),(e=this.a.length)<this.l&&t.getMap()!=this.c&&t.setMap(this.c),e==this.l)for(o=0;o<e;o++)this.a[o].setMap(f);if(e>=this.l&&t.setMap(f),t=this.c.getZoom(),(e=this.k.I())&&t>e)for(t=0;e=this.a[t];t++)e.setMap(this.c);else this.a.length<this.l?c(this.n):(e=this.k.H()(this.a,this.k.z().length),this.n.setCenter(this.d),(t=this.n).B=e,t.ga=e.text,t.ea=e.index,t.b&&(t.b.innerHTML=e.text),e=Math.max(0,t.B.index-1),e=Math.min(t.j.length-1,e),e=t.j[e],t.da=e.url,t.h=e.height,t.p=e.width,t.M=e.textColor,t.e=e.anchor,t.N=e.textSize,t.D=e.backgroundPosition,this.n.show());return!0},g.getBounds=function(){for(var t,e=new google.maps.LatLngBounds(this.d,this.d),o=this.o(),i=0;t=o[i];i++)e.extend(t.getPosition());return e},g.remove=function(){this.n.remove(),this.a.length=0,delete this.a},g.T=function(){return this.a.length},g.o=e("a"),g.getCenter=e("d"),g.getMap=e("c"),(g=h.prototype).onAdd=function(){this.b=document.createElement("DIV"),this.t&&(this.b.style.cssText=d(this,l(this,this.d)),this.b.innerHTML=this.B.text),this.getPanes().overlayMouseTarget.appendChild(this.b);var t=this;google.maps.event.addDomListener(this.b,"click",function(){var e=t.u.k;google.maps.event.trigger(e,"clusterclick",t.u),e.O&&t.c.fitBounds(t.u.getBounds())})},g.draw=function(){if(this.t){var t=l(this,this.d);this.b.style.top=t.y+"px",this.b.style.left=t.x+"px"}},g.show=function(){this.b&&(this.b.style.cssText=d(this,l(this,this.d)),this.b.style.display=""),this.t=!0},g.remove=function(){this.setMap(f)},g.onRemove=function(){this.b&&this.b.parentNode&&(c(this),this.b.parentNode.removeChild(this.b),this.b=f)},g.setCenter=t("d"),window.MarkerClusterer=o,o.prototype.addMarker=o.prototype.q,o.prototype.addMarkers=o.prototype.C,o.prototype.clearMarkers=o.prototype.R,o.prototype.fitMapToMarkers=o.prototype.S,o.prototype.getCalculator=o.prototype.H,o.prototype.getGridSize=o.prototype.w,o.prototype.getExtendedBounds=o.prototype.v,o.prototype.getMap=o.prototype.getMap,o.prototype.getMarkers=o.prototype.o,o.prototype.getMaxZoom=o.prototype.I,o.prototype.getStyles=o.prototype.z,o.prototype.getTotalClusters=o.prototype.U,o.prototype.getTotalMarkers=o.prototype.V,o.prototype.redraw=o.prototype.i,o.prototype.removeMarker=o.prototype.Y,o.prototype.removeMarkers=o.prototype.Z,o.prototype.resetViewport=o.prototype.m,o.prototype.repaint=o.prototype.L,o.prototype.setCalculator=o.prototype.$,o.prototype.setGridSize=o.prototype.aa,o.prototype.setMaxZoom=o.prototype.ba,o.prototype.onAdd=o.prototype.onAdd,o.prototype.draw=o.prototype.draw,n.prototype.getCenter=n.prototype.getCenter,n.prototype.getSize=n.prototype.T,n.prototype.getMarkers=n.prototype.o,h.prototype.onAdd=h.prototype.onAdd,h.prototype.draw=h.prototype.draw,h.prototype.onRemove=h.prototype.onRemove}();;/*!
  * Bootstrap-select v1.12.4 (https://silviomoreto.github.io/bootstrap-select)
  *

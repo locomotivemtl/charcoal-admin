@@ -23,7 +23,7 @@
         padding-right: 15px;
     }
 
-    .modal-header.hidden + .modal-body .nav-tabs {
+    .modal-header.d-none + .modal-body .nav-tabs {
         padding-right: (15px * 2) + 18px;
     }
 
@@ -58,7 +58,7 @@
             margin-top:  10px;
             margin-left: 30px;
 
-            &.hidden {
+            &.d-none {
                 display: block !important;
             }
 
@@ -79,13 +79,13 @@
             }
         }
 
-        .form-group-sm &[data-lang]::before {
-            line-height: $input-height-sm;
-        }
+        // .form-group-sm &[data-lang]::before {
+        //     line-height: $input-height-sm;
+        // }
 
-        .form-group-lg &[data-lang]::before {
-            line-height: $input-height-lg;
-        }
+        // .form-group-lg &[data-lang]::before {
+        //     line-height: $input-height-lg;
+        // }
 
         &.form-property-file[data-lang]::before,
         &.form-property-image[data-lang]::before {

@@ -95,6 +95,10 @@ label {
   border: none;
 }
 
+.form-control-plaintext {
+  font-size: 12px;
+}
+
 .form-field {
   position: relative;
 }
@@ -2080,12 +2084,12 @@ a.chip:hover::before, a.chip:focus::before {
   cursor: move;
 }
 
-.c-attachments .thumbnail img,
-.c-attachments img.thumbnail {
+.c-attachments .img-thumbnail img,
+.c-attachments img.img-thumbnail {
   max-width: 200px;
 }
 
-.c-attachments img.thumbnail {
+.c-attachments img.img-thumbnail {
   display: block;
   max-width: 100%;
   height: auto;
@@ -2636,7 +2640,7 @@ a.chip:hover::before, a.chip:focus::before {
   padding-right: 15px;
 }
 
-.bootstrap-dialog .modal-header.hidden + .modal-body .nav-tabs {
+.bootstrap-dialog .modal-header.d-none + .modal-body .nav-tabs {
   padding-right: 48px;
 }
 
@@ -2667,7 +2671,7 @@ a.chip:hover::before, a.chip:focus::before {
   margin-left: 30px;
 }
 
-.bootstrap-dialog .form-field.-l10n[data-lang].hidden {
+.bootstrap-dialog .form-field.-l10n[data-lang].d-none {
   display: block !important;
 }
 
@@ -2684,14 +2688,6 @@ a.chip:hover::before, a.chip:focus::before {
   letter-spacing: 1px;
   line-height: calc(2.25rem + 2px);
   text-transform: uppercase;
-}
-
-.form-group-sm .bootstrap-dialog .form-field.-l10n[data-lang]::before {
-  line-height: calc(1.8125rem + 2px);
-}
-
-.form-group-lg .bootstrap-dialog .form-field.-l10n[data-lang]::before {
-  line-height: calc(2.875rem + 2px);
 }
 
 .bootstrap-dialog .form-field.-l10n.form-property-file[data-lang]::before, .bootstrap-dialog .form-field.-l10n.form-property-image[data-lang]::before {

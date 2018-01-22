@@ -5127,11 +5127,7 @@ Charcoal.Admin.Property_Input_File = function (opts)
     this.data = opts.data;
     this.dialog = null;
 
-    // Required
-    this.set_input_id(this.opts.id);
-
-    // Run the plugin or whatever is necessary
-    this.init();
+    this.set_input_id(this.opts.id).init();
 
     return this;
 };
@@ -5142,14 +5138,10 @@ Charcoal.Admin.Property_Input_File.prototype.parent = Charcoal.Admin.Property.pr
 
 Charcoal.Admin.Property_Input_File.prototype.init = function ()
 {
-    // console.log('Init', this.input_type);
-
-    // Impossible!
     if (!this.input_id) {
-        return this;
+        return;
     }
 
-    // OG element.
     this.$input   = $('#' + this.input_id);
     this.$file    = this.$input.find('input[type="file"]');
     this.$hidden  = this.$input.find('input[type="hidden"]');
@@ -5164,10 +5156,8 @@ Charcoal.Admin.Property_Input_File.prototype.init = function ()
 
 Charcoal.Admin.Property_Input_File.prototype.set_listeners = function ()
 {
-    // console.log('Events', this.input_type);
-
     if (typeof this.$input === 'undefined') {
-        return this;
+        return;
     }
 
     this.$input
@@ -5181,27 +5171,23 @@ Charcoal.Admin.Property_Input_File.prototype.set_listeners = function ()
 
 Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
 {
-    // console.log('Remove File');
-
     event.preventDefault();
 
     this.$hidden.val('');
-    this.$input.find('.form-control-static').empty();
-    this.$input.find('.hide-if-no-file').addClass('hidden');
+    this.$input.find('.form-control-plaintext').empty();
+    this.$input.find('.hide-if-no-file').addClass('d-none');
 };
 
 Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
 {
-    // console.log('Change File');
-
     var target, file, src;
 
     target = event.dataTransfer || event.target;
     file   = target && target.files && target.files[0];
     src    = URL.createObjectURL(file);
 
-    this.$input.find('.hide-if-no-file').removeClass('hidden');
-    this.$input.find('.form-control-static').html(file);
+    this.$input.find('.hide-if-no-file').removeClass('d-none');
+    this.$input.find('.form-control-plaintext').html(file);
     this.$preview.empty();
 };
 
@@ -5233,8 +5219,8 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
     }
 
     if (file && file.path) {
-        this.$input.find('.hide-if-no-file').removeClass('hidden');
-        this.$input.find('.form-control-static').html(file.name);
+        this.$input.find('.hide-if-no-file').removeClass('d-none');
+        this.$input.find('.form-control-plaintext').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty();
     }
@@ -5286,11 +5272,7 @@ Charcoal.Admin.Property_Input_Image = function (opts)
     this.opts = opts;
     this.data = opts.data;
 
-    // Required
-    this.set_input_id(this.opts.id);
-
-    // Run the plugin or whatever is necessary
-    this.init();
+    this.set_input_id(this.opts.id).init();
 
     return this;
 };
@@ -5307,8 +5289,8 @@ Charcoal.Admin.Property_Input_Image.prototype.remove_file = function (event)
 
     this.$hidden.val('');
     this.$preview.empty();
-    this.$input.find('.form-control-static').empty();
-    this.$input.find('.hide-if-no-file').addClass('hidden');
+    this.$input.find('.form-control-plaintext').empty();
+    this.$input.find('.hide-if-no-file').addClass('d-none');
 };
 
 Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
@@ -5325,8 +5307,8 @@ Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
 
     img.src = src;
 
-    this.$input.find('.hide-if-no-file').removeClass('hidden');
-    this.$input.find('.form-control-static').html(file);
+    this.$input.find('.hide-if-no-file').removeClass('d-none');
+    this.$input.find('.form-control-plaintext').html(file);
     this.$preview.empty().append(img);
 };
 
@@ -5343,8 +5325,8 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
     if (file && file.path) {
         var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
 
-        this.$input.find('.hide-if-no-file').removeClass('hidden');
-        this.$input.find('.form-control-static').html(file.name);
+        this.$input.find('.hide-if-no-file').removeClass('d-none');
+        this.$input.find('.form-control-plaintext').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty().append($img);
     }

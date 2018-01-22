@@ -12098,6 +12098,121 @@ a.text-dark:hover, a.text-dark:focus {
   clip: auto;
 }
 
+.bootstrap-dialog {
+  /* dialog types */
+  /**
+     * Icon animation
+     * Copied from font-awesome: http://fontawesome.io/
+     **/
+  /** End of icon animation **/
+}
+
+.bootstrap-dialog .modal-header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.bootstrap-dialog .bootstrap-dialog-header {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.bootstrap-dialog .bootstrap-dialog-title {
+  color: #fff;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.bootstrap-dialog .bootstrap-dialog-message {
+  font-size: 14px;
+}
+
+.bootstrap-dialog .bootstrap-dialog-button-icon {
+  margin-right: 3px;
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button {
+  font-size: 20px;
+  float: right;
+  opacity: 0.9;
+}
+
+.bootstrap-dialog .bootstrap-dialog-close-button:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.bootstrap-dialog .bootstrap-dialog-footer-buttons > :not(:last-child) {
+  margin-right: .25rem;
+}
+
+.bootstrap-dialog.type-default .modal-header {
+  background-color: #ffffff;
+}
+
+.bootstrap-dialog.type-default .bootstrap-dialog-title {
+  color: #333;
+}
+
+.bootstrap-dialog.type-info .modal-header {
+  background-color: #17a2b8;
+}
+
+.bootstrap-dialog.type-primary .modal-header {
+  background-color: #6092f5;
+}
+
+.bootstrap-dialog.type-success .modal-header {
+  background-color: #28a745;
+}
+
+.bootstrap-dialog.type-warning .modal-header {
+  background-color: #ffc107;
+}
+
+.bootstrap-dialog.type-danger .modal-header {
+  background-color: #c34747;
+}
+
+.bootstrap-dialog.size-large .bootstrap-dialog-title {
+  font-size: 24px;
+}
+
+.bootstrap-dialog.size-large .bootstrap-dialog-close-button {
+  font-size: 30px;
+}
+
+.bootstrap-dialog.size-large .bootstrap-dialog-message {
+  font-size: 18px;
+}
+
+.bootstrap-dialog .icon-spin {
+  display: inline-block;
+  -webkit-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
 select.bs-select-hidden,
 select.selectpicker {
   display: none !important;

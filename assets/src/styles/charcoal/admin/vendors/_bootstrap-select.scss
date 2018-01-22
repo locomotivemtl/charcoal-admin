@@ -35,4 +35,8 @@
     .dropdown-item {
         outline: none !important;
     }
+
+    &.show > .dropdown-toggle {
+        background-color: $charcoal-gray-0;
+    }
 }

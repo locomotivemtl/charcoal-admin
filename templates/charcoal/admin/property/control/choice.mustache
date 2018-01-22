@@ -8,10 +8,10 @@
     `charcoal/admin/property/input/radio-color`
 --}}
 <input
+    class="form-check-input{{# inputClass }} {{ . }}{{/ inputClass }}"
     type="{{ type }}"
     id="{{ inputId }}"
     name="{{ inputName }}"
-    class="{{ inputClass }}"
     autocomplete="off"
     {{# checked }}checked{{/ checked }}
     {{# readOnly }}readonly{{/ readOnly }}

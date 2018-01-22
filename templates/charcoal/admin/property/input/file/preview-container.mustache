@@ -5,7 +5,7 @@
     `charcoal/admin/property/input/file`
 --}}
 {{# showFilePreview }}
-<figure class="thumbnail hide-if-no-file{{^ inputVal }} hidden{{/ inputVal }}">
+<figure class="thumbnail hide-if-no-file{{^ inputVal }} d-none{{/ inputVal }}">
     <div class="js-preview">{{& filePreview }}</div>
     {{! @see charcoal/admin/property/input/readonly }}
     <figcaption class="caption">

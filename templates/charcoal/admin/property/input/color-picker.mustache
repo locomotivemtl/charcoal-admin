@@ -9,7 +9,7 @@ Color Picker Property Input
     type="text"
     id="{{ inputId }}"
     name="{{ inputName }}"
-    class="form-control {{ inputClass }}"
+    class="form-control{{# inputClass }} {{ . }}{{/ inputClass }}"
     {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
     {{# readOnly }}readonly{{/ readOnly }}
     {{# required }}required{{/ required }}

@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-01-19 
+ * ! Charcoal Admin - 2018-01-22 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -2773,6 +2773,10 @@ a.chip:hover::before, a.chip:focus::before {
 
 .bootstrap-select .dropdown-item {
   outline: none !important;
+}
+
+.bootstrap-select.show > .dropdown-toggle {
+  background-color: #e1e1e1;
 }
 
 .u-float-left {

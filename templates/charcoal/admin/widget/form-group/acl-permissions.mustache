@@ -3,17 +3,17 @@
     <h2>{{ name }}</h2>
     {{# permissions }}
         <h3>{{ name }}</h3>
-        <div class="radio radio-inline">
-            <input type="radio" name="permissions[{{ ident }}]"{{# isDenied }} checked{{/ isDenied }}>
-            <label for="permissions[{{ ident }}]" value="denied">{{# _t }}Denied{{/ _t }}</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="permissions[{{ ident }}]"{{# isDenied }} checked{{/ isDenied }}>
+            <label class="form-check-label" for="permissions[{{ ident }}]" value="denied">{{# _t }}Denied{{/ _t }}</label>
         </div>
-        <div class="radio radio-inline">
-            <input type="radio" name="permissions[{{ ident }}]"{{# isUnknown }} checked{{/ isUnknown }}>
-            <label for="permissions[{{ ident }}]" value="">{{# _t }}N/A{{/ _t }}</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="permissions[{{ ident }}]"{{# isUnknown }} checked{{/ isUnknown }}>
+            <label class="form-check-label" for="permissions[{{ ident }}]" value="">{{# _t }}N/A{{/ _t }}</label>
         </div>
-        <div class="radio radio-inline">
-            <input type="radio" name="permissions[{{ ident }}]"{{# isAllowed }} checked{{/ isAllowed }}>
-            <label for="permissions[{{ ident }}]" value="allowed">{{# _t }}Allowed{{/ _t }}</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="permissions[{{ ident }}]"{{# isAllowed }} checked{{/ isAllowed }}>
+            <label class="form-check-label" for="permissions[{{ ident }}]" value="allowed">{{# _t }}Allowed{{/ _t }}</label>
         </div>
     {{/ permissions }}
 {{/ permissionCategories }}

@@ -129,6 +129,13 @@ class AdminTemplate extends AbstractTemplate implements
     private $widgetFactory;
 
     /**
+     * The cache of parsed template names.
+     *
+     * @var array
+     */
+    protected static $templateNameCache = [];
+
+    /**
      * Template's init method is called automatically from `charcoal-app`'s Template Route.
      *
      * For admin templates, initializations is:

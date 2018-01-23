@@ -277,7 +277,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
             filters:            this.filters,
             orders:             this.orders,
             pagination:         this.pagination,
-            list_actions:       this.list_actions
+            list_actions:       this.list_actions,
+            object_actions:     this.object_actions
         }
     };
 };

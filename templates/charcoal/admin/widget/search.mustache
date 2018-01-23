@@ -1,26 +1,30 @@
 
-<div class="o-container_aside" id="{{widgetId}}">
+<form id="{{ widgetId }}" class="o-widget o-container_aside" method="post">
     <div class="input-group">
-        <input type="text" class="form-control input-sm" placeholder="{{# _t }}Search…{{/ _t }}">
+        <input type="text" name="query" class="form-control input-sm" placeholder="{{# _t }}Search…{{/ _t }}">
         <span class="input-group-btn">
-            <button class="btn btn-default input-sm js-search" type="button">
+            <button type="submit" class="btn btn-default input-sm js-search">
                 <span class="fa fa-search" aria-hidden="true"></span>
                 <span class="btn-label sr-only">{{# _t }}Search{{/ _t }}</span>
             </button>
-            <button class="btn btn-default input-sm js-undo" type="button">
+            <button type="reset" class="btn btn-default input-sm js-undo">
                 <span class="fa fa-undo" aria-hidden="true"></span>
                 <span class="btn-label sr-only">{{# _t }}Clear Results{{/ _t }}</span>
             </button>
         </span>
     </div>
-</div>
 
-{{#addJs}}
+    <input type="hidden" name="widget_id" value="{{ widgetId }}">
+    <input type="hidden" name="obj_type" value="{{ objType }}">
+    <input type="hidden" name="obj_id" value="{{ objId }}">
+</form>
+
+{{# addJs }}
 <script>
 Charcoal.Admin.manager().add_widget({
-    id:   '{{widgetId}}',
+    id:   '{{ widgetId }}',
     type: 'charcoal/admin/widget/search',
     data: {{& widgetDataForJsAsJson }}
 });
 </script>
-{{/addJs}}
+{{/ addJs }}

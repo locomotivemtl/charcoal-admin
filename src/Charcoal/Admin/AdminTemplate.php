@@ -462,19 +462,123 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @return string
+     * Determine if a CAPTCHA test is available.
+     *
+     * For example, the "Login", "Lost Password", and "Reset Password" templates
+     * can render the CAPTCHA test.
+     *
+     * @see    AdminAction::recaptchaEnabled() Duplicate
+     * @return boolean
+     */
+    public function recaptchaEnabled()
+    {
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
+
+        return (isset($recaptcha['public_key']) || isset($recaptcha['key'])) &&
+               (isset($recaptcha['private_key']) || isset($recaptcha['secret']));
+    }
+
+    /**
+     * Determine if the CAPTCHA test is invisible.
+     *
+     * Note: Charcoal's implementation of Google reCAPTCHA defaults to "invisible".
+     *
+     * @return boolean
+     */
+    public function recaptchaInvisible()
+    {
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
+
+        return !isset($recaptcha['invisible']) ||
+               ($recaptcha['invisible'] === true) ||
+               (isset($recaptcha['size']) && $recaptcha['size'] === 'invisible');
+    }
+
+    /**
+     * Alias of {@see self::recaptchaSiteKey()}.
+     *
+     * @deprecated
+     * @return string|null
      */
     public function recaptchaKey()
+    {
+        return $this->recaptchaSiteKey();
+    }
+
+    /**
+     * Retrieve the Google reCAPTCHA public (site) key.
+     *
+     * @throws RuntimeException If Google reCAPTCHA is required but not configured.
+     * @return string|null
+     */
+    public function recaptchaSiteKey()
     {
         $recaptcha = $this->appConfig('apis.google.recaptcha');
 
         if (isset($recaptcha['public_key'])) {
-            $key = $recaptcha['public_key'];
+            return (string)$recaptcha['public_key'];
         } else {
-            $key = $recaptcha['key'];
+            return (string)$recaptcha['key'];
         }
 
-        return (string)$key;
+        return null;
+    }
+
+    /**
+     * Retrieve the parameters for the Google reCAPTCHA widget.
+     *
+     * @return string[]
+     */
+    public function recaptchaParameters()
+    {
+        $appConfig = $this->appConfig('apis.google.recaptcha');
+        $tplConfig = $this->get('recaptcha_options') ?: [];
+
+        $params = [
+            'sitekey'  => $this->recaptchaSiteKey(),
+            'badge'    => null,
+            'type'     => null,
+            'size'     => 'invisible',
+            'tabindex' => null,
+            'callback' => null,
+        ];
+
+        if (isset($appConfig['invisible']) && $appConfig['invisible'] === false) {
+            $params['size'] = null;
+        }
+
+        foreach ($params as $key => $val) {
+            if ($val === null) {
+                if (isset($tplConfig[$key])) {
+                    $val = $tplConfig[$key];
+                } elseif (isset($appConfig[$key])) {
+                    $val = $appConfig[$key];
+                }
+
+                $params[$key] = $val;
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Generate a string representation of HTML attributes for the Google reCAPTCHA tag.
+     *
+     * @return string
+     */
+    public function recaptchaHtmlAttr()
+    {
+        $params = $this->recaptchaParameters();
+
+        $attributes = [];
+        foreach ($params as $key => $val) {
+            if ($val !== null) {
+                $attributes[] = sprintf('data-%s="%s"', $key, htmlspecialchars($val, ENT_QUOTES));
+            }
+        }
+
+        return implode(' ', $attributes);
     }
 
     /**

@@ -99,18 +99,16 @@ class ResetPasswordAction extends AdminAction
             return $response->withStatus(400);
         }
 
-        $recaptchaValue = $request->getParam('g-recaptcha-response');
-        if (!$recaptchaValue) {
-            $this->addFeedback('error', $translator->translate('Missing CAPTCHA response.'));
-            $this->setSuccess(false);
+        if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
+            if ($ip) {
+                $logMessage = sprintf('[Admin] Reset Password — CAPTCHA challenge failed for "%s" from %s', $username, $ip);
+            } else {
+                $logMessage = sprintf('[Admin] Reset Password — CAPTCHA challenge failed for "%s"', $username);
+            }
 
-            return $response->withStatus(400);
-        }
-        if (!$this->validateCaptcha($recaptchaValue)) {
-            $this->addFeedback('error', $translator->translate('Invalid or malformed CAPTCHA response.'));
-            $this->setSuccess(false);
+            $this->logger->warning($logMessage);
 
-            return $response->withStatus(400);
+            return $response;
         }
 
         $failMessage = $translator->translation('An error occurred while processing the password change.');

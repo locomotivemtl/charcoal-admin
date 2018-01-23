@@ -81,6 +81,18 @@ class LoginAction extends AdminAction
                 return $response->withStatus(400);
             }
 
+            if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
+                if ($ip) {
+                    $logMessage = sprintf('[Admin] Login challenge failed for "%s" from %s', $username, $ip);
+                } else {
+                    $logMessage = sprintf('[Admin] Login challenge failed for "%s"', $username);
+                }
+
+                $this->logger->warning($logMessage);
+
+                return $response;
+            }
+
             if ($ip) {
                 $logMessage = sprintf('[Admin] Login attempt for "%s" from %s', $username, $ip);
             } else {

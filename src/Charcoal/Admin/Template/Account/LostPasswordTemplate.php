@@ -57,4 +57,21 @@ class LostPasswordTemplate extends AdminTemplate
 
         return $this->title;
     }
+
+    /**
+     * Retrieve the parameters for the Google reCAPTCHA widget.
+     *
+     * @return string[]
+     */
+    public function recaptchaParameters()
+    {
+        $params = parent::recaptchaParameters();
+
+        if ($this->recaptchaInvisible() === true) {
+            $params['callback'] = 'CharcoalCaptchaResetPassCallback';
+            $params['tabindex'] = 2;
+        }
+
+        return $params;
+    }
 }

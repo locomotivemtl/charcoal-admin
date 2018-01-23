@@ -143,4 +143,21 @@ class LoginTemplate extends AdminTemplate
 
         return $this->title;
     }
+
+    /**
+     * Retrieve the parameters for the Google reCAPTCHA widget.
+     *
+     * @return string[]
+     */
+    public function recaptchaParameters()
+    {
+        $params = parent::recaptchaParameters();
+
+        if ($this->recaptchaInvisible() === true) {
+            $params['callback'] = 'CharcoalCaptchaLoginCallback';
+            $params['tabindex'] = 4;
+        }
+
+        return $params;
+    }
 }

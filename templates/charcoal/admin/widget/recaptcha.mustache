@@ -1,0 +1,14 @@
+{{!--
+
+    Google reCAPTCHA Widget
+    =======================
+
+--}}
+{{# recaptchaEnabled }}
+<div class="form-group">
+    <div id="g-recaptcha-challenge" class="g-recaptcha" {{& recaptchaHtmlAttr }}></div>
+</div>
+{{# addJsRequirement }}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{{/ addJsRequirement }}
+{{/ recaptchaEnabled }}

@@ -6,6 +6,7 @@ use RuntimeException;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 // From Pimple
 use Pimple\Container;
@@ -191,6 +192,44 @@ abstract class AdminAction extends AbstractAction implements
     }
 
     /**
+     * Determine if a CAPTCHA test is available.
+     *
+     * For example, the "Login", "Lost Password", and "Reset Password" templates
+     * can render the CAPTCHA test.
+     *
+     * @see    AdminTemplate::recaptchaEnabled() Duplicate
+     * @return boolean
+     */
+    public function recaptchaEnabled()
+    {
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
+
+        return (isset($recaptcha['public_key']) || isset($recaptcha['key'])) &&
+               (isset($recaptcha['private_key']) || isset($recaptcha['secret']));
+    }
+
+    /**
+     * Retrieve the Google reCAPTCHA secret key.
+     *
+     * @throws RuntimeException If Google reCAPTCHA is required but not configured.
+     * @return string|null
+     */
+    public function recaptchaSecretKey()
+    {
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
+
+        if (isset($recaptcha['private_key'])) {
+            return (string)$recaptcha['private_key'];
+        } elseif (isset($recaptcha['secret'])) {
+            return (string)$recaptcha['secret'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Validate the reCAPTCHA response.
+     *
      * @todo   {@link https://github.com/mcaskill/charcoal-recaptcha Implement CAPTCHA validation as a service}.
      * @param  string $response The captcha value (response) to validate.
      * @throws RuntimeException If Google reCAPTCHA is not configured.
@@ -199,16 +238,10 @@ abstract class AdminAction extends AbstractAction implements
     protected function validateCaptcha($response)
     {
         $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
 
-        if (isset($recaptcha['private_key'])) {
-            $secret = $recaptcha['private_key'];
-        } else {
-            $secret = $recaptcha['secret'];
-        }
-
+        $secret = $this->recaptchaSecretKey();
         if (!$secret) {
-            throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] not configured.');
+            throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] is not configured.');
         }
 
         $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
@@ -216,5 +249,39 @@ abstract class AdminAction extends AbstractAction implements
         $response = json_decode($response, true);
 
         return !!$response['success'];
+    }
+
+    /**
+     * Validate the reCAPTCHA response from a PSR Request object.
+     *
+     * @param  RequestInterface       $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface|null $response A PSR-7 compatible Response instance.
+     *     If $response is provided and challenge fails,
+     *     then it is replaced with a new Response object
+     *     that represents a client error.
+     * @return ResponseInterface|boolean If $response is given,
+     */
+    protected function validateCaptchaFromRequest(RequestInterface $request, ResponseInterface &$response = null)
+    {
+        $recaptchaValue = $request->getParam('g-recaptcha-response', false);
+        if ($recaptchaValue === false) {
+            $this->addFeedback('error', $this->translator()->translate('Missing reCAPTCHA response.'));
+            $this->setSuccess(false);
+
+            $response = $response->withStatus(400);
+
+            return false;
+        }
+
+        $result = $this->validateCaptcha($recaptchaValue);
+
+        if ($result === false) {
+            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed reCAPTCHA response.'));
+            $this->setSuccess(false);
+
+            $response = $response->withStatus(400);
+        }
+
+        return $result;
     }
 }

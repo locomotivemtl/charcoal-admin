@@ -14,7 +14,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
 <div class="o-background -fixed u-background-lightblue"{{#backgroundImage}} style="background-image: url({{.}});"{{/backgroundImage}}>
     {{#backgroundVideo}}
     <video class="embedded-video horizontal" muted="" preload="auto" autoplay loop>
-      <source src="{{.}}" type="video/mp4">
+        <source src="{{.}}" type="video/mp4">
     </video>
     {{/backgroundVideo}}
 </div>
@@ -28,21 +28,21 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                 <img class="c-login_avatar_image" src="{{loginLogo}}">
             </div>
         </div>
-        <form id="login-form" method="POST" action="{{urlLoginAction}}">
+        <form id="login-form" class="c-login_body" method="POST" action="{{urlLoginAction}}">
             <input type="hidden" name="csrf_token" value="{{csrfToken}}">
 
              <div class="form-group">
                 <label class="sr-only" for="username">{{#_t}}Username{{/_t}}</label>
                 <div class="input-group">
                     <label class="input-group-addon" for="username"><i class="fa fa-user fa-fw"></i></label>
-                    <input class="form-control" type="text" name="username" id="username" placeholder="{{#_t}}Username{{/_t}}" required autofocus>
+                    <input class="form-control" type="text" name="username" id="username" placeholder="{{#_t}}Username{{/_t}}" required autofocus tabindex="1">
                 </div>
             </div>
             <div class="form-group">
                 <label class="sr-only" for="password">{{#_t}}Password{{/_t}}</label>
                 <div class="input-group">
                     <label class="input-group-addon" for="password"><i class="fa fa-lock fa-fw"></i></label>
-                    <input class="form-control" type="password" name="password" id="password" placeholder="{{#_t}}Password{{/_t}}" required>
+                    <input class="form-control" type="password" name="password" id="password" placeholder="{{#_t}}Password{{/_t}}" required tabindex="2">
                 </div>
             </div>
 
@@ -50,18 +50,27 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
             <div class="form-group">
                 <div class="checkbox">
                     <input type="hidden" name="remember-me" value="0">
-                    <input type="checkbox" name="remember-me" id="remember-me">
+                    <input type="checkbox" name="remember-me" id="remember-me" tabindex="3">
                     <label for="remember-me">{{#_t}}Remember Me{{/_t}}</label>
                 </div>
             </div>
             {{/rememberMeEnabled}}
-            <div class="form-group">
-                <button type="submit" class="btn btn-info btn-lg btn-block">
-                    <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
-                    <span class="btn-label">{{#_t}}Log In{{/_t}}</span>
-                </button>
 
-                <small><a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a></small>
+            {{> charcoal/admin/widget/recaptcha }}
+
+            <div class="form-group">
+                <p>
+                    <button type="submit" class="btn btn-info btn-lg btn-block" tabindex="5">
+                        <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
+                        <span class="btn-label">{{#_t}}Log In{{/_t}}</span>
+                    </button>
+                </p>
+
+                <p class="text-center">
+                    <small>
+                        <a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a>
+                    </small>
+                </p>
             </div>
         </form>
 
@@ -79,9 +88,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
 <script>
 var login_template;
 $(document).ready(function() {
-    login_template = new Charcoal.Admin.Template_Login({
-
-    });
+    login_template = new Charcoal.Admin.Template_Login({});
     //Charcoal.Admin.register_template(login_template);
 });
 </script>

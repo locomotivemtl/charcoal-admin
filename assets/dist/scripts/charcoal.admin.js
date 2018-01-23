@@ -8339,32 +8339,65 @@ Charcoal.Admin.Template_Login.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Login.prototype.bind_events = function ()
 {
-    $('#login-form').on('submit.charcoal.login', function (event) {
-        event.preventDefault();
+    var $form = $('#login-form');
 
-        var $form = $(this);
-        var url   = ($form.prop('action') || window.location.href);
-        var data  = $form.serialize();
+    /**
+     * @fires Charcoal.Admin.Template_Login.prototype.onSubmit~event:submit.charcoal.login
+     */
+    $form.on('submit.charcoal.login', $.proxy(this.onSubmit, this));
 
-        $.post(url, data, function (response) {
-            window.console.debug(response);
-            if (response.success) {
-                window.location.href = response.next_url;
-            } else {
-                //window.alert('Error');
-                BootstrapDialog.show({
-                    title:   authL10n.login,
-                    message: commonL10n.authFailed,
-                    type:    BootstrapDialog.TYPE_DANGER
-                });
-            }
-        }, 'json').fail(function () {
+    window.CharcoalCaptchaLoginCallback = this.submitForm.bind($form);
+};
+
+/**
+ * @listens Charcoal.Admin.Template_Login~event:submit.charcoal.login
+ * @this    {Charcoal.Admin.Template_Login}
+ * @param   {Event} event - The submit event.
+ */
+Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
+    event.preventDefault();
+
+    var $form      = $(event.currentTarget),
+        $challenge = $form.find('#g-recaptcha-challenge'),
+        $response  = $form.find('#g-recaptcha-response');
+
+    if ($response.val().length || $challenge.data('size') === 'invisible') {
+        window.grecaptcha.execute();
+    } else {
+        this.submitForm.call($form);
+    }
+};
+
+/**
+ * @this {HTMLFormElement|jQuery}
+ */
+Charcoal.Admin.Template_Login.prototype.submitForm = function ()
+{
+    var $form = $(this);
+    var url   = ($form.prop('action') || window.location.href);
+    var data  = $form.serialize();
+
+    $.post(url, data, function (response) {
+        window.console.debug(response);
+        if (response.success) {
+            window.location.href = response.next_url;
+        } else {
             //window.alert('Error');
             BootstrapDialog.show({
                 title:   authL10n.login,
                 message: commonL10n.authFailed,
                 type:    BootstrapDialog.TYPE_DANGER
             });
+        }
+    }, 'json').fail(function () {
+        //window.alert('Error');
+        BootstrapDialog.show({
+            title:    authL10n.login,
+            message:  commonL10n.authFailed,
+            type:     BootstrapDialog.TYPE_DANGER,
+            onhidden: function () {
+                window.grecaptcha.reset();
+            }
         });
     });
 };
@@ -8427,32 +8460,50 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
 {
-    $('#lost-password-form').on('submit.charcoal.password', function (event) {
-        event.preventDefault();
+    var $form = $('#lost-password-form');
 
-        var $form = $(this);
-        var url   = ($form.prop('action') || window.location.href);
-        var data  = $form.serialize();
+    /**
+     * @fires Charcoal.Admin.Template_Account_LostPassword.prototype.onSubmit~event:submit.charcoal.password
+     */
+    $form.on('submit.charcoal.password', $.proxy(this.onSubmit, this));
 
-        $.post(url, data, function (response) {
-            window.console.debug(response);
-            BootstrapDialog.show({
-                title:    authL10n.lostPassword,
-                message:  authL10n.lostPassSuccess,
-                type:     BootstrapDialog.TYPE_SUCCESS,
-                onhidden: function () {
-                    window.location.reload();
-                }
-            });
-        }, 'json').fail(function () {
-            BootstrapDialog.show({
-                title:    authL10n.lostPassword,
-                message:  authL10n.lostPassFailed,
-                type:     BootstrapDialog.TYPE_DANGER,
-                onhidden: function () {
-                    window.grecaptcha.reset();
-                }
-            });
+    window.CharcoalCaptchaResetPassCallback = this.submitForm.bind($form);
+};
+
+/**
+ * @listens Charcoal.Admin.Template_Account_LostPassword~event:submit.charcoal.password
+ * @this    {Charcoal.Admin.Template_Account_LostPassword}
+ * @param   {Event} event - The submit event.
+ */
+Charcoal.Admin.Template_Account_LostPassword.prototype.onSubmit = Charcoal.Admin.Template_Login.prototype.onSubmit;
+
+/**
+ * @this {HTMLFormElement|jQuery}
+ */
+Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ()
+{
+    var $form = $(this);
+    var url   = ($form.prop('action') || window.location.href);
+    var data  = $form.serialize();
+
+    $.post(url, data, function (response) {
+        window.console.debug(response);
+        BootstrapDialog.show({
+            title:    authL10n.lostPassword,
+            message:  authL10n.lostPassSuccess,
+            type:     BootstrapDialog.TYPE_SUCCESS,
+            onhidden: function () {
+                window.location.reload();
+            }
+        });
+    }, 'json').fail(function () {
+        BootstrapDialog.show({
+            title:    authL10n.lostPassword,
+            message:  authL10n.lostPassFailed,
+            type:     BootstrapDialog.TYPE_DANGER,
+            onhidden: function () {
+                window.grecaptcha.reset();
+            }
         });
     });
 };
@@ -8488,32 +8539,50 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function ()
 {
-    $('#reset-password-form').on('submit.charcoal.password', function (event) {
-        event.preventDefault();
+    var $form = $('#reset-password-form');
 
-        var $form = $(this);
-        var url   = ($form.prop('action') || window.location.href);
-        var data  = $form.serialize();
+    /**
+     * @fires Charcoal.Admin.Template_Account_ResetPassword.prototype.onSubmit~event:submit.charcoal.password
+     */
+    $form.on('submit.charcoal.password', $.proxy(this.onSubmit, this));
 
-        $.post(url, data, function (response) {
-            window.console.debug(response);
-            BootstrapDialog.show({
-                title:    authL10n.passwordReset,
-                message:  authL10n.resetPassSuccess,
-                type:     BootstrapDialog.TYPE_SUCCESS,
-                onhidden: function () {
-                    window.location.href = Charcoal.Admin.admin_url() + 'login';
-                }
-            });
-        }, 'json').fail(function () {
-            BootstrapDialog.show({
-                title:    authL10n.passwordReset,
-                message:  authL10n.resetPassFailed,
-                type:     BootstrapDialog.TYPE_DANGER,
-                onhidden: function () {
-                    window.grecaptcha.reset();
-                }
-            });
+    window.CharcoalCaptchaChangePassCallback = this.submitForm.bind($form);
+};
+
+/**
+ * @listens Charcoal.Admin.Template_Account_ResetPassword~event:submit.charcoal.password
+ * @this    {Charcoal.Admin.Template_Account_ResetPassword}
+ * @param   {Event} event - The submit event.
+ */
+Charcoal.Admin.Template_Account_ResetPassword.prototype.onSubmit = Charcoal.Admin.Template_Login.prototype.onSubmit;
+
+/**
+ * @this {HTMLFormElement|jQuery}
+ */
+Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ()
+{
+    var $form = $(this);
+    var url   = ($form.prop('action') || window.location.href);
+    var data  = $form.serialize();
+
+    $.post(url, data, function (response) {
+        window.console.debug(response);
+        BootstrapDialog.show({
+            title:    authL10n.passwordReset,
+            message:  authL10n.resetPassSuccess,
+            type:     BootstrapDialog.TYPE_SUCCESS,
+            onhidden: function () {
+                window.location.href = Charcoal.Admin.admin_url() + 'login';
+            }
+        });
+    }, 'json').fail(function () {
+        BootstrapDialog.show({
+            title:    authL10n.passwordReset,
+            message:  authL10n.resetPassFailed,
+            type:     BootstrapDialog.TYPE_DANGER,
+            onhidden: function () {
+                window.grecaptcha.reset();
+            }
         });
     });
 };

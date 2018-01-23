@@ -18,6 +18,7 @@ use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\ActionContainerTrait;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;
@@ -32,6 +33,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
         CollectionContainerTrait::parseObjectRow as parseCollectionObjectRow;
     }
+    use HttpAwareTrait;
 
     /**
      * Default sorting priority for an action.
@@ -168,7 +170,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function dataFromRequest()
     {
-        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
+        return $this->httpRequest()->getParams($this->acceptedRequestData());
     }
 
     /**
@@ -864,6 +866,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        // Satisfies HttpAwareTrait dependencies
+        $this->setHttpRequest($container['request']);
 
         $this->setView($container['view']);
         $this->setCollectionLoader($container['model/collection/loader']);

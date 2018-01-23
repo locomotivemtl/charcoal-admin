@@ -42,24 +42,36 @@ class UpdateAction extends AbstractSaveAction
     protected $updateData = [];
 
     /**
-     * Set the action's dataset.
+     * Sets the action data from a PSR Request object.
      *
-     * Extract relevant model data from $data, excluding _object type_ and _ID_.
+     * Extract relevant model data from $data, excluding _object type_ and _object ID_.
      * This {@see self::$updateData subset} is merged onto the target model.
      *
-     * @param  array $data The update action data.
-     * @return UpdateAction Chainable
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
      */
-    public function setData(array $data)
+    protected function setDataFromRequest(RequestInterface $request)
     {
-        parent::setData($data);
+        parent::setDataFromRequest($request);
 
-        unset($data['obj_type']);
-        unset($data['obj_id']);
+        $data = $request->getParams();
+        unset($data['obj_type'], $data['objType'], $data['obj_id'], $data['objId']);
 
         $this->setUpdateData($data);
 
         return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type', 'obj_id'
+        ], parent::validDataFromRequest());
     }
 
     /**

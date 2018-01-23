@@ -44,22 +44,36 @@ class SaveAction extends AbstractSaveAction
     protected $saveData = [];
 
     /**
-     * Set the action's dataset.
+     * Sets the action data from a PSR Request object.
      *
      * Extract relevant model data from $data, excluding _object type_.
      * This {@see self::$saveData subset} is merged onto the target model.
      *
-     * @param  array $data The update action data.
-     * @return SaveAction Chainable
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
      */
-    public function setData(array $data)
+    protected function setDataFromRequest(RequestInterface $request)
     {
-        parent::setData($data);
+        parent::setDataFromRequest($request);
 
-        unset($data['obj_type']);
+        $data = $request->getParams();
+        unset($data['obj_type'], $data['objType']);
+
         $this->setSaveData($data);
 
         return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type'
+        ], parent::validDataFromRequest());
     }
 
     /**

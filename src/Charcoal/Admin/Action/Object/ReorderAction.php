@@ -44,6 +44,18 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
     use ObjectContainerTrait;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type', 'obj_id'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface

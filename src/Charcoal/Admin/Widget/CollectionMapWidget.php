@@ -15,6 +15,7 @@ use Charcoal\Model\ModelInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;
 
@@ -24,6 +25,7 @@ use Charcoal\Admin\Ui\CollectionContainerTrait;
 class CollectionMapWidget extends AdminWidget implements CollectionContainerInterface
 {
     use CollectionContainerTrait;
+    use HttpAwareTrait;
 
     /**
      * The API key for the mapping service.
@@ -288,7 +290,7 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
      */
     public function dataFromRequest()
     {
-        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
+        return $this->httpRequest()->getParams($this->acceptedRequestData());
     }
 
     /**
@@ -383,6 +385,9 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        // Satisfies HttpAwareTrait dependencies
+        $this->setHttpRequest($container['request']);
 
         $this->setCollectionLoader($container['model/collection/loader']);
 

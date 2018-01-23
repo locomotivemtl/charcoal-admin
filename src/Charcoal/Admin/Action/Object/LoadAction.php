@@ -70,6 +70,18 @@ class LoadAction extends AdminAction
     protected $objCollection;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type', 'obj_id'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * @param  RequestInterface  $request  The request options.
      * @param  ResponseInterface $response The response to return.
      * @return ResponseInterface

@@ -59,13 +59,13 @@ abstract class AdminAction extends AbstractAction implements
     private $modelFactory;
 
     /**
-     * Template's init method is called automatically from `charcoal-app`'s Template Route.
+     * Action's init method is called automatically from `charcoal-app`'s Action Route.
      *
-     * For admin templates, initializations is:
+     * For admin actions, initializations is:
      *
      * - to start a session, if necessary
      * - to authenticate
-     * - to initialize the template data with `$_GET`
+     * - to initialize the action data with the PSR Request object
      *
      * @param RequestInterface $request The request to initialize.
      * @return boolean
@@ -78,8 +78,7 @@ abstract class AdminAction extends AbstractAction implements
             session_start();
         }
 
-        // Initialize data with GET / POST parameters.
-        $this->setData($request->getParams());
+        $this->setDataFromRequest($request);
 
         if ($this->authRequired() !== false) {
             // Test action vs. ACL roles
@@ -90,6 +89,35 @@ abstract class AdminAction extends AbstractAction implements
         }
 
         return parent::init($request);
+    }
+
+    /**
+     * Sets the action data from a PSR Request object.
+     *
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
+     */
+    protected function setDataFromRequest(RequestInterface $request)
+    {
+        $keys = $this->validDataFromRequest();
+        if (!empty($keys)) {
+            $this->setData($request->getParams($keys));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return [
+            // HTTP Handling
+            'next_url',
+        ];
     }
 
     /**

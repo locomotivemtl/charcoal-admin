@@ -43,6 +43,18 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * Retrieve the sidemenu.
      *
      * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null

@@ -30,6 +30,18 @@ class LoadAction extends BaseLoadAction
     private $selectizeCollection;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'selectize_obj_type', 'selectize_prop_ident'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * @param  RequestInterface  $request  The request options.
      * @param  ResponseInterface $response The response to return.
      * @return ResponseInterface

@@ -84,33 +84,34 @@ class ElfinderTemplate extends AdminTemplate
 
 
     /**
-     * Retrieve options from Request's parameters (GET).
+     * Sets the template data from a PSR Request object.
      *
-     * @param RequestInterface $request The PSR7 request.
-     * @return boolean
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
      */
-    public function init(RequestInterface $request)
+    protected function setDataFromRequest(RequestInterface $request)
     {
-        $params = $request->getParams();
+        $keys = $this->validDataFromRequest();
+        $data = $request->getParams($keys);
 
-        if (isset($params['obj_type'])) {
-            $this->objType = filter_var($params['obj_type'], FILTER_SANITIZE_STRING);
+        if (isset($data['obj_type'])) {
+            $this->objType = filter_var($data['obj_type'], FILTER_SANITIZE_STRING);
         }
 
-        if (isset($params['obj_id'])) {
-            $this->objId = filter_var($params['obj_id'], FILTER_SANITIZE_STRING);
+        if (isset($data['obj_id'])) {
+            $this->objId = filter_var($data['obj_id'], FILTER_SANITIZE_STRING);
         }
 
-        if (isset($params['property'])) {
-            $this->propertyIdent = filter_var($params['property'], FILTER_SANITIZE_STRING);
+        if (isset($data['property'])) {
+            $this->propertyIdent = filter_var($data['property'], FILTER_SANITIZE_STRING);
         }
 
-        if (isset($params['assets'])) {
-            $this->showAssets = !!$params['assets'];
+        if (isset($data['assets'])) {
+            $this->showAssets = !!$data['assets'];
         }
 
-        if (isset($params['callback'])) {
-            $this->callbackIdent = filter_var($params['callback'], FILTER_SANITIZE_STRING);
+        if (isset($data['callback'])) {
+            $this->callbackIdent = filter_var($data['callback'], FILTER_SANITIZE_STRING);
         }
 
         if (isset($this->elfinderConfig['translations'])) {
@@ -121,6 +122,21 @@ class ElfinderTemplate extends AdminTemplate
         }
 
         return true;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            // Current object
+            'obj_type', 'obj_id', 'property',
+            // elFinder instance
+            'assets', 'callback'
+        ], parent::validDataFromRequest());
     }
 
     /**

@@ -135,7 +135,7 @@ class AdminTemplate extends AbstractTemplate implements
      *
      * - to start a session, if necessary
      * - to authenticate
-     * - to initialize the template data with `$_GET`
+     * - to initialize the template data with the PSR Request object
      *
      * @param RequestInterface $request The request to initialize.
      * @return boolean
@@ -148,8 +148,7 @@ class AdminTemplate extends AbstractTemplate implements
             session_start();
         }
 
-        // Initialize data with GET
-        $this->setData($request->getParams());
+        $this->setDataFromRequest($request);
 
         if ($this->authRequired() !== false) {
             // Test template vs. ACL roles
@@ -161,6 +160,37 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return parent::init($request);
+    }
+
+    /**
+     * Sets the template data from a PSR Request object.
+     *
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
+     */
+    protected function setDataFromRequest(RequestInterface $request)
+    {
+        $keys = $this->validDataFromRequest();
+        if (!empty($keys)) {
+            $this->setData($request->getParams($keys));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return [
+            // HTTP Handling
+            'next_url',
+            // Navigation Menusa
+            'header_menu_item', 'side_menu_item', 'system_menu_item',
+        ];
     }
 
     /**

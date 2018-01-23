@@ -132,18 +132,16 @@ class ElfinderConnectorAction extends AdminAction
     private $propertyIdent;
 
     /**
-     * Sets the action data.
+     * Sets the action data from a PSR Request object.
      *
-     * From the HTTP Request:
-     * - "obj_type"
-     * - "obj_id"
-     * - "property"
-     *
-     * @param  array $data The action data.
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
      * @return self
      */
-    public function setData(array $data)
+    protected function setDataFromRequest(RequestInterface $request)
     {
+        $keys = $this->validDataFromRequest();
+        $data = $request->getParams($keys);
+
         if (isset($data['obj_type'])) {
             $this->objType = $data['obj_type'];
         }
@@ -157,6 +155,16 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return [ 'obj_type', 'obj_id', 'property' ];
     }
 
     /**

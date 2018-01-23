@@ -46,6 +46,18 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
     protected $revNum;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type', 'obj_id', 'rev_num'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * Set the revision number to restore.
      *
      * @param  integer $revNum The revision number to load.

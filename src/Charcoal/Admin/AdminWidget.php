@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin;
 
-use Charcoal\Ui\ConditionalizableInterface;
-use Charcoal\Ui\ConditionalizableTrait;
 use InvalidArgumentException;
 
 // From Pimple
@@ -329,26 +327,6 @@ class AdminWidget extends AbstractWidget implements
         }
 
         return null;
-    }
-
-    /**
-     * Retrieve the widget's data options for JavaScript components.
-     *
-     * @return array
-     */
-    public function widgetDataForJs()
-    {
-        return [];
-    }
-
-    /**
-     * Converts the widget's {@see self::widgetDataForJs() options} as a JSON string.
-     *
-     * @return string Returns data serialized with {@see json_encode()}.
-     */
-    final public function widgetDataForJsAsJson()
-    {
-        return json_encode($this->widgetDataForJs(), JSON_UNESCAPED_UNICODE);
     }
 
     /**

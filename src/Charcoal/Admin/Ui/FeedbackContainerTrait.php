@@ -77,8 +77,6 @@ trait FeedbackContainerTrait
     public function addFeedback($level, $message)
     {
         $this->feedbacks[] = [
-            /** @deprecated "msg" */
-            'msg'     => (string)$message,
             'message' => (string)$message,
             'level'   => $this->resolveFeedbackLevel($level)
         ];

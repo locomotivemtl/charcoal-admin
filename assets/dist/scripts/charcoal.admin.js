@@ -1153,8 +1153,8 @@ Charcoal.Admin = (function () {
     /**
      * Expects and array of object that looks just like this:
      * [
-     *   { 'level' : 'success', 'msg' : 'Good job!' },
-     *   { 'level' : 'success', 'msg' : 'Good job!' }
+     *   { 'level': 'success', 'message': 'Good job!' },
+     *   { 'level': 'success', 'message': 'Good job!' }
      * ]
      *
      * You can add other parameters as well.
@@ -1513,7 +1513,7 @@ Charcoal.Admin = (function () {
 
     Entry.createFromObject = function (obj) {
         var level   = obj.level || null;
-        var message = obj.message || obj.msg || null;
+        var message = obj.message || null;
 
         if (!level && !message) {
             return null;

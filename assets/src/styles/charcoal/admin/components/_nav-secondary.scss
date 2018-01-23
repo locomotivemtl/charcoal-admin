@@ -49,10 +49,6 @@
     .has-nav-open & {
         transform: translateX(0%);
     }
-
-    .panel {
-        background-color: $charcoal-white-1;
-    }
 }
 
 .c-nav-secondary_header {
@@ -65,38 +61,51 @@
     }
 }
 
-.c-nav-secondary_heading {
+.c-nav-secondary_heading,
+.c-nav-secondary_subheading {
     color: $white;
-    margin: 0;
     opacity: 0.6;
-    padding: 0 rem(5px);
     line-height: 1;
+}
 
-    .panel & {
-        color: $charcoal-gray-5;
-        opacity: 1;
-        padding: 0;
+.c-nav-secondary_heading {
+    margin: 0;
+}
+
+.c-nav-secondary_subheading {
+    // padding-bottom: $font-size-base;
+
+    &.-button {
+        color: $charcoal-gray-6;
         font-size: 14px;
+        opacity: 1;
+        margin: 0;
+    }
+}
+
+.c-nav-secondary_wrapper {
+    margin-bottom: rem($unit / 2);
+
+    &.-collapsible {
+        background-color: $charcoal-white-1;
     }
 }
 
 .c-nav-secondary_list {
     @include u-list-reset;
-    border-radius: 3px;
-    // border-bottom-left-radius: 3px;
-    // border-bottom-right-radius: 3px;
+    border-radius: $border-radius;
     overflow: hidden;
 
     border-top-width: 1px;
     border-top-style: solid;
-    margin-bottom: rem($unit / 2);
 
-    .panel-body & {
-        border-radius: 0;
-        margin-bottom: 0;
-        border-bottom: none;
-        border-top-width: 1px;
-        border-top-style: solid;
+    .collapse &,
+    .collapsing & {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        // border-bottom: none;
+        // border-top-width: 1px;
+        // border-top-style: solid;
     }
 }
 
@@ -132,9 +141,11 @@
     }
 
     &.-arrow {
+        background-color: $charcoal-white-1;
         padding-top: rem(16px);
         padding-bottom: rem(16px);
         position: relative;
+        border-radius: $border-radius;
 
         &::after {
             right: 10px;
@@ -156,8 +167,9 @@
             }
         }
 
-        &[aria-expanded=true],
-        &.in {
+        &[aria-expanded=true] {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
             background-color: $charcoal-gray-1;
 
             &::after {

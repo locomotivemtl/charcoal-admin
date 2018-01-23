@@ -1374,42 +1374,46 @@ a.chip:hover::before, a.chip:focus::before {
           transform: translateX(0%);
 }
 
-.c-nav-secondary .panel {
-  background-color: #f0f0f0;
-}
-
-.c-nav-secondary_heading {
+.c-nav-secondary_heading,
+.c-nav-secondary_subheading {
   color: #ffffff;
-  margin: 0;
   opacity: 0.6;
-  padding: 0 0.3125rem;
   line-height: 1;
 }
 
-.panel .c-nav-secondary_heading {
-  color: #2f2f2f;
-  opacity: 1;
-  padding: 0;
+.c-nav-secondary_heading {
+  margin: 0;
+}
+
+.c-nav-secondary_subheading.-button {
+  color: #202020;
   font-size: 14px;
+  opacity: 1;
+  margin: 0;
+}
+
+.c-nav-secondary_wrapper {
+  margin-bottom: 1.875rem;
+}
+
+.c-nav-secondary_wrapper.-collapsible {
+  background-color: #f0f0f0;
 }
 
 .c-nav-secondary_list {
   margin: 0;
   padding: 0;
   list-style: none;
-  border-radius: 3px;
+  border-radius: 0.25rem;
   overflow: hidden;
   border-top-width: 1px;
   border-top-style: solid;
-  margin-bottom: 1.875rem;
 }
 
-.panel-body .c-nav-secondary_list {
-  border-radius: 0;
-  margin-bottom: 0;
-  border-bottom: none;
-  border-top-width: 1px;
-  border-top-style: solid;
+.collapse .c-nav-secondary_list,
+.collapsing .c-nav-secondary_list {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .c-nav-secondary_list_item {
@@ -1452,9 +1456,11 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-nav-secondary_link.-arrow {
+  background-color: #f0f0f0;
   padding-top: 1rem;
   padding-bottom: 1rem;
   position: relative;
+  border-radius: 0.25rem;
 }
 
 .c-nav-secondary_link.-arrow::after {
@@ -1480,11 +1486,13 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
-.c-nav-secondary_link.-arrow[aria-expanded=true], .c-nav-secondary_link.-arrow.in {
+.c-nav-secondary_link.-arrow[aria-expanded=true] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   background-color: #dadadb;
 }
 
-.c-nav-secondary_link.-arrow[aria-expanded=true]::after, .c-nav-secondary_link.-arrow.in::after {
+.c-nav-secondary_link.-arrow[aria-expanded=true]::after {
   border-bottom: solid #2f2f2f;
   border-width: 5px;
   border-top: none;

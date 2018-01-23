@@ -471,11 +471,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
                 $actions = [];
             }
 
-            /** Enable seamless button group */
-            if (isset($actions['edit'])) {
-                $actions['edit']['actionType'] = 'seamless';
-            }
-
             $this->setObjectActions($actions);
         }
 
@@ -502,7 +497,14 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $this->parsedObjectActions = false;
 
-        $this->objectActions = $this->mergeActions($this->defaultObjectActions(), $actions);
+        $actions = $this->mergeActions($this->defaultObjectActions(), $actions);
+
+        /** Enable seamless button group */
+        if (isset($actions['edit'])) {
+            $actions['edit']['actionType'] = 'seamless';
+        }
+
+        $this->objectActions = $actions;
 
         return $this;
     }

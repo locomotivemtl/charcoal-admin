@@ -8,50 +8,48 @@
 --}}
 
 {{# hasSidemenu }}
-<nav class="c-nav-secondary" id="{{ widget_id }}" data-children=".panel">
+<nav class="c-nav-secondary" id="{{ widget_id }}">
     {{# showTitle }}
     <header class="o-header c-nav-secondary_header">
         <h1 class="c-nav-secondary_heading">{{ title }}</h1>
     </header>
     {{/ showTitle }}
     {{# hasLinks }}
-    <ul class="c-nav-secondary_list">
-    {{# links }}
-        {{> charcoal/admin/widget/sidemenu/link }}
-    {{/ links }}
-    </ul>
+    <div class="c-nav-secondary_wrapper">
+        <ul class="c-nav-secondary_list">
+        {{# links }}
+            {{> charcoal/admin/widget/sidemenu/link }}
+        {{/ links }}
+        </ul>
+    </div>
 
     {{/ hasLinks }}
     {{# hasGroups }}
     {{# groups }}
-    <div class="{{# displayAsPanel }}panel panel-default{{/ displayAsPanel }}">
+    <div class="c-nav-secondary_wrapper">
         {{# showTitle }}
-        <div class="{{# displayAsPanel }}panel-heading{{/ displayAsPanel }}{{^ displayAsPanel }} o-section{{/ displayAsPanel }}">
             {{# collapsible }}
-            <a class="c-nav-secondary_link{{# collapsible }} -arrow{{/ collapsible }}"
-                data-toggle="collapse"
-                href="#{{ groupId }}"
-                role="button"
-                aria-expanded="{{# collapsed }}false{{/ collapsed }}{{^ collapsed }}true{{/ collapsed }}"
-                aria-controls="{{ groupId }}"
-                {{# parented }}
-                data-parent="#{{ widget_id }}"
-                {{/ parented }}>
+        <a class="c-nav-secondary_link -arrow"
+            data-toggle="collapse"
+            href="#{{ groupId }}"
+            role="button"
+            aria-expanded="{{# collapsed }}false{{/ collapsed }}{{^ collapsed }}true{{/ collapsed }}"
+            aria-controls="{{ groupId }}"
+            {{# parented }}
+            data-parent="#{{ widget_id }}"
+            {{/ parented }}>
             {{/ collapsible }}
-            <h2 class="h3 c-nav-secondary_heading">{{ title }}</h2>
+            <h2 class="h3 c-nav-secondary_subheading{{# collapsible }} -button{{/ collapsible }}">{{ title }}</h2>
             {{# collapsible }}
-            </a>
+        </a>
             {{/ collapsible }}
-        </div>
         {{/ showTitle }}
-        <div id="{{ groupId }}" class="{{# displayAsPanel }}panel-collapse{{/ displayAsPanel }}{{# collapsible }} collapse{{/ collapsible }}{{^ collapsed }} show{{/ collapsed }}">
-            <div class="{{# displayAsPanel }}panel-body{{/ displayAsPanel }}">
-                <ul class="c-nav-secondary_list">
-                {{# links }}
-                    {{> charcoal/admin/widget/sidemenu/link }}
-                {{/ links }}
-                </ul>
-            </div>
+        <div class="{{# collapsible }}collapse{{/ collapsible }}{{^ collapsed }} show{{/ collapsed }}" id="{{ groupId }}">
+            <ul class="c-nav-secondary_list">
+            {{# links }}
+                {{> charcoal/admin/widget/sidemenu/link }}
+            {{/ links }}
+            </ul>
         </div>
     </div>
     {{/ groups }}

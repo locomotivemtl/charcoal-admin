@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Action\Selectize;
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-core'
-use Charcoal\Model\ModelInterface;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\Action\Object\SaveAction as BaseSaveAction;
 use Charcoal\Admin\Service\SelectizeRenderer;

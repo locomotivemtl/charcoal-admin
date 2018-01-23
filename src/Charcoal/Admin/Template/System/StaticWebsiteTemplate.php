@@ -59,12 +59,12 @@ class StaticWebsiteTemplate extends AdminTemplate
         $files = $this->globRecursive($this->basePath.'cache/static', 'index.*');
         foreach ($files as $file) {
             yield [
-                'file' => $file,
-                'name' => dirname(str_replace($this->basePath.'cache/static/', '', $file)),
-                'size' => $this->formatBytes(filesize($file)),
-                'mtime' => date(DATE_ATOM, filemtime($file)),
+                'file'      => $file,
+                'name'      => dirname(str_replace($this->basePath.'cache/static/', '', $file)),
+                'size'      => $this->formatBytes(filesize($file)),
+                'mtime'     => date(DATE_ATOM, filemtime($file)),
                 'generated' => date('Y-m-d H:i:s', filemtime($file)),
-                'type' => pathinfo($file, PATHINFO_EXTENSION)
+                'type'      => pathinfo($file, PATHINFO_EXTENSION)
             ];
         }
     }
@@ -91,7 +91,7 @@ class StaticWebsiteTemplate extends AdminTemplate
             return 0;
         }
         $base = log($size, 1024);
-        $suffixes = ['bytes', 'k', 'M', 'G', 'T'];
+        $suffixes = [ 'bytes', 'k', 'M', 'G', 'T' ];
 
         $floor = floor($base);
         return round(pow(1024, ($base - $floor)), 2).' '.$suffixes[$floor];

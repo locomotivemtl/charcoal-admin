@@ -61,12 +61,12 @@ class ClearCacheTemplate extends AdminTemplate
 
         $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
         return [
-            'type'    => $cacheType,
-            'active'  => $this->cacheConfig['active'],
-            'global'  => $this->globalCacheInfo(),
-            'pages'   => $this->pagesCacheInfo(),
-            'objects' => $this->objectsCacheInfo(),
-            'pages_items' => $this->pagesCacheItems(),
+            'type'          => $cacheType,
+            'active'        => $this->cacheConfig['active'],
+            'global'        => $this->globalCacheInfo(),
+            'pages'         => $this->pagesCacheInfo(),
+            'objects'       => $this->objectsCacheInfo(),
+            'pages_items'   => $this->pagesCacheItems(),
             'objects_items' => $this->objectsCacheItems()
         ];
     }
@@ -78,10 +78,11 @@ class ClearCacheTemplate extends AdminTemplate
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
         $this->availableCacheDrivers = $container['cache/available-drivers'];
-        $this->cacheDriver = $container['cache/driver'];
-        $this->cache = $container['cache'];
-        $this->cacheConfig = $container['cache/config'];
+        $this->cacheDriver           = $container['cache/driver'];
+        $this->cache                 = $container['cache'];
+        $this->cacheConfig           = $container['cache/config'];
     }
 
     /**
@@ -218,10 +219,10 @@ class ClearCacheTemplate extends AdminTemplate
         }
 
         foreach ($iter as $item) {
-            $item['ident'] = str_replace('::', '⇒', str_replace('.', '/', trim(str_replace($this->cache->getNamespace(), '', strstr($item['key'], $this->cache->getNamespace().'::')), ':')));
-            $item['size'] = $this->formatBytes($item['mem_size']);
+            $item['ident']   = str_replace('::', '⇒', str_replace('.', '/', trim(str_replace($this->cache->getNamespace(), '', strstr($item['key'], $this->cache->getNamespace().'::')), ':')));
+            $item['size']    = $this->formatBytes($item['mem_size']);
             $item['created'] = date('Y-m-d H:i:s', $item['creation_time']);
-            $item['expiry'] = date('Y-m-d H:i:s', ($item['creation_time']+$item['ttl']));
+            $item['expiry']  = date('Y-m-d H:i:s', ($item['creation_time']+$item['ttl']));
             yield $item;
         }
     }

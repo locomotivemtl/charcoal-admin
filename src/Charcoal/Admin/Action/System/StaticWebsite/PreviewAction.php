@@ -70,7 +70,7 @@ class PreviewAction extends AdminAction
         $ret = [
             'success'   => $this->success(),
             'feedbacks' => $this->feedbacks(),
-            'content' => $this->fileContent
+            'content'   => $this->fileContent
         ];
 
         return $ret;

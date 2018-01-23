@@ -2,145 +2,26 @@
 // Color Swatch
 // ==========================================================================
 
-// .radio-color-group,
-// .checkbox-color-group {
-//     // margin-left: -10px;
-// }
+.o-swatch {
+    display: inline-block;
+    position: relative;
+    width:  rem($unit / 2);
+    height: rem($unit / 2);
+    vertical-align: middle;
+}
 
-// .radio-color,
-// .checkbox-color {
-//     position: relative;
-//     display: block;
-//     margin-top: 10px;
-//     margin-bottom: 10px;
+.o-swatch_color {
+    border: 1px solid $charcoal-gray-2;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
 
-//     label {
-//         min-height: $input-height;
-//         // padding-left: 20px;
-//         margin-bottom: 0;
-//         font-weight: normal;
-//         cursor: pointer;
-//     }
-
-//     .o-color-swatch {
-//         cursor:        pointer;
-//         width:         $input-height - 2px;
-//         height:        $input-height - 2px;
-//         border-radius: $input-border-radius;
-
-//         .minicolors-swatch-color {
-//             border-radius: $input-border-radius;
-//             border:        1px solid $gray-light;
-//         }
-
-//         + .o-swatch-label {
-//             margin-left: 5px;
-//             vertical-align: middle;
-//         }
-//     }
-// }
-
-// .radio-color input[type="radio"],
-// .checkbox-color input[type="checkbox"] {
-//     position: absolute;
-// }
-
-// .radio-color.radio-lg,
-// .checkbox-color.checkbox-lg {
-//     // font-size: $font-size-large;
-//     // line-height: $line-height-large;
-//     line-height: $line-height-base;
-
-//     label {
-//         min-height: $input-height-lg;
-//     }
-
-//     .o-color-swatch {
-//         width:         $input-height-lg - 2px;
-//         height:        $input-height-lg - 2px;
-//         border-radius: $input-border-radius-lg;
-
-//         .minicolors-swatch-color {
-//             border-radius: $input-border-radius-lg;
-//         }
-//     }
-// }
-
-// .radio-color.radio-sm,
-// .checkbox-color.checkbox-sm {
-//     // font-size: $font-size-small;
-//     // line-height: $line-height-small;
-//     line-height: $line-height-base;
-
-//     label {
-//         min-height: $input-height-sm;
-//     }
-
-//     .o-color-swatch {
-//         width:         $input-height-sm - 2px;
-//         height:        $input-height-sm - 2px;
-//         border-radius: $input-border-radius-sm;
-
-//         .minicolors-swatch-color {
-//             border-radius: $input-border-radius-sm;
-//         }
-//     }
-// }
-
-// .radio-color + .radio-color,
-// .checkbox-color + .checkbox-color {
-//     margin-top: -5px; // Move up sibling radios or checkboxes for tighter spacing
-// }
-
-// .radio-color.radio-inline,
-// .checkbox-color.checkbox-inline {
-//     position: relative;
-//     display: inline-block;
-//     padding-left: 0;
-//     margin-right: 10px;
-//     margin-top: 0;
-//     margin-bottom: 10px;
-// }
-
-// .radio-color.radio-inline + .radio-color.radio-inline,
-// .checkbox-color.checkbox-inline + .checkbox-color.checkbox-inline {
-//     margin-top: 0;
-//     margin-bottom: 10px;
-//     margin-left: 0;
-// }
-
-// .radio-color input[type="radio"],
-// .checkbox-color input[type="checkbox"] {
-//     opacity:     0;
-//     margin-left: .25em;
-//     margin-top:  .25em;
-
-//     &:checked + .o-color-swatch::after,
-//     &:checked + label > .o-color-swatch::after {
-//         position:      absolute;
-//         content:       '';
-//         top:           -4px;
-//         left:          -4px;
-//         right:         -4px;
-//         bottom:        -4px;
-//         display:       block;
-//         border:        #3498DB 2px solid;
-//         border-radius: calc(#{$input-border-radius} + 2px);
-//     }
-// }
-
-// .radio-color.radio-lg input[type="radio"],
-// .checkbox-color.checkbox-lg input[type="checkbox"] {
-//     &:checked + .o-color-swatch::after,
-//     &:checked + label >.o-color-swatch::after {
-//         border-radius: calc(#{$input-border-radius-lg} + 2px);
-//     }
-// }
-
-// .radio-color.radio-sm input[type="radio"],
-// .checkbox-color.checkbox-sm input[type="checkbox"] {
-//     &:checked + .o-color-swatch::after,
-//     &:checked + label >.o-color-swatch::after {
-//         border-radius: calc(#{$input-border-radius-sm} + 2px);
-//     }
-// }
+.o-swatch-label {
+    display: inline-block;
+    padding-left: 5px;
+    vertical-align: middle;
+}

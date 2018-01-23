@@ -4,12 +4,15 @@
 
     `charcoal/admin/property/input/checkbox-color`
 --}}
-<fieldset class="checkbox-color-group">
-    {{> charcoal/admin/property/control/fallback }}
-    {{# choices }}
-    <div class="checkbox-color form-check{{# inputLayouts.inline }} form-check-inline{{/ inputLayouts.inline }} checkbox-lg">
-        {{> charcoal/admin/property/control/choice }}
-        {{> charcoal/admin/property/input/choice/color-label }}
-    </div>
-    {{/ choices }}
-</fieldset>
+{{> charcoal/admin/property/control/fallback }}
+{{# choices }}
+<div class="form-check{{# inputLayouts.inline }} form-check-inline{{/ inputLayouts.inline }} form-check-color">
+    {{> charcoal/admin/property/control/choice }}
+    <label class="form-check-label" for="{{ inputId }}">
+        <span class="o-swatch" aria-hidden="true">
+            <span class="o-swatch_color"{{# color }} style="background-color: {{ . }};"{{/ color }}></span>
+        </span>
+        <span class="o-swatch-label{{^ show_label }} sr-only{{/ show_label }}">{{& label }}</span>
+    </label>
+</div>
+{{/ choices }}

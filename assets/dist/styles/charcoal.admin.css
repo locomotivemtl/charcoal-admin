@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-01-22 
+ * ! Charcoal Admin - 2018-01-23 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -107,22 +107,51 @@ label {
   margin-top: 5px;
 }
 
-.form-check-color input {
-  position: absolute !important;
-}
-
-.form-check-color label {
-  font-size: 0;
-  padding: 0;
+.form-check-color {
   position: relative;
-  width: calc(2.25rem + 2px);
-  height: calc(2.25rem + 2px);
+  margin-bottom: 0.75rem;
 }
 
-.form-check-color label::before, .form-check-color label::after {
-  margin-left: 0;
-  width: 100%;
-  height: 100%;
+.form-check-color .form-check-input {
+  position: absolute;
+  margin: 0;
+  top: 3px;
+  left: 3px;
+}
+
+.form-check-color .form-check-input:checked + label > .o-swatch::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  display: block;
+  border: 2px solid #6092f5;
+  border-radius: calc(0.25rem + 3px);
+}
+
+.form-check-color .form-check-label {
+  cursor: pointer;
+}
+
+.form-check-color .o-swatch {
+  width: calc(2.25rem - 6px);
+  height: calc(2.25rem - 6px);
+}
+
+.form-check-color .o-swatch_color {
+  border-radius: 0.25rem;
+}
+
+.form-check-color.form-check-color-lg .o-swatch {
+  width: calc(2.875rem - 6px);
+  height: calc(2.875rem - 6px);
+}
+
+.form-check-color.form-check-color-sm .o-swatch {
+  width: calc(1.8125rem - 6px);
+  height: calc(1.8125rem - 6px);
 }
 
 .active-lang [data-lang] {
@@ -739,6 +768,30 @@ a.chip:hover::before, a.chip:focus::before {
 
 .chip-danger[href]:hover::before, .chip-danger[href]:focus::before {
   background-color: #a23535;
+}
+
+.o-swatch {
+  display: inline-block;
+  position: relative;
+  width: 1.875rem;
+  height: 1.875rem;
+  vertical-align: middle;
+}
+
+.o-swatch_color {
+  border: 1px solid #bcbcbc;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.o-swatch-label {
+  display: inline-block;
+  padding-left: 5px;
+  vertical-align: middle;
 }
 
 .c-nav-container {

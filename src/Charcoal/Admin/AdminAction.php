@@ -59,18 +59,6 @@ abstract class AdminAction extends AbstractAction implements
     private $modelFactory;
 
     /**
-     * @param array $data Optional.
-     */
-    final public function __construct(array $data = null)
-    {
-        parent::__construct($data);
-
-        if ($data !== null) {
-            $this->setData($data);
-        }
-    }
-
-    /**
      * Template's init method is called automatically from `charcoal-app`'s Template Route.
      *
      * For admin templates, initializations is:

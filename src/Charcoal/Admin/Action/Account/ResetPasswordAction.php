@@ -55,6 +55,8 @@ class ResetPasswordAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $translator = $this->translator();
+
         $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
 
         $token     = $request->getParam('token');
@@ -63,35 +65,35 @@ class ResetPasswordAction extends AdminAction
         $password2 = $request->getParam('password2');
 
         if (!$token) {
-            $this->addFeedback('error', $this->translator()->translate('Missing reset token.'));
+            $this->addFeedback('error', $translator->translate('Missing reset token.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$username) {
-            $this->addFeedback('error', $this->translator()->translate('Missing username.'));
+            $this->addFeedback('error', $translator->translate('Missing username.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$password1) {
-            $this->addFeedback('error', $this->translator()->translate('Missing password'));
+            $this->addFeedback('error', $translator->translate('Missing password'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$password2) {
-            $this->addFeedback('error', $this->translator()->translate('Missing password confirmation'));
+            $this->addFeedback('error', $translator->translate('Missing password confirmation'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if ($password1 != $password2) {
-            $this->addFeedback('error', $this->translator()->translate('Passwords do not match'));
+            $this->addFeedback('error', $translator->translate('Passwords do not match'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -99,19 +101,19 @@ class ResetPasswordAction extends AdminAction
 
         $recaptchaValue = $request->getParam('g-recaptcha-response');
         if (!$recaptchaValue) {
-            $this->addFeedback('error', $this->translator()->translate('Missing CAPTCHA response.'));
+            $this->addFeedback('error', $translator->translate('Missing CAPTCHA response.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
         if (!$this->validateCaptcha($recaptchaValue)) {
-            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed CAPTCHA response.'));
+            $this->addFeedback('error', $translator->translate('Invalid or malformed CAPTCHA response.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
-        $failMessage = $this->translator()->translation('An error occurred while processing the password change.');
+        $failMessage = $translator->translation('An error occurred while processing the password change.');
 
         $user = $this->loadUser($username);
         if ($user === null) {
@@ -136,7 +138,7 @@ class ResetPasswordAction extends AdminAction
         }
 
         if (!$this->validateToken($token, $user->id())) {
-            $this->addFeedback('error', $this->translator()->translate('Invalid or expired reset token.'));
+            $this->addFeedback('error', $translator->translate('Invalid or expired reset token.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -146,7 +148,7 @@ class ResetPasswordAction extends AdminAction
             $user->resetPassword($password1);
             $this->deleteToken($token);
 
-            $this->addFeedback('success', $this->translator()->translate('Password has been successfully changed.'));
+            $this->addFeedback('success', $translator->translate('Password has been successfully changed.'));
             $this->setSuccess(true);
 
             return $response;

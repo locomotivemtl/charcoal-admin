@@ -114,8 +114,6 @@ class SaveAction extends AbstractSaveAction
                 return $response->withStatus(400);
             }
 
-            $this->setData($request->getParams());
-
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
             $obj->setFlatData($this->saveData());

@@ -46,8 +46,6 @@ class LoadAction extends BaseLoadAction
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
 
-        $this->setData($request->getParams());
-
         $objType = $this->selectizeObjType();
 
         if (!$objType) {

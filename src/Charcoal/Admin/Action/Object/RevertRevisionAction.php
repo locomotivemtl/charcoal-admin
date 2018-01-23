@@ -91,8 +91,6 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
                 '{{ errorMessage }}' => $failMessage
             ]);
 
-            $this->setData($request->getParams());
-
             $obj    = $this->obj();
             $revNum = $this->revNum();
             $rev    = $obj->revisionNum($revNum);

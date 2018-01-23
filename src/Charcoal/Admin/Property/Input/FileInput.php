@@ -63,19 +63,6 @@ class FileInput extends AbstractPropertyInput
     private $removeButtonLabel;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->baseUrl = $container['base-url'];
-    }
-
-    /**
      * Retrieve the control type for the HTML element `<input>`.
      *
      * @return string
@@ -128,11 +115,16 @@ class FileInput extends AbstractPropertyInput
     public function previewVal()
     {
         $val = parent::inputVal();
+        if (empty($val)) {
+            return '';
+        }
 
-        if ($val && !parse_url($val, PHP_URL_SCHEME)) {
-            if (!in_array($val[0], [ '/', '#', '?' ])) {
-                return $this->baseUrl->withPath($val);
-            }
+        $parts = parse_url($val);
+        if (empty($parts['scheme']) && !in_array($val[0], [ '/', '#', '?' ])) {
+            $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+            $val   = $this->baseUrl->withPath($path)->withQuery($query)->withFragment($hash);
         }
 
         return $val;
@@ -217,16 +209,6 @@ class FileInput extends AbstractPropertyInput
     }
 
     /**
-     * Retrieve the default title for the file picker dialog.
-     *
-     * @return \Charcoal\Translator\Translation|string|null
-     */
-    protected function defaultDialogTitle()
-    {
-        return $this->translator()->translation('Media Library');
-    }
-
-    /**
      * Retrieve the title for the file picker dialog.
      *
      * @return \Charcoal\Translator\Translation|string|null
@@ -253,15 +235,7 @@ class FileInput extends AbstractPropertyInput
         return $this;
     }
 
-    /**
-     * Retrieve the default label for the file picker button.
-     *
-     * @return \Charcoal\Translator\Translation|string|null
-     */
-    protected function defaultChooseButtonLabel()
-    {
-        return $this->translator()->translation('Choose File…');
-    }
+
 
     /**
      * Retrieve the label for the file picker button.
@@ -290,15 +264,6 @@ class FileInput extends AbstractPropertyInput
         return $this;
     }
 
-    /**
-     * Retrieve the default label for the file removal button.
-     *
-     * @return \Charcoal\Translator\Translation|string|null
-     */
-    protected function defaultRemoveButtonLabel()
-    {
-        return $this->translator()->translation('Remove File');
-    }
 
     /**
      * Retrieve the label for the file removal button.
@@ -312,5 +277,49 @@ class FileInput extends AbstractPropertyInput
         }
 
         return $this->removeButtonLabel;
+    }
+
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->baseUrl = $container['base-url'];
+    }
+
+    /**
+     * Retrieve the default title for the file picker dialog.
+     *
+     * @return \Charcoal\Translator\Translation|string|null
+     */
+    protected function defaultDialogTitle()
+    {
+        return $this->translator()->translation('Media Library');
+    }
+
+    /**
+     * Retrieve the default label for the file picker button.
+     *
+     * @return \Charcoal\Translator\Translation|string|null
+     */
+    protected function defaultChooseButtonLabel()
+    {
+        return $this->translator()->translation('Choose File…');
+    }
+
+    /**
+     * Retrieve the default label for the file removal button.
+     *
+     * @return \Charcoal\Translator\Translation|string|null
+     */
+    protected function defaultRemoveButtonLabel()
+    {
+        return $this->translator()->translation('Remove File');
     }
 }

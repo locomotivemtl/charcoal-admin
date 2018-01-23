@@ -3,21 +3,21 @@
 namespace Charcoal\Admin\Tests\Action\Object;
 
 // From PHPUnit
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From Slim
-use \Slim\Http\Environment;
-use \Slim\Http\Request;
-use \Slim\Http\Response;
+use Slim\Http\Environment;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Action\Object\DeleteAction;
+use Charcoal\Admin\Action\Object\DeleteAction;
 
-use \Charcoal\Admin\Tests\ContainerProvider;
-use \Charcoal\Admin\Tests\Mock\UserProviderTrait;
+use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Admin\Tests\Mock\UserProviderTrait;
 
 /**
  *

@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Action\System\StaticWebsite;
 
+use Exception;
+
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -24,23 +26,16 @@ class UpdateAction extends AdminAction
     protected $basePath;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['base_path'];
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        if (!$this->baseUrl()) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        }
         $url = $request->getParam('url');
         $relativeUrl = str_replace($this->baseUrl(), '', $url);
         $url = $this->baseUrl().$relativeUrl;
@@ -67,6 +62,17 @@ class UpdateAction extends AdminAction
     }
 
     /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['base_path'];
+    }
+
+    /**
      * @param string            $url       URL to fetch and cache.
      * @param string            $outputDir Output directory.
      * @param ResponseInterface $response  PSR-7 response.
@@ -88,9 +94,13 @@ class UpdateAction extends AdminAction
             unlink($outputDir.'/index.html');
         }
 
-        $guzzleClient = new GuzzleClient();
-        $static = $guzzleClient->request('GET', $url);
-
+        try {
+            $guzzleClient = new GuzzleClient();
+            $static = $guzzleClient->request('GET', $url);
+        } catch (Exception $e) {
+            $this->setSuccess(false);
+            return false;
+        }
         if ($static->getStatusCode() !== 200) {
             $this->setSuccess(false);
             $this->addFeedback('error', 'Can not generate static page: response status not 200.');

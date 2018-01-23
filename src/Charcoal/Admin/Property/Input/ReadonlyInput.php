@@ -50,31 +50,6 @@ class ReadonlyInput extends AbstractPropertyInput
     private $propertyDisplayFactory;
 
     /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setPropertyDisplayFactory($container['property/display/factory']);
-    }
-
-    /**
-     * Set a property display factory.
-     *
-     * @param FactoryInterface $factory The property display factory,
-     *     to create displayable property values.
-     * @return self
-     */
-    protected function setPropertyDisplayFactory(FactoryInterface $factory)
-    {
-        $this->propertyDisplayFactory = $factory;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the property display factory.
      *
      * @throws RuntimeException If the property display factory was not previously set.
@@ -191,5 +166,28 @@ class ReadonlyInput extends AbstractPropertyInput
         } else {
             return !!$this->placeholder();
         }
+    }
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setPropertyDisplayFactory($container['property/display/factory']);
+    }
+
+    /**
+     * Set a property display factory.
+     *
+     * @param FactoryInterface $factory The property display factory,
+     *     to create displayable property values.
+     * @return void
+     */
+    protected function setPropertyDisplayFactory(FactoryInterface $factory)
+    {
+        $this->propertyDisplayFactory = $factory;
     }
 }

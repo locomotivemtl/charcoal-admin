@@ -1,68 +1,86 @@
 /**
  * Placeholder Text for TinyMCE
  *
- * @link https://github.com/mohan/tinymce-placeholder
+ * Based on {@link https://github.com/mohan/tinymce-placeholder Mohan's implementation}
  */
 
 (function (tinymce) {
 
-    var default_placeholder_attrs = {
-        class: 'mce-placeholder-area mce-content-body'
-    };
-
     tinymce.PluginManager.add('placeholder', function (editor) {
         editor.on('init', function () {
-            var placeholder_text = editor.getElement().getAttribute('placeholder') || editor.settings.placeholder;
-            if (placeholder_text === '' || placeholder_text === null || placeholder_text === undefined) {
+            if (editor.settings.readonly === true || editor.settings.inline === true) {
                 return;
             }
 
+            var placeholder = editor.getElement().getAttribute('placeholder') || editor.settings.placeholder;
+            if (typeof placeholder === 'undefined') {
+                return;
+            }
+
+            if (typeof placeholder === 'string') {
+                placeholder = {
+                    text: placeholder
+                };
+            }
+
+            if (typeof placeholder.attr === 'undefined') {
+                placeholder.attr = editor.settings.placeholder_attr || { class: 'mce-placeholder-area' };
+            }
+            if (typeof placeholder.tag === 'undefined') {
+                placeholder.tag = editor.settings.placeholder_tag  || 'label';
+            }
+
             var label = new Label(
-                placeholder_text,
-                editor.settings.placeholder_attrs || default_placeholder_attrs,
-                editor.getContentAreaContainer()
+                placeholder,
+                editor.getContentAreaContainer() || editor.getBody()
             );
 
-            onBlur();
-
             tinymce.DOM.bind(label.el, 'click', onFocus);
+
+            // When focus is in main editor window
             editor.on('focus', onFocus);
+
+            // When focus is outside of main editor area
             editor.on('blur', onBlur);
-            editor.on('change', onBlur);
-            editor.on('setContent', onBlur);
-            editor.on('keydown', onKeydown);
+
+            // Whenever content is changed, including when a toolbar item is pressed (bold, italic, bullets, etc)
+            editor.on('change', onChange);
+
+            // Called when switching between Visual/Text
+            editor.on('setcontent', onSetContent);
 
             function onFocus() {
-                if (!editor.settings.readonly) {
-                    label.hide();
-                }
-
-                editor.execCommand('mceFocus', false, editor.id);
+                label.check();
+                editor.focus();
             }
 
             function onBlur() {
-                if (editor.getContent() === '') {
-                    label.show();
-                } else {
-                    label.hide();
-                }
+                label.check();
             }
 
-            function onKeydown() {
-                label.hide();
+            function onChange() {
+                label.check();
             }
+
+            function onSetContent() {
+                label.check();
+            }
+
+            // Add 1 second timeout to delay execution until after
+            // vendor plugings adjust the toolbars
+            setTimeout(function () {
+                label.check();
+            }, 1000);
         });
 
-        var Label = function (text, attrs, area) {
+        var Label = function (data, area) {
+            this.data = data;
+            this.text = data.text;
+
             tinymce.DOM.setStyle(area, 'position', 'relative');
 
             // Create label el
-            this.el = tinymce.DOM.add(
-                area,
-                editor.settings.placeholder_tag || 'label',
-                attrs,
-                tinymce.DOM.decode(text)
-            );
+            this.el = tinymce.DOM.add(area, data.tag, data.attr, tinymce.DOM.decode(data.text));
         };
 
         Label.prototype.hide = function () {
@@ -71,6 +89,18 @@
 
         Label.prototype.show = function () {
             tinymce.DOM.setStyle(this.el, 'display', '');
+        };
+
+        Label.prototype.check = function () {
+            var bodyElement = editor.getBody();
+            if (bodyElement !== null) {
+                var textContent = bodyElement.textContent.trim();
+                if (textContent === '') {
+                    this.show();
+                } else {
+                    this.hide();
+                }
+            }
         };
     });
 

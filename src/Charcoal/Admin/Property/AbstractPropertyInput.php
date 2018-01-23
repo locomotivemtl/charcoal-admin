@@ -166,19 +166,6 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        $this->setMetadataLoader($container['metadata/loader']);
-        $this->setTranslator($container['translator']);
-        $this->setView($container['view']);
-    }
-
-    /**
      * This function takes an array and fill the model object with its value.
      *
      * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
@@ -190,7 +177,7 @@ abstract class AbstractPropertyInput implements
      * on the metadata object, because the method `set_foobar()` does not exist.
      *
      * @param array $data The input data.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setData(array $data)
     {
@@ -210,16 +197,23 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param array $data Optional. Metadata data.
-     * @return PropertyMetadata
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
      */
-    protected function createMetadata(array $data = null)
+    public function controlDataForJs()
     {
-        $metadata = new PropertyMetadata();
-        if (is_array($data)) {
-            $metadata->setData($data);
-        }
-        return $metadata;
+        return [];
+    }
+
+    /**
+     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function controlDataForJsAsJson()
+    {
+        return json_encode($this->controlDataForJs(), JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -300,12 +294,14 @@ abstract class AbstractPropertyInput implements
     /**
      * @param string $ident Input identifier.
      * @throws InvalidArgumentException If the ident is not a string.
-     * @return Widget Chainable
+     * @return self
      */
     public function setIdent($ident)
     {
         if (!is_string($ident)) {
-            throw new InvalidArgumentException('Property Input identifier must be string');
+            throw new InvalidArgumentException(
+                'Property Input identifier must be string'
+            );
         }
         $this->ident = $ident;
         return $this;
@@ -321,7 +317,7 @@ abstract class AbstractPropertyInput implements
 
     /**
      * @param boolean $readOnly The read-only flag.
-     * @return Widget (Chainable)
+     * @return self
      */
     public function setReadOnly($readOnly)
     {
@@ -339,7 +335,7 @@ abstract class AbstractPropertyInput implements
 
     /**
      * @param boolean $required Required flag.
-     * @return Widget (Chainable)
+     * @return self
      */
     public function setRequired($required)
     {
@@ -357,7 +353,7 @@ abstract class AbstractPropertyInput implements
 
     /**
      * @param boolean $disabled Disabled flag.
-     * @return Widget (Chainable)
+     * @return self
      */
     public function setDisabled($disabled)
     {
@@ -375,7 +371,7 @@ abstract class AbstractPropertyInput implements
 
     /**
      * @param boolean $multiple Multiple flag.
-     * @return Widget (Chainable)
+     * @return self
      */
     public function setMultiple($multiple)
     {
@@ -398,7 +394,7 @@ abstract class AbstractPropertyInput implements
      * in the property control.
      *
      * @param  mixed $placeholder The placeholder attribute.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setPlaceholder($placeholder)
     {
@@ -453,7 +449,7 @@ abstract class AbstractPropertyInput implements
      * Used for the HTML "ID" attribute.
      *
      * @param  string $inputId HTML input id attribute.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setInputId($inputId)
     {
@@ -479,19 +475,9 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * Generate a unique input ID.
-     *
-     * @return string
-     */
-    protected function generateInputId()
-    {
-        return 'input_'.uniqid();
-    }
-
-    /**
      * @param string $inputClass The input class attribute.
      * @throws InvalidArgumentException If the class is not a string.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setInputClass($inputClass)
     {
@@ -516,7 +502,7 @@ abstract class AbstractPropertyInput implements
      * Used for the HTML "name" attribute.
      *
      * @param  string $inputName HTML input id attribute.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setInputName($inputName)
     {
@@ -582,7 +568,7 @@ abstract class AbstractPropertyInput implements
      *
      * @param  string $inputMode The input type.
      * @throws InvalidArgumentException If the provided argument is not a string.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setInputMode($inputMode)
     {
@@ -608,7 +594,7 @@ abstract class AbstractPropertyInput implements
     /**
      * @param  string $inputType The input type.
      * @throws InvalidArgumentException If the provided argument is not a string.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      * @todo   [mcaskill 2016-11-16]: Rename to `controlType` or `controlTemplate`.
      */
     public function setInputType($inputType)
@@ -714,7 +700,7 @@ abstract class AbstractPropertyInput implements
             }
 
             if ($this->lang()) {
-                return $this->inputPrefix[$this->lang()];
+                return $this->inputSuffix[$this->lang()];
             }
         }
 
@@ -726,7 +712,7 @@ abstract class AbstractPropertyInput implements
      *
      * @param  string $type The control type.
      * @throws InvalidArgumentException If the provided argument is not a string.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      * @todo   [mcaskill 2016-11-16]: Rename to `inputType`.
      */
     public function setType($type)
@@ -766,7 +752,7 @@ abstract class AbstractPropertyInput implements
 
     /**
      * @param PropertyInterface $p The property.
-     * @return AbstractPropertyInput Chainable
+     * @return self
      */
     public function setProperty(PropertyInterface $p)
     {
@@ -832,6 +818,48 @@ abstract class AbstractPropertyInput implements
 
         return '';
     }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        // Fullfills the DescribableTrait dependencies
+        $this->setMetadataLoader($container['metadata/loader']);
+
+        // Fulfills the TranslatorAwareTrait dependencies
+        $this->setTranslator($container['translator']);
+
+        // Fulfills the ViewableTrait dependencies
+        $this->setView($container['view']);
+    }
+
+    /**
+     * Generate a unique input ID.
+     *
+     * @return string
+     */
+    protected function generateInputId()
+    {
+        return 'input_'.uniqid();
+    }
+
+    /**
+     * @param array $data Optional. Metadata data.
+     * @return PropertyMetadata
+     */
+    protected function createMetadata(array $data = null)
+    {
+        $metadata = new PropertyMetadata();
+        if (is_array($data)) {
+            $metadata->setData($data);
+        }
+        return $metadata;
+    }
+
 
     /**
      * Allow an object to define how the key getter are called.

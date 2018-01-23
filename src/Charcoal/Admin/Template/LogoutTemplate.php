@@ -39,9 +39,10 @@ class LogoutTemplate extends AdminTemplate
         $token = $this->modelFactory()->create(AuthToken::class);
 
         if ($token->source()->tableExists()) {
-            $table = $token->source()->table();
-            $q = 'DELETE FROM '.$table.' WHERE username = :username';
-            $token->source()->dbQuery($q, [ 'username' => $user->username() ]);
+            $q = sprintf('DELETE FROM %s WHERE username = :username', $token->source()->table());
+            $token->source()->dbQuery($q, [
+                'username' => $user->username()
+            ]);
         }
 
         return $this;
@@ -78,17 +79,20 @@ class LogoutTemplate extends AdminTemplate
      */
     public function logoutLogo()
     {
-        if (isset($this->adminConfig['logout_logo'])) {
-            return $this->adminConfig['logout_logo'];
-        } else {
-            return $this->baseUrl().'assets/admin/images/avatar.jpg';
+        $logo = $this->adminConfig('logout.logo') ?:
+                $this->adminConfig('logout_logo', 'assets/admin/images/avatar.jpg');
+
+        if (empty($logo)) {
+            return '';
         }
+
+        return $this->baseUrl($logo);
     }
 
     /**
      * Retrieve the title of the page.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {

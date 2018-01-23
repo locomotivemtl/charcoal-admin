@@ -6,7 +6,6 @@ use Exception;
 use InvalidArgumentException;
 
 // From PSR-7
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 
 // From Pimple
@@ -32,6 +31,9 @@ use Charcoal\Ui\MenuItem\GenericMenuItem;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
+use Charcoal\Admin\Support\AdminTrait;
+use Charcoal\Admin\Support\BaseUrlTrait;
+use Charcoal\Admin\Support\SecurityTrait;
 
 /**
  * Base class for all `admin` Templates.
@@ -47,30 +49,12 @@ use Charcoal\Admin\Ui\FeedbackContainerTrait;
 class AdminTemplate extends AbstractTemplate implements
     AuthAwareInterface
 {
+    use AdminTrait;
     use AuthAwareTrait;
+    use BaseUrlTrait;
     use FeedbackContainerTrait;
+    use SecurityTrait;
     use TranslatorAwareTrait;
-
-    /**
-     * The base URI.
-     *
-     * @var UriInterface
-     */
-    protected $baseUrl;
-
-    /**
-     * Store a reference to the admin configuration.
-     *
-     * @var \Charcoal\Admin\Config
-     */
-    protected $adminConfig;
-
-    /**
-     * Store a reference to the application configuration.
-     *
-     * @var \Charcoal\App\Config
-     */
-    protected $appConfig;
 
     /**
      * The name of the project.
@@ -145,41 +129,6 @@ class AdminTemplate extends AbstractTemplate implements
     private $widgetFactory;
 
     /**
-     * The cache of parsed template names.
-     *
-     * @var array
-     */
-    protected static $templateNameCache = [];
-
-    /**
-     * Set common dependencies (services) used in all admin templates.
-     *
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setModelFactory($container['model/factory']);
-        $this->setTranslator($container['translator']);
-
-        $this->appConfig = $container['config'];
-        $this->adminConfig = $container['admin/config'];
-        $this->setBaseUrl($container['base-url']);
-        $this->setSiteName($container['config']['project_name']);
-
-        $this->setWidgetFactory($container['widget/factory']);
-
-        $this->menuBuilder = $container['menu/builder'];
-        $this->menuItemBuilder = $container['menu/item/builder'];
-
-        // Satisfies AuthAwareInterface dependencies
-        $this->setAuthenticator($container['admin/authenticator']);
-        $this->setAuthorizer($container['admin/authorizer']);
-    }
-
-    /**
      * Template's init method is called automatically from `charcoal-app`'s Template Route.
      *
      * For admin templates, initializations is:
@@ -212,32 +161,6 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return parent::init($request);
-    }
-
-
-    /**
-     * As a convenience, all admin templates have a model factory to easily create objects.
-     *
-     * @param FactoryInterface $factory The factory used to create models.
-     * @return void
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-    }
-
-    /**
-     * @throws Exception If the factory is not set.
-     * @return FactoryInterface The model factory.
-     */
-    protected function modelFactory()
-    {
-        if (!$this->modelFactory) {
-            throw new Exception(
-                sprintf('Model factory is not set for template "%s".', get_class($this))
-            );
-        }
-        return $this->modelFactory;
     }
 
     /**
@@ -345,7 +268,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function showTopHeaderMenu()
     {
-        $showTopHeaderMenu = $this->adminConfig['show_top_header_menu'];
+        $showTopHeaderMenu = $this->adminConfig('show_top_header_menu');
         return $showTopHeaderMenu;
     }
 
@@ -405,13 +328,239 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
+     * @param boolean $show The show footer menu flag.
+     * @return AdminTemplate Chainable
+     */
+    public function setShowSystemMenu($show)
+    {
+        $this->showSystemMenu = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showSystemMenu()
+    {
+        return ($this->isAuthorized() && $this->showSystemMenu && (count($this->systemMenu()) > 0));
+    }
+
+    /**
+     * @return array
+     */
+    public function systemMenu()
+    {
+        if ($this->systemMenu === null) {
+            $this->systemMenu = $this->createSystemMenu();
+        }
+
+        return new \ArrayIterator($this->systemMenu);
+    }
+
+    /**
+     * @param  boolean $show The show sidemenu flag.
+     * @return AdminTemplate Chainable
+     */
+    public function setShowSidemenu($show)
+    {
+        $this->showSidemenu = !!$show;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showSidemenu()
+    {
+        return ($this->isAuthorized() && $this->showSidemenu);
+    }
+
+    /**
+     * Retrieve the sidemenu.
+     *
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
+     */
+    public function sidemenu()
+    {
+        return $this->sidemenu;
+    }
+
+    /**
+     * @return string
+     */
+    public function headerMenuLogo()
+    {
+        $logo = $this->adminConfig('menu_logo');
+        if (!empty($logo)) {
+            return $logo;
+        }
+
+        return 'assets/admin/images/identicon.png';
+    }
+
+    /**
+     * Retrieve the name of the project.
+     *
+     * @return Translation|string|null
+     */
+    public function siteName()
+    {
+        return $this->siteName;
+    }
+
+    /**
+     * Retrieve the document title.
+     *
+     * @return Translation|string|null
+     */
+    public function documentTitle()
+    {
+        $siteName  = $this->siteName();
+        $pageTitle = strip_tags($this->title());
+
+        if ($pageTitle) {
+            if ($pageTitle === $siteName) {
+                return sprintf('%1$s &#8212; Charcoal', $pageTitle);
+            } else {
+                return sprintf('%1$s &lsaquo; %2$s &#8212; Charcoal', $pageTitle, $siteName);
+            }
+        }
+
+        return $siteName;
+    }
+
+    /**
+     * Retrieve the current language.
+     *
+     * @return string
+     */
+    public function lang()
+    {
+        return $this->translator()->getLocale();
+    }
+
+    /**
+     * Retrieve the current language.
+     *
+     * @return string
+     */
+    public function locale()
+    {
+        $lang    = $this->lang();
+        $locales = $this->translator()->locales();
+
+        if (isset($locales[$lang]['locale'])) {
+            $locale = $locales[$lang]['locale'];
+            if (is_array($locale)) {
+                $locale = implode(' ', $locale);
+            }
+        } else {
+            $locale = 'en-US';
+        }
+
+        return $locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function recaptchaKey()
+    {
+        $recaptcha = $this->appConfig('apis.google.recaptcha');
+
+        if (isset($recaptcha['public_key'])) {
+            $key = $recaptcha['public_key'];
+        } else {
+            $key = $recaptcha['key'];
+        }
+
+        return (string)$key;
+    }
+
+    /**
+     * Set common dependencies (services) used in all admin templates.
+     *
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Satisfies TranslatorAwareTrait dependencies
+        $this->setTranslator($container['translator']);
+
+        // Satisfies AuthAwareInterface + SecurityTrait dependencies
+        $this->setAuthenticator($container['admin/authenticator']);
+        $this->setAuthorizer($container['admin/authorizer']);
+
+        // Satisfies AdminTrait dependencies
+        $this->setDebug($container['config']);
+        $this->setAppConfig($container['config']);
+        $this->setAdminConfig($container['admin/config']);
+
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
+
+        // Satisfies AdminTemplate dependencies
+        $this->setSiteName($container['config']['project_name']);
+
+        $this->setModelFactory($container['model/factory']);
+        $this->setWidgetFactory($container['widget/factory']);
+
+        $this->menuBuilder = $container['menu/builder'];
+        $this->menuItemBuilder = $container['menu/item/builder'];
+    }
+
+    /**
+     * @throws Exception If the factory is not set.
+     * @return FactoryInterface The model factory.
+     */
+    protected function modelFactory()
+    {
+        if (!$this->modelFactory) {
+            throw new Exception(
+                sprintf('Model factory is not set for template "%s".', get_class($this))
+            );
+        }
+        return $this->modelFactory;
+    }
+
+    /**
+     * @throws Exception If the widget factory dependency was not previously set / injected.
+     * @return FactoryInterface
+     */
+    protected function widgetFactory()
+    {
+        if ($this->widgetFactory === null) {
+            throw new Exception(
+                'Widget factory was not set.'
+            );
+        }
+        return $this->widgetFactory;
+    }
+
+    /**
+     * Set the name of the project.
+     *
+     * @param  string $name Name of the project.
+     * @return AdminTemplate Chainable
+     */
+    protected function setSiteName($name)
+    {
+        $this->siteName = $this->translator()->translation($name);
+        return $this;
+    }
+
+    /**
      * @param  mixed $options The sidemenu widget ID or config.
      * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
      * @return array|Generator
      */
     protected function createHeaderMenu($options = null)
     {
-        $headerMenu = $this->adminConfig['header_menu'];
+        $headerMenu = $this->adminConfig('header_menu');
 
         if (!isset($headerMenu['items'])) {
             throw new InvalidArgumentException(
@@ -420,6 +569,10 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $mainMenu = null;
+        if (isset($this['header_menu_item'])) {
+            $mainMenu = $this['header_menu_item'];
+        }
+
         if (!(empty($options) && !is_numeric($options))) {
             if (is_string($options)) {
                 $mainMenu = $options;
@@ -453,6 +606,128 @@ class AdminTemplate extends AbstractTemplate implements
 
             yield $menuIdent => $menuItem;
         }
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the sidemenu widget is invalid.
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
+     */
+    protected function createSidemenu($options = null)
+    {
+        if (!is_array($options)) {
+            $options = [
+                'widget_options' => [
+                    'ident' => $options
+                ]
+            ];
+        } elseif (!isset($options['widget_options']['ident'])) {
+            $options['widget_options']['ident'] = null;
+        }
+
+        if (isset($this['side_menu_item'])) {
+            $options['widget_options']['current_item'] = $this['side_menu_item'];
+        }
+
+        if (isset($this['header_menu_item'])) {
+            $options['widget_options']['ident'] = $this['header_menu_item'];
+        }
+
+        $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
+        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($sidemenuFromRequest) {
+            $options['widget_options']['ident'] = $sidemenuFromRequest;
+        } elseif ($mainMenuFromRequest) {
+            $options['widget_options']['ident'] = $mainMenuFromRequest;
+        }
+
+        if (!is_string($options['widget_options']['ident'])) {
+            return null;
+        }
+
+        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
+
+        if (isset($options['widget_type'])) {
+            $widgetType = $options['widget_type'];
+        } else {
+            $widgetType = 'charcoal/admin/widget/sidemenu';
+        }
+
+        $sidemenu = $this->widgetFactory()->create($widgetType);
+
+        if (isset($options['widget_options'])) {
+            $sidemenu->setData($options['widget_options']);
+        }
+
+        return $sidemenu;
+    }
+
+    /**
+     * @param  mixed $options The sidemenu widget ID or config.
+     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
+     * @return array|Generator
+     */
+    protected function createSystemMenu($options = null)
+    {
+        $menuConfig = $this->adminConfig('system_menu');
+
+        if (!isset($menuConfig['items'])) {
+            return [];
+        }
+
+        $currentIdent = null;
+        if (isset($this['system_menu_item'])) {
+            $currentIdent = $this['system_menu_item'];
+        }
+
+        if (!(empty($options) && !is_numeric($options))) {
+            if (is_string($options)) {
+                $currentIdent = $options;
+            } elseif (is_array($options)) {
+                $menuConfig = array_replace_recursive($menuConfig, $options);
+            }
+        }
+
+        $systemMenu = $this->menuBuilder->build([]);
+        $menuItems  = [];
+        foreach ($menuConfig['items'] as $menuIdent => $menuItem) {
+            $menuItem['menu'] = $systemMenu;
+            $test = $this->menuItemBuilder->build($menuItem);
+            if ($test->isAuthorized() === false) {
+                continue;
+            }
+            unset($menuItem['menu']);
+
+            if (isset($menuItem['active']) && $menuItem['active'] === false) {
+                continue;
+            }
+
+            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent, $currentIdent);
+            $menuIdent = $menuItem['ident'];
+
+            $menuItems[$menuIdent] = $menuItem;
+        }
+        return $menuItems;
+    }
+
+    /**
+     * As a convenience, all admin templates have a model factory to easily create objects.
+     *
+     * @param FactoryInterface $factory The factory used to create models.
+     * @return void
+     */
+    private function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+    }
+
+    /**
+     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
+     * @return void
+     */
+    private function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
     }
 
     /**
@@ -511,80 +786,6 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @param boolean $show The show footer menu flag.
-     * @return AdminTemplate Chainable
-     */
-    public function setShowSystemMenu($show)
-    {
-        $this->showSystemMenu = !!$show;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showSystemMenu()
-    {
-        return ($this->isAuthorized() && $this->showSystemMenu && (count($this->systemMenu()) > 0));
-    }
-
-    /**
-     * @return array
-     */
-    public function systemMenu()
-    {
-        if ($this->systemMenu === null) {
-            $this->systemMenu = $this->createSystemMenu();
-        }
-
-        return new \ArrayIterator($this->systemMenu);
-    }
-
-    /**
-     * @param  mixed $options The sidemenu widget ID or config.
-     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
-     * @return array|Generator
-     */
-    protected function createSystemMenu($options = null)
-    {
-        $menuConfig = $this->adminConfig['system_menu'];
-
-        if (!isset($menuConfig['items'])) {
-            return [];
-        }
-
-        $currentIdent = null;
-        if (!(empty($options) && !is_numeric($options))) {
-            if (is_string($options)) {
-                $currentIdent = $options;
-            } elseif (is_array($options)) {
-                $menuConfig = array_replace_recursive($menuConfig, $options);
-            }
-        }
-
-        $systemMenu = $this->menuBuilder->build([]);
-        $menuItems  = [];
-        foreach ($menuConfig['items'] as $menuIdent => $menuItem) {
-            $menuItem['menu'] = $systemMenu;
-            $test = $this->menuItemBuilder->build($menuItem);
-            if ($test->isAuthorized() === false) {
-                continue;
-            }
-            unset($menuItem['menu']);
-
-            if (isset($menuItem['active']) && $menuItem['active'] === false) {
-                continue;
-            }
-
-            $menuItem  = $this->parseSystemMenuItem($menuItem, $menuIdent, $currentIdent);
-            $menuIdent = $menuItem['ident'];
-
-            $menuItems[$menuIdent] = $menuItem;
-        }
-        return $menuItems;
-    }
-
-    /**
      * @param  array       $menuItem     The menu structure.
      * @param  string|null $menuIdent    The menu identifier.
      * @param  string|null $currentIdent The current menu identifier.
@@ -618,296 +819,6 @@ class AdminTemplate extends AbstractTemplate implements
         $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
 
         return $menuItem;
-    }
-
-    /**
-     * @param  boolean $show The show sidemenu flag.
-     * @return AdminTemplate Chainable
-     */
-    public function setShowSidemenu($show)
-    {
-        $this->showSidemenu = !!$show;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showSidemenu()
-    {
-        return ($this->isAuthorized() && $this->showSidemenu);
-    }
-
-    /**
-     * Retrieve the sidemenu.
-     *
-     * @return SidemenuWidgetInterface|null
-     */
-    public function sidemenu()
-    {
-        return $this->sidemenu;
-    }
-
-    /**
-     * @param  mixed $options The sidemenu widget ID or config.
-     * @throws InvalidArgumentException If the sidemenu widget is invalid.
-     * @return SidemenuWidgetInterface|null
-     */
-    protected function createSidemenu($options = null)
-    {
-        if (!is_array($options)) {
-            $options = [
-                'widget_options' => [
-                    'ident' => $options
-                ]
-            ];
-        } elseif (!isset($options['widget_options']['ident'])) {
-            $options['widget_options']['ident'] = null;
-        }
-
-        $sidemenuFromRequest = filter_input(INPUT_GET, 'side_menu', FILTER_SANITIZE_STRING);
-        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-        if ($sidemenuFromRequest) {
-            $options['widget_options']['ident'] = $sidemenuFromRequest;
-        } elseif ($mainMenuFromRequest) {
-            $options['widget_options']['ident'] = $mainMenuFromRequest;
-        }
-
-        if (!is_string($options['widget_options']['ident'])) {
-            return null;
-        }
-
-        $GLOBALS['widget_template'] = 'charcoal/admin/widget/sidemenu';
-
-        if (isset($options['widget_type'])) {
-            $widgetType = $options['widget_type'];
-        } else {
-            $widgetType = 'charcoal/admin/widget/sidemenu';
-        }
-
-        $sidemenu = $this->widgetFactory()->create($widgetType);
-
-        if (isset($options['widget_options'])) {
-            $sidemenu->setData($options['widget_options']);
-        }
-
-        return $sidemenu;
-    }
-
-    /**
-     * Determine if user authentication is required.
-     *
-     * Authentication is required by default. If unnecessary,
-     * replace this method in the inherited template class.
-     *
-     * For example, the "Login" / "Reset Password" templates
-     * should return `false`.
-     *
-     * @return boolean
-     */
-    protected function authRequired()
-    {
-        return true;
-    }
-
-    /**
-     * Determine if the current user is authenticated.
-     *
-     * @return boolean
-     */
-    public function isAuthenticated()
-    {
-        return !!$this->authenticator()->authenticate();
-    }
-
-    /**
-     * Retrieve the currently authenticated user.
-     *
-     * @return \Charcoal\User\UserInterface|null
-     */
-    public function getAuthenticatedUser()
-    {
-        return $this->authenticator()->authenticate();
-    }
-
-    /**
-     * Retrieve the base URI of the administration area.
-     *
-     * @return UriInterface|string
-     */
-    public function adminUrl()
-    {
-        $adminPath = $this->adminConfig['base_path'];
-
-        return rtrim($this->baseUrl(), '/').'/'.rtrim($adminPath, '/').'/';
-    }
-
-    /**
-     * Set the base URI of the application.
-     *
-     * @param UriInterface|string $uri The base URI.
-     * @return self
-     */
-    public function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the base URI of the application.
-     *
-     * @return UriInterface|string
-     */
-    public function baseUrl()
-    {
-        return rtrim($this->baseUrl, '/').'/';
-    }
-
-    /**
-     * @return string
-     */
-    public function headerMenuLogo()
-    {
-        if (isset($this->adminConfig['menu_logo'])) {
-            if (is_string($this->adminConfig['menu_logo'])) {
-                return $this->adminConfig['menu_logo'];
-            }
-        }
-
-        return 'assets/admin/images/identicon.png';
-    }
-
-    /**
-     * Set the name of the project.
-     *
-     * @param  string $name Name of the project.
-     * @return AdminTemplate Chainable
-     */
-    protected function setSiteName($name)
-    {
-        $this->siteName = $this->translator()->translation($name);
-        return $this;
-    }
-
-    /**
-     * Retrieve the name of the project.
-     *
-     * @return Translation|string|null
-     */
-    public function siteName()
-    {
-        return $this->siteName;
-    }
-
-    /**
-     * Retrieve the document title.
-     *
-     * @return Translation|string|null
-     */
-    public function documentTitle()
-    {
-        $siteName  = $this->siteName();
-        $pageTitle = strip_tags($this->title());
-
-        if ($pageTitle) {
-            if ($pageTitle === $siteName) {
-                return sprintf('%1$s &#8212; Charcoal', $pageTitle);
-            } else {
-                return sprintf('%1$s &lsaquo; %2$s &#8212; Charcoal', $pageTitle, $siteName);
-            }
-        }
-
-        return $siteName;
-    }
-
-    /**
-     * Application Debug Mode.
-     *
-     * @return boolean
-     */
-    public function devMode()
-    {
-        if (!$this->appConfig) {
-            return false;
-        }
-
-        $debug   = isset($this->appConfig['debug'])    ? $this->appConfig['debug']    : false;
-        $devMode = isset($this->appConfig['dev_mode']) ? $this->appConfig['dev_mode'] : false;
-
-        return $debug || $devMode;
-    }
-
-    /**
-     * Retrieve the current language.
-     *
-     * @return string
-     */
-    public function lang()
-    {
-        return $this->translator()->getLocale();
-    }
-
-    /**
-     * Retrieve the current language.
-     *
-     * @return string
-     */
-    public function locale()
-    {
-        $lang    = $this->lang();
-        $locales = $this->translator()->locales();
-
-        if (isset($locales[$lang]['locale'])) {
-            $locale = $locales[$lang]['locale'];
-            if (is_array($locale)) {
-                $locale = implode(' ', $locale);
-            }
-        } else {
-            $locale = 'en-US';
-        }
-
-        return $locale;
-    }
-
-    /**
-     * @return string
-     */
-    public function recaptchaKey()
-    {
-        $recaptcha = $this->appConfig['apis.google.recaptcha'];
-
-        if (isset($recaptcha['public_key'])) {
-            $key = $recaptcha['public_key'];
-        } else {
-            $key = $recaptcha['key'];
-        }
-
-        return (string)$key;
-    }
-
-    /**
-     * @param FactoryInterface $factory The widget factory, to create the dashboard and sidemenu widgets.
-     * @return void
-     */
-    private function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
-    }
-
-    /**
-     * @throws Exception If the widget factory dependency was not previously set / injected.
-     * @return FactoryInterface
-     */
-    protected function widgetFactory()
-    {
-        if ($this->widgetFactory === null) {
-            throw new Exception(
-                'Widget factory was not set.'
-            );
-        }
-        return $this->widgetFactory;
     }
 
 

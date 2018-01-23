@@ -30,19 +30,6 @@ class LoadAction extends BaseLoadAction
     private $selectizeCollection;
 
     /**
-     * Dependencies
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setSelectizeRenderer($container['selectize/renderer']);
-        $this->setPropertyInputFactory($container['property/input/factory']);
-    }
-
-    /**
      * @param  RequestInterface  $request  The request options.
      * @param  ResponseInterface $response The response to return.
      * @return ResponseInterface
@@ -139,5 +126,18 @@ class LoadAction extends BaseLoadAction
             'feedbacks'  => $this->feedbacks(),
             'selectize'  => $this->selectizeCollection()
         ];
+    }
+
+    /**
+     * Dependencies
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setSelectizeRenderer($container['selectize/renderer']);
+        $this->setPropertyInputFactory($container['property/input/factory']);
     }
 }

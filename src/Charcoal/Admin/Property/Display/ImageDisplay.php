@@ -24,19 +24,6 @@ class ImageDisplay extends AbstractPropertyDisplay
     public $baseUrl;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->baseUrl = $container['base-url'];
-    }
-
-    /**
      * Retrieve display value.
      *
      * @see    \Charcoal\Admin\Property\Display\LinkDisplay::hrefVal()
@@ -45,13 +32,31 @@ class ImageDisplay extends AbstractPropertyDisplay
     public function displayVal()
     {
         $val = parent::displayVal();
+        if (empty($val)) {
+            return '';
+        }
 
-        if ($val && !parse_url($val, PHP_URL_SCHEME)) {
-            if (!in_array($val[0], [ '/', '#', '?' ])) {
-                return $this->baseUrl->withPath($val);
-            }
+        $parts = parse_url($val);
+        if (empty($parts['scheme']) && !in_array($val[0], [ '/', '#', '?' ])) {
+            $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+            $val   = $this->baseUrl->withPath($path)->withQuery($query)->withFragment($hash);
         }
 
         return $val;
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->baseUrl = $container['base-url'];
     }
 }

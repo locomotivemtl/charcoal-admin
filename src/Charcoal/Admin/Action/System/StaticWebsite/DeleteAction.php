@@ -24,17 +24,6 @@ class DeleteAction extends AdminAction
     private $basePath;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['base_path'];
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -51,16 +40,26 @@ class DeleteAction extends AdminAction
             return $response->withStatus(404);
         }
 
-        // Previous static version must be deleted in order to generate a new one.
+        $ret = null;
         if (file_exists($outputDir.'/index.php')) {
-            unlink($outputDir.'/index.php');
+            $ret = unlink($outputDir.'/index.php');
         }
         if (file_exists($outputDir.'/index.html')) {
-            unlink($outputDir.'/index.html');
+            $ret = unlink($outputDir.'/index.html');
         }
 
-        $this->setSuccess(($ret !== false));
-        return $response;
+        if ($ret === null) {
+            $this->setSuccess(false);
+            return $response->withStatus(404);
+        }
+
+        if ($ret === false) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        } else {
+            $this->setSuccess(true);
+            return $response;
+        }
     }
 
     /**
@@ -74,5 +73,16 @@ class DeleteAction extends AdminAction
         ];
 
         return $ret;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['base_path'];
     }
 }

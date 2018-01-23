@@ -11,6 +11,9 @@ use Pimple\ServiceProviderInterface;
 // From PSR-7
 use Psr\Http\Message\UriInterface;
 
+// From Slim
+use Slim\Http\Uri;
+
 // From Mustache
 use Mustache_LambdaHelper as LambdaHelper;
 
@@ -92,6 +95,40 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container['elfinder/config'] = function (Container $container) {
             return $container['admin/config']['elfinder'];
         };
+
+        if (!isset($container['admin/base-url'])) {
+            /**
+             * Base Admin URL as a PSR-7 UriInterface object for the current request
+             * or the Charcoal application.
+             *
+             * @param Container $container
+             * @return \Psr\Http\Message\UriInterface
+             */
+            $container['admin/base-url'] = function (Container $container) {
+                $adminConfig = $container['admin/config'];
+
+                if (isset($adminConfig['base_url'])) {
+                    $adminUrl = $adminConfig['base_url'];
+                } else {
+                    $adminUrl = clone $container['base-url'];
+                    if ($adminConfig['base_path']) {
+                        $basePath  = rtrim($adminUrl->getBasePath(), '/');
+                        $adminPath = ltrim($adminConfig['base_path'], '/');
+                        $adminUrl  = $adminUrl->withBasePath($basePath.'/'.$adminPath);
+                    }
+                }
+
+                $adminUrl = Uri::createFromString($adminUrl)->withUserInfo('');
+
+                /** Fix the base path */
+                $path = $adminUrl->getPath();
+                if ($path) {
+                    $adminUrl = $adminUrl->withBasePath($path)->withPath('');
+                }
+
+                return $adminUrl;
+            };
+        }
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
@@ -260,12 +297,7 @@ class AdminServiceProvider implements ServiceProviderInterface
          * @return array
          */
         $container->extend('view/mustache/helpers', function (array $helpers, Container $container) {
-            $adminUrl = clone $container['base-url'];
-            if ($container['admin/config']['base_path']) {
-                $basePath  = rtrim($adminUrl->getBasePath(), '/');
-                $adminPath = ltrim($container['admin/config']['base_path'], '/');
-                $adminUrl  = $adminUrl->withBasePath($basePath.'/'.$adminPath);
-            }
+            $adminUrl = $container['admin/base-url'];
 
             $urls = [
                 /**
@@ -273,7 +305,7 @@ class AdminServiceProvider implements ServiceProviderInterface
                  *
                  * @return UriInterface|null
                  */
-                'adminUrl'     => $adminUrl,
+                'adminUrl' => $adminUrl,
                 /**
                  * Prepend the administration-area URI to the given path.
                  *

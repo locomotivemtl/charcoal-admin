@@ -201,8 +201,6 @@ trait SidemenuGroupTrait
             );
         }
 
-        $objType = $this->sidemenu()->objType();
-
         if (is_array($link)) {
             $active = true;
             $name = null;
@@ -229,7 +227,7 @@ trait SidemenuGroupTrait
                 return $this;
             }
 
-            $isSelected = ($linkIdent === $objType);
+            $isSelected = $this->sidemenu()->isCurrentItem([ $linkIdent, (string)$url ]);
 
             if ($isSelected) {
                 $this->isSelected(true);

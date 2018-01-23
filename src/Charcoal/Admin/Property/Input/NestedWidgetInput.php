@@ -58,12 +58,35 @@ class NestedWidgetInput extends AbstractPropertyInput implements
     private $formGroup;
 
     /**
+     * Set the form input's parent group.
+     *
+     * @param  FormGroupInterface $formGroup The parent form group object.
+     * @return FormInputInterface Chainable
+     */
+    public function setFormGroup(FormGroupInterface $formGroup)
+    {
+        $this->formGroup = $formGroup;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the input's parent group.
+     *
+     * @return FormGroupInterface
+     */
+    public function formGroup()
+    {
+        return $this->formGroup;
+    }
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param Container $container A dependencies container instance.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 
@@ -131,29 +154,6 @@ class NestedWidgetInput extends AbstractPropertyInput implements
         }
 
         return $this->formGroupFactory;
-    }
-
-    /**
-     * Set the form input's parent group.
-     *
-     * @param  FormGroupInterface $formGroup The parent form group object.
-     * @return FormInputInterface Chainable
-     */
-    public function setFormGroup(FormGroupInterface $formGroup)
-    {
-        $this->formGroup = $formGroup;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the input's parent group.
-     *
-     * @return FormGroupInterface
-     */
-    public function formGroup()
-    {
-        return $this->formGroup;
     }
 
     /**

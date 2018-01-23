@@ -55,7 +55,7 @@ class LoadAction extends AdminAction
     /**
      * Store the factory instance for the current class.
      *
-     * @var FactoryInterface
+     * @var \Charcoal\Factory\FactoryInterface
      */
     private $modelFactory;
 
@@ -68,17 +68,6 @@ class LoadAction extends AdminAction
      * @var Collection
      */
     protected $objCollection;
-
-    /**
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setCollectionLoader($container['model/collection/loader']);
-    }
 
     /**
      * @param  RequestInterface  $request  The request options.
@@ -158,24 +147,6 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * Load Object Collection
-     *
-     * @param string $objType The object type as string.
-     * @return \Charcoal\Model\Collection
-     */
-    protected function loadObjectCollection($objType)
-    {
-        $proto  = $this->modelFactory()->get($objType);
-        $loader = $this->collectionLoader();
-        $loader->setModel($proto);
-        $loader->addFilter('active', true);
-
-        $this->objCollection = $loader->load();
-
-        return $this->objCollection;
-    }
-
-    /**
      * @return array The object collection parsed as array
      */
     public function objCollection()
@@ -203,19 +174,6 @@ class LoadAction extends AdminAction
         }
 
         return $this->collectionLoader;
-    }
-
-    /**
-     * Set a model collection loader.
-     *
-     * @param CollectionLoader $loader The collection loader.
-     * @return self
-     */
-    protected function setCollectionLoader(CollectionLoader $loader)
-    {
-        $this->collectionLoader = $loader;
-
-        return $this;
     }
 
     /**
@@ -255,5 +213,47 @@ class LoadAction extends AdminAction
             'feedbacks'  => $this->feedbacks(),
             'collection' => $this->objCollection()
         ];
+    }
+
+    /**
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setCollectionLoader($container['model/collection/loader']);
+    }
+
+    /**
+     * Load Object Collection
+     *
+     * @param string $objType The object type as string.
+     * @return \Charcoal\Model\Collection
+     */
+    protected function loadObjectCollection($objType)
+    {
+        $proto  = $this->modelFactory()->get($objType);
+        $loader = $this->collectionLoader();
+        $loader->setModel($proto);
+        $loader->addFilter('active', true);
+
+        $this->objCollection = $loader->load();
+
+        return $this->objCollection;
+    }
+
+    /**
+     * Set a model collection loader.
+     *
+     * @param CollectionLoader $loader The collection loader.
+     * @return self
+     */
+    protected function setCollectionLoader(CollectionLoader $loader)
+    {
+        $this->collectionLoader = $loader;
+
+        return $this;
     }
 }

@@ -2,33 +2,23 @@
 
 namespace Charcoal\Admin\Property\Display;
 
-use Charcoal\Admin\Property\AbstractPropertyDisplay;
+// From Pimple
 use Pimple\Container;
+
+// From 'charcoal-property'
+use Charcoal\Property\FileProperty;
+use Charcoal\Property\ImageProperty;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractPropertyDisplay;
+use Charcoal\Admin\Support\BaseUrlTrait;
 
 /**
  * Link Display Property
  */
 class LinkDisplay extends AbstractPropertyDisplay
 {
-    /**
-     * The base URI for the Charcoal application.
-     *
-     * @var string|\Psr\Http\Message\UriInterface
-     */
-    public $baseUrl;
-
-    /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->baseUrl = $container['base-url'];
-    }
+    use BaseUrlTrait;
 
     /**
      * Retrieve display value for anchor link.
@@ -39,13 +29,50 @@ class LinkDisplay extends AbstractPropertyDisplay
     public function hrefVal()
     {
         $val = parent::displayVal();
+        if (empty($val)) {
+            return '';
+        }
 
-        if ($val && !parse_url($val, PHP_URL_SCHEME)) {
-            if (!in_array($val[0], [ '/', '#', '?' ])) {
-                return $this->baseUrl->withPath($val);
+        $val = $this->getLocalUrl($val);
+
+        return $val;
+    }
+
+
+    /**
+     * Get the URL for the file at the given path.
+     *
+     * @param  string $path The file path.
+     * @return string
+     */
+    protected function getLocalUrl($path)
+    {
+        $prop = $this->property();
+        if ($prop instanceof FileProperty) {
+            if ($prop->publicAccess() === false) {
+                $query = http_build_query([
+                    'disk' => $prop->filesystem(),
+                    'path' => $path,
+                ]);
+                return $this->adminUrl('filesystem/download')->withQuery($query);
             }
         }
 
-        return $val;
+        return $this->baseUrl($path);
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
     }
 }

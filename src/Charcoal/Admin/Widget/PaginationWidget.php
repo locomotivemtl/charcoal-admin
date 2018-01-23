@@ -12,7 +12,7 @@ use Charcoal\Source\PaginationInterface;
 use Charcoal\Admin\AdminWidget;
 
 /**
- *
+ * Pagination Widget.
  */
 class PaginationWidget extends AdminWidget
 {
@@ -59,7 +59,7 @@ class PaginationWidget extends AdminWidget
      * Set the page number.
      *
      * @param  integer $page The current page. Pages should start at 1.
-     * @return PaginationWidget Chainable
+     * @return self
      */
     public function setPage($page)
     {
@@ -103,7 +103,7 @@ class PaginationWidget extends AdminWidget
      *
      * @param  integer $count The number of results to return, per page.
      *     Use 0 to request all results.
-     * @return PaginationWidget Chainable
+     * @return self
      */
     public function setNumPerPage($count)
     {
@@ -127,7 +127,7 @@ class PaginationWidget extends AdminWidget
      *
      * @param  integer $total The total number of items.
      * @throws InvalidArgumentException If the argument is not a number or lower than 0.
-     * @return PaginationWidget Chainable
+     * @return self
      */
     public function setNumTotal($total)
     {
@@ -162,7 +162,7 @@ class PaginationWidget extends AdminWidget
     /**
      * Yield each page.
      *
-     * @return array|Generator
+     * @return \Generator
      */
     public function pages()
     {

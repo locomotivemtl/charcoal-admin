@@ -26,25 +26,6 @@ class ClearCacheAction extends AdminAction
     private $cache;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->setCache($container['cache']);
-    }
-
-    /**
-     * @param CacheItemPoolInterface $cache A PSR-6 cache item pool.
-     * @return void
-     */
-    private function setCache(CacheItemPoolInterface $cache)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -93,5 +74,25 @@ class ClearCacheAction extends AdminAction
         ];
 
         return $ret;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setCache($container['cache']);
+    }
+
+    /**
+     * @param CacheItemPoolInterface $cache A PSR-6 cache item pool.
+     * @return void
+     */
+    private function setCache(CacheItemPoolInterface $cache)
+    {
+        $this->cache = $cache;
     }
 }

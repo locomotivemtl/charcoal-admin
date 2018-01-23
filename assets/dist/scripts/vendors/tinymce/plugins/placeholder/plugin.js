@@ -1,52 +1,107 @@
-tinymce.PluginManager.add('placeholder', function(editor) {
-    editor.on('init', function() {
-        var label = new Label;
+/**
+ * Placeholder Text for TinyMCE
+ *
+ * Based on {@link https://github.com/mohan/tinymce-placeholder Mohan's implementation}
+ */
 
-        onBlur();
+(function (tinymce) {
 
-        tinymce.DOM.bind(label.el, 'click', onFocus);
-        editor.on('focus', onFocus);
-        editor.on('blur', onBlur);
-        editor.on('change', onBlur);
-        editor.on('setContent', onBlur);
-        editor.on('keydown', onKeydown);
-
-        function onFocus() {
-            if (!editor.settings.readonly === true) {
-                label.hide();
+    tinymce.PluginManager.add('placeholder', function (editor) {
+        editor.on('init', function () {
+            if (editor.settings.readonly === true || editor.settings.inline === true) {
+                return;
             }
-            editor.execCommand('mceFocus', false);
-        }
 
-        function onBlur() {
-            if (editor.getContent() == '') {
-                label.show();
-            } else {
-                label.hide();
+            var placeholder = editor.getElement().getAttribute('placeholder') || editor.settings.placeholder;
+            if (typeof placeholder === 'undefined') {
+                return;
             }
-        }
 
-        function onKeydown(){
-            label.hide();
-        }
+            if (typeof placeholder === 'string') {
+                placeholder = {
+                    text: placeholder
+                };
+            }
+
+            if (typeof placeholder.attr === 'undefined') {
+                placeholder.attr = editor.settings.placeholder_attr || { class: 'mce-placeholder-area' };
+            }
+            if (typeof placeholder.tag === 'undefined') {
+                placeholder.tag = editor.settings.placeholder_tag  || 'label';
+            }
+
+            var label = new Label(
+                placeholder,
+                editor.getContentAreaContainer() || editor.getBody()
+            );
+
+            tinymce.DOM.bind(label.el, 'click', onFocus);
+
+            // When focus is in main editor window
+            editor.on('focus', onFocus);
+
+            // When focus is outside of main editor area
+            editor.on('blur', onBlur);
+
+            // Whenever content is changed, including when a toolbar item is pressed (bold, italic, bullets, etc)
+            editor.on('change', onChange);
+
+            // Called when switching between Visual/Text
+            editor.on('setcontent', onSetContent);
+
+            function onFocus() {
+                label.hide();
+                editor.focus();
+            }
+
+            function onBlur() {
+                label.check();
+            }
+
+            function onChange() {
+                label.check();
+            }
+
+            function onSetContent() {
+                label.check();
+            }
+
+            // Add 1 second timeout to delay execution until after
+            // vendor plugings adjust the toolbars
+            setTimeout(function () {
+                label.check();
+            }, 1000);
+        });
+
+        var Label = function (data, area) {
+            this.data = data;
+            this.text = data.text;
+
+            tinymce.DOM.setStyle(area, 'position', 'relative');
+
+            // Create label el
+            this.el = tinymce.DOM.add(area, data.tag, data.attr, tinymce.DOM.decode(data.text));
+        };
+
+        Label.prototype.hide = function () {
+            tinymce.DOM.setStyle(this.el, 'display', 'none');
+        };
+
+        Label.prototype.show = function () {
+            tinymce.DOM.setStyle(this.el, 'display', '');
+        };
+
+        Label.prototype.check = function () {
+            var bodyElement = editor.getBody();
+            if (bodyElement !== null) {
+                var textContent = editor.getBody().textContent.replace(this.el.textContent, '').trim();
+                if (textContent === '') {
+                    this.show();
+                } else {
+                    this.hide();
+                }
+            }
+        };
     });
 
-    var Label = function(){
-        var placeholder_text = editor.getElement().getAttribute("placeholder") || editor.settings.placeholder;
-        var placeholder_attrs = editor.settings.placeholder_attrs || {style: {position: 'absolute', top:'5px', left:0, color: '#888', padding: '1%', width:'98%', overflow: 'hidden', 'white-space': 'pre-wrap'} };
-        var contentAreaContainer = editor.getContentAreaContainer();
-
-        tinymce.DOM.setStyle(contentAreaContainer, 'position', 'relative');
-
-        // Create label el
-        this.el = tinymce.DOM.add( contentAreaContainer, editor.settings.placeholder_tag || "label", placeholder_attrs, placeholder_text );
-    }
-
-    Label.prototype.hide = function(){
-        tinymce.DOM.setStyle( this.el, 'display', 'none' );
-    }
-
-    Label.prototype.show = function(){
-        tinymce.DOM.setStyle( this.el, 'display', '' );
-    }
-});
+}(window.tinymce));

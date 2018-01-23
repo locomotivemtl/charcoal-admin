@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Template\System;
 
 use APCUIterator;
 use APCIterator;
+use RuntimeException;
 
 use Stash\Driver\Apc;
 use Stash\Driver\Memcache;
@@ -14,7 +15,7 @@ use Pimple\Container;
 use Charcoal\Admin\AdminTemplate;
 
 /**
- *
+ * Cache information.
  */
 class ClearCacheTemplate extends AdminTemplate
 {
@@ -24,22 +25,9 @@ class ClearCacheTemplate extends AdminTemplate
     private $cache;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->availableCacheDrivers = $container['cache/available-drivers'];
-        $this->cacheDriver = $container['cache/driver'];
-        $this->cache = $container['cache'];
-        $this->cacheConfig = $container['cache/config'];
-    }
-
-    /**
      * Retrieve the title of the page.
      *
-     * @return Translation|string|null
+     * @return \Charcoal\Translator\Translation|string|null
      */
     public function title()
     {
@@ -51,7 +39,7 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
@@ -81,6 +69,19 @@ class ClearCacheTemplate extends AdminTemplate
             'pages_items' => $this->pagesCacheItems(),
             'objects_items' => $this->objectsCacheItems()
         ];
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->availableCacheDrivers = $container['cache/available-drivers'];
+        $this->cacheDriver = $container['cache/driver'];
+        $this->cache = $container['cache'];
+        $this->cacheConfig = $container['cache/config'];
     }
 
     /**
@@ -203,6 +204,7 @@ class ClearCacheTemplate extends AdminTemplate
 
     /**
      * @param string $key The cache key to look at.
+     * @throws RuntimeException If the APC iterator class can not be found.
      * @return array|\Generator
      */
     private function apcCacheItems($key)
@@ -212,7 +214,7 @@ class ClearCacheTemplate extends AdminTemplate
         } elseif (class_exists(APCIterator::class)) {
             $iter = new APCIterator($key);
         } else {
-            return [];
+            throw new RuntimeException('Cache uses APC but no iterator could be found.');
         }
 
         foreach ($iter as $item) {

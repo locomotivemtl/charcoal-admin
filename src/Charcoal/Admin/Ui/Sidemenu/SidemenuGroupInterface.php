@@ -18,7 +18,7 @@ interface SidemenuGroupInterface extends
      * Set the sidemenu widget.
      *
      * @param  SidemenuWidgetInterface $sidemenu The related sidemenu widget.
-     * @return SidemenuGroupInterface Chainable
+     * @return self
      */
     public function setSidemenu(SidemenuWidgetInterface $sidemenu);
 
@@ -33,7 +33,7 @@ interface SidemenuGroupInterface extends
      * Set the identifier of the group.
      *
      * @param  string $ident Sidemenu group identifier.
-     * @return UiGroupingInterface Chainable
+     * @return self
      */
     public function setIdent($ident);
 

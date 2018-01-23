@@ -26,21 +26,9 @@ class UpdateScript extends AdminScript
     private $basePath;
 
     /**
-     * @var GuzzleClient
+     * @var \GuzzleHttp\Client
      */
     private $guzzleClient;
-
-
-    /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['basePath'];
-    }
 
     /**
      * @return array
@@ -106,6 +94,17 @@ class UpdateScript extends AdminScript
     }
 
     /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['basePath'];
+    }
+
+    /**
      * @param string $url       The URL to cache. The base (start) URL will be prefixed to relative URLs.
      * @param string $outputDir The output directory.
      * @return void
@@ -156,7 +155,7 @@ class UpdateScript extends AdminScript
      * @param integer $flags   Glob flags.
      * @return array
      */
-    protected function globRecursive($dir, $pattern, $flags = 0)
+    private function globRecursive($dir, $pattern, $flags = 0)
     {
         $files = glob($dir.'/'.$pattern, $flags);
         foreach (glob($dir.'/*', (GLOB_ONLYDIR|GLOB_NOSORT)) as $dir) {

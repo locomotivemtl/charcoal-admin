@@ -63,7 +63,10 @@ module.exports = {
             'node_modules/selectize/dist/js/standalone/selectize.min.js',
 
             // Selectize
-            'node_modules/clipboard/dist/clipboard.min.js'
+            'node_modules/clipboard/dist/clipboard.min.js',
+
+            // jQuery Timeago
+            'node_modules/timeago/jquery.timeago.js',
         ],
         dest: '<%= paths.js.dist %>/charcoal.admin.vendors.js',
         separator: "\n"

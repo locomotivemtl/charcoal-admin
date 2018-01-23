@@ -31,22 +31,6 @@ class CollectionTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
 
     /**
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Required collection dependencies
-        $this->setModelFactory($container['model/factory']);
-        $this->setCollectionLoader($container['model/collection/loader']);
-
-        // Required dashboard dependencies.
-        $this->setDashboardBuilder($container['dashboard/builder']);
-    }
-
-    /**
      * @param RequestInterface $request PSR-7 request.
      * @return boolean
      */
@@ -59,54 +43,9 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * @return void
-     */
-    private function createObjTable()
-    {
-        $obj = $this->proto();
-        if (!$obj) {
-            return;
-        }
-
-        if (!$obj->source()->tableExists()) {
-            $obj->source()->createTable();
-            $this->addFeedback('notice', strtr(
-                $this->translator()->translate('The "{{ objType }}" table has been created.'),
-                [
-                    '{{ objType }}' => $obj->objType()
-                ]
-            ));
-        }
-    }
-
-    /**
-     * @throws Exception If the dashboard config can not be loaded.
-     * @return array
-     */
-    protected function createDashboardConfig()
-    {
-        $adminMetadata  = $this->objAdminMetadata();
-        $dashboardIdent = $this->dashboardIdent();
-
-        if (!$dashboardIdent) {
-            $dashboardIdent = $this->metadataDashboardIdent();
-        }
-
-        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
-            throw new Exception(
-                'Dashboard config is not defined.'
-            );
-        }
-
-        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
-
-        return $dashboardConfig;
-    }
-
-    /**
      * Retrieve the sidemenu.
      *
-     * @return SidemenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
     public function sidemenu()
     {
@@ -148,7 +87,7 @@ class CollectionTemplate extends AdminTemplate implements
      * Uses the "default_search_list" ident that should point
      * on ident in the "lists"
      *
-     * @return widget
+     * @return \Charcoal\Admin\Widget\SearchWidget
      */
     public function searchWidget()
     {
@@ -162,61 +101,6 @@ class CollectionTemplate extends AdminTemplate implements
         $widget->setCollectionIdent($listIdent);
 
         return $widget;
-    }
-
-    /**
-     * @return string
-     */
-    private function metadataListIdent()
-    {
-        $adminMetadata = $this->objAdminMetadata();
-
-        if (isset($adminMetadata['default_search_list'])) {
-            $listIdent = $adminMetadata['default_search_list'];
-        } elseif (isset($adminMetadata['default_list'])) {
-            $listIdent = $adminMetadata['default_list'];
-        } else {
-            $listIdent = 'default';
-        }
-
-        return $listIdent;
-    }
-
-    /**
-     * @throws Exception If no default collection is defined.
-     * @return string
-     */
-    private function metadataDashboardIdent()
-    {
-        $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
-        if ($dashboardIdent) {
-            return $dashboardIdent;
-        }
-
-        $adminMetadata = $this->objAdminMetadata();
-        if (!isset($adminMetadata['default_collection_dashboard'])) {
-            throw new Exception(sprintf(
-                'No default collection dashboard defined in admin metadata for %s.',
-                get_class($this->proto())
-            ));
-        }
-
-        return $adminMetadata['default_collection_dashboard'];
-    }
-
-    /**
-     * @throws Exception If the object's admin metadata is not set.
-     * @return \ArrayAccess
-     */
-    private function objAdminMetadata()
-    {
-        $obj = $this->proto();
-
-        $objMetadata = $obj->metadata();
-
-        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : [];
-
-        return $adminMetadata;
     }
 
     /**
@@ -293,5 +177,121 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         return $this->title;
+    }
+
+    /**
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required collection dependencies
+        $this->setModelFactory($container['model/factory']);
+        $this->setCollectionLoader($container['model/collection/loader']);
+
+        // Required dashboard dependencies.
+        $this->setDashboardBuilder($container['dashboard/builder']);
+    }
+
+    /**
+     * @throws Exception If the dashboard config can not be loaded.
+     * @return array
+     */
+    protected function createDashboardConfig()
+    {
+        $adminMetadata  = $this->objAdminMetadata();
+        $dashboardIdent = $this->dashboardIdent();
+
+        if (!$dashboardIdent) {
+            $dashboardIdent = $this->metadataDashboardIdent();
+        }
+
+        if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
+            throw new Exception(
+                'Dashboard config is not defined.'
+            );
+        }
+
+        $dashboardConfig = $adminMetadata['dashboards'][$dashboardIdent];
+
+        return $dashboardConfig;
+    }
+
+    /**
+     * @return void
+     */
+    private function createObjTable()
+    {
+        $obj = $this->proto();
+        if (!$obj) {
+            return;
+        }
+
+        if (!$obj->source()->tableExists()) {
+            $obj->source()->createTable();
+            $this->addFeedback('notice', strtr(
+                $this->translator()->translate('The "{{ objType }}" table has been created.'),
+                [
+                    '{{ objType }}' => $obj->objType()
+                ]
+            ));
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function metadataListIdent()
+    {
+        $adminMetadata = $this->objAdminMetadata();
+
+        if (isset($adminMetadata['default_search_list'])) {
+            $listIdent = $adminMetadata['default_search_list'];
+        } elseif (isset($adminMetadata['default_list'])) {
+            $listIdent = $adminMetadata['default_list'];
+        } else {
+            $listIdent = 'default';
+        }
+
+        return $listIdent;
+    }
+
+    /**
+     * @throws Exception If no default collection is defined.
+     * @return string
+     */
+    private function metadataDashboardIdent()
+    {
+        $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
+        if ($dashboardIdent) {
+            return $dashboardIdent;
+        }
+
+        $adminMetadata = $this->objAdminMetadata();
+        if (!isset($adminMetadata['default_collection_dashboard'])) {
+            throw new Exception(sprintf(
+                'No default collection dashboard defined in admin metadata for %s.',
+                get_class($this->proto())
+            ));
+        }
+
+        return $adminMetadata['default_collection_dashboard'];
+    }
+
+    /**
+     * @throws Exception If the object's admin metadata is not set.
+     * @return \ArrayAccess
+     */
+    private function objAdminMetadata()
+    {
+        $obj = $this->proto();
+
+        $objMetadata = $obj->metadata();
+
+        $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : [];
+
+        return $adminMetadata;
     }
 }

@@ -83,18 +83,6 @@ class LoadAction extends AdminAction
     protected $widgetFactory;
 
     /**
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setdependencies($container);
-
-        $this->setWidgetFactory($container['widget/factory']);
-        $this->setWidgetView($container['view']);
-    }
-
-    /**
      * Execute the endpoint.
      *
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
@@ -274,15 +262,30 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * Set the widget renderer.
-     *
-     * @param  ViewInterface $view The view renderer to create widgets.
+     * @return array
+     */
+    public function results()
+    {
+        return [
+            'success'       => $this->success(),
+            'widget_html'   => $this->widgetHtml(),
+            'widget_id'     => $this->widgetId(),
+            'feedbacks'     => $this->feedbacks()
+        ];
+    }
+
+    /**
+     * @param  Container $container A dependencies container instance.
      * @return void
      */
-    private function setWidgetView(ViewInterface $view)
+    protected function setDependencies(Container $container)
     {
-        $this->widgetView = $view;
+        parent::setdependencies($container);
+
+        $this->setWidgetFactory($container['widget/factory']);
+        $this->setWidgetView($container['view']);
     }
+
 
     /**
      * Retrieve the widget renderer.
@@ -297,17 +300,6 @@ class LoadAction extends AdminAction
         }
 
         return $this->widgetView;
-    }
-
-    /**
-     * Set the widget factory.
-     *
-     * @param  FactoryInterface $factory The factory to create widgets.
-     * @return void
-     */
-    private function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
     }
 
     /**
@@ -326,15 +318,24 @@ class LoadAction extends AdminAction
     }
 
     /**
-     * @return string
+     * Set the widget renderer.
+     *
+     * @param  ViewInterface $view The view renderer to create widgets.
+     * @return void
      */
-    public function results()
+    private function setWidgetView(ViewInterface $view)
     {
-        return [
-            'success'       => $this->success(),
-            'widget_html'   => $this->widgetHtml(),
-            'widget_id'     => $this->widgetId(),
-            'feedbacks'     => $this->feedbacks()
-        ];
+        $this->widgetView = $view;
+    }
+
+    /**
+     * Set the widget factory.
+     *
+     * @param  FactoryInterface $factory The factory to create widgets.
+     * @return void
+     */
+    private function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
     }
 }

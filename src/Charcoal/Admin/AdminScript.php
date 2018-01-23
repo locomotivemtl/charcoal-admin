@@ -20,19 +20,16 @@ use Charcoal\Property\PropertyInterface;
 // From 'charcoal-translator'
 use Charcoal\Translator\TranslatorAwareTrait;
 
+// From 'charcoal-admin'
+use Charcoal\Admin\Support\BaseUrlTrait;
+
 /**
  *
  */
 abstract class AdminScript extends AbstractScript
 {
+    use BaseUrlTrait;
     use TranslatorAwareTrait;
-
-    /**
-     * The base URI.
-     *
-     * @var UriInterface
-     */
-    protected $baseUrl;
 
     /**
      * The model factory.
@@ -45,34 +42,19 @@ abstract class AdminScript extends AbstractScript
      * @param  Container $container Pimple DI container.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
-        $this->setModelFactory($container['model/factory']);
-        $this->setTranslator($container['translator']);
-        $this->setBaseUrl($container['base-url']);
-
         parent::setDependencies($container);
-    }
 
+        // Satisfies TranslatorAwareTrait dependencies
+        $this->setTranslator($container['translator']);
 
-    /**
-     * Retrieve the model factory.
-     *
-     * @return FactoryInterface
-     */
-    protected function modelFactory()
-    {
-        return $this->modelFactory;
-    }
+        // Satisfies BaseUrlTrait dependencies
+        $this->setBaseUrl($container['base-url']);
+        $this->setAdminUrl($container['admin/base-url']);
 
-    /**
-     * Retrieve the base URI of the application.
-     *
-     * @return UriInterface|string
-     */
-    protected function baseUrl()
-    {
-        return rtrim($this->baseUrl, '/').'/';
+        // Satisfies AdminScript dependencies
+        $this->setModelFactory($container['model/factory']);
     }
 
     /**
@@ -142,26 +124,23 @@ abstract class AdminScript extends AbstractScript
     }
 
     /**
-     * Set the base URI of the application.
-     *
-     * @param  UriInterface|string $uri The base URI.
-     * @return self
-     */
-    private function setBaseUrl($uri)
-    {
-        $this->baseUrl = $uri;
-        return $this;
-    }
-
-    /**
      * Set the model factory.
      *
      * @param  FactoryInterface $factory The factory used to create models.
-     * @return self
+     * @return void
      */
     private function setModelFactory(FactoryInterface $factory)
     {
         $this->modelFactory = $factory;
-        return $this;
+    }
+
+    /**
+     * Retrieve the model factory.
+     *
+     * @return FactoryInterface
+     */
+    protected function modelFactory()
+    {
+        return $this->modelFactory;
     }
 }

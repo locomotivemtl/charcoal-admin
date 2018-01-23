@@ -17,19 +17,6 @@ class UpdateAction extends BaseUpdateAction
     use SelectizeRendererAwareTrait;
 
     /**
-     * Dependencies
-     * @param Container $container DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setSelectizeRenderer($container['selectize/renderer']);
-        $this->setPropertyInputFactory($container['property/input/factory']);
-    }
-
-    /**
      * @return array
      */
     public function results()
@@ -41,5 +28,18 @@ class UpdateAction extends BaseUpdateAction
         }
 
         return $results;
+    }
+
+    /**
+     * Dependencies
+     * @param Container $container DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setSelectizeRenderer($container['selectize/renderer']);
+        $this->setPropertyInputFactory($container['property/input/factory']);
     }
 }

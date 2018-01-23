@@ -25,7 +25,7 @@ class LostPasswordToken extends AbstractModel
     private $user;
 
     /**
-     * @var DateTimeInterface
+     * @var DateTimeInterface|null
      */
     private $expiry;
 
@@ -74,7 +74,7 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
-     * @param  DateTime|string|null $expiry The date/time at object's creation.
+     * @param  DateTimeInterface|string|null $expiry The date/time at object's creation.
      * @throws InvalidArgumentException If the date/time is invalid.
      * @return LostPasswordToken Chainable
      */
@@ -101,7 +101,7 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     public function expiry()
     {
@@ -112,7 +112,7 @@ class LostPasswordToken extends AbstractModel
      * @see    \Charcoal\Source\StorableTrait::preSave() For the "create" Event.
      * @return boolean
      */
-    public function preSave()
+    protected function preSave()
     {
         if ($this->expiry === null) {
             $this->setExpiry('now +15 minutes');

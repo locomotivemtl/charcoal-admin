@@ -1846,11 +1846,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();
-            var type = $(this).data('type');
+            var _this = $(this);
+
+            var type = _this.data('type');
             if (!type) {
                 return false;
             }
-            var id = $(this).data('id');
+
+            var id = _this.data('id');
             if (id) {
                 that.add({
                     id:   id,
@@ -1860,9 +1863,13 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     that.reload();
                 });
             } else {
-                var title = $(this).data('title') || attachmentWidgetL10n.editObject,
-                skip_form = $(this).data('skip-form');
-                that.create_attachment(type, 0, null, { title: title, skipForm:skip_form }, function (response) {
+                var attachment_struct = {
+                    title:     _this.data('title') || attachmentWidgetL10n.editObject,
+                    formIdent: _this.data('form-ident'),
+                    skipForm:  _this.data('skip-form')
+                };
+
+                that.create_attachment(type, 0, null, attachment_struct, function (response) {
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
@@ -1883,13 +1890,19 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             var action = _this.data('action');
             switch (action) {
                 case 'edit':
-                    var type = _this.data('type');
-                    var id = _this.data('id');
+                    var type = _this.data('type'),
+                        id = _this.data('id');
+
                     if (!type || !id) {
                         break;
                     }
-                    var title = _this.data('title') || attachmentWidgetL10n.editObject;
-                    that.create_attachment(type, id, null, { title: title }, function (response) {
+
+                    var attachment_struct = {
+                        title:     _this.data('title') || attachmentWidgetL10n.editObject,
+                        formIdent: _this.data('form-ident')
+                    };
+
+                    that.create_attachment(type, id, null, attachment_struct, function (response) {
                         if (response.success) {
                             that.reload();
                         }
@@ -1922,21 +1935,24 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                         container_type   = _this.data('type'),
                         container_id     = _this.data('id'),
                         container_group  = _this.data('group'),
+                        form_ident       = _this.data('form-ident'),
                         skip_form        = _this.data('skip-form'),
                         container_struct = {
-                            id:    container_id,
-                            type:  container_type,
-                            group: container_group,
-                            skipForm: skip_form
+                            id:       container_id,
+                            type:     container_type,
+                            group:    container_group
                         };
+                    attachment_struct = {
+                        title:     attachment_title,
+                        formIdent: form_ident,
+                        skipForm:  skip_form
+                    };
 
                     that.create_attachment(
                         attachment_type,
                         0,
-                        {
-                            title: attachment_title
-                        },
                         container_struct,
+                        attachment_struct,
                         function (response) {
                             if (response.success) {
                                 that.add_object_to_container(
@@ -2022,6 +2038,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
         widget_options: {
             obj_type:  type,
             obj_id:    id,
+            form_ident: customOpts.formIdent || null,
             form_data: {
                 pivot: parent
             }
@@ -3353,6 +3370,8 @@ Charcoal.Admin.Widget_Table = function ()
         page: 1,
         num_per_page: 50
     };
+    this.list_actions = {};
+    this.object_actions = {};
 
     this.template = this.properties = this.properties_options = undefined;
 };
@@ -3382,6 +3401,8 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
     this.filters            = opts.data.filters            || this.filters;
     this.orders             = opts.data.orders             || this.orders;
     this.pagination         = opts.data.pagination         || this.pagination;
+    this.list_actions       = opts.data.list_actions       || this.list_actions;
+    this.object_actions     = opts.data.object_actions     || this.object_actions;
 
     // @todo remove the hardcoded shit
     this.collection_ident = opts.data.collection_ident || 'default';
@@ -3602,7 +3623,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
             properties_options: this.properties_options,
             filters:            this.filters,
             orders:             this.orders,
-            pagination:         this.pagination
+            pagination:         this.pagination,
+            list_actions:       this.list_actions
         }
     };
 };
@@ -7744,6 +7766,10 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
     };
 
     if (('plugins' in default_opts) && ('plugins' in this.editor_options)) {
+        if ($.type(this.editor_options.plugins) === 'string') {
+            this.editor_options.plugins = this.editor_options.plugins.split(' ');
+        }
+
         $.each(this.editor_options.plugins, function (i, pattern) {
             // If the first character is ! it should be omitted
             var exclusion = pattern.indexOf('!') === 0;

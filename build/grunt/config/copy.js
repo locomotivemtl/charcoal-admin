@@ -36,7 +36,7 @@ module.exports = {
                     'skins/**/*.*',
                     'plugins/**/plugin.min.js',
                     'plugins/**/*.{css,gif,swf}',
-                    'themes/modern/theme.min.js',
+                    'themes/**/theme.min.js',
                     'tinymce.min.js'
                 ],
                 dest   : '<%= paths.js.dist %>/vendors/tinymce/'

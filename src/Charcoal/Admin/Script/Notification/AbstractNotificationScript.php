@@ -56,20 +56,6 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     private $objectFactory;
 
     /**
-     * @param Container $container Pimple DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-        $this->setNotificationFactory($container['model/factory']);
-        $this->setRevisionFactory($container['model/factory']);
-        $this->emailFactory = $container['email/factory'];
-        $this->userFactory = $container['model/factory'];
-        $this->objectFactory = $container['model/factory'];
-    }
-
-    /**
      * @return array
      */
     public function defaultArguments()
@@ -116,6 +102,46 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
 
         return $response;
     }
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->setNotificationFactory($container['model/factory']);
+        $this->setRevisionFactory($container['model/factory']);
+        $this->emailFactory = $container['email/factory'];
+        $this->userFactory = $container['model/factory'];
+        $this->objectFactory = $container['model/factory'];
+    }
+
+    /**
+     * Get the frequency type of this script.
+     *
+     * @return string
+     */
+    abstract protected function frequency();
+
+    /**
+     * Retrieve the "minimal" date that the revisions should have been made for this script.
+     * @return DateTime
+     */
+    abstract protected function startDate();
+
+    /**
+     * Retrieve the "maximal" date that the revisions should have been made for this script.
+     * @return DateTime
+     */
+    abstract protected function endDate();
+
+    /**
+     * @param Notification $notification The notification object.
+     * @param array        $objects      The objects that were modified.
+     * @return array
+     */
+    abstract protected function emailData(Notification $notification, array $objects);
 
     /**
      * @param string $frequency The frequency type to load.
@@ -307,30 +333,4 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
     {
         return $this->revisionFactory;
     }
-
-    /**
-     * Get the frequency type of this script.
-     *
-     * @return string
-     */
-    abstract protected function frequency();
-
-    /**
-     * Retrieve the "minimal" date that the revisions should have been made for this script.
-     * @return DateTime
-     */
-    abstract protected function startDate();
-
-    /**
-     * Retrieve the "maximal" date that the revisions should have been made for this script.
-     * @return DateTime
-     */
-    abstract protected function endDate();
-
-    /**
-     * @param Notification $notification The notification object.
-     * @param array        $objects      The objects that were modified.
-     * @return array
-     */
-    abstract protected function emailData(Notification $notification, array $objects);
 }

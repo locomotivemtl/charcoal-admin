@@ -113,130 +113,6 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * Retrieve the default data sources (when setting data on an entity).
-     *
-     * @return string[]
-     */
-    protected function defaultDataSources()
-    {
-        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT ];
-    }
-
-    /**
-     * Retrieve the default data source filters (when setting data on an entity).
-     *
-     * @return array
-     */
-    protected function defaultDataSourceFilters()
-    {
-        return [
-            'request' => null,
-            'object'  => 'array_replace_recursive'
-        ];
-    }
-
-    /**
-     * Retrieve the default data source filters (when setting data on an entity).
-     *
-     * Note: Adapted from {@see \Slim\CallableResolver}.
-     *
-     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
-     * @param  mixed $toResolve A callable used when merging data.
-     * @return callable|null
-     */
-    protected function resolveDataSourceFilter($toResolve)
-    {
-        if (is_string($toResolve)) {
-            $obj = $this->obj();
-
-            $resolved = [ $obj, $toResolve ];
-
-            // check for slim callable as "class:method"
-            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
-            if (preg_match($callablePattern, $toResolve, $matches)) {
-                $class = $matches[1];
-                $method = $matches[2];
-
-                if ($class === 'parent') {
-                    $resolved = [ $obj, $class.'::'.$method ];
-                }
-            }
-
-            $toResolve = $resolved;
-        }
-
-        return parent::resolveDataSourceFilter($toResolve);
-    }
-
-    /**
-     * Retrieve the accepted metadata from the current request.
-     *
-     * @return array
-     */
-    protected function acceptedRequestData()
-    {
-        return array_merge(
-            parent::acceptedRequestData(),
-            [ 'obj_type', 'obj_id', 'template' ]
-        );
-    }
-
-    /**
-     * Fetch metadata from the current object type.
-     *
-     * @return array
-     */
-    protected function dataFromObject()
-    {
-        $obj = $this->obj();
-        $objMetadata = $obj->metadata();
-        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
-
-        $formIdent = $this->formIdent();
-        if (!$formIdent) {
-            $formIdent = $this->formIdentFallback();
-        }
-
-        if ($formIdent && $obj->view()) {
-            $formIdent = $obj->render($formIdent);
-        }
-
-        if (isset($adminMetadata['forms'][$formIdent])) {
-            $objFormData = $adminMetadata['forms'][$formIdent];
-        } else {
-            $objFormData = [];
-        }
-
-        if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
-            $extraFormGroups = array_intersect(
-                array_keys($adminMetadata['form_groups']),
-                array_keys($objFormData['groups'])
-            );
-            foreach ($extraFormGroups as $groupIdent) {
-                $objFormData['groups'][$groupIdent] = array_replace_recursive(
-                    $adminMetadata['form_groups'][$groupIdent],
-                    $objFormData['groups'][$groupIdent]
-                );
-            }
-        }
-
-        if (isset($objFormData['sidebars']) && isset($adminMetadata['form_sidebars'])) {
-            $extraFormSidebars = array_intersect(
-                array_keys($adminMetadata['form_sidebars']),
-                array_keys($objFormData['sidebars'])
-            );
-            foreach ($extraFormSidebars as $sidebarIdent) {
-                $objFormData['sidebars'][$sidebarIdent] = array_replace_recursive(
-                    $adminMetadata['form_sidebars'][$sidebarIdent],
-                    $objFormData['sidebars'][$sidebarIdent]
-                );
-            }
-        }
-
-        return $objFormData;
-    }
-
-    /**
      * @return FormSidebarInterface[]|\Generator
      */
     public function sidebars()
@@ -289,7 +165,7 @@ class DocWidget extends FormWidget implements
      *
      * @param  string $formIdent The form identifier.
      * @throws InvalidArgumentException If the identifier is not a string.
-     * @return ObjectForm Chainable
+     * @return self
      */
     public function setFormIdent($formIdent)
     {
@@ -522,81 +398,6 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * Create a new form group widget.
-     *
-     * @see    \Charcoal\Ui\Form\FormTrait::createFormGroup()
-     * @param  array|null $data Optional. The form group data to set.
-     * @return FormGroupInterface
-     */
-    protected function createFormGroup(array $data = null)
-    {
-        $type = $this->defaultGroupType();
-
-        if (isset($data['template'])) {
-            unset($data['template']);
-        }
-
-        $group = $this->formGroupFactory()->create($type);
-        $group->setForm($this);
-
-        if ($group instanceof ObjectContainerInterface) {
-            if (empty($group->objType())) {
-                $group->setObjType($this->objType());
-            }
-
-            if (empty($group->objId()) && !empty($this->objId())) {
-                $group->setObjId($this->objId());
-            }
-        }
-
-        if ($data !== null) {
-            $group->setData($data);
-        }
-
-        $group['show_header'] = $this->showHeader();
-        $group['show_title'] = $this->showTitle();
-
-        return $group;
-    }
-
-    /**
-     * Update the given form group widget.
-     *
-     * @see    \Charcoal\Ui\Form\FormTrait::updateFormGroup()
-     * @param  FormGroupInterface $group      The form group to update.
-     * @param  array|null         $groupData  Optional. The new group data to apply.
-     * @param  string|null        $groupIdent Optional. The new group identifier.
-     * @return FormGroupInterface
-     */
-    protected function updateFormGroup(
-        FormGroupInterface $group,
-        array $groupData = null,
-        $groupIdent = null
-    ) {
-        $group->setForm($this);
-
-        if ($groupIdent !== null) {
-            $group->setIdent($groupIdent);
-        }
-
-        if ($group instanceof ObjectContainerInterface) {
-            if (empty($group->objType())) {
-                $group->setObjType($this->objType());
-            }
-
-            if (empty($group->objId()) && !empty($this->objId())) {
-                $group->setObjId($this->objId());
-            }
-        }
-
-        if ($groupData !== null) {
-            $group->setData($groupData);
-        }
-
-        return $group;
-    }
-
-    /**
      * Set the form's auxiliary data.
      *
      * This method is called via {@see self::setData()} if a "form_data" parameter
@@ -692,5 +493,204 @@ class DocWidget extends FormWidget implements
     public function defaultGroupType()
     {
         return 'charcoal/admin/docs/widget/form-group/doc';
+    }
+
+    /**
+     * Retrieve the default data sources (when setting data on an entity).
+     *
+     * @return string[]
+     */
+    protected function defaultDataSources()
+    {
+        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT ];
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * @return array
+     */
+    protected function defaultDataSourceFilters()
+    {
+        return [
+            'request' => null,
+            'object'  => 'array_replace_recursive'
+        ];
+    }
+
+    /**
+     * Retrieve the default data source filters (when setting data on an entity).
+     *
+     * Note: Adapted from {@see \Slim\CallableResolver}.
+     *
+     * @link   https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php
+     * @param  mixed $toResolve A callable used when merging data.
+     * @return callable|null
+     */
+    protected function resolveDataSourceFilter($toResolve)
+    {
+        if (is_string($toResolve)) {
+            $obj = $this->obj();
+
+            $resolved = [ $obj, $toResolve ];
+
+            // check for slim callable as "class:method"
+            $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+            if (preg_match($callablePattern, $toResolve, $matches)) {
+                $class = $matches[1];
+                $method = $matches[2];
+
+                if ($class === 'parent') {
+                    $resolved = [ $obj, $class.'::'.$method ];
+                }
+            }
+
+            $toResolve = $resolved;
+        }
+
+        return parent::resolveDataSourceFilter($toResolve);
+    }
+
+    /**
+     * Retrieve the accepted metadata from the current request.
+     *
+     * @return array
+     */
+    protected function acceptedRequestData()
+    {
+        return array_merge(
+            parent::acceptedRequestData(),
+            [ 'obj_type', 'obj_id', 'template' ]
+        );
+    }
+
+    /**
+     * Fetch metadata from the current object type.
+     *
+     * @return array
+     */
+    protected function dataFromObject()
+    {
+        $obj = $this->obj();
+        $objMetadata = $obj->metadata();
+        $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
+
+        $formIdent = $this->formIdent();
+        if (!$formIdent) {
+            $formIdent = $this->formIdentFallback();
+        }
+
+        if ($formIdent && $obj->view()) {
+            $formIdent = $obj->render($formIdent);
+        }
+
+        if (isset($adminMetadata['forms'][$formIdent])) {
+            $objFormData = $adminMetadata['forms'][$formIdent];
+        } else {
+            $objFormData = [];
+        }
+
+        if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
+            $extraFormGroups = array_intersect(
+                array_keys($adminMetadata['form_groups']),
+                array_keys($objFormData['groups'])
+            );
+            foreach ($extraFormGroups as $groupIdent) {
+                $objFormData['groups'][$groupIdent] = array_replace_recursive(
+                    $adminMetadata['form_groups'][$groupIdent],
+                    $objFormData['groups'][$groupIdent]
+                );
+            }
+        }
+
+        if (isset($objFormData['sidebars']) && isset($adminMetadata['form_sidebars'])) {
+            $extraFormSidebars = array_intersect(
+                array_keys($adminMetadata['form_sidebars']),
+                array_keys($objFormData['sidebars'])
+            );
+            foreach ($extraFormSidebars as $sidebarIdent) {
+                $objFormData['sidebars'][$sidebarIdent] = array_replace_recursive(
+                    $adminMetadata['form_sidebars'][$sidebarIdent],
+                    $objFormData['sidebars'][$sidebarIdent]
+                );
+            }
+        }
+
+        return $objFormData;
+    }
+
+    /**
+     * Create a new form group widget.
+     *
+     * @see    \Charcoal\Ui\Form\FormTrait::createFormGroup()
+     * @param  array|null $data Optional. The form group data to set.
+     * @return FormGroupInterface
+     */
+    protected function createFormGroup(array $data = null)
+    {
+        $type = $this->defaultGroupType();
+
+        if (isset($data['template'])) {
+            unset($data['template']);
+        }
+
+        $group = $this->formGroupFactory()->create($type);
+        $group->setForm($this);
+
+        if ($group instanceof ObjectContainerInterface) {
+            if (empty($group->objType())) {
+                $group->setObjType($this->objType());
+            }
+
+            if (empty($group->objId()) && !empty($this->objId())) {
+                $group->setObjId($this->objId());
+            }
+        }
+
+        if ($data !== null) {
+            $group->setData($data);
+        }
+
+        $group['show_header'] = $this->showHeader();
+        $group['show_title'] = $this->showTitle();
+
+        return $group;
+    }
+
+    /**
+     * Update the given form group widget.
+     *
+     * @see    \Charcoal\Ui\Form\FormTrait::updateFormGroup()
+     * @param  FormGroupInterface $group      The form group to update.
+     * @param  array|null         $groupData  Optional. The new group data to apply.
+     * @param  string|null        $groupIdent Optional. The new group identifier.
+     * @return FormGroupInterface
+     */
+    protected function updateFormGroup(
+        FormGroupInterface $group,
+        array $groupData = null,
+        $groupIdent = null
+    ) {
+        $group->setForm($this);
+
+        if ($groupIdent !== null) {
+            $group->setIdent($groupIdent);
+        }
+
+        if ($group instanceof ObjectContainerInterface) {
+            if (empty($group->objType())) {
+                $group->setObjType($this->objType());
+            }
+
+            if (empty($group->objId()) && !empty($this->objId())) {
+                $group->setObjId($this->objId());
+            }
+        }
+
+        if ($groupData !== null) {
+            $group->setData($groupData);
+        }
+
+        return $group;
     }
 }

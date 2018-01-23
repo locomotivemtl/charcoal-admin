@@ -57,82 +57,6 @@ class TagsInput extends AbstractSelectableInput
     private $collectionLoader;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setModelFactory($container['model/factory']);
-        $this->setCollectionLoader($container['model/collection/loader']);
-    }
-
-    /**
-     * Set an object model factory.
-     *
-     * @param  FactoryInterface $factory The model factory, to create objects.
-     * @return self
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the object model factory.
-     *
-     * @throws RuntimeException If the model factory was not previously set.
-     * @return FactoryInterface
-     */
-    public function modelFactory()
-    {
-        if (!isset($this->modelFactory)) {
-            throw new RuntimeException(sprintf(
-                'Model Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->modelFactory;
-    }
-
-    /**
-     * Set a model collection loader.
-     *
-     * @param CollectionLoader $loader The collection loader.
-     * @return self
-     */
-    private function setCollectionLoader(CollectionLoader $loader)
-    {
-        $this->collectionLoader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the model collection loader.
-     *
-     * @throws RuntimeException If the collection loader was not previously set.
-     * @return CollectionLoader
-     */
-    protected function collectionLoader()
-    {
-        if (!isset($this->collectionLoader)) {
-            throw new RuntimeException(sprintf(
-                'Collection Loader is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->collectionLoader;
-    }
-
-    /**
      * The input name should always be the property's ident.
      *
      * @return string
@@ -158,7 +82,7 @@ class TagsInput extends AbstractSelectableInput
      * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
      *
      * @todo   [^1]: With PHP7 we can simply do `yield from $choices;`.
-     * @return Generator|array
+     * @return \Generator
      */
     public function choices()
     {
@@ -314,6 +238,87 @@ class TagsInput extends AbstractSelectableInput
     }
 
     /**
+     * Retrieve the default object-to-choice data map.
+     *
+     * @return array
+     */
+    public function defaultChoiceObjMap()
+    {
+        return [
+            'value' => 'id',
+            'text'  => 'name:title:label:id',
+            'color' => 'color'
+        ];
+    }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        $prop = $this->property();
+
+        $data = [
+            // Selectize Control
+            'title'                    => (string)$prop->label(),
+            'copy_items'               => $this->allowClipboardCopy(),
+
+            'selectize_selector'       => '#'.$this->inputId(),
+            'selectize_options'        => $this->selectizeOptions(),
+
+            // Base Property
+            'required'                 => $this->required(),
+            'l10n'                     => $this->property()->l10n(),
+            'multiple'                 => $this->multiple(),
+            'multiple_separator'       => $this->property()->multipleSeparator(),
+            'multiple_options'         => $this->property()->multipleOptions(),
+        ];
+
+        if ($prop instanceof ObjectProperty) {
+            if ($prop->objType()) {
+                $data['pattern']  = $prop->pattern();
+                $data['obj_type'] = $prop->objType();
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setModelFactory($container['model/factory']);
+        $this->setCollectionLoader($container['model/collection/loader']);
+    }
+
+    /**
+     * Retrieve the object model factory.
+     *
+     * @throws RuntimeException If the model factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function modelFactory()
+    {
+        if (!isset($this->modelFactory)) {
+            throw new RuntimeException(sprintf(
+                'Model Factory is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->modelFactory;
+    }
+
+    /**
      * Parse the selectize picker's options.
      *
      * @param  array $settings The selectize picker options.
@@ -323,6 +328,33 @@ class TagsInput extends AbstractSelectableInput
     {
         return $settings;
     }
+
+    /**
+     * Set an object model factory.
+     *
+     * @param  FactoryInterface $factory The model factory, to create objects.
+     * @return self
+     */
+    private function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Set a model collection loader.
+     *
+     * @param CollectionLoader $loader The collection loader.
+     * @return self
+     */
+    private function setCollectionLoader(CollectionLoader $loader)
+    {
+        $this->collectionLoader = $loader;
+
+        return $this;
+    }
+
 
     /**
      * Convert the given value into selectize picker choices.

@@ -111,72 +111,6 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setMetadataLoader($container['metadata/loader']);
-    }
-
-    /**
-     * Set a metadata loader.
-     *
-     * @param  MetadataLoader $loader The loader instance, used to load metadata.
-     * @return self
-     */
-    protected function setMetadataLoader(MetadataLoader $loader)
-    {
-        $this->metadataLoader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the metadata loader.
-     *
-     * @throws RuntimeException If the metadata loader was not previously set.
-     * @return MetadataLoader
-     */
-    protected function metadataLoader()
-    {
-        if ($this->metadataLoader === null) {
-            throw new RuntimeException(sprintf(
-                'Metadata Loader is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->metadataLoader;
-    }
-
-    /**
-     * Load a metadata file.
-     *
-     * @param  string $metadataIdent A metadata file path or namespace.
-     * @return MetadataInterface
-     */
-    protected function loadMetadata($metadataIdent)
-    {
-        $metadataLoader = $this->metadataLoader();
-        $metadata = $metadataLoader->load($metadataIdent, $this->createMetadata());
-
-        return $metadata;
-    }
-
-    /**
-     * @return MetadataInterface
-     */
-    protected function createMetadata()
-    {
-        return new StructureMetadata();
-    }
-
-    /**
      * Set the form object's template controller identifier.
      *
      * @param  mixed $ident The template controller identifier.
@@ -291,6 +225,72 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     }
 
     /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setMetadataLoader($container['metadata/loader']);
+    }
+
+    /**
+     * Set a metadata loader.
+     *
+     * @param  MetadataLoader $loader The loader instance, used to load metadata.
+     * @return self
+     */
+    protected function setMetadataLoader(MetadataLoader $loader)
+    {
+        $this->metadataLoader = $loader;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the metadata loader.
+     *
+     * @throws RuntimeException If the metadata loader was not previously set.
+     * @return MetadataLoader
+     */
+    protected function metadataLoader()
+    {
+        if ($this->metadataLoader === null) {
+            throw new RuntimeException(sprintf(
+                'Metadata Loader is not defined for "%s"',
+                get_class($this)
+            ));
+        }
+
+        return $this->metadataLoader;
+    }
+
+    /**
+     * Load a metadata file.
+     *
+     * @param  string $metadataIdent A metadata file path or namespace.
+     * @return MetadataInterface
+     */
+    protected function loadMetadata($metadataIdent)
+    {
+        $metadataLoader = $this->metadataLoader();
+        $metadata = $metadataLoader->load($metadataIdent, $this->createMetadata());
+
+        return $metadata;
+    }
+
+    /**
+     * @return MetadataInterface
+     */
+    protected function createMetadata()
+    {
+        return new StructureMetadata();
+    }
+
+    /**
      * Finalize the form group's properies, entries, and layout.
      *
      * @param  boolean $reload Rebuild the form group's structure.
@@ -302,41 +302,25 @@ class TemplateOptionsFormGroup extends StructureFormGroup
             $template = null;
             $finalize = false;
 
-            if (!$finalize) {
-                $controller = $this->controllerIdent();
-                if ($controller) {
-                    $finalize = true;
-                    $template = $controller;
-                }
+            $obj = $this->obj();
+            if ($obj instanceof TemplateableInterface) {
+                $structureMetadata = $obj->templateOptionsMetadata();
+            } else {
+                $structureMetadata = $this->createMetadata();
             }
 
-            if (!$finalize) {
-                $obj = $this->obj();
-                $property = $this->templateProperty();
-                /** @see TemplateProperty::__toString() Similar structure interface resolution. */
-                if ($property) {
-                    $template = $obj[$property->ident()];
-                    if ($property instanceof SelectablePropertyInterface) {
-                        if ($property->hasChoice($template)) {
-                            $choice = $property->choice($template);
-                            $keys   = [ 'controller', 'template', 'class' ];
-                            foreach ($keys as $key) {
-                                if (isset($choice[$key])) {
-                                    $finalize = true;
-                                    $template = $choice[$key];
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+            $controllerInterface = $this->controllerIdent();
+            if ($controllerInterface) {
+                $controllerStructIdent = sprintf('widget/form-group/structure/%s/%s', $obj->objType(), $obj->id());
+                $structureMetadata     = $this->metadataLoader()->load(
+                    $controllerStructIdent,
+                    $structureMetadata,
+                    (array)$controllerInterface
+                );
             }
 
-            if ($template) {
-                $metadata = $this->loadMetadata($template);
-                $property = $this->storageProperty();
-                $property->setStructureMetadata($metadata);
-            }
+            $storageProperty = $this->storageProperty();
+            $storageProperty->setStructureMetadata($structureMetadata);
 
             parent::finalizeStructure();
         }

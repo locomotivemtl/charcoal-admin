@@ -82,14 +82,14 @@ class StructureFormGroup extends FormGroupWidget implements
     /**
      * The form group's storage model.
      *
-     * @var ModelInterface|null
+     * @var \Charcoal\Model\ModelInterface|null
      */
     protected $obj;
 
     /**
      * The form group's storage medium.
      *
-     * @var array|PropertyInterface|SourceInterface|null
+     * @var array|PropertyInterface|\Charcoal\Source\SourceInterface|null
      */
     protected $storage;
 
@@ -341,25 +341,30 @@ class StructureFormGroup extends FormGroupWidget implements
 
             $property = $this->storageProperty();
 
-            if ($property) {
-                $struct = $property->structureMetadata();
-                $formGroup = null;
-                if (isset($struct['admin']['default_form_group'])) {
-                    $groupName = $struct['admin']['default_form_group'];
+            $struct = $property->structureMetadata();
+            $formGroup = null;
+            if (isset($struct['admin']['default_form_group'])) {
+                $groupName = $struct['admin']['default_form_group'];
+                if (isset($struct['admin']['form_groups'][$groupName])) {
+                    $formGroup = $struct['admin']['form_groups'][$groupName];
+                }
+            } elseif (isset($struct['admin']['form_group'])) {
+                if (is_string($struct['admin']['form_group'])) {
+                    $groupName = $struct['admin']['form_group'];
                     if (isset($struct['admin']['form_groups'][$groupName])) {
                         $formGroup = $struct['admin']['form_groups'][$groupName];
                     }
-                } elseif (isset($struct['admin']['form_group'])) {
+                } else {
                     $formGroup = $struct['admin']['form_group'];
                 }
+            }
 
-                if ($formGroup) {
-                    if (is_array($this->rawData)) {
-                        $widgetData = array_replace($formGroup, $this->rawData);
-                        $this->setData($widgetData);
-                    } else {
-                        $this->setData($formGroup);
-                    }
+            if ($formGroup) {
+                if (is_array($this->rawData)) {
+                    $widgetData = array_replace($formGroup, $this->rawData);
+                    $this->setData($widgetData);
+                } else {
+                    $this->setData($formGroup);
                 }
             }
         }

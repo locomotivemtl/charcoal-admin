@@ -61,7 +61,7 @@ class Config extends AbstractConfig
      *
      * @param  string $path The admin module base path.
      * @throws InvalidArgumentException If the route group is invalid.
-     * @return Config Chainable
+     * @return self
      */
     public function setBasePath($path)
     {
@@ -98,7 +98,7 @@ class Config extends AbstractConfig
      *
      * @see    \Charcoal\App\AppConfig::setRoutes() For a similar implementation.
      * @param  array $routes The route configuration structure to set.
-     * @return Config Chainable
+     * @return self
      */
     public function setRoutes(array $routes)
     {
@@ -125,7 +125,7 @@ class Config extends AbstractConfig
      * - "phpErrorHandler"
      *
      * @param  array $handlers The handlers configuration structure to set.
-     * @return AppConfig Chainable
+     * @return self
      */
     public function setHandlers(array $handlers)
     {

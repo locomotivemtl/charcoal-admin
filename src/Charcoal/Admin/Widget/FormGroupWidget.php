@@ -67,26 +67,6 @@ class FormGroupWidget extends AbstractUiItem implements
         if (isset($data['form'])) {
             $this->setForm($data['form']);
         }
-
-        $this->setFormInputBuilder($data['form_input_builder']);
-
-        // Set up layout builder (to fulfill LayoutAware Interface)
-        $this->setLayoutBuilder($data['layout_builder']);
-    }
-
-    /**
-     * @param Container $container The DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Satisfies ViewableInterface dependencies
-        $this->setView($container['view']);
-
-        // Satisfies LayoutAwareInterface dependencies
-        $this->setLayoutBuilder($container['layout/builder']);
     }
 
     /**
@@ -185,22 +165,6 @@ class FormGroupWidget extends AbstractUiItem implements
         return $this->propertiesOptions;
     }
 
-    /**
-     * Parse the form group and model properties.
-     *
-     * @return array
-     */
-    protected function parsedFormProperties()
-    {
-        if ($this->parsedFormProperties === null) {
-            $groupProperties = $this->groupProperties();
-            $formProperties  = $this->form()->formProperties($groupProperties);
-
-            $this->parsedFormProperties = $formProperties;
-        }
-
-        return $this->parsedFormProperties;
-    }
 
     /**
      * Determine if the form group has properties.
@@ -329,5 +293,39 @@ class FormGroupWidget extends AbstractUiItem implements
     public function showNotesAbove()
     {
         return $this->showNotesAbove;
+    }
+
+    /**
+     * @param Container $container The DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setFormInputBuilder($container['form/input/builder']);
+
+        // Satisfies ViewableInterface dependencies
+        $this->setView($container['view']);
+
+        // Satisfies LayoutAwareInterface dependencies
+        $this->setLayoutBuilder($container['layout/builder']);
+    }
+
+    /**
+     * Parse the form group and model properties.
+     *
+     * @return array
+     */
+    protected function parsedFormProperties()
+    {
+        if ($this->parsedFormProperties === null) {
+            $groupProperties = $this->groupProperties();
+            $formProperties  = $this->form()->formProperties($groupProperties);
+
+            $this->parsedFormProperties = $formProperties;
+        }
+
+        return $this->parsedFormProperties;
     }
 }

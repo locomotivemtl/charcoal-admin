@@ -2,20 +2,10 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
-
-// From Pimple
-use \Pimple\Container;
-
-// From 'charcoal-core'
-use \Charcoal\Charcoal;
-use \Charcoal\Property\PropertyFactory;
-use \Charcoal\Property\PropertyInterface;
-
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\CollectionContainerInterface;
-use \Charcoal\Admin\Ui\CollectionContainerTrait;
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\CollectionContainerInterface;
+use Charcoal\Admin\Ui\CollectionContainerTrait;
 
 /**
  * The table widget displays a collection in a tabular (table) format.
@@ -36,7 +26,7 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
 
     /**
      * @param array $data The search widget data.
-     * @return TableWidget Chainable
+     * @return self
      */
     public function setData(array $data)
     {

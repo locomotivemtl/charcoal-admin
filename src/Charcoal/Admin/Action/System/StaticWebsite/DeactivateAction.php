@@ -22,17 +22,6 @@ class DeactivateAction extends AdminAction
     private $basePath;
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->basePath = $container['config']['base_path'];
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -40,14 +29,21 @@ class DeactivateAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         unset($request);
+
         $staticLink = $this->basePath.'www/static';
         if (!file_exists($staticLink)) {
             $this->setSuccess(false);
-            return $response->withStatus(404);
+            return $response->withStatus(409);
         }
+
         $ret = unlink($staticLink);
-        $this->setSuccess($ret);
-        return $response;
+        if ($ret === false) {
+            $this->setSuccess(false);
+            return $response->withStatus(500);
+        } else {
+            $this->setSuccess(true);
+            return $response;
+        }
     }
 
     /**
@@ -61,5 +57,16 @@ class DeactivateAction extends AdminAction
         ];
 
         return $ret;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->basePath = $container['config']['base_path'];
     }
 }

@@ -109,34 +109,6 @@ class SelectizeInput extends SelectInput
     private $selectizeRenderer;
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param  Container $container A dependencies container instance.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setModelFactory($container['model/factory']);
-        $this->setCollectionLoader($container['model/collection/loader']);
-        $this->selectizeRenderer = $container['selectize/renderer'];
-    }
-
-    /**
-     * Set an object model factory.
-     *
-     * @param  FactoryInterface $factory The model factory, to create objects.
-     * @return self
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the object model factory.
      *
      * @throws RuntimeException If the model factory was not previously set.
@@ -711,5 +683,31 @@ class SelectizeInput extends SelectInput
         }
 
         return $data;
+    }
+
+    /**
+     * Inject dependencies from a DI Container.
+     *
+     * @param  Container $container A dependencies container instance.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->setModelFactory($container['model/factory']);
+        $this->setCollectionLoader($container['model/collection/loader']);
+        $this->selectizeRenderer = $container['selectize/renderer'];
+    }
+
+    /**
+     * Set an object model factory.
+     *
+     * @param  FactoryInterface $factory The model factory, to create objects.
+     * @return void
+     */
+    protected function setModelFactory(FactoryInterface $factory)
+    {
+        $this->modelFactory = $factory;
     }
 }

@@ -44,10 +44,10 @@
 
 // .charcoal-admin-widget-table {
 //     .table-container > .table {
-//         margin-bottom: ($line-height-base * 3);
+//         margin-bottom: ($line-height-computed * 3);
 
 //         & + .table-foot {
-//             margin-top: -($line-height-base * 3);
+//             margin-top: -($line-height-computed * 3);
 //         }
 //     }
 // }

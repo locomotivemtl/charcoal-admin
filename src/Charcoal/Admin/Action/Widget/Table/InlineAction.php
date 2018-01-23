@@ -58,17 +58,6 @@ class InlineAction extends AdminAction
     protected $widgetFactory;
 
     /**
-     * @param Container $container DI container.
-     * @return void
-     */
-    public function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        $this->setWidgetFactory($container['widget/factory']);
-    }
-
-    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @throws UnexpectedValueException If there are no form controls.
@@ -177,14 +166,14 @@ class InlineAction extends AdminAction
     }
 
     /**
-     * Set the widget factory.
-     *
-     * @param  FactoryInterface $factory The factory to create widgets.
+     * @param Container $container DI container.
      * @return void
      */
-    private function setWidgetFactory(FactoryInterface $factory)
+    protected function setDependencies(Container $container)
     {
-        $this->widgetFactory = $factory;
+        parent::setDependencies($container);
+
+        $this->setWidgetFactory($container['widget/factory']);
     }
 
     /**
@@ -200,5 +189,16 @@ class InlineAction extends AdminAction
         }
 
         return $this->widgetFactory;
+    }
+
+    /**
+     * Set the widget factory.
+     *
+     * @param  FactoryInterface $factory The factory to create widgets.
+     * @return void
+     */
+    private function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
     }
 }

@@ -2,19 +2,19 @@
     Permalink Sample
     ================
 --}}
-<output id="permalink_{{ sampleId }}" class="sample-permalink small" data-spy="#{{ inputId }}">
+<output id="permalink_{{ sampleId }}" class="form-text sample-permalink small" data-spy="#{{ inputId }}">
     <a{{# obj.isActiveRoute }} href="{{ viewLink }}"{{/ obj.isActiveRoute }} target="_blank" class="preview-link">
         <span class="immutable-uri">{{ baseRoute }}</span><strong class="editable-uri">{{ editableRoute }}</strong>
     </a>
     {{# obj.isActiveRoute }}
-    <button type="button" class="btn btn-default btn-xs pull-right" data-permalink-action="copy" id="{{ sampleId }}_copy_permalink" data-toggle="tooltip" data-placement="left" title="{{# _t }}Copy link to clipboard{{/ _t }}">
-        <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+    <button type="button" class="btn btn-primary btn-sm pull-right" data-permalink-action="copy" id="{{ sampleId }}_copy_permalink" data-toggle="tooltip" data-placement="left" title="{{# _t }}Copy link to clipboard{{/ _t }}">
+        <span class="fa fa-clipboard" aria-hidden="true"></span>
         <span class="btn-label sr-only">{{# _t }}Copy To Clipboard{{/ _t }}</span>
     </button>
     {{/ obj.isActiveRoute }}
-    <button type="button" class="btn btn-default btn-xs pull-right hidden" data-permalink-action="revert" data-toggle="tooltip" data-placement="left" title="{{# _t }}Revert to the original link{{/ _t }}">{{# _t }}Revert{{/ _t }}</button>
+    <button type="button" class="btn btn-primary btn-sm float-right d-none" data-permalink-action="revert" data-toggle="tooltip" data-placement="left" title="{{# _t }}Revert to the original link{{/ _t }}">{{# _t }}Revert{{/ _t }}</button>
 </output>
-{{# addJsRequirement }}
+{{# addJs }}
 <script>
 $(function() {
     /**
@@ -109,7 +109,7 @@ $(function() {
                         ch = charMap[ch]
                     }
                     // allowed
-                    ch = ch.replace(options.remove || /[^_+~\w\s\$\*\.\(\)\!\-]/g, '')
+                    ch = ch.replace(options.remove || /[^_+~\w\s\$\*\.\(\)\!\-\/]/g, '')
                     result += ch
                     return result
                 }, '')
@@ -154,8 +154,8 @@ $(function() {
             }
 
             $sample.toggleClass('is-dirty', isDirty);
-            $sample.data('permalink-elem-copier').toggleClass('hidden', isDirty);
-            $sample.data('permalink-elem-reverter').toggleClass('hidden', !isDirty);
+            $sample.data('permalink-elem-copier').toggleClass('d-none', isDirty);
+            $sample.data('permalink-elem-reverter').toggleClass('d-none', !isDirty);
         });
     };
 
@@ -226,11 +226,13 @@ $(function() {
                 $control.on('change.charcoal.permalink', permalinkHandler);
             }
 
-            if ($control.data('permalink-elem-samples').push($sample) > 1) {
-                $revert.remove();
-            }
+            /** Broken for l10n permalinks */
+            $control.data('permalink-elem-samples').push($sample);
+            // if ($control.data('permalink-elem-samples').push($sample) > 1) {
+            //     $revert.remove();
+            // }
         }
     });
 });
 </script>
-{{/ addJsRequirement }}
+{{/ addJs }}

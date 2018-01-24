@@ -33,7 +33,7 @@
                 <td>{{ revUser }}</td>
                 <td>{{& changedProperties }}{{# droppedProperties }}<br><strong>{{# _t }}Deprecated{{/ _t }}</strong>: {{& . }}{{/ droppedProperties }}</td>
                 <td>{{# allowRevert }}
-                    <a class="js-obj-revert btn btn-default" data-rev-num="{{ revNum }}">
+                    <a class="js-obj-revert btn btn-secondary" data-rev-num="{{ revNum }}">
                         <span aria-hidden="true">{{# _t }}Restore{{/ _t }}</span>
                         <span class="sr-only">{{# _t }}Restore This Revision{{/ _t }}</span>
                     </a>

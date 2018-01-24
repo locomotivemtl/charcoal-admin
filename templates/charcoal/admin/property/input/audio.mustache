@@ -11,19 +11,19 @@ Audio Property Input
     <div class="o-toolbox_actions">
         <div class="btn-group-vertical">
             {{#textEnabled}}
-            <label for="voice_message_input_{{inputId}}" class="btn btn-default js-toggle-pane" data-pane="text">
+            <label for="voice_message_input_{{inputId}}" class="btn btn-secondary js-toggle-pane" data-pane="text">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-text"></use></svg>
                 <span class="sr-only">{{#_t}}Enter text here{{/_t}}</span>
             </label>
             {{/textEnabled}}
             {{#recordingEnabled}}
-            <button type="button" class="btn btn-default js-toggle-pane" data-pane="recording">
+            <button type="button" class="btn btn-secondary js-toggle-pane" data-pane="recording">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-microphone"></use></svg>
                 <span class="btn-label sr-only">{{#_t}}Record A Message{{/_t}}</span>
             </button>
             {{/recordingEnabled}}
             {{#fileEnabled}}
-            <button type="button" class="btn btn-default js-toggle-pane" data-pane="file">
+            <button type="button" class="btn btn-secondary js-toggle-pane" data-pane="file">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-file"></use></svg>
                 <span class="btn-label sr-only">{{#_t}}Upload Audio File{{/_t}}</span>
             </button>

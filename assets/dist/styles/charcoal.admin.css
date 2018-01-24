@@ -359,6 +359,10 @@ td {
   font-size: 12px;
 }
 
+output {
+  display: block;
+}
+
 @media (min-width: 700px) {
   .o-flex {
     display: -webkit-box;

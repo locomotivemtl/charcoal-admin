@@ -876,15 +876,11 @@ trait CollectionContainerTrait
             $objLabels = [];
             $proto = $this->proto();
             $objMetadata = $proto->metadata();
-            if (isset($objMetadata['labels'])) {
+            if (isset($objMetadata['labels']) && !empty($objMetadata['labels'])) {
                 $objLabels = $objMetadata['labels'];
-                array_walk($labels, function(&$value) {
-                    // die();
+                array_walk($objLabels, function(&$value) {
                     $value = $this->translator()->translation($value);
                 });
-                var_dump($labels);
-                // die();
-                // return
                 $this->objLabels = $objLabels;
             }
         }

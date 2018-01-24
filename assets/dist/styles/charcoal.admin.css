@@ -2371,6 +2371,65 @@ a.chip:hover::before, a.chip:focus::before {
   background-color: transparent;
 }
 
+.c-dualselect.-cols {
+  -webkit-box-align: top;
+      -ms-flex-align: top;
+          align-items: top;
+}
+
+.c-dualselect_list .form-control ~ .form-control {
+  margin-top: 5px;
+}
+
+.c-dualselect.-rows .c-dualselect_transfer .btn-group + .btn-group {
+  margin-left: 0.5rem;
+}
+
+.c-dualselect.-cols .c-dualselect_transfer .btn-group + .btn-group {
+  margin-top: 0.5rem;
+}
+
+.c-dualselect.-cols .c-dualselect_transfer .btn-group {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn {
+  border-radius: 0.25rem;
+}
+
+.c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn:not(:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn:not(:first-child) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.c-dualselect.-cols .c-dualselect_transfer .btn-group .btn + .btn {
+  margin-left: 0;
+  margin-top: -1px;
+}
+
+.c-dualselect.-rows .c-dualselect_transfer {
+  margin: 1rem 0;
+}
+
+.c-dualselect.-rows .c-dualselect_transfer .fa {
+  -webkit-transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+
+.c-dualselect_reorder {
+  margin-top: 0.5rem;
+}
+
 .switch {
   font-size: 1rem;
   position: relative;
@@ -2509,118 +2568,6 @@ a.chip:hover::before, a.chip:focus::before {
 
 .switch + .switch {
   margin-left: 1rem;
-}
-
-.c-dualselect_list .form-control ~ .form-control {
-  margin-top: 5px;
-}
-
-.c-dualselect--vertical .c-dualselect_list,
-.c-dualselect--vertical .c-dualselect_transfer {
-  float: none;
-  width: auto;
-}
-
-.c-dualselect--vertical .c-dualselect_transfer .btn-toolbar {
-  margin: 1em auto;
-  text-align: center;
-}
-
-.c-dualselect--vertical .c-dualselect_transfer .btn-toolbar .glyphicon.-rotatable {
-  -webkit-transform: rotate(90deg);
-      -ms-transform: rotate(90deg);
-          transform: rotate(90deg);
-}
-
-.c-dualselect--vertical .c-dualselect_transfer .btn-toolbar > .btn,
-.c-dualselect--vertical .c-dualselect_transfer .btn-toolbar > .btn-group {
-  float: none;
-  margin-left: 2px;
-}
-
-@media (max-width: 575.98px) {
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar {
-    margin: 1em auto;
-    text-align: center;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar .glyphicon.-rotatable {
-    -webkit-transform: rotate(90deg);
-        -ms-transform: rotate(90deg);
-            transform: rotate(90deg);
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group {
-    float: none;
-    margin-left: 2px;
-  }
-}
-
-@media (min-width: 576px) {
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar {
-    margin-left: 0;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group > .btn {
-    display: block;
-    float: none;
-    width: 100%;
-    max-width: 100%;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group::after {
-    display: block;
-    clear: both;
-    content: "";
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group > .btn {
-    float: none;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .input-group {
-    margin-left: 0;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn + .btn,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn + .btn-group,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group + .btn,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group + .btn-group {
-    margin-top: 5px;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group > .btn + .btn {
-    margin-top: -1px;
-    margin-left: 0;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn:not(:first-child):not(:last-child),
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group > .btn:not(:first-child):not(:last-child) {
-    border-radius: 0;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn:first-child:not(:last-child),
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group > .btn:first-child:not(:last-child) {
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn:last-child:not(:first-child),
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group > .btn:last-child:not(:first-child) {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group:first-child:not(:last-child) > .btn:last-child,
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  .c-dualselect:not(.c-dualselect--vertical) .c-dualselect_transfer .btn-toolbar > .btn-group:last-child:not(:first-child) > .btn:first-child {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
-}
-
-.c-dualselect_reorder {
-  margin-top: 5px;
 }
 
 .bootstrap-dialog iframe {

@@ -1,0 +1,76 @@
+// ==========================================================================
+// Dual Select
+// ==========================================================================
+
+.c-dualselect {
+    &.-cols {
+        align-items: top;
+        // margin-bottom: $spacer * 3;
+    }
+}
+
+.c-dualselect_list {
+    // Vertically space out multiple block controls
+    // Use general sibling selector to skip hidden inputs
+    .form-control ~ .form-control {
+        margin-top: 5px;
+    }
+}
+
+.c-dualselect_transfer {
+
+    .btn-group + .btn-group {
+        .c-dualselect.-rows & {
+            margin-left: $spacer / 2;
+        }
+
+        .c-dualselect.-cols & {
+            margin-top: $spacer / 2;
+            // margin-left: $spacer;
+        }
+    }
+
+    .c-dualselect.-cols & {
+        .btn-group {
+            flex-direction: column;
+            width: 100%;
+
+            > .btn {
+                border-radius: $border-radius;
+            }
+
+            > .btn:not(:last-child) {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            > .btn:not(:first-child) {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+
+            .btn + .btn {
+                margin-left: 0;
+                margin-top: -1px;
+            }
+        }
+    }
+
+    .c-dualselect.-rows & {
+        margin: 1rem 0;
+
+        .fa {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+.c-dualselect_reorder {
+    margin-top: $spacer / 2;
+
+    .c-dualselect.-cols & {
+        // Allow .c-dualselect{align-items:center} to align both <select>
+        // position: absolute;
+        // width: 100%;
+    }
+}

@@ -4,32 +4,45 @@
 
     `charcoal/admin/property/input/dual-select`
 --}}
-<div class="row c-dualselect{{# inputLayouts.rows }} c-dualselect--vertical{{/ inputLayouts.rows }} bootstrap-multiselect">
-    <div class="c-dualselect_list col-sm-5">
+<div class="row c-dualselect -{{ inputLayout }} bootstrap-multiselect">
+    <div class="c-dualselect_list col-sm-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}5{{/ inputLayouts.rows }}">
         <label class="sr-only" for="{{ inputId }}">{{# _t }}Unselected Options{{/ _t }}</label>
 
         {{# searchable }}
-            <label class="sr-only" for="{{ inputId }}_searchLeft">{{# _t }}Search Unselected Options{{/ _t }}</label>
-            <input id="{{ inputId }}_searchLeft" type="text" name="q" class="form-control" placeholder="{{ left.placeholder }}"/>
+        <label class="sr-only" for="{{ inputId }}_searchLeft">{{# _t }}Search Unselected Options{{/ _t }}</label>
+        <input id="{{ inputId }}_searchLeft" type="text" name="q" class="form-control" placeholder="{{ left.placeholder }}"/>
         {{/ searchable }}
 
-        <select name="[]" id="{{ inputId }}" class="form-control {{ inputClass }}" size="8" multiple="multiple">
+        <select name="[]" id="{{ inputId }}" class="form-control{{# inputClass }} {{ . }}{{/ inputClass }}" size="8" multiple="multiple">
         {{# unselectedChoices }}
             {{> charcoal/admin/property/input/dual-select/option }}
         {{/ unselectedChoices }}
         </select>
     </div>
 
-    <div class="c-dualselect_transfer col-sm-2">
-        {{> charcoal/admin/property/input/dual-select/transfer }}
+    <div class="c-dualselect_transfer col-sm-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}2{{/ inputLayouts.rows }}">
+        <div class="btn-toolbar justify-content-center">
+            <div class="btn-group">
+                <button type="button" id="{{ inputId }}_undo" class="btn btn-info" data-toggle="tooltip" title="{{# _t }}Undo the last action{{/ _t }}">{{# _t }}Undo{{/ _t }}</button>
+            </div>
+            <div class="btn-group">
+                <button type="button" id="{{ inputId }}_rightAll" class="btn btn-outline-secondary" data-toggle="tooltip" title="{{# _t }}Move all options from left to right{{/ _t }}"><i class="fa fa-forward"></i></button>
+                <button type="button" id="{{ inputId }}_rightSelected" class="btn btn-outline-secondary" data-toggle="tooltip" title="{{# _t }}Move selected options from left to right{{/ _t }}"><i class="fa fa-chevron-right"></i></button>
+                <button type="button" id="{{ inputId }}_leftSelected" class="btn btn-outline-secondary" data-toggle="tooltip" title="{{# _t }}Move selected options from right to left{{/ _t }}"><i class="fa fa-chevron-left"></i></button>
+                <button type="button" id="{{ inputId }}_leftAll" class="btn btn-outline-secondary" data-toggle="tooltip" title="{{# _t }}Move all options from right to left{{/ _t }}"><i class="fa fa-backward"></i></button>
+            </div>
+            <div class="btn-group">
+                <button type="button" id="{{ inputId }}_redo" class="btn btn-warning" data-toggle="tooltip" title="{{# _t }}Redo the last action{{/ _t }}">{{# _t }}Redo{{/ _t }}</button>
+            </div>
+        </div>
     </div>
 
-    <div class="c-dualselect_list col-sm-5">
+    <div class="c-dualselect_list col-sm-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}5{{/ inputLayouts.rows }}">
         <label class="sr-only" for="{{ inputId }}_to">{{# _t }}Selected Options{{/ _t }}</label>
 
         {{# searchable }}
-            <label class="sr-only" for="{{ inputId }}_searchRight">{{# _t }}Search Selected Options{{/ _t }}</label>
-            <input id="{{ inputId }}_searchRight" type="text" name="q" class="form-control" placeholder="{{ right.placeholder }}"/>
+        <label class="sr-only" for="{{ inputId }}_searchRight">{{# _t }}Search Selected Options{{/ _t }}</label>
+        <input id="{{ inputId }}_searchRight" type="text" name="q" class="form-control" placeholder="{{ right.placeholder }}"/>
         {{/ searchable }}
 
         {{> charcoal/admin/property/control/fallback }}
@@ -40,11 +53,31 @@
         </select>
 
         {{# reorderable }}
-            <div class="c-dualselect_reorder row">
-                {{> charcoal/admin/property/input/dual-select/reorder }}
+        <div class="position-relative">
+            <div class="c-dualselect_reorder">
+                <div class="btn-toolbar justify-content-center">
+                    <div class="btn-group">
+                        <button type="button" id="{{ inputId }}_move_up" data-toggle="tooltip" class="btn btn-outline-secondary" title="{{# _t }}Move up the selected options from the right side{{/ _t }}"><i class="fa fa-arrow-up"></i></button>
+                        <button type="button" id="{{ inputId }}_move_down" data-toggle="tooltip" class="btn btn-outline-secondary" title="{{# _t }}Move down the selected options from the right side{{/ _t }}"><i class="fa fa-arrow-down"></i></button>
+                    </div>
+                </div>
             </div>
+        </div>
         {{/ reorderable }}
     </div>
 </div>
 
-{{> charcoal/admin/property/input/dual-select/js }}
+{{# addJs }}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id: '{{ inputId }}',
+    type: 'charcoal/admin/property/input/DualSelect',
+    data: {
+        {{# searchable }}searchable: true, {{/ searchable }}
+        dualselect_selector: '#{{ inputId }}',
+        dualselect_options:  {{& dualSelectOptionsAsJson }}
+    }
+});
+</script>
+{{/ addJs }}
+

@@ -4,8 +4,15 @@
 
 .c-dualselect {
     &.-cols {
-        align-items: top;
-        // margin-bottom: $spacer * 3;
+        align-items: start;
+
+        @include media-breakpoint-down('sm') {
+            > [class*="col-"] {
+                max-width: none;
+                flex: none;
+                width: 100%;
+            }
+        }
     }
 }
 
@@ -18,40 +25,12 @@
 }
 
 .c-dualselect_transfer {
-
-    .btn-group + .btn-group {
-        .c-dualselect.-rows & {
-            margin-left: $spacer / 2;
-        }
-
-        .c-dualselect.-cols & {
-            margin-top: $spacer / 2;
-            // margin-left: $spacer;
-        }
-    }
-
     .c-dualselect.-cols & {
-        .btn-group {
-            flex-direction: column;
-            width: 100%;
+        @include media-breakpoint-down('sm') {
+            margin: 1rem 0;
 
-            > .btn {
-                border-radius: $border-radius;
-            }
-
-            > .btn:not(:last-child) {
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-
-            > .btn:not(:first-child) {
-                border-top-left-radius: 0;
-                border-top-right-radius: 0;
-            }
-
-            .btn + .btn {
-                margin-left: 0;
-                margin-top: -1px;
+            .fa {
+                transform: rotate(90deg);
             }
         }
     }
@@ -63,14 +42,53 @@
             transform: rotate(90deg);
         }
     }
+
+    .btn-group {
+        + .btn-group {
+            .c-dualselect.-rows & {
+                margin-left: $spacer / 2;
+            }
+
+            .c-dualselect.-cols & {
+                @include media-breakpoint-down('sm') {
+                    margin-left: $spacer / 2;
+                }
+
+                @include media-breakpoint-up('md') {
+                    margin-top: $spacer / 2;
+                }
+            }
+        }
+
+        .c-dualselect.-cols & {
+
+            @include media-breakpoint-up('md') {
+                flex-direction: column;
+                width: 100%;
+
+                > .btn {
+                    border-radius: $border-radius;
+                }
+
+                > .btn:not(:last-child) {
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+
+                > .btn:not(:first-child) {
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                }
+
+                .btn + .btn {
+                    margin-left: 0;
+                    margin-top: -1px;
+                }
+            }
+        }
+    }
 }
 
 .c-dualselect_reorder {
     margin-top: $spacer / 2;
-
-    .c-dualselect.-cols & {
-        // Allow .c-dualselect{align-items:center} to align both <select>
-        // position: absolute;
-        // width: 100%;
-    }
 }

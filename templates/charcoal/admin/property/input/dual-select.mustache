@@ -5,7 +5,7 @@
     `charcoal/admin/property/input/dual-select`
 --}}
 <div class="row c-dualselect -{{ inputLayout }} bootstrap-multiselect">
-    <div class="c-dualselect_list col-sm-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}5{{/ inputLayouts.rows }}">
+    <div class="c-dualselect_list col-md-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}5{{/ inputLayouts.rows }}">
         <label class="sr-only" for="{{ inputId }}">{{# _t }}Unselected Options{{/ _t }}</label>
 
         {{# searchable }}
@@ -20,7 +20,7 @@
         </select>
     </div>
 
-    <div class="c-dualselect_transfer col-sm-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}2{{/ inputLayouts.rows }}">
+    <div class="c-dualselect_transfer col-md-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}2{{/ inputLayouts.rows }}">
         <div class="btn-toolbar justify-content-center">
             <div class="btn-group">
                 <button type="button" id="{{ inputId }}_undo" class="btn btn-info" data-toggle="tooltip" title="{{# _t }}Undo the last action{{/ _t }}">{{# _t }}Undo{{/ _t }}</button>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="c-dualselect_list col-sm-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}5{{/ inputLayouts.rows }}">
+    <div class="c-dualselect_list col-md-{{# inputLayouts.rows }}12{{/ inputLayouts.rows }}{{^ inputLayouts.rows }}5{{/ inputLayouts.rows }}">
         <label class="sr-only" for="{{ inputId }}_to">{{# _t }}Selected Options{{/ _t }}</label>
 
         {{# searchable }}

@@ -2372,48 +2372,34 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-dualselect.-cols {
-  -webkit-box-align: top;
-      -ms-flex-align: top;
-          align-items: top;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
+}
+
+@media (max-width: 767.98px) {
+  .c-dualselect.-cols > [class*="col-"] {
+    max-width: none;
+    -webkit-box-flex: 0;
+        -ms-flex: none;
+            flex: none;
+    width: 100%;
+  }
 }
 
 .c-dualselect_list .form-control ~ .form-control {
   margin-top: 5px;
 }
 
-.c-dualselect.-rows .c-dualselect_transfer .btn-group + .btn-group {
-  margin-left: 0.5rem;
-}
-
-.c-dualselect.-cols .c-dualselect_transfer .btn-group + .btn-group {
-  margin-top: 0.5rem;
-}
-
-.c-dualselect.-cols .c-dualselect_transfer .btn-group {
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 100%;
-}
-
-.c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn {
-  border-radius: 0.25rem;
-}
-
-.c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn:not(:last-child) {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn:not(:first-child) {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-.c-dualselect.-cols .c-dualselect_transfer .btn-group .btn + .btn {
-  margin-left: 0;
-  margin-top: -1px;
+@media (max-width: 767.98px) {
+  .c-dualselect.-cols .c-dualselect_transfer {
+    margin: 1rem 0;
+  }
+  .c-dualselect.-cols .c-dualselect_transfer .fa {
+    -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+  }
 }
 
 .c-dualselect.-rows .c-dualselect_transfer {
@@ -2424,6 +2410,47 @@ a.chip:hover::before, a.chip:focus::before {
   -webkit-transform: rotate(90deg);
       -ms-transform: rotate(90deg);
           transform: rotate(90deg);
+}
+
+.c-dualselect.-rows .c-dualselect_transfer .btn-group + .btn-group {
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group + .btn-group {
+    margin-left: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group + .btn-group {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: 100%;
+  }
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn {
+    border-radius: 0.25rem;
+  }
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn:not(:last-child) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group > .btn:not(:first-child) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .c-dualselect.-cols .c-dualselect_transfer .btn-group .btn + .btn {
+    margin-left: 0;
+    margin-top: -1px;
+  }
 }
 
 .c-dualselect_reorder {

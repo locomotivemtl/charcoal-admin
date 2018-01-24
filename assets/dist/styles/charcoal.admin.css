@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-01-23 
+ * ! Charcoal Admin - 2018-01-24 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -185,12 +185,9 @@ label {
   color: #6092f5;
 }
 
-.btn-mock {
-  cursor: inherit;
-}
-
-.btn-mock + .btn-group {
-  margin-left: -1px;
+/** Force border-radius */
+.btn-rounded {
+  border-radius: 0.25rem !important;
 }
 
 .dropdown-item {

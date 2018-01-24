@@ -22,15 +22,10 @@
     color: $charcoal-blue-1;
 }
 
-
-// Fake button
-// -------------------------
-
-.btn-mock {
-    cursor: inherit;
-
-    & + .btn-group {
-        margin-left: -1px;
+/** Force border-radius */
+.btn-rounded {
+    @if $enable-rounded {
+        border-radius: $border-radius !important;
     }
 }
 

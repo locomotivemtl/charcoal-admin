@@ -74,7 +74,7 @@
 }
 
 label {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .form-control {
@@ -93,6 +93,10 @@ label {
 
 .form-control.-noborder {
   border: none;
+}
+
+.form-control[readonly] {
+  cursor: not-allowed;
 }
 
 .form-control-plaintext {

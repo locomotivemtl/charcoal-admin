@@ -220,8 +220,8 @@ abstract class AdminAction extends AbstractAction implements
     {
         $recaptcha = $this->appConfig('apis.google.recaptcha');
 
-        return (isset($recaptcha['public_key']) || isset($recaptcha['key'])) &&
-               (isset($recaptcha['private_key']) || isset($recaptcha['secret']));
+        return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
+               (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
     }
 
     /**
@@ -234,10 +234,10 @@ abstract class AdminAction extends AbstractAction implements
     {
         $recaptcha = $this->appConfig('apis.google.recaptcha');
 
-        if (isset($recaptcha['private_key'])) {
-            return (string)$recaptcha['private_key'];
-        } elseif (isset($recaptcha['secret'])) {
-            return (string)$recaptcha['secret'];
+        if (!empty($recaptcha['private_key'])) {
+            return $recaptcha['private_key'];
+        } elseif (!empty($recaptcha['secret'])) {
+            return $recaptcha['secret'];
         }
 
         return null;
@@ -256,7 +256,7 @@ abstract class AdminAction extends AbstractAction implements
         $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
         $secret = $this->recaptchaSecretKey();
-        if (!$secret) {
+        if (empty($secret)) {
             throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] is not configured.');
         }
 

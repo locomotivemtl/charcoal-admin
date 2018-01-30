@@ -504,8 +504,8 @@ class AdminTemplate extends AbstractTemplate implements
     {
         $recaptcha = $this->appConfig('apis.google.recaptcha');
 
-        return (isset($recaptcha['public_key']) || isset($recaptcha['key'])) &&
-               (isset($recaptcha['private_key']) || isset($recaptcha['secret']));
+        return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
+               (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
     }
 
     /**
@@ -519,9 +519,21 @@ class AdminTemplate extends AbstractTemplate implements
     {
         $recaptcha = $this->appConfig('apis.google.recaptcha');
 
-        return !isset($recaptcha['invisible']) ||
-               ($recaptcha['invisible'] === true) ||
-               (isset($recaptcha['size']) && $recaptcha['size'] === 'invisible');
+        $hasInvisible = isset($recaptcha['invisible']);
+        if ($hasInvisible && $recaptcha['invisible'] === true) {
+            return true;
+        }
+
+        $hasSize = isset($recaptcha['size']);
+        if ($hasSize && $recaptcha['size'] === 'invisible') {
+            return true;
+        }
+
+        if (!$hasInvisible && !$hasSize) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -545,10 +557,10 @@ class AdminTemplate extends AbstractTemplate implements
     {
         $recaptcha = $this->appConfig('apis.google.recaptcha');
 
-        if (isset($recaptcha['public_key'])) {
-            return (string)$recaptcha['public_key'];
-        } else {
-            return (string)$recaptcha['key'];
+        if (!empty($recaptcha['public_key'])) {
+            return $recaptcha['public_key'];
+        } elseif (!empty($recaptcha['key'])) {
+            return $recaptcha['key'];
         }
 
         return null;
@@ -573,12 +585,12 @@ class AdminTemplate extends AbstractTemplate implements
             'callback' => null,
         ];
 
-        if (isset($appConfig['invisible']) && $appConfig['invisible'] === false) {
+        if ($this->recaptchaInvisible() === false) {
             $params['size'] = null;
         }
 
         foreach ($params as $key => $val) {
-            if ($val === null) {
+            if ($val === null || $val === '') {
                 if (isset($tplConfig[$key])) {
                     $val = $tplConfig[$key];
                 } elseif (isset($appConfig[$key])) {

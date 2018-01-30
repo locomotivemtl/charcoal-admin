@@ -20,6 +20,17 @@ $.fn.disable = function () {
     return this;
 };
 
+/**
+ * Return TRUE if a jQuery selection exists.
+ *
+ * @link      https://advancedcustomfields.com/
+ * @copyright Elliot Condon
+ * @return    {boolean}
+ */
+$.fn.exists = function () {
+    return $(this).length > 0;
+};
+
 if (!RegExp.escape) {
     /**
      * Quote regular expression characters.
@@ -8358,10 +8369,9 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
     event.preventDefault();
 
     var $form      = $(event.currentTarget),
-        $challenge = $form.find('#g-recaptcha-challenge'),
-        $response  = $form.find('#g-recaptcha-response');
+        $challenge = $form.find('#g-recaptcha-challenge');
 
-    if ($response.val().length || $challenge.data('size') === 'invisible') {
+    if ($challenge.exists() && $challenge.data('size') === 'invisible') {
         window.grecaptcha.execute();
     } else {
         this.submitForm.call($form);

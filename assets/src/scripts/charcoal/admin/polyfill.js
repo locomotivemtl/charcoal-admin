@@ -20,6 +20,17 @@ $.fn.disable = function () {
     return this;
 };
 
+/**
+ * Return TRUE if a jQuery selection exists.
+ *
+ * @link      https://advancedcustomfields.com/
+ * @copyright Elliot Condon
+ * @return    {boolean}
+ */
+$.fn.exists = function () {
+    return $(this).length > 0;
+};
+
 if (!RegExp.escape) {
     /**
      * Quote regular expression characters.

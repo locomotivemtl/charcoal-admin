@@ -51,10 +51,9 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
     event.preventDefault();
 
     var $form      = $(event.currentTarget),
-        $challenge = $form.find('#g-recaptcha-challenge'),
-        $response  = $form.find('#g-recaptcha-response');
+        $challenge = $form.find('#g-recaptcha-challenge');
 
-    if ($response.val().length || $challenge.data('size') === 'invisible') {
+    if ($challenge.exists() && $challenge.data('size') === 'invisible') {
         window.grecaptcha.execute();
     } else {
         this.submitForm.call($form);

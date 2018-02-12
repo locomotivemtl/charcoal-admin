@@ -179,112 +179,100 @@ The following property inputs are available  to build forms in the _admin_ modul
 
 ### Selectize inputs options
 
-| Name               | Type                | Description                                                                           | default  |
-| --------------     | ------------------- | -----------                                                                           | -------- |
-| **choice_obj_map** | _array_             | Custom mapping between an object properties or callable and the selectize.            | |
-| **label**          | _Translation_       | ...                                                                                   | |
-| **l10n**           | _bool_              | If true, then the data should be stored in a l10n-aware structure (be translatable).s | |
-| **hidden**         | _bool_              |                                                                                       | |
-| **multiple**       | _bool_              | Multiple values can be held and stored, if true.                                      | |
-| **required**       | _bool_              |                                                                                       | |
-| **unique**         | _bool_              |                                                                                       | |
-| **storable**       | _bool_              |                                                                                       | |
-| **active**         | _bool_              |                                                                                       | |
-
-<table class="table table-bordered table-hover table-condensed">
-<thead><tr><th title="Field #1">Name</th>
-    <th title="Field #2">Type</th>
-    <th title="Field #3">Description</th>
-    <th title="Field #4">Default</th>
-</tr></thead>
-<tbody><tr>
-    <td><strong>choice_obj_map</strong></td>
-    <td><em>array</em></td>
-    <td>Custom mapping between an object properties or callable and the selectize.
-        <table class="table table-bordered table-hover table-condensed">
-        <tbody><tr>
-        <td><strong>value</strong></td>
-        <td>Object property or object callable. Defines the actual value to be registered in the database</td>
-        </tr>
-        <tr>
-        <td><strong>label<string></td>
-        <td>Object property or object callable. Defines the visible label of the input.</td>
-        </tr>
-        </tbody></table>
-    </td>
-    <td>
-<pre>{
-    &quot;value&quot; : &quot;id&quot;,
-    &quot;label&quot;: &quot;name:title:label:id&quot;
+<table width="100%"><tr><th>Name</th><th>Type</th><th>Description</th><th>Default</th></tr>
+<tr>
+  <td valign="top"><strong>choice_obj_map</strong></td>
+  <td valign="top"><em>array</em></td>
+  <td valign="top">Custom mapping between an object properties or callable and the selectize.
+  <table class="table table-bordered table-hover table-condensed">
+          <tbody><tr>
+          <td><strong>value</strong></td>
+          <td>Object property or object callable. Defines the actual value to be registered in the database</td>
+          </tr>
+          <tr>
+          <td><strong>label<string></td>
+          <td>Object property or object callable. Defines the visible label of the input.</td>
+          </tr>
+          </tbody>
+      </table>
+  </td>
+  <td valign="top">{&quot;value&quot; : &quot;id&quot;, &quot;label&quot;: &quot;name:title:label:id&quot;}</td>
+</tr>
+<tr>
+  <td valign="top"><strong>form_ident</strong></td>
+  <td valign="top"><em>string|array</em></td>
+  <td valign="top">Allow to define a specific object form ident when creating or updating an object. You can specify different form idents for create and update by using the &quot;create&quot; and &quot;update&quot; array keys</td>
+  <td valign="top">&quot;quick&quot;</td>
+</tr>
+<tr>
+  <td valign="top"><strong>selectize_templates</strong></td>
+  <td valign="top"><em>array</em></td>
+  <td valign="top">Allow custom rendering for selectize [item] and [option]. Overrule choice_obj_map[label].
+  <table class="table table-bordered table-hover table-condensed">
+          <tbody><tr>
+          <td><strong>item</strong></td>
+          <td>Custom renderable html or mustache template for the selectize item. [Item] is the term used to refer to a selected choice.</td>
+          </tr>
+          <tr>
+          <td><strong>option</strong></td>
+          <td>Custom renderable html or mustache template for the selectize option. [Option] is the term used to refer to an available choice.</td>
+          </tr>
+          <tr>
+          <td><strong>controller</strong></td>
+          <td>Defines a rendering context (path to php controller). (optional) Default context is the object itself.</td>
+          </tr>
+          </tbody>
+      </table>
+  </td>
+  <td valign="top">{}</td>
+</tr>
+<tr>
+  <td valign="top"><strong>allow_create</strong></td>
+  <td valign="top"><em>bool</em></td>
+  <td valign="top">Display a &#39;create&#39; button which triggers the selectize create functionality.</td>
+  <td valign="top">false</td>
+</tr>
+<tr>
+  <td valign="top"><strong>allow_update</strong></td>
+  <td valign="top"><em>bool</em></td>
+  <td valign="top">Display an &#39;update&#39; button which triggers the selectize update functionality. Applies to currently selected element.</td>
+  <td valign="top">false</td>
+</tr>
+<tr>
+  <td valign="top"><strong>allow_clipboard_copy</strong></td>
+  <td valign="top"><em>bool</em></td>
+  <td valign="top">Display a &#39;copy&#39; button which allows the user to easilly copy all selected elements at once.</td>
+  <td valign="top">false</td>
+</tr>
+<tr>
+  <td valign="top"><strong>deferred</strong></td>
+  <td valign="top"><em>bool</em></td>
+  <td valign="top">Allow the select to load the dropdown &quot;options&quot; with an ajax request instead of on load. This can speed up the page load when there is a lot of &quot;options&quot;. </td>
+  <td valign="top">false</td>
+</tr>
+<tr>
+  <td valign="top"><strong>selectize_options</strong></td>
+  <td valign="top"><em>array</em></td>
+  <td valign="top">Defines the selectize js options. See the https://github.com/selectize/selectize.js/blob/master/docs/usage.md. Some usefull ones are :
+  <ul>
+  <li>&quot;maxItems&quot;</li>
+  <li>&quot;maxOptions&quot;</li>
+  <li>&quot;create&quot;</li>
+  <li>&quot;placeholder&quot;</li>
+  <li>&quot;searchField&quot;</li>
+  <li>&quot;plugins&quot;</li>
+  </ul>
+  Also, two home made plugins are available : &quot;btn_remove&quot; and &quot;btn_update&quot; that are custom buttons for selected items that work well with charcoal objects and doesn&#39;t break styling.</td>
+  <td valign="top"><pre>{
+   persist: true,
+   preload: "focus",
+   openOnFocus: true, 
+   labelField: "label",
+   searchField: ["value", "label"]
 }</pre>
-    </td>
+  </td>
 </tr>
-<tr>
-    <td><strong>form_ident</strong></td>
-    <td><em>string|array</em></td>
-    <td>Allow to define a specific object form ident when creating or updating an object. You can specify different form idents for create and update by using the &quot;create&quot; and &quot;update&quot; array keys</td>
-    <td>&quot;quick&quot;</td>
-</tr>
-<tr>
-    <td><strong>selectize_templates</strong></td>
-    <td><em>array</em></td>
-    <td>Allow custom rendering for selectize [item] and [option]. Overrule choice_obj_map[label].
-        <table class="table table-bordered table-hover table-condensed">
-        <tbody><tr>
-        <td><strong>item</strong></td>
-        <td>Custom renderable html or mustache template for the selectize item. [Item] is the term used to refer to a selected choice.</td>
-        </tr>
-        <tr>
-        <td><strong>option</strong></td>
-        <td>Custom renderable html or mustache template for the selectize option. [Option] is the term used to refer to an available choice.</td>
-        </tr>
-        <tr>
-        <td><strong>controller</strong></td>
-        <td>Defines a rendering context (path to php controller). (optional) Default context is the object itself.</td>
-        </tr>
-        </tbody></table>
-    </td>
-    <td>{}</td>
-</tr>
-<tr>
-    <td><strong>allow_create</strong></td>
-    <td><em>bool</em></td>
-    <td>Display a "create" button which triggers the selectize create functionality.</td>
-    <td>false</td>
-</tr>
-<tr>
-    <td><strong>allow_update</strong></td>
-    <td><em>bool</em></td>
-    <td>Display an "update" button which triggers the selectize update functionality. Applies to currently selected element.</td>
-    <td>false</td>
-</tr>
-<tr>
-    <td><strong>allow_clipboard_copy</strong></td>
-    <td><em>bool</em></td>
-    <td>Display a "copy" button which allows the user to easilly copy all selected elements at once.</td>
-    <td>false</td>
-</tr>
-<tr>
-    <td><strong>deferred</strong></td>
-    <td><em>bool</em></td>
-    <td>Allow the select to load the dropdown &quot;options&quot; with an ajax request instead of on load. This can speed up the page load when there is a lot of &quot;options&quot;. </td>
-    <td>false</td>
-</tr>
-<tr>
-    <td><strong>selectize_options</strong></td>
-    <td><em>array</em></td>
-    <td>Defines the selectize js options. See the [selectize.js doc](https://github.com/selectize/selectize.js/blob/master/docs/usage.md). Some usefull ones are : [&quot;maxItems&quot;, &quot;maxOptions&quot;, &quot;create&quot;, &quot;placeholder&quot;, &quot;searchField&quot;, &quot;plugins&quot;]. Also, two home made plugins are available : &quot;btn_remove&quot; and &quot;btn_update&quot; that are custom buttons for selected items that work well with charcoal objects and doesn"t break styling.</td>
-    <td>
-<pre>{
-    persist: true,
-    preload: "focus",
-    openOnFocus: true, 
-    labelField: "label",
-    searchField: ["value", "label"]
-}</pre>
-    </td>
-</tr>
-</tbody></table>
+</table>
 
 # Actions
 

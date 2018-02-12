@@ -179,7 +179,13 @@ The following property inputs are available  to build forms in the _admin_ modul
 
 ### Selectize inputs options
 
-<table width="100%"><tr><th>Name</th><th>Type</th><th>Description</th><th>Default</th></tr>
+<table width="100%">
+<tr>
+  <th width="120px" align="left">Name</th>
+  <th align="left">Type</th>
+  <th width="60px" align="left">Description</th>
+  <th width="60px" align="left">Default</th>
+</tr>
 <tr>
   <td valign="top"><strong>choice_obj_map</strong></td>
   <td valign="top"><em>array</em></td>
@@ -196,7 +202,10 @@ The following property inputs are available  to build forms in the _admin_ modul
           </tbody>
       </table>
   </td>
-  <td valign="top">{&quot;value&quot; : &quot;id&quot;, &quot;label&quot;: &quot;name:title:label:id&quot;}</td>
+  <td valign="top"><code>{
+  &quot;value&quot; : &quot;id&quot;,
+  &quot;label&quot;: &quot;name:title:label:id&quot;
+  }</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>form_ident</strong></td>

@@ -182,8 +182,8 @@ The following property inputs are available  to build forms in the _admin_ modul
 <table width="100%">
 <tr>
   <th width="120px" align="left">Name</th>
-  <th align="left">Type</th>
-  <th width="60px" align="left">Description</th>
+  <th width="30px" align="left">Type</th>
+  <th align="left">Description</th>
   <th width="60px" align="left">Default</th>
 </tr>
 <tr>
@@ -191,78 +191,82 @@ The following property inputs are available  to build forms in the _admin_ modul
   <td valign="top"><em>array</em></td>
   <td valign="top">Custom mapping between an object properties or callable and the selectize.
   <table class="table table-bordered table-hover table-condensed">
+          </br>
+          </br>
           <tbody><tr>
-          <td><strong>value</strong></td>
+          <td valign="top"><strong>value</strong></td>
           <td>Object property or object callable. Defines the actual value to be registered in the database</td>
           </tr>
           <tr>
-          <td><strong>label<string></td>
+          <td valign="top"><strong>label<string></td>
           <td>Object property or object callable. Defines the visible label of the input.</td>
           </tr>
           </tbody>
       </table>
   </td>
-  <td valign="top"><code>{
+  <td valign="top"><pre>{
   &quot;value&quot; : &quot;id&quot;,
   &quot;label&quot;: &quot;name:title:label:id&quot;
-  }</code></td>
+}</pre></td>
 </tr>
 <tr>
   <td valign="top"><strong>form_ident</strong></td>
   <td valign="top"><em>string|array</em></td>
   <td valign="top">Allow to define a specific object form ident when creating or updating an object. You can specify different form idents for create and update by using the &quot;create&quot; and &quot;update&quot; array keys</td>
-  <td valign="top">&quot;quick&quot;</td>
+  <td valign="top"><code>&quot;quick&quot;</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>selectize_templates</strong></td>
   <td valign="top"><em>array</em></td>
   <td valign="top">Allow custom rendering for selectize [item] and [option]. Overrule choice_obj_map[label].
   <table class="table table-bordered table-hover table-condensed">
+          </br>
+          </br>
           <tbody><tr>
-          <td><strong>item</strong></td>
+          <td valign="top"><strong>item</strong></td>
           <td>Custom renderable html or mustache template for the selectize item. [Item] is the term used to refer to a selected choice.</td>
           </tr>
           <tr>
-          <td><strong>option</strong></td>
+          <td valign="top"><strong>option</strong></td>
           <td>Custom renderable html or mustache template for the selectize option. [Option] is the term used to refer to an available choice.</td>
           </tr>
           <tr>
-          <td><strong>controller</strong></td>
+          <td valign="top"><strong>controller</strong></td>
           <td>Defines a rendering context (path to php controller). (optional) Default context is the object itself.</td>
           </tr>
           </tbody>
       </table>
   </td>
-  <td valign="top">{}</td>
+  <td valign="top"><code>{}</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>allow_create</strong></td>
   <td valign="top"><em>bool</em></td>
   <td valign="top">Display a &#39;create&#39; button which triggers the selectize create functionality.</td>
-  <td valign="top">false</td>
+  <td valign="top"><code>false</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>allow_update</strong></td>
   <td valign="top"><em>bool</em></td>
   <td valign="top">Display an &#39;update&#39; button which triggers the selectize update functionality. Applies to currently selected element.</td>
-  <td valign="top">false</td>
+  <td valign="top"><code>false</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>allow_clipboard_copy</strong></td>
   <td valign="top"><em>bool</em></td>
   <td valign="top">Display a &#39;copy&#39; button which allows the user to easilly copy all selected elements at once.</td>
-  <td valign="top">false</td>
+  <td valign="top"><code>false</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>deferred</strong></td>
   <td valign="top"><em>bool</em></td>
   <td valign="top">Allow the select to load the dropdown &quot;options&quot; with an ajax request instead of on load. This can speed up the page load when there is a lot of &quot;options&quot;. </td>
-  <td valign="top">false</td>
+  <td valign="top"><code>false</code></td>
 </tr>
 <tr>
   <td valign="top"><strong>selectize_options</strong></td>
   <td valign="top"><em>array</em></td>
-  <td valign="top">Defines the selectize js options. See the https://github.com/selectize/selectize.js/blob/master/docs/usage.md. Some usefull ones are :
+  <td valign="top">Defines the selectize js options. See the <a href="https://github.com/selectize/selectize.js/blob/master/docs/usage.md">Selectize.js doc</a>. Some usefull ones are :
   <ul>
   <li>&quot;maxItems&quot;</li>
   <li>&quot;maxOptions&quot;</li>
@@ -277,11 +281,47 @@ The following property inputs are available  to build forms in the _admin_ modul
    preload: "focus",
    openOnFocus: true, 
    labelField: "label",
-   searchField: ["value", "label"]
+   searchField: [
+     "value",
+     "label"
+   ]
 }</pre>
   </td>
 </tr>
 </table>
+
+Usage example : 
+
+<pre>
+"categories": {
+    "type": "object",
+    "input_type": "charcoal/admin/property/input/selectize",
+    "multiple": true,
+    "deferred": true,
+    "obj_type": "cms/object/news-category",
+    "pattern": "title",
+    "choice_obj_map": {
+        "value": "{{ident}}",
+        "label": "{{customLabelFunction}} - {{someAdditionalInfo }}"
+    },
+    "selectize_templates": {
+        "item": "project/selectize/custom-item-template",
+        "option": "project/selectize/custom-option-template",
+        "controller": "project/selectize/custom-template"
+    },
+    "selectize_options": {
+        "plugins": {
+            "drag_drop": {},
+            "btn_remove": {},
+            "btn_update": {}
+        }
+    },
+    "form_ident": {
+        "create": "quick.create",
+        "update": "quick.update"
+    }
+}
+</pre>
 
 # Actions
 

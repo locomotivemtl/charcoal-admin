@@ -424,6 +424,16 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
+     * @return boolean
+     */
+    public function disableTheme()
+    {
+        return isset($this->elfinderConfig['disable_theme']) ?
+            !!$this->elfinderConfig['disable_theme'] :
+            false;
+    }
+
+    /**
      * Retrieve the default custom localizations.
      *
      * @return array

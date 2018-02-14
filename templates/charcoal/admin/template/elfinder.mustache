@@ -9,7 +9,9 @@
         <link rel="stylesheet" type="text/css" media="screen" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
         <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_assets_url }}css/elfinder.min.css">
+        {{^ disableTheme }}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ admin_assets_url }}styles/vendors/elfinder.css">
+        {{/ disableTheme }}
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>

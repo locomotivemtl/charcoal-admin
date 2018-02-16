@@ -589,6 +589,11 @@ class SidemenuWidget extends AdminWidget implements
 
         uasort($this->groups, [ $this, 'sortGroupsByPriority' ]);
 
+        // Remove items that are not active.
+        $this->groups = array_filter($this->groups, function($item) {
+            return ($item->active());
+        });
+
         return $this;
     }
 
@@ -665,7 +670,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu groups.
      *
-     * @return \Generator
+     * @return array
      */
     public function groups()
     {
@@ -683,13 +688,7 @@ class SidemenuWidget extends AdminWidget implements
             }
         }
 
-        foreach ($this->groups as $group) {
-            if (!$group->active()) {
-                continue;
-            }
-
-            yield $group;
-        }
+        return $this->groups;
     }
 
     /**

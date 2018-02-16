@@ -116,7 +116,7 @@ Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
  * If the input is specified, splits relative to the input
  * @param  {String} val  Value
  * @param  {[type]} input [description]
- * @return {thisArg}      Chainable
+ * @return {DOMElement|false}
  */
 Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input) {
     var separator = this.split_on || this.multiple_separator;
@@ -148,7 +148,7 @@ Charcoal.Admin.Property_Input_Text.prototype.split_val = function (input) {
         }
     }
 
-    return this;
+    return input;
 };
 
 Charcoal.Admin.Property_Input_Text.prototype.bind_keyboard_events = function (input) {
@@ -167,7 +167,8 @@ Charcoal.Admin.Property_Input_Text.prototype.bind_keyboard_events = function (in
         if (chars_new.indexOf(keyCode) > -1) {
             if (!that.multiple_max || that.currentValAmount < that.multiple_max) {
                 e.preventDefault();
-                that.insert_item($(this));
+                var clone = that.insert_item($(this));
+                clone.focus();
             }
         }
 
@@ -195,7 +196,10 @@ Charcoal.Admin.Property_Input_Text.prototype.bind_keyboard_events = function (in
     });
 
     input.on('keyup', function () {
-        that.split_val($(this));
+        var clone = that.split_val($(this));
+        if (clone) {
+            clone.focus();
+        }
     });
 };
 
@@ -209,7 +213,6 @@ Charcoal.Admin.Property_Input_Text.prototype.insert_item = function (elem, val) 
     var clone = this.input_clone(val);
     clone.insertAfter(elem);
     this.bind_keyboard_events(clone);
-    clone.focus();
 
     this.currentValAmount++;
 
@@ -225,7 +228,6 @@ Charcoal.Admin.Property_Input_Text.prototype.add_item = function (val) {
     var clone = this.input_clone(val);
     this.$container.append(clone);
     this.bind_keyboard_events(clone);
-    clone.focus();
 
     this.currentValAmount++;
 

@@ -34,7 +34,7 @@ module.exports = {
             'bower_components/moment/min/moment.min.js',
             'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             // BB Map
-            'bower_components/bb-gmap/assets/scripts/dist/min/gmap.min.js',
+            'node_modules/bb-gmap/assets/scripts/dist/min/gmap.min.js',
             // Bootstrap Select
             'bower_components/bootstrap-select/dist/js/bootstrap-select.js',
             // Jquery Minicolors

@@ -11,7 +11,6 @@
     "dependencies": {
         "bower": "*",
         "awesome-bootstrap-checkbox": "~0.3.4",
-        "bb-gmap": "master",
         "bootstrap-sass": "~3.3.7",
         "bootstrap-select": "~1.7.3",
         "bootstrap-switch": "~3.3.2",

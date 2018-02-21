@@ -27,6 +27,7 @@
     "load-grunt-tasks": "^3.5.2"
   },
   "dependencies": {
+    "beneroch-gmap": "^0.2.0",
     "url-search-params": "^0.10.0"
   }
 }

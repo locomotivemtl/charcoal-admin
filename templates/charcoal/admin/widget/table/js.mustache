@@ -26,7 +26,7 @@ Charcoal.Admin.manager().add_widget({
     id: '{{ widgetId }}',
     type: 'charcoal/admin/widget/table',
     widget_type: '{{ type }}',
-    data: {{& widgetDataForJsAsJson }}
+    data: {{& escapedWidgetDataForJsAsJson }}
 });
 </script>
 {{/ addJs }}

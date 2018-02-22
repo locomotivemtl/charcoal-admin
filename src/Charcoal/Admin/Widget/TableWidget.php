@@ -299,7 +299,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             'filters'          => $this->filters(),
             'orders'           => $this->orders(),
             'list_actions'     => $this->listActions(),
-            'object_actions'   => $this->objectActions(),
+            'object_actions'   => $this->rawObjectActions(),
             'pagination'       => $this->pagination(),
         ];
     }
@@ -465,20 +465,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
-        if ($this->objectActions === null) {
-            $collectionConfig = $this->collectionConfig();
-            if (isset($collectionConfig['object_actions'])) {
-                $actions = $collectionConfig['object_actions'];
-            } else {
-                $actions = [];
-            }
-            $this->setObjectActions($actions);
-        }
-
-        if ($this->parsedObjectActions === false) {
-            $this->parsedObjectActions = true;
-            $this->objectActions = $this->createObjectActions($this->objectActions);
-        }
+        $this->rawObjectActions();
 
         $objectActions = [];
         if (is_array($this->objectActions)) {
@@ -486,6 +473,35 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         }
 
         return $objectActions;
+    }
+
+    /**
+     * Retrieve the table's object actions without rendering it.
+     *
+     * @return array
+     */
+    public function rawObjectActions()
+    {
+        if ($this->objectActions === null) {
+            $parsed = $this->parsedObjectActions;
+
+            $collectionConfig = $this->collectionConfig();
+            if (isset($collectionConfig['object_actions'])) {
+                $actions = $collectionConfig['object_actions'];
+            } else {
+                $actions = [];
+            }
+            $this->setObjectActions($actions);
+
+            $this->parsedObjectActions = $parsed;
+        }
+
+        if ($this->parsedObjectActions === false) {
+            $this->parsedObjectActions = true;
+            $this->objectActions = $this->createObjectActions($this->objectActions);
+        }
+
+        return $this->objectActions;
     }
 
     /**

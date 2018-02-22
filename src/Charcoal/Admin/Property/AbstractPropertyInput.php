@@ -217,6 +217,16 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    public function escapedControlDataForJsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->controlDataForJsAsJson().'<%={{ }}=%>';
+    }
+
+    /**
      * @param mixed $val The property value.
      * @return PropertyInputInterface Chainable
      */

@@ -1,38 +1,35 @@
 {{!--
-Object Edit Template
-====================
 
-`charcoal/admin/template/objet/edit`
+    Object Edit Template
+    ====================
 
-Display the object's "edit" dashboard.
+    `charcoal/admin/template/objet/edit`
 
-This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
+    Display the object's "edit" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
 
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
 <div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+    {{# showSidemenu }}
+        {{# sidemenu }}
+            {{> charcoal/admin/widget/sidemenu }}
+        {{/ sidemenu }}
+    {{/ showSidemenu }}
 
-    {{>charcoal/admin/widget/feedbacks}}
+    {{> charcoal/admin/widget/feedbacks }}
 
     <div class="o-flex_main">
-        <div class="o-container -top -bottom clearfix">
-            <header class="o-container_header">
-                {{# title }}<h2>{{&.}}</h2>{{/ title }}
-                {{# subtitle }}<h3>{{&.}}</h3>{{/ subtitle }}
-            </header>
-            {{#dashboard}}
-                {{>charcoal/admin/widget/dashboard}}
-            {{/dashboard}}
+        <section class="o-container -top -bottom clearfix">
+            {{> charcoal/admin/template/object/inc.edit.header }}
+            {{# dashboard }}
+                {{> charcoal/admin/widget/dashboard }}
 
-        </div>
+            {{/ dashboard }}
+        </section>
     </div>
-
 </div>
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

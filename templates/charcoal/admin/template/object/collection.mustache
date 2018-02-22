@@ -1,40 +1,35 @@
 {{!--
-Object Collection Template
-==========================
 
-`charcoal/admin/template/objet/edit`
+    Object Collection Template
+    ==========================
 
-Display the object's "collection" dashboard.
+    `charcoal/admin/template/objet/edit`
 
-This template expects a `Charcoal\Admin\Template\Object\Collection` model as context.
+    Display the object's "collection" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\Collection` model as context.
 
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
 <div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+    {{# showSidemenu }}
+        {{# sidemenu }}
+            {{> charcoal/admin/widget/sidemenu }}
+        {{/ sidemenu }}
+    {{/ showSidemenu }}
 
-    {{>charcoal/admin/widget/feedbacks}}
+    {{> charcoal/admin/widget/feedbacks }}
 
-    {{!-- Object list section --}}
     <div class="o-flex_main">
         <section class="o-container -bottom">
-            <header class="o-header">
-                <h1>{{title}}</h1>
-                {{#searchWidget}}
-                    {{>charcoal/admin/widget/search}}
-                {{/searchWidget}}
-            </header>
-            {{#dashboard}}
-                {{>charcoal/admin/widget/dashboard}}
-            {{/dashboard}}
+            {{> charcoal/admin/template/object/inc.collection.header }}
+            {{# dashboard }}
+                {{> charcoal/admin/widget/dashboard }}
 
+            {{/ dashboard }}
         </section>
     </div>
 </div>
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

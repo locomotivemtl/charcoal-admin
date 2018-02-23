@@ -19,17 +19,17 @@
                 "fr": "Pour trier l'objet dans une collection."
             }
         },
-        "required_acl_permissions":{
-            "type":"string",
-            "multiple":true,
-            "allow_null":true,
-            "label":{
+        "required_acl_permissions": {
+            "type": "string",
+            "multiple": true,
+            "allow_null": true,
+            "label": {
                 "en": "Required ACL permissions",
                 "fr": "Permissions requise (ACL)"
             },
             "description": {
-                "en":"List of permissions that are required in order to be able to see / edit this object.",
-                "fr":"La liste des permissions requises afin de pouvoir voir / modifier cet objet."
+                "en": "List of permissions that are required in order to be able to see / edit this object.",
+                "fr": "La liste des permissions requises afin de pouvoir voir / modifier cet objet."
             }
         }
     }

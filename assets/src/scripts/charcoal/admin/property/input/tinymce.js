@@ -193,7 +193,9 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //table_row_class_list: [],
         //templates: [].
         //textpattern_patterns: [],
-        visualblocks_default_state: false
+        visualblocks_default_state: false,
+        automatic_uploads: true,
+        images_upload_url: 'tinymce/upload/image'
     };
 
     if (('plugins' in default_opts) && ('plugins' in this.editor_options)) {

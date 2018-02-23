@@ -151,6 +151,10 @@
             },
             "system/static-website/crawl": {
                 "ident": "charcoal/admin/action/system/static-website/crawl"
+            },
+            "tinymce/upload/image": {
+                "methods": [ "GET", "POST" ],
+                "ident": "charcoal/admin/action/tinymce/upload-image"
             }
         },
         "scripts": {

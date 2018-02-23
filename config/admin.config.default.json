@@ -153,7 +153,7 @@
                 "ident": "charcoal/admin/action/system/static-website/crawl"
             },
             "tinymce/upload/image": {
-                "methods": [ "GET", "POST" ],
+                "methods": [ "POST" ],
                 "ident": "charcoal/admin/action/tinymce/upload-image"
             }
         },

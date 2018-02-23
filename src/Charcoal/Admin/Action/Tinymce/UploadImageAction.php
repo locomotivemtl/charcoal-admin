@@ -148,7 +148,7 @@ class UploadImageAction extends AdminAction
             mkdir($dir, 0777, true);
         }
         if (!is_writable($dir)) {
-            throw new \exception(
+            throw new \Exception(
                 'Error: upload directory is not writeable'
             );
         }
@@ -197,7 +197,7 @@ class UploadImageAction extends AdminAction
         if ($files) {
             $pattern = preg_quote($file, '#');
             foreach ($files as $f) {
-                if (preg_match("#{$pattern}#i", $f)) {
+                if (preg_match("#${pattern}#i", $f)) {
                     return true;
                 }
             }

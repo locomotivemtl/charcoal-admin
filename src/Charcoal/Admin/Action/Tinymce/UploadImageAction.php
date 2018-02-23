@@ -139,7 +139,6 @@ class UploadImageAction extends AdminAction
         $dir      = $basePath.$this->uploadPath();
         $filename = ($filename) ? $this->sanitizeFilename($filename) : 'unnamed_file';
 
-        error_log(var_export($dir, true));
         if (!file_exists($dir)) {
             // @todo: Feedback
             $this->logger->debug(

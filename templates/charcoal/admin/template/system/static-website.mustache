@@ -10,8 +10,6 @@
         {{/sidemenu}}
     {{/showSidemenu}}
 
-    {{>charcoal/admin/widget/feedbacks}}
-
     {{!-- Object list section --}}
     <div class="o-flex_main">
         <section class="o-container -bottom">
@@ -21,6 +19,8 @@
                     {{>charcoal/admin/widget/search}}
                 {{/searchWidget}}
             </header>
+
+            {{>charcoal/admin/widget/feedbacks}}
 
             <div>
                 {{#_t}}Static website is a filesystem cache of the content, based on URL. For apache, it must be properly set up in the `.htaccess` file of the server.{{/_t}}

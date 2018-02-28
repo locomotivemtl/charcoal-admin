@@ -1,20 +1,23 @@
 {{!--
-Feedbacks Widget
-================
+    Feedbacks Widget
+    ================
 
-`charcoal/admin/widget/feedbacks
+    `charcoal/admin/widget/feedbacks
 
-Loop the available feedbacks (the `feedbacks()` method is available for all admin templates) and display them according to their level.
+    Loop the available feedbacks (the `feedbacks()` method is available for all admin templates) and display them according to their level.
 
-This widget expects a `Charcoal\Admin\Template` (or children) model as context.
+    This widget expects a `Charcoal\Admin\Template` (or children) model as context.
 
 --}}
-{{#hasFeedbacks}}
-<div class="feedbacks">
-    {{#feedbacks}}
-    <div class="alert alert-{{level}} alert-dismissible" role="alert">
-        {{&message}}
-    </div>
-    {{/feedbacks}}
-</div>
-{{/hasFeedbacks}}
+<section class="feedbacks">
+    {{# feedbacks }}
+    <article id="feedback-{{ id }}" class="alert alert-{{ level }}{{# dismissible }} alert-dismissible{{/ dismissible }}" role="alert">
+        {{# dismissible }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="{{# _t }}Close{{/ _t }}">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{/ dismissible }}
+        <div class="alert-body">{{& message }}</div>
+    </article>
+    {{/ feedbacks }}
+</section>

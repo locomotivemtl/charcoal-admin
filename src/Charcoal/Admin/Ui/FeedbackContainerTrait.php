@@ -72,22 +72,25 @@ trait FeedbackContainerTrait
      *
      * @param  string $level   The feedback level.
      * @param  mixed  $message The feedback message.
-     * @return FeedbackContainerTrait Chainable
+     * @return string The unique ID assigned to the feedback.
      */
     public function addFeedback($level, $message)
     {
+        $fid = uniqid();
         $this->feedbacks[] = [
-            'message' => (string)$message,
-            'level'   => $this->resolveFeedbackLevel($level)
+            'id'          => $fid,
+            'level'       => $this->resolveFeedbackLevel($level),
+            'message'     => (string)$message,
+            'dismissible' => true,
         ];
 
-        return $this;
+        return $fid;
     }
 
     /**
      * Remove all feedback from collection.
      *
-     * @return FeedbackContainerTrait Chainable
+     * @return self
      */
     public function clearFeedback()
     {

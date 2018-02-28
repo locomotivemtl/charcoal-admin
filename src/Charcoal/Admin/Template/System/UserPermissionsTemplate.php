@@ -59,7 +59,12 @@ class UserPermissionsTemplate extends AdminTemplate implements
         $obj = $this->modelFactory()->create('charcoal/admin/user/permission');
         if ($obj->source()->tableExists() === false) {
             $obj->source()->createTable();
-            $this->addFeedback('success', 'A new table was created for object.');
+            $msg = $this->translator()->translate('Database table created for "{{ objType }}".', [
+                '{{ objType }}' => $obj->objType()
+            ]);
+            $this->addFeedback('notice',
+                '<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><span>&nbsp; '.$msg.'</span>'
+            );
         }
     }
 

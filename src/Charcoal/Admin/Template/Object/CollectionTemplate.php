@@ -241,14 +241,14 @@ class CollectionTemplate extends AdminTemplate implements
             return;
         }
 
-        if (!$obj->source()->tableExists()) {
+        if ($obj->source()->tableExists() === false) {
             $obj->source()->createTable();
-            $this->addFeedback('notice', strtr(
-                $this->translator()->translate('The "{{ objType }}" table has been created.'),
-                [
-                    '{{ objType }}' => $obj->objType()
-                ]
-            ));
+            $msg = $this->translator()->translate('Database table created for "{{ objType }}".', [
+                '{{ objType }}' => $obj->objType()
+            ]);
+            $this->addFeedback('notice',
+                '<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><span>&nbsp; '.$msg.'</span>'
+            );
         }
     }
 

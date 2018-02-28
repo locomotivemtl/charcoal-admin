@@ -13,8 +13,6 @@
         {{/sidemenu}}
     {{/showSidemenu}}
 
-    {{>charcoal/admin/widget/feedbacks}}
-
     {{!-- Object list section --}}
     <div class="o-flex_main">
         <div class="o-container -top -bottom clearfix">
@@ -22,6 +20,8 @@
                 {{# title }}<h2>{{&.}}</h2>{{/ title }}
                 {{# subtitle }}<h3>{{&.}}</h3>{{/ subtitle }}
             </header>
+
+            {{>charcoal/admin/widget/feedbacks}}
 
             <div class="dashboard">
 

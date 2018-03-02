@@ -9,6 +9,9 @@ use InvalidArgumentException;
 use Charcoal\Ui\Dashboard\DashboardBuilder;
 use Charcoal\Ui\Dashboard\DashboardInterface;
 
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\DashboardWidget;
+
 /**
  * Implements Charcoal\Admin\Ui\DashboardContainerInterface
  */
@@ -101,9 +104,23 @@ trait DashboardContainerTrait
     protected function createDashboard()
     {
         $dashboardConfig = $this->createDashboardConfig();
-        $dashboard       = $this->dashboardBuilder->build($dashboardConfig);
+        if (!isset($dashboardConfig['type'])) {
+            $dashboardConfig['type'] = $this->defaultDashboardType();
+        }
+
+        $dashboard = $this->dashboardBuilder->build($dashboardConfig);
 
         return $dashboard;
+    }
+
+    /**
+     * Retrieve the default dashboard type class name.
+     *
+     * @return string
+     */
+    public function defaultDashboardType()
+    {
+        return DashboardWidget::class;
     }
 
     /**

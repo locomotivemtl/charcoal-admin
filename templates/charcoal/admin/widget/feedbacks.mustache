@@ -10,6 +10,7 @@
 
 --}}
 <section class="feedbacks">
+    <h3 class="sr-only">{{# _t }}Notifications{{/ _t }}</h3>
     {{# feedbacks }}
     <article id="feedback-{{ id }}" class="alert alert-{{ level }}{{# dismissible }} alert-dismissible{{/ dismissible }}" role="alert">
         {{# dismissible }}

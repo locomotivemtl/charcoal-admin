@@ -54,7 +54,7 @@ class AdminModule extends AbstractModule
 
         $adminConfig = $container['admin/config'];
 
-        $this->setupMetadataPaths();
+        $this->setupMetadataForAdmin();
 
         $this->setConfig($adminConfig);
 
@@ -221,15 +221,17 @@ class AdminModule extends AbstractModule
 
     /**
      * Add "admin/" to each metadata paths.
+     * Disable metadata loader cache for admin, for now.
      *
      * @return void
      */
-    private function setupMetadataPaths()
+    private function setupMetadataForAdmin()
     {
         $container = $this->app()->getContainer();
 
         $container['config']->merge([
             'metadata'=>[
+                'cache' => $container['cache/drivers']['memory'],
                 'paths'=>array_merge($container['config']['metadata.paths'], array_map(function ($p) {
                     return rtrim($p, '/').'/admin/';
                 }, $container['config']['metadata.paths']))

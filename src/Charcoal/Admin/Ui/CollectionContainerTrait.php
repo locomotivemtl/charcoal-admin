@@ -459,7 +459,7 @@ trait CollectionContainerTrait
      */
     public function pagination()
     {
-        if ($this->pagination === null) {
+        if ($this->pagination === null || !$this->pagination instanceof PaginationInterface) {
             $this->pagination = $this->createPagination();
             $collectionConfig = $this->collectionConfig();
             if (isset($collectionConfig['pagination'])) {

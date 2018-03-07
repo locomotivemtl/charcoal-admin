@@ -2,10 +2,12 @@
 
 namespace Charcoal\Admin\Tests;
 
-use ReflectionClass;
+
 
 // From PHPUnit
 use PHPUnit_Framework_TestCase;
+
+use ReflectionClass;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
@@ -102,12 +104,13 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->obj->numFeedbacks());
 
         $ret = $this->obj->addFeedback('error', 'Message');
-        $this->assertSame($ret, $this->obj);
+        //$this->assertSame($ret, $this->obj);
         $this->assertTrue($this->obj->hasFeedbacks());
         $this->assertEquals([[
             'level'   => 'error',
-            'msg'     => 'Message',
-            'message' => 'Message'
+            'message' => 'Message',
+            'id' => $ret,
+            'dismissible'=>true
         ]], $this->obj->feedbacks());
         $this->assertEquals(1, $this->obj->numFeedbacks());
     }
@@ -115,14 +118,6 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
     public function testAdminUrl()
     {
         $this->assertEquals('/admin/', $this->obj->adminUrl());
-    }
-
-    public function testBaseUrl()
-    {
-        $this->assertEquals('/', $this->obj->baseUrl());
-        $ret = $this->obj->setBaseUrl('foobar');
-        $this->assertSame($ret, $this->obj);
-        $this->assertEquals('foobar/', $this->obj->baseUrl());
     }
 
     public function testAuthRequiredIsTrue()

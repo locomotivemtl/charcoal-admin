@@ -3,24 +3,23 @@
 namespace Charcoal\Admin\Tests\Action\Object;
 
 // From PHPUnit
-use \PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
+
+use ReflectionClass;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From Slim
-use \Slim\Http\Environment;
-use \Slim\Http\Request;
-use \Slim\Http\Response;
-
-// From 'charcoal-core'
-use \Charcoal\Model\CollectionInterface;
+use Slim\Http\Environment;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Action\Object\LoadAction;
+use Charcoal\Admin\Action\Object\LoadAction;
 
-use \Charcoal\Admin\Tests\ContainerProvider;
-use \Charcoal\Admin\Tests\Mock\UserProviderTrait;
+use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Admin\Tests\Mock\UserProviderTrait;
 
 /**
  *
@@ -58,9 +57,19 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public static function getMethod($obj, $name)
+    {
+        $class = new ReflectionClass($obj);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
+    }
+
     public function testAuthRequiredIsTrue()
     {
-        $this->assertTrue($this->obj->authRequired());
+        $foo = self::getMethod($this->obj, 'authRequired');
+        $res = $foo->invoke($this->obj);
+        $this->assertTrue($res);
     }
 
     public function testRunWithoutObjTypeIs400()

@@ -246,7 +246,8 @@ class CollectionTemplate extends AdminTemplate implements
             $msg = $this->translator()->translate('Database table created for "{{ objType }}".', [
                 '{{ objType }}' => $obj->objType()
             ]);
-            $this->addFeedback('notice',
+            $this->addFeedback(
+                'notice',
                 '<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><span>&nbsp; '.$msg.'</span>'
             );
         }

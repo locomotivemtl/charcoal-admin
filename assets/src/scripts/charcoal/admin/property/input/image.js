@@ -33,6 +33,7 @@ Charcoal.Admin.Property_Input_Image.prototype.remove_file = function (event)
     this.$preview.empty();
     this.$input.find('.form-control-static').empty();
     this.$input.find('.hide-if-no-file').addClass('hidden');
+    this.$input.find('.show-if-no-file').removeClass('hidden');
 };
 
 Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
@@ -50,6 +51,7 @@ Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
     img.src = src;
 
     this.$input.find('.hide-if-no-file').removeClass('hidden');
+    this.$input.find('.show-if-no-file').addClass('hidden');
     this.$input.find('.form-control-static').html(file);
     this.$preview.empty().append(img);
 };
@@ -68,6 +70,7 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
         var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
 
         this.$input.find('.hide-if-no-file').removeClass('hidden');
+        this.$input.find('.show-if-no-file').addClass('hidden');
         this.$input.find('.form-control-static').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty().append($img);

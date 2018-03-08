@@ -1,0 +1,18 @@
+{{!--
+    File Property Input \ Preview Container
+    =======================================
+
+    `charcoal/admin/property/input/file`
+--}}
+{{# showFilePreview }}
+<figure class="thumbnail show-if-no-file{{# inputVal }} hidden{{/ inputVal }}">
+    <img src="{{& placeholderVal }}" style="max-width: 100%; opacity: 0.5">
+    {{! @see charcoal/admin/property/input/readonly }}
+    <figcaption class="caption">
+        <p class="u-truncate">
+            <samp class="form-control-static" title="{{ placeholder }}">{{& placeholder }}</samp>
+        </p>
+    </figcaption>
+</figure>
+{{/ showFilePreview }}
+

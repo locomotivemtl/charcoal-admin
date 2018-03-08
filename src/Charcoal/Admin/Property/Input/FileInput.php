@@ -112,6 +112,29 @@ class FileInput extends AbstractPropertyInput
      *
      * @return string
      */
+    public function placeholderVal()
+    {
+        $val = parent::placeholder();
+        if (empty($val)) {
+            return '';
+        }
+
+        $parts = parse_url($val);
+        if (empty($parts['scheme']) && !in_array($val[0], [ '/', '#', '?' ])) {
+            $path  = isset($parts['path']) ? ltrim($parts['path'], '/') : '';
+            $query = isset($parts['query']) ? $parts['query'] : '';
+            $hash  = isset($parts['fragment']) ? $parts['fragment'] : '';
+            $val   = $this->baseUrl->withPath($path)->withQuery($query)->withFragment($hash);
+        }
+
+        return $val;
+    }
+
+    /**
+     * Retrieve input value for file preview.
+     *
+     * @return string
+     */
     public function previewVal()
     {
         $val = parent::inputVal();

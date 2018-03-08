@@ -72,6 +72,7 @@ Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
     this.$hidden.val('');
     this.$input.find('.form-control-static').empty();
     this.$input.find('.hide-if-no-file').addClass('hidden');
+    this.$input.find('.show-if-no-file').removeClass('hidden');
 };
 
 Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
@@ -85,6 +86,7 @@ Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
     src    = URL.createObjectURL(file);
 
     this.$input.find('.hide-if-no-file').removeClass('hidden');
+    this.$input.find('.show-if-no-file').addClass('hidden');
     this.$input.find('.form-control-static').html(file);
     this.$preview.empty();
 };
@@ -118,6 +120,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
 
     if (file && file.path) {
         this.$input.find('.hide-if-no-file').removeClass('hidden');
+        this.$input.find('.show-if-no-file').addClass('hidden');
         this.$input.find('.form-control-static').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty();

@@ -6,7 +6,9 @@
 --}}
 {{# showFilePreview }}
 <figure class="thumbnail show-if-no-file{{# inputVal }} hidden{{/ inputVal }}">
-    <img src="{{& placeholderVal }}" style="max-width: 100%; opacity: 0.5">
+    <div class="">
+        <img src="{{& placeholderVal }}" style="max-width: 100%; opacity: 0.5">
+    </div>
     {{! @see charcoal/admin/property/input/readonly }}
     <figcaption class="caption">
         <p class="u-truncate">

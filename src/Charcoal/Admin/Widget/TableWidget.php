@@ -181,11 +181,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function acceptedRequestData()
     {
         return [
-            'collection_ident',
-            'obj_id',
             'obj_type',
+            'obj_id',
+            'collection_ident',
             'sortable',
-            'template'
+            'template',
         ];
     }
 

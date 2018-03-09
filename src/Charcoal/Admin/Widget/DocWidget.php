@@ -560,8 +560,8 @@ class DocWidget extends FormWidget implements
     protected function acceptedRequestData()
     {
         return array_merge(
-            parent::acceptedRequestData(),
-            [ 'obj_type', 'obj_id', 'template' ]
+            [ 'obj_type', 'obj_id', 'template' ],
+            parent::acceptedRequestData()
         );
     }
 

@@ -301,9 +301,9 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
     public function acceptedRequestData()
     {
         return [
-            'collection_ident',
+            'obj_type',
             'obj_id',
-            'obj_type'
+            'collection_ident',
         ];
     }
 

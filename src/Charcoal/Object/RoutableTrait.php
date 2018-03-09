@@ -561,7 +561,7 @@ trait RoutableTrait
         $slug = preg_replace('!['.preg_quote($flip).']+!u', $separator, $slug);
 
         // Remove all whitespace and normalize delimiters
-        $slug = preg_replace('![_\|\s]+!', $separator, $slug);
+        $slug = preg_replace('![_\|\s|\(\)]+!', $separator, $slug);
 
         // Squeeze multiple delimiters and whitespace with a single separator
         $slug = preg_replace('!['.$pregDelim.'\s]{2,}!', $separator, $slug);

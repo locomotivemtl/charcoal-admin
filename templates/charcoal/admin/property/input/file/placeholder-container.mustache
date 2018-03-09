@@ -5,6 +5,7 @@
     `charcoal/admin/property/input/file`
 --}}
 {{# showFilePreview }}
+{{# placeholder }}
 <figure class="thumbnail show-if-no-file{{# inputVal }} hidden{{/ inputVal }}">
     <div class="">
         <img src="{{& placeholderVal }}" style="max-width: 100%; opacity: 0.5">
@@ -16,5 +17,6 @@
         </p>
     </figcaption>
 </figure>
+{{/ placeholder }}
 {{/ showFilePreview }}
 

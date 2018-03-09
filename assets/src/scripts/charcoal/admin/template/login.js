@@ -39,7 +39,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
      */
     $form.on('submit.charcoal.login', $.proxy(this.onSubmit, this));
 
-    window.CharcoalCaptchaLoginCallback = this.submitForm.bind($form);
+    window.CharcoalCaptchaLoginCallback = this.submitForm.bind(this, $form);
 };
 
 /**
@@ -63,11 +63,17 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
 /**
  * @this {HTMLFormElement|jQuery}
  */
-Charcoal.Admin.Template_Login.prototype.submitForm = function ()
+Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 {
-    var $form = $(this);
+    $form = $($form);
     var url   = ($form.prop('action') || window.location.href);
     var data  = $form.serialize();
+
+    var queryParams = this.queryParams();
+
+    if (queryParams.hasOwnProperty('redirect')) {
+        data = data.concat('&next_url=' + encodeURIComponent(queryParams.redirect));
+    }
 
     $.post(url, data, function (response) {
         window.console.debug(response);
@@ -92,4 +98,19 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ()
             }
         });
     });
+};
+
+Charcoal.Admin.Template_Login.prototype.queryParams = function ()
+{
+    var pairs = location.search.slice(1).split('&');
+
+    var result = {};
+    pairs.forEach(function (pair) {
+        pair = pair.split('=');
+        if (pair[1]) {
+            result[pair[0]] = decodeURIComponent(pair[1] || '');
+        }
+    });
+
+    return JSON.parse(JSON.stringify(result));
 };

@@ -154,7 +154,7 @@ class AdminTemplate extends AbstractTemplate implements
             // Test template vs. ACL roles
             if (!$this->isAuthorized()) {
                 header('HTTP/1.0 403 Forbidden');
-                header('Location: '.$this->adminUrl().'login');
+                header('Location: '.$this->adminUrl().'login?redirect='.urlencode($request->getRequestTarget()));
                 exit;
             }
         }

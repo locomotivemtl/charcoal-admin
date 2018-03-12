@@ -3,7 +3,6 @@
 composer.phar
 composer.lock
 yarn.lock
-package-lock.json
 vendor/
 node_modules/
 bower_components/
@@ -21,6 +20,5 @@ logs/
 
 build/docs/
 build/logs/
-mustache_cache/
+cache/
 tmp/
-

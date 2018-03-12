@@ -9,16 +9,13 @@
  * - `.elfinder-cwd-icon` : Removed background property.
  * - `.elfinder-cwd-icon-postscript:before` : Removed content property.
  * - `.elfinder .elfinder-path` : Added padding property.
+ * - FontAwesome is required externally
  *
- * @link    https://github.com/lokothodida/elfinder-theme-moono/commit/f709b58
+ * @link    https://github.com/lokothodida/elfinder-theme-moono/commit/76fd96c
+ * @date    2017-02-15
  * @author  lokothodida
  * @package Charcoal
  */
-
-// @import "../../../../../bower_components/elfinder-theme-moono/moono/css/theme.css";
-
-/* FontAwesome Icons */
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
 
 /* Main features of the whole UI */
 /* main */

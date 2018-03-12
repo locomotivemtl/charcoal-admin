@@ -393,7 +393,7 @@ The Charcoal-Admin module follows the Charcoal coding-style:
 -	Naming conventions
 	-	Read the [phpcs.xml](phpcs.xml) file for all the details.
 
-> Coding style validation / enforcement can be performed with `grunt phpcs`. An auto-fixer is also available with `grunt phpcbf`.
+> Coding style validation / enforcement can be performed with `composer phpcs`. An auto-fixer is also available with `composer phpcbf`.
 
 For Javascript, the following coding style is enforced:
 

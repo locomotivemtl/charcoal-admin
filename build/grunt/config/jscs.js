@@ -1,7 +1,7 @@
 module.exports = {
-    src: 'assets/src/scripts/**/*.js',
+    src: '<%= paths.js.src %>/**/*.js',
     options: {
         config: '.jscsrc',
-        fix: true
+        fix:    true
     }
 };

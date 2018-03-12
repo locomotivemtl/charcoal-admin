@@ -1,7 +1,7 @@
 module.exports = {
     files: [
-        'assets/src/scripts/**/*.js',
-        'grunt_tasks/*.js'
+        '<%= paths.js.src %>/**/*.js',
+        '<%= paths.grunt %>/*.js'
     ],
     options: {
         jshintrc: '.jshintrc'

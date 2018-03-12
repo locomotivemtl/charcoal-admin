@@ -5510,6 +5510,7 @@ Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
     this.$hidden.val('');
     this.$input.find('.form-control-static').empty();
     this.$input.find('.hide-if-no-file').addClass('hidden');
+    this.$input.find('.show-if-no-file').removeClass('hidden');
 };
 
 Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
@@ -5523,6 +5524,7 @@ Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
     src    = URL.createObjectURL(file);
 
     this.$input.find('.hide-if-no-file').removeClass('hidden');
+    this.$input.find('.show-if-no-file').addClass('hidden');
     this.$input.find('.form-control-static').html(file);
     this.$preview.empty();
 };
@@ -5556,6 +5558,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
 
     if (file && file.path) {
         this.$input.find('.hide-if-no-file').removeClass('hidden');
+        this.$input.find('.show-if-no-file').addClass('hidden');
         this.$input.find('.form-control-static').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty();
@@ -5631,6 +5634,7 @@ Charcoal.Admin.Property_Input_Image.prototype.remove_file = function (event)
     this.$preview.empty();
     this.$input.find('.form-control-static').empty();
     this.$input.find('.hide-if-no-file').addClass('hidden');
+    this.$input.find('.show-if-no-file').removeClass('hidden');
 };
 
 Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
@@ -5648,6 +5652,7 @@ Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
     img.src = src;
 
     this.$input.find('.hide-if-no-file').removeClass('hidden');
+    this.$input.find('.show-if-no-file').addClass('hidden');
     this.$input.find('.form-control-static').html(file);
     this.$preview.empty().append(img);
 };
@@ -5666,6 +5671,7 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
         var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
 
         this.$input.find('.hide-if-no-file').removeClass('hidden');
+        this.$input.find('.show-if-no-file').addClass('hidden');
         this.$input.find('.form-control-static').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty().append($img);
@@ -8140,7 +8146,9 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         //table_row_class_list: [],
         //templates: [].
         //textpattern_patterns: [],
-        visualblocks_default_state: false
+        visualblocks_default_state: false,
+        automatic_uploads: true,
+        images_upload_url: 'tinymce/upload/image'
     };
 
     if (('plugins' in default_opts) && ('plugins' in this.editor_options)) {
@@ -8359,7 +8367,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
      */
     $form.on('submit.charcoal.login', $.proxy(this.onSubmit, this));
 
-    window.CharcoalCaptchaLoginCallback = this.submitForm.bind($form);
+    window.CharcoalCaptchaLoginCallback = this.submitForm.bind(this, $form);
 };
 
 /**
@@ -8383,11 +8391,17 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
 /**
  * @this {HTMLFormElement|jQuery}
  */
-Charcoal.Admin.Template_Login.prototype.submitForm = function ()
+Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 {
-    var $form = $(this);
+    $form = $($form);
     var url   = ($form.prop('action') || window.location.href);
     var data  = $form.serialize();
+
+    var queryParams = this.queryParams();
+
+    if (queryParams.hasOwnProperty('redirect_to')) {
+        data = data.concat('&next_url=' + encodeURIComponent(queryParams.redirect_to));
+    }
 
     $.post(url, data, function (response) {
         window.console.debug(response);
@@ -8412,6 +8426,21 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ()
             }
         });
     });
+};
+
+Charcoal.Admin.Template_Login.prototype.queryParams = function ()
+{
+    var pairs = location.search.slice(1).split('&');
+
+    var result = {};
+    pairs.forEach(function (pair) {
+        pair = pair.split('=');
+        if (pair[1]) {
+            result[pair[0]] = decodeURIComponent(pair[1] || '');
+        }
+    });
+
+    return JSON.parse(JSON.stringify(result));
 };
 ;Charcoal.Admin.Template_MenuHeader = function ()
 {

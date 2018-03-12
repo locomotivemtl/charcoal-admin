@@ -13,7 +13,7 @@ $selectize-offset-item-remove: 28px;
 
 $selectize-width-item-buttons: 40px;
 
-@import "../../../../../../bower_components/selectize-scss/src/selectize.bootstrap3";
+@import "../../../../../../node_modules/selectize-scss/src/selectize.bootstrap3";
 
 .selectize-dropdown {
     .option > .caption {

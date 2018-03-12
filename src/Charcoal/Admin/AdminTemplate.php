@@ -149,17 +149,35 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $this->setDataFromRequest($request);
-
-        if ($this->authRequired() !== false) {
-            // Test template vs. ACL roles
-            if (!$this->isAuthorized()) {
-                header('HTTP/1.0 403 Forbidden');
-                header('Location: '.$this->adminUrl().'login?redirect='.urlencode($request->getRequestTarget()));
-                exit;
-            }
-        }
+        $this->authRedirect($request);
 
         return parent::init($request);
+    }
+
+    /**
+     * Determine if the current user is authenticated, if not redirect them to the login page.
+     *
+     * @todo   Move auth-check and redirection to a middleware or dedicated admin route.
+     * @param  RequestInterface $request The request to initialize.
+     * @return void
+     */
+    protected function authRedirect(RequestInterface $request)
+    {
+        // Test if authentication is required.
+        if ($this->authRequired() === false) {
+            return;
+        }
+
+        // Test if user is authorized to access this controller
+        if ($this->isAuthorized() === true) {
+            return;
+        }
+
+        $redirectTo = urlencode($request->getRequestTarget());
+
+        header('HTTP/1.0 403 Forbidden');
+        header('Location: '.$this->adminUrl('login?redirect_to='.$redirectTo));
+        exit;
     }
 
     /**

@@ -71,8 +71,8 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 
     var queryParams = this.queryParams();
 
-    if (queryParams.hasOwnProperty('redirect')) {
-        data = data.concat('&next_url=' + encodeURIComponent(queryParams.redirect));
+    if (queryParams.hasOwnProperty('redirect_to')) {
+        data = data.concat('&next_url=' + encodeURIComponent(queryParams.redirect_to));
     }
 
     $.post(url, data, function (response) {

@@ -54,10 +54,10 @@ module.exports = {
             // 'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
 
             // jQuery MiniColors
-            'node_modules/jquery-minicolors/jquery.minicolors.min.js',
+            'node_modules/@claviska/jquery-minicolors/jquery.minicolors.min.js',
 
             // Multiselect Two-sides
-            'node_modules/multiselect/dist/js/multiselect.min.js',
+            'node_modules/multiselect-two-sides/dist/js/multiselect.min.js',
 
             // Selectize
             'node_modules/selectize/dist/js/standalone/selectize.min.js',

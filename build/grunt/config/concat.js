@@ -20,6 +20,12 @@ module.exports = {
         ],
         dest: '<%= paths.js.dist %>/charcoal.admin.js'
     },
+    elfinder: {
+        src: [
+            '<%= paths.js.src %>/charcoal/admin/elfinder.js'
+        ],
+        dest: '<%= paths.elfinder.dist %>/main.js'
+    },
     vendors: {
         src: [
             // jQuery UI

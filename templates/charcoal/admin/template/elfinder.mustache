@@ -1,27 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html class="has-no-js{{# devMode }} s-admin-debug{{/ devMode }}" lang="{{ lang }}">
     <head>
         <meta charset="utf-8">
         <title>{{# _t }}elFinder File Manager{{/ _t }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 
-        {{# elfinderAssets }}
-        <link rel="stylesheet" type="text/css" media="screen" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ elfinder_assets_url }}css/elfinder.min.css">
-        {{^ disableTheme }}
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" media="screen" href="{{ admin_assets_url }}styles/vendors/elfinder.css">
-        {{/ disableTheme }}
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-
-        <script src="{{ elfinder_assets_url }}js/elfinder.min.js"></script>
-
-        {{!-- elFinder translation (OPTIONAL) --}}
-        {{!--<script src="js/i18n/elfinder.fr.js"></script>--}}
-        {{/ elfinderAssets }}
+        <script data-main="{{ elfinderAssetsUrl }}main.js" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"></script>
 
         <style type="text/css">
             body {
@@ -35,15 +19,34 @@
         </style>
 
         <script>
-            // Documentation for client options:
-            // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
-            $(document).ready(function () {
-                var elf, defaults, actionUri, i18nMsgs, settings = {}, $window = $(window);
+            // config of RequireJS (REQUIRED)
+            /*
+            require.config({
+                baseUrl: '{{ elfinderAssetsUrl }}js'
+            });
+            */
+
+            /**
+             * elFinder options for Charcoal
+             *
+             * {@link https://github.com/Studio-42/elFinder/wiki/Client-configuration-options Documentation for client options:}
+             *
+             * @param  {jQuery} $ - jQuery API
+             * @return {object}   - elFinder client settings.
+             */
+            define('elFinderConfig', [ 'jquery' ], function ($) {
+                var $window       = $(window),
+                    $html         = $(document.documentElement),
+                    customOpts    = {},
+                    defaultOpts   = {},
+                    immutableOpts = {};
+
+                $html.removeClass('has-no-js').addClass('has-js');
 
                 if (!$.fn.smartresize) {
                     // debouncing function from John Hann
                     // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
-                    var debounce = function(func, threshold, execAsap) {
+                    var debounce = function (func, threshold, execAsap) {
                         var timeout;
 
                         return function debounced() {
@@ -51,52 +54,73 @@
                                 args = arguments;
 
                             function delayed() {
-                                if (!execAsap)
+                                if (!execAsap) {
                                     func.apply(obj, args);
+                                }
                                 timeout = null;
                             };
 
-                            if (timeout)
+                            if (timeout) {
                                 clearTimeout(timeout);
-                            else if (execAsap)
+                            } else if (execAsap) {
                                 func.apply(obj, args);
+                            }
 
                             timeout = setTimeout(delayed, threshold || 100);
                         };
                     };
 
-                    $.fn.smartresize = function(fn) {
+                    $.fn.smartresize = function (fn) {
                         return fn ? this.bind('resize', debounce(fn)) : this.trigger('smartresize');
                     };
                 }
 
-                $window.smartresize(function(){
-                    if (elf) {
-                        var height = $window.height();
-
-                        if (elf.options.height != height) {
-                            elf.resize('auto', height);
-                        }
-                    }
-                });
-
-                actionUri = '{{ admin_url }}elfinder-connector' +
-                            '?obj_type={{ objType }}' +
-                            '&obj_id={{ objId }}' +
-                            '&property={{ propertyIdent }}';
-
-                defaults = {
-                    url:        actionUri,
+                defaultOpts = {
+                    url:        '{{ adminUrl }}elfinder-connector' + '?obj_type={{ objType }}' + '&obj_id={{ objId }}' + '&property={{ propertyIdent }}',
                     resizable:  false,
                     height:     $window.height(),
-                    handlers:   {
-                        init:   function(event, elf) {
-                            $.extend(elf.messages, i18nMsgs.en || {}, i18nMsgs[elf.lang] || {});
+                    commandsOptions: {
+                        quicklook: {
+                            // to enable preview with Google Docs Viewer
+                            googleDocsMimes: [
+                                'application/pdf',
+                                'image/tiff',
+                                'application/vnd.ms-office',
+                                'application/msword',
+                                'application/vnd.ms-word',
+                                'application/vnd.ms-excel',
+                                'application/vnd.ms-powerpoint',
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+                            ]
                         }
                     },
-                    cssAutoLoad: false,
-                    getFileCallback: function (file) {
-                        if (elf.option('separator') === '\\') {
+                    bootCallback: function (fm /* , extraObj */) {
+                        // Set document.title dynamically.
+                        var title = document.title;
+                        fm.bind('open', function() {
+                            var path = '',
+                                cwd  = fm.cwd();
+                            if (cwd) {
+                                path = fm.path(cwd.hash) || null;
+                            }
+                            document.title = path ? path + ':' + title : title;
+                        }).bind('destroy', function() {
+                            document.title = title;
+                        });
+
+                        $window.smartresize(function () {
+                            var height = $window.height();
+                            console.log('SmartResize', fm.options.height, height);
+
+                            if (fm.options.height != height) {
+                                fm.resize('auto', height);
+                            }
+                        });
+                    },
+                    getFileCallback: function (file, fm) {
+                        if (fm.option('separator') === '\\') {
                             var separator = /\\/g;
                             if ($.isArray(file)) {
                                 file = $.map(file, function (f) {
@@ -108,68 +132,25 @@
                         }
 
                         if (typeof(parent.elFinderCallback['{{ elfinderCallback }}']) === 'function') {
-                            parent.elFinderCallback['{{ elFinderCallback }}'](file, elf);
+                            parent.elFinderCallback['{{ elFinderCallback }}'](file, fm);
                         }
                     }
                 };
+                customOpts = {{& elfinderConfigAsJson }};
 
-                $.extend(
-                    settings,
-                    defaults,
-                    {{& elfinderConfigAsJson }}
-                );
-
-                i18nMsgs = {{& elfinderLocalizationsAsJson }};
-
-                var elfInit = function (settings) {
-                    settings = elfDisableCommands(settings);
-
-                    $().ready(function() {
-                        elf = $('#elfinder')
-                            .elfinder(settings)
-                            .elfinder('instance');
-                    });
-                };
-
-                var elfDisableCommands = function (settings) {
-                    if (settings.disabledCommands && !settings.commands) {
-                        var disabled = settings.disabledCommands;
-
-                        var commands = elFinder.prototype._options.commands;
-
-                        if ($.inArray('*', commands) !== -1) {
-                            commands = Object.keys(elFinder.prototype.commands);
-                        }
-
-                        $.each(disabled, function(i, cmd) {
-                            var idx = $.inArray(cmd, commands);
-                            delete commands[idx];
-                        });
-
-                        settings.commands = commands;
+                return {
+                    defaultOpts: $.extend({}, defaultOpts, customOpts),
+                    managers: {
+                        'elfinder': {},
                     }
-
-                    delete settings.disabledCommands;
-
-                    return settings;
                 };
-
-                if (settings.lang != 'en') {
-                    $.ajax({
-                        url:      '{{elfinder_assets_url}}js/i18n/elfinder.'+settings.lang+'.js',
-                        cache:    true,
-                        dataType: 'script'
-                    })
-                    .fail(function() {
-                        settings.lang = 'en';
-                    })
-                    .always(function() {
-                        elfInit(settings);
-                    });
-                } else {
-                    elfInit(settings);
-                }
             });
+            /**
+             * elFinder localizations for Charcoal
+             *
+             * @return {object} - Localized messages.
+             */
+            define('elFinderL10n', {{& elfinderLocalizationsAsJson }});
         </script>
     </head>
 

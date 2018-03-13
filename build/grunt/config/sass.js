@@ -15,7 +15,7 @@ module.exports = {
     },
     elfinder: {
         files: {
-            '<%= paths.css.dist %>/vendors/elfinder.css': '<%= paths.css.src %>/**/elfinder.scss'
+            '<%= paths.elfinder.dist %>/themes/moono/css/theme.css': '<%= paths.css.src %>/**/vendors/elfinder.moono.scss'
         }
     }
 };

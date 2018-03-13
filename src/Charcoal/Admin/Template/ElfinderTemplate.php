@@ -26,6 +26,10 @@ use Charcoal\Admin\AdminTemplate;
  */
 class ElfinderTemplate extends AdminTemplate
 {
+    // const ELFINDER_IMG_PARENT_URL;
+    const ADMIN_ASSETS_REL_PATH    = 'assets/admin/';
+    const ELFINDER_ASSETS_REL_PATH = 'assets/admin/elfinder/';
+
     /**
      * Store the elFinder configuration from the admin configuration.
      *
@@ -293,7 +297,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function adminAssetsUrl()
     {
-        return $this->baseUrl().'assets/admin/';
+        return $this->baseUrl(static::ADMIN_ASSETS_REL_PATH);
     }
 
     /**
@@ -301,7 +305,7 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function elfinderAssetsUrl()
     {
-        return $this->baseUrl().'assets/admin/elfinder/';
+        return $this->baseUrl(static::ELFINDER_ASSETS_REL_PATH);
     }
 
     /**

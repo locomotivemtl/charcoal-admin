@@ -31,6 +31,7 @@ use Charcoal\App\CallableResolverAwareTrait;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\Template\ElfinderTemplate;
 
 /**
  * Action: Setup elFinder Connector
@@ -189,6 +190,11 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function setupElfinder(array $extraOptions = [])
     {
+        if (!defined('ELFINDER_IMG_PARENT_URL')) {
+            // Ensure images injected by elFinder are relative to its assets directory
+            define('ELFINDER_IMG_PARENT_URL', $this->baseUrl(ElfinderTemplate::ELFINDER_ASSETS_REL_PATH));
+        }
+
         $options = $this->buildConnectorOptions($extraOptions);
 
         // Run elFinder
@@ -338,11 +344,12 @@ class ElfinderConnectorAction extends AdminAction
     protected function getDefaultFlysystemRootSettings()
     {
         return [
-            'driver'      => 'Flysystem',
-            'filesystem'  => null,
-            'cache'       => false,
-            'URL'         => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
-            'path'        => self::DEFAULT_STORAGE_PATH,
+            'driver'       => 'Flysystem',
+            'rootCssClass' => 'elfinder-navbar-root-local',
+            'filesystem'   => null,
+            'cache'        => false,
+            'URL'          => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
+            'path'         => self::DEFAULT_STORAGE_PATH,
         ];
     }
 

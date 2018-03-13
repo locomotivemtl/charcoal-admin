@@ -272,5 +272,20 @@
                 "denied": []
             }
         }
+    },
+
+    "elfinder": {
+        "client": {
+            "theme": "moono",
+            "themeOptions": {
+                "moono": {
+                    "cssClass": "elfinder-theme-moono",
+                    "cssAutoLoad": [
+                        "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+                        "../assets/admin/elfinder/themes/moono/css/theme.css"
+                    ]
+                }
+            }
+        }
     }
 }

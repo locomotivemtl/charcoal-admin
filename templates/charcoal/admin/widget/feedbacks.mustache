@@ -12,7 +12,7 @@
 <section class="feedbacks">
     <h3 class="sr-only">{{# _t }}Notifications{{/ _t }}</h3>
     {{# feedbacks }}
-    <article id="feedback-{{ id }}" class="alert alert-{{ level }}{{# dismissible }} alert-dismissible{{/ dismissible }}" role="alert">
+    <article id="feedback-{{ id }}" class="alert alert-{{ type }}{{# dismissible }} alert-dismissible{{/ dismissible }}" role="alert">
         {{# dismissible }}
         <button type="button" class="close" data-dismiss="alert" aria-label="{{# _t }}Close{{/ _t }}">
             <span aria-hidden="true">&times;</span>

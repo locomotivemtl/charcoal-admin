@@ -9,6 +9,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-admin'
+use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 
@@ -40,6 +41,8 @@ use Charcoal\Admin\User;
  */
 class LoginAction extends AdminAction
 {
+    use AuthActionTrait;
+
     /**
      * Authentication is required by default.
      *
@@ -127,9 +130,9 @@ class LoginAction extends AdminAction
                 $this->setSuccess(true);
 
                 if (is_string($nextUrl) && !empty($nextUrl)) {
-                    $this->setSuccessUrl($nextUrl);
+                    $this->setSuccessUrl((string)$nextUrl);
                 } else {
-                    $this->setSuccessUrl($this->adminUrl());
+                    $this->setSuccessUrl((string)$this->adminUrl());
                 }
 
                 return $response;

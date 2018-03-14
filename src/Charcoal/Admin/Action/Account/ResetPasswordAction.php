@@ -8,7 +8,8 @@ use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
+use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
@@ -36,6 +37,8 @@ use Charcoal\Admin\User\LostPasswordToken;
  */
 class ResetPasswordAction extends AdminAction
 {
+    use AuthActionTrait;
+
     /**
      * @return boolean
      */
@@ -136,7 +139,8 @@ class ResetPasswordAction extends AdminAction
         }
 
         if (!$this->validateToken($token, $user->id())) {
-            $this->addFeedback('error', $translator->translate('Invalid or expired reset token.'));
+            $this->setFailureUrl($this->adminUrl('account/lost-password?notice=invalidtoken'));
+            $this->addFeedback('error', $translator->translate('Your password reset token is invalid or expired.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -146,7 +150,8 @@ class ResetPasswordAction extends AdminAction
             $user->resetPassword($password1);
             $this->deleteToken($token);
 
-            $this->addFeedback('success', $translator->translate('Password has been successfully changed.'));
+            $this->addFeedback('success', $translator->translate('Your password has been successfully changed.'));
+            $this->setSuccessUrl((string)$this->adminUrl('login?notice=newpass'));
             $this->setSuccess(true);
 
             return $response;
@@ -187,32 +192,6 @@ class ResetPasswordAction extends AdminAction
         ];
 
         return $ret;
-    }
-
-    /**
-     * @param string $username Username or email.
-     * @return User|false
-     */
-    private function loadUser($username)
-    {
-        if (!$username) {
-            return false;
-        }
-
-        // Try to get user by username
-        $user = $this->modelFactory()->create(User::class);
-        $user->loadFrom('username', $username);
-        if ($user->id()) {
-            return $user;
-        }
-
-        // Try to get user by email
-        $user->loadFrom('email', $username);
-        if ($user->id()) {
-            return $user;
-        }
-
-        return false;
     }
 
     /**

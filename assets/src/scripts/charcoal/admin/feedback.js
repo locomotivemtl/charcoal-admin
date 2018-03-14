@@ -21,7 +21,7 @@
     };
 
     var DEFAULTS = {
-        supported: [ 'success', 'info', 'notice', 'warning', 'error' ],
+        supported: [ 'success', 'info', 'notice', 'warning', 'error', 'danger' ],
         definitions: {
             success: {
                 title: commonL10n.success,
@@ -38,11 +38,13 @@
             },
             error: {
                 title: commonL10n.errorOccurred,
-                type:  BootstrapDialog.TYPE_DANGER
+                type:  BootstrapDialog.TYPE_DANGER,
+                alias: [ 'danger' ]
             }
         },
         aliases: {
-            info: 'notice'
+            info: 'notice',
+            danger: 'error'
         }
     };
 

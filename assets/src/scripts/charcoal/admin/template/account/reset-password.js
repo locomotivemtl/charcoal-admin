@@ -37,7 +37,7 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function (
      */
     $form.on('submit.charcoal.password', $.proxy(this.onSubmit, this));
 
-    window.CharcoalCaptchaChangePassCallback = this.submitForm.bind($form);
+    window.CharcoalCaptchaChangePassCallback = this.submitForm.bind(this, $form);
 };
 
 /**
@@ -48,28 +48,39 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function (
 Charcoal.Admin.Template_Account_ResetPassword.prototype.onSubmit = Charcoal.Admin.Template_Login.prototype.onSubmit;
 
 /**
- * @this {HTMLFormElement|jQuery}
+ * Generate HTML from the given feedback.
  */
-Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ()
-{
-    var $form = $(this);
-    var url   = ($form.prop('action') || window.location.href);
-    var data  = $form.serialize();
+Charcoal.Admin.Template_Account_ResetPassword.prototype.parseFeedbackAsHtml = Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml;
 
-    $.post(url, data, function (response) {
-        window.console.debug(response);
+/**
+ * @this  {Charcoal.Admin.Template_Account_ResetPassword}
+ * @param {HTMLFormElement|jQuery} $form - The form element.
+ */
+Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ($form)
+{
+    var that = this,
+        url  = ($form.prop('action') || window.location.href),
+        data = $form.serialize();
+
+    $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
+     .done(function (response) {
+        var message = that.parseFeedbackAsHtml(response) || authL10n.resetPassSuccess;
+
         BootstrapDialog.show({
             title:    authL10n.passwordReset,
-            message:  authL10n.resetPassSuccess,
+            message:  message,
             type:     BootstrapDialog.TYPE_SUCCESS,
             onhidden: function () {
-                window.location.href = Charcoal.Admin.admin_url() + 'login';
+                window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=newpass');
             }
         });
-    }, 'json').fail(function () {
+    }).fail(function (jqxhr, status, error) {
+        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+            message  = that.parseFeedbackAsHtml(response) || authL10n.resetPassFailed;
+
         BootstrapDialog.show({
             title:    authL10n.passwordReset,
-            message:  authL10n.resetPassFailed,
+            message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
             onhidden: function () {
                 window.grecaptcha.reset();

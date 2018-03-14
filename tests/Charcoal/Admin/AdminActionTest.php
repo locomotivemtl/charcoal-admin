@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Tests;
 
-
-
 // From PHPUnit
 use PHPUnit_Framework_TestCase;
 
@@ -103,15 +101,16 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->obj->feedbacks());
         $this->assertEquals(0, $this->obj->numFeedbacks());
 
-        $ret = $this->obj->addFeedback('error', 'Message');
-        //$this->assertSame($ret, $this->obj);
+        $entryId = $this->obj->addFeedback('error', 'Message');
+        $entries = $this->obj->feedbacks();
+        $entry   = reset($entries);
+
+        $this->assertArraySubset([ 'id'      => $entryId  ], $entry);
+        $this->assertArraySubset([ 'type'    => 'danger'  ], $entry);
+        $this->assertArraySubset([ 'level'   => 'error'   ], $entry);
+        $this->assertArraySubset([ 'message' => 'Message' ], $entry);
+
         $this->assertTrue($this->obj->hasFeedbacks());
-        $this->assertEquals([[
-            'level'   => 'error',
-            'message' => 'Message',
-            'id' => $ret,
-            'dismissible'=>true
-        ]], $this->obj->feedbacks());
         $this->assertEquals(1, $this->obj->numFeedbacks());
     }
 

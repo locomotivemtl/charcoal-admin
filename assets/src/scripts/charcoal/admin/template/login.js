@@ -1,4 +1,4 @@
-/* globals commonL10n,authL10n */
+/* globals authL10n */
 /**
  * charcoal/admin/template/login
  *
@@ -56,42 +56,45 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
     if ($challenge.exists() && $challenge.data('size') === 'invisible') {
         window.grecaptcha.execute();
     } else {
-        this.submitForm.call($form);
+        this.submitForm.call(this, $form);
     }
 };
 
 /**
- * @this {HTMLFormElement|jQuery}
+ * @this  {Charcoal.Admin.Template_Login}
+ * @param {HTMLFormElement|jQuery} $form - The form element.
  */
 Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 {
-    $form = $($form);
-    var url   = ($form.prop('action') || window.location.href);
-    var data  = $form.serialize();
+    var that = this,
+        url  = ($form.prop('action') || window.location.href),
+        data = $form.serialize();
 
-    var queryParams = this.queryParams();
+    var urlParams = Charcoal.Admin.queryParams();
 
-    if (queryParams.hasOwnProperty('redirect_to')) {
-        data = data.concat('&next_url=' + encodeURIComponent(queryParams.redirect_to));
+    if ('redirect_to' in urlParams) {
+        data = data.concat('&next_url=' + encodeURIComponent(urlParams.redirect_to));
     }
 
-    $.post(url, data, function (response) {
-        window.console.debug(response);
-        if (response.success) {
-            window.location.href = response.next_url;
-        } else {
-            //window.alert('Error');
-            BootstrapDialog.show({
-                title:   authL10n.login,
-                message: commonL10n.authFailed,
-                type:    BootstrapDialog.TYPE_DANGER
-            });
-        }
-    }, 'json').fail(function () {
-        //window.alert('Error');
+    $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
+     .done(function (response) {
+        var message = that.parseFeedbackAsHtml(response) || authL10n.authSuccess;
         BootstrapDialog.show({
             title:    authL10n.login,
-            message:  commonL10n.authFailed,
+            message:  message,
+            type:     BootstrapDialog.TYPE_SUCCESS,
+        });
+
+        setTimeout(function () {
+            window.location.href = response.next_url || Charcoal.Admin.admin_url();
+        }, 300);
+    }).fail(function (jqxhr, status, error) {
+        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+            message  = that.parseFeedbackAsHtml(response) || authL10n.authFailed;
+
+        BootstrapDialog.show({
+            title:    authL10n.login,
+            message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
             onhidden: function () {
                 window.grecaptcha.reset();
@@ -100,17 +103,44 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
     });
 };
 
-Charcoal.Admin.Template_Login.prototype.queryParams = function ()
+/**
+ * Generate HTML from the given feedback.
+ *
+ * @param  {array}  entries  - Collection of feedback entries.
+ * @return {string|null} - The merged feedback messages as HTML paragraphs.
+ */
+Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
 {
-    var pairs = location.search.slice(1).split('&');
+    if (entries.feedbacks) {
+        entries = entries.feedbacks;
+    }
 
-    var result = {};
-    pairs.forEach(function (pair) {
-        pair = pair.split('=');
-        if (pair[1]) {
-            result[pair[0]] = decodeURIComponent(pair[1] || '');
-        }
-    });
+    if (Array.isArray(entries) === false || entries.length === 0) {
+        return null;
+    }
 
-    return JSON.parse(JSON.stringify(result));
+    if (entries.length === 0) {
+        return null;
+    }
+
+    var key,
+        out,
+        manager = Charcoal.Admin.feedback(entries),
+        grouped = manager.getMessagesMap();
+
+    console.log(grouped);
+
+    out  = '<p>';
+    for (key in grouped) {
+        out += grouped[key].join('</p><p>');
+    }
+    out += '</p>';
+
+    manager.empty();
+
+    if (out === '<p></p>') {
+        return null;
+    }
+
+    return out;
 };

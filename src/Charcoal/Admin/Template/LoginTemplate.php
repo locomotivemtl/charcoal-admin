@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Template;
 
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Template\AuthTemplateTrait;
@@ -13,6 +16,40 @@ use Charcoal\Admin\User\AuthToken;
 class LoginTemplate extends AdminTemplate
 {
     use AuthTemplateTrait;
+
+    /**
+     * Determine if the password token is valid.
+     *
+     * @param  RequestInterface $request The PSR-7 HTTP request.
+     * @return boolean
+     */
+    public function init(RequestInterface $request)
+    {
+        $translator = $this->translator();
+
+        $notice = $request->getParam('notice');
+        switch ($notice) {
+            case 'resetpass':
+                $message = $translator->translate('Check your email for instructions to reset your password.');
+                $this->addFeedback([
+                    'level'       => 'notice',
+                    'message'     => $message,
+                    'dismissible' => false
+                ]);
+                break;
+
+            case 'newpass':
+                $message = $translator->translate('Log in with your new password.');
+                $this->addFeedback([
+                    'level'       => 'notice',
+                    'message'     => $message,
+                    'dismissible' => false
+                ]);
+                break;
+        }
+
+        return true;
+    }
 
     /**
      * @todo   Implement using PSR Request object

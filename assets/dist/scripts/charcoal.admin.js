@@ -276,16 +276,19 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Generates the admin URL used by forms and other objects
-     * @return  {string}  URL for admin section
+     * Generates the admin URL used by forms and other objects.
+     *
+     * @param  {string|null} [path] - A target path of the admin.
+     * @return {string} - The admin URL.
      */
-    Admin.admin_url = function () {
-        return options.base_url + options.admin_path + '/';
+    Admin.admin_url = function (path) {
+        return options.base_url + options.admin_path + '/' + (typeof path === 'string' ? path : '');
     };
 
     /**
-     * Returns the base_url of the project
-     * @return  {string}  URL for admin section
+     * Returns the base_url of the project.
+     *
+     * @return {string} - The base URL.
      */
     Admin.base_url = function () {
         return options.base_url;
@@ -304,6 +307,11 @@ Charcoal.Admin = (function () {
         return manager;
     };
 
+    /**
+     * Convert the query string into a query object.
+     *
+     * @return {object} Key/Value pair of query parameters.
+     */
     Admin.queryParams = function () {
         var pairs = location.search.slice(1).split('&');
 
@@ -337,9 +345,10 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Convert an object namespace string into a usable object name
-     * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
-     * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+     * Convert an object namespace string into a usable object name.
+     *
+     * @param  {string} name - String that respects the namespace structure : charcoal/admin/property/input/switch
+     * @return {string} - String that respects the object name structure : Property_Input_Switch
      */
     Admin.get_object_name = function (name) {
         // Getting rid of Charcoal.Admin namespacing
@@ -370,8 +379,8 @@ Charcoal.Admin = (function () {
     /**
      * Get the numeric value of a variable.
      *
-     * @param   {string|number}  value - The value to parse.
-     * @return  {string|number}  Returns a numeric value if one was detected otherwise a string.
+     * @param  {string|number} value - The value to parse.
+     * @return {string|number} - Returns a numeric value if one was detected otherwise a string.
      */
     Admin.parseNumber = function (value) {
         var re = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
@@ -384,10 +393,11 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Load Script
+     * Load JavaScript
      *
-     * @param   {string}    src      - Full path to a script file.
-     * @param   {function}  callback - Fires multiple times
+     * @param  {string}    src      - Full path to a script file.
+     * @param  {function}  callback - Fires multiple times.
+     * @return {void}
      */
     Admin.loadScript = function (src, callback) {
         this.store(src, function (defer) {
@@ -403,11 +413,11 @@ Charcoal.Admin = (function () {
     /**
      * Retrieve or store a value shared across the application.
      *
-     * @param   {string}    key      - The key for the stored value.
-     * @param   {function}  value    - The value to store.
+     * @param  {string}   key      - The key for the stored value.
+     * @param  {function} value    - The value to store.
      *     If a function, fires once when promise is completed.
-     * @param   {function}  callback - Fires multiple times.
-     * @return  {mixed}     Returns the stored value.
+     * @param  {function} callback - Fires multiple times.
+     * @return {mixed}    Returns the stored value.
      */
     Admin.store = function (key, value, callback) {
         if (!store[key]) {
@@ -492,6 +502,141 @@ Charcoal.Admin = (function () {
         }
 
         return args;
+    };
+
+    /**
+     * Resolves the structure of the XHR response dataset.
+     *
+     * @link   https://github.com/locomotivemtl/memo-boilerplate/blob/v0.4.0/assets/src/scripts/objects/api.js#L112-L130
+     *
+     * @param  {jqXHR}  jqxhr  - The jqXHR promise.
+     * @param  {string} status - A string describing the status.
+     * @param  {mixed}  error  - The error message.
+     * @return {object} - The resolved XHR response structure.
+     */
+    Admin.parseJqXhrResponse = function (jqxhr, status, error)
+    {
+        var response = { success: false, feedbacks: [] };
+
+        if (jqxhr.responseJSON) {
+            $.extend(response, jqxhr.responseJSON);
+        }
+
+        if (response.feedbacks.length === 0) {
+            if (response.message) {
+                response.feedbacks = Array.isArray(response.message) ?
+                                   response.message
+                                   : [ { msg: response.message } ];
+            } else {
+                response.feedbacks = Array.isArray(error) ?
+                                   error
+                                   : [ { msg: error } ];
+            }
+        }
+
+        return response;
+    };
+
+    /**
+     * Resolves false positives from successful requests.
+     *
+     * @param  {mixed}  response - The response body, formatted according to the dataType parameter or the dataFilter callback function, if specified.
+     * @param  {string} status   - A string describing the status.
+     * @param  {jqXHR}  jqxhr    - The jqXHR promise.
+     * @return {jqXHR} - The resolved jqXHR promise.
+     */
+    Admin.resolveJqXhrFalsePositive = function (response, status, jqxhr) {
+        if (!response || !response.success || response.error) {
+            if (response.message) {
+                return $.Deferred().reject(jqxhr, 'error', response.message);
+            } else if (response.feedbacks) {
+                return $.Deferred().reject(jqxhr, 'error', response.feedbacks);
+            } else {
+                return $.Deferred().reject(jqxhr, 'error', '');
+            }
+        }
+
+        return $.Deferred().resolve(response, status, jqxhr);
+    };
+
+    /**
+     * Resolves the given promise.
+     *
+     * Note: Expects the data type to be 'json'.
+     *
+     * @param  {jqXHR}        jqxhr      - A jqXHR object.
+     * @param  {simpleDone}   [success]  - A function to be called if the request succeeds.
+     * @param  {simpleFail}   [failure]  - A function to be called if the request fails.
+     * @param  {simpleAlways} [complete] - A function to be called when the request finishes.
+     * @return {jqXHR} - The given jqXHR object.
+     */
+    Admin.resolveSimpleJsonXhr = function (jqxhr, success, failure, complete) {
+        jqxhr = jqxhr.then(this.resolveJqXhrFalsePositive);
+
+        if (typeof success === 'function') {
+            jqxhr.done(function (response, status, jqxhr) {
+                response = $.extend({ success: true, feedbacks: [] }, response);
+
+                /**
+                 * Fires when the request succeeds.
+                 *
+                 * @callback simpleDone
+                 * @this     jqXHR
+                 * @param    {object} response - The response body.
+                 * @return   {void}
+                 */
+                success.call(jqxhr, response);
+            });
+        }
+
+        if (typeof failure === 'function') {
+            jqxhr.fail(function (jqxhr, status, error) {
+                var response = { success: false, feedbacks: [] };
+
+                if (jqxhr.responseJSON) {
+                    $.extend(response, jqxhr.responseJSON);
+                }
+
+                if (response.feedbacks.length === 0) {
+                    if (response.message) {
+                        response.feedbacks = Array.isArray(response.message) ?
+                                           response.message
+                                           : [ { msg: response.message } ];
+                    } else {
+                        response.feedbacks = Array.isArray(error) ?
+                                           error
+                                           : [ { msg: error } ];
+                    }
+                }
+
+                response = $.extend({ success: false, feedbacks: [] }, response);
+
+                /**
+                 * Fires when the request fails.
+                 *
+                 * @callback simpleFail
+                 * @this     jqXHR
+                 * @param    {object} response - The response body.
+                 * @return   {void}
+                 */
+                failure.call(jqxhr, response);
+            });
+        }
+
+        if (typeof complete === 'function') {
+            jqxhr.always(function () {
+                /**
+                 * Fires when the request finishes.
+                 *
+                 * @callback simpleAlways
+                 * @this     jqXHR
+                 * @return   {void}
+                 */
+                complete.call(jqxhr);
+            });
+        }
+
+        return jqxhr;
     };
 
     return Admin;
@@ -1073,7 +1218,7 @@ Charcoal.Admin = (function () {
     };
 
     var DEFAULTS = {
-        supported: [ 'success', 'info', 'notice', 'warning', 'error' ],
+        supported: [ 'success', 'info', 'notice', 'warning', 'error', 'danger' ],
         definitions: {
             success: {
                 title: commonL10n.success,
@@ -1090,11 +1235,13 @@ Charcoal.Admin = (function () {
             },
             error: {
                 title: commonL10n.errorOccurred,
-                type:  BootstrapDialog.TYPE_DANGER
+                type:  BootstrapDialog.TYPE_DANGER,
+                alias: [ 'danger' ]
             }
         },
         aliases: {
-            info: 'notice'
+            info: 'notice',
+            danger: 'error'
         }
     };
 
@@ -8326,7 +8473,7 @@ Charcoal.Admin.Template = function (opts)
 {
     window.alert('Template ' + opts);
 };
-;/* globals commonL10n,authL10n */
+;/* globals authL10n */
 /**
  * charcoal/admin/template/login
  *
@@ -8384,42 +8531,45 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
     if ($challenge.exists() && $challenge.data('size') === 'invisible') {
         window.grecaptcha.execute();
     } else {
-        this.submitForm.call($form);
+        this.submitForm.call(this, $form);
     }
 };
 
 /**
- * @this {HTMLFormElement|jQuery}
+ * @this  {Charcoal.Admin.Template_Login}
+ * @param {HTMLFormElement|jQuery} $form - The form element.
  */
 Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 {
-    $form = $($form);
-    var url   = ($form.prop('action') || window.location.href);
-    var data  = $form.serialize();
+    var that = this,
+        url  = ($form.prop('action') || window.location.href),
+        data = $form.serialize();
 
-    var queryParams = this.queryParams();
+    var urlParams = Charcoal.Admin.queryParams();
 
-    if (queryParams.hasOwnProperty('redirect_to')) {
-        data = data.concat('&next_url=' + encodeURIComponent(queryParams.redirect_to));
+    if ('redirect_to' in urlParams) {
+        data = data.concat('&next_url=' + encodeURIComponent(urlParams.redirect_to));
     }
 
-    $.post(url, data, function (response) {
-        window.console.debug(response);
-        if (response.success) {
-            window.location.href = response.next_url;
-        } else {
-            //window.alert('Error');
-            BootstrapDialog.show({
-                title:   authL10n.login,
-                message: commonL10n.authFailed,
-                type:    BootstrapDialog.TYPE_DANGER
-            });
-        }
-    }, 'json').fail(function () {
-        //window.alert('Error');
+    $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
+     .done(function (response) {
+        var message = that.parseFeedbackAsHtml(response) || authL10n.authSuccess;
         BootstrapDialog.show({
             title:    authL10n.login,
-            message:  commonL10n.authFailed,
+            message:  message,
+            type:     BootstrapDialog.TYPE_SUCCESS,
+        });
+
+        setTimeout(function () {
+            window.location.href = response.next_url || Charcoal.Admin.admin_url();
+        }, 300);
+    }).fail(function (jqxhr, status, error) {
+        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+            message  = that.parseFeedbackAsHtml(response) || authL10n.authFailed;
+
+        BootstrapDialog.show({
+            title:    authL10n.login,
+            message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
             onhidden: function () {
                 window.grecaptcha.reset();
@@ -8428,19 +8578,46 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
     });
 };
 
-Charcoal.Admin.Template_Login.prototype.queryParams = function ()
+/**
+ * Generate HTML from the given feedback.
+ *
+ * @param  {array}  entries  - Collection of feedback entries.
+ * @return {string|null} - The merged feedback messages as HTML paragraphs.
+ */
+Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
 {
-    var pairs = location.search.slice(1).split('&');
+    if (entries.feedbacks) {
+        entries = entries.feedbacks;
+    }
 
-    var result = {};
-    pairs.forEach(function (pair) {
-        pair = pair.split('=');
-        if (pair[1]) {
-            result[pair[0]] = decodeURIComponent(pair[1] || '');
-        }
-    });
+    if (Array.isArray(entries) === false || entries.length === 0) {
+        return null;
+    }
 
-    return JSON.parse(JSON.stringify(result));
+    if (entries.length === 0) {
+        return null;
+    }
+
+    var key,
+        out,
+        manager = Charcoal.Admin.feedback(entries),
+        grouped = manager.getMessagesMap();
+
+    console.log(grouped);
+
+    out  = '<p>';
+    for (key in grouped) {
+        out += grouped[key].join('</p><p>');
+    }
+    out += '</p>';
+
+    manager.empty();
+
+    if (out === '<p></p>') {
+        return null;
+    }
+
+    return out;
 };
 ;Charcoal.Admin.Template_MenuHeader = function ()
 {
@@ -8508,7 +8685,7 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
      */
     $form.on('submit.charcoal.password', $.proxy(this.onSubmit, this));
 
-    window.CharcoalCaptchaResetPassCallback = this.submitForm.bind($form);
+    window.CharcoalCaptchaResetPassCallback = this.submitForm.bind(this, $form);
 };
 
 /**
@@ -8519,28 +8696,39 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
 Charcoal.Admin.Template_Account_LostPassword.prototype.onSubmit = Charcoal.Admin.Template_Login.prototype.onSubmit;
 
 /**
- * @this {HTMLFormElement|jQuery}
+ * Generate HTML from the given feedback.
  */
-Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ()
-{
-    var $form = $(this);
-    var url   = ($form.prop('action') || window.location.href);
-    var data  = $form.serialize();
+Charcoal.Admin.Template_Account_LostPassword.prototype.parseFeedbackAsHtml = Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml;
 
-    $.post(url, data, function (response) {
-        window.console.debug(response);
+/**
+ * @this  {Charcoal.Admin.Template_Account_LostPassword}
+ * @param {HTMLFormElement|jQuery} $form - The form element.
+ */
+Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($form)
+{
+    var that = this,
+        url  = ($form.prop('action') || window.location.href),
+        data = $form.serialize();
+
+    $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
+     .done(function (response) {
+        var message = that.parseFeedbackAsHtml(response) || authL10n.lostPassSuccess;
+
         BootstrapDialog.show({
             title:    authL10n.lostPassword,
-            message:  authL10n.lostPassSuccess,
+            message:  message,
             type:     BootstrapDialog.TYPE_SUCCESS,
             onhidden: function () {
-                window.location.reload();
+                window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=resetpass');
             }
         });
-    }, 'json').fail(function () {
+    }).fail(function (jqxhr, status, error) {
+        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+            message  = that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed;
+
         BootstrapDialog.show({
             title:    authL10n.lostPassword,
-            message:  authL10n.lostPassFailed,
+            message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
             onhidden: function () {
                 window.grecaptcha.reset();
@@ -8587,7 +8775,7 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function (
      */
     $form.on('submit.charcoal.password', $.proxy(this.onSubmit, this));
 
-    window.CharcoalCaptchaChangePassCallback = this.submitForm.bind($form);
+    window.CharcoalCaptchaChangePassCallback = this.submitForm.bind(this, $form);
 };
 
 /**
@@ -8598,28 +8786,39 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function (
 Charcoal.Admin.Template_Account_ResetPassword.prototype.onSubmit = Charcoal.Admin.Template_Login.prototype.onSubmit;
 
 /**
- * @this {HTMLFormElement|jQuery}
+ * Generate HTML from the given feedback.
  */
-Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ()
-{
-    var $form = $(this);
-    var url   = ($form.prop('action') || window.location.href);
-    var data  = $form.serialize();
+Charcoal.Admin.Template_Account_ResetPassword.prototype.parseFeedbackAsHtml = Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml;
 
-    $.post(url, data, function (response) {
-        window.console.debug(response);
+/**
+ * @this  {Charcoal.Admin.Template_Account_ResetPassword}
+ * @param {HTMLFormElement|jQuery} $form - The form element.
+ */
+Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ($form)
+{
+    var that = this,
+        url  = ($form.prop('action') || window.location.href),
+        data = $form.serialize();
+
+    $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
+     .done(function (response) {
+        var message = that.parseFeedbackAsHtml(response) || authL10n.resetPassSuccess;
+
         BootstrapDialog.show({
             title:    authL10n.passwordReset,
-            message:  authL10n.resetPassSuccess,
+            message:  message,
             type:     BootstrapDialog.TYPE_SUCCESS,
             onhidden: function () {
-                window.location.href = Charcoal.Admin.admin_url() + 'login';
+                window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=newpass');
             }
         });
-    }, 'json').fail(function () {
+    }).fail(function (jqxhr, status, error) {
+        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+            message  = that.parseFeedbackAsHtml(response) || authL10n.resetPassFailed;
+
         BootstrapDialog.show({
             title:    authL10n.passwordReset,
-            message:  authL10n.resetPassFailed,
+            message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
             onhidden: function () {
                 window.grecaptcha.reset();

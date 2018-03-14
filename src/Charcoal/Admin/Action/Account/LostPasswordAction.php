@@ -16,6 +16,7 @@ use Pimple\Container;
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-admin'
+use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
@@ -42,6 +43,8 @@ use Charcoal\Admin\User\LostPasswordToken;
  */
 class LostPasswordAction extends AdminAction
 {
+    use AuthActionTrait;
+
     /**
      * Store the factory instance for the current class.
      *
@@ -95,7 +98,7 @@ class LostPasswordAction extends AdminAction
 
 
         $user = $this->loadUser($username);
-        if ($user === false) {
+        if ($user === null) {
             /**
              * Fail silently — Never confirm or deny the existence
              * of an account with a given email or username.
@@ -115,6 +118,7 @@ class LostPasswordAction extends AdminAction
             $this->logger->error($logMessage);
 
             $this->addFeedback('success', $doneMessage);
+            $this->setSuccessUrl((string)$this->adminUrl('login?notice=resetpass'));
             $this->setSuccess(true);
 
             return $response;
@@ -203,33 +207,6 @@ class LostPasswordAction extends AdminAction
         $this->emailFactory = $factory;
 
         return $this;
-    }
-
-
-    /**
-     * @param string $username Username or email.
-     * @return User|false
-     */
-    private function loadUser($username)
-    {
-        if (!$username) {
-            return false;
-        }
-
-        // Try to get user by username
-        $user = $this->modelFactory()->create(User::class);
-        $user->loadFrom('username', $username);
-        if ($user->id()) {
-            return $user;
-        }
-
-        // Try to get user by email
-        $user->loadFrom('email', $username);
-        if ($user->id()) {
-            return $user;
-        }
-
-        return false;
     }
 
     /**

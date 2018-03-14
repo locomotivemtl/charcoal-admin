@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Template\Account;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Template\AuthTemplateTrait;
 
 /**
  * Lost Password Template
@@ -12,6 +13,8 @@ use Charcoal\Admin\AdminTemplate;
  */
 class LostPasswordTemplate extends AdminTemplate
 {
+    use AuthTemplateTrait;
+
     /**
      * @return boolean
      */
@@ -25,23 +28,7 @@ class LostPasswordTemplate extends AdminTemplate
      */
     public function urlLostPasswordAction()
     {
-        return $this->adminUrl().'account/lost-password';
-    }
-
-    /**
-     * @return string
-     */
-    public function urlResetPassword()
-    {
-        return $this->adminUrl().'account/reset-password';
-    }
-
-    /**
-     * @return string
-     */
-    public function urlLogin()
-    {
-        return $this->adminUrl().'login';
+        return $this->adminUrl('account/lost-password');
     }
 
     /**

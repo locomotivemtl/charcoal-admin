@@ -17,14 +17,14 @@ Logout template
     <div class="c-login_panel">
         <div class="c-login_header">
             <div class="c-login_avatar">
-                <img class="c-login_avatar_image" src="{{logoutLogo}}">
+                <img class="c-login_avatar_image" src="{{avatarImage}}">
             </div>
         </div>
         <div class="text-center">
             <h2>{{#_t}}Logged Out{{/_t}}</h2>
             <p>{{#_t}}You have safely logged out from Charcoal.{{/_t}}</p>
 
-            <a href="login" class="btn btn-default">{{#_t}}Log In Again{{/_t}}</a>
+            <a href="{{urlLogin}}" class="btn btn-default">{{#_t}}Log In Again{{/_t}}</a>
         </div>
     </div>
 </div>

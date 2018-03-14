@@ -7,6 +7,7 @@ use Psr\Http\Message\RequestInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Template\AuthTemplateTrait;
 use Charcoal\Admin\User\LostPasswordToken;
 
 /**
@@ -19,6 +20,8 @@ use Charcoal\Admin\User\LostPasswordToken;
  */
 class ResetPasswordTemplate extends AdminTemplate
 {
+    use AuthTemplateTrait;
+
     /**
      * @var string
      */
@@ -69,23 +72,7 @@ class ResetPasswordTemplate extends AdminTemplate
      */
     public function urlResetPasswordAction()
     {
-        return $this->adminUrl().'account/reset-password';
-    }
-
-    /**
-     * @return string
-     */
-    public function urlLostPassword()
-    {
-        return $this->adminUrl().'account/lost-password';
-    }
-
-    /**
-     * @return string
-     */
-    public function urlLogin()
-    {
-        return $this->adminUrl().'login';
+        return $this->adminUrl('account/reset-password');
     }
 
     /**

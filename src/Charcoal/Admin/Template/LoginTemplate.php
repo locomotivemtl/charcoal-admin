@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Template;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Template\AuthTemplateTrait;
 use Charcoal\Admin\User\AuthToken;
 
 /**
@@ -11,52 +12,10 @@ use Charcoal\Admin\User\AuthToken;
  */
 class LoginTemplate extends AdminTemplate
 {
-    /**
-     * Get the background image, from admin config.
-     *
-     * @return string
-     */
-    public function backgroundImage()
-    {
-        $backdrop = $this->adminConfig('login.background_image');
-        if (empty($backdrop)) {
-            return '';
-        }
-
-        return $this->baseUrl($backdrop);
-    }
+    use AuthTemplateTrait;
 
     /**
-     * Get the background video, from admin config.
-     *
-     * @return string
-     */
-    public function backgroundVideo()
-    {
-        $backdrop = $this->adminConfig('login.background_video');
-        if (empty($backdrop)) {
-            return '';
-        }
-
-        return $this->baseUrl($backdrop);
-    }
-
-    /**
-     * @return string
-     */
-    public function loginLogo()
-    {
-        $logo = $this->adminConfig('login.logo') ?:
-                $this->adminConfig('login_logo', 'assets/admin/images/avatar.jpg');
-
-        if (empty($logo)) {
-            return '';
-        }
-
-        return $this->baseUrl($logo);
-    }
-
-    /**
+     * @todo   Implement using PSR Request object
      * @return boolean
      */
     private function isHttps()
@@ -120,14 +79,6 @@ class LoginTemplate extends AdminTemplate
     public function urlLoginAction()
     {
         return $this->adminUrl('login');
-    }
-
-    /**
-     * @return string
-     */
-    public function urlLostPassword()
-    {
-        return $this->adminUrl('account/lost-password');
     }
 
     /**

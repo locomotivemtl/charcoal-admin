@@ -78,16 +78,23 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 
     $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
      .done(function (response) {
-        var message = that.parseFeedbackAsHtml(response) || authL10n.authSuccess;
+        var nextUrl  = (response.next_url || Charcoal.Admin.admin_url()),
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.authSuccess),
+            redirect = function () {
+                window.location.href = nextUrl;
+            };
+
+        message += '<p>' + authL10n.postLoginRedirect + ' ' +
+                    authL10n.postLoginFallback.replace('[[ url ]]', nextUrl) + '</p>';
+
         BootstrapDialog.show({
             title:    authL10n.login,
             message:  message,
             type:     BootstrapDialog.TYPE_SUCCESS,
+            onhidden: redirect
         });
 
-        setTimeout(function () {
-            window.location.href = response.next_url || Charcoal.Admin.admin_url();
-        }, 300);
+        setTimeout(redirect, 300);
     }).fail(function (jqxhr, status, error) {
         var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
             message  = that.parseFeedbackAsHtml(response) || authL10n.authFailed;
@@ -127,8 +134,6 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
         out,
         manager = Charcoal.Admin.feedback(entries),
         grouped = manager.getMessagesMap();
-
-    console.log(grouped);
 
     out  = '<p>';
     for (key in grouped) {

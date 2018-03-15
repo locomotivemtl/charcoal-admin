@@ -24,8 +24,8 @@ class QuickFormWidget extends ObjectFormWidget
             return $metadata['admin']['default_quick_form'];
         }
 
-        if (isset($this->data()['form_data']['form_ident'])) {
-            $ident = $this->data()['form_data']['form_ident'];
+        if (isset($this->formData()['form_ident'])) {
+            $ident = $this->formData()['form_ident'];
 
             if (is_string($ident) && !empty($ident)) {
                 return $ident;
@@ -42,8 +42,8 @@ class QuickFormWidget extends ObjectFormWidget
      */
     public function submitLabel()
     {
-        if (isset($this->data()['form_data']['submit_label'])) {
-            $label = $this->data()['form_data']['submit_label'];
+        if (isset($this->formData()['submit_label'])) {
+            $label = $this->formData()['submit_label'];
             $this->submitLabel = $this->translator()->translation($label);
         }
 

@@ -44,12 +44,28 @@ abstract class AdminAction extends AbstractAction implements
     use SecurityTrait;
     use TranslatorAwareTrait;
 
+    const GOOGLE_RECAPTCHA_SERVER_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
     /**
      * The name of the project.
      *
      * @var \Charcoal\Translator\Translation|string|null
      */
     private $siteName;
+
+    /**
+     * Store the user response token from the last validation by Google reCAPTCHA API.
+     *
+     * @var string|null
+     */
+    private $recaptchaLastToken;
+
+    /**
+     * Store the result from the last validation by Google reCAPTCHA API.
+     *
+     * @var array|null
+     */
+    private $recaptchaLastResult;
 
     /**
      * Store the model factory.
@@ -260,55 +276,87 @@ abstract class AdminAction extends AbstractAction implements
     }
 
     /**
-     * Validate the reCAPTCHA response.
+     * Retrieve the result from the last validation by Google reCAPTCHA API.
+     *
+     * @return array|null
+     */
+    protected function getLastCaptchaValidation()
+    {
+        return $this->recaptchaLastResult;
+    }
+
+    /**
+     * Validate a Google reCAPTCHA user response.
      *
      * @todo   {@link https://github.com/mcaskill/charcoal-recaptcha Implement CAPTCHA validation as a service}.
-     * @param  string $response The captcha value (response) to validate.
+     * @link   https://developers.google.com/recaptcha/docs/verify
+     * @param  string $token A user response token provided by reCAPTCHA.
      * @throws RuntimeException If Google reCAPTCHA is not configured.
-     * @return boolean
+     * @return boolean Returns TRUE if the user response is valid, FALSE if it is invalid.
      */
-    protected function validateCaptcha($response)
+    protected function validateCaptcha($token)
     {
-        $validationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        if (empty($token)) {
+            throw new RuntimeException('Google reCAPTCHA response parameter is invalid or malformed.');
+        }
 
         $secret = $this->recaptchaSecretKey();
         if (empty($secret)) {
             throw new RuntimeException('Google reCAPTCHA [apis.google.recaptcha.private_key] is not configured.');
         }
 
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
-        $response = file_get_contents($validationUrl.'?secret='.$secret.'&response='.$response.'&remoteip='.$ip);
-        $response = json_decode($response, true);
+        $data = [
+            'secret'   => $secret,
+            'response' => $token,
+        ];
 
-        return !!$response['success'];
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $data['remoteip'] = $_SERVER['REMOTE_ADDR'];
+        }
+
+        $query = http_build_query($data);
+        $url   = static::GOOGLE_RECAPTCHA_SERVER_URL.'?'.$query;
+
+        $this->logger->debug(sprintf('Verifying reCAPTCHA user response: %s', $url));
+
+        /**
+         * @todo Use Guzzle
+         */
+        $result = file_get_contents($url);
+        $result = (array)json_decode($result, true);
+
+        $this->recaptchaLastToken  = $token;
+        $this->recaptchaLastResult = $result;
+
+        return isset($result['success']) && (bool)$result['success'];
     }
 
     /**
-     * Validate the reCAPTCHA response from a PSR Request object.
+     * Validate a Google reCAPTCHA user response from a PSR Request object.
      *
      * @param  RequestInterface       $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface|null $response A PSR-7 compatible Response instance.
-     *     If $response is provided and challenge fails,
-     *     then it is replaced with a new Response object
-     *     that represents a client error.
-     * @return ResponseInterface|boolean If $response is given,
+     *     If $response is provided and challenge fails, then it is replaced
+     *     with a new Response object that represents a client error.
+     * @return boolean Returns TRUE if the user response is valid, FALSE if it is invalid.
      */
     protected function validateCaptchaFromRequest(RequestInterface $request, ResponseInterface &$response = null)
     {
-        $recaptchaValue = $request->getParam('g-recaptcha-response', false);
-        if ($recaptchaValue === false) {
-            $this->addFeedback('error', $this->translator()->translate('Missing reCAPTCHA response.'));
-            $this->setSuccess(false);
+        $token = $request->getParam('g-recaptcha-response', false);
+        if (empty($token)) {
+            if ($response !== null) {
+                $this->addFeedback('error', $this->translator()->translate('Missing CAPTCHA response.'));
+                $this->setSuccess(false);
 
-            $response = $response->withStatus(400);
+                $response = $response->withStatus(400);
+            }
 
             return false;
         }
 
-        $result = $this->validateCaptcha($recaptchaValue);
-
-        if ($result === false) {
-            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed reCAPTCHA response.'));
+        $result = $this->validateCaptcha($token);
+        if ($result === false && $response !== null) {
+            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed CAPTCHA response.'));
             $this->setSuccess(false);
 
             $response = $response->withStatus(400);

@@ -47,14 +47,15 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
  * @this    {Charcoal.Admin.Template_Login}
  * @param   {Event} event - The submit event.
  */
-Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
+Charcoal.Admin.Template_Login.prototype.onSubmit = function (event)
+{
     event.preventDefault();
 
-    var $form      = $(event.currentTarget),
-        $challenge = $form.find('#g-recaptcha-challenge');
+    var $form   = $(event.currentTarget),
+        captcha = Charcoal.Admin.recaptcha();
 
-    if ($challenge.exists() && $challenge.data('size') === 'invisible') {
-        window.grecaptcha.execute();
+    if (captcha.hasInvisibleWidget($form, '#g-recaptcha-challenge')) {
+        captcha.getApi().execute();
     } else {
         this.submitForm.call(this, $form);
     }
@@ -97,15 +98,21 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
         setTimeout(redirect, 300);
     }).fail(function (jqxhr, status, error) {
         var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = that.parseFeedbackAsHtml(response) || authL10n.authFailed;
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.authFailed),
+            captcha  = Charcoal.Admin.recaptcha(),
+            callback = null;
+
+        if (captcha.hasApi()) {
+            callback = function () {
+                captcha.getApi().reset();
+            };
+        }
 
         BootstrapDialog.show({
             title:    authL10n.login,
             message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: function () {
-                window.grecaptcha.reset();
-            }
+            onhidden: callback
         });
     });
 };

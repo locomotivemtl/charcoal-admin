@@ -76,15 +76,21 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($f
         });
     }).fail(function (jqxhr, status, error) {
         var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed;
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed),
+            captcha  = Charcoal.Admin.recaptcha(),
+            callback = null;
+
+        if (captcha.hasApi()) {
+            callback = function () {
+                captcha.getApi().reset();
+            };
+        }
 
         BootstrapDialog.show({
             title:    authL10n.lostPassword,
             message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: function () {
-                window.grecaptcha.reset();
-            }
+            onhidden: callback
         });
     });
 };

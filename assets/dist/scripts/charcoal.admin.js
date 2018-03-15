@@ -149,7 +149,7 @@ if (!String.prototype.replacePairs) {
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback, cache, store, debug,
+    var options, manager, feedback, recaptcha, cache, store, debug,
         currentLocale = document.documentElement.getAttribute('locale'),
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
@@ -342,6 +342,19 @@ Charcoal.Admin = (function () {
         }
 
         return feedback;
+    };
+
+    /**
+     * Provides access to the reCAPTCHA handler.
+     *
+     * @return {Captcha}
+     */
+    Admin.recaptcha = function () {
+        if (typeof recaptcha === 'undefined') {
+            recaptcha = new Charcoal.Admin.ReCaptcha();
+        }
+
+        return recaptcha;
     };
 
     /**
@@ -1745,6 +1758,96 @@ Charcoal.Admin = (function () {
     Admin.FeedbackEntry = Entry;
 
 }(jQuery, Charcoal.Admin, document));
+;/**
+ * Charcoal reCAPTCHA Handler
+ */
+
+;(function ($, Admin, window, undefined) {
+    'use strict';
+
+    /**
+     * Creates a new reCAPTCHA handler.
+     *
+     * @class
+     * @return {this}
+     */
+    var Captcha = function ()
+    {
+        return this;
+    };
+
+    /**
+     * Public Interface
+     */
+
+    /**
+     * Retrieve the Google reCAPTCHA API instance.
+     *
+     * @return {grecaptcha|null} - The Google reCAPTCHA object or NULL.
+     */
+    Captcha.prototype.getApi = function ()
+    {
+        return window.grecaptcha || null;
+    };
+
+    /**
+     * Determine if the Google reCAPTCHA API is available.
+     *
+     * @return {boolean}
+     */
+    Captcha.prototype.hasApi = function ()
+    {
+        return (typeof window.grecaptcha !== 'undefined');
+    };
+
+    /**
+     * Determine if a Google reCAPTCHA widget exists.
+     *
+     * @param  {HTMLFormElement|jQuery} context    - The HTML element containing the reCAPTCHA widget.
+     * @param  {string}                 [selector] - The CSS selector of the reCAPTCHA widget to locate.
+     * @return {boolean} - Returns TRUE if the Google reCAPTCHA API is avialable
+     *     and if the widget exists.
+     */
+    Captcha.prototype.hasWidget = function (context, selector)
+    {
+        // Bail early
+        if (this.hasApi() === false) {
+            return false;
+        }
+
+        selector = selector || '.g-recaptcha';
+
+        var $context = $(context);
+
+        return ($context.is(selector) || $context.find(selector).exists());
+    };
+
+    /**
+     * Determine if a Google reCAPTCHA widget exists and is invisible.
+     *
+     * @param  {HTMLFormElement|jQuery} context    - The HTML element containing the reCAPTCHA widget.
+     * @param  {string}                 [selector] - The CSS selector of the reCAPTCHA widget to locate.
+     * @return {boolean} - Returns TRUE if the Google reCAPTCHA API is avialable
+     *     and if the widget exists and is invisible.
+     */
+    Captcha.prototype.hasInvisibleWidget = function (context, selector)
+    {
+        // Bail early
+        if (this.hasApi() === false) {
+            return false;
+        }
+
+        selector = selector || '.g-recaptcha';
+
+        var $context = $(context),
+            $widget  = $context.is(selector) ? $context : $context.find(selector);
+
+        return ($widget.exists() && $widget.data('size') === 'invisible');
+    };
+
+    Admin.ReCaptcha = Captcha;
+
+}(jQuery, Charcoal.Admin, window));
 ;/* globals widgetL10n */
 /**
  * charcoal/admin/widget
@@ -8522,14 +8625,15 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
  * @this    {Charcoal.Admin.Template_Login}
  * @param   {Event} event - The submit event.
  */
-Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
+Charcoal.Admin.Template_Login.prototype.onSubmit = function (event)
+{
     event.preventDefault();
 
-    var $form      = $(event.currentTarget),
-        $challenge = $form.find('#g-recaptcha-challenge');
+    var $form   = $(event.currentTarget),
+        captcha = Charcoal.Admin.recaptcha();
 
-    if ($challenge.exists() && $challenge.data('size') === 'invisible') {
-        window.grecaptcha.execute();
+    if (captcha.hasInvisibleWidget($form, '#g-recaptcha-challenge')) {
+        captcha.getApi().execute();
     } else {
         this.submitForm.call(this, $form);
     }
@@ -8553,27 +8657,40 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
 
     $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
      .done(function (response) {
-        var message = that.parseFeedbackAsHtml(response) || authL10n.authSuccess;
+        var nextUrl  = (response.next_url || Charcoal.Admin.admin_url()),
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.authSuccess),
+            redirect = function () {
+                window.location.href = nextUrl;
+            };
+
+        message += '<p>' + authL10n.postLoginRedirect + ' ' +
+                    authL10n.postLoginFallback.replace('[[ url ]]', nextUrl) + '</p>';
+
         BootstrapDialog.show({
             title:    authL10n.login,
             message:  message,
             type:     BootstrapDialog.TYPE_SUCCESS,
+            onhidden: redirect
         });
 
-        setTimeout(function () {
-            window.location.href = response.next_url || Charcoal.Admin.admin_url();
-        }, 300);
+        setTimeout(redirect, 300);
     }).fail(function (jqxhr, status, error) {
         var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = that.parseFeedbackAsHtml(response) || authL10n.authFailed;
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.authFailed),
+            captcha  = Charcoal.Admin.recaptcha(),
+            callback = null;
+
+        if (captcha.hasApi()) {
+            callback = function () {
+                captcha.getApi().reset();
+            };
+        }
 
         BootstrapDialog.show({
             title:    authL10n.login,
             message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: function () {
-                window.grecaptcha.reset();
-            }
+            onhidden: callback
         });
     });
 };
@@ -8602,8 +8719,6 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
         out,
         manager = Charcoal.Admin.feedback(entries),
         grouped = manager.getMessagesMap();
-
-    console.log(grouped);
 
     out  = '<p>';
     for (key in grouped) {
@@ -8724,15 +8839,21 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($f
         });
     }).fail(function (jqxhr, status, error) {
         var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed;
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed),
+            captcha  = Charcoal.Admin.recaptcha(),
+            callback = null;
+
+        if (captcha.hasApi()) {
+            callback = function () {
+                captcha.getApi().reset();
+            };
+        }
 
         BootstrapDialog.show({
             title:    authL10n.lostPassword,
             message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: function () {
-                window.grecaptcha.reset();
-            }
+            onhidden: callback
         });
     });
 };
@@ -8814,15 +8935,21 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ($
         });
     }).fail(function (jqxhr, status, error) {
         var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = that.parseFeedbackAsHtml(response) || authL10n.resetPassFailed;
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.resetPassFailed),
+            captcha = Charcoal.Admin.recaptcha(),
+            callback = null;
+
+        if (captcha.hasApi()) {
+            callback = function () {
+                captcha.getApi().reset();
+            };
+        }
 
         BootstrapDialog.show({
             title:    authL10n.passwordReset,
             message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: function () {
-                window.grecaptcha.reset();
-            }
+            onhidden: callback
         });
     });
 };

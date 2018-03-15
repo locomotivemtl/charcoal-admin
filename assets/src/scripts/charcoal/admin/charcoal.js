@@ -8,7 +8,7 @@ var Charcoal = Charcoal || {};
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback, cache, store, debug,
+    var options, manager, feedback, recaptcha, cache, store, debug,
         currentLocale = document.documentElement.getAttribute('locale'),
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
@@ -201,6 +201,19 @@ Charcoal.Admin = (function () {
         }
 
         return feedback;
+    };
+
+    /**
+     * Provides access to the reCAPTCHA handler.
+     *
+     * @return {Captcha}
+     */
+    Admin.recaptcha = function () {
+        if (typeof recaptcha === 'undefined') {
+            recaptcha = new Charcoal.Admin.ReCaptcha();
+        }
+
+        return recaptcha;
     };
 
     /**

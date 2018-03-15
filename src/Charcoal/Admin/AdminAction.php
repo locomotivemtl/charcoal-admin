@@ -234,7 +234,7 @@ abstract class AdminAction extends AbstractAction implements
      */
     public function recaptchaEnabled()
     {
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
+        $recaptcha = $this->apiConfig('google.recaptcha');
 
         return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
                (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
@@ -248,7 +248,7 @@ abstract class AdminAction extends AbstractAction implements
      */
     public function recaptchaSecretKey()
     {
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
+        $recaptcha = $this->apiConfig('google.recaptcha');
 
         if (!empty($recaptcha['private_key'])) {
             return $recaptcha['private_key'];

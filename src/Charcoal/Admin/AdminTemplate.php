@@ -520,7 +520,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function recaptchaEnabled()
     {
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
+        $recaptcha = $this->apiConfig('google.recaptcha');
 
         return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
                (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
@@ -535,7 +535,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function recaptchaInvisible()
     {
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
+        $recaptcha = $this->apiConfig('google.recaptcha');
 
         $hasInvisible = isset($recaptcha['invisible']);
         if ($hasInvisible && $recaptcha['invisible'] === true) {
@@ -573,7 +573,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function recaptchaSiteKey()
     {
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
+        $recaptcha = $this->apiConfig('google.recaptcha');
 
         if (!empty($recaptcha['public_key'])) {
             return $recaptcha['public_key'];
@@ -591,7 +591,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     public function recaptchaParameters()
     {
-        $appConfig = $this->appConfig('apis.google.recaptcha');
+        $appConfig = $this->apiConfig('google.recaptcha');
         $tplConfig = $this->get('recaptcha_options') ?: [];
 
         $params = [

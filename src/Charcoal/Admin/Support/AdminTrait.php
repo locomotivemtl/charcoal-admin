@@ -124,4 +124,28 @@ trait AdminTrait
 
         return $this->appConfig;
     }
+
+    /**
+     * Retrieve a value from the API configset.
+     *
+     * Looks up the admin module first, the application second.
+     *
+     * @param  string|null $key     Optional data key to retrieve from the configset.
+     * @param  mixed|null  $default The default value to return if data key does not exist.
+     * @return mixed
+     */
+    protected function apiConfig($key, $default = null)
+    {
+        $key = 'apis.'.$key;
+
+        if (isset($this->adminConfig[$key])) {
+            return $this->adminConfig[$key];
+        } elseif (isset($this->appConfig[$key])) {
+            return $this->appConfig[$key];
+        } elseif (!is_string($default) && is_callable($default)) {
+            return $default();
+        } else {
+            return $default;
+        }
+    }
 }

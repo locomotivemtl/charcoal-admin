@@ -391,12 +391,10 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
 
         $this->setCollectionLoader($container['model/collection/loader']);
 
-        $appConfig = $container['config'];
-
-        if (isset($appConfig['google.console.api_key'])) {
-            $this->setApiKey($appConfig['google.console.api_key']);
-        } elseif (isset($appConfig['apis.google.map.key'])) {
-            $this->setApiKey($appConfig['apis.google.map.key']);
+        if (isset($container['admin/config']['apis.google.map.key'])) {
+            $this->setApiKey($container['admin/config']['apis.google.map.key']);
+        } elseif (isset($container['config']['apis.google.map.key'])) {
+            $this->setApiKey($container['config']['apis.google.map.key']);
         }
     }
 

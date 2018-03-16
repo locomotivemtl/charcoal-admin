@@ -140,10 +140,10 @@ class LoginTemplate extends AdminTemplate
     public function recaptchaParameters()
     {
         $params = parent::recaptchaParameters();
+        $params['tabindex'] = 4;
 
         if ($this->recaptchaInvisible() === true) {
             $params['callback'] = 'CharcoalCaptchaLoginCallback';
-            $params['tabindex'] = 4;
         }
 
         return $params;

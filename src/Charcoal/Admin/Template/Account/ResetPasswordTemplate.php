@@ -124,10 +124,10 @@ class ResetPasswordTemplate extends AdminTemplate
     public function recaptchaParameters()
     {
         $params = parent::recaptchaParameters();
+        $params['tabindex'] = 5;
 
         if ($this->recaptchaInvisible() === true) {
             $params['callback'] = 'CharcoalCaptchaChangePassCallback';
-            $params['tabindex'] = 5;
         }
 
         return $params;

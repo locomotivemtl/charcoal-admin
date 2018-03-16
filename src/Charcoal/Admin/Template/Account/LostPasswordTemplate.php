@@ -91,10 +91,10 @@ class LostPasswordTemplate extends AdminTemplate
     public function recaptchaParameters()
     {
         $params = parent::recaptchaParameters();
+        $params['tabindex'] = 2;
 
         if ($this->recaptchaInvisible() === true) {
             $params['callback'] = 'CharcoalCaptchaResetPassCallback';
-            $params['tabindex'] = 2;
         }
 
         return $params;

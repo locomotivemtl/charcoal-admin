@@ -252,6 +252,10 @@ abstract class AdminAction extends AbstractAction implements
     {
         $recaptcha = $this->apiConfig('google.recaptcha');
 
+        if (empty($recaptcha) || (isset($recaptcha['active']) && $recaptcha['active'] === false)) {
+            return false;
+        }
+
         return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
                (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
     }

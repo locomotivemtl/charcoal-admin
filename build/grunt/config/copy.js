@@ -40,7 +40,7 @@ module.exports = {
             }
         ]
     },
-    admin:  {
+    www:  {
         expand: true,
         cwd:    '<%= paths.dist %>',
         src:    ['**', '*'],

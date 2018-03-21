@@ -28,7 +28,7 @@ module.exports = {
             message: 'SVG is concatenated'
         }
     },
-    copy: {
+    www: {
         options: {
             message: 'Admin assets are copied'
         }

@@ -5,11 +5,11 @@ module.exports = {
     },
     javascript: {
         files: [ '<%= paths.js.src %>/**/*.js', '<%= paths.grunt %>/config/concat.js' ],
-        tasks: [ 'concat', 'notify:javascript', 'copy:admin' ]
+        tasks: [ 'concat', 'notify:javascript', 'copy:www' ]
     },
     sass: {
         files: [ '<%= paths.css.src %>/**/*.scss' ],
-        tasks: [ 'sass', 'postcss', 'notify:sass', 'copy:admin' ]
+        tasks: [ 'sass', 'postcss', 'notify:sass', 'copy:www' ]
     },
     svg: {
         files: [ '<%= paths.img.src %>/**/*.svg' ],
@@ -17,7 +17,7 @@ module.exports = {
     },
     dist: {
         files: [ '<%= paths.dist %>/**/*' ],
-        tasks: [ 'copy:admin', 'notify:copy' ]
+        tasks: [ 'copy:www', 'notify:www' ]
     },
     tasks: {
         options: {

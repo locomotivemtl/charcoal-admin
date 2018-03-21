@@ -31,7 +31,7 @@
         "barryvdh/elfinder-flysystem-driver": "^0.2.1",
         "locomotivemtl/charcoal-app": "~0.6",
         "locomotivemtl/charcoal-core": "^0.3",
-        "locomotivemtl/charcoal-email": "^0.1",
+        "locomotivemtl/charcoal-email": "^0.2",
         "locomotivemtl/charcoal-object": "~0.4",
         "locomotivemtl/charcoal-translator": "~0.3",
         "locomotivemtl/charcoal-ui": "~0.3",

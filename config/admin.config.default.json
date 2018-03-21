@@ -274,6 +274,10 @@
         }
     },
 
+    "login": {
+        "visit_site": null
+    },
+
     "elfinder": {
         "client": {
             "theme": "moono",

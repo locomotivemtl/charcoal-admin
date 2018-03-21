@@ -59,6 +59,29 @@ trait AuthTemplateTrait
     }
 
     /**
+     * Get the "Back to website" label.
+     *
+     * @return string|boolean The button's label,
+     *     TRUE to use the default label,
+     *     or FALSE to disable the link.
+     */
+    public function returnToSiteLabel()
+    {
+        $label = $this->adminConfig('login.visit_site');
+        if ($label === false) {
+            return false;
+        }
+
+        if (empty($label) || $label === true) {
+            $label = $this->translator()->translate('Back to website');
+        } else {
+            $label = $this->translator()->translate($label);
+        }
+
+        return '&larr; '.$label;
+    }
+
+    /**
      * Get the background image, from admin config.
      *
      * @return string

@@ -72,11 +72,14 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                         </button>
                     </p>
 
-                    <p class="text-center">
-                        <small>
-                            <a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a>
-                        </small>
+                    <p class="small text-center">
+                        <a href="{{urlLostPassword}}" id="btn-lost-password">{{#_t}}Lost your password?{{/_t}}</a>
                     </p>
+                    {{# returnToSiteLabel }}
+                    <p class="small text-center">
+                        <a href="{{baseUrl}}" id="btn-backtosite">{{& . }}</a>
+                    </p>
+                    {{/ returnToSiteLabel }}
                 </div>
             </form>
         </div>

@@ -23,8 +23,14 @@ Logout template
         <div class="text-center">
             <h2>{{#_t}}auth.logout.title{{/_t}}</h2>
             <p>{{#_t}}You have safely logged out from Charcoal.{{/_t}}</p>
-
-            <a href="{{urlLogin}}" class="btn btn-default">{{#_t}}Log In Again{{/_t}}</a>
+            <p>
+                <a href="{{urlLogin}}" class="btn btn-default">{{#_t}}Log In Again{{/_t}}</a>
+            </p>
+            {{# returnToSiteLabel }}
+            <p class="small text-center">
+                <a href="{{baseUrl}}" id="btn-backtosite">{{& . }}</a>
+            </p>
+            {{/ returnToSiteLabel }}
         </div>
     </div>
 </div>

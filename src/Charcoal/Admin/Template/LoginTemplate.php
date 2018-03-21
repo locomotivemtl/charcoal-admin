@@ -126,7 +126,7 @@ class LoginTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translator()->translation('Log In'));
+            $this->setTitle($this->translator()->translation('auth.login.title'));
         }
 
         return $this->title;

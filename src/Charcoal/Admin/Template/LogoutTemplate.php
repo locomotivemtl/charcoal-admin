@@ -102,7 +102,7 @@ class LogoutTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translator()->translation('Logged Out'));
+            $this->setTitle($this->translator()->translation('auth.logout.title'));
         }
 
         return $this->title;

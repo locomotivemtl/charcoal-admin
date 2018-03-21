@@ -8667,7 +8667,7 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
                     authL10n.postLoginFallback.replace('[[ url ]]', nextUrl) + '</p>';
 
         BootstrapDialog.show({
-            title:    authL10n.login,
+            title:    authL10n.loginTitle,
             message:  message,
             type:     BootstrapDialog.TYPE_SUCCESS,
             onhidden: redirect
@@ -8687,7 +8687,7 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
         }
 
         BootstrapDialog.show({
-            title:    authL10n.login,
+            title:    authL10n.loginTitle,
             message:  message,
             type:     BootstrapDialog.TYPE_DANGER,
             onhidden: callback

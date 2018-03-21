@@ -32,7 +32,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
         <div class="c-login_body">
             {{>charcoal/admin/widget/feedbacks}}
             <div class="text-center">
-                <h2>{{#_t}}Log In{{/_t}}</h2>
+                <h2 class="sr-only">{{#_t}}auth.login.title{{/_t}}</h2>
             </div>
             <form id="login-form" method="POST" action="{{urlLoginAction}}">
                 <input type="hidden" name="csrf_token" value="{{csrfToken}}">
@@ -68,7 +68,7 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                     <p>
                         <button type="submit" class="btn btn-info btn-lg btn-block" tabindex="5">
                             <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
-                            <span class="btn-label">{{#_t}}Log In{{/_t}}</span>
+                            <span class="btn-label">{{#_t}}auth.login.action{{/_t}}</span>
                         </button>
                     </p>
 

@@ -14,11 +14,14 @@ Header menu Widget
     <a class="c-header-main_link" href="{{adminUrl}}">
         <svg class="c-header-main_logo_img" role="img" title="Charcoal"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
     </a>
+
     {{#baseUrl}}
+    {{# visitSiteLabel }}
     <a class="btn btn-link" href="{{baseUrl}}" target="_blank">
-        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-        <span class="btn-label">{{# _t }}Visit Site{{/ _t }}</span>
+        <span class="fa fa-home" aria-hidden="true"></span>
+        <span class="btn-label">{{& . }}</span>
     </a>
+    {{/ visitSiteLabel }}
     {{/baseUrl}}
 
     {{# isAuthenticated }}

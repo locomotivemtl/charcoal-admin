@@ -449,6 +449,29 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
+     * Get the "Visit website" label.
+     *
+     * @return string|boolean The button's label,
+     *     TRUE to use the default label,
+     *     or FALSE to disable the link.
+     */
+    public function visitSiteLabel()
+    {
+        $label = $this->adminConfig('header_menu.visit_site');
+        if ($label === false) {
+            return false;
+        }
+
+        if (empty($label) || $label === true) {
+            $label = $this->translator()->translate('Visit Site');
+        } else {
+            $label = $this->translator()->translate($label);
+        }
+
+        return $label;
+    }
+
+    /**
      * Retrieve the name of the project.
      *
      * @return Translation|string|null

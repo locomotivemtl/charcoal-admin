@@ -278,6 +278,10 @@
         "visit_site": null
     },
 
+    "header_menu": {
+        "visit_site": null
+    },
+
     "elfinder": {
         "client": {
             "theme": "moono",

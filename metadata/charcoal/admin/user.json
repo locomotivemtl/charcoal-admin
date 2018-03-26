@@ -1,95 +1,11 @@
 {
-    "parent": "charcoal/object/content",
-
     "properties": {
-        "username": {
-            "type": "string",
-            "unique": true,
-            "required": true,
-            "allow_null": false,
-            "label":{
-                "en":"Username",
-                "fr":"Nom d'utilisateur"
-            }
-        },
-        "password": {
-            "type": "password",
-            "required": true,
-            "allow_null": false,
-            "allow_empty": false,
-            "label":{
-                "en":"Password",
-                "fr":"Mot de passe"
-            },
-            "input_type":"charcoal/admin/property/input/password"
-        },
-        "email": {
-            "type": "email",
-            "required": true,
-            "allow_empty": false,
-            "allow_null": false,
-            "label":{
-                "en":"Email",
-                "fr":"Courriel"
-            }
-        },
-        "active":{
-            "type":"boolean",
-            "label":{
-                "en":"Active",
-                "fr":"Actif"
-            }
-        },
         "roles": {
             "type": "object",
             "obj_type": "charcoal/admin/user/acl-role",
-            "multiple": true,
-            "input_type":"charcoal/admin/property/input/checkbox",
+            "input_type": "charcoal/admin/property/input/checkbox",
             "pattern": "{{ident}}",
-            "label":{
-                "en":"Roles (permissions)",
-                "fr":"Roles (permissions)"
-            }
-        },
-        "last_login_date": {
-            "type": "date-time",
-            "label": {
-                "en":"Last login date",
-                "fr":"Date dernière connexion"
-            },
-            "read_only":true,
-            "input_type":"charcoal/admin/property/input/readonly"
-        },
-        "last_login_ip": {
-            "type": "ip",
-            "label": {
-                "en":"Last login IP",
-                "fr":"IP dernière connexion"
-            },
-            "read_only":true,
-            "input_type":"charcoal/admin/property/input/readonly"
-        },
-        "last_password_date": {
-            "type": "date-time",
-            "description": "Date of the last password modification.",
-            "label": {
-                "en":"Last password date",
-                "fr":"Date changement mot de passe"
-            },
-            "read_only":true,
-            "input_type":"charcoal/admin/property/input/readonly"
-        },
-        "last_password_ip": {
-            "type": "ip",
-            "label": {
-                "en":"Last password IP",
-                "fr":"IP changement mot de passe"
-            },
-            "read_only":true,
-            "input_type":"charcoal/admin/property/input/readonly"
-        },
-        "login_token": {
-            "type": "string"
+            "multiple": true
         }
     },
 
@@ -106,8 +22,8 @@
         "lists": {
             "default": {
                 "label": {
-                    "en":"Administrators",
-                    "fr":"Administrateurs / Gestionnaires"
+                    "en": "Administrators / Managers",
+                    "fr": "Administrateurs / Gestionnaires"
                 },
                 "properties": [
                     "username",
@@ -115,26 +31,28 @@
                     "roles",
                     "last_login_date"
                 ],
-                "list_actions":[{
-                    "label":{
-                        "en":"Create a new user",
-                        "fr":"Créer un nouvel utilisateur"
-                    },
-                    "ident":"create",
-                    "url":"object/edit?obj_type=charcoal/admin/user"
-                }]
+                "list_actions": [
+                    {
+                        "ident": "create",
+                        "label": {
+                            "en": "Create a new user",
+                            "fr": "Créer un nouvel utilisateur"
+                        },
+                        "url": "object/edit?obj_type=charcoal/admin/user"
+                    }
+                ]
             }
         },
         "default_list": "default",
 
         "forms": {
-            "default":{
+            "default": {
                 "label": "Admin User Form",
                 "groups": {
                     "main": {
                         "title": {
-                            "en":"Information",
-                            "fr":"Informations"
+                            "en": "Information",
+                            "fr": "Informations"
                         },
                         "properties": [
                             "active",
@@ -142,34 +60,34 @@
                             "email",
                             "password"
                         ],
-                        "priority":10
+                        "priority": 10
                     },
                     "access": {
                         "title": {
-                            "en":"Access levels",
-                            "fr":"Niveaux d'accès"
+                            "en": "Access levels",
+                            "fr": "Niveaux d'accès"
                         },
                         "properties": [
                             "roles"
                         ],
-                        "priority":20
+                        "priority": 20
                     },
                     "logs": {
                         "title": {
-                            "en":"Logs",
-                            "fr":"Journal"
+                            "en": "Logs",
+                            "fr": "Journal"
                         },
-                        "properties":[
+                        "properties": [
                             "last_login_date",
                             "last_login_ip",
                             "last_password_date",
                             "last_password_ip"
                         ],
-                        "priority":30
+                        "priority": 30
                     }
                 },
-                "sidebars":{
-                    "actions":{
+                "sidebars": {
+                    "actions": {
                         "properties": [
                             "created",
                             "last_modified"
@@ -183,10 +101,12 @@
         "dashboards": {
             "admin.edit": {
                 "layout": {
-                    "structure": [{
-                        "num_columns": 3,
-                        "columns": [ 2, 1 ]
-                    }]
+                    "structure": [
+                        {
+                            "num_columns": 3,
+                            "columns": [ 2, 1 ]
+                        }
+                    ]
                 },
                 "widgets": {
                     "form": {
@@ -202,10 +122,9 @@
             },
             "admin.collection": {
                 "layout": {
-                    "structure": [{
-                        "num_columns": 1,
-                        "columns": [ 1 ]
-                    }]
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
                 },
                 "widgets": {
                     "list": {
@@ -221,7 +140,7 @@
                 }
             }
         },
-        "default_create_dashboard":"admin.edit",
+        "default_create_dashboard": "admin.edit",
         "default_edit_dashboard": "admin.edit",
         "default_collection_dashboard": "admin.collection"
     }

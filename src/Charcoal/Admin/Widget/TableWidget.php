@@ -371,8 +371,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $this->propertiesOptions;
     }
 
-
-
     /**
      * Retrieve the view options for the given property.
      *
@@ -405,14 +403,17 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function collectionProperties()
     {
-        $props = $this->properties();
+        $properties  = $this->properties();
+        $propOptions = $this->propertiesOptions();
 
-        foreach ($props as $propertyIdent => $property) {
-            $propertyMetadata = $props[$propertyIdent];
-
+        foreach ($properties as $propertyIdent => $propertyMetadata) {
             $p = $this->propertyFactory()->create($propertyMetadata['type']);
             $p->setIdent($propertyIdent);
             $p->setData($propertyMetadata);
+
+            if (isset($propOptions[$propertyIdent]) && is_array($propOptions[$propertyIdent])) {
+                $p->setData($propOptions[$propertyIdent]);
+            }
 
             $column = [
                 'label' => trim($p->label())

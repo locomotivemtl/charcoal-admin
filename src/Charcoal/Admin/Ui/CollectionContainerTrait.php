@@ -685,7 +685,8 @@ trait CollectionContainerTrait
     public function objectRows()
     {
         // Get properties as defined in object's list metadata
-        $properties = $this->sortProperties();
+        $properties  = $this->sortProperties();
+        $propOptions = $this->propertiesOptions();
 
         // Collection objects
         $objects = $this->sortObjects();
@@ -697,14 +698,13 @@ trait CollectionContainerTrait
                     continue;
                 }
             }
-            $objectProperties = [];
 
+            $objectProperties = [];
             foreach ($properties as $propertyIdent => $propertyData) {
                 $property = $object->property($propertyIdent);
 
-                $propertiesOptions = $this->propertiesOptions();
-                if (isset($propertiesOptions[$propertyIdent])) {
-                    $property->setData($propertiesOptions[$propertyIdent]);
+                if (isset($propOptions[$propertyIdent]) && is_array($propOptions[$propertyIdent])) {
+                    $property->setData($propOptions[$propertyIdent]);
                 }
 
                 $this->setupDisplayPropertyValue($object, $property);

@@ -20,9 +20,39 @@ use Charcoal\Admin\AdminTemplate;
 class ClearCacheTemplate extends AdminTemplate
 {
     /**
+     * Cache service.
+     *
      * @var \Stash\Pool
      */
     private $cache;
+
+    /**
+     * Summary of cache.
+     *
+     * @var array
+     */
+    private $cacheInfo;
+
+    /**
+     * Cache service config.
+     *
+     * @var \Charcoal\App\Config\CacheConfig
+     */
+    private $cacheConfig;
+
+    /**
+     * Driver Name => Class Name.
+     *
+     * @var \Stash\Interfaces\DriverInterface
+     */
+    private $cacheDriver;
+
+    /**
+     * Driver Name => Class Name.
+     *
+     * @var array
+     */
+    private $availableCacheDrivers;
 
     /**
      * Retrieve the title of the page.
@@ -50,39 +80,53 @@ class ClearCacheTemplate extends AdminTemplate
         return $this->sidemenu;
     }
 
-
     /**
+     * @param  boolean $force Whether to reload cache information.
      * @return array
      */
-    public function cacheInfo()
+    public function cacheInfo($force = false)
     {
-        $flip = array_flip($this->availableCacheDrivers);
-        $driver = get_class($this->cache->getDriver());
+        if ($this->cacheInfo === null || $force === true) {
+            $flip   = array_flip($this->availableCacheDrivers);
+            $driver = get_class($this->cache->getDriver());
 
-        $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
-        return [
-            'type'          => $cacheType,
-            'active'        => $this->cacheConfig['active'],
-            'global'        => $this->globalCacheInfo(),
-            'pages'         => $this->pagesCacheInfo(),
-            'objects'       => $this->objectsCacheInfo(),
-            'pages_items'   => $this->pagesCacheItems(),
-            'objects_items' => $this->objectsCacheItems()
-        ];
+            $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
+            $this->cacheInfo = [
+                'type'          => $cacheType,
+                'active'        => $this->cacheConfig['active'],
+                'global'        => $this->globalCacheInfo(),
+                'pages'         => $this->pagesCacheInfo(),
+                'objects'       => $this->objectsCacheInfo(),
+                'pages_items'   => $this->pagesCacheItems(),
+                'objects_items' => $this->objectsCacheItems()
+            ];
+        }
+
+        return $this->cacheInfo;
     }
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
+     * @return string
      */
-    protected function setDependencies(Container $container)
+    private function getGlobalCacheInfoKey()
     {
-        parent::setDependencies($container);
+        return '/::'.$this->cache->getNamespace().'::/';
+    }
 
-        $this->availableCacheDrivers = $container['cache/available-drivers'];
-        $this->cacheDriver           = $container['cache/driver'];
-        $this->cache                 = $container['cache'];
-        $this->cacheConfig           = $container['cache/config'];
+    /**
+     * @return string
+     */
+    private function getPagesCacheInfoKey()
+    {
+        return '/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/';
+    }
+
+    /**
+     * @return string
+     */
+    private function getObjectsCacheInfoKey()
+    {
+        return '/::'.$this->cache->getNamespace().'::objects::|::'.$this->cache->getNamespace().'::metadata::/';
     }
 
     /**
@@ -90,8 +134,9 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function globalCacheInfo()
     {
-        if ($this->isApc() === true) {
-            return $this->apcCacheInfo('/::'.$this->cache->getNamespace().'::/');
+        if ($this->isApc()) {
+            $cacheKey = $this->getGlobalCacheInfoKey();
+            return $this->apcCacheInfo($cacheKey);
         } else {
             return [
                 'num_entries'  => 0,
@@ -108,10 +153,9 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function pagesCacheInfo()
     {
-        if ($this->isApc() === true) {
-            return $this->apcCacheInfo(
-                '/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/'
-            );
+        if ($this->isApc()) {
+            $cacheKey = $this->getPagesCacheInfoKey();
+            return $this->apcCacheInfo($cacheKey);
         } else {
             return [
                 'num_entries'  => 0,
@@ -128,8 +172,9 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function pagesCacheItems()
     {
-        if ($this->isApc() === true) {
-            return $this->apcCacheItems('/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/');
+        if ($this->isApc()) {
+            $cacheKey = $this->getPagesCacheInfoKey();
+            return $this->apcCacheInfo($cacheKey);
         } else {
             return [];
         }
@@ -140,10 +185,9 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function objectsCacheInfo()
     {
-        if ($this->isApc() === true) {
-            return $this->apcCacheInfo(
-                '/::'.$this->cache->getNamespace().'::object::|::'.$this->cache->getNamespace().'::metadata::/'
-            );
+        if ($this->isApc()) {
+            $cacheKey = $this->getPagesCacheInfoKey();
+            return $this->apcCacheItems($cacheKey);
         } else {
             return [
                 'num_entries'  => 0,
@@ -161,26 +205,20 @@ class ClearCacheTemplate extends AdminTemplate
     private function objectsCacheItems()
     {
         if ($this->isApc()) {
-            return $this->apcCacheItems('/::'.$this->cache->getNamespace().'::objects::|::'.$this->cache->getNamespace().'::metadata::/');
+            $cacheKey = $this->getPagesCacheInfoKey();
+            return $this->apcCacheItems($cacheKey);
         } else {
             return [];
         }
     }
 
     /**
-     * @param string $key The cache key to look at.
+     * @param  string $key The cache key to look at.
      * @return array
      */
     private function apcCacheInfo($key)
     {
-        if (class_exists(APCUIterator::class)) {
-            $iter = new APCUIterator($key);
-        } elseif (class_exists(APCIterator::class)) {
-            $iter = new APCIterator($key);
-        } else {
-            // Shouldn't happen.
-            return [];
-        }
+        $iter = $this->createApcIterator($key);
 
         $numEntries = 0;
         $sizeTotal  = 0;
@@ -204,22 +242,15 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
-     * @param string $key The cache key to look at.
-     * @throws RuntimeException If the APC iterator class can not be found.
+     * @param  string $key The cache key to look at.
      * @return array|\Generator
      */
     private function apcCacheItems($key)
     {
-        if (class_exists(APCUIterator::class)) {
-            $iter = new APCUIterator($key);
-        } elseif (class_exists(APCIterator::class)) {
-            $iter = new APCIterator($key);
-        } else {
-            throw new RuntimeException('Cache uses APC but no iterator could be found.');
-        }
+        $iter = $this->createApcIterator($key);
 
         foreach ($iter as $item) {
-            $item['ident']   = str_replace('::', '⇒', str_replace('.', '/', trim(str_replace($this->cache->getNamespace(), '', strstr($item['key'], $this->cache->getNamespace().'::')), ':')));
+            $item['ident']   = $this->formatApcCacheKey($item['key']);
             $item['size']    = $this->formatBytes($item['mem_size']);
             $item['created'] = date('Y-m-d H:i:s', $item['creation_time']);
             $item['expiry']  = date('Y-m-d H:i:s', ($item['creation_time']+$item['ttl']));
@@ -228,11 +259,27 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * @param  string $key The cache item key to load.
+     * @throws RuntimeException If the APC Iterator class is missing.
+     * @return \APCIterator|\APCUIterator|null
+     */
+    private function createApcIterator($key)
+    {
+        if (class_exists('\\APCUIterator', false)) {
+            return new \APCUIterator($key);
+        } elseif (class_exists('\\APCIterator', false)) {
+            return new \APCIterator($key);
+        } else {
+            throw new RuntimeException('Cache uses APC but no iterator could be found.');
+        }
+    }
+
+    /**
      * @return boolean
      */
     private function isApc()
     {
-        return (get_class($this->cache->getDriver()) == Apc::class);
+        return is_a($this->cache->getDriver(), Apc::class);
     }
 
     /**
@@ -240,24 +287,58 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function isMemcache()
     {
-        return (get_class($this->cache->getDriver()) == Memcache::class);
+        return is_a($this->cache->getDriver(), Memcache::class);
+    }
+
+    /**
+     * Human-readable identifier format.
+     *
+     * @param  string $key The cache item key to format.
+     * @return string
+     */
+    private function formatApcCacheKey($key)
+    {
+        $nss = $this->cache->getNamespace();
+        $key = str_replace($nss, '', strstr($key, $nss.'::'));
+        $key = str_replace([ '::', '.' ], [ '⇒', '/' ], trim($key, ':'));
+        return $key;
     }
 
     /**
      * Human-readable bytes format.
      *
-     * @param integer $size The number of bytes to format.
-     * @return boolean
+     * @param  integer $bytes The number of bytes to format.
+     * @return string
      */
-    private function formatBytes($size)
+    private function formatBytes($bytes)
     {
-        if ($size === 0) {
+        if ($bytes === 0) {
             return 0;
         }
-        $base = log($size, 1024);
-        $suffixes = [ 'b', 'k', 'M', 'G', 'T' ];
 
+        $units = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
+        $base  = log($bytes, 1024);
         $floor = floor($base);
-        return round(pow(1024, ($base - $floor)), 2).''.$suffixes[$floor];
+        $unit  = $units[$floor];
+        $size  = round(pow(1024, ($base - $floor)), 2);
+
+        $locale = localeconv();
+        $size   = number_format($size, 2, $locale['decimal_point'], $locale['thousands_sep']);
+
+        return rtrim($size, '.0').' '.$unit;
+    }
+
+    /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        $this->availableCacheDrivers = $container['cache/available-drivers'];
+        $this->cacheDriver           = $container['cache/driver'];
+        $this->cache                 = $container['cache'];
+        $this->cacheConfig           = $container['cache/config'];
     }
 }

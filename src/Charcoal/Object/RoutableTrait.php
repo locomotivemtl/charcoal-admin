@@ -457,20 +457,12 @@ trait RoutableTrait
             ));
         }
 
-        $model = $this->createRouteObject();
-
         if (!$this->objType() || !$this->id()) {
-            return $model;
+            return $this->createRouteObject();
         }
 
-        // For URL.
-        $loader = new CollectionLoader([
-            'logger'  => $this->logger,
-            'factory' => $this->modelFactory()
-        ]);
-
+        $loader = $this->createRouteObjectCollectionLoader();
         $loader
-            ->setModel($model)
             ->setNumPerPage(1)
             ->setPage(1)
             ->addOrder('creation_date', 'desc')
@@ -644,14 +636,8 @@ trait RoutableTrait
             return false;
         }
 
-        $model = $this->modelFactory()->get($this->objectRouteClass());
-        $loader = new CollectionLoader([
-            'logger'  => $this->logger,
-            'factory' => $this->modelFactory()
-        ]);
-
+        $loader = $this->createRouteObjectCollectionLoader();
         $loader
-            ->setModel($model)
             ->addFilters([
                 [
                     'property' => 'route_obj_type',
@@ -672,6 +658,22 @@ trait RoutableTrait
     }
 
     /**
+     * Create a route collection loader.
+     *
+     * @return CollectionLoader
+     */
+    public function createRouteObjectCollectionLoader()
+    {
+        $loader = new CollectionLoader([
+            'logger'  => $this->logger,
+            'factory' => $this->modelFactory(),
+            'model'   => $this->getRouteObjectPrototype(),
+        ]);
+
+        return $loader;
+    }
+
+    /**
      * Create a route object.
      *
      * @return ObjectRouteInterface
@@ -681,6 +683,18 @@ trait RoutableTrait
         $route = $this->modelFactory()->create($this->objectRouteClass());
 
         return $route;
+    }
+
+    /**
+     * Retrieve the route object prototype.
+     *
+     * @return ObjectRouteInterface
+     */
+    public function getRouteObjectPrototype()
+    {
+        $proto = $this->modelFactory()->get($this->objectRouteClass());
+
+        return $proto;
     }
 
     /**

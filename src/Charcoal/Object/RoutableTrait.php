@@ -231,9 +231,9 @@ trait RoutableTrait
     public function generateSlug()
     {
         $languages = $this->translator()->availableLocales();
-        $patterns = $this->slugPattern();
-        $curSlug = $this->slug();
-        $newSlug = [];
+        $patterns  = $this->slugPattern();
+        $curSlug   = $this->slug();
+        $newSlug   = [];
 
         $origLang = $this->translator()->getLocale();
         foreach ($languages as $lang) {
@@ -253,17 +253,17 @@ trait RoutableTrait
             }
             $newSlug[$lang] = $this->finalizeSlug($newSlug[$lang]);
 
-            $objectRoute = $this->createRouteObject();
-            $objectRoute->setData([
+            $newRoute = $this->createRouteObject();
+            $newRoute->setData([
                 'lang'           => $lang,
                 'slug'           => $newSlug[$lang],
                 'route_obj_type' => $this->objType(),
-                'route_obj_id'   => $this->id()
+                'route_obj_id'   => $this->id(),
             ]);
 
-            if (!$objectRoute->isSlugUnique()) {
-                $objectRoute->generateUniqueSlug();
-                $newSlug[$lang] = $objectRoute->slug();
+            if (!$newRoute->isSlugUnique()) {
+                $newRoute->generateUniqueSlug();
+                $newSlug[$lang] = $newRoute->slug();
             }
         }
         $this->translator()->setLocale($origLang);
@@ -395,19 +395,19 @@ trait RoutableTrait
             }
             $this->translator()->setLocale($lang);
 
-            $objectRoute = $this->createRouteObject();
-
+            $newRoute = $this->createRouteObject();
             $oldRoute = $this->getLatestObjectRoute();
 
             $defaultData = [
                 'lang'                => $lang,
+                'slug'                => $slug,
                 'route_obj_type'      => $this->objType(),
                 'route_obj_id'        => $this->id(),
                 // Not used, might be too much.
                 'route_template'      => $this->templateIdent(),
                 'route_options'       => $this->routeOptions(),
                 'route_options_ident' => $this->routeOptionsIdent(),
-                'active'              => true
+                'active'              => true,
             ];
 
             $data = array_merge($defaultData, $data);
@@ -417,24 +417,22 @@ trait RoutableTrait
                 $oldRoute->setData([
                     'route_template'      => $data['route_template'],
                     'route_options'       => $data['route_options'],
-                    'route_options_ident' => $data['route_options_ident']
+                    'route_options_ident' => $data['route_options_ident'],
                 ]);
                 $oldRoute->update([ 'route_template', 'route_options' ]);
                 continue;
             }
 
-            $objectRoute->setData($data);
-            $objectRoute->setSlug($slug);
-            $objectRoute->setLang($lang);
+            $newRoute->setData($data);
 
-            if (!$objectRoute->isSlugUnique()) {
-                $objectRoute->generateUniqueSlug();
+            if (!$newRoute->isSlugUnique()) {
+                $newRoute->generateUniqueSlug();
             }
 
-            if ($objectRoute->id()) {
-                $objectRoute->update();
+            if ($newRoute->id()) {
+                $newRoute->update();
             } else {
-                $objectRoute->save();
+                $newRoute->save();
             }
         }
 
@@ -450,7 +448,6 @@ trait RoutableTrait
      */
     protected function getLatestObjectRoute($lang = null)
     {
-
         if ($lang === null) {
             $lang = $this->translator()->getLocale();
         } elseif (!in_array($lang, $this->translator()->availableLocales())) {
@@ -474,14 +471,31 @@ trait RoutableTrait
 
         $loader
             ->setModel($model)
-            ->addFilter('route_obj_type', $this->objType())
-            ->addFilter('route_obj_id', $this->id())
-            ->addFilter('route_options_ident', '', ['operator' => 'IS NULL'])
-            ->addFilter('lang', $lang)
-            ->addFilter('active', true)
-            ->addOrder('creation_date', 'desc')
+            ->setNumPerPage(1)
             ->setPage(1)
-            ->setNumPerPage(1);
+            ->addOrder('creation_date', 'desc')
+            ->addFilters([
+                [
+                    'property' => 'route_obj_type',
+                    'value'    => $this->objType(),
+                ],
+                [
+                    'property' => 'route_obj_id',
+                    'value'    => $this->id(),
+                ],
+                [
+                    'property' => 'route_options_ident',
+                    'operator' => 'IS NULL'
+                ],
+                [
+                    'property' => 'lang',
+                    'value'    => $lang,
+                ],
+                [
+                    'property' => 'active',
+                    'value'    => true,
+                ],
+            ]);
 
         $collection = $loader->load()->objects();
 
@@ -528,12 +542,12 @@ trait RoutableTrait
             return $sluggedArray[$str];
         }
 
-        $metadata = $this->metadata();
-        $separator = isset($metadata['routable']['separator']) ? $metadata['routable']['separator'] : '-';
-        $delimiters = '-_|';
-        $pregDelim = preg_quote($delimiters);
+        $metadata    = $this->metadata();
+        $separator   = isset($metadata['routable']['separator']) ? $metadata['routable']['separator'] : '-';
+        $delimiters  = '-_|';
+        $pregDelim   = preg_quote($delimiters);
         $directories = '\\/';
-        $pregDir = preg_quote($directories);
+        $pregDir     = preg_quote($directories);
 
         // Do NOT remove forward slashes.
         $slug = preg_replace('![^(\p{L}|\p{N})(\s|\/)]!u', $separator, $str);
@@ -638,8 +652,16 @@ trait RoutableTrait
 
         $loader
             ->setModel($model)
-            ->addFilter('route_obj_type', $this->objType())
-            ->addFilter('route_obj_id', $this->id());
+            ->addFilters([
+                [
+                    'property' => 'route_obj_type',
+                    'value'    => $this->objType(),
+                ],
+                [
+                    'property' => 'route_obj_id',
+                    'value'    => $this->id(),
+                ],
+            ]);
 
         $collection = $loader->load();
         foreach ($collection as $route) {

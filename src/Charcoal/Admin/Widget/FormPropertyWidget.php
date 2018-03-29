@@ -196,6 +196,16 @@ class FormPropertyWidget extends AdminWidget implements
     private $isMergingWidgetData = false;
 
     /**
+     * The UI item's icon.
+     *
+     * Note: Only icons from the {@link http://fontawesome.io/ Font Awesome}
+     * library are supported.
+     *
+     * @var string|null
+     */
+    private $icon;
+
+    /**
      * Retrieve the property factory.
      *
      * @throws RuntimeException If the property factory is missing.
@@ -1486,5 +1496,44 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         return $display;
+    }
+
+    /**
+     * Retrieve the path to the item's icon.
+     *
+     * @todo  [mcaskill 2016-09-16] Move this to a tab interface in charcoal-admin
+     *     so as to focus the icon getter/setter on being a Glyphicon.
+     * @return string
+     */
+    public function icon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * Set the path to the item's icon associated with the object.
+     *
+     * @param  string $icon A path to an image.
+     * @return self
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Check for icon(s)
+     *
+     * @return boolean
+     */
+    public function hasIcon()
+    {
+        if (is_array($this->icon())) {
+            return !!count($this->icon());
+        }
+
+        return !!$this->icon();
     }
 }

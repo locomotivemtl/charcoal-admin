@@ -6,6 +6,12 @@
 --}}
 <fieldset class="{{ formGroupCssClass }}">
     {{# showLabel }}
+    {{# hasIcon }}
+        <span class="text-info">
+            {{> charcoal/admin/widget/inc.icon-fontawesome}}
+            &nbsp;
+        </span>
+    {{/ hasIcon }}
     <label class="control-label" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
 
     {{# showActiveLanguage }}

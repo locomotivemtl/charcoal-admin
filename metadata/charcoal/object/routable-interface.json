@@ -11,6 +11,7 @@
     "properties": {
         "slug": {
             "type": "string",
+            "icon": "link",
             "l10n": true,
             "label": {
                 "fr": "Permalien",

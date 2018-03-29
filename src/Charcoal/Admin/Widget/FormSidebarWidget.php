@@ -820,11 +820,13 @@ class FormSidebarWidget extends AdminWidget implements
      */
     protected function checkPermission($permissionName)
     {
-        if (!isset($this->requiredGlobalAclPermissions[$permissionName])) {
+        if (isset($this->requiredGlobalAclPermissions[$permissionName])) {
+            $permissions = $this->requiredGlobalAclPermissions[$permissionName];
+        } elseif (isset($this->requiredAclPermissions()[$permissionName])) {
+            $permissions = $this->requiredAclPermissions()[$permissionName];
+        } else {
             return true;
         }
-
-        $permissions = $this->requiredGlobalAclPermissions[$permissionName];
 
         // Test sidebar vs. ACL roles
         $authUser = $this->authenticator()->authenticate();

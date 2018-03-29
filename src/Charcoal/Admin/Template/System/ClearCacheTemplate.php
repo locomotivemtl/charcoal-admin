@@ -55,6 +55,13 @@ class ClearCacheTemplate extends AdminTemplate
     private $availableCacheDrivers;
 
     /**
+     * Regular expression pattern to match a Stash / APC cache key.
+     *
+     * @var string
+     */
+    private $apcCacheKeyPattern;
+
+    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation|string|null
@@ -91,21 +98,22 @@ class ClearCacheTemplate extends AdminTemplate
             $driver    = get_class($this->cache->getDriver());
             $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
 
-            # $globalItems = $this->globalCacheItems();
-            $pageItems   = $this->pagesCacheItems();
-            $objectItems = $this->objectsCacheItems();
+            $globalItems = $this->globalCacheItems();
+            # $pageItems   = $this->pagesCacheItems();
+            # $objectItems = $this->objectsCacheItems();
             $this->cacheInfo = [
                 'type'              => $cacheType,
                 'active'            => $this->cacheConfig['active'],
+                'namespace'         => $this->getCacheNamespace(),
                 'global'            => $this->globalCacheInfo(),
                 'pages'             => $this->pagesCacheInfo(),
                 'objects'           => $this->objectsCacheInfo(),
-                # 'global_items'      => $globalItems,
-                'pages_items'       => $pageItems,
-                'objects_items'     => $objectItems,
-                # 'num_global_items'  => count($globalItems),
-                'num_pages_items'   => count($pageItems),
-                'num_objects_items' => count($objectItems),
+                'global_items'      => $globalItems,
+                # 'pages_items'       => $pageItems,
+                # 'objects_items'     => $objectItems,
+                'has_global_items'  => !empty($globalItems),
+                # 'has_pages_items'   => !empty($pageItems),
+                # 'has_objects_items' => !empty($objectItems),
             ];
         }
 
@@ -115,9 +123,25 @@ class ClearCacheTemplate extends AdminTemplate
     /**
      * @return string
      */
+    private function getCacheNamespace()
+    {
+        return $this->cache->getNamespace();
+    }
+
+    /**
+     * @return string
+     */
+    private function getApcNamespace()
+    {
+        return $this->cacheConfig['prefix'];
+    }
+
+    /**
+     * @return string
+     */
     private function getGlobalCacheKey()
     {
-        return '/::'.$this->cache->getNamespace().'::/';
+        return '/::'.$this->getCacheNamespace().'::/';
     }
 
     /**
@@ -157,7 +181,7 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function getPagesCacheKey()
     {
-        return '/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/';
+        return '/::'.$this->getCacheNamespace().'::request::|::'.$this->getCacheNamespace().'::template::/';
     }
 
     /**
@@ -197,7 +221,7 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function getObjectsCacheKey()
     {
-        return '/::'.$this->cache->getNamespace().'::object::|::'.$this->cache->getNamespace().'::metadata::/';
+        return '/::'.$this->getCacheNamespace().'::object::|::'.$this->getCacheNamespace().'::metadata::/';
     }
 
     /**
@@ -311,6 +335,33 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * Get the RegExp pattern to match a Stash / APC cache key.
+     *
+     * Breakdown:
+     * - `apcID`: Installation ID
+     * - `apcNS`: Optional. Application Key or Installation ID
+     * - `stashNS`: Stash Segment
+     * - `poolNS`: Optional. Application Key
+     * - `appKey`: Data Segment
+     *
+     * @return string
+     */
+    private function getApcCacheKeyPattern()
+    {
+        if ($this->apcCacheKeyPattern === null) {
+            $pattern  = '/^(?<apcID>[a-f0-9]{32})::(?:(?<apcNS>';
+            $pattern .= preg_quote($this->getApcNamespace());
+            $pattern .= '|[a-f0-9]{32})::)?(?<stashNS>cache|sp)::(?:(?<poolNS>';
+            $pattern .= preg_quote($this->getCacheNamespace());
+            $pattern .= ')::)?(?<itemID>.+)$/i';
+
+            $this->apcCacheKeyPattern = $pattern;
+        }
+
+        return $this->apcCacheKeyPattern;
+    }
+
+    /**
      * Human-readable identifier format.
      *
      * @param  string $key The cache item key to format.
@@ -318,9 +369,14 @@ class ClearCacheTemplate extends AdminTemplate
      */
     private function formatApcCacheKey($key)
     {
-        $nss = $this->cache->getNamespace();
-        $key = str_replace($nss, '', strstr($key, $nss.'::'));
-        $key = preg_replace([ '/:+/', '/\.+/' ], [ '⇒', '/' ], trim($key, ':'));
+        $pattern = $this->getApcCacheKeyPattern();
+        if (preg_match($pattern, $key, $matches)) {
+            $sns = $matches['stashNS'];
+            $iid = trim($matches['itemID'], ':');
+            $iid = preg_replace([ '/:+/', '/\.+/' ], [ '⇒', '/' ], $iid);
+            $key = $matches['stashNS'] . '⇒' . $iid;
+        }
+
         return $key;
     }
 

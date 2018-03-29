@@ -107,12 +107,12 @@
                     </div>
                 </div>
 
-                {{# cacheInfo.global.num_entries }}
                 <div class="col-md-12">
                     <section class="panel panel-default">
                         <header class="panel-heading">
                             <h3 class="panel-title">{{#_t}}Cache entries{{/_t}}</h3>
                         </header>
+                        {{# cacheInfo.has_global_items }}
                         <table class="table" data-toggle="table">
                             <thead>
                                 <tr>
@@ -125,20 +125,8 @@
                                     <th scope="col">{{#_t}}Action{{/_t}}</th>
                                 </tr>
                             </thead>
-                            {{# cacheInfo.num_objects_items }}
-                            <tfoot>
-                                <tr>
-                                    <th scope="col" data-sortable="true">{{#_t}}Key{{/_t}}</th>
-                                    <th scope="col" data-sortable="true">{{#_t}}Hits{{/_t}}</th>
-                                    <th scope="col" data-sortable="true">{{#_t}}Size{{/_t}}</th>
-                                    <th scope="col" data-sortable="true">{{#_t}}Created{{/_t}}</th>
-                                    <th scope="col" data-sortable="true">{{#_t}}Timeout{{/_t}}</th>
-                                    <th scope="col" data-sortable="true">{{#_t}}Expiry{{/_t}}</th>
-                                    <th scope="col">{{#_t}}Action{{/_t}}</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
-                            {{# cacheInfo.objects_items }}
+                            {{# cacheInfo.global_items }}
                                 <tr>
                                     <td><strong>{{ ident }}</strong></td>
                                     <td>{{ num_hits }}</td>
@@ -148,13 +136,15 @@
                                     <td>{{ expiry }}</td>
                                     <td><!--<a class="btn btn-default">Delete</a>--></td>
                                 </tr>
-                            {{/ cacheInfo.objects_items }}
+                            {{/ cacheInfo.global_items }}
                             </tbody>
-                            {{/ cacheInfo.num_objects_items }}
                         </table>
+                        {{/ cacheInfo.has_global_items }}
+                        {{^ cacheInfo.has_global_items }}
+                        <div class="panel-body text-center">{{# _t }}No records found{{/ _t }}</div>
+                        {{/ cacheInfo.has_global_items }}
                     </section>
                 </div>
-                {{/ cacheInfo.global.num_entries }}
 
             </div>
         </div>

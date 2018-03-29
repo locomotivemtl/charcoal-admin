@@ -125,6 +125,7 @@
                                     <th scope="col">{{#_t}}Action{{/_t}}</th>
                                 </tr>
                             </thead>
+                            {{# cacheInfo.num_objects_items }}
                             <tfoot>
                                 <tr>
                                     <th scope="col" data-sortable="true">{{#_t}}Key{{/_t}}</th>
@@ -149,6 +150,7 @@
                                 </tr>
                             {{/ cacheInfo.objects_items }}
                             </tbody>
+                            {{/ cacheInfo.num_objects_items }}
                         </table>
                     </section>
                 </div>

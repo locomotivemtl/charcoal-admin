@@ -87,18 +87,25 @@ class ClearCacheTemplate extends AdminTemplate
     public function cacheInfo($force = false)
     {
         if ($this->cacheInfo === null || $force === true) {
-            $flip   = array_flip($this->availableCacheDrivers);
-            $driver = get_class($this->cache->getDriver());
-
+            $flip      = array_flip($this->availableCacheDrivers);
+            $driver    = get_class($this->cache->getDriver());
             $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
+
+            # $globalItems = $this->globalCacheItems();
+            $pageItems   = $this->pagesCacheItems();
+            $objectItems = $this->objectsCacheItems();
             $this->cacheInfo = [
-                'type'          => $cacheType,
-                'active'        => $this->cacheConfig['active'],
-                'global'        => $this->globalCacheInfo(),
-                'pages'         => $this->pagesCacheInfo(),
-                'objects'       => $this->objectsCacheInfo(),
-                'pages_items'   => $this->pagesCacheItems(),
-                'objects_items' => $this->objectsCacheItems()
+                'type'              => $cacheType,
+                'active'            => $this->cacheConfig['active'],
+                'global'            => $this->globalCacheInfo(),
+                'pages'             => $this->pagesCacheInfo(),
+                'objects'           => $this->objectsCacheInfo(),
+                # 'global_items'      => $globalItems,
+                'pages_items'       => $pageItems,
+                'objects_items'     => $objectItems,
+                # 'num_global_items'  => count($globalItems),
+                'num_pages_items'   => count($pageItems),
+                'num_objects_items' => count($objectItems),
             ];
         }
 
@@ -108,25 +115,9 @@ class ClearCacheTemplate extends AdminTemplate
     /**
      * @return string
      */
-    private function getGlobalCacheInfoKey()
+    private function getGlobalCacheKey()
     {
         return '/::'.$this->cache->getNamespace().'::/';
-    }
-
-    /**
-     * @return string
-     */
-    private function getPagesCacheInfoKey()
-    {
-        return '/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/';
-    }
-
-    /**
-     * @return string
-     */
-    private function getObjectsCacheInfoKey()
-    {
-        return '/::'.$this->cache->getNamespace().'::objects::|::'.$this->cache->getNamespace().'::metadata::/';
     }
 
     /**
@@ -135,7 +126,7 @@ class ClearCacheTemplate extends AdminTemplate
     private function globalCacheInfo()
     {
         if ($this->isApc()) {
-            $cacheKey = $this->getGlobalCacheInfoKey();
+            $cacheKey = $this->getGlobalCacheKey();
             return $this->apcCacheInfo($cacheKey);
         } else {
             return [
@@ -143,9 +134,30 @@ class ClearCacheTemplate extends AdminTemplate
                 'total_size'   => 0,
                 'average_size' => 0,
                 'total_hits'   => 0,
-                'average_hits' => 0
+                'average_hits' => 0,
             ];
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function globalCacheItems()
+    {
+        if ($this->isApc()) {
+            $cacheKey = $this->getGlobalCacheKey();
+            return $this->apcCacheItems($cacheKey);
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getPagesCacheKey()
+    {
+        return '/::'.$this->cache->getNamespace().'::request::|::'.$this->cache->getNamespace().'::template::/';
     }
 
     /**
@@ -154,7 +166,7 @@ class ClearCacheTemplate extends AdminTemplate
     private function pagesCacheInfo()
     {
         if ($this->isApc()) {
-            $cacheKey = $this->getPagesCacheInfoKey();
+            $cacheKey = $this->getPagesCacheKey();
             return $this->apcCacheInfo($cacheKey);
         } else {
             return [
@@ -162,7 +174,7 @@ class ClearCacheTemplate extends AdminTemplate
                 'total_size'   => 0,
                 'average_size' => 0,
                 'total_hits'   => 0,
-                'average_hits' => 0
+                'average_hits' => 0,
             ];
         }
     }
@@ -173,11 +185,19 @@ class ClearCacheTemplate extends AdminTemplate
     private function pagesCacheItems()
     {
         if ($this->isApc()) {
-            $cacheKey = $this->getPagesCacheInfoKey();
-            return $this->apcCacheInfo($cacheKey);
+            $cacheKey = $this->getPagesCacheKey();
+            return $this->apcCacheItems($cacheKey);
         } else {
             return [];
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getObjectsCacheKey()
+    {
+        return '/::'.$this->cache->getNamespace().'::object::|::'.$this->cache->getNamespace().'::metadata::/';
     }
 
     /**
@@ -186,15 +206,15 @@ class ClearCacheTemplate extends AdminTemplate
     private function objectsCacheInfo()
     {
         if ($this->isApc()) {
-            $cacheKey = $this->getPagesCacheInfoKey();
-            return $this->apcCacheItems($cacheKey);
+            $cacheKey = $this->getObjectsCacheKey();
+            return $this->apcCacheInfo($cacheKey);
         } else {
             return [
                 'num_entries'  => 0,
                 'total_size'   => 0,
                 'average_size' => 0,
                 'total_hits'   => 0,
-                'average_hits' => 0
+                'average_hits' => 0,
             ];
         }
     }
@@ -205,7 +225,7 @@ class ClearCacheTemplate extends AdminTemplate
     private function objectsCacheItems()
     {
         if ($this->isApc()) {
-            $cacheKey = $this->getPagesCacheInfoKey();
+            $cacheKey = $this->getObjectsCacheKey();
             return $this->apcCacheItems($cacheKey);
         } else {
             return [];
@@ -237,7 +257,7 @@ class ClearCacheTemplate extends AdminTemplate
             'total_size'   => $this->formatBytes($sizeTotal),
             'average_size' => $this->formatBytes($sizeAvg),
             'total_hits'   => $hitsTotal,
-            'average_hits' => $hitsAvg
+            'average_hits' => $hitsAvg,
         ];
     }
 
@@ -268,7 +288,7 @@ class ClearCacheTemplate extends AdminTemplate
         if (class_exists('\\APCUIterator', false)) {
             return new \APCUIterator($key);
         } elseif (class_exists('\\APCIterator', false)) {
-            return new \APCIterator($key);
+            return new \APCIterator('user', $key);
         } else {
             throw new RuntimeException('Cache uses APC but no iterator could be found.');
         }
@@ -300,7 +320,7 @@ class ClearCacheTemplate extends AdminTemplate
     {
         $nss = $this->cache->getNamespace();
         $key = str_replace($nss, '', strstr($key, $nss.'::'));
-        $key = str_replace([ '::', '.' ], [ '⇒', '/' ], trim($key, ':'));
+        $key = preg_replace([ '/:+/', '/\.+/' ], [ '⇒', '/' ], trim($key, ':'));
         return $key;
     }
 

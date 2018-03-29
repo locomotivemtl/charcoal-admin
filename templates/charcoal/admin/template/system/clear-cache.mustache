@@ -29,9 +29,9 @@
                     <div class="col-md-12">
                         <dl>
                             <dt>{{#_t}}Active?{{/_t}}</dt>
-                            <dd>{{#cacheInfo.active}}Yes{{/cacheInfo.active}}{{^cacheInfo.active}}No{{/cacheInfo.active}}</dd>
+                            <dd>{{# cacheInfo.active }}Yes{{/ cacheInfo.active }}{{^ cacheInfo.active }}No{{/ cacheInfo.active }}</dd>
                             <dt>{{#_t}}Cache type{{/_t}}</dt>
-                            <dd>{{cacheInfo.type}}</dd>
+                            <dd>{{ cacheInfo.type }}</dd>
                         </dl>
                     </div>
                 </div>
@@ -44,15 +44,13 @@
                             <div class="panel-body">
                                 <p>{{#_t}}Clearing this cache will clear *all* entries in the cache. In other words, it completely erase all items in the cache (pages, objects and everything else).{{/_t}}</p>
                                 <p><small>Note that if the <a href="{{adminUrl}}system/static-website">static website</a> option is enabled, clearing the cache might not result in new versions of the page, as the static website, when properly configured, supercedes all cache.</small></p>
-                                <p>
-                                    <dl>
-                                        <dt>{{#_t}}Num entries{{/_t}}</dt>
-                                        <dd>{{cacheInfo.global.num_entries}}</dd>
-                                        <dt>{{#_t}}Total size{{/_t}}</dt>
-                                        <dd>{{cacheInfo.global.total_size}}
-                                        <dd></dd>
-                                    </dl>
-                                </p>
+                                <dl>
+                                    <dt>{{#_t}}Num entries{{/_t}}</dt>
+                                    <dd>{{ cacheInfo.global.num_entries }}</dd>
+                                    <dt>{{#_t}}Total size{{/_t}}</dt>
+                                    <dd>{{ cacheInfo.global.total_size }}
+                                    <dd></dd>
+                                </dl>
                                 <p>
                                     <button class="btn btn-info btn-lg" data-purge="cache" data-cache-type="global">
                                         <i class="fa fa-refresh" aria-hidden="true">&nbsp;</i>
@@ -69,15 +67,13 @@
                             </header>
                             <div class="panel-body">
                                 <p>{{#_t}}Some pages might be saved entirely in the cache, either at route-level or template-level. Clearing this cache will make sure the pages will be rebuilt at next request.{{/_t}}</p>
-                                <p>
-                                    <dl>
-                                        <dt>{{#_t}}Num entries{{/_t}}</dt>
-                                        <dd>{{cacheInfo.pages.num_entries}}</dd>
-                                        <dt>{{#_t}}Total size{{/_t}}</dt>
-                                        <dd>{{cacheInfo.pages.total_size}}
-                                        <dd></dd>
-                                    </dl>
-                                </p>
+                                <dl>
+                                    <dt>{{#_t}}Num entries{{/_t}}</dt>
+                                    <dd>{{ cacheInfo.pages.num_entries }}</dd>
+                                    <dt>{{#_t}}Total size{{/_t}}</dt>
+                                    <dd>{{ cacheInfo.pages.total_size }}
+                                    <dd></dd>
+                                </dl>
                                 <p>
                                     <button class="btn btn-info" data-purge="cache" data-cache-type="pages">
                                         <span class="btn-label">{{# _t }}Clear pages cache{{/ _t }}</span>
@@ -94,15 +90,13 @@
                             </header>
                             <div class="panel-body">
                                 <p>{{#_t}}This cache includes the objects and their metadata. Clearing this cache will reset all metadata from their JSON files and objects will be reloaded from their source (database) at next request.{{/_t}}</p>
-                                <p>
-                                    <dl>
-                                        <dt>{{#_t}}Num entries{{/_t}}</dt>
-                                        <dd>{{cacheInfo.objects.num_entries}}</dd>
-                                        <dt>{{#_t}}Total size{{/_t}}</dt>
-                                        <dd>{{cacheInfo.objects.total_size}}
-                                        <dd></dd>
-                                    </dl>
-                                </p>
+                                <dl>
+                                    <dt>{{#_t}}Num entries{{/_t}}</dt>
+                                    <dd>{{ cacheInfo.objects.num_entries }}</dd>
+                                    <dt>{{#_t}}Total size{{/_t}}</dt>
+                                    <dd>{{ cacheInfo.objects.total_size }}
+                                    <dd></dd>
+                                </dl>
                                 <p>
                                     <button class="btn btn-info" data-purge="cache" data-cache-type="objects">
                                         <span class="btn-label">{{# _t }}Clear objects cache{{/ _t }}</span>
@@ -113,7 +107,7 @@
                     </div>
                 </div>
 
-                {{#cacheInfo.global.num_entries}}
+                {{# cacheInfo.global.num_entries }}
                 <div class="col-md-12">
                     <section class="panel panel-default">
                         <header class="panel-heading">
@@ -121,32 +115,44 @@
                         </header>
                         <table class="table" data-toggle="table">
                             <thead>
-                            <tr>
-                                <th scope="col" data-sortable="true">{{#_t}}Key{{/_t}}</th>
-                                <th scope="col" data-sortable="true">{{#_t}}Hits{{/_t}}</th>
-                                <th scope="col" data-sortable="true">{{#_t}}Size{{/_t}}</th>
-                                <th scope="col" data-sortable="true">{{#_t}}Created{{/_t}}</th>
-                                <th scope="col" data-sortable="true">{{#_t}}Timeout{{/_t}}</th>
-                                <th scope="col" data-sortable="true">{{#_t}}Expiry{{/_t}}</th>
-                                <th scope="col">{{#_t}}Action{{/_t}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {{#cacheInfo.objects_items}}
                                 <tr>
-                                    <td><strong>{{ident}}</strong></td>
-                                    <td>{{num_hits}}</td>
-                                    <td><span data-value="{{mem_size}}">{{size}}<span></td>
-                                    <td>{{created}}</td>
-                                    <td>{{ttl}}</td>
-                                    <td>{{expiry}}</td>
+                                    <th scope="col" data-sortable="true">{{#_t}}Key{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Hits{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Size{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Created{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Timeout{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Expiry{{/_t}}</th>
+                                    <th scope="col">{{#_t}}Action{{/_t}}</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th scope="col" data-sortable="true">{{#_t}}Key{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Hits{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Size{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Created{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Timeout{{/_t}}</th>
+                                    <th scope="col" data-sortable="true">{{#_t}}Expiry{{/_t}}</th>
+                                    <th scope="col">{{#_t}}Action{{/_t}}</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            {{# cacheInfo.objects_items }}
+                                <tr>
+                                    <td><strong>{{ ident }}</strong></td>
+                                    <td>{{ num_hits }}</td>
+                                    <td><span data-value="{{ mem_size }}">{{ size }}<span></td>
+                                    <td>{{ created }}</td>
+                                    <td>{{ ttl }}</td>
+                                    <td>{{ expiry }}</td>
                                     <td><!--<a class="btn btn-default">Delete</a>--></td>
                                 </tr>
-                            {{/cacheInfo.objects_items}}
+                            {{/ cacheInfo.objects_items }}
+                            </tbody>
                         </table>
                     </section>
                 </div>
-                {{/cacheInfo.global.num_entries}}
+                {{/ cacheInfo.global.num_entries }}
 
             </div>
         </div>

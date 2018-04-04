@@ -399,31 +399,35 @@ trait RoutableTrait
             $oldRoute = $this->getLatestObjectRoute();
 
             $defaultData = [
-                'lang'                => $lang,
-                'slug'                => $slug,
-                'route_obj_type'      => $this->objType(),
-                'route_obj_id'        => $this->id(),
                 // Not used, might be too much.
                 'route_template'      => $this->templateIdent(),
                 'route_options'       => $this->routeOptions(),
                 'route_options_ident' => $this->routeOptionsIdent(),
+            ];
+
+            $immutableData = [
+                'lang'                => $lang,
+                'slug'                => $slug,
+                'route_obj_type'      => $this->objType(),
+                'route_obj_id'        => $this->id(),
                 'active'              => true,
             ];
 
-            $data = array_merge($defaultData, $data);
+            $newData = array_merge($defaultData, $data, $immutableData);
 
             // Unchanged but sync extra properties
             if ($slug === $oldRoute->slug()) {
                 $oldRoute->setData([
-                    'route_template'      => $data['route_template'],
-                    'route_options'       => $data['route_options'],
-                    'route_options_ident' => $data['route_options_ident'],
+                    'route_template'      => $newData['route_template'],
+                    'route_options'       => $newData['route_options'],
+                    'route_options_ident' => $newData['route_options_ident'],
                 ]);
                 $oldRoute->update([ 'route_template', 'route_options' ]);
+
                 continue;
             }
 
-            $newRoute->setData($data);
+            $newRoute->setData($newData);
 
             if (!$newRoute->isSlugUnique()) {
                 $newRoute->generateUniqueSlug();
@@ -492,7 +496,7 @@ trait RoutableTrait
         $collection = $loader->load()->objects();
 
         if (!count($collection)) {
-            return $model;
+            return $this->createRouteObject();
         }
 
         return $collection[0];

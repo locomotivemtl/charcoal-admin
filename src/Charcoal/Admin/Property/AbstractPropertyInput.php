@@ -838,18 +838,26 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param array $data Optional. Metadata data.
+     * Create a new metadata object.
+     *
+     * @param  array $data Optional metadata to merge on the object.
      * @return PropertyMetadata
      */
     protected function createMetadata(array $data = null)
     {
-        $metadata = new PropertyMetadata();
-        if (is_array($data)) {
-            $metadata->setData($data);
-        }
-        return $metadata;
+        $class = $this->metadataClass();
+        return new $class($data);
     }
 
+    /**
+     * Retrieve the class name of the metadata object.
+     *
+     * @return string
+     */
+    protected function metadataClass()
+    {
+        return PropertyMetadata::class;
+    }
 
     /**
      * Allow an object to define how the key getter are called.

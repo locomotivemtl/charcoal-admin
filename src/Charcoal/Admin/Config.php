@@ -47,13 +47,10 @@ class Config extends AbstractConfig
      */
     public function defaults()
     {
-        $baseDir = rtrim(realpath(__DIR__.'/../../../'), '/').'/';
-        $confDir = $baseDir.'config/';
+        $baseDir = rtrim(realpath(__DIR__.'/../../../'), '/');
+        $confDir = $baseDir.'/config';
 
-        $file_content = file_get_contents($confDir.'admin.config.default.json');
-        $config = json_decode($file_content, true);
-
-        return $config;
+        return $this->loadFile($confDir.'/admin.config.default.json');
     }
 
     /**
@@ -79,7 +76,6 @@ class Config extends AbstractConfig
         }
 
         $this->basePath = $path;
-
         return $this;
     }
 

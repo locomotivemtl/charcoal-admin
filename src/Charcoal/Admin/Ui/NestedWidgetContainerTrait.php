@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Ui;
 
+use Charcoal\Ui\Form\FormInterface;
 use Traversable;
 use RuntimeException;
 use InvalidArgumentException;
@@ -372,4 +373,11 @@ trait NestedWidgetContainerTrait
      * @return FactoryInterface
      */
     abstract protected function widgetFactory();
+
+    /**
+     * Retrieve the widget form.
+     *
+     * @return FormInterface
+     */
+    abstract protected function form();
 }

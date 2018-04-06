@@ -2,8 +2,12 @@
 
 namespace Charcoal\Admin\Template\Account;
 
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Template\AuthTemplateTrait;
 
 /**
  * Lost Password Template
@@ -12,6 +16,43 @@ use Charcoal\Admin\AdminTemplate;
  */
 class LostPasswordTemplate extends AdminTemplate
 {
+    use AuthTemplateTrait;
+
+    /**
+     * Determine if the password token is valid.
+     *
+     * @param  RequestInterface $request The PSR-7 HTTP request.
+     * @return boolean
+     */
+    public function init(RequestInterface $request)
+    {
+        $translator = $this->translator();
+
+        $notice = $request->getParam('notice');
+        switch ($notice) {
+            case 'invalidtoken':
+                $message = $translator->translate('Your password reset token is invalid or expired.').' '.
+                           $translator->translate('Please request a new token below.');
+                $this->addFeedback([
+                    'level'       => 'error',
+                    'message'     => $message,
+                    'dismissible' => false
+                ]);
+                break;
+
+            case 'resetpass':
+                $message = $translator->translate('Check your email for instructions to reset your password.');
+                $this->addFeedback([
+                    'level'       => 'notice',
+                    'message'     => $message,
+                    'dismissible' => false
+                ]);
+                break;
+        }
+
+        return true;
+    }
+
     /**
      * @return boolean
      */
@@ -25,23 +66,7 @@ class LostPasswordTemplate extends AdminTemplate
      */
     public function urlLostPasswordAction()
     {
-        return $this->adminUrl().'account/lost-password';
-    }
-
-    /**
-     * @return string
-     */
-    public function urlResetPassword()
-    {
-        return $this->adminUrl().'account/reset-password';
-    }
-
-    /**
-     * @return string
-     */
-    public function urlLogin()
-    {
-        return $this->adminUrl().'login';
+        return $this->adminUrl('account/lost-password');
     }
 
     /**
@@ -56,5 +81,22 @@ class LostPasswordTemplate extends AdminTemplate
         }
 
         return $this->title;
+    }
+
+    /**
+     * Retrieve the parameters for the Google reCAPTCHA widget.
+     *
+     * @return string[]
+     */
+    public function recaptchaParameters()
+    {
+        $params = parent::recaptchaParameters();
+        $params['tabindex'] = 2;
+
+        if ($this->recaptchaInvisible() === true) {
+            $params['callback'] = 'CharcoalCaptchaResetPassCallback';
+        }
+
+        return $params;
     }
 }

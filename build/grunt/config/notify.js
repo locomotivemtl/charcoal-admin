@@ -1,11 +1,11 @@
 module.exports = {
     notify_hooks: {
         options: {
-            enabled  : true,
-            success  : true,
-            duration : 3,
-            title    : '<%= package.name %>',
-            max_jshint_notifications : 5
+            enabled:  true,
+            success:  true,
+            duration: 3,
+            title:    '<%= package.name %>',
+            max_jshint_notifications: 5
         }
     },
     javascript: {
@@ -18,11 +18,6 @@ module.exports = {
             message: 'JSON is linted'
         }
     },
-    php: {
-        options: {
-            message: 'PHP linted and cleaned up'
-        }
-    },
     sass: {
         options: {
             message: 'CSS is compiled'
@@ -33,7 +28,7 @@ module.exports = {
             message: 'SVG is concatenated'
         }
     },
-    copy: {
+    www: {
         options: {
             message: 'Admin assets are copied'
         }

@@ -10,13 +10,17 @@
         "jsonlint",
         "uglify",
         "svg_sprite",
-        "copy:admin",
-        "notify:copy"
+        "deploy"
     ],
 
     "sync": [
         "browserSync",
         "watch",
         "notify:watch"
+    ],
+
+    "deploy": [
+        "copy:www",
+        "notify:www"
     ]
 }

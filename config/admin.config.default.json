@@ -151,6 +151,10 @@
             },
             "system/static-website/crawl": {
                 "ident": "charcoal/admin/action/system/static-website/crawl"
+            },
+            "tinymce/upload/image": {
+                "methods": [ "POST" ],
+                "ident": "charcoal/admin/action/tinymce/upload-image"
             }
         },
         "scripts": {
@@ -266,6 +270,29 @@
                     "template.charcoal/admin/home"
                 ],
                 "denied": []
+            }
+        }
+    },
+
+    "login": {
+        "visit_site": null
+    },
+
+    "header_menu": {
+        "visit_site": null
+    },
+
+    "elfinder": {
+        "client": {
+            "theme": "moono",
+            "themeOptions": {
+                "moono": {
+                    "cssClass": "elfinder-theme-moono",
+                    "cssAutoLoad": [
+                        "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+                        "../assets/admin/elfinder/themes/moono/css/theme.css"
+                    ]
+                }
             }
         }
     }

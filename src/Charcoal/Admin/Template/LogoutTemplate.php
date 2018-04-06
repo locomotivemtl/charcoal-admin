@@ -7,6 +7,7 @@ use Psr\Http\Message\RequestInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Template\AuthTemplateTrait;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\AuthToken;
 
@@ -15,6 +16,10 @@ use Charcoal\Admin\User\AuthToken;
  */
 class LogoutTemplate extends AdminTemplate
 {
+    use AuthTemplateTrait {
+        AuthTemplateTrait::avatarImage as loginLogo;
+    }
+
     /**
      * @param RequestInterface $request The request to initialize.
      * @return boolean
@@ -77,13 +82,13 @@ class LogoutTemplate extends AdminTemplate
     /**
      * @return string
      */
-    public function logoutLogo()
+    public function avatarImage()
     {
         $logo = $this->adminConfig('logout.logo') ?:
                 $this->adminConfig('logout_logo', 'assets/admin/images/avatar.jpg');
 
         if (empty($logo)) {
-            return '';
+            return $this->loginLogo();
         }
 
         return $this->baseUrl($logo);
@@ -97,7 +102,7 @@ class LogoutTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translator()->translation('Logged Out'));
+            $this->setTitle($this->translator()->translation('auth.logout.title'));
         }
 
         return $this->title;

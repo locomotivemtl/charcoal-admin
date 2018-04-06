@@ -34,6 +34,11 @@ abstract class AbstractTickableInput extends AbstractSelectableInput
     {
         $choice = parent::parseChoice($ident, $choice);
 
+        // Prevent choices from breaking their input types
+        if (isset($choice['type'])) {
+            unset($choice['type']);
+        }
+
         $choice['inputId'] = $this->generateInputId();
 
         return $choice;

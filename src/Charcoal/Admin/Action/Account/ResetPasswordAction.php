@@ -8,7 +8,8 @@ use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
+use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
@@ -36,6 +37,8 @@ use Charcoal\Admin\User\LostPasswordToken;
  */
 class ResetPasswordAction extends AdminAction
 {
+    use AuthActionTrait;
+
     /**
      * @return boolean
      */
@@ -55,6 +58,8 @@ class ResetPasswordAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $translator = $this->translator();
+
         $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
 
         $token     = $request->getParam('token');
@@ -63,55 +68,53 @@ class ResetPasswordAction extends AdminAction
         $password2 = $request->getParam('password2');
 
         if (!$token) {
-            $this->addFeedback('error', $this->translator()->translate('Missing reset token.'));
+            $this->addFeedback('error', $translator->translate('Missing reset token.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$username) {
-            $this->addFeedback('error', $this->translator()->translate('Missing username.'));
+            $this->addFeedback('error', $translator->translate('Missing username.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$password1) {
-            $this->addFeedback('error', $this->translator()->translate('Missing password'));
+            $this->addFeedback('error', $translator->translate('Missing password'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if (!$password2) {
-            $this->addFeedback('error', $this->translator()->translate('Missing password confirmation'));
+            $this->addFeedback('error', $translator->translate('Missing password confirmation'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
         if ($password1 != $password2) {
-            $this->addFeedback('error', $this->translator()->translate('Passwords do not match'));
+            $this->addFeedback('error', $translator->translate('Passwords do not match'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
         }
 
-        $recaptchaValue = $request->getParam('g-recaptcha-response');
-        if (!$recaptchaValue) {
-            $this->addFeedback('error', $this->translator()->translate('Missing CAPTCHA response.'));
-            $this->setSuccess(false);
+        if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
+            if ($ip) {
+                $logMessage = sprintf('[Admin] Reset Password — CAPTCHA challenge failed for "%s" from %s', $username, $ip);
+            } else {
+                $logMessage = sprintf('[Admin] Reset Password — CAPTCHA challenge failed for "%s"', $username);
+            }
 
-            return $response->withStatus(400);
-        }
-        if (!$this->validateCaptcha($recaptchaValue)) {
-            $this->addFeedback('error', $this->translator()->translate('Invalid or malformed CAPTCHA response.'));
-            $this->setSuccess(false);
+            $this->logger->warning($logMessage);
 
-            return $response->withStatus(400);
+            return $response;
         }
 
-        $failMessage = $this->translator()->translation('An error occurred while processing the password change.');
+        $failMessage = $translator->translation('An error occurred while processing the password change.');
 
         $user = $this->loadUser($username);
         if ($user === null) {
@@ -136,7 +139,8 @@ class ResetPasswordAction extends AdminAction
         }
 
         if (!$this->validateToken($token, $user->id())) {
-            $this->addFeedback('error', $this->translator()->translate('Invalid or expired reset token.'));
+            $this->setFailureUrl($this->adminUrl('account/lost-password?notice=invalidtoken'));
+            $this->addFeedback('error', $translator->translate('Your password reset token is invalid or expired.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -146,7 +150,8 @@ class ResetPasswordAction extends AdminAction
             $user->resetPassword($password1);
             $this->deleteToken($token);
 
-            $this->addFeedback('success', $this->translator()->translate('Password has been successfully changed.'));
+            $this->addFeedback('success', $translator->translate('Your password has been successfully changed.'));
+            $this->setSuccessUrl((string)$this->adminUrl('login?notice=newpass'));
             $this->setSuccess(true);
 
             return $response;
@@ -187,32 +192,6 @@ class ResetPasswordAction extends AdminAction
         ];
 
         return $ret;
-    }
-
-    /**
-     * @param string $username Username or email.
-     * @return User|false
-     */
-    private function loadUser($username)
-    {
-        if (!$username) {
-            return false;
-        }
-
-        // Try to get user by username
-        $user = $this->modelFactory()->create(User::class);
-        $user->loadFrom('username', $username);
-        if ($user->id()) {
-            return $user;
-        }
-
-        // Try to get user by email
-        $user->loadFrom('email', $username);
-        if ($user->id()) {
-            return $user;
-        }
-
-        return false;
     }
 
     /**

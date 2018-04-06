@@ -8,7 +8,7 @@ var Charcoal = Charcoal || {};
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback, cache, store, debug,
+    var options, manager, feedback, recaptcha, cache, store, debug,
         currentLocale = document.documentElement.getAttribute('locale'),
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
@@ -135,16 +135,19 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Generates the admin URL used by forms and other objects
-     * @return  {string}  URL for admin section
+     * Generates the admin URL used by forms and other objects.
+     *
+     * @param  {string|null} [path] - A target path of the admin.
+     * @return {string} - The admin URL.
      */
-    Admin.admin_url = function () {
-        return options.base_url + options.admin_path + '/';
+    Admin.admin_url = function (path) {
+        return options.base_url + options.admin_path + '/' + (typeof path === 'string' ? path : '');
     };
 
     /**
-     * Returns the base_url of the project
-     * @return  {string}  URL for admin section
+     * Returns the base_url of the project.
+     *
+     * @return {string} - The base URL.
      */
     Admin.base_url = function () {
         return options.base_url;
@@ -163,6 +166,11 @@ Charcoal.Admin = (function () {
         return manager;
     };
 
+    /**
+     * Convert the query string into a query object.
+     *
+     * @return {object} Key/Value pair of query parameters.
+     */
     Admin.queryParams = function () {
         var pairs = location.search.slice(1).split('&');
 
@@ -196,9 +204,23 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Convert an object namespace string into a usable object name
-     * @param   {string}  name  String that respects the namespace structure : charcoal/admin/property/input/switch
-     * @return  {string}  name  String that respects the object name structure : Property_Input_Switch
+     * Provides access to the reCAPTCHA handler.
+     *
+     * @return {Captcha}
+     */
+    Admin.recaptcha = function () {
+        if (typeof recaptcha === 'undefined') {
+            recaptcha = new Charcoal.Admin.ReCaptcha();
+        }
+
+        return recaptcha;
+    };
+
+    /**
+     * Convert an object namespace string into a usable object name.
+     *
+     * @param  {string} name - String that respects the namespace structure : charcoal/admin/property/input/switch
+     * @return {string} - String that respects the object name structure : Property_Input_Switch
      */
     Admin.get_object_name = function (name) {
         // Getting rid of Charcoal.Admin namespacing
@@ -229,8 +251,8 @@ Charcoal.Admin = (function () {
     /**
      * Get the numeric value of a variable.
      *
-     * @param   {string|number}  value - The value to parse.
-     * @return  {string|number}  Returns a numeric value if one was detected otherwise a string.
+     * @param  {string|number} value - The value to parse.
+     * @return {string|number} - Returns a numeric value if one was detected otherwise a string.
      */
     Admin.parseNumber = function (value) {
         var re = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
@@ -243,10 +265,11 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Load Script
+     * Load JavaScript
      *
-     * @param   {string}    src      - Full path to a script file.
-     * @param   {function}  callback - Fires multiple times
+     * @param  {string}    src      - Full path to a script file.
+     * @param  {function}  callback - Fires multiple times.
+     * @return {void}
      */
     Admin.loadScript = function (src, callback) {
         this.store(src, function (defer) {
@@ -262,11 +285,11 @@ Charcoal.Admin = (function () {
     /**
      * Retrieve or store a value shared across the application.
      *
-     * @param   {string}    key      - The key for the stored value.
-     * @param   {function}  value    - The value to store.
+     * @param  {string}   key      - The key for the stored value.
+     * @param  {function} value    - The value to store.
      *     If a function, fires once when promise is completed.
-     * @param   {function}  callback - Fires multiple times.
-     * @return  {mixed}     Returns the stored value.
+     * @param  {function} callback - Fires multiple times.
+     * @return {mixed}    Returns the stored value.
      */
     Admin.store = function (key, value, callback) {
         if (!store[key]) {
@@ -351,6 +374,141 @@ Charcoal.Admin = (function () {
         }
 
         return args;
+    };
+
+    /**
+     * Resolves the structure of the XHR response dataset.
+     *
+     * @link   https://github.com/locomotivemtl/memo-boilerplate/blob/v0.4.0/assets/src/scripts/objects/api.js#L112-L130
+     *
+     * @param  {jqXHR}  jqxhr  - The jqXHR promise.
+     * @param  {string} status - A string describing the status.
+     * @param  {mixed}  error  - The error message.
+     * @return {object} - The resolved XHR response structure.
+     */
+    Admin.parseJqXhrResponse = function (jqxhr, status, error)
+    {
+        var response = { success: false, feedbacks: [] };
+
+        if (jqxhr.responseJSON) {
+            $.extend(response, jqxhr.responseJSON);
+        }
+
+        if (response.feedbacks.length === 0) {
+            if (response.message) {
+                response.feedbacks = Array.isArray(response.message) ?
+                                   response.message
+                                   : [ { msg: response.message } ];
+            } else {
+                response.feedbacks = Array.isArray(error) ?
+                                   error
+                                   : [ { msg: error } ];
+            }
+        }
+
+        return response;
+    };
+
+    /**
+     * Resolves false positives from successful requests.
+     *
+     * @param  {mixed}  response - The response body, formatted according to the dataType parameter or the dataFilter callback function, if specified.
+     * @param  {string} status   - A string describing the status.
+     * @param  {jqXHR}  jqxhr    - The jqXHR promise.
+     * @return {jqXHR} - The resolved jqXHR promise.
+     */
+    Admin.resolveJqXhrFalsePositive = function (response, status, jqxhr) {
+        if (!response || !response.success || response.error) {
+            if (response.message) {
+                return $.Deferred().reject(jqxhr, 'error', response.message);
+            } else if (response.feedbacks) {
+                return $.Deferred().reject(jqxhr, 'error', response.feedbacks);
+            } else {
+                return $.Deferred().reject(jqxhr, 'error', '');
+            }
+        }
+
+        return $.Deferred().resolve(response, status, jqxhr);
+    };
+
+    /**
+     * Resolves the given promise.
+     *
+     * Note: Expects the data type to be 'json'.
+     *
+     * @param  {jqXHR}        jqxhr      - A jqXHR object.
+     * @param  {simpleDone}   [success]  - A function to be called if the request succeeds.
+     * @param  {simpleFail}   [failure]  - A function to be called if the request fails.
+     * @param  {simpleAlways} [complete] - A function to be called when the request finishes.
+     * @return {jqXHR} - The given jqXHR object.
+     */
+    Admin.resolveSimpleJsonXhr = function (jqxhr, success, failure, complete) {
+        jqxhr = jqxhr.then(this.resolveJqXhrFalsePositive);
+
+        if (typeof success === 'function') {
+            jqxhr.done(function (response, status, jqxhr) {
+                response = $.extend({ success: true, feedbacks: [] }, response);
+
+                /**
+                 * Fires when the request succeeds.
+                 *
+                 * @callback simpleDone
+                 * @this     jqXHR
+                 * @param    {object} response - The response body.
+                 * @return   {void}
+                 */
+                success.call(jqxhr, response);
+            });
+        }
+
+        if (typeof failure === 'function') {
+            jqxhr.fail(function (jqxhr, status, error) {
+                var response = { success: false, feedbacks: [] };
+
+                if (jqxhr.responseJSON) {
+                    $.extend(response, jqxhr.responseJSON);
+                }
+
+                if (response.feedbacks.length === 0) {
+                    if (response.message) {
+                        response.feedbacks = Array.isArray(response.message) ?
+                                           response.message
+                                           : [ { msg: response.message } ];
+                    } else {
+                        response.feedbacks = Array.isArray(error) ?
+                                           error
+                                           : [ { msg: error } ];
+                    }
+                }
+
+                response = $.extend({ success: false, feedbacks: [] }, response);
+
+                /**
+                 * Fires when the request fails.
+                 *
+                 * @callback simpleFail
+                 * @this     jqXHR
+                 * @param    {object} response - The response body.
+                 * @return   {void}
+                 */
+                failure.call(jqxhr, response);
+            });
+        }
+
+        if (typeof complete === 'function') {
+            jqxhr.always(function () {
+                /**
+                 * Fires when the request finishes.
+                 *
+                 * @callback simpleAlways
+                 * @this     jqXHR
+                 * @return   {void}
+                 */
+                complete.call(jqxhr);
+            });
+        }
+
+        return jqxhr;
     };
 
     return Admin;

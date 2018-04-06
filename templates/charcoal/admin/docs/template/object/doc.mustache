@@ -18,14 +18,13 @@ This template expects a `Charcoal\Admin\Template\Object\Doc` model as context.
         {{/sidemenu}}
     {{/showSidemenu}}
 
-    {{>charcoal/admin/widget/feedbacks}}
-
     <div class="o-flex_main">
         <div class="o-container -top -bottom clearfix">
             <header class="o-container_header">
                 {{# title }}<h2>{{&.}}</h2>{{/ title }}
                 {{# subtitle }}<h3>{{&.}}</h3>{{/ subtitle }}
             </header>
+            {{> charcoal/admin/widget/feedbacks }}
             {{#dashboard}}
                 {{>charcoal/admin/widget/dashboard}}
             {{/dashboard}}

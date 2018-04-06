@@ -3,12 +3,14 @@
 namespace Charcoal\Admin\Tests\Widget;
 
 // From PHPUnit
-use \PHPUnit_Framework_TestCase;
-
-use Psr\Log\NullLogger;
+use PHPUnit_Framework_TestCase;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
+
+// From Slim
+use Slim\Http\Environment;
+use Slim\Http\Request;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Widget\TableWidget;
@@ -39,6 +41,7 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $container = $this->container();
+        $container['request'] = Request::createFromEnvironment(Environment::mock());
 
         $this->obj = new TableWidget([
             'logger'    => $container['logger'],

@@ -6,8 +6,10 @@ module.exports = {
         src: [
             '<%= paths.js.src %>/charcoal/admin/polyfill.js',
             '<%= paths.js.src %>/charcoal/admin/charcoal.js',
+            '<%= paths.js.src %>/charcoal/admin/cache.js',
             '<%= paths.js.src %>/charcoal/admin/component_manager.js',
             '<%= paths.js.src %>/charcoal/admin/feedback.js',
+            '<%= paths.js.src %>/charcoal/admin/recaptcha.js',
             '<%= paths.js.src %>/charcoal/admin/widget.js',
             '<%= paths.js.src %>/charcoal/admin/widget/*.js',
             '<%= paths.js.src %>/charcoal/admin/property.js',
@@ -19,19 +21,25 @@ module.exports = {
         ],
         dest: '<%= paths.js.dist %>/charcoal.admin.js'
     },
+    elfinder: {
+        src: [
+            '<%= paths.js.src %>/charcoal/admin/elfinder.js'
+        ],
+        dest: '<%= paths.elfinder.dist %>/main.js'
+    },
     vendors: {
         src: [
             // jQuery
-            'node_modules/jquery/dist/jquery.js',
+            '<%= paths.npm %>/jquery/dist/jquery.js',
 
             // jQuery UI
-            'node_modules/jquery-ui-bundle/jquery-ui.js',
+            '<%= paths.npm %>/jquery-ui-bundle/jquery-ui.js',
 
             // Bootstrap
-            'node_modules/bootstrap/dist/js/bootstrap.bundle.js',
+            '<%= paths.npm %>/bootstrap/dist/js/bootstrap.bundle.js',
 
             // URL Search Params
-            'node_modules/url-search-params/build/url-search-params.js',
+            '<%= paths.npm %>/url-search-params/build/url-search-params.js',
 
             /**
              * Bootstrap Dialog (temporary)
@@ -40,35 +48,36 @@ module.exports = {
              * @see  https://github.com/pYr0x/bootstrap-dialog)
              * @see  https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75)
              */
-            'node_modules/bootstrap-dialog-temporary/bootstrap-dialog.js',
+            '<%= paths.npm %>/bootstrap-dialog-temporary/bootstrap-dialog.js',
 
-            // Bootstrap 3 Datepicker
-            // 'bower_components/moment/min/moment.min.js',
+            // Bootstrap Datepicker
+            '<%= paths.npm %>/moment/min/moment.min.js',
+            // @todo
             // 'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
 
             // BB Map
-            'node_modules/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
+            '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
 
             // Bootstrap Select (@see paramono/bootstrap-select)
-            'node_modules/bootstrap-select-temporary/dist/js/bootstrap-select.js',
-            // 'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
+            '<%= paths.npm %>/bootstrap-select-temporary/dist/js/bootstrap-select.js',
+            // '<%= paths.npm %>/bootstrap-select/dist/js/bootstrap-select.js',
 
             // jQuery MiniColors
-            'node_modules/@claviska/jquery-minicolors/jquery.minicolors.min.js',
+            '<%= paths.npm %>/@claviska/jquery-minicolors/jquery.minicolors.min.js',
 
             // Multiselect Two-sides
-            'node_modules/multiselect-two-sides/dist/js/multiselect.min.js',
+            '<%= paths.npm %>/multiselect-two-sides/dist/js/multiselect.min.js',
 
             // Selectize
-            'node_modules/selectize/dist/js/standalone/selectize.min.js',
+            '<%= paths.npm %>/selectize/dist/js/standalone/selectize.min.js',
 
             // Selectize
-            'node_modules/clipboard/dist/clipboard.min.js',
+            '<%= paths.npm %>/clipboard/dist/clipboard.min.js',
 
             // jQuery Timeago
-            'node_modules/timeago/jquery.timeago.js',
+            '<%= paths.npm %>/timeago/jquery.timeago.js',
         ],
-        dest: '<%= paths.js.dist %>/charcoal.admin.vendors.js',
+        dest:      '<%= paths.js.dist %>/charcoal.admin.vendors.js',
         separator: "\n"
     }
 };

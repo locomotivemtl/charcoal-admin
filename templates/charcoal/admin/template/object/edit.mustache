@@ -1,31 +1,33 @@
 {{!--
-Object Edit Template
-====================
 
-`charcoal/admin/template/objet/edit`
+    Object Edit Template
+    ====================
 
-Display the object's "edit" dashboard.
+    `charcoal/admin/template/objet/edit`
 
-This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
+    Display the object's "edit" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
 
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-{{>charcoal/admin/widget/feedbacks}}
+{{! @todo See if broken, feedbacks partial used to be right here L15 }}
 
 <main class="c-page-container o-flex_main">
     <header class="c-page-header o-header">
         <div class="o-container">
-            {{#title}}<h1 class="c-page-header_title">{{&.}}</h1>{{/title}}
+            {{# title }}<h1 class="c-page-header_title">{{& . }}</h1>{{/ title }}
             {{# subtitle }}<h2>{{&.}}</h2>{{/ subtitle }}
         </div>
     </header>
 
     <section class="o-container -bottom">
-        {{#dashboard}}
-            {{>charcoal/admin/widget/dashboard}}
-        {{/dashboard}}
+        {{> charcoal/admin/widget/feedbacks }}
+        {{# dashboard }}
+            {{> charcoal/admin/widget/dashboard }}
+        {{/ dashboard }}
     </section>
 </main>
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

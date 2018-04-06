@@ -9,34 +9,32 @@
  * - `.elfinder-cwd-icon` : Removed background property.
  * - `.elfinder-cwd-icon-postscript:before` : Removed content property.
  * - `.elfinder .elfinder-path` : Added padding property.
+ * - FontAwesome is required externally
  *
- * @link    https://github.com/lokothodida/elfinder-theme-moono/commit/f709b58
+ * @link    https://github.com/lokothodida/elfinder-theme-moono/commit/76fd96c
+ * @date    2017-02-15
  * @author  lokothodida
  * @package Charcoal
  */
-
-// @import "../../../../../bower_components/elfinder-theme-moono/moono/css/theme.css";
-
-/* FontAwesome Icons */
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
 
 /* Main features of the whole UI */
 /* main */
 .elfinder {
     display: block;
-    border: 1px solid #b6b6b6;
+    border: 1px solid #B6B6B6;
     padding: 0;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
     height: 100%;
     border-radius: 0;
 }
-.elfinder * {
-    border-collapse: collapse;
-    font: normal normal normal 12px Arial, Helvetica, Tahoma, Verdana, Sans-Serif;
-    color: #000;
-    text-align: left;
-    cursor: auto;
-}
+// .elfinder * {
+//     font-size: 12px;
+//     border-collapse: collapse;
+//     font: normal normal normal 12px Arial, Helvetica, Tahoma, Verdana, Sans-Serif;
+//     color: #000;
+//     text-align: left;
+//     cursor: auto;
+// }
 /* resizer */
 .elfinder .ui-icon-gripsmall-diagonal-se,
 .elfinder-dialog .ui-icon-gripsmall-diagonal-se {
@@ -71,134 +69,143 @@
 .elfinder-cwd-icon:not(.elfinder-cwd-bgurl) {
     background-image: none !important;
 }
-.elfinder-cwd-icon:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl):before {
     font-family: FontAwesome;
+    font-size: inherit;
     background: none;
     display: block;
     text-align: center;
 }
 /* generic files */
-.elfinder-cwd-icon-application:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-plain:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-application:before {
     content: '\f016';
 }
 /* directories */
-.elfinder-cwd-icon-directory:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-directory:before {
     content: '\f07b';
 }
-.elfinder-droppable-active .elfinder-cwd-icon-directory:before {
+.elfinder-droppable-active .elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-directory:before {
     content: '\f07c';
 }
 /* empty files */
-.elfinder-cwd-icon-x-empty:before,
-.elfinder-cwd-icon-inode:before {
-    content: '\f1c9';
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-empty:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-inode:before {
+    content: '\f15b';
 }
 /* rich text */
-.elfinder-cwd-icon-text:before,
-.elfinder-cwd-icon-rtf:before,
-.elfinder-cwd-icon-rtfd:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-text:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-rtf:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-rtfd:before {
     content: '\f0f6';
 }
 /* pdfs */
-.elfinder-cwd-icon-pdf:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-pdf:before {
     content: '\f1c1';
 }
 /* html/web documents */
-.elfinder-cwd-icon-html:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-html:before {
     content: '\f0ac';
 }
 /* word */
-.elfinder-cwd-icon-vnd-ms-word:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-word:before {
     content: '\f1c2';
 }
 /* powerpoint */
-.elfinder-cwd-icon-vnd-ms-powerpoint:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-powerpoint:before {
     content: '\f1c4';
 }
 /* excel */
-.elfinder-cwd-icon-ms-excel:before,
-.elfinder-cwd-icon-vnd-ms-excel:before,
-.elfinder-cwd-icon-vnd-ms-excel-addin-macroEnabled-12:before,
-.elfinder-cwd-icon-vnd-ms-excel-sheet-binary-macroEnabled-12:before,
-.elfinder-cwd-icon-vnd-ms-excel-sheet-macroEnabled-12:before,
-.elfinder-cwd-icon-vnd-ms-excel-template-macroEnabled-12:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-ms-excel:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-excel:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-excel-addin-macroEnabled-12:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-excel-sheet-binary-macroEnabled-12:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-excel-sheet-macroEnabled-12:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-ms-excel-template-macroEnabled-12:before {
     content: '\f1c3';
 }
 /* images */
-.elfinder-cwd-icon-image:not(.elfinder-cwd-bgurl):before,
-.elfinder-cwd-icon-vnd-adobe-photoshop:before,
-.elfinder-cwd-icon-postscript:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-image:not(.elfinder-cwd-bgurl):before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-vnd-adobe-photoshop:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-postscript:before {
     content: '\f1c5';
 }
 /* audio */
-.elfinder-cwd-icon-audio:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-audio:before {
     content: '\f1c7';
 }
 /* video */
-.elfinder-cwd-icon-video:before,
-.elfinder-cwd-icon-flash-video:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-video:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-flash-video:before {
     content: '\f1c8';
 }
 /* archives */
-.elfinder-cwd-icon-zip:before,
-.elfinder-cwd-icon-x-zip:before,
-.elfinder-cwd-icon-x-xz:before,
-.elfinder-cwd-icon-x-7z-compressed:before,
-.elfinder-cwd-icon-x-gzip:before,
-.elfinder-cwd-icon-x-tar:before,
-.elfinder-cwd-icon-x-bzip:before,
-.elfinder-cwd-icon-x-bzip2:before,
-.elfinder-cwd-icon-x-rar:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-zip:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-zip:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-xz:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-7z-compressed:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-gzip:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-tar:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-bzip:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-bzip2:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-rar:before {
     content: '\f1c6';
 }
 /* code/script files */
-.elfinder-cwd-icon-javascript:before,
-.elfinder-cwd-icon-x-javascript:before,
-.elfinder-cwd-icon-x-perl:before,
-.elfinder-cwd-icon-x-python:before,
-.elfinder-cwd-icon-x-ruby:before,
-.elfinder-cwd-icon-x-sh:before,
-.elfinder-cwd-icon-x-shellscript:before,
-.elfinder-cwd-icon-x-c:before,
-.elfinder-cwd-icon-x-csrc:before,
-.elfinder-cwd-icon-x-chdr:before,
-.elfinder-cwd-icon-x-c--:before,
-.elfinder-cwd-icon-x-c--src:before,
-.elfinder-cwd-icon-x-c--hdr:before,
-.elfinder-cwd-icon-x-java:before,
-.elfinder-cwd-icon-x-java-source:before,
-.elfinder-cwd-icon-x-php:before,
-.elfinder-cwd-icon-xml:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-javascript:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-javascript:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-perl:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-python:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-ruby:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-sh:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-shellscript:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-c:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-csrc:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-chdr:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-c--:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-c--src:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-c--hdr:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-java:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-java-source:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-x-php:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-svg-xml:before,
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-xml:before {
     content: '\f1c9';
 }
 /* unknown file types */
-.elfinder-cwd-icon-unknown:before {
+.elfinder-cwd-icon:not(.elfinder-cwd-bgurl).elfinder-cwd-icon-unknown:before {
     content: '\f016';
+}
+.elfinder-cwd-icon-image:before {
+    display: inline-block;
+    background-color: #798798;
+    color: white;
+    line-height: 13px;
 }
 /* Toolbar  */
 /* toolbar */
 .elfinder .elfinder-toolbar {
-    /*border: 1px solid #b2b2b2;*/
-    border-bottom: 1px solid #b6b6b6;
+    /*border: 1px solid #B2B2B2;*/
+    border-bottom: 1px solid #B6B6B6;
     padding: 6px 8px 2px;
     /* Allow breaking toolbars when in a narrow editor. (#9947) */
     white-space: normal;
     box-shadow: 0 1px 0 #fff inset;
-    background: #cfd1cf;
-    background-image: linear-gradient(to bottom, #f5f5f5, #cfd1cf);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f5f5f5', endColorstr='#cfd1cf');
+    background: #CFD1CF;
+    background-image: linear-gradient(to bottom, #F5F5F5, #CFD1CF);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#F5F5F5', endColorstr='#CFD1CF');
 }
 /* toolbar buttons */
 .elfinder .elfinder-buttonset {
     float: left;
     margin: 0 6px 5px 0;
-    border: 1px solid #a6a6a6;
+    border: 1px solid #A6A6A6;
     border-bottom-color: #979797;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    background: #e4e4e4;
-    background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');
+    background: #E4E4E4;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E4E4E4);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#E4E4E4');
 }
 /* toolbar buttons */
 .elfinder .elfinder-buttonset .elfinder-button {
@@ -218,8 +225,8 @@
 .elfinder .elfinder-buttonset .elfinder-button:active {
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.3) inset;
     background: #ccc;
-    background-image: linear-gradient(to bottom, #f2f2f2, #ccc);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f2f2f2', endColorstr='#cccccc');
+    background-image: linear-gradient(to bottom, #F2F2F2, #ccc);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#F2F2F2', endColorstr='#CCCCCC');
 }
 /* disabled buttons */
 .elfinder .elfinder-buttonset .elfinder-button.ui-state-disabled {
@@ -248,17 +255,17 @@
 /* searchbar menu unselected items */
 .elfinder-toolbar .elfinder-button-search .elfinder-button-menu .ui-state-default {
     background-image: none;
-    background: #eaeaea;
+    background: #EAEAEA;
 }
 /* searchbar menu hovered items */
 .elfinder-toolbar .elfinder-button-search .elfinder-button-menu .ui-state-hover {
     background-image: none;
-    background: #d0ebf4;
-    border: 1px solid #509ece !important;
+    background: #D0EBF4;
+    border: 1px solid #509ECE !important;
 }
 /* searchbar menu hovered items text */
 .elfinder-toolbar .elfinder-button-search .elfinder-button-menu .ui-button-text:hover {
-    color: #509ece;
+    color: #509ECE;
 }
 /* at the time of speaking, v2.1 has a second, non-functional search bar, so
      we'll hide it - this does mean that the CTRL-F shortcut will not work in v2.1
@@ -323,6 +330,12 @@
     display: block;
     text-align: center;
     cursor: pointer;
+}
+.elfinder-button-icon-undo:before {
+    content: '\f0e2';
+}
+.elfinder-button-icon-redo:before {
+    content: '\f01e';
 }
 .elfinder-button-icon-back:before {
     content: '\f137';
@@ -393,6 +406,9 @@
 .elfinder-button-icon-rm:before {
     content: '\f014';
 }
+.elfinder-button-icon-empty:before {
+    content: '\f1f8';
+}
 .elfinder-button-icon-edit:before {
     content: '\f044';
 }
@@ -410,22 +426,32 @@
     right: 5px;
     font-size: 10px;
 }
-.elfinder-button-icon-resize:before {
-    content: '\f065';
-}
 .elfinder-button-icon-extract:before {
     content: '\f1c6';
+}
+.elfinder-button-icon-resize:before {
+    content: '\f065';
 }
 .elfinder-button-icon-sort:before {
     content: '\f0dc';
 }
-.elfinder-button-icon-fullscreen:before {
+.elfinder-button-icon-selectall:before {
+    content: '\f0c8';
+}
+.elfinder-button-icon-selectnone:before {
+    content: '\f096';
+}
+.elfinder-button-icon-selectinvert:before {
+    content: '\f096';
+}
+.elfinder-button-icon-fullscreen:before,
+.elfinder-button-icon-unfullscreen:before {
     content: '\f0b2';
 }
 /* menus */
 .elfinder-button-menu {
     background-color: #fff;
-    border: 1px solid #b6b6b6;
+    border: 1px solid #B6B6B6;
     border-bottom-color: #999;
     border-radius: 3px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
@@ -439,8 +465,8 @@
 .elfinder-button-menu-item-selected,
 .elfinder-button-menu-item.ui-state-hover {
     background-image: none;
-    border-color: #dedede;
-    background-color: #f2f2f2;
+    border-color: #DEDEDE;
+    background-color: #F2F2F2;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1) inset;
 }
 .elfinder-button-menu-item-selected.elfinder-menu-item-sort-asc .elfinder-menu-item-sort-dir:before {
@@ -464,24 +490,24 @@
 }
 /* active directory */
 .elfinder .elfinder-navbar-dir.ui-state-active {
-    border: 1px solid #a6a6a6;
+    border: 1px solid #A6A6A6;
     border-bottom-color: #979797;
     color: #000;
     /* fix for 2.x */
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    background: #e4e4e4;
-    background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');
+    background: #E4E4E4;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E4E4E4);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#E4E4E4');
 }
 .elfinder .elfinder-navbar-dir:hover {
-    border: 1px solid #a6a6a6;
+    border: 1px solid #A6A6A6;
     border-bottom-color: #979797;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    background: #e4e4e4;
-    background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');
+    background: #E4E4E4;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E4E4E4);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#E4E4E4');
 }
 /* Navbar Restrictions */
 /* prevents 2nd-level children from being displayed in the navbar */
@@ -603,8 +629,8 @@
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file.ui-selected {
     background: none;
     /* reset background */
-    border-color: #dedede;
-    background-color: #f2f2f2;
+    border-color: #DEDEDE;
+    background-color: #F2F2F2;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1) inset;
     border-radius: 6px;
 }
@@ -615,10 +641,10 @@
 }
 /* active and hovered */
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file.ui-selected:hover {
-    background-color: #f4f4f4;
+    background-color: #F4F4F4;
 }
 .elfinder .elfinder-cwd-view-icons .elfinder-cwd-file.ui-selected:hover * {
-    color: #b7b7b7;
+    color: #B7B7B7;
 }
 /* List View */
 /* headings */
@@ -633,13 +659,13 @@
     position: relative;
     color: #474747;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
-    border-bottom: 2px solid #b2b2b2;
+    border-bottom: 2px solid #B2B2B2;
     padding: 6px 18px 6px 10px;
     border-radius: 2px 2px 0 0;
     box-shadow: 0 1px 0 #fff inset;
-    background: #cfd1cf;
-    background-image: linear-gradient(to bottom, #f5f5f5, #cfd1cf);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f5f5f5', endColorstr='#cfd1cf');
+    background: #CFD1CF;
+    background-image: linear-gradient(to bottom, #F5F5F5, #CFD1CF);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#F5F5F5', endColorstr='#CFD1CF');
 }
 /* sorter icon */
 .elfinder .elfinder-cwd-wrapper-list tr td .ui-icon,
@@ -683,7 +709,7 @@
     cursor: default;
 }
 .elfinder .elfinder-cwd table tbody tr:nth-child(odd) {
-    background-color: #eaeaea;
+    background-color: #EAEAEA;
 }
 /* fix for font sizes on v2.x */
 .elfinder .elfinder-cwd-view-list td {
@@ -698,14 +724,14 @@
 .elfinder .elfinder-cwd-wrapper-list .elfinder-cwd-file.ui-state-hover {
     /* fix for v2.x */
     background-image: none;
-    background: #d0ebf4;
+    background: #D0EBF4;
 }
 /* fix text hover color */
 .elfinder .elfinder-cwd-wrapper-list .elfinder-cwd-file:hover *,
 .elfinder .elfinder-cwd-wrapper-list .elfinder-cwd-file.ui-state-hover:hover *,
 .elfinder .elfinder-cwd-wrapper-list .elfinder-cwd-file.ui-state-hover * {
     /* fix for v2.x */
-    color: #509ece;
+    color: #509ECE;
 }
 /* selected files */
 .elfinder .elfinder-cwd table tbody tr.ui-selected td {
@@ -734,8 +760,8 @@
 /* main dialog styles */
 .elfinder-dialog {
     padding: 0;
-    background: #eaeaea;
-    border: 1px solid #b2b2b2;
+    background: #EAEAEA;
+    border: 1px solid #B2B2B2;
     border-bottom-color: #999;
     border-radius: 3px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
@@ -759,9 +785,9 @@
     padding: 6px 10px;
     border-radius: 2px 2px 0 0;
     box-shadow: 0 1px 0 #fff inset;
-    background: #cfd1cf;
-    background-image: linear-gradient(to bottom, #f5f5f5, #cfd1cf);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f5f5f5', endColorstr='#cfd1cf');
+    background: #CFD1CF;
+    background-image: linear-gradient(to bottom, #F5F5F5, #CFD1CF);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#F5F5F5', endColorstr='#CFD1CF');
 }
 /* icons */
 .elfinder-dialog-icon {
@@ -793,7 +819,7 @@
 /* tabs navigation backdrop */
 .elfinder-dialog .ui-tabs-nav {
     height: 24px;
-    background: #eaeaea;
+    background: #EAEAEA;
     border: 0;
     border-bottom: 1px solid #999;
     border-radius: 0;
@@ -814,11 +840,11 @@
     line-height: 16px;
     outline: none;
     color: #595959;
-    border: 1px solid #bfbfbf;
+    border: 1px solid #BFBFBF;
     border-radius: 3px 3px 0 0;
-    background: #d4d4d4;
-    background-image: linear-gradient(to bottom, #fafafa, #ededed);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#fafafa', endColorstr='#ededed');
+    background: #D4D4D4;
+    background-image: linear-gradient(to bottom, #FAFAFA, #EDEDED);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FAFAFA', endColorstr='#EDEDED');
 }
 /* selected tab */
 .elfinder-dialog .ui-tabs-nav .ui-tabs-selected {
@@ -831,13 +857,12 @@
 }
 /* active tab */
 .elfinder-dialog .ui-tabs-nav li:active {
-    background: #ededed;
-    background: linear-gradient(to bottom, #ededed 0%, #ffffff 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff', GradientType=0);
+    background: #EDEDED;
+    background: linear-gradient(to bottom, #EDEDED 0%, #FFFFFF 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EDEDED', endColorstr='#FFFFFF', GradientType=0);
 }
 /* info dialog */
 .elfinder-dialog .elfinder-cwd-icon {
-    background-image: none !important;
     overflow: hidden;
     height: 52px;
     width: 52px;
@@ -875,12 +900,12 @@
     text-align: right;
     position: relative;
     border: none;
-    outline: 1px solid #bfbfbf;
+    outline: 1px solid #BFBFBF;
     box-shadow: 0 1px 0 #fff inset;
     border-radius: 0 0 2px 2px;
-    background: #cfd1cf;
-    background-image: linear-gradient(to bottom, #ebebeb, #cfd1cf);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ebebeb', endColorstr='#cfd1cf');
+    background: #CFD1CF;
+    background-image: linear-gradient(to bottom, #EBEBEB, #CFD1CF);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#EBEBEB', endColorstr='#CFD1CF');
 }
 /* buttons */
 .elfinder-dialog .ui-dialog-buttonset {
@@ -896,24 +921,48 @@
     color: #333;
     vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #b6b6b6;
+    border: 1px solid #B6B6B6;
     border-bottom-color: #999;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    background: #e4e4e4;
-    background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');
+    background: #E4E4E4;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E4E4E4);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#E4E4E4');
 }
 .elfinder-dialog .ui-button:hover {
-    border-color: #9e9e9e;
+    border-color: #9E9E9E;
     background: #ccc;
-    background-image: linear-gradient(to bottom, #f2f2f2, #ccc);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f2f2f2', endColorstr='#cccccc');
+    background-image: linear-gradient(to bottom, #F2F2F2, #ccc);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#F2F2F2', endColorstr='#CCCCCC');
 }
 .elfinder-dialog .ui-button:active {
     border-color: #969696;
     outline: none;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.4) inset;
+}
+/* Quicklook */
+/* dialogs */
+.elfinder-quicklook-titlebar-icon .ui-icon {
+    background-color: #D4D4D4;
+    border: none;
+}
+.std42-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close:hover .ui-icon,
+.elfinder-mobile .std42-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon,
+.elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-close:hover,
+.elfinder-mobile .elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-close {
+    background-color: #FF6252;
+}
+.std42-dialog .ui-dialog-titlebar .elfinder-titlebar-minimize:hover .ui-icon,
+.elfinder-mobile .std42-dialog .ui-dialog-titlebar .elfinder-titlebar-minimize .ui-icon,
+.elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-minimize:hover,
+.elfinder-mobile .elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-minimize {
+    background-color: #FFBC00;
+}
+.std42-dialog .ui-dialog-titlebar .elfinder-titlebar-full:hover .ui-icon,
+.elfinder-mobile .std42-dialog .ui-dialog-titlebar .elfinder-titlebar-full .ui-icon,
+.elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-full:hover,
+.elfinder-mobile .elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-full {
+    background-color: #26C82F;
 }
 /* Context menu */
 .elfinder {
@@ -927,7 +976,7 @@
 }
 .elfinder .elfinder-contextmenu {
     display: block;
-    border: 1px solid #b6b6b6;
+    border: 1px solid #B6B6B6;
     padding: 0;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
 }
@@ -967,12 +1016,12 @@
 .elfinder .elfinder-statusbar {
     padding: 6px 8px 2px;
     position: relative;
-    border-top: 1px solid #bfbfbf;
+    border-top: 1px solid #BFBFBF;
     box-shadow: 0 1px 0 #fff inset;
     border-radius: 0;
-    background: #cfd1cf;
-    background-image: linear-gradient(to bottom, #ebebeb, #cfd1cf);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ebebeb', endColorstr='#cfd1cf');
+    background: #CFD1CF;
+    background-image: linear-gradient(to bottom, #EBEBEB, #CFD1CF);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#EBEBEB', endColorstr='#CFD1CF');
 }
 /* breadcrumbs */
 .elfinder .elfinder-path-other {
@@ -985,13 +1034,13 @@
     float: left;
     padding: 4px 8px;
     margin: 0 6px 5px 0;
-    border: 1px solid #a6a6a6;
+    border: 1px solid #A6A6A6;
     border-bottom-color: #979797;
     border-radius: 3px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    background: #e4e4e4;
-    background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');
+    background: #E4E4E4;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E4E4E4);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFFFFF', endColorstr='#E4E4E4');
 }
 /* style each element of the trail */
 .elfinder .elfinder-path a {
@@ -1003,7 +1052,7 @@
 }
 /* css divider */
 .elfinder .elfinder-path a:not(:first-child) {
-    border-left: 1px dotted #a6a6a6;
+    border-left: 1px dotted #A6A6A6;
 }
 /* hovering */
 .elfinder .elfinder-path a:hover,
@@ -1011,8 +1060,8 @@
 .elfinder .elfinder-path a:hover:active {
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.3) inset;
     background: #ccc;
-    background-image: linear-gradient(to bottom, #f2f2f2, #ccc);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f2f2f2', endColorstr='#cccccc');
+    background-image: linear-gradient(to bottom, #F2F2F2, #ccc);
+    filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#F2F2F2', endColorstr='#CCCCCC');
 }
 .elfinder .elfinder-statusbar .elfinder-stat-selected {
     float: right;
@@ -1022,7 +1071,7 @@
     text-align: right;
 }
 /* size information */
-.elfinder .elfinder-statusbar .elfinder-stat-size {
+.elfinder .elfinder-statusbar > .elfinder-stat-size {
     font-size: 12px;
     padding: 5px;
     margin: 0 0 5px 6px;

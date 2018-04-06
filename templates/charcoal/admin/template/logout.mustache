@@ -3,28 +3,34 @@ Logout template
 ===============
 
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-<div class="o-background -fixed u-background-lightblue"{{#backgroundImage}} style="background-image: url({{.}});"{{/backgroundImage}}>
-    {{#backgroundVideo}}
+<div class="o-background -fixed u-background-lightblue"{{# backgroundImage }} style="background-image: url({{.}});"{{/ backgroundImage }}>
+    {{# backgroundVideo }}
     <video class="embedded-video horizontal" muted="" preload="auto" autoplay loop>
       <source src="{{.}}" type="video/mp4">
     </video>
-    {{/backgroundVideo}}
+    {{/ backgroundVideo }}
 </div>
 
 <div class="c-login">
     <div class="c-login_panel">
         <div class="c-login_header">
             <div class="c-login_avatar">
-                <img class="c-login_avatar_image" src="{{logoutLogo}}">
+                <img class="c-login_avatar_image" src="{{avatarImage}}">
             </div>
         </div>
         <div class="text-center">
-            <h2>{{#_t}}Logged Out{{/_t}}</h2>
-            <p>{{#_t}}You have safely logged out from Charcoal.{{/_t}}</p>
-
-            <a href="login" class="btn btn-secondary">{{#_t}}Log In Again{{/_t}}</a>
+            <h2>{{# _t }}auth.logout.title{{/ _t }}</h2>
+            <p>{{# _t }}You have safely logged out from Charcoal.{{/ _t }}</p>
+            <p>
+                <a href="{{ urlLogin }}" class="btn btn-secondary">{{# _t }}Log In Again{{/ _t }}</a>
+            </p>
+            {{# returnToSiteLabel }}
+            <p class="small text-center">
+                <a href="{{ baseUrl }}" id="btn-backtosite">{{& . }}</a>
+            </p>
+            {{/ returnToSiteLabel }}
         </div>
     </div>
 </div>
@@ -35,4 +41,4 @@ Logout template
 </script>
 {{/ addJsRequirement }}
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

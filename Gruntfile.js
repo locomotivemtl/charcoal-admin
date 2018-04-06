@@ -17,8 +17,14 @@ module.exports = function (grunt)
             paths: {
                 grunt:    'build/grunt',
                 npm:      'node_modules',
-                dist:     '../../../www/assets/admin/',
-                elfinder: 'assets/dist/elfinder',
+                composer: 'vendor',
+                dist:     'assets/dist',
+                prod:     '../../../www/assets/admin',
+                fonts:    'assets/dist/fonts',
+                elfinder: {
+                    src:  'vendor/studio-42/elfinder',
+                    dist: 'assets/dist/elfinder'
+                },
                 js: {
                     src:  'assets/src/scripts',
                     dist: 'assets/dist/scripts'

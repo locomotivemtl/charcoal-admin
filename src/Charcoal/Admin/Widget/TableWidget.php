@@ -18,6 +18,7 @@ use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\ActionContainerTrait;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;
@@ -32,6 +33,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
         CollectionContainerTrait::parseObjectRow as parseCollectionObjectRow;
     }
+    use HttpAwareTrait;
 
     /**
      * Default sorting priority for an action.
@@ -168,7 +170,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function dataFromRequest()
     {
-        return array_intersect_key($_GET, array_flip($this->acceptedRequestData()));
+        return $this->httpRequest()->getParams($this->acceptedRequestData());
     }
 
     /**
@@ -179,11 +181,11 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function acceptedRequestData()
     {
         return [
-            'collection_ident',
-            'obj_id',
             'obj_type',
+            'obj_id',
+            'collection_ident',
             'sortable',
-            'template'
+            'template',
         ];
     }
 
@@ -297,7 +299,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             'filters'          => $this->filters(),
             'orders'           => $this->orders(),
             'list_actions'     => $this->listActions(),
-            'object_actions'   => $this->objectActions(),
+            'object_actions'   => $this->rawObjectActions(),
             'pagination'       => $this->pagination(),
         ];
     }
@@ -369,8 +371,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $this->propertiesOptions;
     }
 
-
-
     /**
      * Retrieve the view options for the given property.
      *
@@ -403,14 +403,17 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function collectionProperties()
     {
-        $props = $this->properties();
+        $properties  = $this->properties();
+        $propOptions = $this->propertiesOptions();
 
-        foreach ($props as $propertyIdent => $property) {
-            $propertyMetadata = $props[$propertyIdent];
-
+        foreach ($properties as $propertyIdent => $propertyMetadata) {
             $p = $this->propertyFactory()->create($propertyMetadata['type']);
             $p->setIdent($propertyIdent);
             $p->setData($propertyMetadata);
+
+            if (isset($propOptions[$propertyIdent]) && is_array($propOptions[$propertyIdent])) {
+                $p->setData($propOptions[$propertyIdent]);
+            }
 
             $column = [
                 'label' => trim($p->label())
@@ -463,7 +466,26 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectActions()
     {
+        $this->rawObjectActions();
+
+        $objectActions = [];
+        if (is_array($this->objectActions)) {
+            $objectActions = $this->parseAsObjectActions($this->objectActions);
+        }
+
+        return $objectActions;
+    }
+
+    /**
+     * Retrieve the table's object actions without rendering it.
+     *
+     * @return array
+     */
+    public function rawObjectActions()
+    {
         if ($this->objectActions === null) {
+            $parsed = $this->parsedObjectActions;
+
             $collectionConfig = $this->collectionConfig();
             if (isset($collectionConfig['object_actions'])) {
                 $actions = $collectionConfig['object_actions'];
@@ -472,6 +494,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             $this->setObjectActions($actions);
+
+            $this->parsedObjectActions = $parsed;
         }
 
         if ($this->parsedObjectActions === false) {
@@ -479,12 +503,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             $this->objectActions = $this->createObjectActions($this->objectActions);
         }
 
-        $objectActions = [];
-        if (is_array($this->objectActions)) {
-            $objectActions = $this->parseAsObjectActions($this->objectActions);
-        }
-
-        return $objectActions;
+        return $this->objectActions;
     }
 
     /**
@@ -872,6 +891,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
+
+        // Satisfies HttpAwareTrait dependencies
+        $this->setHttpRequest($container['request']);
 
         $this->setView($container['view']);
         $this->setCollectionLoader($container['model/collection/loader']);

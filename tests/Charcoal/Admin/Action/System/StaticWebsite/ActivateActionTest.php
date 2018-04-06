@@ -8,6 +8,8 @@ use PHPUnit_Framework_TestCase;
 // From Pimple
 use Pimple\Container;
 
+use ReflectionClass;
+
 // From Slim
 use Slim\Http\Environment;
 use Slim\Http\Request;
@@ -55,9 +57,19 @@ class ActivateActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public static function getMethod($obj, $name)
+    {
+        $class = new ReflectionClass($obj);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
+    }
+
     public function testAuthRequiredIsTrue()
     {
-        $this->assertTrue($this->obj->authRequired());
+        $foo = self::getMethod($this->obj, 'authRequired');
+        $res = $foo->invoke($this->obj);
+        $this->assertTrue($res);
     }
 
     public function testRun()

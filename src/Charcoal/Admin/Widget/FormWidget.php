@@ -26,6 +26,7 @@ use Charcoal\Ui\PrioritizableInterface;
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Ui\FormSidebarInterface;
+use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
@@ -40,6 +41,7 @@ class FormWidget extends AdminWidget implements
     LayoutAwareInterface
 {
     use FormTrait;
+    use HttpAwareTrait;
     use LayoutAwareTrait;
 
     /**
@@ -69,13 +71,6 @@ class FormWidget extends AdminWidget implements
      * @var \Charcoal\Translator\Translation|string
      */
     protected $submitLabel;
-
-    /**
-     * Store the HTTP request object.
-     *
-     * @var RequestInterface
-     */
-    private $httpRequest;
 
     /**
      * Store the factory instance for the current class.
@@ -397,7 +392,9 @@ class FormWidget extends AdminWidget implements
     {
         parent::setDependencies($container);
 
+        // Satisfies HttpAwareTrait dependencies
         $this->setHttpRequest($container['request']);
+
         $this->setWidgetFactory($container['widget/factory']);
 
         // Satisfies FormInterface
@@ -405,25 +402,6 @@ class FormWidget extends AdminWidget implements
 
         // Satisfies LayoutAwareInterface
         $this->setLayoutBuilder($container['layout/builder']);
-    }
-
-
-    /**
-     * Retrieve the HTTP request object.
-     *
-     * @throws RuntimeException If an HTTP request was not previously set.
-     * @return RequestInterface
-     */
-    protected function httpRequest()
-    {
-        if (!isset($this->httpRequest)) {
-            throw new RuntimeException(sprintf(
-                'A PSR-7 Request instance is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->httpRequest;
     }
 
     /**
@@ -447,14 +425,11 @@ class FormWidget extends AdminWidget implements
     /**
      * Fetch metadata from the current request.
      *
-     *
      * @return array
      */
     protected function dataFromRequest()
     {
-        $request = $this->httpRequest();
-
-        return array_intersect_key($request->getParams(), array_flip($this->acceptedRequestData()));
+        return $this->httpRequest()->getParams($this->acceptedRequestData());
     }
 
     /**
@@ -465,11 +440,11 @@ class FormWidget extends AdminWidget implements
     protected function acceptedRequestData()
     {
         return [
-            'next_url',
             'form_ident',
             'form_data',
             'l10n_mode',
-            'group_display_mode'
+            'group_display_mode',
+            'next_url',
         ];
     }
 
@@ -522,16 +497,5 @@ class FormWidget extends AdminWidget implements
     private function setWidgetFactory(FactoryInterface $factory)
     {
         $this->widgetFactory = $factory;
-    }
-
-    /**
-     * Set an HTTP request object.
-     *
-     * @param RequestInterface $request A PSR-7 compatible Request instance.
-     * @return void
-     */
-    private function setHttpRequest(RequestInterface $request)
-    {
-        $this->httpRequest = $request;
     }
 }

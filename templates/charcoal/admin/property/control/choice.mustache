@@ -7,6 +7,11 @@
     `charcoal/admin/property/input/radio`
     `charcoal/admin/property/input/radio-color`
 --}}
+{{# disabled }}
+{{# checked }}
+<input type="hidden" name="{{ inputName }}" value="{{ value }}" autocomplete="off">
+{{/ checked }}
+{{/ disabled }}
 <input
     class="form-check-input{{# inputClass }} {{ . }}{{/ inputClass }}"
     type="{{ type }}"
@@ -14,7 +19,6 @@
     name="{{ inputName }}"
     autocomplete="off"
     {{# checked }}checked{{/ checked }}
-    {{# readOnly }}readonly{{/ readOnly }}
     {{# required }}required{{/ required }}
     {{# disabled }}disabled{{/ disabled }}
     value="{{ value }}"

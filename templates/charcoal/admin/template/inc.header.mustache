@@ -18,24 +18,24 @@ Based on the HTML5 boilerplate.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="HandheldFriendly" content="True">
 
-    <title>{{&documentTitle}}</title>
+    <title>{{& documentTitle }}</title>
 
-    <base href="{{adminUrl}}" />
+    <base href="{{ adminUrl }}" />
 
     <!-- Theming -->
     <meta name="theme-color" content="#393939">
 
-    {{>charcoal/admin/template/inc.favicon}}
+    {{> charcoal/admin/template/inc.favicon }}
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,400italic" rel="stylesheet" type="text/css">
     {{! <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> }}
-    <link href="{{baseUrl}}assets/admin/styles/charcoal.admin.vendors.css" rel="stylesheet" type="text/css">
-    <link href="{{baseUrl}}assets/admin/styles/charcoal.admin.css" rel="stylesheet" type="text/css">
+    <link href="{{ baseUrl }}assets/admin/styles/charcoal.admin.vendors.css" rel="stylesheet" type="text/css">
+    <link href="{{ baseUrl }}assets/admin/styles/charcoal.admin.css" rel="stylesheet" type="text/css">
 
-    {{>charcoal/admin/template/inc.head.extra}}
+    {{> charcoal/admin/template/inc.head.extra }}
 </head>
-<body{{#showHeaderMenu}} class="has-nav-main"{{/showHeaderMenu}}>
+<body{{# showHeaderMenu }} class="has-nav-main"{{/ showHeaderMenu }}>
 
     <div class="o-flex">
 
-        {{>charcoal/admin/widget/menu.header}}
+        {{> charcoal/admin/widget/menu.header }}

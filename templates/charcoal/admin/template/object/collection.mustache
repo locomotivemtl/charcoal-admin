@@ -1,32 +1,34 @@
 {{!--
-Object Collection Template
-==========================
 
-`charcoal/admin/template/objet/edit`
+    Object Collection Template
+    ==========================
 
-Display the object's "collection" dashboard.
+    `charcoal/admin/template/objet/edit`
 
-This template expects a `Charcoal\Admin\Template\Object\Collection` model as context.
+    Display the object's "collection" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\Collection` model as context.
 
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-{{>charcoal/admin/widget/feedbacks}}
+{{! @todo See if broken, feedbacks partial used to be right here L15 }}
 
 <main class="c-page-container o-flex_main">
     <header class="c-page-header o-header">
         <div class="o-container">
-            <h1 class="c-page-header_title">{{title}}</h1>
+            <h1 class="c-page-header_title">{{ title }}</h1>
         </div>
     </header>
-    {{#searchWidget}}
-        {{>charcoal/admin/widget/search}}
-    {{/searchWidget}}
+    {{# searchWidget }}
+        {{> charcoal/admin/widget/search }}
+    {{/ searchWidget }}
     <section class="o-container -bottom">
-        {{#dashboard}}
-            {{>charcoal/admin/widget/dashboard}}
-        {{/dashboard}}
+        {{> charcoal/admin/widget/feedbacks }}
+        {{# dashboard }}
+            {{> charcoal/admin/widget/dashboard }}
+        {{/ dashboard }}
     </section>
 </main>
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

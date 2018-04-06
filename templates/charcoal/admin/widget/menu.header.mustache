@@ -3,6 +3,15 @@
     Header Menu Widget
     ==================
 
+{-#baseUrl-}
+{-# visitSiteLabel -}
+<a class="btn btn-link" href="{-baseUrl-}" target="_blank">
+    <span class="fa fa-home" aria-hidden="true"></span>
+    <span class="btn-label">{-& . -}</span>
+</a>
+{-/ visitSiteLabel -}
+{-/baseUrl-}
+
 --}}
 
 <div class="c-nav-container o-flex_aside">
@@ -42,7 +51,7 @@
             {{^ showSystemMenu }}
                 <a href="{{adminUrl}}logout" class="c-nav-system_logout btn">
                     <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
-                    <span class="btn-label">{{# _t }}Log Out{{/ _t }}</span>
+                    <span class="btn-label">{{# _t }}auth.logout.action{{/ _t }}</span>
                 </a>
             {{/ showSystemMenu }}
         {{/ isAuthenticated }}

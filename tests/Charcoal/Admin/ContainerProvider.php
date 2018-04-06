@@ -13,6 +13,9 @@ use Psr\Log\NullLogger;
 // From 'cache/void-adapter' (PSR-6)
 use Cache\Adapter\Void\VoidCachePool;
 
+// Dependencies from Slim
+use Slim\Http\Uri;
+
 // From 'tedivm/stash' (PSR-6)
 use Stash\Pool;
 use Stash\Driver\Ephemeral;
@@ -109,7 +112,11 @@ class ContainerProvider
     public function registerBaseUrl(Container $container)
     {
         $container['base-url'] = function (Container $container) {
-            return '';
+            return Uri::createFromString('');
+        };
+
+        $container['admin/base-url'] = function (Container $container) {
+            return Uri::createFromString('admin');
         };
     }
 

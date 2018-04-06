@@ -14,7 +14,6 @@
     "disallowMixedSpacesAndTabs": true,
     "disallowMultipleLineBreaks": true,
     "disallowMultipleLineStrings": true,
-    "disallowQuotedKeysInObjects": true,
     "disallowSpaceAfterKeywords": [
         "default"
     ],
@@ -41,7 +40,13 @@
     "disallowSpacesInsideParentheses": true,
     "disallowYodaConditions": true,
 
-    "maximumLineLength": 120,
+    "maximumLineLength": {
+        "value": 160,
+        "allExcept": [
+            "urlComments",
+            "functionSignature"
+        ]
+    },
 
     "requireBlocksOnNewline": true,
     "requireCapitalizedConstructors": true,

@@ -17,6 +17,18 @@ class UpdateAction extends BaseUpdateAction
     use SelectizeRendererAwareTrait;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'selectize_obj_type', 'selectize_prop_ident'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * @return array
      */
     public function results()

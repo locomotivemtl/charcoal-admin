@@ -23,17 +23,17 @@
     {{/ showHeader }}
     {{^ showHeader }}
     {{# showDescription }}
-    <div class="form-text text-muted o-section">{{& description }}</div>
+    {{! @todo See if `.form-group-description` is useful }}
+    <div class="help-block o-section form-group-description">{{& description }}</div>
     {{/ showDescription }}
     {{# showNotesAbove }}
     {{> charcoal/admin/template/inc.notes }}
     {{/ showNotesAbove }}
+
     {{/ showHeader }}
-
     {{> charcoal/admin/widget/form-group/form-properties }}
-
     {{^ showNotesAbove }}
+
     {{> charcoal/admin/template/inc.notes }}
     {{/ showNotesAbove }}
-
 </fieldset>

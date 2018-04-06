@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Charcoal\Model\ModelValidator;
 
 // From 'charcoal-object'
-use Charcoal\Object\ContentInterface;
+use Charcoal\Object\AuthorableInterface;
 
 /**
  * Action: Save an object and update copy in storage.
@@ -42,24 +42,36 @@ class UpdateAction extends AbstractSaveAction
     protected $updateData = [];
 
     /**
-     * Set the action's dataset.
+     * Sets the action data from a PSR Request object.
      *
-     * Extract relevant model data from $data, excluding _object type_ and _ID_.
+     * Extract relevant model data from $data, excluding _object type_ and _object ID_.
      * This {@see self::$updateData subset} is merged onto the target model.
      *
-     * @param  array $data The update action data.
-     * @return UpdateAction Chainable
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
      */
-    public function setData(array $data)
+    protected function setDataFromRequest(RequestInterface $request)
     {
-        parent::setData($data);
+        parent::setDataFromRequest($request);
 
-        unset($data['obj_type']);
-        unset($data['obj_id']);
+        $data = $request->getParams();
+        unset($data['obj_type'], $data['objType'], $data['obj_id'], $data['objId']);
 
         $this->setUpdateData($data);
 
         return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type', 'obj_id'
+        ], parent::validDataFromRequest());
     }
 
     /**
@@ -131,8 +143,6 @@ class UpdateAction extends AbstractSaveAction
                 return $response->withStatus(400);
             }
 
-            $this->setData($request->getParams());
-
             // Load or reload object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
             $obj->mergeData($this->updateData());
@@ -151,7 +161,7 @@ class UpdateAction extends AbstractSaveAction
                 return $response->withStatus(400);
             }
 
-            if ($obj instanceof ContentInterface) {
+            if ($obj instanceof AuthorableInterface) {
                 $obj->setLastModifiedBy($this->authorIdent());
             }
 

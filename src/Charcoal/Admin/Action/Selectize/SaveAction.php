@@ -5,9 +5,6 @@ namespace Charcoal\Admin\Action\Selectize;
 // From Pimple
 use Pimple\Container;
 
-// From 'charcoal-core'
-use Charcoal\Model\ModelInterface;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\Action\Object\SaveAction as BaseSaveAction;
 use Charcoal\Admin\Service\SelectizeRenderer;
@@ -18,6 +15,18 @@ use Charcoal\Admin\Service\SelectizeRenderer;
 class SaveAction extends BaseSaveAction
 {
     use SelectizeRendererAwareTrait;
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'selectize_obj_type', 'selectize_prop_ident'
+        ], parent::validDataFromRequest());
+    }
 
     /**
      * @return array

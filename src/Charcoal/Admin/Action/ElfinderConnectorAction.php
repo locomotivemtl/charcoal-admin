@@ -31,6 +31,7 @@ use Charcoal\App\CallableResolverAwareTrait;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
+use Charcoal\Admin\Template\ElfinderTemplate;
 
 /**
  * Action: Setup elFinder Connector
@@ -132,18 +133,16 @@ class ElfinderConnectorAction extends AdminAction
     private $propertyIdent;
 
     /**
-     * Sets the action data.
+     * Sets the action data from a PSR Request object.
      *
-     * From the HTTP Request:
-     * - "obj_type"
-     * - "obj_id"
-     * - "property"
-     *
-     * @param  array $data The action data.
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
      * @return self
      */
-    public function setData(array $data)
+    protected function setDataFromRequest(RequestInterface $request)
     {
+        $keys = $this->validDataFromRequest();
+        $data = $request->getParams($keys);
+
         if (isset($data['obj_type'])) {
             $this->objType = $data['obj_type'];
         }
@@ -157,6 +156,16 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return [ 'obj_type', 'obj_id', 'property' ];
     }
 
     /**
@@ -181,6 +190,11 @@ class ElfinderConnectorAction extends AdminAction
      */
     public function setupElfinder(array $extraOptions = [])
     {
+        if (!defined('ELFINDER_IMG_PARENT_URL')) {
+            // Ensure images injected by elFinder are relative to its assets directory
+            define('ELFINDER_IMG_PARENT_URL', $this->baseUrl(ElfinderTemplate::ELFINDER_ASSETS_REL_PATH));
+        }
+
         $options = $this->buildConnectorOptions($extraOptions);
 
         // Run elFinder
@@ -330,11 +344,12 @@ class ElfinderConnectorAction extends AdminAction
     protected function getDefaultFlysystemRootSettings()
     {
         return [
-            'driver'      => 'Flysystem',
-            'filesystem'  => null,
-            'cache'       => false,
-            'URL'         => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
-            'path'        => self::DEFAULT_STORAGE_PATH,
+            'driver'       => 'Flysystem',
+            'rootCssClass' => 'elfinder-navbar-root-local',
+            'filesystem'   => null,
+            'cache'        => false,
+            'URL'          => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
+            'path'         => self::DEFAULT_STORAGE_PATH,
         ];
     }
 

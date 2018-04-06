@@ -33,6 +33,18 @@ class EditTemplate extends AdminTemplate implements
     use ObjectContainerTrait;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type', 'obj_id'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * Retrieve the sidemenu.
      *
      * @return SidemenuWidgetInterface|null

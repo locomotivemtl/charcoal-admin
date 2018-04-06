@@ -2,8 +2,12 @@
 
 namespace Charcoal\Admin\Template;
 
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Template\AuthTemplateTrait;
 use Charcoal\Admin\User\AuthToken;
 
 /**
@@ -11,52 +15,44 @@ use Charcoal\Admin\User\AuthToken;
  */
 class LoginTemplate extends AdminTemplate
 {
+    use AuthTemplateTrait;
+
     /**
-     * Get the background image, from admin config.
+     * Determine if the password token is valid.
      *
-     * @return string
+     * @param  RequestInterface $request The PSR-7 HTTP request.
+     * @return boolean
      */
-    public function backgroundImage()
+    public function init(RequestInterface $request)
     {
-        $backdrop = $this->adminConfig('login.background_image');
-        if (empty($backdrop)) {
-            return '';
+        $translator = $this->translator();
+
+        $notice = $request->getParam('notice');
+        switch ($notice) {
+            case 'resetpass':
+                $message = $translator->translate('Check your email for instructions to reset your password.');
+                $this->addFeedback([
+                    'level'       => 'notice',
+                    'message'     => $message,
+                    'dismissible' => false
+                ]);
+                break;
+
+            case 'newpass':
+                $message = $translator->translate('Log in with your new password.');
+                $this->addFeedback([
+                    'level'       => 'notice',
+                    'message'     => $message,
+                    'dismissible' => false
+                ]);
+                break;
         }
 
-        return $this->baseUrl($backdrop);
+        return true;
     }
 
     /**
-     * Get the background video, from admin config.
-     *
-     * @return string
-     */
-    public function backgroundVideo()
-    {
-        $backdrop = $this->adminConfig('login.background_video');
-        if (empty($backdrop)) {
-            return '';
-        }
-
-        return $this->baseUrl($backdrop);
-    }
-
-    /**
-     * @return string
-     */
-    public function loginLogo()
-    {
-        $logo = $this->adminConfig('login.logo') ?:
-                $this->adminConfig('login_logo', 'assets/admin/images/avatar.jpg');
-
-        if (empty($logo)) {
-            return '';
-        }
-
-        return $this->baseUrl($logo);
-    }
-
-    /**
+     * @todo   Implement using PSR Request object
      * @return boolean
      */
     private function isHttps()
@@ -123,14 +119,6 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-     * @return string
-     */
-    public function urlLostPassword()
-    {
-        return $this->adminUrl('account/lost-password');
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation|string|null
@@ -138,9 +126,26 @@ class LoginTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->setTitle($this->translator()->translation('Log In'));
+            $this->setTitle($this->translator()->translation('auth.login.title'));
         }
 
         return $this->title;
+    }
+
+    /**
+     * Retrieve the parameters for the Google reCAPTCHA widget.
+     *
+     * @return string[]
+     */
+    public function recaptchaParameters()
+    {
+        $params = parent::recaptchaParameters();
+        $params['tabindex'] = 4;
+
+        if ($this->recaptchaInvisible() === true) {
+            $params['callback'] = 'CharcoalCaptchaLoginCallback';
+        }
+
+        return $params;
     }
 }

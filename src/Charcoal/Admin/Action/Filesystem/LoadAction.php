@@ -59,7 +59,7 @@ class LoadAction extends AdminAction
      *
      * @var array
      */
-    protected $requestParams = [];
+    protected $params = [];
 
     /**
      * Collection of filesystem adapters.
@@ -93,7 +93,23 @@ class LoadAction extends AdminAction
      */
     public function setData(array $data)
     {
-        $data = array_intersect_key($data, array_flip($this->validParams()));
+        $keys = $this->validDataFromRequest();
+        $data = array_intersect_key($data, array_flip($keys));
+        $this->mergeData($data);
+
+        return $this;
+    }
+
+    /**
+     * Sets the action data from a PSR Request object.
+     *
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
+     */
+    protected function setDataFromRequest(RequestInterface $request)
+    {
+        $keys = $this->validDataFromRequest();
+        $data = $request->getParams($keys);
         $this->mergeData($data);
 
         return $this;
@@ -107,17 +123,17 @@ class LoadAction extends AdminAction
      */
     public function mergeData(array $data)
     {
-        $this->requestParams = array_replace($this->requestParams, $data);
+        $this->params = array_replace($this->params, $data);
 
         return $this;
     }
 
     /**
-     * Get the valid request parameters.
+     * Retrieve the list of parameters to extract from the HTTP request.
      *
      * @return string[]
      */
-    public function validParams()
+    protected function validDataFromRequest()
     {
         return [ 'disk', 'disposition', 'path', 'name' ];
     }
@@ -130,7 +146,7 @@ class LoadAction extends AdminAction
      */
     public function getParams(array $keys = null)
     {
-        $params = $this->requestParams;
+        $params = $this->params;
 
         if ($keys) {
             $subset = [];
@@ -154,7 +170,7 @@ class LoadAction extends AdminAction
      */
     public function getParam($key, $default = null)
     {
-        $params = $this->requestParams;
+        $params = $this->params;
         if (is_array($params) && isset($params[$key])) {
             $result = $params[$key];
         } else {
@@ -179,8 +195,6 @@ class LoadAction extends AdminAction
         $translator = $this->translator();
 
         try {
-            $this->mergeData($request->getParams($this->validParams()));
-
             $disk = $this->getParam('disk', $this->filesystemConfig['default_connection']);
             $this->assertValidDisk($disk);
 

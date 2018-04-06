@@ -77,7 +77,13 @@ class AdminServiceProvider implements ServiceProviderInterface
             $appConfig = $container['config'];
 
             // The `admin.json` file is not part of regular config
-            $appConfig->addFile($appConfig['base_path'].$appConfig['admin_config']);
+            if (is_array($appConfig['admin_config'])) {
+                foreach ($appConfig['admin_config'] as $path) {
+                    $appConfig->addFile($appConfig['base_path'].$path);
+                }
+            } else {
+                $appConfig->addFile($appConfig['base_path'].$appConfig['admin_config']);
+            }
 
             return new AdminConfig($appConfig['admin']);
         };

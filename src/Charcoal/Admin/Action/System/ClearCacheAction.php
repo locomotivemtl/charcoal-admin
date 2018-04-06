@@ -40,16 +40,16 @@ class ClearCacheAction extends AdminAction
             return $response->withStatus(400);
         }
 
-        if ($cacheType == 'global') {
+        if ($cacheType === 'global') {
             $this->cache->clear();
             $this->addFeedback('success', $this->translator()->translate('Cache cleared successfully.'));
             $this->setSuccess(true);
-        } elseif ($cacheType == 'pages') {
+        } elseif ($cacheType === 'pages') {
             $this->cache->deleteItem('request');
             $this->cache->deleteItem('template');
             $this->addFeedback('success', $this->translator()->translate('Pages cache cleared successfully.'));
             $this->setSuccess(true);
-        } elseif ($cacheType == 'objects') {
+        } elseif ($cacheType === 'objects') {
             $this->cache->deleteItem('object');
             $this->cache->deleteItem('metadata');
             $this->addFeedback('success', $this->translator()->translate('Objects cache cleared successfully.'));

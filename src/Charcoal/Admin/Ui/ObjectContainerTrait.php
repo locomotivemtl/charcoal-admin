@@ -235,7 +235,9 @@ trait ObjectContainerTrait
      */
     protected function cloneObj()
     {
-        if (empty($_GET['clone_id'])) {
+        $cloneId = filter_input(INPUT_GET, 'clone_id', FILTER_SANITIZE_ENCODED);
+
+        if (empty($cloneId)) {
             throw new Exception(sprintf(
                 '%1$s cannot clone object. Clone ID missing from request.',
                 get_class($this)
@@ -243,7 +245,7 @@ trait ObjectContainerTrait
         }
 
         $obj   = $this->createObj();
-        $clone = $this->createObj()->load($_GET['clone_id']);
+        $clone = $this->createObj()->load($cloneId);
 
         $data = $clone->data();
         unset($data[$clone->key()]);
@@ -263,7 +265,9 @@ trait ObjectContainerTrait
      */
     protected function createObjFromBluePrint()
     {
-        if (empty($_GET['blueprint_id'])) {
+        $bpId = filter_input(INPUT_GET, 'blueprint_id', FILTER_SANITIZE_ENCODED);
+
+        if (empty($bpId)) {
             throw new Exception(sprintf(
                 '%1$s cannot create object from blueprint. Blueprint ID missing from request.',
                 get_class($this)
@@ -273,7 +277,7 @@ trait ObjectContainerTrait
         $obj = $this->createObj();
 
         $blueprint = $this->modelFactory()->create($obj->blueprintType());
-        $blueprint->load($_GET['blueprint_id']);
+        $blueprint->load($bpId);
 
         $data = $blueprint->data();
         unset($data[$blueprint->key()]);

@@ -30,32 +30,67 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.init = function (opts)
 
 Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
 {
-    $('#lost-password-form').on('submit.charcoal.password', function (event) {
-        event.preventDefault();
+    var $form = $('#lost-password-form');
 
-        var $form = $(this);
-        var url   = ($form.prop('action') || window.location.href);
-        var data  = $form.serialize();
+    /**
+     * @fires Charcoal.Admin.Template_Account_LostPassword.prototype.onSubmit~event:submit.charcoal.password
+     */
+    $form.on('submit.charcoal.password', $.proxy(this.onSubmit, this));
 
-        $.post(url, data, function (response) {
-            window.console.debug(response);
-            BootstrapDialog.show({
-                title:    authL10n.lostPassword,
-                message:  authL10n.lostPassSuccess,
-                type:     BootstrapDialog.TYPE_SUCCESS,
-                onhidden: function () {
-                    window.location.reload();
-                }
-            });
-        }, 'json').fail(function () {
-            BootstrapDialog.show({
-                title:    authL10n.lostPassword,
-                message:  authL10n.lostPassFailed,
-                type:     BootstrapDialog.TYPE_DANGER,
-                onhidden: function () {
-                    window.grecaptcha.reset();
-                }
-            });
+    window.CharcoalCaptchaResetPassCallback = this.submitForm.bind(this, $form);
+};
+
+/**
+ * @listens Charcoal.Admin.Template_Account_LostPassword~event:submit.charcoal.password
+ * @this    {Charcoal.Admin.Template_Account_LostPassword}
+ * @param   {Event} event - The submit event.
+ */
+Charcoal.Admin.Template_Account_LostPassword.prototype.onSubmit = Charcoal.Admin.Template_Login.prototype.onSubmit;
+
+/**
+ * Generate HTML from the given feedback.
+ */
+Charcoal.Admin.Template_Account_LostPassword.prototype.parseFeedbackAsHtml = Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml;
+
+/**
+ * @this  {Charcoal.Admin.Template_Account_LostPassword}
+ * @param {HTMLFormElement|jQuery} $form - The form element.
+ */
+Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($form)
+{
+    var that = this,
+        url  = ($form.prop('action') || window.location.href),
+        data = $form.serialize();
+
+    $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
+     .done(function (response) {
+        var message = that.parseFeedbackAsHtml(response) || authL10n.lostPassSuccess;
+
+        BootstrapDialog.show({
+            title:    authL10n.lostPassword,
+            message:  message,
+            type:     BootstrapDialog.TYPE_SUCCESS,
+            onhidden: function () {
+                window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=resetpass');
+            }
+        });
+    }).fail(function (jqxhr, status, error) {
+        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+            message  = (that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed),
+            captcha  = Charcoal.Admin.recaptcha(),
+            callback = null;
+
+        if (captcha.hasApi()) {
+            callback = function () {
+                captcha.getApi().reset();
+            };
+        }
+
+        BootstrapDialog.show({
+            title:    authL10n.lostPassword,
+            message:  message,
+            type:     BootstrapDialog.TYPE_DANGER,
+            onhidden: callback
         });
     });
 };

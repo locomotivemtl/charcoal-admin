@@ -22,6 +22,18 @@ class UserRolesTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * @return \Charcoal\Translator\Translation
      */
     public function title()

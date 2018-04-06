@@ -10,8 +10,6 @@
         {{/sidemenu}}
     {{/showSidemenu}}
 
-    {{>charcoal/admin/widget/feedbacks}}
-
     {{!-- Object list section --}}
     <div class="o-flex_main">
         <section class="o-container -bottom">
@@ -21,10 +19,11 @@
                     {{>charcoal/admin/widget/search}}
                 {{/searchWidget}}
             </header>
+            {{>charcoal/admin/widget/feedbacks}}
             {{#dashboard}}
                 {{>charcoal/admin/widget/dashboard}}
-            {{/dashboard}}
 
+            {{/dashboard}}
         </section>
     </div>
 </div>

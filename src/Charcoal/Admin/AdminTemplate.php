@@ -56,6 +56,8 @@ class AdminTemplate extends AbstractTemplate implements
     use SecurityTrait;
     use TranslatorAwareTrait;
 
+    const GOOGLE_RECAPTCHA_CLIENT_URL = 'https://www.google.com/recaptcha/api.js';
+
     /**
      * The name of the project.
      *
@@ -142,7 +144,7 @@ class AdminTemplate extends AbstractTemplate implements
      *
      * - to start a session, if necessary
      * - to authenticate
-     * - to initialize the template data with `$_GET`
+     * - to initialize the template data with the PSR Request object
      *
      * @param RequestInterface $request The request to initialize.
      * @return boolean
@@ -155,19 +157,67 @@ class AdminTemplate extends AbstractTemplate implements
             session_start();
         }
 
-        // Initialize data with GET
-        $this->setData($request->getParams());
-
-        if ($this->authRequired() !== false) {
-            // Test template vs. ACL roles
-            if (!$this->isAuthorized()) {
-                header('HTTP/1.0 403 Forbidden');
-                header('Location: '.$this->adminUrl().'login');
-                exit;
-            }
-        }
+        $this->setDataFromRequest($request);
+        $this->authRedirect($request);
 
         return parent::init($request);
+    }
+
+    /**
+     * Determine if the current user is authenticated, if not redirect them to the login page.
+     *
+     * @todo   Move auth-check and redirection to a middleware or dedicated admin route.
+     * @param  RequestInterface $request The request to initialize.
+     * @return void
+     */
+    protected function authRedirect(RequestInterface $request)
+    {
+        // Test if authentication is required.
+        if ($this->authRequired() === false) {
+            return;
+        }
+
+        // Test if user is authorized to access this controller
+        if ($this->isAuthorized() === true) {
+            return;
+        }
+
+        $redirectTo = urlencode($request->getRequestTarget());
+
+        header('HTTP/1.0 403 Forbidden');
+        header('Location: '.$this->adminUrl('login?redirect_to='.$redirectTo));
+        exit;
+    }
+
+    /**
+     * Sets the template data from a PSR Request object.
+     *
+     * @param  RequestInterface $request A PSR-7 compatible Request instance.
+     * @return self
+     */
+    protected function setDataFromRequest(RequestInterface $request)
+    {
+        $keys = $this->validDataFromRequest();
+        if (!empty($keys)) {
+            $this->setData($request->getParams($keys));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return [
+            // HTTP Handling
+            'next_url',
+            // Navigation Menusa
+            'header_menu_item', 'side_menu_item', 'system_menu_item',
+        ];
     }
 
     /**
@@ -406,6 +456,29 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
+     * Get the "Visit website" label.
+     *
+     * @return string|boolean The button's label,
+     *     TRUE to use the default label,
+     *     or FALSE to disable the link.
+     */
+    public function visitSiteLabel()
+    {
+        $label = $this->adminConfig('header_menu.visit_site');
+        if ($label === false) {
+            return false;
+        }
+
+        if (empty($label) || $label === true) {
+            $label = $this->translator()->translate('Visit Site');
+        } else {
+            $label = $this->translator()->translate($label);
+        }
+
+        return $label;
+    }
+
+    /**
      * Retrieve the name of the project.
      *
      * @return Translation|string|null
@@ -469,19 +542,139 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @return string
+     * Determine if a CAPTCHA test is available.
+     *
+     * For example, the "Login", "Lost Password", and "Reset Password" templates
+     * can render the CAPTCHA test.
+     *
+     * @see    AdminAction::recaptchaEnabled() Duplicate
+     * @return boolean
+     */
+    public function recaptchaEnabled()
+    {
+        $recaptcha = $this->apiConfig('google.recaptcha');
+
+        if (empty($recaptcha) || (isset($recaptcha['active']) && $recaptcha['active'] === false)) {
+            return false;
+        }
+
+        return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
+               (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
+    }
+
+    /**
+     * Determine if the CAPTCHA test is invisible.
+     *
+     * Note: Charcoal's implementation of Google reCAPTCHA defaults to "invisible".
+     *
+     * @return boolean
+     */
+    public function recaptchaInvisible()
+    {
+        $recaptcha = $this->apiConfig('google.recaptcha');
+
+        $hasInvisible = isset($recaptcha['invisible']);
+        if ($hasInvisible && $recaptcha['invisible'] === true) {
+            return true;
+        }
+
+        $hasSize = isset($recaptcha['size']);
+        if ($hasSize && $recaptcha['size'] === 'invisible') {
+            return true;
+        }
+
+        if (!$hasInvisible && !$hasSize) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Alias of {@see self::recaptchaSiteKey()}.
+     *
+     * @deprecated
+     * @return string|null
      */
     public function recaptchaKey()
     {
-        $recaptcha = $this->appConfig('apis.google.recaptcha');
+        return $this->recaptchaSiteKey();
+    }
 
-        if (isset($recaptcha['public_key'])) {
-            $key = $recaptcha['public_key'];
-        } else {
-            $key = $recaptcha['key'];
+    /**
+     * Retrieve the Google reCAPTCHA public (site) key.
+     *
+     * @throws RuntimeException If Google reCAPTCHA is required but not configured.
+     * @return string|null
+     */
+    public function recaptchaSiteKey()
+    {
+        $recaptcha = $this->apiConfig('google.recaptcha');
+
+        if (!empty($recaptcha['public_key'])) {
+            return $recaptcha['public_key'];
+        } elseif (!empty($recaptcha['key'])) {
+            return $recaptcha['key'];
         }
 
-        return (string)$key;
+        return null;
+    }
+
+    /**
+     * Retrieve the parameters for the Google reCAPTCHA widget.
+     *
+     * @return string[]
+     */
+    public function recaptchaParameters()
+    {
+        $apiConfig = $this->apiConfig('google.recaptcha');
+        $tplConfig = $this->get('recaptcha_options') ?: [];
+
+        $params = [
+            'sitekey'  => $this->recaptchaSiteKey(),
+            'badge'    => null,
+            'type'     => null,
+            'size'     => 'invisible',
+            'tabindex' => null,
+            'callback' => null,
+        ];
+
+        if ($this->recaptchaInvisible() === false) {
+            $params['size'] = null;
+        }
+
+        foreach ($params as $key => $val) {
+            if ($val === null || $val === '') {
+                if (isset($tplConfig[$key])) {
+                    $val = $tplConfig[$key];
+                } elseif (isset($apiConfig[$key])) {
+                    $val = $apiConfig[$key];
+                }
+
+                $params[$key] = $val;
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Generate a string representation of HTML attributes for the Google reCAPTCHA tag.
+     *
+     * @return string
+     */
+    public function recaptchaHtmlAttr()
+    {
+        $params = $this->recaptchaParameters();
+
+        $attributes = [];
+        foreach ($params as $key => $val) {
+            if ($val !== null) {
+                $attributes[] = sprintf('data-%s="%s"', $key, htmlspecialchars($val, ENT_QUOTES));
+            }
+        }
+
+        return implode(' ', $attributes);
     }
 
     /**

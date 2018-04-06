@@ -13,7 +13,7 @@ $selectize-offset-item-remove: 28px;
 
 $selectize-width-item-buttons: 40px;
 
-// @import "../../../../../../bower_components/selectize-scss/src/selectize.bootstrap3";
+// @import "../../../../../../node_modules/selectize-scss/src/selectize.bootstrap3";
 
 .selectize-dropdown {
     .option > .caption {
@@ -190,5 +190,42 @@ $selectize-width-item-buttons: 40px;
 
     ~ .input-group-btn {
         vertical-align: top;
+    }
+}
+
+.selectize-grid {
+    .items {
+        display:flex;
+        flex-wrap:wrap;
+    }
+
+    .item {
+        display: inline-block;
+        align-items: stretch;
+        margin: 0;
+    }
+
+    &.item\@1\/4 {
+        .item {
+            @media (min-width: $from-medium){
+                width: 22.5%;
+            }
+        }
+    }
+
+    .item\@1\/3 & {
+        .item {
+            @media (min-width: $from-medium) {
+                width: 30%;
+            }
+        }
+    }
+
+    .item\@1\/2 & {
+        .item {
+            @media (min-width: $from-medium){
+                width: 48%;
+            }
+        }
     }
 }

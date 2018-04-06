@@ -80,6 +80,13 @@ class StructureFormGroup extends FormGroupWidget implements
     use StructureContainerTrait;
 
     /**
+     * The structure entry identifier.
+     *
+     * @var string
+     */
+    private $structId;
+
+    /**
      * The form group's storage model.
      *
      * @var \Charcoal\Model\ModelInterface|null
@@ -130,8 +137,30 @@ class StructureFormGroup extends FormGroupWidget implements
     }
 
     /**
+     * @param  string $structId The structure entry identifier.
+     * @return self
+     */
+    public function setStructId($structId)
+    {
+        $this->structId = $structId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function structId()
+    {
+        if (!$this->structId) {
+            $this->structId = uniqid();
+        }
+
+        return $this->structId;
+    }
+
+    /**
      * @param  array $data Widget data.
-     * @return FormGroupWidget Chainable
+     * @return self
      */
     public function setData(array $data)
     {
@@ -209,7 +238,7 @@ class StructureFormGroup extends FormGroupWidget implements
      * Set the form input's parent group.
      *
      * @param  FormGroupInterface $formGroup The parent form group object.
-     * @return StructureFormGroup
+     * @return self
      */
     public function setFormGroup(FormGroupInterface $formGroup)
     {
@@ -231,7 +260,7 @@ class StructureFormGroup extends FormGroupWidget implements
     /**
      * Clear the group's parent group.
      *
-     * @return StructureFormGroup
+     * @return self
      */
     public function clearFormGroup()
     {
@@ -249,7 +278,7 @@ class StructureFormGroup extends FormGroupWidget implements
      * @param  string|ModelStructureProperty $propertyIdent The property identifier—or instance—of a storage property.
      * @throws InvalidArgumentException If the property identifier is not a string.
      * @throws UnexpectedValueException If a property is invalid.
-     * @return StructureFormGroup
+     * @return self
      */
     public function setStorageProperty($propertyIdent)
     {

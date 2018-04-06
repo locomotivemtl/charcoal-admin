@@ -21,7 +21,7 @@
     };
 
     var DEFAULTS = {
-        supported: [ 'success', 'info', 'notice', 'warning', 'error' ],
+        supported: [ 'success', 'info', 'notice', 'warning', 'error', 'danger' ],
         definitions: {
             success: {
                 title: commonL10n.success,
@@ -38,11 +38,13 @@
             },
             error: {
                 title: commonL10n.errorOccurred,
-                type:  BootstrapDialog.TYPE_DANGER
+                type:  BootstrapDialog.TYPE_DANGER,
+                alias: [ 'danger' ]
             }
         },
         aliases: {
-            info: 'notice'
+            info: 'notice',
+            danger: 'error'
         }
     };
 
@@ -112,8 +114,8 @@
     /**
      * Expects and array of object that looks just like this:
      * [
-     *   { 'level' : 'success', 'msg' : 'Good job!' },
-     *   { 'level' : 'success', 'msg' : 'Good job!' }
+     *   { 'level': 'success', 'message': 'Good job!' },
+     *   { 'level': 'success', 'message': 'Good job!' }
      * ]
      *
      * You can add other parameters as well.
@@ -472,7 +474,7 @@
 
     Entry.createFromObject = function (obj) {
         var level   = obj.level || null;
-        var message = obj.message || obj.msg || null;
+        var message = obj.message || null;
 
         if (!level && !message) {
             return null;

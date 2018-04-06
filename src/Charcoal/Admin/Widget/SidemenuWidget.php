@@ -18,6 +18,7 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\ActionContainerTrait;
 use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
 
@@ -28,6 +29,7 @@ class SidemenuWidget extends AdminWidget implements
     SidemenuWidgetInterface
 {
     use ActionContainerTrait;
+    use HttpAwareTrait;
 
     /**
      * Default sorting priority for an action.
@@ -133,13 +135,6 @@ class SidemenuWidget extends AdminWidget implements
      * @var FactoryInterface
      */
     protected $sidemenuGroupFactory;
-
-    /**
-     * Store the HTTP request object.
-     *
-     * @var RequestInterface
-     */
-    private $httpRequest;
 
     /**
      * @param  array $data Class data.
@@ -594,6 +589,11 @@ class SidemenuWidget extends AdminWidget implements
 
         uasort($this->groups, [ $this, 'sortGroupsByPriority' ]);
 
+        // Remove items that are not active.
+        $this->groups = array_filter($this->groups, function($item) {
+            return ($item->active());
+        });
+
         return $this;
     }
 
@@ -670,7 +670,7 @@ class SidemenuWidget extends AdminWidget implements
     /**
      * Retrieve the sidemenu groups.
      *
-     * @return \Generator
+     * @return array
      */
     public function groups()
     {
@@ -688,13 +688,7 @@ class SidemenuWidget extends AdminWidget implements
             }
         }
 
-        foreach ($this->groups as $group) {
-            if (!$group->active()) {
-                continue;
-            }
-
-            yield $group;
-        }
+        return $this->groups;
     }
 
     /**
@@ -836,26 +830,10 @@ class SidemenuWidget extends AdminWidget implements
     {
         parent::setDependencies($container);
 
+        // Satisfies HttpAwareTrait dependencies
         $this->setHttpRequest($container['request']);
+
         $this->setSidemenuGroupFactory($container['sidemenu/group/factory']);
-    }
-
-    /**
-     * Retrieve the HTTP request object.
-     *
-     * @throws RuntimeException If an HTTP request was not previously set.
-     * @return RequestInterface
-     */
-    protected function httpRequest()
-    {
-        if (!isset($this->httpRequest)) {
-            throw new RuntimeException(sprintf(
-                'A PSR-7 Request instance is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->httpRequest;
     }
 
     /**
@@ -948,17 +926,6 @@ class SidemenuWidget extends AdminWidget implements
             return 0;
         }
         return ($a < $b) ? (-1) : 1;
-    }
-
-    /**
-     * Set an HTTP request object.
-     *
-     * @param RequestInterface $request A PSR-7 compatible Request instance.
-     * @return void
-     */
-    private function setHttpRequest(RequestInterface $request)
-    {
-        $this->httpRequest = $request;
     }
 
     /**

@@ -60,6 +60,7 @@ Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
     this.$hidden.val('');
     this.$input.find('.form-control-plaintext').empty();
     this.$input.find('.hide-if-no-file').addClass('d-none');
+    this.$input.find('.show-if-no-file').removeClass('d-none');
 };
 
 Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
@@ -71,14 +72,13 @@ Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
     src    = URL.createObjectURL(file);
 
     this.$input.find('.hide-if-no-file').removeClass('d-none');
+    this.$input.find('.show-if-no-file').addClass('d-none');
     this.$input.find('.form-control-plaintext').html(file);
     this.$preview.empty();
 };
 
 Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
 {
-    // console.log('Load elFinder');
-
     event.preventDefault();
 
     this.dialog = BootstrapDialog.show({
@@ -94,21 +94,17 @@ Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
 
 Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/*, elf */)
 {
-    // console.group('elFinder Callback (File)');
-    // console.log('elFinder', elf);
-    // console.log('Selected File', file);
-
     if (this.dialog) {
         this.dialog.close();
     }
 
     if (file && file.path) {
         this.$input.find('.hide-if-no-file').removeClass('d-none');
+        this.$input.find('.show-if-no-file').addClass('d-none');
         this.$input.find('.form-control-plaintext').html(file.name);
         this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
         this.$preview.empty();
     }
-    // console.groupEnd();
 };
 
 /**

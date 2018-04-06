@@ -5,6 +5,8 @@ namespace Charcoal\Admin\Tests\Action\System\StaticWebsite;
 // From PHPUnit
 use PHPUnit_Framework_TestCase;
 
+use ReflectionClass;
+
 // From Pimple
 use Pimple\Container;
 
@@ -55,9 +57,19 @@ class UpdateActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    public static function getMethod($obj, $name)
+    {
+        $class = new ReflectionClass($obj);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
+    }
+
     public function testAuthRequiredIsTrue()
     {
-        $this->assertTrue($this->obj->authRequired());
+        $foo = self::getMethod($this->obj, 'authRequired');
+        $res = $foo->invoke($this->obj);
+        $this->assertTrue($res);
     }
 
     public function testRun()

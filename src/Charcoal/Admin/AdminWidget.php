@@ -350,6 +350,16 @@ class AdminWidget extends AbstractWidget implements
     }
 
     /**
+     * Converts the widget's {@see self::widgetDataForJs() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    final public function escapedWidgetDataForJsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->widgetDataForJsAsJson().'<%={{ }}=%>';
+    }
+
+    /**
      * @param mixed $label The label.
      * @return self
      */

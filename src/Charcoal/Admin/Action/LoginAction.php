@@ -9,6 +9,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-admin'
+use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 
@@ -40,6 +41,8 @@ use Charcoal\Admin\User;
  */
 class LoginAction extends AdminAction
 {
+    use AuthActionTrait;
+
     /**
      * Authentication is required by default.
      *
@@ -59,10 +62,12 @@ class LoginAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $translator = $this->translator();
+
         try {
-            $doneMessage = $this->translator()->translation('You have logged in successfully.');
-            $failMessage = $this->translator()->translation('An error occurred while logging in');
-            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+            $doneMessage = $translator->translation('You have logged in successfully.');
+            $failMessage = $translator->translation('An error occurred while logging in');
+            $errorThrown = strtr($translator->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
 
@@ -73,10 +78,22 @@ class LoginAction extends AdminAction
             $nextUrl  = $request->getParam('next_url');
 
             if (!$username || !$password) {
-                $this->addFeedback('error', $this->translator()->translate('Invalid username or password'));
+                $this->addFeedback('error', $translator->translate('Invalid username or password'));
                 $this->setSuccess(false);
 
                 return $response->withStatus(400);
+            }
+
+            if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
+                if ($ip) {
+                    $logMessage = sprintf('[Admin] Login challenge failed for "%s" from %s', $username, $ip);
+                } else {
+                    $logMessage = sprintf('[Admin] Login challenge failed for "%s"', $username);
+                }
+
+                $this->logger->warning($logMessage);
+
+                return $response;
             }
 
             if ($ip) {
@@ -113,9 +130,9 @@ class LoginAction extends AdminAction
                 $this->setSuccess(true);
 
                 if (is_string($nextUrl) && !empty($nextUrl)) {
-                    $this->setSuccessUrl($nextUrl);
+                    $this->setSuccessUrl((string)$nextUrl);
                 } else {
-                    $this->setSuccessUrl($this->adminUrl());
+                    $this->setSuccessUrl((string)$this->adminUrl());
                 }
 
                 return $response;

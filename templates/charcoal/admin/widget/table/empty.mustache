@@ -4,26 +4,30 @@
 
     @used-by `charcoal/admin/widget/table`
 --}}
-
-<div class="alert alert-danger" role="alert">
-    {{! <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> }}
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-    <span class="sr-only">{{# _t }}Errors:{{/ _t }}</span>
-    <span>{{# _t }}No "{{ objLabels.singular_name }}" objects found.{{/ _t }}</span>
-    <div class="btn-group" role="group">
-    {{# emptyListActions }}
-        {{# isSeparator }}
-            </div>
-            <div class="btn-group" role="group">
-        {{/ isSeparator }}
-        {{^ isSeparator }}
-            {{> charcoal/admin/widget/actions }}
-        {{/ isSeparator }}
-    {{/ emptyListActions }}
-    {{^ showEmptyListActions }}
-        {{# isObjCreatable }}
-        <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
-        {{/ isObjCreatable }}
-    {{/ showEmptyListActions }}
+<section class="alert alert-danger" role="alert">
+    <div class="alert-body">
+        <p>
+            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+            <span class="sr-only">{{# _t }}Errors:{{/ _t }}</span>
+            <span>&nbsp; {{# _t }}No objects have been created yet for "{{ objType }}".{{/ _t }}</span>
+        </p>
+        <p>
+            <span class="btn-group" role="group">
+            {{# emptyListActions }}
+                {{# isSeparator }}
+                    </span>
+                    <span class="btn-group" role="group">
+                {{/ isSeparator }}
+                {{^ isSeparator }}
+                    {{> charcoal/admin/widget/actions }}
+                {{/ isSeparator }}
+            {{/ emptyListActions }}
+            {{^ showEmptyListActions }}
+                {{# isObjCreatable }}
+                <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
+                {{/ isObjCreatable }}
+            {{/ showEmptyListActions }}
+            </span>
+        </p>
     </div>
-</div>
+</section>

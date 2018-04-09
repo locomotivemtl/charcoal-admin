@@ -832,6 +832,9 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 1200px) {
   [data-template="login"] .c-nav-container,
+  [data-template="logout"] .c-nav-container,
+  [data-template="lost-password"] .c-nav-container,
+  [data-template="reset-password"] .c-nav-container,
   [data-template="elfinder"] .c-nav-container {
     background-color: #393939;
     position: fixed;
@@ -866,6 +869,9 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 1200px) {
   [data-template="login"] .c-nav-container_button,
+  [data-template="logout"] .c-nav-container_button,
+  [data-template="lost-password"] .c-nav-container_button,
+  [data-template="reset-password"] .c-nav-container_button,
   [data-template="elfinder"] .c-nav-container_button {
     cursor: pointer;
     background: none;
@@ -959,6 +965,9 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 1200px) {
   [data-template="login"] .c-nav-container_header,
+  [data-template="logout"] .c-nav-container_header,
+  [data-template="lost-password"] .c-nav-container_header,
+  [data-template="reset-password"] .c-nav-container_header,
   [data-template="elfinder"] .c-nav-container_header {
     position: absolute;
     top: 0;
@@ -968,7 +977,10 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
-[data-template="login"] .c-nav-container_header {
+[data-template="login"] .c-nav-container_header,
+[data-template="logout"] .c-nav-container_header,
+[data-template="lost-password"] .c-nav-container_header,
+[data-template="reset-password"] .c-nav-container_header {
   left: 0 !important;
 }
 
@@ -1015,7 +1027,10 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 @media (max-width: 699px) {
-  [data-template="login"] .c-nav-container_logo {
+  [data-template="login"] .c-nav-container_logo,
+  [data-template="logout"] .c-nav-container_logo,
+  [data-template="lost-password"] .c-nav-container_logo,
+  [data-template="reset-password"] .c-nav-container_logo {
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -1023,10 +1038,16 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 1200px) {
   [data-template="login"] .c-nav-container_logo,
+  [data-template="logout"] .c-nav-container_logo,
+  [data-template="lost-password"] .c-nav-container_logo,
+  [data-template="reset-password"] .c-nav-container_logo,
   [data-template="elfinder"] .c-nav-container_logo {
     padding: 6px 20px;
   }
   [data-template="login"] .c-nav-container_logo svg,
+  [data-template="logout"] .c-nav-container_logo svg,
+  [data-template="lost-password"] .c-nav-container_logo svg,
+  [data-template="reset-password"] .c-nav-container_logo svg,
   [data-template="elfinder"] .c-nav-container_logo svg {
     width: 81px;
     height: 48px;

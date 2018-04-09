@@ -27,6 +27,9 @@
     }
 
     [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             @include c-nav-container;
@@ -59,6 +62,9 @@
     }
 
     [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             @include c-nav-container_button;
@@ -130,13 +136,19 @@
     }
 
     [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             @include c-nav-container_header;
         }
     }
 
-    [data-template="login"] & {
+    [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] & {
         left: 0 !important;
     }
 }
@@ -177,7 +189,10 @@
         }
     }
 
-    [data-template="login"] & {
+    [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] & {
         @media (max-width: $to-small) {
             padding-left: $spacer;
             padding-right: $spacer;
@@ -185,6 +200,9 @@
     }
 
     [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             padding: 6px 20px;

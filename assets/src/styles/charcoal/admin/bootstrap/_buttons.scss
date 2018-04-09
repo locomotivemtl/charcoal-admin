@@ -11,8 +11,8 @@
         font-size: 1rem;
     }
 
-    > .fa + .btn-label,
-    > .glyphicon + .btn-label {
+    > .fa:not(.d-none) + .btn-label,
+    > .glyphicon:not(.d-none) + .btn-label {
         margin-left: 0.25em;
     }
 }

@@ -26,6 +26,7 @@
         width: rem($nav-width);
     }
 
+    [data-template="login"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             @include c-nav-container;
@@ -57,6 +58,7 @@
         display: none;
     }
 
+    [data-template="login"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             @include c-nav-container_button;
@@ -127,10 +129,15 @@
         position: relative;
     }
 
+    [data-template="login"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             @include c-nav-container_header;
         }
+    }
+
+    [data-template="login"] & {
+        left: 0 !important;
     }
 }
 
@@ -170,6 +177,14 @@
         }
     }
 
+    [data-template="login"] & {
+        @media (max-width: $to-small) {
+            padding-left: $spacer;
+            padding-right: $spacer;
+        }
+    }
+
+    [data-template="login"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
             padding: 6px 20px;

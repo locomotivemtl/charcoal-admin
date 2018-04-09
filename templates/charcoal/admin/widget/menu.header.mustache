@@ -15,9 +15,11 @@
 --}}
 
 <div class="c-nav-container o-flex_aside">
+    {{# isAuthorized }}
     <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
         <span class="c-nav-container_button_icon"></span>
     </button>
+    {{/ isAuthorized }}
     <div class="c-nav-container_header">
         <a class="c-nav-container_logo" href="{{adminUrl}}">
             <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>

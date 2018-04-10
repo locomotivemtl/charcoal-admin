@@ -3,10 +3,14 @@
 // ==========================================================================
 
 .c-structure-property {
-    .form-field > &.c-structure-property--bordered {
-        padding:       $card-spacer-y $card-spacer-x 0;
+    .form-field > &.c-structure-property.-bordered {
         border:        1px solid $input-border-color;
         border-radius: $input-border-radius;
+        padding:       ($grid-gutter-width / 2);
+
+        @media (min-width: $from-large) {
+            padding: rem($unit / 2);
+        }
     }
 }
 

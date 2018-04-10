@@ -15,7 +15,7 @@
         {{/ cellStartsRow }}
     {{/ layout }}
 
-            <div class="col-md-{{ layout.cellSpanBy12 }}">
+            <div{{# layout }} class="col-md-{{ cellSpanBy12 }}"{{/ layout }}>
                 {{> charcoal/admin/widget/form-property-widget }}
             </div>
 

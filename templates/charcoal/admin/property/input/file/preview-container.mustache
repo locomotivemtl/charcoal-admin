@@ -5,10 +5,9 @@
     `charcoal/admin/property/input/file`
 --}}
 {{# showFilePreview }}
-<figure class="img-thumbnail hide-if-no-file{{^ inputVal }} d-none{{/ inputVal }}">
+<figure class="figure img-thumbnail hide-if-no-file{{^ inputVal }} d-none{{/ inputVal }}">
     <div class="js-preview">{{& filePreview }}</div>
-    {{! @see charcoal/admin/property/input/readonly }}
-    <figcaption class="caption">
+    <figcaption class="figure-caption">
         <p class="u-truncate">
             <samp class="form-control-plaintext" title="{{ inputVal }}">{{& abridgedInputVal }}</samp>
         </p>

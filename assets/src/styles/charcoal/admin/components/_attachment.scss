@@ -15,19 +15,6 @@ $c-attachment-ph: $card-spacer-x;
         cursor: move;
     }
 
-    .img-thumbnail img,
-    img.img-thumbnail {
-        max-width:  200px;
-    }
-
-    img.img-thumbnail {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     .gallery-list {
         padding:    0;
         list-style: none;

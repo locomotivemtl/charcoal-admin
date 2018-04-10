@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-04-09 
+ * ! Charcoal Admin - 2018-04-10 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -1784,14 +1784,9 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 1200px) {
   .c-form-widget_groups {
-    padding: 1.875rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  .c-form-widget_groups {
     background-color: #fbfbfb;
     border-radius: 0.25rem;
+    padding: 1.875rem;
     margin-top: 2.96875rem;
   }
 }
@@ -2004,10 +1999,16 @@ a.chip:hover::before, a.chip:focus::before {
   color: #c34747;
 }
 
-.form-field > .c-structure-property.c-structure-property--bordered {
-  padding: 0.75rem 1.25rem 0;
+.form-field > .c-structure-property.c-structure-property.-bordered {
   border: 1px solid #bcbcbc;
   border-radius: 0.25rem;
+  padding: 10px;
+}
+
+@media (min-width: 1200px) {
+  .form-field > .c-structure-property.c-structure-property.-bordered {
+    padding: 1.875rem;
+  }
 }
 
 .c-structure-property_entry_content > .o-section:last-child,
@@ -2277,19 +2278,6 @@ a.chip:hover::before, a.chip:focus::before {
  */
 .c-attachments .ui-sortable-helper {
   cursor: move;
-}
-
-.c-attachments .img-thumbnail img,
-.c-attachments img.img-thumbnail {
-  max-width: 200px;
-}
-
-.c-attachments img.img-thumbnail {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .c-attachments .gallery-list {

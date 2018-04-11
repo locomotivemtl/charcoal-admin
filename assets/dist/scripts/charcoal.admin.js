@@ -2298,13 +2298,13 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
 
         $container.sortable({
             handle:      '[draggable="true"]',
-            placeholder: 'panel c-attachment_placeholder',
+            placeholder: 'card c-attachments_row -placeholder',
             start:       function (event, ui) {
-                var $heading     = ui.item.children('.panel-heading'),
+                var $heading     = ui.item.children('.card-header'),
                     $collapsible = $heading.find('[data-toggle="collapse"]');
 
                 if (!$collapsible.hasClass('collapsed')) {
-                    ui.item.children('.panel-collapse').collapse('hide');
+                    ui.item.children('.collapse').collapse('hide');
                 }
             }
         }).disableSelection();
@@ -2353,19 +2353,19 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             var $attachments = $container.children('.js-attachment');
 
             if ($container.hasClass('js-attachment-preview-only')) {
-                $attachments.children('.panel-heading.sr-only').removeClass('sr-only').addClass('sr-only-off');
+                $attachments.children('.card-header.sr-only').removeClass('sr-only').addClass('sr-only-off');
             }
 
-            $attachments.children('.panel-collapse.in').collapse('hide');
+            $attachments.find('.collapse.show').collapse('hide');
         })
         .on('click.charcoal.attachments', '.js-attachments-expand', function () {
             var $attachments = $container.children('.js-attachment');
 
             if ($container.hasClass('js-attachment-preview-only')) {
-                $attachments.children('.panel-heading.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
+                $attachments.children('.card-header.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
             }
 
-            $attachments.children('.panel-collapse:not(.in)').collapse('show');
+            $attachments.find('.collapse:not(.show)').collapse('show');
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();

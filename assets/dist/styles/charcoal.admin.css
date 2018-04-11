@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-04-10 
+ * ! Charcoal Admin - 2018-04-11 
  */
 @media (max-width: 699px) {
   h1, .h1 {
@@ -97,6 +97,10 @@ label {
 
 .form-control[readonly] {
   cursor: not-allowed;
+}
+
+.form-text {
+  margin-bottom: 0.5rem;
 }
 
 .form-control-plaintext {
@@ -197,6 +201,14 @@ label {
 /** Force border-radius */
 .btn-rounded {
   border-radius: 0.25rem !important;
+}
+
+.btn-group + .btn-group {
+  margin-left: 0.5rem;
+}
+
+.btn-group-vertical + .btn-group-vertical {
+  margin-top: 0.5rem;
 }
 
 .dropdown-item {
@@ -305,12 +317,13 @@ label {
   margin-left: 4px;
 }
 
-.panel-body > :first-child {
-  margin-top: 0;
+.card-collapsible .card-header {
+  border-bottom: 0;
 }
 
-.panel-body > :last-child {
-  margin-bottom: 0;
+.card-collapsible .collapse .card-body,
+.card-collapsible .collapsing .card-body {
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 a:focus {
@@ -2285,127 +2298,39 @@ a.chip:hover::before, a.chip:focus::before {
   list-style: none;
 }
 
-.c-attachments .panel {
-  position: relative;
-}
-
 .c-attachments .panel.ui-sortable-helper {
   height: auto !important;
 }
 
-.c-attachments .list-group-item {
-  padding-right: 5rem;
-}
-
-.c-attachments .panel-title-icon,
-.c-attachments .list-group-item-icon {
-  padding: 0.75rem 1.25rem;
-}
-
-.c-attachments .panel-title-icon,
-.c-attachments .list-group-item > .list-group-item-icon {
-  width: 3.75rem;
-  margin: -0.75rem 1.25rem -0.75rem -1.25rem;
-  border-right: 1px solid #ddd;
-}
-
-.c-attachments .panel-heading > .panel-actions,
-.c-attachments .list-group-item-actions {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.c-attachments .panel-heading > .panel-actions .list-group-item-action,
-.c-attachments .list-group-item-actions .list-group-item-action {
-  display: block;
-  float: left;
-  border-left: 1px solid #ddd;
-  padding: 0.75rem 1.25rem;
-}
-
-.c-attachments .panel-headless-title {
-  display: none;
-}
-
-.c-attachments .panel-heading.sr-only ~ .panel-collapse > .panel-body, .c-attachments .panel-heading.hidden ~ .panel-collapse > .panel-body {
-  border-top: 0;
-}
-
-.c-attachments .panel-heading.sr-only ~ .panel-collapse .panel-headless-title, .c-attachments .panel-heading.hidden ~ .panel-collapse .panel-headless-title {
-  display: block;
-}
-
-.c-attachments .panel-title {
-  font-size: 16px;
-}
-
-.c-attachments .panel-body {
-  font-family: "Roboto", sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
-  min-height: 32px;
-}
-
-.c-attachments .panel-body img,
-.c-attachments .panel-body svg {
-  max-width: 100%;
-  height: auto;
-}
-
-.c-attachments .panel-actions .fa,
-.c-attachments .dropdown-menu .fa {
-  width: 1.25rem;
-  text-align: left;
-}
-
-.c-attachments .panel-actions .fa.-wide,
-.c-attachments .dropdown-menu .fa.-wide {
-  width: 3.125rem;
-}
-
-.c-attachments .panel-actions .fa.-center,
-.c-attachments .dropdown-menu .fa.-center {
-  text-align: center;
-}
-
-.c-attachments .panel-actions .disabled,
-.c-attachments .dropdown-menu .disabled {
-  pointer-events: none;
-  color: #cccccc;
-}
-
-.c-attachments .panel-actions-float {
-  position: absolute;
-  top: 0;
-  left: 102%;
-  width: 16%;
-}
-
-.c-attachments .panel-actions-inline {
-  padding: 4px;
-}
-
 .c-attachments_header {
-  margin-bottom: 2em;
+  margin-bottom: 2rem;
 }
 
 .c-attachments_container .js-grid-container {
   min-height: 100px;
 }
 
-.c-attachments_container > .panel-group {
-  width: 85%;
+.c-attachments_row + .c-attachments_row {
+  margin-top: 0.75rem;
 }
 
-.c-attachment_placeholder {
-  height: 1.5rem;
+.c-attachments_row.-placeholder {
+  height: calc(1.5rem + 21.6px + 2px);
   padding: 0.75rem;
   border-color: #BBB;
   border-style: dashed;
   -webkit-box-shadow: none;
           box-shadow: none;
   background-color: transparent;
+}
+
+/**
+ * Sweet hack.
+ * Allows the sortable to apply on video as well.
+ */
+.js-attachment iframe {
+  pointer-events: none;
+  max-width: 100%;
 }
 
 .c-dualselect.-cols {

@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-04-10 
+ * ! Charcoal Admin - 2018-04-11 
  */
 @charset "UTF-8";
 /*!
@@ -436,7 +436,7 @@ hr {
 
 small,
 .small {
-  font-size: 80%;
+  font-size: 72%;
   font-weight: 400;
 }
 
@@ -2190,7 +2190,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   display: none;
   width: 100%;
   margin-top: 0.25rem;
-  font-size: 80%;
+  font-size: 72%;
   color: #28a745;
 }
 
@@ -2293,7 +2293,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   display: none;
   width: 100%;
   margin-top: 0.25rem;
-  font-size: 80%;
+  font-size: 72%;
   color: #c34747;
 }
 

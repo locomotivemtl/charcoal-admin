@@ -37,6 +37,15 @@ label {
     }
 }
 
+// Form groups
+//
+// Designed to help with the organization and spacing of vertical forms. For
+// horizontal forms, use the predefined grid classes.
+
+.form-text {
+    margin-bottom: ($form-text-margin-top * 2);
+}
+
 .form-control-plaintext {
     font-size: 12px;
 }

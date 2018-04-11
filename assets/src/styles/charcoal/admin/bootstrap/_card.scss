@@ -1,0 +1,17 @@
+// ==========================================================================
+// Card
+// ==========================================================================
+
+// Switch up the borders between `.card-header` & `.card-body` when using collapsing cards using a header toggle.
+.card-header {
+    .card-collapsible & {
+        border-bottom: 0;
+    }
+}
+
+.card-body {
+    .card-collapsible .collapse &,
+    .card-collapsible .collapsing & {
+        border-top: $card-border-width solid $card-border-color;
+    }
+}

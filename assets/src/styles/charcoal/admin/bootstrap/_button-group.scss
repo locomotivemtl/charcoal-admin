@@ -1,0 +1,16 @@
+// ==========================================================================
+// Button Groups
+// ==========================================================================
+
+// Add margins between adjacent button groups
+.btn-group {
+    & + & {
+        margin-left: ($spacer / 2);
+    }
+}
+
+.btn-group-vertical {
+    & + & {
+        margin-top: ($spacer / 2);
+    }
+}

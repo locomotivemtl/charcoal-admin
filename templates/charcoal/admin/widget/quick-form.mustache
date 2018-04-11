@@ -7,8 +7,8 @@
     Expects JS initialization of this component to be handled by the dialog manager.
 --}}
 <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
-    <div class="o-flex">
-        <div class="o-flex_main" style="min-height: 0;">
+    <div class="o-flex c-form-widget -quick-form">
+        <div class="o-flex_main c-form-widget_form">
             {{# isTabbable }}
             {{> charcoal/admin/template/form/nav-tabs }}
             {{/ isTabbable }}
@@ -29,12 +29,12 @@
         <input type="hidden" name="obj_id" value="{{ objId }}">
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-link-danger" data-dismiss="dialog">
+        <button type="button" class="btn text-danger" data-dismiss="dialog">
             <span class="btn-label">{{# _t }}Cancel{{/ _t }}</span>
         </button>
-        <button type="submit" class="btn btn-info">
-            <span class="glyphicon glyphicon-refresh u-spin hidden"></span>
-            <span class="btn-lable">{{ submitLabel }}</span>
+        <button type="submit" class="btn btn-primary">
+            <span class="fa fa-refresh u-spin d-none"></span>
+            <span class="btn-label">{{ submitLabel }}</span>
         </button>
     </div>
 </form>

@@ -77,9 +77,14 @@ $nav-tabs-link-hover-border-color:  $nav-tabs-border-color;
 $nav-tabs-link-active-bg:           $charcoal-white-1;
 $nav-tabs-link-active-border-color: $nav-tabs-border-color $nav-tabs-border-color $nav-tabs-link-active-bg;
 
-
 // Tooltips
 // ==========================================================================
 
 $tooltip-bg:      $charcoal-gray-5;
 $tooltip-opacity: 1;
+
+// Modal
+// ==========================================================================
+
+$modal-lg: 900px;
+$modal-md: 600px;

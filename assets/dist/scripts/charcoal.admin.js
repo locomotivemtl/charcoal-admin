@@ -2557,7 +2557,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
     var defaultOpts = {
         size:           BootstrapDialog.SIZE_WIDE,
         cssClass:       '-quick-form',
-        widget_type:    'charcoal/admin/widget/quickForm',
+        widget_type:    'charcoal/admin/widget/quick-form',
         widget_options: {
             obj_type:  type,
             obj_id:    id,
@@ -3579,7 +3579,7 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
     var defaultOptions = {
         size:           BootstrapDialog.SIZE_WIDE,
         cssClass:       '-quick-form',
-        widget_type:    'charcoal/admin/widget/quickForm',
+        widget_type:    'charcoal/admin/widget/quick-form',
         widget_options: {
             obj_type:           'charcoal/relation/pivot',
             obj_id:             0,
@@ -6550,7 +6550,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     });
                 }
             },
-            widget_type: 'charcoal/admin/widget/quickForm',
+            widget_type: 'charcoal/admin/widget/quick-form',
             widget_options: {
                 obj_type: type,
                 obj_id: id,
@@ -7459,7 +7459,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                 });
             }
         },
-        widget_type: 'charcoal/admin/widget/quickForm',
+        widget_type: 'charcoal/admin/widget/quick-form',
         widget_options: {
             obj_type: type,
             obj_id: id,

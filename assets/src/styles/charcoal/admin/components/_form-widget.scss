@@ -14,14 +14,16 @@
 }
 
 .c-form-widget_nav {
-    @media (min-width: $from-small) {
-        justify-content: flex-end;
-        transform: translateY(-100%);
-    }
+    .c-form-widget.-object-form & {
+        @media (min-width: $from-small) {
+            justify-content: flex-end;
+            transform: translateY(-100%);
+        }
 
-    @media (min-width: $from-large) {
-        position: absolute;
-        width: 100%;
+        @media (min-width: $from-large) {
+            position: absolute;
+            width: 100%;
+        }
     }
 }
 
@@ -30,7 +32,16 @@
         background-color: $charcoal-white-0;
         border-radius: $border-radius;
         padding: rem($unit / 2);
-        margin-top: rem($header-height / 2);
+    }
+
+    .c-form-widget.-object-form & {
+        @media (min-width: $from-large) {
+            margin-top: rem($header-height / 2);
+        }
+    }
+
+    .c-form-widget.-quick-form & {
+        background-color: $nav-tabs-link-active-bg;
     }
 }
 

@@ -271,7 +271,7 @@
                     });
                 }
             },
-            widget_type: 'charcoal/admin/widget/quickForm',
+            widget_type: 'charcoal/admin/widget/quick-form',
             widget_options: {
                 obj_type: type,
                 obj_id: id,

@@ -482,14 +482,14 @@ output {
 }
 
 @media (max-width: 699px) {
-  .o-section {
-    margin-bottom: 10px;
+  .o-section + .o-section {
+    margin-top: 10px;
   }
 }
 
 @media (min-width: 700px) {
-  .o-section {
-    margin-bottom: 1.875rem;
+  .o-section + .o-section {
+    margin-top: 1.875rem;
   }
 }
 
@@ -1778,7 +1778,7 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 @media (min-width: 700px) {
-  .c-form-widget_nav {
+  .c-form-widget.-object-form .c-form-widget_nav {
     -webkit-box-pack: end;
         -ms-flex-pack: end;
             justify-content: flex-end;
@@ -1789,7 +1789,7 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 @media (min-width: 1200px) {
-  .c-form-widget_nav {
+  .c-form-widget.-object-form .c-form-widget_nav {
     position: absolute;
     width: 100%;
   }
@@ -1800,8 +1800,17 @@ a.chip:hover::before, a.chip:focus::before {
     background-color: #fbfbfb;
     border-radius: 0.25rem;
     padding: 1.875rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-form-widget.-object-form .c-form-widget_groups {
     margin-top: 2.96875rem;
   }
+}
+
+.c-form-widget.-quick-form .c-form-widget_groups {
+  background-color: #f0f0f0;
 }
 
 @media (min-width: 700px) and (max-width: 999px) {
@@ -2561,34 +2570,6 @@ a.chip:hover::before, a.chip:focus::before {
 
 .bootstrap-dialog iframe {
   display: block;
-}
-
-.bootstrap-dialog .bootstrap-dialog-close-button > .close {
-  width: 24px;
-  margin-right: -6px;
-}
-
-.bootstrap-dialog .bootstrap-dialog-message > :last-child {
-  margin-bottom: 0;
-}
-
-.bootstrap-dialog .modal-body .nav-tabs {
-  margin-left: -15px;
-  margin-right: -15px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.bootstrap-dialog .modal-header.d-none + .modal-body .nav-tabs {
-  padding-right: 48px;
-}
-
-.bootstrap-dialog .modal-body .nav-tabs.bootstrap-dialog-title {
-  display: block;
-}
-
-.bootstrap-dialog .modal-body .modal-footer {
-  margin: 0 -15px -15px;
 }
 
 .bootstrap-dialog.-elfinder .modal-header {

@@ -176,7 +176,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                 });
             }
         },
-        widget_type: 'charcoal/admin/widget/quickForm',
+        widget_type: 'charcoal/admin/widget/quick-form',
         widget_options: {
             obj_type: type,
             obj_id: id,

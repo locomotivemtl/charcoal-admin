@@ -41,7 +41,7 @@ class ObjectFormWidget extends FormWidget implements
      */
     public function widgetType()
     {
-        return 'charcoal/admin/widget/objectForm';
+        return 'charcoal/admin/widget/object-form';
     }
 
     /**

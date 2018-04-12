@@ -5,28 +5,28 @@ DateTime picker Property Input
 `charcoal/admin/property/input/datetimepicker`
 
 --}}
-<div class="input-group date" id="datetimepicker_{{ inputId }}">
+<div class="input-group date" id="datetimepicker_{{ inputId }}" data-target-input="nearest">
     <input
         type="text"
-        id="{{ inputId }}"
+        class="form-control {{ inputClass }} datetimepicker-input"
+        data-target="#datetimepicker_{{ inputId }}"
         name="{{ inputName }}"
-        class="form-control {{ inputClass }}"
+        id="{{ inputId }}"
         {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
         {{# readOnly }}readonly{{/ readOnly }}
         {{# required }}required{{/ required }}
         {{# disabled }}disabled{{/ disabled }}
-        value=""
-    >
-    <span class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar" aria-label="{{# _t }}Use Calendar Widget{{/ _t }}"></span>
-    </span>
-    {{!--
-    <div class="input-group-btn">
-        <button type="button" class="btn btn-secondary" aria-label="[[# _t ]]Use Calendar Widget[[/ _t ]]">
-            <span class="glyphicon glyphicon-calendar"></span>
-        </button>
+        value="">
+    <div class="input-group-append">
+        <label
+            class="input-group-text"
+            data-target="#datetimepicker_{{ inputId }}"
+            data-toggle="datetimepicker"
+            for="{{ inputId }}">
+            <span class="sr-only">{{# _t }}Use Calendar Widget{{/ _t }}</span>
+            <span class="fa fa-calendar" aria-hidden="true"></span>
+        </label>
     </div>
-    --}}
 </div>
 
 {{# addJs }}

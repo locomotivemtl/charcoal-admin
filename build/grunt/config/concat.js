@@ -52,8 +52,7 @@ module.exports = {
 
             // Bootstrap Datepicker
             '<%= paths.npm %>/moment/min/moment.min.js',
-            // @todo
-            // 'bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+            '<%= paths.npm %>/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js',
 
             // BB Map
             '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',

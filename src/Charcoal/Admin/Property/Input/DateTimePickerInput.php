@@ -105,9 +105,12 @@ class DateTimePickerInput extends AbstractPropertyInput
      */
     public function defaultPickerOptions()
     {
+        $date = new \DateTime($this->inputVal());
+
         return [
-            'format'      => self::DEFAULT_JS_FORMAT,
-            'defaultDate' => $this->inputVal()
+            'allowInputToggle' => true,
+            'format'           => self::DEFAULT_JS_FORMAT,
+            'defaultDate'      => $date->format(\DateTime::ISO8601)
         ];
     }
 

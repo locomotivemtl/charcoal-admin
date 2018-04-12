@@ -9,15 +9,19 @@
         - `charcoal/admin/property/input/url`
 --}}
 {{# hasInputAffix }}
-<div class="input-group">
+    <div class="input-group">
 {{/ hasInputAffix }}
 {{# inputPrefix }}
-<span class="input-group-prepend" id="{{ inputId }}_prefix">{{& . }}</span>
+    <div class="input-group-prepend" id="{{ inputId }}_prefix">
+        <span class="input-group-text">{{& . }}</span>
+    </div>
 {{/ inputPrefix }}
 {{> charcoal/admin/property/control/input }}
 {{# inputSuffix }}
-<span class="input-group-append" id="{{ inputId }}_suffix">{{& . }}</span>
+    <div class="input-group-append" id="{{ inputId }}_suffix">
+        <span class="input-group-text">{{& . }}</span>
+    </div>
 {{/ inputSuffix }}
 {{# hasInputAffix }}
-</div>
+    </div>
 {{/ hasInputAffix }}

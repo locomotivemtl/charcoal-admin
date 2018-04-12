@@ -37,9 +37,8 @@
 // @import "../../../../../node_modules/bootstrap-select/sass/bootstrap-select";
 @import "../../../../../node_modules/bootstrap-select-temporary/sass/bootstrap-select";
 
-// Bootstrap 3 Datepicker
-// @todo Implement datepicker & fix dependencies
-// @import "../../../../../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker";
+// Bootstrap 4 Datepicker
+@import "../../../../../node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4";
 
 // jQuery MiniColors
 @import "../../../../../node_modules/@claviska/jquery-minicolors/jquery.minicolors";

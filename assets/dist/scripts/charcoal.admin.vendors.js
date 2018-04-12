@@ -35590,6 +35590,7 @@ var URLSearchParams=URLSearchParams||function(){"use strict";function URLSearchP
       });
       if (lastDialogInstance !== null) {
         lastDialogInstance.getModal().focus();
+        $('body').addClass('modal-open');
       }
     };
 

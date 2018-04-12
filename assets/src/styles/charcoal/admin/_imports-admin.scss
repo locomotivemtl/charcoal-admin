@@ -32,6 +32,7 @@
 // Overwrites
 // ==========================================================================
 
+@import "bootstrap/reboot";
 @import "bootstrap/type";
 @import "bootstrap/tables";
 @import "bootstrap/forms";
@@ -40,7 +41,7 @@
 @import "bootstrap/dropdown";
 @import "bootstrap/nav";
 @import "bootstrap/card";
-@import "bootstrap/scaffolding"; // @todo Migrate
+@import "bootstrap/modal";
 
 // ==========================================================================
 // Charcoal
@@ -88,7 +89,6 @@
 // Bootstrap custom components
 // ==========================================================================
 @import "bootstrap-custom/switch";
-@import "bootstrap-custom/dialog";
 
 // Utilities
 // ==========================================================================

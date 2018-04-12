@@ -31,17 +31,28 @@
     @media (min-width: $from-large) {
         background-color: $charcoal-white-0;
         border-radius: $border-radius;
-        padding: rem($unit / 2);
     }
 
-    .c-form-widget.-object-form & {
+    .c-form-widget.-tabbed & {
         @media (min-width: $from-large) {
+            padding: rem($unit / 2);
             margin-top: rem($header-height / 2);
         }
     }
 
     .c-form-widget.-quick-form & {
-        background-color: $nav-tabs-link-active-bg;
+        background: none;
+    }
+
+    .c-form-widget.-quick-form.-tabbed & {
+        background-color: $charcoal-white-1;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        @media (min-width: $from-large) {
+            margin-top: 0;
+            padding: rem($header-height / 2) rem($unit / 2) 0;
+        }
     }
 }
 

@@ -2,18 +2,21 @@
 // Selectize
 // ==========================================================================
 
-$selectize-font-size: $font-size-base;
+// $selectize-font-size: $font-size-base;
 $selectize-line-height: $line-height-base;
-$selectize-shadow-input: inset 0 1px 1px rgba(0, 0, 0, .075);
-$selectize-color-item-border: rgba(black, 0.1);
-$selectize-padding-item-x: 10px;
-$selectize-padding-item-y: 8px;
-$selectize-width-item-remove: 20px;
-$selectize-offset-item-remove: 28px;
+$selectize-padding-y: $input-padding-y;
+$selectize-padding-x: $input-padding-x;
+// $selectize-shadow-input: inset 0 1px 1px rgba(0, 0, 0, .075);
+// $selectize-color-item-border: rgba(black, 0.1);
+// $selectize-padding-item-x: 10px;
+// $selectize-padding-item-y: 8px;
+// $selectize-width-item-remove: 20px;
+// $selectize-offset-item-remove: 28px;
 
 $selectize-width-item-buttons: 40px;
 
-// @import "../../../../../../node_modules/selectize-scss/src/selectize.bootstrap3";
+// Base styles imported after variable declarations
+@import "../../../../../../node_modules/selectize-scss/src/selectize/selectize.bootstrap4";
 
 .selectize-dropdown {
     .option > .caption {
@@ -23,150 +26,152 @@ $selectize-width-item-buttons: 40px;
     }
 }
 
+// @todo Evaluate all these overide styles.
+
 .selectize-control {
     .selectize-input {
         display: block;
-        // padding: 4px $selectize-padding-x 0;
     }
 
     &.multi {
-        .selectize-input.has-items {
-            padding: 4px 4px 0;
-        }
-    }
-
-    .selectize-input > div.new {
-        font-style: italic;
-    }
-
-    .selectize-input .item > .email {
-        margin-left: 5px;
-        opacity: 0.75;
-
-        &:before {
-            content: "<";
-        }
-        &:after {
-            content: ">";
-        }
-
-    }
-
-    &.selectize-list {
-        .selectize-input,
-        .selectize-input.focus {
-            border: none;
-            box-shadow: none;
-            padding: 4px 4px 0;
-
-            &::before {
-                content: none;
+        .selectize-input {
+            &.has-items {
+                padding: 3px 3px 0;
             }
 
-            > input {
-                left: 0!important;
-                @extend .form-control;
-                position: relative!important;
-                display: block!important;
-                opacity: 1!important;
-                width: 100%!important;
-                padding: 6px 12px!important;
-                line-height: 1.428571429!important;
-                color: #080909!important;
-                border: 1px solid #ccc!important;
-                border-radius: 4px!important;
-                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075)!important;
-                -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-                transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-            }
-        }
-
-        .item {
-            width: 100%;
-        }
-
-    }
-
-    &:not(.selectize-list) {
-        .selectize-input.focus {
-            // $color: $input-focus-color;
-            $color: $input-focus-border-color;
-            $color-rgba: rgba(red($color), green($color), blue($color), .6);
-            // @include selectize-box-shadow(unquote("inset 0 1px 1px #{rgba(black, .075)}, 0 0 8px #{$color-rgba}"));
-        }
-    }
-
-    .selectize-input::before {
-        content:        "\200B";
-        position:       static;
-        display:        inline-block;
-        width:          1px;
-        height:         auto;
-        padding:        $selectize-padding-item-y 0;
-        background:     none transparent;
-        vertical-align: baseline;
-    }
-
-    .selectize-input.dropdown-active::before {
-        display: inline-block;
-    }
-
-    &.plugin-remove_button {
-        [data-value] {
-            padding: $selectize-padding-item-y $selectize-offset-item-remove $selectize-padding-item-y $selectize-padding-item-x !important;
-
-            .remove {
-                width:   $selectize-width-item-remove;
-                // padding: $selectize-padding-x 0 0 0;
+            > div {
+                padding: 7px 10px;
             }
         }
     }
+
+//     .selectize-input > div.new {
+//         font-style: italic;
+//     }
+
+//     .selectize-input .item > .email {
+//         margin-left: 5px;
+//         opacity: 0.75;
+
+//         &:before {
+//             content: "<";
+//         }
+//         &:after {
+//             content: ">";
+//         }
+
+//     }
+
+//     &.selectize-list {
+//         .selectize-input,
+//         .selectize-input.focus {
+//             border: none;
+//             box-shadow: none;
+//             padding: 4px 4px 0;
+
+//             &::before {
+//                 content: none;
+//             }
+
+//             > input {
+//                 left: 0!important;
+//                 @extend .form-control;
+//                 position: relative!important;
+//                 display: block!important;
+//                 opacity: 1!important;
+//                 width: 100%!important;
+//                 padding: 6px 12px!important;
+//                 line-height: 1.428571429!important;
+//                 color: #080909!important;
+//                 border: 1px solid #ccc!important;
+//                 border-radius: 4px!important;
+//                 box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075)!important;
+//                 -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+//                 transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+//             }
+//         }
+
+//         .item {
+//             width: 100%;
+//         }
+
+//     }
+
+//     &:not(.selectize-list) {
+//         .selectize-input.focus {
+//             // $color: $input-focus-color;
+//             $color: $input-focus-border-color;
+//             $color-rgba: rgba(red($color), green($color), blue($color), .6);
+//             // @include selectize-box-shadow(unquote("inset 0 1px 1px #{rgba(black, .075)}, 0 0 8px #{$color-rgba}"));
+//         }
+//     }
+
+//     .selectize-input::before {
+//         content:        "\200B";
+//         position:       static;
+//         display:        inline-block;
+//         width:          1px;
+//         height:         auto;
+//         padding:        $selectize-padding-item-y 0;
+//         background:     none transparent;
+//         vertical-align: baseline;
+//     }
+
+//     .selectize-input.dropdown-active::before {
+//         display: inline-block;
+//     }
+
+//     &.plugin-remove_button {
+//         [data-value] {
+//             padding: $selectize-padding-item-y $selectize-offset-item-remove $selectize-padding-item-y $selectize-padding-item-x !important;
+
+//             .remove {
+//                 width:   $selectize-width-item-remove;
+//                 // padding: $selectize-padding-x 0 0 0;
+//             }
+//         }
+//     }
 
     &.plugin-buttons {
         [data-value] {
             position: relative;
-
-            .button {
-                background-color: rgba(black, 0.05);
-                width:            $selectize-width-item-buttons;
-                // padding:          $selectize-padding-x 0 0 0;
-                z-index:          1; /* fixes ie bug (see #392) */
-                position:         absolute;
-                top:              0;
-                right:            0;
-                bottom:           0;
-                text-align:       center;
-                font-weight:      bold;
-                font-size:        12px;
-                color:            inherit;
-                text-decoration:  none;
-                vertical-align:   middle;
-                display:          inline-block;
-                                  //border-left: 1px solid $selectize-color-item-border;
-                // @include selectize-border-radius (0 2px 2px 0);
-                // @include selectize-box-sizing (border-box);
-            }
         }
     }
-    [data-value] .button:hover {
-        background: rgba(black, 0.1);
-    }
-    [data-value].active .button {
-        // border-left-color: $selectize-color-item-active-border;
-    }
-    .disabled [data-value] .button:hover {
-        background: none;
-    }
-    .disabled [data-value] .button {
-        // border-left-color: lighten(desaturate($selectize-color-item-border, 100%), $selectize-lighten-disabled-item-border);
-    }
+
     .update-single {
         position:  absolute;
         right:     28px;
         top:       6px;
         font-size: 23px;
     }
+}
 
+.selectize-button {
+    background-color: rgba(black, 0.05);
+    width:            $selectize-width-item-buttons;
+    cursor:           pointer;
+    z-index:          1; /* fixes ie bug (see #392) */
+    position:         absolute;
+    top:              0;
+    right:            0;
+    bottom:           0;
+    text-align:       center;
+    font-weight:      bold;
+    font-size:        12px;
+    color:            inherit;
+    text-decoration:  none;
+    vertical-align:   middle;
+    display:          inline-block;
+    border:           none;
+    @include selectize-border-radius (0 2px 2px 0);
+
+    .selectize-control [data-value] &:hover {
+        background: rgba(black, 0.1);
+    }
+
+    .selectize-control .disabled [data-value] &:hover {
+        background: none;
+    }
 }
 
 .input-group > .selectize-control {
@@ -193,39 +198,39 @@ $selectize-width-item-buttons: 40px;
     }
 }
 
-.selectize-grid {
-    .items {
-        display:flex;
-        flex-wrap:wrap;
-    }
+// .selectize-grid {
+//     .items {
+//         display:flex;
+//         flex-wrap:wrap;
+//     }
 
-    .item {
-        display: inline-block;
-        align-items: stretch;
-        margin: 0;
-    }
+//     .item {
+//         display: inline-block;
+//         align-items: stretch;
+//         margin: 0;
+//     }
 
-    &.item\@1\/4 {
-        .item {
-            @media (min-width: $from-medium){
-                width: 22.5%;
-            }
-        }
-    }
+//     &.item\@1\/4 {
+//         .item {
+//             @media (min-width: $from-medium){
+//                 width: 22.5%;
+//             }
+//         }
+//     }
 
-    .item\@1\/3 & {
-        .item {
-            @media (min-width: $from-medium) {
-                width: 30%;
-            }
-        }
-    }
+//     .item\@1\/3 & {
+//         .item {
+//             @media (min-width: $from-medium) {
+//                 width: 30%;
+//             }
+//         }
+//     }
 
-    .item\@1\/2 & {
-        .item {
-            @media (min-width: $from-medium){
-                width: 48%;
-            }
-        }
-    }
-}
+//     .item\@1\/2 & {
+//         .item {
+//             @media (min-width: $from-medium){
+//                 width: 48%;
+//             }
+//         }
+//     }
+// }

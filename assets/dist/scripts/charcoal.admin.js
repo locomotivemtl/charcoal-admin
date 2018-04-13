@@ -6322,13 +6322,6 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     Selectize.parent = Charcoal.Admin.Property.prototype;
 
     Selectize.prototype.init = function () {
-        // if (typeof $.fn.sortable !== 'function') {
-        //     var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
-        //     Charcoal.Admin.loadScript(url, this.init.bind(this));
-        //
-        //     return this;
-        // }
-
         this.init_selectize();
         this.init_clipboard();
         this.init_allow_update();
@@ -6776,9 +6769,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 ;/* global Selectize */
 Selectize.define('btn_remove', function (options) {
     options = $.extend({
-        label: '<span class="glyphicon glyphicon-trash"></span>',
+        label: '<span class="fa fa-trash-o"></span>',
         title: 'Remove',
-        className: 'btn-remove',
+        className: 'selectize-button-remove',
         append: true,
     }, options);
 
@@ -6808,9 +6801,9 @@ Selectize.define('btn_remove', function (options) {
 ;/* global Selectize */
 Selectize.define('btn_update', function (options) {
     options = $.extend({
-        label: '<span class="glyphicon glyphicon-pencil"></span>',
+        label: '<span class="fa fa-pencil"></span>',
         title: 'Update',
-        className: 'btn-update',
+        className: 'selectize-button-update',
         append: true,
     }, options);
 
@@ -6865,8 +6858,8 @@ Selectize.define('buttons', function () {
 
     this.addButton = function (thisRef, options, callback) {
         var self = thisRef;
-        var html = '<a href="javascript:void(0)" ' +
-            'class="button ' + options.className + '" ' +
+        var html = '<button type="button" ' +
+            'class="selectize-button ' + options.className + '" ' +
             'tabindex="-1" ' +
             'title="' + escape_html(options.title) + '" ' +
             'style="right:' + self.currentButtonOffset + 'px">' +
@@ -6922,7 +6915,9 @@ Selectize.define('buttons', function () {
                             adjustContainerPadding(
                                 render_item.apply(thisRef, arguments),
                                 self.currentButtonOffset
-                            ), html);
+                            ),
+                            html
+                        );
                     };
                 }
 
@@ -7197,90 +7192,6 @@ Selectize.define('charcoal_item', function (options) {
     Charcoal.Admin.Property_Input_Selectize_List = List;
 
 }(jQuery, document));
-;/**
- * Selectize Picker
- * Search.
- *
- * Require
- * - selectize.js
- */
-
-Charcoal.Admin.Property_Input_Selectize_Search = function (opts) {
-    this.input_type = 'charcoal/admin/property/input/selectize/search';
-
-    // Property_Input_Selectize_Search properties
-    this.input_id   = null;
-    this.obj_type   = null;
-    this.copy_items = false;
-    this.title      = null;
-    this.multiple   = false;
-    this.separator  = ',';
-    this._tags      = null;
-
-    this.selectize          = null;
-    this.selectize_selector = null;
-    this.selectize_options  = {};
-
-    this.clipboard = null;
-
-    this.set_properties(opts).init();
-};
-Charcoal.Admin.Property_Input_Selectize_Search.prototype             = Object.create(Charcoal.Admin.Property.prototype);
-Charcoal.Admin.Property_Input_Selectize_Search.prototype.constructor = Charcoal.Admin.Property_Input_Selectize_Search;
-Charcoal.Admin.Property_Input_Selectize_Search.prototype.parent      = Charcoal.Admin.Property.prototype;
-
-Charcoal.Admin.Property_Input_Selectize_Search.prototype.init = function () {
-
-    if (typeof $.fn.sortable !== 'function') {
-        var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
-        Charcoal.Admin.loadScript(url, this.init.bind(this));
-
-        return this;
-    }
-    this.init_selectize();
-};
-
-Charcoal.Admin.Property_Input_Selectize_Search.prototype.set_properties = function (opts) {
-    this.input_id   = opts.id || this.input_id;
-    this.obj_type   = opts.data.obj_type || this.obj_type;
-    this.copy_items = opts.data.copy_items || this.copy_items;
-    this.title      = opts.data.title || this.title;
-
-    this.multiple  = opts.data.multiple || this.multiple;
-    this.separator = opts.data.multiple_separator || this.multiple_separator || ',';
-
-    this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
-    this.selectize_options  = opts.data.selectize_options || this.selectize_options;
-
-    this.$input = $(this.selectize_selector || '#' + this.input_id);
-
-    var plugins;
-    if (this.multiple) {
-        plugins = [
-            // 'restore_on_backspace',
-            'remove_button',
-            'drag_drop'
-        ];
-    }
-
-    var default_opts = {
-        plugins: plugins,
-        formData: {},
-        delimiter: this.separator,
-        persist: false,
-        preload: true,
-        openOnFocus: true
-    };
-
-    this.selectize_options = $.extend({}, default_opts, this.selectize_options);
-
-    return this;
-};
-
-Charcoal.Admin.Property_Input_Selectize_Search.prototype.init_selectize = function () {
-    var $select    = this.$input.selectize(this.selectize_options);
-    this.selectize = $select[0].selectize;
-};
 ;/* global Clipboard */
 /**
  * Selectize Picker

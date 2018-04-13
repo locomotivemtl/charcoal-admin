@@ -1798,6 +1798,12 @@ a.chip:hover::before, a.chip:focus::before {
   white-space: nowrap;
 }
 
+.c-table-container .ui-tablesort-placeholder {
+  margin: 12px;
+  border: 2px dotted black;
+  height: calc(2.5rem - 2px);
+}
+
 .c-table-container_actions {
   padding: 0 !important;
 }
@@ -1857,6 +1863,7 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 @media (min-width: 1200px) {
+  .c-form-widget.-object-form .c-form-widget_groups,
   .c-form-widget.-tabbed .c-form-widget_groups {
     padding: 1.875rem;
     margin-top: 2.96875rem;

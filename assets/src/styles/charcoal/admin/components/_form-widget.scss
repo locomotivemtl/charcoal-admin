@@ -33,6 +33,7 @@
         border-radius: $border-radius;
     }
 
+    .c-form-widget.-object-form &,
     .c-form-widget.-tabbed & {
         @media (min-width: $from-large) {
             padding: rem($unit / 2);

@@ -1,0 +1,16 @@
+{{!--
+
+    Radio Button Group Property Input
+    =================================
+
+    `charcoal/admin/property/input/radio-btn-group`
+
+--}}
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+    {{# choices }}
+        <label class="btn btn-outline-dark btn-lg{{# checked }} active{{/ checked }}">
+            {{> charcoal/admin/property/control/choice }}
+            <span>{{& label }}</span>
+        </label>
+    {{/ choices }}
+</div>

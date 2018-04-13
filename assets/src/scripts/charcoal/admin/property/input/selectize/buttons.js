@@ -19,8 +19,8 @@ Selectize.define('buttons', function () {
 
     this.addButton = function (thisRef, options, callback) {
         var self = thisRef;
-        var html = '<a href="javascript:void(0)" ' +
-            'class="button ' + options.className + '" ' +
+        var html = '<button type="button" ' +
+            'class="selectize-button ' + options.className + '" ' +
             'tabindex="-1" ' +
             'title="' + escape_html(options.title) + '" ' +
             'style="right:' + self.currentButtonOffset + 'px">' +
@@ -76,7 +76,9 @@ Selectize.define('buttons', function () {
                             adjustContainerPadding(
                                 render_item.apply(thisRef, arguments),
                                 self.currentButtonOffset
-                            ), html);
+                            ),
+                            html
+                        );
                     };
                 }
 

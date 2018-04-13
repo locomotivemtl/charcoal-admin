@@ -1,9 +1,9 @@
 /* global Selectize */
 Selectize.define('btn_update', function (options) {
     options = $.extend({
-        label: '<span class="glyphicon glyphicon-pencil"></span>',
+        label: '<span class="fa fa-pencil"></span>',
         title: 'Update',
-        className: 'btn-update',
+        className: 'selectize-button-update',
         append: true,
     }, options);
 

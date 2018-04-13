@@ -1,9 +1,9 @@
 /* global Selectize */
 Selectize.define('btn_remove', function (options) {
     options = $.extend({
-        label: '<span class="glyphicon glyphicon-trash"></span>',
+        label: '<span class="fa fa-trash-o"></span>',
         title: 'Remove',
-        className: 'btn-remove',
+        className: 'selectize-button-remove',
         append: true,
     }, options);
 

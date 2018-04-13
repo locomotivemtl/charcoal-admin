@@ -277,11 +277,11 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
             );
 
         if (!showHeader) {
-            dialog.getModalHeader().addClass('hidden');
+            dialog.getModalHeader().addClass('d-none');
         }
 
         if (!showFooter) {
-            dialog.getModalFooter().addClass('hidden');
+            dialog.getModalFooter().addClass('d-none');
         }
 
         dialog.getModalBody().on(

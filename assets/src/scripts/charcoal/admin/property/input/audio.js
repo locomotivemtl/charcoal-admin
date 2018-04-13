@@ -139,10 +139,10 @@ Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
 
             // Hide all
             $panes.removeClass('-active');
-            $panes.addClass('hidden');
+            $panes.addClass('d-none');
 
             // Show one
-            $pane.removeClass('hidden');
+            $pane.removeClass('d-none');
             $pane.addClass('-active');
 
             // Activate the pane's content
@@ -727,12 +727,12 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_audio_data = func
 Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = function (canvas) {
     switch (canvas) {
         case 'waves':
-            this.recording_properties.$analyser_canvas.addClass('hidden');
-            this.recording_properties.$waves_canvas.removeClass('hidden');
+            this.recording_properties.$analyser_canvas.addClass('d-none');
+            this.recording_properties.$waves_canvas.removeClass('d-none');
             break;
         default:
-            this.recording_properties.$analyser_canvas.removeClass('hidden');
-            this.recording_properties.$waves_canvas.addClass('hidden');
+            this.recording_properties.$analyser_canvas.removeClass('d-none');
+            this.recording_properties.$waves_canvas.addClass('d-none');
             break;
     }
 };

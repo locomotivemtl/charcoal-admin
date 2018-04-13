@@ -2369,15 +2369,6 @@ a.chip:hover::before, a.chip:focus::before {
   cursor: move;
 }
 
-.c-attachments .gallery-list {
-  padding: 0;
-  list-style: none;
-}
-
-.c-attachments .panel.ui-sortable-helper {
-  height: auto !important;
-}
-
 .c-attachments_header {
   margin-bottom: 2rem;
 }

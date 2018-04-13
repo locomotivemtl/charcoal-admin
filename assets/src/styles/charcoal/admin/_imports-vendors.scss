@@ -38,6 +38,7 @@
 @import "../../../../../node_modules/bootstrap-select-temporary/sass/bootstrap-select";
 
 // Bootstrap 4 Datepicker
+// @see below
 @import "../../../../../node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4";
 
 // jQuery MiniColors
@@ -51,8 +52,12 @@
 // @todo Update temporary import. Waiting for a real vendor to support Bootstrap 4.
 @import "vendors/bootstrap-dialog";
 
+
 // Dependency overrides
 // ==========================================================================
+
+// Tempus Dominus Bootstrap 4 Datetime Picker
+@import "vendors/tempusdominus-bootstrap-4";
 
 // Awesome Bootstrap Checkbox
 @import "vendors/awesome-bootstrap-checkbox";

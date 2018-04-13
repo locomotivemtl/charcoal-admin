@@ -8,10 +8,6 @@
     box-shadow: 0 0 0 1px $table-border-color;
     border-style: hidden !important;
 
-    th {
-        padding: $table-cell-padding;
-    }
-
     > thead,
     > tbody,
     > tfoot {

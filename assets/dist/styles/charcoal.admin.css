@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-04-12 
+ * ! Charcoal Admin - 2018-04-13 
  */
 a:focus {
   text-decoration: none;
@@ -48,10 +48,6 @@ a:focus {
   -webkit-box-shadow: 0 0 0 1px #cccccc;
           box-shadow: 0 0 0 1px #cccccc;
   border-style: hidden !important;
-}
-
-.table th {
-  padding: 0.75rem;
 }
 
 .table > thead > tr > th,

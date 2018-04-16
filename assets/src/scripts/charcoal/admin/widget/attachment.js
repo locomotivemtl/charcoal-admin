@@ -113,7 +113,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             var $attachments = $container.children('.js-attachment');
 
             if ($container.hasClass('js-attachment-preview-only')) {
-                $attachments.children('.card-header.sr-only').removeClass('sr-only').addClass('sr-only-off');
+                $attachments.find('.card-header.sr-only').removeClass('sr-only').addClass('sr-only-off');
             }
 
             $attachments.find('.collapse.show').collapse('hide');
@@ -122,7 +122,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
             var $attachments = $container.children('.js-attachment');
 
             if ($container.hasClass('js-attachment-preview-only')) {
-                $attachments.children('.card-header.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
+                $attachments.find('.card-header.sr-only-off').removeClass('sr-only-off').addClass('sr-only');
             }
 
             $attachments.find('.collapse:not(.show)').collapse('show');

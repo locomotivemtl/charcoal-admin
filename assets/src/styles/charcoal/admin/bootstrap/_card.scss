@@ -2,16 +2,23 @@
 // Card
 // ==========================================================================
 
-// Switch up the borders between `.card-header` & `.card-body` when using collapsing cards using a header toggle.
 .card-header {
+    // Switch up the borders between `.card-header` & `.card-body` when using collapsing cards using a header toggle.
     .card-collapsible & {
         border-bottom: 0;
     }
 }
 
 .card-body {
+    // Switch up the borders between `.card-header` & `.card-body` when using collapsing cards using a header toggle.
     .card-collapsible .collapse &,
     .card-collapsible .collapsing & {
         border-top: $card-border-width solid $card-border-color;
+    }
+
+    // Remove the border when using collapsings cards that hide the header when `.collapse.show`
+    .card-collapsible .card-header.sr-only + .collapse &,
+    .card-collapsible .card-header.sr-only + .collapsing & {
+        border-top: none;
     }
 }

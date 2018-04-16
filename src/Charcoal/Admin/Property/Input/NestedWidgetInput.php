@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input;
 
+use Charcoal\Ui\Form\FormInterface;
 use RuntimeException;
 use InvalidArgumentException;
 
@@ -213,5 +214,15 @@ class NestedWidgetInput extends AbstractPropertyInput implements
                 WidgetInterface::class
             ));
         }
+    }
+
+    /**
+     * Retrieve the widget form.
+     *
+     * @return FormInterface
+     */
+    protected function form()
+    {
+        return $this->formGroup()->form();
     }
 }

@@ -118,6 +118,16 @@ class TemplateOptionsFormGroup extends StructureFormGroup
      */
     public function setControllerIdent($ident)
     {
+        if (class_exists($ident)) {
+            $this->controllerIdent = $ident;
+
+            return $this;
+        }
+
+        if (substr($ident, -9) !== '-template') {
+            $ident .= '-template';
+        }
+
         $this->controllerIdent = $ident;
 
         return $this;
@@ -147,6 +157,7 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     {
         if ($propertyIdent === null) {
             $this->templateProperty = null;
+
             return $this;
         }
 
@@ -277,7 +288,7 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     protected function loadMetadata($metadataIdent)
     {
         $metadataLoader = $this->metadataLoader();
-        $metadata = $metadataLoader->load($metadataIdent, $this->createMetadata());
+        $metadata       = $metadataLoader->load($metadataIdent, $this->createMetadata());
 
         return $metadata;
     }

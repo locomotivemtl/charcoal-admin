@@ -1,4 +1,5 @@
 {{!--
+
     Form Group Widget
     =================
 
@@ -7,33 +8,31 @@
     Display a form group (as a fieldset) and loop the properties to display them.
 
     This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
+
 --}}
 <fieldset>
     {{# showHeader }}
-    <header class="o-header -border">
-        {{# showTitle }}
-        <h2>{{ title }}</h2>
-        {{/ showTitle }}
-
-        {{> charcoal/admin/template/inc.description }}
-        {{# showNotesAbove }}
-        {{> charcoal/admin/template/inc.notes }}
-        {{/ showNotesAbove }}
-    </header>
+        <header class="o-header -border">
+            {{# showTitle }}
+                <h2>{{ title }}</h2>
+            {{/ showTitle }}
+            {{> charcoal/admin/template/inc.description }}
+            {{# showNotesAbove }}
+                {{> charcoal/admin/template/inc.notes }}
+            {{/ showNotesAbove }}
+        </header>
     {{/ showHeader }}
     {{^ showHeader }}
-    {{# showDescription }}
-    {{! @todo See if `.form-group-description` is useful }}
-    <div class="help-block o-section form-group-description">{{& description }}</div>
-    {{/ showDescription }}
-    {{# showNotesAbove }}
-    {{> charcoal/admin/template/inc.notes }}
-    {{/ showNotesAbove }}
-
+        {{# showDescription }}
+            {{! @todo See if `.form-group-description` is useful }}
+            <div class="help-block o-section form-group-description">{{& description }}</div>
+        {{/ showDescription }}
+        {{# showNotesAbove }}
+            {{> charcoal/admin/template/inc.notes }}
+        {{/ showNotesAbove }}
     {{/ showHeader }}
     {{> charcoal/admin/widget/form-group/form-properties }}
     {{^ showNotesAbove }}
-
-    {{> charcoal/admin/template/inc.notes }}
+        {{> charcoal/admin/template/inc.notes }}
     {{/ showNotesAbove }}
 </fieldset>

@@ -17,7 +17,7 @@ use Charcoal\Admin\Ui\DashboardContainerTrait;
 use Charcoal\Admin\User;
 
 /**
- *
+ * List Admin User Permissions
  */
 class UserPermissionsTemplate extends AdminTemplate implements
     CollectionContainerInterface,
@@ -90,7 +90,7 @@ class UserPermissionsTemplate extends AdminTemplate implements
             ],
             'widgets' => [
                 'list' => [
-                    'type'     => 'charcoal/support/admin/widget/table',
+                    'type'     => 'charcoal/admin/widget/table',
                     'obj_type' => 'charcoal/admin/user/permission'
                 ]
             ]
@@ -106,6 +106,7 @@ class UserPermissionsTemplate extends AdminTemplate implements
         parent::setDependencies($container);
 
         // Required collection dependencies
+        $this->setModelFactory($container['model/factory']);
         $this->setCollectionLoader($container['model/collection/loader']);
 
         // Required dashboard dependencies.

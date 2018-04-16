@@ -1,100 +1,91 @@
 {{!--
-`charcoal/admin/template/system/static-website`
+
+    Static Website Template
+    =======================
+
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-<div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+<main class="c-page-container o-flex_main">
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -top -bottom">
+        {{> charcoal/admin/widget/feedbacks }}
+        <p>
+            {{# _t }}Static website is a filesystem cache of the content, based on URL. For apache, it must be properly set up in the `.htaccess` file of the server.{{/ _t }}
+        </p>
 
-    {{!-- Object list section --}}
-    <div class="o-flex_main">
-        <section class="o-container -bottom">
-            <header class="o-header">
-                <h1>{{title}}</h1>
-                {{#searchWidget}}
-                    {{>charcoal/admin/widget/search}}
-                {{/searchWidget}}
-            </header>
-
-            {{>charcoal/admin/widget/feedbacks}}
-
-            <div>
-                {{#_t}}Static website is a filesystem cache of the content, based on URL. For apache, it must be properly set up in the `.htaccess` file of the server.{{/_t}}
+        {{# isStaticWebsiteEnabled }}
+            <div class="alert alert-success">
+                {{# _t }}Static website is currently enabled. To disable, remove the `www/static` symlink.{{/ _t }} <button class="btn btn-primary js-static-deactivate">{{# _t }}Deactivate{{/ _t }}</button>.
             </div>
-
-            {{#isStaticWebsiteEnabled}}
-                <div class="alert alert-success">
-                {{#_t}}Static website is currently enabled. To disable, remove the `www/static` symlink.{{/_t}} <button class="btn js-static-deactivate">Deactivate</button>.
-                </div>
-            {{/isStaticWebsiteEnabled}}
-            {{^isStaticWebsiteEnabled}}
-                <div class="alert alert-danger">
-                    {{#_t}}Static website is currently disabled. To enable, create a symlink from `cache/static` to `www/static`.{{/_t}} <button class="btn js-static-activate">Activate</button>
-                </div>
-            {{/isStaticWebsiteEnabled}}
-
-            <h2>{{#_t}}Generated files{{/_t}}</h2>
-
-            <div>
-                <button class="btn js-static-add">Add URL</button>
+        {{/ isStaticWebsiteEnabled }}
+        {{^ isStaticWebsiteEnabled }}
+            <div class="alert alert-danger">
+                {{# _t }}Static website is currently disabled. To enable, create a symlink from `cache/static` to `www/static`.{{/ _t }} <button class="btn btn-primary js-static-activate">{{# _t }}Activate{{/ _t }}</button>
             </div>
-            <table class="table">
-                <thead>
+        {{/ isStaticWebsiteEnabled }}
+
+        <h2>{{# _t }}Generated files{{/ _t }}</h2>
+
+        <p>
+            <button class="btn btn-primary js-static-add">{{# _t }}Add URL{{/ _t }}</button>
+        </p>
+        <table class="table">
+            <thead>
                 <tr>
-                    <th scope="col">URL</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Generated</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">{{# _t }}URL{{/ _t }}</th>
+                    <th scope="col">{{# _t }}Type{{/ _t }}</th>
+                    <th scope="col">{{# _t }}Generated{{/ _t }}</th>
+                    <th scope="col">{{# _t }}Size{{/ _t }}</th>
+                    <th scope="col">{{# _t }}Action{{/ _t }}</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 {{#staticWebsiteFiles}}
-                <tr>
-                    <th scope="row">{{name}}</th>
-                    <td>{{type}}</td>
-                    <td><time class="timeago" datetime="{{mtime}}">{{generated}}</time></td>
-                    <td>{{size}}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-secondary js-static-update" data-static-url="{{name}}">{{#_t}}Regenerate{{/_t}}</button>
-                            <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" class="js-static-preview" data-static-url="{{name}}">{{#_t}}Preview{{/_t}}</a></li>
-                                <li><a href="#" class="js-static-delete" data-static-url="{{name}}">{{#_t}}Delete{{/_t}}</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                    <tr>
+                        <th scope="row">{{ name }}</th>
+                        <td>{{ type }}</td>
+                        <td><time class="timeago" datetime="{{ mtime }}">{{ generated }}</time></td>
+                        <td>{{ size }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary js-static-update" data-static-url="{{name}}">{{# _t }}Regenerate{{/ _t }}</button>
+                                <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">
+                                    <span class="sr-only">{{# _t }}Toggle Dropdown{{/ _t }}</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item js-static-preview" href="#" data-static-url="{{ name }}">{{# _t }}Preview{{/ _t }}</a>
+                                    <a class="dropdown-item js-static-delete" href="#" data-static-url="{{ name }}">{{# _t }}Delete{{/ _t }}</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 {{/staticWebsiteFiles}}
-                </tbody>
-                <tfoot>
+            </tbody>
+            <tfoot>
                 <tr>
                     <td colspan="4">&nbsp;</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-secondary js-static-update-all">{{#_t}}Regenerate all{{/_t}}</button>
-                            <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" class="js-static-delete-all">Delete all</a></li>
-                            </ul>
+                            <button type="button" class="btn btn-secondary js-static-update-all">{{# _t }}Regenerate all{{/ _t }}</button>
+                            <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">
+                                <span class="sr-only">{{# _t }}Toggle Dropdown{{/ _t }}</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item js-static-delete-all" href="#">{{# _t }}Delete all{{/ _t }}</a>
+                            </div>
                         </div>
                     </td>
                 </tr>
-                </tfoot>
-            </table>
-        </section>
-    </div>
-</div>
+            </tfoot>
+        </table>
+    </section>
+</main>
 
-{{#addJs}}
+{{# addJs }}
     <script>
         $(document).ready(function() {
-            $("time.timeago").timeago();
+            $('time.timeago').timeago();
         });
         $('.js-static-activate').click(function(el) {
             el.preventDefault();
@@ -105,7 +96,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -121,7 +111,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -139,7 +128,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -157,7 +145,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -175,7 +162,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -194,7 +180,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -210,7 +195,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -226,7 +210,6 @@
                     } else {
                         alert('Error');
                     }
-
                 },
                 'json'
             ).fail(function() {
@@ -234,6 +217,6 @@
             });
         });
     </script>
-{{/addJs}}
+{{/ addJs }}
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

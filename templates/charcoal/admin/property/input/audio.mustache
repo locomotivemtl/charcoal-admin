@@ -19,13 +19,13 @@ Audio Property Input
             {{#recordingEnabled}}
             <button type="button" class="btn btn-secondary js-toggle-pane" data-pane="recording">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-microphone"></use></svg>
-                <span class="btn-label sr-only">{{#_t}}Record A Message{{/_t}}</span>
+                <span class="sr-only">{{#_t}}Record A Message{{/_t}}</span>
             </button>
             {{/recordingEnabled}}
             {{#fileEnabled}}
             <button type="button" class="btn btn-secondary js-toggle-pane" data-pane="file">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-file"></use></svg>
-                <span class="btn-label sr-only">{{#_t}}Upload Audio File{{/_t}}</span>
+                <span class="sr-only">{{#_t}}Upload Audio File{{/_t}}</span>
             </button>
             {{/fileEnabled}}
         </div>
@@ -45,20 +45,20 @@ Audio Property Input
                     <button class="btn c-audio-player_button -playback js-recording-playback" disabled type="button">
                         <span class="fa fa-play" aria-hidden="true"></span>
                         <span class="fa fa-pause" aria-hidden="true"></span>
-                        <span class="btn-label sr-only">{{#_t}}Play/Pause{{/_t}}</span>
+                        <span class="sr-only">{{#_t}}Play/Pause{{/_t}}</span>
                     </button>
                     <button class="btn c-audio-player_button -stop js-recording-stop" disabled type="button">
                         <span class="fa fa-stop" aria-hidden="true"></span>
-                        <span class="btn-label sr-only">{{#_t}}Complete Recording{{/_t}}</span>
+                        <span class="sr-only">{{#_t}}Complete Recording{{/_t}}</span>
                     </button>
                     <button class="btn c-audio-player_button -reset js-recording-reset" disabled type="button">
                         <span class="fa fa-refresh" aria-hidden="true"></span>
-                        <span class="btn-label sr-only">{{#_t}}Restart Recording{{/_t}}</span>
+                        <span class="sr-only">{{#_t}}Restart Recording{{/_t}}</span>
                     </button>
                     <button class="btn c-audio-player_button -record js-recording-record" type="button">
                         <span class="c-audio-player_button_circle"></span>
                         <span class="fa fa-pause" aria-hidden="true"></span>
-                        <span class="btn-label sr-only">{{#_t}}Record{{/_t}}</span>
+                        <span class="sr-only">{{#_t}}Record{{/_t}}</span>
                     </button>
 
                     <span class="c-audio-player_time js-recording-timer">00:00</span>

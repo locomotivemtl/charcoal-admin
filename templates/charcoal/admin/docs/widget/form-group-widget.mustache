@@ -1,44 +1,35 @@
 {{!--
-    Doc Form Group Widget
-    =================
 
-    `charcoal/admin/widget/form-group-widget`
+    Docs \ Form Group Widget
+    ========================
+
+    `charcoal/admin/docs/widget/form-group-widget`
 
     Display a form group (as a fieldset) and loop the properties to display them.
 
     This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
+
 --}}
 <div>
     {{# showHeader }}
-    <header class="o-header -border">
-        {{# showTitle }}
-        <h2>{{ title }}</h2>
-        {{/ showTitle }}
-
-        {{!> charcoal/admin/template/inc.description }}
-        {{# showNotesAbove }}
-        {{/ showNotesAbove }}
-    </header>
-    {{!& description }}
+        <header class="o-header -border">
+            {{# showTitle }}
+                <h2>{{ title }}</h2>
+            {{/ showTitle }}
+        </header>
     {{/ showHeader }}
-    {{# showDescription }}
-        <div class="form-text text-muted o-section">{{& description }}</div>
-    {{/ showDescription }}
-    <div class="form-text text-muted o-section">{{> charcoal/admin/template/inc.notes }}</div>
     {{^ showHeader }}
-    {{# showNotesAbove }}
-    {{> charcoal/admin/template/inc.notes }}
-    {{/ showNotesAbove }}
+        {{# showDescription }}
+            {{! @todo See if `.form-group-description` is useful }}
+            <div class="help-block o-section form-group-description">{{& description }}</div>
+        {{/ showDescription }}
+        {{# showNotesAbove }}
+            {{> charcoal/admin/template/inc.notes }}
+        {{/ showNotesAbove }}
     {{/ showHeader }}
-
-    <div class="panel-group" id="panel_group_{{ widgetId }}" role="tablist" aria-multiselectable="false">
+    <div id="{{ widgetId }}_accordion" role="tablist">
         {{# formProperties }}
             {{> charcoal/admin/docs/widget/form-property-widget }}
         {{/ formProperties }}
     </div>
-
-    {{^ showNotesAbove }}
-    {{!> charcoal/admin/template/inc.notes }}
-    {{/ showNotesAbove }}
-
 </div>

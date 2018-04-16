@@ -6,45 +6,27 @@
 
     This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Form`.
 --}}
-<div class="form charcoal-admin-widget-form">
-    <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
+<form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
+    <div class="o-flex c-form-widget -form{{# isTabbable }} -tabbed{{/ isTabbable }}">
+        <div class="o-flex_main c-form-widget_form">
+            {{# isTabbable }}
+                {{> charcoal/admin/template/form/nav-tabs }}
+            {{/ isTabbable }}
 
-        {{# isTabbable }}
-        {{> charcoal/admin/template/form/nav-tabs }}
-        {{/ isTabbable }}
+            {{# hasGroups }}
+                {{> charcoal/admin/template/form/groups }}
+            {{/ hasGroups }}
 
-        {{# hasGroups }}
-        {{> charcoal/admin/template/form/groups }}
-        {{/ hasGroups }}
+            <button type="submit" class="btn btn-primary">{{ submitLabel }}</button>
+        </div>
 
         {{# hiddenProperties }}
-        {{# output }}
-        {{> $widget_template }}
-        {{/ output }}
+            {{# output }}
+                {{> $widget_template }}
+            {{/ output }}
         {{/ hiddenProperties }}
 
-        <button type="submit" class="btn btn-info">{{ submitLabel }}</button>
-    </form>
-</div>
+    </div>
+</form>
 
-{{# addJsRequirement }}
-<script rel="l10n">
-    {{> charcoal/admin/l10n/widget.js }}
-</script>
-{{/ addJsRequirement }}
-
-{{# addJsRequirement }}
-<script rel="l10n">
-    {{> charcoal/admin/l10n/form.js }}
-</script>
-{{/ addJsRequirement }}
-
-{{# addJs }}
-<script>
-Charcoal.Admin.manager().add_widget({
-    id:   '{{ widgetId }}',
-    type: 'charcoal/admin/widget/form',
-    data: {{& widgetDataForJsAsJson }}
-});
-</script>
-{{/ addJs }}
+{{> charcoal/admin/template/form/js }}

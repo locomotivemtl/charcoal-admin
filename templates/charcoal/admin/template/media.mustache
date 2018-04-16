@@ -4,13 +4,12 @@ Charcoal Admin Media Template
 
 Display the "media" dashboard, which consists of elFinder in quasi-fullscreen.
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-{{>charcoal/admin/widget/feedbacks}}
+{{> charcoal/admin/widget/feedbacks }}
+
 <main class="c-page-container o-flex_main">
-
     <div class="o-flex">
-
         <script language="javascript" type="text/javascript">
             function resizeIframe(obj) {
                 var ele = document.getElementsByClassName('c-nav-container');
@@ -19,11 +18,9 @@ Display the "media" dashboard, which consists of elFinder in quasi-fullscreen.
                 obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';
             }
         </script>
-
         {{!-- Object edit section --}}
         <iframe width="100%" height="auto" frameborder="0" src="elfinder" onload="javascript:resizeIframe(this);"></iframe>
-
     </div>
 </main>
 
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

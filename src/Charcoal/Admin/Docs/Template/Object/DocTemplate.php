@@ -33,10 +33,22 @@ class DocTemplate extends AdminTemplate implements
     use ObjectContainerTrait;
 
     /**
+     * Retrieve the list of parameters to extract from the HTTP request.
+     *
+     * @return string[]
+     */
+    protected function validDataFromRequest()
+    {
+        return array_merge([
+            'obj_type'
+        ], parent::validDataFromRequest());
+    }
+
+    /**
      * @param Container $container DI container.
      * @return void
      */
-    public function setDependencies(Container $container)
+    protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
 

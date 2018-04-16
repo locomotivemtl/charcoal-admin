@@ -1,14 +1,16 @@
 {{!--
-    Form Property Widget
-    ====================
 
-    @used-by `charcoal/admin/widget/form-group-widget`
+    Docs \ Form Property Widget
+    ===========================
+
+    @used-by `charcoal/admin/docs/widget/form-group-widget`
+
 --}}
-<div class="panel panel-default">
-    <div class="panel-heading">
+<article class="card card-collapsible">
+    <div class="card-header">
         {{# collapsible }}
         <a role="button" data-toggle="collapse"
-           {{# parented }}data-parent="#panel_group_{{ formGroup.widgetId }}"{{/ parented }} href="#panel_{{widgetId}}"
+           {{# parented }}data-parent="#{{ formGroup.widgetId }}_accordion"{{/ parented }} href="#panel_{{widgetId}}"
            aria-expanded="false" aria-controls="panel_{{widgetId}}" class="c-nav_list_link c-nav_header_arrow">
         {{/ collapsible }}
         <h3 class="panel-title">{{> charcoal/admin/property/control/label }} ({{prop.type}})</h3>
@@ -34,7 +36,7 @@
             {{# hasExtraData }}
                 <div class="panel-group" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
+                        <div class="card-header">
                             <a role="button" data-toggle="collapse" href="#more_{{widgetId}}" aria-expanded="false"
                                aria-controls="more_{{widgetId}}">
                                 <h3 class="panel-title">Voir plus</h3>
@@ -72,7 +74,7 @@
             {{/ hasExtraData }}
         </div>
     </div>
-</div>
+</article>
 
 <!--
     {{# showLabel }}

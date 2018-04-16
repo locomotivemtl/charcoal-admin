@@ -15,13 +15,7 @@
 {{! @todo See if broken, feedbacks partial used to be right here L15 }}
 
 <main class="c-page-container o-flex_main">
-    <header class="c-page-header o-header">
-        <div class="o-container">
-            {{# title }}<h1 class="c-page-header_title">{{& . }}</h1>{{/ title }}
-            {{# subtitle }}<h2>{{&.}}</h2>{{/ subtitle }}
-        </div>
-    </header>
-
+    {{> charcoal/admin/template/inc.page-header }}
     <section class="o-container -bottom">
         {{> charcoal/admin/widget/feedbacks }}
         {{# dashboard }}

@@ -19,24 +19,24 @@
         <div class="btn-group-vertical" role="group" aria-label="{{# _t }}Mapping Actions{{/ _t }}">
             <button type="button" class="btn btn-secondary {{! -active }} js-display-marker-toolbox">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg>
-                <span class="btn-label sr-only">{{#_t}}Add Marker{{/_t}}</span>
+                <span class="sr-only">{{#_t}}Add Marker{{/_t}}</span>
             </button>
             <button type="button" class="btn btn-secondary js-add-line">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-path"></use></svg>
-                <span class="btn-label sr-only">{{#_t}}Add Line{{/_t}}</span>
+                <span class="sr-only">{{#_t}}Add Line{{/_t}}</span>
             </button>
             <button type="button" class="btn btn-secondary js-add-polygon">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-region"></use></svg>
-                <span class="btn-label sr-only">{{#_t}}Add Polygon{{/_t}}</span>
+                <span class="sr-only">{{#_t}}Add Polygon{{/_t}}</span>
             </button>
             <button type="button" class="btn btn-secondary js-reset">
-                <strong class="btn-label">{{# _t }}Reset{{/ _t }}</strong>
+                {{# _t }}Reset{{/ _t }}
             </button>
             {{! Added this here to keep this button's integration, but cannot be used yet with the plugin }}
             {{!--
             <button type="button" class="btn btn-secondary">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="[[ baseUrl ]]assets/admin/images/svgs.svg#icon-map-area"></use></svg>
-                <span class="btn-label sr-only">[[# _t ]]Find My Location[[/ _t ]]</span>
+                <span class="sr-only">[[# _t ]]Find My Location[[/ _t ]]</span>
             </button>
             --}}
         </div>
@@ -50,7 +50,7 @@
                 </button>
             <button type="button" class="c-map-maker_btn btn btn-lg btn-info js-add-marker">
                 <span class="fa fa-plus" aria-hidden="true"></span>
-                <span class="btn-label sr-only">{{#_t}}Add Location{{/_t}}</span>
+                <span class="sr-only">{{#_t}}Add Location{{/_t}}</span>
             </button>
         </div>
         <div class="c-map-maker_map js-map-maker-map"></div>

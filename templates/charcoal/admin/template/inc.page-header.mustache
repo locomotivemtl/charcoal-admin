@@ -1,0 +1,15 @@
+{{!--
+
+    Page Header
+    ===========
+
+    Usually displayed above a dashboard.
+    Used by most templates.
+
+--}}
+<header class="c-page-header o-header">
+    <div class="o-container">
+        {{# title }}<h1 class="c-page-header_title">{{& . }}</h1>{{/ title }}
+        {{# subtitle }}<h2>{{&.}}</h2>{{/ subtitle }}
+    </div>
+</header>

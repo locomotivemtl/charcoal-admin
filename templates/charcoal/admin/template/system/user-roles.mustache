@@ -1,31 +1,19 @@
 {{!--
-`charcoal/admin/template/system/users`
+
+    Administration User Roles
+    =========================
+
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-<div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+<main class="c-page-container o-flex_main">
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -bottom">
+        {{> charcoal/admin/widget/feedbacks }}
+        {{# dashboard }}
+            {{> charcoal/admin/widget/dashboard }}
+        {{/ dashboard }}
+    </section>
+</main>
 
-    {{!-- Object list section --}}
-    <div class="o-flex_main">
-        <section class="o-container -bottom">
-            <header class="o-header">
-                <h1>{{title}}</h1>
-                {{#searchWidget}}
-                    {{>charcoal/admin/widget/search}}
-                {{/searchWidget}}
-            </header>
-            {{>charcoal/admin/widget/feedbacks}}
-            {{#dashboard}}
-                {{>charcoal/admin/widget/dashboard}}
-
-            {{/dashboard}}
-        </section>
-    </div>
-</div>
-
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

@@ -9,36 +9,33 @@ This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
 --}}
 <div class="dashboard{{# ident }} dashboard-{{ . }}{{/ ident }}">
 
-    {{#widgets}}
-        {{#dashboard.layout}}
-            {{>charcoal/admin/widget/layout.start}}
-        {{/dashboard.layout}}
+    {{# widgets }}
+        {{# dashboard.layout }}
+            {{> charcoal/admin/widget/layout.start }}
+        {{/ dashboard.layout }}
 
         <div class="widget{{# ident }} widget-{{ . }}{{/ ident }}{{# form.layout.cellSpanBy12 }} col-md-{{ . }}{{/ form.layout.cellSpanBy12 }}">
 
-            {{#showLabel}}
-                <span class="title">{{label}}</span>
-            {{/showLabel}}
-            {{#showActions}}
+            {{# showActions }}
                 <div class="widget-actions">
-                {{#actions}}
-                    <a href="{{url}}">{{label}}</a>
-                {{/actions}}
+                {{# actions }}
+                    <a href="{{ url }}">{{ label }}</a>
+                {{/ actions }}
                 </div>
-            {{/showActions}}
+            {{/ showActions }}
 
             {{!--
             Include the widget's partial (template).
             Magic (global) variable $widget_template, set by dashboard's controller
             --}}
-            {{>$widget_template}}
+            {{> $widget_template }}
 
         </div>
 
-        {{#dashboard.layout}}
-           {{>charcoal/admin/widget/layout.end}}
-        {{/dashboard.layout}}
+        {{# dashboard.layout }}
+           {{> charcoal/admin/widget/layout.end }}
+        {{/ dashboard.layout }}
 
-    {{/widgets}}
+    {{/ widgets }}
 
 </div>

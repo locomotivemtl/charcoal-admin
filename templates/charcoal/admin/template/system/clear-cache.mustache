@@ -4,16 +4,11 @@
 {{# addCss }}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
 {{/ addCss }}
+
 {{> charcoal/admin/template/inc.header }}
 
 <main class="c-page-container o-flex_main">
-    <header class="c-page-header o-header">
-        <div class="o-container">
-            {{# title }}<h1 class="c-page-header_title">{{& . }}</h1>{{/ title }}
-            {{# subtitle }}<h2>{{&.}}</h2>{{/ subtitle }}
-        </div>
-    </header>
-
+    {{> charcoal/admin/template/inc.page-header }}
     <section class="o-container -top -bottom">
         {{> charcoal/admin/widget/feedbacks }}
         <div class="dashboard">

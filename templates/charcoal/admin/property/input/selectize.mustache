@@ -31,21 +31,21 @@
         <button id="{{ inputId }}_copy" class="btn btn-lg btn-secondary" type="button"
                 data-clipboard-target="#{{ inputId }}">
             <span class="fa fa-copy" aria-hidden="true"></span>
-            <span class="btn-label sr-only">{{# _t }}Copy To Clipboard{{/ _t }}</span>
+            <span class="sr-only">{{# _t }}Copy To Clipboard{{/ _t }}</span>
         </button>
     {{/ allowClipboardCopy }}
     {{# allowUpdate }}
         <button id="{{ inputId }}_update" class="btn btn-info" type="button"
                         data-update-target="#{{ inputId }}">
             <span class="fa fa-pencil" aria-hidden="true"></span>
-            <span class="btn-label sr-only">{{# _t }}Update selected item{{/ _t }}</span>
+            <span class="sr-only">{{# _t }}Update selected item{{/ _t }}</span>
         </button>
     {{/ allowUpdate }}
     {{# allowCreate }}
         <button id="{{ inputId }}_create" class="btn btn-info" type="button"
                         data-update-target="#{{ inputId }}">
             <span class="fa fa-plus" aria-hidden="true"></span>
-            <span class="btn-label sr-only">{{# _t }}Create a new item{{/ _t }}</span>
+            <span class="sr-only">{{# _t }}Create a new item{{/ _t }}</span>
         </button>
     {{/ allowCreate }}
     </span>

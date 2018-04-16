@@ -1,37 +1,25 @@
 {{!--
-Object Doc Template
-====================
 
-`charcoal/admin/docs/template/objet/doc`
+    Object Doc Template
+    ====================
 
-Display the object's "doc" dashboard.
+    `charcoal/admin/docs/template/objet/doc`
 
-This template expects a `Charcoal\Admin\Template\Object\Doc` model as context.
+    Display the object's "doc" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\Doc` model as context.
 
 --}}
-{{>charcoal/admin/template/inc.header}}
+{{> charcoal/admin/template/inc.header }}
 
-<div class="o-flex">
-    {{#showSidemenu}}
-        {{#sidemenu}}
-            {{>charcoal/admin/widget/sidemenu}}
-        {{/sidemenu}}
-    {{/showSidemenu}}
+<main class="c-page-container o-flex_main">
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -top -bottom">
+        {{> charcoal/admin/widget/feedbacks }}
+        {{# dashboard }}
+            {{> charcoal/admin/widget/dashboard }}
+        {{/ dashboard }}
+    </section>
+</main>
 
-    <div class="o-flex_main">
-        <div class="o-container -top -bottom clearfix">
-            <header class="o-container_header">
-                {{# title }}<h2>{{&.}}</h2>{{/ title }}
-                {{# subtitle }}<h3>{{&.}}</h3>{{/ subtitle }}
-            </header>
-            {{> charcoal/admin/widget/feedbacks }}
-            {{#dashboard}}
-                {{>charcoal/admin/widget/dashboard}}
-            {{/dashboard}}
-
-        </div>
-    </div>
-
-</div>
-
-{{>charcoal/admin/template/inc.footer}}
+{{> charcoal/admin/template/inc.footer }}

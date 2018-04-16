@@ -9,15 +9,9 @@ This template expects a `Charcoal\Admin\Template\HandlerTemplate` model as conte
 {{> charcoal/admin/template/inc.header }}
 
 <main class="c-page-container o-flex_main">
-    <div class="c-page-header o-header"></div>
-    <section class="o-container -bottom">
-        <div class="o-section">
-            <div class="o-header">
-                <div>
-                    {{> $handlerMessage }}
-                </div>
-            </div>
-        </div>
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -top -bottom">
+        {{> $handlerMessage }}
     </section>
 </main>
 

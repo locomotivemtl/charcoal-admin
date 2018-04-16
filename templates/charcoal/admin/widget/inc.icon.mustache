@@ -2,9 +2,4 @@
     Icon
     ====
 --}}
-{{# glyphicon }}
-{{> charcoal/admin/widget/inc.icon-glyphicon }}
-{{/ glyphicon }}
-{{^ glyphicon }}
-{{> charcoal/admin/widget/inc.icon-fontawesome }}
-{{/ glyphicon }}
+{{# icon }}<i class="fa fa-{{ . }}" aria-hidden="true"></i>{{/ icon }}

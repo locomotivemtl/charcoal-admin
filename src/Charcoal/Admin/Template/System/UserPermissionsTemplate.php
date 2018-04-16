@@ -64,7 +64,7 @@ class UserPermissionsTemplate extends AdminTemplate implements
             ]);
             $this->addFeedback(
                 'notice',
-                '<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span><span>&nbsp; '.$msg.'</span>'
+                '<span class="fa fa-asterisk" aria-hidden="true"></span><span>&nbsp; '.$msg.'</span>'
             );
         }
     }

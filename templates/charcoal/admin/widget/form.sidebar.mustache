@@ -62,17 +62,17 @@
 
         {{# showActionsWrapper }}
         <div class="c-sidebar-widget_wrapper -actions">
-            {{#showLanguageSwitch}}
-            <div class="btn-group d-flex mb-sm-3 js-lang-switch" role="group" aria-label="{{#_t}}Languages{{/_t}}">
-                {{#languages}}
-                <button class="btn {{#current}}btn-primary{{/current}}{{^current}}btn-outline-primary{{/current}}"
+            {{# showLanguageSwitch }}
+            <div class="btn-group d-flex mb-sm-3 js-lang-switch" role="group" aria-label="{{# _t }}Languages{{/ _t }}">
+                {{# languages }}
+                <button class="btn {{# current }}btn-primary{{/ current }}{{^ current }}btn-outline-primary{{/ current }}"
                     type="button"
-                    data-lang-switch="{{ident}}">
-                    <span class="btn-label">{{name}}</span>
+                    data-lang-switch="{{ ident }}">
+                    <span class="btn-label">{{ name }}</span>
                 </button>
-                {{/languages}}
+                {{/ languages }}
             </div>
-            {{/showLanguageSwitch}}
+            {{/ showLanguageSwitch }}
 
             {{# showSidebarActions }}
             <div class="btn-group-vertical c-sidebar-widget_actions" role="group">

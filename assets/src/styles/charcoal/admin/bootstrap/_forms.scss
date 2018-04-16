@@ -10,7 +10,8 @@ input[type="checkbox"]:focus {
 }
 
 input[type="url"] {
-    // font-family: monospace;
+    // @see https://github.com/necolas/normalize.css/issues/519#issuecomment-197131966
+    font-family: monospace, monospace;
 }
 
 label {

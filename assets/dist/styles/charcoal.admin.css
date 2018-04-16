@@ -73,6 +73,10 @@ a:focus {
   text-align: center;
 }
 
+input[type="url"] {
+  font-family: monospace, monospace;
+}
+
 label {
   font-size: 14px;
 }

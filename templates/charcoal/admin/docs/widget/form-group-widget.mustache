@@ -27,9 +27,9 @@
             {{> charcoal/admin/template/inc.notes }}
         {{/ showNotesAbove }}
     {{/ showHeader }}
-    <div id="{{ widgetId }}_accordion" role="tablist">
-        {{# formProperties }}
+    {{# formProperties }}
+        <div class="mb-4">
             {{> charcoal/admin/docs/widget/form-property-widget }}
-        {{/ formProperties }}
-    </div>
+        </div>
+    {{/ formProperties }}
 </div>

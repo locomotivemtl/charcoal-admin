@@ -6,19 +6,32 @@
     @used-by `charcoal/admin/docs/widget/form-group-widget`
 
 --}}
-<article class="card card-collapsible">
+<article class="card">
     <div class="card-header">
-        {{# collapsible }}
-        <a role="button" data-toggle="collapse"
-           {{# parented }}data-parent="#{{ formGroup.widgetId }}_accordion"{{/ parented }} href="#panel_{{widgetId}}"
-           aria-expanded="false" aria-controls="panel_{{widgetId}}" class="c-nav_list_link c-nav_header_arrow">
-        {{/ collapsible }}
-        <h3 class="panel-title">{{> charcoal/admin/property/control/label }} ({{prop.type}})</h3>
-        {{# collapsible }}</a>{{/ collapsible }}
+        <h3 class="card-title m-0">
+            {{# collapsible }}
+                <a
+                    role="button"
+                    data-toggle="collapse"
+                    {{# parented }}
+                    data-parent="#{{ formGroup.widgetId }}_accordion"
+                    {{/ parented }}
+                    href="#panel_{{ widgetId }}"
+                    aria-expanded="false"
+                    aria-controls="panel_{{ widgetId }}"
+                    class="text-dark">
+            {{/ collapsible }}
+            {{> charcoal/admin/property/control/label }} ({{prop.type}})
+            {{# collapsible }}
+                </a>
+            {{/ collapsible }}
+        </h3>
     </div>
-    <div class="panel-collapse {{# collapsible }} collapse{{/ collapsible }} {{# collapsed }} in{{/ collapsed }}"
-         id="panel_{{widgetId}}" role="tabpanel">
-        <div class="panel-body">
+    <div
+        class="{{# collapsible }}collapse{{/ collapsible }}{{# collapsed }} show{{/ collapsed }}"
+        id="panel_{{ widgetId }}"
+        role="tabpanel">
+        <div class="card-body">
             {{# typeDescription }}
                 <p><strong>{{ prop.type }}</strong> - {{& . }}</p>
             {{/ typeDescription }}
@@ -34,40 +47,48 @@
             {{/ notes }}
 
             {{# hasExtraData }}
-                <div class="panel-group" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
+                <div role="tablist" aria-multiselectable="true">
+                    <div class="card card-collapsible">
                         <div class="card-header">
-                            <a role="button" data-toggle="collapse" href="#more_{{widgetId}}" aria-expanded="false"
-                               aria-controls="more_{{widgetId}}">
-                                <h3 class="panel-title">Voir plus</h3>
-                            </a>
+                            <h4 class="card-title m-0">
+                                <a
+                                    role="button"
+                                    data-toggle="collapse"
+                                    href="#more_{{ widgetId }}"
+                                    aria-expanded="false"
+                                    aria-controls="more_{{ widgetId }}"
+                                    class="text-dark">
+                                    {{# _t }}See more{{/ _t }}
+                                </a>
+                            </h4>
                         </div>
-
-                        <div class="panel-collapse collapse" id="more_{{widgetId}}" role="tabpanel">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        {{#_t}}Feature{{/_t}}
-                                    </th>
-                                    <th>
-                                        {{#_t}}Description{{/_t}}
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {{# extraData }}
-                                    <tr>
-                                        <td>
-                                            {{ feature }}
-                                        </td>
-                                        <td>
-                                            {{& description }}
-                                        </td>
-                                    </tr>
-                                {{/ extraData }}
-                                </tbody>
-                            </table>
+                        <div class="collapse" id="more_{{ widgetId }}" role="tabpanel">
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                {{# _t }}Feature{{/ _t }}
+                                            </th>
+                                            <th>
+                                                {{# _t }}Description{{/ _t }}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{# extraData }}
+                                            <tr>
+                                                <td>
+                                                    {{ feature }}
+                                                </td>
+                                                <td>
+                                                    {{& description }}
+                                                </td>
+                                            </tr>
+                                        {{/ extraData }}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

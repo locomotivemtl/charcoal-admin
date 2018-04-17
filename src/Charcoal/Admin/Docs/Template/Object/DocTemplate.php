@@ -45,21 +45,6 @@ class DocTemplate extends AdminTemplate implements
     }
 
     /**
-     * @param Container $container DI container.
-     * @return void
-     */
-    protected function setDependencies(Container $container)
-    {
-        parent::setDependencies($container);
-
-        // Required ObjectContainerInterface dependencies
-        $this->setModelFactory($container['model/factory']);
-
-        // Required dependencies.
-        $this->dashboardBuilder = $container['dashboard/builder'];
-    }
-
-    /**
      * Retrieve the sidemenu.
      *
      * @return SidemenuWidgetInterface|null
@@ -159,6 +144,21 @@ class DocTemplate extends AdminTemplate implements
         }
 
         return $this->title;
+    }
+
+    /**
+     * @param Container $container DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Required ObjectContainerInterface dependencies
+        $this->setModelFactory($container['model/factory']);
+
+        // Required dependencies.
+        $this->dashboardBuilder = $container['dashboard/builder'];
     }
 
     /**

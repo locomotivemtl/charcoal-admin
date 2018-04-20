@@ -22,6 +22,9 @@ use Charcoal\Config\GenericConfig as Config;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-core'
+use Charcoal\Model\Service\MetadataConfig;
+
 // From 'charcoal-ui'
 use Charcoal\Ui\ServiceProvider\UiServiceProvider;
 
@@ -75,6 +78,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         $this->registerFactoryServices($container);
         $this->registerElfinderServices($container);
         $this->registerSelectizeServices($container);
+        $this->registerMetadataExtensions($container);
         $this->registerAuthExtensions($container);
         $this->registerViewExtensions($container);
 
@@ -144,6 +148,52 @@ class AdminServiceProvider implements ServiceProviderInterface
                 return $adminUrl;
             };
         }
+    }
+
+    /**
+     * Registers metadata extensions.
+     *
+     * @see    \Charcoal\Model\ServiceProvider\ModelServiceProvider
+     * @param  Container $container The Pimple DI container.
+     * @return void
+     */
+    protected function registerMetadataExtensions(Container $container)
+    {
+        if (!isset($container['metadata/config'])) {
+            /**
+             * @return MetadataConfig
+             */
+            $container['metadata/config'] = function () {
+                return new MetadataConfig();
+            };
+        }
+
+        /**
+         * Alters the application's metadata configset.
+         *
+         * Changes:
+         * 1. Add "admin" suffix to metadata search paths
+         * 2. Merge metadata configset from  "admin/config", if any
+         *
+         * @param  MetadataConfig $metaConfig The metadata configset.
+         * @param  Container $container The Pimple DI container.
+         * @return MetadataConfig
+         */
+        $container->extend('metadata/config', function (MetadataConfig $metaConfig, Container $container) {
+            /** 1. Search for metadata in admin sub-directories, if any */
+            $metaPaths  = $metaConfig->paths();
+            $adminPaths = array_map(function ($path) {
+                return rtrim($path, '/').'/admin/';
+            }, $metaPaths);
+            $metaConfig->addPaths($adminPaths);
+
+            /** 2. Merge admin metadata configset */
+            if (isset($container['admin/config']['metadata'])) {
+                $metaConfig->merge($container['admin/config']['metadata']);
+            }
+
+            return $metaConfig;
+        });
     }
 
     /**

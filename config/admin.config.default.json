@@ -1,6 +1,10 @@
 {
     "base_path": "admin",
 
+    "metadata": {
+        "cache": "memory"
+    },
+
     "routes": {
         "templates": {
             "home": {

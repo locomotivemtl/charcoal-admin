@@ -11,11 +11,6 @@
         {{# showTableHeader }}
             {{> charcoal/admin/widget/table/header }}
         {{/ showTableHeader }}
-
-    {{!--
-    @TODO Implement a better responsive table solution (Tablesaw?)
-    <div class="table-responsive">
-    --}}
         <div class="c-table-container table-responsive">
             {{!--
             <strong>[[# _t ]]Filters[[/ _t ]]</strong>
@@ -51,10 +46,11 @@
                 {{> charcoal/admin/widget/table/pagination }}
             {{/ paginationWidget }}
         </div>
-
     {{/ hasObjects }}
     {{^ hasObjects }}
-        {{> charcoal/admin/widget/table/empty }}
+        <div class="mt-4">
+            {{> charcoal/admin/widget/table/empty }}
+        </div>
     {{/ hasObjects }}
 </div>
 

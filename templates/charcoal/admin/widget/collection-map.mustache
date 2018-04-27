@@ -5,19 +5,21 @@ Collection Map Widget
 `charcoal/admin/widget/alert/collection-map`
 --}}
 
-<div id="{{widget_id}}" style="width:100%; height:50em;"></div>
+<div class="card mt-4">
+    <div id="{{ widget_id }}" style="width:100%;height:50em;"></div>
+</div>
 
-{{#show_infobox}}
+{{# show_infobox }}
     <div style="display:none;">
-    {{#map_objects}}
-    <div id="{{widget_id}}_infowindow_{{id}}">
-        {{>$widget_template}}
+        {{# map_objects }}
+            <div id="{{ widget_id }}_infowindow_{{ id }}">
+                {{> $widget_template }}
+            </div>
+        {{/ map_objects }}
     </div>
-    {{/map_objects}}
-    </div>
-{{/show_infobox}}
+{{/ show_infobox }}
 
-{{#addJs}}
+{{# addJs }}
 <script>
 
 function load_collection_map() {
@@ -149,4 +151,4 @@ if (typeof google === 'undefined') {
     map_controller = load_collection_map();
 }
 </script>
-{{/addJs}}
+{{/ addJs }}

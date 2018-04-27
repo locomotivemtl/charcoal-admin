@@ -8,66 +8,65 @@
 --}}
 
 {{# hasSidemenu }}
-<nav class="c-nav-secondary" id="{{ widget_id }}">
-    {{# showTitle }}
-    <header class="o-header c-nav-secondary_header">
-        <h1 class="c-nav-secondary_heading">{{ title }}</h1>
-    </header>
-    {{/ showTitle }}
-    {{# hasLinks }}
-    <div class="c-nav-secondary_wrapper">
-        <ul class="c-nav-secondary_list">
-        {{# links }}
-            {{> charcoal/admin/widget/sidemenu/link }}
-        {{/ links }}
-        </ul>
-    </div>
-
-    {{/ hasLinks }}
-    {{# hasGroups }}
-    {{# groups }}
-    <div class="c-nav-secondary_wrapper">
+    <nav class="c-nav-secondary" id="{{ widget_id }}">
         {{# showTitle }}
-            {{# collapsible }}
-        <a class="c-nav-secondary_link -arrow"
-            data-toggle="collapse"
-            href="#{{ groupId }}"
-            role="button"
-            aria-expanded="{{# collapsed }}false{{/ collapsed }}{{^ collapsed }}true{{/ collapsed }}"
-            aria-controls="{{ groupId }}"
-            {{# parented }}
-            data-parent="#{{ widget_id }}"
-            {{/ parented }}>
-            {{/ collapsible }}
-            <h2 class="h3 c-nav-secondary_subheading{{# collapsible }} -button{{/ collapsible }}">{{ title }}</h2>
-            {{# collapsible }}
-        </a>
-            {{/ collapsible }}
+            <header class="o-header c-nav-secondary_header">
+                <h1 class="c-nav-secondary_heading">{{ title }}</h1>
+            </header>
         {{/ showTitle }}
-        <div class="{{# collapsible }}collapse{{/ collapsible }}{{^ collapsed }} show{{/ collapsed }}" id="{{ groupId }}">
-            <ul class="c-nav-secondary_list">
-            {{# links }}
-                {{> charcoal/admin/widget/sidemenu/link }}
-            {{/ links }}
-            </ul>
-        </div>
-    </div>
-    {{/ groups }}
-
-    {{/ hasGroups }}
-
-    {{# showSidemenuActions }}
-    <div class="btn-group-vertical btn-block" role="group">
-    {{# sidemenuActions }}
-        {{# isSeparator }}
+        {{# hasLinks }}
+            <div class="c-nav-secondary_wrapper">
+                <ul class="c-nav-secondary_list">
+                    {{# links }}
+                        {{> charcoal/admin/widget/sidemenu/link }}
+                    {{/ links }}
+                </ul>
             </div>
+        {{/ hasLinks }}
+        {{# hasGroups }}
+            {{# groups }}
+                <div class="c-nav-secondary_wrapper">
+                    {{# showTitle }}
+                        {{# collapsible }}
+                            <a class="c-nav-secondary_link -arrow"
+                                data-toggle="collapse"
+                                href="#{{ groupId }}"
+                                role="button"
+                                aria-expanded="{{# collapsed }}false{{/ collapsed }}{{^ collapsed }}true{{/ collapsed }}"
+                                aria-controls="{{ groupId }}"
+                                {{# parented }}
+                                data-parent="#{{ widget_id }}"
+                                {{/ parented }}>
+                        {{/ collapsible }}
+                        <h2 class="h3 c-nav-secondary_subheading{{# collapsible }} -button{{/ collapsible }}">
+                            {{ title }}
+                        </h2>
+                        {{# collapsible }}
+                            </a>
+                        {{/ collapsible }}
+                    {{/ showTitle }}
+                    <div class="{{# collapsible }}collapse{{/ collapsible }}{{^ collapsed }} show{{/ collapsed }}" id="{{ groupId }}">
+                        <ul class="c-nav-secondary_list">
+                            {{# links }}
+                                {{> charcoal/admin/widget/sidemenu/link }}
+                            {{/ links }}
+                        </ul>
+                    </div>
+                </div>
+            {{/ groups }}
+        {{/ hasGroups }}
+        {{# showSidemenuActions }}
             <div class="btn-group-vertical btn-block" role="group">
-        {{/ isSeparator }}
-        {{^ isSeparator }}
-            {{> charcoal/admin/widget/actions }}
-        {{/ isSeparator }}
-    {{/ sidemenuActions }}
-    </div>
-    {{/ showSidemenuActions }}
-</nav>
+                {{# sidemenuActions }}
+                    {{# isSeparator }}
+                        </div>
+                        <div class="btn-group-vertical btn-block" role="group">
+                    {{/ isSeparator }}
+                    {{^ isSeparator }}
+                        {{> charcoal/admin/widget/actions }}
+                    {{/ isSeparator }}
+                {{/ sidemenuActions }}
+            </div>
+        {{/ showSidemenuActions }}
+    </nav>
 {{/ hasSidemenu }}

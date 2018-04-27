@@ -14,23 +14,47 @@
     - Center map by address
 
 --}}
-<div class="o-toolbox -left" id="{{inputId}}">
+<div class="o-toolbox" id="{{ inputId }}">
     <div class="o-toolbox_actions">
-        <div class="btn-group-vertical" role="group" aria-label="{{# _t }}Mapping Actions{{/ _t }}">
-            <button type="button" class="btn btn-secondary {{! -active }} js-display-marker-toolbox">
-                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-marker"></use></svg>
-                <span class="sr-only">{{#_t}}Add Marker{{/_t}}</span>
-            </button>
-            <button type="button" class="btn btn-secondary js-add-line">
-                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-path"></use></svg>
-                <span class="sr-only">{{#_t}}Add Line{{/_t}}</span>
-            </button>
-            <button type="button" class="btn btn-secondary js-add-polygon">
-                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-map-region"></use></svg>
-                <span class="sr-only">{{#_t}}Add Polygon{{/_t}}</span>
-            </button>
-            <button type="button" class="btn btn-secondary js-reset">
-                {{# _t }}Reset{{/ _t }}
+        <div class="btn-group-vertical btn-group-toggle d-flex h-100" role="group" aria-label="{{# _t }}Mapping Actions{{/ _t }}" data-toggle="buttons">
+
+            <label class="o-toolbox_button btn btn-outline-dark btn-lg active js-display-marker-toolbox">
+                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-map-marker"></use></svg>
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="map_toolbox_{{ inputId }}"
+                    autocomplete="off"
+                    checked
+                    value="display_marker_toolbar">
+                <span class="sr-only">{{# _t }}Add Marker{{/ _t }}</span>
+            </label>
+
+            <label class="o-toolbox_button btn btn-outline-dark btn-lg js-add-line">
+                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-map-path"></use></svg>
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="map_toolbox_{{ inputId }}"
+                    autocomplete="off"
+                    value="add_line">
+                <span class="sr-only">{{# _t }}Add Line{{/ _t }}</span>
+            </label>
+
+            <label class="o-toolbox_button btn btn-outline-dark btn-lg js-add-polygon">
+                <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-map-region"></use></svg>
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="map_toolbox_{{ inputId }}"
+                    autocomplete="off"
+                    value="add_polygon">
+                <span class="sr-only">{{# _t }}Add Polygon{{/ _t }}</span>
+            </label>
+
+            <button type="button" class="o-toolbox_button btn btn-danger js-reset">
+                <span class="fa fa-lg fa-refresh" aria-hidden="true"></span>
+                <span class="sr-only">{{# _t }}Reset{{/ _t }}</span>
             </button>
             {{! Added this here to keep this button's integration, but cannot be used yet with the plugin }}
             {{!--
@@ -41,17 +65,18 @@
             --}}
         </div>
     </div>
-    <div class="o-toolbox_content c-map-maker">
-        <div class="c-map-maker_header">
-            <label class="c-map-maker_label" for="c-map-maker-search">{{#_t}}Address{{/_t}}</label>
-            <input class="c-map-maker_input form-control js-address" name="c-map-maker-search" type="text">
-            <button type="button" class="c-map-maker_btn btn btn-lg btn-info js-add_place_by_address" data-toggle="modal" data-target="#myModal">
-                <span class="btn-label">{{#_t}}Search{{/_t}}</span>
-                </button>
-            <button type="button" class="c-map-maker_btn btn btn-lg btn-info js-add-marker">
-                <span class="fa fa-plus" aria-hidden="true"></span>
-                <span class="sr-only">{{#_t}}Add Location{{/_t}}</span>
-            </button>
+    <div class="o-toolbox_content c-map-maker is-header-open js-map-maker">
+        <div class="c-map-maker_header input-group p-3">
+            <label class="input-group-prepend mb-0" for="map_address_{{ inputId }}">
+                <span class="input-group-text">{{# _t }}Address{{/ _t }}</span>
+            </label>
+            <div class="c-map-maker_input form-control js-address" id="map_address_{{ inputId }}" contenteditable></div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary js-add_place_by_address" type="button" data-toggle="modal" data-target="#myModal">{{# _t }}Search{{/ _t }}</button>
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary js-add-marker" type="button">{{# _t }}Add Location{{/ _t }}</button>
+            </div>
         </div>
         <div class="c-map-maker_map js-map-maker-map"></div>
     </div>
@@ -59,20 +84,18 @@
         Input that will contain the actual data
         This input will be posted on save / update
     }}
-    <input type="hidden" name="{{inputName}}" value="{{inputVal}}">
+    <input type="hidden" name="{{ inputName }}" value="{{ inputVal }}">
 </div>
 
 {{# addJs }}
-<script>
-var inputOptions = {
-    id:   '{{ inputId }}',
-    type: 'charcoal/admin/property/input/map-widget',
-};
+    <script>
+        var inputOptions = {
+            id:            '{{ inputId }}',
+            type:          'charcoal/admin/property/input/map-widget',
+            data:          {{& mapOptionsAsJson }},
+            controls_name: 'map_toolbox_{{ inputId }}'
+        };
 
-{{#mapOptionsAsJson}}
-    inputOptions['data'] = {{& mapOptionsAsJson }};
-{{/mapOptionsAsJson}}
-
-Charcoal.Admin.manager().add_property_input(inputOptions);
-</script>
+        Charcoal.Admin.manager().add_property_input(inputOptions);
+    </script>
 {{/ addJs }}

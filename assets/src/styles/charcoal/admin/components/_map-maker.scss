@@ -3,52 +3,36 @@
 // ==========================================================================
 
 .c-map-maker {
-
-}
-
-.c-map-maker_map {
-    background-color: #E5E3DF;
-    height: 100%;
+    position: relative;
     overflow: hidden;
-    top: -72px;
-    // transform: translateY(-72px);
-
-
-    .maker_header-open & {
-        height: calc(100% - 72px);
-        top: 0;
-        // transform: translateY(0);
-    }
-
 }
 
 .c-map-maker_header {
-    border-color: $gray-light;
-    border-right-style: solid;
-    border-top-style: solid;
-    border-width: 1px;
-    padding: 11.5px 20px;
-    position: relative;
-    top: -72px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color: $charcoal-white-0;
+    border-bottom: 1px solid $gray-light;
+    transform: translateY(-100%);
+    transition: transform $speed $easing;
 
-    .maker_header-open & {
-        top: 0;
+    .c-map-maker.is-header-open & {
+        transform: translateY(0%);
     }
-}
-
-.c-map-maker_label {
-    margin-right: 13px;
-}
-
-.c-map-maker_btn {
-    margin-left: 13px;
 }
 
 .c-map-maker_input {
-    display: inline-block;
-    width: calc(100% - 276px);
-
-    [lang="en"] & {
-        width: calc(100% - 244px);
+    * {
+        display: inline;
     }
+
+    br {
+        display: none;
+    }
+}
+
+.c-map-maker_map {
+    height: 100%;
+    overflow: hidden;
 }

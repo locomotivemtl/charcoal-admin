@@ -335,6 +335,10 @@ label {
   border-top: none;
 }
 
+.card-collapsible + .card-collapsible {
+  margin-top: 1.5rem;
+}
+
 .modal iframe {
   display: block;
 }

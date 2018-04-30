@@ -22,3 +22,9 @@
         border-top: none;
     }
 }
+
+.card-collapsible {
+    & + & {
+        margin-top: map-get($spacers, 4);
+    }
+}

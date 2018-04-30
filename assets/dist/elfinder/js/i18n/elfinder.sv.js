@@ -116,7 +116,7 @@
 			'cmdinfo'      : 'Visa info',
 			'cmdmkdir'     : 'Ny mapp',
 			'cmdmkfile'    : 'Ny textfil',
-			'cmdopen'      : 'Öppna',
+			'cmdopen'      : 'Öpna',
 			'cmdpaste'     : 'Klistra in',
 			'cmdquicklook' : 'Förhandsgranska',
 			'cmdreload'    : 'Ladda om',

@@ -9,19 +9,14 @@
     {{# layout }}
         {{ start }}
         {{# cellStartsRow }}
-
             <section class="o-section">
-            <div class="row">
+                <div class="row">
         {{/ cellStartsRow }}
     {{/ layout }}
-
-        <!--<div class="col-md-{{ layout.cellSpanBy12 }}">-->
-            {{> charcoal/admin/docs/widget/form-property-widget }}
-        <!--</div>-->
-
+    {{> charcoal/admin/docs/widget/form-property-widget }}
     {{# layout }}
         {{# cellEndsRow }}
-            </div>
+                </div>
             </section>
 
         {{/ cellEndsRow }}

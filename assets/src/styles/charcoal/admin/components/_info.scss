@@ -20,4 +20,9 @@
     font-size: rem(12px);
     font-weight: normal;
     line-height: rem(16px);
+
+    &.-dark {
+        border: 1px solid $gray-dark;
+        color: $gray-dark;
+    }
 }

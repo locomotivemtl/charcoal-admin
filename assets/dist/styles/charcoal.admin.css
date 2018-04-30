@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-04-27 
+ * ! Charcoal Admin - 2018-04-30 
  */
 a:focus {
   text-decoration: none;
@@ -2116,6 +2116,11 @@ a.chip:hover::before, a.chip:focus::before {
   font-size: 0.75rem;
   font-weight: normal;
   line-height: 1rem;
+}
+
+.c-info.-dark {
+  border: 1px solid #262626;
+  color: #262626;
 }
 
 .c-audio-player {

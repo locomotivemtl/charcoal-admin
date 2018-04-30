@@ -68,5 +68,67 @@
             "table": "object_revisions"
         }
     },
+<<<<<<< Updated upstream
     "default_source": "default"
+=======
+    "default_source": "default",
+
+    "admin": {
+        "lists": {
+            "default": {
+                "properties": [
+                    "rev_num",
+                    "rev_ts",
+                    "rev_user"
+                ]
+            }
+        },
+        "default_list": "default",
+
+        "forms": {
+            "default": {
+                "groups": {
+                    "info": {}
+                }
+            }
+        },
+        "default_form": "default",
+
+        "dashboards": {
+            "admin.edit": {
+                "title": "Révisions",
+                "layout": {
+                    "structure": [{
+                        "columns": [ 1 ]
+                    }]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/object-form",
+                        "form_ident": "default",
+                        "target_type": "charcoal/object/object-revision"
+                    }
+                }
+            },
+            "admin.table": {
+                "title": "Liste des révisions",
+                "layout": {
+                    "structure": [{
+                        "columns": [ 1 ]
+                    }]
+                },
+                "widgets": {
+                    "form": {
+                        "type": "charcoal/admin/widget/table",
+                        "collection_ident": "default",
+                        "target_type": "charcoal/object/object-revision"
+                    }
+                }
+            }
+        },
+        "default_create_dashboard": "admin.edit",
+        "default_edit_dashboard": "admin.edit",
+        "default_collection_dashboard": "admin.table"
+    }
+>>>>>>> Stashed changes
 }

@@ -1495,7 +1495,7 @@ a.chip:hover::before, a.chip:focus::before {
       -ms-flex-positive: 1;
           flex-grow: 1;
   font-size: 12px;
-  padding: 1.25rem;
+  padding: 16px 1.25rem;
   position: relative;
   -webkit-transition: background-color 0.2s, color 0.2s;
   transition: background-color 0.2s, color 0.2s;

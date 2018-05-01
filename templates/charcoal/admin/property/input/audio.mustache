@@ -9,21 +9,21 @@ Audio Property Input
 {{# displayAudioWidget }}
     <div class="o-toolbox -small" id="{{ inputId }}">
         <div class="o-toolbox_actions">
-            <div class="btn-group-vertical">
+            <div class="btn-group-vertical btn-group-toggle d-flex h-100" role="group" aria-label="{{# _t }}Audio Actions{{/ _t }}">
                 {{# textEnabled }}
-                    <label for="voice_message_input_{{ inputId }}" class="btn btn-secondary js-toggle-pane" data-pane="text">
+                    <button class="o-toolbox_button btn btn-outline-dark js-toggle-pane" data-pane="text" type="button">
                         <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-text"></use></svg>
                         <span class="sr-only">{{# _t }}Enter text here{{/ _t }}</span>
-                    </label>
+                    </button>
                 {{/ textEnabled }}
                 {{# recordingEnabled }}
-                    <button type="button" class="btn btn-secondary js-toggle-pane" data-pane="recording">
+                    <button class="o-toolbox_button btn btn-outline-dark js-toggle-pane" data-pane="recording" type="button">
                         <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-microphone"></use></svg>
                         <span class="sr-only">{{# _t }}Record A Message{{/ _t }}</span>
                     </button>
                 {{/ recordingEnabled }}
                 {{# fileEnabled }}
-                    <button type="button" class="btn btn-secondary js-toggle-pane" data-pane="file">
+                    <button class="o-toolbox_button btn btn-outline-dark js-toggle-pane" data-pane="file" type="button">
                         <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-file"></use></svg>
                         <span class="sr-only">{{# _t }}Upload Audio File{{/ _t }}</span>
                     </button>
@@ -32,12 +32,12 @@ Audio Property Input
         </div>
         <div class="o-toolbox_content">
             {{# textEnabled }}
-                <div class="o-toolbox_pane js-pane d-none" data-pane="text">
-                    <textarea id="voice_message_input_{{ inputId }}" class="form-control -norounded -noborder js-text-voice-message" name="voice_message" style="height:100%;" name="voice_message[fr]">{{& alert.voiceMessage.fr /}}</textarea>
+                <div class="o-toolbox_pane js-pane" data-pane="text">
+                    <textarea class="form-control -norounded -noborder js-text-voice-message" id="voice_message_input_{{ inputId }}" style="height:100%;" name="voice_message[fr]">{{& alert.voiceMessage.fr /}}</textarea>
                 </div>
             {{/ textEnabled }}
             {{# recordingEnabled }}
-                <div class="o-toolbox_pane js-pane d-none" data-pane="recording">
+                <div class="o-toolbox_pane p-3 js-pane d-none" data-pane="recording">
                     {{!-- Here be the recording widget --}}
                     <div class="c-audio-player -complex">
                         <div class="c-audio-player_wrap">
@@ -67,10 +67,12 @@ Audio Property Input
                 </div>
             {{/ recordingEnabled }}
             {{# fileEnabled }}
-                <div class="o-toolbox_pane js-pane d-none" data-pane="file">
-                    <audio class="js-file-audio{{^ alert.voiceAudio }} hide{{/ alert.voiceAudio }}" src="{{ alert.voiceAudio }}" controls></audio> <br>
-                    <button type="button" class="btn btn-danger js-file-reset{{^ alert.voiceAudio }} hide{{/ alert.voiceAudio }}">{{# _t }}Delete{{/ _t }}</button>
-                    <input type="file" name="voice_audio" class="form-control js-file-input{{# alert.voiceAudio }} hide{{/ alert.voiceAudio }}">
+                <div class="o-toolbox_pane p-3 js-pane d-none" data-pane="file">
+                    <p><audio class="js-file-audio{{^ alert.voiceAudio }} hide{{/ alert.voiceAudio }}" src="{{ alert.voiceAudio }}" controls></audio></p>
+                    <div class="row">
+                        <div class="col-6"><input type="file" name="voice_audio" class="form-control js-file-input{{# alert.voiceAudio }} hide{{/ alert.voiceAudio }}"></div>
+                        <div class="col-6"><button type="button" class="btn btn-danger js-file-reset{{^ alert.voiceAudio }} hide{{/ alert.voiceAudio }}">{{# _t }}Delete{{/ _t }}</button></div>
+                    </div>
                 </div>
             {{/ fileEnabled }}
         </div>
@@ -84,27 +86,24 @@ Audio Property Input
             type="hidden"
             name="voice_audio"
             value="{{ alert.voiceAudio }}">
-</div>
-
-{{# addJsRequirement }}
-    <script rel="l10n">
-        {{> charcoal/admin/l10n/audio.js }}
-    </script>
-{{/ addJsRequirement }}
-
-{{# addJs }}
-    <script>
-        Charcoal.Admin.manager().add_property_input({
-            id:   '{{ inputId }}',
-            type: 'charcoal/admin/property/input/audio',
-            data: {{& controlDataForJsAsJson }}
-        });
-    </script>
-{{/ addJs }}
-
+    </div>
+    {{# addJsRequirement }}
+        <script rel="l10n">
+            {{> charcoal/admin/l10n/audio.js }}
+        </script>
+    {{/ addJsRequirement }}
+    {{# addJs }}
+        <script>
+            Charcoal.Admin.manager().add_property_input({
+                id:   '{{ inputId }}',
+                type: 'charcoal/admin/property/input/audio',
+                data: {{& controlDataForJsAsJson }}
+            });
+        </script>
+    {{/ addJs }}
 {{/ displayAudioWidget }}
 {{^ displayAudioWidget }}
-    <div class="o-toolbox -small" id="{{ inputId }}">
+    <div class="o-toolbox -small">
         <p>{{# _t }}You must activate at least one of the following methods: text, record, or file{{/ _t }}</p>
     </div>
 {{/ displayAudioWidget }}

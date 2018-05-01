@@ -25,6 +25,6 @@
 
 .card-collapsible {
     & + & {
-        margin-top: map-get($spacers, 4);
+        margin-top: rem($unit / 2);
     }
 }

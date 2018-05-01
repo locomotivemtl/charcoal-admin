@@ -420,7 +420,7 @@
 
             BootstrapDialog.show({
                 title:   level.title,
-                message: '<p>' + grouped[key].join('</p><p>') + '</p>',
+                message: '<p class="mb-0">' + grouped[key].join('</p><p>') + '</p>',
                 type:    level.type,
                 buttons: buttons
             });

@@ -128,8 +128,9 @@ class AudioInput extends AbstractPropertyInput
     {
         return [
             // Audio Control
-            'active_pane'     => 'next',
-            'hidden_input_id' => 'hidden_'.$this->inputId(),
+            'active_pane'          => 'text',
+            'hidden_input_id'      => 'hidden_'.$this->inputId(),
+            'recorder_worker_path' => '{{ baseUrl }}assets/admin/scripts/vendors/recorderWorker.js'
         ];
     }
 }

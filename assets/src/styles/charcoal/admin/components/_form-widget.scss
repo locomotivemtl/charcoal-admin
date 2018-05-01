@@ -37,7 +37,7 @@
     .c-form-widget.-tabbed & {
         @media (min-width: $from-large) {
             padding: rem($unit / 2);
-            margin-top: rem($header-height / 2);
+            margin-top: rem($unit / 2);
         }
     }
 

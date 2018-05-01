@@ -125,7 +125,7 @@
     display: flex;
     flex-grow: 1;
     font-size: 12px;
-    padding: rem(17px);
+    padding: rem($unit / 2);
     position: relative;
     transition: background-color $speed, color $speed;
 

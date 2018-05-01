@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-04-30 
+ * ! Charcoal Admin - 2018-05-01 
  */
 @charset "UTF-8";
 /*!
@@ -2118,7 +2118,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .form-text {

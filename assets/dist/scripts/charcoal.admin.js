@@ -1634,7 +1634,7 @@ Charcoal.Admin = (function () {
 
             BootstrapDialog.show({
                 title:   level.title,
-                message: '<p>' + grouped[key].join('</p><p>') + '</p>',
+                message: '<p class="mb-0">' + grouped[key].join('</p><p>') + '</p>',
                 type:    level.type,
                 buttons: buttons
             });
@@ -4617,8 +4617,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.bind_nav_controls = function ()
     // Scope
     var that = this;
 
-    this.element().on('click', '.js-toggle-pane', function ()
-    {
+    this.element().on('click', '.js-toggle-pane', function () {
         var $toggle = $(this);
         that.set_nav($toggle.attr('data-pane'));
     });
@@ -4638,20 +4637,17 @@ Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
             $pane = $panes.filter('[data-pane="' + pane + '"]');
 
         // Already active
-        if (!$pane.hasClass('-active')) {
-
+        if (!$pane.hasClass('is-active')) {
             // Find which toggle and set as active
             var $toggle = $toggles.filter('[data-pane="' + pane + '"]');
-            $toggles.removeClass('-active');
-            $toggle.addClass('-active');
+            $toggles.removeClass('active');
+            $toggle.addClass('active');
 
             // Hide all
-            $panes.removeClass('-active');
-            $panes.addClass('d-none');
+            $panes.removeClass('is-active').addClass('d-none');
 
             // Show one
-            $pane.removeClass('d-none');
-            $pane.addClass('-active');
+            $pane.removeClass('d-none').addClass('is-active');
 
             // Activate the pane's content
             this.prepare_pane(pane);
@@ -4866,7 +4862,9 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_got_stream = function (s
     window.analyserNode = that.recording_properties.audio_context.createAnalyser();
     window.analyserNode.fftSize = 2048;
     input_point.connect(window.analyserNode);
-    that.recording_properties.audio_recorder = new window.Recorder(input_point);
+    that.recording_properties.audio_recorder = new window.Recorder(input_point, {
+        workerPath: that.data.recorder_worker_path
+    });
     zero_gain = that.recording_properties.audio_context.createGain();
     zero_gain.gain.value = 0.0;
     input_point.connect(zero_gain);
@@ -5326,9 +5324,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
 };
 
 (function (window) {
-
-    var WORKER_PATH = '../../assets/admin/scripts/vendors/recorderWorker.js';
-
     /**
      * Recorder worker that handles saving microphone input to buffers
      * @param  {GainNode}  source
@@ -5337,7 +5332,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
     var Recorder = function (source, cfg) {
         var config        = cfg || {},
             buffer_length = config.buffer_length || 4096,
-            worker        = new window.Worker(config.workerPath || WORKER_PATH),
+            worker        = new window.Worker(config.workerPath),
             recording     = false,
             current_callback;
 

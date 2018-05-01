@@ -45,7 +45,7 @@
         height: rem(107px);
         width: rem(107px);
 
-        .glyphicon {
+        .fa {
             color: $gray;
         }
     }
@@ -80,16 +80,16 @@
     }
 
     &.is-playing {
-        .glyphicon-pause {
+        .fa-pause {
             opacity: 1;
         }
-        .glyphicon-play {
+        .fa-play {
             opacity: 0;
         }
     }
 
     &.is-recording {
-        .glyphicon-pause {
+        .fa-pause {
             opacity: 1;
         }
         .c-audio-player_button_circle {
@@ -97,7 +97,7 @@
         }
     }
 
-    .glyphicon {
+    .fa {
         color: $white;
         left: 50%;
         position: absolute;
@@ -105,7 +105,7 @@
         transform: translate(-50%, -50%);
     }
 
-    .glyphicon-pause {
+    .fa-pause {
         opacity: 0;
     }
 }

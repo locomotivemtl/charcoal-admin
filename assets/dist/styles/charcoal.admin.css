@@ -2174,7 +2174,7 @@ a.chip:hover::before, a.chip:focus::before {
   width: 6.6875rem;
 }
 
-.c-audio-player_button.-record .glyphicon {
+.c-audio-player_button.-record .fa {
   color: #6c6c6c;
 }
 
@@ -2205,15 +2205,15 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
-.c-audio-player_button.is-playing .glyphicon-pause {
+.c-audio-player_button.is-playing .fa-pause {
   opacity: 1;
 }
 
-.c-audio-player_button.is-playing .glyphicon-play {
+.c-audio-player_button.is-playing .fa-play {
   opacity: 0;
 }
 
-.c-audio-player_button.is-recording .glyphicon-pause {
+.c-audio-player_button.is-recording .fa-pause {
   opacity: 1;
 }
 
@@ -2221,7 +2221,7 @@ a.chip:hover::before, a.chip:focus::before {
   opacity: 0;
 }
 
-.c-audio-player_button .glyphicon {
+.c-audio-player_button .fa {
   color: #ffffff;
   left: 50%;
   position: absolute;
@@ -2231,7 +2231,7 @@ a.chip:hover::before, a.chip:focus::before {
           transform: translate(-50%, -50%);
 }
 
-.c-audio-player_button .glyphicon-pause {
+.c-audio-player_button .fa-pause {
   opacity: 0;
 }
 

@@ -67,5 +67,6 @@
             "type": "database",
             "table": "object_revisions"
         }
-    }
+    },
+    "default_source": "default"
 }

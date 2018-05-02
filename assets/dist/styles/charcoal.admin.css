@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-01 
+ * ! Charcoal Admin - 2018-05-02 
  */
 a:focus {
   text-decoration: none;
@@ -42,12 +42,24 @@ a:focus {
 }
 
 .table {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
   border-radius: 0.25rem;
   -webkit-box-shadow: 0 0 0 1px #cccccc;
           box-shadow: 0 0 0 1px #cccccc;
   border-style: hidden !important;
+}
+
+@media (max-width: 699px) {
+  .table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (min-width: 700px) {
+  .table {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
 }
 
 .table > thead > tr > th,
@@ -1732,7 +1744,18 @@ a.chip:hover::before, a.chip:focus::before {
 .c-table-container {
   background-color: #ffffff;
   border-radius: 0.25rem;
-  padding: 0 0.75rem;
+}
+
+@media (max-width: 699px) {
+  .c-table-container {
+    padding: 0 10px;
+  }
+}
+
+@media (min-width: 700px) {
+  .c-table-container {
+    padding: 0 1.25rem;
+  }
 }
 
 .c-table-container .property-active {
@@ -1761,7 +1784,18 @@ a.chip:hover::before, a.chip:focus::before {
 .c-table-pagination {
   color: #393939;
   font-size: 12px;
-  margin: 1.5rem 0;
+}
+
+@media (max-width: 699px) {
+  .c-table-pagination {
+    margin: 10px 0;
+  }
+}
+
+@media (min-width: 700px) {
+  .c-table-pagination {
+    margin: 1.25rem 0;
+  }
 }
 
 @media (max-width: 699px) {

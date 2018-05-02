@@ -2,11 +2,19 @@
 // Tables
 // ==========================================================================
 .table {
-    margin-top: $table-cell-padding;
-    margin-bottom: $table-cell-padding;
     border-radius: $border-radius;
     box-shadow: 0 0 0 1px $table-border-color;
     border-style: hidden !important;
+
+    @media (max-width: $to-small) {
+        margin-top: $unit-small;
+        margin-bottom: $unit-small;
+    }
+
+    @media (min-width: $from-small) {
+        margin-top: rem($unit / 2);
+        margin-bottom: rem($unit / 2);
+    }
 
     > thead,
     > tbody,

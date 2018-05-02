@@ -5,7 +5,14 @@
 .c-table-container {
     background-color: $white;
     border-radius: $border-radius;
-    padding: 0 $table-cell-padding;
+
+    @media (max-width: $to-small) {
+        padding: 0 $unit-small;
+    }
+
+    @media (min-width: $from-small) {
+        padding: 0 rem($unit / 2);
+    }
 
     .property-active {
         text-align: center;

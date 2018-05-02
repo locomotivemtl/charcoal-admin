@@ -62,6 +62,10 @@ a:focus {
   }
 }
 
+.table th td, .table th th, .table td td, .table td th {
+  padding: 0.3rem;
+}
+
 .table > thead > tr > th,
 .table > thead > tr > td,
 .table > tbody > tr > th,

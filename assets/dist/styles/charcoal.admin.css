@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-02 
+ * ! Charcoal Admin - 2018-05-03 
  */
 a:focus {
   text-decoration: none;
@@ -1124,47 +1124,21 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-nav-system_list {
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  top: -1px !important;
-}
-
-.c-nav-system_item {
-  line-height: 1;
-  padding: 0;
-}
-
-.c-nav-system_item + .c-nav-system_item {
-  border-top: 1px solid transparent;
-}
-
-.c-nav-system_item:hover {
-  background-color: transparent;
-  color: inherit;
+  background-color: #393939;
 }
 
 .c-nav-system_link {
-  background-color: #393939;
   color: #bcbcbc;
-  display: block;
   font-size: 13px;
-  padding: 0.75rem 1.125rem;
-  text-decoration: none;
-  -webkit-transition: color 0.2s linear, background-color 0.2s linear;
-  transition: color 0.2s linear, background-color 0.2s linear;
 }
 
 .c-nav-system_link:hover {
   background-color: #686868;
-  color: inherit;
-  text-decoration: inherit;
+  color: #ffffff;
 }
 
 .c-nav-system_link.-logout:hover {
   background-color: #c34747;
-  color: #ffffff;
 }
 
 .c-nav-system_logout {

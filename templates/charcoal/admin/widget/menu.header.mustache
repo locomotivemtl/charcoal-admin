@@ -16,9 +16,9 @@
 
 <div class="c-nav-container o-flex_aside">
     {{# isAuthorized }}
-    <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
-        <span class="c-nav-container_button_icon"></span>
-    </button>
+        <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
+            <span class="c-nav-container_button_icon"></span>
+        </button>
     {{/ isAuthorized }}
     <div class="c-nav-container_header">
         <a class="c-nav-container_logo" href="{{adminUrl}}">
@@ -26,26 +26,25 @@
         </a>
         {{# isAuthenticated }}
             {{# showSystemMenu }}
-                <nav class="btn-group c-nav-system">
+                <nav class="c-nav-system">
                     <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
                         <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
                         {{# systemMenu }}
-                        <li class="dropdown-item c-nav-system_item">
-                            <a
-                                href="{{ url }}"
-                                class="c-nav-system_link{{# ident }} -{{ . }}{{/ ident }}"
-                                {{# id }}
-                                id="{{ . }}"
-                                {{/ id }}
-                                {{# iconCss }}
-                                data-icon="{{ . }}"
-                                {{/ iconCss }}>
-                                <span>{{ label }}</span>
-                            </a>
-                        </li>
+                            <li>
+                                <a class="c-nav-system_link dropdown-item{{# ident }} -{{ . }}{{/ ident }}"
+                                    href="{{ url }}"
+                                    {{# id }}
+                                    id="{{ . }}"
+                                    {{/ id }}
+                                    {{# iconCss }}
+                                    data-icon="{{ . }}"
+                                    {{/ iconCss }}>
+                                    {{ label }}
+                                </a>
+                            </li>
                         {{/ systemMenu }}
                     </ul>
                 </nav>
@@ -59,51 +58,49 @@
         {{/ isAuthenticated }}
     </div>
     {{# showHeaderMenu }}
-    <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
-    <nav class="c-nav-main">
-        <ul class="c-nav-main_list">
-            {{# headerMenu }}
-               <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
-                   <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
-                       <span class="c-nav-main_link_wrap">
-                           {{# svg }}
-                           <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>
-                           {{/ svg }}
-                           {{# icon }}
-                           <img class="c-nav-main_link_icon" src="{{ . }}">
-                           {{/ icon }}
-                           {{# iconCss }}
-                           <i class="{{ . }}" aria-hidden="true"></i>
-                           {{/ iconCss }}
-                           {{# label }}
-                           <span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>
-                           {{/ label }}
-                       </span>
-                   </a>
-               </li>
-           {{/ headerMenu }}
-        </ul>
-    </nav>
+        <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
+        <nav class="c-nav-main">
+            <ul class="c-nav-main_list">
+                {{# headerMenu }}
+                   <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
+                       <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
+                           <span class="c-nav-main_link_wrap">
+                                {{# svg }}
+                                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>
+                                {{/ svg }}
+                                {{# icon }}
+                                    <img class="c-nav-main_link_icon" src="{{ . }}">
+                                {{/ icon }}
+                                {{# iconCss }}
+                                    <i class="{{ . }}" aria-hidden="true"></i>
+                                {{/ iconCss }}
+                                {{# label }}
+                                    <span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>
+                                {{/ label }}
+                           </span>
+                       </a>
+                   </li>
+               {{/ headerMenu }}
+            </ul>
+        </nav>
     {{/ showHeaderMenu }}
-
     {{# showSidemenu }}
         {{# sidemenu }}
             {{> charcoal/admin/widget/sidemenu }}
         {{/ sidemenu }}
     {{/ showSidemenu }}
 </div>
+{{# addJs }}
+    <script>
+        $(function() {
+            var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
 
-{{#addJs}}
-<script>
-    $(function() {
-        var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
+            $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
+                event.preventDefault();
+                event.cacheType = 'global';
 
-        $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
-            event.preventDefault();
-            event.cacheType = 'global';
-
-            Charcoal.Admin.cache().onPurge(event);
+                Charcoal.Admin.cache().onPurge(event);
+            });
         });
-    });
 </script>
-{{/addJs}}
+{{/ addJs }}

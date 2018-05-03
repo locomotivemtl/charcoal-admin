@@ -34,14 +34,14 @@ class StaticWebsiteTemplate extends AdminTemplate
     /**
      * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
      */
-    public function sidemenu()
-    {
-        if ($this->sidemenu === null) {
-            $this->sidemenu = $this->createSidemenu('system');
-        }
+    // public function sidemenu()
+    // {
+    //     if ($this->sidemenu === null) {
+    //         $this->sidemenu = $this->createSidemenu('system');
+    //     }
 
-        return $this->sidemenu;
-    }
+    //     return $this->sidemenu;
+    // }
 
     /**
      * @return boolean

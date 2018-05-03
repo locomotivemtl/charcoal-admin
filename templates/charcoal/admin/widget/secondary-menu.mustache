@@ -1,13 +1,10 @@
 {{!--
 
-    Sidemenu Widget
-    ===============
-
-    @see `charcoal/admin/widget/sidemenu`
+    Secondary Menu Widget
+    =====================
 
 --}}
-
-{{# hasSidemenu }}
+{{# hasSecondaryMenu }}
     <nav class="c-nav-secondary" id="{{ widget_id }}">
         {{# showTitle }}
             <header class="o-header c-nav-secondary_header">
@@ -18,7 +15,7 @@
             <div class="c-nav-secondary_wrapper">
                 <ul class="c-nav-secondary_list">
                     {{# links }}
-                        {{> charcoal/admin/widget/sidemenu/link }}
+                        {{> charcoal/admin/widget/secondary-menu/link }}
                     {{/ links }}
                 </ul>
             </div>
@@ -48,16 +45,16 @@
                     <div class="{{# collapsible }}collapse{{/ collapsible }}{{^ collapsed }} show{{/ collapsed }}" id="{{ groupId }}">
                         <ul class="c-nav-secondary_list">
                             {{# links }}
-                                {{> charcoal/admin/widget/sidemenu/link }}
+                                {{> charcoal/admin/widget/secondary-menu/link }}
                             {{/ links }}
                         </ul>
                     </div>
                 </div>
             {{/ groups }}
         {{/ hasGroups }}
-        {{# showSidemenuActions }}
+        {{# showSecondaryMenuActions }}
             <div class="btn-group-vertical btn-block" role="group">
-                {{# sidemenuActions }}
+                {{# secondaryMenuActions }}
                     {{# isSeparator }}
                         </div>
                         <div class="btn-group-vertical btn-block" role="group">
@@ -65,8 +62,8 @@
                     {{^ isSeparator }}
                         {{> charcoal/admin/widget/actions }}
                     {{/ isSeparator }}
-                {{/ sidemenuActions }}
+                {{/ secondaryMenuActions }}
             </div>
-        {{/ showSidemenuActions }}
+        {{/ showSecondaryMenuActions }}
     </nav>
-{{/ hasSidemenu }}
+{{/ hasSecondaryMenu }}

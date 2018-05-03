@@ -1023,22 +1023,13 @@ a.chip:hover::before, a.chip:focus::before {
   fill: #dadadb;
 }
 
-@media (max-width: 699px) {
-  .c-nav-container_logo {
-    padding: 6px;
-  }
-}
-
-@media (min-width: 700px) and (max-width: 1199px) {
-  .c-nav-container_logo {
-    padding: 6px 20px;
-  }
-}
-
 @media (max-width: 1199px) {
+  .c-nav-container_logo {
+    padding: 13px 6px 12px;
+  }
   .c-nav-container_logo svg {
     width: 81px;
-    height: 48px;
+    height: 15px;
   }
 }
 
@@ -1076,7 +1067,7 @@ a.chip:hover::before, a.chip:focus::before {
   [data-template="reset-password"] .c-nav-container_logo svg,
   [data-template="elfinder"] .c-nav-container_logo svg {
     width: 81px;
-    height: 48px;
+    height: 15px;
   }
 }
 
@@ -1100,7 +1091,7 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (max-width: 1199px) {
   .c-nav-system_button {
-    padding: 6px 20px;
+    padding: 10px 20px;
   }
 }
 
@@ -1116,11 +1107,22 @@ a.chip:hover::before, a.chip:focus::before {
 
 .c-nav-system_button svg {
   fill: #dadadb;
-  width: 16px;
-  height: 4px;
   -webkit-transform: rotate(90deg);
       -ms-transform: rotate(90deg);
           transform: rotate(90deg);
+  width: 16px;
+}
+
+@media (max-width: 1199px) {
+  .c-nav-system_button svg {
+    height: 8px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .c-nav-system_button svg {
+    height: 4px;
+  }
 }
 
 .c-nav-system_list {
@@ -1437,10 +1439,6 @@ a.chip:hover::before, a.chip:focus::before {
   font-size: 14px;
   opacity: 1;
   margin: 0;
-}
-
-.c-nav-secondary_wrapper {
-  margin-bottom: 1.25rem;
 }
 
 .c-nav-secondary_wrapper.-collapsible {

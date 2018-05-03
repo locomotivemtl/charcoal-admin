@@ -55,46 +55,6 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * Retrieve the sidemenu.
-     *
-     * @return \Charcoal\Admin\Widget\SidemenuWidgetInterface|null
-     */
-    public function sidemenu()
-    {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->dashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
-        }
-
-        return $this->sidemenu;
-    }
-
-    /**
-     * Retrieve the header menu.
-     *
-     * @return array
-     */
-    public function headerMenu()
-    {
-        if ($this->headerMenu === null) {
-            $dashboardConfig = $this->dashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->headerMenu = $this->createHeaderMenu();
-            }
-        }
-
-        return $this->headerMenu;
-    }
-
-    /**
      * Sets the search widget accodingly
      * Uses the "default_search_list" ident that should point
      * on ident in the "lists"

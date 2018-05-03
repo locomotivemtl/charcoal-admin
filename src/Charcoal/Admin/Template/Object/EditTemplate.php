@@ -45,46 +45,6 @@ class EditTemplate extends AdminTemplate implements
     }
 
     /**
-     * Retrieve the sidemenu.
-     *
-     * @return SidemenuWidgetInterface|null
-     */
-    public function sidemenu()
-    {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->dashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
-        }
-
-        return $this->sidemenu;
-    }
-
-    /**
-     * Retrieve the header menu.
-     *
-     * @return array
-     */
-    public function headerMenu()
-    {
-        if ($this->headerMenu === null) {
-            $dashboardConfig = $this->dashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->headerMenu = $this->createHeaderMenu();
-            }
-        }
-
-        return $this->headerMenu;
-    }
-
-    /**
      * Retrieve the title of the page.
      *
      * @return \Charcoal\Translator\Translation

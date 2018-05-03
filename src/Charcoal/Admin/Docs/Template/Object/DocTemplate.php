@@ -45,26 +45,6 @@ class DocTemplate extends AdminTemplate implements
     }
 
     /**
-     * Retrieve the sidemenu.
-     *
-     * @return SidemenuWidgetInterface|null
-     */
-    public function sidemenu()
-    {
-        if ($this->sidemenu === null) {
-            $dashboardConfig = $this->dashboardConfig();
-
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->sidemenu = $this->createSidemenu($dashboardConfig['sidemenu']);
-            } else {
-                $this->sidemenu = $this->createSidemenu();
-            }
-        }
-
-        return $this->sidemenu;
-    }
-
-    /**
      * Retrieve the header menu.
      *
      * @return array

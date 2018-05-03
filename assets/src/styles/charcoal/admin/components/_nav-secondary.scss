@@ -84,7 +84,7 @@
 }
 
 .c-nav-secondary_wrapper {
-    margin-bottom: rem($unit / 2);
+    // margin-bottom: rem($unit / 2); // @todo investigate why this margin?
 
     &.-collapsible {
         background-color: $charcoal-white-1;

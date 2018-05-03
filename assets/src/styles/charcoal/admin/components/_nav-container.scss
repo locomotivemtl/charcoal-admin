@@ -165,18 +165,12 @@
         fill: $charcoal-gray-1;
     }
 
-    @media (max-width: $to-small) {
-        padding: 6px;
-    }
-
-    @media (min-width: $from-small) and (max-width: $to-large) {
-        padding: 6px 20px;
-    }
-
     @media (max-width: $to-large) {
+        padding: 13px 6px 12px;
+
         svg {
             width: 81px;
-            height: 48px;
+            height: 15px;
         }
     }
 
@@ -209,7 +203,7 @@
 
             svg {
                 width: 81px;
-                height: 48px;
+                height: 15px;
             }
         }
     }

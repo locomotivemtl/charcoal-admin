@@ -13,7 +13,6 @@
 {-/baseUrl-}
 
 --}}
-
 <div class="c-nav-container o-flex_aside">
     {{# isAuthorized }}
         <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
@@ -57,11 +56,11 @@
             {{/ showSystemMenu }}
         {{/ isAuthenticated }}
     </div>
-    {{# showHeaderMenu }}
+    {{# showMainMenu }}
         <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
         <nav class="c-nav-main">
             <ul class="c-nav-main_list">
-                {{# headerMenu }}
+                {{# mainMenu }}
                    <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
                        <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
                            <span class="c-nav-main_link_wrap">
@@ -80,20 +79,20 @@
                            </span>
                        </a>
                    </li>
-               {{/ headerMenu }}
+               {{/ mainMenu }}
             </ul>
         </nav>
-    {{/ showHeaderMenu }}
-    {{# showSidemenu }}
-        {{# sidemenu }}
-            {{> charcoal/admin/widget/sidemenu }}
-        {{/ sidemenu }}
-    {{/ showSidemenu }}
+    {{/ showMainMenu }}
+    {{# showSecondaryMenu }}
+        {{# secondaryMenu }}
+            {{> charcoal/admin/widget/secondary-menu }}
+        {{/ secondaryMenu }}
+    {{/ showSecondaryMenu }}
 </div>
 {{# addJs }}
     <script>
         $(function() {
-            var headerMenu_template = new Charcoal.Admin.Template_MenuHeader();
+            var mainMenu_template = new Charcoal.Admin.Template_MenuHeader();
 
             $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
                 event.preventDefault();

@@ -18,7 +18,7 @@
     cursor: pointer;
 
     @media (max-width: $to-large) {
-        padding: 6px 20px;
+        padding: 10px 20px;
     }
 
     @media (min-width: $from-large) {
@@ -31,9 +31,16 @@
 
     svg {
         fill: $charcoal-gray-1;
-        width: 16px;
-        height: 4px;
         transform: rotate(90deg);
+        width: 16px;
+
+        @media (max-width: $to-large) {
+            height: 8px;
+        }
+
+        @media (min-width: $from-large) {
+            height: 4px;
+        }
     }
 }
 

@@ -7,6 +7,7 @@ use APCIterator;
 use RuntimeException;
 
 use Stash\Driver\Apc;
+use Stash\Driver\Ephemeral;
 use Stash\Driver\Memcache;
 
 use Pimple\Container;
@@ -39,13 +40,6 @@ class ClearCacheTemplate extends AdminTemplate
      * @var \Charcoal\App\Config\CacheConfig
      */
     private $cacheConfig;
-
-    /**
-     * Driver Name => Class Name.
-     *
-     * @var \Stash\Interfaces\DriverInterface
-     */
-    private $cacheDriver;
 
     /**
      * Driver Name => Class Name.
@@ -99,8 +93,6 @@ class ClearCacheTemplate extends AdminTemplate
             $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
 
             $globalItems = $this->globalCacheItems();
-            # $pageItems   = $this->pagesCacheItems();
-            # $objectItems = $this->objectsCacheItems();
             $this->cacheInfo = [
                 'type'              => $cacheType,
                 'active'            => $this->cacheConfig['active'],
@@ -109,11 +101,7 @@ class ClearCacheTemplate extends AdminTemplate
                 'pages'             => $this->pagesCacheInfo(),
                 'objects'           => $this->objectsCacheInfo(),
                 'global_items'      => $globalItems,
-                # 'pages_items'       => $pageItems,
-                # 'objects_items'     => $objectItems,
                 'has_global_items'  => !empty($globalItems),
-                # 'has_pages_items'   => !empty($pageItems),
-                # 'has_objects_items' => !empty($objectItems),
             ];
         }
 
@@ -319,19 +307,43 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * Determine if Charcoal has cache statistics.
+     *
      * @return boolean
      */
-    private function isApc()
+    public function hasStats()
+    {
+        return $this->isApc();
+    }
+
+    /**
+     * Determine if Charcoal is using the APC driver.
+     *
+     * @return boolean
+     */
+    public function isApc()
     {
         return is_a($this->cache->getDriver(), Apc::class);
     }
 
     /**
+     * Determine if Charcoal is using the Memcache driver.
+     *
      * @return boolean
      */
-    private function isMemcache()
+    public function isMemcache()
     {
         return is_a($this->cache->getDriver(), Memcache::class);
+    }
+
+    /**
+     * Determine if Charcoal is using the Ephemeral driver.
+     *
+     * @return boolean
+     */
+    public function isMemory()
+    {
+        return is_a($this->cache->getDriver(), Ephemeral::class);
     }
 
     /**
@@ -413,7 +425,6 @@ class ClearCacheTemplate extends AdminTemplate
         parent::setDependencies($container);
 
         $this->availableCacheDrivers = $container['cache/available-drivers'];
-        $this->cacheDriver           = $container['cache/driver'];
         $this->cache                 = $container['cache'];
         $this->cacheConfig           = $container['cache/config'];
     }

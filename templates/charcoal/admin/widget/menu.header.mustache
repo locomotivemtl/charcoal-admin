@@ -59,11 +59,22 @@
     {{# showMainMenu }}
         <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
         <nav class="c-nav-main">
-            <ul class="c-nav-main_list">
+            <ul class="c-nav-main_list nav">
                 {{# mainMenu }}
                    <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
-                       <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}" href="{{ url }}">
-                           <span class="c-nav-main_link_wrap">
+                        <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}"
+                            {{^ hasSecondaryMenu }}
+                                href="{{ url }}"
+                            {{/ hasSecondaryMenu }}
+                            {{# hasSecondaryMenu }}
+                                href="#{{ ident }}_pane"
+                                id="{{ ident }}_tab"
+                                data-toggle="tab"
+                                role="tab"
+                                aria-controls="{{ ident }}_pane"
+                                aria-selected="{{# selected }}true{{/ selected }}{{^ selected }}false{{/ selected }}"
+                            {{/ hasSecondaryMenu }}>
+                            <span class="c-nav-main_link_wrap">
                                 {{# svg }}
                                     <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>
                                 {{/ svg }}
@@ -76,17 +87,19 @@
                                 {{# label }}
                                     <span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>
                                 {{/ label }}
-                           </span>
-                       </a>
-                   </li>
-               {{/ mainMenu }}
+                            </span>
+                        </a>
+                    </li>
+                {{/ mainMenu }}
             </ul>
         </nav>
     {{/ showMainMenu }}
     {{# showSecondaryMenu }}
-        {{# secondaryMenu }}
-            {{> charcoal/admin/widget/secondary-menu }}
-        {{/ secondaryMenu }}
+        <div class="tab-content">
+            {{# secondaryMenu }}
+                {{> charcoal/admin/widget/secondary-menu }}
+            {{/ secondaryMenu }}
+        </div>
     {{/ showSecondaryMenu }}
 </div>
 {{# addJs }}

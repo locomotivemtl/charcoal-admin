@@ -51,6 +51,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    display: block; // because of .nav on element
 }
 
 .c-nav-main_item {

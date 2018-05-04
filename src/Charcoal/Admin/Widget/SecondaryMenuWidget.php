@@ -39,35 +39,35 @@ class SecondaryMenuWidget extends AdminWidget implements
     const DEFAULT_ACTION_PRIORITY = 10;
 
     /**
-     * Store the sidemenu actions.
+     * Store the secondary menu actions.
      *
      * @var array|null
      */
-    protected $sidemenuActions;
+    protected $secondaryMenuActions;
 
     /**
      * Store the default list actions.
      *
      * @var array|null
      */
-    protected $defaultSidemenuActions;
+    protected $defaultSecondaryMenuActions;
 
     /**
-     * Keep track if sidemenu actions are finalized.
+     * Keep track if secondary menu actions are finalized.
      *
      * @var boolean
      */
-    protected $parsedSidemenuActions = false;
+    protected $parsedSecondaryMenuActions = false;
 
     /**
-     * The sidemenu's display type.
+     * The secondary menu's display type.
      *
      * @var string
      */
     protected $displayType;
 
     /**
-     * The sidemenu's display options.
+     * The secondary menu's display options.
      *
      * @var array
      */
@@ -109,21 +109,21 @@ class SecondaryMenuWidget extends AdminWidget implements
     protected $adminRoute;
 
     /**
-     * The sidemenu's title.
+     * The secondary menu's title.
      *
      * @var \Charcoal\Translator\Translation|string|null
      */
     protected $title;
 
     /**
-     * The sidemenu's links.
+     * The secondary menu's links.
      *
      * @var array
      */
     protected $links;
 
     /**
-     * The sidemenu's groups.
+     * The secondary menu's groups.
      *
      * @var SidemenuGroupInterface[]
      */
@@ -134,7 +134,7 @@ class SecondaryMenuWidget extends AdminWidget implements
      *
      * @var FactoryInterface
      */
-    protected $sidemenuGroupFactory;
+    protected $secondaryMenu;
 
     /**
      * @param  array $data Class data.
@@ -145,14 +145,18 @@ class SecondaryMenuWidget extends AdminWidget implements
         parent::setData($data);
 
         if (isset($data['actions'])) {
-            $this->setSidemenuActions($data['actions']);
+            $this->setSecondaryMenuActions($data['actions']);
+        }
+
+        if (isset($data['is_current'])) {
+            $this->setIsCurrent($data['is_current']);
         }
 
         return $this;
     }
 
     /**
-     * Determine if the sidemenu has anything.
+     * Determine if the secondary menu has anything.
      *
      * @return boolean
      */
@@ -169,7 +173,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the metadata for the sidemenu.
+     * Retrieve the metadata for the secondary menu.
      *
      * @return array
      */
@@ -274,9 +278,9 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set the title of the sidemenu.
+     * Set the title of the secondary menu.
      *
-     * @param  mixed $title A title for the sidemenu.
+     * @param  mixed $title A title for the secondary menu.
      * @return self
      */
     public function setTitle($title)
@@ -287,7 +291,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the title of the sidemenu.
+     * Retrieve the title of the secondary menu.
      *
      * @return \Charcoal\Translator\Translation|string|null
      */
@@ -308,7 +312,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set the sidemenu links.
+     * Set the secondary menu links.
      *
      * @param  array $links A collection of link objects.
      * @return self
@@ -325,7 +329,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set the sidemenu links.
+     * Set the secondary menu links.
      *
      * @param  string       $linkIdent The link identifier.
      * @param  array|object $link      The link object or structure.
@@ -390,7 +394,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the sidemenu links.
+     * Retrieve the secondary menu links.
      *
      * @return array
      */
@@ -436,7 +440,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set the display type of the sidemenu's contents.
+     * Set the display type of the secondary menu's contents.
      *
      * @param  mixed $type The display type.
      * @throws InvalidArgumentException If the display type is invalid.
@@ -454,7 +458,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the display type of the sidemenu's contents.
+     * Retrieve the display type of the secondary menu's contents.
      *
      * @return string|null
      */
@@ -475,7 +479,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Determine if the sidemenu groups should be displayed as panels.
+     * Determine if the secondary menu groups should be displayed as panels.
      *
      * @return boolean
      */
@@ -495,7 +499,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set the display options for the sidemenu.
+     * Set the display options for the secondary menu.
      *
      * @param  array $options Display configuration.
      * @throws InvalidArgumentException If the display options are not an associative array.
@@ -509,7 +513,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the display options for the sidemenu.
+     * Retrieve the display options for the secondary menu.
      *
      * @throws RuntimeException If the display options are not an associative array.
      * @return array
@@ -537,7 +541,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the default display options for the sidemenu.
+     * Retrieve the default display options for the secondary menu.
      *
      * @return array
      */
@@ -574,7 +578,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set the sidemenu's groups.
+     * Set the secondary menu's groups.
      *
      * @param  array $groups A collection of group structures.
      * @return self
@@ -598,7 +602,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Add a sidemenu group.
+     * Add a secondary menu group.
      *
      * @param  string                       $groupIdent The group identifier.
      * @param  array|SidemenuGroupInterface $group      The group object or structure.
@@ -643,7 +647,7 @@ class SecondaryMenuWidget extends AdminWidget implements
                 $group['group_id'] = uniqid('collapsible_');
             }
 
-            $g = $this->sidemenuGroupFactory()->create($this->defaultGroupType());
+            $g = $this->secondaryMenu()->create($this->defaultGroupType());
             $g->setSidemenu($this);
             $g->setData($group);
 
@@ -668,7 +672,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the sidemenu groups.
+     * Retrieve the secondary menu groups.
      *
      * @return array
      */
@@ -692,7 +696,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the default sidemenu group class name.
+     * Retrieve the default secondary menu group class name.
      *
      * @return string
      */
@@ -702,7 +706,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Determine if the sidemenu has any links.
+     * Determine if the secondary menu has any links.
      *
      * @return boolean
      */
@@ -712,7 +716,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Count the number of sidemenu links.
+     * Count the number of secondary menu links.
      *
      * @return integer
      */
@@ -745,7 +749,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Determine if the sidemenu has any groups of links.
+     * Determine if the secondary menu has any groups of links.
      *
      * @return boolean
      */
@@ -755,7 +759,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Count the number of sidemenu groups.
+     * Count the number of secondary menu groups.
      *
      * @return integer
      */
@@ -775,25 +779,25 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Determine if the sidemenu's actions should be shown.
+     * Determine if the secondary menu's actions should be shown.
      *
      * @return boolean
      */
     public function showSecondaryMenuActions()
     {
-        $actions = $this->sidemenuActions();
+        $actions = $this->secondaryMenuActions();
 
         return count($actions);
     }
 
     /**
-     * Retrieve the sidemenu's actions.
+     * Retrieve the secondary menu's actions.
      *
      * @return array
      */
-    public function sidemenuActions()
+    public function secondaryMenuActions()
     {
-        if ($this->sidemenuActions === null) {
+        if ($this->secondaryMenuActions === null) {
             $ident    = $this->ident();
             $metadata = $this->adminSidemenu();
             if (isset($metadata[$ident]['actions'])) {
@@ -801,15 +805,15 @@ class SecondaryMenuWidget extends AdminWidget implements
             } else {
                 $actions = [];
             }
-            $this->setSidemenuActions($actions);
+            $this->setSecondaryMenuActions($actions);
         }
 
-        if ($this->parsedSidemenuActions === false) {
-            $this->parsedSidemenuActions = true;
-            $this->sidemenuActions = $this->createSidemenuActions($this->sidemenuActions);
+        if ($this->parsedSecondaryMenuActions === false) {
+            $this->parsedSecondaryMenuActions = true;
+            $this->secondaryMenuActions = $this->createSecondaryMenuActions($this->secondaryMenuActions);
         }
 
-        return $this->sidemenuActions;
+        return $this->secondaryMenuActions;
     }
 
     /**
@@ -837,63 +841,86 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Retrieve the sidemenu group factory.
+     * Retrieve the widget's display state.
      *
-     * @throws RuntimeException If the sidemenu group factory was not previously set.
+     * @return boolean
+     */
+    public function isCurrent()
+    {
+        return $this->isCurrent;
+    }
+
+    /**
+     * Set the widget's display state.
+     *
+     * @param  boolean $flag A truthy state.
+     * @return self
+     */
+    protected function setIsCurrent($flag)
+    {
+        $this->isCurrent = boolval($flag);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the secondary menu group factory.
+     *
+     * @throws RuntimeException If the secondary menu group factory was not previously set.
      * @return FactoryInterface
      */
-    protected function sidemenuGroupFactory()
+    protected function secondaryMenu()
     {
-        if (!isset($this->sidemenuGroupFactory)) {
+        if (!isset($this->secondaryMenu)) {
             throw new RuntimeException(sprintf(
                 'Sidemenu Group Factory is not defined for "%s"',
                 get_class($this)
             ));
         }
 
-        return $this->sidemenuGroupFactory;
+        return $this->secondaryMenu;
     }
 
     /**
-     * Set the sidemenu's actions.
+     * Set the secondary menu's actions.
      *
      * @param  array $actions One or more actions.
      * @return self
      */
-    protected function setSidemenuActions(array $actions)
+    protected function setSecondaryMenuActions(array $actions)
     {
-        $this->parsedSidemenuActions = false;
+        $this->parsedSecondaryMenuActions = false;
 
-        $this->sidemenuActions = $this->mergeActions($this->defaultSidemenuActions(), $actions);
+        $this->secondaryMenuActions = $this->mergeActions($this->defaultSecondaryMenuActions(), $actions);
 
         return $this;
     }
 
     /**
-     * Build the sidemenu's actions.
+     * Build the secondary menu's actions.
      *
      * Sidemenu actions should come from the form settings defined by the "sidemenus".
      * It is still possible to completly override those externally by setting the "actions"
-     * with the {@see self::setSidemenuActions()} method.
+     * with the {@see self::setSecondaryMenuActions()} method.
      *
      * @param  array $actions Actions to resolve.
      * @return array Sidemenu actions.
      */
-    protected function createSidemenuActions(array $actions)
+    protected function createSecondaryMenuActions(array $actions)
     {
-        $sidemenuActions = $this->parseActions($actions);
+        $secondaryMenuActions = $this->parseActions($actions);
 
-        return $sidemenuActions;
+        return $secondaryMenuActions;
     }
 
     /**
-     * Retrieve the sidemenu's default actions.
+     * Retrieve the secondary menu's default actions.
      *
      * @return array
      */
-    protected function defaultSidemenuActions()
+    protected function defaultSecondaryMenuActions()
     {
-        if ($this->defaultSidemenuActions === null) {
+        if ($this->defaultSecondaryMenuActions === null) {
             // $library = [
             //     'active'     => false,
             //     'label'      => $this->translator()->translation('File Manager'),
@@ -902,11 +929,11 @@ class SecondaryMenuWidget extends AdminWidget implements
             //     'cssClasses' => 'js-toggle-filemanager',
             //     'priority'   => 90
             // ];
-            // $this->defaultSidemenuActions = [ $library ];
-            $this->defaultSidemenuActions = [];
+            // $this->defaultSecondaryMenuActions = [ $library ];
+            $this->defaultSecondaryMenuActions = [];
         }
 
-        return $this->defaultSidemenuActions;
+        return $this->defaultSecondaryMenuActions;
     }
 
     /**
@@ -937,6 +964,6 @@ class SecondaryMenuWidget extends AdminWidget implements
      */
     private function setSidemenuGroupFactory(FactoryInterface $factory)
     {
-        $this->sidemenuGroupFactory = $factory;
+        $this->secondaryMenu = $factory;
     }
 }

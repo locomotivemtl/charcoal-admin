@@ -331,9 +331,7 @@ class AdminTemplate extends AbstractTemplate implements
             $this->mainMenu = $this->createMainMenu();
         }
 
-        foreach ($this->mainMenu as $menuIdent => $menuItem) {
-            yield $menuIdent => $menuItem;
-        }
+        return $this->mainMenu;
     }
 
     /**
@@ -745,6 +743,7 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         $menu = $this->menuBuilder->build([]);
+        $menuItems = [];
         foreach ($mainMenuConfig['items'] as $menuIdent => $menuItem) {
             $menuItem['menu'] = $menu;
             $test = $this->menuItemBuilder->build($menuItem);
@@ -760,8 +759,11 @@ class AdminTemplate extends AbstractTemplate implements
             $menuItem  = $this->parseMainMenuItem($menuItem, $menuIdent, $mainMenuIdent);
             $menuIdent = $menuItem['ident'];
 
-            yield $menuIdent => $menuItem;
+            // $menuItems[$menuIdent] = $menuItem;
+            $menuItems[] = $menuItem;
         }
+
+        return $menuItems;
     }
 
     /**
@@ -772,6 +774,11 @@ class AdminTemplate extends AbstractTemplate implements
     {
         $secondaryMenu = [];
         $secondaryMenuItems = $this->adminConfig('secondary_menu');
+
+        $mainMenuItems = $this->mainMenu();
+
+        // Get the ident of the active main menu item
+        $mainMenuIdents = array_column($mainMenuItems, 'selected', 'ident');
 
         foreach ($secondaryMenuItems as $ident => $options) {
             $options['ident'] = $ident;
@@ -784,14 +791,16 @@ class AdminTemplate extends AbstractTemplate implements
                 $options['ident'] = $this['main_menu_item'];
             }
 
-            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-            if ($mainMenuFromRequest) {
-                $options['ident'] = $mainMenuFromRequest;
-            }
+            // $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+            // if ($mainMenuFromRequest) {
+            //     $options['ident'] = $mainMenuFromRequest;
+            // }
 
             if (!is_string($options['ident'])) {
                 return null;
             }
+
+            $options['is_current'] = isset($mainMenuIdents[$options['ident']]) && $mainMenuIdents[$options['ident']] === true;
 
             $widget = $this->widgetFactory()
                             ->create('charcoal/admin/widget/secondary-menu')

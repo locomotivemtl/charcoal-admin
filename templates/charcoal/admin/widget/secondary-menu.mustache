@@ -5,7 +5,9 @@
 
 --}}
 {{# hasSecondaryMenu }}
-    <nav class="c-nav-secondary" id="{{ widget_id }}">
+    <nav class="c-nav-secondary tab-pane{{# isCurrent }} active{{/ isCurrent }}"
+        id="{{ ident }}_pane"
+        role="tabpanel">
         {{# showTitle }}
             <header class="o-header c-nav-secondary_header">
                 <h1 class="c-nav-secondary_heading">{{ title }}</h1>

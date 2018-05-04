@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-03 
+ * ! Charcoal Admin - 2018-05-04 
  */
 a:focus {
   text-decoration: none;
@@ -1059,7 +1059,7 @@ a.chip:hover::before, a.chip:focus::before {
   [data-template="lost-password"] .c-nav-container_logo,
   [data-template="reset-password"] .c-nav-container_logo,
   [data-template="elfinder"] .c-nav-container_logo {
-    padding: 6px 20px;
+    padding: 13px 6px 12px;
   }
   [data-template="login"] .c-nav-container_logo svg,
   [data-template="logout"] .c-nav-container_logo svg,
@@ -1229,6 +1229,7 @@ a.chip:hover::before, a.chip:focus::before {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: block;
 }
 
 .c-nav-main_item + .c-nav-main_item {
@@ -1391,29 +1392,10 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 1200px) {
   .c-nav-secondary {
-    left: 5.625rem;
     margin-left: 5.625rem;
     width: calc(100% - 5.625rem);
     padding: 0 1.25rem;
     padding-bottom: 2.5rem;
-  }
-}
-
-@media (min-width: 1200px) {
-  [data-template="elfinder"] .c-nav-secondary {
-    background-color: #202020;
-    position: fixed;
-    top: 40px;
-    bottom: 0;
-    padding: 0 20px;
-    padding-bottom: 40px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    z-index: 998;
-    -webkit-transition: -webkit-transform 0.5s;
-    transition: -webkit-transform 0.5s;
-    transition: transform 0.5s;
-    transition: transform 0.5s, -webkit-transform 0.5s;
   }
 }
 

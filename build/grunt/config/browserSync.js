@@ -1,7 +1,7 @@
 module.exports = {
     options: {
         open:      false,
-        proxy:     'charcoal-admin.test',
+        proxy:     'charcoal-redux-greenbeaver.test',
         port:      3000,
         watchTask: true,
         notify:    false

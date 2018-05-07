@@ -70,8 +70,7 @@
 
 .c-nav-secondary_heading,
 .c-nav-secondary_subheading {
-    color: $white;
-    opacity: 0.6;
+    color: $charcoal-gray-2;
     line-height: 1;
 }
 
@@ -206,5 +205,13 @@
             margin-top: -3px;
             margin-right: -3px;
         }
+    }
+}
+
+.c-nav-secondary_footer {
+    color: $charcoal-gray-2;
+
+    :not(.c-nav-secondary_header) + & {
+        padding-top: $unit / 2;
     }
 }

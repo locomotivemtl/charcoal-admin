@@ -95,6 +95,13 @@ class SecondaryMenuWidget extends AdminWidget implements
     private $showTitle = true;
 
     /**
+     * The description is displayed by default.
+     *
+     * @var boolean
+     */
+    private $showDescription = true;
+
+    /**
      * The currently highlighted item.
      *
      * @var mixed
@@ -128,6 +135,13 @@ class SecondaryMenuWidget extends AdminWidget implements
      * @var SidemenuGroupInterface[]
      */
     protected $groups;
+
+    /**
+     * The secondary menu's description.
+     *
+     * @var \Charcoal\Translator\Translation|string|null
+     */
+    protected $description;
 
     /**
      * Store the factory instance for the current class.
@@ -166,7 +180,30 @@ class SecondaryMenuWidget extends AdminWidget implements
         $metadata = $this->adminSidemenu();
 
         if (isset($metadata[$ident])) {
-            return $this->hasLinks() || $this->hasGroups() || $this->hasActions() || $this->showTitle();
+            return $this->hasLinks() ||
+                   $this->hasGroups() ||
+                   $this->hasActions() ||
+                   $this->showTitle() ||
+                   $this->showDescription();
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if the secondary menu is accessible via a tab.
+     *
+     * @return boolean
+     */
+    public function isTabbed()
+    {
+        $ident    = $this->ident();
+        $metadata = $this->adminSidemenu();
+
+        if (isset($metadata[$ident])) {
+            return $this->hasLinks() ||
+                   $this->hasGroups() ||
+                   $this->hasActions();
         }
 
         return false;
@@ -814,6 +851,65 @@ class SecondaryMenuWidget extends AdminWidget implements
         }
 
         return $this->secondaryMenuActions;
+    }
+
+    /**
+     * Set the description of the secondary menu.
+     *
+     * @param  mixed $description A description for the secondary menu.
+     * @return self
+     */
+    public function setDescription($description)
+    {
+        $this->description = $this->translator()->translation($description);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the description of the secondary menu.
+     *
+     * @return \Charcoal\Translator\Translation|string|null
+     */
+    public function description()
+    {
+        if ($this->description === null) {
+            $ident    = $this->ident();
+            $metadata = $this->adminSidemenu();
+
+            $this->description = '';
+
+            if (isset($metadata[$ident]['description'])) {
+                $this->setDescription($metadata[$ident]['description']);
+            }
+        }
+
+        return $this->description;
+    }
+    /**
+     * Determine if the description is to be displayed.
+     *
+     * @return boolean If TRUE or unset, check if there is a description.
+     */
+    public function setShowDescription($show)
+    {
+        $this->showDescription = !!$show;
+        return $this;
+    }
+
+    /**
+     * Show/hide the widget's description.
+     *
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the description.
+     * @return self
+     */
+    public function showDescription()
+    {
+        if ($this->showDescription === false) {
+            return false;
+        } else {
+            return !!$this->description();
+        }
     }
 
     /**

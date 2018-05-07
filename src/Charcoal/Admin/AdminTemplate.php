@@ -108,6 +108,16 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * @var boolean
      */
+    protected $mainMenuIdentLoaded = false;
+
+    /**
+     * @var string|null
+     */
+    protected $mainMenuIdent;
+
+    /**
+     * @var boolean
+     */
     protected $systemMenu;
 
     /**
@@ -708,9 +718,11 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
-     * @param  mixed $options The secondary menu widget ID or config.
-     * @throws InvalidArgumentException If the menu is missing, invalid, or malformed.
-     * @return array|Generator
+     * Create the main menu using the admin config.
+     *
+     * @param  mixed $options The main menu widget ID or config.
+     * @throws InvalidArgumentException If the admin config is missing, invalid, or malformed.
+     * @return array
      */
     protected function createMainMenu($options = null)
     {
@@ -722,25 +734,7 @@ class AdminTemplate extends AbstractTemplate implements
             );
         }
 
-        $mainMenuIdent = null;
-        if (isset($this['main_menu_item'])) {
-            $mainMenuIdent = $this['main_menu_item'];
-        }
-
-        if (!(empty($options) && !is_numeric($options))) {
-            if (is_string($options)) {
-                $mainMenuIdent = $options;
-            } elseif (is_array($options)) {
-                if (isset($options['widget_options']['ident'])) {
-                    $mainMenuIdent = $options['widget_options']['ident'];
-                }
-            }
-        }
-
-        $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-        if ($mainMenuFromRequest) {
-            $mainMenuIdent = $mainMenuFromRequest;
-        }
+        $mainMenuIdent = $this->mainMenuIdent($options);
 
         $menu = $this->menuBuilder->build([]);
         $menuItems = [];
@@ -756,14 +750,47 @@ class AdminTemplate extends AbstractTemplate implements
                 continue;
             }
 
-            $menuItem  = $this->parseMainMenuItem($menuItem, $menuIdent, $mainMenuIdent);
-            $menuIdent = $menuItem['ident'];
-
-            // $menuItems[$menuIdent] = $menuItem;
-            $menuItems[] = $menuItem;
+            $menuItems[] = $this->parseMainMenuItem($menuItem, $menuIdent, $mainMenuIdent);
         }
 
         return $menuItems;
+    }
+
+    /**
+     * Determine and retrieve the active main menu item's identifier.
+     *
+     * @param  mixed $options The secondary menu widget ID or config.
+     * @return string|null
+     */
+    private function mainMenuIdent($options = null)
+    {
+        if ($this->mainMenuIdentLoaded === false) {
+            $mainMenuIdent = null;
+
+            if (isset($this['main_menu_item'])) {
+                $mainMenuIdent = $this['main_menu_item'];
+            }
+
+            if (!(empty($options) && !is_numeric($options))) {
+                if (is_string($options)) {
+                    $mainMenuIdent = $options;
+                } elseif (is_array($options)) {
+                    if (isset($options['widget_options']['ident'])) {
+                        $mainMenuIdent = $options['widget_options']['ident'];
+                    }
+                }
+            }
+
+            $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+            if ($mainMenuFromRequest) {
+                $mainMenuIdent = $mainMenuFromRequest;
+            }
+
+            $this->mainMenuIdent = $mainMenuIdent;
+            $this->mainMenuIdentLoaded = true;
+        }
+
+        return $this->mainMenuIdent;
     }
 
     /**
@@ -775,10 +802,8 @@ class AdminTemplate extends AbstractTemplate implements
         $secondaryMenu = [];
         $secondaryMenuItems = $this->adminConfig('secondary_menu');
 
-        $mainMenuItems = $this->mainMenu();
-
         // Get the ident of the active main menu item
-        $mainMenuIdents = array_column($mainMenuItems, 'selected', 'ident');
+        $mainMenuIdent = $this->mainMenuIdent();
 
         foreach ($secondaryMenuItems as $ident => $options) {
             $options['ident'] = $ident;
@@ -791,16 +816,11 @@ class AdminTemplate extends AbstractTemplate implements
                 $options['ident'] = $this['main_menu_item'];
             }
 
-            // $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-            // if ($mainMenuFromRequest) {
-            //     $options['ident'] = $mainMenuFromRequest;
-            // }
-
             if (!is_string($options['ident'])) {
                 return null;
             }
 
-            $options['is_current'] = isset($mainMenuIdents[$options['ident']]) && $mainMenuIdents[$options['ident']] === true;
+            $options['is_current'] = $options['ident'] === $mainMenuIdent;
 
             $widget = $this->widgetFactory()
                             ->create('charcoal/admin/widget/secondary-menu')
@@ -932,12 +952,21 @@ class AdminTemplate extends AbstractTemplate implements
 
         $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
 
+        $menuItem['hasSecondaryMenuTab'] = false;
         $secondaryMenu = $this->adminConfig('secondary_menu');
         if (!empty($menuIdent) && isset($secondaryMenu[$menuIdent])) {
-            $menuItem['hasSecondaryMenu'] = true;
-            $menuItem['secondaryMenu']    = $secondaryMenu[$menuIdent];
-        } else {
-            $menuItem['hasSecondaryMenu'] = false;
+            /** Extract the secondary menu widget related to this main menu item. */
+            $secondaryMenuWidget = current(
+                array_filter(
+                    $this->secondaryMenu(), function($item) use ($menuIdent) {
+                        return $item->ident() === $menuIdent;
+                    }
+                )
+            );
+
+            if (!empty($secondaryMenuWidget)) {
+                $menuItem['hasSecondaryMenuTab'] = $secondaryMenuWidget->isTabbed() || ($secondaryMenuWidget->hasSecondaryMenu() && $secondaryMenuWidget->isCurrent());
+            }
         }
 
         return $menuItem;

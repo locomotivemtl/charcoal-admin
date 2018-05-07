@@ -64,17 +64,17 @@
                     {{# mainMenu }}
                        <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
                             <a class="c-nav-main_link{{# selected }} active{{/ selected }}"
-                                {{^ hasSecondaryMenu }}
+                                {{^ hasSecondaryMenuTab }}
                                     href="{{ url }}"
-                                {{/ hasSecondaryMenu }}
-                                {{# hasSecondaryMenu }}
+                                {{/ hasSecondaryMenuTab }}
+                                {{# hasSecondaryMenuTab }}
                                     href="#{{ ident }}_pane"
                                     id="{{ ident }}_tab"
                                     data-toggle="tab"
                                     role="tab"
                                     aria-controls="{{ ident }}_pane"
                                     aria-selected="{{# selected }}true{{/ selected }}{{^ selected }}false{{/ selected }}"
-                                {{/ hasSecondaryMenu }}>
+                                {{/ hasSecondaryMenuTab }}>
                                 <span class="c-nav-main_link_wrap">
                                     {{# svg }}
                                         <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>

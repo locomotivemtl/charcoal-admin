@@ -67,5 +67,12 @@
                 {{/ secondaryMenuActions }}
             </div>
         {{/ showSecondaryMenuActions }}
+        {{# showDescription }}
+            <div class="c-nav-secondary_footer">
+                <p class="m-0 small">
+                    {{& description }}
+                </p>
+            </div>
+        {{/ showDescription }}
     </nav>
 {{/ hasSecondaryMenu }}

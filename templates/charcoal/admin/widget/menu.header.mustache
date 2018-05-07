@@ -14,93 +14,95 @@
 
 --}}
 <div class="c-nav-container o-flex_aside">
-    {{# isAuthorized }}
-        <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
-            <span class="c-nav-container_button_icon"></span>
-        </button>
-    {{/ isAuthorized }}
-    <div class="c-nav-container_header">
-        <a class="c-nav-container_logo" href="{{adminUrl}}">
-            <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
-        </a>
-        {{# isAuthenticated }}
-            {{# showSystemMenu }}
-                <nav class="c-nav-system">
-                    <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
-                        <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
-                        {{# systemMenu }}
-                            <li>
-                                <a class="c-nav-system_link dropdown-item{{# ident }} -{{ . }}{{/ ident }}"
-                                    href="{{ url }}"
-                                    {{# id }}
-                                    id="{{ . }}"
-                                    {{/ id }}
-                                    {{# iconCss }}
-                                    data-icon="{{ . }}"
-                                    {{/ iconCss }}>
-                                    {{ label }}
-                                </a>
-                            </li>
-                        {{/ systemMenu }}
-                    </ul>
-                </nav>
-            {{/ showSystemMenu }}
-            {{^ showSystemMenu }}
-                <a href="{{ adminUrl }}logout" class="c-nav-system_logout btn">
-                    <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
-                    <span class="btn-label">{{# _t }}auth.logout.action{{/ _t }}</span>
-                </a>
-            {{/ showSystemMenu }}
-        {{/ isAuthenticated }}
-    </div>
-    {{# showMainMenu }}
-        <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
-        <nav class="c-nav-main">
-            <ul class="c-nav-main_list nav">
-                {{# mainMenu }}
-                   <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
-                        <a class="c-nav-main_link{{# selected }} is-active{{/ selected }}"
-                            {{^ hasSecondaryMenu }}
-                                href="{{ url }}"
-                            {{/ hasSecondaryMenu }}
-                            {{# hasSecondaryMenu }}
-                                href="#{{ ident }}_pane"
-                                id="{{ ident }}_tab"
-                                data-toggle="tab"
-                                role="tab"
-                                aria-controls="{{ ident }}_pane"
-                                aria-selected="{{# selected }}true{{/ selected }}{{^ selected }}false{{/ selected }}"
-                            {{/ hasSecondaryMenu }}>
-                            <span class="c-nav-main_link_wrap">
-                                {{# svg }}
-                                    <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>
-                                {{/ svg }}
-                                {{# icon }}
-                                    <img class="c-nav-main_link_icon" src="{{ . }}">
-                                {{/ icon }}
-                                {{# iconCss }}
-                                    <i class="{{ . }}" aria-hidden="true"></i>
-                                {{/ iconCss }}
-                                {{# label }}
-                                    <span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>
-                                {{/ label }}
-                            </span>
-                        </a>
-                    </li>
-                {{/ mainMenu }}
-            </ul>
-        </nav>
-    {{/ showMainMenu }}
-    {{# showSecondaryMenu }}
-        <div class="tab-content">
-            {{# secondaryMenu }}
-                {{> charcoal/admin/widget/secondary-menu }}
-            {{/ secondaryMenu }}
+    <div class="c-nav-container_wrap">
+        {{# isAuthorized }}
+            <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
+                <span class="c-nav-container_button_icon"></span>
+            </button>
+        {{/ isAuthorized }}
+        <div class="c-nav-container_header">
+            <a class="c-nav-container_logo" href="{{adminUrl}}">
+                <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
+            </a>
+            {{# isAuthenticated }}
+                {{# showSystemMenu }}
+                    <nav class="c-nav-system">
+                        <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
+                            <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
+                            {{# systemMenu }}
+                                <li>
+                                    <a class="c-nav-system_link dropdown-item{{# ident }} -{{ . }}{{/ ident }}"
+                                        href="{{ url }}"
+                                        {{# id }}
+                                        id="{{ . }}"
+                                        {{/ id }}
+                                        {{# iconCss }}
+                                        data-icon="{{ . }}"
+                                        {{/ iconCss }}>
+                                        {{ label }}
+                                    </a>
+                                </li>
+                            {{/ systemMenu }}
+                        </ul>
+                    </nav>
+                {{/ showSystemMenu }}
+                {{^ showSystemMenu }}
+                    <a href="{{ adminUrl }}logout" class="c-nav-system_logout btn">
+                        <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
+                        <span class="btn-label">{{# _t }}auth.logout.action{{/ _t }}</span>
+                    </a>
+                {{/ showSystemMenu }}
+            {{/ isAuthenticated }}
         </div>
-    {{/ showSecondaryMenu }}
+        {{# showMainMenu }}
+            <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
+            <nav class="c-nav-main">
+                <ul class="c-nav-main_list nav">
+                    {{# mainMenu }}
+                       <li class="c-nav-main_item{{# ident }} -{{ . }}{{/ ident }}">
+                            <a class="c-nav-main_link{{# selected }} active{{/ selected }}"
+                                {{^ hasSecondaryMenu }}
+                                    href="{{ url }}"
+                                {{/ hasSecondaryMenu }}
+                                {{# hasSecondaryMenu }}
+                                    href="#{{ ident }}_pane"
+                                    id="{{ ident }}_tab"
+                                    data-toggle="tab"
+                                    role="tab"
+                                    aria-controls="{{ ident }}_pane"
+                                    aria-selected="{{# selected }}true{{/ selected }}{{^ selected }}false{{/ selected }}"
+                                {{/ hasSecondaryMenu }}>
+                                <span class="c-nav-main_link_wrap">
+                                    {{# svg }}
+                                        <svg class="c-nav-main_link_icon" role="img"><use xlink:href="{{ . }}"></use></svg>
+                                    {{/ svg }}
+                                    {{# icon }}
+                                        <img class="c-nav-main_link_icon" src="{{ . }}">
+                                    {{/ icon }}
+                                    {{# iconCss }}
+                                        <i class="{{ . }}" aria-hidden="true"></i>
+                                    {{/ iconCss }}
+                                    {{# label }}
+                                        <span class="c-nav-main_link_text{{^ show_label }} sr-only{{/ show_label }}">{{ . }}</span>
+                                    {{/ label }}
+                                </span>
+                            </a>
+                        </li>
+                    {{/ mainMenu }}
+                </ul>
+            </nav>
+        {{/ showMainMenu }}
+        {{# showSecondaryMenu }}
+            <div class="c-nav-secondary tab-content">
+                {{# secondaryMenu }}
+                    {{> charcoal/admin/widget/secondary-menu }}
+                {{/ secondaryMenu }}
+            </div>
+        {{/ showSecondaryMenu }}
+    </div>
 </div>
 {{# addJs }}
     <script>

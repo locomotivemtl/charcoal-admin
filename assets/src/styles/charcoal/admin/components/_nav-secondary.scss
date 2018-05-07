@@ -2,7 +2,7 @@
 // Nav secondary Components
 // ==========================================================================
 
-@mixin c-nav-secondary {
+@mixin c-nav-secondary_pane {
     background-color: $charcoal-gray-6;
     position: fixed;
     top: $unit;
@@ -11,11 +11,18 @@
     padding-bottom: $unit;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    z-index: 998;
     transition: transform 0.5s;
 }
 
 .c-nav-secondary {
+    position: relative;
+    z-index: 800;
+
+    .is-fullscreen-template & {
+    }
+}
+
+.c-nav-secondary_pane {
     @media (max-width: $to-small) {
         left: $unit;
         width: calc(100% - #{$unit});
@@ -29,7 +36,7 @@
     }
 
     @media (max-width: $to-large) {
-        @include c-nav-secondary;
+        @include c-nav-secondary_pane;
     }
 
     @media (min-width: $from-large) {
@@ -38,12 +45,21 @@
         padding: 0 rem($unit / 2);
         padding-bottom: rem($unit);
     }
+    .is-fullscreen-template & {
+        @media (min-width: $from-large) {
+            // top: $unit;
+            // background-color: $charcoal-gray-6;
+            // bottom: 0;
+            // position: absolute;
+            // width: rem($nav-width);
+            // padding-bottom: $unit;
+            // overflow-y: auto;
+            // -webkit-overflow-scrolling: touch;
 
-    // [data-template="elfinder"] & {
-    //     @media (min-width: $from-large) {
-    //         @include c-nav-secondary;
-    //     }
-    // }
+            // transition: transform 0.5s;
+            @include c-nav-secondary_pane;
+        }
+    }
 
     .has-nav-open & {
         transform: translateX(0%);
@@ -84,9 +100,6 @@
     @include u-list-reset;
     border-radius: $border-radius;
     overflow: hidden;
-
-    border-top-width: 1px;
-    border-top-style: solid;
 
     .collapse &,
     .collapsing & {

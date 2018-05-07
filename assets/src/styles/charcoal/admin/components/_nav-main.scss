@@ -8,7 +8,6 @@
     top: $unit;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    z-index: 999;
     transition: transform 0.2s;
     transform: translateX(-100%);
 }
@@ -19,6 +18,7 @@
     bottom: 0;
     left: 0;
     line-height: 1;
+    z-index: 850;
 
     @media (max-width: $to-small) {
         width: $unit;
@@ -36,7 +36,7 @@
         width: rem($nav-main-width);
     }
 
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             @include c-nav-main;
         }
@@ -71,7 +71,7 @@
         height: rem(95px);
     }
 
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             height: $nav-main-width;
         }
@@ -96,41 +96,29 @@
 
     &:hover,
     &:active,
-    &.is-active {
+    &.active {
         color: $charcoal-blue-1;
     }
 
     &:focus,
     &:hover,
     &:active,
-    &.is-active {
+    &.active {
         text-decoration: none;
     }
 
-    &.is-active {
-        // @media (max-width: $to-large) {
-        //     background-color: $black;
-        // }
-
-        // @media (min-width: $from-large) {
-            background-color: transparent;
-        // }
+    &.active {
+        background-color: transparent;
     }
 }
-
-.c-nav-main_link_wrap {}
 
 .c-nav-main_link_icon {
     fill: currentColor;
     transition: fill $speed;
 
-    .c-nav-main_link.is-active & {
-        // fill: $charcoal-blue-2;
-    }
-
     @media (max-width: $to-small) {
-        width:  21px;
-        height: 21px;
+        width:  20px;
+        height: 20px;
     }
 
     @media (min-width: $from-small) {
@@ -163,7 +151,7 @@
         display: none;
     }
 
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             display: block;
         }

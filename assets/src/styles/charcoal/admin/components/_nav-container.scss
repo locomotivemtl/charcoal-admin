@@ -15,6 +15,7 @@
     left: 0;
     z-index: 900;
     backface-visibility: hidden;
+    position: relative;
 
     @media (max-width: $to-large) {
         @include c-nav-container;
@@ -22,18 +23,22 @@
 
     @media (min-width: $from-large) {
         background-color: $charcoal-gray-6;
-        bottom: 0;
         width: rem($nav-width);
     }
 
-    [data-template="login"] &,
-    [data-template="logout"] &,
-    [data-template="lost-password"] &,
-    [data-template="reset-password"] &,
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             @include c-nav-container;
         }
+    }
+}
+
+.c-nav-container_wrap {
+    @media (min-width: $from-large) {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: rem($nav-width);
     }
 }
 
@@ -61,11 +66,7 @@
         display: none;
     }
 
-    [data-template="login"] &,
-    [data-template="logout"] &,
-    [data-template="lost-password"] &,
-    [data-template="reset-password"] &,
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             @include c-nav-container_button;
         }
@@ -135,22 +136,15 @@
         position: relative;
     }
 
-    [data-template="login"] &,
-    [data-template="logout"] &,
-    [data-template="lost-password"] &,
-    [data-template="reset-password"] &,
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             @include c-nav-container_header;
         }
     }
 
-    [data-template="login"] &,
-    [data-template="logout"] &,
-    [data-template="lost-password"] &,
-    [data-template="reset-password"] & {
-        left: 0 !important;
-    }
+    // .is-fullscreen-template & {
+    //     left: 0 !important;
+    // }
 }
 
 .c-nav-container_logo {
@@ -183,21 +177,14 @@
         }
     }
 
-    [data-template="login"] &,
-    [data-template="logout"] &,
-    [data-template="lost-password"] &,
-    [data-template="reset-password"] & {
+    .is-fullscreen-template & {
         @media (max-width: $to-small) {
             padding-left: $spacer;
             padding-right: $spacer;
         }
     }
 
-    [data-template="login"] &,
-    [data-template="logout"] &,
-    [data-template="lost-password"] &,
-    [data-template="reset-password"] &,
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             padding: 13px 6px 12px;
 

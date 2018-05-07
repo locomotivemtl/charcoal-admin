@@ -981,8 +981,54 @@ class AdminTemplate extends AbstractTemplate implements
 
 
 
-    // Front-end helpers
-    // ============================================================
+    // Templating
+    // =========================================================================
+
+    /**
+     * Generate a string containing HTML attributes for the <html> element.
+     *
+     * @return string
+     */
+    public function htmlAttr()
+    {
+        $attributes = [
+            'data-template' => $this->templateName(),
+            'data-debug'    => $this->debug() ? 'true' : false,
+            'lang'          => $this->lang(),
+            'locale'        => $this->locale(),
+            'class'         => $this->htmlClasses()
+        ];
+
+        return html_build_attributes($attributes);
+    }
+
+    /**
+     * Generate an array containing a list of CSS classes to be used by the <html> tag.
+     *
+     * @return array
+     */
+    public function htmlClasses()
+    {
+        $classes = [
+            'has-no-js'
+        ];
+
+        if ($this->isFullscreenTemplate()) {
+            $classes[] = 'is-fullscreen-template';
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Determine if main & secondary menu should appear as mobile in a desktop resolution.
+     *
+     * @return boolean
+     */
+    public function isFullscreenTemplate()
+    {
+        return false;
+    }
 
     /**
      * Retrieve the template's identifier.

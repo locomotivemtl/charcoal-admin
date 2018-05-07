@@ -448,4 +448,20 @@ class ElfinderTemplate extends AdminTemplate
             'volume_default' => $this->translator()->translation('Library')
         ];
     }
+
+
+
+    // Templating
+    // =========================================================================
+
+    /**
+     * Determine if main & secondary menu should appear as mobile in a desktop resolution.
+     *
+     * @return boolean
+     */
+    public function isFullscreenTemplate()
+    {
+        // return true;
+        return false;
+    }
 }

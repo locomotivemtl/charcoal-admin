@@ -10,7 +10,7 @@
         padding-top: $unit;
     }
 
-    [data-template="elfinder"] & {
+    .is-fullscreen-template & {
         @media (min-width: $from-large) {
             padding-top: $unit;
         }

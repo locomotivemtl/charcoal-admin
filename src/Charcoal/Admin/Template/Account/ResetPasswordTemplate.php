@@ -132,4 +132,19 @@ class ResetPasswordTemplate extends AdminTemplate
 
         return $params;
     }
+
+
+
+    // Templating
+    // =========================================================================
+
+    /**
+     * Determine if main & secondary menu should appear as mobile in a desktop resolution.
+     *
+     * @return boolean
+     */
+    public function isFullscreenTemplate()
+    {
+        return true;
+    }
 }

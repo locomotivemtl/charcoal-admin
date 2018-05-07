@@ -10,7 +10,7 @@ Based on the HTML5 boilerplate.
 
 --}}
 <!doctype html>
-<html class="has-no-js{{# devMode }} s-admin-debug{{/ devMode }}" lang="{{ lang }}" locale="{{ locale }}" data-template="{{ templateName }}">
+<html {{& htmlAttr}}>
 <head>
     <meta charset="utf-8">
 
@@ -28,7 +28,6 @@ Based on the HTML5 boilerplate.
     {{> charcoal/admin/template/inc.favicon }}
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,400italic" rel="stylesheet" type="text/css">
-    {{! <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> }}
     <link href="{{ baseUrl }}assets/admin/styles/charcoal.admin.vendors.css" rel="stylesheet" type="text/css">
     <link href="{{ baseUrl }}assets/admin/styles/charcoal.admin.css" rel="stylesheet" type="text/css">
 

@@ -14,7 +14,7 @@ This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
             {{> charcoal/admin/widget/layout.start }}
         {{/ dashboard.layout }}
 
-        <div class="widget{{# ident }} widget-{{ . }}{{/ ident }}{{# form.layout.cellSpanBy12 }} col-md-{{ . }}{{/ form.layout.cellSpanBy12 }}">
+        <div class="widget{{# ident }} widget-{{ . }}{{/ ident }}{{# dashboard.layout.cellSpanBy12 }} col-md-{{ . }}{{/ dashboard.layout.cellSpanBy12 }}">
 
             {{# showActions }}
                 <div class="widget-actions">

@@ -61,7 +61,7 @@
                         "obj_type": "charcoal/admin/user/permission"
                     }
                 },
-                "sidemenu": {
+                "secondary_menu": {
                     "widget_options": {
                         "ident": "system"
                     }
@@ -84,7 +84,7 @@
                         "obj_type": "charcoal/admin/user/permission"
                     }
                 },
-                "sidemenu": {
+                "secondary_menu": {
                     "widget_options": {
                         "ident": "system"
                     }

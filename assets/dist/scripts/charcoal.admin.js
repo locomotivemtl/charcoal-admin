@@ -2945,7 +2945,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
                 Charcoal.Admin.admin_url() +
                 'object/edit?' +
                 (params.has('main_menu') ? 'main_menu=' + params.get('main_menu') + '&' : '') +
-                (params.has('sidemenu') ? 'sidemenu=' + params.get('sidemenu') + '&' : '') +
+                (params.has('secondary_menu') ? 'secondary_menu=' + params.get('secondary_menu') + '&' : '') +
                 'obj_type=' + this.obj_type +
                 '&obj_id=' + response.obj_id;
         }
@@ -3075,7 +3075,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
     var successUrl = Charcoal.Admin.admin_url() +
         'object/collection?' +
         (params.has('main_menu') ? 'main_menu=' + params.get('main_menu') + '&' : '') +
-        (params.has('sidemenu') ? 'sidemenu=' + params.get('sidemenu') + '&' : '') +
+        (params.has('secondary_menu') ? 'secondary_menu=' + params.get('secondary_menu') + '&' : '') +
         'obj_type=' + this.obj_type;
 
     //console.debug(form);

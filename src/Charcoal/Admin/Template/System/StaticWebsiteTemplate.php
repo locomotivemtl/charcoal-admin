@@ -32,6 +32,20 @@ class StaticWebsiteTemplate extends AdminTemplate
     }
 
     /**
+     * Retrieve the secondary menu.
+     *
+     * @return \Charcoal\Admin\Widget\SecondaryMenuWidgetInterface|null
+     */
+    public function secondaryMenu()
+    {
+        if ($this->secondaryMenu === null) {
+            $this->secondaryMenu = $this->createSecondaryMenu('system');
+        }
+
+        return $this->secondaryMenu;
+    }
+
+    /**
      * @return boolean
      */
     public function isStaticWebsiteEnabled()

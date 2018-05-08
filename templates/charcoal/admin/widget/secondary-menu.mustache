@@ -9,12 +9,12 @@
         id="{{ ident }}_pane"
         role="tabpanel">
         {{# showTitle }}
-            <header class="o-header c-nav-secondary_header">
+            <header class="o-header">
                 <h1 class="c-nav-secondary_heading">{{ title }}</h1>
             </header>
         {{/ showTitle }}
         {{# hasLinks }}
-            <div class="c-nav-secondary_wrapper">
+            <div class="c-nav-secondary_row c-nav-secondary_wrapper">
                 <ul class="c-nav-secondary_list">
                     {{# links }}
                         {{> charcoal/admin/widget/secondary-menu/link }}
@@ -24,7 +24,7 @@
         {{/ hasLinks }}
         {{# hasGroups }}
             {{# groups }}
-                <div class="c-nav-secondary_wrapper">
+                <div class="c-nav-secondary_row c-nav-secondary_wrapper">
                     {{# showTitle }}
                         {{# collapsible }}
                             <a class="c-nav-secondary_link -arrow"
@@ -55,7 +55,7 @@
             {{/ groups }}
         {{/ hasGroups }}
         {{# showSecondaryMenuActions }}
-            <div class="btn-group-vertical btn-block" role="group">
+            <div class="c-nav-secondary_row c-nav-secondary_actions btn-group-vertical btn-block" role="group">
                 {{# secondaryMenuActions }}
                     {{# isSeparator }}
                         </div>
@@ -68,7 +68,7 @@
             </div>
         {{/ showSecondaryMenuActions }}
         {{# showDescription }}
-            <div class="c-nav-secondary_footer">
+            <div class="c-nav-secondary_row c-nav-secondary_footer">
                 <p class="m-0 small">
                     {{& description }}
                 </p>

@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-07 
+ * ! Charcoal Admin - 2018-05-08 
  */
 a:focus {
   text-decoration: none;
@@ -1404,6 +1404,10 @@ a.chip:hover::before, a.chip:focus::before {
           transform: translateX(0%);
 }
 
+.c-nav-secondary_row + .c-nav-secondary_row {
+  margin-top: 20px;
+}
+
 .c-nav-secondary_heading,
 .c-nav-secondary_subheading {
   color: #bcbcbc;
@@ -1556,10 +1560,6 @@ a.chip:hover::before, a.chip:focus::before {
 
 .c-nav-secondary_footer {
   color: #bcbcbc;
-}
-
-:not(.c-nav-secondary_header) + .c-nav-secondary_footer {
-  padding-top: 20px;
 }
 
 .c-page-header {

@@ -76,6 +76,20 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * Retrieve the secondary menu.
+     *
+     * @return \Charcoal\Admin\Widget\SecondaryMenuWidgetInterface|null
+     */
+    public function secondaryMenu()
+    {
+        if ($this->secondaryMenu === null) {
+            $this->secondaryMenu = $this->createSecondaryMenu('system');
+        }
+
+        return $this->secondaryMenu;
+    }
+
+    /**
      * @param  boolean $force Whether to reload cache information.
      * @return array
      */

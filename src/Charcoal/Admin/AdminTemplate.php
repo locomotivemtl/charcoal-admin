@@ -19,21 +19,17 @@ use Charcoal\User\AuthAwareInterface;
 use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
 
-// From 'charcoal-ui'
-use Charcoal\Ui\Menu\GenericMenu;
-use Charcoal\Ui\MenuItem\GenericMenuItem;
-
 // From 'charcoal-admin'
-use Charcoal\Admin\Ui\FeedbackContainerTrait;
+use Charcoal\Admin\Ui\DashboardContainerInterface;
 use Charcoal\Admin\Support\AdminTrait;
 use Charcoal\Admin\Support\BaseUrlTrait;
 use Charcoal\Admin\Support\SecurityTrait;
+use Charcoal\Admin\Ui\FeedbackContainerTrait;
 
 /**
  * Base class for all `admin` Templates.
@@ -338,7 +334,17 @@ class AdminTemplate extends AbstractTemplate implements
     public function mainMenu()
     {
         if ($this->mainMenu === null) {
-            $this->mainMenu = $this->createMainMenu();
+            $options = null;
+
+            if ($this instanceof DashboardContainerInterface) {
+                $dashboardConfig = $this->dashboardConfig();
+
+                if (isset($dashboardConfig['secondary_menu'])) {
+                    $options = $dashboardConfig['secondary_menu'];
+                }
+            }
+
+            $this->mainMenu = $this->createMainMenu($options);
         }
 
         return $this->mainMenu;
@@ -795,7 +801,7 @@ class AdminTemplate extends AbstractTemplate implements
 
     /**
      * @throws InvalidArgumentException If the secondary menu widget is invalid.
-     * @return \Charcoal\Admin\Widget\SecondaryMenuWidgetInterface|null
+     * @return \Charcoal\Admin\Widget\SecondaryMenuWidgetInterface[]|
      */
     protected function createSecondaryMenu()
     {
@@ -816,17 +822,15 @@ class AdminTemplate extends AbstractTemplate implements
                 $options['ident'] = $this['main_menu_item'];
             }
 
-            if (!is_string($options['ident'])) {
-                return null;
+            if (is_string($options['ident'])) {
+                $options['is_current'] = $options['ident'] === $mainMenuIdent;
+
+                $widget = $this->widgetFactory()
+                                ->create('charcoal/admin/widget/secondary-menu')
+                                ->setData($options);
+
+                $secondaryMenu[] = $widget;
             }
-
-            $options['is_current'] = $options['ident'] === $mainMenuIdent;
-
-            $widget = $this->widgetFactory()
-                            ->create('charcoal/admin/widget/secondary-menu')
-                            ->setData($options);
-
-            $secondaryMenu[] = $widget;
         }
 
         return $secondaryMenu;

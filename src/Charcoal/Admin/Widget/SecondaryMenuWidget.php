@@ -1017,15 +1017,6 @@ class SecondaryMenuWidget extends AdminWidget implements
     protected function defaultSecondaryMenuActions()
     {
         if ($this->defaultSecondaryMenuActions === null) {
-            // $library = [
-            //     'active'     => false,
-            //     'label'      => $this->translator()->translation('File Manager'),
-            //     'ident'      => 'filemanager',
-            //     'url'        => $this->adminUrl().'media',
-            //     'cssClasses' => 'js-toggle-filemanager',
-            //     'priority'   => 90
-            // ];
-            // $this->defaultSecondaryMenuActions = [ $library ];
             $this->defaultSecondaryMenuActions = [];
         }
 

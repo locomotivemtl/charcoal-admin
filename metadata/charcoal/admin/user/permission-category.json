@@ -20,8 +20,8 @@
                 }],
                 "list_actions": [{
                     "label": {
-                        "en": "New cateogry",
-                        "fr": "Nouvelle catégorie de contact"
+                        "en": "New user permission category",
+                        "fr": "Nouvelle catégorie de permission"
                     },
                     "ident": "create",
                     "url": "object/edit?obj_type=charcoal/user/permission-category"
@@ -52,7 +52,10 @@
 
         "dashboards": {
             "admin.edit": {
-                "title": "Catégorie de permissions",
+                "title": {
+                    "en": "Permission category",
+                    "fr": "Catégorie de permissions"
+                },
                 "layout": {
                     "structure": [
                         { "columns": [ 1 ] }
@@ -67,7 +70,10 @@
                 }
             },
             "admin.table": {
-                "title": "Liste des catégories de permissions",
+                "title": {
+                    "en": "Permission category list",
+                    "fr": "Liste des catégories de permissions"
+                },
                 "layout": {
                     "structure": [
                         { "columns": [ 1 ] }
@@ -80,8 +86,10 @@
                         "obj_type": "charcoal/admin/user/permission-category"
                     }
                 },
-                "sidemenu": {
-                    "widget_type": "charcoal/admin/widget/saintconstant/sidemenu/contact"
+                "secondary_menu": {
+                    "widget_options": {
+                        "ident": "system"
+                    }
                 }
             }
         },

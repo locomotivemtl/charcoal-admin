@@ -11,18 +11,18 @@ use \Slim\Http\Environment;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
-use \Charcoal\Admin\Widget\SidemenuWidget;
+use \Charcoal\Admin\Widget\SecondaryMenuWidget;
 
 use Charcoal\Admin\Tests\ContainerProvider;
 
 /**
- * Class SidemenuWidgetTest
+ * Class SecondaryMenuWidgetTest
  * @package Charcoal\Admin\Tests\Widget
  */
-class SidemenuWidgetTest extends PHPUnit_Framework_TestCase
+class SecondaryMenuWidgetTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var SidemenuWidget
+     * @var SecondaryMenuWidget
      */
     public $obj;
 
@@ -37,9 +37,9 @@ class SidemenuWidgetTest extends PHPUnit_Framework_TestCase
         $containerProvider->registerWidgetFactory($container);
 
         $container['request'] = Request::createFromEnvironment(Environment::mock());
-        $container['sidemenu/group/factory'] = $container['widget/factory'];
+        $container['secondary-menu/group/factory'] = $container['widget/factory'];
 
-        $this->obj = new SidemenuWidget([
+        $this->obj = new SecondaryMenuWidget([
             'logger' => $container['logger'],
             'container' => $container
         ]);
@@ -50,6 +50,6 @@ class SidemenuWidgetTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $this->assertInstanceOf(SidemenuWidget::class, $this->obj);
+        $this->assertInstanceOf(SecondaryMenuWidget::class, $this->obj);
     }
 }

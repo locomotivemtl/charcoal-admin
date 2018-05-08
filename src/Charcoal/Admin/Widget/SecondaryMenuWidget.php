@@ -20,13 +20,13 @@ use Charcoal\Factory\FactoryInterface;
 use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\ActionContainerTrait;
-use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
+use Charcoal\Admin\Ui\SecondaryMenu\SecondaryMenuGroupInterface;
 
 /**
  * Admin Secondary Menu Widget
  */
 class SecondaryMenuWidget extends AdminWidget implements
-    SidemenuWidgetInterface
+    SecondaryMenuWidgetInterface
 {
     use ActionContainerTrait;
     use HttpAwareTrait;
@@ -132,7 +132,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     /**
      * The secondary menu's groups.
      *
-     * @var SidemenuGroupInterface[]
+     * @var SecondaryMenuGroupInterface[]
      */
     protected $groups;
 
@@ -177,7 +177,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     public function hasSecondaryMenu()
     {
         $ident    = $this->ident();
-        $metadata = $this->adminSidemenu();
+        $metadata = $this->adminSecondaryMenu();
 
         if (isset($metadata[$ident])) {
             return $this->hasLinks() ||
@@ -198,7 +198,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     public function isTabbed()
     {
         $ident    = $this->ident();
-        $metadata = $this->adminSidemenu();
+        $metadata = $this->adminSecondaryMenu();
 
         if (isset($metadata[$ident])) {
             return $this->hasLinks() ||
@@ -214,7 +214,7 @@ class SecondaryMenuWidget extends AdminWidget implements
      *
      * @return array
      */
-    public function adminSidemenu()
+    public function adminSecondaryMenu()
     {
         return $this->adminConfig('secondary_menu', []);
     }
@@ -336,7 +336,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->title === null) {
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
 
             $this->title = '';
 
@@ -439,7 +439,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->links === null) {
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
 
             $this->links = [];
             if (isset($metadata[$ident]['links'])) {
@@ -503,7 +503,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->displayType === null) {
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
 
             if (isset($metadata[$ident]['display_type'])) {
                 $this->setDisplayType($metadata[$ident]['display_type']);
@@ -561,7 +561,7 @@ class SecondaryMenuWidget extends AdminWidget implements
             $this->setDisplayOptions($this->defaultDisplayOptions());
 
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
 
             if (isset($metadata[$ident]['display_options'])) {
                 $options = $metadata[$ident]['display_options'];
@@ -642,7 +642,7 @@ class SecondaryMenuWidget extends AdminWidget implements
      * Add a secondary menu group.
      *
      * @param  string                       $groupIdent The group identifier.
-     * @param  array|SidemenuGroupInterface $group      The group object or structure.
+     * @param  array|SecondaryMenuGroupInterface $group      The group object or structure.
      * @throws InvalidArgumentException If the identifier is not a string or the group is invalid.
      * @return self
      */
@@ -654,8 +654,8 @@ class SecondaryMenuWidget extends AdminWidget implements
             );
         }
 
-        if ($group instanceof SidemenuGroupInterface) {
-            $group->setSidemenu($this);
+        if ($group instanceof SecondaryMenuGroupInterface) {
+            $group->setSecondaryMenu($this);
             $group->setIdent($groupIdent);
 
             $this->groups[] = $group;
@@ -685,7 +685,7 @@ class SecondaryMenuWidget extends AdminWidget implements
             }
 
             $g = $this->secondaryMenu()->create($this->defaultGroupType());
-            $g->setSidemenu($this);
+            $g->setSecondaryMenu($this);
             $g->setData($group);
 
             $group = $g;
@@ -694,7 +694,7 @@ class SecondaryMenuWidget extends AdminWidget implements
         } else {
             throw new InvalidArgumentException(sprintf(
                 'Group must be an instance of %s or an array of form group options, received %s',
-                'SidemenuGroupInterface',
+                'SecondaryMenuGroupInterface',
                 (is_object($group) ? get_class($group) : gettype($group))
             ));
         }
@@ -717,7 +717,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->groups === null) {
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
 
             $this->groups = [];
             if (isset($metadata[$ident]['groups'])) {
@@ -739,7 +739,7 @@ class SecondaryMenuWidget extends AdminWidget implements
      */
     public function defaultGroupType()
     {
-        return 'charcoal/ui/sidemenu/generic';
+        return 'charcoal/ui/secondary-menu/generic';
     }
 
     /**
@@ -836,7 +836,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->secondaryMenuActions === null) {
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
             if (isset($metadata[$ident]['actions'])) {
                 $actions = $metadata[$ident]['actions'];
             } else {
@@ -875,7 +875,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->description === null) {
             $ident    = $this->ident();
-            $metadata = $this->adminSidemenu();
+            $metadata = $this->adminSecondaryMenu();
 
             $this->description = '';
 
@@ -917,7 +917,7 @@ class SecondaryMenuWidget extends AdminWidget implements
      */
     public function jsActionPrefix()
     {
-        return 'js-sidemenu';
+        return 'js-secondary-menu';
     }
 
     /**
@@ -933,7 +933,7 @@ class SecondaryMenuWidget extends AdminWidget implements
         // Satisfies HttpAwareTrait dependencies
         $this->setHttpRequest($container['request']);
 
-        $this->setSidemenuGroupFactory($container['sidemenu/group/factory']);
+        $this->setSecondaryMenuGroupFactory($container['secondary-menu/group/factory']);
     }
 
     /**
@@ -969,7 +969,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if (!isset($this->secondaryMenu)) {
             throw new RuntimeException(sprintf(
-                'Sidemenu Group Factory is not defined for "%s"',
+                'Secondary Menu Group Factory is not defined for "%s"',
                 get_class($this)
             ));
         }
@@ -995,12 +995,12 @@ class SecondaryMenuWidget extends AdminWidget implements
     /**
      * Build the secondary menu's actions.
      *
-     * Sidemenu actions should come from the form settings defined by the "sidemenus".
+     * Secondary menu actions should come from the form settings defined by the "secondary menus".
      * It is still possible to completly override those externally by setting the "actions"
      * with the {@see self::setSecondaryMenuActions()} method.
      *
      * @param  array $actions Actions to resolve.
-     * @return array Sidemenu actions.
+     * @return array Secondary menu actions.
      */
     protected function createSecondaryMenuActions(array $actions)
     {
@@ -1035,13 +1035,13 @@ class SecondaryMenuWidget extends AdminWidget implements
     /**
      * To be called with {@see uasort()}.
      *
-     * @param  SidemenuGroupInterface $a Sortable entity A.
-     * @param  SidemenuGroupInterface $b Sortable entity B.
+     * @param  SecondaryMenuGroupInterface $a Sortable entity A.
+     * @param  SecondaryMenuGroupInterface $b Sortable entity B.
      * @return integer Sorting value: -1, 0, or 1
      */
     protected function sortGroupsByPriority(
-        SidemenuGroupInterface $a,
-        SidemenuGroupInterface $b
+        SecondaryMenuGroupInterface $a,
+        SecondaryMenuGroupInterface $b
     ) {
         $a = $a->priority();
         $b = $b->priority();
@@ -1053,12 +1053,12 @@ class SecondaryMenuWidget extends AdminWidget implements
     }
 
     /**
-     * Set an sidemenu group factory.
+     * Set a secondary menu group factory.
      *
      * @param FactoryInterface $factory The group factory, to create objects.
      * @return void
      */
-    private function setSidemenuGroupFactory(FactoryInterface $factory)
+    private function setSecondaryMenuGroupFactory(FactoryInterface $factory)
     {
         $this->secondaryMenu = $factory;
     }

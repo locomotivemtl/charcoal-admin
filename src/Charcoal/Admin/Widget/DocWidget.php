@@ -2,23 +2,20 @@
 
 namespace Charcoal\Admin\Widget;
 
-use Charcoal\Admin\Docs\Widget\DocFormPropertyWidget;
-use Charcoal\Admin\Ui\FormSidebarInterface;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
-use \UnexpectedValueException;
-use \InvalidArgumentException;
+use InvalidArgumentException;
+use UnexpectedValueException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\FormGroup\FormGroupInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\FormWidget;
-
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait;
+use Charcoal\Admin\Docs\Widget\DocFormPropertyWidget;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Ui\ObjectContainerTrait;
+use Charcoal\Admin\Widget\FormWidget;
 
 /**
  * Object Admin Form
@@ -199,7 +196,7 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * Retrieve the display options for the sidemenu.
+     * Retrieve the display options for the widget.
      *
      * @return array
      */
@@ -213,7 +210,7 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * Set the display options for the sidemenu.
+     * Set the display options for the widget.
      *
      * @param  array $options Display configuration.
      * @throws \RuntimeException If the display options are not an associative array.
@@ -231,7 +228,7 @@ class DocWidget extends FormWidget implements
     }
 
     /**
-     * Retrieve the default display options for the sidemenu.
+     * Retrieve the default display options for the widget.
      *
      * @return array
      */

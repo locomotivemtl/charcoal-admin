@@ -38,8 +38,8 @@ use Charcoal\User\Authorizer;
 use Charcoal\Admin\Config as AdminConfig;
 use Charcoal\Admin\Property\PropertyInputInterface;
 use Charcoal\Admin\Property\PropertyDisplayInterface;
-use Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface;
-use Charcoal\Admin\Ui\Sidemenu\GenericSidemenuGroup;
+use Charcoal\Admin\Ui\SecondaryMenu\SecondaryMenuGroupInterface;
+use Charcoal\Admin\Ui\SecondaryMenu\GenericSecondaryMenuGroup;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\AuthToken;
 
@@ -275,10 +275,10 @@ class AdminServiceProvider implements ServiceProviderInterface
          * @param Container $container A Pimple DI container.
          * @return \Charcoal\Factory\FactoryInterface
          */
-        $container['sidemenu/group/factory'] = function (Container $container) {
+        $container['secondary-menu/group/factory'] = function (Container $container) {
             return new Factory([
-                'base_class'       => SidemenuGroupInterface::class,
-                'default_class'    => GenericSidemenuGroup::class,
+                'base_class'       => SecondaryMenuGroupInterface::class,
+                'default_class'    => GenericSecondaryMenuGroup::class,
                 'arguments'        => [[
                     'container'      => $container,
                     'logger'         => $container['logger'],
@@ -286,7 +286,7 @@ class AdminServiceProvider implements ServiceProviderInterface
                     'layout_builder' => $container['layout/builder']
                 ]],
                 'resolver_options' => [
-                    'suffix' => 'SidemenuGroup'
+                    'suffix' => 'SecondaryMenuGroup'
                 ]
             ]);
         };

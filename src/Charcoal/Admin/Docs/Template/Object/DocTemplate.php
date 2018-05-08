@@ -3,16 +3,9 @@
 namespace Charcoal\Admin\Docs\Template\Object;
 
 use Exception;
-use InvalidArgumentException;
 
 // From Pimple
 use Pimple\Container;
-
-// From 'charcoal-factory'
-use Charcoal\Factory\FactoryInterface;
-
-// From 'charcoal-ui'
-use Charcoal\Ui\DashboardBuilder;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
@@ -20,7 +13,6 @@ use Charcoal\Admin\Ui\DashboardContainerInterface;
 use Charcoal\Admin\Ui\DashboardContainerTrait;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
-use Charcoal\Admin\Widget\SidemenuWidget;
 
 /**
  * Object Edit Template
@@ -54,8 +46,8 @@ class DocTemplate extends AdminTemplate implements
         if ($this->headerMenu === null) {
             $dashboardConfig = $this->dashboardConfig();
 
-            if (isset($dashboardConfig['sidemenu'])) {
-                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['sidemenu']);
+            if (isset($dashboardConfig['secondary_menu'])) {
+                $this->headerMenu = $this->createHeaderMenu($dashboardConfig['secondary_menu']);
             } else {
                 $this->headerMenu = $this->createHeaderMenu();
             }

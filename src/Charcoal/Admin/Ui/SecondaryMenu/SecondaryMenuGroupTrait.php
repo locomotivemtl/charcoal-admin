@@ -1,27 +1,27 @@
 <?php
 
-namespace Charcoal\Admin\Ui\Sidemenu;
+namespace Charcoal\Admin\Ui\SecondaryMenu;
 
 use ArrayIterator;
 use InvalidArgumentException;
 
 // From 'charcoal-admin'
-use Charcoal\Admin\Widget\SidemenuWidgetInterface;
+use Charcoal\Admin\Widget\SecondaryMenuWidgetInterface;
 
 /**
- * Provides an implementation of {@see \Charcoal\Admin\Ui\Sidemenu\SidemenuGroupInterface}.
+ * Provides an implementation of {@see \Charcoal\Admin\Ui\SecondaryMenu\SecondaryMenuGroupInterface}.
  */
-trait SidemenuGroupTrait
+trait SecondaryMenuGroupTrait
 {
     /**
-     * Store a reference to the parent sidemenu widget.
+     * Store a reference to the parent secondary menu widget.
      *
-     * @var SidemenuWidgetInterface
+     * @var SecondaryMenuWidgetInterface
      */
-    protected $sidemenu;
+    protected $secondaryMenu;
 
     /**
-     * The sidemenu group ID.
+     * The secondary menu group ID.
      *
      * @var string
      */
@@ -84,26 +84,26 @@ trait SidemenuGroupTrait
     private $active = true;
 
     /**
-     * Set the sidemenu widget.
+     * Set the secondary menu widget.
      *
-     * @param  SidemenuWidgetInterface $sidemenu The related sidemenu widget.
+     * @param  SecondaryMenuWidgetInterface $menu The related secondary menu widget.
      * @return self
      */
-    public function setSidemenu(SidemenuWidgetInterface $sidemenu)
+    public function setSecondaryMenu(SecondaryMenuWidgetInterface $menu)
     {
-        $this->sidemenu = $sidemenu;
+        $this->secondaryMenu = $menu;
 
         return $this;
     }
 
     /**
-     * Retrieve the sidemenu widget.
+     * Retrieve the secondary menu widget.
      *
-     * @return SidemenuWidgetInterface
+     * @return SecondaryMenuWidgetInterface
      */
-    public function sidemenu()
+    public function secondaryMenu()
     {
-        return $this->sidemenu;
+        return $this->secondaryMenu;
     }
 
     /**
@@ -134,7 +134,7 @@ trait SidemenuGroupTrait
     public function groupId()
     {
         if ($this->groupId === null) {
-            $this->groupId = uniqid('sidemenu_group_');
+            $this->groupId = uniqid('secondary_menu_group_');
         }
 
         return $this->groupId;
@@ -169,7 +169,7 @@ trait SidemenuGroupTrait
     }
 
     /**
-     * Set the sidemenu links.
+     * Set the secondary menu links.
      *
      * @param  array $links A collection of link objects.
      * @return self
@@ -186,7 +186,7 @@ trait SidemenuGroupTrait
     }
 
     /**
-     * Set the sidemenu links.
+     * Set the secondary menu links.
      *
      * @param  string       $linkIdent The link identifier.
      * @param  array|object $link      The link object or structure.
@@ -227,7 +227,7 @@ trait SidemenuGroupTrait
                 return $this;
             }
 
-            $isSelected = $this->sidemenu()->isCurrentItem([ $linkIdent, (string)$url ]);
+            $isSelected = $this->secondaryMenu()->isCurrentItem([ $linkIdent, (string)$url ]);
 
             if ($isSelected) {
                 $this->isSelected(true);
@@ -251,7 +251,7 @@ trait SidemenuGroupTrait
     }
 
     /**
-     * Retrieve the sidemenu links.
+     * Retrieve the secondary menu links.
      *
      * @return ArrayIterator|\Generator
      */
@@ -282,7 +282,7 @@ trait SidemenuGroupTrait
     }
 
     /**
-     * Determine if the sidemenu has any links.
+     * Determine if the secondary menu has any links.
      *
      * @return boolean
      */
@@ -292,7 +292,7 @@ trait SidemenuGroupTrait
     }
 
     /**
-     * Count the number of sidemenu links.
+     * Count the number of secondary menu links.
      *
      * @return integer
      */
@@ -342,7 +342,7 @@ trait SidemenuGroupTrait
     }
 
     /**
-     * Determine if the sidemenu groups should be displayed as panels.
+     * Determine if the secondary groups should be displayed as panels.
      *
      * @return boolean
      */

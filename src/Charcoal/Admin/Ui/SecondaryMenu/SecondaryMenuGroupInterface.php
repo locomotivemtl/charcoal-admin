@@ -1,38 +1,38 @@
 <?php
 
-namespace Charcoal\Admin\Ui\Sidemenu;
+namespace Charcoal\Admin\Ui\SecondaryMenu;
 
 // From 'charcoal-ui'
 use Charcoal\Ui\PrioritizableInterface;
 
 // From 'charcoal-admin'
-use Charcoal\Admin\Widget\SidemenuWidgetInterface;
+use Charcoal\Admin\Widget\SecondaryMenuWidgetInterface;
 
 /**
- * Defines an admin sidemenu group
+ * Defines an admin secondary menu group
  */
-interface SidemenuGroupInterface extends
+interface SecondaryMenuGroupInterface extends
     PrioritizableInterface
 {
     /**
-     * Set the sidemenu widget.
+     * Set the secondary menu widget.
      *
-     * @param  SidemenuWidgetInterface $sidemenu The related sidemenu widget.
+     * @param  SecondaryMenuWidgetInterface $menu The related secondary menu widget.
      * @return self
      */
-    public function setSidemenu(SidemenuWidgetInterface $sidemenu);
+    public function setSecondaryMenu(SecondaryMenuWidgetInterface $menu);
 
     /**
-     * Retrieve the sidemenu widget.
+     * Retrieve the secondary menu widget.
      *
-     * @return SidemenuWidgetInterface
+     * @return SecondaryMenuWidgetInterface
      */
-    public function sidemenu();
+    public function secondaryMenu();
 
     /**
      * Set the identifier of the group.
      *
-     * @param  string $ident Sidemenu group identifier.
+     * @param  string $ident Secondary menu group identifier.
      * @return self
      */
     public function setIdent($ident);

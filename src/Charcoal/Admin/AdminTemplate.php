@@ -819,7 +819,7 @@ class AdminTemplate extends AbstractTemplate implements
             }
 
             if (isset($this['main_menu_item'])) {
-                $options['ident'] = $this['main_menu_item'];
+                $mainMenuIdent = $this['main_menu_item'];
             }
 
             if (is_string($options['ident'])) {

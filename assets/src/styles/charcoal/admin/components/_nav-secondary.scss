@@ -15,11 +15,13 @@
 }
 
 .c-nav-secondary {
-    position: relative;
+    position: absolute;
     z-index: 800;
-
-    .is-fullscreen-template & {
-    }
+    top: rem($header-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
 }
 
 .c-nav-secondary_pane {

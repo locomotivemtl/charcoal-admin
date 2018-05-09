@@ -156,15 +156,23 @@ class SecondaryMenuWidget extends AdminWidget implements
      */
     public function setData(array $data)
     {
-        parent::setData($data);
 
         if (isset($data['actions'])) {
             $this->setSecondaryMenuActions($data['actions']);
+            unset($data['actions']);
+        }
+
+        if (isset($data['current_item'])) {
+            $this->setCurrentItem($data['current_item']);
+            unset($data['current_item']);
         }
 
         if (isset($data['is_current'])) {
             $this->setIsCurrent($data['is_current']);
+            unset($data['is_current']);
         }
+
+        parent::setData($data);
 
         return $this;
     }
@@ -267,7 +275,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     public function isCurrentItem($linkIdent)
     {
         $context = array_filter([
-            $this->currentItem,
+            $this->currentItem(),
             $this->objType(),
             $this->adminRoute(),
         ]);

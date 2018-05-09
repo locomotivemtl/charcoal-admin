@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-08 
+ * ! Charcoal Admin - 2018-05-09 
  */
 a:focus {
   text-decoration: none;
@@ -1331,8 +1331,13 @@ a.chip:hover::before, a.chip:focus::before {
 }
 
 .c-nav-secondary {
-  position: relative;
+  position: absolute;
   z-index: 800;
+  top: 5.9375rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
 }
 
 @media (max-width: 699px) {

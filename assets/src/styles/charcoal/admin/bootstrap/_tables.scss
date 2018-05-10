@@ -16,7 +16,15 @@
         margin-bottom: rem($unit / 2);
     }
 
+    tr {
+        &.draggable--over {
+            opacity: 0;
+        }
+    }
+
     th, td {
+        position: relative;
+
         td, th {
             padding: $table-cell-padding-sm;
         }
@@ -50,6 +58,13 @@
 .table-cell-checkbox {
     width: rem(20px + 30px);
     text-align: center;
+}
+
+.table-sortable-handle {
+    position: absolute;
+    top: 50%;
+    left: -18px;
+    transform: translateY(-50%);
 }
 
 // .charcoal-admin-widget-table {

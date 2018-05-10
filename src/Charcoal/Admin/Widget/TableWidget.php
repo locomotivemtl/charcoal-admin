@@ -30,6 +30,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
     use ActionContainerTrait;
     use CollectionContainerTrait {
+        CollectionContainerTrait::createCollectionLoader as createCollectionLoaderFromTrait;
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
         CollectionContainerTrait::parseObjectRow as parseCollectionObjectRow;
     }
@@ -403,30 +404,55 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function collectionProperties()
     {
-        $properties  = $this->properties();
-        $propOptions = $this->propertiesOptions();
+        $props = $this->properties();
 
-        foreach ($properties as $propertyIdent => $propertyMetadata) {
+        foreach ($props as $propertyIdent => $property) {
+            $propertyMetadata = $props[$propertyIdent];
+
             $p = $this->propertyFactory()->create($propertyMetadata['type']);
             $p->setIdent($propertyIdent);
             $p->setData($propertyMetadata);
 
-            if (isset($propOptions[$propertyIdent]) && is_array($propOptions[$propertyIdent])) {
-                $p->setData($propOptions[$propertyIdent]);
+            $options = $this->viewOptions($propertyIdent);
+            $classes = $this->parsePropertyCellClasses($p);
+
+            if (isset($options['label'])) {
+                $label = $this->translator()->translate($options['label']);
+            } else {
+                $label = strval($p->label());
             }
 
             $column = [
-                'label' => trim($p->label())
+                'label' => trim($label)
             ];
 
-            $column['classes'] = $this->parsePropertyCellClasses($p);
-            if (is_array($column['classes'])) {
-                $column['classes'] = implode(' ', array_unique($column['classes']));
+            if (!isset($column['attr'])) {
+                $column['attr'] = [];
             }
 
-            if (empty($column['classes'])) {
-                unset($column['classes']);
+            if (isset($options['attr'])) {
+                $column['attr'] = array_merge($column['attr'], $options['attr']);
             }
+
+            if (isset($classes)) {
+                if (isset($column['attr']['class'])) {
+                    if (is_string($classes)) {
+                        $classes = explode(' ', $column['attr']['class']);
+                    }
+
+                    if (is_string($column['attr']['class'])) {
+                        $column['attr']['class'] = explode(' ', $column['attr']['class']);
+                    }
+
+                    $column['attr']['class'] = array_unique(array_merge($column['attr']['class'], $classes));
+                } else {
+                    $column['attr']['class'] = $classes;
+                }
+
+                unset($classes);
+            }
+
+            $column['attr'] = html_build_attributes($column['attr']);
 
             yield $column;
         }
@@ -903,6 +929,27 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
+     * Create a collection loader.
+     *
+     * @return CollectionLoader
+     */
+    protected function createCollectionLoader()
+    {
+        $loader = $this->createCollectionLoaderFromTrait();
+
+        $mainMenu = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+        if ($mainMenu) {
+            $loader->setCallback(function (&$obj) use ($mainMenu) {
+                if (!$obj['main_menu']) {
+                    $obj['main_menu'] = $mainMenu;
+                }
+            });
+        }
+
+        return $loader;
+    }
+
+    /**
      * Retrieve the widget factory.
      *
      * @throws RuntimeException If the widget factory was not previously set.
@@ -1111,6 +1158,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         return $collectionConfig['properties_options'];
     }
+
     /**
      * Filter the property before its assigned to the object row.
      *
@@ -1126,16 +1174,41 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         PropertyInterface $property,
         $propertyValue
     ) {
-        $cell = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
+        $cell    = $this->parseCollectionPropertyCell($object, $property, $propertyValue);
+        $ident   = $property->ident();
+        $options = $this->viewOptions($ident);
+        $classes = $this->parsePropertyCellClasses($property, $object);
 
-        $cell['classes'] = $this->parsePropertyCellClasses($property, $object);
-        if (is_array($cell['classes'])) {
-            $cell['classes'] = implode(' ', array_unique($cell['classes']));
+        $cell['truncate'] = (isset($options['truncate']) ? boolval($options['truncate']) : false);
+
+        if (!isset($cell['attr'])) {
+            $cell['attr'] = [];
         }
 
-        if (empty($cell['classes'])) {
-            unset($cell['classes']);
+        if (isset($options['attr'])) {
+            unset($options['attr']['width']);
+            $cell['attr'] = array_merge($cell['attr'], $options['attr']);
         }
+
+        if (isset($classes)) {
+            if (isset($cell['attr']['class'])) {
+                if (is_string($classes)) {
+                    $classes = explode(' ', $cell['attr']['class']);
+                }
+
+                if (is_string($cell['attr']['class'])) {
+                    $cell['attr']['class'] = explode(' ', $cell['attr']['class']);
+                }
+
+                $cell['attr']['class'] = array_unique(array_merge($cell['attr']['class'], $classes));
+            } else {
+                $cell['attr']['class'] = $classes;
+            }
+
+            unset($classes);
+        }
+
+        $cell['attr'] = html_build_attributes($cell['attr']);
 
         return $cell;
     }
@@ -1185,6 +1258,21 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
         $row['objectActions'] = $this->objectActions();
         $row['showObjectActions'] = ($this->showObjectActions === false) ? false : !!$row['objectActions'];
+
+        $row['attr'] = [
+            'class' => []
+        ];
+
+        $method = [ $object, 'isActiveTableRow' ];
+        if (is_callable($method)) {
+            if (call_user_func($method)) {
+                $row['attr']['class'][] = 'active';
+            }
+        }
+
+        $row['attr']['class'][] = 'js-table-row';
+
+        $row['attr'] = html_build_attributes($row['attr']);
 
         return $row;
     }

@@ -4,4 +4,4 @@
 
     @used-by `charcoal/admin/widget/tbody`
 --}}
-<td{{& attr }}>{{> charcoal/admin/widget/table/tbody-col/truncated }}{{^ truncate }}{{& val }}{{/ truncate }}</td>
+{{# truncate }}<span class="u-truncated"><span class="u-truncated_target">{{& val }}</span></span>{{/ truncate }}

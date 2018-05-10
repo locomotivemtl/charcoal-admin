@@ -64,6 +64,9 @@ module.exports = {
             // jQuery MiniColors
             '<%= paths.npm %>/@claviska/jquery-minicolors/jquery.minicolors.min.js',
 
+            // Shopify Draggable
+            '<%= paths.npm %>/@shopify/draggable/lib/es5/sortable.js',
+
             // Multiselect Two-sides
             '<%= paths.npm %>/multiselect-two-sides/dist/js/multiselect.min.js',
 

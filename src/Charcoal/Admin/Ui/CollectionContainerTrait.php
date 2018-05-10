@@ -721,8 +721,14 @@ trait CollectionContainerTrait
 
                 $propertyValue = $this->view()->renderTemplate($displayType, $this->display);
 
-                $objectProperties[] = $this->parsePropertyCell($object, $property, $propertyValue);
+                $cell = $this->parsePropertyCell($object, $property, $propertyValue);
+                // $cell['isFirst'] = false;
+                $objectProperties[] = $cell;
             };
+
+            // if (isset($objectProperties[0])) {
+            //     $objectProperties[0]['isFirst'] = true;
+            // }
 
             $this->currentObj = $object;
             $this->currentObjId = $object->id();

@@ -4,11 +4,11 @@
 
     @used-by `charcoal/admin/widget/tbody`
 --}}
-<tr class="js-table-row" data-id="{{ objectId }}" data-type="{{ objType }}">
+<tr{{& attr }} data-id="{{ objectId }}" data-type="{{ objType }}">
     {{# objectProperties }}
-    {{> charcoal/admin/widget/table/tbody-col }}
+        {{> charcoal/admin/widget/table/tbody-col }}
     {{/ objectProperties }}
     {{# showObjectActions }}
-    {{> charcoal/admin/widget/table/tbody-row-actions }}
+        {{> charcoal/admin/widget/table/tbody-row-actions }}
     {{/ showObjectActions }}
 </tr>

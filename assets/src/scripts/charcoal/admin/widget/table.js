@@ -81,122 +81,147 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
     var that = this;
 
     // The "quick create" event button loads the objectform widget
-    $('.js-list-quick-create', that.table_selector).on('click', function (e) {
-        e.preventDefault();
-        var url = Charcoal.Admin.admin_url() + 'widget/load',
-            data = {
-                widget_type: 'charcoal/admin/widget/objectForm',
-                widget_options: {
-                    obj_type: that.obj_type,
-                    obj_id: 0
-                }
-            };
+    // $('.js-list-quick-create', that.table_selector).on('click', function (e) {
+    //     e.preventDefault();
+    //     var url = Charcoal.Admin.admin_url() + 'widget/load',
+    //         data = {
+    //             widget_type: 'charcoal/admin/widget/objectForm',
+    //             widget_options: {
+    //                 obj_type: that.obj_type,
+    //                 obj_id: 0
+    //             }
+    //         };
 
-        $.post(url, data, function (response) {
-            var dlg = BootstrapDialog.show({
-                    title:   tableWidgetL10n.quickCreate,
-                    message: '…',
-                    nl2br:   false
-                });
+    //     $.post(url, data, function (response) {
+    //         var dlg = BootstrapDialog.show({
+    //                 title:   tableWidgetL10n.quickCreate,
+    //                 message: '…',
+    //                 nl2br:   false
+    //             });
 
-            dlg.getModalBody().on(
-                'click.charcoal.bs.dialog',
-                '[data-dismiss="dialog"]',
-                { dialog: dlg },
-                function (event) {
-                    event.data.dialog.close();
-                }
-            );
+    //         dlg.getModalBody().on(
+    //             'click.charcoal.bs.dialog',
+    //             '[data-dismiss="dialog"]',
+    //             { dialog: dlg },
+    //             function (event) {
+    //                 event.data.dialog.close();
+    //             }
+    //         );
 
-            if (response.success) {
-                dlg.setMessage(response.widget_html);
-            } else {
-                dlg.setType(BootstrapDialog.TYPE_DANGER);
-                dlg.setMessage(commonL10n.errorOccurred);
-            }
-        }, 'json');
+    //         if (response.success) {
+    //             dlg.setMessage(response.widget_html);
+    //         } else {
+    //             dlg.setType(BootstrapDialog.TYPE_DANGER);
+    //             dlg.setMessage(commonL10n.errorOccurred);
+    //         }
+    //     }, 'json');
 
-    });
+    // });
 
-    $('.js-sublist-inline-edit', that.table_selector).on('click', function (e) {
-        e.preventDefault();
+    // $('.js-sublist-inline-edit', that.table_selector).on('click', function (e) {
+    //     e.preventDefault();
 
-        var sublist = that.sublist(),
-            url = Charcoal.Admin.admin_url() + 'widget/table/inlinemulti',
-            data = {
-                obj_type: that.obj_type,
-                obj_ids: sublist.obj_ids
-            };
+    //     var sublist = that.sublist(),
+    //         url = Charcoal.Admin.admin_url() + 'widget/table/inlinemulti',
+    //         data = {
+    //             obj_type: that.obj_type,
+    //             obj_ids: sublist.obj_ids
+    //         };
 
-        $.post(url, data, function (response) {
-            if (response.success) {
-                var objects = response.objects;
-                for (var i = 0;i <= objects.length -1;i++) {
+    //     $.post(url, data, function (response) {
+    //         if (response.success) {
+    //             var objects = response.objects;
+    //             for (var i = 0;i <= objects.length -1;i++) {
 
-                    var formControls = objects[i].properties,
-                        row = $(sublist.elems[i]).parents('tr'),
-                        p = 0;
+    //                 var formControls = objects[i].properties,
+    //                     row = $(sublist.elems[i]).parents('tr'),
+    //                     p = 0;
 
-                    for (p in formControls) {
-                        var td = row.find('.property-' + p);
-                        td.html(formControls[p]);
-                    }
-                }
-            }
-        }, 'json');
+    //                 for (p in formControls) {
+    //                     var td = row.find('.property-' + p);
+    //                     td.html(formControls[p]);
+    //                 }
+    //             }
+    //         }
+    //     }, 'json');
 
-    });
+    // });
 
-    $('.js-list-import', that.element).on('click', function (e) {
-        e.preventDefault();
+    // $('.js-list-import', that.element).on('click', function (e) {
+    //     e.preventDefault();
 
-        var $this = $(this);
-        var widget_type = $this.data('widget-type');
+    //     var $this = $(this);
+    //     var widget_type = $this.data('widget-type');
 
-        that.widget_dialog({
-            title: tableWidgetL10n.importList,
-            widget_type: widget_type,
-            widget_options: {
-                obj_type: that.obj_type,
-                obj_id: 0
-            }
+    //     that.widget_dialog({
+    //         title: tableWidgetL10n.importList,
+    //         widget_type: widget_type,
+    //         widget_options: {
+    //             obj_type: that.obj_type,
+    //             obj_id: 0
+    //         }
+    //     });
+    // });
+
+    var $sortable_table = $('tbody.js-sortable', that.table_selector);
+    if ($sortable_table.length > 0) {
+        var sortableTable = new Sortable.default($sortable_table.get(), {
+            delay: 150,
+            draggable: '.js-table-row',
+            handle: '.js-sortable-handle'
         });
-    });
+        sortableTable.on('mirror:create', function(event) {
+            // console.log(event.cancel());
+            console.log('mirror creation');
+        });
+        sortableTable.on('sortable:start', function() {
+            console.log('sortable:start');
+        });
+        sortableTable.on('sortable:sort',  function() {
+            console.log('sortable:sort');
+        });
+        sortableTable.on('sortable:sorted', function() {
+            console.log('sortable:sorted');
+        });
+        sortableTable.on('sortable:stop', function() {
+            console.log('sortable:stop');
+        });
+    }
 
-    $('tbody.js-sortable', that.table_selector).sortable({
-        cursor: 'ns-resize',
-        delay: 150,
-        distance: 5,
-        opacity: 0.75,
-        containment: 'parent',
-        placeholder: 'ui-tablesort-placeholder',
-        helper: function (e, ui) {
-            ui.children().each(function () {
-                $(this).width($(this).width());
-            });
-            return ui;
-        },
-        update: function () {
-            var rows = $(this).sortable('toArray', {
-                attribute: 'data-id'
-            });
+    // $('tbody.js-sortable', that.table_selector).sortable({
+    //     cursor: 'ns-resize',
+    //     delay: 150,
+    //     distance: 5,
+    //     opacity: 0.75,
+    //     containment: 'parent',
+    //     placeholder: 'ui-tablesort-placeholder',
+    //     helper: function (e, ui) {
+    //         ui.children().each(function () {
+    //             $(this).width($(this).width());
+    //         });
+    //         return ui;
+    //     },
+    //     update: function () {
+    //         var rows = $(this).sortable('toArray', {
+    //             attribute: 'data-id'
+    //         });
 
-            var data = {
-                obj_type: that.obj_type,
-                obj_orders: rows,
-                starting_order: 1
-            };
-            var url = Charcoal.Admin.admin_url() + 'object/reorder';
-            $.ajax({
-                method: 'POST',
-                url: url,
-                data: data,
-                dataType: 'json'
-            }).done(function (response) {
-                console.debug(response);
-            });
-        }
-    }).disableSelection();
+    //         var data = {
+    //             obj_type: that.obj_type,
+    //             obj_orders: rows,
+    //             starting_order: 1
+    //         };
+    //         var url = Charcoal.Admin.admin_url() + 'object/reorder';
+    //         $.ajax({
+    //             method: 'POST',
+    //             url: url,
+    //             data: data,
+    //             dataType: 'json'
+    //         }).done(function (response) {
+    //             console.debug(response);
+    //         });
+    //     }
+    // }).disableSelection();
 
     $('.js-page-switch', that.table_selector).on('click', function (event) {
         event.preventDefault();

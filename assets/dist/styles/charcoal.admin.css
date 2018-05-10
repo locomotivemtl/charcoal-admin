@@ -62,6 +62,14 @@ a:focus {
   }
 }
 
+.table tr.draggable--over {
+  opacity: 0;
+}
+
+.table th, .table td {
+  position: relative;
+}
+
 .table th td, .table th th, .table td td, .table td th {
   padding: 0.3rem;
 }
@@ -87,6 +95,15 @@ a:focus {
 .table-cell-checkbox {
   width: 3.125rem;
   text-align: center;
+}
+
+.table-sortable-handle {
+  position: absolute;
+  top: 50%;
+  left: -18px;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 
 input[type="url"] {

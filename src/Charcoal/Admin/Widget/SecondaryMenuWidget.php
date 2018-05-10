@@ -259,10 +259,6 @@ class SecondaryMenuWidget extends AdminWidget implements
      */
     public function currentItem()
     {
-        if ($this->currentItem === null) {
-            return $this->objType() ?: $this->adminRoute()->getPath();
-        }
-
         return $this->currentItem;
     }
 

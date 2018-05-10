@@ -105,6 +105,32 @@
                             </div>
                         </section>
                     </div>
+
+                    <div class="col-xs-12 col-sm-6 col-lg-6">
+                        <section class="panel panel-default">
+                            <header class="panel-heading">
+                                <h3 class="panel-title">{{#_t}}Cdn cache{{/_t}}</h3>
+                            </header>
+                            <div class="panel-body">
+                                <p>{{#_t}}Some assets may be cached by the cdn (Content Delivenery Network) and need to be purged independently from the site cache system.{{/_t}}</p>
+                                {{!--
+                                @TODO Fetch num items cached in cdn service
+                                --}}
+                                <!--<dl>-->
+                                    <!--<dt>{{#_t}}Num entries{{/_t}}</dt>-->
+                                    <!--<dd></dd>-->
+                                    <!--<dt>{{#_t}}Total size{{/_t}}</dt>-->
+                                    <!--<dd>-->
+                                    <!--<dd></dd>-->
+                                <!--</dl>-->
+                                <p>
+                                    <button class="btn btn-info" data-purge="cache" data-cache-type="cdn">
+                                        <span class="btn-label">{{# _t }}Clear cdn cache{{/ _t }}</span>
+                                    </button>
+                                </p>
+                            </div>
+                        </section>
+                    </div>
                 </div>
 
                 <div class="col-md-12">

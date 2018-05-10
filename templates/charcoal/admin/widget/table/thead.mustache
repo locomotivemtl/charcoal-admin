@@ -6,6 +6,9 @@
 --}}
 <thead>
     <tr>
+        {{# sortable }}
+            <th class="table-cell-sort" aria-hidden="true"></th>
+        {{/ sortable }}
         {{# collectionProperties }}
             {{> charcoal/admin/widget/table/thead-col }}
         {{/ collectionProperties }}

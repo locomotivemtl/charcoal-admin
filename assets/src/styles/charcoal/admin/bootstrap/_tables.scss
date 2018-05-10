@@ -5,6 +5,7 @@
     border-radius: $border-radius;
     box-shadow: 0 0 0 1px $table-border-color;
     border-style: hidden !important;
+    overflow: hidden;
 
     @media (max-width: $to-small) {
         margin-top: $unit-small;
@@ -17,8 +18,25 @@
     }
 
     tr {
+        width: 100%;
+
         &.draggable--over {
-            opacity: 0;
+            background-color: $table-border-color !important;
+
+            td {
+                opacity: 0;
+            }
+
+            .table-cell-sort {
+                border-top-color: $table-border-color;
+                border-bottom-color: $table-border-color;
+            }
+
+            & + tr {
+                .table-cell-sort {
+                    border-top-color: $table-border-color;
+                }
+            }
         }
     }
 
@@ -55,24 +73,62 @@
     }
 }
 
+.table-sortable {
+    tr {
+        outline: none;
+    }
+
+    .draggable-container--is-dragging {
+        tr:not(:last-child) td {
+            border-bottom: none !important;
+        }
+    }
+
+    .draggable-mirror {
+        background-color: $charcoal-white-1;
+        display: table;
+        width: 100%;
+        z-index: 1;
+
+        .table-cell-sort {
+            border-top-color: $table-border-color;
+            border-bottom-color: $table-border-color;
+        }
+    }
+}
+
 .table-cell-checkbox {
     width: rem(20px + 30px);
     text-align: center;
 }
 
-.table-sortable-handle {
-    position: absolute;
-    top: 50%;
-    left: -18px;
-    transform: translateY(-50%);
+.table-cell-sort {
+    background-color: $white;
+    padding: 0px 5px;
+    width: 1px;
+
+    .table-sortable tbody & {
+        border-top-color: $white;
+        border-bottom-color: $white;
+        // border-top: none;
+        // border-bottom: none;
+
+        // tr:first-child & {
+            // border-top: 1px solid $table-border-color;
+        // }
+    }
 }
 
-// .charcoal-admin-widget-table {
-//     .table-container > .table {
-//         margin-bottom: ($line-height-computed * 3);
+.table-sortable-handle {
+    background-color: $white;
+    border: 1px solid $charcoal-gray-2;
+    color: $black;
+    padding: 5px;
+    font-size: 12px;
+    opacity: 0;
 
-//         & + .table-foot {
-//             margin-top: -($line-height-computed * 3);
-//         }
-//     }
-// }
+    .table tr.draggable-mirror &,
+    .table tr:hover & {
+        opacity: 1;
+    }
+}

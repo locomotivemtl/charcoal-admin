@@ -3964,7 +3964,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
 
 Charcoal.Admin.Widget_Table.prototype.create_rows = function ()
 {
-    var rows = $('.js-table-row');
+    var rows = $('.js-table-row', this.table_selector);
 
     for (var i = 0, len = rows.length; i < len; i++) {
         var element = rows[i],
@@ -4064,26 +4064,46 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 
     var $sortable_table = $('tbody.js-sortable', that.table_selector);
     if ($sortable_table.length > 0) {
-        var sortableTable = new Sortable.default($sortable_table.get(), {
+        new Sortable.default($sortable_table.get(), {
             delay: 150,
             draggable: '.js-table-row',
-            handle: '.js-sortable-handle'
-        });
-        sortableTable.on('mirror:create', function(event) {
-            // console.log(event.cancel());
-            console.log('mirror creation');
-        });
-        sortableTable.on('sortable:start', function() {
-            console.log('sortable:start');
-        });
-        sortableTable.on('sortable:sort',  function() {
-            console.log('sortable:sort');
-        });
-        sortableTable.on('sortable:sorted', function() {
-            console.log('sortable:sorted');
-        });
-        sortableTable.on('sortable:stop', function() {
-            console.log('sortable:stop');
+            handle: '.js-sortable-handle',
+            mirror: {
+                constrainDimensions: true,
+            }
+        }).on('mirror:create', function(event) {
+            var originalCells = event.originalSource.querySelectorAll(':scope > td');
+            var mirrorCells = event.source.querySelectorAll(':scope > td');
+            originalCells.forEach(function(cell, index) {
+                mirrorCells[index].style.width = cell.offsetWidth + 'px';
+            });
+        }).on('sortable:stop', function(event) {
+            if (event.oldIndex !== event.newIndex) {
+                var rows = Array.from(event.newContainer.querySelectorAll(':scope > tr')).map(function(row) {
+                    if (row.classList.contains('draggable-mirror') || row.classList.contains('draggable--original')) {
+                        return '';
+                    } else {
+                        return row.getAttribute('data-id');
+                    }
+                }).filter(function(row) {
+                    return row !== '';
+                });
+
+                var data = {
+                    obj_type: that.obj_type,
+                    obj_orders: rows,
+                    starting_order: 1
+                };
+                var url = Charcoal.Admin.admin_url() + 'object/reorder';
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data,
+                    dataType: 'json'
+                }).done(function (response) {
+                    console.debug(response);
+                });
+            }
         });
     }
 

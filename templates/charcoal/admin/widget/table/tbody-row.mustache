@@ -4,7 +4,14 @@
 
     @used-by `charcoal/admin/widget/tbody`
 --}}
-<tr{{& attr }} data-id="{{ objectId }}" data-type="{{ objType }}">
+<tr {{& attr }} data-id="{{ objectId }}" data-type="{{ objType }}">
+    {{# sortable }}
+        <td class="table-cell-sort">
+            <button class="btn table-sortable-handle js-sortable-handle" type="button">
+                <i class="fa fa-arrows-v" aria-hidden="true"></i>
+            </button>
+        </td>
+    {{/ sortable }}
     {{# objectProperties }}
         {{> charcoal/admin/widget/table/tbody-col }}
     {{/ objectProperties }}

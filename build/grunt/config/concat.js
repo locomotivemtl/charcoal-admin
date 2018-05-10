@@ -33,7 +33,7 @@ module.exports = {
             '<%= paths.npm %>/jquery/dist/jquery.js',
 
             // jQuery UI
-            '<%= paths.npm %>/jquery-ui-bundle/jquery-ui.js',
+            // '<%= paths.npm %>/jquery-ui-bundle/jquery-ui.js',
 
             // Bootstrap
             '<%= paths.npm %>/bootstrap/dist/js/bootstrap.bundle.js',
@@ -66,6 +66,7 @@ module.exports = {
 
             // Shopify Draggable
             '<%= paths.npm %>/@shopify/draggable/lib/es5/sortable.js',
+            // '<%= paths.npm %>/@shopify/draggable/lib/es5/plugins/resize-mirror.js',
 
             // Multiselect Two-sides
             '<%= paths.npm %>/multiselect-two-sides/dist/js/multiselect.min.js',

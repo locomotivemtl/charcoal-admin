@@ -5,7 +5,7 @@
 
 --}}
 {{# hasSecondaryMenu }}
-    <nav class="c-nav-secondary_pane tab-pane{{# isCurrent }} active{{/ isCurrent }}"
+    <nav class="c-nav-secondary_pane tab-pane{{# isCurrent }} active{{/ isCurrent }}{{^ showTitle }} -padding-top{{/ showTitle }}"
         id="{{ ident }}_pane"
         role="tabpanel">
         {{# showTitle }}

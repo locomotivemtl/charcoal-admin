@@ -13,7 +13,7 @@
     jquery ">= 1.7.x"
 
 "@shopify/draggable@^1.0.0-beta7":
-  version "1.0.0-beta.7"
+  version "1.0.0-beta7"
   resolved "https://registry.yarnpkg.com/@shopify/draggable/-/draggable-1.0.0-beta.7.tgz#58c3619ffd88841d337c2922506f4a85540ba7ee"
 
 "JSV@>= 4.0.x", JSV@^4.0.x:

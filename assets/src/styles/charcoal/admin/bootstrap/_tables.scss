@@ -105,17 +105,14 @@
 .table-cell-sort {
     background-color: $white;
     padding: 0px 5px;
-    width: 1px;
+
+    @media (min-width: $from-small) {
+        @include u-auto-cell-width;
+    }
 
     .table-sortable tbody & {
         border-top-color: $white;
         border-bottom-color: $white;
-        // border-top: none;
-        // border-bottom: none;
-
-        // tr:first-child & {
-            // border-top: 1px solid $table-border-color;
-        // }
     }
 }
 

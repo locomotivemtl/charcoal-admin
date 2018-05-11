@@ -12,26 +12,9 @@
             {{> charcoal/admin/widget/table/header }}
         {{/ showTableHeader }}
         <div class="c-table-container table-responsive">
-            {{!--
-            <strong>[[# _t ]]Filters[[/ _t ]]</strong>
-            <div class="btn-group">
-                <button type="button" class="btn btn-info">[[# _t ]]Latest Objects[[/ _t ]]</button>
-                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">[[# _t ]]Toggle Dropdown[[/ _t ]]</span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </div>
-            --}}
             <div class="c-table-pagination">
                 {{> charcoal/admin/widget/table/counter }}
             </div>
-
             <table class="table table-bordered table-hover{{# sortable }} table-sortable{{/ sortable }}">
                 {{# showTableHead }}
                     {{> charcoal/admin/widget/table/thead }}
@@ -41,16 +24,13 @@
                     {{> charcoal/admin/widget/table/tfoot }}
                 {{/ showTableFoot }}
             </table>
-
             {{# paginationWidget }}
                 {{> charcoal/admin/widget/table/pagination }}
             {{/ paginationWidget }}
         </div>
     {{/ hasObjects }}
     {{^ hasObjects }}
-        <div class="mt-4">
-            {{> charcoal/admin/widget/table/empty }}
-        </div>
+        {{> charcoal/admin/widget/table/empty }}
     {{/ hasObjects }}
 </div>
 

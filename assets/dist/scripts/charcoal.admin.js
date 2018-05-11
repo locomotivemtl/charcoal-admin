@@ -3897,8 +3897,7 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget)
 
     return this;
 };
-;/* globals commonL10n,tableWidgetL10n,widgetL10n */
-/**
+;/**
  * Table widget used for listing collections of objects
  * charcoal/admin/widget/table
  *
@@ -3967,28 +3966,28 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 
     var $sortable_table = $('tbody.js-sortable', that.table_selector);
     if ($sortable_table.length > 0) {
-        new Sortable.default($sortable_table.get(), {
+        new window.Sortable.default($sortable_table.get(), {
             delay: 150,
             draggable: '.js-table-row',
             handle: '.js-sortable-handle',
             mirror: {
                 constrainDimensions: true,
             }
-        }).on('mirror:create', function(event) {
+        }).on('mirror:create', function (event) {
             var originalCells = event.originalSource.querySelectorAll(':scope > td');
             var mirrorCells = event.source.querySelectorAll(':scope > td');
-            originalCells.forEach(function(cell, index) {
+            originalCells.forEach(function (cell, index) {
                 mirrorCells[index].style.width = cell.offsetWidth + 'px';
             });
-        }).on('sortable:stop', function(event) {
+        }).on('sortable:stop', function (event) {
             if (event.oldIndex !== event.newIndex) {
-                var rows = Array.from(event.newContainer.querySelectorAll(':scope > tr')).map(function(row) {
+                var rows = Array.from(event.newContainer.querySelectorAll(':scope > tr')).map(function (row) {
                     if (row.classList.contains('draggable-mirror') || row.classList.contains('draggable--original')) {
                         return '';
                     } else {
                         return row.getAttribute('data-id');
                     }
-                }).filter(function(row) {
+                }).filter(function (row) {
                     return row !== '';
                 });
 

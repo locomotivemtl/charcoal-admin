@@ -235,6 +235,6 @@
 // @output `width`, `white-space`
 //
 @mixin u-auto-cell-width {
-    width: 1px;
+    width: 1%;
     white-space: nowrap;
 }

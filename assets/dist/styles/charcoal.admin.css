@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-10 
+ * ! Charcoal Admin - 2018-05-11 
  */
 a:focus {
   text-decoration: none;
@@ -138,7 +138,13 @@ a:focus {
 .table-cell-sort {
   background-color: #ffffff;
   padding: 0px 5px;
-  width: 1px;
+}
+
+@media (min-width: 700px) {
+  .table-cell-sort {
+    width: 1%;
+    white-space: nowrap;
+  }
 }
 
 .table-sortable tbody .table-cell-sort {
@@ -1457,20 +1463,15 @@ a.chip:hover::before, a.chip:focus::before {
   }
 }
 
+@media (max-width: 1199px) {
+  .c-nav-secondary_pane.-padding-top {
+    padding-top: 20px;
+  }
+}
+
 @media (min-width: 1200px) {
-  .is-fullscreen-template .c-nav-secondary_pane {
-    background-color: #202020;
-    position: fixed;
-    top: 40px;
-    bottom: 0;
-    padding: 0 20px;
-    padding-bottom: 40px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    -webkit-transition: -webkit-transform 0.5s;
-    transition: -webkit-transform 0.5s;
-    transition: transform 0.5s;
-    transition: transform 0.5s, -webkit-transform 0.5s;
+  .c-nav-secondary_pane.-padding-top {
+    padding-top: 1.25rem;
   }
 }
 
@@ -1543,8 +1544,8 @@ a.chip:hover::before, a.chip:focus::before {
   font-size: 12px;
   padding: 16px 1.25rem;
   position: relative;
-  -webkit-transition: background-color 0.2s, color 0.2s;
-  transition: background-color 0.2s, color 0.2s;
+  -webkit-transition: background-color 0.2s, color 0.2s, border-radius 0.1s 0.3s;
+  transition: background-color 0.2s, color 0.2s, border-radius 0.1s 0.3s;
 }
 
 .c-nav-secondary_link:hover {
@@ -1593,6 +1594,8 @@ a.chip:hover::before, a.chip:focus::before {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   background-color: #dadadb;
+  -webkit-transition-delay: 0s;
+          transition-delay: 0s;
 }
 
 .c-nav-secondary_link.-arrow[aria-expanded=true]::after {
@@ -1798,7 +1801,7 @@ a.chip:hover::before, a.chip:focus::before {
 
 .c-table-container .property-active {
   text-align: center;
-  width: 1px;
+  width: 1%;
   white-space: nowrap;
 }
 
@@ -1814,7 +1817,7 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 700px) {
   .c-table-container_actions {
-    width: 1px;
+    width: 1%;
     white-space: nowrap;
   }
 }

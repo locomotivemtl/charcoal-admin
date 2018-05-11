@@ -2,18 +2,6 @@
 // Nav secondary Components
 // ==========================================================================
 
-@mixin c-nav-secondary_pane {
-    background-color: $charcoal-gray-6;
-    position: fixed;
-    top: $unit;
-    bottom: 0;
-    padding: 0 $unit / 2;
-    padding-bottom: $unit;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    transition: transform 0.5s;
-}
-
 .c-nav-secondary {
     position: absolute;
     z-index: 800;
@@ -38,7 +26,15 @@
     }
 
     @media (max-width: $to-large) {
-        @include c-nav-secondary_pane;
+        background-color: $charcoal-gray-6;
+        position: fixed;
+        top: $unit;
+        bottom: 0;
+        padding: 0 $unit / 2;
+        padding-bottom: $unit;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transition: transform 0.5s;
     }
 
     @media (min-width: $from-large) {
@@ -47,19 +43,14 @@
         padding: 0 rem($unit / 2);
         padding-bottom: rem($unit);
     }
-    .is-fullscreen-template & {
-        @media (min-width: $from-large) {
-            // top: $unit;
-            // background-color: $charcoal-gray-6;
-            // bottom: 0;
-            // position: absolute;
-            // width: rem($nav-width);
-            // padding-bottom: $unit;
-            // overflow-y: auto;
-            // -webkit-overflow-scrolling: touch;
 
-            // transition: transform 0.5s;
-            @include c-nav-secondary_pane;
+    &.-padding-top {
+        @media (max-width: $to-large) {
+            padding-top: $unit / 2;
+        }
+
+        @media (min-width: $from-large) {
+            padding-top: rem($unit / 2);
         }
     }
 
@@ -129,7 +120,7 @@
     font-size: 12px;
     padding: $font-size rem($unit / 2);
     position: relative;
-    transition: background-color $speed, color $speed;
+    transition: background-color $speed, color $speed, border-radius 0.1s 0.3s;
 
     &:hover {
         background-color: $charcoal-gray-1;
@@ -173,6 +164,7 @@
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
             background-color: $charcoal-gray-1;
+            transition-delay: 0s;
 
             &::after {
                 border-bottom: solid $charcoal-gray-5;

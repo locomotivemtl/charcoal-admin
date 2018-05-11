@@ -13,20 +13,20 @@
         </p>
         <p class="mb-0">
             <span class="btn-group" role="group">
-            {{# emptyListActions }}
-                {{# isSeparator }}
-                    </span>
-                    <span class="btn-group" role="group">
-                {{/ isSeparator }}
-                {{^ isSeparator }}
-                    {{> charcoal/admin/widget/actions }}
-                {{/ isSeparator }}
-            {{/ emptyListActions }}
-            {{^ showEmptyListActions }}
-                {{# isObjCreatable }}
-                <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
-                {{/ isObjCreatable }}
-            {{/ showEmptyListActions }}
+                {{# emptyListActions }}
+                    {{# isSeparator }}
+                        </span>
+                        <span class="btn-group" role="group">
+                    {{/ isSeparator }}
+                    {{^ isSeparator }}
+                        {{> charcoal/admin/widget/actions }}
+                    {{/ isSeparator }}
+                {{/ emptyListActions }}
+                {{^ showEmptyListActions }}
+                    {{# isObjCreatable }}
+                        <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
+                    {{/ isObjCreatable }}
+                {{/ showEmptyListActions }}
             </span>
         </p>
     </div>

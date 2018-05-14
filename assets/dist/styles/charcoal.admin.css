@@ -1,5 +1,5 @@
 /*
- * ! Charcoal Admin - 2018-05-11 
+ * ! Charcoal Admin - 2018-05-14 
  */
 a:focus {
   text-decoration: none;
@@ -142,7 +142,7 @@ a:focus {
 
 @media (min-width: 700px) {
   .table-cell-sort {
-    width: 1%;
+    width: 0.1%;
     white-space: nowrap;
   }
 }
@@ -1801,7 +1801,7 @@ a.chip:hover::before, a.chip:focus::before {
 
 .c-table-container .property-active {
   text-align: center;
-  width: 1%;
+  width: 0.1%;
   white-space: nowrap;
 }
 
@@ -1817,7 +1817,7 @@ a.chip:hover::before, a.chip:focus::before {
 
 @media (min-width: 700px) {
   .c-table-container_actions {
-    width: 1%;
+    width: 0.1%;
     white-space: nowrap;
   }
 }
@@ -2200,6 +2200,21 @@ a.chip:hover::before, a.chip:focus::before {
 .c-info.-dark {
   border: 1px solid #262626;
   color: #262626;
+}
+
+.c-notifications {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  padding: 1rem;
+}
+
+.c-notifications_item {
+  margin: 0;
+}
+
+.c-notifications_item + .c-notifications_item {
+  margin-top: 1rem;
 }
 
 .c-audio-player {

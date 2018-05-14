@@ -7,8 +7,6 @@
  * - `success`
  * - `warning`
  * - `error`
- *
- * It uses BootstrapDialog to display all of this.
  */
 
 ;(function ($, Admin, document, undefined) {
@@ -24,22 +22,26 @@
         supported: [ 'success', 'info', 'notice', 'warning', 'error', 'danger' ],
         definitions: {
             success: {
-                title: commonL10n.success,
-                type:  BootstrapDialog.TYPE_SUCCESS
+                title:   commonL10n.success,
+                display: 'notification',
+                type:    BootstrapDialog.TYPE_SUCCESS
             },
             notice: {
-                title: commonL10n.notice,
-                type:  BootstrapDialog.TYPE_INFO,
-                alias: [ 'info' ]
+                title:   commonL10n.notice,
+                display: 'notification',
+                type:    BootstrapDialog.TYPE_INFO,
+                alias:   [ 'info' ]
             },
             warning: {
-                title: commonL10n.warning,
-                type:  BootstrapDialog.TYPE_WARNING
+                title:   commonL10n.warning,
+                display: 'dialog',
+                type:    BootstrapDialog.TYPE_WARNING
             },
             error: {
-                title: commonL10n.errorOccurred,
-                type:  BootstrapDialog.TYPE_DANGER,
-                alias: [ 'danger' ]
+                title:   commonL10n.errorOccurred,
+                display: 'dialog',
+                type:    BootstrapDialog.TYPE_DANGER,
+                alias:   [ 'danger' ]
             }
         },
         aliases: {
@@ -55,7 +57,7 @@
      */
     var Manager = function ()
     {
-        this.reset();
+        this.empty();
 
         if (arguments.length) {
             this.push.apply(this, arguments);
@@ -134,11 +136,9 @@
      * This will class all success object by level in order to display a FULL LIST
      * once the call method is...called
      *
-     * @param  {mixed}  [entries]
-     * @param  {string} [context]
      * @return this
      */
-    Manager.prototype.push = function (/* context, entries */)
+    Manager.prototype.push = function ()
     {
         var context = arguments[0];
         var entries = arguments;
@@ -162,54 +162,37 @@
             }
 
             if (entry instanceof Entry) {
-                this.storage/*[context]*/.push(entry);
+                this.storage.push(entry);
             }
         }
 
         return this;
     };
 
-    /** @deprecated in favor of Manager.prototype.push() */
-    Manager.prototype.add_data = Manager.prototype.push;
-
     /**
      * Get Messages
      *
-     * @param  {string} [key] - The key to get the messages from.
      * @return {array}  Messages to show.
      */
-    Manager.prototype.getMessages = function (/* key */) {
-        /*
-        key = this.parseContext(key);
-        return this.storage[key];
-        */
+    Manager.prototype.getMessages = function () {
         return this.storage;
     };
 
     /**
      * Count Messages
      *
-     * @param  {string}  [key] - The key to get the messages from.
      * @return {integer} The number of messages.
      */
-    Manager.prototype.countMessages = function (/* key */) {
-        /*
-        key = this.parseContext(key);
-        return this.storage[key].length;
-        */
+    Manager.prototype.countMessages = function () {
         return this.storage.length;
     };
 
     /**
      * Has Messages
      *
-     * @param  {string}  [key] - The key to get the messages from.
      * @return {boolean} Whether messages have been set or not.
      */
-    Manager.prototype.hasMessages = function (/* key */) {
-        /*
-        return this.countMessages(key) > 0;
-        */
+    Manager.prototype.hasMessages = function () {
         return this.countMessages() > 0;
     };
 
@@ -341,39 +324,6 @@
         return this;
     };
 
-    /** @deprecated */
-    Manager.prototype.add_context = function (context) {
-        if (!context) {
-            return this;
-        }
-
-        if (typeof context.name === 'undefined' || typeof context.title === 'undefined') {
-            return this;
-        }
-
-        defs[ context.name ] = context;
-        // for (var k in context) {
-        //     if (typeof context[ k ].title === 'undefined') {
-        //         // WRONG
-        //         return this;
-        //         break;
-        //     }
-        // }
-
-        return this;
-    };
-
-    /** @deprecated */
-    Manager.prototype.add_context_alias = function (alias, context) {
-        if (!alias || !context || !defs[ context ]) {
-            return this;
-        }
-
-        alts[ alias ] = context;
-
-        return this;
-    };
-
     /**
      * Actions in the dialog box
      */
@@ -385,28 +335,19 @@
     /**
      * Dispatch the results of all feedback accumulated.
      *
-     * @param  {string} [key] - The key to get the messages from.
      * @return this
      */
-    Manager.prototype.dispatch = function (/* key */)
+    Manager.prototype.dispatch = function ()
     {
-        if (!this.hasMessages(/* key */)) {
+        if (!this.hasMessages()) {
             return this;
         }
 
         var key, level, buttons;
-        /*
-        if (key) {
-            var grouped = {};
-            grouped[key] = this.getMessages(key);
-        } else {
-            var grouped = this.getMessagesMap();
-        }
-        */
         var grouped = this.getMessagesMap();
 
         for (key in grouped) {
-            level   = this.level(key);
+            level       = this.level(key);
             buttons = [];
             if (this.actions.length) {
                 for (var action, k = 0; k < this.actions.length; k++) {
@@ -418,12 +359,28 @@
                 }
             }
 
-            BootstrapDialog.show({
-                title:   level.title,
-                message: '<p class="mb-0">' + grouped[key].join('</p><p>') + '</p>',
-                type:    level.type,
-                buttons: buttons
-            });
+            var message = grouped[key].join('</p><p>');
+
+            switch (level.display) {
+                case 'notification':
+                    Notification.createFromObject({
+                        level: key,
+                        content: message,
+                        dismissible: true
+                    });
+                    break;
+
+                case 'dialog':
+                    /* falls through */
+                default:
+                    BootstrapDialog.show({
+                        title:   level.title,
+                        message: '<p class="mb-0">' + message + '</p>',
+                        type:    level.type,
+                        buttons: buttons
+                    });
+                    break;
+            }
         }
 
         this.empty();
@@ -431,21 +388,16 @@
         return this;
     };
 
-    /** @deprecated in favor of Manager.prototype.dispatch() */
-    Manager.prototype.call = Manager.prototype.dispatch;
-
+    /**
+     * Reset feedback storages.
+     */
     Manager.prototype.empty = function ()
     {
         reset();
 
         this.actions = [];
-        this.storage = []/*{
-            global: []
-        }*/;
+        this.storage = [];
     };
-
-    /** @deprecated in favor of Manager.prototype.empty() */
-    Manager.prototype.reset = Manager.prototype.empty;
 
     /**
      * Single Feedback Message
@@ -493,9 +445,9 @@
         },
 
         setLevel: function (level) {
-            var type = $.type(level);
-            if (type !== 'string') {
-                throw new TypeError('Feedback level must be a string, received ' + type);
+            var vartype = $.type(level);
+            if (vartype !== 'string') {
+                throw new TypeError('Feedback level must be a string, received ' + vartype);
             }
 
             if ($.inArray(level, lvls) === -1) {
@@ -537,6 +489,82 @@
             return ($.type(message) === 'string');
         }
     };
+
+    /**
+     * Notification Component
+     *
+     * @param {String} [level]   - The feedback level.
+     * @param {String} [message] - The feedback message.
+     */
+    var Notification = function (level, content, dismissible) {
+        // Initialize the feedback manager
+        Admin.feedback();
+
+        this.options = {
+            id: BootstrapDialog.newGuid(),
+            delay: 3200
+        }
+
+        this.$elem = $('<article class="c-notifications_item alert fade" role="alert"></article>');
+        this.$elem.prop('id', this.options.id);
+        this.$elem.addClass('alert-' + level);
+
+        if (dismissible) {
+            this.$elem.addClass('alert-dismissible');
+            var $button = $('<button type="button" class="close" data-dismiss="alert" aria-label="'+commonL10n.close+'"><span aria-hidden="true">&times;</span></button>');
+            this.$elem.append($button);
+        }
+
+        if (content) {
+            var $content = $('<div class="alert-body"></div>');
+            $content.html('').append(content);
+            this.$elem.append($content);
+        }
+
+        this.$elem.appendTo('.c-notifications').addClass('show');
+
+        this.$elem.on('mouseover.charcoal.feedback', { notification: this }, function (event) {
+            window.clearTimeout(event.data.notification.closeTimer);
+        });
+
+        this.$elem.on('mouseout.charcoal.feedback', { notification: this }, function (event) {
+            var notification = event.data.notification;
+            notification.closeTimer = window.setTimeout(function() {
+                notification.$elem.alert('close');
+            }, notification.options.delay);
+        });
+
+        this.$elem.on('closed.bs.alert', { notification: this }, function (event) {
+            event.data.notification.$elem.off('.charcoal.feedback');
+            window.clearTimeout(event.data.notification.closeTimer);
+        });
+
+        this.closeTimer = window.setTimeout(
+            $.proxy(
+                function () {
+                    this.$elem.alert('close');
+                },
+                this
+            ),
+            this.options.delay
+        );
+
+        return this;
+    };
+
+    Notification.createFromObject = function (obj) {
+        var level       = obj.level || null;
+        var content     = obj.content || null;
+        var dismissible = obj.dismissible || null;
+
+        if (!level && !content && !dismissible) {
+            return null;
+        }
+
+        return new Notification(level, content, dismissible);
+    };
+
+    Notification.prototype = {};
 
     reset();
 

@@ -1,17 +1,9 @@
 module.exports = {
     vendors: {
         files: [
-            // @todo What is this?
-            // {
-            //     expand: true,
-            //     cwd:   '<%= paths.npm %>/bootstrap-sass/assets/fonts/bootstrap/',
-            //     src:   ['**', '*'],
-            //     dest:  '<%= paths.fonts %>'
-            // },
             {
                 expand: true,
                 cwd:   '<%= paths.npm %>/echarts/dist/',
-                // src: ['echarts.js'],
                 src:   ['**/*.*', '*/*.*', '*.*'],
                 dest:  '<%= paths.js.dist %>/vendors/echarts/'
             },

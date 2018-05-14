@@ -1,16 +1,7 @@
 /* globals authL10n */
 /**
  * charcoal/admin/template/login
- *
- * Require:
- * - jQuery
- * - Boostrap3
- * - Boostrap3-Dialog
- *
- * @todo Implement feedback from server-side
  */
-
-// Charcoal.Admin.Template_Login = new Charcoal.Admin.Widget();  // Here's where the inheritance occurs
 
 Charcoal.Admin.Template_Login = function (opts)
 {

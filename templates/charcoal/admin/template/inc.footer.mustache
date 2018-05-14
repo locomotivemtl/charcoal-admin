@@ -1,20 +1,29 @@
     </div> {{! Closing .o-flex }}
 
-    {{#showFooterMenu}}
-        {{>charcoal/admin/widget/menu.footer}}
-    {{/showFooterMenu}}
+    {{! <article class="c-notifications_item alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="alert-body">This is your warning</div>
+    </article> }}
+    {{! Notification container }}
+    <div class="c-notifications"></div>
 
-    {{>charcoal/admin/template/inc.foot.extra}}
+    {{# showFooterMenu }}
+        {{> charcoal/admin/widget/menu.footer }}
+    {{/ showFooterMenu }}
+
+    {{> charcoal/admin/template/inc.foot.extra }}
 
     {{!-- Styles from widgets & templates --}}
-    {{&cssRequirements}}
-    {{&css}}
+    {{& cssRequirements }}
+    {{& css }}
 
     {{# addJsRequirement }}
-    <script rel="l10n">
-        {{> charcoal/admin/l10n/common.js }}
-        {{> charcoal/admin/l10n/cache.js }}
-    </script>
+        <script rel="l10n">
+            {{> charcoal/admin/l10n/common.js }}
+            {{> charcoal/admin/l10n/cache.js }}
+        </script>
     {{/ addJsRequirement }}
 
     <script rel="l10n">
@@ -23,14 +32,14 @@
 
     {{& jsRequirements }}
 
-    <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.vendors.js"></script>
+    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.vendors.js"></script>
 
-    <script src="{{baseUrl}}assets/admin/scripts/charcoal.admin.js"></script>
+    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.js"></script>
 
     <script>
         Charcoal.Admin.set_data({
-            'base_url'   : '{{baseUrl}}',
-            'admin_path' : 'admin'
+            base_url:   '{{ baseUrl }}',
+            admin_path: 'admin'
         });
 
         $(document)
@@ -60,7 +69,7 @@
     </script>
 
     {{!-- Scripts from widgets & templates --}}
-    {{&js}}
+    {{& js }}
 
 </body>
 </html>

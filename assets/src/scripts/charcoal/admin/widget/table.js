@@ -92,16 +92,14 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
                     return row !== '';
                 });
 
-                var data = {
-                    obj_type: that.obj_type,
-                    obj_orders: rows,
-                    starting_order: 1
-                };
-                var url = Charcoal.Admin.admin_url() + 'object/reorder';
                 $.ajax({
                     method: 'POST',
-                    url: url,
-                    data: data,
+                    url: Charcoal.Admin.admin_url() + 'object/reorder',
+                    data: {
+                        obj_type: that.obj_type,
+                        obj_orders: rows,
+                        starting_order: 1
+                    },
                     dataType: 'json'
                 }).done(function (response) {
                     console.debug(response);

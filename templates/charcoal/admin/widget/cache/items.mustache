@@ -24,7 +24,9 @@
                 <td>{{ created }}</td>
                 <td>{{ timeout }}</td>
                 <td>{{ expiry }}</td>
-                <!-- <td><a class="btn btn-danger">{{# _t }}Delete{{/ _t }}</a></td> -->
+                <!-- <td>
+                    <button class="btn btn-danger" data-clear="cache" data-cache-type="item" data-cache-key="{{ key }}">{{# _t }}Delete{{/ _t }}</button>
+                </td> -->
             </tr>
             {{/ cacheInfo.global_items }}
         </tbody>

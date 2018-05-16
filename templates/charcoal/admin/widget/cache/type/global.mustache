@@ -5,6 +5,7 @@
     <div class="card-body">
         <p>{{# _t }}Clearing this cache will clear *all* entries in the cache. In other words, it completely erase all items in the cache (pages, objects and everything else).{{/ _t }}</p>
         <p><small>{{# _t }}If the <a href="{{ adminUrl }}system/static-website">static website</a> option is enabled, clearing the cache might not result in new versions of the page, as the static website, when properly configured, supercedes all cache.{{/ _t }}</small></p>
+        <p><small>{{# _t }}The <em>Purge</em> function allows the cache to perform basic maintenance tasks, such as removing stale or expired items and reindexing data for improved performance.{{/ _t }}</small></p>
         {{# hasStats }}
         <dl>
             <dt>{{# _t }}Num Entries{{/ _t }}</dt>
@@ -16,8 +17,8 @@
         {{/ hasStats }}
     </div>
     <footer class="card-footer bg-transparent">
-        <button class="btn btn-primary btn-lg" data-purge="cache" data-cache-type="global">
-            <i class="fa fa-refresh" aria-hidden="true">&nbsp;</i>
+        <button class="btn btn-lg btn-primary" data-clear="cache" data-cache-type="global">
+            <i class="fa fa-trash" aria-hidden="true">&nbsp;</i>
             <span class="btn-label">{{# _t }}Clear Global Cache{{/ _t }}</span>
         </button>
     </footer>

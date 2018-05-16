@@ -1,0 +1,23 @@
+<section class="card">
+    <header class="card-header">
+        <h3 class="card-title mb-0">{{# _t }}Objects Cache{{/ _t }}</h3>
+    </header>
+    <div class="card-body">
+        <p>{{# _t }}This cache includes the objects and their metadata.{{/ _t }}</p>
+        <p>{{# _t }}Clearing this cache will reset all metadata (e.g., from their JSON files) and objects will be reloaded from their source (database) at next request.{{/ _t }}</p>
+        {{# hasStats }}
+        <dl>
+            <dt>{{# _t }}Num Entries{{/ _t }}</dt>
+            <dd>{{ cacheInfo.objects.num_entries }}</dd>
+            <dt>{{# _t }}Total Size{{/ _t }}</dt>
+            <dd>{{ cacheInfo.objects.total_size }}
+            <dd></dd>
+        </dl>
+        {{/ hasStats }}
+    </div>
+    <footer class="card-footer bg-transparent">
+        <button class="btn btn-primary" data-purge="cache" data-cache-type="objects">
+            <span class="btn-label">{{# _t }}Clear Objects Cache{{/ _t }}</span>
+        </button>
+    </footer>
+</section>

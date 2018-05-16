@@ -1,0 +1,66 @@
+// ==========================================================================
+// Clear Cache
+// ==========================================================================
+
+.c-cache-info {}
+
+.c-cache-types {
+    .card-grid {
+        @media (max-width: $to-small) {
+            .card {
+                margin-bottom: $card-deck-margin;
+            }
+        }
+
+        @media (min-width: $from-small) {
+            flex-flow: row wrap;
+            margin-right: -$card-deck-margin;
+            margin-left: -$card-deck-margin;
+
+            &::after {
+                content: '';
+                flex: auto;
+            }
+
+            .card {
+                display: flex;
+                flex: 1 0 0%;
+                flex-direction: column;
+                // min-width: 300px;
+                margin-right: $card-deck-margin;
+                margin-left: $card-deck-margin;
+                margin-bottom: $card-deck-margin * 2;
+
+                &.w-100 {
+                    flex: 1 1 auto;
+                }
+            }
+        }
+
+        @media (min-width: $from-small) and (max-width: $to-medium) {
+            .card {
+                @include card-deck-column-count(2)
+            }
+        }
+
+        @media (min-width: $from-medium) and (max-width: $to-large) {
+            .card {
+                @include card-deck-column-count(3)
+            }
+        }
+
+        @media (min-width: $from-large) and (max-width: $to-big) {
+            .card {
+                @include card-deck-column-count(2)
+            }
+        }
+
+        @media (min-width: $from-big) {
+            .card {
+                @include card-deck-column-count(3)
+            }
+        }
+    }
+}
+
+.c-cache-items {}

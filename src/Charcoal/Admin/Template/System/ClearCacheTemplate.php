@@ -4,6 +4,9 @@ namespace Charcoal\Admin\Template\System;
 
 use APCUIterator;
 use APCIterator;
+use DateInterval;
+use DateTimeInterface;
+use DateTime;
 use RuntimeException;
 
 use Stash\Driver\Apc;
@@ -282,10 +285,17 @@ class ClearCacheTemplate extends AdminTemplate
         $iter = $this->createApcIterator($key);
 
         foreach ($iter as $item) {
-            $item['ident']   = $this->formatApcCacheKey($item['key']);
-            $item['size']    = $this->formatBytes($item['mem_size']);
-            $item['created'] = date('Y-m-d H:i:s', $item['creation_time']);
-            $item['expiry']  = date('Y-m-d H:i:s', ($item['creation_time']+$item['ttl']));
+            $item['ident'] = $this->formatApcCacheKey($item['key']);
+            $item['size']  = $this->formatBytes($item['mem_size']);
+
+            $item['expiration_time'] = ($item['creation_time'] + $item['ttl']);
+
+            $date1 = new DateTime('@'.$item['creation_time']);
+            $date2 = new DateTime('@'.$item['expiration_time']);
+
+            $item['created'] = $date1->format('Y-m-d H:i:s');
+            $item['expiry']  = $date2->format('Y-m-d H:i:s');
+            $item['timeout'] = $this->formatTimeDiff($date1, $date2);
             yield $item;
         }
     }
@@ -414,6 +424,63 @@ class ClearCacheTemplate extends AdminTemplate
         $size   = number_format($size, 2, $locale['decimal_point'], $locale['thousands_sep']);
 
         return rtrim($size, '.0').' '.$unit;
+    }
+
+    /**
+     * Human-readable time difference.
+     *
+     * Note: Adapted from CakePHP\Chronos.
+     *
+     * @see https://github.com/cakephp/chronos/blob/1.1.4/LICENSE
+     *
+     * @param DateTimeInterface      $date1 The datetime to start with.
+     * @param DateTimeInterface|null $date2 The datetime to compare against.
+     * @return string
+     */
+    private function formatTimeDiff(DateTimeInterface $date1, DateTimeInterface $date2 = null)
+    {
+        $isNow = $date2 === null;
+        if ($isNow) {
+            $date2 = new DateTime('now', $date1->getTimezone());
+        }
+        $interval = $date1->diff($date2);
+
+        $translator = $this->translator();
+
+        switch (true) {
+            case ($interval->y > 0):
+                $unit  = 'time.year';
+                $count = $interval->y;
+                break;
+            case ($interval->m > 0):
+                $unit  = 'time.month';
+                $count = $interval->m;
+                break;
+            case ($interval->d > 0):
+                $unit  = 'time.day';
+                $count = $interval->d;
+                if ($count >= 7) {
+                    $unit  = 'time.week';
+                    $count = (int)($count / 7);
+                }
+                break;
+            case ($interval->h > 0):
+                $unit  = 'time.hour';
+                $count = $interval->h;
+                break;
+            case ($interval->i > 0):
+                $unit  = 'time.minute';
+                $count = $interval->i;
+                break;
+            default:
+                $count = $interval->s;
+                $unit  = 'time.second';
+                break;
+        }
+
+        $time = $translator->transChoice($unit, $count, [ '{{ count }}' => $count ]);
+
+        return $time;
     }
 
     /**

@@ -13,13 +13,9 @@
         {{> charcoal/admin/widget/feedbacks }}
         <div class="dashboard">
             {{# cacheInfo }}
-            <dl class="mb-4">
-                <dt>{{# _t }}Active?{{/ _t }}</dt>
-                <dd>{{# active }}Yes{{/ active }}{{^ active }}No{{/ active }}</dd>
-                <dt>{{# _t }}Cache Type{{/ _t }}</dt>
-                <dd>{{ type }}</dd>
-            </dl>
-
+            <header class="c-cache-info">
+                {{> charcoal/admin/widget/cache/info }}
+            </header>
             {{/ cacheInfo }}
             {{# isMemory }}
             <div class="alert alert-info" role="alert">
@@ -35,137 +31,19 @@
 
             {{/ isApc }}
             {{^ isMemory }}
-            <div class="row mb-4">
+            <div class="c-cache-types row mb-4">
                 <div class="col-12">
-                    <section class="card">
-                        <header class="card-header">
-                            <h3 class="card-title mb-0">{{# _t }}Global Cache{{/ _t }}</h3>
-                        </header>
-                        <div class="card-body">
-                            <p>{{# _t }}Clearing this cache will clear *all* entries in the cache. In other words, it completely erase all items in the cache (pages, objects and everything else).{{/ _t }}</p>
-                            <p><small>Note that if the <a href="{{ adminUrl }}system/static-website">static website</a> option is enabled, clearing the cache might not result in new versions of the page, as the static website, when properly configured, supercedes all cache.</small></p>
-                            {{# hasStats }}
-                            <dl>
-                                <dt>{{# _t }}Num Entries{{/ _t }}</dt>
-                                <dd>{{ cacheInfo.global.num_entries }}</dd>
-                                <dt>{{# _t }}Total Size{{/ _t }}</dt>
-                                <dd>{{ cacheInfo.global.total_size }}
-                                <dd></dd>
-                            </dl>
-                            {{/ hasStats }}
-                        </div>
-                        <footer class="card-footer bg-transparent">
-                            <button class="btn btn-primary btn-lg" data-purge="cache" data-cache-type="global">
-                                <i class="fa fa-refresh" aria-hidden="true">&nbsp;</i>
-                                <span class="btn-label">{{# _t }}Clear Global Cache{{/ _t }}</span>
-                            </button>
-                        </footer>
-                    </section>
-                </div>
-            </div>
-
-            {{/ isMemory }}
-            {{^ isMemory }}
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="card-deck">
-                        {{! <div class="col-12 col-sm-6 mb-3 mb-sm-0"> }}
-                        <section class="card">
-                            <header class="card-header">
-                                <h3 class="card-title mb-0">{{# _t }}Pages Cache{{/ _t }}</h3>
-                            </header>
-                            <div class="card-body">
-                                <p>{{# _t }}Some pages might be saved entirely in the cache, either at route-level or template-level.{{/ _t }}</p>
-                                <p>{{# _t }}Clearing this cache will make sure the pages will be rebuilt at next request.{{/ _t }}</p>
-                                {{# hasStats }}
-                                <dl>
-                                    <dt>{{# _t }}Num Entries{{/ _t }}</dt>
-                                    <dd>{{ cacheInfo.pages.num_entries }}</dd>
-                                    <dt>{{# _t }}Total Size{{/ _t }}</dt>
-                                    <dd>{{ cacheInfo.pages.total_size }}
-                                    <dd></dd>
-                                </dl>
-                                {{/ hasStats }}
-                            </div>
-                            <footer class="card-footer bg-transparent">
-                                <button class="btn btn-primary" data-purge="cache" data-cache-type="pages">
-                                    <span class="btn-label">{{# _t }}Clear Pages Cache{{/ _t }}</span>
-                                </button>
-                            </footer>
-                        </section>
-                        {{! </div> }}
-
-                        {{! <div class="col-12 col-sm-6 mb-3 mb-sm-0"> }}
-                        <section class="card">
-                            <header class="card-header">
-                                <h3 class="card-title mb-0">{{# _t }}Objects Cache{{/ _t }}</h3>
-                            </header>
-                            <div class="card-body">
-                                <p>{{# _t }}This cache includes the objects and their metadata.{{/ _t }}</p>
-                                <p>{{# _t }}Clearing this cache will reset all metadata (e.g., from their JSON files) and objects will be reloaded from their source (database) at next request.{{/ _t }}</p>
-                                {{# hasStats }}
-                                <dl>
-                                    <dt>{{# _t }}Num Entries{{/ _t }}</dt>
-                                    <dd>{{ cacheInfo.objects.num_entries }}</dd>
-                                    <dt>{{# _t }}Total Size{{/ _t }}</dt>
-                                    <dd>{{ cacheInfo.objects.total_size }}
-                                    <dd></dd>
-                                </dl>
-                                {{/ hasStats }}
-                            </div>
-                            <footer class="card-footer bg-transparent">
-                                <button class="btn btn-primary" data-purge="cache" data-cache-type="objects">
-                                    <span class="btn-label">{{# _t }}Clear Objects Cache{{/ _t }}</span>
-                                </button>
-                            </footer>
-                        </section>
+                    <div class="card-grid">
+                        {{> charcoal/admin/widget/cache/types }}
                     </div>
                 </div>
             </div>
 
             {{/ isMemory }}
             {{^ isMemory }}
-            <div class="row">
+            <div class="c-cache-items row">
                 <div class="col-12">
-                    <section class="card card-table">
-                        <header class="card-header">
-                            <h3 class="card-title mb-0">{{# _t }}Cache Entries{{/ _t }}</h3>
-                        </header>
-                        {{# cacheInfo.has_global_items }}
-                        <table class="table"
-                               data-toggle="table"
-                               data-search="true"
-                               data-pagination="true" data-page-list="10,25,50,100,All" data-page-size="25">
-                            <thead>
-                                <tr>
-                                    <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Key{{/ _t }}</th>
-                                    <th scope="col" data-sortable="true">{{# _t }}Hits{{/ _t }}</th>
-                                    <th scope="col" data-sortable="true">{{# _t }}Size{{/ _t }}</th>
-                                    <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Created{{/ _t }}</th>
-                                    <th scope="col" data-sortable="true">{{# _t }}Timeout{{/ _t }}</th>
-                                    <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Expiry{{/ _t }}</th>
-                                    <!-- <th scope="col">{{# _t }}Action{{/ _t }}</th> -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{# cacheInfo.global_items }}
-                                <tr>
-                                    <td><strong>{{ ident }}</strong></td>
-                                    <td>{{ num_hits }}</td>
-                                    <td><span data-value="{{ mem_size }}">{{ size }}</span></td>
-                                    <td>{{ created }}</td>
-                                    <td>{{ ttl }}</td>
-                                    <td>{{ expiry }}</td>
-                                    <!-- <td><a class="btn btn-danger">{{# _t }}Delete{{/ _t }}</a></td> -->
-                                </tr>
-                                {{/ cacheInfo.global_items }}
-                            </tbody>
-                        </table>
-                        {{/ cacheInfo.has_global_items }}
-                        {{^ cacheInfo.has_global_items }}
-                        <div class="card-body text-center">{{# _t }}No records found{{/ _t }}</div>
-                        {{/ cacheInfo.has_global_items }}
-                    </section>
+                    {{> charcoal/admin/widget/cache/items }}
                 </div>
             </div>
             {{/ isMemory }}

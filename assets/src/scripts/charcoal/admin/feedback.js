@@ -497,14 +497,6 @@
             throw new TypeError('Notification config must be an associative array, received ' + type);
         }
 
-        if (this.validLevel(config.level)) {
-            this.setLevel(config.level);
-        } else {
-            throw new TypeError(
-                'Feedback level required. Must be one of: ' + lvls.join(', ')
-            );
-        }
-
         if (this.validMessage(config.message)) {
             this.setMessage(config.message);
         }
@@ -516,7 +508,7 @@
 
         this.$elem = $('<article class="c-notifications_item alert fade show" role="alert"></article>');
         this.$elem.prop('id', this.config.id);
-        this.$elem.addClass('alert-' + this.config.level);
+        this.$elem.addClass('alert-' + this.config.type.replace('type-', ''));
 
         if (this.config.dismissible) {
             this.$elem.addClass('alert-dismissible');

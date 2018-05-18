@@ -24,8 +24,7 @@
     {{/ showHeader }}
     {{^ showHeader }}
         {{# showDescription }}
-            {{! @todo See if `.form-group-description` is useful }}
-            <div class="help-block o-section form-group-description">{{& description }}</div>
+            <div class="form-text border-bottom mb-4 pb-4">{{& description }}</div>
         {{/ showDescription }}
         {{# showNotesAbove }}
             {{> charcoal/admin/template/inc.notes }}

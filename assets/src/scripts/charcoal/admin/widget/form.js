@@ -61,13 +61,11 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     // Submit the form via ajax
     $(that.form_selector)
         .on('submit.charcoal.form', function (event) {
-            console.log('form.submit', event);
             event.preventDefault();
             that.submit_form(this);
         })
         .find(':submit')
             .on('click.charcoal.form', function (event) {
-                console.log('click.submit', event);
                 that.submitted_via = this;
             });
 
@@ -342,23 +340,22 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
         (params.has('secondary_menu') ? 'secondary_menu=' + params.get('secondary_menu') + '&' : '') +
         'obj_type=' + this.obj_type;
 
-    //console.debug(form);
     BootstrapDialog.confirm({
-        title:          formWidgetL10n.confirmDeletion,
-        type:           BootstrapDialog.TYPE_DANGER,
-        message:        $('<p>' + commonL10n.confirmAction + '</p><p>' + commonL10n.cantUndo + '</p>'),
-        btnOKLabel:     commonL10n.delete,
-        callback: function (result) {
+        title:      formWidgetL10n.confirmDeletion,
+        type:       BootstrapDialog.TYPE_DANGER,
+        message:    $('<p>' + commonL10n.confirmAction + '</p><p class="mb-0">' + commonL10n.cantUndo + '</p>'),
+        btnOKLabel: commonL10n.delete,
+        callback:   function (result) {
             if (result) {
                 var url  = Charcoal.Admin.admin_url() + 'object/delete';
                 var data = {
                     obj_type: that.obj_type,
-                    obj_id: that.obj_id
+                    obj_id:   that.obj_id
                 };
                 $.ajax({
-                    method: 'POST',
-                    url: url,
-                    data: data,
+                    method:   'POST',
+                    url:      url,
+                    data:     data,
                     dataType: 'json'
                 }).done(function (response) {
                     if (response.success) {

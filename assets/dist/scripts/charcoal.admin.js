@@ -1573,26 +1573,24 @@ Charcoal.Admin = (function () {
                 }
             }
 
-            var message = grouped[key].join('</p><p>');
+            var config = {
+                title:   level.title,
+                message: '<p class="mb-0">' + grouped[key].join('</p><p class="mb-0 mt-3">') + '</p>',
+                level:   key,
+                type:    level.type,
+                buttons: buttons
+            }
 
             switch (level.display) {
                 case 'notification':
-                    Notification.createFromObject({
-                        level: key,
-                        content: message,
-                        dismissible: true
-                    });
+                    config.dismissible = buttons.length === 0;
+                    new Notification(config);
                     break;
 
                 case 'dialog':
                     /* falls through */
                 default:
-                    BootstrapDialog.show({
-                        title:   level.title,
-                        message: '<p class="mb-0">' + message + '</p>',
-                        type:    level.type,
-                        buttons: buttons
-                    });
+                    BootstrapDialog.show(config);
                     break;
             }
         }
@@ -1705,33 +1703,44 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Notification Component
-     *
-     * @param {String} [level]   - The feedback level.
-     * @param {String} [message] - The feedback message.
+     * Notification Component (extends Entry)
      */
-    var Notification = function (level, content, dismissible) {
-        // Initialize the feedback manager
-        Admin.feedback();
-
-        this.options = {
-            id: BootstrapDialog.newGuid(),
-            delay: 3200
+    var Notification = function (config) {
+        var vartype = $.type(config);
+        if (vartype !== 'object') {
+            throw new TypeError('Notification config must be an associative array, received ' + type);
         }
 
-        this.$elem = $('<article class="c-notifications_item alert fade" role="alert"></article>');
-        this.$elem.prop('id', this.options.id);
-        this.$elem.addClass('alert-' + level);
+        if (this.validLevel(config.level)) {
+            this.setLevel(config.level);
+        } else {
+            throw new TypeError(
+                'Feedback level required. Must be one of: ' + lvls.join(', ')
+            );
+        }
 
-        if (dismissible) {
+        if (this.validMessage(config.message)) {
+            this.setMessage(config.message);
+        }
+
+        this.config = $.extend({}, {
+            id:    BootstrapDialog.newGuid(),
+            delay: 3200
+        }, config);
+
+        this.$elem = $('<article class="c-notifications_item alert fade show" role="alert"></article>');
+        this.$elem.prop('id', this.config.id);
+        this.$elem.addClass('alert-' + this.config.level);
+
+        if (this.config.dismissible) {
             this.$elem.addClass('alert-dismissible');
             var $button = $('<button type="button" class="close" data-dismiss="alert" aria-label="'+commonL10n.close+'"><span aria-hidden="true">&times;</span></button>');
             this.$elem.append($button);
         }
 
-        if (content) {
+        if (this.config.message) {
             var $content = $('<div class="alert-body"></div>');
-            $content.html('').append(content);
+            $content.html('').append(this.config.message);
             this.$elem.append($content);
         }
 
@@ -1745,7 +1754,7 @@ Charcoal.Admin = (function () {
             var notification = event.data.notification;
             notification.closeTimer = window.setTimeout(function() {
                 notification.$elem.alert('close');
-            }, notification.options.delay);
+            }, notification.config.delay);
         });
 
         this.$elem.on('closed.bs.alert', { notification: this }, function (event) {
@@ -1760,25 +1769,17 @@ Charcoal.Admin = (function () {
                 },
                 this
             ),
-            this.options.delay
+            this.config.delay
         );
 
         return this;
     };
 
-    Notification.createFromObject = function (obj) {
-        var level       = obj.level || null;
-        var content     = obj.content || null;
-        var dismissible = obj.dismissible || null;
+    Notification.prototype = Object.create(Entry.prototype);
+    Notification.prototype.constructor = Notification;
+    Notification.prototype.parent = Entry.prototype;
 
-        if (!level && !content && !dismissible) {
-            return null;
-        }
-
-        return new Notification(level, content, dismissible);
-    };
-
-    Notification.prototype = {};
+    // Notification.prototype = {};
 
     reset();
 

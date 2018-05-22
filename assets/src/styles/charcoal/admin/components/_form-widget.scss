@@ -27,6 +27,16 @@
     }
 }
 
+.c-form-widget.-tabbed {
+    .c-form-widget_groups & {
+        margin-top: 3.5rem;
+
+        @media (min-width: $from-huge) {
+            margin-top: 2.5rem;
+        }
+    }
+}
+
 .c-form-widget_groups {
     @media (min-width: $from-large) {
         background-color: $charcoal-white-0;

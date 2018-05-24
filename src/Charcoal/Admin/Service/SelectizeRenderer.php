@@ -66,34 +66,34 @@ class SelectizeRenderer
             );
         }
 
-        $this->logger = $data['logger'];
+        $this->logger          = $data['logger'];
         $this->templateFactory = $data['template_factory'];
-        $this->view = $data['view'];
+        $this->view            = $data['view'];
         $this->setTranslator($data['translator']);
 
         return $this;
     }
 
     /**
-     * @param string         $templateIdent   The templateIdent as string.
-     * @param ModelInterface $object          The ObjectType for context.
-     * @param string|null    $controllerIdent The ControllerIdent string to override Object context.
+     * @param string                    $templateIdent   The templateIdent as string.
+     * @param ModelInterface|array|null $context         The context as Model or array.
+     * @param string|null               $controllerIdent The ControllerIdent string to override Object context.
      * @throws \InvalidArgumentException If the callable id not callable.
      * @return string
      */
-    public function renderTemplate($templateIdent, ModelInterface $object, $controllerIdent = null)
+    public function renderTemplate($templateIdent, $context, $controllerIdent = null)
     {
         $template = null;
 
         if ($controllerIdent && is_string($controllerIdent)) {
-            $controllerIdent = explode('::', $controllerIdent);
+            $controllerIdent    = explode('::', $controllerIdent);
             $controllerCallable = isset($controllerIdent[1]) ? $controllerIdent[1] : null;
-            $controllerIdent = $controllerIdent[0];
+            $controllerIdent    = $controllerIdent[0];
 
             $template = $this->templateFactory->create($controllerIdent);
 
             if ($controllerCallable) {
-                $method = [ $template, $controllerCallable ];
+                $method = [$template, $controllerCallable];
                 if (!is_callable($method)) {
                     throw new \InvalidArgumentException(sprintf(
                         '%s::%s supplied in %s::%s is not a callable method.',
@@ -104,9 +104,9 @@ class SelectizeRenderer
                     ));
                 }
 
-                call_user_func($method, $object);
-            } elseif (is_callable($template)) {
-                $template($object);
+                call_user_func($method, $context);
+            } elseif (method_exists($template, 'setData')) {
+                $template->setData($context);
             } else {
                 throw new \InvalidArgumentException(sprintf(
                     '%s supplied in %s::%s is not callable.',
@@ -118,7 +118,7 @@ class SelectizeRenderer
         }
 
         if (!$template) {
-            $template = $object;
+            $template = $context;
         }
 
         return $this->view->render($templateIdent, $template);

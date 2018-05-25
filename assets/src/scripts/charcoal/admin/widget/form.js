@@ -65,7 +65,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
             that.submit_form(this);
         })
         .find(':submit')
-            .on('click.charcoal.form', function (event) {
+            .on('click.charcoal.form', function () {
                 that.submitted_via = this;
             });
 

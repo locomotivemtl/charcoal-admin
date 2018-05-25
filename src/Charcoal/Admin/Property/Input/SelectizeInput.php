@@ -17,6 +17,7 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-property'
 use Charcoal\Property\ObjectProperty;
+use Charcoal\Property\SelectablePropertyInterface;
 use Charcoal\Property\AbstractProperty;
 
 // From 'charcoal-admin'
@@ -394,7 +395,7 @@ class SelectizeInput extends SelectInput
             $options = $this->parseSelectizeOptions($options);
         }
 
-        if ($this->property() instanceof ObjectProperty) {
+        if ($this->property() instanceof SelectablePropertyInterface) {
             $choices = iterator_to_array($this->choices());
 
             if (isset($options['options'])) {
@@ -522,6 +523,12 @@ class SelectizeInput extends SelectInput
             $val = (array)$val;
         }
 
+        $selectizeTemplates = $this->selectizeTemplates();
+        $itemTemplate = isset($selectizeTemplates['item']) ? $selectizeTemplates['item'] : null;
+        $optionTemplate = isset($selectizeTemplates['option']) ? $selectizeTemplates['option'] : null;
+        $selectizeController = isset($selectizeTemplates['controller']) ?
+            $selectizeTemplates['controller'] : null;
+
         if ($prop instanceof ObjectProperty) {
             foreach ($val as &$v) {
                 if (is_array($v)) {
@@ -547,12 +554,6 @@ class SelectizeInput extends SelectInput
 
             $collection = $loader->load();
 
-            $selectizeTemplates = $this->selectizeTemplates();
-            $itemTemplate = isset($selectizeTemplates['item']) ? $selectizeTemplates['item'] : null;
-            $optionTemplate = isset($selectizeTemplates['option']) ? $selectizeTemplates['option'] : null;
-            $selectizeController = isset($selectizeTemplates['controller']) ?
-                $selectizeTemplates['controller'] : null;
-
             $choices = [];
             foreach ($collection as $obj) {
                 $c = $this->mapObjToChoice($obj);
@@ -576,11 +577,31 @@ class SelectizeInput extends SelectInput
                 $choices[] = $c;
             }
         } else {
-            foreach ($val as $v) {
-                $choices[] = [
-                    'value' => $v,
-                    'label' => $v
+            foreach ($val as $label => $value) {
+                $pChoices = [
+                    'value' => $value,
+                    'label' => $label
                 ];
+
+                $c = $pChoices;
+
+                if ($itemTemplate) {
+                    $c['item_render'] = $this->selectizeRenderer->renderTemplate(
+                        $itemTemplate,
+                        $pChoices,
+                        $selectizeController
+                    );
+                }
+
+                if ($optionTemplate) {
+                    $c['option_render'] = $this->selectizeRenderer->renderTemplate(
+                        $optionTemplate,
+                        $pChoices,
+                        $selectizeController
+                    );
+                }
+
+                $choices[] = $c;
             }
         }
 

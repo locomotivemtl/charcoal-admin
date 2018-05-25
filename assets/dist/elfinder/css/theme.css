@@ -10,10 +10,39 @@
 .elfinder textarea {
 	color: #000;
 	background-color: #FFF;
+	border-color: #ccc;
 }
 
 /* dialogs */
 .std42-dialog, .std42-dialog .ui-widget-content { background-color:#ededed; background-image:none; background-clip: content-box; }
+.elfinder-quicklook-titlebar-icon .ui-icon {
+	background-color: #d4d4d4;
+	border-color: #8a8a8a;
+}
+.std42-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close:hover .ui-icon,
+.elfinder-mobile .std42-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon,
+.elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-close:hover,
+.elfinder-mobile .elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-close {
+	background-color: #ff6252;
+	border-color: #e5695d;
+	background-image: url("../img/ui-icons_ffffff_256x240.png");
+}
+.std42-dialog .ui-dialog-titlebar .elfinder-titlebar-minimize:hover .ui-icon,
+.elfinder-mobile .std42-dialog .ui-dialog-titlebar .elfinder-titlebar-minimize .ui-icon,
+.elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-minimize:hover,
+.elfinder-mobile .elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-minimize {
+	background-color: #ffbc00;
+	border-color: #e3a40b;
+	background-image: url("../img/ui-icons_ffffff_256x240.png");
+}
+.std42-dialog .ui-dialog-titlebar .elfinder-titlebar-full:hover .ui-icon,
+.elfinder-mobile .std42-dialog .ui-dialog-titlebar .elfinder-titlebar-full .ui-icon,
+.elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-full:hover,
+.elfinder-mobile .elfinder-quicklook-titlebar-icon .ui-icon.elfinder-icon-full {
+	background-color: #26c82f;
+	border-color: #13ae10;
+	background-image: url("../img/ui-icons_ffffff_256x240.png");
+}
 
 /* navbar */
 .elfinder .elfinder-navbar { background:#dde4eb; }
@@ -21,14 +50,30 @@
 .elfinder-navbar .ui-state-active { background: #3875d7;    border-color:#3875d7; color:#fff; }
 .elfinder-navbar .elfinder-droppable-active {background:#A7C6E5 !important;}
 /* disabled elfinder */
-.elfinder-disabled .elfinder-navbar .ui-state-active { background: #dadada; border-color:#aaa; color:#fff; }
+.elfinder-disabled .elfinder-navbar .ui-state-active { background: #dadada; border-color:#aaa; color:#777; }
 
 /* workzone */
 .elfinder-workzone { background:#fff; }
 
 /* current directory */
+/* Is in trash */
+.elfinder-cwd-wrapper.elfinder-cwd-wrapper-trash {
+	background-color: #f0f0f0;
+}
+
 /* selected file in "icons" view */
-.elfinder-cwd-view-icons .elfinder-cwd-file .ui-state-hover { background:#ccc; }
+.elfinder-cwd-view-icons .elfinder-cwd-file .ui-state-hover,
+.elfinder-cwd-view-icons .elfinder-cwd-file .ui-state-active { background:#ccc; }
+
+/* type badge in "icons" view */
+.elfinder-cwd-icon:before { 
+	color: white;
+	background-color: #798da7;
+}
+.elfinder-cwd-icon-text:before  { background-color: #6f99e6 }
+.elfinder-cwd-icon-image:before { background-color: #2ea26c }
+.elfinder-cwd-icon-audio:before { background-color: #7bad2a }
+.elfinder-cwd-icon-video:before { background-color: #322aad }
 
 /* list view*/
 .elfinder-cwd table thead td.ui-state-hover { background:#ddd; }
@@ -38,7 +83,12 @@
 	border-top:1px solid #fff;
 }
 .elfinder-cwd .elfinder-droppable-active td { background:#A7C6E5 !important; }
-
+.elfinder-cwd.elfinder-table-header-sticky table {
+	border-top-color: #fff;
+}
+.elfinder-droppable-active .elfinder-cwd.elfinder-table-header-sticky table {
+	border-top-color: #A7C6E5;
+}
 
 /* common selected background/color */
 .elfinder-cwd-view-icons .elfinder-cwd-file .elfinder-cwd-filename.ui-state-hover,
@@ -53,7 +103,10 @@
 .elfinder .elfinder-statusbar a { text-decoration:none; color:#555;}
 
 
-.std42-dialog .elfinder-help, .std42-dialog .elfinder-help .ui-widget-content { background:#fff;}
+.std42-dialog .elfinder-help,
+.std42-dialog .elfinder-help .ui-widget-content,
+.std42-dialog .elfinder-preference,
+.std42-dialog .elfinder-preference .ui-widget-content { background:#fff;}
 
 /* contextmenu */
 .elfinder-contextmenu .ui-state-active { background: #6293df; color:#fff; }
@@ -65,4 +118,9 @@
 .elfinder .ui-dialog textarea.ui-state-hover {
 	background-image: none;
 	background-color: inherit;
+}
+
+/* tooltip */
+.elfinder-ui-tooltip.ui-widget-shadow {
+	box-shadow: 2px 6px 4px -4px #cecdcd;
 }

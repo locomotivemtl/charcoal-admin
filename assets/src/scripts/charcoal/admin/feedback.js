@@ -365,7 +365,7 @@
                 level:   key,
                 type:    level.type,
                 buttons: buttons
-            }
+            };
 
             switch (level.display) {
                 case 'notification':
@@ -494,7 +494,7 @@
     var Notification = function (config) {
         var vartype = $.type(config);
         if (vartype !== 'object') {
-            throw new TypeError('Notification config must be an associative array, received ' + type);
+            throw new TypeError('Notification config must be an associative array, received ' + vartype);
         }
 
         if (this.validMessage(config.message)) {
@@ -512,7 +512,8 @@
 
         if (this.config.dismissible) {
             this.$elem.addClass('alert-dismissible');
-            var $button = $('<button type="button" class="close" data-dismiss="alert" aria-label="'+commonL10n.close+'"><span aria-hidden="true">&times;</span></button>');
+            var $button = $('<button type="button" class="close" data-dismiss="alert" aria-label="' + commonL10n.close + '"></button>');
+            $button.append('<span aria-hidden="true">&times;</span>');
             this.$elem.append($button);
         }
 
@@ -530,7 +531,7 @@
 
         this.$elem.on('mouseout.charcoal.feedback', { notification: this }, function (event) {
             var notification = event.data.notification;
-            notification.closeTimer = window.setTimeout(function() {
+            notification.closeTimer = window.setTimeout(function () {
                 notification.$elem.alert('close');
             }, notification.config.delay);
         });

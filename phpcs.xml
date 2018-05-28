@@ -98,6 +98,10 @@
     <!--<rule ref="Squiz.Commenting.LongConditionClosingComment" />-->
     <!-- Checks to ensure that there are no comments after statements (on same line, after ;) -->
     <rule ref="Squiz.Commenting.PostStatementComment" />
+    <rule ref="Squiz.Commenting.PostStatementComment.Found">
+        <type>warning</type>
+        <message>Comments should not appear after statements</message>
+    </rule>
     <!-- Variable commenting rules -->
     <rule ref="Squiz.Commenting.VariableComment" />
 

@@ -1,9 +1,12 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Mock;
+namespace Charcoal\Tests\Admin\Mock;
 
 // From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
+
+// From 'charcoal-admin'
+use Charcoal\Tests\AbstractTestCase;
 
 /**
  * Mock Sortable Model

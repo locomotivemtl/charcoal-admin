@@ -1,22 +1,31 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Property\Input;
+namespace Charcoal\Tests\Admin\Property\Input;
 
-use \PHPUnit_Framework_TestCase;
+// From Pimple
+use Pimple\Container;
 
-use \Pimple\Container;
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\Input\TextInput;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use \Charcoal\Admin\Property\Input\TextInput;
-
-use \Charcoal\Admin\Tests\ContainerProvider;
-
-class TextInputTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class TextInputTest extends AbstractTestCase
 {
+    /**
+     * @var TextInput
+     */
     private $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
-//        $container = $GLOBALS['container'];
+        // $container = $GLOBALS['container'];
         $container = new Container();
         $containerProvider = new ContainerProvider();
         $containerProvider->registerTranslator($container);
@@ -31,6 +40,9 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $obj = $this->obj;
@@ -49,6 +61,9 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar', (string)$obj->placeholder());
     }
 
+    /**
+     * @return void
+     */
     public function testSetSize()
     {
         $obj = $this->obj;
@@ -56,10 +71,13 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->size());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setSize(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetMinLength()
     {
         $obj = $this->obj;
@@ -67,10 +85,13 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->minLength());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setMinLength(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetMaxLength()
     {
         $obj = $this->obj;
@@ -78,10 +99,13 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->maxLength());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setMaxLength(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetPattern()
     {
         $obj = $this->obj;
@@ -89,10 +113,13 @@ class TextInputTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->pattern());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setPattern(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetPlaceholder()
     {
         $obj = $this->obj;

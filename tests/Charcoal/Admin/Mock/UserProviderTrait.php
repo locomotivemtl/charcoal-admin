@@ -1,12 +1,13 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Mock;
+namespace Charcoal\Tests\Admin\Mock;
 
 // From 'charcoal-admin'
-use \Charcoal\User\UserInterface;
+use Charcoal\User\UserInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\User;
+use Charcoal\Admin\User;
+use Charcoal\Tests\AbstractTestCase;
 
 /**
  * User Testing Helpers
@@ -26,7 +27,7 @@ trait UserProviderTrait
     /**
      * Create a user model and save it into storage.
      *
-     * @param  [type] $username The user's handle and primary key.
+     * @param  string $username The user's handle and primary key.
      * @param  string $password The user's password.
      * @param  string $email    The user's email address.
      * @return UserInterface
@@ -51,6 +52,12 @@ trait UserProviderTrait
         return $user;
     }
 
+    /**
+     * Determine if the user exists.
+     *
+     * @param  string $username The username to lookup.
+     * @return User
+     */
     protected function userExists($username)
     {
         $container = $this->container();
@@ -66,5 +73,5 @@ trait UserProviderTrait
      *
      * @return Container
      */
-    abstract function container();
+    abstract protected function container();
 }

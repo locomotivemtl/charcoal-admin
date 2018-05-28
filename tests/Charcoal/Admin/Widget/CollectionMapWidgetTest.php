@@ -1,15 +1,27 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use \Psr\Log\NullLogger;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Charcoal\Admin\Widget\CollectionMapWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\CollectionMapWidget;
+use Charcoal\Tests\AbstractTestCase;
 
-class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class CollectionMapWidgetTest extends AbstractTestCase
 {
+    /**
+     * @var CollectionMapWidget
+     */
     public $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $logger = new NullLogger();
@@ -18,6 +30,9 @@ class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetLatProperty()
     {
         $ret = $this->obj->setLatProperty('foo');
@@ -25,6 +40,9 @@ class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->obj->latProperty());
     }
 
+    /**
+     * @return void
+     */
     public function testSetLonProperty()
     {
         $ret = $this->obj->setLonProperty('foo');
@@ -32,6 +50,9 @@ class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->obj->lonProperty());
     }
 
+    /**
+     * @return void
+     */
     public function testSetPolygonProperty()
     {
         $ret = $this->obj->setPolygonProperty('foo');
@@ -39,6 +60,9 @@ class CollectionMapWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->obj->polygonProperty());
     }
 
+    /**
+     * @return void
+     */
     public function testSetInfoboxTemplate()
     {
         $ret = $this->obj->setInfoboxTemplate('foo');

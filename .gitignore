@@ -2,22 +2,26 @@
 
 composer.phar
 composer.lock
-vendor/
-node_modules/
-bower_components/
-
-# Documentation
-
-phpdoc/
+/vendor/
+/node_modules/
 
 # Logging
 
 *.log
-logs/
+/logs/
 
-# Caches
+# Caching
 
-build/docs/
-build/logs/
-cache/
-tmp/
+/.phplint-cache/
+/cache/
+
+# Testing
+
+phpcs.xml
+phpunit.xml
+
+# Codebase
+
+/build/docs/
+/build/logs/
+/build/report/

@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Action;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin\Action;
 
 use ReflectionClass;
 
@@ -17,15 +14,17 @@ use Slim\Http\Response;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Action\LoginAction;
-
-use Charcoal\Admin\Tests\ContainerProvider;
-use Charcoal\Admin\Tests\Mock\UserProviderTrait;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
+use Charcoal\Tests\Admin\Mock\UserProviderTrait;
 
 /**
  *
  */
-class LoginActionTest extends PHPUnit_Framework_TestCase
+class LoginActionTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
     use UserProviderTrait;
 
     /**
@@ -44,6 +43,8 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -61,21 +62,18 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsFalse()
     {
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertFalse($res);
     }
 
+    /**
+     * @return void
+     */
     public function testRunWithoutParamsIs400()
     {
         $request  = Request::createFromEnvironment(Environment::mock());
@@ -85,6 +83,9 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
+    /**
+     * @return void
+     */
     public function testRunWithInvalidCredentials()
     {
         $this->createUser('foo');
@@ -122,7 +123,7 @@ class LoginActionTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

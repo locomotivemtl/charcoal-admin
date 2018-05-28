@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
 use InvalidArgumentException;
 
@@ -9,11 +9,21 @@ use Psr\Log\NullLogger;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Widget\PaginationWidget;
+use Charcoal\Tests\AbstractTestCase;
 
-class PaginationWidgetTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class PaginationWidgetTest extends AbstractTestCase
 {
+    /**
+     * @var PaginationWidget
+     */
     public $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->obj = new PaginationWidget([
@@ -21,6 +31,9 @@ class PaginationWidgetTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testPageLogic()
     {
         $this->obj->setData([
@@ -54,13 +67,16 @@ class PaginationWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->obj->pageNext());
     }
 
+    /**
+     * @return void
+     */
     public function testSetNumTotal()
     {
         $ret = $this->obj->setNumTotal(42);
         $this->assertSame($ret, $this->obj);
         $this->assertEquals(42, $this->obj->numTotal());
 
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->obj->setNumTotal('foobar');
     }
 }

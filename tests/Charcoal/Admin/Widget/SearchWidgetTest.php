@@ -1,13 +1,22 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use \Psr\Log\NullLogger;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Charcoal\Admin\Widget\SearchWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\SearchWidget;
+use Charcoal\Tests\AbstractTestCase;
 
-class SearchWidgetTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class SearchWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $logger = new NullLogger();
@@ -16,6 +25,9 @@ class SearchWidgetTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $this->assertInstanceOf(SearchWidget::class, $this->obj);

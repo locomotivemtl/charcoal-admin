@@ -1,22 +1,26 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Script\Notification;
+namespace Charcoal\Tests\Admin\Script\Notification;
 
 use DateTime;
 use ReflectionClass;
 
-use PHPUnit_Framework_TestCase;
-
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Script\Notification\ProcessMinuteScript;
-use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class ProcessMinuteScriptTest extends PHPUnit_Framework_TestCase
+class ProcessMinuteScriptTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
     /**
      * @var Container
      */
@@ -46,15 +50,9 @@ class ProcessMinuteScriptTest extends PHPUnit_Framework_TestCase
         return $container;
     }
 
-    private function callMethod($obj, $name, array $args = [])
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($obj, $args);
-    }
-
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->container = $this->getContainer();
@@ -70,12 +68,18 @@ class ProcessMinuteScriptTest extends PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * @return void
+     */
     public function testDefaultArguments()
     {
         $args = $this->obj->defaultArguments();
         $this->assertArrayHasKey('now', $args);
     }
 
+    /**
+     * @return void
+     */
     public function testFrequency()
     {
         $this->assertEquals('minute', $this->callMethod($this->obj, 'frequency'));

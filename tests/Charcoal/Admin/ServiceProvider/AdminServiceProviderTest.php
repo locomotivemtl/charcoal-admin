@@ -2,17 +2,21 @@
 
 namespace Charcoal\Tests\Admin\ServiceProvider;
 
-use PHPUnit_Framework_TestCase;
-
+// From Pimple
 use Pimple\Container;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\ServiceProvider\AdminServiceProvider;
+use Charcoal\Tests\AbstractTestCase;
 
 /**
  *
  */
-class AdminServiceProviderTest extends PHPUnit_Framework_TestCase
+class AdminServiceProviderTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function testProvider()
     {
         $container = new Container([

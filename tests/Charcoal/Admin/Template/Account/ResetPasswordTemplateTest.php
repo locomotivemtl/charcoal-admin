@@ -1,26 +1,33 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Template\Account;
+namespace Charcoal\Tests\Admin\Template\Account;
 
-use \ReflectionClass;
+use ReflectionClass;
 
-use \Psr\Log\NullLogger;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \PHPUnit_Framework_TestCase;
-
-use \Charcoal\Admin\Template\Account\ResetPasswordTemplate;
+// From 'charcoal-admin'
+use Charcoal\Admin\Template\Account\ResetPasswordTemplate;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
 
 /**
  *
  */
-class ResetPasswordTemplateTest extends PHPUnit_Framework_TestCase
+class ResetPasswordTemplateTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
     /**
      * Instance of object under test
      * @var LoginTemplate
      */
     private $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->obj = new ResetPasswordTemplate([
@@ -28,19 +35,12 @@ class ResetPasswordTemplateTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsFalse()
     {
-
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertNotTrue($res);
     }
 }

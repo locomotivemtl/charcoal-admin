@@ -1,19 +1,28 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Property;
+namespace Charcoal\Tests\Admin\Property;
 
-use \PHPUnit_Framework_TestCase;
+// From Pimple
+use Pimple\Container;
 
-use \Pimple\Container;
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractPropertyInput;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput;
-
-use \Charcoal\Admin\Tests\ContainerProvider;
-
-class AbstractInputTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class AbstractInputTest extends AbstractTestCase
 {
+    /**
+     * @var AbstractPropertyInput
+     */
     public $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -29,6 +38,9 @@ class AbstractInputTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $obj = $this->obj;

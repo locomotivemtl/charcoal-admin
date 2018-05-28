@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
@@ -13,11 +10,17 @@ use Pimple\Container;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use Charcoal\Admin\Tests\ContainerProvider;
-
-class AdminTemplateTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class AdminTemplateTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
     /**
      * Tested Class.
      *
@@ -34,6 +37,8 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -45,14 +50,9 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testSetIdent()
     {
         $this->assertNull($this->obj->ident());
@@ -61,6 +61,9 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', $this->obj->ident());
     }
 
+    /**
+     * @return void
+     */
     public function testSetLabel()
     {
         $this->assertNull($this->obj->label());
@@ -69,10 +72,12 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', (string)$this->obj->label());
     }
 
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsTrue()
     {
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertTrue($res);
     }
 
@@ -81,7 +86,7 @@ class AdminTemplateTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

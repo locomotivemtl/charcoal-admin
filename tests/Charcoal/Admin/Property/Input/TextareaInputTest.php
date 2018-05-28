@@ -1,18 +1,23 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Property\Input;
+namespace Charcoal\Tests\Admin\Property\Input;
 
-use \PHPUnit_Framework_TestCase;
+// From Pimple
+use Pimple\Container;
 
-use \Pimple\Container;
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\Input\TextareaInput;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use \Charcoal\Admin\Property\Input\TextareaInput;
-
-use \Charcoal\Admin\Tests\ContainerProvider;
-
-class TextareaInputTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class TextareaInputTest extends AbstractTestCase
 {
-
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -26,6 +31,9 @@ class TextareaInputTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $obj = $this->obj;
@@ -38,6 +46,9 @@ class TextareaInputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(84, $obj->rows());
     }
 
+    /**
+     * @return void
+     */
     public function testSetCols()
     {
         $obj = $this->obj;
@@ -46,10 +57,13 @@ class TextareaInputTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->cols());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setCols('foo');
     }
 
+    /**
+     * @return void
+     */
     public function testSetRows()
     {
         $obj = $this->obj;
@@ -58,7 +72,7 @@ class TextareaInputTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals(42, $obj->rows());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setRows('foo');
     }
 }

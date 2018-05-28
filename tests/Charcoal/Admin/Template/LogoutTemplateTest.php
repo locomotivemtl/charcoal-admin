@@ -1,20 +1,30 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Template;
+namespace Charcoal\Tests\Admin\Template;
 
-use \Psr\Log\NullLogger;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \PHPUnit_Framework_TestCase;
-
-use \Charcoal\Admin\Template\LogoutTemplate;
+// From 'charcoal-admin'
+use Charcoal\Admin\Template\LogoutTemplate;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
 
 /**
  *
  */
-class LogoutTemplateTest extends PHPUnit_Framework_TestCase
+class LogoutTemplateTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
+    /**
+     * @var LogoutTemplate
+     */
     public $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->obj = new LogoutTemplate([
@@ -22,27 +32,26 @@ class LogoutTemplateTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsFalse()
     {
-
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertNotTrue($res);
     }
 
+    /**
+     * @return void
+     */
     public function testShowHeaderMenuIsFalse()
     {
         $this->assertNotTrue($this->obj->showHeaderMenu());
     }
 
+    /**
+     * @return void
+     */
     public function testShowFooterMenuIsFalse()
     {
         $this->assertNotTrue($this->obj->showHeaderMenu());

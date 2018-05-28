@@ -1,19 +1,26 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use PHPUnit_Framework_TestCase;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Psr\Log\NullLogger;
-
+// From Pimple
 use Pimple\Container;
 
-use \Charcoal\Admin\Widget\FormPropertyWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\FormPropertyWidget;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use Charcoal\Admin\Tests\ContainerProvider;
-
-class FormPropertyWidgetTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class FormPropertyWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -29,11 +36,17 @@ class FormPropertyWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $this->assertInstanceOf(FormPropertyWidget::class, $this->obj);
     }
 
+    /**
+     * @return void
+     */
     public function testSetOutputType()
     {
         //$this->assertEquals(FormPropertyWidget::DEFAULT_OUTPUT, $this->obj->outputType());
@@ -55,6 +68,9 @@ class FormPropertyWidgetTest extends PHPUnit_Framework_TestCase
         $this->obj->setOutputType('foobar');
     }
 
+    /**
+     * @return void
+     */
     public function testPropertyType()
     {
         $this->assertNull($this->obj->propertyType());

@@ -1,23 +1,21 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Template;
+namespace Charcoal\Tests\Admin\Template;
 
 use ReflectionClass;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Template\ElfinderTemplate;
-use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
+class ElfinderTemplateTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -35,6 +33,8 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -46,6 +46,9 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testAdminAssertsUrl()
     {
         $ret = $this->obj->adminAssetsUrl();
@@ -57,7 +60,7 @@ class ElfinderTemplateTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

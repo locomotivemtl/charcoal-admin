@@ -1,12 +1,19 @@
 <?php
 
-namespace Charcoal\Admin\Tests;
+namespace Charcoal\Tests\Admin;
 
-use \Charcoal\Admin\Config;
+// From 'charcoal-admin'
+use Charcoal\Admin\Config;
+use Charcoal\Tests\AbstractTestCase;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class ConfigTest extends AbstractTestCase
 {
-
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $obj = new Config();
@@ -17,6 +24,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $obj->basePath());
     }
 
+    /**
+     * @return void
+     */
     public function testSetBasePath()
     {
         $obj = new Config();
@@ -26,15 +36,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->basePath());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setBasePath([]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetBasePathEmptyParamThrowsException()
     {
         $obj = new Config();
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setBasePath('');
     }
 }

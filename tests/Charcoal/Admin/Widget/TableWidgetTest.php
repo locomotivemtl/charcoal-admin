@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin\Widget;
 
 // From Pimple
 use Pimple\Container;
@@ -14,12 +11,13 @@ use Slim\Http\Request;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Widget\TableWidget;
-use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class TableWidgetTest extends PHPUnit_Framework_TestCase
+class TableWidgetTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -37,6 +35,8 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -49,6 +49,9 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetSortable()
     {
         $ret = $this->obj->setSortable(true);
@@ -62,6 +65,9 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj['sortable']);
     }
 
+    /**
+     * @return void
+     */
     public function testShowTableHeader()
     {
         $this->assertTrue($this->obj->showTableHeader());
@@ -76,6 +82,9 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj['show_table_header']);
     }
 
+    /**
+     * @return void
+     */
     public function testShowTableHead()
     {
         $this->assertTrue($this->obj->showTableHead());
@@ -90,6 +99,9 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj['show_table_head']);
     }
 
+    /**
+     * @return void
+     */
     public function testShowTableFoot()
     {
         $this->assertFalse($this->obj->showTableFoot());
@@ -109,7 +121,7 @@ class TableWidgetTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

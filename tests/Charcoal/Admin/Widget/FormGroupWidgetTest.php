@@ -1,19 +1,26 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use PHPUnit_Framework_TestCase;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Psr\Log\NullLogger;
-
+// From Pimple
 use Pimple\Container;
 
-use \Charcoal\Admin\Widget\FormGroupWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\FormGroupWidget;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use Charcoal\Admin\Tests\ContainerProvider;
-
-class FormGroupWidgetTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class FormGroupWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -35,6 +42,9 @@ class FormGroupWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $this->assertInstanceOf(FormGroupWidget::class, $this->obj);

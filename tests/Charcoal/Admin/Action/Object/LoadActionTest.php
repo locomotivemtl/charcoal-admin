@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Action\Object;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin\Action\Object;
 
 use ReflectionClass;
 
@@ -17,15 +14,17 @@ use Slim\Http\Response;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Action\Object\LoadAction;
-
-use Charcoal\Admin\Tests\ContainerProvider;
-use Charcoal\Admin\Tests\Mock\UserProviderTrait;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
+use Charcoal\Tests\Admin\Mock\UserProviderTrait;
 
 /**
  *
  */
-class LoadActionTest extends PHPUnit_Framework_TestCase
+class LoadActionTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
     use UserProviderTrait;
 
     /**
@@ -44,6 +43,8 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -57,21 +58,18 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsTrue()
     {
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertTrue($res);
     }
 
+    /**
+     * @return void
+     */
     public function testRunWithoutObjTypeIs400()
     {
         $request  = Request::createFromEnvironment(Environment::mock());
@@ -84,6 +82,9 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($results['success']);
     }
 
+    /**
+     * @return void
+     */
     public function testRun()
     {
         $user = $this->createUser('foo');
@@ -107,7 +108,7 @@ class LoadActionTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

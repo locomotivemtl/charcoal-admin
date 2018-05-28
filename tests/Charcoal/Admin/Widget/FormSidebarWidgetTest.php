@@ -1,19 +1,26 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use PHPUnit_Framework_TestCase;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Psr\Log\NullLogger;
-
+// From Pimple
 use Pimple\Container;
 
-use \Charcoal\Admin\Widget\FormSidebarWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\FormSidebarWidget;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use Charcoal\Admin\Tests\ContainerProvider;
-
-class FormSidebarWidgetTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class FormSidebarWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -29,6 +36,9 @@ class FormSidebarWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $this->assertInstanceOf(FormSidebarWidget::class, $this->obj);

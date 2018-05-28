@@ -120,9 +120,9 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $input = $cli->confirm('Continue?');
         if ($input->confirmed()) {
-            $cli->info('Starting Conveversion');
+            $cli->info('Starting Conversion');
         } else {
-            $cli->info('Canceled Conveversion');
+            $cli->info('Canceled Conversion');
 
             return $this;
         }
@@ -132,7 +132,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $db = $source->db();
         if (!$db) {
             $cli->error(
-                'Could not instanciate a database connection.'
+                'Could not instantiate a database connection.'
             );
 
             return $this;

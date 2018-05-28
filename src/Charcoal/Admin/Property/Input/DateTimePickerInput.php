@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  * Date/Time Picker Input Property

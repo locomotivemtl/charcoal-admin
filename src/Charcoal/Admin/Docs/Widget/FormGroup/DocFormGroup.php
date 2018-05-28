@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Docs\Widget\FormGroup;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\FormGroupWidget;
+use Charcoal\Admin\Widget\FormGroupWidget;
 
 /**
  *

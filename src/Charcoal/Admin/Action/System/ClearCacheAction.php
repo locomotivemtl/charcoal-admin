@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Action\System;
 
 // From PSR-6
-use \Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;

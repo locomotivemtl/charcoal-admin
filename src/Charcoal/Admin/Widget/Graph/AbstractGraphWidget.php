@@ -3,8 +3,8 @@
 namespace Charcoal\Admin\Widget\Graph;
 
 // From `charcoal-admin`
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Widget\Graph\GraphWidgetInterface;
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Widget\Graph\GraphWidgetInterface;
 
 /**
  * Base Graph widget

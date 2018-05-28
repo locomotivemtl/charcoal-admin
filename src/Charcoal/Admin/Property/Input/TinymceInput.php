@@ -2,11 +2,11 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 
 // Intra-module (`charcoal-admin`) dependencies
-use \Charcoal\Admin\Property\Input\TextareaInput;
+use Charcoal\Admin\Property\Input\TextareaInput;
 
 /**
  * TinyMCE Rich-Text Input Property

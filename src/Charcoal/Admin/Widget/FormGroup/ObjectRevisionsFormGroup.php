@@ -3,10 +3,10 @@
 namespace Charcoal\Admin\Widget\FormGroup;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\FormGroup\AbstractFormGroup;
+use Charcoal\Ui\FormGroup\AbstractFormGroup;
 
 /**
  * Form Group: Object Revisions List

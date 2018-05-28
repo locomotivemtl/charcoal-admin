@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \Charcoal\Admin\Property\Input\TextInput;
+use Charcoal\Admin\Property\Input\TextInput;
 
 /**
  * Email Address Input

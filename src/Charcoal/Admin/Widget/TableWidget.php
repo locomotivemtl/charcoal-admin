@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \RuntimeException;
+use RuntimeException;
 
 // From Pimple
 use Pimple\Container;

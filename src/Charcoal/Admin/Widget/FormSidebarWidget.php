@@ -2,21 +2,21 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\Form\FormInterface;
+use Charcoal\Ui\Form\FormInterface;
 
 // From 'charcoal-translator'
-use \Charcoal\Translator\Translation;
+use Charcoal\Translator\Translation;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\AdminWidget;
-use \Charcoal\Admin\Ui\ActionContainerTrait;
-use \Charcoal\Admin\Ui\FormSidebarInterface;
+use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\ActionContainerTrait;
+use Charcoal\Admin\Ui\FormSidebarInterface;
 
 /**
  * Form Sidebar Widget

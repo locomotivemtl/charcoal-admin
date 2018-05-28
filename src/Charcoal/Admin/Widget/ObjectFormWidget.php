@@ -2,21 +2,21 @@
 
 namespace Charcoal\Admin\Widget;
 
-use \UnexpectedValueException;
-use \InvalidArgumentException;
+use UnexpectedValueException;
+use InvalidArgumentException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-ui'
-use \Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\FormGroup\FormGroupInterface;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\FormWidget;
-use \Charcoal\Admin\Widget\FormPropertyWidget;
+use Charcoal\Admin\Widget\FormWidget;
+use Charcoal\Admin\Widget\FormPropertyWidget;
 
-use \Charcoal\Admin\Ui\ObjectContainerInterface;
-use \Charcoal\Admin\Ui\ObjectContainerTrait;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
+use Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
  * Object Admin Form

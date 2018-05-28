@@ -2,23 +2,23 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \RuntimeException;
-use \UnexpectedValueException;
+use RuntimeException;
+use UnexpectedValueException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-factory'
-use \Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-translator'
-use \Charcoal\Translator\Translation;
+use Charcoal\Translator\Translation;
 
 // From 'charcoal-property'
-use \Charcoal\Property\HtmlProperty;
+use Charcoal\Property\HtmlProperty;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  * Static Control Value Property

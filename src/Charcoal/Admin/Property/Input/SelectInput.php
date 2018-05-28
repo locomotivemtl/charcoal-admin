@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
-use \Charcoal\Admin\Property\AbstractSelectableInput;
+use Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
  * Select Options Input Property

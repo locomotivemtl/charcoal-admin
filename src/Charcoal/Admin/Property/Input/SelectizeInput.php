@@ -526,8 +526,8 @@ class SelectizeInput extends SelectInput
         $selectizeTemplates = $this->selectizeTemplates();
         $itemTemplate = isset($selectizeTemplates['item']) ? $selectizeTemplates['item'] : null;
         $optionTemplate = isset($selectizeTemplates['option']) ? $selectizeTemplates['option'] : null;
-        $selectizeController = isset($selectizeTemplates['controller']) ?
-            $selectizeTemplates['controller'] : null;
+        $selectizeController = isset($selectizeTemplates['controller']) ? $selectizeTemplates['controller'] : null;
+        $selectizeData = isset($selectizeTemplates['data']) ? $selectizeTemplates['data'] : [];
 
         if ($prop instanceof ObjectProperty) {
             foreach ($val as &$v) {
@@ -558,6 +558,8 @@ class SelectizeInput extends SelectInput
             foreach ($collection as $obj) {
                 $c = $this->mapObjToChoice($obj);
 
+                $obj->setData($selectizeData);
+
                 if ($itemTemplate) {
                     $c['item_render'] = $this->selectizeRenderer->renderTemplate(
                         $itemTemplate,
@@ -584,11 +586,12 @@ class SelectizeInput extends SelectInput
                 ];
 
                 $c = $pChoices;
+                $context = array_replace_recursive($selectizeData, $pChoices);
 
                 if ($itemTemplate) {
                     $c['item_render'] = $this->selectizeRenderer->renderTemplate(
                         $itemTemplate,
-                        $pChoices,
+                        $context,
                         $selectizeController
                     );
                 }
@@ -596,7 +599,7 @@ class SelectizeInput extends SelectInput
                 if ($optionTemplate) {
                     $c['option_render'] = $this->selectizeRenderer->renderTemplate(
                         $optionTemplate,
-                        $pChoices,
+                        $context,
                         $selectizeController
                     );
                 }

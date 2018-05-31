@@ -579,11 +579,8 @@ class SelectizeInput extends SelectInput
                 $choices[] = $c;
             }
         } else {
-            foreach ($val as $label => $value) {
-                $pChoices = [
-                    'value' => $value,
-                    'label' => $label
-                ];
+            foreach ($val as $value) {
+                $pChoices = $value;
 
                 $c = $pChoices;
                 $context = array_replace_recursive($selectizeData, $pChoices);

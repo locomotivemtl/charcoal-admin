@@ -102,21 +102,26 @@ class LoginActionTest extends AbstractTestCase
         $this->assertFalse($results['success']);
     }
 
-//    public function testRunWithValidCredentials()
-//    {
-//        $this->createUser('foo');
-//
-//        $request = Request::createFromEnvironment(Environment::mock([
-//            'QUERY_STRING' => 'username=foo&password=qwerty'
-//        ]));
-//        $response = new Response();
-//
-//        $response = $this->obj->run($request, $response);
-//        $this->assertEquals(200, $response->getStatusCode());
-//
-//        $results = $this->obj->results();
-//        $this->assertTrue($results['success']);
-//    }
+    /**
+     * @return void
+     */
+    /*
+    public function testRunWithValidCredentials()
+    {
+        $this->createUser('foo');
+
+        $request = Request::createFromEnvironment(Environment::mock([
+           'QUERY_STRING' => 'username=foo&password=qwerty'
+        ]));
+        $response = new Response();
+
+        $response = $this->obj->run($request, $response);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $results = $this->obj->results();
+        $this->assertTrue($results['success']);
+    }
+    */
 
     /**
      * Set up the service container.

@@ -97,37 +97,42 @@ class ResetPasswordScriptTest extends AbstractTestCase
         $this->assertArrayHasKey('password', $args);
     }
 
-//     public function testInvokeWithArguments()
-//     {
-//         global $argv;
+    /**
+     * @return void
+     */
+    /*
+    public function testInvokeWithArguments()
+    {
+        global $argv;
 
-//         $argv = [];
-//         $argv[] = 'vendor/bin/charcoal';
+        $argv = [];
+        $argv[] = 'vendor/bin/charcoal';
 
-//         $argv[] = '--username';
-//         $argv[] = 'foobar';
+        $argv[] = '--username';
+        $argv[] = 'foobar';
 
-//         $argv[] = '--password';
-//         $argv[] = '[Foo]{bar}123';
+        $argv[] = '--password';
+        $argv[] = '[Foo]{bar}123';
 
-//         $model = $this->container['model/factory']->create('charcoal/admin/user');
-//         $source = $model->source();
-//         $source->createTable();
+        $model = $this->container['model/factory']->create('charcoal/admin/user');
+        $source = $model->source();
+        $source->createTable();
 
-//         $model->setData([
-//             'username' => 'foobar',
-//             'password' => 'BarFoo123',
-//             'email' => 'foobar@example.com'
-//         ]);
-//         $model->setRevisionEnabled(false);
-//         $model->save();
+        $model->setData([
+            'username' => 'foobar',
+            'password' => 'BarFoo123',
+            'email' => 'foobar@example.com'
+        ]);
+        $model->setRevisionEnabled(false);
+        $model->save();
 
-//         $request = $this->createMock('\Psr\Http\Message\RequestInterface');
-//         $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
+        $request = $this->createMock('\Psr\Http\Message\RequestInterface');
+        $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
 
-//         $obj = $this->obj;
-//         $ret = $obj($request, $response);
+        $obj = $this->obj;
+        $ret = $obj($request, $response);
 
-//         $this->assertSame($ret, $response);
-//     }
+        $this->assertSame($ret, $response);
+    }
+    */
 }

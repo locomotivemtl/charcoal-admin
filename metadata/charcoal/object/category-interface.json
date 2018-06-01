@@ -13,7 +13,8 @@
             }
         },
         "position": {
-            "type": "number"
+            "type": "number",
+            "label": "Position"
         }
     }
 }

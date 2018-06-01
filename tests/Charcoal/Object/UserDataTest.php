@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
 
@@ -9,12 +9,13 @@ use Pimple\Container;
 
 // From 'charcoal-object'
 use Charcoal\Object\UserData;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class UserDataTest extends \PHPUnit_Framework_TestCase
+class UserDataTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -32,6 +33,8 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -40,6 +43,9 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(UserData::class);
     }
 
+    /**
+     * @return void
+     */
     public function testDefaults()
     {
         $this->assertNull($this->obj->ip());
@@ -47,6 +53,9 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->obj->ts());
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $ret = $this->obj->setData([
@@ -61,6 +70,9 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->obj->ts());
     }
 
+    /**
+     * @return void
+     */
     public function testSetIp()
     {
         $this->obj = $this->obj;
@@ -72,6 +84,9 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2349255, $this->obj->ip());
     }
 
+    /**
+     * @return void
+     */
     public function testSetLang()
     {
         $this->obj = $this->obj;
@@ -79,10 +94,13 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $this->obj);
         $this->assertEquals('en', $this->obj->lang());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setLang(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetTs()
     {
         $this->obj = $this->obj;
@@ -91,7 +109,7 @@ class UserDataTest extends \PHPUnit_Framework_TestCase
         $expected = new DateTime('July 1st, 2014');
         $this->assertEquals($expected, $this->obj->ts());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setTs(false);
     }
 

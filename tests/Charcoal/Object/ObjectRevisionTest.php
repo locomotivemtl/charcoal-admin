@@ -1,23 +1,21 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-object'
 use Charcoal\Object\ObjectRevision;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
+class ObjectRevisionTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -35,6 +33,8 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -43,6 +43,9 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(ObjectRevision::class);
     }
 
+    /**
+     * @return void
+     */
     public function testSetObjType()
     {
         $this->assertNull($this->obj->targetType());
@@ -50,10 +53,13 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $this->obj);
         $this->assertEquals('foobar', $this->obj->targetType());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setTargetType(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetObjId()
     {
         $this->assertNull($this->obj->targetId());
@@ -62,6 +68,9 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $this->obj->targetId());
     }
 
+    /**
+     * @return void
+     */
     public function testSetRevNum()
     {
         $this->assertNull($this->obj->revNum());
@@ -72,10 +81,13 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->obj->setRevNum('42');
         $this->assertEquals(42, $this->obj->revNum());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setRevNum([]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetRevTs()
     {
         $obj = $this->obj;
@@ -88,10 +100,13 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $obj->setRevTs(null);
         $this->assertNull($obj->revTs());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setRevTs(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetRevUser()
     {
         $this->assertNull($this->obj->revUser());
@@ -102,10 +117,13 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->obj->setRevUser(null);
         $this->assertNull($this->obj->revUser());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setRevUser(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetDataPrev()
     {
         $this->assertNull($this->obj->dataPrev());
@@ -117,6 +135,9 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->obj->setDataPrev(null)->dataPrev());
     }
 
+    /**
+     * @return void
+     */
     public function testSetDataObj()
     {
         $this->assertNull($this->obj->dataObj());
@@ -128,6 +149,9 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->obj->setDataObj(null)->dataObj());
     }
 
+    /**
+     * @return void
+     */
     public function testSetDataDiff()
     {
         $this->assertNull($this->obj->dataDiff());
@@ -139,6 +163,9 @@ class ObjectRevisionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $this->obj->setDataDiff(null)->dataDiff());
     }
 
+    /**
+     * @return void
+     */
     public function testCreateDiff()
     {
         $this->assertEquals([], $this->obj->createDiff([], []));

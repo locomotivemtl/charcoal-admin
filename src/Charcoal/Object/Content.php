@@ -13,10 +13,10 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
-// From `charcoal-translation`
+// From 'charcoal-translation'
 use Charcoal\Translator\TranslatorAwareTrait;
 
-// From `charcoal-object`
+// From 'charcoal-object'
 use Charcoal\Object\ContentInterface;
 use Charcoal\Object\AuthorableInterface;
 use Charcoal\Object\AuthorableTrait;

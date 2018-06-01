@@ -2,14 +2,14 @@
 
 namespace Charcoal\Object;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // From 'charcoal-core'
-use \Charcoal\Loader\CollectionLoader;
+use Charcoal\Loader\CollectionLoader;
 
 // From 'charcoal-object'
-use \Charcoal\Object\ObjectRevision;
-use \Charcoal\Object\ObjectRevisionInterface;
+use Charcoal\Object\ObjectRevision;
+use Charcoal\Object\ObjectRevisionInterface;
 
 /**
  *

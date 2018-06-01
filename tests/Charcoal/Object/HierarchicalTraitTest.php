@@ -1,13 +1,17 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 // From 'charcoal-object'
 use Charcoal\Object\HierarchicalTrait;
-use Charcoal\Object\Tests\ContainerProvider;
-use Charcoal\Object\Tests\Mocks\HierarchicalClass as HierarchicalObject;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
+use Charcoal\Tests\Object\Mocks\HierarchicalClass as HierarchicalObject;
 
-class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class HierarchicalTraitTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -18,12 +22,17 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
         $this->obj = new HierarchicalObject();
     }
 
+    /**
+     * @return void
+     */
     public function testSetMaster()
     {
         $obj = $this->obj;
@@ -36,6 +45,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $obj->setMaster(['foobar']);
     }
 
+    /**
+     * @return void
+     */
     public function testHasMaster()
     {
         $obj = $this->obj;
@@ -46,6 +58,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj->hasMaster());
     }
 
+    /**
+     * @return void
+     */
     public function testIsTopLevel()
     {
         $obj = $this->obj;
@@ -56,6 +71,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($obj->isTopLevel());
     }
 
+    /**
+     * @return void
+     */
     public function testIsLastLevel()
     {
         $obj = $this->obj;
@@ -66,6 +84,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($obj->isLastLevel());
     }
 
+    /**
+     * @return void
+     */
     public function testHierarchyLevel()
     {
         $obj = $this->obj;
@@ -83,6 +104,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         //$this->assertEquals(3, $obj->hierarchyLevel());
     }
 
+    /**
+     * @return void
+     */
     public function testToplevelMaster()
     {
         $obj = $this->obj;
@@ -98,6 +122,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         //$this->assertSame($master2, $obj->toplevelMaster());
     }
 
+    /**
+     * @return void
+     */
     public function testHierarchy()
     {
         $obj = $this->obj;
@@ -113,6 +140,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         //$this->assertSame([$master1, $master2], $obj->hierarchy());
     }
 
+    /**
+     * @return void
+     */
     public function testInvertedHierarchy()
     {
         $obj = $this->obj;
@@ -128,6 +158,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         //$this->assertSame([$master2, $master1], $obj->invertedHierarchy());
     }
 
+    /**
+     * @return void
+     */
     public function testIsMasterOf()
     {
         $obj = $this->obj;
@@ -139,6 +172,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         //$this->assertFalse($obj->isMasterOf($master));
     }
 
+    /**
+     * @return void
+     */
     public function testHasChildren()
     {
         $obj = $this->obj;
@@ -149,6 +185,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj->hasChildren());
     }
 
+    /**
+     * @return void
+     */
     public function testNumChildren()
     {
         $obj = $this->obj;
@@ -164,6 +203,9 @@ class HierarchicalTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $obj->numChildren());
     }
 
+    /**
+     * @return void
+     */
     public function testIsChildOf()
     {
         $obj = $this->obj;

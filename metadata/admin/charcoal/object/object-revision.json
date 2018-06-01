@@ -22,11 +22,9 @@
 
         "dashboards": {
             "admin.edit": {
-                "title": "Révisions",
-                "layout": {
-                    "structure": [{
-                        "columns": [ 1 ]
-                    }]
+                "title": {
+                    "en": "Revisions",
+                    "fr": "Révisions"
                 },
                 "widgets": {
                     "form": {
@@ -34,14 +32,17 @@
                         "form_ident": "default",
                         "target_type": "charcoal/object/object-revision"
                     }
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
                 }
             },
             "admin.table": {
-                "title": "Liste des révisions",
-                "layout": {
-                    "structure": [{
-                        "columns": [ 1 ]
-                    }]
+                "title": {
+                    "en": "List of Revisions",
+                    "fr": "Liste des révisions"
                 },
                 "widgets": {
                     "form": {
@@ -49,6 +50,11 @@
                         "collection_ident": "default",
                         "target_type": "charcoal/object/object-revision"
                     }
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
                 }
             }
         },

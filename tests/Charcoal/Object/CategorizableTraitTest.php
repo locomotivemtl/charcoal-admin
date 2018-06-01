@@ -1,15 +1,16 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 // From 'charcoal-object'
 use Charcoal\Object\CategorizableTrait;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class CategorizableTraitTest extends \PHPUnit_Framework_TestCase
+class CategorizableTraitTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -20,12 +21,17 @@ class CategorizableTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
         $this->obj = $this->getMockForTrait(CategorizableTrait::class);
     }
 
+    /**
+     * @return void
+     */
     public function testSetCategoryType()
     {
         $obj = $this->obj;
@@ -35,7 +41,7 @@ class CategorizableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals('foobar', $obj->categoryType());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setCategoryType(false);
     }
 }

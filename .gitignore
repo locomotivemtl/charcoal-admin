@@ -1,22 +1,20 @@
 # Package Managers
 
-composer.lock
 composer.phar
-vendor/
-node_modules/
-bower_components/
-
-# Documentation
-
-phpdoc/
+composer.lock
+/vendor/
 
 # Logging
 
 *.log
-logs/
+/logs/
 
-# Caches
+# Caching
 
-build/docs/
-build/logs/
-tmp/
+/cache/
+
+# Codebase
+
+/build/docs/
+/build/logs/
+/build/report/

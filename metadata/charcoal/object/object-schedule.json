@@ -1,7 +1,8 @@
 {
     "properties": {
         "id": {
-            "type": "id"
+            "type": "id",
+            "label": "ID"
         },
         "target_type": {
             "type": "string",
@@ -18,7 +19,11 @@
             }
         },
         "scheduled_date": {
-            "type": "date-time"
+            "type": "date-time",
+            "label": {
+                "en": "Scheduled date",
+                "fr": "Date prévue"
+            }
         },
         "data_diff": {
             "type": "structure",
@@ -28,10 +33,18 @@
             }
         },
         "processed": {
-            "type": "boolean"
+            "type": "boolean",
+            "label": {
+                "en": "Task processed",
+                "fr": "Tâche traitée"
+            }
         },
         "processed_date": {
-            "type": "date-time"
+            "type": "date-time",
+            "label": {
+                "en": "Processed date",
+                "fr": "Date de traitement"
+            }
         }
     },
 

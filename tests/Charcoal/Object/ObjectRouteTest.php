@@ -1,23 +1,21 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-object'
 use Charcoal\Object\ObjectRoute;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class ObjectRouteTest extends PHPUnit_Framework_TestCase
+class ObjectRouteTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -35,6 +33,8 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -43,11 +43,17 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(ObjectRoute::class);
     }
 
+    /**
+     * @return void
+     */
     public function testDefaults()
     {
         $this->assertNull($this->obj->id());
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $ret = $this->obj->setData([
@@ -64,8 +70,11 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $this->obj);
 
         $this->assertEquals(42, $this->obj->id());
-        $this->assertEquals(new DateTime('today'), $this->obj->creationDate());
-        $this->assertEquals(new DateTime('today'), $this->obj->lastModificationDate());
+
+        $expected = new DateTime('today');
+        $this->assertEquals($expected, $this->obj->creationDate());
+        $this->assertEquals($expected, $this->obj->lastModificationDate());
+
         $this->assertEquals('es', $this->obj->lang());
         $this->assertEquals('foobar', $this->obj->slug());
         $this->assertEquals('foo', $this->obj->routeObjType());
@@ -73,6 +82,9 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('baz', $this->obj->routeTemplate());
     }
 
+    /**
+     * @return void
+     */
     public function testSetId()
     {
         $ret = $this->obj->setId(3);
@@ -86,19 +98,31 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10, $this->obj['id']);
     }
 
+    /**
+     * @return void
+     */
     public function testSetCreationDate()
     {
         $this->assertNull($this->obj->creationDate());
     }
 
+    /**
+     * @return void
+     */
     public function testLastModificationDate()
     {
     }
 
+    /**
+     * @return void
+     */
     public function testLang()
     {
     }
 
+    /**
+     * @return void
+     */
     public function testSetSlug()
     {
         $this->assertNull($this->obj->slug());
@@ -115,7 +139,7 @@ class ObjectRouteTest extends PHPUnit_Framework_TestCase
         $this->obj['slug'] = null;
         $this->assertNull($this->obj->slug());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setSlug(false);
     }
 

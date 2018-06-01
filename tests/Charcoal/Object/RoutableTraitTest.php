@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
 
@@ -14,13 +14,14 @@ use Charcoal\Translator\LocalesManager;
 // From 'charcoal-object'
 use Charcoal\Object\ObjectRoute;
 use Charcoal\Object\RoutableTrait;
-use Charcoal\Object\Tests\ContainerProvider;
-use Charcoal\Object\Tests\Mocks\RoutableClass as RoutableObject;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
+use Charcoal\Tests\Object\Mocks\RoutableClass as RoutableObject;
 
 /**
  *
  */
-class RoutableTraitTest extends \PHPUnit_Framework_TestCase
+class RoutableTraitTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -45,6 +46,8 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -61,6 +64,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSlugPattern()
     {
         // $this->assertEquals('', $this->obj->slugPattern());
@@ -72,6 +78,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         // $this->assertEquals('', $this->obj->slugPattern());
     }
 
+    /**
+     * @return void
+     */
     public function testSlugPatternRoutable()
     {
         $this->obj->setMetadata([
@@ -82,6 +91,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foofoo', $this->obj->slugPattern());
     }
 
+    /**
+     * @return void
+     */
     public function testSlugPatternWithoutRoutable()
     {
         $this->obj->setMetadata([
@@ -91,14 +103,20 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('barbar', $this->obj->slugPattern());
     }
 
+    /**
+     * @return void
+     */
     public function testSlugPatternWithoutMetadata()
     {
         $this->obj->setMetadata([]);
 
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $this->obj->slugPattern();
     }
 
+    /**
+     * @return void
+     */
     public function testSlugPrefix()
     {
         $this->assertEquals('', $this->obj->slugPrefix());
@@ -111,6 +129,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('barfoo', $this->obj->slugPrefix());
     }
 
+    /**
+     * @return void
+     */
     public function testSlugSuffix()
     {
         $this->assertEquals('', $this->obj->slugSuffix());
@@ -123,11 +144,17 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('barfoo', $this->obj->slugSuffix());
     }
 
+    /**
+     * @return void
+     */
     public function testIsSlugEditableIsFalseByDefault()
     {
         $this->assertFalse($this->obj->isSlugEditable());
     }
 
+    /**
+     * @return void
+     */
     public function testIsSlugEditable()
     {
         $this->obj->setMetadata([
@@ -138,6 +165,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->isSlugEditable());
     }
 
+    /**
+     * @return void
+     */
     public function testSlug()
     {
         $this->assertNull($this->obj->slug());
@@ -150,6 +180,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->obj->slug());
     }
 
+    /**
+     * @return void
+     */
     public function testGenerateSlug()
     {
         $container = $this->container();
@@ -168,12 +201,19 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerSlugs
+     *
+     * @param  string $str  A dirty slug.
+     * @param  string $slug A clean $str.
+     * @return void
      */
     public function testSlugify($str, $slug)
     {
         $this->assertEquals($slug, $this->obj->slugify($str));
     }
 
+    /**
+     * @return array
+     */
     public function providerSlugs()
     {
         return [
@@ -188,6 +228,9 @@ class RoutableTraitTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return Translator
+     */
     private function translator()
     {
         if ($this->translator === null) {

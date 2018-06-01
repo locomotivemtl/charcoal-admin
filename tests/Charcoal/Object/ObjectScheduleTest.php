@@ -1,23 +1,21 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-object'
 use Charcoal\Object\ObjectSchedule;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
+class ObjectScheduleTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -35,6 +33,8 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -43,6 +43,9 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(ObjectSchedule::class);
     }
 
+    /**
+     * @return void
+     */
     public function testSetTargetType()
     {
         $this->assertNull($this->obj->targetType());
@@ -50,10 +53,13 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($ret, $this->obj);
         $this->assertEquals('foobar', $this->obj->targetType());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setTargetType(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetTargetId()
     {
         $this->assertNull($this->obj->targetId());
@@ -62,6 +68,9 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(42, $this->obj->targetId());
     }
 
+    /**
+     * @return void
+     */
     public function testSetDataDiff()
     {
         $this->assertEquals([], $this->obj->dataDiff());
@@ -70,6 +79,9 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo'=>42], $this->obj->dataDiff());
     }
 
+    /**
+     * @return void
+     */
     public function testSetProcessed()
     {
         $this->assertFalse($this->obj->processed());
@@ -78,6 +90,9 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->processed());
     }
 
+    /**
+     * @return void
+     */
     public function testSetScheduledDate()
     {
         $obj = $this->obj;
@@ -90,16 +105,22 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $obj->setScheduledDate(null);
         $this->assertNull($obj->scheduledDate());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setScheduledDate(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetScheduledDateInvalidTime()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setScheduledDate('A totally invalid date time');
     }
 
+    /**
+     * @return void
+     */
     public function testSetProcessedDate()
     {
         $obj = $this->obj;
@@ -112,16 +133,22 @@ class ObjectScheduleTest extends \PHPUnit_Framework_TestCase
         $obj->setProcessedDate(null);
         $this->assertNull($obj->processedDate());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setProcessedDate(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetProcessedDateInvalidTime()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->obj->setProcessedDate('A totally invalid date time');
     }
 
+    /**
+     * @return void
+     */
     public function testProcess()
     {
         $container = $this->container();

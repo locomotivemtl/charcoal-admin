@@ -2,11 +2,11 @@
 
 namespace Charcoal\Object;
 
-use \InvalidArgumentException;
-use \UnexpectedValueException;
+use InvalidArgumentException;
+use UnexpectedValueException;
 
 // From 'charcoal-core'
-use \Charcoal\Model\ModelInterface;
+use Charcoal\Model\ModelInterface;
 
 /**
  * Full implementation, as a trait, of the `HierarchicalInterface`

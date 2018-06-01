@@ -1,15 +1,16 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 // From 'charcoal-object'
 use Charcoal\Object\ArchivableTrait;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class ArchivableTraitTest extends \PHPUnit_Framework_TestCase
+class ArchivableTraitTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -20,12 +21,17 @@ class ArchivableTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
         $this->obj = $this->getMockForTrait(ArchivableTrait::class);
     }
 
+    /**
+     * @return void
+     */
     public function testConstructor()
     {
         $this->assertTrue(true);

@@ -1,66 +1,90 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 // From 'charcoal-object'
 use Charcoal\Object\CategoryTrait;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class CategoryTraitTest extends \PHPUnit_Framework_TestCase
+class CategoryTraitTest extends AbstractTestCase
 {
     /**
-     * Tested Class.
+     * Set up the test.
      *
-     * @var CategoryTrait
+     * @return CategoryTrait
      */
-    private $obj;
+    public function createTrait()
+    {
+        return $this->getMockForTrait(CategoryTrait::class);
+    }
 
     /**
-     * Set up the test.
+     * @return void
      */
-    public function setUp()
-    {
-        $this->obj = $this->getMockForTrait(CategoryTrait::class);
-    }
-
     public function testUnsetCategoryItemTypeThrowsException()
     {
-        $this->setExpectedException('\Exception');
-        $this->obj->categoryItemType();
+        $mock = $this->createTrait();
+
+        $this->expectException('\Exception');
+        $mock->categoryItemType();
     }
 
+    /**
+     * @return void
+     */
     public function testSetCategoryItemType()
     {
-        $ret = $this->obj->setCategoryItemType('foobar');
-        $this->assertSame($ret, $this->obj);
-        $this->assertEquals('foobar', $this->obj->categoryItemType());
+        $mock = $this->createTrait();
 
-        $this->setExpectedException('\InvalidArgumentException');
-        $this->obj->setCategoryItemType(false);
+        $ret = $mock->setCategoryItemType('foobar');
+        $this->assertSame($ret, $mock);
+        $this->assertEquals('foobar', $mock->categoryItemType());
+
+        $this->expectException('\InvalidArgumentException');
+        $mock->setCategoryItemType(false);
     }
 
+    /**
+     * @return void
+     */
     public function testNumCategoryItems()
     {
-        $this->assertEquals(0, $this->obj->numCategoryItems());
-
-        $this->obj->expects($this->any())
+        $mock = $this->createTrait();
+        $mock->expects($this->any())
             ->method('loadCategoryItems')
-            ->will($this->returnValue([1]));
+            ->will($this->returnValue([]));
 
-        $this->assertEquals(1, $this->obj->numCategoryItems());
+        $this->assertEquals(0, $mock->numCategoryItems());
+
+        $mock = $this->createTrait();
+        $mock->expects($this->any())
+            ->method('loadCategoryItems')
+            ->will($this->returnValue([ 'item' ]));
+
+        $this->assertEquals(1, $mock->numCategoryItems());
     }
 
+    /**
+     * @return void
+     */
     public function testHasCategoryItems()
     {
-        $this->assertFalse($this->obj->hasCategoryItems());
-
-        $this->obj->expects($this->any())
+        $mock = $this->createTrait();
+        $mock->expects($this->any())
             ->method('loadCategoryItems')
-            ->will($this->returnValue([1]));
+            ->will($this->returnValue([]));
 
-        $this->assertTrue($this->obj->hasCategoryItems());
+        $this->assertFalse($mock->hasCategoryItems());
+
+        $mock = $this->createTrait();
+        $mock->expects($this->any())
+            ->method('loadCategoryItems')
+            ->will($this->returnValue([ 'item' ]));
+
+        $this->assertTrue($mock->hasCategoryItems());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
 use InvalidArgumentException;
@@ -12,13 +12,14 @@ use Pimple\Container;
 // From 'charcoal-object'
 use Charcoal\Object\PublishableTrait;
 use Charcoal\Object\PublishableInterface as Publishable;
-use Charcoal\Object\Tests\ContainerProvider;
-use Charcoal\Object\Tests\Mocks\PublishableClass as PublishableObject;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
+use Charcoal\Tests\Object\Mocks\PublishableClass as PublishableObject;
 
 /**
  *
  */
-class PublishableTraitTest extends \PHPUnit_Framework_TestCase
+class PublishableTraitTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -36,6 +37,8 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -53,6 +56,8 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
      * - accepts a string representation of a date/time value
      * - accepts a {@see \DateTimeInterface}
      * - accepts an blank value
+     *
+     * @return void
      */
     public function testPublishDate()
     {
@@ -70,19 +75,25 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($time, $obj->publishDate());
     }
 
+    /**
+     * @return void
+     */
     public function testUnexpectedPublishDate()
     {
         $obj = $this->obj;
 
-        $this->setExpectedException(UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $obj->setPublishDate('foobar');
     }
 
+    /**
+     * @return void
+     */
     public function testInvalidPublishDate()
     {
         $obj = $this->obj;
 
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $obj->setPublishDate(false);
     }
 
@@ -92,6 +103,8 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
      * - accepts a string representation of a date/time value
      * - accepts a {@see \DateTimeInterface}
      * - accepts an blank value
+     *
+     * @return void
      */
     public function testExpiryDate()
     {
@@ -109,22 +122,31 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($time, $obj->expiryDate());
     }
 
+    /**
+     * @return void
+     */
     public function testUnexpectedExpiryDate()
     {
         $obj = $this->obj;
 
-        $this->setExpectedException(UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $obj->setExpiryDate('foobar');
     }
 
+    /**
+     * @return void
+     */
     public function testInvalidExpiryDate()
     {
         $obj = $this->obj;
 
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $obj->setExpiryDate(false);
     }
 
+    /**
+     * @return void
+     */
     public function testPublishStatus()
     {
         $obj = $this->obj;
@@ -147,12 +169,17 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $obj->setPublishStatus('');
         $this->assertNull($obj->publishStatus());
 
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $obj->setPublishStatus('foobar');
     }
 
     /**
      * @dataProvider providerPublishStatus
+     *
+     * @param  mixed  $publishDate    A date/time value.
+     * @param  mixed  $expiryDate     A date/time value.
+     * @param  string $expectedStatus The expected publication status.
+     * @return void
      */
     public function testPublishStatusFromDates($publishDate, $expiryDate, $expectedStatus)
     {
@@ -177,6 +204,9 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedStatus, $obj->publishDateStatus());
     }
 
+    /**
+     * @return array
+     */
     public function providerPublishStatus()
     {
         return [
@@ -190,6 +220,9 @@ class PublishableTraitTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testIsPublished()
     {
         $obj = $this->obj;

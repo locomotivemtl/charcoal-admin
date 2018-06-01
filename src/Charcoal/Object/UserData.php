@@ -7,16 +7,16 @@ use DateTimeInterface;
 use Exception;
 use InvalidArgumentException;
 
-// From `pimple/pimple`
+// From Pimple
 use Pimple\Container;
 
-// From `charcoal-core`
+// From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
-// From `charcoal-translation`
+// From 'charcoal-translator'
 use Charcoal\Translator\TranslatorAwareTrait;
 
-// From `charcoal-object`
+// From 'charcoal-object'
 use Charcoal\Object\UserDataInterface;
 
 /**

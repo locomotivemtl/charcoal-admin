@@ -1,23 +1,21 @@
 <?php
 
-namespace Charcoal\Object\Tests;
+namespace Charcoal\Tests\Object;
 
 use DateTime;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-object'
 use Charcoal\Object\Content;
-use Charcoal\Object\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Object\ContainerProvider;
 
 /**
  *
  */
-class ContentTest extends PHPUnit_Framework_TestCase
+class ContentTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -35,6 +33,8 @@ class ContentTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -43,6 +43,9 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->obj = $container['model/factory']->create(Content::class);
     }
 
+    /**
+     * @return void
+     */
     public function testDefaults()
     {
         $this->assertTrue($this->obj->active());
@@ -61,6 +64,9 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->revisionEnabled());
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $ret = $this->obj->setData([
@@ -84,6 +90,9 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(['foo', 'bar'], $this->obj->requiredAclPermissions());
     }
 
+    /**
+     * @return void
+     */
     public function testSetActive()
     {
         $this->assertTrue($this->obj->active());
@@ -101,6 +110,9 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj['active']);
     }
 
+    /**
+     * @return void
+     */
     public function testSetPosition()
     {
         $this->obj = $this->obj;
@@ -118,10 +130,13 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->obj->setPosition(null);
         $this->assertEquals(0, $this->obj->position());
 
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setPosition('foo');
     }
 
+    /**
+     * @return void
+     */
     public function testSetCreated()
     {
         $ret = $this->obj->setCreated('2015-01-01 13:05:45');
@@ -130,31 +145,42 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->obj->created());
 
         $this->obj['created'] = 'today';
-        $this->assertEquals(new DateTime('today'), $this->obj->created());
+        $expected = new DateTime('today');
+        $this->assertEquals($expected, $this->obj->created());
 
         $this->obj->set('created', 'tomorrow');
-        $this->assertEquals(new DateTime('tomorrow'), $this->obj['created']);
+        $expected = new DateTime('tomorrow');
+        $this->assertEquals($expected, $this->obj['created']);
 
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setCreated(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetCreatedInvalidDate()
     {
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $this->obj->setCreated('foo.bar');
     }
 
+    /**
+     * @return void
+     */
     public function testSetCreatedBy()
     {
         $ret = $this->obj->setCreatedBy('Me');
         $this->assertSame($ret, $this->obj);
         $this->assertEquals('Me', $this->obj->createdBy());
 
-        //$this->setExpectedException(\InvalidArgumentException::class);
+        //$this->expectException(\InvalidArgumentException::class);
         //$this->obj->setCreatedBy(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetLastModified()
     {
         $ret = $this->obj->setLastModified('2015-01-01 13:05:45');
@@ -163,31 +189,42 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->obj->lastModified());
 
         $this->obj['last_modified'] = 'today';
-        $this->assertEquals(new DateTime('today'), $this->obj->lastModified());
+        $expected = new DateTime('today');
+        $this->assertEquals($expected, $this->obj->lastModified());
 
         $this->obj->set('last_modified', 'tomorrow');
-        $this->assertEquals(new DateTime('tomorrow'), $this->obj['last_modified']);
+        $expected = new DateTime('tomorrow');
+        $this->assertEquals($expected, $this->obj['last_modified']);
 
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setLastModified(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetLastModifiedInvalidDate()
     {
-        $this->setExpectedException('\Exception');
+        $this->expectException('\Exception');
         $this->obj->setLastModified('foo.bar');
     }
 
+    /**
+     * @return void
+     */
     public function testSetLastModifiedBy()
     {
         $ret = $this->obj->setLastModifiedBy('Me');
         $this->assertSame($ret, $this->obj);
         $this->assertEquals('Me', $this->obj->lastModifiedBy());
 
-        //$this->setExpectedException(\InvalidArgumentException::class);
+        //$this->expectException(\InvalidArgumentException::class);
         //$this->obj->setLastModifiedBy(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetRequiredAclPermissions()
     {
         $ret = $this->obj->setRequiredAclPermissions(['a', 'b', 'c']);
@@ -204,7 +241,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $this->obj->setRequiredAclPermissions(false);
         $this->assertEquals([], $this->obj->requiredAclPermissions());
 
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setRequiredAclPermissions(true);
     }
 

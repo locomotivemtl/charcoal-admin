@@ -13,7 +13,7 @@ use Charcoal\Factory\FactoryInterface;
 // From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
 
-// From 'charcoal-translation'
+// From 'charcoal-translator'
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-object'

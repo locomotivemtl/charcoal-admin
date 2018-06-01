@@ -7,6 +7,9 @@ use InvalidArgumentException;
 use DateTime;
 use DateTimeInterface;
 
+/**
+ *
+ */
 trait TimestampableTrait
 {
     /**

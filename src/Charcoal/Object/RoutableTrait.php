@@ -9,7 +9,7 @@ use UnexpectedValueException;
 // From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;
 
-// From 'charcoal-translation'
+// From 'charcoal-translator'
 use Charcoal\Translator\Translation;
 
 // From 'charcoal-view'

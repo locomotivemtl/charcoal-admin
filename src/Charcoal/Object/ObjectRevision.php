@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use DateTime;
 use DateTimeInterface;
 
-// From 'pimple/pimple'
+// From Pimple
 use Pimple\Container;
 
 // From 'charcoal-factory'

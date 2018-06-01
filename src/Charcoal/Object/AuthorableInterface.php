@@ -2,6 +2,9 @@
 
 namespace Charcoal\Object;
 
+/**
+ *
+ */
 interface AuthorableInterface
 {
     /**

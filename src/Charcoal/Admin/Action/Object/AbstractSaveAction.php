@@ -15,7 +15,7 @@ use Charcoal\Model\ModelValidator;
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
 
-// From `charcoal-admin`
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;

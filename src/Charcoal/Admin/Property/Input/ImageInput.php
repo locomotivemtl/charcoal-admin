@@ -2,10 +2,10 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-// Dependency from 'charcoal-view'
+// From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
 
-// Local Dependency
+// From 'charcoal-admin'
 use Charcoal\Admin\Ui\ImageAttributesTrait;
 use Charcoal\Admin\Property\Input\FileInput;
 

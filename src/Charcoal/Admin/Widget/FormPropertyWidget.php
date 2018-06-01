@@ -13,7 +13,7 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-property`
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-view'

@@ -12,7 +12,7 @@ use RuntimeException;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-// From PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 

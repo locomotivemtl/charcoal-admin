@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**

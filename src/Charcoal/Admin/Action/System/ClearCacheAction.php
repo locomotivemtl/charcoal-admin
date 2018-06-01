@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 // From Pimple
 use Pimple\Container;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Action\Object;
 
-use Charcoal\Object\RevisionableInterface;
 use Exception;
 use InvalidArgumentException;
 
@@ -10,7 +9,10 @@ use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From `charcoal-admin`
+// From 'charcoal-object'
+use Charcoal\Object\RevisionableInterface;
+
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;

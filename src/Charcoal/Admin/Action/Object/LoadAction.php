@@ -18,7 +18,7 @@ use Pimple\Container;
 use Charcoal\Model\Collection;
 use Charcoal\Loader\CollectionLoader;
 
-// From `charcoal-admin`
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 
 /**

@@ -2,14 +2,14 @@
 
 namespace Charcoal\Admin\Property\Input\Selectize\Template;
 
-// local dependencies
-use Charcoal\Admin\Support\BaseUrlTrait;
-
-// from `pimple`
+// from Pimple
 use Pimple\Container;
 
-// from `charcoal-app`
+// From 'charcoal-app'
 use Charcoal\App\Template\AbstractTemplate;
+
+// From 'charcoal-admin'
+use Charcoal\Admin\Support\BaseUrlTrait;
 
 /**
  * Controller for selectize tempalte

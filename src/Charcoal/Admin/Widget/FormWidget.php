@@ -12,10 +12,10 @@ use Pimple\Container;
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 
-// From `charcoal-app`
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-/// From `charcoal-ui`
+/// From 'charcoal-ui'
 use Charcoal\Ui\Form\FormInterface;
 use Charcoal\Ui\Form\FormTrait;
 use Charcoal\Ui\FormGroup\FormGroupInterface;

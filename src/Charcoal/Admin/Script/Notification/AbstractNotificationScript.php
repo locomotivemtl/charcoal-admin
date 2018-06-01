@@ -2,28 +2,28 @@
 
 namespace Charcoal\Admin\Script\Notification;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Pimple (DI container) dependencies
+// From Pimple
 use Pimple\Container;
 
-// Module `charcoal-core` dependencies
+// From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;
 use Charcoal\Model\CollectionInterface;
 
-// Module `charcoal-object` dependencies
+// From 'charcoal-object'
 use Charcoal\Object\ObjectRevision;
 
-// Module `charcoal-factory` dependencies
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// Module `charcoal-app` dependencies
+// From 'charcoal-app'
 use Charcoal\App\Script\CronScriptInterface;
 use Charcoal\App\Script\CronScriptTrait;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 use Charcoal\Admin\Object\Notification;
 use Charcoal\Admin\User;

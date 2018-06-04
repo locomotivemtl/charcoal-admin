@@ -101,7 +101,10 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
 
             var urlParams = Charcoal.Admin.queryParams();
 
-            if (urlParams.tab_ident === undefined || $tab.data('tab-ident') === urlParams.tab_ident) {
+            // Skip push state for same state.
+            if (urlParams.tab_ident !== undefined &&
+                $tab.data('tab-ident') === urlParams.tab_ident
+            ) {
                 return;
             }
 

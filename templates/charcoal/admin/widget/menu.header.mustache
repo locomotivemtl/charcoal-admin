@@ -14,50 +14,22 @@
 
 --}}
 
-<div class="c-nav-container o-flex_aside">
-    {{# isAuthorized }}
+<div class="c-nav-container o-flex_aside{{# navContainerCssClasses }} {{ . }}{{/ navContainerCssClasses }}">
+    {{# showHeaderMenu }}
     <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
         <span class="c-nav-container_button_icon"></span>
     </button>
-    {{/ isAuthorized }}
+    {{/ showHeaderMenu }}
+
     <div class="c-nav-container_header">
-        <a class="c-nav-container_logo" href="{{adminUrl}}">
-            <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
+        <a class="c-nav-container_logo" href="{{ adminUrl }}">
+            <svg role="img"><use xlink:href="{{# withBaseUrl }}assets/admin/images/svgs.svg{{/ withBaseUrl }}#charcoal-logo"></use></svg>
         </a>
         {{# isAuthenticated }}
-            {{# showSystemMenu }}
-                <nav class="btn-group c-nav-system">
-                    <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
-                        <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
-                        {{# systemMenu }}
-                        <li class="dropdown-item c-nav-system_item">
-                            <a
-                                href="{{ url }}"
-                                class="c-nav-system_link{{# ident }} -{{ . }}{{/ ident }}"
-                                {{# id }}
-                                id="{{ . }}"
-                                {{/ id }}
-                                {{# iconCss }}
-                                data-icon="{{ . }}"
-                                {{/ iconCss }}>
-                                <span>{{ label }}</span>
-                            </a>
-                        </li>
-                        {{/ systemMenu }}
-                    </ul>
-                </nav>
-            {{/ showSystemMenu }}
-            {{^ showSystemMenu }}
-                <a href="{{ adminUrl }}logout" class="c-nav-system_logout btn">
-                    <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
-                    <span class="btn-label">{{# _t }}auth.logout.action{{/ _t }}</span>
-                </a>
-            {{/ showSystemMenu }}
+            {{> charcoal/admin/widget/menu.system }}
         {{/ isAuthenticated }}
     </div>
+
     {{# showHeaderMenu }}
     <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
     <nav class="c-nav-main">

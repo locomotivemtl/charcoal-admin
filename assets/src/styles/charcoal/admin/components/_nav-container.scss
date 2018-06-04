@@ -41,7 +41,7 @@
     cursor: pointer;
     background: none;
     border: none;
-    display: inline-block;
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
@@ -66,9 +66,9 @@
     [data-template="lost-password"] &,
     [data-template="reset-password"] &,
     [data-template="elfinder"] & {
-        @media (min-width: $from-large) {
+        //@media (min-width: $from-large) {
             @include c-nav-container_button;
-        }
+        //}
     }
 }
 
@@ -174,9 +174,11 @@
     }
 
     @media (max-width: $to-large) {
+        padding: 0 20px;
+
         svg {
-            width: 81px;
-            height: 48px;
+            width: 80px;
+            height: 40px;
         }
     }
 
@@ -205,11 +207,11 @@
     [data-template="reset-password"] &,
     [data-template="elfinder"] & {
         @media (min-width: $from-large) {
-            padding: 6px 20px;
+            padding: 0 20px;
 
             svg {
-                width: 81px;
-                height: 48px;
+                width: 80px;
+                height: 40px;
             }
         }
     }

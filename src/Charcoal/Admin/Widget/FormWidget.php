@@ -445,6 +445,7 @@ class FormWidget extends AdminWidget implements
             'l10n_mode',
             'group_display_mode',
             'next_url',
+            'tab_ident',
         ];
     }
 

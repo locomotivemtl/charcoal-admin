@@ -1,0 +1,38 @@
+<section class="card card-table">
+    <header class="card-header">
+        <h3 class="card-title mb-0">{{# _t }}Cache Entries{{/ _t }}</h3>
+    </header>
+    {{# cacheInfo.has_global_items }}
+    <table class="table" data-toggle="table" data-search="true" data-pagination="true" data-page-list="10,25,50,100,All" data-page-size="25">
+        <thead>
+            <tr>
+                <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Key{{/ _t }}</th>
+                <th scope="col" data-sortable="true">{{# _t }}Hits{{/ _t }}</th>
+                <th scope="col" data-sortable="true">{{# _t }}Size{{/ _t }}</th>
+                <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Created{{/ _t }}</th>
+                <th scope="col" data-sortable="true">{{# _t }}Timeout{{/ _t }}</th>
+                <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Expiry{{/ _t }}</th>
+                <!-- <th scope="col">{{# _t }}Action{{/ _t }}</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {{# cacheInfo.global_items }}
+            <tr>
+                <td><strong>{{ ident }}</strong></td>
+                <td>{{ num_hits }}</td>
+                <td><span data-value="{{ mem_size }}">{{ size }}</span></td>
+                <td>{{ created }}</td>
+                <td>{{ timeout }}</td>
+                <td>{{ expiry }}</td>
+                <!-- <td>
+                    <button class="btn btn-danger" data-clear="cache" data-cache-type="item" data-cache-key="{{ key }}">{{# _t }}Delete{{/ _t }}</button>
+                </td> -->
+            </tr>
+            {{/ cacheInfo.global_items }}
+        </tbody>
+    </table>
+    {{/ cacheInfo.has_global_items }}
+    {{^ cacheInfo.has_global_items }}
+    <div class="card-body text-center">{{# _t }}No records found{{/ _t }}</div>
+    {{/ cacheInfo.has_global_items }}
+</section>

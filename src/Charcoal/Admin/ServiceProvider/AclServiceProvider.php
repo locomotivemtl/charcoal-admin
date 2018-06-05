@@ -27,7 +27,7 @@ use Charcoal\User\Acl\Manager as AclManager;
  * This service provider expects a few "global" services to be registered on the container:
  * - `logger`, a PSR-3 logger
  * - `database`, a PDO instance
- * - `admin/config`, a PSR-6 Cache pool
+ * - `admin/config`, a configset of the admin
  */
 class AclServiceProvider implements ServiceProviderInterface
 {

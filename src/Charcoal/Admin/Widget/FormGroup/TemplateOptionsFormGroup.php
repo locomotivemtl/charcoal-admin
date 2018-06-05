@@ -287,18 +287,29 @@ class TemplateOptionsFormGroup extends StructureFormGroup
      */
     protected function loadMetadata($metadataIdent)
     {
-        $metadataLoader = $this->metadataLoader();
-        $metadata       = $metadataLoader->load($metadataIdent, $this->createMetadata());
-
+        $metadata = $this->metadataLoader()->load($metadataIdent, $this->metadataClass());
         return $metadata;
     }
 
     /**
+     * Create a new metadata object.
+     *
      * @return MetadataInterface
      */
     protected function createMetadata()
     {
-        return new StructureMetadata();
+        $class = $this->metadataClass();
+        return new $class();
+    }
+
+    /**
+     * Retrieve the class name of the metadata object.
+     *
+     * @return string
+     */
+    protected function metadataClass()
+    {
+        return StructureMetadata::class;
     }
 
     /**
@@ -320,13 +331,18 @@ class TemplateOptionsFormGroup extends StructureFormGroup
                 $structureMetadata = $this->createMetadata();
             }
 
-            $controllerInterface = $this->controllerIdent();
-            if ($controllerInterface) {
-                $controllerStructIdent = sprintf('widget/form-group/structure/%s/%s', $obj->objType(), $obj->id());
-                $structureMetadata     = $this->metadataLoader()->load(
-                    $controllerStructIdent,
+            $controllerInterfaces = (array)$this->controllerIdent();
+            if (!empty($controllerInterfaces)) {
+                $metadataLoader = $this->metadataLoader();
+
+                $controllerStructKey = $controllerInterfaces;
+                array_unshift($controllerStructKey, $obj->objType(), $obj->id());
+                $controllerStructKey = 'template/structure='.$metadataLoader->serializeMetaKey($controllerStructKey);
+
+                $structureMetadata = $this->metadataLoader()->load(
+                    $controllerStructKey,
                     $structureMetadata,
-                    (array)$controllerInterface
+                    $controllerInterfaces
                 );
             }
 

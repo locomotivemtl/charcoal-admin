@@ -1,6 +1,10 @@
 {
     "base_path": "admin",
 
+    "metadata": {
+        "cache": "memory"
+    },
+
     "routes": {
         "templates": {
             "home": {
@@ -124,6 +128,12 @@
             },
             "system/clear-cache": {
                 "ident": "charcoal/admin/action/system/clear-cache"
+            },
+            "system/cache/clear": {
+                "ident": "charcoal/admin/action/system/clear-cache"
+            },
+            "system/cache/purge": {
+                "ident": "charcoal/admin/action/system/purge-cache"
             },
             "system/static-website/activate": {
                 "ident": "charcoal/admin/action/system/static-website/activate"

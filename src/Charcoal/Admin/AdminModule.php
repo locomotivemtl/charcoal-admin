@@ -55,8 +55,6 @@ class AdminModule extends AbstractModule
 
         $adminConfig = $container['admin/config'];
 
-        $this->setupMetadataForAdmin();
-
         $this->setConfig($adminConfig);
 
         $groupIdent = '/'.trim($adminConfig['base_path'], '/');
@@ -218,25 +216,5 @@ class AdminModule extends AbstractModule
         });
 
         return $next($request, $response);
-    }
-
-    /**
-     * Add "admin/" to each metadata paths.
-     * Disable metadata loader cache for admin, for now.
-     *
-     * @return void
-     */
-    private function setupMetadataForAdmin()
-    {
-        $container = $this->app()->getContainer();
-
-        $container['config']->merge([
-            'metadata'=>[
-                'cache' => $container['cache/drivers']['memory'],
-                'paths'=>array_merge($container['config']['metadata.paths'], array_map(function ($p) {
-                    return rtrim($p, '/').'/admin/';
-                }, $container['config']['metadata.paths']))
-            ]
-        ]);
     }
 }

@@ -1,0 +1,23 @@
+<section class="card">
+    <header class="card-header">
+        <h3 class="card-title mb-0">{{# _t }}Pages Cache{{/ _t }}</h3>
+    </header>
+    <div class="card-body">
+        <p>{{# _t }}Some pages might be saved entirely in the cache, either at route-level or template-level.{{/ _t }}</p>
+        <p>{{# _t }}Clearing this cache will make sure the pages will be rebuilt at next request.{{/ _t }}</p>
+        {{# hasStats }}
+        <dl>
+            <dt>{{# _t }}Num Entries{{/ _t }}</dt>
+            <dd>{{ cacheInfo.pages.num_entries }}</dd>
+            <dt>{{# _t }}Total Size{{/ _t }}</dt>
+            <dd>{{ cacheInfo.pages.total_size }}
+            <dd></dd>
+        </dl>
+        {{/ hasStats }}
+    </div>
+    <footer class="card-footer bg-transparent">
+        <button class="btn btn-primary" data-clear="cache" data-cache-type="pages">
+            <span class="btn-label">{{# _t }}Clear Pages Cache{{/ _t }}</span>
+        </button>
+    </footer>
+</section>

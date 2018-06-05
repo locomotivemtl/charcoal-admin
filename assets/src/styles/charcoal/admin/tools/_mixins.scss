@@ -238,3 +238,10 @@
     width: 1px;
     white-space: nowrap;
 }
+
+//
+// Generate column count for `.card-deck`
+//
+@mixin card-deck-column-count($count: 1) {
+    flex: 0 0 calc((100% / #{$count}) - (#{$card-deck-margin} * 2));
+}

@@ -18,7 +18,9 @@
     cursor: pointer;
 
     @media (max-width: $to-large) {
-        padding: 6px 20px;
+        padding: 0;
+        width: 40px;
+        height: 40px;
     }
 
     @media (min-width: $from-large) {
@@ -34,6 +36,19 @@
         width: 16px;
         height: 4px;
         transform: rotate(90deg);
+        vertical-align: middle;
+    }
+
+    [data-template="login"] &,
+    [data-template="logout"] &,
+    [data-template="lost-password"] &,
+    [data-template="reset-password"] &,
+    [data-template="elfinder"] & {
+        @media (min-width: $from-large) {
+            padding: 0;
+            width: 40px;
+            height: 40px;
+        }
     }
 }
 
@@ -87,7 +102,7 @@
     position: absolute;
     z-index: 1200;
     right: rem(10px);
-    bottom: rem(10px);
+    bottom: rem(8px);
 
     &:hover {
         color: $charcoal-gray-2;

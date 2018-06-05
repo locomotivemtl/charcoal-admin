@@ -6830,32 +6830,27 @@ Selectize.define('buttons', function () {
          * @return {string}
          */
         var append = function (html_container, html_element) {
-            var pos = html_container.search(/(<\/[^>]+>\s*)$/);
-            return html_container.substring(0, pos) + html_element + html_container.substring(pos);
+            var $item = $(html_container);
+
+            if ($item.hasClass('item')) {
+                $item.append($(html_element));
+
+                return $item[0];
+            }
+
+            return html_container;
         };
 
         var adjustContainerPadding = function (html_container, offset) {
-            var pos = html_container.match(/(padding-right:.*;)/);
-            if (pos && pos[0]) {
-                var endIndex = pos[0].length + pos.index;
-                return html_container.substring(0, pos.index) +
-                    'padding-right:' + (offset + 8) + 'px;' + html_container.substring(endIndex);
+            var $item = $(html_container);
+
+            if ($item.hasClass('item')) {
+                $item.css('padding-right', (offset + 8) + 'px');
+
+                return $item[0];
             }
 
-            pos = html_container.match(/(style=")/);
-            if (pos && pos[0]) {
-                pos = pos[0].length + pos.index;
-                return html_container.substring(0, pos) +
-                    'padding-right:' + (offset + 8) + 'px;' + html_container.substring(pos);
-            }
-
-            pos = html_container.match(/(<[^>]+)/);
-            if (pos && pos[0]) {
-                pos = pos[0].length + pos.index;
-                return html_container.substring(0, pos) +
-                    'style="padding-right:' + (offset + 8) + 'px;' + '"' +
-                    html_container.substring(pos);
-            }
+            return html_container;
         };
 
         thisRef.setup = (function () {

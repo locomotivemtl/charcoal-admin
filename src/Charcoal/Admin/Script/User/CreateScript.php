@@ -4,11 +4,11 @@ namespace Charcoal\Admin\Script\User;
 
 use Exception;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 use Charcoal\Admin\User;
 

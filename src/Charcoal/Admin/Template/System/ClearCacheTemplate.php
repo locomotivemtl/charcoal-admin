@@ -4,9 +4,13 @@ namespace Charcoal\Admin\Template\System;
 
 use APCUIterator;
 use APCIterator;
+use DateInterval;
+use DateTimeInterface;
+use DateTime;
 use RuntimeException;
 
 use Stash\Driver\Apc;
+use Stash\Driver\Ephemeral;
 use Stash\Driver\Memcache;
 
 use Pimple\Container;
@@ -39,13 +43,6 @@ class ClearCacheTemplate extends AdminTemplate
      * @var \Charcoal\App\Config\CacheConfig
      */
     private $cacheConfig;
-
-    /**
-     * Driver Name => Class Name.
-     *
-     * @var \Stash\Interfaces\DriverInterface
-     */
-    private $cacheDriver;
 
     /**
      * Driver Name => Class Name.
@@ -101,8 +98,6 @@ class ClearCacheTemplate extends AdminTemplate
             $cacheType = isset($flip['\\'.$driver]) ? $flip['\\'.$driver] : $driver;
 
             $globalItems = $this->globalCacheItems();
-            # $pageItems   = $this->pagesCacheItems();
-            # $objectItems = $this->objectsCacheItems();
             $this->cacheInfo = [
                 'type'              => $cacheType,
                 'active'            => $this->cacheConfig['active'],
@@ -111,11 +106,7 @@ class ClearCacheTemplate extends AdminTemplate
                 'pages'             => $this->pagesCacheInfo(),
                 'objects'           => $this->objectsCacheInfo(),
                 'global_items'      => $globalItems,
-                # 'pages_items'       => $pageItems,
-                # 'objects_items'     => $objectItems,
                 'has_global_items'  => !empty($globalItems),
-                # 'has_pages_items'   => !empty($pageItems),
-                # 'has_objects_items' => !empty($objectItems),
             ];
         }
 
@@ -296,10 +287,17 @@ class ClearCacheTemplate extends AdminTemplate
         $iter = $this->createApcIterator($key);
 
         foreach ($iter as $item) {
-            $item['ident']   = $this->formatApcCacheKey($item['key']);
-            $item['size']    = $this->formatBytes($item['mem_size']);
-            $item['created'] = date('Y-m-d H:i:s', $item['creation_time']);
-            $item['expiry']  = date('Y-m-d H:i:s', ($item['creation_time']+$item['ttl']));
+            $item['ident'] = $this->formatApcCacheKey($item['key']);
+            $item['size']  = $this->formatBytes($item['mem_size']);
+
+            $item['expiration_time'] = ($item['creation_time'] + $item['ttl']);
+
+            $date1 = new DateTime('@'.$item['creation_time']);
+            $date2 = new DateTime('@'.$item['expiration_time']);
+
+            $item['created'] = $date1->format('Y-m-d H:i:s');
+            $item['expiry']  = $date2->format('Y-m-d H:i:s');
+            $item['timeout'] = $this->formatTimeDiff($date1, $date2);
             yield $item;
         }
     }
@@ -321,19 +319,43 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * Determine if Charcoal has cache statistics.
+     *
      * @return boolean
      */
-    private function isApc()
+    public function hasStats()
+    {
+        return $this->isApc();
+    }
+
+    /**
+     * Determine if Charcoal is using the APC driver.
+     *
+     * @return boolean
+     */
+    public function isApc()
     {
         return is_a($this->cache->getDriver(), Apc::class);
     }
 
     /**
+     * Determine if Charcoal is using the Memcache driver.
+     *
      * @return boolean
      */
-    private function isMemcache()
+    public function isMemcache()
     {
         return is_a($this->cache->getDriver(), Memcache::class);
+    }
+
+    /**
+     * Determine if Charcoal is using the Ephemeral driver.
+     *
+     * @return boolean
+     */
+    public function isMemory()
+    {
+        return is_a($this->cache->getDriver(), Ephemeral::class);
     }
 
     /**
@@ -407,6 +429,63 @@ class ClearCacheTemplate extends AdminTemplate
     }
 
     /**
+     * Human-readable time difference.
+     *
+     * Note: Adapted from CakePHP\Chronos.
+     *
+     * @see https://github.com/cakephp/chronos/blob/1.1.4/LICENSE
+     *
+     * @param DateTimeInterface      $date1 The datetime to start with.
+     * @param DateTimeInterface|null $date2 The datetime to compare against.
+     * @return string
+     */
+    private function formatTimeDiff(DateTimeInterface $date1, DateTimeInterface $date2 = null)
+    {
+        $isNow = $date2 === null;
+        if ($isNow) {
+            $date2 = new DateTime('now', $date1->getTimezone());
+        }
+        $interval = $date1->diff($date2);
+
+        $translator = $this->translator();
+
+        switch (true) {
+            case ($interval->y > 0):
+                $unit  = 'time.year';
+                $count = $interval->y;
+                break;
+            case ($interval->m > 0):
+                $unit  = 'time.month';
+                $count = $interval->m;
+                break;
+            case ($interval->d > 0):
+                $unit  = 'time.day';
+                $count = $interval->d;
+                if ($count >= 7) {
+                    $unit  = 'time.week';
+                    $count = (int)($count / 7);
+                }
+                break;
+            case ($interval->h > 0):
+                $unit  = 'time.hour';
+                $count = $interval->h;
+                break;
+            case ($interval->i > 0):
+                $unit  = 'time.minute';
+                $count = $interval->i;
+                break;
+            default:
+                $count = $interval->s;
+                $unit  = 'time.second';
+                break;
+        }
+
+        $time = $translator->transChoice($unit, $count, [ '{{ count }}' => $count ]);
+
+        return $time;
+    }
+
+    /**
      * @param Container $container Pimple DI Container.
      * @return void
      */
@@ -415,7 +494,6 @@ class ClearCacheTemplate extends AdminTemplate
         parent::setDependencies($container);
 
         $this->availableCacheDrivers = $container['cache/available-drivers'];
-        $this->cacheDriver           = $container['cache/driver'];
         $this->cache                 = $container['cache'];
         $this->cacheConfig           = $container['cache/config'];
     }

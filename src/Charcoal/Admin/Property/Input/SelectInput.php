@@ -2,9 +2,9 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
-use \Charcoal\Admin\Property\AbstractSelectableInput;
+use Charcoal\Admin\Property\AbstractSelectableInput;
 
 /**
  * Select Options Input Property
@@ -149,10 +149,10 @@ class SelectInput extends AbstractSelectableInput
     public function defaultSelectOptions()
     {
         return [
-            // 'iconBase' => 'fa', // Error in plugin?
-            'style'    => '',   // Neutralize any Bootstrap .btn styling
+            // 'iconBase' => 'fa',   // Error in plugin?
+            'style'    => '',        // Neutralize any Bootstrap .btn styling
             'template' => [
-                'caret' => ''   // No need for .caret markup since Bootstrap 4
+                'caret' => ''        // No need for .caret markup since Bootstrap 4
             ]
         ];
     }

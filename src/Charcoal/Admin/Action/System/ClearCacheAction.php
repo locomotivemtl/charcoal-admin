@@ -2,97 +2,114 @@
 
 namespace Charcoal\Admin\Action\System;
 
-// From PSR-6
-use \Psr\Cache\CacheItemPoolInterface;
-
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From Pimple
-use Pimple\Container;
-
-// Intra-module (`charcoal-admin`) dependencies
-use Charcoal\Admin\AdminAction;
+// From 'charcoal-admin'
+use Charcoal\Admin\Action\System\AbstractCacheAction;
 
 /**
- *
+ * Empty the entire cache pool of items.
  */
-class ClearCacheAction extends AdminAction
+class ClearCacheAction extends AbstractCacheAction
 {
     /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
-
-    /**
+     * @todo   Implement support for deleting a specific cache item.
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $cacheType = $request->getParam('cache_type');
+        $translator = $this->translator();
 
-        if (!$cacheType) {
-            $this->addFeedback('error', $this->translator()->translate('Cache type not defined.'));
+        $cacheType = $request->getParam('cache_type');
+        if (!is_string($cacheType) || empty($cacheType)) {
+            $this->addFeedback('error', $translator->translate('Cache type not defined.'));
             $this->setSuccess(false);
             return $response->withStatus(400);
         }
+
+        $result  = false;
+        $message = null;
 
         if ($cacheType === 'global') {
-            $this->cache->clear();
-            $this->addFeedback('success', $this->translator()->translate('Cache cleared successfully.'));
-            $this->setSuccess(true);
+            $result = $this->clearGlobalCache();
+
+            if ($result) {
+                $message = $translator->translate('Cache cleared successfully.');
+            } else {
+                $message = $translator->translate('Failed to clear cache.');
+            }
         } elseif ($cacheType === 'pages') {
-            $this->cache->deleteItem('request');
-            $this->cache->deleteItem('template');
-            $this->addFeedback('success', $this->translator()->translate('Pages cache cleared successfully.'));
-            $this->setSuccess(true);
+            $result = $this->clearPagesCache();
+
+            if ($result) {
+                $message = $translator->translate('Pages cache cleared successfully.');
+            } else {
+                $message = $translator->translate('Failed to clear pages cache.');
+            }
         } elseif ($cacheType === 'objects') {
-            $this->cache->deleteItem('object');
-            $this->cache->deleteItem('metadata');
-            $this->addFeedback('success', $this->translator()->translate('Objects cache cleared successfully.'));
-            $this->setSuccess(true);
+            $result = $this->clearObjectsCache();
+
+            if ($result) {
+                $message = $translator->translate('Objects cache cleared successfully.');
+            } else {
+                $message = $translator->translate('Failed to clear objects cache.');
+            }
+        } elseif ($cacheType === 'item') {
+            $message = $translator->translate('Deleting cache items is unsupported, for now.');
         } else {
-            $this->addFeedback('error', $this->translator()->translate(sprintf('Invalid cache type "%s"', $cacheType)));
+            $this->addFeedback('error', $translator->translate(sprintf('Invalid cache type "%s"', $cacheType)));
             $this->setSuccess(false);
             return $response->withStatus(400);
         }
 
-        return $response;
+        $this->setSuccess($result);
+
+        if ($result) {
+            $this->addFeedback('success', $message);
+            return $response;
+        } else {
+            $this->addFeedback('error', $message);
+            return $response->withStatus(500);
+        }
     }
 
     /**
-     * @return array
+     * Clear the global cache.
+     *
+     * @return boolean TRUE if cache type cleared, FALSE otherwise.
      */
-    public function results()
+    private function clearGlobalCache()
     {
-        $ret = [
-            'success'   => $this->success(),
-            'feedbacks' => $this->feedbacks()
-        ];
-
-        return $ret;
+        $cache  = $this->cachePool();
+        $result = $cache->clear();
+        return $result;
     }
 
     /**
-     * @param Container $container Pimple DI Container.
-     * @return void
+     * Clear the pages cache.
+     *
+     * @return boolean TRUE if cache type cleared, FALSE otherwise.
      */
-    protected function setDependencies(Container $container)
+    private function clearPagesCache()
     {
-        parent::setDependencies($container);
-
-        $this->setCache($container['cache']);
+        $cache  = $this->cachePool();
+        $result = $cache->deleteItems([ 'request', 'template' ]);
+        return $result;
     }
 
     /**
-     * @param CacheItemPoolInterface $cache A PSR-6 cache item pool.
-     * @return void
+     * Clear the objects cache.
+     *
+     * @return boolean TRUE if cache type cleared, FALSE otherwise.
      */
-    private function setCache(CacheItemPoolInterface $cache)
+    private function clearObjectsCache()
     {
-        $this->cache = $cache;
+        $cache  = $this->cachePool();
+        $result = $cache->deleteItems([ 'object', 'metadata' ]);
+        return $result;
     }
 }

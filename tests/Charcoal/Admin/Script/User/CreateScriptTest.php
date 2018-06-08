@@ -1,32 +1,38 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Script\User;
+namespace Charcoal\Tests\Admin\Script\User;
 
-use \PDO;
+use PDO;
 
-use \PHPUnit_Framework_TestCase;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Psr\Log\NullLogger;
-use \Cache\Adapter\Void\VoidCachePool;
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+// From 'cache/void-adapter'
+use Cache\Adapter\Void\VoidCachePool;
 
-use \Pimple\Container;
+// From Pimple
+use Pimple\Container;
 
-use \Charcoal\Factory\GenericFactory as Factory;
+// From 'charcoal-factory'
+use Charcoal\Factory\GenericFactory as Factory;
 
-use \Charcoal\Model\Service\MetadataLoader;
-use \Charcoal\Source\DatabaseSource;
+// From 'charcoal-core'
+use Charcoal\Model\Service\MetadataLoader;
+use Charcoal\Source\DatabaseSource;
 
-use \Charcoal\Admin\Script\User\CreateScript;
-
-use \Charcoal\Admin\Tests\ContainerProvider;
+// From 'charcoal-admin'
+use Charcoal\Admin\Script\User\CreateScript;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class CreateScriptTest extends PHPUnit_Framework_TestCase
+class CreateScriptTest extends AbstractTestCase
 {
     /**
      * @var Container
@@ -39,6 +45,9 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
      */
     private $obj;
 
+    /**
+     * @return Container
+     */
     private function getContainer()
     {
         $container = new Container();
@@ -49,6 +58,9 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
         return $container;
     }
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->container = $this->getContainer();
@@ -63,6 +75,9 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testDefaultArguments()
     {
         $args = $this->obj->defaultArguments();
@@ -73,6 +88,9 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('roles', $args);
     }
 
+    /**
+     * @return void
+     */
     public function testArguments()
     {
         $args = $this->obj->arguments();
@@ -83,6 +101,9 @@ class CreateScriptTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('roles', $args);
     }
 
+    /**
+     * @return integer
+     */
     private function numAdminUsersInSource()
     {
         $source = $this->container['model/factory']->create('charcoal/admin/user')->source();

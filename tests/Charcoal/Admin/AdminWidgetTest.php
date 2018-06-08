@@ -1,21 +1,19 @@
 <?php
 
-namespace Charcoal\Admin\Tests;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin;
 
 // From Pimple
 use Pimple\Container;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
-use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class AdminWidgetTest extends PHPUnit_Framework_TestCase
+class AdminWidgetTest extends AbstractTestCase
 {
     /**
      * Tested Class.
@@ -33,6 +31,8 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -44,6 +44,9 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $obj = $this->obj;
@@ -61,6 +64,9 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertNotTrue($obj->showActions());
     }
 
+    /**
+     * @return void
+     */
     public function testSetType()
     {
         $obj = $this->obj;
@@ -70,10 +76,13 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->type());
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $obj->setType(1);
     }
 
+    /**
+     * @return void
+     */
     public function testSetLabel()
     {
         $obj = $this->obj;
@@ -86,7 +95,7 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
         $obj->setLabel('Foo Bar');
         $this->assertEquals('Foo Bar', $obj->label());
 
-        //$this->setExpectedException('\InvalidArgumentException');
+        //$this->expectException('\InvalidArgumentException');
         //$obj->set_label(null);
     }
 
@@ -95,7 +104,7 @@ class AdminWidgetTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

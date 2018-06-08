@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
  * Readonly Select Options Input Property

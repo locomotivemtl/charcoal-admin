@@ -2,14 +2,15 @@
 
 namespace Charcoal\Admin;
 
-// Dependencies from PSR-7 (HTTP Messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Dependency from 'charcoal-app'
+// From 'charcoal-app'
 use Charcoal\App\Handler\HandlerInterface;
 use Charcoal\App\Module\AbstractModule;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\ServiceProvider\AdminServiceProvider;
 
 /**
@@ -53,8 +54,6 @@ class AdminModule extends AbstractModule
         };
 
         $adminConfig = $container['admin/config'];
-
-        $this->setupMetadataForAdmin();
 
         $this->setConfig($adminConfig);
 
@@ -217,25 +216,5 @@ class AdminModule extends AbstractModule
         });
 
         return $next($request, $response);
-    }
-
-    /**
-     * Add "admin/" to each metadata paths.
-     * Disable metadata loader cache for admin, for now.
-     *
-     * @return void
-     */
-    private function setupMetadataForAdmin()
-    {
-        $container = $this->app()->getContainer();
-
-        $container['config']->merge([
-            'metadata'=>[
-                'cache' => $container['cache/drivers']['memory'],
-                'paths'=>array_merge($container['config']['metadata.paths'], array_map(function ($p) {
-                    return rtrim($p, '/').'/admin/';
-                }, $container['config']['metadata.paths']))
-            ]
-        ]);
     }
 }

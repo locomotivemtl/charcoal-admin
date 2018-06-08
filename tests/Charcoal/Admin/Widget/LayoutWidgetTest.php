@@ -1,13 +1,22 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use \Psr\Log\NullLogger;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Charcoal\Admin\Widget\LayoutWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\LayoutWidget;
+use Charcoal\Tests\AbstractTestCase;
 
-class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class LayoutWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $logger = new NullLogger();
@@ -16,6 +25,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testDefaultPosition()
     {
         $obj = $this->obj;
@@ -23,6 +35,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $obj->position());
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $struct = [[
@@ -40,6 +55,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         //$this->assertEquals($computed, $obj->structure());
     }
 
+    /**
+     * @return void
+     */
     public function testSetStructure()
     {
         $obj = $this->obj;
@@ -65,6 +83,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         //$this->assertEquals($struct, $obj->structure());
     }
 
+    /**
+     * @return void
+     */
     public function testNumRows()
     {
         $obj = $this->obj;
@@ -77,6 +98,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $obj->numRows());
     }
 
+    /**
+     * @return void
+     */
     public function testRowIndex()
     {
         $obj = $this->obj;
@@ -94,6 +118,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $obj->rowIndex(5));
     }
 
+    /**
+     * @return void
+     */
     public function testRowData()
     {
         $obj = $this->obj;
@@ -111,6 +138,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($obj->rowData(5));
     }
 
+    /**
+     * @return void
+     */
     public function testRowNumColumns()
     {
         $obj = $this->obj;
@@ -128,6 +158,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($obj->rowNumColumns(5));
     }
 
+    /**
+     * @return void
+     */
     public function testRowNumCells()
     {
         $obj = $this->obj;
@@ -145,6 +178,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($obj->rowNumCells(5));
     }
 
+    /**
+     * @return void
+     */
     public function testRowFirstCellIndex()
     {
         $obj = $this->obj;
@@ -162,6 +198,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         //$this->assertNull($obj->rowFirstCellIndex(5));
     }
 
+    /**
+     * @return void
+     */
     public function testCellRowIndex()
     {
         $obj = $this->obj;
@@ -179,6 +218,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         //$this->assertNull($obj->cellRowIndex(5));
     }
 
+    /**
+     * @return void
+     */
     public function testNumCellsTotal()
     {
         $obj = $this->obj;
@@ -191,6 +233,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $obj->numCellsTotal());
     }
 
+    /**
+     * @return void
+     */
     public function testNumCellSpan()
     {
         $obj = $this->obj;
@@ -208,6 +253,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($obj->cellSpan(5));
     }
 
+    /**
+     * @return void
+     */
     public function testNumCellSpanBy12()
     {
         $obj = $this->obj;
@@ -225,6 +273,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($obj->cellSpanBy12(5));
     }
 
+    /**
+     * @return void
+     */
     public function testCellStartsRow()
     {
         $obj = $this->obj;
@@ -242,6 +293,9 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         //$this->assertNull($obj->cellStartsRow(5));
     }
 
+    /**
+     * @return void
+     */
     public function testCellEndsRow()
     {
         $obj = $this->obj;
@@ -259,12 +313,18 @@ class LayoutWidgetTest extends \PHPUnit_Framework_TestCase
         //$this->assertNull($obj->cellEndsRow(5));
     }
 
+    /**
+     * @return void
+     */
     public function testStart()
     {
         $obj = $this->obj;
         $this->assertEquals('', $obj->start());
     }
 
+    /**
+     * @return void
+     */
     public function testEnd()
     {
         $obj = $this->obj;

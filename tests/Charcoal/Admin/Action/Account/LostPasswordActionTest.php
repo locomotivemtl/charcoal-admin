@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Action\Account;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin\Action\Account;
 
 use ReflectionClass;
 
@@ -21,14 +18,17 @@ use Slim\Http\Response;
 // From 'charcoal-admin'
 use Charcoal\Admin\Action\Account\LostPasswordAction;
 use Charcoal\Admin\User;
-
-use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class LostPasswordActionTest extends PHPUnit_Framework_TestCase
+class LostPasswordActionTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
     /**
      * Tested Class.
      *
@@ -45,6 +45,8 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -58,21 +60,18 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsFalse()
     {
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertFalse($res);
     }
 
+    /**
+     * @return void
+     */
     public function testRunWithoutUsernameReturns400()
     {
         $request  = Request::createFromEnvironment(Environment::mock());
@@ -85,6 +84,9 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($results['success']);
     }
 
+    /**
+     * @return void
+     */
     public function testRunWithoutRecaptchaReturns400()
     {
         $mock = m::mock($this->obj);
@@ -105,6 +107,9 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($results['success']);
     }
 
+    /**
+     * @return void
+     */
     public function testRunWithInvalidRecaptchaReturns400()
     {
         $mock = m::mock($this->obj);
@@ -130,7 +135,7 @@ class LostPasswordActionTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

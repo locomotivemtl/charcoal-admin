@@ -4,15 +4,20 @@ namespace Charcoal\Admin\Script\Tools\StaticWebsite;
 
 use InvalidArgumentException;
 
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From Pimple
 use Pimple\Container;
 
+// From 'guzzlehttp/guzzle'
 use GuzzleHttp\Client as GuzzleClient;
+
+// From 'fabpot/goutte'
 use Goutte\Client as GoutteClient;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 
 /**

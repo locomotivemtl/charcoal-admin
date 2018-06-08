@@ -1,18 +1,19 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use PHPUnit_Framework_TestCase;
-
+// From PSR-3
 use Psr\Log\NullLogger;
 
+// From 'charcoal-admin'
 use Charcoal\Admin\Widget\FormSidebarWidget;
 use Charcoal\Admin\Widget\FormWidget;
+use Charcoal\Tests\AbstractTestCase;
 
 /**
  *
  */
-class FormWidgetTest extends PHPUnit_Framework_TestCase
+class FormWidgetTest extends AbstractTestCase
 {
     /**
      * Object under test
@@ -21,7 +22,7 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
     private $obj;
 
     /**
-     *
+     * @return void
      */
     public function setUp()
     {
@@ -32,7 +33,7 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @return FormSidebarWidget
      */
     private function sidebarWidget()
     {
@@ -43,7 +44,7 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @return void
      */
     public function testConstructor()
     {
@@ -51,7 +52,7 @@ class FormWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @return void
      */
     public function testSidebars()
     {

@@ -1,6 +1,6 @@
 {
-    "name": "locomotivemtl/charcoal-admin",
     "type": "library",
+    "name": "locomotivemtl/charcoal-admin",
     "description": "The Charcoal Administration Dashboard",
     "keywords": [ "charcoal", "admin", "cms" ],
     "homepage": "https://charcoal.locomotive.ca",
@@ -19,31 +19,33 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.11.x-dev"
+            "dev-master": "0.12.x-dev"
         }
     },
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=5.6.0 || >=7.0",
         "psr/log": "^1.0",
+        "psr/cache": "^1.0",
         "psr/http-message": "^1.0",
         "paragonie/random_compat": "^1.2",
         "studio-42/elfinder": "~2.1.32",
         "barryvdh/elfinder-flysystem-driver": "^0.2.1",
-        "locomotivemtl/charcoal-app": "~0.6",
-        "locomotivemtl/charcoal-core": "^0.3",
+        "locomotivemtl/charcoal-app": "~0.8",
+        "locomotivemtl/charcoal-cache": "~0.1",
+        "locomotivemtl/charcoal-core": "~0.4",
         "locomotivemtl/charcoal-email": "~0.3",
-        "locomotivemtl/charcoal-object": "~0.5",
+        "locomotivemtl/charcoal-object": "~0.6",
         "locomotivemtl/charcoal-translator": "~0.3",
         "locomotivemtl/charcoal-ui": "~0.3",
-        "locomotivemtl/charcoal-user": "~0.2",
+        "locomotivemtl/charcoal-user": "~0.3",
         "guzzlehttp/guzzle": "^6.3",
         "mcaskill/php-html-build-attributes": "1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7",
         "mockery/mockery": "^1.0",
-        "squizlabs/php_codesniffer": "^2.9",
-        "php-coveralls/php-coveralls": "^1.0",
+        "phpunit/phpunit": "^5.7 || ^6.5",
+        "squizlabs/php_codesniffer": "^3.0",
+        "php-coveralls/php-coveralls": "^2.0",
         "cache/void-adapter": "^0.3",
         "mustache/mustache": "^2.11",
         "tedivm/stash": "~0.14",
@@ -55,12 +57,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Charcoal\\Admin\\": "src/Charcoal/Admin"
+            "Charcoal\\Admin\\": "src/Charcoal/Admin/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Charcoal\\Admin\\Tests\\": "tests/Charcoal/Admin"
+            "Charcoal\\Tests\\": "tests/Charcoal/"
         }
     },
     "scripts": {
@@ -72,9 +74,9 @@
             "@phpcs",
             "@phpunit"
         ],
-        "phplint": "find {src,tests} -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
-        "phpunit": "php vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-text",
-        "phpcs": "php vendor/bin/phpcs --config-set ignore_warnings_on_exit 1;php vendor/bin/phpcs -ps --colors --standard=phpcs.xml src/",
-        "phpcbf": "php vendor/bin/phpcbf -ps --colors --standard=phpcs.xml src/ tests/"
+        "phplint": "find src tests -type f -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
+        "phpcs": "php vendor/bin/phpcs -ps --colors src/ tests/",
+        "phpcbf": "php vendor/bin/phpcbf -ps --colors src/ tests/",
+        "phpunit": "php vendor/bin/phpunit --coverage-text"
     }
 }

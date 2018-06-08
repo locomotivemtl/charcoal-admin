@@ -3,10 +3,10 @@
 namespace Charcoal\Admin\Property\Input;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // // From 'charcoal-admin'
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  * File Property Input

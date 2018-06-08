@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Action\Object;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin\Action\Object;
 
 use ReflectionClass;
 
@@ -21,14 +18,18 @@ use Charcoal\Model\Collection;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Action\Object\ReorderAction;
-use Charcoal\Admin\Tests\ContainerProvider;
-use Charcoal\Admin\Tests\Mock\SortableModel as Model;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
+use Charcoal\Tests\Admin\Mock\SortableModel as Model;
 
 /**
  *
  */
-class ReorderActionTest extends PHPUnit_Framework_TestCase
+class ReorderActionTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
     /**
      * The primary model to test with.
      *
@@ -59,6 +60,8 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -72,6 +75,9 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return array
+     */
     public function setUpObjects()
     {
         $container = $this->container();
@@ -89,6 +95,7 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
             [ 'id' => 'baz', 'position' => 3 ],
             [ 'id' => 'qux', 'position' => 4 ],
         ];
+
         foreach ($objs as $obj) {
             $model->setData($obj)->save();
         }
@@ -100,6 +107,9 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         return $objs;
     }
 
+    /**
+     * @return Collection
+     */
     public function getObjects()
     {
         if ($this->collectionLoader === null) {
@@ -119,27 +129,22 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         return $this->collectionLoader->load();
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsTrue()
     {
-        $foo = self::getMethod($this->action, 'authRequired');
-        $res = $foo->invoke($this->action);
+        $res = $this->callMethod($this->action, 'authRequired');
         $this->assertTrue($res);
     }
 
     /**
      * @dataProvider runRequestProvider
      *
-     * @param integer $status  An HTTP status code.
-     * @param string  $success Whether the action was successful.
-     * @param array   $mock    The request parameters to test.
+     * @param  integer $status  An HTTP status code.
+     * @param  string  $success Whether the action was successful.
+     * @param  array   $mock    The request parameters to test.
+     * @return void
      */
     public function testRun($status, $success, array $mock)
     {
@@ -162,6 +167,9 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function runRequestProvider()
     {
         return [
@@ -179,7 +187,7 @@ class ReorderActionTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

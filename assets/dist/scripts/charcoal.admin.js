@@ -671,19 +671,26 @@ Charcoal.Admin = (function () {
         DATA_KEY = 'charcoal.cache',
         EVENT_KEY = '.' + DATA_KEY,
         Event = {
-            PURGE:  'purge'  + EVENT_KEY,
-            PURGED: 'purged' + EVENT_KEY,
-            CLICK:  'click'  + EVENT_KEY
+            FLUSH:   'flush'   + EVENT_KEY,
+            FLUSHED: 'flushed' + EVENT_KEY,
+            CLICK:   'click'   + EVENT_KEY
         },
         Selector = {
+            DATA_ITEM:  '[data-cache-key]',
             DATA_CACHE: '[data-cache-type]',
+            DATA_CLEAR: '[data-clear="cache"]',
             DATA_PURGE: '[data-purge="cache"]'
         },
+        Action = {
+            CLEAR: 'clear',
+            PURGE: 'purge'
+        },
         lastXhr    = null,
+        lastAction = null,
         lastCache  = null,
         lastTarget = null,
         fromEvent  = false,
-        isPurging  = false;
+        isFlushing = false;
 
     /**
      * Create a new cache manager.
@@ -704,17 +711,29 @@ Charcoal.Admin = (function () {
      */
     Manager.prototype.init = function ()
     {
-        $document.off(Event.CLICK).on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
+        $document.off(Event.CLICK)
+                 .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
+                 .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
     };
 
     /**
-     * Determine if the cache is in the process of purging.
+     * Determine if the cache is in the process of flushing.
      *
      * @return {Boolean} TRUE if the cache is clearing data otherwise FALSE.
      */
-    Manager.prototype.isPurging = function ()
+    Manager.prototype.isFlushing = function ()
     {
-        return isPurging;
+        return isFlushing;
+    };
+
+    /**
+     * Retrieve the last flush action called.
+     *
+     * @return {String|null}
+     */
+    Manager.prototype.lastAction = function ()
+    {
+        return lastAction;
     };
 
     /**
@@ -728,7 +747,7 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Retrieve the last target to trigger the purge.
+     * Retrieve the last target to trigger the flush.
      *
      * @return {Element|null}
      */
@@ -748,6 +767,55 @@ Charcoal.Admin = (function () {
     };
 
     /**
+     * Resolve the cache type from the event target.
+     *
+     * @param  {Element} $trigger - The jQuery element.
+     * @return {String|Null}
+     */
+    Manager.prototype.resolveType = function ($trigger)
+    {
+        return $trigger.data('cacheType') || null;
+    };
+
+    /**
+     * Resolve the cache item key from the event target.
+     *
+     * @param  {Element} $trigger - The jQuery element.
+     * @return {String|Null}
+     */
+    Manager.prototype.resolveKey = function ($trigger)
+    {
+        return $trigger.data('cacheKey') || null;
+    };
+
+    /**
+     * Event: Clear the cache.
+     *
+     * @this   {CacheManager}
+     * @event  document#click
+     * @param  {Event} event - The event handler.
+     */
+    Manager.prototype.onClear = function (event)
+    {
+        event.preventDefault();
+
+        var $trigger, type, key;
+
+        fromEvent  = true;
+        lastTarget = event.currentTarget;
+        $trigger   = $(event.currentTarget);
+
+        type = event.cacheType || this.resolveType($trigger);
+        key  = event.cacheKey  || this.resolveKey($trigger);
+
+        if (type) {
+            this.clear(type, key);
+        }
+
+        fromEvent = false;
+    };
+
+    /**
      * Event: Purge the cache.
      *
      * @this   {CacheManager}
@@ -758,60 +826,107 @@ Charcoal.Admin = (function () {
     {
         event.preventDefault();
 
+        var $trigger, type, key;
+
         fromEvent  = true;
         lastTarget = event.currentTarget;
+        $trigger   = $(event.currentTarget);
 
-        var type = event.cacheType || $(event.currentTarget).data('cacheType') || null;
+        type = event.cacheType || this.resolveType($trigger);
+        key  = event.cacheKey  || this.resolveKey($trigger);
+
         if (type) {
-            this.purge(type);
+            this.purge(type, key);
         }
 
         fromEvent = false;
     };
 
     /**
-     * Purge the cache for given category.
+     * Empty the entire cache pool of all items.
      *
-     * @param {String} cacheType - The cache type to clean out.
+     * @param {String} cacheType   - The cache type to flush.
+     * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.purge = function (cacheType)
+    Manager.prototype.clear = function (cacheType, cacheKey)
     {
-        if (isPurging === true) {
+        this.flush(Action.CLEAR, cacheType, cacheKey);
+    };
+
+    /**
+     * Purge the cache pool of stale or expired items.
+     *
+     * @param {String} cacheType   - The cache type to flush.
+     * @param {String} cacheKey    - The cache key to delete.
+     */
+    Manager.prototype.purge = function (cacheType, cacheKey)
+    {
+        this.flush(Action.PURGE, cacheType, cacheKey);
+    };
+
+    /**
+     * Flush the cache for given category.
+     *
+     * @param {String} cacheAction - Whether to empty all items or purge stale or expired items.
+     * @param {String} cacheType   - The cache type to flush.
+     * @param {String} cacheKey    - The cache key to delete.
+     */
+    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey)
+    {
+        if (isFlushing === true) {
             return;
         }
 
-        isPurging = true;
-        lastCache = cacheType;
-        lastXhr   = null;
+        if (cacheAction !== Action.CLEAR && cacheAction !== Action.PURGE) {
+            cacheAction = Action.PURGE;
+        }
+
+        var flushEvent, settings, data;
+
+        isFlushing = true;
+        lastAction = cacheAction;
+        lastCache  = cacheType;
+        lastXhr    = null;
 
         if (fromEvent === false) {
             lastTarget = null;
         }
 
-        var purgeEvent = $.Event(Event.PURGE, {
+        flushEvent = $.Event(Event.FLUSH, {
             cacheManager:  this,
+            cacheAction:   cacheAction,
             cacheType:     lastCache,
             relatedTarget: lastTarget
         });
 
-        $document.trigger(purgeEvent);
+        $document.trigger(flushEvent);
 
-        if (purgeEvent.isDefaultPrevented()) {
+        if (flushEvent.isDefaultPrevented()) {
             return;
         }
 
-        lastXhr = $.post({
-                    url: Admin.admin_url() + 'system/clear-cache',
-                    data: {
-                        cache_type: cacheType
-                    },
-                    dataType: 'json',
-                    context: this
-                })
-               .then(juggle)
-               .done(done)
-               .fail(fail)
-               .always(finalize);
+        data = {};
+
+        if (cacheType) {
+            data.cache_type = cacheType;
+        }
+
+        if (cacheKey) {
+            data.cache_key = cacheKey;
+        }
+
+        settings = {
+            url:      Admin.admin_url() + 'system/cache/' + cacheAction,
+            data:     data,
+            dataType: 'json',
+            context:  this
+        };
+
+        lastXhr = $.post(settings)
+                   .then(juggle)
+                   .done(done)
+                   .fail(fail)
+                   .always(finalize);
     };
 
     /**
@@ -881,15 +996,16 @@ Charcoal.Admin = (function () {
      * @this {CacheManager}
      */
     var finalize = function () {
-        isPurging = false;
+        isFlushing = false;
 
-        var purgedEvent = $.Event(Event.PURGE, {
+        var flushedEvent = $.Event(Event.FLUSH, {
             cacheManager:  this,
+            cacheAction:   lastAction,
             cacheType:     lastCache,
             relatedTarget: lastTarget
         });
 
-        $document.trigger(purgedEvent);
+        $document.trigger(flushedEvent);
     };
 
     /**
@@ -2784,11 +2900,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.is_new_object     = false;
     this.xhr               = null;
 
-    var urlParams = Charcoal.Admin.queryParams();
-
-    if ('tab_ident' in urlParams) {
-        $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
-    }
+    this.update_tab_ident();
 
     var lang = $('[data-lang]:not(.d-none)').data('lang');
     if (lang) {
@@ -2849,6 +2961,35 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
         that.switch_language(lang);
     });
 
+    window.onpopstate = function () {
+        that.update_tab_ident();
+    };
+
+    // crappy push state
+    if (that.isTab) {
+        $(this.form_selector).on('shown.bs.tab', '.js-group-tabs', function (event) {
+            var $tab = $(event.target); // active tab
+            var params = [];
+
+            var urlParams = Charcoal.Admin.queryParams();
+
+            // Skip push state for same state.
+            if (urlParams.tab_ident !== undefined &&
+                $tab.data('tab-ident') === urlParams.tab_ident
+            ) {
+                return;
+            }
+
+            urlParams.tab_ident = $tab.data('tab-ident');
+
+            for (var param in urlParams) {
+                params.push(param + '=' + urlParams[param]);
+            }
+
+            history.pushState('','', window.location.pathname + '?' + params.join('&'));
+        });
+    }
+
     /*if (that.isTab) {
          $(that.form_selector).on('click', '.js-group-tabs', function (event) {
              event.preventDefault();
@@ -2859,6 +3000,18 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
          });
      }*/
 
+};
+
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.update_tab_ident = function () {
+    var urlParams = Charcoal.Admin.queryParams();
+
+    if ('tab_ident' in urlParams) {
+        $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
+    }
 };
 
 /**
@@ -6516,32 +6669,27 @@ Selectize.define('buttons', function () {
          * @return {string}
          */
         var append = function (html_container, html_element) {
-            var pos = html_container.search(/(<\/[^>]+>\s*)$/);
-            return html_container.substring(0, pos) + html_element + html_container.substring(pos);
+            var $item = $(html_container);
+
+            if ($item.hasClass('item')) {
+                $item.append($(html_element));
+
+                return $item[0];
+            }
+
+            return html_container;
         };
 
         var adjustContainerPadding = function (html_container, offset) {
-            var pos = html_container.match(/(padding-right:.*;)/);
-            if (pos && pos[0]) {
-                var endIndex = pos[0].length + pos.index;
-                return html_container.substring(0, pos.index) +
-                    'padding-right:' + (offset + 8) + 'px;' + html_container.substring(endIndex);
+            var $item = $(html_container);
+
+            if ($item.hasClass('item')) {
+                $item.css('padding-right', (offset + 8) + 'px');
+
+                return $item[0];
             }
 
-            pos = html_container.match(/(style=")/);
-            if (pos && pos[0]) {
-                pos = pos[0].length + pos.index;
-                return html_container.substring(0, pos) +
-                    'padding-right:' + (offset + 8) + 'px;' + html_container.substring(pos);
-            }
-
-            pos = html_container.match(/(<[^>]+)/);
-            if (pos && pos[0]) {
-                pos = pos[0].length + pos.index;
-                return html_container.substring(0, pos) +
-                    'style="padding-right:' + (offset + 8) + 'px;' + '"' +
-                    html_container.substring(pos);
-            }
+            return html_container;
         };
 
         thisRef.setup = (function () {

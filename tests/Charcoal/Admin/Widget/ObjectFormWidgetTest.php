@@ -1,21 +1,38 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use \Charcoal\Admin\Widget\ObjectFormWidget;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-class ObjectFormWidgetTest extends \PHPUnit_Framework_TestCase
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\ObjectFormWidget;
+use Charcoal\Tests\AbstractTestCase;
+
+/**
+ *
+ */
+class ObjectFormWidgetTest extends AbstractTestCase
 {
+    /**
+     * @var ObjectFormWidget
+     */
     public $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
-        $logger = new \Psr\Log\NullLogger();
+        $logger = new NullLogger();
         $this->obj = new ObjectFormWidget([
             'logger' => $logger
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetFormIdent()
     {
         $ret = $this->obj->setFormIdent('foobar');
@@ -23,9 +40,9 @@ class ObjectFormWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', $this->obj->formIdent());
 
         if (class_exists('\Throwable', false)) {
-            $this->setExpectedException('\Throwable');
+            $this->expectException('\Throwable');
         } else {
-            $this->setExpectedException('\Exception');
+            $this->expectException('\Exception');
         }
 
         $this->obj->setFormIdent(false);

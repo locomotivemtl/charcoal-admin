@@ -1,16 +1,12 @@
-<?xml version="1.0"?>
-<ruleset name="Charcoal" >
-    <!-- PHP CodeSniffer ruleset -->
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Charcoal">
+    <description>Charcoal Coding Standard</description>
 
-    <description >Charcoal Coding Standard</description >
     <arg name="encoding" value="utf-8" />
-    <arg name="tab-width" value="4" />
 
-    <!-- Include the whole PSR-1 standard -->
-
-    <rule ref="PSR1" />
-
-    <!-- Include the whole PSR-2 standard -->
+    <config name="show_progress" value="1" />
+    <config name="ignore_warnings_on_exit" value="1" />
+    <config name="php_version" value="50630" />
 
     <rule ref="PSR2" />
 
@@ -87,8 +83,8 @@
     <!-- Function comment blocks -->
     <rule ref="Squiz.Commenting.FunctionComment" />
     <!-- Do not test scalar typehint (php-7 only feature) -->
-    <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" >
-        <severity >0</severity >
+    <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
+        <severity>0</severity>
     </rule>
     <!-- Verifies that a @throws tag exists for a function that throws exceptions -->
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
@@ -98,6 +94,10 @@
     <!--<rule ref="Squiz.Commenting.LongConditionClosingComment" />-->
     <!-- Checks to ensure that there are no comments after statements (on same line, after ;) -->
     <rule ref="Squiz.Commenting.PostStatementComment" />
+    <rule ref="Squiz.Commenting.PostStatementComment.Found">
+        <type>warning</type>
+        <message>Comments should not appear after statements</message>
+    </rule>
     <!-- Variable commenting rules -->
     <rule ref="Squiz.Commenting.VariableComment" />
 
@@ -131,10 +131,10 @@
     <!--Generic.Files_InlineHTMLSniff-->
 
     <!-- All line endings are standardized to "\n" -->
-    <rule ref="Generic.Files.LineEndings" >
-        <properties >
+    <rule ref="Generic.Files.LineEndings">
+        <properties>
             <property name="eolChar" value="\n" />
-        </properties >
+        </properties>
     </rule>
     <!-- Make sure all files are a certain max length -->
     <!--<rule ref="Generic.Files.LineLength">
@@ -173,10 +173,10 @@
 
     <!--<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />-->
     <!-- Checks that arguments in function declarations are spaced correctly. -->
-    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing" >
-        <properties >
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+        <properties>
             <property name="equalsSpacing" value="1" />
-        </properties >
+        </properties>
     </rule>
     <!-- @todo doc me -->
     <rule ref="Squiz.Functions.FunctionDeclaration" />
@@ -188,9 +188,9 @@
     <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
     <!-- Ensure single and multi-line function declarations are defined correctly -->
     <rule ref="Squiz.Functions.MultiLineFunctionDeclaration" />
-    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction" >
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction">
         <!-- This check is disabled; it breaks lambda functions -->
-        <severity >0></severity >
+        <severity>0</severity>
     </rule>
     <rule ref="PEAR.Functions.ValidDefaultValue" />
 
@@ -218,7 +218,7 @@
     <!-- Objects Sniffs -->
 
     <!-- Ensures objects are assigned to a variable when instantiated. -->
-    <rule ref="Squiz.Objects.ObjectInstantiation" >
+    <rule ref="Squiz.Objects.ObjectInstantiation">
         <exclude name="Squiz.Objects.ObjectInstantiation.NotAssigned" />
     </rule>
 
@@ -269,8 +269,8 @@
     <!-- @todo Doc me -->
     <rule ref="Squiz.PHP.DiscouragedFunctions" />
     <rule ref="Squiz.PHP.EmbeddedPhp" />
-    <rule ref="Squiz.PHP.EmbeddedPhp.Indent" >
-        <severity >0</severity >
+    <rule ref="Squiz.PHP.EmbeddedPhp.Indent">
+        <severity>0</severity>
     </rule>
     <rule ref="Squiz.PHP.Eval" />
     <!-- Disallow usage of functions that should be obsolete but kept for compatibility. -->
@@ -300,9 +300,9 @@
             <property name="allowMultiline" value="true" />
         </properties>
     </rule>
-    <rule ref="Generic.Strings.UnnecessaryStringConcat.Found" >
-        <type >warning</type >
-        <message >Only concatenate strings if they would be too long on a single line.</message >
+    <rule ref="Generic.Strings.UnnecessaryStringConcat.Found">
+        <type>warning</type>
+        <message>Only concatenate strings if they would be too long on a single line.</message>
     </rule>
     <!-- Makes sure there are no spaces between the concatenation operator (.) the strings -->
     <rule ref="Squiz.Strings.ConcatenationSpacing">
@@ -310,9 +310,9 @@
             <property name="ignoreNewlines" value="true" />
         </properties>
     </rule>
-    <rule ref="Squiz.Strings.ConcatenationSpacing.PaddingFound" >
-        <type >warning</type >
-        <message >Concat operator should not be surrounded by spaces</message >
+    <rule ref="Squiz.Strings.ConcatenationSpacing.PaddingFound">
+        <type>warning</type>
+        <message>Concat operator should not be surrounded by spaces</message>
     </rule>
     <!-- Makes sure that any use of Double Quotes ("") are warranted. -->
     <rule ref="Squiz.Strings.DoubleQuoteUsage" />
@@ -333,19 +333,18 @@
     <!-- Checks that control structures are structured correctly -->
     <!--<rule ref="Generic.Whitespace.ScopeIndent" />-->
     <!-- There MUST NOT be trailing whitespace at the end of non-blank lines. -->
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" >
-        <properties >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
             <property name="ignoreBlankLines" value="true" />
-        </properties >
+        </properties>
     </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile" >
-        <severity >0</severity >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
+        <severity>0</severity>
     </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile" >
-        <severity >0</severity >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile">
+        <severity>0</severity>
     </rule>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines" >
-        <severity >0</severity >
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
+        <severity>0</severity>
     </rule>
-
-</ruleset >
+</ruleset>

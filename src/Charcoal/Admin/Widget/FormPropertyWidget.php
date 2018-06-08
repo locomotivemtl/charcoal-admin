@@ -13,7 +13,7 @@ use Pimple\Container;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-// From `charcoal-property`
+// From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-view'
@@ -1453,15 +1453,17 @@ class FormPropertyWidget extends AdminWidget implements
             $input->setViewController($this->viewController());
         }
 
+        $metadata = $prop->metadata();
+        $data = $prop->data();
+
+        if (isset($metadata['admin'])) {
+            $data = array_replace_recursive($metadata['admin'], $data);
+        }
+
         $input->setInputType($type);
         $input->setProperty($prop);
         $input->setPropertyVal($this->propertyVal());
-        $input->setData($prop->data());
-
-        $metadata = $prop->metadata();
-        if (isset($metadata['admin'])) {
-            $input->setData($metadata['admin']);
-        }
+        $input->setData($data);
 
         return $input;
     }

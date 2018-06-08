@@ -2,13 +2,13 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 // From Pimple
-use \Pimple\Container;
+use Pimple\Container;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests;
+namespace Charcoal\Tests\Admin;
 
 use PDO;
 
@@ -10,11 +10,11 @@ use Mockery;
 // From PSR-3
 use Psr\Log\NullLogger;
 
+// From Slim
+use Slim\Http\Uri;
+
 // From 'cache/void-adapter' (PSR-6)
 use Cache\Adapter\Void\VoidCachePool;
-
-// Dependencies from Slim
-use Slim\Http\Uri;
 
 // From 'tedivm/stash' (PSR-6)
 use Stash\Pool;
@@ -111,11 +111,11 @@ class ContainerProvider
      */
     public function registerBaseUrl(Container $container)
     {
-        $container['base-url'] = function (Container $container) {
+        $container['base-url'] = function () {
             return Uri::createFromString('');
         };
 
-        $container['admin/base-url'] = function (Container $container) {
+        $container['admin/base-url'] = function () {
             return Uri::createFromString('admin');
         };
     }
@@ -128,7 +128,7 @@ class ContainerProvider
      */
     public function registerConfig(Container $container)
     {
-        $container['config'] = function (Container $container) {
+        $container['config'] = function () {
             return new AppConfig([
                 'base_path'  => realpath(__DIR__.'/../../..'),
                 'apis'       => [
@@ -153,20 +153,27 @@ class ContainerProvider
     {
         $this->registerConfig($container);
 
-        $container['admin/config'] = function (Container $container) {
+        $container['admin/config'] = function () {
             return new AdminConfig();
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerLayoutFactory(Container $container)
     {
-        $container['layout/factory'] = function (Container $container) {
-
+        $container['layout/factory'] = function () {
             $layoutFactory = new LayoutFactory();
             return $layoutFactory;
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerLayoutBuilder(Container $container)
     {
         $this->registerLayoutFactory($container);
@@ -178,6 +185,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerDashboardFactory(Container $container)
     {
         $this->registerLogger($container);
@@ -199,6 +210,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerDashboardBuilder(Container $container)
     {
         $this->registerDashboardFactory($container);
@@ -210,6 +225,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerWidgetFactory(Container $container)
     {
         $this->registerLogger($container);
@@ -227,6 +246,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerWidgetBuilder(Container $container)
     {
         $this->registerWidgetFactory($container);
@@ -235,9 +258,14 @@ class ContainerProvider
             return new WidgetBuilder($container['widget/factory'], $container);
         };
     }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerClimate(Container $container)
     {
-        $container['climate/system'] = function (Container $container) {
+        $container['climate/system'] = function () {
             $system = Mockery::mock(Linux::class);
             $system->shouldReceive('hasAnsiSupport')->andReturn(true);
             $system->shouldReceive('width')->andReturn(80);
@@ -245,7 +273,7 @@ class ContainerProvider
             return $system;
         };
 
-        $container['climate/output'] = function (Container $container) {
+        $container['climate/output'] = function () {
             $output = Mockery::mock(Output::class);
             $output->shouldReceive('persist')->andReturn($output);
             $output->shouldReceive('sameLine')->andReturn($output);
@@ -254,7 +282,7 @@ class ContainerProvider
             return $output;
         };
 
-        $container['climate/reader'] = function (Container $container) {
+        $container['climate/reader'] = function () {
             $reader = Mockery::mock(Stdin::class);
             $reader->shouldReceive('line')->andReturn('line');
             $reader->shouldReceive('char')->andReturn('char');
@@ -319,7 +347,7 @@ class ContainerProvider
      */
     public function registerTranslator(Container $container)
     {
-        $container['locales/manager'] = function (Container $container) {
+        $container['locales/manager'] = function () {
             return new LocalesManager([
                 'locales' => [
                     'en' => [ 'locale' => 'en-US' ]
@@ -342,7 +370,7 @@ class ContainerProvider
      */
     public function registerLogger(Container $container)
     {
-        $container['logger'] = function (Container $container) {
+        $container['logger'] = function () {
             return new NullLogger();
         };
     }
@@ -355,20 +383,28 @@ class ContainerProvider
      */
     public function registerCache(Container $container)
     {
-        $container['cache'] = function ($container) {
+        $container['cache'] = function () {
             return new Pool(new Ephemeral());
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerDatabase(Container $container)
     {
-        $container['database'] = function (Container $container) {
+        $container['database'] = function () {
             $pdo = new PDO('sqlite::memory:');
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $pdo;
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerMetadataLoader(Container $container)
     {
         $this->registerLogger($container);
@@ -388,6 +424,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerSourceFactory(Container $container)
     {
         $this->registerLogger($container);
@@ -406,6 +446,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerPropertyFactory(Container $container)
     {
         $this->registerTranslator($container);
@@ -428,6 +472,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerPropertyDisplayFactory(Container $container)
     {
         $this->registerDatabase($container);
@@ -447,6 +495,10 @@ class ContainerProvider
     }
 
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerModelFactory(Container $container)
     {
         $this->registerLogger($container);
@@ -468,13 +520,21 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerAcl(Container $container)
     {
-        $container['admin/acl'] = function (Container $container) {
+        $container['admin/acl'] = function () {
             return new Acl();
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerAuthenticator(Container $container)
     {
         $this->registerLogger($container);
@@ -491,6 +551,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerAuthorizer(Container $container)
     {
         $this->registerLogger($container);
@@ -505,6 +569,10 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerCollectionLoader(Container $container)
     {
         $this->registerLogger($container);
@@ -518,9 +586,13 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerEmailFactory(Container $container)
     {
-        $container['email/factory'] = function (Container $container) {
+        $container['email/factory'] = function () {
             return new Factory([
                 'map' => [
                     'email' => Email::class
@@ -529,13 +601,21 @@ class ContainerProvider
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerElfinderConfig(Container $container)
     {
-        $container['elfinder/config'] = function (Container $container) {
+        $container['elfinder/config'] = function () {
             return [];
         };
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerActionDependencies(Container $container)
     {
         $this->registerLogger($container);
@@ -550,6 +630,10 @@ class ContainerProvider
         $this->registerAuthorizer($container);
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerTemplateDependencies(Container $container)
     {
         $this->registerLogger($container);
@@ -567,6 +651,10 @@ class ContainerProvider
         $container['menu/item/builder'] = null;
     }
 
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerWidgetDependencies(Container $container)
     {
         $this->registerLogger($container);

@@ -1,19 +1,33 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-class GraphWidgetTest extends \PHPUnit_Framework_TestCase
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
+use Charcoal\Tests\AbstractTestCase;
+
+/**
+ *
+ */
+class GraphWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
-        $logger = new \Psr\Log\NullLogger();
+        $logger = new NullLogger();
         $this->obj = $this->getMockForAbstractClass('\Charcoal\Admin\Widget\Graph\AbstractGraphWidget', [[
             'logger'=>$logger
         ]]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $obj = $this->obj;
@@ -26,6 +40,9 @@ class GraphWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['#ff0000', '#0000ff'], $obj->colors());
     }
 
+    /**
+     * @return void
+     */
     public function testSetHeight()
     {
         $obj =  $this->obj;
@@ -35,10 +52,13 @@ class GraphWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($obj, $ret);
         $this->assertEquals(333, $obj->height());
 
-        //$this->setExpectedException('\InvalidArgumentException');
+        //$this->expectException('\InvalidArgumentException');
         //$obj->setHeight(false);
     }
 
+    /**
+     * @return void
+     */
     public function testSetColors()
     {
         $obj =  $this->obj;

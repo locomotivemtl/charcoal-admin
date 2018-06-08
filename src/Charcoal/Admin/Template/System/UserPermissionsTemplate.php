@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Template\System;
 
-// From PSR-7 (http messaging)
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 
 // From Pimple

@@ -14,19 +14,26 @@
         DATA_KEY = 'charcoal.cache',
         EVENT_KEY = '.' + DATA_KEY,
         Event = {
-            PURGE:  'purge'  + EVENT_KEY,
-            PURGED: 'purged' + EVENT_KEY,
-            CLICK:  'click'  + EVENT_KEY
+            FLUSH:   'flush'   + EVENT_KEY,
+            FLUSHED: 'flushed' + EVENT_KEY,
+            CLICK:   'click'   + EVENT_KEY
         },
         Selector = {
+            DATA_ITEM:  '[data-cache-key]',
             DATA_CACHE: '[data-cache-type]',
+            DATA_CLEAR: '[data-clear="cache"]',
             DATA_PURGE: '[data-purge="cache"]'
         },
+        Action = {
+            CLEAR: 'clear',
+            PURGE: 'purge'
+        },
         lastXhr    = null,
+        lastAction = null,
         lastCache  = null,
         lastTarget = null,
         fromEvent  = false,
-        isPurging  = false;
+        isFlushing = false;
 
     /**
      * Create a new cache manager.
@@ -47,17 +54,29 @@
      */
     Manager.prototype.init = function ()
     {
-        $document.off(Event.CLICK).on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
+        $document.off(Event.CLICK)
+                 .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
+                 .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
     };
 
     /**
-     * Determine if the cache is in the process of purging.
+     * Determine if the cache is in the process of flushing.
      *
      * @return {Boolean} TRUE if the cache is clearing data otherwise FALSE.
      */
-    Manager.prototype.isPurging = function ()
+    Manager.prototype.isFlushing = function ()
     {
-        return isPurging;
+        return isFlushing;
+    };
+
+    /**
+     * Retrieve the last flush action called.
+     *
+     * @return {String|null}
+     */
+    Manager.prototype.lastAction = function ()
+    {
+        return lastAction;
     };
 
     /**
@@ -71,7 +90,7 @@
     };
 
     /**
-     * Retrieve the last target to trigger the purge.
+     * Retrieve the last target to trigger the flush.
      *
      * @return {Element|null}
      */
@@ -91,6 +110,55 @@
     };
 
     /**
+     * Resolve the cache type from the event target.
+     *
+     * @param  {Element} $trigger - The jQuery element.
+     * @return {String|Null}
+     */
+    Manager.prototype.resolveType = function ($trigger)
+    {
+        return $trigger.data('cacheType') || null;
+    };
+
+    /**
+     * Resolve the cache item key from the event target.
+     *
+     * @param  {Element} $trigger - The jQuery element.
+     * @return {String|Null}
+     */
+    Manager.prototype.resolveKey = function ($trigger)
+    {
+        return $trigger.data('cacheKey') || null;
+    };
+
+    /**
+     * Event: Clear the cache.
+     *
+     * @this   {CacheManager}
+     * @event  document#click
+     * @param  {Event} event - The event handler.
+     */
+    Manager.prototype.onClear = function (event)
+    {
+        event.preventDefault();
+
+        var $trigger, type, key;
+
+        fromEvent  = true;
+        lastTarget = event.currentTarget;
+        $trigger   = $(event.currentTarget);
+
+        type = event.cacheType || this.resolveType($trigger);
+        key  = event.cacheKey  || this.resolveKey($trigger);
+
+        if (type) {
+            this.clear(type, key);
+        }
+
+        fromEvent = false;
+    };
+
+    /**
      * Event: Purge the cache.
      *
      * @this   {CacheManager}
@@ -101,60 +169,107 @@
     {
         event.preventDefault();
 
+        var $trigger, type, key;
+
         fromEvent  = true;
         lastTarget = event.currentTarget;
+        $trigger   = $(event.currentTarget);
 
-        var type = event.cacheType || $(event.currentTarget).data('cacheType') || null;
+        type = event.cacheType || this.resolveType($trigger);
+        key  = event.cacheKey  || this.resolveKey($trigger);
+
         if (type) {
-            this.purge(type);
+            this.purge(type, key);
         }
 
         fromEvent = false;
     };
 
     /**
-     * Purge the cache for given category.
+     * Empty the entire cache pool of all items.
      *
-     * @param {String} cacheType - The cache type to clean out.
+     * @param {String} cacheType   - The cache type to flush.
+     * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.purge = function (cacheType)
+    Manager.prototype.clear = function (cacheType, cacheKey)
     {
-        if (isPurging === true) {
+        this.flush(Action.CLEAR, cacheType, cacheKey);
+    };
+
+    /**
+     * Purge the cache pool of stale or expired items.
+     *
+     * @param {String} cacheType   - The cache type to flush.
+     * @param {String} cacheKey    - The cache key to delete.
+     */
+    Manager.prototype.purge = function (cacheType, cacheKey)
+    {
+        this.flush(Action.PURGE, cacheType, cacheKey);
+    };
+
+    /**
+     * Flush the cache for given category.
+     *
+     * @param {String} cacheAction - Whether to empty all items or purge stale or expired items.
+     * @param {String} cacheType   - The cache type to flush.
+     * @param {String} cacheKey    - The cache key to delete.
+     */
+    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey)
+    {
+        if (isFlushing === true) {
             return;
         }
 
-        isPurging = true;
-        lastCache = cacheType;
-        lastXhr   = null;
+        if (cacheAction !== Action.CLEAR && cacheAction !== Action.PURGE) {
+            cacheAction = Action.PURGE;
+        }
+
+        var flushEvent, settings, data;
+
+        isFlushing = true;
+        lastAction = cacheAction;
+        lastCache  = cacheType;
+        lastXhr    = null;
 
         if (fromEvent === false) {
             lastTarget = null;
         }
 
-        var purgeEvent = $.Event(Event.PURGE, {
+        flushEvent = $.Event(Event.FLUSH, {
             cacheManager:  this,
+            cacheAction:   cacheAction,
             cacheType:     lastCache,
             relatedTarget: lastTarget
         });
 
-        $document.trigger(purgeEvent);
+        $document.trigger(flushEvent);
 
-        if (purgeEvent.isDefaultPrevented()) {
+        if (flushEvent.isDefaultPrevented()) {
             return;
         }
 
-        lastXhr = $.post({
-                    url: Admin.admin_url() + 'system/clear-cache',
-                    data: {
-                        cache_type: cacheType
-                    },
-                    dataType: 'json',
-                    context: this
-                })
-               .then(juggle)
-               .done(done)
-               .fail(fail)
-               .always(finalize);
+        data = {};
+
+        if (cacheType) {
+            data.cache_type = cacheType;
+        }
+
+        if (cacheKey) {
+            data.cache_key = cacheKey;
+        }
+
+        settings = {
+            url:      Admin.admin_url() + 'system/cache/' + cacheAction,
+            data:     data,
+            dataType: 'json',
+            context:  this
+        };
+
+        lastXhr = $.post(settings)
+                   .then(juggle)
+                   .done(done)
+                   .fail(fail)
+                   .always(finalize);
     };
 
     /**
@@ -224,15 +339,16 @@
      * @this {CacheManager}
      */
     var finalize = function () {
-        isPurging = false;
+        isFlushing = false;
 
-        var purgedEvent = $.Event(Event.PURGE, {
+        var flushedEvent = $.Event(Event.FLUSH, {
             cacheManager:  this,
+            cacheAction:   lastAction,
             cacheType:     lastCache,
             relatedTarget: lastTarget
         });
 
-        $document.trigger(purgedEvent);
+        $document.trigger(flushedEvent);
     };
 
     /**

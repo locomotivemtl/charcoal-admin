@@ -1,23 +1,34 @@
 <?php
 
-namespace Charcoal\Admin\Tests;
+namespace Charcoal\Tests\Admin;
 
-use PHPUnit_Framework_TestCase;
-
+// From PSR-3
 use Psr\Log\NullLogger;
 
+// From Pimple
 use Pimple\Container;
 
-use Charcoal\Admin\Service\Exporter;
-
+// From 'charcoal-factory'
 use Charcoal\Factory\GenericFactory;
 
-use Charcoal\Admin\Tests\ContainerProvider;
+// From 'charcoal-admin'
+use Charcoal\Admin\Service\Exporter;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-class ExporterTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class ExporterTest extends AbstractTestCase
 {
+    /**
+     * @var Exporter
+     */
     private $obj;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -34,6 +45,9 @@ class ExporterTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testExport()
     {
         $this->assertTrue(true);

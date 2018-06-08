@@ -127,5 +127,61 @@
     .table tr.draggable-mirror &,
     .table tr:hover & {
         opacity: 1;
+
+        // & + .table-foot {
+        //     margin-top: -($line-height-computed * 3);
+        // }
+    }
+}
+
+// ==========================================================================
+// wenzhixin/bootstrap-table
+// ==========================================================================
+
+.card-table > .bootstrap-table {
+    > .fixed-table-container {
+        border: 0;
+    }
+
+    > .fixed-table-toolbar {
+        position: absolute;
+        top: 0;
+        right: 10px;
+
+        /**
+         * Apply `.form-control-sm `
+         */
+        > .search .form-control {
+            padding: .15rem $input-padding-x-sm;
+            font-size: $font-size-sm;
+            line-height: $input-line-height-sm;
+            @include border-radius($input-border-radius-sm);
+        }
+    }
+
+    /**
+     * Apply `.card-footer`
+     */
+    .fixed-table-pagination {
+        // padding: $card-spacer-y $card-spacer-x;
+        padding-right: $card-spacer-x;
+        padding-left: $card-spacer-x;
+        background-color: $card-cap-bg;
+        border-top: $card-border-width solid $card-border-color;
+        font-size: $font-size-sm;
+        line-height: $input-line-height-sm;
+
+        &:last-child {
+            @include border-radius(0 0 $card-inner-border-radius $card-inner-border-radius);
+        }
+    }
+
+    .table {
+        margin-top: 0;
+
+        > tbody > tr > th,
+        > tbody > tr > td {
+            padding: $table-cell-padding-sm;
+        }
     }
 }

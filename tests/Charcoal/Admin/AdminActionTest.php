@@ -1,9 +1,6 @@
 <?php
 
-namespace Charcoal\Admin\Tests;
-
-// From PHPUnit
-use PHPUnit_Framework_TestCase;
+namespace Charcoal\Tests\Admin;
 
 use ReflectionClass;
 
@@ -15,13 +12,17 @@ use Pimple\Container;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
-use Charcoal\Admin\Tests\ContainerProvider;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\ReflectionsTrait;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class AdminActionTest extends PHPUnit_Framework_TestCase
+class AdminActionTest extends AbstractTestCase
 {
+    use ReflectionsTrait;
+
     /**
      * Tested Class.
      *
@@ -38,6 +39,8 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set up the test.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -49,19 +52,17 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         ]]);
     }
 
-    public static function getMethod($obj, $name)
-    {
-        $class = new ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-        return $method;
-    }
-
+    /**
+     * @return void
+     */
     public function testSetData()
     {
         $ret = $this->obj->setData([]);
     }
 
+    /**
+     * @return void
+     */
     public function testInit()
     {
         $request = $this->createMock(RequestInterface::class);
@@ -77,6 +78,8 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
      * - success can be set by ArrayAccess
      * - success can be set with get()
      * - success can be accessed by ArrayAccess
+     *
+     * @return void
      */
     public function testSuccess()
     {
@@ -95,6 +98,9 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->obj['success']);
     }
 
+    /**
+     * @return void
+     */
     public function testFeedback()
     {
         $this->assertFalse($this->obj->hasFeedbacks());
@@ -114,15 +120,20 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->obj->numFeedbacks());
     }
 
+    /**
+     * @return void
+     */
     public function testAdminUrl()
     {
         $this->assertEquals('/admin/', $this->obj->adminUrl());
     }
 
+    /**
+     * @return void
+     */
     public function testAuthRequiredIsTrue()
     {
-        $foo = self::getMethod($this->obj, 'authRequired');
-        $res = $foo->invoke($this->obj);
+        $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertTrue($res);
     }
 
@@ -131,7 +142,7 @@ class AdminActionTest extends PHPUnit_Framework_TestCase
      *
      * @return Container
      */
-    private function container()
+    protected function container()
     {
         if ($this->container === null) {
             $container = new Container();

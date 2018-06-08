@@ -46,7 +46,7 @@
     cursor: pointer;
     background: none;
     border: none;
-    display: inline-block;
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
@@ -141,10 +141,6 @@
             @include c-nav-container_header;
         }
     }
-
-    // .is-fullscreen-template & {
-    //     left: 0 !important;
-    // }
 }
 
 .c-nav-container_logo {

@@ -1,19 +1,26 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use PHPUnit_Framework_TestCase;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Psr\Log\NullLogger;
-
+// From Pimple
 use Pimple\Container;
 
-use \Charcoal\Admin\Widget\TextWidget;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\TextWidget;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
-use Charcoal\Admin\Tests\ContainerProvider;
-
-class TextWidgetTest extends PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class TextWidgetTest extends AbstractTestCase
 {
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $container = new Container();
@@ -26,6 +33,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testSetShowTitle()
     {
         $this->assertFalse($this->obj->showTitle());
@@ -38,6 +48,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->showTitle());
     }
 
+    /**
+     * @return void
+     */
     public function testSetShowSubtitle()
     {
         $this->assertFalse($this->obj->showSubtitle());
@@ -50,6 +63,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->showSubtitle());
     }
 
+    /**
+     * @return void
+     */
     public function testSetShowDescription()
     {
         $this->assertFalse($this->obj->showDescription());
@@ -62,6 +78,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->showDescription());
     }
 
+    /**
+     * @return void
+     */
     public function testSetShowNotes()
     {
         $this->assertFalse($this->obj->showNotes());
@@ -74,6 +93,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->showNotes());
     }
 
+    /**
+     * @return void
+     */
     public function testSetTitle()
     {
         $ret = $this->obj->setTitle('Fôö title');
@@ -81,6 +103,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Fôö title', (string)$this->obj->title());
     }
 
+    /**
+     * @return void
+     */
     public function testSetSubtitle()
     {
         $ret = $this->obj->setSubtitle('Fôö subtitle');
@@ -88,6 +113,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Fôö subtitle', (string)$this->obj->subtitle());
     }
 
+    /**
+     * @return void
+     */
     public function testSetDescription()
     {
         $ret = $this->obj->setDescription('Fôö description');
@@ -95,6 +123,9 @@ class TextWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Fôö description', (string)$this->obj->description());
     }
 
+    /**
+     * @return void
+     */
     public function testSetNotes()
     {
         $ret = $this->obj->setNotes('Fôö notes');

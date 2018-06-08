@@ -2,14 +2,14 @@
 
 namespace Charcoal\Admin\Script;
 
-// PSR-7 (http messaging) dependencies
+// From PSR-7
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// Module `charcoal-core` dependencies
+// From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;
 
-// Intra-module (`charcoal-admin`) dependencies
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
 use Charcoal\Admin\Ui\CollectionContainerTrait;

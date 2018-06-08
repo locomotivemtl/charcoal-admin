@@ -106,7 +106,15 @@ class SelectizeRenderer
 
                 call_user_func($method, $context);
             } elseif (method_exists($template, 'setData')) {
-                $template->setData($context);
+                if ($context instanceof ModelInterface) {
+                    if (is_callable([$context, 'dataForTemplate'])) {
+                        $template->setData($context->dataForTemplate());
+                    } else {
+                        $template->setData($context->data());
+                    }
+                } else {
+                    $template->setData($context);
+                }
             } else {
                 throw new \InvalidArgumentException(sprintf(
                     '%s supplied in %s::%s is not callable.',

@@ -1,16 +1,16 @@
 <?php
 namespace Charcoal\Admin\Widget\Graph;
 
-use \DateInterval;
-use \DateTime;
-use \DateTimeInterface;
-use \Exception;
-use \InvalidArgumentException;
-use \PDO;
+use DateInterval;
+use DateTime;
+use DateTimeInterface;
+use Exception;
+use InvalidArgumentException;
+use PDO;
 
 // From 'charcoal-admin'
-use \Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
-use \Charcoal\Admin\Widget\Graph\TimeGraphWidgetInterface;
+use Charcoal\Admin\Widget\Graph\AbstractGraphWidget;
+use Charcoal\Admin\Widget\Graph\TimeGraphWidgetInterface;
 
 /**
  * Base Time Graph widget.

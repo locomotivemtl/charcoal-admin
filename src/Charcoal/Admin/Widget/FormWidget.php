@@ -12,10 +12,10 @@ use Pimple\Container;
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
 
-// From `charcoal-app`
+// From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
-/// From `charcoal-ui`
+/// From 'charcoal-ui'
 use Charcoal\Ui\Form\FormInterface;
 use Charcoal\Ui\Form\FormTrait;
 use Charcoal\Ui\FormGroup\FormGroupInterface;
@@ -445,6 +445,7 @@ class FormWidget extends AdminWidget implements
             'l10n_mode',
             'group_display_mode',
             'next_url',
+            'tab_ident',
         ];
     }
 

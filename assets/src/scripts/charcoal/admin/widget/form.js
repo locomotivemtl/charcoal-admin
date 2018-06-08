@@ -26,11 +26,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.is_new_object     = false;
     this.xhr               = null;
 
-    var urlParams = Charcoal.Admin.queryParams();
-
-    if ('tab_ident' in urlParams) {
-        $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
-    }
+    this.update_tab_ident();
 
     var lang = $('[data-lang]:not(.d-none)').data('lang');
     if (lang) {
@@ -91,6 +87,35 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
         that.switch_language(lang);
     });
 
+    window.onpopstate = function () {
+        that.update_tab_ident();
+    };
+
+    // crappy push state
+    if (that.isTab) {
+        $(this.form_selector).on('shown.bs.tab', '.js-group-tabs', function (event) {
+            var $tab = $(event.target); // active tab
+            var params = [];
+
+            var urlParams = Charcoal.Admin.queryParams();
+
+            // Skip push state for same state.
+            if (urlParams.tab_ident !== undefined &&
+                $tab.data('tab-ident') === urlParams.tab_ident
+            ) {
+                return;
+            }
+
+            urlParams.tab_ident = $tab.data('tab-ident');
+
+            for (var param in urlParams) {
+                params.push(param + '=' + urlParams[param]);
+            }
+
+            history.pushState('','', window.location.pathname + '?' + params.join('&'));
+        });
+    }
+
     /*if (that.isTab) {
          $(that.form_selector).on('click', '.js-group-tabs', function (event) {
              event.preventDefault();
@@ -101,6 +126,18 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
          });
      }*/
 
+};
+
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.update_tab_ident = function () {
+    var urlParams = Charcoal.Admin.queryParams();
+
+    if ('tab_ident' in urlParams) {
+        $('.js-group-tabs[data-tab-ident="' + urlParams.tab_ident + '"]').tab('show');
+    }
 };
 
 /**

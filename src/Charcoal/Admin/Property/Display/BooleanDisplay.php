@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Property\Display;
 
-use \Charcoal\Admin\Property\AbstractPropertyDisplay;
+use Charcoal\Admin\Property\AbstractPropertyDisplay;
 
 /**
  * Boolean/Semaphore Display Property

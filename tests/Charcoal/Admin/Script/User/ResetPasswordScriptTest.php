@@ -1,32 +1,38 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Script\User;
+namespace Charcoal\Tests\Admin\Script\User;
 
-use \PDO;
+use PDO;
 
-use \PHPUnit_Framework_TestCase;
+// From PSR-3
+use Psr\Log\NullLogger;
 
-use \Psr\Log\NullLogger;
-use \Cache\Adapter\Void\VoidCachePool;
+// From PSR-7
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-use \Psr\Http\Message\RequestInterface;
-use \Psr\Http\Message\ResponseInterface;
+// From 'cache/void-adapter'
+use Cache\Adapter\Void\VoidCachePool;
 
-use \Pimple\Container;
+// From Pimple
+use Pimple\Container;
 
-use \Charcoal\Factory\GenericFactory as Factory;
+// From 'charcoal-factory'
+use Charcoal\Factory\GenericFactory as Factory;
 
-use \Charcoal\Model\Service\MetadataLoader;
-use \Charcoal\Source\DatabaseSource;
+// From 'charcoal-core'
+use Charcoal\Model\Service\MetadataLoader;
+use Charcoal\Source\DatabaseSource;
 
-use \Charcoal\Admin\Script\User\ResetPasswordScript;
-
-use \Charcoal\Admin\Tests\ContainerProvider;
+// From 'charcoal-admin'
+use Charcoal\Admin\Script\User\ResetPasswordScript;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  *
  */
-class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
+class ResetPasswordScriptTest extends AbstractTestCase
 {
     /**
      * @var Container
@@ -39,6 +45,9 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
      */
     private $obj;
 
+    /**
+     * @return Container
+     */
     private function getContainer()
     {
         $container = new Container();
@@ -49,6 +58,9 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
         return $container;
     }
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->container = $this->getContainer();
@@ -63,6 +75,9 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function testDefaultArguments()
     {
         $args = $this->obj->defaultArguments();
@@ -71,6 +86,9 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('password', $args);
     }
 
+    /**
+     * @return void
+     */
     public function testArguments()
     {
         $args = $this->obj->arguments();
@@ -79,37 +97,42 @@ class ResetPasswordScriptTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('password', $args);
     }
 
-//     public function testInvokeWithArguments()
-//     {
-//         global $argv;
+    /**
+     * @return void
+     */
+    /*
+    public function testInvokeWithArguments()
+    {
+        global $argv;
 
-//         $argv = [];
-//         $argv[] = 'vendor/bin/charcoal';
+        $argv = [];
+        $argv[] = 'vendor/bin/charcoal';
 
-//         $argv[] = '--username';
-//         $argv[] = 'foobar';
+        $argv[] = '--username';
+        $argv[] = 'foobar';
 
-//         $argv[] = '--password';
-//         $argv[] = '[Foo]{bar}123';
+        $argv[] = '--password';
+        $argv[] = '[Foo]{bar}123';
 
-//         $model = $this->container['model/factory']->create('charcoal/admin/user');
-//         $source = $model->source();
-//         $source->createTable();
+        $model = $this->container['model/factory']->create('charcoal/admin/user');
+        $source = $model->source();
+        $source->createTable();
 
-//         $model->setData([
-//             'username' => 'foobar',
-//             'password' => 'BarFoo123',
-//             'email' => 'foobar@example.com'
-//         ]);
-//         $model->setRevisionEnabled(false);
-//         $model->save();
+        $model->setData([
+            'username' => 'foobar',
+            'password' => 'BarFoo123',
+            'email' => 'foobar@example.com'
+        ]);
+        $model->setRevisionEnabled(false);
+        $model->save();
 
-//         $request = $this->createMock('\Psr\Http\Message\RequestInterface');
-//         $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
+        $request = $this->createMock('\Psr\Http\Message\RequestInterface');
+        $response = $this->createMock('\Psr\Http\Message\ResponseInterface');
 
-//         $obj = $this->obj;
-//         $ret = $obj($request, $response);
+        $obj = $this->obj;
+        $ret = $obj($request, $response);
 
-//         $this->assertSame($ret, $response);
-//     }
+        $this->assertSame($ret, $response);
+    }
+    */
 }

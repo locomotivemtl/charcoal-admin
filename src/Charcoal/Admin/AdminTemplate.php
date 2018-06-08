@@ -426,6 +426,29 @@ class AdminTemplate extends AbstractTemplate implements
     }
 
     /**
+     * @return string
+     */
+    public function navContainerCssClasses()
+    {
+        $classes = [ 'has-nav-logo' ];
+
+        if ($this->showMainMenu()) {
+            $classes[] = 'has-nav-main';
+        }
+
+        if ($this->showSecondaryMenu()) {
+            $classes[] = 'has-nav-sub';
+        }
+
+        /** @see ::showSystemMenu() */
+        if ($this->isAuthenticated()) {
+            $classes[] = 'has-nav-system';
+        }
+
+        return implode(' ', $classes);
+    }
+
+    /**
      * Get the "Visit website" label.
      *
      * @return string|boolean The button's label,

@@ -2,7 +2,7 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use \Charcoal\Admin\Property\AbstractPropertyInput;
+use Charcoal\Admin\Property\AbstractPropertyInput;
 
 /**
  * Audio Property Input

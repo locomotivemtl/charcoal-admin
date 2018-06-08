@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use UnexpectedValueException;
 
 // From Pimple
@@ -13,6 +14,7 @@ use Charcoal\Ui\FormGroup\FormGroupInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Docs\Widget\DocFormPropertyWidget;
+use Charcoal\Admin\Ui\FormSidebarInterface;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 use Charcoal\Admin\Widget\FormWidget;

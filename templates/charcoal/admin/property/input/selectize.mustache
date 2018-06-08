@@ -57,7 +57,7 @@
         Charcoal.Admin.manager().add_property_input({
             id:   '{{ inputId }}',
             type: 'charcoal/admin/property/input/selectize',
-            data: {{& controlDataForJsAsJson }}
+            data: {{& escapedControlDataForJsAsJson }}
         });
     </script>
 {{/ addJs }}

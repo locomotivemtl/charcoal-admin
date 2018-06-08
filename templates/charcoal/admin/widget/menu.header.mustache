@@ -3,60 +3,24 @@
     Header Menu Widget
     ==================
 
-{-#baseUrl-}
-{-# visitSiteLabel -}
-<a class="btn btn-link" href="{-baseUrl-}" target="_blank">
-    <span class="fa fa-home" aria-hidden="true"></span>
-    <span class="btn-label">{-& . -}</span>
-</a>
-{-/ visitSiteLabel -}
-{-/baseUrl-}
-
 --}}
-<div class="c-nav-container o-flex_aside">
+<div class="c-nav-container o-flex_aside{{# navContainerCssClasses }} {{ . }}{{/ navContainerCssClasses }}">
     <div class="c-nav-container_wrap">
-        {{# isAuthorized }}
+        {{# showHeaderMenu }}
             <button class="c-nav-container_button js-toggle-class" type="button" data-target="body" data-class="has-nav-open">
                 <span class="c-nav-container_button_icon"></span>
             </button>
-        {{/ isAuthorized }}
+        {{/ showHeaderMenu }}
+
         <div class="c-nav-container_header">
-            <a class="c-nav-container_logo" href="{{adminUrl}}">
-                <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#charcoal-logo"></use></svg>
+            <a class="c-nav-container_logo" href="{{ adminUrl }}">
+                <svg role="img"><use xlink:href="{{# withBaseUrl }}assets/admin/images/svgs.svg{{/ withBaseUrl }}#charcoal-logo"></use></svg>
             </a>
             {{# isAuthenticated }}
-                {{# showSystemMenu }}
-                    <nav class="c-nav-system">
-                        <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg role="img"><use xlink:href="{{baseUrl}}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
-                            <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
-                            {{# systemMenu }}
-                                <li>
-                                    <a class="c-nav-system_link dropdown-item{{# ident }} -{{ . }}{{/ ident }}"
-                                        href="{{ url }}"
-                                        {{# id }}
-                                        id="{{ . }}"
-                                        {{/ id }}
-                                        {{# iconCss }}
-                                        data-icon="{{ . }}"
-                                        {{/ iconCss }}>
-                                        {{ label }}
-                                    </a>
-                                </li>
-                            {{/ systemMenu }}
-                        </ul>
-                    </nav>
-                {{/ showSystemMenu }}
-                {{^ showSystemMenu }}
-                    <a href="{{ adminUrl }}logout" class="c-nav-system_logout btn">
-                        <i class="fa fa-lg fa-sign-out" aria-hidden="true">&nbsp;</i>
-                        <span class="btn-label">{{# _t }}auth.logout.action{{/ _t }}</span>
-                    </a>
-                {{/ showSystemMenu }}
+                {{> charcoal/admin/widget/menu.system }}
             {{/ isAuthenticated }}
         </div>
+
         {{# showMainMenu }}
             <div class="c-nav-main_overlay -light js-toggle-class" data-target="body" data-class="has-nav-open"></div>
             <nav class="c-nav-main">
@@ -105,16 +69,16 @@
     </div>
 </div>
 {{# addJs }}
-    <script>
-        $(function() {
-            var mainMenu_template = new Charcoal.Admin.Template_MenuHeader();
+<script>
+    $(function() {
+        var mainMenu_template = new Charcoal.Admin.Template_MenuHeader();
 
-            $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
-                event.preventDefault();
-                event.cacheType = 'global';
+        $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
+            event.preventDefault();
+            event.cacheType = 'global';
 
-                Charcoal.Admin.cache().onPurge(event);
-            });
+            Charcoal.Admin.cache().onClear(event);
         });
+    });
 </script>
 {{/ addJs }}

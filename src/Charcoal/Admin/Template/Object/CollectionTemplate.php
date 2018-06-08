@@ -243,6 +243,7 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         $adminMetadata = $this->objAdminMetadata();
+        var_dump($adminMetadata);
         if (!isset($adminMetadata['default_collection_dashboard'])) {
             throw new Exception(sprintf(
                 'No default collection dashboard defined in admin metadata for %s.',

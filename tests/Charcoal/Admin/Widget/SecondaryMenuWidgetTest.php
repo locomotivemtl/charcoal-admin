@@ -1,25 +1,25 @@
 <?php
 
-namespace Charcoal\Admin\Tests\Widget;
+namespace Charcoal\Tests\Admin\Widget;
 
-use PHPUnit_Framework_TestCase;
-
+// From Pimple
 use Pimple\Container;
 
 // From Slim
-use \Slim\Http\Environment;
-use \Slim\Http\Request;
-use \Slim\Http\Response;
+use Slim\Http\Environment;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
-use \Charcoal\Admin\Widget\SecondaryMenuWidget;
-
-use Charcoal\Admin\Tests\ContainerProvider;
+// From 'charcoal-admin'
+use Charcoal\Admin\Widget\SecondaryMenuWidget;
+use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  * Class SecondaryMenuWidgetTest
  * @package Charcoal\Admin\Tests\Widget
  */
-class SecondaryMenuWidgetTest extends PHPUnit_Framework_TestCase
+class SecondaryMenuWidgetTest extends AbstractTestCase
 {
     /**
      * @var SecondaryMenuWidget
@@ -27,7 +27,7 @@ class SecondaryMenuWidgetTest extends PHPUnit_Framework_TestCase
     public $obj;
 
     /**
-     *
+     * @return void
      */
     public function setUp()
     {
@@ -46,7 +46,7 @@ class SecondaryMenuWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @return void
      */
     public function testConstructor()
     {

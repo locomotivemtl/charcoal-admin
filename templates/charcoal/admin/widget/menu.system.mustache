@@ -1,0 +1,34 @@
+{{!--
+
+    System Menu Widget
+    ==================
+
+--}}
+{{# showSystemMenu }}
+    <nav class="c-nav-system">
+        <button type="button" class="btn dropdown-toggle c-nav-system_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <svg role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-kebab"></use></svg>
+            <span class="sr-only">{{# _t }}Settings{{/ _t }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right c-nav-system_list">
+            {{# systemMenu }}
+            <li>
+                <a
+                    href="{{ url }}"
+                    class="c-nav-system_link dropdown-item{{# ident }} -{{ . }}{{/ ident }}"
+                    {{# id }}
+                    id="{{ . }}"
+                    {{/ id }}
+                    {{# iconCss }}
+                    data-icon="{{ . }}"
+                    {{/ iconCss }}>
+                    {{ label }}
+                </a>
+            </li>
+            {{/ systemMenu }}
+        </ul>
+    </nav>
+{{/ showSystemMenu }}
+{{^ showSystemMenu }}
+    {{> charcoal/admin/widget/menu.system.logout }}
+{{/ showSystemMenu }}

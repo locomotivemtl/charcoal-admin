@@ -14,3 +14,39 @@
         margin-top: ($spacer / 2);
     }
 }
+
+// A grid layout for buttons
+.btn-group-grid {
+    display: flex;
+    flex-flow: wrap;
+
+    & > .btn {
+        border-radius: 0;
+        flex: 1 1 auto;
+        width: 50%;
+
+        &:nth-child(n + 3) {
+            margin-top: -1px;
+        }
+
+        &:nth-child(2n) {
+            margin-left: -1px;
+        }
+
+        &:first-child {
+            border-top-left-radius: $border-radius;
+        }
+
+        &:nth-child(2) {
+            border-top-right-radius: $border-radius;
+        }
+
+        &:nth-last-child(2) {
+            border-bottom-left-radius: $border-radius;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: $border-radius;
+        }
+    }
+}

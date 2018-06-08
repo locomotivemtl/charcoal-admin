@@ -56,11 +56,9 @@
         {{# showActionsWrapper }}
             <div class="c-sidebar-widget_wrapper -actions">
                 {{# showLanguageSwitch }}
-                    <div class="btn-group d-flex mb-sm-3 js-lang-switch" role="group" aria-label="{{# _t }}Languages{{/ _t }}">
+                    <div class="btn-group-grid mb-sm-3 js-lang-switch" role="group" aria-label="{{# _t }}Languages{{/ _t }}">
                         {{# languages }}
-                            <button class="btn {{# current }}btn-primary{{/ current }}{{^ current }}btn-outline-primary{{/ current }}"
-                                    type="button"
-                                    data-lang-switch="{{ ident }}">
+                            <button class="btn {{# cssClasses }}{{ . }}{{/ cssClasses }}" type="button" data-lang-switch="{{ ident }}">
                                 {{ name }}
                             </button>
                         {{/ languages }}

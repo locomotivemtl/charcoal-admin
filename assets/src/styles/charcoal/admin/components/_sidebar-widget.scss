@@ -62,17 +62,17 @@
         }
 
         // Apply .btn-sm styles to the actions
-        .btn {
-            @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
-        }
+        // .btn {
+        //     @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+        // }
     }
 
     @media (min-width: $from-small) {
         padding: rem($unit / 2);
 
-        .btn {
-            width: 100%;
-        }
+        // .btn {
+        //     width: 100%;
+        // }
     }
 
     &:last-child {

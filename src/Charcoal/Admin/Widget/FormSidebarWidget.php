@@ -774,10 +774,12 @@ class FormSidebarWidget extends AdminWidget implements
                 }
             }
 
+            $isCurrent = ($locale === $currentLocale);
             $languages[] = [
-                'ident'   => $locale,
-                'name'    => $label,
-                'current' => ($locale === $currentLocale)
+                'cssClasses' => ($isCurrent) ? 'btn-primary' : 'btn-outline-primary',
+                'ident'      => $locale,
+                'name'       => $label,
+                'current'    => $isCurrent
             ];
         }
 

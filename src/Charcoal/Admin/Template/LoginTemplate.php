@@ -95,22 +95,6 @@ class LoginTemplate extends AdminTemplate
     }
 
     /**
-     * @return boolean
-     */
-    public function showHeaderMenu()
-    {
-        return false;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function showFooterMenu()
-    {
-        return false;
-    }
-
-    /**
      * @return string
      */
     public function urlLoginAction()

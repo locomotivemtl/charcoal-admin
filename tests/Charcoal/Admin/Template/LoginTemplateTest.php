@@ -43,20 +43,4 @@ class LoginTemplateTest extends AbstractTestCase
         $res = $this->callMethod($this->obj, 'authRequired');
         $this->assertNotTrue($res);
     }
-
-    /**
-     * @return void
-     */
-    public function testShowHeaderMenuIsFalse()
-    {
-        $this->assertNotTrue($this->obj->showHeaderMenu());
-    }
-
-    /**
-     * @return void
-     */
-    public function testShowFooterMenuIsFalse()
-    {
-        $this->assertNotTrue($this->obj->showHeaderMenu());
-    }
 }

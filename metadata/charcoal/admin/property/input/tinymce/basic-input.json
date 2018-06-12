@@ -1,0 +1,14 @@
+{
+    "default_data": {
+        "editor_options": {
+            "toolbar": "undo redo | formatselect | bold italic small | bullist | link | removeformat",
+            "advlist_bullet_styles": "default",
+            "image_caption": true,
+            "extended_valid_elements": "span[!class]",
+            "menubar": "view",
+            "plugins": [ "link", "code", "pagebreak", "!fullscreen" ],
+            "block_formats": "Heading 2=h2;Heading 3=h3;Paragraph=p;",
+            "default_link_target": "_blank"
+        }
+    }
+}

@@ -985,14 +985,17 @@ class AdminTemplate extends AbstractTemplate implements
             /** Extract the secondary menu widget related to this main menu item. */
             $secondaryMenuWidget = current(
                 array_filter(
-                    $this->secondaryMenu(), function($item) use ($menuIdent) {
+                    $this->secondaryMenu(),
+                    function ($item) use ($menuIdent) {
                         return $item->ident() === $menuIdent;
                     }
                 )
             );
 
             if (!empty($secondaryMenuWidget)) {
-                $menuItem['hasSecondaryMenuTab'] = $secondaryMenuWidget->isTabbed() || ($secondaryMenuWidget->hasSecondaryMenu() && $secondaryMenuWidget->isCurrent());
+                $menuItem['hasSecondaryMenuTab'] = $secondaryMenuWidget->isTabbed() || (
+                    $secondaryMenuWidget->hasSecondaryMenu() && $secondaryMenuWidget->isCurrent()
+                );
             }
         }
 

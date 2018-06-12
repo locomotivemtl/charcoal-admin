@@ -645,7 +645,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     /**
      * Add a secondary menu group.
      *
-     * @param  string                       $groupIdent The group identifier.
+     * @param  string                            $groupIdent The group identifier.
      * @param  array|SecondaryMenuGroupInterface $group      The group object or structure.
      * @throws InvalidArgumentException If the identifier is not a string or the group is invalid.
      * @return self
@@ -890,10 +890,12 @@ class SecondaryMenuWidget extends AdminWidget implements
 
         return $this->description;
     }
+
     /**
      * Determine if the description is to be displayed.
      *
-     * @return boolean If TRUE or unset, check if there is a description.
+     * @param  boolean $show Show (TRUE) or hide (FALSE) the description.
+     * @return self
      */
     public function setShowDescription($show)
     {
@@ -904,8 +906,7 @@ class SecondaryMenuWidget extends AdminWidget implements
     /**
      * Show/hide the widget's description.
      *
-     * @param  boolean $show Show (TRUE) or hide (FALSE) the description.
-     * @return self
+     * @return boolean If TRUE or unset, check if there is a description.
      */
     public function showDescription()
     {

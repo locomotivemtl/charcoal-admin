@@ -5,12 +5,12 @@ DateTime picker Property Input
 `charcoal/admin/property/input/datetimepicker`
 
 --}}
-<div class="input-group date" id="datetimepicker_{{ inputId }}" data-target-input="nearest">
+<div class="input-group{{# inputGroupClass }} {{ . }}{{/ inputGroupClass }}" id="datetimepicker_{{ inputId }}" data-target-input="nearest">
     <input
         type="text"
         id="{{ inputId }}"
         name="{{ inputName }}"
-        class="form-control datetimepicker-input {{ inputClass }}"
+        class="form-control datetimepicker-input{{# inputClass }} {{ . }}{{/ inputClass }}"
         data-target="#datetimepicker_{{ inputId }}"
         {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
         {{# readOnly }}readonly{{/ readOnly }}

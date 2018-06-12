@@ -9,6 +9,8 @@
         width: 100%;
     }
 
+
+    // These styles completely remove any Bootstrap v4 .btn styling, which is not optimal
     > .dropdown-toggle {
         background:     $input-bg;
         border:         $input-border-width solid $input-border-color;

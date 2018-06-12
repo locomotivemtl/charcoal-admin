@@ -14,6 +14,11 @@ class DateTimePickerInput extends AbstractPropertyInput
     const DEFAULT_JS_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
     /**
+     * @var string $inputGroupClass
+     */
+    protected $inputGroupClass = '';
+
+    /**
      * Settings for {@link https://eonasdan.github.io/bootstrap-datetimepicker/ Bootstrap Datepicker}.
      *
      * @var array
@@ -28,6 +33,28 @@ class DateTimePickerInput extends AbstractPropertyInput
     public function type()
     {
         return 'datetime-local';
+    }
+
+    /**
+     * @param string $class The input group class attribute.
+     * @throws InvalidArgumentException If the class is not a string.
+     * @return self
+     */
+    public function setInputGroupClass($class)
+    {
+        if (!is_string($class)) {
+            throw new InvalidArgumentException('CSS Class(es) must be a string');
+        }
+        $this->inputGroupClass = $class;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function inputGroupClass()
+    {
+        return $this->inputGroupClass;
     }
 
     /**

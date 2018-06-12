@@ -797,7 +797,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function objectEditUrl()
     {
-        return 'object/edit?main_menu={{ main_menu }}&obj_type='.$this->objType();
+        $model = $this->proto();
+        $url   = 'object/edit?main_menu={{ main_menu }}&obj_type='.$this->objType();
+
+        if ($model->view()) {
+            $url = $model->render((string)$url);
+        } else {
+            $url = preg_replace('~{{\s*id\s*}}~', $this->currentObjId, $url);
+        }
+
+        return $url;
     }
 
     /**

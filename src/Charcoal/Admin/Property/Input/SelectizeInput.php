@@ -2,6 +2,8 @@
 
 namespace Charcoal\Admin\Property\Input;
 
+use Charcoal\Admin\Property\HierarchicalObjectProperty;
+use Charcoal\Object\HierarchicalCollection;
 use RuntimeException;
 use InvalidArgumentException;
 
@@ -410,6 +412,11 @@ class SelectizeInput extends SelectInput
                 $items = [];
             }
 
+            // workaround for object setter casting the proerty as object.
+            if ($items instanceof ModelInterface) {
+                $items = $this->mapObjToChoice($items)['value'];
+            }
+
             if (is_scalar($items)) {
                 $items = [$items];
             }
@@ -554,6 +561,10 @@ class SelectizeInput extends SelectInput
 
             $collection = $loader->load();
 
+            if ($prop instanceof HierarchicalObjectProperty) {
+                $collection = $this->sortObjects($collection);
+            }
+
             $choices = [];
             foreach ($collection as $obj) {
                 $c = $this->mapObjToChoice($obj);
@@ -606,6 +617,20 @@ class SelectizeInput extends SelectInput
         }
 
         return $choices;
+    }
+
+    /**
+     * Sort the objects before they are displayed as rows.
+     *
+     * @see \Charcoal\Admin\Ui\CollectionContainerTrait::sortObjects()
+     * @return array
+     */
+    public function sortObjects($objects)
+    {
+        $collection = new HierarchicalCollection($objects, false);
+        $collection->sortTree();
+
+        return $collection->all();
     }
 
     /**

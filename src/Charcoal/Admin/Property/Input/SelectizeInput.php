@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-use Charcoal\Admin\Property\HierarchicalObjectProperty;
-use Charcoal\Object\HierarchicalCollection;
 use RuntimeException;
 use InvalidArgumentException;
 
@@ -12,7 +10,11 @@ use Pimple\Container;
 
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
+use Charcoal\Model\Collection;
 use Charcoal\Loader\CollectionLoader;
+
+// From 'charcoal-object'
+use Charcoal\Object\HierarchicalCollection;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
@@ -24,6 +26,7 @@ use Charcoal\Property\AbstractProperty;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Service\SelectizeRenderer;
+use Charcoal\Admin\Property\HierarchicalObjectProperty;
 
 /**
  * Tags Input Property
@@ -622,6 +625,7 @@ class SelectizeInput extends SelectInput
     /**
      * Sort the objects before they are displayed as rows.
      *
+     * @param ModelInterface[]|Collection $objects The objects colelction to sort
      * @see \Charcoal\Admin\Ui\CollectionContainerTrait::sortObjects()
      * @return array
      */

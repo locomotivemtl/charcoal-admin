@@ -204,7 +204,7 @@ class SelectizeInput extends SelectInput
      * Show/hide the "Copy to Clipboard" button.
      *
      * @param  boolean $flag Show (TRUE) or hide (FALSE) the copy button.
-     * @return UiItemInterface Chainable
+     * @return self
      */
     public function setAllowClipboardCopy($flag)
     {
@@ -625,7 +625,7 @@ class SelectizeInput extends SelectInput
     /**
      * Sort the objects before they are displayed as rows.
      *
-     * @param ModelInterface[]|Collection $objects The objects colelction to sort
+     * @param ModelInterface[]|Collection $objects The objects collection to sort.
      * @see \Charcoal\Admin\Ui\CollectionContainerTrait::sortObjects()
      * @return array
      */

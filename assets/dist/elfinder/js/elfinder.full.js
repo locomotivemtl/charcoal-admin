@@ -1,6 +1,6 @@
 /*!
  * elFinder - file manager for web
- * Version 2.1.38 (2018-05-05)
+ * Version 2.1.39 (2018-06-05)
  * http://elfinder.org
  * 
  * Copyright 2009-2018, Studio 42
@@ -1752,7 +1752,7 @@ var elFinder = function(elm, opts, bootCallback) {
 				url = file.tmb;
 			}
 			if (url) {
-				if (file.ts) {
+				if (file.ts && tmbUrl !== 'self') {
 					url += (url.match(/\?/)? '&' : '?') + '_t=' + file.ts;
 				}
 				return { url: url, className: cls };
@@ -4397,7 +4397,7 @@ var elFinder = function(elm, opts, bootCallback) {
 		self.messages = i18n.messages;
 		
 		// check jquery ui
-		if (!($.fn.selectable && $.fn.draggable && $.fn.droppable && $.fn.resizable)) {
+		if (!($.fn.selectable && $.fn.draggable && $.fn.droppable && $.fn.resizable && $.fn.slider)) {
 			return alert(self.i18n('errJqui'));
 		}
 		
@@ -4594,7 +4594,7 @@ var elFinder = function(elm, opts, bootCallback) {
 					if (! helper.data('droped')) {
 						files = $.grep(helper.data('files')||[], function(h) { return h? true : false ;});
 						self.trigger('unlockfiles', {files : files});
-						self.trigger('selectfiles', {files : files});
+						self.trigger('selectfiles', {files : self.selected()});
 					}
 					self.enable();
 					
@@ -5064,7 +5064,9 @@ var elFinder = function(elm, opts, bootCallback) {
 						node.data('cssautoloadHide').remove();
 						node.removeData('cssautoloadHide');
 						self.cssloaded = true;
-						self.trigger('cssloaded');
+						requestAnimationFrame(function() {
+							self.trigger('cssloaded');
+						});
 					},
 					cnt, fi;
 				if (node.css('visibility') === 'hidden') {
@@ -5218,6 +5220,7 @@ elFinder.prototype = {
 	UA : (function(){
 		var self = this,
 			webkit = !document.unqueID && !window.opera && !window.sidebar && window.localStorage && 'WebkitAppearance' in document.documentElement.style,
+			chrome = webkit && window.chrome,
 			/*setRotated = function() {
 				var a = ((screen && screen.orientation && screen.orientation.angle) || window.orientation || 0) + 0;
 				if (a === -90) {
@@ -5243,7 +5246,8 @@ elFinder.prototype = {
 				Firefox : window.sidebar,
 				Opera   : window.opera,
 				Webkit  : webkit,
-				Chrome  : webkit && window.chrome,
+				Chrome  : chrome,
+				Edge    : (chrome && window.msCredentials)? true : false,
 				Safari  : webkit && !window.chrome,
 				Mobile  : typeof window.orientation != "undefined",
 				Touch   : typeof window.ontouchstart != "undefined",
@@ -9252,6 +9256,15 @@ elFinder.prototype = {
 			xhr = void 0;
 		}
 	},
+
+	/**
+	 * Gets the request identifier
+	 *
+	 * @return  String  The request identifier.
+	 */
+	getRequestId : function() {
+		return (+ new Date()).toString(16) + Math.floor(1000 * Math.random()).toString(16);
+	},
 	
 	/**
 	 * Flip key and value of array or object
@@ -9497,7 +9510,7 @@ if (!window.cancelAnimationFrame) {
  *
  * @type String
  **/
-elFinder.prototype.version = '2.1.38';
+elFinder.prototype.version = '2.1.39';
 
 
 
@@ -9927,21 +9940,21 @@ elFinder.prototype._options = {
 	cdns : {
 		// for editor etc.
 		ace        : '//cdnjs.cloudflare.com/ajax/libs/ace/1.3.3',
-		codemirror : '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.37.0',
+		codemirror : '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0',
 		ckeditor   : '//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.9.2',
-		ckeditor5  : '//cdn.ckeditor.com/ckeditor5/10.0.0',
-		tinymce    : '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.11',
+		ckeditor5  : '//cdn.ckeditor.com/ckeditor5/10.0.1',
+		tinymce    : '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.13',
 		simplemde  : '//cdnjs.cloudflare.com/ajax/libs/simplemde/1.11.2',
 		// for quicklook etc.
 		hls        : '//cdnjs.cloudflare.com/ajax/libs/hls.js/0.9.1/hls.min.js',
-		dash       : '//cdnjs.cloudflare.com/ajax/libs/dashjs/2.6.7/dash.all.min.js',
+		dash       : '//cdnjs.cloudflare.com/ajax/libs/dashjs/2.6.8/dash.all.min.js',
 		flv        : '//cdnjs.cloudflare.com/ajax/libs/flv.js/1.4.2/flv.min.js',
 		prettify   : '//cdn.rawgit.com/google/code-prettify/fbd527e9f76914e36f730ec9849f2115473a65d8/loader/run_prettify.js',
 		psd        : '//cdnjs.cloudflare.com/ajax/libs/psd.js/3.2.0/psd.min.js',
 		rar        : '//cdn.rawgit.com/nao-pon/rar.js/6cef13ec66dd67992fc7f3ea22f132d770ebaf8b/rar.min.js',
 		zlibUnzip  : '//cdn.rawgit.com/imaya/zlib.js/0.3.1/bin/unzip.min.js', // need check unzipFiles() in quicklook.plugins.js when update
 		zlibGunzip : '//cdn.rawgit.com/imaya/zlib.js/0.3.1/bin/gunzip.min.js',
-		marked     : '//cdnjs.cloudflare.com/ajax/libs/marked/0.3.19/marked.min.js',
+		marked     : '//cdnjs.cloudflare.com/ajax/libs/marked/0.4.0/marked.min.js',
 		sparkmd5   : '//cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js',
 		jssha      : '//cdnjs.cloudflare.com/ajax/libs/jsSHA/2.3.1/sha.js',
 		amr        : '//cdn.rawgit.com/yxl/opencore-amr-js/dcf3d2b5f384a1d9ded2a54e4c137a81747b222b/js/amrnb.js'
@@ -10437,7 +10450,6 @@ elFinder.prototype._options = {
 			getDimThreshold : 204800,
 			// File size (bytes) to request to get substitute image (400px) with the `dim` command
 			dimSubImgSize : 307200
-<<<<<<< HEAD
 		},
 		rm: {
 			// If trash is valid, items moves immediately to the trash holder without confirm.
@@ -10447,17 +10459,6 @@ elFinder.prototype._options = {
 			// Maximum number of items that can be placed into the Trash at one time
 			toTrashMaxItems : 1000
 		},
-=======
-		},
-		rm: {
-			// If trash is valid, items moves immediately to the trash holder without confirm.
-			quickTrash : true,
-			// Maximum wait seconds when checking the number of items to into the trash
-			infoCheckWait : 10,
-			// Maximum number of items that can be placed into the Trash at one time
-			toTrashMaxItems : 1000
-		},
->>>>>>> master
 		help : {
 			// Tabs to show
 			view : ['about', 'shortcuts', 'help', 'debug'],
@@ -10648,7 +10649,23 @@ elFinder.prototype._options = {
 				columnsCustomName : {},
 				// fixed list header colmun
 				fixedHeader : true
-			}
+			},
+
+			// icons view setting
+			iconsView : {
+				// default icon size (0-3 in default CSS (cwd.css - elfinder-cwd-size[number]))
+				size: 0,
+				// number of maximum size (3 in default CSS (cwd.css - elfinder-cwd-size[number]))
+				// uses in preference.js
+				sizeMax: 3,
+				// Name of each size
+				sizeNames: {
+					0: 'viewSmall',
+					1: 'viewMedium',
+					2: 'viewLarge',
+					3: 'viewExtraLarge' 
+				}
+			},
 
 			// /**
 			//  * Add CSS class name to cwd directories (optional)
@@ -11322,23 +11339,6 @@ elFinder.prototype.command = function(fm) {
 	 * @type  Boolean
 	 */
 	this.updateOnSelect = true;
-<<<<<<< HEAD
-=======
-	
-	/**
-	 * Sync toolbar button title on change
-	 * 
-	 * @type  Boolean
-	 */
-	this.syncTitleOnChange = false;
-
-	/**
-	 * Keep display of the context menu when command execution
-	 * 
-	 * @type  Boolean
-	 */
-	this.keepContextmenu = false;
->>>>>>> master
 	
 	/**
 	 * Sync toolbar button title on change
@@ -12085,7 +12085,7 @@ $.fn.dialogelfinder = function(opts) {
  * English translation
  * @author Troex Nevelin <troex@fury.scancode.ru>
  * @author Naoki Sawada <hypweb+elfinder@gmail.com>
- * @version 2018-04-04
+ * @version 2018-05-22
  */
 // elfinder.en.js is integrated into elfinder.(full|min).js by jake build
 if (typeof elFinder === 'function' && elFinder.prototype.i18) {
@@ -12390,6 +12390,10 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'selectlfile'     : 'Select last item',
 			'viewlist'        : 'List view',
 			'viewicons'       : 'Icons view',
+			'viewSmall'       : 'Small icons', // from v2.1.39 added 22.5.2018
+			'viewMedium'      : 'Medium icons', // from v2.1.39 added 22.5.2018
+			'viewLarge'       : 'Large icons', // from v2.1.39 added 22.5.2018
+			'viewExtraLarge'  : 'Extra large icons', // from v2.1.39 added 22.5.2018
 			'places'          : 'Places',
 			'calc'            : 'Calculate',
 			'path'            : 'Path',
@@ -12533,6 +12537,7 @@ if (typeof elFinder === 'function' && elFinder.prototype.i18) {
 			'workspace'       : 'Work Space', // from v2.1.38 added 4.4.2018
 			'dialog'          : 'Dialog', // from v2.1.38 added 4.4.2018
 			'all'             : 'All', // from v2.1.38 added 4.4.2018
+			'iconSize'        : 'Icon Size (Icons view)', // form v2.1.39 added 7.5.2018
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Unknown',
@@ -12643,9 +12648,10 @@ $.fn.elfinderbutton = function(cmd) {
 			selected = 'elfinder-button-menu-item-selected',
 			menu,
 			text     = $('<span class="elfinder-button-text">'+cmd.title+'</span>'),
+			prvCname = 'elfinder-button-icon-' + (cmd.className? cmd.className : cmd.name),
 			button   = $(this).addClass('ui-state-default elfinder-button')
 				.attr('title', cmd.title)
-				.append('<span class="elfinder-button-icon elfinder-button-icon-' + (cmd.className? cmd.className : cmd.name) + '"/>', text)
+				.append('<span class="elfinder-button-icon ' + prvCname + '"/>', text)
 				.on('mouseenter mouseleave', function(e) { !button.hasClass(disabled) && button[e.type == 'mouseleave' ? 'removeClass' : 'addClass'](hover);})
 				.on('click', function(e) { 
 					if (!button.hasClass(disabled)) {
@@ -12730,6 +12736,7 @@ $.fn.elfinderbutton = function(cmd) {
 		}	
 			
 		cmd.change(function() {
+			var cName;
 			tm && cancelAnimationFrame(tm);
 			tm = requestAnimationFrame(function() {
 				if (cmd.disabled()) {
@@ -12739,6 +12746,11 @@ $.fn.elfinderbutton = function(cmd) {
 					button[cmd.active() ? 'addClass' : 'removeClass'](active);
 				}
 				if (cmd.syncTitleOnChange) {
+					cName = 'elfinder-button-icon-' + (cmd.className? cmd.className : cmd.name);
+					if (prvCname !== cName) {
+						button.children('.elfinder-button-icon').removeClass(prvCname).addClass(cName);
+						prvCname = cName;
+					}
 					text.html(cmd.title);
 					button.attr('title', cmd.title);
 				}
@@ -12855,7 +12867,8 @@ $.fn.elfindercontextmenu = function(fm) {
 					}, 100);
 				})
 				.draggable(dragOpt),
-			subpos  = fm.direction == 'ltr' ? 'left' : 'right',
+			ltr = fm.direction === 'ltr',
+			subpos = ltr? 'left' : 'right',
 			types = Object.assign({}, fm.options.contextmenu),
 			tpl     = '<div class="'+cmItem+'{className}"><span class="elfinder-button-icon {icon} elfinder-contextmenu-icon"{style}/><span>{label}</span></div>',
 			item = function(label, icon, callback, opts) {
@@ -12916,8 +12929,16 @@ $.fn.elfindercontextmenu = function(fm) {
 								}
 								var tgt = $(e.target);
 								if (menu.first().length && !tgt.is('input:checkbox') && !tgt.hasClass('elfinder-cwd-select')) {
+									e.stopPropagation();
+									//e.preventDefault();
 									open(e.originalEvent.touches[0].pageX, e.originalEvent.touches[0].pageY);
-									return false;
+									cwd.data('longtap', true)
+									tgt.one('touchend', function() {
+										setTimeout(function() {
+											cwd.removeData('longtap');
+										}, 80);
+									});
+									return;
 								}
 								cwd.find('.elfinder-cwd-file').off(evTouchStart);
 							})
@@ -13167,18 +13188,44 @@ $.fn.elfindercontextmenu = function(fm) {
 										baseOffset = base.offset(),
 										wwidth     = baseOffset.left + base.width(),
 										wheight    = baseOffset.top + base.height(),
-										x, y, over;
+										cltr       = ltr, 
+										x          = nodewidth,
+										y, over;
 	
-									over = (nodeleft + nodewidth + width) - wwidth;
-									x = (nodeleft > width && over > 0)? (fm.UA.Mobile? 10 - width : nodewidth - over) : nodewidth;
-									if (subpos === 'right' && nodeleft < width) {
-										x = fm.UA.Mobile? 30 - nodewidth : nodewidth - (width - nodeleft);
+									if (ltr) {
+										over = (nodeleft + nodewidth + width) - wwidth;
+										if (over > 10) {
+											if (nodeleft > width - 5) {
+												x = x - 5;
+												cltr = false;
+											} else {
+												if (!fm.UA.Mobile) {
+													x = nodewidth - over;
+												}
+											}
+										}
+									} else {
+										over = width - nodeleft;
+										if (over > 0) {
+											if ((nodeleft + nodewidth + width - 15) < wwidth) {
+												x = x - 5;
+												cltr = true;
+											} else {
+												if (!fm.UA.Mobile) {
+													x = nodewidth - over;
+												}
+											}
+										}
 									}
 									over = (nodetop + 5 + height) - wheight;
 									y = (over > 0 && nodetop < wheight)? 5 - over : (over > 0? 30 - height : 5);
 	
 									menu.find('.elfinder-contextmenu-sub:visible').hide();
-									submenu.css({ top : y }).css(subpos, x).show();
+									submenu.css({
+										top : y,
+										left : cltr? x : 'auto',
+										right: cltr? 'auto' : x
+									}).show();
 									base.attr('style', bstyle);
 								}
 							};
@@ -13664,7 +13711,9 @@ $.fn.elfindercwd = function(fm, options) {
 					return f.icon? fm.getIconStyle(f) : '';
 				},
 				mime : function(f) {
-					return fm.mime2class(f.mime);
+					var cName = fm.mime2class(f.mime);
+					f.icon && (cName += ' elfinder-cwd-bgurl');
+					return cName;
 				},
 				size : function(f) {
 					return (f.mime === 'directory' && !f.size)? '-' : fm.formatSize(f.size);
@@ -14077,15 +14126,20 @@ $.fn.elfindercwd = function(fm, options) {
 			 * @return void
 			 */
 			wrapperRepaint = function(init, recnt) {
+				var firstNode = (list? cwd.find('tbody:first') : cwd).children('[id]:first');
+				if (!firstNode.length) {
+					return;
+				}
 				var selectable = cwd.data('selectable'),
 					rec = (function() {
 						var wos = wrapper.offset(),
 							w = $(window),
-							l = wos.left - w.scrollLeft() + (fm.direction === 'ltr'? 30 : wrapper.width() - 30),
+							x = firstNode.width() / 2,
+							l = wos.left - w.scrollLeft() + (fm.direction === 'ltr'? x : wrapper.width() - x),
 							t = wos.top - w.scrollTop() + 10 + (list? bufferExt.itemH || (fm.UA.Touch? 36 : 24) : 0);
 						return {left: Math.max(0, Math.round(l)), top: Math.max(0, Math.round(t))};
 					})(),
-					tgt = $(document.elementFromPoint(rec.left , rec.top)),
+					tgt = init? firstNode : $(document.elementFromPoint(rec.left , rec.top)),
 					ids = {},
 					tmbs = {},
 					multi = 5,
@@ -14127,21 +14181,35 @@ $.fn.elfindercwd = function(fm, options) {
 							attachThumbnails(tmbs);
 						}
 					},
+					setTarget = function() {
+						if (!tgt.hasClass(clFile)) {
+							tgt = tgt.closest(fileSelector);
+						}
+					},
 					arr, widget;
 				
 				inViewHashes = {};
 				selectable && cwd.selectable('option', 'disabled');
 				
 				if (tgt.length) {
-					if (tgt.hasClass('ui-widget')) {
-						// serach button etc.
-						widget = tgt;
-						widget.hide();
-						tgt = $(document.elementFromPoint(rec.left , rec.top));
-						widget.show();
+					if (!tgt.hasClass(clFile) && !tgt.closest(fileSelector).length) {
+						// dialog, serach button etc.
+						widget = fm.getUI().find('.ui-dialog:visible,.ui-widget:visible');
+						if (widget.length) {
+							widget.hide();
+							tgt = $(document.elementFromPoint(rec.left , rec.top));
+							widget.show();
+						} else {
+							widget = null;
+						}
 					}
-					if (! tgt.hasClass(clFile)) {
-						tgt = tgt.closest(fileSelector);
+					setTarget();
+					if (!tgt.length) {
+						// try search 5px down
+						widget && widget.hide();
+						tgt = $(document.elementFromPoint(rec.left , rec.top + 5));
+						widget && widget.show();
+						setTarget();
 					}
 				}
 
@@ -14263,7 +14331,7 @@ $.fn.elfindercwd = function(fm, options) {
 									dirs = true;
 								}
 								if (f.tmb || (stmb && f.mime.indexOf('image/') === 0)) {
-									atmb[f.hash] = f.tmb;
+									atmb[f.hash] = f.tmb || 'self';
 								}
 								clipCuts[f.hash] && locks.push(f.hash);
 								return itemhtml(f);
@@ -14345,6 +14413,8 @@ $.fn.elfindercwd = function(fm, options) {
 							go(chk);
 							bufferExt.rendering = false;
 						});
+					} else {
+						!fm.enabled() && resize();
 					}
 				} else {
 					resize();
@@ -14877,8 +14947,8 @@ $.fn.elfindercwd = function(fm, options) {
 				}
 			},
 
-			bottomMarkerShow = function(place, cnt) {
-				var place = place || (list ? cwd.find('tbody') : cwd),
+			bottomMarkerShow = function(cur, cnt) {
+				var place = cur || (list ? cwd.find('tbody') : cwd),
 					boxSize = itemBoxSize[fm.viewType],
 					col = 1,
 					row;
@@ -14945,9 +15015,9 @@ $.fn.elfindercwd = function(fm, options) {
 							wrapper.data('touching', null);
 						}
 					} else {
-						requestAnimationFrame(function() {
+						setTimeout(function() {
 							cwd.removeData('longtap');
-						});
+						}, 80);
 					}
 					clearTimeout(cwd.data('tmlongtap'));
 				},
@@ -14967,7 +15037,6 @@ $.fn.elfindercwd = function(fm, options) {
 			content = function() {
 				fm.lazy(function() {
 					var phash, emptyMethod, thtr;
-<<<<<<< HEAD
 
 					wz.append(selectAllCheckbox).removeClass('elfinder-cwd-wrapper-empty elfinder-search-result elfinder-incsearch-result elfinder-letsearch-result');
 					if (fm.searchStatus.state > 1 || fm.searchStatus.ininc) {
@@ -15009,49 +15078,6 @@ $.fn.elfindercwd = function(fm, options) {
 						wrapper.removeClass('overflow-scrolling-touch').addClass('overflow-scrolling-touch');
 					}
 
-=======
-
-					wz.append(selectAllCheckbox).removeClass('elfinder-cwd-wrapper-empty elfinder-search-result elfinder-incsearch-result elfinder-letsearch-result');
-					if (fm.searchStatus.state > 1 || fm.searchStatus.ininc) {
-						wz.addClass('elfinder-search-result' + (fm.searchStatus.ininc? ' elfinder-'+(query.substr(0,1) === '/' ? 'let':'inc')+'search-result' : ''));
-					}
-					
-					// abort attachThumbJob
-					bufferExt.attachThumbJob && bufferExt.attachThumbJob._abort();
-					
-					// destroy selectable for GC
-					cwd.data('selectable') && cwd.selectable('disable').selectable('destroy').removeData('selectable');
-					
-					// notify cwd init
-					fm.trigger('cwdinit');
-					
-					selectedNext = $();
-					try {
-						// to avoid problem with draggable
-						cwd.empty();
-					} catch (e) {
-						cwd.html('');
-					}
-					
-					if (tableHeader) {
-						wrapper.off('scroll.fixheader resize.fixheader');
-						tableHeader.remove();
-						tableHeader = null;
-					}
-
-					cwd.removeClass('elfinder-cwd-view-icons elfinder-cwd-view-list')
-						.addClass('elfinder-cwd-view-'+(list ? 'list' :'icons'))
-						.attr('style', '')
-						.css('height', 'auto');
-					bottomMarker.hide();
-
-					wrapper[list ? 'addClass' : 'removeClass']('elfinder-cwd-wrapper-list')
-						._padding = parseInt(wrapper.css('padding-top')) + parseInt(wrapper.css('padding-bottom'));
-					if (fm.UA.iOS) {
-						wrapper.removeClass('overflow-scrolling-touch').addClass('overflow-scrolling-touch');
-					}
-
->>>>>>> master
 					if (list) {
 						cwd.html('<table><thead/><tbody/></table>');
 						thtr = $('<tr class="ui-state-default"><td class="elfinder-cwd-view-th-name">'+fm.getColumnName('name')+'</td>'+customColsNameBuild()+'</tr>');
@@ -15316,21 +15342,12 @@ $.fn.elfindercwd = function(fm, options) {
 					var tgt = $(e.target),
 						p;
 					if (selectCheckbox && (tgt.is('input:checkbox') || tgt.hasClass('elfinder-cwd-select'))) {
-<<<<<<< HEAD
 						return;
 					}
 					if (e.target.nodeName == 'INPUT' || e.target.nodeName == 'TEXTAREA') {
 						e.stopPropagation();
 						return;
 					}
-=======
-						return;
-					}
-					if (e.target.nodeName == 'INPUT' || e.target.nodeName == 'TEXTAREA') {
-						e.stopPropagation();
-						return;
-					}
->>>>>>> master
 					p = this.id ? $(this) : $(this).parents('[id]:first');
 					clearTimeout(p.data('tmlongtap'));
 					if (e.type === 'touchmove') {
@@ -15342,26 +15359,26 @@ $.fn.elfindercwd = function(fm, options) {
 							wrapper.data('touching', null);
 							fm.dblclick({file : fm.cwdId2Hash(this.id)});
 						}
-						requestAnimationFrame(function() {
+						setTimeout(function() {
 							cwd.removeData('longtap');
-						});
+						}, 80);
 					}
 				})
 				// attach draggable
 				.on('mouseenter.'+fm.namespace, fileSelector, function(e) {
 					if (scrolling) { return; }
-					var $this = $(this), helper = null,
-						target = list ? $this : $this.children('div.elfinder-cwd-file-wrapper,div.elfinder-cwd-filename');
+					var $this = $(this), helper = null;
 
-					if (!mobile && !$this.data('dragRegisted') && !$this.hasClass(clTmp) && !target.hasClass(clDraggable) && !target.hasClass(clDisabled)) {
+					if (!mobile && !$this.data('dragRegisted') && !$this.hasClass(clTmp) && !$this.hasClass(clDraggable) && !$this.hasClass(clDisabled)) {
 						$this.data('dragRegisted', true);
 						if (!fm.isCommandEnabled('copy', fm.searchStatus.state > 1? fm.cwdId2Hash($this.attr('id')) : void 0)) {
 							return;
 						}
-						target.on('mousedown', function(e) {
+						$this.on('mousedown', function(e) {
 							// shiftKey or altKey + drag start for HTML5 native drag function
 							// Note: can no use shiftKey with the Google Chrome 
-							var metaKey = e.shiftKey || e.altKey;
+							var metaKey = e.shiftKey || e.altKey,
+								disable = false;
 							if (metaKey && !fm.UA.IE && cwd.data('selectable')) {
 								// destroy jQuery-ui selectable while trigger native drag
 								cwd.selectable('disable').selectable('destroy').removeData('selectable');
@@ -15369,12 +15386,24 @@ $.fn.elfindercwd = function(fm, options) {
 									cwd.selectable(selectableOption).selectable('option', {disabled: false}).selectable('refresh').data('selectable', true);
 								});
 							}
-							target.draggable('option', 'disabled', metaKey).removeClass('ui-state-disabled');
+							$this.removeClass('ui-state-disabled');
 							if (metaKey) {
-								target.attr('draggable', 'true');
+								$this.draggable('option', 'disabled', true).attr('draggable', 'true');
 							} else {
-								target.removeAttr('draggable')
-								      .draggable('option', 'cursorAt', {left: 50 - parseInt($(e.currentTarget).css('margin-left')), top: 47});
+								if (!$this.hasClass(clSelected)) {
+									if (list) {
+										disable = $(e.target).closest('span,tr').is('tr');
+									} else {
+										disable = $(e.target).hasClass('elfinder-cwd-file');
+									}
+								}
+								if (disable) {
+									$this.draggable('option', 'disabled', true);
+								} else {
+									$this.draggable('option', 'disabled', false)
+										  .removeAttr('draggable')
+									      .draggable('option', 'cursorAt', {left: 50 - parseInt($(e.currentTarget).css('margin-left')), top: 47});
+								}
 							}
 						})
 						.on('dragstart', function(e) {
@@ -15602,6 +15631,57 @@ $.fn.elfindercwd = function(fm, options) {
 						fixTableHeader({fitWidth: true});
 						fm.storage('cwdColWidth', colWidth = null);
 					}
+				})
+				.on('iconpref', function(e, data) {
+					cwd.removeClass(function(i, cName) {
+						return (cName.match(/\belfinder-cwd-size\S+/g) || []).join(' ');
+					});
+					iconSize = data? (parseInt(data.size) || 0) : 0;
+					if (!list) {
+						if (iconSize > 0) {
+							cwd.addClass('elfinder-cwd-size' + iconSize);
+						}
+						if (bufferExt.renderd) {
+							requestAnimationFrame(function() {
+								itemBoxSize.icons = {};
+								bufferExt.hpi = null;
+								bottomMarkerShow(cwd, bufferExt.renderd);
+								wrapperRepaint();
+							});
+						}
+					}
+				})
+				// Change icon size with mouse wheel event
+				.on('onwheel' in document ? 'wheel' : 'mousewheel', function(e) {
+					var tm, size, delta;
+					if (!list && ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey))) {
+						e.stopPropagation();
+						e.preventDefault();
+						tm = cwd.data('wheelTm');
+						if (typeof tm !== 'undefined') {
+							clearTimeout(tm);
+							cwd.data('wheelTm', setTimeout(function() {
+								cwd.removeData('wheelTm');
+							}, 200));
+						} else {
+							cwd.data('wheelTm', false);
+							size = iconSize || 0;
+							delta = e.originalEvent.deltaY ? e.originalEvent.deltaY : -(e.originalEvent.wheelDelta);
+							if (delta > 0) {
+								if (iconSize > 0) {
+									size = iconSize - 1;
+								}
+							} else {
+								if (iconSize < options.iconsView.sizeMax) {
+									size = iconSize + 1;
+								}
+							}
+							if (size !== iconSize) {
+								fm.storage('iconsize', size);
+								cwd.trigger('iconpref', {size: size});
+							}
+						}
+					}
 				}),
 			wrapper = $('<div class="elfinder-cwd-wrapper"/>')
 				// make cwd itself droppable for folders from nav panel
@@ -15618,21 +15698,12 @@ $.fn.elfindercwd = function(fm, options) {
 					scrolling = true;
 					bufferExt.scrtm && cancelAnimationFrame(bufferExt.scrtm);
 					if (bufferExt.scrtm && Math.abs((bufferExt.scrolltop || 0) - (bufferExt.scrolltop = (this.scrollTop || $(this).scrollTop()))) < 5) {
-<<<<<<< HEAD
 						bufferExt.scrtm = 0;
 						wrapper.trigger(scrollEvent);
 					}
 					bufferExt.scrtm = requestAnimationFrame(function() {
 						bufferExt.scrtm = 0;
 						wrapper.trigger(scrollEvent);
-=======
-						bufferExt.scrtm = 0;
-						wrapper.trigger(scrollEvent);
-					}
-					bufferExt.scrtm = requestAnimationFrame(function() {
-						bufferExt.scrtm = 0;
-						wrapper.trigger(scrollEvent);
->>>>>>> master
 					});
 				})
 				.on(scrollEvent, function() {
@@ -15710,6 +15781,9 @@ $.fn.elfindercwd = function(fm, options) {
 
 			// has UI tree
 			hasUiTree,
+
+			// Icon size of icons view
+			iconSize,
 			
 			winScrTm;
 
@@ -15781,7 +15855,7 @@ $.fn.elfindercwd = function(fm, options) {
 		fm
 			.one('init', function(){
 				var style = document.createElement('style'),
-				sheet, node, base, resizeTm, i = 0;
+				sheet, node, base, resizeTm, iconSize, i = 0;
 				if (document.head) {
 					document.head.appendChild(style);
 					sheet = style.sheet;
@@ -15791,6 +15865,9 @@ $.fn.elfindercwd = function(fm, options) {
 					sheet.insertRule('.elfinder-cwd-wrapper-empty.elfinder-search-result .elfinder-cwd:not(.elfinder-table-header-sticky):after{ content:"'+fm.i18n('emptySearch')+'" }', i++);
 					sheet.insertRule('.elfinder-cwd-wrapper-empty.elfinder-search-result.elfinder-incsearch-result .elfinder-cwd:not(.elfinder-table-header-sticky):after{ content:"'+fm.i18n('emptyIncSearch')+'" }', i++);
 					sheet.insertRule('.elfinder-cwd-wrapper-empty.elfinder-search-result.elfinder-letsearch-result .elfinder-cwd:not(.elfinder-table-header-sticky):after{ content:"'+fm.i18n('emptyLetSearch')+'" }', i++);
+				}
+				if (iconSize = fm.storage('iconsize') || 0) {
+					cwd.trigger('iconpref', {size: iconSize});
 				}
 				if (! mobile) {
 					fm.one('open', function() {
@@ -15949,6 +16026,11 @@ $.fn.elfindercwd = function(fm, options) {
 				if (l != list) {
 					list = l;
 					fm.viewType = list? 'list' : 'icons';
+					if (iconSize) {
+						fm.one('cwdinit', function() {
+							cwd.trigger('iconpref', {size: iconSize});
+						});
+					}
 					content();
 
 					if (allsel) {
@@ -16818,36 +16900,42 @@ $.fn.elfinderdialog = function(opts, fm) {
 					}
 				})
 				.on('keydown', '.'+cltabstop, function(e) {
-					var $this = $(this);
+					var $this = $(this),
+						esc, move, moveTo;
 					if ($this.is(':focus')) {
-						e.stopPropagation();
-						if (e.keyCode == $.ui.keyCode.ENTER) {
+						esc = e.keyCode === $.ui.keyCode.ESCAPE;
+						if (e.keyCode === $.ui.keyCode.ENTER) {
 							e.preventDefault();
 							$this.trigger('click');
-						}  else if ((e.keyCode == $.ui.keyCode.TAB && e.shiftKey) || e.keyCode == $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP) {
-							if ($this.is('input:text') && (!(e.ctrlKey || e.metaKey) && e.keyCode == $.ui.keyCode.LEFT)) {
-								return;
+						}  else if (((e.keyCode === $.ui.keyCode.TAB) && e.shiftKey) || e.keyCode === $.ui.keyCode.LEFT || e.keyCode == $.ui.keyCode.UP) {
+							move = 'prev';
+						}  else if (e.keyCode === $.ui.keyCode.TAB || e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN) {
+							move = 'next';
+						}
+						if (move
+								&&
+							(
+								($this.is('textarea') && !(e.ctrlKey || e.metaKey))
+									||
+								($this.is('select,span.ui-slider-handle') && e.keyCode !== $.ui.keyCode.TAB)
+									||
+								($this.is('input:not(:checkbox,:radio)') && (!(e.ctrlKey || e.metaKey) && e.keyCode === $.ui.keyCode[move === 'prev'? 'LEFT':'RIGHT']))
+							)
+						) {
+							e.stopPropagation();
+							return;
+						}
+						if (!esc) {
+							e.stopPropagation();
+						} else if ($this.is('input:not(:checkbox,:radio),textarea')) {
+							if ($this.val() !== '') {
+								$this.val('');
+								e.stopPropagation();
 							}
-							if ($this.is('select') && e.keyCode != $.ui.keyCode.TAB) {
-								return;
-							}
-							if ($this.is('textarea') && !(e.ctrlKey || e.metaKey)) {
-								return;
-							}
+						}
+						if (move) {
 							e.preventDefault();
-							tabstopPrev(this).trigger('focus');
-						}  else if (e.keyCode == $.ui.keyCode.TAB || e.keyCode == $.ui.keyCode.RIGHT || e.keyCode == $.ui.keyCode.DOWN) {
-							if ($this.is('input:text') && (!(e.ctrlKey || e.metaKey) && e.keyCode == $.ui.keyCode.RIGHT)) {
-								return;
-							}
-							if ($this.is('select') && e.keyCode != $.ui.keyCode.TAB) {
-								return;
-							}
-							if ($this.is('textarea') && !(e.ctrlKey || e.metaKey)) {
-								return;
-							}
-							e.preventDefault();
-							tabstopNext(this).trigger('focus');
+							(move === 'prev'? tabstopPrev : tabstopNext)(this).trigger('focus');
 						}
 					}
 				})
@@ -17006,7 +17094,7 @@ $.fn.elfinderfullscreenbutton = function(cmd) {
 			tm && cancelAnimationFrame(tm);
 			tm = requestAnimationFrame(function() {
 				var fullscreen = cmd.value;
-				icon.toggleClass('elfinder-button-icon-unfullscreen', fullscreen);
+				icon.addClass('elfinder-button-icon-fullscreen').toggleClass('elfinder-button-icon-unfullscreen', fullscreen);
 				cmd.className = fullscreen? 'unfullscreen' : '';
 			});
 		});
@@ -17655,68 +17743,6 @@ $.fn.elfinderplaces = function(fm, opts) {
 				}
 				
 				fm.storage(key, data);
-			},
-			/**
-			 * Init dir at places
-			 *
-			 * @return void
-			 **/
-			init = function() {
-				var dat, hashes;
-				key = 'places'+(opts.suffix? opts.suffix : ''),
-				dirs = {};
-				dat = fm.storage(key);
-				if (typeof dat === 'string') {
-					// old data type elFinder <= 2.1.12
-					dat = $.grep(dat.split(','), function(hash) { return hash? true : false;});
-					$.each(dat, function(i, d) {
-						var dir = d.split('#');
-						dirs[dir[0]] = dir[1]? dir[1] : dir[0];
-					});
-				} else if ($.isPlainObject(dat)) {
-					dirs = dat;
-				}
-				// allow modify `dirs`
-				/**
-				 * example for preset places
-				 * 
-				 * elfinderInstance.bind('placesload', function(e, fm) {
-				 * 	//if (fm.storage(e.data.storageKey) === null) { // for first time only
-				 * 	if (!fm.storage(e.data.storageKey)) {           // for empty places
-				 * 		e.data.dirs[targetHash] = fallbackName;     // preset folder
-				 * 	}
-				 * }
-				 **/
-				fm.trigger('placesload', {dirs: dirs, storageKey: key}, true);
-				
-				hashes = Object.keys(dirs);
-				if (hashes.length) {
-					root.prepend(spinner);
-					
-					fm.request({
-						data : {cmd : 'info', targets : hashes},
-						preventDefault : true
-					})
-					.done(function(data) {
-						var exists = {};
-						
-						data.files && data.files.length && fm.cache(data.files);
-						
-						$.each(data.files, function(i, f) {
-							var hash = f.hash;
-							exists[hash] = f;
-						});
-						$.each(dirs, function(h, f) {
-							add(exists[h] || Object.assign({notfound: true}, f));
-						});
-						if (fm.storage('placesState') > 0) {
-							root.trigger('click');
-						}
-					})
-					.always(function() {
-						spinner.remove();
-					});
-				}
 			},
 			/**
 			 * Init dir at places
@@ -19003,13 +19029,15 @@ $.fn.elfindertoolbar = function(fm, opts) {
 				}
 				
 				(! self.data('swipeClose') && self.children().length)? self.show() : self.hide();
+				prevHeight = self[0].clientHeight;
 				fm.trigger('toolbarload').trigger('uiresize');
 			},
 			buttons = {},
 			panels   = filter(opts || []),
 			dispre   = null,
 			uiCmdMapPrev = '',
-			l, i, cmd, panel, button, swipeHandle, autoHide, textLabel;
+			prevHeight = 0,
+			l, i, cmd, panel, button, swipeHandle, autoHide, textLabel, resizeTm;
 		
 		// normalize options
 		options.showPreferenceButton = options.showPreferenceButton.toLowerCase();
@@ -19104,27 +19132,9 @@ $.fn.elfindertoolbar = function(fm, opts) {
 				sel = fm.selected();
 				if (sel.length) {
 					disabled = fm.getDisabledCmds(sel, true);
-<<<<<<< HEAD
-=======
 				}
 			}
 			
-			$.each(userHides, function(n) {
-				if (!disabled[n]) {
-					disabled[n] = true;
->>>>>>> master
-				}
-			});
-			
-			if (Object.keys(fm.commandMap).length) {
-				$.each(fm.commandMap, function(from, to){
-					if (to === 'hidden') {
-						disabled[from] = true;
-					}
-				});
-			}
-			
-<<<<<<< HEAD
 			$.each(userHides, function(n) {
 				if (!disabled[n]) {
 					disabled[n] = true;
@@ -19139,8 +19149,6 @@ $.fn.elfindertoolbar = function(fm, opts) {
 				});
 			}
 			
-=======
->>>>>>> master
 			disabledKeys = Object.keys(disabled);
 			if (!dispre || dispre.toString() !== disabledKeys.sort().toString()) {
 				render(disabledKeys.length? disabled : null);
@@ -19185,6 +19193,15 @@ $.fn.elfindertoolbar = function(fm, opts) {
 					});
 				}
 			}
+		}).bind('resize', function(e) {
+			resizeTm && cancelAnimationFrame(resizeTm);
+			resizeTm = requestAnimationFrame(function() {
+				var h = self[0].clientHeight;
+				if (prevHeight !== h) {
+					prevHeight = h;
+					fm.trigger('uiresize');
+				}
+			});
 		});
 		
 		if (fm.UA.Touch) {
@@ -20117,7 +20134,6 @@ $.fn.elfindertree = function(fm, opts) {
 									};
 								if (until) {
 									data.until = until;
-<<<<<<< HEAD
 								}
 								return fm.request({
 									data : data,
@@ -20168,58 +20184,6 @@ $.fn.elfindertree = function(fm, opts) {
 								} else {
 									cmd = 'parents';
 								}
-=======
-								}
-								return fm.request({
-									data : data,
-									preventFail : true
-								});
-							},
-							baseHash, baseId;
-						
-						reqs = $.map(ends, function(h) {
-							var d = fm.file(h),
-								isRoot = d? fm.isRoot(d) : false,
-								node = $('#'+fm.navHash2Id(h)),
-								getPhash = function(h, dep) {
-									var d, ph,
-										depth = dep || 1;
-									ph = (d = fm.file(h))? d.phash : false;
-									if (ph && depth > 1) {
-										return getPhash(ph, --depth);
-									}
-									return ph;
-								},
-								until,
-								closest = (function() {
-									var phash = getPhash(h);
-									until = phash;
-									while (phash) {
-										if ($('#'+fm.navHash2Id(phash)).hasClass(loaded)) {
-											break;
-										}
-										until = phash;
-										phash = getPhash(phash);
-									}
-									if (!phash) {
-										until = void(0);
-										phash = fm.root(h);
-									}
-									return phash;
-								})(),
-								cmd;
-							
-							if (!node.hasClass(loaded) && (isRoot || !d || !$('#'+fm.navHash2Id(d.phash)).hasClass(loaded))) {
-								if (isRoot || closest === getPhash(h) || closest === getPhash(h, 2)) {
-									until = void(0);
-									cmd = 'tree';
-									if (!isRoot) {
-										h = getPhash(h);
-									}
-								} else {
-									cmd = 'parents';
-								}
->>>>>>> master
 								if (!baseHash) {
 									baseHash = (cmd === 'tree')? h : closest;
 								}
@@ -20902,6 +20866,7 @@ $.fn.elfinderviewbutton = function(cmd) {
 		return this.each(function() {
 		var button = $(this).elfinderbutton(cmd),
 			icon   = button.children('.elfinder-button-icon'),
+			text   = button.children('.elfinder-button-text'),
 			tm;
 
 		cmd.change(function() {
@@ -20913,6 +20878,7 @@ $.fn.elfinderviewbutton = function(cmd) {
 				cmd.className = icons? 'view-list' : '';
 				cmd.title = cmd.fm.i18n(icons ? 'viewlist' : 'viewicons');
 				button.attr('title', cmd.title);
+				text.html(cmd.title);
 			});
 		});
 	});
@@ -21555,6 +21521,8 @@ elFinder.prototype.commands.download = function() {
 		czipdl = null,
 		zipOn  = false,
 		mixed  = false,
+		dlntf  = false,
+		cpath  = window.location.pathname || '/',
 		filter = function(hashes, inExec) {
 			var volumeid, mixedCmd;
 			
@@ -21716,6 +21684,7 @@ elFinder.prototype.commands.download = function() {
 		if (fm.api >= 2.1012) {
 			czipdl = fm.getCommand('zipdl');
 		}
+		dlntf = fm.api > 2.1038 && !fm.isCORS;
 	});
 	
 	this.exec = function(select) {
@@ -21854,7 +21823,28 @@ elFinder.prototype.commands.download = function() {
 				}
 				a.dispatchEvent(clickEv);
 			},
-			link, html5dl, fileCnt, clickEv;
+			checkCookie = function(id) {
+				var name = 'elfdl' + id,
+					parts;
+				parts = document.cookie.split(name + "=");
+				if (parts.length === 2) {
+					ntftm && clearTimeout(ntftm);
+					document.cookie = name + '=; path=' + cpath + '; max-age=0';
+					closeNotify();
+				} else {
+					setTimeout(function() { checkCookie(id); }, 200);
+				}
+			},
+			closeNotify = function() {
+				if (fm.ui.notify.children('.elfinder-notify-download').length) {
+					fm.notify({
+						type : 'download',
+						cnt : -1
+					});
+				}
+			},
+			reqids = [],
+			link, html5dl, fileCnt, clickEv, cid, ntftm, reqid;
 			
 		if (!files.length) {
 			return dfrd.reject();
@@ -21890,8 +21880,35 @@ elFinder.prototype.commands.download = function() {
 			);
 			return dfrd;
 		} else {
+			reqids = [];
 			for (i = 0; i < files.length; i++) {
 				url = fm.openUrl(files[i].hash, true);
+				if (dlntf && url.substr(0, fm.options.url.length) === fm.options.url) {
+					reqid = fm.getRequestId();
+					reqids.push(reqid);
+					url += '&cpath=' + cpath + '&reqid=' + reqid;
+					ntftm = setTimeout(function() {
+						fm.notify({
+							type : 'download',
+							cnt : 1,
+							cancel : (fm.UA.IE || fm.UA.Edge)? void(0) : function() {
+								if (reqids.length) {
+									$.each(reqids, function() {
+										fm.request({
+											data: {
+												cmd: 'abort',
+												id: this
+											},
+											preventDefault: true
+										});
+									});
+								}
+								reqids = [];
+							}
+						});
+					}, fm.notifyDelay);
+					checkCookie(reqid);
+				}
 				if (html5dl && (!fm.UA.Safari || fm.isSameOrigin(url))) {
 					click(link.attr('href', url)
 						.attr('download', fm.escape(files[i].name))
@@ -21902,6 +21919,8 @@ elFinder.prototype.commands.download = function() {
 						setTimeout(function(){
 							if (! window.open(url)) {
 								fm.error('errPopup');
+								ntftm && cleaerTimeout(ntftm);
+								closeNotify();
 							}
 						}, 100);
 					} else {
@@ -22503,209 +22522,96 @@ elFinder.prototype.commands.edit = function() {
 						preventDefault : true
 					});
 				}
-			}
 
-			req.done(function(data) {
-				var selEncoding, reg, m, res;
-				if (data.doconv) {
-					fm.confirm({
-						title  : self.title,
-						text   : data.doconv === 'unknown'? 'confirmNonUTF8' : 'confirmConvUTF8',
-						accept : {
-							label    : 'btnConv',
-							callback : function() {  
-								dfrd = edit(file, selEncoding.val(), editor);
-							}
-						},
-						cancel : {
-							label    : 'btnCancel',
-							callback : function() { dfrd.reject(); }
-						},
-						optionsCallback : function(options) {
-							options.create = function() {
-								var base = $('<div class="elfinder-dialog-confirm-encoding"/>'),
-									head = {value: data.doconv},
-									detected;
-								
-								if (data.doconv === 'unknown') {
-									head.caption = '-';
+				req.done(function(data) {
+					var selEncoding, reg, m, res;
+					if (data.doconv) {
+						fm.confirm({
+							title  : self.title,
+							text   : data.doconv === 'unknown'? 'confirmNonUTF8' : 'confirmConvUTF8',
+							accept : {
+								label    : 'btnConv',
+								callback : function() {  
+									dfrd = edit(file, selEncoding.val(), editor);
 								}
-								selEncoding = getEncSelect([head]);
-								$(this).next().find('.ui-dialog-buttonset')
-									.prepend(base.append($('<label>'+fm.i18n('encoding')+' </label>').append(selEncoding)));
-							};
-						}
-					});
-				} else {
-					if ((!editor || !editor.info || !editor.info.preventGet) && fm.mimeIsText(file.mime)) {
-						reg = new RegExp('^(data:'+file.mime.replace(/([.+])/g, '\\$1')+';base64,)', 'i');
-						if (window.atob && (m = data.content.match(reg))) {
-							data.content = atob(data.content.substr(m[1].length));
-						}
-					}
-					dialog(id, file, data.content, data.encoding, editor)
-						.done(function(data) {
-							dfrd.resolve(data);
-						})
-						.progress(function(encoding, newHash) {
-							var ta = this;
-							if (newHash) {
-								hash = newHash;
-							}
-							fm.request({
-								options : {type : 'post'},
-								data : {
-									cmd     : 'put',
-									target  : hash,
-									encoding : encoding || data.encoding,
-									content : ta.getContent.call(ta, ta[0])
-								},
-								notify : {type : 'save', cnt : 1},
-								syncOnFail : true,
-								preventFail : true,
-								navigate : {
-									target : 'changed',
-									toast : {
-										inbuffer : {msg: fm.i18n(['complete', fm.i18n('btnSave')])}
+							},
+							cancel : {
+								label    : 'btnCancel',
+								callback : function() { dfrd.reject(); }
+							},
+							optionsCallback : function(options) {
+								options.create = function() {
+									var base = $('<div class="elfinder-dialog-confirm-encoding"/>'),
+										head = {value: data.doconv},
+										detected;
+									
+									if (data.doconv === 'unknown') {
+										head.caption = '-';
 									}
+									selEncoding = getEncSelect([head]);
+									$(this).next().find('.ui-dialog-buttonset')
+										.prepend(base.append($('<label>'+fm.i18n('encoding')+' </label>').append(selEncoding)));
+								};
+							}
+						});
+					} else {
+						if ((!editor || !editor.info || !editor.info.preventGet) && fm.mimeIsText(file.mime)) {
+							reg = new RegExp('^(data:'+file.mime.replace(/([.+])/g, '\\$1')+';base64,)', 'i');
+							if (window.atob && (m = data.content.match(reg))) {
+								data.content = atob(data.content.substr(m[1].length));
+							}
+						}
+						dialog(id, file, data.content, data.encoding, editor)
+							.done(function(data) {
+								dfrd.resolve(data);
+							})
+							.progress(function(encoding, newHash) {
+								var ta = this;
+								if (newHash) {
+									hash = newHash;
 								}
+								fm.request({
+									options : {type : 'post'},
+									data : {
+										cmd     : 'put',
+										target  : hash,
+										encoding : encoding || data.encoding,
+										content : ta.getContent.call(ta, ta[0])
+									},
+									notify : {type : 'save', cnt : 1},
+									syncOnFail : true,
+									preventFail : true,
+									navigate : {
+										target : 'changed',
+										toast : {
+											inbuffer : {msg: fm.i18n(['complete', fm.i18n('btnSave')])}
+										}
+									}
+								})
+								.fail(function(error) {
+									dfrd.reject(error);
+									ta.trigger('_savefail');
+								})
+								.done(function(data) {
+									requestAnimationFrame(function(){
+										ta.trigger('focus');
+										ta.editor && ta.editor.focus(ta[0], ta.editor.instance);
+									});
+									ta.trigger('_savedone');
+								});
 							})
 							.fail(function(error) {
 								dfrd.reject(error);
-								ta.trigger('_savefail');
-							})
-							.done(function(data) {
-								requestAnimationFrame(function(){
-									ta.trigger('focus');
-									ta.editor && ta.editor.focus(ta[0], ta.editor.instance);
-								});
-								ta.trigger('_savedone');
 							});
-						})
-						.fail(function(error) {
-							dfrd.reject(error);
-						});
-				}
-			})
-			.fail(function(error) {
-				var err = Array.isArray(error)? error[0] : error;
-				(err !== 'errConvUTF8') && fm.sync();
-				dfrd.reject(error);
-<<<<<<< HEAD
-=======
-			});
-
-			return dfrd.promise();
-		},
-		
-		/**
-		 * Current editors of selected files
-		 * 
-		 * @type Object
-		 */
-		editors = {},
-		
-		/**
-		 * Set current editors
-		 * 
-		 * @param  Object  file object
-		 * @param  Number  cnt  count of selected items
-		 * @return Void
-		 */
-		setEditors = function(file, cnt) {
-			var mimeMatch = function(fileMime, editorMimes){
-					if (!editorMimes) {
-						return fm.mimeIsText(fileMime);
-					} else {
-						if ($.inArray(fileMime, editorMimes) !== -1 ) {
-							return true;
-						}
-						var i, l;
-						l = editorMimes.length;
-						for (i = 0; i < l; i++) {
-							if (fileMime.indexOf(editorMimes[i]) === 0) {
-								return true;
-							}
-						}
-						return false;
 					}
-				},
-				extMatch = function(fileName, editorExts){
-					if (!editorExts || !editorExts.length) {
-						return true;
-					}
-					var ext = fileName.replace(/^.+\.([^.]+)|(.+)$/, '$1$2').toLowerCase(),
-					i, l;
-					l = editorExts.length;
-					for (i = 0; i < l; i++) {
-						if (ext === editorExts[i].toLowerCase()) {
-							return true;
-						}
-					}
-					return false;
-				};
-			
-			stored = fm.storage('storedEditors') || {};
-			editors = {};
-			$.each(self.options.editors || [], function(i, editor) {
-				var name;
-				if ((cnt === 1 || !editor.info || !editor.info.single)
-						&& mimeMatch(file.mime, editor.mimes || null)
-						&& extMatch(file.name, editor.exts || null)
-						&& typeof editor.load == 'function'
-						&& typeof editor.save == 'function') {
-					
-					name = editor.info && editor.info.name? editor.info.name : ('Editor ' + i);
-					editor.id = editor.info && editor.info.id? editor.info.id : ('editor' + i),
-					editor.name = name;
-					editor.i18n = fm.i18n(name);
-					editors[editor.id] = editor;
-				}
-			});
-		},
-		store = function(mime, editor) {
-			if (mime && editor) {
-				if (!$.isPlainObject(stored)) {
-					stored = {};
-				}
-				stored[mime] = editor.id;
-				fm.storage('storedEditors', stored);
-				fm.trigger('selectfiles', {files : fm.selected()});
+				})
+				.fail(function(error) {
+					var err = Array.isArray(error)? error[0] : error;
+					(err !== 'errConvUTF8') && fm.sync();
+					dfrd.reject(error);
+				});
 			}
-		},
-		useStoredEditor = function() {
-			var d = fm.storage('useStoredEditor');
-			return d? (d > 0) : self.options.useStoredEditor;
-		},
-		getSubMenuRaw = function(files, callback) {
-			var subMenuRaw = [];
-			$.each(editors, function(id, ed) {
-				subMenuRaw.push(
-					{
-						label    : fm.escape(ed.i18n),
-						icon     : ed.info && ed.info.icon? ed.info.icon : 'edit',
-						options  : { iconImg: ed.info && ed.info.iconImg? fm.baseUrl + ed.info.iconImg : void(0) },
-						callback : function() {
-							store(files[0].mime, ed);
-							callback && callback.call(ed);
-						}
-					}		
-				);
->>>>>>> master
-			});
-			return subMenuRaw;
-		},
-		getStoreId = function(name) {
-			// for compatibility to previous version
-			return name.toLowerCase().replace(/ +/g, '');
-		},
-		getStoredEditor = function(mime) {
-			var name = stored[mime];
-			return name && Object.keys(editors).length? editors[getStoreId(name)] : void(0);
-		},
-		infoRequest = function() {
 
-<<<<<<< HEAD
 			return dfrd.promise();
 		},
 		
@@ -22716,6 +22622,30 @@ elFinder.prototype.commands.edit = function() {
 		 */
 		editors = {},
 		
+		/**
+		 * Fallback editor (Simple text editor)
+		 * 
+		 * @type Object
+		 */
+		fallbackEditor = {
+			// Simple Text (basic textarea editor)
+			info : {
+				id : 'textarea',
+				name : 'TextArea',
+				useTextAreaEvent : true
+			},
+			load : function(textarea) {
+				// trigger event 'editEditorPrepare'
+				this.trigger('Prepare', {
+					node: textarea,
+					editorObj: void(0),
+					instance: void(0),
+					opts: {}
+				});
+			},
+			save : function(){}
+		},
+
 		/**
 		 * Set current editors
 		 * 
@@ -22754,11 +22684,15 @@ elFinder.prototype.commands.edit = function() {
 						}
 					}
 					return false;
-				};
+				},
+				optEditors = self.options.editors || [];
 			
 			stored = fm.storage('storedEditors') || {};
 			editors = {};
-			$.each(self.options.editors || [], function(i, editor) {
+			if (!optEditors.length) {
+				optEditors = [fallbackEditor];
+			}
+			$.each(optEditors, function(i, editor) {
 				var name;
 				if ((cnt === 1 || !editor.info || !editor.info.single)
 						&& mimeMatch(file.mime, editor.mimes || null)
@@ -22815,8 +22749,6 @@ elFinder.prototype.commands.edit = function() {
 		},
 		infoRequest = function() {
 
-=======
->>>>>>> master
 		},
 		stored;
 	
@@ -22959,7 +22891,6 @@ elFinder.prototype.commands.edit = function() {
 			cnt = sel.length;
 
 		return cnt && filter(sel).length == cnt ? 0 : -1;
-<<<<<<< HEAD
 	};
 	
 	this.exec = function(select, opts) {
@@ -23152,200 +23083,6 @@ elFinder.prototype.commands.empty = function() {
 			});
 		});
 		
-=======
-	};
-	
-	this.exec = function(select, opts) {
-		var fm    = this.fm, 
-			files = filter(this.files(select)),
-			hashes = $.map(files, function(f) { return f.hash; }),
-			list  = [],
-			editor = opts && opts.editor? opts.editor : null,
-			node = $(opts && opts._currentNode? opts._currentNode : $('#'+ fm.cwdHash2Id(hashes[0]))),
-			getEditor = function() {
-				var dfd = $.Deferred(),
-					storedId;
-				
-				if (!editor && Object.keys(editors).length > 1) {
-					if (useStoredEditor() && (editor = getStoredEditor(files[0].mime))) {
-						return dfd.resolve(editor);
-					}
-					fm.trigger('contextmenu', {
-						raw: getSubMenuRaw(files, function() {
-							dfd.resolve(this);
-						}),
-						x: node.offset().left,
-						y: node.offset().top + 22,
-						opened: function() {
-							fm.one('closecontextmenu',function() {
-								requestAnimationFrame(function() {
-									if (dfd.state() === 'pending') {
-										dfd.reject();
-									}
-								});
-							});
-						}
-					});
-					
-					fm.trigger('selectfiles', {files : hashes});
-					
-					return dfd;
-				} else {
-					Object.keys(editors).length > 1 && editor && store(files[0].mime, editor);
-					return dfd.resolve(editor? editor : (Object.keys(editors).length? editors[Object.keys(editors)[0]] : null));
-				}
-			},
-			dfrd = $.Deferred(),
-			file;
-
-		if (editors === null) {
-			setEditors(files[0], hashes.length);
-		}
-		
-		if (!node.length) {
-			node = fm.getUI('cwd');
-		}
-		
-		getEditor().done(function(editor) {
-			while ((file = files.shift())) {
-				list.push(edit(file, void(0), editor).fail(function(error) {
-					error && fm.error(error);
-				}));
-			}
-			
-			if (list.length) { 
-				$.when.apply(null, list).done(function() {
-					dfrd.resolve();
-				}).fail(function() {
-					dfrd.reject();
-				});
-			} else {
-				dfrd.reject();
-			}
-		}).fail(function() {
-			dfrd.reject();
-		});
-		
-		return dfrd;
-	};
-
-};
-
-
-/*
- * File: /js/commands/empty.js
- */
-
-/**
- * @class elFinder command "empty".
- * Empty the folder
- *
- * @type  elFinder.command
- * @author  Naoki Sawada
- */
-elFinder.prototype.commands.empty = function() {
-		var fm = this.fm,
-		self = this,
-		selFiles = function(select) {
-			var sel = self.files(select);
-			if (!sel.length) {
-				sel = [ fm.cwd() ];
-			}
-			return sel;
-		};
-	
-	this.linkedCmds = ['rm'];
-	
-	this.getstate = function(select) {
-		var sel = selFiles(select),
-			cnt;
-		
-		cnt = sel.length;
-		return $.grep(sel, function(f) { return f.write && f.mime === 'directory' ? true : false; }).length == cnt ? 0 : -1;
-	};
-	
-	this.exec = function(hashes) {
-		var dirs = selFiles(hashes),
-			cnt  = dirs.length,
-			dfrd = $.Deferred()
-				.done(function() {
-					var data = {changed: {}};
-					fm.toast({msg: fm.i18n(['"'+success.join('", ')+'"', 'complete', fm.i18n('cmdempty')])});
-					$.each(dirs, function(i, dir) {
-						data.changed[dir.hash] = dir;
-					});
-					fm.change(data);
-				})
-				.always(function() {
-					var cwd = fm.cwd().hash;
-					fm.trigger('selectfiles', {files: $.map(dirs, function(d) { return cwd === d.phash? d.hash : null; })});
-				}),
-			success = [],
-			done = function(res) {
-				if (typeof res === 'number') {
-					success.push(dirs[res].name);
-					delete dirs[res].dirs;
-				} else {
-					res && fm.error(res);
-				}
-				(--cnt < 1) && dfrd[success.length? 'resolve' : 'reject']();
-			};
-
-		$.each(dirs, function(i, dir) {
-			var tm;
-			if (!(dir.write && dir.mime === 'directory')) {
-				done(['errEmpty', dir.name, 'errPerm']);
-				return null;
-			}
-			if (!fm.isCommandEnabled('rm', dir.hash)) {
-				done(['errCmdNoSupport', '"rm"']);
-				return null;
-			}
-			tm = setTimeout(function() {
-				fm.notify({type : 'search', cnt : 1, hideCnt : cnt > 1? false : true});
-			}, fm.notifyDelay);
-			fm.request({
-				data : {cmd  : 'open', target : dir.hash},
-				preventDefault : true,
-				asNotOpen : true
-			}).done(function(data) {
-				var targets = [];
-				tm && clearTimeout(tm);
-				if (fm.ui.notify.children('.elfinder-notify-search').length) {
-					fm.notify({type : 'search', cnt : -1, hideCnt : cnt > 1? false : true});
-				}
-				if (data && data.files && data.files.length) {
-					if (data.files.length > fm.maxTargets) {
-						done(['errEmpty', dir.name, 'errMaxTargets', fm.maxTargets]);
-					} else {
-						fm.updateCache(data);
-						$.each(data.files, function(i, f) {
-							if (!f.write || f.locked) {
-								done(['errEmpty', dir.name, 'errRm', f.name, 'errPerm']);
-								targets = [];
-								return false;
-							}
-							targets.push(f.hash);
-						});
-						if (targets.length) {
-							fm.exec('rm', targets, { _userAction : true, addTexts : [ fm.i18n('folderToEmpty', dir.name) ] })
-							.fail(function(error) {
-								fm.trigger('unselectfiles', {files: fm.selected()});
-								done(error || '');
-							})
-							.done(function() { done(i); });
-						}
-					}
-				} else {
-					fm.toast({ mode: 'warning', msg: fm.i18n('filderIsEmpty', dir.name)});
-					done('');
-				}
-			}).fail(function(error) {
-				done(error || '');
-			});
-		});
-		
->>>>>>> master
 		return dfrd;
 	};
 
@@ -24140,8 +23877,6 @@ elFinder.prototype.commands.fullscreen = function() {
 		debugShow();
 		this.dialog.trigger('initContents').elfinderdialog('open').find((tab? '.elfinder-help-tab-'+tab : '.ui-tabs-nav li') + ' a:first').trigger('click');
 		return $.Deferred().resolve();
-<<<<<<< HEAD
-=======
 	};
 
 }).prototype = { forceLoad : true }; // this is required command
@@ -24162,26 +23897,6 @@ elFinder.prototype.commands.hidden = function() {
 	this.updateOnSelect = false;
 	this.getstate = function() {
 		return -1;
->>>>>>> master
-	};
-};
-
-/*
- * File: /js/commands/hidden.js
- */
-
-<<<<<<< HEAD
-/**
- * @class  elFinder command "hidden"
- * Always hidden command for uiCmdMap
- *
- * @author Naoki Sawada
- **/
-elFinder.prototype.commands.hidden = function() {
-		this.hidden = true;
-	this.updateOnSelect = false;
-	this.getstate = function() {
-		return -1;
 	};
 };
 
@@ -24189,8 +23904,6 @@ elFinder.prototype.commands.hidden = function() {
  * File: /js/commands/home.js
  */
 
-=======
->>>>>>> master
 (elFinder.prototype.commands.home = function() {
 		this.title = 'Home';
 	this.alwaysEnabled  = true;
@@ -24595,7 +24308,8 @@ elFinder.prototype.commands.mkdir = function() {
 		if (! select && ! this.options.intoNewFolderToolbtn) {
 			fm.getUI('cwd').trigger('unselectall');
 		}
-		this.move = (!onCwd && curOrg !== 'navbar' && fm.selected().length)? true : false;
+		//this.move = (!onCwd && curOrg !== 'navbar' && fm.selected().length)? true : false;
+		this.move = this.value === fm.i18n('cmdmkdirin');
 		return $.proxy(fm.res('mixin', 'make'), self)();
 	};
 	
@@ -24617,13 +24331,19 @@ elFinder.prototype.commands.mkdir = function() {
 		if (!self.options.intoNewFolderToolbtn && curOrg === '') {
 			curOrg = 'cwd';
 		}
-		if (sel.length && curOrg !== 'navbar'  && curOrg !== 'cwd' && fm.cwd().hash !== sel[0]) {
+		if (sel.length && curOrg !== 'navbar' && curOrg !== 'cwd' && fm.cwd().hash !== sel[0]) {
 			self.title = fm.i18n('cmdmkdirin');
 			self.className += ' elfinder-button-icon-mkdirin';
 		} else {
 			self.title = fm.i18n('cmdmkdir');
 		}
-		self.update(void(0), self.title);
+		if (e.type !== 'closecontextmenu') {
+			self.update(void(0), self.title);
+		} else {
+			requestAnimationFrame(function() {
+				self.update(void(0), self.title);
+			});
+		}
 	});
 	
 	this.getstate = function(select) {
@@ -24703,6 +24423,9 @@ elFinder.prototype.commands.netmount = function() {
 					},
 					inputs = {
 						protocol : $('<select/>')
+						.on('mousedown', function(e) {
+							e.stopPropagation();
+						})
 						.on('change', function(e, data){
 							var protocol = this.value;
 							content.find('.elfinder-netmount-tr').hide();
@@ -24952,7 +24675,6 @@ elFinder.prototype.commands.netunmount = function() {
 								}).fail(function(error) {
 									if (removed.length) {
 										fm.remove({ removed: removed });
-<<<<<<< HEAD
 									}
 									dfrd.reject(error);
 								});
@@ -24993,48 +24715,6 @@ elFinder.prototype.commands.netunmount = function() {
 									callback : function() {
 										dfrd.reject();
 									}
-=======
-									}
-									dfrd.reject(error);
-								});
-							};
-						
-						if (roots.length) {
-							fm.confirm({
-								title : self.title,
-								text  : (function() {
-									var msgs = ['unmountChildren'];
-									$.each(roots, function(i, hash) {
-										msgs.push([fm.file(hash).name]);
-									});
-									return msgs;
-								})(),
-								accept : {
-									label : 'btnUnmount',
-									callback : function() {
-										$.each(roots, function(i, hash) {
-											var d = fm.file(hash);
-											if (d.netkey) {
-												requests.push(fm.request({
-													data   : {cmd  : 'netmount', protocol : 'netunmount', host: d.netkey, user : d.hash, pass : 'dum'}, 
-													notify : {type : 'netunmount', cnt : 1, hideCnt : true},
-													preventDefault : true
-												}).done(function(data) {
-													if (data.removed) {
-														removed = removed.concat(data.removed);
-													}
-												}));
-											}
-										});
-										doUmount();
-									}
-								},
-								cancel : {
-									label : 'btnCancel',
-									callback : function() {
-										dfrd.reject();
-									}
->>>>>>> master
 								}
 							});
 						} else {
@@ -25339,72 +25019,7 @@ elFinder.prototype.commands.opendir = function() {
 		
 		return dfrd;
 	};
-<<<<<<< HEAD
-=======
 
-};
-
-
-/*
- * File: /js/commands/opennew.js
- */
-
-/**
- * @class  elFinder command "opennew"
- * Open folder in new window
- *
- * @author Naoki Sawada
- **/  
-elFinder.prototype.commands.opennew = function() {
-	
-	var fm = this.fm;
-
-	this.shortcuts = [{
-		pattern  : (typeof(fm.options.getFileCallback) === 'function'? 'shift+' : '') + 'ctrl+enter'
-	}];
-
-	this.getstate = function(select) {
-		var sel = this.files(select),
-			cnt = sel.length;
-		
-		return cnt === 1 
-			? (sel[0].mime === 'directory' && sel[0].read? 0 : -1) 
-			: -1;
-	};
-	
-	this.exec = function(hashes) {
-		var dfrd  = $.Deferred(),
-			files = this.files(hashes),
-			cnt   = files.length,
-			opts  = this.options,
-			file, loc, url, win;
->>>>>>> master
-
-		// open folder to new tab (window)
-		if (cnt === 1 && (file = files[0]) && file.mime === 'directory') {
-			loc = window.location;
-			if (opts.url) {
-				url = opts.url;
-			} else {
-				url = loc.pathname;
-			}
-			if (opts.useOriginQuery) {
-				if (!url.match(/\?/)) {
-					url += loc.search;
-				} else if (loc.search) {
-					url += '&' + loc.search.substr(1);
-				}
-			}
-			url += '#elf_' + file.hash;
-			win = window.open(url, '_blank');
-			setTimeout(function() {
-				win.focus();
-			}, 1000);
-			return dfrd.resolve();
-		} else {
-			return dfrd.reject();
-		}
-	};
 };
 
 
@@ -25898,7 +25513,6 @@ elFinder.prototype.commands.places = function() {
  * File: /js/commands/preference.js
  */
 
-<<<<<<< HEAD
 /**
  * @class  elFinder command "preference"
  * "Preference" dialog
@@ -25923,13 +25537,13 @@ elFinder.prototype.commands.preference = function() {
 			var cats = self.options.categories || {
 					'language' : ['language'],
 					'toolbar' : ['toolbarPref'],
-					'workspace' : ['columnPref', 'selectAction', 'useStoredEditor'],
+					'workspace' : ['iconSize','columnPref', 'selectAction', 'useStoredEditor'],
 					'dialog' : ['autoFocusDialog'],
 					'selectionInfo' : ['infoItems', 'hashChecker'],
 					'reset' : ['clearBrowserData'],
 					'all' : true
 				},
-				forms = self.options.prefs || ['language', 'toolbarPref', 'columnPref', 'selectAction', 'useStoredEditor', 'infoItems', 'hashChecker', 'autoFocusDialog', 'clearBrowserData'];
+				forms = self.options.prefs || ['language', 'toolbarPref', 'iconSize', 'columnPref', 'selectAction', 'useStoredEditor', 'infoItems', 'hashChecker', 'autoFocusDialog', 'clearBrowserData'];
 			
 			forms = fm.arrayFlip(forms, true);
 			
@@ -26015,6 +25629,24 @@ elFinder.prototype.commands.preference = function() {
 				});
 			})());
 			
+			forms.iconSize && (forms.iconSize = (function() {
+				var max = fm.options.uiOptions.cwd.iconsView.sizeMax || 3,
+					size = fm.storage('iconsize') || 0;
+				return $('<div class="touch-punch"/>').slider({
+					classes: {
+						'ui-slider-handle': 'elfinder-tabstop',
+					},
+					value: size,
+					max: max,
+					slide: function(e, ui) {
+						fm.getUI('cwd').trigger('iconpref', {size: ui.value});
+					},
+					change: function(e, ui) {
+						fm.storage('iconsize', ui.value);
+					}
+				});
+			})());
+
 			forms.columnPref && (forms.columnPref = (function() {
 				var cols = fm.options.uiOptions.cwd.listView.columns,
 					tags = [],
@@ -26072,7 +25704,7 @@ elFinder.prototype.commands.preference = function() {
 			forms.infoItems && (forms.infoItems = (function() {
 				var items = fm.getCommand('info').items,
 					tags = [],
-					hides = fm.storage('infohides') || {};
+					hides = fm.storage('infohides') || fm.arrayFlip(fm.options.commandsOptions.info.hideItems, true);
 				$.each(items, function() {
 					var key = this,
 						name = fm.i18n(key);
@@ -26207,7 +25839,8 @@ elFinder.prototype.commands.preference = function() {
 			dialog.closest('.ui-dialog')
 			.css({
 				overflow: 'hidden'
-			});
+			})
+			.addClass('elfinder-bg-translucent');
 			
 			openTab = 'all';
 		},
@@ -26237,346 +25870,6 @@ elFinder.prototype.commands.preference = function() {
 		return $.Deferred().resolve();
 	};
 
-=======
-/**
- * @class  elFinder command "preference"
- * "Preference" dialog
- *
- * @author Naoki Sawada
- **/
-elFinder.prototype.commands.preference = function() {
-	var self    = this,
-		fm      = this.fm,
-		r       = 'replace',
-		tab     = '<li class="ui-state-default ui-corner-top elfinder-preference-tab-{id}"><a href="#'+fm.namespace+'-preference-{id}" id="'+fm.namespace+'-preference-tab-{id}" class="{class}">{title}</a></li>',
-		base    = $('<div class="ui-tabs ui-widget ui-widget-content ui-corner-all elfinder-preference">'), 
-		ul      = $('<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">'),
-		tabs    = $('<div class="elfinder-preference-tabs ui-tabs-panel ui-widget-content ui-corner-bottom"/>'),
-		sep     = '<div class="elfinder-preference-separator"/>',
-		selfUrl = $('base').length? document.location.href.replace(/#.*$/, '') : '',
-		selectTab = function(tab) {
-			$('#'+fm.namespace+'-preference-tab-'+tab).trigger('mouseover').trigger('click');
-			openTab = tab;
-		},
-		build   = function() {
-			var cats = self.options.categories || {
-					'language' : ['language'],
-					'toolbar' : ['toolbarPref'],
-					'workspace' : ['columnPref', 'selectAction', 'useStoredEditor'],
-					'dialog' : ['autoFocusDialog'],
-					'selectionInfo' : ['infoItems', 'hashChecker'],
-					'reset' : ['clearBrowserData'],
-					'all' : true
-				},
-				forms = self.options.prefs || ['language', 'toolbarPref', 'columnPref', 'selectAction', 'useStoredEditor', 'infoItems', 'hashChecker', 'autoFocusDialog', 'clearBrowserData'];
-			
-			forms = fm.arrayFlip(forms, true);
-			
-			if (fm.options.getFileCallback) {
-				delete forms.selectAction;
-			}
-			
-			forms.language && (forms.language = (function() {
-				var langSel = $('<select/>').on('change', function() {
-						var lang = $(this).val();
-						fm.storage('lang', lang);
-						$('#'+fm.id).elfinder('reload');
-					}),
-					optTags = [],
-					langs = self.options.langs || {
-						ar: 'اللغة العربية',
-						bg: 'Български',
-						ca: 'Català',
-						cs: 'Čeština',
-						da: 'Dansk',
-						de: 'Deutsch',
-						el: 'Ελληνικά',
-						en: 'English',
-						es: 'Español',
-						fa: 'فارسی‌‎, پارسی‌',
-						fo: 'Føroyskt',
-						fr: 'Français',
-						he: 'עברית‎',
-						hr: 'Hrvatski',
-						hu: 'Magyar',
-						id: 'Bahasa Indonesia',
-						it: 'Italiano',
-						ja: '日本語',
-						ko: '한국어',
-						nl: 'Nederlands',
-						no: 'Norsk',
-						pl: 'Polski',
-						pt_BR: 'Português',
-						ro: 'Română',
-						ru: 'Pусский',
-						si: 'සිංහල',
-						sk: 'Slovenčina',
-						sl: 'Slovenščina',
-						sr: 'Srpski',
-						sv: 'Svenska',
-						tr: 'Türkçe',
-						ug_CN: 'ئۇيغۇرچە',
-						uk: 'Український',
-						vi: 'Tiếng Việt',
-						zh_CN: '简体中文',
-						zh_TW: '正體中文'
-					};
-				$.each(langs, function(lang, name) {
-					optTags.push('<option value="'+lang+'">'+name+'</option>');
-				});
-				return langSel.append(optTags.join('')).val(fm.lang);
-			})());
-			
-			forms.toolbarPref && (forms.toolbarPref = (function() {
-				var pnls = $.map(fm.options.uiOptions.toolbar, function(v) {
-						return $.isArray(v)? v : null;
-					}),
-					tags = [],
-					hides = fm.storage('toolbarhides') || {};
-				$.each(pnls, function() {
-					var cmd = this,
-						name = fm.i18n('cmd'+cmd);
-					if (name === 'cmd'+cmd) {
-						name = fm.i18n(cmd);
-					}
-					tags.push('<span class="elfinder-preference-toolbar-item"><label><input type="checkbox" value="'+cmd+'" '+(hides[cmd]? '' : 'checked')+'/>'+name+'</label></span>');
-				});
-				return $(tags.join(' ')).on('change', 'input', function() {
-					var v = $(this).val(),
-						o = $(this).is(':checked');
-					if (!o && !hides[v]) {
-						hides[v] = true;
-					} else if (o && hides[v]) {
-						delete hides[v];
-					}
-					fm.storage('toolbarhides', hides);
-					fm.trigger('toolbarpref');
-				});
-			})());
-			
-			forms.columnPref && (forms.columnPref = (function() {
-				var cols = fm.options.uiOptions.cwd.listView.columns,
-					tags = [],
-					hides = fm.storage('columnhides') || {};
-				$.each(cols, function() {
-					var key = this,
-						name = fm.getColumnName(key);
-					tags.push('<span class="elfinder-preference-column-item"><label><input type="checkbox" value="'+key+'" '+(hides[key]? '' : 'checked')+'/>'+name+'</label></span>');
-				});
-				return $(tags.join(' ')).on('change', 'input', function() {
-					var v = $(this).val(),
-						o = $(this).is(':checked');
-					if (!o && !hides[v]) {
-						hides[v] = true;
-					} else if (o && hides[v]) {
-						delete hides[v];
-					}
-					fm.storage('columnhides', hides);
-					fm.trigger('columnpref', { repaint: true });
-				});
-			})());
-			
-			forms.selectAction && (forms.selectAction = (function() {
-				var actSel = $('<select/>').on('change', function() {
-						var act = $(this).val();
-						fm.storage('selectAction', act === 'default'? null : act);
-					}),
-					optTags = [],
-					acts = self.options.selectActions;
-				
-				if ($.inArray('open', acts) === -1) {
-					acts.unshift('open');
-				}
-				$.each(acts, function(i, act) {
-					var names = $.map(act.split('/'), function(cmd) {
-						var name = fm.i18n('cmd'+cmd);
-						if (name === 'cmd'+cmd) {
-							name = fm.i18n(cmd);
-						}
-						return name;
-					});
-					optTags.push('<option value="'+act+'">'+names.join('/')+'</option>');
-				});
-				return actSel.append(optTags.join('')).val(fm.storage('selectAction') || 'open');
-			})());
-			
-			forms.useStoredEditor && (forms.useStoredEditor = $('<input type="checkbox"/>').prop('checked', (function() {
-				var s = fm.storage('useStoredEditor');
-				return s? (s > 0) : fm.options.commandsOptions.edit.useStoredEditor;
-			})()).on('change', function(e) {
-				fm.storage('useStoredEditor', $(this).is(':checked')? 1 : -1);
-				fm.trigger('selectfiles', {files : fm.selected()});
-			}));
-			
-			forms.infoItems && (forms.infoItems = (function() {
-				var items = fm.getCommand('info').items,
-					tags = [],
-					hides = fm.storage('infohides') || {};
-				$.each(items, function() {
-					var key = this,
-						name = fm.i18n(key);
-					tags.push('<span class="elfinder-preference-info-item"><label><input type="checkbox" value="'+key+'" '+(hides[key]? '' : 'checked')+'/>'+name+'</label></span>');
-				});
-				return $(tags.join(' ')).on('change', 'input', function() {
-					var v = $(this).val(),
-						o = $(this).is(':checked');
-					if (!o && !hides[v]) {
-						hides[v] = true;
-					} else if (o && hides[v]) {
-						delete hides[v];
-					}
-					fm.storage('infohides', hides);
-					fm.trigger('infopref', { repaint: true });
-				});
-			})());
-			
-			forms.hashChecker && fm.hashCheckers.length && (forms.hashChecker = (function() {
-				var tags = [],
-					enabled = fm.arrayFlip(fm.storage('hashchekcer') || fm.options.commandsOptions.info.showHashAlgorisms, true);
-				$.each(fm.hashCheckers, function() {
-					var cmd = this,
-						name = fm.i18n(cmd);
-					tags.push('<span class="elfinder-preference-hashchecker-item"><label><input type="checkbox" value="'+cmd+'" '+(enabled[cmd]? 'checked' : '')+'/>'+name+'</label></span>');
-				});
-				return $(tags.join(' ')).on('change', 'input', function() {
-					var v = $(this).val(),
-						o = $(this).is(':checked');
-					if (o) {
-						enabled[v] = true;
-					} else if (enabled[v]) {
-						delete enabled[v];
-					}
-					fm.storage('hashchekcer', $.grep(fm.hashCheckers, function(v) {
-						return enabled[v];
-					}));
-				});
-			})());
-
-			forms.autoFocusDialog && (forms.autoFocusDialog = $('<input type="checkbox"/>').prop('checked', (function() {
-				var s = fm.storage('autoFocusDialog');
-				return s? (s > 0) : fm.options.uiOptions.dialog.focusOnMouseOver;
-			})()).on('change', function(e) {
-				fm.storage('autoFocusDialog', $(this).is(':checked')? 1 : -1);
-			}));
-			
-			forms.clearBrowserData && (forms.clearBrowserData = $('<button/>').text(fm.i18n('reset')).button().on('click', function(e) {
-				e.preventDefault();
-				fm.storage();
-				$('#'+fm.id).elfinder('reload');
-			}));
-			
-			$.each(cats, function(id, prefs) {
-				var dls, found;
-				if (prefs === true) {
-					found = 1;
-				} else if (prefs) {
-					dls = $();
-					$.each(prefs, function(i, n) {
-						var f, title, chks = '';
-						if (f = forms[n]) {
-							found = 2;
-							title = fm.i18n(n);
-							if (f instanceof jQuery && f.length === 1 && f.is('input:checkbox')) {
-								if (!f.attr('id')) {
-									f.attr('id', 'elfinder-preference-'+n+'-checkbox');
-								}
-								title = '<label for="'+f.attr('id')+'">'+title+'</label>';
-							} else if (f.find('input[type="checkbox"]').length > 1) {
-								chks = ' elfinder-preference-checkboxes';
-							}
-							dls = dls.add($('<dt class="elfinder-preference-'+n+chks+'">'+title+'</dt>')).add($('<dd class="elfinder-preference-'+n+chks+'"/>').append(f));
-						}
-					});
-				}
-				if (found) {
-					ul.append(tab[r](/\{id\}/g, id)[r](/\{title\}/, fm.i18n(id))[r](/\{class\}/, openTab === id? 'elfinder-focus' : ''));
-					if (found === 2) {
-						tabs.append(
-							$('<div id="'+fm.namespace+'-preference-'+id+'" class="elfinder-preference-content"/>')
-							.hide()
-							.append($('<dl/>').append(dls))
-						);
-					}
-				}
-			});
-
-			ul.on('click', 'a', function(e) {
-				var t = $(e.target),
-					h = t.attr('href');
-				e.preventDefault();
-				e.stopPropagation();
-
-				ul.children().removeClass('ui-tabs-selected ui-state-active');
-				t.removeClass('ui-state-hover').parent().addClass('ui-tabs-selected ui-state-active');
-
-				if (h.match(/all$/)) {
-					tabs.children().show();
-				} else {
-					tabs.children().hide();
-					$(h).show();
-				}
-			});
-
-			base.append(ul, tabs).find('a,input,select,button').addClass('elfinder-tabstop');
-
-			dialog = fm.dialog(base, {
-				title : self.title,
-				width : 600,
-				height: 400,
-				maxWidth: 'window',
-				maxHeight: 'window',
-				autoOpen : false,
-				destroyOnClose : false,
-				allowMinimize : false,
-				open : function() {
-					openTab && selectTab(openTab);
-					openTab = null;
-				},
-				resize : function() {
-					tabs.height(dialog.height() - ul.outerHeight(true) - (tabs.outerHeight(true) - tabs.height()) - 5);
-				}
-			})
-			.on('click', function(e) {
-				e.stopPropagation();
-			})
-			.css({
-				overflow: 'hidden'
-			});
-
-			dialog.closest('.ui-dialog')
-			.css({
-				overflow: 'hidden'
-			});
-			
-			openTab = 'all';
-		},
-		dialog, openTab;
-
-	this.shortcuts = [{
-		pattern     : 'ctrl+comma',
-		description : this.title
-	}];
-
-	this.alwaysEnabled  = true;
-	
-	this.getstate = function() {
-		return 0;
-	};
-	
-	this.exec = function(sel, cOpts) {
-		!dialog && build();
-		if (cOpts) {
-			if (cOpts.tab) {
-				selectTab(cOpts.tab);
-			} else if (cOpts._currentType === 'cwd') {
-				selectTab('workspace');
-			}
-		}
-		dialog.elfinderdialog('open');
-		return $.Deferred().resolve();
-	};
-
->>>>>>> master
 };
 
 /*
@@ -27253,7 +26546,7 @@ elFinder.prototype.commands.preference = function() {
 			ogg  : support('video/ogg;'),
 			webm : support('video/webm;'),
 			mp4  : support('video/mp4;'),
-			mkv  : support('video/x-matroska;'),
+			mkv  : support('video/x-matroska;') || support('video/webm;'),
 			'3gp': support('video/3gpp;'),
 			m3u8 : support('application/x-mpegURL', 'video') || support('application/vnd.apple.mpegURL', 'video'),
 			mpd  : support('application/dash+xml', 'video')
@@ -28156,6 +27449,16 @@ elFinder.prototype.commands.quicklook.plugins = [
 				}
 			},
 			render = function(file, opts) {
+				var errTm = function(e) {
+						if (err > 1) {
+							tm && clearTimeout(tm);
+							tm = setTimeout(function() {
+								!canPlay && reset(true);
+							}, 800);
+						}
+					},
+					err = 0, 
+					canPlay, tm;
 				opts = opts || {};
 				ql.hideinfo();
 				node = $('<video class="elfinder-quicklook-preview-video" controls preload="auto" autobuffer playsinline>'
@@ -28164,9 +27467,18 @@ elFinder.prototype.commands.quicklook.plugins = [
 						// Firefox fire change event on seek or volume change
 						e.stopPropagation();
 					})
-					.on('error', function() {
-						reset(true);
+					.on('timeupdate progress', errTm)
+					.on('canplay', function() {
+						canPlay = true;
 					});
+				// can not handling error event with jQuery `on` event handler
+				node[0].addEventListener('error', function(e) {
+					if (opts.src && fm.convAbsUrl(opts.src) === fm.convAbsUrl(e.target.src)) {
+						++err;
+						errTm();
+					}
+				}, true);
+
 				if (opts.src) {
 					node.append('<source src="'+opts.src+'" type="'+file.mime+'"/><source src="'+opts.src+'"/>');
 				}
@@ -32607,20 +31919,32 @@ elFinder.prototype.commands.upload = function() {
 			inputButton = function(type, caption) {
 				var button,
 					input = $('<input type="file" ' + type + '/>')
+					.on('click', function() {
+						// for IE's bug
+						if (fm.UA.IE) {
+							setTimeout(function() {
+								form.css('display', 'none').css('position', 'relative');
+								requestAnimationFrame(function() {
+									form.css('display', '').css('position', '');
+								});
+							}, 100);
+						}
+					})
 					.on('change', function() {
 						upload({input : input.get(0), type : 'files'});
 					})
 					.on('dragover', function(e) {
 						e.originalEvent.dataTransfer.dropEffect = 'copy';
-					});
+					}),
+					form = $('<form/>').append(input);
 
 				return $('<div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only elfinder-tabstop elfinder-focus"><span class="ui-button-text">'+fm.i18n(caption)+'</span></div>')
-					.append($('<form/>').append(input))
+					.append(form)
 					.on('click', function(e) {
 						if (e.target === this) {
 							e.stopPropagation();
 							e.preventDefault();
-							input.click();
+							input.trigger('click');
 						}
 					})
 					.on('mouseenter mouseleave', function(e) {
@@ -32668,9 +31992,14 @@ elFinder.prototype.commands.upload = function() {
 							type = 'html';
 						}
 					} catch(e) {}
-					if (! file && (data = trf.getData('text'))) {
-						file = [ data ];
-						type = 'text';
+					if (! file) {
+						if (data = trf.getData('text')) {
+							file = [ data ];
+							type = 'text';
+						} else if (trf && trf.files) {
+							// maybe folder uploading but this UA dose not support it
+							kind = 'file';
+						}
 					}
 				}
 			}
@@ -32863,7 +32192,9 @@ elFinder.prototype.commands.upload = function() {
  **/
 elFinder.prototype.commands.view = function() {
 	"use strict";
-	var fm = this.fm;
+	var self = this,
+		fm = this.fm,
+		subMenuRaw;
 	this.value          = fm.viewType;
 	this.alwaysEnabled  = true;
 	this.updateOnSelect = false;
@@ -32874,6 +32205,25 @@ elFinder.prototype.commands.view = function() {
 		return 0;
 	};
 	
+	this.extra = {
+		icon: 'menu',
+		node: $('<span/>')
+			.attr({title: fm.i18n('viewtype')})
+			.on('click touchstart', function(e){
+				if (e.type === 'touchstart' && e.originalEvent.touches.length > 1) {
+					return;
+				}
+				var node = $(this);
+				e.stopPropagation();
+				e.preventDefault();
+				fm.trigger('contextmenu', {
+					raw: getSubMenuRaw(),
+					x: node.offset().left,
+					y: node.offset().top
+				});
+			})
+	};
+
 	this.exec = function() {
 		var self  = this,
 			value = fm.storage('view', this.value == 'list' ? 'icons' : 'list');
@@ -32883,6 +32233,78 @@ elFinder.prototype.commands.view = function() {
 			this.resolve();
 		});
 	};
+
+	fm.bind('init', function() {
+		subMenuRaw = (function() {
+			var cwd = fm.getUI('cwd'),
+				raws = [],
+				sizeNames = fm.options.uiOptions.cwd.iconsView.sizeNames,
+				max = fm.options.uiOptions.cwd.iconsView.sizeMax,
+				i, size;
+			for (i = 0; i <= max; i++) {
+				raws.push(
+					{
+						label    : fm.i18n(sizeNames[i] || ('Size-' + i + ' icons')),
+						icon     : 'view',
+						callback : (function(s) {
+							return function() {
+								cwd.trigger('iconpref', {size: s});
+								fm.storage('iconsize', s);
+								if (self.value === 'list') {
+									self.exec();
+								}
+							};
+						})(i)
+					}
+				);
+			}
+			raws.push('|');
+			raws.push(
+				{
+					label    : fm.i18n('viewlist'),
+					icon     : 'view-list',
+					callback : function() {
+						if (self.value !== 'list') {
+							self.exec();
+						}
+					}
+				}		
+			);
+			return raws;
+		})();
+	}).bind('contextmenucreate', function() {
+		self.extra = {
+			icon: 'menu',
+			node: $('<span/>')
+				.attr({title: fm.i18n('cmdview')})
+				.on('click touchstart', function(e){
+					if (e.type === 'touchstart' && e.originalEvent.touches.length > 1) {
+						return;
+					}
+					var node = $(this),
+						raw = subMenuRaw.concat(),
+						idx, i;
+					if (self.value === 'list') {
+						idx = subMenuRaw.length - 1;
+					} else {
+						idx = parseInt(fm.storage('iconsize') || 0);
+					}
+					for (i = 0; i < subMenuRaw.length; i++) {
+						if (subMenuRaw[i] !== '|') {
+							subMenuRaw[i].options = (i === idx? {'className': 'ui-state-active'} : void(0))
+							;
+						}
+					}
+					e.stopPropagation();
+					e.preventDefault();
+					fm.trigger('contextmenu', {
+						raw: subMenuRaw,
+						x: node.offset().left,
+						y: node.offset().top
+					});
+				})
+		};
+	});
 
 };
 

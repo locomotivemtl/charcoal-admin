@@ -79,23 +79,23 @@
                                     if (response.success) {
                                         window.location.reload();
                                     } else {
-                                        Charcoal.Admin.feedback().add_data([
+                                        Charcoal.Admin.feedback().push([
                                             {
                                                 msg: '{{# _t }}Error:{{/ _t }} {{# _t }}Unable to revert to the revision.{{/ _t }}',
                                                 level: 'error'
                                             }
                                         ]);
-                                        Charcoal.Admin.feedback().call();
+                                        Charcoal.Admin.feedback().dispatch();
                                     }
                                 },
                                 error: function() {
-                                    Charcoal.Admin.feedback().add_data([
+                                    Charcoal.Admin.feedback().push([
                                         {
                                             msg: '{{# _t }}Error:{{/ _t }} {{# _t }}Unable to revert to the revision.{{/ _t }}',
                                             level: 'error'
                                         }
                                     ]);
-                                    Charcoal.Admin.feedback().call();
+                                    Charcoal.Admin.feedback().dispatch();
                                 }
                             })
                         }

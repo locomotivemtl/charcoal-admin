@@ -256,42 +256,16 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         cssClass: cssClass,
         nl2br: false,
         showHeader: showHeader,
-        showFooter: showFooter,
-        onshown: function () {
-                Charcoal.Admin.manager().render();
-            }
+        showFooter: showFooter
     };
 
     var dialogOptions = $.extend({}, defaultOptions, userOptions);
     var alertTemplate = '<div class="alert alert-{type}" role="alert">{text}</div>';
 
-    dialogOptions.message = function (dialog) {
+    dialogOptions.onshown = function (dialog) {
         var xhr,
             url      = Charcoal.Admin.admin_url() + 'widget/load',
-            data     = dialog_opts,
-            $message = $(
-                alertTemplate.replaceMap({
-                    '{type}': 'warning',
-                    '{text}': widgetL10n.loading
-                })
-            );
-
-        if (!showHeader) {
-            dialog.getModalHeader().addClass('d-none');
-        }
-
-        if (!showFooter) {
-            dialog.getModalFooter().addClass('d-none');
-        }
-
-        dialog.getModalBody().on(
-            'click.charcoal.bs.dialog',
-            '[data-dismiss="dialog"]',
-            { dialog: dialog },
-            function (event) {
-                event.data.dialog.close();
-            }
-        );
+            data     = dialog_opts;
 
         xhr = $.ajax({
             method:   'POST',
@@ -301,16 +275,16 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         });
 
         xhr.then(function (response, textStatus, jqXHR) {
-                if (!response || !response.success) {
-                    if (response.feedbacks) {
-                        return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
-                    } else {
-                        return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
-                    }
+            if (!response || !response.success) {
+                if (response.feedbacks) {
+                    return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                } else {
+                    return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
                 }
+            }
 
-                return $.Deferred().resolve(response, textStatus, jqXHR);
-            })
+            return $.Deferred().resolve(response, textStatus, jqXHR);
+        })
             .done(function (response/*, textStatus, jqXHR*/) {
                 dialog.setMessage(response.widget_html);
 
@@ -357,6 +331,33 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
 
                 $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
             });
+        Charcoal.Admin.manager().render();
+    };
+
+    dialogOptions.message = function (dialog) {
+        var $message = $(
+            alertTemplate.replaceMap({
+                '{type}': 'warning',
+                '{text}': widgetL10n.loading
+            })
+        );
+
+        if (!showHeader) {
+            dialog.getModalHeader().addClass('d-none');
+        }
+
+        if (!showFooter) {
+            dialog.getModalFooter().addClass('d-none');
+        }
+
+        dialog.getModalBody().on(
+            'click.charcoal.bs.dialog',
+            '[data-dismiss="dialog"]',
+            { dialog: dialog },
+            function (event) {
+                event.data.dialog.close();
+            }
+        );
 
         return $message;
     };

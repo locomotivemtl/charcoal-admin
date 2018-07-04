@@ -12,7 +12,7 @@ use Charcoal\App\Template\AbstractTemplate;
 use Charcoal\Admin\Support\BaseUrlTrait;
 
 /**
- * Controller for selectize tempalte
+ * Controller for selectize template
  * Controls the display of {@see Charcoal/Property/SpriteProperty} in the context of a selectize input
  *
  * Sprite Property Input Template

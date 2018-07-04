@@ -485,13 +485,13 @@ class SelectizeInput extends SelectInput
     public function setSelectizeTemplates($selectizeTemplates)
     {
         if (!is_object($selectizeTemplates) && !is_array($selectizeTemplates)) {
-            throw new \InvalidArgumentException(sprintf(
-                '%s::%s given argument was of type %s instead of object',
-                __CLASS__,
-                __FUNCTION__,
-                gettype($selectizeTemplates)
-            ));
+            $selectizeTemplates = [
+                'item' => $selectizeTemplates,
+                'option' => $selectizeTemplates,
+                'controller' => class_exists($selectizeTemplates) ? $selectizeTemplates : null
+            ];
         }
+
         $this->selectizeTemplates = $selectizeTemplates;
 
         return $this;

@@ -30,6 +30,7 @@
         this.selectize_options = {};
         this.choice_obj_map = {};
         this.selectize_property_ident = null;
+        this.selectize_property = null;
         this.selectize_obj_type = null;
         this.selectize_templates = {};
 
@@ -77,6 +78,7 @@
         this.selectize_options = opts.data.selectize_options || this.selectize_options;
         this.choice_obj_map = opts.data.choice_obj_map || this.choice_obj_map;
         this.selectize_property_ident = opts.data.selectize_property_ident || this.selectize_property_ident;
+        this.selectize_property = opts.data.selectize_property || this.selectize_property;
         this.selectize_obj_type = opts.data.selectize_obj_type || this.selectize_obj_type;
         this.selectize_templates = opts.data.selectize_templates || this.selectize_templates;
 
@@ -193,7 +195,6 @@
     Selectize.prototype.create_item = function (input, callback, opts) {
         var form_data = {};
         opts = opts || {};
-        var pattern = this.pattern;
         var self = this;
         var type = this.obj_type;
         var title = this.title;
@@ -233,14 +234,8 @@
         }
 
         if ($.isEmptyObject(settings.formData)) {
-            if (pattern) {
-                if (input) {
-                    form_data[pattern] = input;
-                }
-            } else {
-                if (input) {
-                    form_data[this.choice_obj_map.label] = input;
-                }
+            if (input) {
+                form_data[this.choice_obj_map.label] = input;
             }
             form_data.form_ident = form_ident;
             form_data.submit_label = submit_label;
@@ -333,11 +328,13 @@
         var type = this.obj_type;
         var selectize_property_ident = this.selectize_property_ident;
         var selectize_obj_type = this.selectize_obj_type;
+        var selectize_property = this.selectize_property;
 
         var form_data = {
             obj_type: type,
             selectize_obj_type: selectize_obj_type,
-            selectize_prop_ident: selectize_property_ident
+            selectize_prop_ident: selectize_property_ident,
+            selectize_property: selectize_property
         };
 
         $.ajax({

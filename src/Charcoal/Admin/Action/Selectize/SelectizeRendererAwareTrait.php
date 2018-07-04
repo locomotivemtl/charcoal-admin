@@ -33,6 +33,13 @@ trait SelectizeRendererAwareTrait
     protected $propertyInputFactory;
 
     /**
+     * Store the factory instance.
+     *
+     * @var FactoryInterface
+     */
+    protected $propertyFactory;
+
+    /**
      * @var string
      */
     protected $selectizeObjType;
@@ -67,6 +74,22 @@ trait SelectizeRendererAwareTrait
         }
 
         return $this->selectizeProperty;
+    }
+
+    /**
+     * @param string $struct The property as string.
+     */
+    public function setSelectizeProperty($struct)
+    {
+        $struct = json_decode($struct, true);
+
+        $property = $this->propertyFactory()->create($struct['type']);
+        $property->setIdent($this->selectizePropIdent());
+        $property->setData($struct);
+
+        $this->selectizeProperty = $property;
+
+        return $this;
     }
 
     /**
@@ -140,6 +163,37 @@ trait SelectizeRendererAwareTrait
         }
 
         return $this->propertyInputFactory;
+    }
+
+    /**
+     * Set a property control factory.
+     *
+     * @param  FactoryInterface $factory The factory to create form controls for property values.
+     * @return self
+     */
+    protected function setPropertyFactory(FactoryInterface $factory)
+    {
+        $this->propertyFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the property control factory.
+     *
+     * @throws RuntimeException If the property control factory is missing.
+     * @return FactoryInterface
+     */
+    public function propertyFactory()
+    {
+        if (!isset($this->propertyFactory)) {
+            throw new RuntimeException(sprintf(
+                'Property Control Factory is not defined for [%s]',
+                get_class($this)
+            ));
+        }
+
+        return $this->propertyFactory;
     }
 
     // ==========================================================================

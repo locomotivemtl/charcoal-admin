@@ -179,7 +179,12 @@ class SelectizeInput extends SelectInput
             yield $prepend;
         }
 
-        $choices = $this->selectizeVal($this->p()->choices());
+        // When deferred, we want to fetch choices for current values only.
+        if ($this->deferred()) {
+            $choices = $this->selectizeVal($this->propertyVal());
+        } else {
+            $choices = $this->selectizeVal($this->p()->choices());
+        }
 
         /* Pass along the Generator from the parent method [^1] */
         /* Filter the all options down to those *not* selected */
@@ -279,7 +284,7 @@ class SelectizeInput extends SelectInput
      */
     public function setDeferred($deferred)
     {
-        $this->deferred = $deferred;
+        $this->deferred = $this->property() instanceof ObjectProperty ? $deferred : false;
 
         return $this;
     }
@@ -716,6 +721,7 @@ class SelectizeInput extends SelectInput
             'selectize_property_ident' => $prop->ident(),
             'selectize_obj_type'       => $this->render('{{& objType }}'),
             'selectize_templates'      => $this->selectizeTemplates(),
+            'selectize_property'       => json_encode($this->property()),
 
             // Base Property
             'required'                 => $this->required(),

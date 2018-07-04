@@ -63,12 +63,12 @@ trait SelectizeRendererAwareTrait
             return $this->selectizeProperty;
         }
 
-        $objType = $this->selectizeObjType();
+        $objType       = $this->selectizeObjType();
         $propertyIdent = $this->selectizePropIdent();
 
         if ($objType && $propertyIdent) {
             $model = $this->modelFactory()->create($objType);
-            $prop = $model->property($propertyIdent);
+            $prop  = $model->property($propertyIdent);
 
             $this->selectizeProperty = $prop;
         }
@@ -78,6 +78,7 @@ trait SelectizeRendererAwareTrait
 
     /**
      * @param string $struct The property as string.
+     * @return self
      */
     public function setSelectizeProperty($struct)
     {
@@ -120,7 +121,7 @@ trait SelectizeRendererAwareTrait
             return [];
         }
 
-        $input = $this->selectizeInput();
+        $input   = $this->selectizeInput();
         $choices = [];
 
         if ($input instanceof SelectizeInput) {

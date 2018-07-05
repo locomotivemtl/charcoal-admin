@@ -22,7 +22,7 @@
         "jquery-ui-bundle": "1.12.1",
         "multiselect-two-sides": "~2.3.1",
         "recorderjs": "1.0.1",
-        "selectize": "~0.12.3",
+        "selectize": "~0.12.4",
         "selectize-scss": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "^5.0.0-alpha18",
         "timeago": "1.6.1",

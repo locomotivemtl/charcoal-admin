@@ -1,0 +1,23 @@
+{{!--
+
+    Radio Button Group Property Input
+    =================================
+
+    `charcoal/admin/property/input/radio-btn-group`
+
+--}}
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+    {{# choices }}
+        <label class="btn btn-outline-dark btn-lg{{# checked }} active{{/ checked }}">
+            {{> charcoal/admin/property/control/choice }}
+            <span class="u-vertical-center">
+                {{# sprite }}
+                <svg fill="currentColor" viewBox="0 0 25 25" height=25 role='img'><use xlink:href='{{# withBaseUrl }}assets/admin/images/svgs.svg#{{ sprite }}{{/ withBaseUrl }}'></use></svg>
+                <span>&nbsp;</span>
+                {{/ sprite }}
+                <span>{{& label }}</span>
+            </span>
+
+        </label>
+    {{/ choices }}
+</div>

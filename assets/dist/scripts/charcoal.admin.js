@@ -6196,12 +6196,10 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             onInitialize: function () {
                 var self = this;
                 self.sifter.iterator(this.items, function (value) {
-                    var option = self.options[value];
-                    var $item = self.getItem(value);
-
-                    if (option.color) {
-                        $item.css('background-color', option.color/*[options.colorField]*/);
-                    }
+                    self.refreshItem(value, self.getItem(value));
+                });
+                self.sifter.iterator(this.options, function (data) {
+                    self.refreshOption(data.value, data);
                 });
             }
         };
@@ -6366,6 +6364,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     },
                     save_action: 'selectize/save',
                     update_action: 'selectize/update',
+
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
 
@@ -6619,6 +6618,7 @@ Selectize.define('btn_update', function (options) {
                 callback: function (item) {
                     if (item && item.value) {
                         self.updateOption(item.value, item);
+                        self.refreshItem(item.value, self.getItem(item.value));
                     }
                 }
             });
@@ -6803,29 +6803,65 @@ Selectize.define('charcoal_item', function (options) {
     }, options);
 
     var self = this;
+    var original = null;
+
+    this.refreshItem = function (value, $item) {
+        var option = self.options[value];
+
+        if (option.hasOwnProperty(options.colorField)) {
+            if (option[options.colorField]) {
+                $item.addClass('has-color');
+                $item.css('border-left-color', option[options.colorField]);
+            }
+            // $item.css('background-color', option[options.colorField]);
+        }
+
+        if (option.hasOwnProperty(options.classField)) {
+            $item.addClass(option[options.classField]);
+        }
+
+        if (original) {
+            return original.apply(this, arguments);
+        }
+    };
+
+    this.refreshOption = function (value, data) {
+        var option = self.options[value];
+        self.refreshOptions(false);
+        var $option = self.getOption(value);
+
+        if (option.hasOwnProperty(options.colorField)) {
+            if (option[options.colorField]) {
+                $option.addClass('has-color');
+                $option.css('border-left-color', option[options.colorField]);
+            }
+        }
+
+        if (original) {
+            return original.apply(this, arguments);
+        }
+    };
+
+    this.settings.onOptionAdd = (function () {
+        original = null;
+
+        // check if onItemAdd exists as it is an optional callback function
+        if (self.settings.hasOwnProperty('onOptionAdd')) {
+            original = self.settings.onOptionAdd;
+        }
+
+        return self.refreshOption;
+    })();
 
     this.settings.onItemAdd = (function (/*value, $item*/) {
-        var original = null;
+        original = null;
 
         // check if onItemAdd exists as it is an optional callback function
         if (self.settings.hasOwnProperty('onItemAdd')) {
             original = self.settings.onItemAdd;
         }
 
-        return function (value, $item) {
-            var option = self.options[value];
-            if (option.hasOwnProperty(options.colorField)) {
-                $item.css('background-color', option[options.colorField]);
-            }
-
-            if (option.hasOwnProperty(options.classField)) {
-                $item.addClass(option[options.classField]);
-            }
-
-            if (original) {
-                return original.apply(this, arguments);
-            }
-        };
+        return self.refreshItem;
     })();
 
 });

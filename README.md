@@ -189,7 +189,7 @@ The following property inputs are available  to build forms in the _admin_ modul
 <tr>
   <td valign="top"><strong>choice_obj_map</strong></td>
   <td valign="top"><em>array</em></td>
-  <td valign="top">Custom mapping between an object properties or callable and the selectize.
+  <td valign="top">Custom mapping between an object properties or callable and the selectize. It is discouraged to use renderable data. choice_obj_map must be a mapping with existing object properties.
   <table class="table table-bordered table-hover table-condensed">
           </br>
           </br>
@@ -217,22 +217,26 @@ The following property inputs are available  to build forms in the _admin_ modul
 </tr>
 <tr>
   <td valign="top"><strong>selectize_templates</strong></td>
-  <td valign="top"><em>array</em></td>
-  <td valign="top">Allow custom rendering for selectize [item] and [option]. Overrule choice_obj_map[label].
+  <td valign="top"><em>string|array</em></td>
+  <td valign="top">Allow custom rendering for selectize [item] and [option]. Overrule choice_obj_map[label]. Priotize using this for rendering custom labels instead of choice_obj_map.<br><br>The value can either be a string with render tags, a path to a custom template or even an array mapping to handle "item", "option", "controller" and "data" individually.
   <table class="table table-bordered table-hover table-condensed">
           </br>
           </br>
           <tbody><tr>
-          <td valign="top"><strong>item</strong></td>
+          <td valign="top"><strong>item</strong><br>(Can be a renderable string or template path)</td>
           <td>Custom renderable html or mustache template for the selectize item. [Item] is the term used to refer to a selected choice.</td>
           </tr>
           <tr>
-          <td valign="top"><strong>option</strong></td>
+          <td valign="top"><strong>option</strong><br>(Can be a renderable string or template path)</td>
           <td>Custom renderable html or mustache template for the selectize option. [Option] is the term used to refer to an available choice.</td>
           </tr>
           <tr>
           <td valign="top"><strong>controller</strong></td>
           <td>Defines a rendering context (path to php controller). (optional) Default context is the object itself.</td>
+          </tr>
+          <tr>
+          <td valign="top"><strong>data</strong>(array)</td>
+          <td>Provides additional data to the controller</td>
           </tr>
           </tbody>
       </table>
@@ -301,7 +305,7 @@ Usage example :
     "obj_type": "cms/object/news-category",
     "pattern": "title",
     "choice_obj_map": {
-        "value": "{{ident}}",
+        "value": "ident",
         "label": "{{customLabelFunction}} - {{someAdditionalInfo }}"
     },
     "selectize_templates": {
@@ -321,6 +325,34 @@ Usage example :
         "update": "quick.update"
     }
 }
+</pre>
+
+Selectize templates examples : 
+
+<pre>
+"selectize_templates": {
+    "item": "{{customLabelFunction}} - {{someAdditionalInfo }}",
+    "option": "{{customLabelFunction}} - {{someAdditionalInfo }}"
+},
+
+---
+
+"selectize_templates": "{{customLabelFunction}} - {{someAdditionalInfo }}",
+
+---
+
+"selectize_templates": "project/selectize/custom-template",
+
+---
+
+"selectize_templates": {
+   "item": "project/selectize/custom-item-template",
+   "option": "project/selectize/custom-option-template",
+   "controller": "project/selectize/custom-template",
+   "data": {
+        "category": "{{selectedCategory}}"
+   }
+},
 </pre>
 
 # Actions

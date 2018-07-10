@@ -12,6 +12,10 @@ $selectize-padding-x: $input-padding-x;
 // $selectize-padding-item-y: 8px;
 // $selectize-width-item-remove: 20px;
 // $selectize-offset-item-remove: 28px;
+$selectize-color-item-active: #efefef;
+$selectize-color-item-active-text: inherit;
+$selectize-color-item-border: rgba(0,0,0,0);
+$selectize-color-item-active-border: rgba(0,0,0,0.5);
 
 $selectize-width-item-buttons: 40px;
 
@@ -23,6 +27,12 @@ $selectize-width-item-buttons: 40px;
         display: block;
         opacity: 0.75;
         font-size: 12px;
+    }
+
+    .option {
+        border-left-color: rgba(0,0,0,0);
+        border-left-width: 5px;
+        border-left-style: solid;
     }
 }
 
@@ -39,8 +49,15 @@ $selectize-width-item-buttons: 40px;
                 padding: 3px 3px 0;
             }
 
-            > div {
+            > div, > div.active {
                 padding: 7px 10px;
+                box-sizing: border-box;
+                border-width: 1px;
+            }
+
+            .item.has-color {
+                border-left-width: 5px;
+                border-left-style: solid;
             }
         }
     }

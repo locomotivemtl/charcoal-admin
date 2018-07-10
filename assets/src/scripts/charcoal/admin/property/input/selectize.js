@@ -122,12 +122,10 @@
             onInitialize: function () {
                 var self = this;
                 self.sifter.iterator(this.items, function (value) {
-                    var option = self.options[value];
-                    var $item = self.getItem(value);
-
-                    if (option.color) {
-                        $item.css('background-color', option.color/*[options.colorField]*/);
-                    }
+                    self.refreshItem(value, self.getItem(value));
+                });
+                self.sifter.iterator(this.options, function (data) {
+                    self.refreshOption(data.value, data);
                 });
             }
         };
@@ -292,6 +290,7 @@
                     },
                     save_action: 'selectize/save',
                     update_action: 'selectize/update',
+
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
 

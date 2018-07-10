@@ -27,6 +27,7 @@ Selectize.define('btn_update', function (options) {
                 callback: function (item) {
                     if (item && item.value) {
                         self.updateOption(item.value, item);
+                        self.refreshItem(item.value, self.getItem(item.value));
                     }
                 }
             });

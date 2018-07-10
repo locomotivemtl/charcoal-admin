@@ -261,6 +261,8 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             if (isset($obj[$prop])) {
                 return $this->parseChoiceVal($obj[$prop]);
             }
+
+            return null;
         }
 
         if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {

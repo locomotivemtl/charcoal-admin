@@ -4,12 +4,14 @@ namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException;
 
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminWidget;
+
 // From 'charcoal-core'
 use Charcoal\Source\Pagination;
 use Charcoal\Source\PaginationInterface;
 
-// From 'charcoal-admin'
-use Charcoal\Admin\AdminWidget;
+
 
 /**
  * Pagination Widget.
@@ -112,7 +114,7 @@ class PaginationWidget extends AdminWidget
      * Set the number of results per page.
      *
      * @param  integer $count The number of results to return, per page.
-     *     Use 0 to request all results.
+     *                        Use 0 to request all results.
      * @return self
      */
     public function setNumPerPage($count)
@@ -130,6 +132,16 @@ class PaginationWidget extends AdminWidget
     public function numPerPage()
     {
         return $this->pager()->numPerPage();
+    }
+
+    /**
+     * Retrieve the total number of items (for counting pages).
+     *
+     * @return integer
+     */
+    public function numTotal()
+    {
+        return $this->numTotal;
     }
 
     /**
@@ -160,17 +172,6 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
-     * Retrieve the total number of items (for counting pages).
-     *
-     * @return integer
-     */
-    public function numTotal()
-    {
-        return $this->numTotal;
-    }
-
-
-    /**
      * @return array
      */
     public function pages()
@@ -179,13 +180,13 @@ class PaginationWidget extends AdminWidget
             return $this->buildQuickJumpForm();
         }
 
-        $out = [];
-        $i = 1;
+        $out      = [];
+        $i        = 1;
         $numPages = $this->numPages();
 
         while ($i <= $numPages) {
             $active = ($i == $this->page());
-            $out[] = $this->formatPage($i);
+            $out[]  = $this->formatPage($i);
             $i++;
         }
 
@@ -197,16 +198,16 @@ class PaginationWidget extends AdminWidget
      */
     private function buildQuickJumpForm()
     {
-        $out = [];
-        $i = 1;
-        $numPages = $this->numPages();
+        $out          = [];
+        $i            = 1;
+        $numPages     = $this->numPages();
         $maxPageCount = $this->maxPageCount();
 
         // Get the range on each side of the pager
-        $half = $numPages / 2;
-        $max = $maxPageCount / 2;
+        $half  = $numPages / 2;
+        $max   = $maxPageCount / 2;
         $range = round(min($half, $max));
-        $left = [];
+        $left  = [];
         $right = [];
 
         // Remember if the active page was hit
@@ -225,14 +226,14 @@ class PaginationWidget extends AdminWidget
             }
             $left[] = [
                 'separator' => false,
-                'active' => $active,
-                'num'    => $i
+                'active'    => $active,
+                'num'       => $i
             ];
             $i++;
         }
 
         // Second range loop
-        $rangeNumPages = $numPages-$range+1;
+        $rangeNumPages = $numPages - $range + 1;
         while ($rangeNumPages <= $numPages) {
             $active = ($rangeNumPages == $this->page());
             if ($active) {
@@ -245,13 +246,13 @@ class PaginationWidget extends AdminWidget
         // In between the 2 ranges
         $middle = $hasActive ? [$separator] : [];
         if (!$hasActive) {
-            if ($range+1 < $this->page()) {
+            if ($range + 1 < $this->page()) {
                 $middle[] = $separator;
             }
 
             $middle[] = $this->formatPage($this->page());
 
-            if (($numPages-$range+1) > $this->page()) {
+            if (($numPages - $range + 1) > $this->page()) {
                 $middle[] = $separator;
             }
         }
@@ -265,11 +266,12 @@ class PaginationWidget extends AdminWidget
      * @param int $page
      * @return array
      */
-    private function formatPage($page) {
+    private function formatPage($page)
+    {
         return [
             'separator' => false,
-            'active' => ($page == $this->page()),
-            'num'    => $page
+            'active'    => ($page == $this->page()),
+            'num'       => $page
         ];
     }
 

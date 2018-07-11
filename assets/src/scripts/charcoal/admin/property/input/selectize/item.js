@@ -28,7 +28,7 @@ Selectize.define('charcoal_item', function (options) {
         }
     };
 
-    this.refreshOption = function (value, data) {
+    this.refreshOption = function (value) {
         var option = self.options[value];
         self.refreshOptions(false);
         var $option = self.getOption(value);

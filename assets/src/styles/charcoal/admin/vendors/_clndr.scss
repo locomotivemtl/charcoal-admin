@@ -1,0 +1,248 @@
+// ==========================================================================
+// Calendar
+// ==========================================================================
+.c-calendar {
+    position: relative;
+    text-align: center;
+}
+
+.c-calendar_days {
+    @include o-layout;
+    border-top: 1px solid $gray-light;
+    border-left: 1px solid $gray-light;
+}
+
+.c-calendar_header {
+    position: relative;
+    padding: rem(40px) 0 rem(20px);
+}
+
+.c-calendar_month {
+    font-size: rem(21px);
+    font-weight: $weight-semi;
+}
+
+.c-calendar_main {
+    @include o-layout;
+}
+
+.c-calendar_header-day {
+    @include o-layout_item;
+    display: inline-block;
+    width: span(1/7);
+    font-size: rem(12px);
+    padding: rem(5px) 0;
+    color: $white;
+    background: $charcoal-blue-1;
+}
+
+.c-calendar_header-day:first-of-type {
+    border-top-left-radius: $border-radius;
+}
+
+.c-calendar_header-day:nth-of-type(7) {
+    border-top-right-radius: $border-radius;
+}
+
+.c-calendar_day {
+    @include o-layout_item;
+    @extend .u-ratio;
+    @extend .u-ratio[data-ratio="0.6"];
+    position: relative;
+    display: inline-block;
+    width: span(1/7);
+    background-color: $white;
+
+    font-weight: $weight-semi;
+    border-right: 1px solid $gray-light;
+    border-bottom: 1px solid $gray-light;
+    transition: background-color $speed $easing;
+
+    &.is-inactive{
+        pointer-events: none;
+    }
+
+    &.has-events:not(.is-adjacent-month) {
+        cursor: pointer;
+
+        &.is-selected:not(.is-inactive) {
+            background-color: $blue;
+            color: $white;
+        }
+    }
+
+    &:not(.has-events) {
+        background-color: $gray-200;
+        color:            $gray-dark;
+    }
+
+    &.is-adjacent-month,
+    &.empty {
+        background-color: $charcoal-gray-1;
+        color: $gray-dark;
+    }
+}
+
+.c-calendar_day_content_container {
+    @extend .u-ratio_content_container;
+}
+
+.c-calendar_day_content {
+    @extend .u-ratio_content;
+    height: 100%;
+    text-align: left;
+
+    @media (max-width: $to-small) {
+        padding: 14px 10px;
+        font-size: 15px;
+    }
+
+    @media (min-width: $from-small) {
+        padding: rem(19px) rem(15px) rem(23px);
+        font-size: rem(16px);
+    }
+}
+
+.c-calendar_day_number {
+    display: inline-block;
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+    //transition: transform $speed $easing;
+    //
+    //html:not(.is-mobile) .c-calendar_day.has-events:hover:not(.is-adjacent-month) & {
+    //    transform: translateY(#{rem(-10px)});
+    //}
+}
+
+//.c-calendar_day_price {
+//    position: absolute;
+//    right: 0;
+//    bottom: rem(5px);
+//    left: 0;
+//    font-size: rem(12px);
+//    display: none;
+//    transition: transform $speed $easing;
+//    transform-origin: center bottom;
+//    transform: translateZ(0);
+//
+//    html:not(.is-mobile) .c-calendar_day.has-events:hover:not(.is-adjacent-month) & {
+//        transform: translateY(#{rem(-5px)});
+//    }
+//
+//    @media (min-width: $from-small) {
+//        .c-calendar_day.has-events & {
+//            display: block;
+//        }
+//    }
+//}
+
+.c-calendar_arrow {
+    position: absolute;
+    top: 50%;
+    width: rem(40px);
+    height: rem(40px);
+    background: $charcoal-blue-1;
+    color: $white;
+    @include o-vertical-center;
+    border-radius: 50%;
+    margin-top: rem(-20px);
+
+    //&::before {
+    //    content: "";
+    //    position: absolute;
+    //    top: 0;
+    //    right: 0;
+    //    bottom: 0;
+    //    left: 0;
+    //    background-color: $blue;
+    //    border-radius: 50%;
+    //    transform: scale(0);
+    //    transition: transform $speed $easing;
+    //}
+
+    &.-prev {
+        left: 0;
+
+        &:hover {
+            svg {
+                transform: translateX(#{-3px});
+            }
+        }
+    }
+
+    &.-next {
+        right: 0;
+
+        &:hover {
+            svg {
+                transform: translateX(#{3px});
+            }
+        }
+    }
+
+    i {
+        position: relative;
+        width: 100%;
+        height: rem(14px);
+        //transition: transform $speed $easing, fill $speed $easing;
+    }
+
+    &:hover {
+        color: $white;
+
+        &::before {
+            transform: scale(1);
+        }
+    }
+
+}
+
+.c-calendar_days,
+.c-calendar_day:nth-last-of-type(7) {
+    border-bottom-left-radius: $border-radius;
+}
+
+.c-calendar_days,
+.c-calendar_day:last-of-type {
+    border-bottom-right-radius: $border-radius;
+}
+
+.c-calendar_dot {
+    margin-right: 4px;
+    display: inline-block;
+    background-color: $charcoal-blue-1;
+    width: rem(15px);
+    height: rem(15px);
+    border-radius: 50%;
+}
+
+.c-calendar_icon {
+    margin-right: 4px;
+    display: inline-block;
+    width: rem(15px);
+    height: rem(15px);
+    border-radius: 50%;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.c-calendar_item_create {
+    button {
+        border-radius: 50% 50%;
+    }
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    transition: transform $speed $easing, opacity $speed $easing;
+    transform:scale(0,0);
+    opacity: 0;
+
+    .c-calendar_day:hover & {
+        transform:scale(1,1);
+        opacity: 1;
+    }
+}

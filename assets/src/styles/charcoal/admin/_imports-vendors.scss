@@ -17,6 +17,11 @@
 @import "settings/config.colors";
 @import "settings/config";
 
+// Utilities
+// ==========================================================================
+
+@import "utilities/ratio";
+
 // Overwriting core Bootstrap variables
 @import "bootstrap/variables";
 
@@ -70,3 +75,5 @@
 
 // jQuery MiniColors
 @import "vendors/minicolors";
+
+@import "vendors/clndr";

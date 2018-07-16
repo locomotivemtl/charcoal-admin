@@ -4,18 +4,25 @@ namespace Charcoal\Admin\Widget;
 
 use InvalidArgumentException;
 
+// From 'charcoal-admin'
+use Charcoal\Admin\AdminWidget;
+
 // From 'charcoal-core'
 use Charcoal\Source\Pagination;
 use Charcoal\Source\PaginationInterface;
 
-// From 'charcoal-admin'
-use Charcoal\Admin\AdminWidget;
+
 
 /**
  * Pagination Widget.
  */
 class PaginationWidget extends AdminWidget
 {
+    /**
+     * Max pages count in the pagination
+     */
+    const MAX_PAGE_COUNT = 10;
+
     /**
      * The pager object.
      *
@@ -29,6 +36,11 @@ class PaginationWidget extends AdminWidget
      * @var integer
      */
     private $numTotal;
+
+    /**
+     * @var int
+     */
+    private $maxPageCount = self::MAX_PAGE_COUNT;
 
     /**
      * Retrieve the Paginationb object.
@@ -102,7 +114,7 @@ class PaginationWidget extends AdminWidget
      * Set the number of results per page.
      *
      * @param  integer $count The number of results to return, per page.
-     *     Use 0 to request all results.
+     *                        Use 0 to request all results.
      * @return self
      */
     public function setNumPerPage($count)
@@ -120,6 +132,16 @@ class PaginationWidget extends AdminWidget
     public function numPerPage()
     {
         return $this->pager()->numPerPage();
+    }
+
+    /**
+     * Retrieve the total number of items (for counting pages).
+     *
+     * @return integer
+     */
+    public function numTotal()
+    {
+        return $this->numTotal;
     }
 
     /**
@@ -150,30 +172,107 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
-     * Retrieve the total number of items (for counting pages).
-     *
-     * @return integer
-     */
-    public function numTotal()
-    {
-        return $this->numTotal;
-    }
-
-    /**
-     * Yield each page.
-     *
-     * @return \Generator
+     * @return array
      */
     public function pages()
     {
-        $i = 1;
-        while ($i <= $this->numPages()) {
-            yield [
-                'active' => ($i == $this->page()),
-                'num'    => $i
+        if ($this->quickJumpEnabled()) {
+            return $this->buildQuickJumpForm();
+        }
+
+        $out      = [];
+        $i        = 1;
+        $numPages = $this->numPages();
+
+        while ($i <= $numPages) {
+            $active = ($i == $this->page());
+            $out[]  = $this->formatPage($i);
+            $i++;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array
+     */
+    private function buildQuickJumpForm()
+    {
+        $out          = [];
+        $i            = 1;
+        $numPages     = $this->numPages();
+        $maxPageCount = $this->maxPageCount();
+
+        // Get the range on each side of the pager
+        $half  = $numPages / 2;
+        $max   = $maxPageCount / 2;
+        $range = round(min($half, $max));
+        $left  = [];
+        $right = [];
+
+        // Remember if the active page was hit
+        $hasActive = false;
+
+        // Separator
+        $separator = [
+            'separator' => true
+        ];
+
+        // First range loop
+        while ($i <= $range) {
+            $active = ($i == $this->page());
+            if ($active) {
+                $hasActive = true;
+            }
+            $left[] = [
+                'separator' => false,
+                'active'    => $active,
+                'num'       => $i
             ];
             $i++;
         }
+
+        // Second range loop
+        $rangeNumPages = $numPages - $range + 1;
+        while ($rangeNumPages <= $numPages) {
+            $active = ($rangeNumPages == $this->page());
+            if ($active) {
+                $hasActive = true;
+            }
+            $right[] = $this->formatPage($rangeNumPages);
+            $rangeNumPages++;
+        }
+
+        // In between the 2 ranges
+        $middle = $hasActive ? [$separator] : [];
+        if (!$hasActive) {
+            if ($range + 1 < $this->page()) {
+                $middle[] = $separator;
+            }
+
+            $middle[] = $this->formatPage($this->page());
+
+            if (($numPages - $range + 1) > $this->page()) {
+                $middle[] = $separator;
+            }
+        }
+
+        $out = array_merge($left, $middle, $right);
+
+        return $out;
+    }
+
+    /**
+     * @param int $page
+     * @return array
+     */
+    private function formatPage($page)
+    {
+        return [
+            'separator' => false,
+            'active'    => ($page == $this->page()),
+            'num'       => $page
+        ];
     }
 
     /**
@@ -189,6 +288,26 @@ class PaginationWidget extends AdminWidget
 
         return ceil($this->numTotal() / $this->numPerPage());
     }
+
+    /**
+     * @return int
+     */
+    public function maxPageCount()
+    {
+        return $this->maxPageCount;
+    }
+
+    /**
+     * @param int $maxPageCount
+     * @return PaginationWidget
+     */
+    public function setMaxPageCount($maxPageCount)
+    {
+        $this->maxPageCount = $maxPageCount;
+
+        return $this;
+    }
+
 
     /**
      * Determine if pagination can be displayed.
@@ -218,5 +337,15 @@ class PaginationWidget extends AdminWidget
     public function nextEnabled()
     {
         return ($this->page() < $this->numPages());
+    }
+
+    /**
+     * His the quick jump input allowed?
+     *
+     * @return bool
+     */
+    public function quickJumpEnabled()
+    {
+        return ($this->numPages() > $this->maxPageCount());
     }
 }

@@ -189,13 +189,14 @@ Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
     return this;
 };
 
-Charcoal.Admin.Widget.prototype.reload = function (callback) {
+Charcoal.Admin.Widget.prototype.reload = function (callback, with_data = false) {
     var that = this;
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load';
     var data = {
         widget_type:    that.widget_type || that.type(),
-        widget_options: that.widget_options()
+        widget_options: that.widget_options(),
+        with_data: with_data
     };
 
     // Response from the reload action should always include a
@@ -213,6 +214,11 @@ Charcoal.Admin.Widget.prototype.reload = function (callback) {
                 that.set_id(wid);
                 that.add_opts('id', wid);
                 that.add_opts('widget_id', wid);
+
+                if (with_data) {
+                    that.add_opts('data', response.widget_data);
+                }
+
                 that.widget_id = wid;
                 that.anim_out(function () {
                     that.element().replaceWith(response.widget_html);

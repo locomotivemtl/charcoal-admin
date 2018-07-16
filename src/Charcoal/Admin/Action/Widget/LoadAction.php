@@ -55,6 +55,13 @@ class LoadAction extends AdminAction
     protected $widgetId;
 
     /**
+     * The widget's Data for JS.
+     *
+     * @var array|mixed
+     */
+    protected $widgetData;
+
+    /**
      * The widget's current type.
      *
      * @var string
@@ -94,6 +101,7 @@ class LoadAction extends AdminAction
         $previousId    = $request->getParam('widget_id');
         $widgetType    = $request->getParam('widget_type');
         $widgetOptions = $request->getParam('widget_options');
+        $withData      = $request->getParam('with_data');
 
         if ($previousId) {
             $failMessage = $this->translator()->translation('Failed to reload widget');
@@ -152,6 +160,11 @@ class LoadAction extends AdminAction
             $this->setWidgetHtml($widgetHtml);
             $this->setWidgetId($widgetId);
 
+            if ($withData) {
+                $widgetData = $widget->widgetDataForJs();
+                $this->setWidgetData($widgetData);
+            }
+
             if ($previousId) {
                 $doneMessage = $this->translator()->translation('Widget Reloaded');
             } else {
@@ -199,6 +212,29 @@ class LoadAction extends AdminAction
     public function widgetId()
     {
         return $this->widgetId;
+    }
+
+    /**
+     * Set the widget's DATA.
+     *
+     * @param array|mixed $widgetData WidgetData for LoadAction.
+     * @return self
+     */
+    public function setWidgetData($widgetData)
+    {
+        $this->widgetData = $widgetData;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the widget's DATA.
+     *
+     * @return array|mixed
+     */
+    public function widgetData()
+    {
+        return $this->widgetData;
     }
 
     /**
@@ -269,6 +305,7 @@ class LoadAction extends AdminAction
         return [
             'success'       => $this->success(),
             'widget_html'   => $this->widgetHtml(),
+            'widget_data'   => $this->widgetData(),
             'widget_id'     => $this->widgetId(),
             'feedbacks'     => $this->feedbacks()
         ];

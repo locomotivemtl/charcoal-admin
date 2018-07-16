@@ -398,7 +398,7 @@ class ClearCacheTemplate extends AdminTemplate
             $sns = $matches['stashNS'];
             $iid = trim($matches['itemID'], ':');
             $iid = preg_replace([ '/:+/', '/\.+/' ], [ '⇒', '/' ], $iid);
-            $key = $matches['stashNS'] . '⇒' . $iid;
+            $key = $matches['stashNS'].'⇒'.$iid;
         }
 
         return $key;

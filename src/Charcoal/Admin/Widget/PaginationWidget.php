@@ -11,8 +11,6 @@ use Charcoal\Admin\AdminWidget;
 use Charcoal\Source\Pagination;
 use Charcoal\Source\PaginationInterface;
 
-
-
 /**
  * Pagination Widget.
  */
@@ -38,7 +36,7 @@ class PaginationWidget extends AdminWidget
     private $numTotal;
 
     /**
-     * @var int
+     * @var integer
      */
     private $maxPageCount = self::MAX_PAGE_COUNT;
 
@@ -204,8 +202,8 @@ class PaginationWidget extends AdminWidget
         $maxPageCount = $this->maxPageCount();
 
         // Get the range on each side of the pager
-        $half  = $numPages / 2;
-        $max   = $maxPageCount / 2;
+        $half  = ($numPages / 2);
+        $max   = ($maxPageCount / 2);
         $range = round(min($half, $max));
         $left  = [];
         $right = [];
@@ -233,7 +231,7 @@ class PaginationWidget extends AdminWidget
         }
 
         // Second range loop
-        $rangeNumPages = $numPages - $range + 1;
+        $rangeNumPages = ($numPages - $range + 1);
         while ($rangeNumPages <= $numPages) {
             $active = ($rangeNumPages == $this->page());
             if ($active) {
@@ -246,7 +244,7 @@ class PaginationWidget extends AdminWidget
         // In between the 2 ranges
         $middle = $hasActive ? [$separator] : [];
         if (!$hasActive) {
-            if ($range + 1 < $this->page()) {
+            if (($range + 1) < $this->page()) {
                 $middle[] = $separator;
             }
 
@@ -263,7 +261,7 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
-     * @param int $page
+     * @param integer $page The page index.
      * @return array
      */
     private function formatPage($page)
@@ -290,7 +288,7 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
-     * @return int
+     * @return integer
      */
     public function maxPageCount()
     {
@@ -298,7 +296,7 @@ class PaginationWidget extends AdminWidget
     }
 
     /**
-     * @param int $maxPageCount
+     * @param integer $maxPageCount The maximum number of page to display in pager at the same time.
      * @return PaginationWidget
      */
     public function setMaxPageCount($maxPageCount)
@@ -342,7 +340,7 @@ class PaginationWidget extends AdminWidget
     /**
      * His the quick jump input allowed?
      *
-     * @return bool
+     * @return boolean
      */
     public function quickJumpEnabled()
     {

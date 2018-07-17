@@ -137,6 +137,10 @@
 //    }
 //}
 
+.c-calendar_arrow.btn {
+    font-size: 0;
+}
+
 .c-calendar_arrow {
     position: absolute;
     top: 50%;
@@ -147,6 +151,7 @@
     @include o-vertical-center;
     border-radius: 50%;
     margin-top: rem(-20px);
+    cursor: pointer;
 
     //&::before {
     //    content: "";
@@ -163,39 +168,24 @@
 
     &.-prev {
         left: 0;
-
-        &:hover {
-            svg {
-                transform: translateX(#{-3px});
-            }
-        }
     }
 
     &.-next {
         right: 0;
+    }
 
-        &:hover {
-            svg {
-                transform: translateX(#{3px});
-            }
-        }
+    span {
+        text-align: center;
+        font-size: 0;
     }
 
     i {
+        font-size: 1rem;
         position: relative;
         width: 100%;
         height: rem(14px);
         //transition: transform $speed $easing, fill $speed $easing;
     }
-
-    &:hover {
-        color: $white;
-
-        &::before {
-            transform: scale(1);
-        }
-    }
-
 }
 
 .c-calendar_days,
@@ -233,7 +223,11 @@
 .c-calendar_item_create {
     button {
         border-radius: 50% 50%;
+        width: 100%;
+        height: 100%;
     }
+    width: rem(40px);
+    height: rem(40px);
     position: absolute;
     bottom: 2px;
     right: 2px;

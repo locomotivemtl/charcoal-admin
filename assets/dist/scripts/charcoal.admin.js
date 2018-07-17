@@ -4188,6 +4188,18 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             }
         });
     }
+    
+    $('.js-jump-page-form', that.table_selector).on('submit', function (event) {
+        event.preventDefault();
+
+        var $this = $(this);
+        var page_num = parseInt($this.find('input').val());
+
+        if (page_num) {
+            that.pagination.page = page_num;
+            that.reload();
+        }
+    });
 
     $('.js-page-switch', that.table_selector).on('click', function (event) {
         event.preventDefault();

@@ -24,4 +24,8 @@
         height: auto;
         margin-bottom: rem($unit);
     }
+
+    &.-small {
+        height: $unit;
+    }
 }

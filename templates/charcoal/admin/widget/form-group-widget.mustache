@@ -10,28 +10,31 @@
     This widget expects a `Charcoal\Admin\Widget\FormGroup` model as context.
 
 --}}
-<fieldset>
-    {{# showHeader }}
-        <header class="o-header -border">
-            {{# showTitle }}
-                <h2>{{ title }}</h2>
-            {{/ showTitle }}
-            {{> charcoal/admin/template/inc.description }}
+
+{{# showHeader }}
+<header class="o-header -small">
+    {{# showTitle }}
+        <h3>{{ title }}</h3>
+    {{/ showTitle }}
+    {{> charcoal/admin/template/inc.description }}
+    {{# showNotesAbove }}
+        {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
+</header>
+{{/ showHeader }}
+<div class="o-container c-form-widget_group_content">
+    <fieldset>
+        {{^ showHeader }}
+            {{# showDescription }}
+                <div class="form-text border-bottom mb-4 pb-4">{{& description }}</div>
+            {{/ showDescription }}
             {{# showNotesAbove }}
                 {{> charcoal/admin/template/inc.notes }}
             {{/ showNotesAbove }}
-        </header>
-    {{/ showHeader }}
-    {{^ showHeader }}
-        {{# showDescription }}
-            <div class="form-text border-bottom mb-4 pb-4">{{& description }}</div>
-        {{/ showDescription }}
-        {{# showNotesAbove }}
+        {{/ showHeader }}
+        {{> charcoal/admin/widget/form-group/form-properties }}
+        {{^ showNotesAbove }}
             {{> charcoal/admin/template/inc.notes }}
         {{/ showNotesAbove }}
-    {{/ showHeader }}
-    {{> charcoal/admin/widget/form-group/form-properties }}
-    {{^ showNotesAbove }}
-        {{> charcoal/admin/template/inc.notes }}
-    {{/ showNotesAbove }}
-</fieldset>
+    </fieldset>
+</div>

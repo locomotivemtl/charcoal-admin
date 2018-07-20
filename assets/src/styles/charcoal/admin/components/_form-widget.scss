@@ -38,33 +38,38 @@
 }
 
 .c-form-widget_groups {
-    @media (min-width: $from-large) {
-        background-color: $charcoal-white-0;
-        border-radius: $border-radius;
-    }
-
-    .c-form-widget.-object-form &,
-    .c-form-widget.-tabbed & {
-        @media (min-width: $from-large) {
-            padding: rem($unit / 2);
+    .c-form-widget_group {
+        > header {
             margin-top: rem($unit / 2);
+            padding: rem($unit / 2) rem($unit / 2) 0 rem($unit / 2);
+        }
+
+        .c-form-widget_group_content {
+            background-color: $charcoal-white-0;
+            border-radius: $border-radius;
+
+            .c-form-widget.-object-form &,
+            .c-form-widget.-tabbed & {
+                padding: rem($unit / 2);
+                margin-top: rem($unit / 2);
+            }
+            .c-form-widget.-quick-form & {
+                background: none;
+            }
+
+            .c-form-widget.-quick-form.-tabbed & {
+                background-color: $charcoal-white-1;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+
+                @media (min-width: $from-large) {
+                    margin-top: 0;
+                    padding: rem($header-height / 2) rem($unit / 2) 0;
+                }
+            }
         }
     }
 
-    .c-form-widget.-quick-form & {
-        background: none;
-    }
-
-    .c-form-widget.-quick-form.-tabbed & {
-        background-color: $charcoal-white-1;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-
-        @media (min-width: $from-large) {
-            margin-top: 0;
-            padding: rem($header-height / 2) rem($unit / 2) 0;
-        }
-    }
 }
 
 .c-form-widget_sidebar {

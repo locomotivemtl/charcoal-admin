@@ -94,6 +94,30 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * @param string $ident Property ident.
+     * @param array  $data  Property metadata.
+     * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
+     */
+    public function getOrCreateFormProperty($ident, array $data = null)
+    {
+        if ($ident && isset($this->formProperties[$ident])) {
+            $p = $this->formProperties[$ident];
+
+            if ($data !== null) {
+                $p->setData($data);
+            }
+
+            $this->formProperties[$ident] = $p;
+
+            return $this->formProperties[$ident];
+        }
+
+        $this->formProperties[$ident] = $this->createFormProperty($data);
+
+        return $this->formProperties[$ident];
+    }
+
+    /**
      * @param array $sidebars The form sidebars.
      * @return self
      */
@@ -132,7 +156,7 @@ class FormWidget extends AdminWidget implements
                 $s = $this->widgetFactory()->create('charcoal/admin/widget/form-sidebar');
             }
 
-            $s->setForm($this);
+            $s->setForm($this->formWidget());
             $s->setData($sidebar);
 
             // Test sidebar vs. ACL roles
@@ -162,7 +186,7 @@ class FormWidget extends AdminWidget implements
     public function sidebars()
     {
         $sidebars = $this->sidebars;
-        uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
+        uasort($sidebars, [$this, 'sortSidebarsByPriority']);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             if (!$sidebar->active()) {
                 continue;
@@ -230,6 +254,16 @@ class FormWidget extends AdminWidget implements
         }
 
         if (is_array($formProperty)) {
+            if ($this->formProperties[$propertyIdent]) {
+                $this->formProperties[$propertyIdent]->setData($formProperty);
+
+                return $this;
+            }
+            if ($this->hiddenProperties[$propertyIdent]) {
+                $this->hiddenProperties[$propertyIdent]->setData($formProperty);
+
+                return $this;
+            }
             $formProperty = $this->createFormProperty($formProperty);
             $formProperty->setPropertyIdent($propertyIdent);
         } elseif (!$formProperty instanceof FormPropertyWidget) {
@@ -320,6 +354,11 @@ class FormWidget extends AdminWidget implements
         }
 
         if (is_array($formProperty)) {
+            if ($this->hiddenProperties[$propertyIdent]) {
+                $this->hiddenProperties[$propertyIdent]->setData($formProperty);
+
+                return $this;
+            }
             $formProperty = $this->createFormProperty($formProperty);
             $formProperty->setPropertyIdent($propertyIdent);
         } elseif (!$formProperty instanceof FormPropertyWidget) {
@@ -466,6 +505,7 @@ class FormWidget extends AdminWidget implements
         if ($priorityA === $priorityB) {
             return 0;
         }
+
         return ($priorityA < $priorityB) ? (-1) : 1;
     }
 
@@ -486,6 +526,7 @@ class FormWidget extends AdminWidget implements
         if ($a === $b) {
             return 0;
         }
+
         return ($a < $b) ? (-1) : 1;
     }
 

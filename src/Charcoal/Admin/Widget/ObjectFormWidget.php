@@ -197,7 +197,7 @@ class ObjectFormWidget extends FormWidget implements
                 ));
             }
 
-            $formProperty = $this->createFormProperty();
+            $formProperty = $this->getOrCreateFormProperty($propertyIdent);
             $formProperty->setViewController($this->viewController());
             $formProperty->setPropertyIdent($propertyIdent);
             $formProperty->setData($propertyMetadata);
@@ -227,6 +227,10 @@ class ObjectFormWidget extends FormWidget implements
             );
         }
 
+        if (isset($this->formProperties[$propertyIdent])) {
+            return $this->formProperties[$propertyIdent];
+        }
+
         $propertyMetadata = $this->obj()->metadata()->property($propertyIdent);
 
         if (!is_array($propertyMetadata)) {
@@ -237,7 +241,7 @@ class ObjectFormWidget extends FormWidget implements
             ));
         }
 
-        $p = $this->createFormProperty();
+        $p = $this->getOrCreateFormProperty($propertyIdent);
         $p->setViewController($this->viewController());
         $p->setPropertyIdent($propertyIdent);
         $p->setData($propertyMetadata);
@@ -468,6 +472,16 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
+     * Yield the form's property controls.
+     *
+     * @return array
+     */
+    public function parseFormProperties()
+    {
+        return $this->formProperties;
+    }
+
+    /**
      * Create a new form group widget.
      *
      * @see    \Charcoal\Ui\Form\FormTrait::createFormGroup()
@@ -483,7 +497,7 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         $group = $this->formGroupFactory()->create($type);
-        $group->setForm($this);
+        $group->setForm($this->formWidget());
 
         if ($group instanceof ObjectContainerInterface) {
             if (empty($group->objType())) {

@@ -10,6 +10,7 @@ use Pimple\Container;
 
 // From 'charcoal-ui'
 use Charcoal\Ui\FormGroup\FormGroupInterface;
+use Charcoal\Ui\Form\FormInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Widget\FormWidget;
@@ -155,7 +156,7 @@ class ObjectFormWidget extends FormWidget implements
     {
         $action = parent::action();
         if (!$action) {
-            $obj = $this->obj();
+            $obj   = $this->obj();
             $objId = $obj->id();
             if ($objId) {
                 return 'object/update';
@@ -172,7 +173,7 @@ class ObjectFormWidget extends FormWidget implements
      *
      * @param  array $group An optional group to use.
      * @throws UnexpectedValueException If a property data is invalid.
-     * @return FormPropertyWidget[]|Generator
+     * @return FormPropertyWidget[]|\Generator
      */
     public function formProperties(array $group = null)
     {
@@ -261,7 +262,7 @@ class ObjectFormWidget extends FormWidget implements
     public function setFormData(array $data)
     {
         $objData = $this->objData();
-        $merged = array_replace_recursive($objData, $data);
+        $merged  = array_replace_recursive($objData, $data);
 
         // Remove null values
         $merged = array_filter($merged, function ($val) {
@@ -309,11 +310,41 @@ class ObjectFormWidget extends FormWidget implements
     public function widgetDataForJs()
     {
         return [
-            'obj_id'        => $this->objId(),
-            'obj_type'      => $this->objType(),
-            'form_selector' => '#'.$this->widgetId(),
-            'tab'           => $this->isTabbable(),
+            'obj_id'           => $this->objId(),
+            'obj_type'         => $this->objType(),
+            'form_selector'    => '#'.$this->widgetId(),
+            'tab'              => $this->isTabbable(),
+            'group_conditions' => $this->groupsConditionalLogic(),
         ];
+    }
+
+    /**
+     * Self recursive when a groups is an instance of FormInterface.
+     *
+     * @param array|null $groups Form groups to parse.
+     * @return array
+     */
+    protected function groupsConditionalLogic(array $groups = null)
+    {
+        if (!$groups) {
+            $groups = iterator_to_array($this->groups());
+        }
+
+        $conditions = [];
+
+        foreach ($groups as $group) {
+            if ($group instanceof FormInterface) {
+                $conditions = array_merge($conditions, $this->groupsConditionalLogic(
+                    iterator_to_array($group->groups())
+                ));
+            }
+
+            if ($group instanceof FormGroupInterface && $group->conditionalLogic()) {
+                $conditions = array_merge($conditions, $group->conditionalLogic());
+            }
+        }
+
+        return $conditions;
     }
 
     /**
@@ -335,7 +366,7 @@ class ObjectFormWidget extends FormWidget implements
      */
     protected function defaultDataSources()
     {
-        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT ];
+        return [static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT];
     }
 
     /**
@@ -365,16 +396,16 @@ class ObjectFormWidget extends FormWidget implements
         if (is_string($toResolve)) {
             $obj = $this->obj();
 
-            $resolved = [ $obj, $toResolve ];
+            $resolved = [$obj, $toResolve];
 
             // check for slim callable as "class:method"
             $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
             if (preg_match($callablePattern, $toResolve, $matches)) {
-                $class = $matches[1];
+                $class  = $matches[1];
                 $method = $matches[2];
 
                 if ($class === 'parent') {
-                    $resolved = [ $obj, $class.'::'.$method ];
+                    $resolved = [$obj, $class.'::'.$method];
                 }
             }
 
@@ -392,7 +423,7 @@ class ObjectFormWidget extends FormWidget implements
     protected function acceptedRequestData()
     {
         return array_merge(
-            [ 'obj_type', 'obj_id', 'template' ],
+            ['obj_type', 'obj_id', 'template'],
             parent::acceptedRequestData()
         );
     }

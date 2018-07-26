@@ -18,7 +18,6 @@ use Charcoal\Factory\FactoryInterface;
 /// From 'charcoal-ui'
 use Charcoal\Ui\Form\FormInterface;
 use Charcoal\Ui\Form\FormTrait;
-use Charcoal\Ui\FormGroup\FormGroupInterface;
 use Charcoal\Ui\Layout\LayoutAwareInterface;
 use Charcoal\Ui\Layout\LayoutAwareTrait;
 use Charcoal\Ui\PrioritizableInterface;
@@ -26,6 +25,7 @@ use Charcoal\Ui\PrioritizableInterface;
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Ui\FormSidebarInterface;
+use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
@@ -112,7 +112,34 @@ class FormWidget extends AdminWidget implements
             return $this->formProperties[$ident];
         }
 
-        $this->formProperties[$ident] = $this->createFormProperty($data);
+        if ($ident && isset($this->hiddenProperties[$ident])) {
+            $p = $this->hiddenProperties[$ident];
+
+            if ($data !== null) {
+                $p->setData($data);
+            }
+
+            $this->hiddenProperties[$ident] = $p;
+
+            return $this->hiddenProperties[$ident];
+        }
+
+        $prop = $this->createFormProperty($data);
+        $prop->setPropertyIdent($ident);
+
+        if ($this instanceof ObjectContainerInterface) {
+            $prop->setPropertyVal($this->obj()[$ident]);
+        }
+
+        if ($prop->hidden()) {
+            $prop->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
+
+            $this->hiddenProperties[$ident] = $prop;
+
+            return $this->hiddenProperties[$ident];
+        }
+
+        $this->formProperties[$ident] = $prop;
 
         return $this->formProperties[$ident];
     }
@@ -254,29 +281,13 @@ class FormWidget extends AdminWidget implements
         }
 
         if (is_array($formProperty)) {
-            if ($this->formProperties[$propertyIdent]) {
-                $this->formProperties[$propertyIdent]->setData($formProperty);
-
-                return $this;
-            }
-            if ($this->hiddenProperties[$propertyIdent]) {
-                $this->hiddenProperties[$propertyIdent]->setData($formProperty);
-
-                return $this;
-            }
-            $formProperty = $this->createFormProperty($formProperty);
+            $formProperty = $this->getOrCreateFormProperty($propertyIdent, $formProperty);
             $formProperty->setPropertyIdent($propertyIdent);
         } elseif (!$formProperty instanceof FormPropertyWidget) {
             throw new InvalidArgumentException(sprintf(
                 'Property must be an array or an instance of FormPropertyWidget, received %s',
                 is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
             ));
-        }
-
-        if ($formProperty->hidden()) {
-            $this->hiddenProperties[$propertyIdent] = $formProperty;
-        } else {
-            $this->formProperties[$propertyIdent] = $formProperty;
         }
 
         return $this;
@@ -290,7 +301,7 @@ class FormWidget extends AdminWidget implements
     public function formProperties()
     {
         $sidebars = $this->sidebars;
-        if (!is_array($this->sidebars)) {
+        if (!is_array($sidebars)) {
             yield null;
         } else {
             foreach ($this->formProperties as $formProperty) {
@@ -354,23 +365,13 @@ class FormWidget extends AdminWidget implements
         }
 
         if (is_array($formProperty)) {
-            if ($this->hiddenProperties[$propertyIdent]) {
-                $this->hiddenProperties[$propertyIdent]->setData($formProperty);
-
-                return $this;
-            }
-            $formProperty = $this->createFormProperty($formProperty);
-            $formProperty->setPropertyIdent($propertyIdent);
+            $this->getOrCreateFormProperty($propertyIdent, $formProperty);
         } elseif (!$formProperty instanceof FormPropertyWidget) {
             throw new InvalidArgumentException(sprintf(
                 'Property must be an array or an instance of FormPropertyWidget, received %s',
                 is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
             ));
         }
-
-        $formProperty->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
-
-        $this->hiddenProperties[$propertyIdent] = $formProperty;
 
         return $this;
     }

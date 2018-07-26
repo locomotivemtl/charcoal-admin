@@ -198,15 +198,9 @@ class ObjectFormWidget extends FormWidget implements
                 ));
             }
 
-            $formProperty = $this->getOrCreateFormProperty($propertyIdent);
-            $formProperty->setViewController($this->viewController());
-            $formProperty->setPropertyIdent($propertyIdent);
-            $formProperty->setData($propertyMetadata);
-            $formProperty->setPropertyVal($obj[$propertyIdent]);
+            $formProperty = $this->getOrCreateFormProperty($propertyIdent, $propertyMetadata);
 
-            if ($formProperty->hidden()) {
-                $this->hiddenProperties[$propertyIdent] = $formProperty;
-            } else {
+            if (!$formProperty->hidden()) {
                 yield $propertyIdent => $formProperty;
             }
         }
@@ -242,10 +236,7 @@ class ObjectFormWidget extends FormWidget implements
             ));
         }
 
-        $p = $this->getOrCreateFormProperty($propertyIdent);
-        $p->setViewController($this->viewController());
-        $p->setPropertyIdent($propertyIdent);
-        $p->setData($propertyMetadata);
+        $p = $this->getOrCreateFormProperty($propertyIdent, $propertyMetadata);
 
         return $p;
     }

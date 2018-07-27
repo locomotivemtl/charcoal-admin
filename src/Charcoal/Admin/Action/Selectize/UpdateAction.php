@@ -24,7 +24,7 @@ class UpdateAction extends BaseUpdateAction
     protected function validDataFromRequest()
     {
         return array_merge([
-            'selectize_obj_type', 'selectize_prop_ident'
+            'selectize_obj_type', 'selectize_prop_ident', 'selectize_property'
         ], parent::validDataFromRequest());
     }
 
@@ -53,5 +53,6 @@ class UpdateAction extends BaseUpdateAction
 
         $this->setSelectizeRenderer($container['selectize/renderer']);
         $this->setPropertyInputFactory($container['property/input/factory']);
+        $this->setPropertyFactory($container['property/factory']);
     }
 }

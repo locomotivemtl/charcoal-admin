@@ -37,7 +37,6 @@ $selectize-width-item-buttons: 40px;
 }
 
 // @todo Evaluate all these overide styles.
-
 .selectize-control {
     .selectize-input {
         display: block;
@@ -51,6 +50,9 @@ $selectize-width-item-buttons: 40px;
 
     &.single {
         .selectize-input {
+            &.input-active {
+                display: block;
+            }
             .item.has-color {
                 padding-left: 5px;
             }
@@ -226,6 +228,14 @@ $selectize-width-item-buttons: 40px;
 
     ~ .input-group-btn {
         vertical-align: top;
+    }
+}
+
+.input-group {
+    .selectized:first-child + .selectize-control{
+        .selectize-input{
+            @include border-left-radius($input-border-radius);
+        }
     }
 }
 

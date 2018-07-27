@@ -6426,6 +6426,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         var form_ident = this.form_ident;
         var submit_label = null;
         var id = opts.id || null;
+        var selectize_property = this.selectize_property;
         var selectize_property_ident = this.selectize_property_ident;
         var selectize_obj_type = this.selectize_obj_type;
 
@@ -6510,7 +6511,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     obj_id: id,
                     extra_form_data: {
                         selectize_obj_type: selectize_obj_type,
-                        selectize_prop_ident: selectize_property_ident
+                        selectize_prop_ident: selectize_property_ident,
+                        selectize_property: selectize_property
                     },
                     save_action: 'selectize/save',
                     update_action: 'selectize/update',
@@ -6638,7 +6640,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 self.create_item(null, function (item) {
                     // Update the item.
                     if (item && item.value) {
-                        selectize.updateOption(selectedItem[0], item);
+                        selectize.updateOption(item.value, item);
+                        selectize.refreshOption(item.value, item);
+                        selectize.refreshItem(item.value, selectize.getItem(item.value));
                     }
                 }, {
                     id: selectedItem[0],
@@ -6667,6 +6671,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     // Update the item.
                     if (item && item.value) {
                         selectize.updateOption(id, item);
+                        selectize.refreshOption(id, item);
+                        selectize.refreshItem(id, selectize.getItem(item));
                     }
                 }, {
                     id: id,
@@ -6768,6 +6774,7 @@ Selectize.define('btn_update', function (options) {
                 callback: function (item) {
                     if (item && item.value) {
                         self.updateOption(item.value, item);
+                        self.refreshOption(item.value, item);
                         self.refreshItem(item.value, self.getItem(item.value));
                     }
                 }

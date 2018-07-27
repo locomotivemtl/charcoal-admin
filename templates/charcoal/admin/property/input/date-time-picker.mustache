@@ -18,14 +18,13 @@ DateTime picker Property Input
         {{# disabled }}disabled{{/ disabled }}
         value="">
     <div class="input-group-append">
-        <label
-            class="input-group-text"
-            data-target="#datetimepicker_{{ inputId }}"
-            data-toggle="datetimepicker"
-            for="{{ inputId }}">
+        <button id="{{ inputId }}_create" class="btn btn-lg btn-outline-secondary"
+                data-target="#datetimepicker_{{ inputId }}"
+                data-toggle="datetimepicker"
+                for="{{ inputId }}" type="button">
             <span class="sr-only">{{# _t }}Use Calendar Widget{{/ _t }}</span>
             <span class="fa fa-calendar" aria-hidden="true"></span>
-        </label>
+        </button>
     </div>
 </div>
 

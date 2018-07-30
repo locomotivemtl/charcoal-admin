@@ -17,9 +17,6 @@
         <h3>{{ title }}</h3>
     {{/ showTitle }}
     {{> charcoal/admin/template/inc.description }}
-    {{# showNotesAbove }}
-        {{> charcoal/admin/template/inc.notes }}
-    {{/ showNotesAbove }}
 </header>
 {{/ showHeader }}
 <div class="o-container c-form-widget_group_content">
@@ -28,10 +25,13 @@
             {{# showDescription }}
                 <div class="form-text border-bottom mb-4 pb-4">{{& description }}</div>
             {{/ showDescription }}
-            {{# showNotesAbove }}
-                {{> charcoal/admin/template/inc.notes }}
-            {{/ showNotesAbove }}
         {{/ showHeader }}
+        {{# showNotesAbove }}
+        <div class="form-text mb-4">
+            {{> charcoal/admin/template/inc.notes }}
+        </div>
+        {{/ showNotesAbove }}
+
         {{> charcoal/admin/widget/form-group/form-properties }}
         {{^ showNotesAbove }}
             {{> charcoal/admin/template/inc.notes }}

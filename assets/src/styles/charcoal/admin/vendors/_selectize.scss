@@ -57,6 +57,25 @@ $selectize-width-item-buttons: 40px;
                 padding-left: 5px;
             }
         }
+
+        &.sprite-select {
+            padding-left: 45px;
+
+            .u-vertical-center {
+                font-size: inherit;
+            }
+
+            .selectize-input {
+                overflow: inherit;
+
+                svg {
+                    padding: 0;
+                    position: absolute;
+                    top: 0;
+                    left: -45px;
+                }
+            }
+        }
     }
 
     &.multi {
@@ -232,6 +251,7 @@ $selectize-width-item-buttons: 40px;
 }
 
 .input-group {
+    input[type=hidden]:first-child + .selectized + .selectize-control,
     .selectized:first-child + .selectize-control{
         .selectize-input{
             @include border-left-radius($input-border-radius);

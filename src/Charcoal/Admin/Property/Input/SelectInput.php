@@ -5,6 +5,7 @@ namespace Charcoal\Admin\Property\Input;
 use InvalidArgumentException;
 
 use Charcoal\Admin\Property\AbstractSelectableInput;
+use Charcoal\Admin\Property\HierarchicalObjectProperty;
 
 /**
  * Select Options Input Property
@@ -68,6 +69,10 @@ class SelectInput extends AbstractSelectableInput
 
         if (!isset($choice['icon'])) {
             $choice['icon'] = '';
+        }
+
+        if ($this->p() instanceof HierarchicalObjectProperty) {
+            $choice['disabled'] = $choice['value'] === $this->p()->objId();
         }
 
         return $choice;

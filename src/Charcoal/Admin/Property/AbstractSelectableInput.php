@@ -309,7 +309,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      * Set the object-to-choice data map.
      *
      * @param  array $map Model-to-choice mapping.
-     * @return TagsInput Chainable
+     * @return self
      */
     public function setChoiceObjMap(array $map)
     {

@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
+use Charcoal\Admin\Property\HierarchicalObjectProperty;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
@@ -129,6 +130,10 @@ class FormWidget extends AdminWidget implements
 
         if ($this instanceof ObjectContainerInterface) {
             $prop->setPropertyVal($this->obj()[$ident]);
+
+            if ($prop->propertyType() === HierarchicalObjectProperty::class) {
+                $prop->merge(['obj_id' => $this->obj()->id()]);
+            }
         }
 
         if ($prop->hidden()) {

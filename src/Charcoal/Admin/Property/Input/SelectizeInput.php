@@ -115,6 +115,39 @@ class SelectizeInput extends SelectInput
     private $selectizeRenderer;
 
     /**
+     * @var array
+     */
+    private $disabledFields = [];
+
+    /**
+     * This function takes an array and fill the model object with its value.
+     *
+     * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
+     *
+     * For example, calling with `setData(['properties'=>$properties])` would call
+     * `setProperties($properties)`, becasue `setProperties()` exists.
+     *
+     * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
+     * on the metadata object, because the method `set_foobar()` does not exist.
+     *
+     * @param array $data The input data.
+     * @return self
+     */
+    public function setData(array $data)
+    {
+        // Push selectize options back at the end of the data container.
+        if (isset($data['selectizeOptions'])) {
+            $selectizeOptions = $data['selectizeOptions'];
+            unset($data['selectizeOptions']);
+            $data['selectizeOptions'] = $selectizeOptions;
+        }
+
+        parent::setData($data);
+
+        return $this;
+    }
+
+    /**
      * Retrieve the object model factory.
      *
      * @throws RuntimeException If the model factory was not previously set.
@@ -460,13 +493,11 @@ class SelectizeInput extends SelectInput
     }
 
     /**
-     *
-     *
      * @return boolean
      */
     public function isObject()
     {
-        return !!($this->p()->type() === 'object');
+        return !!($this->p() instanceof ObjectProperty);
     }
 
     /**
@@ -576,8 +607,11 @@ class SelectizeInput extends SelectInput
             $choices = [];
             foreach ($collection as $obj) {
                 $c = $this->mapObjToChoice($obj);
-
                 $obj->setData($selectizeData);
+
+                if (in_array($c['value'], $this->disabledFields())) {
+                    $c['disabled'] = 'disabled';
+                }
 
                 if ($itemTemplate) {
                     $c['item_render'] = $this->selectizeRenderer->renderTemplate(
@@ -739,6 +773,25 @@ class SelectizeInput extends SelectInput
         }
 
         return $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function disabledFields()
+    {
+        return $this->disabledFields;
+    }
+
+    /**
+     * @param array $disabledFields DisabledFields for SelectizeInput.
+     * @return self
+     */
+    public function setDisabledFields(array $disabledFields)
+    {
+        $this->disabledFields = $disabledFields;
+
+        return $this;
     }
 
     /**

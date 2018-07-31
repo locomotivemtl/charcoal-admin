@@ -31,7 +31,9 @@ Selectize.define('charcoal_item', function (options) {
     this.refreshOption = function (value) {
         var option = self.options[value];
         self.refreshOptions(false);
-        var $option = self.getOption(value);
+
+        // Get all options including disabled ones
+        var $option = self.getElementWithValue(value, self.$dropdown_content.find('.option'));
 
         if (option.hasOwnProperty(options.colorField)) {
             if (option[options.colorField]) {

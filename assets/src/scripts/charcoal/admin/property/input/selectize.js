@@ -110,6 +110,9 @@
             searchField: ['value', 'label'],
             dropdownParent: this.$input.closest('.form-field'),
             render: {},
+            onItemRemove: function (value) {
+                this.refreshOption(value);
+            },
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
@@ -125,7 +128,7 @@
                     self.refreshItem(value, self.getItem(value));
                 });
                 self.sifter.iterator(this.options, function (data) {
-                    self.refreshOption(data.value, data);
+                    self.refreshOption(data.value);
                 });
             }
         };
@@ -417,7 +420,7 @@
                     // Update the item.
                     if (item && item.value) {
                         selectize.updateOption(item.value, item);
-                        selectize.refreshOption(item.value, item);
+                        selectize.refreshOption(item.value);
                         selectize.refreshItem(item.value, selectize.getItem(item.value));
                     }
                 }, {
@@ -447,7 +450,7 @@
                     // Update the item.
                     if (item && item.value) {
                         selectize.updateOption(id, item);
-                        selectize.refreshOption(id, item);
+                        selectize.refreshOption(id);
                         selectize.refreshItem(id, selectize.getItem(item));
                     }
                 }, {

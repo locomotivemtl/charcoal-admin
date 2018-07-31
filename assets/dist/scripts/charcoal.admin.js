@@ -6334,6 +6334,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             searchField: ['value', 'label'],
             dropdownParent: this.$input.closest('.form-field'),
             render: {},
+            onItemRemove: function (value) {
+                this.refreshOption(value);
+            },
             createFilter: function (input) {
                 for (var item in this.options) {
                     item = this.options[item];
@@ -6349,7 +6352,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     self.refreshItem(value, self.getItem(value));
                 });
                 self.sifter.iterator(this.options, function (data) {
-                    self.refreshOption(data.value, data);
+                    self.refreshOption(data.value);
                 });
             }
         };
@@ -6641,7 +6644,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     // Update the item.
                     if (item && item.value) {
                         selectize.updateOption(item.value, item);
-                        selectize.refreshOption(item.value, item);
+                        selectize.refreshOption(item.value);
                         selectize.refreshItem(item.value, selectize.getItem(item.value));
                     }
                 }, {
@@ -6671,7 +6674,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                     // Update the item.
                     if (item && item.value) {
                         selectize.updateOption(id, item);
-                        selectize.refreshOption(id, item);
+                        selectize.refreshOption(id);
                         selectize.refreshItem(id, selectize.getItem(item));
                     }
                 }, {
@@ -6985,7 +6988,9 @@ Selectize.define('charcoal_item', function (options) {
     this.refreshOption = function (value) {
         var option = self.options[value];
         self.refreshOptions(false);
-        var $option = self.getOption(value);
+
+        // Get all options including disabled ones
+        var $option = self.getElementWithValue(value, self.$dropdown_content.find('.option'));
 
         if (option.hasOwnProperty(options.colorField)) {
             if (option[options.colorField]) {

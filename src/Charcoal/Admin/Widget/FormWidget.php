@@ -134,7 +134,10 @@ class FormWidget extends AdminWidget implements
             if ($prop->propertyType() === HierarchicalObjectProperty::class) {
                 $prop->merge(['obj_id' => $this->obj()->id()]);
             }
+
         }
+
+        $prop->setViewController($this->viewController());
 
         if ($prop->hidden()) {
             $prop->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);

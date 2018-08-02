@@ -164,6 +164,15 @@
     background-color: transparent !important;
     font-size: 10px;
 
+    > i {
+        font-size: 14px;
+    }
+
+    &:focus,
+    &:active {
+        box-shadow: none;
+    }
+
     @media (min-width: $from-small) {
         width: 100%;
     }
@@ -177,6 +186,12 @@
     &.-reset {
         @include hover-focus {
             color: $danger;
+        }
+    }
+
+    &.-revision {
+        @include hover-focus {
+            color: $warning;
         }
     }
 }

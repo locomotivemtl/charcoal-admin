@@ -79,6 +79,12 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
         $(that.form_selector)[0].reset();
     });
 
+    // Revision button
+    $('.js-obj-revision', $sidebar).on('click.charcoal.form', function (event) {
+        event.preventDefault();
+        that.view_revision(this);
+    });
+
     // Language switcher
     $('.js-lang-switch button', $sidebar).on('click.charcoal.form', function (event) {
         event.preventDefault();
@@ -495,6 +501,47 @@ Charcoal.Admin.Widget_Form.prototype.request_url = function () {
     } else {
         return Charcoal.Admin.admin_url() + this.update_action;
     }
+};
+
+/**
+ * Handle the "delete" button / action.
+ */
+Charcoal.Admin.Widget_Form.prototype.view_revision = function (/* form */) {
+    var type = this.obj_type,
+        id   = this.obj_id;
+
+    var defaultOpts = {
+        size:           BootstrapDialog.SIZE_WIDE,
+        title:          formWidgetL10n.revisions,
+        widget_type:    'charcoal/admin/widget/object-revisions',
+        widget_options: {
+            obj_type:  type,
+            obj_id:    id
+        }
+    };
+
+    var dialogOpts = $.extend({}, defaultOpts);
+
+    this.dialog(dialogOpts, function (response) {
+        if (response.success) {
+            // Call the quickForm widget js.
+            // Really not a good place to do that.
+            if (!response.widget_id) {
+                return false;
+            }
+
+            Charcoal.Admin.manager().add_widget({
+                id:   response.widget_id,
+                type: 'charcoal/admin/widget/object-revisions',
+                obj_type: type,
+                obj_id: id
+            });
+
+            // Re render.
+            // This is not good.
+            Charcoal.Admin.manager().render();
+        }
+    });
 };
 
 /**

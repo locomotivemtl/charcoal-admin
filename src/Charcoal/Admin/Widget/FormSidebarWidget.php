@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
+use Charcoal\Object\RevisionableInterface;
 use InvalidArgumentException;
 
 // From Pimple
@@ -137,6 +138,13 @@ class FormSidebarWidget extends AdminWidget implements
      * @var boolean
      */
     private $isObjDeletable;
+
+    /**
+     * Whether the object is revisionable.
+     *
+     * @var boolean
+     */
+    private $isObjRevisionable;
 
     /**
      * The required Acl permissions for the whole sidebar.
@@ -496,6 +504,36 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
+     * Determine if the object has revisions.
+     *
+     * If TRUE, the "Delete" button is shown. The object can still be
+     * deleted programmatically or via direct action on the database.
+     *
+     * @return boolean
+     */
+    public function isObjRevisionable()
+    {
+        if ($this->isObjRevisionable === null) {
+            // Overridden by permissions
+            if (!$this->checkPermission('revision') || !$this->form()) {
+                $this->isObjRevisionable = false;
+            } else {
+                $obj = $this->form()->obj();
+                if (!$obj->id()) {
+                    $this->isObjRevisionable = false;
+                    return $this->isObjRevisionable;
+                }
+
+                if ($obj instanceof RevisionableInterface && $obj->revisionEnabled()) {
+                    $this->isObjRevisionable = !!count($obj->allRevisions());
+                }
+            }
+        }
+
+        return $this->isObjRevisionable;
+    }
+
+    /**
      * Determine if the object can be reset.
      *
      * If TRUE, the "Reset" button is shown. The object can still be
@@ -684,7 +722,7 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         // Overridden by conditionals
-        if (!$this->isObjDeletable() && !$this->isObjResettable()) {
+        if (!$this->isObjDeletable() && !$this->isObjResettable() &&!$this->isObjRevisionable()) {
             return false;
         }
 

@@ -85,19 +85,23 @@
             <footer class="c-sidebar-widget_footer btn-group d-flex justify-content-center" role="group">
                 {{!-- @todo Only show the "delete" button if there's an object's ID. --}}
                 {{# isObjDeletable }}
-                    <button class="c-sidebar-widget_button -delete btn js-obj-delete" type="button">
-                        <span class="fa fa-trash-o" aria-hidden="true"></span>
-                        <span class="btn-label" aria-hidden="true">{{# _t }}Delete{{/ _t }}</span>
+                    <button class="c-sidebar-widget_button -delete btn js-obj-delete" type="button" data-toggle="tooltip" data-placement="bottom" title="{{# _t }}Delete{{/ _t }}">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
                         <span class="sr-only">{{# _t }}Delete Object{{/ _t }}</span>
                     </button>
                 {{/ isObjDeletable }}
                 {{# isObjResettable }}
-                    <button class="c-sidebar-widget_button -reset btn js-reset-form" type="button">
-                        <span class="fa fa-refresh" aria-hidden="true"></span>
-                        <span class="btn-label" aria-hidden="true">{{# _t }}Reset{{/ _t }}</span>
+                    <button class="c-sidebar-widget_button -reset btn js-reset-form" type="button" data-toggle="tooltip" data-placement="bottom" title="{{# _t }}Reset{{/ _t }}">
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
                         <span class="sr-only">{{# _t }}Reset Form{{/ _t }}</span>
                     </button>
                 {{/ isObjResettable }}
+                {{# isObjRevisionable }}
+                <button class="c-sidebar-widget_button -revision btn js-obj-revision" type="button" data-toggle="tooltip" data-placement="bottom" title="{{# _t }}Revisions{{/ _t }}">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    <span class="sr-only">{{# _t }}Revisions{{/ _t }}</span>
+                </button>
+                {{/ isObjRevisionable }}
             </footer>
         {{/ showFooter }}
     </div>

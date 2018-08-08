@@ -96,6 +96,7 @@
         border-radius: 13px;
         border: 1px solid $charcoal-gray-0;
         border-bottom-width: 2px;
+        cursor: grab;
         box-shadow: 0px 0px 0px 0px rgba($charcoal-gray-5, 0);
         transition: transform 0.2s cubic-bezier(.17,.89,.59,1.54),
                     box-shadow 0.2s cubic-bezier(.17,.89,.59,1.54);
@@ -118,5 +119,9 @@
     .card:hover .sortable-handle,
     &.draggable-mirror .card .sortable-handle {
         opacity: .85;
+    }
+
+    .draggable-container--is-dragging &{
+        cursor: grabbing!important;
     }
 }

@@ -11,6 +11,7 @@
 
     .card-body {
         position: relative;
+        padding-right: 2.5rem;
     }
 
     .card-status {
@@ -22,8 +23,12 @@
         top: 0;
         right: 0;
 
+        .dropdown-toggle:after {
+            content: none;
+        }
+
         button {
-            font-size: 20px;
+            font-size: 14px;
         }
     }
 

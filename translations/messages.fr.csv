@@ -274,3 +274,4 @@
 "time.from_now";"{{ time }} à partir de maintenant"
 "time.after";"{{ time }} après"
 "time.before";"{{ time }} avant"
+"Last updated";"Dernière mise à jour"

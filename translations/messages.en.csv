@@ -265,3 +265,4 @@
 "time.from_now";"{{ time }} from now"
 "time.after";"{{ time }} after"
 "time.before";"{{ time }} before"
+"Last updated";"Last updated"

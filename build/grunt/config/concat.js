@@ -79,6 +79,9 @@ module.exports = {
 
             // jQuery Timeago
             '<%= paths.npm %>/timeago/jquery.timeago.js',
+
+            // Moment.js
+            '<%= paths.npm %>/moment/min/moment-with-locales.min.js',
         ],
         dest:      '<%= paths.js.dist %>/charcoal.admin.vendors.js',
         separator: "\n"

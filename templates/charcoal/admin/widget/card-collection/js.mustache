@@ -1,0 +1,25 @@
+{{!--
+    Table Widget \ JS Component
+    ===========================
+
+    @used-by `charcoal/admin/widget/table`
+--}}
+
+{{# addJsRequirement }}
+    <script rel="l10n">
+        {{> charcoal/admin/l10n/widget.js }}
+        {{> charcoal/admin/l10n/table.js }}
+    </script>
+{{/ addJsRequirement }}
+
+{{# addJs }}
+    <script>
+        Charcoal.Admin.manager().add_widget({
+            id: '{{ widgetId }}',
+            type: 'charcoal/admin/widget/card-collection',
+            widget_type: '{{ type }}',
+            lang: '{{lang}}',
+            data: {{& escapedWidgetDataForJsAsJson }}
+        });
+    </script>
+{{/ addJs }}

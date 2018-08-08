@@ -37,3 +37,86 @@
         margin-bottom: $card-deck-margin;
     }
 }
+
+.draggable-mirror {
+    .card {
+        transform-origin: center;
+        transform: perspective(120em) rotateX(9deg) scale3d(1.05, 1.05, 1.05);
+        box-shadow: 0px 5px 20px 10px rgba($charcoal-gray-5, 0.5);
+    }
+}
+
+.draggable-source--placed.card-sortable {
+    .card {
+        animation: card-placed 0.2s ease-out 0s 1;
+    }
+}
+
+@keyframes card-placed {
+    from {
+        transform: perspective(120em) rotateX(9deg) scale3d(1.05, 1.05, 1.05);
+        box-shadow: 0px 5px 20px 10px rgba($charcoal-gray-5, 0.5);
+    }
+    to {
+        transform: perspective(120em) rotateX(0deg) scale3d(1.00, 1.00, 1.00);
+        box-shadow: 0px 0px 0px 0px rgba($charcoal-gray-5, 0);
+    }
+}
+
+.draggable--over.card-sortable {
+    .card-container {
+        border-radius: $card-border-radius;
+        background-color: $table-border-color !important;
+    }
+
+    .card {
+        opacity: 0;
+    }
+}
+
+.card-sortable,
+.card-sortable-container {
+    outline: none;
+}
+
+.card-sortable {
+    .card {
+        transition: transform 0.3s cubic-bezier(.17,.89,.59,1.54),
+                    box-shadow 0.3s cubic-bezier(.17,.89,.59,1.54);
+    }
+
+    .card .sortable-handle {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translate(-50%, -50%);
+        width: 60px;
+        height: 26px;
+        opacity: 0;
+        border-radius: 13px;
+        border: 1px solid $charcoal-gray-0;
+        border-bottom-width: 2px;
+        box-shadow: 0px 0px 0px 0px rgba($charcoal-gray-5, 0);
+        transition: transform 0.2s cubic-bezier(.17,.89,.59,1.54),
+                    box-shadow 0.2s cubic-bezier(.17,.89,.59,1.54);
+
+        &:hover {
+            box-shadow: 0px 2px 1px 1px rgba($charcoal-gray-5, 0.5);
+        }
+
+        .dots {
+            width: 15px;
+            span {
+                height: 3px;
+                width: 3px;
+                margin: 1px;
+                background: #000;
+            }
+        }
+    }
+
+    .card:hover .sortable-handle,
+    &.draggable-mirror .card .sortable-handle {
+        opacity: .85;
+    }
+}

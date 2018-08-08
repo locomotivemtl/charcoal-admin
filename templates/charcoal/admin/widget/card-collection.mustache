@@ -1,0 +1,90 @@
+{{!--
+    Card Collection Widget
+    =================
+
+    @see `charcoal/admin/widget/table`
+
+    This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\TableGrid`.
+--}}
+<div class="o-section" id="{{ widgetId }}">
+    {{# hasObjects }}
+    {{# showTableHeader }}
+    {{> charcoal/admin/widget/table/header }}
+    {{/ showTableHeader }}
+
+    <div class="c-table-container table-responsive">
+        <div class="c-table-pagination">
+            {{> charcoal/admin/widget/table/counter }}
+        </div>
+        <div class="row{{# sortable }} card-sortable-container js-sortable{{/ sortable }}">
+            {{# objectCardRow }}
+            <div class="col-md-{{ bsColRatio }} col-12 mb-4{{# sortable }} card-sortable js-sortable-item{{/ sortable }}" {{& attr }} data-id="{{ objectId }}" data-type="{{ objType }}">
+                <div class="card-container h-100">
+                    <div class="card c-table-card h-100">
+
+                    {{# object }}
+
+                    {{# image }}
+                    <span class="card-img-top" style="background-image: url({{# withBaseUrl }}{{ . }}{{/ withBaseUrl }});"></span>
+                    {{/ image }}
+
+                    <div class="card-body">
+                    {{# sortable }}
+                    <button class="btn btn-small sortable-handle js-sortable-handle" type="button">
+                        <span class="dots d-flex flex-wrap justify-content-center align-items-center m-auto">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </span>
+                    </button>
+                    {{/ sortable }}
+
+                    <div class="dropdown tool-dropdown p-2">
+                        <button class="btn btn-outline-primary border-0" type="button" data-toggle="dropdown" aria-haspopup="true">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            {{# showObjectActions }}
+                                {{# objectActions }}
+                                        <a class="btn btn-primary dropdown-item"
+                                           href="{{ url }}"
+                                            {{# target }}
+                                           target="{{ . }}"
+                                            {{/ target }}
+                                            {{# widgetType }}
+                                           data-widget-type="{{ . }}"
+                                            {{/ widgetType }}
+                                            {{# dataAttributes }}
+                                           data-{{ key }}="{{ value }}"
+                                            {{/ dataAttributes }}
+                                        >{{> charcoal/admin/widget/actions/label }}</a>
+                                    <!--<a href="#" class="btn btn-primary">{{ label }}</a>-->
+                                {{/ objectActions }}
+                            {{/ showObjectActions }}
+                        </div>
+                    </div>
+                        {{> $widget_template }}
+                    </div>
+
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <small class="text-muted">{{#_t}}Last updated{{/_t}} <span class="js-last-time" data-time="{{ lastModified.getTimestamp }}">-</span></small>
+                        <small class="card-status chip{{# active }} chip-success{{/ active }}"></small>
+                    </div>
+                    {{/ object }}
+
+                    </div>
+                </div>
+            </div>
+            {{/ objectCardRow }}
+        </div>
+
+        {{# paginationWidget }}
+        {{> charcoal/admin/widget/table/pagination }}
+        {{/ paginationWidget }}
+    </div>
+    {{/ hasObjects }}
+
+    {{^ hasObjects }}
+    {{> charcoal/admin/widget/table/empty }}
+    {{/ hasObjects }}
+</div>
+
+{{> charcoal/admin/widget/card-collection/js }}

@@ -288,8 +288,7 @@ class FormWidget extends AdminWidget implements
         }
 
         if (is_array($formProperty)) {
-            $formProperty = $this->getOrCreateFormProperty($propertyIdent, $formProperty);
-            $formProperty->setPropertyIdent($propertyIdent);
+            $this->getOrCreateFormProperty($propertyIdent, $formProperty);
         } elseif (!$formProperty instanceof FormPropertyWidget) {
             throw new InvalidArgumentException(sprintf(
                 'Property must be an array or an instance of FormPropertyWidget, received %s',

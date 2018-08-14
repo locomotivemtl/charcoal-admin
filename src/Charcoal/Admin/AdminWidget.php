@@ -46,6 +46,7 @@ class AdminWidget extends AbstractWidget implements
 
     const DATA_SOURCE_REQUEST = 'request';
     const DATA_SOURCE_OBJECT  = 'object';
+    const DATA_SOURCE_METADATA = 'metadata';
 
     /**
      * @var string $widgetId
@@ -572,7 +573,7 @@ class AdminWidget extends AbstractWidget implements
      */
     protected function acceptedDataSources()
     {
-        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT ];
+        return [ static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT, static::DATA_SOURCE_METADATA ];
     }
 
     /**

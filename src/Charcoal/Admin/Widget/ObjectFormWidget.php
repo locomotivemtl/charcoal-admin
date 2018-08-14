@@ -325,9 +325,13 @@ class ObjectFormWidget extends FormWidget implements
 
         foreach ($groups as $group) {
             if ($group instanceof FormInterface) {
-                $conditions = array_merge($conditions, $this->groupsConditionalLogic(
-                    iterator_to_array($group->groups())
-                ));
+                $groupGroups = iterator_to_array($group->groups());
+                if (!empty($groupGroups)) {
+                    $conditions = array_merge(
+                        $conditions,
+                        $this->groupsConditionalLogic($groupGroups)
+                    );
+                }
             }
 
             if ($group instanceof FormGroupInterface && $group->conditionalLogic()) {

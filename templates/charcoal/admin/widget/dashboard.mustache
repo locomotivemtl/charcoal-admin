@@ -16,6 +16,15 @@ This widget expects a `Charcoal\Admin\Widget\Dashboard` model as context.
 
         <div class="widget{{# ident }} widget-{{ . }}{{/ ident }}{{# dashboard.layout.cellSpanBy12 }} col-md-{{ . }}{{/ dashboard.layout.cellSpanBy12 }}">
 
+            {{# showHeader }}
+                <header class="o-header -small">
+                    {{# showTitle }}
+                        <h3>{{ title }}</h3>
+                    {{/ showTitle }}
+                    {{!> charcoal/admin/template/inc.description }}
+                </header>
+            {{/ showHeader }}
+
             {{# showActions }}
                 <div class="widget-actions">
                     {{# actions }}

@@ -770,6 +770,7 @@ class AdminTemplate extends AbstractTemplate implements
         foreach ($mainMenuConfig['items'] as $menuIdent => $menuItem) {
             $menuItem['menu'] = $menu;
             $test = $this->menuItemBuilder->build($menuItem);
+
             if ($test->isAuthorized() === false) {
                 continue;
             }
@@ -810,6 +811,20 @@ class AdminTemplate extends AbstractTemplate implements
                 }
             }
 
+            // Get main menu from the obj_type
+            $objType = filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+            if ($objType) {
+
+                $secondaryMenuItems = $this->adminConfig('secondary_menu');
+                foreach ($secondaryMenuItems as $main => $item) {
+                    if ($this->isObjTypeInSecondaryMenuItem($objType, $item)) {
+                        $mainMenuIdent = $main;
+                        break;
+                    }
+                }
+            }
+
+            // Choose main menu with a get parameter
             $mainMenuFromRequest = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
             if ($mainMenuFromRequest) {
                 $mainMenuIdent = $mainMenuFromRequest;
@@ -820,6 +835,35 @@ class AdminTemplate extends AbstractTemplate implements
         }
 
         return $this->mainMenuIdent;
+    }
+
+    /**
+     * Check for the objType in the secondary menu items
+     * returning true as soon as it its.
+     *
+     * @param $objType
+     * @param $item
+     * @return bool
+     */
+    protected function isObjTypeInSecondaryMenuItem($objType, $item)
+    {
+        if (isset($item['links'])) {
+            foreach ($item['links'] as $obj => $i) {
+                if ($obj === $objType) {
+                    return true;
+                }
+            }
+        }
+
+        if (isset($item['groups'])) {
+            foreach ($item['groups'] as $group) {
+                if ($this->isObjTypeInSecondaryMenuItem($objType, $group)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

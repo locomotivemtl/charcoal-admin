@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\ServiceProvider;
 
 // From Pimple
+use Charcoal\Factory\GenericResolver;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -105,6 +106,22 @@ class AdminServiceProvider implements ServiceProviderInterface
 
             // The `admin.json` file is not part of regular config
             $extraConfigs = (array)$appConfig['admin_config'];
+
+            $moduleAdminConfigs = [];
+
+            foreach ($container['module/classes'] as $module) {
+                if (defined(sprintf('%s::ADMIN_CONFIG', $module))) {
+                    $moduleAdminConfigs[] = $module::ADMIN_CONFIG;
+                };
+            }
+
+            if (!empty($moduleAdminConfigs)) {
+                $extraConfigs = array_merge(
+                    $extraConfigs,
+                    $moduleAdminConfigs
+                );
+            }
+
             if (!empty($extraConfigs)) {
                 $basePath = $appConfig['base_path'];
                 foreach ($extraConfigs as $path) {
@@ -176,7 +193,7 @@ class AdminServiceProvider implements ServiceProviderInterface
          * 2. Merge metadata configset from  "admin/config", if any
          *
          * @param  MetadataConfig $metaConfig The metadata configset.
-         * @param  Container $container The Pimple DI container.
+         * @param  Container      $container  The Pimple DI container.
          * @return MetadataConfig
          */
         $container->extend('metadata/config', function (MetadataConfig $metaConfig, Container $container) {
@@ -281,7 +298,7 @@ class AdminServiceProvider implements ServiceProviderInterface
                  *
                  * @return UriInterface|null
                  */
-                'adminUrl' => $adminUrl,
+                'adminUrl'     => $adminUrl,
                 /**
                  * Prepend the administration-area URI to the given path.
                  *

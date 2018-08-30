@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
+use Charcoal\Property\ModelStructureProperty;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
@@ -306,7 +307,90 @@ class ObjectFormWidget extends FormWidget implements
             'form_selector'    => '#'.$this->widgetId(),
             'tab'              => $this->isTabbable(),
             'group_conditions' => $this->groupsConditionalLogic(),
+            'properties_conditions' => $this->propertiesConditionalLogic()
         ];
+    }
+
+    private function parseProperties($properties, $parentIdent = null)
+    {
+        $out = [];
+
+        foreach ($properties as $property) {
+            $ident = $property->ident();
+            if ($parentIdent) {
+                $ident = sprintf(
+                    '%s[%s]',
+                    $parentIdent,
+                    $ident
+                );
+            }
+
+            $formProperty = $this->getOrCreateFormProperty($ident, $property->data());
+            $out[] = $formProperty;
+
+            if ($formProperty->prop() instanceof ModelStructureProperty) {
+                $structureProperties = iterator_to_array($formProperty->prop()->structureProto()->properties());
+
+                $out = array_merge($out, $this->parseProperties($structureProperties, $ident));
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array
+     */
+    protected function propertiesConditionalLogic()
+    {
+        $properties = iterator_to_array($this->formProperties());
+        // $properties = $this->obj()->properties();
+
+        $parseProperties = $this->parseProperties($this->obj()->properties());
+
+        foreach ($parseProperties as $p) {
+            error_log(var_export($p->prop()->ident(), true));
+            error_log(var_export($p->input()->inputId(), true));
+        }
+
+        $out = [];
+
+        foreach ($properties as $property) {
+            $prop = $property->prop();
+            // error_log(var_export($property->ident(), true));
+
+            if (method_exists($prop, 'properties')) {
+                if ($prop instanceof ModelStructureProperty) {
+                    $test = $prop->structureProto();
+                    $prop = $test->properties();
+
+                    foreach ($prop as $t) {
+                        $formProperty = $this->getOrCreateFormProperty($t->ident(), $t->data());
+                        error_log(var_export($formProperty->input()->inputId(), true));
+                        error_log(var_export($t instanceof ModelStructureProperty, true));
+                        // error_log(var_export($t->input()->inputId(), true));
+                    }
+
+                    // foreach ($struct->properties() as $p) {
+                    //     error_log(var_export($p->ident(), true));
+                    // }
+                }
+            }
+
+            // $conditionalLogic = $prop->conditionalLogic();
+            //
+            // if ($conditionalLogic && is_array($conditionalLogic)) {
+            //     foreach ($conditionalLogic as &$condition) {
+            //         $targetProp = $this->formProperty($condition['property']);
+            //         $condition['input_id'] = $targetProp->input()->inputId();
+            //     }
+            //     $out[] = [
+            //         $property->input()->inputId() => $conditionalLogic
+            //     ];
+            // }
+        }
+
+        return $out;
     }
 
     /**
@@ -336,6 +420,12 @@ class ObjectFormWidget extends FormWidget implements
 
             if ($group instanceof FormGroupInterface && $group->conditionalLogic()) {
                 $conditions = array_merge($conditions, $group->conditionalLogic());
+            }
+
+            $properties = $group->groupProperties();
+
+            foreach ($properties as $p) {
+                // error_log(var_export($p, true));
             }
         }
 

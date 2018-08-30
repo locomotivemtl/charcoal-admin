@@ -478,6 +478,13 @@ class ElfinderConnectorAction extends AdminAction
             $disk = $this->getNamedRoot($targetFilesystem);
 
             $startPath = $formProperty->uploadPath();
+            $isPublic = $formProperty->publicAccess();
+            $basePath = $isPublic ? $this->publicPath : $this->basePath;
+
+            if (!file_exists($basePath.$startPath)) {
+                mkdir($basePath.$startPath, 0755, true);
+            }
+
             if ($startPath) {
                 $disk['startPath'] = $startPath;
             }

@@ -30,7 +30,7 @@
         "paragonie/random_compat": "^1.2",
         "studio-42/elfinder": "~2.1.32",
         "barryvdh/elfinder-flysystem-driver": "^0.2.1",
-        "locomotivemtl/charcoal-app": "~0.8",
+        "locomotivemtl/charcoal-app": "~0.8.1",
         "locomotivemtl/charcoal-cache": "~0.1",
         "locomotivemtl/charcoal-core": "~0.4",
         "locomotivemtl/charcoal-email": "~0.3",

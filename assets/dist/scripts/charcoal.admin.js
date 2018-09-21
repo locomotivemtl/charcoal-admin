@@ -6633,6 +6633,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         // Property_Input_Selectize properties
         this.input_id = null;
         this.obj_type = null;
+        this.remote_source = null;
         this.copy_items = false;
         this.title = null;
         this.translations = null;
@@ -6680,6 +6681,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     Selectize.prototype.set_properties = function (opts) {
         this.input_id = opts.id || this.input_id;
         this.obj_type = opts.data.obj_type || this.obj_type;
+        this.remote_source = opts.data.remote_source || this.remote_source;
 
         // Enables the copy button
         this.copy_items = opts.data.copy_items || this.copy_items;
@@ -6717,6 +6719,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         }
 
         var objType = this.obj_type;
+        var remoteSource = this.remote_source;
         var default_opts = {
             plugins: plugins,
             formData: {},
@@ -6769,7 +6772,15 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             };
         }
 
-        if (objType) {
+        if (remoteSource) {
+            default_opts.create = function (input) {
+                return {
+                    value: input,
+                    label: input
+                };
+            };
+            default_opts.load = this.load_from_remote.bind(this);
+        } else if (objType) {
             default_opts.create = this.create_item.bind(this);
             default_opts.load = this.load_items.bind(this);
         } else {
@@ -6942,6 +6953,45 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 // Re render.
                 // This is not good.
                 Charcoal.Admin.manager().render();
+            }
+        });
+    };
+
+    Selectize.prototype.load_from_remote = function (query, callback) {
+        if (!query.length) {
+            return callback();
+        }
+        var that = this;
+
+        var selectize_obj_type = this.selectize_obj_type;
+        var selectize_property_ident = this.selectize_property_ident;
+        var selectize_property = this.selectize_property;
+
+        var form_data = {
+            selectize_obj_type: selectize_obj_type,
+            selectize_prop_ident: selectize_property_ident,
+            selectize_property: selectize_property
+        };
+
+        $.ajax({
+            url: this.remote_source + encodeURIComponent(query),
+            type: 'GET',
+            data: form_data,
+            error: function () {
+                callback();
+            },
+            success: function (response) {
+                if (response.optgroups !== null) {
+                    $.each(response.optgroups, function (index, optgroup) {
+                        that.selectize.registerOptionGroup(optgroup);
+                    });
+                }
+
+                if (response.options !== null) {
+                    callback(response.options);
+                } else {
+                    callback(response);
+                }
             }
         });
     };

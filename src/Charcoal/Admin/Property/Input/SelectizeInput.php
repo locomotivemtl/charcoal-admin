@@ -120,6 +120,11 @@ class SelectizeInput extends SelectInput
     private $disabledFields = [];
 
     /**
+     * @var string $remoteSource
+     */
+    private $remoteSource;
+
+    /**
      * This function takes an array and fill the model object with its value.
      *
      * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
@@ -317,7 +322,7 @@ class SelectizeInput extends SelectInput
      */
     public function setDeferred($deferred)
     {
-        $this->deferred = $this->property() instanceof ObjectProperty ? $deferred : false;
+        $this->deferred = ($this->property() instanceof ObjectProperty || $this->remoteSource()) ? $deferred : false;
 
         return $this;
     }
@@ -453,7 +458,7 @@ class SelectizeInput extends SelectInput
                 $items = [];
             }
 
-            // workaround for object setter casting the proerty as object.
+            // workaround for object setter casting the property as object.
             if ($items instanceof ModelInterface) {
                 $items = $this->mapObjToChoice($items)['value'];
             }
@@ -548,10 +553,9 @@ class SelectizeInput extends SelectInput
     {
         /** @todo Find a use for this */
         unset($options);
-
         $choices = [];
 
-        if ($val === null) {
+        if ($val === null || $val === '') {
             return [];
         }
 
@@ -756,6 +760,7 @@ class SelectizeInput extends SelectInput
             'selectize_obj_type'       => $this->render('{{& objType }}'),
             'selectize_templates'      => $this->selectizeTemplates(),
             'selectize_property'       => json_encode($this->property()),
+            'remote_source'            => $this->remoteSource(),
 
             // Base Property
             'required'                 => $this->required(),
@@ -790,6 +795,29 @@ class SelectizeInput extends SelectInput
     public function setDisabledFields(array $disabledFields)
     {
         $this->disabledFields = $disabledFields;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function remoteSource()
+    {
+        return $this->remoteSource;
+    }
+
+    /**
+     * @param string $remoteSource RemoteSource for SelectizeInput.
+     * @return self
+     */
+    public function setRemoteSource($remoteSource)
+    {
+        $this->remoteSource = $remoteSource;
+
+        if ($this->remoteSource) {
+            $this->remoteSource = $this->renderTemplate($this->remoteSource);
+        }
 
         return $this;
     }

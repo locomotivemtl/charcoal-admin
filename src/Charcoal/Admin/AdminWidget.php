@@ -79,12 +79,12 @@ class AdminWidget extends AbstractWidget implements
     private $lang;
 
     /**
-     * @var bool $showLabel
+     * @var boolean $showLabel
      */
     private $showLabel;
 
     /**
-     * @var bool $showActions
+     * @var boolean $showActions
      */
     private $showActions;
 

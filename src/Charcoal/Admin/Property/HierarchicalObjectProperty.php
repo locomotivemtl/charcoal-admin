@@ -25,7 +25,7 @@ class HierarchicalObjectProperty extends ObjectProperty
     /**
      * The property's object id.
      *
-     * @var string|int
+     * @var string|integer
      */
     private $objId;
 

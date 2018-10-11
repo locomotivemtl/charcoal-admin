@@ -443,7 +443,8 @@ class SelectizeInput extends SelectInput
             $options = $this->parseSelectizeOptions($options);
         }
 
-        if ($this->property() instanceof SelectablePropertyInterface) {
+        $prop = $this->property();
+        if ($prop instanceof SelectablePropertyInterface) {
             $choices = iterator_to_array($this->choices());
 
             if (isset($options['options'])) {
@@ -453,6 +454,22 @@ class SelectizeInput extends SelectInput
             }
 
             $items = $this->propertyVal();
+
+            if ($prop instanceof AbstractProperty) {
+                $items = $prop->parseVal($items);
+
+                if ($prop->l10n()) {
+                    $items = (string)$this->translator()->translation($items);
+                }
+
+                if (is_string($items)) {
+                    $items = explode($prop->multipleSeparator(), $items);
+                }
+            }
+
+            if (!$prop->multiple()) {
+                $items = (array)$items;
+            }
 
             if (!$items) {
                 $items = [];

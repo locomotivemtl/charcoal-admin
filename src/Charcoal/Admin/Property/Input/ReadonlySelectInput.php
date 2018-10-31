@@ -16,11 +16,15 @@ class ReadonlySelectInput extends SelectInput
      */
     public function displayVal()
     {
+        $selectedChoices = [];
+
         foreach ($this->choices() as $choice) {
             if ($this->isChoiceSelected($choice)) {
-                return $choice['label'];
-                break;
+                $selectedChoices[] = $choice['label'];
+                // break;
             }
         }
+
+        return implode(', ', $selectedChoices);
     }
 }

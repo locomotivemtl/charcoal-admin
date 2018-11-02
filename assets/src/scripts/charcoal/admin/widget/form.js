@@ -599,7 +599,11 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
  */
 Charcoal.Admin.Widget_Form.prototype.reload = function (callback) {
     // Call supra class
-    Charcoal.Admin.Widget.prototype.reload.call(this, function() {
+    Charcoal.Admin.Widget.prototype.reload.call(this, function (that, response) {
+        // Callback
+        if (typeof callback === 'function') {
+            callback.call(that, response);
+        }
         // Re render.
         // This is not good.
         Charcoal.Admin.manager().render();

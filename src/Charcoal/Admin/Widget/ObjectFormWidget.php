@@ -303,6 +303,7 @@ class ObjectFormWidget extends FormWidget implements
         return [
             'obj_id'           => $this->objId(),
             'obj_type'         => $this->objType(),
+            'template'          => $this->template(),
             'form_selector'    => '#'.$this->widgetId(),
             'tab'              => $this->isTabbable(),
             'group_conditions' => $this->groupsConditionalLogic(),
@@ -434,10 +435,12 @@ class ObjectFormWidget extends FormWidget implements
         $objMetadata   = $obj->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
 
+
         $formIdent = $this->formIdent();
         if (!$formIdent) {
             $formIdent = $this->formIdentFallback();
         }
+
 
         if ($formIdent && $obj->view()) {
             $formIdent = $obj->render($formIdent);

@@ -227,11 +227,11 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
                     // Pure dompe.
                     that.element().hide().fadeIn();
                     that.init();
+                    // Callback
+                    if (typeof callback === 'function') {
+                        callback.call(that, response);
+                    }
                 });
-            }
-            // Callback
-            if (typeof callback === 'function') {
-                callback.call(that, response);
             }
         }
     });

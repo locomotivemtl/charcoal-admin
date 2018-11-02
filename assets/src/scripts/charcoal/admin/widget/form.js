@@ -51,6 +51,15 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
     return this;
 };
 
+Charcoal.Admin.Widget_Form.prototype.init = function () {
+};
+
+Charcoal.Admin.Widget_Form.prototype.widget_options = function () {
+    var options = this.parent.widget_options.call(this);
+
+    return $.extend({}, options, this.opts('data'));
+};
+
 Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
     var that = this;
 
@@ -583,6 +592,20 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
             }
         }
     });
+};
+
+/**
+ * reload callback
+ */
+Charcoal.Admin.Widget_Form.prototype.reload = function (callback) {
+    // Call supra class
+    Charcoal.Admin.Widget.prototype.reload.call(this, function() {
+        // Re render.
+        // This is not good.
+        Charcoal.Admin.manager().render();
+    }, true);
+
+    return this;
 };
 
 /**

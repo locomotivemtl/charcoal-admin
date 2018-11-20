@@ -6414,6 +6414,12 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
 
     this.element().on('click', function ()
        {
+
+		var raw = that.controller().export();
+		if (raw && Object.keys(raw.places).length !== 0) {
+			return false;
+		}
+
         if (!that._startGeometry) {
             that._startGeometry = true;
 

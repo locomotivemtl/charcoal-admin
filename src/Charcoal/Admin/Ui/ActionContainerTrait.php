@@ -225,6 +225,10 @@ trait ActionContainerTrait
                 }
             }
 
+            if (isset($action['extraTemplate'])) {
+                    $action['extraTemplate'] = $this->render($action['extraTemplate']);
+            }
+
             if (isset($action['dataAttributes']) && is_array($action['dataAttributes'])) {
                 $action['dataAttributes'] = array_filter($action['dataAttributes'], function ($attribute) {
                     return  !empty($attribute['key']) &&

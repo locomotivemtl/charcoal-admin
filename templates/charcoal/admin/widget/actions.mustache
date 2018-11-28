@@ -43,5 +43,10 @@
                 {{/ dataAttributes }}
             >{{> charcoal/admin/widget/actions/label }}</a>
         {{/ isButton }}
+
+				{{# extraTemplate }}
+				{{& . }}
+				{{/ extraTemplate }}
+
     {{/ hasActions }}
 {{/ active }}

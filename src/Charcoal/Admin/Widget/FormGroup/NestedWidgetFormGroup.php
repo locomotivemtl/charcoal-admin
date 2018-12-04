@@ -93,6 +93,16 @@ class NestedWidgetFormGroup extends AbstractFormGroup implements
         return $this->widgetId;
     }
 
+        /**
+         * Retrieve the current form group
+         *
+         * @return self
+         */
+    public function currentFromGroup()
+    {
+            return $this;
+    }
+
     /**
      * Set the widget's ID.
      *

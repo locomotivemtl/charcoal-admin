@@ -46,6 +46,9 @@
             "system/cache": {
                 "ident": "charcoal/admin/template/system/clear-cache"
             },
+            "system/object/info": {
+                "ident": "charcoal/admin/template/system/object/info"
+            },
             "system/static-website": {
                 "ident": "charcoal/admin/template/system/static-website"
             },

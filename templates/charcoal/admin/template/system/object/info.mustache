@@ -1,0 +1,140 @@
+{{!--
+
+    Object Edit Template
+    ====================
+
+    `charcoal/admin/template/objet/edit`
+
+    Display the object's "edit" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\Edit` model as context.
+
+--}}
+{{> charcoal/admin/template/inc.header }}
+
+{{! @todo See if broken, feedbacks partial used to be right here L15 }}
+
+<main class="c-page-container o-flex_main">
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -bottom">
+        {{> charcoal/admin/widget/feedbacks }}
+
+        {{# dashboard }}
+            {{> charcoal/admin/widget/dashboard }}
+        {{/ dashboard }}
+
+        <div class="container dashboard">
+
+            <div class="panel panel-default widget">
+
+                <div class="panel-heading">
+                    <h3>Infos</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="o-flex c-form-widget -form">
+                        <div class="accordion">
+                            <ul>
+                                <li><strong>Type:</strong> {{objType}}</li>
+                                <li><strong>Class:</strong> {{className}}</li>
+                                <li><strong>Hierarchy:</strong> {{#classHierarchy}}{{.}} ←{{/classHierarchy}} {{className}}</li>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-default widget">
+
+                <div class="panel-heading">
+                    <h3>Properties</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="o-flex c-form-widget -form">
+                        <div class="accordion">
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Multi-lang</th>
+                                <th>Multiple</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#objProperties}}
+                            <tr>
+                                <td>{{metadataSource}}
+                                    {{#hasMoreSource}}
+                                        <span class="c-info " data-toggle="tooltip" data-placement="auto" title="{{#allSources}}{{.}}
+                                        {{/allSources}}">?</span>
+                                    {{/hasMoreSource}}
+                                </td>
+                                <td><strong>{{ident}}</strong></td>
+                                <td><em>{{type}}</em></td>
+                                <td>{{#l10n}}✔{{/l10n}}</td>
+                                <td>{{#multiple}}✔{{/multiple}}</td>
+                                <td>{{description.fr}}</td>
+                            </tr>
+                            {{/objProperties}}
+                        </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-default widget">
+
+                <div class="panel-heading">
+                    <h3>Source</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="o-flex c-form-widget -form">
+                        <div class="accordion">
+                            <ul>
+                                <li><strong>Type:</strong> {{sourceType}}</li>
+                                <li><strong>Table:</strong> {{sourceTable}}</li>
+                                <li><strong># entries:</strong> {{sourceEntries}}</li>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-default widget">
+
+                <div class="panel-heading">
+                    <h3>Traits & Interfaces</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="o-flex c-form-widget -form">
+                        <div class="accordion">
+                            <ul>
+                                {{#classTraits}}
+                                    <li>{{.}}</li>
+                                 {{/classTraits}}
+                            </ul>
+                             <ul>
+                                {{#classInterfaces}}
+                                    <li>{{.}}</li>
+                                 {{/classInterfaces}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </section>
+</main>
+
+{{> charcoal/admin/template/inc.footer }}

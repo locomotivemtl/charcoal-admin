@@ -28,6 +28,9 @@ class InfoTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
     use ObjectContainerTrait;
 
+    /**
+     * @var array
+     */
     private $metadataFiles;
 
     /**
@@ -184,7 +187,6 @@ class InfoTemplate extends AdminTemplate implements
     }
 
     /**
-     * @throws Exception If the object's dashboard config can not be loaded.
      * @return array
      */
     protected function createDashboardConfig()
@@ -193,6 +195,7 @@ class InfoTemplate extends AdminTemplate implements
     }
 
     /**
+     * @param string $propertyIdent The property ident to retrieve.
      * @return string
      */
     private function getFirstFile($propertyIdent)

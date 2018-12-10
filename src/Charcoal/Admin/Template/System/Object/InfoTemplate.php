@@ -33,6 +33,11 @@ class InfoTemplate extends AdminTemplate implements
      */
     private $metadataFiles;
 
+    public function title()
+    {
+        return $this->objType();
+    }
+
     /**
      * @return array
      */

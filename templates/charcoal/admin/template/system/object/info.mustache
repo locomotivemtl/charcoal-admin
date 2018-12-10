@@ -24,22 +24,50 @@
         {{/ dashboard }}
 
         <div class="container dashboard">
+            <div class="row">
 
-            <div class="panel panel-default widget">
+                <div class="col panel panel-default widget">
 
-                <div class="panel-heading">
-                    <h3>Infos</h3>
-                </div>
+                    <div class="panel-heading">
+                        <h3>Infos</h3>
+                    </div>
 
-                <div class="panel-body">
-                    <div class="o-flex c-form-widget -form">
-                        <div class="accordion">
-                            <ul>
-                                <li><strong>Type:</strong> {{objType}}</li>
-                                <li><strong>Class:</strong> {{className}}</li>
-                                <li><strong>Hierarchy:</strong> {{#classHierarchy}}{{.}} ←{{/classHierarchy}} {{className}}</li>
+                    <div class="panel-body">
+                        <div class="o-flex c-form-widget -form">
+                            <div class="accordion">
+                                <ul>
+                                    <li><strong>Type:</strong> {{objType}}</li>
+                                    <li><strong>Class:</strong> {{className}}</li>
+                                    <li>
+                                        <strong>Hierarchy:</strong> <br />
+                                        {{#classHierarchy}}
+                                            {{.}} <br />
+                                        {{/classHierarchy}}
+                                        {{className}}
+                                    </li>
+                            </div>
                         </div>
                     </div>
+
+                </div>
+
+                <div class="col panel panel-default widget">
+
+                    <div class="panel-heading">
+                        <h3>Source</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="o-flex c-form-widget -form">
+                            <div class="accordion">
+                                <ul>
+                                    <li><strong>Type:</strong> {{sourceType}}</li>
+                                    <li><strong>Table:</strong> {{sourceTable}}</li>
+                                    <li><strong># entries:</strong> {{sourceEntries}}</li>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -91,59 +119,44 @@
 
             </div>
 
-            <div class="panel panel-default widget">
+            <div class="row">
+                <div class="col panel panel-default widget">
 
-                <div class="panel-heading">
-                    <h3>Source</h3>
-                </div>
+                    <div class="panel-heading">
+                        <h3>Traits</h3>
+                    </div>
 
-                <div class="panel-body">
-                    <div class="o-flex c-form-widget -form">
-                        <div class="accordion">
-                            <ul>
-                                <li><strong>Type:</strong> {{sourceType}}</li>
-                                <li><strong>Table:</strong> {{sourceTable}}</li>
-                                <li><strong># entries:</strong> {{sourceEntries}}</li>
+                    <div class="panel-body">
+                        <div class="o-flex c-form-widget -form">
+                            <div class="accordion">
+                                <ul>
+                                    {{#classTraits}}
+                                        <li>{{.}}</li>
+                                     {{/classTraits}}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
+                <div class="col panel panel-default widget">
+                    <div class="panel-heading">
+                        <h3>Interfaces</h3>
+                    </div>
 
-            <div class="panel panel-default widget">
-
-                <div class="panel-heading">
-                    <h3>Traits</h3>
-                </div>
-
-                <div class="panel-body">
-                    <div class="o-flex c-form-widget -form">
-                        <div class="accordion">
-                            <ul>
-                                {{#classTraits}}
-                                    <li>{{.}}</li>
-                                 {{/classTraits}}
-                            </ul>
+                    <div class="panel-body">
+                        <div class="o-flex c-form-widget -form">
+                            <div class="accordion">
+                                 <ul>
+                                    {{#classInterfaces}}
+                                        <li>{{.}}</li>
+                                     {{/classInterfaces}}
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="panel-heading">
-                    <h3>Interfaces</h3>
                 </div>
-
-                <div class="panel-body">
-                    <div class="o-flex c-form-widget -form">
-                        <div class="accordion">
-                             <ul>
-                                {{#classInterfaces}}
-                                    <li>{{.}}</li>
-                                 {{/classInterfaces}}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <div class="panel panel-default widget">
@@ -176,7 +189,7 @@
                             {{/propertyProperties}}
                             </tbody>
                             </table>
-                            <a href="system/object/info?obj_type={{objType}}#properties">Back to properties table</a>
+                            <a class="btn" href="system/object/info?obj_type={{objType}}#properties">{{#_t}}⮤ Back to properties table{{/_t}}</a>
                             <br />
                         </div>
                     </div>

@@ -17,7 +17,6 @@ use Charcoal\Tests\Admin\ContainerProvider;
 
 /**
  * Class SecondaryMenuWidgetTest
- * @package Charcoal\Admin\Tests\Widget
  */
 class SecondaryMenuWidgetTest extends AbstractTestCase
 {

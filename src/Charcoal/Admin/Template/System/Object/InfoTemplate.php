@@ -34,18 +34,36 @@ class InfoTemplate extends AdminTemplate implements
     private $metadataFiles;
 
     /**
-     * @return Generator
+     * @return array
      */
     public function objProperties()
     {
         $ret = [];
         $properties = $this->obj()->metadata()->properties();
         foreach ($properties as $ident => $property) {
+            $prop = $this->obj()->p($ident);
             $allSources = $this->getAllFiles($ident);
             $property['ident'] = $ident;
             $property['metadataSource'] = $this->getFirstFile($ident);
             $property['allSources'] = $allSources;
             $property['hasMoreSource'] = (count($allSources) > 1);
+            $propertyProperties = $prop->metadata()->properties();
+            $property['propertyProperties'] = [[
+                'ident' => 'type',
+                'val'   => $property['type'],
+                'type'  => '',
+                'label' => 'Type'
+            ]];
+            foreach ($propertyProperties as $propIdent => $propProperty) {
+                $property['propertyProperties'][] = array_merge($propProperty, [
+                    'ident' => $propIdent,
+                    'val'   => $prop->p($propIdent)->displayVal($prop[$propIdent]),
+                    'label' => isset($propProperty['label']) ? (string)$propProperty['label'] : null,
+                    'propDescription' => isset($propProperty['description']) ? (string)$propProperty['description'] : null
+                ]);
+            }
+
+
             $ret[] = $property;
         }
         usort($ret, function($a, $b) {
@@ -209,6 +227,7 @@ class InfoTemplate extends AdminTemplate implements
     }
 
     /**
+     * @param string $propertyIdent The property ident to retrieve.
      * @return array
      */
     private function getAllFiles($propertyIdent)

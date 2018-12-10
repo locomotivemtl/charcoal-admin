@@ -44,9 +44,10 @@
 
             </div>
 
-            <div class="panel panel-default widget">
+            <div class="panel panel-default">
 
                 <div class="panel-heading">
+                    <a name="properties"></a>
                     <h3>Properties</h3>
                 </div>
 
@@ -57,7 +58,8 @@
                         <thead>
                             <tr>
                                 <th>Source</th>
-                                <th>Name</th>
+                                <th>Ident</th>
+                                <th>Label</th>
                                 <th>Type</th>
                                 <th>Multi-lang</th>
                                 <th>Multiple</th>
@@ -73,7 +75,8 @@
                                         {{/allSources}}">?</span>
                                     {{/hasMoreSource}}
                                 </td>
-                                <td><strong>{{ident}}</strong></td>
+                                <td><a href="system/object/info?obj_type={{objType}}#prop-{{ident}}"><strong>{{ident}}</strong></a></td>
+                                <td>{{label.fr}}</td>
                                 <td><em>{{type}}</em></td>
                                 <td>{{#l10n}}✔{{/l10n}}</td>
                                 <td>{{#multiple}}✔{{/multiple}}</td>
@@ -110,7 +113,7 @@
             <div class="panel panel-default widget">
 
                 <div class="panel-heading">
-                    <h3>Traits & Interfaces</h3>
+                    <h3>Traits</h3>
                 </div>
 
                 <div class="panel-body">
@@ -121,6 +124,17 @@
                                     <li>{{.}}</li>
                                  {{/classTraits}}
                             </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-heading">
+                    <h3>Interfaces</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="o-flex c-form-widget -form">
+                        <div class="accordion">
                              <ul>
                                 {{#classInterfaces}}
                                     <li>{{.}}</li>
@@ -132,6 +146,43 @@
 
             </div>
 
+            <div class="panel panel-default widget">
+                 <div class="panel-heading">
+                    <h3>Properties details</h3>
+                </div>
+                {{#objProperties}}
+                <div class="panel-body">
+                    <div class="o-flex c-form-widget -form">
+                        <div class="accordion">
+                            <a name="prop-{{ident}}"></a>
+                            <h4><strong>{{ident}}</strong> <em>({{type}})</em></h4>
+                            <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Ident</th>
+                                    <th>Label</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                 <tr>
+                            </thead>
+                            <tbody>
+                            {{#propertyProperties}}
+                                 <tr>
+                                    <td><strong>{{ident}}</strong>{{#propDescription}}<span class="c-info " data-toggle="tooltip" data-placement="auto" title="{{.}}">?</span>{{/propDescription}}</td>
+                                    <td>{{label}}</td>
+                                    <td><em>{{type}}</em></td>
+                                    <td>{{val}}</td>
+                                 </tr>
+                            {{/propertyProperties}}
+                            </tbody>
+                            </table>
+                            <a href="system/object/info?obj_type={{objType}}#properties">Back to properties table</a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                {{/objProperties}}
+            </div>
 
         </div>
     </section>

@@ -33,6 +33,9 @@ class InfoTemplate extends AdminTemplate implements
      */
     private $metadataFiles;
 
+    /**
+     * @return \Charcoal\Admin\Translation|\Charcoal\Translator\Translation|string|null
+     */
     public function title()
     {
         return $this->objType();

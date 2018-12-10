@@ -94,6 +94,12 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
         that.view_revision(this);
     });
 
+    // Back-to-list button
+    $('.js-obj-list', $sidebar).on('click.charcoal.form', function (event) {
+        event.preventDefault();
+        that.back_to_list(this);
+    });
+    
     // Language switcher
     $('.js-lang-switch button', $sidebar).on('click.charcoal.form', function (event) {
         event.preventDefault();
@@ -551,6 +557,13 @@ Charcoal.Admin.Widget_Form.prototype.view_revision = function (/* form */) {
             Charcoal.Admin.manager().render();
         }
     });
+};
+
+/**
+ * Hande the "back to list" button / action.
+ */
+Charcoal.Admin.Widget_Form.prototype.back_to_list = function () {
+    window.location.href = 'object/collection?obj_type=' + this.obj_type;
 };
 
 /**

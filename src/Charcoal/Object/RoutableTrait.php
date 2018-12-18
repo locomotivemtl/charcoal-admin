@@ -620,6 +620,8 @@ trait RoutableTrait
             $slug = preg_replace('!\b'.preg_quote($suffix).'$!', '', $slug).$suffix;
         }
 
+        $slug = rtrim($slug, '/');
+
         return $slug;
     }
 

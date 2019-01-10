@@ -474,7 +474,7 @@ class ElfinderConnectorAction extends AdminAction
         $formProperty     = $this->formProperty();
         $targetFilesystem = $formProperty ? $formProperty->filesystem() : null;
 
-        if ($this->isFilesystemPublic($targetFilesystem)) {
+        if ($this->hasFilesystem($targetFilesystem)) {
             $disk = $this->getNamedRoot($targetFilesystem);
 
             $startPath = $formProperty->uploadPath();

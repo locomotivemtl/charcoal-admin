@@ -7,11 +7,11 @@
     This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 --}}
 <div class="o-section" id="{{ widgetId }}">
-    {{# hasObjects }}
-        {{# showTableHeader }}
-            {{> charcoal/admin/widget/table/header }}
-        {{/ showTableHeader }}
-        <div class="c-table-container table-responsive">
+    {{# showTableHeader }}
+        {{> charcoal/admin/widget/table/header }}
+    {{/ showTableHeader }}
+    <div class="c-table-container table-responsive">
+        {{# hasObjects }}
             <div class="c-table-pagination">
                 {{> charcoal/admin/widget/table/counter }}
             </div>
@@ -27,11 +27,11 @@
             {{# paginationWidget }}
                 {{> charcoal/admin/widget/table/pagination }}
             {{/ paginationWidget }}
-        </div>
-    {{/ hasObjects }}
-    {{^ hasObjects }}
-        {{> charcoal/admin/widget/table/empty }}
-    {{/ hasObjects }}
+        {{/ hasObjects }}
+        {{^ hasObjects }}
+            {{> charcoal/admin/widget/table/empty }}
+        {{/ hasObjects }}
+    </div>
 </div>
 
 {{> charcoal/admin/widget/table/js }}

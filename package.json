@@ -10,7 +10,7 @@
         "@shopify/draggable": "^1.0.0-beta.8",
         "awesome-bootstrap-checkbox": "1.0.1",
         "beneroch-gmap": "~0.2.0",
-        "bootstrap": ">=4.1.2",
+        "bootstrap": "4.0.0",
         "bootstrap-dialog-temporary": "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git",
         "bootstrap-select": "https://github.com/paramono/bootstrap-select.git",
         "bootstrap-select-temporary": "https://github.com/paramono/bootstrap-select.git",

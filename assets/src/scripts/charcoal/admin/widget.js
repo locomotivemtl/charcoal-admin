@@ -202,7 +202,11 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     // Response from the reload action should always include a
     // widget_id and widget_html in order to work accordingly.
     // @todo add nice styles and stuffs.
-    $.ajax({
+    if (this.reloadXHR) {
+        this.reloadXHR.abort();
+    }
+    
+    this.reloadXHR = $.ajax({
         type:        'POST',
         url:         url,
         data:        JSON.stringify(data),
@@ -235,6 +239,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
             }
         }
     });
+
 };
 
 /**

@@ -89,6 +89,13 @@
         return this.get_component('templates', id);
     };
 
+    /**
+     * Get component from Type and ID
+     *
+     * @param type (widgets, inputs, properties)
+     * @param id
+     * @returns {*}
+     */
     Manager.prototype.get_component = function (type, id)
     {
         if (!this.isReady) {
@@ -98,6 +105,28 @@
         if (type in this.components) {
             return this.components[type].find(function (component/*, index, components*/) {
                 return component._id === id;
+            });
+        }
+
+        return undefined;
+    };
+
+    /**
+     * Remove component from the manager
+     *
+     * @param type (widgets, inputs, properties)
+     * @param id
+     * @returns {undefined}
+     */
+    Manager.prototype.remove_component = function (type, id)
+    {
+        if (!this.isReady) {
+            throw new Error('Components must be rendered.');
+        }
+
+        if (type in this.components) {
+            this.components[type] = this.components[type].filter(function (c) {
+                return c._id !== id;
             });
         }
 

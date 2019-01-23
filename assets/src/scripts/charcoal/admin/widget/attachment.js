@@ -1,4 +1,11 @@
 /* globals commonL10n,attachmentWidgetL10n */
+
+/**
+ * Keep track of XHR by group
+ * @type {{}}
+ */
+var globalXHR = {};
+
 /**
  * Attachment widget
  * You can associate a perticular object to another
@@ -129,6 +136,8 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();
+            var opts = that.opts();
+
             var _this = $(this);
 
             var type = _this.data('type');
@@ -156,6 +165,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
+                        opts = that.opts();
                         that.join(function () {
                             that.reload();
                         });
@@ -416,17 +426,21 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     if (this.is_dirty()) {
         return false;
     }
-
+    
     // Create join from current list.
     this.join();
 };
 
 Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
 {
+    if (!$('#' + this.element().attr('id')).length) {
+        return ;
+    }
     // Scope
     var that = this;
 
     var opts = that.opts();
+
     var data = {
         obj_type:    opts.data.obj_type,
         obj_id:      opts.data.obj_id,
@@ -447,11 +461,16 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
         });
     });
 
-    $.post('join', data, function () {
+    if (typeof globalXHR[opts.data.group] !== 'undefined') {
+        globalXHR[opts.data.group].abort();
+    }
+
+    globalXHR[opts.data.group] = $.post('join', data, function () {
         if (typeof cb === 'function') {
             cb();
         }
         that.set_dirty_state(false);
+        delete globalXHR[opts.data.group];
     }, 'json');
 };
 

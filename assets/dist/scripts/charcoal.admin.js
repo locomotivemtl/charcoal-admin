@@ -1124,6 +1124,13 @@ Charcoal.Admin = (function () {
         return this.get_component('templates', id);
     };
 
+    /**
+     * Get component from Type and ID
+     *
+     * @param type (widgets, inputs, properties)
+     * @param id
+     * @returns {*}
+     */
     Manager.prototype.get_component = function (type, id)
     {
         if (!this.isReady) {
@@ -1133,6 +1140,28 @@ Charcoal.Admin = (function () {
         if (type in this.components) {
             return this.components[type].find(function (component/*, index, components*/) {
                 return component._id === id;
+            });
+        }
+
+        return undefined;
+    };
+
+    /**
+     * Remove component from the manager
+     *
+     * @param type (widgets, inputs, properties)
+     * @param id
+     * @returns {undefined}
+     */
+    Manager.prototype.remove_component = function (type, id)
+    {
+        if (!this.isReady) {
+            throw new Error('Components must be rendered.');
+        }
+
+        if (type in this.components) {
+            this.components[type] = this.components[type].filter(function (c) {
+                return c._id !== id;
             });
         }
 
@@ -2194,7 +2223,11 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     // Response from the reload action should always include a
     // widget_id and widget_html in order to work accordingly.
     // @todo add nice styles and stuffs.
-    $.ajax({
+    if (this.reloadXHR) {
+        this.reloadXHR.abort();
+    }
+    
+    this.reloadXHR = $.ajax({
         type:        'POST',
         url:         url,
         data:        JSON.stringify(data),
@@ -2227,6 +2260,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
             }
         }
     });
+
 };
 
 /**
@@ -2384,6 +2418,13 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callb
     BootstrapDialog.confirm(opts);
 };
 ;/* globals commonL10n,attachmentWidgetL10n */
+
+/**
+ * Keep track of XHR by group
+ * @type {{}}
+ */
+var globalXHR = {};
+
 /**
  * Attachment widget
  * You can associate a perticular object to another
@@ -2514,6 +2555,8 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();
+            var opts = that.opts();
+
             var _this = $(this);
 
             var type = _this.data('type');
@@ -2541,6 +2584,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
+                        opts = that.opts();
                         that.join(function () {
                             that.reload();
                         });
@@ -2801,17 +2845,21 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     if (this.is_dirty()) {
         return false;
     }
-
+    
     // Create join from current list.
     this.join();
 };
 
 Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
 {
+    if (!$('#' + this.element().attr('id')).length) {
+        return ;
+    }
     // Scope
     var that = this;
 
     var opts = that.opts();
+
     var data = {
         obj_type:    opts.data.obj_type,
         obj_id:      opts.data.obj_id,
@@ -2832,11 +2880,16 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
         });
     });
 
-    $.post('join', data, function () {
+    if (typeof globalXHR[opts.data.group] !== 'undefined') {
+        globalXHR[opts.data.group].abort();
+    }
+
+    globalXHR[opts.data.group] = $.post('join', data, function () {
         if (typeof cb === 'function') {
             cb();
         }
         that.set_dirty_state(false);
+        delete globalXHR[opts.data.group];
     }, 'json');
 };
 

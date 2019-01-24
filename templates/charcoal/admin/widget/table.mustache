@@ -10,7 +10,7 @@
     {{# showTableHeader }}
         {{> charcoal/admin/widget/table/header }}
     {{/ showTableHeader }}
-    <div class="c-table-container table-responsive">
+    <div class="c-table-container table-responsive{{^ showTableHeader }} mt-4{{/ showTableHeader }}">
         {{# hasObjects }}
             <div class="c-table-pagination">
                 {{> charcoal/admin/widget/table/counter }}

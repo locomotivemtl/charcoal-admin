@@ -1,0 +1,35 @@
+// ==========================================================================
+// Bootstrap Glyphicons fallbacks
+//
+// Since Bootstrap 4.0 Glyphicons are no longer supported.
+// To handle third party libraries based on Bootstrap pre-4.0,
+// Override the specific glyphicons classes with some other equivalence.
+// ==========================================================================
+
+.glyphicon {
+    @extend .fa;
+}
+
+.glyphicon-cog {
+    @extend .fa-cog;
+}
+
+.glyphicon-save {
+    @extend .fa-floppy-o;
+}
+
+.glyphicon-copy {
+    @extend .fa-copy;
+}
+
+.glyphicon-remove {
+    @extend .fa-times;
+}
+
+.glyphicon-minus {
+    @extend .fa-minus;
+}
+
+.glyphicon-plus {
+    @extend .fa-plus;
+}

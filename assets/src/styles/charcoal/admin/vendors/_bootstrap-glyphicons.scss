@@ -33,3 +33,11 @@
 .glyphicon-plus {
     @extend .fa-plus;
 }
+
+.glyphicon-remove-circle {
+    @extend .fa-times-circle-o;
+}
+
+.glyphicon-new-window {
+    @extend .fa-external-link;
+}

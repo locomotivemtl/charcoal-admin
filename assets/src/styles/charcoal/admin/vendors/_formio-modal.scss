@@ -1,0 +1,31 @@
+// ==========================================================================
+// Formio-modal
+// ==========================================================================
+
+.formio-dialog.formio-dialog-theme-default .formio-dialog-content {
+    background: $charcoal-gray-0!important;
+    font-family: $font-family;
+
+    .lead {
+        font-weight: $weight-semi;
+    }
+}
+
+.formio-dialog .tab-content {
+    padding-top: 0!important;
+}
+
+.formio-dialog .tab-pane {
+    background: $charcoal-white-1;
+    padding: 12px 8px;
+
+    border-radius: $border-radius;
+
+    &:first-of-type{
+        border-top-left-radius: 0;
+    }
+
+    &:last-of-type {
+        border-top-right-radius: 0;
+    }
+}

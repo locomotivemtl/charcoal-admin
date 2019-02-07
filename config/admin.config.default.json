@@ -295,6 +295,17 @@
         "visit_site": null
     },
 
+    "assets": {
+        "collections": {
+            "jquery": {
+                "files": [
+                  "www/assets/admin/scripts/vendors/jquery/jquery.min.js"
+                ]
+            },
+            "js": {}
+        }
+    },
+
     "elfinder": {
         "client": {
             "theme": "moono",

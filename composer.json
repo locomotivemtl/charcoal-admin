@@ -39,7 +39,8 @@
         "locomotivemtl/charcoal-ui": "~0.3",
         "locomotivemtl/charcoal-user": "~0.3",
         "guzzlehttp/guzzle": "^6.3",
-        "mcaskill/php-html-build-attributes": "1.0"
+        "mcaskill/php-html-build-attributes": "1.0",
+        "kriswallsmith/assetic": "^1.4"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",

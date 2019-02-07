@@ -3,9 +3,15 @@
 namespace Charcoal\Admin\ServiceProvider;
 
 // From Pimple
-use Charcoal\Factory\GenericResolver;
+use Charcoal\Admin\AssetsConfig;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Assetic\Asset\AssetReference;
+use Charcoal\Attachment\Object\File;
+use Charcoal\Factory\GenericResolver;
+
+// from 'kriswallsmith/assetic'
+use Assetic\AssetManager;
 
 // From PSR-7
 use Psr\Http\Message\UriInterface;
@@ -74,6 +80,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         // Ensure dependencies are set
         $container->register(new EmailServiceProvider());
         $container->register(new UiServiceProvider());
+        $container->register(new AssetsManagerServiceProvider());
 
         $this->registerAdminServices($container);
         $this->registerFactoryServices($container);
@@ -82,6 +89,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         $this->registerMetadataExtensions($container);
         $this->registerAuthExtensions($container);
         $this->registerViewExtensions($container);
+        $this->registerAssetsManager($container);
 
         // Register Access-Control-List (acl)
         $container->register(new AclServiceProvider());
@@ -333,7 +341,20 @@ class AdminServiceProvider implements ServiceProviderInterface
                 }
             ];
 
-            return array_merge($helpers, $urls);
+            $am     = $container['assets'];
+            $assets = [
+                'assets' => [
+                    'js' => function () use ($am) {
+                        $am->get('js')->add(
+                            new AssetReference($am, 'formio_scripts')
+                        );
+
+                        return '<script>'.$am->get('js')->dump().'</script>';
+                    }
+                ]
+            ];
+
+            return array_merge($helpers, $urls, $assets);
         });
     }
 
@@ -389,6 +410,19 @@ class AdminServiceProvider implements ServiceProviderInterface
                 'template_factory' => $container['template/factory'],
                 'view'             => $container['view']
             ]);
+        };
+    }
+
+    /**
+     * @param Container $container Pimple DI container.
+     * @return void
+     */
+    protected function registerAssetsManager(Container $container)
+    {
+        $container['assets/config'] = function (Container $container) {
+            $config = $container['admin/config']->get('assets');
+
+            return new AssetsConfig($config);
         };
     }
 

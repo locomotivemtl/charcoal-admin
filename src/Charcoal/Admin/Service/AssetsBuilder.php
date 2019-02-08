@@ -6,6 +6,7 @@ namespace Charcoal\Admin\Service;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
 use Assetic\Asset\FileAsset;
+use Assetic\Asset\GlobAsset;
 use Assetic\AssetManager;
 
 // from charcoal-admin
@@ -47,7 +48,7 @@ final class AssetsBuilder
      * @return mixed
      * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.invoke
      */
-    public function __invoke($config)
+    public function __invoke(AssetsConfig $config)
     {
         return $this->build($config);
     }
@@ -56,7 +57,7 @@ final class AssetsBuilder
      * @param AssetsConfig $config The assets management config.
      * @return AssetManager
      */
-    public function build($config)
+    public function build(AssetsConfig $config)
     {
         $this->am = new AssetManager();
         $this->parseCollections($config->collections());
@@ -66,22 +67,32 @@ final class AssetsBuilder
 
     /**
      * @param array $collections Assets collections.
-     * @return AssetManager
+     * @return void
      */
     private function parseCollections(array $collections)
     {
+        $basePath = dirname(__DIR__, 7).'/';
+
         foreach ($collections as $collectionIdent => $actions) {
             $collection = [];
 
-            if (isset($actions['dependencies'])) {
-                foreach ($actions['dependencies'] as $d) {
-                    $collection[] = new AssetReference($this->am, $d);
-                }
-            }
-
             if (isset($actions['files'])) {
                 foreach ($actions['files'] as $f) {
-                    $collection[] = new FileAsset(dirname(__DIR__, 7).'/'.$f, []);
+                    // Files with asterisks should be treated as glob.
+                    if (strpos($f, '*') !== false) {
+                        $collection[] = new GlobAsset($basePath.$f);
+                        continue;
+                    }
+
+                    // Files starting with '@' should be treated as assets reference.
+                    if ($f[0] === '@') {
+                        $f = ltrim($f, '@');
+
+                        $collection[] = new AssetReference($this->am, $f);
+                        continue;
+                    }
+
+                    $collection[] = new FileAsset($basePath.$f);
                 }
             }
 

@@ -4,6 +4,7 @@ namespace Charcoal\Admin\ServiceProvider;
 
 // from pimple
 use Charcoal\Admin\AssetsConfig;
+use Charcoal\Admin\Mustache\AssetsHelpers;
 use Charcoal\Admin\Service\AssetsBuilder;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -27,6 +28,46 @@ class AssetsManagerServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $this->registerAssetsManager($container);
+        $this->registerMustacheHelpersServices($container);
+    }
+
+    /**
+     * @param Container $container The DI container.
+     * @return void
+     */
+    protected function registerMustacheHelpersServices(Container $container)
+    {
+        if (!isset($container['view/mustache/helpers'])) {
+            $container['view/mustache/helpers'] = function () {
+                return [];
+            };
+        }
+
+        /**
+         * Translation helpers for Mustache.
+         *
+         * @param Container $container Pimple DI container.
+         * @return AssetsHelpers
+         */
+        $container['view/mustache/helpers/assets-manager'] = function (Container $container) {
+            return new AssetsHelpers([
+                'assets' => $container['assets']
+            ]);
+        };
+
+        /**
+         * Extend global helpers for the Mustache Engine.
+         *
+         * @param  array     $helpers   The Mustache helper collection.
+         * @param  Container $container A container instance.
+         * @return array
+         */
+        $container->extend('view/mustache/helpers', function (array $helpers, Container $container) {
+            return array_merge(
+                $helpers,
+                $container['view/mustache/helpers/assets-manager']->toArray()
+            );
+        });
     }
 
     /**

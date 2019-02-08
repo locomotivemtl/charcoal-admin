@@ -341,20 +341,7 @@ class AdminServiceProvider implements ServiceProviderInterface
                 }
             ];
 
-            $am     = $container['assets'];
-            $assets = [
-                'assets' => [
-                    'js' => function () use ($am) {
-                        $am->get('js')->add(
-                            new AssetReference($am, 'formio_scripts')
-                        );
-
-                        return '<script>'.$am->get('js')->dump().'</script>';
-                    }
-                ]
-            ];
-
-            return array_merge($helpers, $urls, $assets);
+            return array_merge($helpers, $urls);
         });
     }
 

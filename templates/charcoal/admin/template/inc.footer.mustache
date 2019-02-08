@@ -6,8 +6,9 @@
 
     {{> charcoal/admin/template/inc.foot.extra }}
 
-    {{!-- Styles from widgets & templates --}}
+    <!-- Styles from widgets & templates -->
     {{& cssRequirements }}
+    <style>{{ assets.output.css }}</style>
     {{& css }}
 
     {{# addJsRequirement }}
@@ -59,8 +60,8 @@
             });
     </script>
 
-    {{!-- Scripts from widgets & templates --}}
-    {{& assets.js }}
+    <!--Scripts from widgets & templates-->
+    <script>{{& assets.output.js }}</script>
     {{& js }}
 
 </body>

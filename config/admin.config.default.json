@@ -299,10 +299,12 @@
         "collections": {
             "jquery": {
                 "files": [
-                  "www/assets/admin/scripts/vendors/jquery/jquery.min.js"
+                    "www/assets/admin/scripts/vendors/jquery/jquery.min.js"
                 ]
             },
-            "js": {}
+            "js": {},
+            "css": {}
+
         }
     },
 

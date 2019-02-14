@@ -8,7 +8,7 @@ var Charcoal = Charcoal || {};
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, feedback, recaptcha, cache, store, debug,
+    var options, manager, action, feedback, recaptcha, cache, store, debug,
         currentLocale = document.documentElement.getAttribute('locale'),
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
@@ -164,6 +164,19 @@ Charcoal.Admin = (function () {
         }
 
         return manager;
+    };
+
+    /**
+     * Provides access to the component manager.
+     *
+     * @return {ComponentManager}
+     */
+    Admin.action = function () {
+        if (typeof(action) === 'undefined') {
+            action = new Charcoal.Admin.ActionManager();
+        }
+
+        return action;
     };
 
     /**

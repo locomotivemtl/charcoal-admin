@@ -8,6 +8,7 @@ module.exports = {
             '<%= paths.js.src %>/charcoal/admin/charcoal.js',
             '<%= paths.js.src %>/charcoal/admin/cache.js',
             '<%= paths.js.src %>/charcoal/admin/component_manager.js',
+            '<%= paths.js.src %>/charcoal/admin/action_manager.js',
             '<%= paths.js.src %>/charcoal/admin/feedback.js',
             '<%= paths.js.src %>/charcoal/admin/recaptcha.js',
             '<%= paths.js.src %>/charcoal/admin/widget.js',

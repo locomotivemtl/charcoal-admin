@@ -165,7 +165,7 @@ trait ActionContainerTrait
             $action = $this->defaultActionStruct();
             $action['isSeparator'] = true;
         } elseif (is_array($action)) {
-            $buttonTypes = [ 'button', 'menu', 'reset', 'submit' ];
+            $buttonTypes = [ 'button', 'menu', 'reset', 'submit', 'action'];
             // Normalize structure keys
             foreach ($action as $key => $val) {
                 $attr = $this->camelize($key);
@@ -222,6 +222,11 @@ trait ActionContainerTrait
 
                 if ($action['buttonType'] === 'submit') {
                     $action['isSubmittable'] = true;
+                }
+
+                if ($action['buttonType'] === 'action') {
+                    $action['actionType'] = 'primary';
+                    $action['cssClasses'] = 'js-action-button btn btn-primary';
                 }
             }
 
@@ -464,7 +469,6 @@ trait ActionContainerTrait
         } elseif (!is_array($classes)) {
             $classes = [];
         }
-
         $classes[] = 'btn';
         $classes[] = 'btn-'.$action['actionType'];
         $classes[] = $this->jsActionPrefix().'-'.$action['ident'];

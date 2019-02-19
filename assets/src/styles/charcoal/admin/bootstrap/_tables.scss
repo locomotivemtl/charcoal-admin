@@ -3,7 +3,10 @@
 // ==========================================================================
 .table {
     border-radius: $border-radius;
-    box-shadow: 0 0 0 1px $table-border-color;
+
+    &:not(.table-contourless) {
+        box-shadow: 0 0 0 1px $table-border-color;
+    }
     border-style: hidden !important;
     overflow: hidden;
 

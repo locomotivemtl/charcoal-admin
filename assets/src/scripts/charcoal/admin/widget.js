@@ -205,7 +205,9 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     if (this.reloadXHR) {
         this.reloadXHR.abort();
     }
-    
+
+    this.element().addClass('-is-loading');
+
     this.reloadXHR = $.ajax({
         type:        'POST',
         url:         url,
@@ -229,6 +231,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
                     that.set_element($('#' + that.id()));
 
                     // Pure dompe.
+                    that.element().removeClass('-is-loading');
                     that.element().hide().fadeIn();
                     that.init();
                     // Callback

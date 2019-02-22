@@ -6,7 +6,7 @@
 
     This widget expects to be in a context (model) of type `Charcoal\Admin\Widget\Table`.
 --}}
-<div class="o-section" id="{{ widgetId }}">
+<div class="o-section position-relative" id="{{ widgetId }}">
     {{# showTableHeader }}
         {{> charcoal/admin/widget/table/header }}
     {{/ showTableHeader }}
@@ -32,6 +32,7 @@
             {{> charcoal/admin/widget/table/empty }}
         {{/ hasObjects }}
     </div>
+    {{> charcoal/admin/widget/inc.loader }}
 </div>
 
 {{> charcoal/admin/widget/table/js }}

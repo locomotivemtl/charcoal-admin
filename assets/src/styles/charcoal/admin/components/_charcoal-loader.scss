@@ -17,12 +17,13 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: $charcoal-white-1;
+    background-color: $charcoal-gray-0;
     transition: opacity $speed $easing;
     pointer-events: none;
 
     opacity: 0;
 
+    .-is-loading &,
     &.-is-loading {
         opacity: 1;
     }

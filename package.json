@@ -16,7 +16,7 @@
         "bootstrap-select-temporary": "https://github.com/paramono/bootstrap-select.git",
         "clipboard": "^1.5.16",
         "components-font-awesome": "~4.7.0",
-        "echarts": "3.8.5",
+        "echarts": "^4.1.0",
         "elfinder-theme-moono": "https://github.com/lokothodida/elfinder-theme-moono.git",
         "jquery": "3.3.1",
         "jquery-ui-bundle": "1.12.1",

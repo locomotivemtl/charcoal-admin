@@ -1266,7 +1266,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $row = $this->parseCollectionObjectRow($object, $objectProperties);
         $row['objectActions'] = $this->objectActions();
-        $row['showObjectActions'] = ($this->showObjectActions === false) ? false : !!$row['objectActions'];
+        $row['showObjectActions'] = ($this->showObjectActions() === false) ? false : !!$row['objectActions'];
 
         $row['attr'] = [
             'class' => []

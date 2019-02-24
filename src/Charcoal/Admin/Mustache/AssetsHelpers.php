@@ -178,9 +178,9 @@ class AssetsHelpers implements HelpersInterface
      */
     protected function __enqueue($collection)
     {
-        $this->assets->get($collection)->add(
-            new AssetReference($this->assets, $this->ident)
-        );
+        foreach ($this->assets->get($this->ident) as $asset) {
+            $this->assets->get($collection)->add($asset);
+        }
     }
 
     /**

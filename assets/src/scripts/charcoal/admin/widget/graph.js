@@ -1,4 +1,4 @@
-/* globals echarts */
+/* globals echarts, widgetL10n */
 /**
  * Graph widget used to display graphical charts
  * charcoal/admin/widget/graph

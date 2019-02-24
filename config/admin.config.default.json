@@ -297,9 +297,9 @@
 
     "assets": {
         "collections": {
-            "jquery": {
+            "echarts_js": {
                 "files": [
-                    "www/assets/admin/scripts/vendors/jquery/jquery.min.js"
+                    "vendor/locomotivemtl/charcoal-admin/assets/dist/scripts/vendors/echarts/echarts.min.js"
                 ]
             },
             "js": {},

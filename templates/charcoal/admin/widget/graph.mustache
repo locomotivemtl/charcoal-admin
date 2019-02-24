@@ -1,0 +1,16 @@
+<div id="{{ widgetId }}" class="o-section position-relative">
+    <div class="js-graph-container" style="height:{{ height }}px;"></div>
+    {{> charcoal/admin/widget/inc.loader }}
+</div>
+
+{{ assets.enqueue.js.echarts_js }}
+
+{{# assets.inject.js }}
+    {{> charcoal/admin/l10n/widget.js }}
+    Charcoal.Admin.manager().add_widget({
+        id: '{{ widgetId }}',
+        type: 'charcoal/admin/widget/graph',
+        widget_type: '{{ type }}',
+        data: {{& escapedWidgetDataForJsAsJson }}
+    });
+{{/ assets.inject.js }}

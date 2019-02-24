@@ -28,6 +28,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     public function setHeight($height)
     {
         $this->height = $height;
+
         return $this;
     }
 
@@ -46,6 +47,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     public function setColors(array $colors)
     {
         $this->colors = $colors;
+
         return $this;
     }
 
@@ -57,6 +59,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
         if ($this->colors === null || empty($this->colors)) {
             $this->colors = $this->defaultColors();
         }
+
         return $this->colors;
     }
 
@@ -115,4 +118,32 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     {
         return json_encode($this->categories());
     }
+
+    /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return [
+            'colors'  => $this->colors(),
+            'options' => [
+                'xAxis' => empty($this->categories()) ? null : [
+                    [
+                        'type' => 'category',
+                        'data' => $this->categories()
+                    ]
+                ],
+                'yAxis' => empty($this->categories()) ? null : [
+                    [
+                        'type'      => 'value',
+                        'splitArea' => ['show' => true]
+                    ]
+                ],
+                'series' => $this->series()
+            ]
+        ];
+    }
+
 }

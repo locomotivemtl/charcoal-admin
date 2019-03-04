@@ -19,7 +19,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.13.x-dev"
+            "dev-master": "0.15.x-dev"
         }
     },
     "require": {
@@ -37,7 +37,7 @@
         "locomotivemtl/charcoal-object": "~0.6",
         "locomotivemtl/charcoal-translator": "~0.3",
         "locomotivemtl/charcoal-ui": "~0.3",
-        "locomotivemtl/charcoal-user": "~0.3",
+        "locomotivemtl/charcoal-user": "~0.4",
         "guzzlehttp/guzzle": "^6.3",
         "mcaskill/php-html-build-attributes": "1.0",
         "kriswallsmith/assetic": "^1.4"

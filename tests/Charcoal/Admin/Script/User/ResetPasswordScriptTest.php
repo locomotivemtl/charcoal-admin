@@ -82,7 +82,7 @@ class ResetPasswordScriptTest extends AbstractTestCase
     {
         $args = $this->obj->defaultArguments();
 
-        $this->assertArrayHasKey('username', $args);
+        $this->assertArrayHasKey('email', $args);
         $this->assertArrayHasKey('password', $args);
     }
 
@@ -93,7 +93,7 @@ class ResetPasswordScriptTest extends AbstractTestCase
     {
         $args = $this->obj->arguments();
 
-        $this->assertArrayHasKey('username', $args);
+        $this->assertArrayHasKey('email', $args);
         $this->assertArrayHasKey('password', $args);
     }
 
@@ -108,8 +108,8 @@ class ResetPasswordScriptTest extends AbstractTestCase
         $argv = [];
         $argv[] = 'vendor/bin/charcoal';
 
-        $argv[] = '--username';
-        $argv[] = 'foobar';
+        $argv[] = '--email';
+        $argv[] = 'foobar@example.com';
 
         $argv[] = '--password';
         $argv[] = '[Foo]{bar}123';
@@ -119,9 +119,8 @@ class ResetPasswordScriptTest extends AbstractTestCase
         $source->createTable();
 
         $model->setData([
-            'username' => 'foobar',
-            'password' => 'BarFoo123',
-            'email' => 'foobar@example.com'
+            'email' => 'foobar@example.com',
+            'password' => 'BarFoo123'
         ]);
         $model->setRevisionEnabled(false);
         $model->save();

@@ -87,7 +87,7 @@ class ResetPasswordActionTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function testRunWithoutUsernameReturns400()
+    public function testRunWithoutEmailReturns400()
     {
         $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'token=foobar'
@@ -107,7 +107,7 @@ class ResetPasswordActionTest extends AbstractTestCase
     public function testRunWithoutPasswordReturns400()
     {
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar'
+            'QUERY_STRING' => 'token=foobar&email=foobar@foo.bar'
         ]));
         $response = new Response();
 
@@ -124,7 +124,7 @@ class ResetPasswordActionTest extends AbstractTestCase
     public function testRunWithoutMatchingPasswordsReturns400()
     {
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar&password1=foo&password2=bar'
+            'QUERY_STRING' => 'token=foobar&email=foobar@foo.bar&password1=foo&password2=bar'
         ]));
         $response = new Response();
 
@@ -147,7 +147,7 @@ class ResetPasswordActionTest extends AbstractTestCase
                     ->andReturn(false);
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar&password1=foo&password2=foo'
+            'QUERY_STRING' => 'token=foobar&email=foobar@foo.bar&password1=foo&password2=foo'
         ]));
         $response = new Response();
 
@@ -170,7 +170,7 @@ class ResetPasswordActionTest extends AbstractTestCase
                     ->andReturn(false);
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'token=foobar&username=foobar&password1=foo&password2=foo&g-recaptcha-response=foobar'
+            'QUERY_STRING' => 'token=foobar&email=foobar@foo.bar&password1=foo&password2=foo&g-recaptcha-response=foobar'
         ]));
         $response = new Response();
 

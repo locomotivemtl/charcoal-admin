@@ -72,7 +72,7 @@ class LostPasswordActionTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function testRunWithoutUsernameReturns400()
+    public function testRunWithoutEmailReturns400()
     {
         $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
@@ -96,7 +96,7 @@ class LostPasswordActionTest extends AbstractTestCase
                     ->andReturn(false);
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'username=foobar'
+            'QUERY_STRING' => 'email=foobar@foo.bar'
         ]));
         $response = new Response();
 
@@ -119,7 +119,7 @@ class LostPasswordActionTest extends AbstractTestCase
                     ->andReturn(false);
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'username=foobar&g-recaptcha-response=foobar'
+            'QUERY_STRING' => 'email=foobar@foo.bar&g-recaptcha-response=foobar'
         ]));
         $response = new Response();
 

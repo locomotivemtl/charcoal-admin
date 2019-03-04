@@ -52,6 +52,8 @@ class ProcessMonthlyScript extends AbstractNotificationScript
      */
     protected function emailData(Notification $notification, array $objects)
     {
+        unset($notification, $objects);
+
         return [
             'subject'         => sprintf('Monthly Charcoal Notification - %s', $this->startDate()->format('Y-m-d')),
             'template_ident'  => 'charcoal/admin/email/notification.monthly',

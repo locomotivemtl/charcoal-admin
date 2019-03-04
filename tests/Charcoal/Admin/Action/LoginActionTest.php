@@ -88,10 +88,10 @@ class LoginActionTest extends AbstractTestCase
      */
     public function testRunWithInvalidCredentials()
     {
-        $this->createUser('foo');
+        $this->createUser('foo@bar.com');
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'username=qux&password=asdfgh'
+            'QUERY_STRING' => 'password=asdfgh'
         ]));
         $response = new Response();
 
@@ -108,10 +108,10 @@ class LoginActionTest extends AbstractTestCase
     /*
     public function testRunWithValidCredentials()
     {
-        $this->createUser('foo');
+        $this->createUser('foo@bar.com');
 
         $request = Request::createFromEnvironment(Environment::mock([
-           'QUERY_STRING' => 'username=foo&password=qwerty'
+           'QUERY_STRING' => 'password=qwerty'
         ]));
         $response = new Response();
 

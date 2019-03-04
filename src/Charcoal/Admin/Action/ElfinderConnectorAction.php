@@ -606,6 +606,8 @@ class ElfinderConnectorAction extends AdminAction
      **/
     public function checkAccess($attr, $path, $data, elFinderVolumeDriver $volume, $isDir, $relPath)
     {
+        unset($data, $volume, $isDir);
+
         $basename = basename($path);
         /**
          * If file/folder begins with '.' (dot) but without volume root,

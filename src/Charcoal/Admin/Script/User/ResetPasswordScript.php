@@ -36,10 +36,10 @@ class ResetPasswordScript extends AdminScript
     public function defaultArguments()
     {
         $arguments = [
-            'username' => [
-                'prefix'        => 'u',
-                'longPrefix'    => 'username',
-                'description'   => 'The user name'
+            'email' => [
+                'prefix'        => 'e',
+                'longPrefix'    => 'email',
+                'description'   => 'The user email'
             ],
             'password' => [
                 'prefix'        => 'p',
@@ -75,10 +75,10 @@ class ResetPasswordScript extends AdminScript
             'Reset a Charcoal Administrator password'
         );
 
-        $username = $this->argOrInput('username');
+        $email = $this->argOrInput('email');
 
         $user = $this->modelFactory()->create(User::class);
-        $user->load($username);
+        $user->loadFrom('email', $email);
 
         if (!$user->id()) {
             $climate->red()->out(
@@ -92,23 +92,23 @@ class ResetPasswordScript extends AdminScript
         $user->resetPassword($password);
 
         if ($climate->arguments->get('sendEmail')) {
-            $this->sendResetPasswordEmail($username, $password);
+            $this->sendResetPasswordEmail($email, $password);
         }
 
         $climate->red()->out(
-            sprintf('User "%s" password has been modified.', $username)
+            sprintf('User "%s" password has been modified.', $email)
         );
 
         return $response;
     }
 
     /**
-     * @param  string $username The username.
+     * @param  string $email    The user email.
      * @param  string $password The new, plain-text password.
      * @return void
      * @todo   Implement reset password email dispatch.
      */
-    private function sendResetPasswordEmail($username, $password)
+    private function sendResetPasswordEmail($email, $password)
     {
     }
 }

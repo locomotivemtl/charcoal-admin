@@ -262,9 +262,11 @@ class TranslateScript extends AdminScript
             if ($row == 1) {
                 continue;
             }
-            // data[0] = ORIGINAL
-            // data[1] = TRANSLATION
-            // data[2] = CONTEXT
+            /**
+             * data[0] = ORIGINAL
+             * data[1] = TRANSLATION
+             * data[2] = CONTEXT
+             */
             $translation = $this->translateCSV($data);
             if (!empty($translation)) {
                 $results[$translation[0]] = $translation[1];

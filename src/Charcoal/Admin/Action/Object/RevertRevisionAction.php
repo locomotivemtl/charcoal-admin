@@ -97,6 +97,8 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         try {
             $translator = $this->translator();
 

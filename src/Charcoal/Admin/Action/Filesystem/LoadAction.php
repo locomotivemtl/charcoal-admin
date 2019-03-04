@@ -192,6 +192,8 @@ class LoadAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $translator = $this->translator();
 
         try {

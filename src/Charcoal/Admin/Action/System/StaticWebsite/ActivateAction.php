@@ -28,6 +28,8 @@ class ActivateAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $cachePath = $this->basePath.'cache';
         // Ensure 'cache' directory exists
         if (!file_exists($cachePath)) {

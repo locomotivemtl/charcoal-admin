@@ -237,7 +237,6 @@ class CrawlScript extends AdminScript
             );
         }
         $this->climate()->out('Deleting '.$dir);
-        return;
 
         $files = array_diff(scandir($dir), ['.','..']);
         foreach ($files as $file) {

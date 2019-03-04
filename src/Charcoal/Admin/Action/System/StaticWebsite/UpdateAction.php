@@ -80,6 +80,8 @@ class UpdateAction extends AdminAction
      */
     protected function cacheUrl($url, $outputDir, ResponseInterface $response)
     {
+        unset($response);
+
         if (!file_exists($outputDir)) {
             $this->setSuccess(false);
             $this->addFeedback('error', 'Can not regenerate static page: did not exist on filesystem.');

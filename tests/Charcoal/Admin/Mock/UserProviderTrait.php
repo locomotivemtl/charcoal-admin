@@ -2,7 +2,7 @@
 
 namespace Charcoal\Tests\Admin\Mock;
 
-// From 'charcoal-admin'
+// From 'charcoal-user'
 use Charcoal\User\UserInterface;
 
 // From 'charcoal-admin'
@@ -27,27 +27,24 @@ trait UserProviderTrait
     /**
      * Create a user model and save it into storage.
      *
-     * @param  string $username The user's handle and primary key.
-     * @param  string $password The user's password.
      * @param  string $email    The user's email address.
+     * @param  string $password The user's password.
      * @return UserInterface
      */
     protected function createUser(
-        $username,
-        $password = 'qwerty',
-        $email = 'foo@example.com'
+        $email,
+        $password = 'qwerty'
     ) {
         $container = $this->container();
 
         $user = $container['model/factory']->create($this->userClass);
         $user->setData([
-            'username' => $username,
+            'email'    => $email,
             'password' => $password,
-            'email'    => $email
         ]);
 
         $user->save();
-        $user->load($username);
+        $user->loadFrom('email', $email);
 
         return $user;
     }
@@ -55,15 +52,15 @@ trait UserProviderTrait
     /**
      * Determine if the user exists.
      *
-     * @param  string $username The username to lookup.
+     * @param  string $email The email to lookup.
      * @return User
      */
-    protected function userExists($username)
+    protected function userExists($email)
     {
         $container = $this->container();
 
         $user = $container['model/factory']->create($this->userClass);
-        $user->load($username);
+        $user->loadFrom('email', $email);
 
         return !!$user->id();
     }

@@ -73,7 +73,7 @@ class LogoutActionTest extends AbstractTestCase
      */
     public function testRunWithUnauthenticatedUser()
     {
-        $this->createUser('foo');
+        $this->createUser('foo@bar.com');
 
         $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
@@ -90,7 +90,7 @@ class LogoutActionTest extends AbstractTestCase
      */
     public function testRunWithAuthenticatedUser()
     {
-        $user = $this->createUser('foo');
+        $user = $this->createUser('foo@bar.com');
         $user->login();
 
         $request  = Request::createFromEnvironment(Environment::mock());

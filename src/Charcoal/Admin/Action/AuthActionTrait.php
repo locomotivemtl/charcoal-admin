@@ -18,7 +18,7 @@ trait AuthActionTrait
     /**
      * Retrieve the user with the given login handle.
      *
-     * @param  string $handle A login name or email address.
+     * @param  string $handle An ID or email address.
      * @return User|null Returns the user object instance or NULL.
      */
     protected function loadUser($handle)
@@ -27,16 +27,16 @@ trait AuthActionTrait
             return null;
         }
 
-        // Try to get user by username
+        // Try to get user by ID
         $user = $this->modelFactory()->create(User::class);
-        $user->loadFrom('username', $handle);
-        if ($user->id()) {
+        $user->load($handle);
+        if ($user->id() !== null) {
             return $user;
         }
 
         // Try to get user by email
         $user->loadFrom('email', $handle);
-        if ($user->id()) {
+        if ($user->id() !== null) {
             return $user;
         }
 

@@ -26,7 +26,6 @@ use Charcoal\Admin\AdminTemplate;
  */
 class ElfinderTemplate extends AdminTemplate
 {
-    // const ELFINDER_IMG_PARENT_URL;
     const ADMIN_ASSETS_REL_PATH    = 'assets/admin/';
     const ELFINDER_ASSETS_REL_PATH = 'assets/admin/elfinder/';
 
@@ -461,7 +460,6 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function isFullscreenTemplate()
     {
-        // return true;
         return false;
     }
 }

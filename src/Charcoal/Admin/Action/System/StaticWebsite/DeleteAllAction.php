@@ -33,6 +33,8 @@ class DeleteAllAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $outputDir = $this->basePath.'cache/static/';
         if (!file_exists($outputDir)) {
             $this->setSuccess(false);

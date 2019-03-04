@@ -91,8 +91,8 @@ class LogoutAction extends AdminAction
 
         if ($token->source()->tableExists()) {
             $table = $token->source()->table();
-            $q = 'DELETE FROM '.$table.' WHERE username = :username';
-            $token->source()->dbQuery($q, [ 'username' => $user->username() ]);
+            $q = 'DELETE FROM '.$table.' WHERE user_id = :userId';
+            $token->source()->dbQuery($q, [ 'userId' => $user->id() ]);
         }
 
         return $this;

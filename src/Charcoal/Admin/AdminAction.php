@@ -109,6 +109,7 @@ abstract class AdminAction extends AbstractAction implements
      */
     protected function authRedirect(RequestInterface $request)
     {
+        unset($request);
         // Test if authentication is required.
         if ($this->authRequired() === false) {
             return;

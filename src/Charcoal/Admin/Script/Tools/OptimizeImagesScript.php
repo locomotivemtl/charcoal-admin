@@ -90,7 +90,10 @@ class OptimizeImagesScript extends AdminScript
 
         if ($this->jpgLevel > 0) {
             if ($this->jpgLevel < 60) {
-                $climate->error(sprintf('ERROR: A quality of %s is VERY low. This will most likely make the resulting images very pixelated. Aborted.', $this->jpgLevel));
+                $climate->error(sprintf(
+                    'ERROR: A quality of %s is VERY low. This will most likely make the resulting images very pixelated. Aborted.',
+                    $this->jpgLevel
+                ));
                 return $response;
             }
             $jpegoptimCmd = $this->getJpegoptimCmd();

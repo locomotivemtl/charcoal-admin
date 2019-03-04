@@ -18,7 +18,7 @@ use Charcoal\Admin\User;
  *
  * ## Required Parameters
  *
- * - `username` (_string_) — The user's handle.
+ * - `email` (_string_) — The user's handle.
  * - `password` (_string_) — The user's password.
  *
  * ## Optional Parameters
@@ -73,12 +73,12 @@ class LoginAction extends AdminAction
 
             $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
 
-            $username = $request->getParam('username');
+            $email    = $request->getParam('email');
             $password = $request->getParam('password');
             $nextUrl  = $request->getParam('next_url');
 
-            if (!$username || !$password) {
-                $this->addFeedback('error', $translator->translate('Invalid username or password'));
+            if (!$email || !$password) {
+                $this->addFeedback('error', $translator->translate('Invalid email or password'));
                 $this->setSuccess(false);
 
                 return $response->withStatus(400);
@@ -86,9 +86,9 @@ class LoginAction extends AdminAction
 
             if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
                 if ($ip) {
-                    $logMessage = sprintf('[Admin] Login challenge failed for "%s" from %s', $username, $ip);
+                    $logMessage = sprintf('[Admin] Login challenge failed for "%s" from %s', $email, $ip);
                 } else {
-                    $logMessage = sprintf('[Admin] Login challenge failed for "%s"', $username);
+                    $logMessage = sprintf('[Admin] Login challenge failed for "%s"', $email);
                 }
 
                 $this->logger->warning($logMessage);
@@ -97,18 +97,18 @@ class LoginAction extends AdminAction
             }
 
             if ($ip) {
-                $logMessage = sprintf('[Admin] Login attempt for "%s" from %s', $username, $ip);
+                $logMessage = sprintf('[Admin] Login attempt for "%s" from %s', $email, $ip);
             } else {
-                $logMessage = sprintf('[Admin] Login attempt for "%s"', $username);
+                $logMessage = sprintf('[Admin] Login attempt for "%s"', $email);
             }
             $this->logger->debug($logMessage);
 
-            $user = $this->authenticator()->authenticateByPassword($username, $password);
+            $user = $this->authenticator()->authenticateByPassword($email, $password);
             if ($user === null) {
                 if ($ip) {
-                    $logMessage = sprintf('[Admin] Login failed for "%s" from %s', $username, $ip);
+                    $logMessage = sprintf('[Admin] Login failed for "%s" from %s', $email, $ip);
                 } else {
-                    $logMessage = sprintf('[Admin] Login failed for "%s"', $username);
+                    $logMessage = sprintf('[Admin] Login failed for "%s"', $email);
                 }
                 $this->logger->warning($logMessage);
 
@@ -120,9 +120,9 @@ class LoginAction extends AdminAction
                 $this->setRememberCookie($request, $user);
 
                 if ($ip) {
-                    $logMessage = sprintf('[Admin] Login successful for "%s" from %s', $username, $ip);
+                    $logMessage = sprintf('[Admin] Login successful for "%s" from %s', $email, $ip);
                 } else {
-                    $logMessage = sprintf('[Admin] Login successful for "%s"', $username);
+                    $logMessage = sprintf('[Admin] Login successful for "%s"', $email);
                 }
                 $this->logger->debug($logMessage);
 
@@ -160,7 +160,7 @@ class LoginAction extends AdminAction
         }
 
         $authToken = $this->modelFactory()->create('charcoal/admin/user/auth-token');
-        $authToken->generate($user->username());
+        $authToken->generate($user->id());
         $authToken->sendCookie();
 
         $authToken->save();

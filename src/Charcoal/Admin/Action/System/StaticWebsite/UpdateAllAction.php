@@ -25,6 +25,8 @@ class UpdateAllAction extends UpdateAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $files = $this->globRecursive($this->basePath.'cache/static', 'index.*');
         foreach ($files as $file) {
             $relativeUrl = dirname(str_replace($this->basePath.'cache/static/', '', $file));

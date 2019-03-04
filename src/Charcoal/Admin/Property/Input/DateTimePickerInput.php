@@ -139,9 +139,8 @@ class DateTimePickerInput extends AbstractPropertyInput
         }
 
         return [
-            // 'allowInputToggle' => true,
-            'format'           => self::DEFAULT_JS_FORMAT,
-            'defaultDate'      => $date ? $date->format(\DateTime::ISO8601) : null
+            'format'      => self::DEFAULT_JS_FORMAT,
+            'defaultDate' => $date ? $date->format(\DateTime::ISO8601) : null
         ];
     }
 

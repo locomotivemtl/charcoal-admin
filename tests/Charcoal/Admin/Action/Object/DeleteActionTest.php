@@ -104,9 +104,9 @@ class DeleteActionTest extends AbstractTestCase
      */
     public function testRunWithInvalidObject()
     {
-        $objId = 'foobar';
-        $user  = $this->createUser($objId);
-        $this->assertTrue($this->userExists($objId));
+        $email = 'foobar@foo.bar';
+        $user  = $this->createUser($email);
+        $this->assertTrue($this->userExists($email));
 
         $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'obj_type=charcoal/admin/user&obj_id=bazqux'
@@ -127,12 +127,12 @@ class DeleteActionTest extends AbstractTestCase
      */
     public function testRunWithObjectDelete()
     {
-        $objId = 'foobar';
-        $user = $this->createUser($objId);
-        $this->assertTrue($this->userExists($objId));
+        $email = 'foobar@foo.bar';
+        $user = $this->createUser($email);
+        $this->assertTrue($this->userExists($email));
 
         $request = Request::createFromEnvironment(Environment::mock([
-            'QUERY_STRING' => 'obj_type=charcoal/admin/user&obj_id='.$objId
+            'QUERY_STRING' => 'obj_type=charcoal/admin/user&obj_id='.$user->id()
         ]));
         $response = new Response();
 
@@ -142,7 +142,7 @@ class DeleteActionTest extends AbstractTestCase
         $results = $this->obj->results();
         $this->assertTrue($results['success']);
 
-        $this->assertFalse($this->userExists($objId));
+        $this->assertFalse($this->userExists($email));
     }
 
     /**

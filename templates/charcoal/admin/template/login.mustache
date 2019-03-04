@@ -35,12 +35,12 @@ This template expects a `Charcoal\Admin\Template\LoginTemplate` model as context
                 <input type="hidden" name="csrf_token" value="{{ csrfToken }}">
 
                  <div class="form-group">
-                    <label class="sr-only" for="username">{{# _t }}Username{{/ _t }}</label>
+                    <label class="sr-only" for="email">{{# _t }}Email{{/ _t }}</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="username"><i class="fa fa-user fa-fw"></i></label>
+                            <label class="input-group-text" for="email"><i class="fa fa-at fa-fw"></i></label>
                         </div>
-                        <input class="form-control" type="text" name="username" id="username" placeholder="{{# _t }}Username{{/ _t }}" required autofocus tabindex="1">
+                        <input class="form-control" type="email" name="email" id="email" placeholder="{{# _t }}Email{{/ _t }}" required autofocus tabindex="1">
                     </div>
                 </div>
                 <div class="form-group">

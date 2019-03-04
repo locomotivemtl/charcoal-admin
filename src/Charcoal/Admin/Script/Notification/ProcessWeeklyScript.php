@@ -52,6 +52,8 @@ class ProcessWeeklyScript extends AbstractNotificationScript
      */
     protected function emailData(Notification $notification, array $objects)
     {
+        unset($notification, $objects);
+
         $subject = sprintf(
             'Weekly Charcoal Notification - %s to %s',
             $this->startDate()->format('Y-m-d'),

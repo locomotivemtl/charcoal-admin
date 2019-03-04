@@ -52,6 +52,8 @@ class ProcessDailyScript extends AbstractNotificationScript
      */
     protected function emailData(Notification $notification, array $objects)
     {
+        unset($notification, $objects);
+
         return [
             'subject'         => sprintf('Daily Charcoal Notification - %s', $this->startDate()->format('Y-m-d')),
             'template_ident'  => 'charcoal/admin/email/notification.daily',

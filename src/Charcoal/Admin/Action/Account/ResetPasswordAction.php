@@ -24,7 +24,7 @@ use Charcoal\Admin\User\LostPasswordToken;
  * ## Required Parameters
  *
  * - `token`
- * - `username`
+ * - `email`
  * - `password1`
  * - `password2`
  * - `g-recaptcha-response`
@@ -63,7 +63,7 @@ class ResetPasswordAction extends AdminAction
         $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
 
         $token     = $request->getParam('token');
-        $username  = $request->getParam('username');
+        $email     = $request->getParam('email');
         $password1 = $request->getParam('password1');
         $password2 = $request->getParam('password2');
 
@@ -74,8 +74,8 @@ class ResetPasswordAction extends AdminAction
             return $response->withStatus(400);
         }
 
-        if (!$username) {
-            $this->addFeedback('error', $translator->translate('Missing username.'));
+        if (!$email) {
+            $this->addFeedback('error', $translator->translate('Missing email.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -104,9 +104,16 @@ class ResetPasswordAction extends AdminAction
 
         if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
             if ($ip) {
-                $logMessage = sprintf('[Admin] Reset Password — CAPTCHA challenge failed for "%s" from %s', $username, $ip);
+                $logMessage = sprintf(
+                    '[Admin] Reset Password — CAPTCHA challenge failed for "%s" from %s',
+                    $email,
+                    $ip
+                );
             } else {
-                $logMessage = sprintf('[Admin] Reset Password — CAPTCHA challenge failed for "%s"', $username);
+                $logMessage = sprintf(
+                    '[Admin] Reset Password — CAPTCHA challenge failed for "%s"',
+                    $email
+                );
             }
 
             $this->logger->warning($logMessage);
@@ -116,18 +123,18 @@ class ResetPasswordAction extends AdminAction
 
         $failMessage = $translator->translation('An error occurred while processing the password change.');
 
-        $user = $this->loadUser($username);
+        $user = $this->loadUser($email);
         if ($user === null) {
             if ($ip) {
                 $logMessage = sprintf(
                     '[Admin] Reset Password — Can not find "%s" user in database for %s.',
-                    $username,
+                    $email,
                     $ip
                 );
             } else {
                 $logMessage = sprintf(
                     '[Admin] Reset Password — Can not find "%s" user in database.',
-                    $username
+                    $email
                 );
             }
             $this->logger->error($logMessage);
@@ -159,14 +166,14 @@ class ResetPasswordAction extends AdminAction
             if ($ip) {
                 $logMessage = sprintf(
                     '[Admin] Reset Password — Failed to process change for "%s" from %s: %s',
-                    $username,
+                    $email,
                     $ip,
                     $e->getMessage()
                 );
             } else {
                 $logMessage = sprintf(
                     '[Admin] Reset Password — Failed to process change for "%s": %s',
-                    $username,
+                    $email,
                     $e->getMessage()
                 );
             }
@@ -204,19 +211,19 @@ class ResetPasswordAction extends AdminAction
      * - match the given user
      *
      * @see    \Charcoal\Admin\Template\Account::validateToken()
-     * @param  string $token    The token to validate.
-     * @param  string $username The user that should match the token.
+     * @param  string $token  The token to validate.
+     * @param  string $userId The user ID that should match the token.
      * @return boolean
      */
-    private function validateToken($token, $username)
+    private function validateToken($token, $userId)
     {
         $obj = $this->modelFactory()->create(LostPasswordToken::class);
-        $sql = strtr('SELECT * FROM `%table` WHERE `token` = :token AND `user` = :username AND `expiry` > NOW()', [
+        $sql = strtr('SELECT * FROM `%table` WHERE `token` = :token AND `user` = :userId AND `expiry` > NOW()', [
             '%table' => $obj->source()->table()
         ]);
         $obj->loadFromQuery($sql, [
-            'token'    => $token,
-            'username' => $username
+            'token'  => $token,
+            'userId' => $userId
         ]);
 
         return !!$obj->token();

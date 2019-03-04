@@ -154,12 +154,11 @@ class SelectInput extends AbstractSelectableInput
     public function defaultSelectOptions()
     {
         return [
-            // 'iconBase' => 'fa',   // Error in plugin?
             'style'    => '',
-// Neutralize any Bootstrap .btn styling
+            // Neutralize any Bootstrap .btn styling
             'template' => [
+                // No need for .caret markup since Bootstrap 4
                 'caret' => ''
-// No need for .caret markup since Bootstrap 4
             ]
         ];
     }

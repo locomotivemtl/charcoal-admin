@@ -117,6 +117,8 @@ abstract class AdminScript extends AbstractScript
      */
     private function passwordInput(PropertyInterface $prop, $label)
     {
+        unset($prop);
+
         $climate = $this->climate();
 
         $input = $climate->password($label);

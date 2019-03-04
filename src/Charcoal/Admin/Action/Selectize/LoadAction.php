@@ -50,6 +50,8 @@ class LoadAction extends BaseLoadAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $failMessage = $this->translator()->translation('Failed to load object(s)');
         $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage

@@ -40,11 +40,6 @@ class CreateScript extends AdminScript
     public function defaultArguments()
     {
         $arguments = [
-            'username' => [
-                'prefix'      => 'u',
-                'longPrefix'  => 'username',
-                'description' => 'The user name'
-            ],
             'email' => [
                 'prefix'      => 'e',
                 'longPrefix'  => 'email',
@@ -60,6 +55,11 @@ class CreateScript extends AdminScript
                 'prefix'      => 'r',
                 'longPrefix'  => 'roles',
                 'description' => 'The user role'
+            ],
+            'display_name' => [
+                'prefix'      => 'n',
+                'longPrefix'  => 'name',
+                'description' => 'The user display name'
             ]
         ];
 
@@ -98,7 +98,7 @@ class CreateScript extends AdminScript
         );
 
         $user       = $this->modelFactory()->create(User::class);
-        $prompts = $this->userPrompts();
+        $prompts    = $this->userPrompts();
         $properties = $user->properties(array_keys($prompts));
 
         $vals = [];
@@ -130,7 +130,7 @@ class CreateScript extends AdminScript
         $ret = $user->save();
 
         if ($ret) {
-            $this->climate()->green()->out("\n".sprintf('Success! User "%s" created.', $ret));
+            $this->climate()->green()->out("\n".sprintf('Success! User "%s" created.', $user->email()));
         } else {
             $this->climate()->red()->out("\nError. User could not be created.");
         }
@@ -144,11 +144,6 @@ class CreateScript extends AdminScript
         $translator = $this->translator();
 
         return [
-            'username' => [
-                'label'      => $translator->translate('Please enter username: '),
-                'property'   => $this->climate()->arguments->get('username'),
-                'validation' => [$this, 'validateUsername']
-            ],
             'email' => [
                 'label'      => $translator->translate('Please enter email: '),
                 'property'   => $this->climate()->arguments->get('email'),
@@ -163,6 +158,11 @@ class CreateScript extends AdminScript
                 'label'      => $translator->translate('Please enter role(s) [ex: admin], comma separated: '),
                 'property'   => $this->climate()->arguments->get('roles'),
                 'validation' => null
+            ],
+            'display_name' => [
+                'label'      => $translator->translate('Please enter a name: '),
+                'property'   => $this->climate()->arguments->get('display_name'),
+                'validation' => null
             ]
         ];
     }
@@ -176,7 +176,7 @@ class CreateScript extends AdminScript
     {
         $input = $this->propertyToInput($prop, $label);
         $v     = $input->prompt();
-        if ($prop->type() == 'password') {
+        if ($prop->type() === 'password') {
             $this->climate()->dim()->out('');
         }
 
@@ -184,30 +184,9 @@ class CreateScript extends AdminScript
     }
 
     /**
-     * @param string $username The username, from input.
-     * @throws Exception If the username is empty or already exists in the database.
-     * @return void
-     */
-    private function validateUsername($username)
-    {
-        if (!$username) {
-            throw new Exception(
-                $this->translator()->translate('Username can not be empty.')
-            );
-        }
-        $user       = $this->modelFactory()->create(User::class);
-        $user->load($username);
-        if ($user->username()) {
-            throw new Exception(sprintf(
-                $this->translator()->translate('Username "%s" already exists in database.'),
-                $username
-            ));
-        }
-    }
-
-    /**
      * @param string $email The email, from input.
-     * @throws Exception If the email is empty or invalid (validated with php's filters).
+     * @throws Exception If the email is empty or invalid (validated with php's filters)
+     *         or already exists in the database.
      * @return void
      */
     private function validateEmail($email)
@@ -220,6 +199,14 @@ class CreateScript extends AdminScript
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new Exception(sprintf(
                 $this->translator()->translate('Invalid email "%s".'),
+                $email
+            ));
+        }
+        $user = $this->modelFactory()->create(User::class);
+        $user->loadFrom('email', $email);
+        if ($user->id() !== null) {
+            throw new Exception(sprintf(
+                $this->translator()->translate('Email "%s" already exists in database.'),
                 $email
             ));
         }

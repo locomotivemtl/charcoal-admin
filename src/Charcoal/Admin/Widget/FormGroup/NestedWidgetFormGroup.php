@@ -22,7 +22,8 @@ use Charcoal\Admin\Ui\NestedWidgetContainerTrait;
  *
  * Allows UI widgets to be embedded into a form group and rendered using the current object, if any.
  *
- * Based on {@link https://bitbucket.org/beneroch/charcoal-utils/src/faa819a/src/Utils/Widget/FormGroup/WidgetFormGroup.php `WidgetFormGroup`}
+ * Based on WidgetFormGroup
+ * https://bitbucket.org/beneroch/charcoal-utils/src/faa819a/src/Utils/Widget/FormGroup/WidgetFormGroup.php
  * from _beneroch/charcoal-utils_.
  *
  * Usage:
@@ -163,7 +164,7 @@ class NestedWidgetFormGroup extends AbstractFormGroup implements
 
         $this->setWidgetFactory($container['widget/factory']);
 
-        // Satisfies {@see Charcoal\View\ViewableInterface} dependencies
+        // Satisfies Charcoal\View\ViewableInterface dependencies
         $this->setView($container['view']);
     }
 

@@ -26,12 +26,12 @@ use Charcoal\Admin\User\LostPasswordToken;
  *
  * This action is used to generate a time-sensitive _password reset token_
  * for which a link will be sent via email to the address assigned to the
- * submitted username. Consult {@see \Charcoal\Admin\Action\Account\ResetPasswordAction}
+ * submitted email. Consult {@see \Charcoal\Admin\Action\Account\ResetPasswordAction}
  * for processing a reset token.
  *
  * ## Required Parameters
  *
- * - `username`
+ * - `email`
  * - `g-recaptcha-response`
  *
  * ## HTTP Status Codes
@@ -73,9 +73,9 @@ class LostPasswordAction extends AdminAction
         $translator = $this->translator();
         $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
 
-        $username = $request->getParam('username');
-        if (!$username) {
-            $this->addFeedback('error', $translator->translate('Missing username.'));
+        $email = $request->getParam('email');
+        if (!$email) {
+            $this->addFeedback('error', $translator->translate('Missing email.'));
             $this->setSuccess(false);
 
             return $response->withStatus(400);
@@ -83,9 +83,16 @@ class LostPasswordAction extends AdminAction
 
         if ($this->recaptchaEnabled() && $this->validateCaptchaFromRequest($request, $response) === false) {
             if ($ip) {
-                $logMessage = sprintf('[Admin] Lost Password Request — CAPTCHA challenge failed for "%s" from %s', $username, $ip);
+                $logMessage = sprintf(
+                    '[Admin] Lost Password Request — CAPTCHA challenge failed for "%s" from %s',
+                    $email,
+                    $ip
+                );
             } else {
-                $logMessage = sprintf('[Admin] Lost Password Request — CAPTCHA challenge failed for "%s"', $username);
+                $logMessage = sprintf(
+                    '[Admin] Lost Password Request — CAPTCHA challenge failed for "%s"',
+                    $email
+                );
             }
 
             $this->logger->warning($logMessage);
@@ -93,26 +100,25 @@ class LostPasswordAction extends AdminAction
             return $response;
         }
 
-        $doneMessage = $translator->translate('If a registered user matches the username or email address given, instructions to reset your password have been sent to the email address registered with that account.');
+        $doneMessage = $translator->translate('If a registered user matches the given email address, instructions to reset your password will be sent to the email address registered with that account.');
         $failMessage = $translator->translate('An error occurred while processing the password reset request.');
 
-
-        $user = $this->loadUser($username);
+        $user = $this->loadUser($email);
         if ($user === null) {
             /**
              * Fail silently — Never confirm or deny the existence
-             * of an account with a given email or username.
+             * of an account with a given email or email.
              */
             if ($ip) {
                 $logMessage = sprintf(
                     '[Admin] Lost Password Request — Can not find "%s" user in database for %s.',
-                    $username,
+                    $email,
                     $ip
                 );
             } else {
                 $logMessage = sprintf(
                     '[Admin] Lost Password Request — Can not find "%s" user in database.',
-                    $username
+                    $email
                 );
             }
             $this->logger->error($logMessage);
@@ -136,14 +142,14 @@ class LostPasswordAction extends AdminAction
             if ($ip) {
                 $logMessage = sprintf(
                     '[Admin] Lost Password Request — Failed to process request for "%s" from %s: %s',
-                    $username,
+                    $email,
                     $ip,
                     $e->getMessage()
                 );
             } else {
                 $logMessage = sprintf(
                     '[Admin] Lost Password Request — Failed to process request for "%s": %s',
-                    $username,
+                    $email,
                     $e->getMessage()
                 );
             }

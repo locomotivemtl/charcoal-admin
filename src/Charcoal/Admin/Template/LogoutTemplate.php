@@ -44,9 +44,9 @@ class LogoutTemplate extends AdminTemplate
         $token = $this->modelFactory()->create(AuthToken::class);
 
         if ($token->source()->tableExists()) {
-            $q = sprintf('DELETE FROM %s WHERE username = :username', $token->source()->table());
+            $q = sprintf('DELETE FROM %s WHERE user_id = :userId', $token->source()->table());
             $token->source()->dbQuery($q, [
-                'username' => $user->username()
+                'userId' => $user->id()
             ]);
         }
 

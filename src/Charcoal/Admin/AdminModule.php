@@ -49,7 +49,7 @@ class AdminModule extends AbstractModule
         $container->register(new AdminServiceProvider());
 
         $module = $this;
-        $container['charcoal/admin/module'] = function ($c) use ($module) {
+        $container['charcoal/admin/module'] = function () use ($module) {
             return $module;
         };
 

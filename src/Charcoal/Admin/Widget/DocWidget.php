@@ -533,7 +533,7 @@ class DocWidget extends FormWidget implements
 
             $resolved = [ $obj, $toResolve ];
 
-            // check for slim callable as "class:method"
+            // Check for Slim callable
             $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
             if (preg_match($callablePattern, $toResolve, $matches)) {
                 $class = $matches[1];

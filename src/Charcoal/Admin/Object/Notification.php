@@ -12,7 +12,7 @@ use Charcoal\Model\AbstractModel;
 class Notification extends AbstractModel
 {
     /**
-     * The user ids (usernames).
+     * The user ids.
      * @var string[]
      */
     private $users = [];
@@ -41,7 +41,7 @@ class Notification extends AbstractModel
     private $active = true;
 
     /**
-     * @param array|string|null $users The users (username) of this notifications.
+     * @param array|string|null $users The users of this notifications.
      * @throws InvalidArgumentException If the users are not an array or a comma-separated string.
      * @return Notification Chainable
      */

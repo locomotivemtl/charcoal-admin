@@ -74,7 +74,10 @@ class AddAction extends AdminAction
 
         if ($static->getStatusCode() !== 200) {
             $this->setSuccess(false);
-            $this->addFeedback('error', sprintf('Can not generate static page: response status was %s (needs a 200 OK response).', $static->getStatusCode()));
+            $this->addFeedback('error', sprintf(
+                'Can not generate static page: response status was %s (needs a 200 OK response).',
+                $static->getStatusCode()
+            ));
             return $response->withStatus(404);
         }
 

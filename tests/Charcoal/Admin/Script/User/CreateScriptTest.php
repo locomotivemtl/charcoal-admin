@@ -82,7 +82,6 @@ class CreateScriptTest extends AbstractTestCase
     {
         $args = $this->obj->defaultArguments();
 
-        $this->assertArrayHasKey('username', $args);
         $this->assertArrayHasKey('email', $args);
         $this->assertArrayHasKey('password', $args);
         $this->assertArrayHasKey('roles', $args);
@@ -95,7 +94,6 @@ class CreateScriptTest extends AbstractTestCase
     {
         $args = $this->obj->arguments();
 
-        $this->assertArrayHasKey('username', $args);
         $this->assertArrayHasKey('email', $args);
         $this->assertArrayHasKey('password', $args);
         $this->assertArrayHasKey('roles', $args);
@@ -138,9 +136,6 @@ class CreateScriptTest extends AbstractTestCase
 
     //     $argv = [];
     //     $argv[] = 'vendor/bin/charcoal';
-
-    //     $argv[] = '--username';
-    //     $argv[] = 'foo';
 
     //     $argv[] = '-e';
     //     $argv[] = 'foo@example.com';

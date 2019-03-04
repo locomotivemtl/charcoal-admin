@@ -21,6 +21,8 @@ class PurgeCacheAction extends AbstractCacheAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        unset($request);
+
         $cache  = $this->cachePool();
         $result = $cache->purge();
 

@@ -10,7 +10,7 @@ Loop notifications, by object types.
                 <p><strong>{{# _t}}Title:{{/_t}}</strong> "{{ . }}"</p>
             {{/title}}
             <p><strong>{{# _t }}Revision #:{{/ _t }}</strong> {{revNum}} ({{ dateStr}})</p>
-            <p><strong>{{# _t }}Author:{{/ _t }}</strong> {{ userObject.username }} ({{ userObject.email }})</p>
+            <p><strong>{{# _t }}Author:{{/ _t }}</strong> {{ userObject.displayName }} ({{ userObject.email }})</p>
             <p><strong>{{# _t }}Properties:{{/ _t }}</strong> {{propertiesString}}</p>
 
             {{# publicUrl }}

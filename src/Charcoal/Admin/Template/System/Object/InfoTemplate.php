@@ -209,6 +209,7 @@ class InfoTemplate extends AdminTemplate implements
     }
 
     /**
+     * @param string $propertyIdent The property ident to retrieve.
      * @return array
      */
     private function getAllFiles($propertyIdent)

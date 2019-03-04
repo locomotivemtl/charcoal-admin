@@ -87,7 +87,7 @@ class LoadActionTest extends AbstractTestCase
      */
     public function testRun()
     {
-        $user = $this->createUser('foo');
+        $user = $this->createUser('foo@bar.com');
 
         $request = Request::createFromEnvironment(Environment::mock([
             'QUERY_STRING' => 'obj_type=charcoal/admin/user'

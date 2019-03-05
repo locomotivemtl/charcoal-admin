@@ -260,9 +260,9 @@ class AdminServiceProvider implements ServiceProviderInterface
          */
         $container['admin/authorizer'] = function (Container $container) {
             return new Authorizer([
-                'logger'     => $container['logger'],
-                'aclManager' => $container['acl/manager'],
-                'resource'   => 'admin'
+                'logger'   => $container['logger'],
+                'acl'      => $container['admin/acl'],
+                'resource' => 'admin'
             ]);
         };
 

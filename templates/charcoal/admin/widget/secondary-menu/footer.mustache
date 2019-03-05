@@ -1,0 +1,16 @@
+{{!--
+
+    Secondary Menu Widget \ Footer
+    ==============================
+
+    @used-by `charcoal/admin/widget/menu.header.mustache`
+
+--}}
+{{# getAuthenticatedUser }}
+<div class="c-nav-secondary_footer">
+    <p class="h3">{{ displayName }}</p>
+    {{# roles }}
+    <p class="mb-0 small">{{ . }}</p>
+    {{/ roles }}
+</div>
+{{/ getAuthenticatedUser }}

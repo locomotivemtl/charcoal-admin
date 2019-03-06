@@ -36,7 +36,7 @@
         "locomotivemtl/charcoal-email": "~0.3",
         "locomotivemtl/charcoal-object": "~0.6",
         "locomotivemtl/charcoal-translator": "~0.3",
-        "locomotivemtl/charcoal-ui": "~0.3",
+        "locomotivemtl/charcoal-ui": "dev-acl-manager-refactor",
         "locomotivemtl/charcoal-user": "dev-acl-manager-refactor",
         "guzzlehttp/guzzle": "^6.3",
         "mcaskill/php-html-build-attributes": "1.0",

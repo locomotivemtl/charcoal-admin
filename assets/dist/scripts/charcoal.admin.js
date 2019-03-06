@@ -4791,28 +4791,32 @@ Charcoal.Admin.Widget_Search.prototype.clear = function ()
  */
 Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query)
 {
-    var words, props, request = null, filters = [];
+    var words, props, request = null, filters = [], sub_filters;
 
     query = query.trim();
     if (query) {
         words = query.split(/\s/);
         props = this.opts.data.properties || [];
-
         $.each(words, function (i, word) {
+            sub_filters = [];
             $.each(props, function (j, prop) {
-                filters.push({
+                sub_filters.push({
                     property: prop,
                     operator: 'LIKE',
                     value:    ('%' + word + '%')
                 });
+            });
+
+            filters.push({
+                conjunction: 'OR',
+                filters:     sub_filters
             });
         });
     }
 
     if (filters.length) {
         request = {
-            conjunction: 'OR',
-            filters:     filters
+            filters: filters
         };
     }
 

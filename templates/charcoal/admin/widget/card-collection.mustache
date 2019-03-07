@@ -71,7 +71,9 @@
 
                         <div class="card-footer d-flex align-items-center justify-content-between">
                             <small class="text-muted">{{#_t}}Last updated{{/_t}} <span class="js-last-time" data-time="{{ lastModified.getTimestamp }}">-</span></small>
-                            <small class="card-status chip{{# active }} chip-success{{/ active }}"></small>
+                            {{# showFooterChip }}
+                                <small data-toggle="tooltip" title="{{ chipTitle }}" class="card-status chip{{# isChipSuccess }} chip-success{{/ isChipSuccess }}"></small>
+                            {{/ showFooterChip }}
                         </div>
                     {{/ object }}
                     </div>

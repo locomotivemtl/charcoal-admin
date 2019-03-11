@@ -101,6 +101,11 @@ class EditTemplate extends AdminTemplate implements
 
                     if ($objId) {
                         $title = $translator->translation('Edit: {{ objType }} #{{ id }}');
+                    } elseif (!empty($_GET['clone_id'])) {
+                        $title = sprintf(
+                            $translator->translation('Create: {{ objType }} from ID ""%s""'),
+                            $_GET['clone_id']
+                        );
                     } else {
                         $title = $translator->translation('Create: {{ objType }}');
                     }

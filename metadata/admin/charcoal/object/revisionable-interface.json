@@ -2,7 +2,17 @@
     "admin": {
         "form_groups": {
             "object-revisions": {
+                "_@deprecated": "Use charcoal/object/revisionable/object-revisions",
                 "priority": 90,
+                "title": {
+                    "en": "Revision History",
+                    "fr": "Historique des révisions"
+                },
+                "type": "charcoal/admin/widget/form-group/object-revisions",
+                "template": "charcoal/admin/widget/form-group/object-revisions"
+            },
+            "charcoal/object/revisionable/object-revisions": {
+                "priority": 99,
                 "title": {
                     "en": "Revision History",
                     "fr": "Historique des révisions"

@@ -229,6 +229,7 @@
 "Database table created for ""{{ objType }}"".";"Database table created for ""{{ objType }}""."
 "Collection: {{ objType }}";"Collection: {{ objType }}"
 "Edit: {{ objType }} #{{ id }}";"Edit: {{ objType }} #{{ id }}"
+"Create: {{ objType }} from ID ""%s""";"Create: {{ objType }} from ID ""%s"""
 "Create: {{ objType }}";"Create: {{ objType }}"
 "Administrators";"Administrators"
 "Save";"Save"

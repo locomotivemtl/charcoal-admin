@@ -237,6 +237,7 @@
 "Database table created for ""{{ objType }}"".";"Table de base de données créée pour ""{{ objType }}""."
 "Collection: {{ objType }}";"Collection : {{ objType }}"
 "Edit: {{ objType }} #{{ id }}";"Modifier : {{ objType }} #{{ id }}"
+"Create: {{ objType }} from ID ""%s""";"Créer : {{ objType }} de l'ID ""%s"""
 "Create: {{ objType }}";"Créer : {{ objType }}"
 "Administrators";"Administrateurs"
 "Save";"Sauvegarder"

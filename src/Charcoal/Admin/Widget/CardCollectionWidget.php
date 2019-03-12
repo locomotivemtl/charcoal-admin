@@ -1,6 +1,8 @@
 <?php
 
 namespace Charcoal\Admin\Widget;
+use Charcoal\Model\ModelInterface;
+use Charcoal\Translator\Translation;
 
 /**
  * Class CardCollectionWidget
@@ -16,6 +18,16 @@ class CardCollectionWidget extends TableWidget
      * @var string $cardTemplate
      */
     protected $cardTemplate;
+
+    /**
+     * @var boolean $showFooterChip
+     */
+    protected $showFooterChip = true;
+
+    /**
+     * @var Translation|string $chipTitle
+     */
+    protected $chipTitle;
 
     /**
      * @return integer
@@ -76,6 +88,30 @@ class CardCollectionWidget extends TableWidget
     }
 
     /**
+     * Filter the object before its assigned to the row.
+     *
+     * This method is useful for classes using this trait.
+     *
+     * @param  ModelInterface $object           The current row's object.
+     * @param  array          $objectProperties The $object's display properties.
+     * @return array
+     */
+    protected function parseObjectRow(ModelInterface $object, array $objectProperties)
+    {
+        $row = $this->parseCollectionObjectRow($object, $objectProperties);
+        $objProps = $row['objectProperties'];
+        array_walk($objProps, function ($value) use (&$row) {
+            $row['objectProperties'][$value['ident']] = $value['val'];
+
+            if (!method_exists($row['object'], 'isChipSuccess')) {
+                $row['isChipSuccess'] = $this->isChipSuccess($row['object']);
+            }
+        });
+
+        return $row;
+    }
+
+    /**
      * Retrieve the widget's data options for JavaScript components.
      *
      * @return array
@@ -91,5 +127,67 @@ class CardCollectionWidget extends TableWidget
         );
 
         return $data;
+    }
+
+    /**
+     * @param ModelInterface $object The model to determine success for.
+     * @return boolean
+     */
+    public function isChipSuccess($object)
+    {
+        if (is_callable([$object, 'isViewable'])) {
+            return !!$object->isViewable();
+        }
+
+        if (is_callable([$object, 'active'])) {
+            return !!$object->active();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function showFooterChip()
+    {
+        return $this->showFooterChip;
+    }
+
+    /**
+     * @param bool $showFooterChip ShowFooterChip for CardCollectionWidget.
+     * @return self
+     */
+    public function setShowFooterChip($showFooterChip)
+    {
+        $this->showFooterChip = $showFooterChip;
+
+        return $this;
+    }
+
+    /**
+     * @return Translation|string
+     */
+    public function chipTitle()
+    {
+        if (empty($this->chipTitle)) {
+            return $this->defaultChipTitle();
+        }
+
+        return $this->chipTitle;
+    }
+
+    private function defaultChipTitle()
+    {
+        return $this->translator()->translate('Active');
+    }
+
+    /**
+     * @param Translation|string $chipTitle ChipTitle for CardCollectionWidget.
+     * @return self
+     */
+    public function setChipTitle($chipTitle)
+    {
+        $this->chipTitle = $this->translator()->translation($chipTitle);
+
+        return $this;
     }
 }

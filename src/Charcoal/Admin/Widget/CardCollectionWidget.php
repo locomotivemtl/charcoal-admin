@@ -1,6 +1,7 @@
 <?php
 
 namespace Charcoal\Admin\Widget;
+
 use Charcoal\Model\ModelInterface;
 use Charcoal\Translator\Translation;
 
@@ -133,7 +134,7 @@ class CardCollectionWidget extends TableWidget
      * @param ModelInterface $object The model to determine success for.
      * @return boolean
      */
-    public function isChipSuccess($object)
+    public function isChipSuccess(ModelInterface $object)
     {
         if (is_callable([$object, 'isViewable'])) {
             return !!$object->isViewable();
@@ -145,7 +146,7 @@ class CardCollectionWidget extends TableWidget
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function showFooterChip()
     {
@@ -153,7 +154,7 @@ class CardCollectionWidget extends TableWidget
     }
 
     /**
-     * @param bool $showFooterChip ShowFooterChip for CardCollectionWidget.
+     * @param boolean $showFooterChip ShowFooterChip for CardCollectionWidget.
      * @return self
      */
     public function setShowFooterChip($showFooterChip)
@@ -175,6 +176,9 @@ class CardCollectionWidget extends TableWidget
         return $this->chipTitle;
     }
 
+    /**
+     * @return string
+     */
     private function defaultChipTitle()
     {
         return $this->translator()->translate('Active');

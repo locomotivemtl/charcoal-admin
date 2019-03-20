@@ -10,7 +10,7 @@ use Charcoal\Admin\Property\Input\TextareaInput;
 /**
  * JSON Editor Input Property
  */
-class JSonEditorInput extends TextareaInput
+class JsonEditorInput extends TextareaInput
 {
     /**
      * The JSONEditor settings
@@ -104,10 +104,15 @@ class JSonEditorInput extends TextareaInput
         return [];
     }
 
+    /**
+     * Retrieve the property's value as a json encoded string.
+     *
+     * @return string
+     */
     public function jsonVal()
     {
         $json = json_encode($this->propertyVal());
-        if ($json == 'null') {
+        if (!$json || $json == 'null') {
             $json = '';
         }
         return $json;

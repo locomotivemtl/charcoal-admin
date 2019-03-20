@@ -145,5 +145,4 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
             ]
         ];
     }
-
 }

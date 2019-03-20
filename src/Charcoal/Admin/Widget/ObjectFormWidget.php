@@ -38,6 +38,14 @@ class ObjectFormWidget extends FormWidget implements
     protected $formData;
 
     /**
+     * **Experimental**
+     * Allows the form widget to reload widgets after update.
+     *
+     * @var boolean $allowReload
+     */
+    protected $allowReload = false;
+
+    /**
      * @return string
      */
     public function widgetType()
@@ -143,6 +151,25 @@ class ObjectFormWidget extends FormWidget implements
         if ($obj->view()) {
             $this->nextUrl = $obj->render($url);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function allowReload()
+    {
+        return $this->allowReload;
+    }
+
+    /**
+     * @param boolean $allowReload AllowReload for ObjectFormWidget.
+     * @return self
+     */
+    public function setAllowReload($allowReload)
+    {
+        $this->allowReload = $allowReload;
 
         return $this;
     }
@@ -301,12 +328,14 @@ class ObjectFormWidget extends FormWidget implements
     public function widgetDataForJs()
     {
         return [
-            'obj_id'           => $this->objId(),
-            'obj_type'         => $this->objType(),
-            'template'          => $this->template(),
-            'form_selector'    => '#'.$this->widgetId(),
-            'tab'              => $this->isTabbable(),
-            'group_conditions' => $this->groupsConditionalLogic(),
+            'obj_id'             => $this->objId(),
+            'obj_type'           => $this->objType(),
+            'template'           => $this->template(),
+            'form_selector'      => '#'.$this->widgetId(),
+            'tab'                => $this->isTabbable(),
+            'group_display_mode' => $this->groupDisplayMode(),
+            'group_conditions'   => $this->groupsConditionalLogic(),
+            'allow_reload'       => $this->allowReload()
         ];
     }
 

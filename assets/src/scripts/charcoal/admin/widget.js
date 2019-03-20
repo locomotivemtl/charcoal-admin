@@ -192,7 +192,7 @@ Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
 Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     var that = this;
 
-    var url  = Charcoal.Admin.admin_url() + 'widget/load';
+    var url  = Charcoal.Admin.admin_url() + 'widget/load' + window.location.search;
     var data = {
         widget_type:    that.widget_type || that.type(),
         widget_options: that.widget_options(),

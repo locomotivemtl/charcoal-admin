@@ -22,7 +22,7 @@ class AssetsManagerServiceProvider implements ServiceProviderInterface
      * This method should only be used to configure services and parameters.
      * It should not get services.
      *
-     * @param Container $container A container instance
+     * @param Container $container A container instance.
      * @return void
      */
     public function register(Container $container)
@@ -99,5 +99,4 @@ class AssetsManagerServiceProvider implements ServiceProviderInterface
             return $assetsBuilder($assetsConfig);
         };
     }
-
 }

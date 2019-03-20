@@ -20,6 +20,7 @@
         "elfinder-theme-moono": "https://github.com/lokothodida/elfinder-theme-moono.git",
         "jquery": "3.3.1",
         "jquery-ui-bundle": "1.12.1",
+        "jsoneditor": "^5.32.0",
         "moment": "^2.22.2",
         "multiselect-two-sides": "~2.3.1",
         "recorderjs": "1.0.1",

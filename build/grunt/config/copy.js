@@ -24,6 +24,12 @@ module.exports = {
                 cwd:   '<%= paths.npm %>/tinymce/',
                 src:   ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/**/theme.min.js', 'tinymce.min.js'],
                 dest:  '<%= paths.js.dist %>/vendors/tinymce/'
+            },
+            {
+                expand: true,
+                cwd:    '<%= paths.npm %>/jsoneditor/dist/',
+                src:    ['**/*.*', '*/*.*', '*.*'],
+                dest:   '<%= paths.js.dist %>/vendors/jsoneditor/'
             }
         ]
     },

@@ -119,7 +119,7 @@ class DeleteActionTest extends AbstractTestCase
         $results = $this->obj->results();
         $this->assertFalse($results['success']);
 
-        $this->assertTrue($this->userExists($objId));
+        $this->assertTrue($this->userExists($email));
     }
 
     /**

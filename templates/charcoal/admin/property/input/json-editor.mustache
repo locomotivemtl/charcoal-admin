@@ -1,0 +1,33 @@
+{{!--
+    JSON Editor Property
+    ====================
+
+    `charcoal/admin/property/input/json-editor`
+--}}
+<input type="hidden" id="hidden_{{inputId}}" name="{{inputName}}" value="" />
+<div id="{{inputId}}" style="height:30em;"></div>
+
+{{#addJsRequirement}}
+    <link href="/assets/admin/scripts/vendors/jsoneditor/jsoneditor.css" rel="stylesheet" type="text/css">
+    <script src="/assets/admin/scripts/vendors/jsoneditor/jsoneditor.js"></script>
+{{/addJsRequirement}}
+
+{{#addJs}}
+    <script>
+
+        var container = document.getElementById("{{inputId}}");
+        var options = {
+            modes: ['code', 'tree'],
+            onChangeText: function(text) {
+                document.getElementById("hidden_{{inputId}}").value = text;
+            }
+        };
+        var editor = new JSONEditor(container, options);
+        {{#jsonVal}}
+            editor.set({{&jsonVal}});
+            document.getElementById("hidden_{{inputId}}").value = editor.getText();
+        {{/jsonVal}}
+
+
+    </script>
+{{/addJs}}

@@ -53,23 +53,6 @@ class AdminActionTest extends AbstractTestCase
     }
 
     /**
-     * @return void
-     */
-    public function testSetData()
-    {
-        $ret = $this->obj->setData([]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testInit()
-    {
-        $request = $this->createMock(RequestInterface::class);
-        //$this->obj->init($request);
-    }
-
-    /**
      * Asserts that success behaves as expected.
      * (Actually test base admin action).
      * - false by default

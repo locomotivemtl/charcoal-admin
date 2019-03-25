@@ -1,5 +1,10 @@
 {
     "default": [
+        "build",
+        "deploy"
+    ],
+
+    "build": [
         "copy:vendors",
         "sass",
         "postcss",
@@ -9,8 +14,7 @@
         "jshint",
         "jsonlint",
         "uglify",
-        "svg_sprite",
-        "deploy"
+        "svg_sprite"
     ],
 
     "sync": [

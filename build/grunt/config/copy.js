@@ -4,39 +4,39 @@ module.exports = {
             {
                 expand: true,
                 cwd:   '<%= paths.npm %>/echarts/dist/',
-                src:   ['**/*.*', '*/*.*', '*.*'],
+                src:   [ '**/*.*', '*/*.*', '*.*' ],
                 dest:  '<%= paths.js.dist %>/vendors/echarts/'
             },
             {
                 expand: true,
                 cwd:   '<%= paths.elfinder.src %>',
-                src:   ['css/*', 'img/*', 'js/*', 'js/**/*', 'sounds/*'],
+                src:   [ 'css/*', 'img/*', 'js/*', 'js/**/*', 'sounds/*' ],
                 dest:  '<%= paths.elfinder.dist %>'
             },
             {
                 expand: true,
                 cwd:   '<%= paths.npm %>/@claviska/jquery-minicolors/',
-                src:   ['jquery.minicolors.png'],
+                src:   [ 'jquery.minicolors.png' ],
                 dest:  '<%= paths.css.dist %>'
             },
             {
                 expand: true,
                 cwd:   '<%= paths.npm %>/tinymce/',
-                src:   ['skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/**/theme.min.js', 'tinymce.min.js'],
+                src:   [ 'skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/**/theme.min.js', 'tinymce.min.js' ],
                 dest:  '<%= paths.js.dist %>/vendors/tinymce/'
             },
             {
                 expand: true,
                 cwd:    '<%= paths.npm %>/jsoneditor/dist/',
-                src:    ['**/*.*', '*/*.*', '*.*'],
+                src:    [ '**/*.*', '*/*.*', '*.*' ],
                 dest:   '<%= paths.js.dist %>/vendors/jsoneditor/'
             }
         ]
     },
-    www:     {
+    www: {
         expand: true,
         cwd:    '<%= paths.dist %>',
-        src:    ['**', '*'],
+        src:    [ '**', '*' ],
         dest:   '<%= paths.prod %>'
     }
 };

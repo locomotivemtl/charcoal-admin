@@ -111,7 +111,10 @@ class JsonEditorInput extends TextareaInput
      */
     public function jsonVal()
     {
-        $json = json_encode($this->propertyVal());
+        $json = $this->propertyVal();
+        if (!is_string($json)) {
+            $json = json_encode($json);
+        }
         if (!$json || $json == 'null') {
             $json = '';
         }

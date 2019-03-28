@@ -11,7 +11,7 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.save_callback = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
 
-    this.form_selector = opts.data.form_selector
+    this.form_selector = opts.data.form_selector;
     this.$form         = $(this.form_selector);
 
     this.save_action   = opts.save_action || 'object/save';
@@ -21,7 +21,7 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.group_conditions = opts.data.group_conditions;
     this.form_working = false;
     this.suppress_feedback = opts.suppress_feedback || false;
-    this.is_new_object = false
+    this.is_new_object = false;
     this.xhr = null;
     this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 
@@ -269,4 +269,4 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
 
 Charcoal.Admin.Widget_Quick_Form.prototype.destroy = function () {
     this.$form.off('charcoal.quick.form');
-}
+};

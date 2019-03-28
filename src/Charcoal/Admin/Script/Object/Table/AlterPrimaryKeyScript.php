@@ -129,8 +129,8 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $cli->br();
 
-        $db = $source->db();
-        if (!$db) {
+        $dbh = $source->db();
+        if (!$dbh) {
             $cli->error(
                 'Could not instantiate a database connection.'
             );
@@ -152,8 +152,13 @@ class AlterPrimaryKeyScript extends AdminScript
         $oldKey = $model->key();
         $newKey = sprintf('%s_new', $model->key());
 
-        $db->query(
-            strtr('LOCK TABLES `%table` WRITE;', ['%table' => $table])
+        $dbh->query(
+            strtr(
+                'LOCK TABLES `%table` WRITE',
+                [
+                    '%table' => $table,
+                ]
+            )
         );
 
         $this->prepareProperties($oldKey, $newKey, $oldProp, $newProp);
@@ -165,7 +170,7 @@ class AlterPrimaryKeyScript extends AdminScript
                     $this->labelFromMode($newProp)
                 )
             );
-            $db->query('UNLOCK TABLES;');
+            $dbh->query('UNLOCK TABLES');
 
             return $this;
         }
@@ -180,7 +185,7 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $this->convertIdField($newProp, $newField, $oldProp, $oldField);
 
-        $db->query('UNLOCK TABLES;');
+        $dbh->query('UNLOCK TABLES');
 
         if (!$this->quiet()) {
             $cli->br();
@@ -213,7 +218,12 @@ class AlterPrimaryKeyScript extends AdminScript
         $newProp = clone $oldProp;
         $newProp->setIdent($newKey);
 
-        $sql  = strtr('SHOW COLUMNS FROM `%table`;', ['%table' => $source->table()]);
+        $sql  = strtr(
+            'SHOW COLUMNS FROM `%table`',
+            [
+                '%table' => $source->table(),
+            ]
+        );
         $cols = $source->db()->query($sql, PDO::FETCH_ASSOC);
         foreach ($cols as $col) {
             if ($col['Field'] !== $oldKey) {
@@ -320,10 +330,13 @@ class AlterPrimaryKeyScript extends AdminScript
         $model  = $this->targetModel();
         $source = $model->source();
 
-        $sql = strtr('SELECT %key FROM `%table`', [
-            '%table' => $source->table(),
-            '%key'   => $model->key(),
-        ]);
+        $sql = strtr(
+            'SELECT %key FROM `%table`',
+            [
+                '%table' => $source->table(),
+                '%key'   => $model->key(),
+            ]
+        );
 
         return $source->db()->query($sql, PDO::FETCH_ASSOC);
     }
@@ -401,10 +414,13 @@ class AlterPrimaryKeyScript extends AdminScript
         $field->setExtra('');
 
         // Don't alter table if column name already exists.
-        $sql = strtr('SHOW COLUMNS FROM `%table` LIKE "%key"', [
-            '%table' => $source->table(),
-            '%key'   => $field->ident(),
-        ]);
+        $sql = strtr(
+            'SHOW COLUMNS FROM `%table` LIKE "%key"',
+            [
+                '%table' => $source->table(),
+                '%key'   => $field->ident(),
+            ]
+        );
 
         $res = $source->db()->query($sql);
 
@@ -413,10 +429,13 @@ class AlterPrimaryKeyScript extends AdminScript
             return $this;
         }
 
-        $sql = strtr('ALTER TABLE `%table` ADD COLUMN %field FIRST;', [
-            '%table' => $source->table(),
-            '%field' => $field->sql(),
-        ]);
+        $sql = strtr(
+            'ALTER TABLE `%table` ADD COLUMN %field FIRST',
+            [
+                '%table' => $source->table(),
+                '%field' => $field->sql(),
+            ]
+        );
         $field->setExtra($extra);
 
         $source->db()->query($sql);
@@ -438,15 +457,13 @@ class AlterPrimaryKeyScript extends AdminScript
         $keepId = $this->climate()->arguments->defined('keep_id');
         $model  = $this->targetModel();
         $source = $model->source();
-        $db     = $source->db();
+        $dbh    = $source->db();
         $key    = $model->key();
 
         if ($keepId) {
             $field->setIdent(sprintf('%1$s_%2$s', $key, date('Ymd_His')));
             $sql = strtr(
-                'ALTER TABLE `%table`
-                    CHANGE COLUMN `%key` %field,
-                    DROP PRIMARY KEY;',
+                'ALTER TABLE `%table` CHANGE COLUMN `%key` %field, DROP PRIMARY KEY',
                 [
                     '%table' => $source->table(),
                     '%field' => $field->sql(),
@@ -455,9 +472,7 @@ class AlterPrimaryKeyScript extends AdminScript
             );
         } else {
             $sql = strtr(
-                'ALTER TABLE `%table`
-                    MODIFY COLUMN %field,
-                    DROP PRIMARY KEY;',
+                'ALTER TABLE `%table` MODIFY COLUMN %field, DROP PRIMARY KEY',
                 [
                     '%table' => $source->table(),
                     '%field' => $field->sql(),
@@ -465,7 +480,7 @@ class AlterPrimaryKeyScript extends AdminScript
             );
         }
 
-        $db->query($sql);
+        $dbh->query($sql);
 
         return $this;
     }
@@ -485,7 +500,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $source = $model->source();
 
         $sql = strtr(
-            'ALTER TABLE `%table` ADD PRIMARY KEY (`%key`);',
+            'ALTER TABLE `%table` ADD PRIMARY KEY (`%key`)',
             [
                 '%table' => $source->table(),
                 '%key'   => $field->ident(),
@@ -512,7 +527,7 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $field->setIdent($to);
         $sql = strtr(
-            'ALTER TABLE `%table` CHANGE COLUMN `%from` %field;',
+            'ALTER TABLE `%table` CHANGE COLUMN `%from` %field',
             [
                 '%table' => $source->table(),
                 '%field' => $field->sql(),
@@ -536,7 +551,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $source = $this->targetModel()->source();
 
         $sql = strtr(
-            'ALTER TABLE `%table` DROP COLUMN `%key`;',
+            'ALTER TABLE `%table` DROP COLUMN `%key`',
             [
                 '%table' => $source->table(),
                 '%key'   => $field->ident(),
@@ -569,7 +584,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $model  = $this->targetModel();
         $source = $model->source();
         $table  = $source->table();
-        $db     = $source->db();
+        $dbh    = $source->db();
 
         $newKey = $newProp->ident();
         $oldKey = $oldProp->ident();
@@ -604,11 +619,14 @@ class AlterPrimaryKeyScript extends AdminScript
 
             foreach ($rows as $row) {
                 $id  = $ids();
-                $sql = strtr('UPDATE `%table` SET `%newKey` = :new WHERE `%oldKey` = :old;', [
-                    '%table'  => $table,
-                    '%newKey' => $newKey,
-                    '%oldKey' => $oldKey,
-                ]);
+                $sql = strtr(
+                    'UPDATE `%table` SET `%newKey` = :new WHERE `%oldKey` = :old',
+                    [
+                        '%table'  => $table,
+                        '%newKey' => $newKey,
+                        '%oldKey' => $oldKey,
+                    ]
+                );
                 $source->dbQuery(
                     $sql,
                     [
@@ -683,13 +701,13 @@ class AlterPrimaryKeyScript extends AdminScript
         foreach ($this->relatedModels() as $model) {
             $src = $model->source();
             $tbl = $src->table();
-            $db  = $src->db();
+            $dbh = $src->db();
 
-            $db->query(
+            $dbh->query(
                 strtr(
                     'LOCK TABLES
                         `%relatedTable` AS a WRITE,
-                        `%sourceTable` AS b WRITE;',
+                        `%sourceTable` AS b WRITE',
                     [
                         '%relatedTable' => $tbl,
                         '%sourceTable'  => $table,
@@ -698,9 +716,9 @@ class AlterPrimaryKeyScript extends AdminScript
             );
 
             $sql = strtr(
-                'UPDATE `%relatedTable` AS a
-                    JOIN `%sourceTable` AS b ON a.`%prop` = b.`%oldKey`
-                    SET a.`%prop` = b.`%newKey`;',
+                'UPDATE `%relatedTable` AS a '.
+                    'JOIN `%sourceTable` AS b ON a.`%prop` = b.`%oldKey` '.
+                    'SET a.`%prop` = b.`%newKey`',
                 [
                     '%relatedTable' => $tbl,
                     '%prop'         => $this->relatedProperties[$model->objType()],
@@ -709,9 +727,9 @@ class AlterPrimaryKeyScript extends AdminScript
                     '%oldKey'       => $target->key(),
                 ]
             );
-            $db->query($sql);
+            $dbh->query($sql);
 
-            $db->query('UNLOCK TABLES;');
+            $dbh->query('UNLOCK TABLES');
         }
 
         return $this;
@@ -779,15 +797,15 @@ class AlterPrimaryKeyScript extends AdminScript
                     'required'    => true,
                     'description' => 'The object type to alter.',
                     'prompt'      => 'What model must be altered?',
-                    'acceptValue' => $validateModel->bindTo($this)
+                    'acceptValue' => $validateModel->bindTo($this),
                 ],
                 'related_model' => [
                     'prefix'      => 'r',
                     'longPrefix'  => 'related-obj-type',
                     'description' => 'Properties of related object types to synchronize (ObjType:propertyIdent,…).',
                     'prompt'      => 'List related models and properties (ObjType:propertyIdent,…):',
-                    'acceptValue' => $validateModels->bindTo($this)
-                ]
+                    'acceptValue' => $validateModels->bindTo($this),
+                ],
             ];
 
             $arguments = array_merge(parent::defaultArguments(), $arguments);

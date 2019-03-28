@@ -267,12 +267,21 @@
             cssClass: '-quick-form',
             dialog_options: {
                 onhide: function () {
+                    if (self.widget_id !== undefined) {
+                        var widget = Charcoal.Admin.manager().get_widget(self.widget_id);
+                        if (typeof widget.destroy === 'function') {
+                            widget.destroy();
+                        }
+                        Charcoal.Admin.manager().remove_component('widgets', self.widget_id);
+                    }
+
                     callback({
                         return: false
                     });
                 }
             },
             widget_type: 'charcoal/admin/widget/quick-form',
+            with_data: true,
             widget_options: {
                 obj_type: type,
                 obj_id: id,
@@ -292,12 +301,12 @@
                     return false;
                 }
 
+                self.widget_id = response.widget_id;
+
                 Charcoal.Admin.manager().add_widget({
                     id: response.widget_id,
                     type: 'charcoal/admin/widget/quick-form',
-                    data: {
-                        obj_type: type
-                    },
+                    data: response.widget_data,
                     obj_id: id,
                     extra_form_data: {
                         selectize_obj_type: selectize_obj_type,
@@ -335,6 +344,7 @@
                 // Re render.
                 // This is not good.
                 Charcoal.Admin.manager().render();
+
             }
         });
     };

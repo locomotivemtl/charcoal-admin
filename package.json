@@ -32,23 +32,24 @@
         "tinymce-i18n": "^19.2.11"
     },
     "devDependencies": {
-        "autoprefixer": "7.1.6",
-        "glob": "7.1.2",
-        "grunt": "1.0.1",
+        "autoprefixer": "9.5.0",
+        "glob": "7.1.3",
+        "grunt": "1.0.4",
         "grunt-browser-sync": "2.2.0",
         "grunt-contrib-concat": "1.0.1",
         "grunt-contrib-copy": "1.0.0",
-        "grunt-contrib-cssmin": "2.2.1",
-        "grunt-contrib-jshint": "1.1.0",
-        "grunt-contrib-uglify": "3.2.1",
-        "grunt-contrib-watch": "1.0.0",
+        "grunt-contrib-cssmin": "3.0.0",
+        "grunt-contrib-jshint": "2.1.0",
+        "grunt-contrib-uglify": "4.0.1",
+        "grunt-contrib-watch": "1.1.0",
         "grunt-jscs": "3.0.1",
         "grunt-jsonlint": "1.1.0",
         "grunt-notify": "0.4.5",
         "grunt-postcss": "0.9.0",
-        "grunt-sass": "2.0.0",
-        "grunt-svg-sprite": "1.3.7",
-        "load-grunt-config": "0.19.2",
-        "postcss-banner": "3.0.0"
+        "grunt-sass": "3.0.2",
+        "grunt-svg-sprite": "1.5.0",
+        "load-grunt-config": "1.0.1",
+        "node-sass": "4.11.0",
+        "postcss-banner": "3.0.1"
     }
 }

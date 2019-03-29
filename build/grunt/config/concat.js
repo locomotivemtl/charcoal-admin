@@ -59,8 +59,7 @@ module.exports = {
             '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
 
             // Bootstrap Select (@see paramono/bootstrap-select)
-            '<%= paths.npm %>/bootstrap-select-temporary/dist/js/bootstrap-select.js',
-            // '<%= paths.npm %>/bootstrap-select/dist/js/bootstrap-select.js',
+            '<%= paths.npm %>/bootstrap-select/dist/js/bootstrap-select.js',
 
             // jQuery MiniColors
             '<%= paths.npm %>/@claviska/jquery-minicolors/jquery.minicolors.min.js',

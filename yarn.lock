@@ -517,7 +517,7 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "0.0.0"
   resolved "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git#ffc260d7aa200c7c4fa10794bbabb2846fe651f7"
 
-"bootstrap-select-temporary@https://github.com/paramono/bootstrap-select.git", "bootstrap-select@https://github.com/paramono/bootstrap-select.git":
+"bootstrap-select@https://github.com/paramono/bootstrap-select.git":
   version "1.12.4"
   resolved "https://github.com/paramono/bootstrap-select.git#cd39856858e234c381fd3c0bb51c65a1681730d1"
   dependencies:

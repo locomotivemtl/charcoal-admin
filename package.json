@@ -12,8 +12,6 @@
         "beneroch-gmap": "~0.2.0",
         "bootstrap": "4.0.0",
         "bootstrap-dialog-temporary": "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git",
-        "bootstrap-select": "https://github.com/paramono/bootstrap-select.git",
-        "bootstrap-select-temporary": "https://github.com/paramono/bootstrap-select.git",
         "clipboard": "^1.5.16",
         "components-font-awesome": "~4.7.0",
         "echarts": "^4.1.0",

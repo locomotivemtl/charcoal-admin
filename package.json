@@ -28,7 +28,7 @@
         "selectize-scss": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "^5.0.0-alpha18",
         "timeago": "1.6.3",
-        "tinymce": "~4.9.1",
+        "tinymce": "^4.9.4",
         "url-search-params": "0.10.0"
     },
     "devDependencies": {

@@ -1022,7 +1022,7 @@ class AlterPrimaryKeyScript extends AdminScript
     /**
      * Set the ID generator.
      *
-     * @param  callable $callable A function or method.
+     * @param  mixed $callable A function or method.
      * @throws InvalidArgumentException If the given argument is not a callable function.
      * @return self
      */

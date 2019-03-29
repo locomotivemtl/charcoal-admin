@@ -84,7 +84,7 @@ class AssetsManagerServiceProvider implements ServiceProviderInterface
             return new AssetsConfig($config);
         };
 
-        $container['assets/builder'] = function (Container $container) {
+        $container['assets/builder'] = function () {
             return new AssetsBuilder();
         };
 

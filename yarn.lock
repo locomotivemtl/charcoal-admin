@@ -2,10 +2,6 @@
 # yarn lockfile v1
 
 
-"49d0a84cca789a5be3c532d8f0bc8b75@https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git", "bootstrap-dialog-temporary@https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git":
-  version "0.0.0"
-  resolved "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git#ffc260d7aa200c7c4fa10794bbabb2846fe651f7"
-
 "@claviska/jquery-minicolors@~2.2.3":
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/@claviska/jquery-minicolors/-/jquery-minicolors-2.2.6.tgz#00b4c1e4e31e4da483501785d5c2ed3fccfdedc9"
@@ -517,6 +513,10 @@ body-parser@~1.14.0:
     qs "5.2.0"
     raw-body "~2.1.5"
     type-is "~1.6.10"
+
+"bootstrap-dialog-temporary@https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git":
+  version "0.0.0"
+  resolved "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git#ffc260d7aa200c7c4fa10794bbabb2846fe651f7"
 
 "bootstrap-select-temporary@https://github.com/paramono/bootstrap-select.git", "bootstrap-select@https://github.com/paramono/bootstrap-select.git":
   version "1.12.4"

@@ -29,6 +29,7 @@
         "tempusdominus-bootstrap-4": "^5.0.0-alpha18",
         "timeago": "1.6.3",
         "tinymce": "^4.9.4",
+        "tinymce-i18n": "^19.2.11",
         "url-search-params": "0.10.0"
     },
     "devDependencies": {

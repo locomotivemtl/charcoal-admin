@@ -27,6 +27,12 @@ module.exports = {
             },
             {
                 expand: true,
+                cwd:   '<%= paths.npm %>/tinymce-i18n/',
+                src:   [ 'langs/**/*.*' ],
+                dest:  '<%= paths.js.dist %>/vendors/tinymce/'
+            },
+            {
+                expand: true,
                 cwd:    '<%= paths.npm %>/jsoneditor/dist/',
                 src:    [ '**/*.*', '*/*.*', '*.*' ],
                 dest:   '<%= paths.js.dist %>/vendors/jsoneditor/'

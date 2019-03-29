@@ -5,9 +5,11 @@ namespace Charcoal\Admin\Script\Object\Table;
 use PDO;
 use PDOStatement;
 
+use Closure;
 use Countable;
 use Traversable;
 use Exception;
+use ReflectionMethod;
 use RuntimeException;
 use UnexpectedValueException;
 use InvalidArgumentException;
@@ -59,6 +61,27 @@ class AlterPrimaryKeyScript extends AdminScript
     protected $relatedProperties;
 
     /**
+     * The model's old primary key name.
+     *
+     * @var string|null
+     */
+    protected $oldPrimaryKey;
+
+    /**
+     * The model's current/new primary key name.
+     *
+     * @var string|null
+     */
+    protected $newPrimaryKey;
+
+    /**
+     * The function to generate a unique ID.
+     *
+     * @var callable|null
+     */
+    protected $idGenerator;
+
+    /**
      * @return void
      */
     protected function init()
@@ -103,6 +126,14 @@ class AlterPrimaryKeyScript extends AdminScript
         $cli->br();
         $cli->bold()->underline()->out('Alter Model\'s Primary Key');
         $cli->br();
+
+        if ($this->dryRun()) {
+            $cli->shout('This command does not support --dry-run');
+            $cli->br();
+            $cli->whisper('Canceled Conversion');
+
+            return $this;
+        }
 
         $objType = $this->argOrInput('target_model');
         $this->setTargetModel($objType);
@@ -149,8 +180,8 @@ class AlterPrimaryKeyScript extends AdminScript
             return $this;
         }
 
-        $oldKey = $model->key();
-        $newKey = sprintf('%s_new', $model->key());
+        $oldKey = $this->oldPrimaryKey();
+        $newKey = $this->newPrimaryKey();
 
         $dbh->query(
             strtr(
@@ -180,7 +211,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $oldField->setExtra('');
 
         if (!$this->quiet()) {
-            $this->describeConversion($newProp);
+            $this->describeConversion($newProp, $oldProp);
         }
 
         $this->convertIdField($newProp, $newField, $oldProp, $oldField);
@@ -207,6 +238,7 @@ class AlterPrimaryKeyScript extends AdminScript
      * @param  string          $newKey  The new key.
      * @param  IdProperty|null $oldProp If provided, then it is filled with an instance of IdProperty.
      * @param  IdProperty|null $newProp If provided, then it is filled with an instance of IdProperty.
+     * @throws RuntimeException If the $oldKey does not exist.
      * @return IdProperty[]
      */
     protected function prepareProperties($oldKey, $newKey, &$oldProp = null, &$newProp = null)
@@ -214,9 +246,27 @@ class AlterPrimaryKeyScript extends AdminScript
         $model  = $this->targetModel();
         $source = $model->source();
 
-        $oldProp = $model->property($oldKey)->setAllowNull(false);
-        $newProp = clone $oldProp;
-        $newProp->setIdent($newKey);
+        /**
+         * Either:
+         * - TRUE if the $oldKey exists in the model's datasource.
+         * - FALSE if the $oldKey does NOT exist in the model's datasource.
+         * - NULL if the $oldKey does NOT exist in the model's datasource and is different from $newKey.
+         *
+         * @var boolean|null
+         */
+        $oldKeyExists = null;
+
+        if ($this->isPrimaryKeyDifferent()) {
+            $newProp = $model->property($newKey)->setAllowNull(false);
+            $oldProp = clone $newProp;
+            $oldProp->setIdent($oldKey);
+        } else {
+            $oldKeyExists = false;
+
+            $oldProp = $model->property($oldKey)->setAllowNull(false);
+            $newProp = clone $oldProp;
+            $newProp->setIdent($newKey);
+        }
 
         $sql  = strtr(
             'SHOW COLUMNS FROM `%table`',
@@ -230,6 +280,8 @@ class AlterPrimaryKeyScript extends AdminScript
                 continue;
             }
 
+            $oldKeyExists = true;
+
             if (!$this->quiet()) {
                 $this->climate()->comment(
                     sprintf('Evaluating the current `%s` column.', $oldKey)
@@ -242,7 +294,21 @@ class AlterPrimaryKeyScript extends AdminScript
                 $oldProp->setMode(IdProperty::MODE_UNIQID);
             } elseif (preg_match('~(?:^|\b)(?:VAR)?CHAR\(36\)(?:$|\b)~i', $col['Type'])) {
                 $oldProp->setMode(IdProperty::MODE_UUID);
+            } else {
+                $oldProp->setMode(IdProperty::MODE_CUSTOM);
             }
+
+            break;
+        }
+
+        if (!$oldKeyExists) {
+            throw new RuntimeException(
+                sprintf(
+                    'The model [%1$s] does not have the target field [%2$s]',
+                    get_class($model),
+                    $oldKey
+                )
+            );
         }
 
         return [
@@ -273,6 +339,9 @@ class AlterPrimaryKeyScript extends AdminScript
 
             case IdProperty::MODE_UUID:
                 return 'RFC-4122 UUID';
+
+            case IdProperty::MODE_CUSTOM:
+                return 'custom';
         }
 
         throw new UnexpectedValueException(sprintf(
@@ -282,27 +351,52 @@ class AlterPrimaryKeyScript extends AdminScript
     }
 
     /**
+     * Retrieve a label for the property.
+     *
+     * @param  IdProperty $prop The new ID property to analyse.
+     * @return string|null
+     */
+    protected function labelFromProp(IdProperty $prop)
+    {
+        $mode = $prop->mode();
+        switch ($mode) {
+            case IdProperty::MODE_AUTO_INCREMENT:
+                return 'auto-increment ID';
+
+            case IdProperty::MODE_CUSTOM:
+                return 'custom ID';
+
+            default:
+                $label = $this->labelFromMode($mode);
+                if ($label) {
+                    return sprintf('auto-generated ID (%s)', $label);
+                } else {
+                    return 'auto-generated ID';
+                }
+        }
+
+        return null;
+    }
+
+    /**
      * Describe what we are converting to.
      *
-     * @param  IdProperty $prop The property to analyse.
+     * @param  IdProperty $newProp The new ID property to analyse.
+     * @param  IdProperty $oldProp The previous ID property to analyse.
      * @return self
      */
-    protected function describeConversion(IdProperty $prop)
+    protected function describeConversion(IdProperty $newProp, IdProperty $oldProp = null)
     {
-        $cli  = $this->climate();
-        $mode = $prop->mode();
-        if ($mode === IdProperty::MODE_AUTO_INCREMENT) {
-            $cli->comment('Converting to auto-increment ID.');
+        if ($oldProp) {
+            $new  = $this->labelFromProp($newProp);
+            $old  = $this->labelFromProp($oldProp);
+            $desc = sprintf('Converting to %s from %s.', $new, $old);
         } else {
-            $label = $this->labelFromMode($mode);
-            if ($label) {
-                $cli->comment(
-                    sprintf('Converting to auto-generated ID (%s).', $label)
-                );
-            } else {
-                $cli->comment('Converting to auto-generated ID.');
-            }
+            $new  = $this->labelFromProp($newProp);
+            $desc = sprintf('Converting to %s.', $new);
         }
+
+        $this->climate()->comment($desc);
 
         return $this;
     }
@@ -334,11 +428,63 @@ class AlterPrimaryKeyScript extends AdminScript
             'SELECT %key FROM `%table`',
             [
                 '%table' => $source->table(),
-                '%key'   => $model->key(),
+                '%key'   => $this->oldPrimaryKey(),
             ]
         );
 
         return $source->db()->query($sql, PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Retrieve the target model's old primary key name.
+     *
+     * @return boolean
+     */
+    private function isPrimaryKeyDifferent()
+    {
+        return $this->climate()->arguments->defined('old_key');
+    }
+
+    /**
+     * Retrieve the target model's old primary key name.
+     *
+     * @return string|null
+     */
+    private function oldPrimaryKey()
+    {
+        if ($this->oldPrimaryKey === null) {
+            if ($this->isPrimaryKeyDifferent()) {
+                $oldKey = $this->climate()->arguments->get('old_key');
+            } else {
+                $oldKey = $this->targetModel()->key();
+            }
+
+            $this->oldPrimaryKey = $oldKey;
+        }
+
+        return $this->oldPrimaryKey;
+    }
+
+    /**
+     * Retrieve the target model's current/new primary key name.
+     *
+     * @return string|null
+     */
+    private function newPrimaryKey()
+    {
+        if ($this->newPrimaryKey === null) {
+            $model = $this->targetModel();
+
+            if ($this->isPrimaryKeyDifferent()) {
+                $newKey = $model->key();
+            } else {
+                $newKey = sprintf('%s_new', $model->key());
+            }
+
+            $this->newPrimaryKey = $newKey;
+        }
+
+        return $this->newPrimaryKey;
     }
 
     /**
@@ -452,16 +598,14 @@ class AlterPrimaryKeyScript extends AdminScript
      */
     private function dropPrimaryKey(PropertyField $field, IdProperty $prop)
     {
-        unset($prop);
-
         $keepId = $this->climate()->arguments->defined('keep_id');
         $model  = $this->targetModel();
         $source = $model->source();
         $dbh    = $source->db();
-        $key    = $model->key();
+        $key    = $prop->ident();
 
         if ($keepId) {
-            $field->setIdent(sprintf('%1$s_%2$s', $key, date('Ymd_His')));
+            $field->setIdent(sprintf('%1$s_%2$s', $key, date('YmdHis')));
             $sql = strtr(
                 'ALTER TABLE `%table` CHANGE COLUMN `%key` %field, DROP PRIMARY KEY',
                 [
@@ -523,7 +667,6 @@ class AlterPrimaryKeyScript extends AdminScript
     {
         $model  = $this->targetModel();
         $source = $model->source();
-        $key    = $model->key();
 
         $field->setIdent($to);
         $sql = strtr(
@@ -598,23 +741,46 @@ class AlterPrimaryKeyScript extends AdminScript
                 $progress = $cli->progress($rows->rowCount());
             }
 
-            if ($newProp->mode() === IdProperty::MODE_AUTO_INCREMENT) {
-                $pool = 0;
-                $ids  = function () use (&$pool) {
-                    return ++$pool;
-                };
-            } else {
-                $pool = [];
-                $ids  = function () use (&$pool, $newProp) {
-                    $id = $newProp->autoGenerate();
-                    while (in_array($id, $pool)) {
+            $mode = $newProp->mode();
+            switch ($mode) {
+                case IdProperty::MODE_AUTO_INCREMENT:
+                    $pool = 0;
+                    $ids  = function () use (&$pool) {
+                        return ++$pool;
+                    };
+                    break;
+
+                case IdProperty::MODE_CUSTOM:
+                    $generator = $this->argOrInput('id_generator');
+                    $this->setIdGenerator($generator);
+                    $generator = $this->idGenerator();
+
+                    $pool = [];
+                    $ids  = function () use (&$pool, $model, $generator) {
+                        $id = $generator();
+                        while (in_array($id, $pool)) {
+                            $id = $generator();
+                        }
+
+                        $pool[] = $id;
+
+                        return $id;
+                    };
+                    break;
+
+                default:
+                    $pool = [];
+                    $ids  = function () use (&$pool, $newProp) {
                         $id = $newProp->autoGenerate();
-                    }
+                        while (in_array($id, $pool)) {
+                            $id = $newProp->autoGenerate();
+                        }
 
-                    $pool[] = $id;
+                        $pool[] = $id;
 
-                    return $id;
-                };
+                        return $id;
+                    };
+                    break;
             }
 
             foreach ($rows as $row) {
@@ -655,7 +821,9 @@ class AlterPrimaryKeyScript extends AdminScript
             $this->removeColumn($oldField);
         }
 
-        $this->renameColumn($newField, $newKey, $oldKey);
+        if (!$this->isPrimaryKeyDifferent()) {
+            $this->renameColumn($newField, $newKey, $oldKey);
+        }
 
         return $this;
     }
@@ -750,6 +918,14 @@ class AlterPrimaryKeyScript extends AdminScript
         static $arguments;
 
         if ($arguments === null) {
+            $validateFieldName = function ($response) {
+                return is_string($response) && strlen($response) > 0;
+            };
+
+            $validateCallback = function ($response) {
+                return is_string($response) && (strpos($callable, '::') > 1 || function_exists($response));
+            };
+
             $validateModel = function ($response) {
                 if (strlen($response) === 0) {
                     return false;
@@ -791,6 +967,22 @@ class AlterPrimaryKeyScript extends AdminScript
                     'noValue'     => true,
                     'description' => 'Skip the deletion of the ID field to be replaced.',
                 ],
+                'id_generator'  => [
+                    'longPrefix'   => 'id-generator',
+                    'required'     => false,
+                    'description'  => 'A function or a method on the model to generate an ID.',
+                    'prompt'       => 'What function to generate a unique ID?',
+                    'acceptValue'  => $validateCallback->bindTo($this),
+                    'defaultValue' => null,
+                ],
+                'old_key'  => [
+                    'longPrefix'   => 'old-key',
+                    'required'     => false,
+                    'description'  => 'The model\'s deprecated ID field to replace.',
+                    'prompt'       => 'What is the model\'s deprecated primary key?',
+                    'acceptValue'  => $validateFieldName->bindTo($this),
+                    'defaultValue' => null,
+                ],
                 'target_model'  => [
                     'prefix'      => 'o',
                     'longPrefix'  => 'obj-type',
@@ -825,6 +1017,93 @@ class AlterPrimaryKeyScript extends AdminScript
     public function parentArguments()
     {
         return parent::defaultArguments();
+    }
+
+    /**
+     * Set the ID generator.
+     *
+     * @param  callable $callable A function or method.
+     * @throws InvalidArgumentException If the given argument is not a callable function.
+     * @return self
+     */
+    public function setIdGenerator($callable)
+    {
+        $this->idGenerator = $this->parseIdGenerator($callable);
+
+        return $this;
+    }
+
+    /**
+     * Parse and validate the given function is callable.
+     *
+     * @param  mixed $callable A function or method.
+     * @throws InvalidArgumentException If the given argument is not a callable function.
+     * @return callable
+     */
+    public function parseIdGenerator($callable)
+    {
+        if ($callable instanceof Closure) {
+            return $callable;
+        }
+
+        $class    = null;
+        $method   = null;
+        $isMethod = false;
+        $isModel  = false;
+        $bail     = false;
+
+        if (is_array($callable) && count($callable) === 2) {
+            list($class, $func) = $callable;
+            $isMethod = ($class && $func);
+        } elseif (is_string($callable) && strpos($callable, '::') > 1) {
+            list($class, $func) = explode('::', $callable);
+            $isMethod = ($class && $func);
+        }
+
+        if ($isMethod) {
+            $model   = $this->targetModel();
+            $isModel = is_a($model, $class);
+
+            $method = new ReflectionMethod($class, $func);
+            if ($isModel && $method->isPublic()) {
+                return $method->getClosure($model);
+            } elseif ($method->isStatic() && $method->isPublic()) {
+                return $callable;
+            } else {
+                $bail = true;
+            }
+        }
+
+        if ($bail || !(is_string($callable) && function_exists($callable))) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'The ID generator must be callable, received: %s',
+                    is_object($callable)
+                        ? get_class($callable)
+                        : (is_string($callable)
+                            ? $callable
+                            : gettype($callable)
+                        )
+                )
+            );
+        }
+
+        return $callable;
+    }
+
+    /**
+     * Retrieve the ID generator.
+     *
+     * @throws RuntimeException If a function has not been defined.
+     * @return callable
+     */
+    public function idGenerator()
+    {
+        if (!isset($this->idGenerator)) {
+            throw new RuntimeException('A function to generate a unique ID must be provided.');
+        }
+
+        return $this->idGenerator;
     }
 
     /**

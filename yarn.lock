@@ -23,6 +23,11 @@
   resolved "https://registry.yarnpkg.com/@sphinxxxx/color-conversion/-/color-conversion-2.2.1.tgz#88e94a50fa79f48bb0d1490bb716df8d506941dd"
   integrity sha512-5+ofCE09lF6C7DPSVyvQ2Nf0oaue3Cl+SosT45DYy5nhgUXsOq3TetArC1q8mVfAOjhG0WReQPPFBdc4xXVNkg==
 
+"@ungap/url-search-params@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@ungap/url-search-params/-/url-search-params-0.1.2.tgz#8ba8c0527543fe675d1c29ae0a2daca842e8ee4f"
+  integrity sha512-WVk5+lJ+AoNLh2sIDMhnEAgLsVQuI067hWLJCzirErH1GYiy1gs09q4+XZxYWSvdAsslKsaO4q1iXXMx2c72dA==
+
 "JSV@>= 4.0.x", JSV@^4.0.x:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
@@ -5942,11 +5947,6 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
-
-url-search-params@0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/url-search-params/-/url-search-params-0.10.0.tgz#d428c1fa9d78d5c5a3feb634147873890f4adcf0"
-  integrity sha512-oFPzmbPAbdthStgffGq8alULe47skPDt1X3KW6NOQnKkcLHP4IS1NfdfHG/CBP5lGsr2gDzNp87pfWLx/eIxjw==
 
 use@^3.1.0:
   version "3.1.1"

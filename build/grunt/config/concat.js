@@ -40,7 +40,7 @@ module.exports = {
             '<%= paths.npm %>/bootstrap/dist/js/bootstrap.bundle.js',
 
             // URL Search Params
-            '<%= paths.npm %>/url-search-params/build/url-search-params.js',
+            '<%= paths.npm %>/@ungap/url-search-params/min.js',
 
             /**
              * Bootstrap Dialog (temporary)

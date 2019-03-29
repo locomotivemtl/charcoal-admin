@@ -8,6 +8,7 @@
         "49d0a84cca789a5be3c532d8f0bc8b75": "https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75.git",
         "@claviska/jquery-minicolors": "~2.2.3",
         "@shopify/draggable": "^1.0.0-beta.8",
+        "@ungap/url-search-params": "0.1.2",
         "awesome-bootstrap-checkbox": "1.0.1",
         "beneroch-gmap": "~0.2.0",
         "bootstrap": "4.0.0",
@@ -29,8 +30,7 @@
         "tempusdominus-bootstrap-4": "^5.0.0-alpha18",
         "timeago": "1.6.3",
         "tinymce": "^4.9.4",
-        "tinymce-i18n": "^19.2.11",
-        "url-search-params": "0.10.0"
+        "tinymce-i18n": "^19.2.11"
     },
     "devDependencies": {
         "autoprefixer": "7.1.6",

@@ -1,4 +1,4 @@
-/* global Clipboard */
+/* global ClipboardJS */
 /**
  * Selectize Picker
  * Search.
@@ -542,7 +542,7 @@
 
         var selectize = this.selectize;
 
-        this.clipboard = new Clipboard(this.selectize_selector + '_copy', {
+        this.clipboard = new ClipboardJS(this.selectize_selector + '_copy', {
             text: function () {
                 return selectize.$input.val();
             }

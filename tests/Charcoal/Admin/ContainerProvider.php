@@ -81,8 +81,22 @@ class ContainerProvider
      * @param  Container $container A DI container.
      * @return void
      */
+    public function registerDebug(Container $container)
+    {
+        if (!isset($container['debug'])) {
+            $container['debug'] = false;
+        }
+    }
+
+    /**
+     * Register the unit tests required services.
+     *
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerBaseServices(Container $container)
     {
+        $this->registerDebug($container);
         $this->registerConfig($container);
         $this->registerDatabase($container);
         $this->registerLogger($container);
@@ -97,6 +111,7 @@ class ContainerProvider
      */
     public function registerAdminServices(Container $container)
     {
+        $this->registerBaseServices($container);
         $this->registerBaseUrl($container);
         $this->registerAdminConfig($container);
         $this->registerAuthenticator($container);
@@ -618,6 +633,8 @@ class ContainerProvider
      */
     public function registerActionDependencies(Container $container)
     {
+        $this->registerDebug($container);
+
         $this->registerLogger($container);
 
         $this->registerModelFactory($container);
@@ -636,6 +653,8 @@ class ContainerProvider
      */
     public function registerTemplateDependencies(Container $container)
     {
+        $this->registerDebug($container);
+
         $this->registerLogger($container);
 
         $this->registerModelFactory($container);
@@ -657,6 +676,8 @@ class ContainerProvider
      */
     public function registerWidgetDependencies(Container $container)
     {
+        $this->registerDebug($container);
+
         $this->registerLogger($container);
         $this->registerTranslator($container);
         $this->registerView($container);

@@ -196,7 +196,7 @@ abstract class AdminAction extends AbstractAction implements
         $this->setAuthorizer($container['admin/authorizer']);
 
         // Satisfies AdminTrait dependencies
-        $this->setDebug($container['config']);
+        $this->setDebug($container['debug']);
         $this->setAppConfig($container['config']);
         $this->setAdminConfig($container['admin/config']);
 

@@ -5,16 +5,24 @@
     ],
 
     "build": [
+        "jsonlint",
         "copy:vendors",
+        "styles",
+        "scripts",
+        "svg_sprite"
+    ],
+
+    "styles": [
         "sass",
         "postcss",
-        "cssmin",
+        "cssmin"
+    ],
+
+    "scripts": [
         "concat",
         "jscs",
         "jshint",
-        "jsonlint",
-        "uglify",
-        "svg_sprite"
+        "uglify"
     ],
 
     "sync": [

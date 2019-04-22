@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 use Charcoal\Object\RevisionableInterface;
+use Charcoal\User\AuthAwareInterface;
 use InvalidArgumentException;
 
 // From Pimple
@@ -308,6 +309,13 @@ class FormSidebarWidget extends AdminWidget implements
 
                 if (is_array($propertyOptions)) {
                     $formProperty->setData($propertyOptions);
+                }
+            }
+
+            if (!empty($formProperty['required_acl_permissions']) && $this instanceof AuthAwareInterface) {
+                $formProperty['active'] = $this->hasPermissions($formProperty['required_acl_permissions']);
+                if (!$this->hasPermissions($formProperty['required_acl_permissions'])) {
+                    continue;
                 }
             }
 

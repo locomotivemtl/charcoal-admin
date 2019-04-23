@@ -77,8 +77,7 @@ if (typeof wx === 'object' && typeof wx.getSystemInfoSync === 'function') {
         wxa: true, // Weixin Application
         canvasSupported: true,
         svgSupported: false,
-        touchEventsSupported: true,
-        domSupported: false
+        touchEventsSupported: true
     };
 }
 else if (typeof document === 'undefined' && typeof self !== 'undefined') {
@@ -88,8 +87,7 @@ else if (typeof document === 'undefined' && typeof self !== 'undefined') {
         os: {},
         node: false,
         worker: true,
-        canvasSupported: true,
-        domSupported: false
+        canvasSupported: true
     };
 }
 else if (typeof navigator === 'undefined') {
@@ -101,8 +99,7 @@ else if (typeof navigator === 'undefined') {
         worker: false,
         // Assume canvas is supported
         canvasSupported: true,
-        svgSupported: true,
-        domSupported: false
+        svgSupported: true
     };
 }
 else {
@@ -211,9 +208,8 @@ function detect(ua) {
             // events currently. So we dont use that on other browsers unless tested sufficiently.
             // Although IE 10 supports pointer event, it use old style and is different from the
             // standard. So we exclude that. (IE 10 is hardly used on touch device)
-            && (browser.edge || (browser.ie && browser.version >= 11)),
+            && (browser.edge || (browser.ie && browser.version >= 11))
         // passiveSupported: detectPassiveSupport()
-        domSupported: typeof document !== 'undefined'
     };
 }
 
@@ -300,7 +296,7 @@ function $override(name, fn) {
  * @return {*} new
  */
 function clone(source) {
-    if (source == null || typeof source !== 'object') {
+    if (source == null || typeof source != 'object') {
         return source;
     }
 
@@ -504,13 +500,13 @@ function mixin(target, source, overlay) {
  * @param {Array|TypedArray} data
  */
 function isArrayLike(data) {
-    if (!data) {
+    if (! data) {
         return;
     }
-    if (typeof data === 'string') {
+    if (typeof data == 'string') {
         return false;
     }
-    return typeof data.length === 'number';
+    return typeof data.length == 'number';
 }
 
 /**
@@ -694,7 +690,7 @@ function isObject$1(value) {
     // Avoid a V8 JIT bug in Chrome 19-20.
     // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
     var type = typeof value;
-    return type === 'function' || (!!value && type === 'object');
+    return type === 'function' || (!!value && type == 'object');
 }
 
 /**
@@ -845,9 +841,6 @@ function isPrimitive(obj) {
  */
 function HashMap(obj) {
     var isArr = isArray(obj);
-    // Key should not be set on this, otherwise
-    // methods get/set/... may be overrided.
-    this.data = {};
     var thisMap = this;
 
     (obj instanceof HashMap)
@@ -859,30 +852,32 @@ function HashMap(obj) {
     }
 }
 
+// Add prefix to avoid conflict with Object.prototype.
+
 HashMap.prototype = {
     constructor: HashMap,
     // Do not provide `has` method to avoid defining what is `has`.
     // (We usually treat `null` and `undefined` as the same, different
     // from ES6 Map).
     get: function (key) {
-        return this.data.hasOwnProperty(key) ? this.data[key] : null;
+        return this.hasOwnProperty(key) ? this[key] : null;
     },
     set: function (key, value) {
         // Comparing with invocation chaining, `return value` is more commonly
         // used in this case: `var someVal = map.set('a', genVal());`
-        return (this.data[key] = value);
+        return (this[key] = value);
     },
     // Although util.each can be performed on this hashMap directly, user
     // should not use the exposed keys, who are prefixed.
     each: function (cb, context) {
         context !== void 0 && (cb = bind(cb, context));
-        for (var key in this.data) {
-            this.data.hasOwnProperty(key) && cb(this.data[key], key);
+        for (var key in this) {
+            this.hasOwnProperty(key) && cb(this[key], key);
         }
     },
     // Do not use this method if performance sensitive.
     removeKey: function (key) {
-        delete this.data[key];
+        delete this[key];
     }
 };
 
@@ -1331,7 +1326,7 @@ function param(target, e) {
 }
 
 /**
- * Event Mixin
+ * 事件扩展
  * @module zrender/mixin/Eventful
  * @author Kener (@Kener-林峰, kener.linfeng@gmail.com)
  *         pissang (https://www.github.com/pissang)
@@ -1340,26 +1335,12 @@ function param(target, e) {
 var arrySlice = Array.prototype.slice;
 
 /**
- * Event dispatcher.
- *
+ * 事件分发器
  * @alias module:zrender/mixin/Eventful
  * @constructor
- * @param {Object} [eventProcessor] The object eventProcessor is the scope when
- *        `eventProcessor.xxx` called.
- * @param {Function} [eventProcessor.normalizeQuery]
- *        param: {string|Object} Raw query.
- *        return: {string|Object} Normalized query.
- * @param {Function} [eventProcessor.filter] Event will be dispatched only
- *        if it returns `true`.
- *        param: {string} eventType
- *        param: {string|Object} query
- *        return: {boolean}
- * @param {Function} [eventProcessor.afterTrigger] Call after all handlers called.
- *        param: {string} eventType
  */
-var Eventful = function (eventProcessor) {
+var Eventful = function () {
     this._$handlers = {};
-    this._$eventProcessor = eventProcessor;
 };
 
 Eventful.prototype = {
@@ -1367,45 +1348,84 @@ Eventful.prototype = {
     constructor: Eventful,
 
     /**
-     * The handler can only be triggered once, then removed.
+     * 单次触发绑定，trigger后销毁
      *
-     * @param {string} event The event name.
-     * @param {string|Object} [query] Condition used on event filter.
-     * @param {Function} handler The event handler.
+     * @param {string} event 事件名
+     * @param {Function} handler 响应函数
      * @param {Object} context
      */
-    one: function (event, query, handler, context) {
-        return on(this, event, query, handler, context, true);
+    one: function (event, handler, context) {
+        var _h = this._$handlers;
+
+        if (!handler || !event) {
+            return this;
+        }
+
+        if (!_h[event]) {
+            _h[event] = [];
+        }
+
+        for (var i = 0; i < _h[event].length; i++) {
+            if (_h[event][i].h === handler) {
+                return this;
+            }
+        }
+
+        _h[event].push({
+            h: handler,
+            one: true,
+            ctx: context || this
+        });
+
+        return this;
     },
 
     /**
-     * Bind a handler.
-     *
-     * @param {string} event The event name.
-     * @param {string|Object} [query] Condition used on event filter.
-     * @param {Function} handler The event handler.
+     * 绑定事件
+     * @param {string} event 事件名
+     * @param {Function} handler 事件处理函数
      * @param {Object} [context]
      */
-    on: function (event, query, handler, context) {
-        return on(this, event, query, handler, context, false);
+    on: function (event, handler, context) {
+        var _h = this._$handlers;
+
+        if (!handler || !event) {
+            return this;
+        }
+
+        if (!_h[event]) {
+            _h[event] = [];
+        }
+
+        for (var i = 0; i < _h[event].length; i++) {
+            if (_h[event][i].h === handler) {
+                return this;
+            }
+        }
+
+        _h[event].push({
+            h: handler,
+            one: false,
+            ctx: context || this
+        });
+
+        return this;
     },
 
     /**
-     * Whether any handler has bound.
-     *
+     * 是否绑定了事件
      * @param  {string}  event
      * @return {boolean}
      */
     isSilent: function (event) {
         var _h = this._$handlers;
-        return !_h[event] || !_h[event].length;
+        return _h[event] && _h[event].length;
     },
 
     /**
-     * Unbind a event.
-     *
-     * @param {string} event The event name.
-     * @param {Function} [handler] The event handler.
+     * 解绑事件
+     * @param {string} event 事件名
+     * @param {Function} [handler] 事件处理函数
      */
     off: function (event, handler) {
         var _h = this._$handlers;
@@ -1419,7 +1439,7 @@ Eventful.prototype = {
             if (_h[event]) {
                 var newList = [];
                 for (var i = 0, l = _h[event].length; i < l; i++) {
-                    if (_h[event][i].h !== handler) {
+                    if (_h[event][i]['h'] != handler) {
                         newList.push(_h[event][i]);
                     }
                 }
@@ -1438,15 +1458,12 @@ Eventful.prototype = {
     },
 
     /**
-     * Dispatch a event.
+     * 事件分发
      *
-     * @param {string} type The event name.
+     * @param {string} type 事件类型
      */
     trigger: function (type) {
-        var _h = this._$handlers[type];
-        var eventProcessor = this._$eventProcessor;
-
-        if (_h) {
+        if (this._$handlers[type]) {
             var args = arguments;
             var argLen = args.length;
 
@@ -1454,36 +1471,27 @@ Eventful.prototype = {
                 args = arrySlice.call(args, 1);
             }
 
+            var _h = this._$handlers[type];
             var len = _h.length;
             for (var i = 0; i < len;) {
-                var hItem = _h[i];
-                if (eventProcessor
-                    && eventProcessor.filter
-                    && hItem.query != null
-                    && !eventProcessor.filter(type, hItem.query)
-                ) {
-                    i++;
-                    continue;
-                }
-
                 // Optimize advise from backbone
                 switch (argLen) {
                     case 1:
-                        hItem.h.call(hItem.ctx);
+                        _h[i]['h'].call(_h[i]['ctx']);
                         break;
                     case 2:
-                        hItem.h.call(hItem.ctx, args[1]);
+                        _h[i]['h'].call(_h[i]['ctx'], args[1]);
                         break;
                     case 3:
-                        hItem.h.call(hItem.ctx, args[1], args[2]);
+                        _h[i]['h'].call(_h[i]['ctx'], args[1], args[2]);
                         break;
                     default:
                         // have more than 2 given arguments
-                        hItem.h.apply(hItem.ctx, args);
+                        _h[i]['h'].apply(_h[i]['ctx'], args);
                         break;
                 }
 
-                if (hItem.one) {
+                if (_h[i]['one']) {
                     _h.splice(i, 1);
                     len--;
                 }
@@ -1493,22 +1501,15 @@ Eventful.prototype = {
             }
         }
 
-        eventProcessor && eventProcessor.afterTrigger
-            && eventProcessor.afterTrigger(type);
-
         return this;
     },
 
     /**
-     * Dispatch a event with context, which is specified at the last parameter.
-     *
-     * @param {string} type The event name.
+     * 带有context的事件分发, 最后一个参数是事件回调的context
+     * @param {string} type 事件类型
      */
     triggerWithContext: function (type) {
-        var _h = this._$handlers[type];
-        var eventProcessor = this._$eventProcessor;
-
-        if (_h) {
+        if (this._$handlers[type]) {
             var args = arguments;
             var argLen = args.length;
 
@@ -1517,36 +1518,27 @@ Eventful.prototype = {
             }
             var ctx = args[args.length - 1];
 
+            var _h = this._$handlers[type];
             var len = _h.length;
             for (var i = 0; i < len;) {
-                var hItem = _h[i];
-                if (eventProcessor
-                    && eventProcessor.filter
-                    && hItem.query != null
-                    && !eventProcessor.filter(type, hItem.query)
-                ) {
-                    i++;
-                    continue;
-                }
-
                 // Optimize advise from backbone
                 switch (argLen) {
                     case 1:
-                        hItem.h.call(ctx);
+                        _h[i]['h'].call(ctx);
                         break;
                     case 2:
-                        hItem.h.call(ctx, args[1]);
+                        _h[i]['h'].call(ctx, args[1]);
                         break;
                     case 3:
-                        hItem.h.call(ctx, args[1], args[2]);
+                        _h[i]['h'].call(ctx, args[1], args[2]);
                         break;
                     default:
                         // have more than 2 given arguments
-                        hItem.h.apply(ctx, args);
+                        _h[i]['h'].apply(ctx, args);
                         break;
                 }
 
-                if (hItem.one) {
+                if (_h[i]['one']) {
                     _h.splice(i, 1);
                     len--;
                 }
@@ -1556,363 +1548,8 @@ Eventful.prototype = {
             }
         }
 
-        eventProcessor && eventProcessor.afterTrigger
-            && eventProcessor.afterTrigger(type);
-
         return this;
     }
-};
-
-function normalizeQuery(host, query) {
-    var eventProcessor = host._$eventProcessor;
-    if (query != null && eventProcessor && eventProcessor.normalizeQuery) {
-        query = eventProcessor.normalizeQuery(query);
-    }
-    return query;
-}
-
-function on(eventful, event, query, handler, context, isOnce) {
-    var _h = eventful._$handlers;
-
-    if (typeof query === 'function') {
-        context = handler;
-        handler = query;
-        query = null;
-    }
-
-    if (!handler || !event) {
-        return eventful;
-    }
-
-    query = normalizeQuery(eventful, query);
-
-    if (!_h[event]) {
-        _h[event] = [];
-    }
-
-    for (var i = 0; i < _h[event].length; i++) {
-        if (_h[event][i].h === handler) {
-            return eventful;
-        }
-    }
-
-    var wrap = {
-        h: handler,
-        one: isOnce,
-        query: query,
-        ctx: context || eventful,
-        // FIXME
-        // Do not publish this feature util it is proved that it makes sense.
-        callAtLast: handler.zrEventfulCallAtLast
-    };
-
-    var lastIndex = _h[event].length - 1;
-    var lastWrap = _h[event][lastIndex];
-    (lastWrap && lastWrap.callAtLast)
-        ? _h[event].splice(lastIndex, 0, wrap)
-        : _h[event].push(wrap);
-
-    return eventful;
-}
-
-/**
- * 事件辅助类
- * @module zrender/core/event
- * @author Kener (@Kener-林峰, kener.linfeng@gmail.com)
- */
-
-var isDomLevel2 = (typeof window !== 'undefined') && !!window.addEventListener;
-
-var MOUSE_EVENT_REG = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
-
-function getBoundingClientRect(el) {
-    // BlackBerry 5, iOS 3 (original iPhone) don't have getBoundingRect
-    return el.getBoundingClientRect ? el.getBoundingClientRect() : {left: 0, top: 0};
-}
-
-// `calculate` is optional, default false
-function clientToLocal(el, e, out, calculate) {
-    out = out || {};
-
-    // According to the W3C Working Draft, offsetX and offsetY should be relative
-    // to the padding edge of the target element. The only browser using this convention
-    // is IE. Webkit uses the border edge, Opera uses the content edge, and FireFox does
-    // not support the properties.
-    // (see http://www.jacklmoore.com/notes/mouse-position/)
-    // In zr painter.dom, padding edge equals to border edge.
-
-    // FIXME
-    // When mousemove event triggered on ec tooltip, target is not zr painter.dom, and
-    // offsetX/Y is relative to e.target, where the calculation of zrX/Y via offsetX/Y
-    // is too complex. So css-transfrom dont support in this case temporarily.
-    if (calculate || !env$1.canvasSupported) {
-        defaultGetZrXY(el, e, out);
-    }
-    // Caution: In FireFox, layerX/layerY Mouse position relative to the closest positioned
-    // ancestor element, so we should make sure el is positioned (e.g., not position:static).
-    // BTW1, Webkit don't return the same results as FF in non-simple cases (like add
-    // zoom-factor, overflow / opacity layers, transforms ...)
-    // BTW2, (ev.offsetY || ev.pageY - $(ev.target).offset().top) is not correct in preserve-3d.
-    // <https://bugs.jquery.com/ticket/8523#comment:14>
-    // BTW3, In ff, offsetX/offsetY is always 0.
-    else if (env$1.browser.firefox && e.layerX != null && e.layerX !== e.offsetX) {
-        out.zrX = e.layerX;
-        out.zrY = e.layerY;
-    }
-    // For IE6+, chrome, safari, opera. (When will ff support offsetX?)
-    else if (e.offsetX != null) {
-        out.zrX = e.offsetX;
-        out.zrY = e.offsetY;
-    }
-    // For some other device, e.g., IOS safari.
-    else {
-        defaultGetZrXY(el, e, out);
-    }
-
-    return out;
-}
-
-function defaultGetZrXY(el, e, out) {
-    // This well-known method below does not support css transform.
-    var box = getBoundingClientRect(el);
-    out.zrX = e.clientX - box.left;
-    out.zrY = e.clientY - box.top;
-}
-
-/**
- * 如果存在第三方嵌入的一些dom触发的事件，或touch事件，需要转换一下事件坐标.
- * `calculate` is optional, default false.
- */
-function normalizeEvent(el, e, calculate) {
-
-    e = e || window.event;
-
-    if (e.zrX != null) {
-        return e;
-    }
-
-    var eventType = e.type;
-    var isTouch = eventType && eventType.indexOf('touch') >= 0;
-
-    if (!isTouch) {
-        clientToLocal(el, e, e, calculate);
-        e.zrDelta = (e.wheelDelta) ? e.wheelDelta / 120 : -(e.detail || 0) / 3;
-    }
-    else {
-        var touch = eventType !== 'touchend'
-            ? e.targetTouches[0]
-            : e.changedTouches[0];
-        touch && clientToLocal(el, touch, e, calculate);
-    }
-
-    // Add which for click: 1 === left; 2 === middle; 3 === right; otherwise: 0;
-    // See jQuery: https://github.com/jquery/jquery/blob/master/src/event.js
-    // If e.which has been defined, if may be readonly,
-    // see: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/which
-    var button = e.button;
-    if (e.which == null && button !== undefined && MOUSE_EVENT_REG.test(e.type)) {
-        e.which = (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
-    }
-    // [Caution]: `e.which` from browser is not always reliable. For example,
-    // when press left button and `mousemove (pointermove)` in Edge, the `e.which`
-    // is 65536 and the `e.button` is -1. But the `mouseup (pointerup)` and
-    // `mousedown (pointerdown)` is the same as Chrome does.
-
-    return e;
-}
-
-/**
- * @param {HTMLElement} el
- * @param {string} name
- * @param {Function} handler
- */
-function addEventListener(el, name, handler) {
-    if (isDomLevel2) {
-        // Reproduct the console warning:
-        // [Violation] Added non-passive event listener to a scroll-blocking <some> event.
-        // Consider marking event handler as 'passive' to make the page more responsive.
-        // Just set console log level: verbose in chrome dev tool.
-        // then the warning log will be printed when addEventListener called.
-        // See https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
-        // We have not yet found a neat way to using passive. Because in zrender the dom event
-        // listener delegate all of the upper events of element. Some of those events need
-        // to prevent default. For example, the feature `preventDefaultMouseMove` of echarts.
-        // Before passive can be adopted, these issues should be considered:
-        // (1) Whether and how a zrender user specifies an event listener passive. And by default,
-        // passive or not.
-        // (2) How to tread that some zrender event listener is passive, and some is not. If
-        // we use other way but not preventDefault of mousewheel and touchmove, browser
-        // compatibility should be handled.
-
-        // var opts = (env.passiveSupported && name === 'mousewheel')
-        //     ? {passive: true}
-        //     // By default, the third param of el.addEventListener is `capture: false`.
-        //     : void 0;
-        // el.addEventListener(name, handler /* , opts */);
-        el.addEventListener(name, handler);
-    }
-    else {
-        el.attachEvent('on' + name, handler);
-    }
-}
-
-function removeEventListener(el, name, handler) {
-    if (isDomLevel2) {
-        el.removeEventListener(name, handler);
-    }
-    else {
-        el.detachEvent('on' + name, handler);
-    }
-}
-
-/**
- * preventDefault and stopPropagation.
- * Notice: do not do that in zrender. Upper application
- * do that if necessary.
- *
- * @memberOf module:zrender/core/event
- * @method
- * @param {Event} e : event对象
- */
-var stop = isDomLevel2
-    ? function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.cancelBubble = true;
-    }
-    : function (e) {
-        e.returnValue = false;
-        e.cancelBubble = true;
-    };
-
-/**
- * This method only works for mouseup and mousedown. The functionality is restricted
- * for fault tolerance, See the `e.which` compatibility above.
- *
- * @param {MouseEvent} e
- * @return {boolean}
- */
-function isMiddleOrRightButtonOnMouseUpDown(e) {
-    return e.which === 2 || e.which === 3;
-}
-
-/**
- * To be removed.
- * @deprecated
- */
-
-/**
- * Only implements needed gestures for mobile.
- */
-
-var GestureMgr = function () {
-
-    /**
-     * @private
-     * @type {Array.<Object>}
-     */
-    this._track = [];
-};
-
-GestureMgr.prototype = {
-
-    constructor: GestureMgr,
-
-    recognize: function (event, target, root) {
-        this._doTrack(event, target, root);
-        return this._recognize(event);
-    },
-
-    clear: function () {
-        this._track.length = 0;
-        return this;
-    },
-
-    _doTrack: function (event, target, root) {
-        var touches = event.touches;
-
-        if (!touches) {
-            return;
-        }
-
-        var trackItem = {
-            points: [],
-            touches: [],
-            target: target,
-            event: event
-        };
-
-        for (var i = 0, len = touches.length; i < len; i++) {
-            var touch = touches[i];
-            var pos = clientToLocal(root, touch, {});
-            trackItem.points.push([pos.zrX, pos.zrY]);
-            trackItem.touches.push(touch);
-        }
-
-        this._track.push(trackItem);
-    },
-
-    _recognize: function (event) {
-        for (var eventName in recognizers) {
-            if (recognizers.hasOwnProperty(eventName)) {
-                var gestureInfo = recognizers[eventName](this._track, event);
-                if (gestureInfo) {
-                    return gestureInfo;
-                }
-            }
-        }
-    }
-};
-
-function dist$1(pointPair) {
-    var dx = pointPair[1][0] - pointPair[0][0];
-    var dy = pointPair[1][1] - pointPair[0][1];
-
-    return Math.sqrt(dx * dx + dy * dy);
-}
-
-function center(pointPair) {
-    return [
-        (pointPair[0][0] + pointPair[1][0]) / 2,
-        (pointPair[0][1] + pointPair[1][1]) / 2
-    ];
-}
-
-var recognizers = {
-
-    pinch: function (track, event) {
-        var trackLen = track.length;
-
-        if (!trackLen) {
-            return;
-        }
-
-        var pinchEnd = (track[trackLen - 1] || {}).points;
-        var pinchPre = (track[trackLen - 2] || {}).points || pinchEnd;
-
-        if (pinchPre
-            && pinchPre.length > 1
-            && pinchEnd
-            && pinchEnd.length > 1
-        ) {
-            var pinchScale = dist$1(pinchEnd) / dist$1(pinchPre);
-            !isFinite(pinchScale) && (pinchScale = 1);
-
-            event.pinchScale = pinchScale;
-
-            var pinchCenter = center(pinchEnd);
-            event.pinchX = pinchCenter[0];
-            event.pinchY = pinchCenter[1];
-
-            return {
-                type: 'pinch',
-                target: track[0].target,
-                event: event
-            };
-        }
-    }
-
-    // Only pinch currently.
 };
 
 var SILENT = 'silent';
@@ -1934,16 +1571,11 @@ function makeEventPacket(eveType, targetInfo, event) {
         pinchScale: event.pinchScale,
         wheelDelta: event.zrDelta,
         zrByTouch: event.zrByTouch,
-        which: event.which,
-        stop: stopEvent
+        which: event.which
     };
 }
 
-function stopEvent(event) {
-    stop(this.event);
-}
-
-function EmptyProxy() {}
+function EmptyProxy () {}
 EmptyProxy.prototype.dispose = function () {};
 
 var handlerNames = [
@@ -1959,7 +1591,7 @@ var handlerNames = [
  * @param {module:zrender/dom/HandlerProxy} proxy HandlerProxy instance.
  * @param {HTMLElement} painterRoot painter.root (not painter.getViewportRoot()).
  */
-var Handler = function (storage, painter, proxy, painterRoot) {
+var Handler = function(storage, painter, proxy, painterRoot) {
     Eventful.call(this);
 
     this.storage = storage;
@@ -1999,12 +1631,6 @@ var Handler = function (storage, painter, proxy, painterRoot) {
      * @type {number}
      */
     this._lastY;
-
-    /**
-     * @private
-     * @type {module:zrender/core/GestureMgr}
-     */
-    this._gestureMgr;
 
 
     Draggable.call(this);
@@ -2080,7 +1706,7 @@ Handler.prototype = {
         do {
             element = element && element.parentNode;
         }
-        while (element && element.nodeType !== 9 && !(
+        while (element && element.nodeType != 9 && !(
             innerDom = element === this.painterRoot
         ));
 
@@ -2161,7 +1787,7 @@ Handler.prototype = {
             // 分发事件到用户自定义层
             // 用户有可能在全局 click 事件中 dispose，所以需要判断下 painter 是否存在
             this.painter && this.painter.eachOtherLayer(function (layer) {
-                if (typeof (layer[eventHandler]) === 'function') {
+                if (typeof(layer[eventHandler]) == 'function') {
                     layer[eventHandler].call(layer, eventPacket);
                 }
                 if (layer.trigger) {
@@ -2179,11 +1805,11 @@ Handler.prototype = {
      * @return {model:zrender/Element}
      * @method
      */
-    findHover: function (x, y, exclude) {
+    findHover: function(x, y, exclude) {
         var list = this.storage.getDisplayList();
         var out = {x: x, y: y};
 
-        for (var i = list.length - 1; i >= 0; i--) {
+        for (var i = list.length - 1; i >= 0 ; i--) {
             var hoverCheckResult;
             if (list[i] !== exclude
                 // getDisplayList may include ignored item in VML mode
@@ -2199,31 +1825,6 @@ Handler.prototype = {
         }
 
         return out;
-    },
-
-    processGesture: function (event, stage) {
-        if (!this._gestureMgr) {
-            this._gestureMgr = new GestureMgr();
-        }
-        var gestureMgr = this._gestureMgr;
-
-        stage === 'start' && gestureMgr.clear();
-
-        var gestureInfo = gestureMgr.recognize(
-            event,
-            this.findHover(event.zrX, event.zrY, null).target,
-            this.proxy.dom
-        );
-
-        stage === 'end' && gestureMgr.clear();
-
-        // Do not do any preventDefault here. Upper application do that if necessary.
-        if (gestureInfo) {
-            var type = gestureInfo.type;
-            event.gestureEvent = type;
-
-            this.dispatchToElement({target: gestureInfo.target}, type, gestureInfo.event);
-        }
     }
 };
 
@@ -2270,7 +1871,7 @@ function isHover(displayable, x, y) {
             // If clipped by ancestor.
             // FIXME: If clipPath has neither stroke nor fill,
             // el.clipPath.contain(x, y) will always return false.
-            if (el.clipPath && !el.clipPath.contain(x, y)) {
+            if (el.clipPath && !el.clipPath.contain(x, y))  {
                 return false;
             }
             if (el.silent) {
@@ -2294,7 +1895,7 @@ mixin(Handler, Draggable);
 
 var ArrayCtor$1 = typeof Float32Array === 'undefined'
     ? Array
-    : Float32Array;
+   : Float32Array;
 
 /**
  * Create a identity matrix.
@@ -2539,7 +2140,6 @@ transformableProto.needLocalTransform = function () {
         || isNotAroundZero(this.scale[1] - 1);
 };
 
-var scaleTmp = [];
 transformableProto.updateTransform = function () {
     var parent = this.parent;
     var parentHasTransform = parent && parent.transform;
@@ -2572,20 +2172,6 @@ transformableProto.updateTransform = function () {
     // 保存这个变换矩阵
     this.transform = m;
 
-    var globalScaleRatio = this.globalScaleRatio;
-    if (globalScaleRatio != null && globalScaleRatio !== 1) {
-        this.getGlobalScale(scaleTmp);
-        var relX = scaleTmp[0] < 0 ? -1 : 1;
-        var relY = scaleTmp[1] < 0 ? -1 : 1;
-        var sx = ((scaleTmp[0] - relX) * globalScaleRatio + relX) / scaleTmp[0] || 0;
-        var sy = ((scaleTmp[1] - relY) * globalScaleRatio + relY) / scaleTmp[1] || 0;
-
-        m[0] *= sx;
-        m[1] *= sx;
-        m[2] *= sy;
-        m[3] *= sy;
-    }
-
     this.invTransform = this.invTransform || create$1();
     invert(this.invTransform, m);
 };
@@ -2615,12 +2201,20 @@ transformableProto.restoreTransform = function (ctx) {
 };
 
 var tmpTransform = [];
-var originTransform = create$1();
 
-transformableProto.setLocalTransform = function (m) {
-    if (!m) {
-        // TODO return or set identity?
+/**
+ * 分解`transform`矩阵到`position`, `rotation`, `scale`
+ */
+transformableProto.decomposeTransform = function () {
+    if (!this.transform) {
         return;
+    }
+    var parent = this.parent;
+    var m = this.transform;
+    if (parent && parent.transform) {
+        // Get local transform and decompose them to position, scale, rotation
+        mul$1(tmpTransform, parent.invTransform, m);
+        m = tmpTransform;
     }
     var sx = m[0] * m[0] + m[1] * m[1];
     var sy = m[2] * m[2] + m[3] * m[3];
@@ -2638,61 +2232,31 @@ transformableProto.setLocalTransform = function (m) {
     if (m[3] < 0) {
         sy = -sy;
     }
-
     position[0] = m[4];
     position[1] = m[5];
     scale$$1[0] = sx;
     scale$$1[1] = sy;
     this.rotation = Math.atan2(-m[1] / sy, m[0] / sx);
 };
-/**
- * 分解`transform`矩阵到`position`, `rotation`, `scale`
- */
-transformableProto.decomposeTransform = function () {
-    if (!this.transform) {
-        return;
-    }
-    var parent = this.parent;
-    var m = this.transform;
-    if (parent && parent.transform) {
-        // Get local transform and decompose them to position, scale, rotation
-        mul$1(tmpTransform, parent.invTransform, m);
-        m = tmpTransform;
-    }
-    var origin = this.origin;
-    if (origin && (origin[0] || origin[1])) {
-        originTransform[4] = origin[0];
-        originTransform[5] = origin[1];
-        mul$1(tmpTransform, m, originTransform);
-        tmpTransform[4] -= origin[0];
-        tmpTransform[5] -= origin[1];
-        m = tmpTransform;
-    }
-
-    this.setLocalTransform(m);
-};
 
 /**
  * Get global scale
  * @return {Array.<number>}
  */
-transformableProto.getGlobalScale = function (out) {
+transformableProto.getGlobalScale = function () {
     var m = this.transform;
-    out = out || [];
     if (!m) {
-        out[0] = 1;
-        out[1] = 1;
-        return out;
+        return [1, 1];
     }
-    out[0] = Math.sqrt(m[0] * m[0] + m[1] * m[1]);
-    out[1] = Math.sqrt(m[2] * m[2] + m[3] * m[3]);
+    var sx = Math.sqrt(m[0] * m[0] + m[1] * m[1]);
+    var sy = Math.sqrt(m[2] * m[2] + m[3] * m[3]);
     if (m[0] < 0) {
-        out[0] = -out[0];
+        sx = -sx;
     }
     if (m[3] < 0) {
-        out[1] = -out[1];
+        sy = -sy;
     }
-    return out;
+    return [sx, sy];
 };
 /**
  * 变换坐标位置到 shape 的局部坐标空间
@@ -2978,14 +2542,13 @@ var easing = {
             return 1;
         }
         if (!a || a < 1) {
-            a = 1;
-            s = p / 4;
+            a = 1; s = p / 4;
         }
         else {
             s = p * Math.asin(1 / a) / (2 * Math.PI);
         }
-        return -(a * Math.pow(2, 10 * (k -= 1))
-                    * Math.sin((k - s) * (2 * Math.PI) / p));
+        return -(a * Math.pow(2, 10 * (k -= 1)) *
+                    Math.sin((k - s) * (2 * Math.PI) / p));
     },
     /**
     * @param {number} k
@@ -3002,14 +2565,13 @@ var easing = {
             return 1;
         }
         if (!a || a < 1) {
-            a = 1;
-            s = p / 4;
+            a = 1; s = p / 4;
         }
         else {
             s = p * Math.asin(1 / a) / (2 * Math.PI);
         }
-        return (a * Math.pow(2, -10 * k)
-                    * Math.sin((k - s) * (2 * Math.PI) / p) + 1);
+        return (a * Math.pow(2, -10 * k) *
+                Math.sin((k - s) * (2 * Math.PI) / p) + 1);
     },
     /**
     * @param {number} k
@@ -3026,8 +2588,7 @@ var easing = {
             return 1;
         }
         if (!a || a < 1) {
-            a = 1;
-            s = p / 4;
+            a = 1; s = p / 4;
         }
         else {
             s = p * Math.asin(1 / a) / (2 * Math.PI);
@@ -3177,7 +2738,7 @@ Clip.prototype = {
         percent = Math.min(percent, 1);
 
         var easing$$1 = this.easing;
-        var easingFunc = typeof easing$$1 === 'string' ? easing[easing$$1] : easing$$1;
+        var easingFunc = typeof easing$$1 == 'string' ? easing[easing$$1] : easing$$1;
         var schedule = typeof easingFunc === 'function'
             ? easingFunc(percent)
             : percent;
@@ -3185,9 +2746,9 @@ Clip.prototype = {
         this.fire('frame', schedule);
 
         // 结束
-        if (percent === 1) {
+        if (percent == 1) {
             if (this.loop) {
-                this.restart(globalTime);
+                this.restart (globalTime);
                 // 重新开始周期
                 // 抛出而不是直接调用事件直到 stage.update 后再统一调用这些事件
                 return 'restart';
@@ -3421,80 +2982,80 @@ LRUProto.clear = function () {
 };
 
 var kCSSColorTable = {
-    'transparent': [0, 0, 0, 0], 'aliceblue': [240, 248, 255, 1],
-    'antiquewhite': [250, 235, 215, 1], 'aqua': [0, 255, 255, 1],
-    'aquamarine': [127, 255, 212, 1], 'azure': [240, 255, 255, 1],
-    'beige': [245, 245, 220, 1], 'bisque': [255, 228, 196, 1],
-    'black': [0, 0, 0, 1], 'blanchedalmond': [255, 235, 205, 1],
-    'blue': [0, 0, 255, 1], 'blueviolet': [138, 43, 226, 1],
-    'brown': [165, 42, 42, 1], 'burlywood': [222, 184, 135, 1],
-    'cadetblue': [95, 158, 160, 1], 'chartreuse': [127, 255, 0, 1],
-    'chocolate': [210, 105, 30, 1], 'coral': [255, 127, 80, 1],
-    'cornflowerblue': [100, 149, 237, 1], 'cornsilk': [255, 248, 220, 1],
-    'crimson': [220, 20, 60, 1], 'cyan': [0, 255, 255, 1],
-    'darkblue': [0, 0, 139, 1], 'darkcyan': [0, 139, 139, 1],
-    'darkgoldenrod': [184, 134, 11, 1], 'darkgray': [169, 169, 169, 1],
-    'darkgreen': [0, 100, 0, 1], 'darkgrey': [169, 169, 169, 1],
-    'darkkhaki': [189, 183, 107, 1], 'darkmagenta': [139, 0, 139, 1],
-    'darkolivegreen': [85, 107, 47, 1], 'darkorange': [255, 140, 0, 1],
-    'darkorchid': [153, 50, 204, 1], 'darkred': [139, 0, 0, 1],
-    'darksalmon': [233, 150, 122, 1], 'darkseagreen': [143, 188, 143, 1],
-    'darkslateblue': [72, 61, 139, 1], 'darkslategray': [47, 79, 79, 1],
-    'darkslategrey': [47, 79, 79, 1], 'darkturquoise': [0, 206, 209, 1],
-    'darkviolet': [148, 0, 211, 1], 'deeppink': [255, 20, 147, 1],
-    'deepskyblue': [0, 191, 255, 1], 'dimgray': [105, 105, 105, 1],
-    'dimgrey': [105, 105, 105, 1], 'dodgerblue': [30, 144, 255, 1],
-    'firebrick': [178, 34, 34, 1], 'floralwhite': [255, 250, 240, 1],
-    'forestgreen': [34, 139, 34, 1], 'fuchsia': [255, 0, 255, 1],
-    'gainsboro': [220, 220, 220, 1], 'ghostwhite': [248, 248, 255, 1],
-    'gold': [255, 215, 0, 1], 'goldenrod': [218, 165, 32, 1],
-    'gray': [128, 128, 128, 1], 'green': [0, 128, 0, 1],
-    'greenyellow': [173, 255, 47, 1], 'grey': [128, 128, 128, 1],
-    'honeydew': [240, 255, 240, 1], 'hotpink': [255, 105, 180, 1],
-    'indianred': [205, 92, 92, 1], 'indigo': [75, 0, 130, 1],
-    'ivory': [255, 255, 240, 1], 'khaki': [240, 230, 140, 1],
-    'lavender': [230, 230, 250, 1], 'lavenderblush': [255, 240, 245, 1],
-    'lawngreen': [124, 252, 0, 1], 'lemonchiffon': [255, 250, 205, 1],
-    'lightblue': [173, 216, 230, 1], 'lightcoral': [240, 128, 128, 1],
-    'lightcyan': [224, 255, 255, 1], 'lightgoldenrodyellow': [250, 250, 210, 1],
-    'lightgray': [211, 211, 211, 1], 'lightgreen': [144, 238, 144, 1],
-    'lightgrey': [211, 211, 211, 1], 'lightpink': [255, 182, 193, 1],
-    'lightsalmon': [255, 160, 122, 1], 'lightseagreen': [32, 178, 170, 1],
-    'lightskyblue': [135, 206, 250, 1], 'lightslategray': [119, 136, 153, 1],
-    'lightslategrey': [119, 136, 153, 1], 'lightsteelblue': [176, 196, 222, 1],
-    'lightyellow': [255, 255, 224, 1], 'lime': [0, 255, 0, 1],
-    'limegreen': [50, 205, 50, 1], 'linen': [250, 240, 230, 1],
-    'magenta': [255, 0, 255, 1], 'maroon': [128, 0, 0, 1],
-    'mediumaquamarine': [102, 205, 170, 1], 'mediumblue': [0, 0, 205, 1],
-    'mediumorchid': [186, 85, 211, 1], 'mediumpurple': [147, 112, 219, 1],
-    'mediumseagreen': [60, 179, 113, 1], 'mediumslateblue': [123, 104, 238, 1],
-    'mediumspringgreen': [0, 250, 154, 1], 'mediumturquoise': [72, 209, 204, 1],
-    'mediumvioletred': [199, 21, 133, 1], 'midnightblue': [25, 25, 112, 1],
-    'mintcream': [245, 255, 250, 1], 'mistyrose': [255, 228, 225, 1],
-    'moccasin': [255, 228, 181, 1], 'navajowhite': [255, 222, 173, 1],
-    'navy': [0, 0, 128, 1], 'oldlace': [253, 245, 230, 1],
-    'olive': [128, 128, 0, 1], 'olivedrab': [107, 142, 35, 1],
-    'orange': [255, 165, 0, 1], 'orangered': [255, 69, 0, 1],
-    'orchid': [218, 112, 214, 1], 'palegoldenrod': [238, 232, 170, 1],
-    'palegreen': [152, 251, 152, 1], 'paleturquoise': [175, 238, 238, 1],
-    'palevioletred': [219, 112, 147, 1], 'papayawhip': [255, 239, 213, 1],
-    'peachpuff': [255, 218, 185, 1], 'peru': [205, 133, 63, 1],
-    'pink': [255, 192, 203, 1], 'plum': [221, 160, 221, 1],
-    'powderblue': [176, 224, 230, 1], 'purple': [128, 0, 128, 1],
-    'red': [255, 0, 0, 1], 'rosybrown': [188, 143, 143, 1],
-    'royalblue': [65, 105, 225, 1], 'saddlebrown': [139, 69, 19, 1],
-    'salmon': [250, 128, 114, 1], 'sandybrown': [244, 164, 96, 1],
-    'seagreen': [46, 139, 87, 1], 'seashell': [255, 245, 238, 1],
-    'sienna': [160, 82, 45, 1], 'silver': [192, 192, 192, 1],
-    'skyblue': [135, 206, 235, 1], 'slateblue': [106, 90, 205, 1],
-    'slategray': [112, 128, 144, 1], 'slategrey': [112, 128, 144, 1],
-    'snow': [255, 250, 250, 1], 'springgreen': [0, 255, 127, 1],
-    'steelblue': [70, 130, 180, 1], 'tan': [210, 180, 140, 1],
-    'teal': [0, 128, 128, 1], 'thistle': [216, 191, 216, 1],
-    'tomato': [255, 99, 71, 1], 'turquoise': [64, 224, 208, 1],
-    'violet': [238, 130, 238, 1], 'wheat': [245, 222, 179, 1],
-    'white': [255, 255, 255, 1], 'whitesmoke': [245, 245, 245, 1],
-    'yellow': [255, 255, 0, 1], 'yellowgreen': [154, 205, 50, 1]
+    'transparent': [0,0,0,0], 'aliceblue': [240,248,255,1],
+    'antiquewhite': [250,235,215,1], 'aqua': [0,255,255,1],
+    'aquamarine': [127,255,212,1], 'azure': [240,255,255,1],
+    'beige': [245,245,220,1], 'bisque': [255,228,196,1],
+    'black': [0,0,0,1], 'blanchedalmond': [255,235,205,1],
+    'blue': [0,0,255,1], 'blueviolet': [138,43,226,1],
+    'brown': [165,42,42,1], 'burlywood': [222,184,135,1],
+    'cadetblue': [95,158,160,1], 'chartreuse': [127,255,0,1],
+    'chocolate': [210,105,30,1], 'coral': [255,127,80,1],
+    'cornflowerblue': [100,149,237,1], 'cornsilk': [255,248,220,1],
+    'crimson': [220,20,60,1], 'cyan': [0,255,255,1],
+    'darkblue': [0,0,139,1], 'darkcyan': [0,139,139,1],
+    'darkgoldenrod': [184,134,11,1], 'darkgray': [169,169,169,1],
+    'darkgreen': [0,100,0,1], 'darkgrey': [169,169,169,1],
+    'darkkhaki': [189,183,107,1], 'darkmagenta': [139,0,139,1],
+    'darkolivegreen': [85,107,47,1], 'darkorange': [255,140,0,1],
+    'darkorchid': [153,50,204,1], 'darkred': [139,0,0,1],
+    'darksalmon': [233,150,122,1], 'darkseagreen': [143,188,143,1],
+    'darkslateblue': [72,61,139,1], 'darkslategray': [47,79,79,1],
+    'darkslategrey': [47,79,79,1], 'darkturquoise': [0,206,209,1],
+    'darkviolet': [148,0,211,1], 'deeppink': [255,20,147,1],
+    'deepskyblue': [0,191,255,1], 'dimgray': [105,105,105,1],
+    'dimgrey': [105,105,105,1], 'dodgerblue': [30,144,255,1],
+    'firebrick': [178,34,34,1], 'floralwhite': [255,250,240,1],
+    'forestgreen': [34,139,34,1], 'fuchsia': [255,0,255,1],
+    'gainsboro': [220,220,220,1], 'ghostwhite': [248,248,255,1],
+    'gold': [255,215,0,1], 'goldenrod': [218,165,32,1],
+    'gray': [128,128,128,1], 'green': [0,128,0,1],
+    'greenyellow': [173,255,47,1], 'grey': [128,128,128,1],
+    'honeydew': [240,255,240,1], 'hotpink': [255,105,180,1],
+    'indianred': [205,92,92,1], 'indigo': [75,0,130,1],
+    'ivory': [255,255,240,1], 'khaki': [240,230,140,1],
+    'lavender': [230,230,250,1], 'lavenderblush': [255,240,245,1],
+    'lawngreen': [124,252,0,1], 'lemonchiffon': [255,250,205,1],
+    'lightblue': [173,216,230,1], 'lightcoral': [240,128,128,1],
+    'lightcyan': [224,255,255,1], 'lightgoldenrodyellow': [250,250,210,1],
+    'lightgray': [211,211,211,1], 'lightgreen': [144,238,144,1],
+    'lightgrey': [211,211,211,1], 'lightpink': [255,182,193,1],
+    'lightsalmon': [255,160,122,1], 'lightseagreen': [32,178,170,1],
+    'lightskyblue': [135,206,250,1], 'lightslategray': [119,136,153,1],
+    'lightslategrey': [119,136,153,1], 'lightsteelblue': [176,196,222,1],
+    'lightyellow': [255,255,224,1], 'lime': [0,255,0,1],
+    'limegreen': [50,205,50,1], 'linen': [250,240,230,1],
+    'magenta': [255,0,255,1], 'maroon': [128,0,0,1],
+    'mediumaquamarine': [102,205,170,1], 'mediumblue': [0,0,205,1],
+    'mediumorchid': [186,85,211,1], 'mediumpurple': [147,112,219,1],
+    'mediumseagreen': [60,179,113,1], 'mediumslateblue': [123,104,238,1],
+    'mediumspringgreen': [0,250,154,1], 'mediumturquoise': [72,209,204,1],
+    'mediumvioletred': [199,21,133,1], 'midnightblue': [25,25,112,1],
+    'mintcream': [245,255,250,1], 'mistyrose': [255,228,225,1],
+    'moccasin': [255,228,181,1], 'navajowhite': [255,222,173,1],
+    'navy': [0,0,128,1], 'oldlace': [253,245,230,1],
+    'olive': [128,128,0,1], 'olivedrab': [107,142,35,1],
+    'orange': [255,165,0,1], 'orangered': [255,69,0,1],
+    'orchid': [218,112,214,1], 'palegoldenrod': [238,232,170,1],
+    'palegreen': [152,251,152,1], 'paleturquoise': [175,238,238,1],
+    'palevioletred': [219,112,147,1], 'papayawhip': [255,239,213,1],
+    'peachpuff': [255,218,185,1], 'peru': [205,133,63,1],
+    'pink': [255,192,203,1], 'plum': [221,160,221,1],
+    'powderblue': [176,224,230,1], 'purple': [128,0,128,1],
+    'red': [255,0,0,1], 'rosybrown': [188,143,143,1],
+    'royalblue': [65,105,225,1], 'saddlebrown': [139,69,19,1],
+    'salmon': [250,128,114,1], 'sandybrown': [244,164,96,1],
+    'seagreen': [46,139,87,1], 'seashell': [255,245,238,1],
+    'sienna': [160,82,45,1], 'silver': [192,192,192,1],
+    'skyblue': [135,206,235,1], 'slateblue': [106,90,205,1],
+    'slategray': [112,128,144,1], 'slategrey': [112,128,144,1],
+    'snow': [255,250,250,1], 'springgreen': [0,255,127,1],
+    'steelblue': [70,130,180,1], 'tan': [210,180,140,1],
+    'teal': [0,128,128,1], 'thistle': [216,191,216,1],
+    'tomato': [255,99,71,1], 'turquoise': [64,224,208,1],
+    'violet': [238,130,238,1], 'wheat': [245,222,179,1],
+    'white': [255,255,255,1], 'whitesmoke': [245,245,245,1],
+    'yellow': [255,255,0,1], 'yellowgreen': [154,205,50,1]
 };
 
 function clampCssByte(i) {  // Clamp to integer 0 .. 255.
@@ -3540,7 +3101,7 @@ function cssHueToRgb(m1, m2, h) {
         return m2;
     }
     if (h * 3 < 2) {
-        return m1 + (m2 - m1) * (2 / 3 - h) * 6;
+        return m1 + (m2 - m1) * (2/3 - h) * 6;
     }
     return m1;
 }
@@ -3633,8 +3194,7 @@ function parse(colorStr, rgbaArr) {
 
         return;
     }
-    var op = str.indexOf('(');
-    var ep = str.indexOf(')');
+    var op = str.indexOf('('), ep = str.indexOf(')');
     if (op !== -1 && ep + 1 === str.length) {
         var fname = str.substr(0, op);
         var params = str.substr(op + 1, ep - (op + 1)).split(',');
@@ -4011,7 +3571,7 @@ function interpolateString(p0, p1, percent) {
  */
 function interpolateArray(p0, p1, percent, out, arrDim) {
     var len = p0.length;
-    if (arrDim === 1) {
+    if (arrDim == 1) {
         for (var i = 0; i < len; i++) {
             out[i] = interpolateNumber(p0[i], p1[i], percent);
         }
@@ -4117,7 +3677,7 @@ function catmullRomInterpolateArray(
     p0, p1, p2, p3, t, t2, t3, out, arrDim
 ) {
     var len = p0.length;
-    if (arrDim === 1) {
+    if (arrDim == 1) {
         for (var i = 0; i < len; i++) {
             out[i] = catmullRomInterpolate(
                 p0[i], p1[i], p2[i], p3[i], t, t2, t3
@@ -4206,7 +3766,7 @@ function createTrackClip(animator, easing, oneTrackDone, keyframes, propName, fo
 
     var trackMaxTime;
     // Sort keyframe as ascending
-    keyframes.sort(function (a, b) {
+    keyframes.sort(function(a, b) {
         return a.time - b.time;
     });
 
@@ -4230,7 +3790,7 @@ function createTrackClip(animator, easing, oneTrackDone, keyframes, propName, fo
         prevValue = value;
 
         // Try converting a string to a color array
-        if (typeof value === 'string') {
+        if (typeof value == 'string') {
             var colorArray = parse(value);
             if (colorArray) {
                 value = colorArray;
@@ -4408,7 +3968,7 @@ function createTrackClip(animator, easing, oneTrackDone, keyframes, propName, fo
  * @param {Function} getter
  * @param {Function} setter
  */
-var Animator = function (target, loop, getter, setter) {
+var Animator = function(target, loop, getter, setter) {
     this._tracks = {};
     this._target = target;
 
@@ -4435,7 +3995,7 @@ Animator.prototype = {
      * @param  {Object} props 关键帧的属性值，key-value表示
      * @return {module:zrender/animation/Animator}
      */
-    when: function (time /* ms */, props) {
+    when: function(time /* ms */, props) {
         var tracks = this._tracks;
         for (var propName in props) {
             if (!props.hasOwnProperty(propName)) {
@@ -4520,7 +4080,7 @@ Animator.prototype = {
         var self = this;
         var clipCount = 0;
 
-        var oneTrackDone = function () {
+        var oneTrackDone = function() {
             clipCount--;
             if (!clipCount) {
                 self._doneCallback();
@@ -4600,7 +4160,7 @@ Animator.prototype = {
      * @param  {Function} cb
      * @return {module:zrender/animation/Animator}
      */
-    done: function (cb) {
+    done: function(cb) {
         if (cb) {
             this._doneList.push(cb);
         }
@@ -4788,159 +4348,135 @@ Animatable.prototype = {
      *      position: [10, 10]
      *  }, 100, 100, 'cubicOut', function () { // done })
      */
-    // TODO Return animation key
+        // TODO Return animation key
     animateTo: function (target, time, delay, easing, callback, forceAnimate) {
-        animateTo(this, target, time, delay, easing, callback, forceAnimate);
-    },
+        // animateTo(target, time, easing, callback);
+        if (isString(delay)) {
+            callback = easing;
+            easing = delay;
+            delay = 0;
+        }
+        // animateTo(target, time, delay, callback);
+        else if (isFunction$1(easing)) {
+            callback = easing;
+            easing = 'linear';
+            delay = 0;
+        }
+        // animateTo(target, time, callback);
+        else if (isFunction$1(delay)) {
+            callback = delay;
+            delay = 0;
+        }
+        // animateTo(target, callback)
+        else if (isFunction$1(time)) {
+            callback = time;
+            time = 500;
+        }
+        // animateTo(target)
+        else if (!time) {
+            time = 500;
+        }
+        // Stop all previous animations
+        this.stopAnimation();
+        this._animateToShallow('', this, target, time, delay);
 
-    /**
-     * Animate from the target state to current state.
-     * The params and the return value are the same as `this.animateTo`.
-     */
-    animateFrom: function (target, time, delay, easing, callback, forceAnimate) {
-        animateTo(this, target, time, delay, easing, callback, forceAnimate, true);
-    }
-};
+        // Animators may be removed immediately after start
+        // if there is nothing to animate
+        var animators = this.animators.slice();
+        var count = animators.length;
+        function done() {
+            count--;
+            if (!count) {
+                callback && callback();
+            }
+        }
 
-function animateTo(animatable, target, time, delay, easing, callback, forceAnimate, reverse) {
-    // animateTo(target, time, easing, callback);
-    if (isString(delay)) {
-        callback = easing;
-        easing = delay;
-        delay = 0;
-    }
-    // animateTo(target, time, delay, callback);
-    else if (isFunction$1(easing)) {
-        callback = easing;
-        easing = 'linear';
-        delay = 0;
-    }
-    // animateTo(target, time, callback);
-    else if (isFunction$1(delay)) {
-        callback = delay;
-        delay = 0;
-    }
-    // animateTo(target, callback)
-    else if (isFunction$1(time)) {
-        callback = time;
-        time = 500;
-    }
-    // animateTo(target)
-    else if (!time) {
-        time = 500;
-    }
-    // Stop all previous animations
-    animatable.stopAnimation();
-    animateToShallow(animatable, '', animatable, target, time, delay, reverse);
-
-    // Animators may be removed immediately after start
-    // if there is nothing to animate
-    var animators = animatable.animators.slice();
-    var count = animators.length;
-    function done() {
-        count--;
+        // No animators. This should be checked before animators[i].start(),
+        // because 'done' may be executed immediately if no need to animate.
         if (!count) {
             callback && callback();
         }
-    }
-
-    // No animators. This should be checked before animators[i].start(),
-    // because 'done' may be executed immediately if no need to animate.
-    if (!count) {
-        callback && callback();
-    }
-    // Start after all animators created
-    // Incase any animator is done immediately when all animation properties are not changed
-    for (var i = 0; i < animators.length; i++) {
-        animators[i]
-            .done(done)
-            .start(easing, forceAnimate);
-    }
-}
-
-/**
- * @param {string} path=''
- * @param {Object} source=animatable
- * @param {Object} target
- * @param {number} [time=500]
- * @param {number} [delay=0]
- * @param {boolean} [reverse] If `true`, animate
- *        from the `target` to current state.
- *
- * @example
- *  // Animate position
- *  el._animateToShallow({
- *      position: [10, 10]
- *  })
- *
- *  // Animate shape, style and position in 100ms, delayed 100ms
- *  el._animateToShallow({
- *      shape: {
- *          width: 500
- *      },
- *      style: {
- *          fill: 'red'
- *      }
- *      position: [10, 10]
- *  }, 100, 100)
- */
-function animateToShallow(animatable, path, source, target, time, delay, reverse) {
-    var objShallow = {};
-    var propertyCount = 0;
-    for (var name in target) {
-        if (!target.hasOwnProperty(name)) {
-            continue;
+        // Start after all animators created
+        // Incase any animator is done immediately when all animation properties are not changed
+        for (var i = 0; i < animators.length; i++) {
+            animators[i]
+                .done(done)
+                .start(easing, forceAnimate);
         }
+    },
 
-        if (source[name] != null) {
-            if (isObject$1(target[name]) && !isArrayLike(target[name])) {
-                animateToShallow(
-                    animatable,
-                    path ? path + '.' + name : name,
-                    source[name],
-                    target[name],
-                    time,
-                    delay,
-                    reverse
-                );
+    /**
+     * @private
+     * @param {string} path=''
+     * @param {Object} source=this
+     * @param {Object} target
+     * @param {number} [time=500]
+     * @param {number} [delay=0]
+     *
+     * @example
+     *  // Animate position
+     *  el._animateToShallow({
+     *      position: [10, 10]
+     *  })
+     *
+     *  // Animate shape, style and position in 100ms, delayed 100ms
+     *  el._animateToShallow({
+     *      shape: {
+     *          width: 500
+     *      },
+     *      style: {
+     *          fill: 'red'
+     *      }
+     *      position: [10, 10]
+     *  }, 100, 100)
+     */
+    _animateToShallow: function (path, source, target, time, delay) {
+        var objShallow = {};
+        var propertyCount = 0;
+        for (var name in target) {
+            if (!target.hasOwnProperty(name)) {
+                continue;
             }
-            else {
-                if (reverse) {
-                    objShallow[name] = source[name];
-                    setAttrByPath(animatable, path, name, target[name]);
+
+            if (source[name] != null) {
+                if (isObject$1(target[name]) && !isArrayLike(target[name])) {
+                    this._animateToShallow(
+                        path ? path + '.' + name : name,
+                        source[name],
+                        target[name],
+                        time,
+                        delay
+                    );
                 }
                 else {
                     objShallow[name] = target[name];
+                    propertyCount++;
                 }
-                propertyCount++;
+            }
+            else if (target[name] != null) {
+                // Attr directly if not has property
+                // FIXME, if some property not needed for element ?
+                if (!path) {
+                    this.attr(name, target[name]);
+                }
+                else {  // Shape or style
+                    var props = {};
+                    props[path] = {};
+                    props[path][name] = target[name];
+                    this.attr(props);
+                }
             }
         }
-        else if (target[name] != null && !reverse) {
-            setAttrByPath(animatable, path, name, target[name]);
+
+        if (propertyCount > 0) {
+            this.animate(path, false)
+                .when(time == null ? 500 : time, objShallow)
+                .delay(delay || 0);
         }
-    }
 
-    if (propertyCount > 0) {
-        animatable.animate(path, false)
-            .when(time == null ? 500 : time, objShallow)
-            .delay(delay || 0);
+        return this;
     }
-}
-
-function setAttrByPath(el, path, name, value) {
-    // Attr directly if not has property
-    // FIXME, if some property not needed for element ?
-    if (!path) {
-        el.attr(name, value);
-    }
-    else {
-        // Only support set shape or style
-        var props = {};
-        props[path] = {};
-        props[path][name] = value;
-        el.attr(props);
-    }
-}
+};
 
 /**
  * @alias module:zrender/Element
@@ -5340,7 +4876,7 @@ BoundingRect.prototype = {
         var by0 = b.y;
         var by1 = b.y + b.height;
 
-        return !(ax1 < bx0 || bx1 < ax0 || ay1 < by0 || by1 < ay0);
+        return ! (ax1 < bx0 || bx1 < ax0 || ay1 < by0 || by1 < ay0);
     },
 
     contain: function (x, y) {
@@ -6139,7 +5675,7 @@ function TimSort(array, compare) {
         }
     }
 
-    function mergeHigh(start1, length1, start2, length2) {
+    function mergeHigh (start1, length1, start2, length2) {
         var i = 0;
 
         for (i = 0; i < length2; i++) {
@@ -6610,15 +6146,6 @@ var fixShadow = function (ctx, propName, value) {
     return value;
 };
 
-var ContextCachedBy = {
-    NONE: 0,
-    STYLE_BIND: 1,
-    PLAIN_TEXT: 2
-};
-
-// Avoid confused with 0/false.
-var WILL_BE_RESTORED = 9;
-
 var STYLE_COMMON_PROPS = [
     ['shadowBlur', 0], ['shadowOffsetX', 0], ['shadowOffsetY', 0], ['shadowColor', '#000'],
     ['lineCap', 'butt'], ['lineJoin', 'miter'], ['miterLimit', 10]
@@ -6627,8 +6154,9 @@ var STYLE_COMMON_PROPS = [
 // var SHADOW_PROPS = STYLE_COMMON_PROPS.slice(0, 4);
 // var LINE_PROPS = STYLE_COMMON_PROPS.slice(4);
 
-var Style = function (opts) {
+var Style = function (opts, host) {
     this.extendFrom(opts, false);
+    this.host = host;
 };
 
 function createLinearGradient(ctx, obj, rect) {
@@ -6680,6 +6208,11 @@ Style.prototype = {
     constructor: Style,
 
     /**
+     * @type {module:zrender/graphic/Displayable}
+     */
+    host: null,
+
+    /**
      * @type {string}
      */
     fill: '#000',
@@ -6693,16 +6226,6 @@ Style.prototype = {
      * @type {number}
      */
     opacity: 1,
-
-    /**
-     * @type {number}
-     */
-    fillOpacity: null,
-
-    /**
-     * @type {number}
-     */
-    strokeOpacity: null,
 
     /**
      * @type {Array.<number>}
@@ -6978,34 +6501,30 @@ Style.prototype = {
     bind: function (ctx, el, prevEl) {
         var style = this;
         var prevStyle = prevEl && prevEl.style;
-        // If no prevStyle, it means first draw.
-        // Only apply cache if the last time cachced by this function.
-        var notCheckCache = !prevStyle || ctx.__attrCachedBy !== ContextCachedBy.STYLE_BIND;
-
-        ctx.__attrCachedBy = ContextCachedBy.STYLE_BIND;
+        var firstDraw = !prevStyle;
 
         for (var i = 0; i < STYLE_COMMON_PROPS.length; i++) {
             var prop = STYLE_COMMON_PROPS[i];
             var styleName = prop[0];
 
-            if (notCheckCache || style[styleName] !== prevStyle[styleName]) {
+            if (firstDraw || style[styleName] !== prevStyle[styleName]) {
                 // FIXME Invalid property value will cause style leak from previous element.
                 ctx[styleName] =
                     fixShadow(ctx, styleName, style[styleName] || prop[1]);
             }
         }
 
-        if ((notCheckCache || style.fill !== prevStyle.fill)) {
+        if ((firstDraw || style.fill !== prevStyle.fill)) {
             ctx.fillStyle = style.fill;
         }
-        if ((notCheckCache || style.stroke !== prevStyle.stroke)) {
+        if ((firstDraw || style.stroke !== prevStyle.stroke)) {
             ctx.strokeStyle = style.stroke;
         }
-        if ((notCheckCache || style.opacity !== prevStyle.opacity)) {
+        if ((firstDraw || style.opacity !== prevStyle.opacity)) {
             ctx.globalAlpha = style.opacity == null ? 1 : style.opacity;
         }
 
-        if ((notCheckCache || style.blend !== prevStyle.blend)) {
+        if ((firstDraw || style.blend !== prevStyle.blend)) {
             ctx.globalCompositeOperation = style.blend || 'source-over';
         }
         if (this.hasStroke()) {
@@ -7162,7 +6681,7 @@ function createDom(id, painter, dpr) {
  * @param {module:zrender/Painter} painter
  * @param {number} [dpr]
  */
-var Layer = function (id, painter, dpr) {
+var Layer = function(id, painter, dpr) {
     var dom;
     dpr = dpr || devicePixelRatio;
     if (typeof id === 'string') {
@@ -7251,7 +6770,7 @@ Layer.prototype = {
         this.domBack = createDom('back-' + this.id, this.painter, dpr);
         this.ctxBack = this.domBack.getContext('2d');
 
-        if (dpr !== 1) {
+        if (dpr != 1) {
             this.ctxBack.scale(dpr, dpr);
         }
     },
@@ -7279,7 +6798,7 @@ Layer.prototype = {
             domBack.width = width * dpr;
             domBack.height = height * dpr;
 
-            if (dpr !== 1) {
+            if (dpr != 1) {
                 this.ctxBack.scale(dpr, dpr);
             }
         }
@@ -7412,8 +6931,8 @@ function createOrUpdateImage(newImageOrSrc, image, hostEl, cb, cbPayload) {
             !isImageReady(image) && cachedImgObj.pending.push(pendingWrap);
         }
         else {
-            image = new Image();
-            image.onload = image.onerror = imageOnLoad;
+            !image && (image = new Image());
+            image.onload = imageOnLoad;
 
             globalImageCache.put(
                 newImageOrSrc,
@@ -7436,7 +6955,7 @@ function createOrUpdateImage(newImageOrSrc, image, hostEl, cb, cbPayload) {
 
 function imageOnLoad() {
     var cachedImgObj = this.__cachedImgObj;
-    this.onload = this.onerror = this.__cachedImgObj = null;
+    this.onload = this.__cachedImgObj = null;
 
     for (var i = 0; i < cachedImgObj.pending.length; i++) {
         var pendingWrap = cachedImgObj.pending[i];
@@ -7457,7 +6976,7 @@ var textWidthCacheCounter = 0;
 var TEXT_CACHE_MAX = 5000;
 var STYLE_REG = /\{([a-zA-Z0-9_]+)\|([^}]*)\}/g;
 
-var DEFAULT_FONT$1 = '12px sans-serif';
+var DEFAULT_FONT = '12px sans-serif';
 
 // Avoid assign to an exported variable, for transforming to cjs.
 var methods$1 = {};
@@ -7473,7 +6992,7 @@ function $override$1(name, fn) {
  * @return {number} width
  */
 function getWidth(text, font) {
-    font = font || DEFAULT_FONT$1;
+    font = font || DEFAULT_FONT;
     var key = text + ':' + font;
     if (textWidthCache[key]) {
         return textWidthCache[key];
@@ -7508,14 +7027,14 @@ function getWidth(text, font) {
  * @param {Object} [truncate]
  * @return {Object} {x, y, width, height, lineHeight}
  */
-function getBoundingRect(text, font, textAlign, textVerticalAlign, textPadding, textLineHeight, rich, truncate) {
+function getBoundingRect(text, font, textAlign, textVerticalAlign, textPadding, rich, truncate) {
     return rich
-        ? getRichTextRect(text, font, textAlign, textVerticalAlign, textPadding, textLineHeight, rich, truncate)
-        : getPlainTextRect(text, font, textAlign, textVerticalAlign, textPadding, textLineHeight, truncate);
+        ? getRichTextRect(text, font, textAlign, textVerticalAlign, textPadding, rich, truncate)
+        : getPlainTextRect(text, font, textAlign, textVerticalAlign, textPadding, truncate);
 }
 
-function getPlainTextRect(text, font, textAlign, textVerticalAlign, textPadding, textLineHeight, truncate) {
-    var contentBlock = parsePlainText(text, font, textPadding, textLineHeight, truncate);
+function getPlainTextRect(text, font, textAlign, textVerticalAlign, textPadding, truncate) {
+    var contentBlock = parsePlainText(text, font, textPadding, truncate);
     var outerWidth = getWidth(text, font);
     if (textPadding) {
         outerWidth += textPadding[1] + textPadding[3];
@@ -7531,14 +7050,13 @@ function getPlainTextRect(text, font, textAlign, textVerticalAlign, textPadding,
     return rect;
 }
 
-function getRichTextRect(text, font, textAlign, textVerticalAlign, textPadding, textLineHeight, rich, truncate) {
+function getRichTextRect(text, font, textAlign, textVerticalAlign, textPadding, rich, truncate) {
     var contentBlock = parseRichText(text, {
         rich: rich,
         truncate: truncate,
         font: font,
         textAlign: textAlign,
-        textPadding: textPadding,
-        textLineHeight: textLineHeight
+        textPadding: textPadding
     });
     var outerWidth = contentBlock.outerWidth;
     var outerHeight = contentBlock.outerHeight;
@@ -7739,7 +7257,7 @@ function prepareTruncateOptions(containerWidth, font, ellipsis, options) {
         contentWidth -= ascCharWidth;
     }
 
-    var ellipsisWidth = getWidth(ellipsis, font);
+    var ellipsisWidth = getWidth(ellipsis);
     if (ellipsisWidth > contentWidth) {
         ellipsis = '';
         ellipsisWidth = 0;
@@ -7770,7 +7288,7 @@ function truncateSingleLine(textLine, options) {
         return textLine;
     }
 
-    for (var j = 0; ; j++) {
+    for (var j = 0;; j++) {
         if (lineWidth <= contentWidth || j >= options.maxIterations) {
             textLine += options.ellipsis;
             break;
@@ -7826,7 +7344,7 @@ function measureText(text, font) {
 // Avoid assign to an exported variable, for transforming to cjs.
 methods$1.measureText = function (text, font) {
     var ctx = getContext();
-    ctx.font = font || DEFAULT_FONT$1;
+    ctx.font = font || DEFAULT_FONT;
     return ctx.measureText(text);
 };
 
@@ -7838,10 +7356,10 @@ methods$1.measureText = function (text, font) {
  * @return {Object} block: {lineHeight, lines, height, outerHeight}
  *  Notice: for performance, do not calculate outerWidth util needed.
  */
-function parsePlainText(text, font, padding, textLineHeight, truncate) {
+function parsePlainText(text, font, padding, truncate) {
     text != null && (text += '');
 
-    var lineHeight = retrieve2(textLineHeight, getLineHeight(font));
+    var lineHeight = getLineHeight(font);
     var lines = text ? text.split('\n') : [];
     var height = lines.length * lineHeight;
     var outerHeight = height;
@@ -8125,15 +7643,6 @@ function makeFont(style) {
     return font && trim(font) || style.textFont || style.font;
 }
 
-/**
- * @param {Object} ctx
- * @param {Object} shape
- * @param {number} shape.x
- * @param {number} shape.y
- * @param {number} shape.width
- * @param {number} shape.height
- * @param {number} shape.r
- */
 function buildPath(ctx, shape) {
     var x = shape.x;
     var y = shape.y;
@@ -8214,19 +7723,9 @@ function buildPath(ctx, shape) {
     r1 !== 0 && ctx.arc(x + r1, y + r1, r1, Math.PI, Math.PI * 1.5);
 }
 
-var DEFAULT_FONT = DEFAULT_FONT$1;
-
 // TODO: Have not support 'start', 'end' yet.
 var VALID_TEXT_ALIGN = {left: 1, right: 1, center: 1};
 var VALID_TEXT_VERTICAL_ALIGN = {top: 1, bottom: 1, middle: 1};
-// Different from `STYLE_COMMON_PROPS` of `graphic/Style`,
-// the default value of shadowColor is `'transparent'`.
-var SHADOW_STYLE_COMMON_PROPS = [
-    ['textShadowBlur', 'shadowBlur', 0],
-    ['textShadowOffsetX', 'shadowOffsetX', 0],
-    ['textShadowOffsetY', 'shadowOffsetY', 0],
-    ['textShadowColor', 'shadowColor', 'transparent']
-];
 
 /**
  * @param {module:zrender/graphic/Style} style
@@ -8269,74 +7768,22 @@ function normalizeStyle(style) {
  * @param {module:zrender/graphic/Style} style
  * @param {Object|boolean} [rect] {x, y, width, height}
  *                  If set false, rect text is not used.
- * @param {Element|module:zrender/graphic/helper/constant.WILL_BE_RESTORED} [prevEl] For ctx prop cache.
  */
-function renderText(hostEl, ctx, text, style, rect, prevEl) {
+function renderText(hostEl, ctx, text, style, rect) {
     style.rich
-        ? renderRichText(hostEl, ctx, text, style, rect, prevEl)
-        : renderPlainText(hostEl, ctx, text, style, rect, prevEl);
+        ? renderRichText(hostEl, ctx, text, style, rect)
+        : renderPlainText(hostEl, ctx, text, style, rect);
 }
 
-// Avoid setting to ctx according to prevEl if possible for
-// performance in scenarios of large amount text.
-function renderPlainText(hostEl, ctx, text, style, rect, prevEl) {
-    'use strict';
-
-    var needDrawBg = needDrawBackground(style);
-
-    var prevStyle;
-    var checkCache = false;
-    var cachedByMe = ctx.__attrCachedBy === ContextCachedBy.PLAIN_TEXT;
-
-    // Only take and check cache for `Text` el, but not RectText.
-    if (prevEl !== WILL_BE_RESTORED) {
-        if (prevEl) {
-            prevStyle = prevEl.style;
-            checkCache = !needDrawBg && cachedByMe && prevStyle;
-        }
-
-        // Prevent from using cache in `Style::bind`, because of the case:
-        // ctx property is modified by other properties than `Style::bind`
-        // used, and Style::bind is called next.
-        ctx.__attrCachedBy = needDrawBg ? ContextCachedBy.NONE : ContextCachedBy.PLAIN_TEXT;
-    }
-    // Since this will be restored, prevent from using these props to check cache in the next
-    // entering of this method. But do not need to clear other cache like `Style::bind`.
-    else if (cachedByMe) {
-        ctx.__attrCachedBy = ContextCachedBy.NONE;
-    }
-
-    var styleFont = style.font || DEFAULT_FONT;
-    // PENDING
-    // Only `Text` el set `font` and keep it (`RectText` will restore). So theoretically
-    // we can make font cache on ctx, which can cache for text el that are discontinuous.
-    // But layer save/restore needed to be considered.
-    // if (styleFont !== ctx.__fontCache) {
-    //     ctx.font = styleFont;
-    //     if (prevEl !== WILL_BE_RESTORED) {
-    //         ctx.__fontCache = styleFont;
-    //     }
-    // }
-    if (!checkCache || styleFont !== (prevStyle.font || DEFAULT_FONT)) {
-        ctx.font = styleFont;
-    }
-
-    // Use the final font from context-2d, because the final
-    // font might not be the style.font when it is illegal.
-    // But get `ctx.font` might be time consuming.
-    var computedFont = hostEl.__computedFont;
-    if (hostEl.__styleFont !== styleFont) {
-        hostEl.__styleFont = styleFont;
-        computedFont = hostEl.__computedFont = ctx.font;
-    }
+function renderPlainText(hostEl, ctx, text, style, rect) {
+    var font = setCtx(ctx, 'font', style.font || DEFAULT_FONT);
 
     var textPadding = style.textPadding;
-    var textLineHeight = style.textLineHeight;
 
     var contentBlock = hostEl.__textCotentBlock;
-    if (!contentBlock || hostEl.__dirtyText) {
+    if (!contentBlock || hostEl.__dirty) {
         contentBlock = hostEl.__textCotentBlock = parsePlainText(
-            text, computedFont, textPadding, textLineHeight, style.truncate
+            text, font, textPadding, style.truncate
         );
     }
 
@@ -8348,7 +7795,7 @@ function renderPlainText(hostEl, ctx, text, style, rect, prevEl) {
     var boxPos = getBoxPosition(outerHeight, style, rect);
     var baseX = boxPos.baseX;
     var baseY = boxPos.baseY;
-    var textAlign = boxPos.textAlign || 'left';
+    var textAlign = boxPos.textAlign;
     var textVerticalAlign = boxPos.textVerticalAlign;
 
     // Origin of textRotation should be the base point of text drawing.
@@ -8358,9 +7805,10 @@ function renderPlainText(hostEl, ctx, text, style, rect, prevEl) {
     var textX = baseX;
     var textY = boxY;
 
+    var needDrawBg = needDrawBackground(style);
     if (needDrawBg || textPadding) {
         // Consider performance, do not call getTextWidth util necessary.
-        var textWidth = getWidth(text, computedFont);
+        var textWidth = getWidth(text, font);
         var outerWidth = textWidth;
         textPadding && (outerWidth += textPadding[1] + textPadding[3]);
         var boxX = adjustTextX(baseX, outerWidth, textAlign);
@@ -8373,77 +7821,44 @@ function renderPlainText(hostEl, ctx, text, style, rect, prevEl) {
         }
     }
 
-    // Always set textAlign and textBase line, because it is difficute to calculate
-    // textAlign from prevEl, and we dont sure whether textAlign will be reset if
-    // font set happened.
-    ctx.textAlign = textAlign;
+    setCtx(ctx, 'textAlign', textAlign || 'left');
     // Force baseline to be "middle". Otherwise, if using "top", the
     // text will offset downward a little bit in font "Microsoft YaHei".
-    ctx.textBaseline = 'middle';
-    // Set text opacity
-    ctx.globalAlpha = style.opacity || 1;
+    setCtx(ctx, 'textBaseline', 'middle');
 
     // Always set shadowBlur and shadowOffset to avoid leak from displayable.
-    for (var i = 0; i < SHADOW_STYLE_COMMON_PROPS.length; i++) {
-        var propItem = SHADOW_STYLE_COMMON_PROPS[i];
-        var styleProp = propItem[0];
-        var ctxProp = propItem[1];
-        var val = style[styleProp];
-        if (!checkCache || val !== prevStyle[styleProp]) {
-            ctx[ctxProp] = fixShadow(ctx, ctxProp, val || propItem[2]);
-        }
-    }
+    setCtx(ctx, 'shadowBlur', style.textShadowBlur || 0);
+    setCtx(ctx, 'shadowColor', style.textShadowColor || 'transparent');
+    setCtx(ctx, 'shadowOffsetX', style.textShadowOffsetX || 0);
+    setCtx(ctx, 'shadowOffsetY', style.textShadowOffsetY || 0);
 
     // `textBaseline` is set as 'middle'.
     textY += lineHeight / 2;
 
     var textStrokeWidth = style.textStrokeWidth;
-    var textStrokeWidthPrev = checkCache ? prevStyle.textStrokeWidth : null;
-    var strokeWidthChanged = !checkCache || textStrokeWidth !== textStrokeWidthPrev;
-    var strokeChanged = !checkCache || strokeWidthChanged || style.textStroke !== prevStyle.textStroke;
     var textStroke = getStroke(style.textStroke, textStrokeWidth);
     var textFill = getFill(style.textFill);
 
     if (textStroke) {
-        if (strokeWidthChanged) {
-            ctx.lineWidth = textStrokeWidth;
-        }
-        if (strokeChanged) {
-            ctx.strokeStyle = textStroke;
-        }
+        setCtx(ctx, 'lineWidth', textStrokeWidth);
+        setCtx(ctx, 'strokeStyle', textStroke);
     }
     if (textFill) {
-        if (!checkCache || style.textFill !== prevStyle.textFill) {
-            ctx.fillStyle = textFill;
-        }
+        setCtx(ctx, 'fillStyle', textFill);
     }
 
-    // Optimize simply, in most cases only one line exists.
-    if (textLines.length === 1) {
+    for (var i = 0; i < textLines.length; i++) {
         // Fill after stroke so the outline will not cover the main part.
-        textStroke && ctx.strokeText(textLines[0], textX, textY);
-        textFill && ctx.fillText(textLines[0], textX, textY);
-    }
-    else {
-        for (var i = 0; i < textLines.length; i++) {
-            // Fill after stroke so the outline will not cover the main part.
-            textStroke && ctx.strokeText(textLines[i], textX, textY);
-            textFill && ctx.fillText(textLines[i], textX, textY);
-            textY += lineHeight;
-        }
+        textStroke && ctx.strokeText(textLines[i], textX, textY);
+        textFill && ctx.fillText(textLines[i], textX, textY);
+        textY += lineHeight;
     }
 }
 
-function renderRichText(hostEl, ctx, text, style, rect, prevEl) {
-    // Do not do cache for rich text because of the complexity.
-    // But `RectText` this will be restored, do not need to clear other cache like `Style::bind`.
-    if (prevEl !== WILL_BE_RESTORED) {
-        ctx.__attrCachedBy = ContextCachedBy.NONE;
-    }
-
+function renderRichText(hostEl, ctx, text, style, rect) {
     var contentBlock = hostEl.__textCotentBlock;
 
-    if (!contentBlock || hostEl.__dirtyText) {
+    if (!contentBlock || hostEl.__dirty) {
         contentBlock = hostEl.__textCotentBlock = parseRichText(text, style);
     }
 
@@ -8548,7 +7963,6 @@ function applyTextRotation(ctx, style, rect, x, y) {
 
 function placeToken(hostEl, ctx, token, style, lineHeight, lineTop, x, textAlign) {
     var tokenStyle = style.rich[token.styleName] || {};
-    tokenStyle.text = token.text;
 
     // 'ctx.textBaseline' is always set as 'middle', for sake of
     // the bias of "Microsoft YaHei".
@@ -8610,13 +8024,11 @@ function placeToken(hostEl, ctx, token, style, lineHeight, lineTop, x, textAlign
 }
 
 function needDrawBackground(style) {
-    return !!(
-        style.textBackgroundColor
-        || (style.textBorderWidth && style.textBorderColor)
-    );
+    return style.textBackgroundColor
+        || (style.textBorderWidth && style.textBorderColor);
 }
 
-// style: {textBackgroundColor, textBorderWidth, textBorderColor, textBorderRadius, text}
+// style: {textBackgroundColor, textBorderWidth, textBorderColor, textBorderRadius}
 // shape: {x, y, width, height}
 function drawBackground(hostEl, ctx, style, x, y, width, height) {
     var textBackgroundColor = style.textBackgroundColor;
@@ -8645,16 +8057,7 @@ function drawBackground(hostEl, ctx, style, x, y, width, height) {
 
     if (isPlainBg) {
         setCtx(ctx, 'fillStyle', textBackgroundColor);
-
-        if (style.fillOpacity != null) {
-            var originalGlobalAlpha = ctx.globalAlpha;
-            ctx.globalAlpha = style.fillOpacity * style.opacity;
-            ctx.fill();
-            ctx.globalAlpha = originalGlobalAlpha;
-        }
-        else {
-            ctx.fill();
-        }
+        ctx.fill();
     }
     else if (isObject$1(textBackgroundColor)) {
         var image = textBackgroundColor.image;
@@ -8670,16 +8073,7 @@ function drawBackground(hostEl, ctx, style, x, y, width, height) {
     if (textBorderWidth && textBorderColor) {
         setCtx(ctx, 'lineWidth', textBorderWidth);
         setCtx(ctx, 'strokeStyle', textBorderColor);
-
-        if (style.strokeOpacity != null) {
-            var originalGlobalAlpha = ctx.globalAlpha;
-            ctx.globalAlpha = style.strokeOpacity * style.opacity;
-            ctx.stroke();
-            ctx.globalAlpha = originalGlobalAlpha;
-        }
-        else {
-            ctx.stroke();
-        }
+        ctx.stroke();
     }
 }
 
@@ -8827,9 +8221,6 @@ RectText.prototype = {
         }
 
         // FIXME
-        // Do not provide prevEl to `textHelper.renderText` for ctx prop cache,
-        // but use `ctx.save()` and `ctx.restore()`. Because the cache for rect
-        // text propably break the cache for its host elements.
         ctx.save();
 
         // Transform rect to view space
@@ -8846,7 +8237,7 @@ RectText.prototype = {
         }
 
         // transformText and textRotation can not be used at the same time.
-        renderText(this, ctx, text, style, rect, WILL_BE_RESTORED);
+        renderText(this, ctx, text, style, rect);
 
         ctx.restore();
     }
@@ -8873,8 +8264,8 @@ function Displayable(opts) {
     // Extend properties
     for (var name in opts) {
         if (
-            opts.hasOwnProperty(name)
-                && name !== 'style'
+            opts.hasOwnProperty(name) &&
+            name !== 'style'
         ) {
             this[name] = opts[name];
         }
@@ -8994,11 +8385,8 @@ Displayable.prototype = {
      * @type {boolean}
      */
     incremental: false,
-    /**
-     * Scale ratio for global scale.
-     * @type {boolean}
-     */
-    globalScaleRatio: 1,
+    // inplace is used with incremental
+    inplace: false,
 
     beforeBrush: function (ctx) {},
 
@@ -9055,7 +8443,7 @@ Displayable.prototype = {
      * Mark displayable element dirty and refresh next frame
      */
     dirty: function () {
-        this.__dirty = this.__dirtyText = true;
+        this.__dirty = true;
 
         this._rect = null;
 
@@ -9208,14 +8596,14 @@ ZImage.prototype = {
         // Draw rect text
         if (style.text != null) {
             // Only restore transform when needs draw text.
-            this.restoreTransform(ctx);
+            this.restoreTransform(ctx);    
             this.drawRectText(ctx, this.getBoundingRect());
         }
     },
 
     getBoundingRect: function () {
         var style = this.style;
-        if (!this._rect) {
+        if (! this._rect) {
             this._rect = new BoundingRect(
                 style.x || 0, style.y || 0, style.width || 0, style.height || 0
             );
@@ -9245,8 +8633,8 @@ function isLayerValid(layer) {
         return true;
     }
 
-    if (typeof (layer.resize) !== 'function'
-        || typeof (layer.refresh) !== 'function'
+    if (typeof(layer.resize) !== 'function'
+        || typeof(layer.refresh) !== 'function'
     ) {
         return false;
     }
@@ -9267,7 +8655,7 @@ function isDisplayableCulled(el, width, height) {
 }
 
 function isClipPathChanged(clipPaths, prevClipPaths) {
-    if (clipPaths === prevClipPaths) { // Can both be null or undefined
+    if (clipPaths == prevClipPaths) { // Can both be null or undefined
         return false;
     }
 
@@ -9502,17 +8890,12 @@ Painter.prototype = {
         }
         var elMirror = new el.constructor({
             style: el.style,
-            shape: el.shape,
-            z: el.z,
-            z2: el.z2,
-            silent: el.silent
+            shape: el.shape
         });
         elMirror.__from = el;
         el.__hoverMir = elMirror;
-        hoverStyle && elMirror.setStyle(hoverStyle);
+        elMirror.setStyle(hoverStyle);
         this._hoverElements.push(elMirror);
-
-        return elMirror;
     },
 
     removeHover: function (el) {
@@ -9578,7 +8961,6 @@ Painter.prototype = {
                 this._doPaintEl(el, hoverLayer, true, scope);
             }
         }
-
         hoverLayer.ctx.restore();
     },
 
@@ -9667,7 +9049,7 @@ Painter.prototype = {
             for (var i = start; i < layer.__endIndex; i++) {
                 var el = list[i];
                 this._doPaintEl(el, layer, paintAll, scope);
-                el.__dirty = el.__dirtyText = false;
+                el.__dirty = false;
 
                 if (useTimer) {
                     // Date.now can be executed in 13,025,305 ops/second.
@@ -10076,7 +9458,7 @@ Painter.prototype = {
             domRoot.style.display = '';
 
             // 优化没有实际改变的resize
-            if (this._width !== width || height !== this._height) {
+            if (this._width != width || height != this._height) {
                 domRoot.style.width = width + 'px';
                 domRoot.style.height = height + 'px';
 
@@ -10269,6 +9651,177 @@ Painter.prototype = {
 };
 
 /**
+ * 事件辅助类
+ * @module zrender/core/event
+ * @author Kener (@Kener-林峰, kener.linfeng@gmail.com)
+ */
+
+var isDomLevel2 = (typeof window !== 'undefined') && !!window.addEventListener;
+
+var MOUSE_EVENT_REG = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
+
+function getBoundingClientRect(el) {
+    // BlackBerry 5, iOS 3 (original iPhone) don't have getBoundingRect
+    return el.getBoundingClientRect ? el.getBoundingClientRect() : {left: 0, top: 0};
+}
+
+// `calculate` is optional, default false
+function clientToLocal(el, e, out, calculate) {
+    out = out || {};
+
+    // According to the W3C Working Draft, offsetX and offsetY should be relative
+    // to the padding edge of the target element. The only browser using this convention
+    // is IE. Webkit uses the border edge, Opera uses the content edge, and FireFox does
+    // not support the properties.
+    // (see http://www.jacklmoore.com/notes/mouse-position/)
+    // In zr painter.dom, padding edge equals to border edge.
+
+    // FIXME
+    // When mousemove event triggered on ec tooltip, target is not zr painter.dom, and
+    // offsetX/Y is relative to e.target, where the calculation of zrX/Y via offsetX/Y
+    // is too complex. So css-transfrom dont support in this case temporarily.
+    if (calculate || !env$1.canvasSupported) {
+        defaultGetZrXY(el, e, out);
+    }
+    // Caution: In FireFox, layerX/layerY Mouse position relative to the closest positioned
+    // ancestor element, so we should make sure el is positioned (e.g., not position:static).
+    // BTW1, Webkit don't return the same results as FF in non-simple cases (like add
+    // zoom-factor, overflow / opacity layers, transforms ...)
+    // BTW2, (ev.offsetY || ev.pageY - $(ev.target).offset().top) is not correct in preserve-3d.
+    // <https://bugs.jquery.com/ticket/8523#comment:14>
+    // BTW3, In ff, offsetX/offsetY is always 0.
+    else if (env$1.browser.firefox && e.layerX != null && e.layerX !== e.offsetX) {
+        out.zrX = e.layerX;
+        out.zrY = e.layerY;
+    }
+    // For IE6+, chrome, safari, opera. (When will ff support offsetX?)
+    else if (e.offsetX != null) {
+        out.zrX = e.offsetX;
+        out.zrY = e.offsetY;
+    }
+    // For some other device, e.g., IOS safari.
+    else {
+        defaultGetZrXY(el, e, out);
+    }
+
+    return out;
+}
+
+function defaultGetZrXY(el, e, out) {
+    // This well-known method below does not support css transform.
+    var box = getBoundingClientRect(el);
+    out.zrX = e.clientX - box.left;
+    out.zrY = e.clientY - box.top;
+}
+
+/**
+ * 如果存在第三方嵌入的一些dom触发的事件，或touch事件，需要转换一下事件坐标.
+ * `calculate` is optional, default false.
+ */
+function normalizeEvent(el, e, calculate) {
+
+    e = e || window.event;
+
+    if (e.zrX != null) {
+        return e;
+    }
+
+    var eventType = e.type;
+    var isTouch = eventType && eventType.indexOf('touch') >= 0;
+
+    if (!isTouch) {
+        clientToLocal(el, e, e, calculate);
+        e.zrDelta = (e.wheelDelta) ? e.wheelDelta / 120 : -(e.detail || 0) / 3;
+    }
+    else {
+        var touch = eventType != 'touchend'
+            ? e.targetTouches[0]
+            : e.changedTouches[0];
+        touch && clientToLocal(el, touch, e, calculate);
+    }
+
+    // Add which for click: 1 === left; 2 === middle; 3 === right; otherwise: 0;
+    // See jQuery: https://github.com/jquery/jquery/blob/master/src/event.js
+    // If e.which has been defined, if may be readonly,
+    // see: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/which
+    var button = e.button;
+    if (e.which == null && button !== undefined && MOUSE_EVENT_REG.test(e.type)) {
+        e.which = (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
+    }
+
+    return e;
+}
+
+/**
+ * @param {HTMLElement} el
+ * @param {string} name
+ * @param {Function} handler
+ */
+function addEventListener(el, name, handler) {
+    if (isDomLevel2) {
+        // Reproduct the console warning:
+        // [Violation] Added non-passive event listener to a scroll-blocking <some> event.
+        // Consider marking event handler as 'passive' to make the page more responsive.
+        // Just set console log level: verbose in chrome dev tool.
+        // then the warning log will be printed when addEventListener called.
+        // See https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
+        // We have not yet found a neat way to using passive. Because in zrender the dom event
+        // listener delegate all of the upper events of element. Some of those events need
+        // to prevent default. For example, the feature `preventDefaultMouseMove` of echarts.
+        // Before passive can be adopted, these issues should be considered:
+        // (1) Whether and how a zrender user specifies an event listener passive. And by default,
+        // passive or not.
+        // (2) How to tread that some zrender event listener is passive, and some is not. If
+        // we use other way but not preventDefault of mousewheel and touchmove, browser
+        // compatibility should be handled.
+
+        // var opts = (env.passiveSupported && name === 'mousewheel')
+        //     ? {passive: true}
+        //     // By default, the third param of el.addEventListener is `capture: false`.
+        //     : void 0;
+        // el.addEventListener(name, handler /* , opts */);
+        el.addEventListener(name, handler);
+    }
+    else {
+        el.attachEvent('on' + name, handler);
+    }
+}
+
+function removeEventListener(el, name, handler) {
+    if (isDomLevel2) {
+        el.removeEventListener(name, handler);
+    }
+    else {
+        el.detachEvent('on' + name, handler);
+    }
+}
+
+/**
+ * preventDefault and stopPropagation.
+ * Notice: do not do that in zrender. Upper application
+ * do that if necessary.
+ *
+ * @memberOf module:zrender/core/event
+ * @method
+ * @param {Event} e : event对象
+ */
+var stop = isDomLevel2
+    ? function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.cancelBubble = true;
+    }
+    : function (e) {
+        e.returnValue = false;
+        e.cancelBubble = true;
+    };
+
+function notLeftMouse(e) {
+    // If e.which is undefined, considered as left mouse event.
+    return e.which > 1;
+}
+
+/**
  * 动画主类, 调度和管理所有动画控制器
  *
  * @module zrender/animation/Animation
@@ -10312,7 +9865,7 @@ var Animation = function (options) {
 
     this.stage = options.stage || {};
 
-    this.onframe = options.onframe || function () {};
+    this.onframe = options.onframe || function() {};
 
     // private properties
     this._clips = [];
@@ -10355,7 +9908,7 @@ Animation.prototype = {
      * 删除动画片段
      * @param {module:zrender/animation/Clip} clip
      */
-    removeClip: function (clip) {
+    removeClip: function(clip) {
         var idx = indexOf(this._clips, clip);
         if (idx >= 0) {
             this._clips.splice(idx, 1);
@@ -10374,7 +9927,7 @@ Animation.prototype = {
         animator.animation = null;
     },
 
-    _update: function () {
+    _update: function() {
         var time = new Date().getTime() - this._pausedTime;
         var delta = time - this._time;
         var clips = this._clips;
@@ -10522,6 +10075,120 @@ Animation.prototype = {
 
 mixin(Animation, Eventful);
 
+/**
+ * Only implements needed gestures for mobile.
+ */
+
+var GestureMgr = function () {
+
+    /**
+     * @private
+     * @type {Array.<Object>}
+     */
+    this._track = [];
+};
+
+GestureMgr.prototype = {
+
+    constructor: GestureMgr,
+
+    recognize: function (event, target, root) {
+        this._doTrack(event, target, root);
+        return this._recognize(event);
+    },
+
+    clear: function () {
+        this._track.length = 0;
+        return this;
+    },
+
+    _doTrack: function (event, target, root) {
+        var touches = event.touches;
+
+        if (!touches) {
+            return;
+        }
+
+        var trackItem = {
+            points: [],
+            touches: [],
+            target: target,
+            event: event
+        };
+
+        for (var i = 0, len = touches.length; i < len; i++) {
+            var touch = touches[i];
+            var pos = clientToLocal(root, touch, {});
+            trackItem.points.push([pos.zrX, pos.zrY]);
+            trackItem.touches.push(touch);
+        }
+
+        this._track.push(trackItem);
+    },
+
+    _recognize: function (event) {
+        for (var eventName in recognizers) {
+            if (recognizers.hasOwnProperty(eventName)) {
+                var gestureInfo = recognizers[eventName](this._track, event);
+                if (gestureInfo) {
+                    return gestureInfo;
+                }
+            }
+        }
+    }
+};
+
+function dist$1(pointPair) {
+    var dx = pointPair[1][0] - pointPair[0][0];
+    var dy = pointPair[1][1] - pointPair[0][1];
+
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function center(pointPair) {
+    return [
+        (pointPair[0][0] + pointPair[1][0]) / 2,
+        (pointPair[0][1] + pointPair[1][1]) / 2
+    ];
+}
+
+var recognizers = {
+
+    pinch: function (track, event) {
+        var trackLen = track.length;
+
+        if (!trackLen) {
+            return;
+        }
+
+        var pinchEnd = (track[trackLen - 1] || {}).points;
+        var pinchPre = (track[trackLen - 2] || {}).points || pinchEnd;
+
+        if (pinchPre
+            && pinchPre.length > 1
+            && pinchEnd
+            && pinchEnd.length > 1
+        ) {
+            var pinchScale = dist$1(pinchEnd) / dist$1(pinchPre);
+            !isFinite(pinchScale) && (pinchScale = 1);
+
+            event.pinchScale = pinchScale;
+
+            var pinchCenter = center(pinchEnd);
+            event.pinchX = pinchCenter[0];
+            event.pinchY = pinchCenter[1];
+
+            return {
+                type: 'pinch',
+                target: track[0].target,
+                event: event
+            };
+        }
+    }
+
+    // Only pinch currently.
+};
+
 var TOUCH_CLICK_DELAY = 300;
 
 var mouseHandlerNames = [
@@ -10544,6 +10211,28 @@ var pointerHandlerNames = map(mouseHandlerNames, function (name) {
 
 function eventNameFix(name) {
     return (name === 'mousewheel' && env$1.browser.firefox) ? 'DOMMouseScroll' : name;
+}
+
+function processGesture(proxy, event, stage) {
+    var gestureMgr = proxy._gestureMgr;
+
+    stage === 'start' && gestureMgr.clear();
+
+    var gestureInfo = gestureMgr.recognize(
+        event,
+        proxy.handler.findHover(event.zrX, event.zrY, null).target,
+        proxy.dom
+    );
+
+    stage === 'end' && gestureMgr.clear();
+
+    // Do not do any preventDefault here. Upper application do that if necessary.
+    if (gestureInfo) {
+        var type = gestureInfo.type;
+        event.gestureEvent = type;
+
+        proxy.handler.dispatchToElement({target: gestureInfo.target}, type, gestureInfo.event);
+    }
 }
 
 // function onMSGestureChange(proxy, event) {
@@ -10596,8 +10285,8 @@ var domHandlers = {
         event = normalizeEvent(this.dom, event);
 
         var element = event.toElement || event.relatedTarget;
-        if (element !== this.dom) {
-            while (element && element.nodeType !== 9) {
+        if (element != this.dom) {
+            while (element && element.nodeType != 9) {
                 // 忽略包含在root中的dom引起的mouseOut
                 if (element === this.dom) {
                     return;
@@ -10626,7 +10315,7 @@ var domHandlers = {
 
         this._lastTouchMoment = new Date();
 
-        this.handler.processGesture(this, event, 'start');
+        processGesture(this, event, 'start');
 
         // In touch device, trigger `mousemove`(`mouseover`) should
         // be triggered, and must before `mousedown` triggered.
@@ -10650,7 +10339,7 @@ var domHandlers = {
         // mouse event in upper applicatoin.
         event.zrByTouch = true;
 
-        this.handler.processGesture(this, event, 'change');
+        processGesture(this, event, 'change');
 
         // Mouse move should always be triggered no matter whether
         // there is gestrue event, because mouse move and pinch may
@@ -10673,7 +10362,7 @@ var domHandlers = {
         // mouse event in upper applicatoin.
         event.zrByTouch = true;
 
-        this.handler.processGesture(this, event, 'end');
+        processGesture(this, event, 'end');
 
         domHandlers.mouseup.call(this, event);
 
@@ -10793,6 +10482,12 @@ function HandlerDomProxy(dom) {
      */
     this._touchTimer;
 
+    /**
+     * @private
+     * @type {module:zrender/core/GestureMgr}
+     */
+    this._gestureMgr = new GestureMgr();
+
     this._handlers = {};
 
     initDomHandler(this);
@@ -10880,12 +10575,12 @@ var instances$1 = {};    // ZRender实例map索引
 /**
  * @type {string}
  */
-var version$1 = '4.0.7';
+var version$1 = '4.0.4';
 
 /**
  * Initializing a zrender instance
  * @param {HTMLElement} dom
- * @param {Object} [opts]
+ * @param {Object} opts
  * @param {string} [opts.renderer='canvas'] 'canvas' or 'svg'
  * @param {number} [opts.devicePixelRatio]
  * @param {number|string} [opts.width] Can be 'auto' (the same as null/undefined)
@@ -11097,7 +10792,7 @@ ZRender.prototype = {
     /**
      * Mark and repaint the canvas in the next frame of browser
      */
-    refresh: function () {
+    refresh: function() {
         this._needsRefresh = true;
     },
 
@@ -11126,9 +10821,8 @@ ZRender.prototype = {
      */
     addHover: function (el, style) {
         if (this.painter.addHover) {
-            var elMirror = this.painter.addHover(el, style);
+            this.painter.addHover(el, style);
             this.refreshHover();
-            return elMirror;
         }
     },
 
@@ -11176,7 +10870,7 @@ ZRender.prototype = {
      * @param {number|string} [opts.width] Can be 'auto' (the same as null/undefined)
      * @param {number|string} [opts.height] Can be 'auto' (the same as null/undefined)
      */
-    resize: function (opts) {
+    resize: function(opts) {
         opts = opts || {};
         this.painter.resize(opts.width, opts.height);
         this.handler.resize();
@@ -11192,14 +10886,14 @@ ZRender.prototype = {
     /**
      * Get container width
      */
-    getWidth: function () {
+    getWidth: function() {
         return this.painter.getWidth();
     },
 
     /**
      * Get container height
      */
-    getHeight: function () {
+    getHeight: function() {
         return this.painter.getHeight();
     },
 
@@ -11222,7 +10916,7 @@ ZRender.prototype = {
      * @param {number} width
      * @param {number} height
      */
-    pathToImage: function (e, dpr) {
+    pathToImage: function(e, dpr) {
         return this.painter.pathToImage(e, dpr);
     },
 
@@ -11251,7 +10945,7 @@ ZRender.prototype = {
      * @param {Function} eventHandler Handler function
      * @param {Object} [context] Context object
      */
-    on: function (eventName, eventHandler, context) {
+    on: function(eventName, eventHandler, context) {
         this.handler.on(eventName, eventHandler, context);
     },
 
@@ -11260,7 +10954,7 @@ ZRender.prototype = {
      * @param {string} eventName Event name
      * @param {Function} [eventHandler] Handler function
      */
-    off: function (eventName, eventHandler) {
+    off: function(eventName, eventHandler) {
         this.handler.off(eventName, eventHandler);
     },
 
@@ -11794,28 +11488,6 @@ function getAttribute(dom, key) {
         : dom[key];
 }
 
-function getTooltipRenderMode(renderModeOption) {
-    if (renderModeOption === 'auto') {
-        // Using html when `document` exists, use richText otherwise
-        return env$1.domSupported ? 'html' : 'richText';
-    }
-    else {
-        return renderModeOption || 'html';
-    }
-}
-
-/**
- * Group a list by key.
- *
- * @param {Array} array
- * @param {Function} getKey
- *        param {*} Array item
- *        return {string} key
- * @return {Object} Result
- *        {Array}: keys,
- *        {module:zrender/core/util/HashMap} buckets: {key -> Array}
- */
-
 /*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
@@ -12278,7 +11950,7 @@ function cubicRootAt(p0, p1, p2, p3, val, roots) {
     // Evaluate roots of cubic functions
     var a = p3 + 3 * (p1 - p2) - p0;
     var b = 3 * (p2 - p1 * 2 + p0);
-    var c = 3 * (p1 - p0);
+    var c = 3 * (p1  - p0);
     var d = p0 - val;
 
     var A = b * b - 3 * a * c;
@@ -12375,7 +12047,7 @@ function cubicExtrema(p0, p1, p2, p3, extrema) {
     if (isAroundZero(a)) {
         if (isNotAroundZero$1(b)) {
             var t1 = -c / b;
-            if (t1 >= 0 && t1 <= 1) {
+            if (t1 >= 0 && t1 <=1) {
                 extrema[n++] = t1;
             }
         }
@@ -12976,7 +12648,7 @@ var mathSin$1 = Math.sin;
 var mathSqrt$1 = Math.sqrt;
 var mathAbs = Math.abs;
 
-var hasTypedArray = typeof Float32Array !== 'undefined';
+var hasTypedArray = typeof Float32Array != 'undefined';
 
 /**
  * @alias module:zrender/core/PathProxy
@@ -13163,7 +12835,7 @@ PathProxy.prototype = {
         this._ctx && this._ctx.arc(cx, cy, r, startAngle, endAngle, anticlockwise);
 
         this._xi = mathCos$1(endAngle) * r + cx;
-        this._yi = mathSin$1(endAngle) * r + cy;
+        this._yi = mathSin$1(endAngle) * r + cx;
         return this;
     },
 
@@ -13266,7 +12938,7 @@ PathProxy.prototype = {
 
         var len$$1 = data.length;
 
-        if (!(this.data && this.data.length === len$$1) && hasTypedArray) {
+        if (! (this.data && this.data.length == len$$1) && hasTypedArray) {
             this.data = new Float32Array(len$$1);
         }
 
@@ -13374,7 +13046,7 @@ PathProxy.prototype = {
         y -= offset * dy;
 
         while ((dx > 0 && x <= x1) || (dx < 0 && x >= x1)
-        || (dx === 0 && ((dy > 0 && y <= y1) || (dy < 0 && y >= y1)))) {
+        || (dx == 0 && ((dy > 0 && y <= y1) || (dy < 0 && y >= y1)))) {
             idx = this._dashIdx;
             dash = lineDash[idx];
             x += dx * dash;
@@ -13504,7 +13176,7 @@ PathProxy.prototype = {
         for (var i = 0; i < data.length;) {
             var cmd = data[i++];
 
-            if (i === 1) {
+            if (i == 1) {
                 // 如果第一个命令是 L, C, Q
                 // 则 previous point 同绘制命令的第一个 point
                 //
@@ -13559,10 +13231,10 @@ PathProxy.prototype = {
                     var startAngle = data[i++];
                     var endAngle = data[i++] + startAngle;
                     // TODO Arc 旋转
-                    i += 1;
+                    var psi = data[i++];
                     var anticlockwise = 1 - data[i++];
 
-                    if (i === 1) {
+                    if (i == 1) {
                         // 直接使用 arc 命令
                         // 第一个命令起点还未定义
                         x0 = mathCos$1(startAngle) * rx + cx;
@@ -13622,7 +13294,7 @@ PathProxy.prototype = {
         for (var i = 0; i < len$$1;) {
             var cmd = d[i++];
 
-            if (i === 1) {
+            if (i == 1) {
                 // 如果第一个命令是 L, C, Q
                 // 则 previous point 同绘制命令的第一个 point
                 //
@@ -13688,7 +13360,7 @@ PathProxy.prototype = {
                         ctx.arc(cx, cy, r, theta, endAngle, 1 - fs);
                     }
 
-                    if (i === 1) {
+                    if (i == 1) {
                         // 直接使用 arc 命令
                         // 第一个命令起点还未定义
                         x0 = mathCos$1(theta) * rx + cx;
@@ -13743,7 +13415,7 @@ function containStroke$1(x0, y0, x1, y1, lineWidth, x, y) {
 
     if (x0 !== x1) {
         _a = (y0 - y1) / (x0 - x1);
-        _b = (x0 * y1 - x1 * y0) / (x0 - x1);
+        _b = (x0 * y1 - x1 * y0) / (x0 - x1) ;
     }
     else {
         return Math.abs(x - x0) <= _l / 2;
@@ -13873,8 +13545,7 @@ function containStroke$4(
         var tmp = startAngle;
         startAngle = normalizeRadian(endAngle);
         endAngle = normalizeRadian(tmp);
-    }
-    else {
+    } else {
         startAngle = normalizeRadian(startAngle);
         endAngle = normalizeRadian(endAngle);
     }
@@ -13946,8 +13617,7 @@ function windingCubic(x0, y0, x1, y1, x2, y2, x3, y3, x, y) {
     else {
         var w = 0;
         var nExtrema = -1;
-        var y0_;
-        var y1_;
+        var y0_, y1_;
         for (var i = 0; i < nRoots; i++) {
             var t = roots[i];
 
@@ -13968,7 +13638,7 @@ function windingCubic(x0, y0, x1, y1, x2, y2, x3, y3, x, y) {
                     y1_ = cubicAt(y0, y1, y2, y3, extrema[1]);
                 }
             }
-            if (nExtrema === 2) {
+            if (nExtrema == 2) {
                 // 分成三段单调函数
                 if (t < extrema[0]) {
                     w += y0_ < y0 ? unit : -unit;
@@ -14065,8 +13735,7 @@ function windingArc(
         var dir = anticlockwise ? 1 : -1;
         if (x >= roots[0] + cx && x <= roots[1] + cx) {
             return dir;
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -14128,7 +13797,7 @@ function containPath(data, lineWidth, isStroke, x, y) {
             // }
         }
 
-        if (i === 1) {
+        if (i == 1) {
             // 如果第一个命令是 L, C, Q
             // 则 previous point 同绘制命令的第一个 point
             //
@@ -14209,7 +13878,7 @@ function containPath(data, lineWidth, isStroke, x, y) {
                 var theta = data[i++];
                 var dTheta = data[i++];
                 // TODO Arc 旋转
-                i += 1;
+                var psi = data[i++];
                 var anticlockwise = 1 - data[i++];
                 var x1 = Math.cos(theta) * rx + cx;
                 var y1 = Math.sin(theta) * ry + cy;
@@ -14330,12 +13999,6 @@ Path.prototype = {
 
     strokeContainThreshold: 5,
 
-    /**
-     * See `module:zrender/src/graphic/helper/subPixelOptimize`.
-     * @type {boolean}
-     */
-    subPixelOptimize: false,
-
     brush: function (ctx, prevEl) {
         var style = this.style;
         var path = this.path || pathProxyForDraw;
@@ -14416,34 +14079,14 @@ Path.prototype = {
             this.path.rebuildPath(ctx);
         }
 
-        if (hasFill) {
-            if (style.fillOpacity != null) {
-                var originalGlobalAlpha = ctx.globalAlpha;
-                ctx.globalAlpha = style.fillOpacity * style.opacity;
-                path.fill(ctx);
-                ctx.globalAlpha = originalGlobalAlpha;
-            }
-            else {
-                path.fill(ctx);
-            }
-        }
+        hasFill && path.fill(ctx);
 
         if (lineDash && ctxLineDash) {
             ctx.setLineDash(lineDash);
             ctx.lineDashOffset = lineDashOffset;
         }
 
-        if (hasStroke) {
-            if (style.strokeOpacity != null) {
-                var originalGlobalAlpha = ctx.globalAlpha;
-                ctx.globalAlpha = style.strokeOpacity * style.opacity;
-                path.stroke(ctx);
-                ctx.globalAlpha = originalGlobalAlpha;
-            }
-            else {
-                path.stroke(ctx);
-            }
-        }
+        hasStroke && path.stroke(ctx);
 
         if (lineDash && ctxLineDash) {
             // PENDING
@@ -14454,7 +14097,7 @@ Path.prototype = {
         // Draw rect text
         if (style.text != null) {
             // Only restore transform when needs draw text.
-            this.restoreTransform(ctx);
+            this.restoreTransform(ctx);    
             this.drawRectText(ctx, this.getBoundingRect());
         }
     },
@@ -14563,7 +14206,7 @@ Path.prototype = {
             this._rect = null;
         }
 
-        this.__dirty = this.__dirtyText = true;
+        this.__dirty = true;
 
         this.__zr && this.__zr.refresh();
 
@@ -14655,7 +14298,7 @@ Path.extend = function (defaults$$1) {
             var thisShape = this.shape;
             for (var name in defaultShape) {
                 if (
-                    !thisShape.hasOwnProperty(name)
+                    ! thisShape.hasOwnProperty(name)
                     && defaultShape.hasOwnProperty(name)
                 ) {
                     thisShape[name] = defaultShape[name];
@@ -14775,23 +14418,23 @@ var transformPath = function (path, m) {
 };
 
 // command chars
-// var cc = [
-//     'm', 'M', 'l', 'L', 'v', 'V', 'h', 'H', 'z', 'Z',
-//     'c', 'C', 'q', 'Q', 't', 'T', 's', 'S', 'a', 'A'
-// ];
+var cc = [
+    'm', 'M', 'l', 'L', 'v', 'V', 'h', 'H', 'z', 'Z',
+    'c', 'C', 'q', 'Q', 't', 'T', 's', 'S', 'a', 'A'
+];
 
 var mathSqrt = Math.sqrt;
 var mathSin = Math.sin;
 var mathCos = Math.cos;
 var PI = Math.PI;
 
-var vMag = function (v) {
+var vMag = function(v) {
     return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
 };
-var vRatio = function (u, v) {
+var vRatio = function(u, v) {
     return (u[0] * v[0] + u[1] * v[1]) / (vMag(u) * vMag(v));
 };
-var vAngle = function (u, v) {
+var vAngle = function(u, v) {
     return (u[0] * v[1] < u[1] * v[0] ? -1 : 1)
             * Math.acos(vRatio(u, v));
 };
@@ -14848,77 +14491,51 @@ function processArc(x1, y1, x2, y2, fa, fs, rx, ry, psiDeg, cmd, path) {
     path.addData(cmd, cx, cy, rx, ry, theta, dTheta, psi, fs);
 }
 
-
-var commandReg = /([mlvhzcqtsa])([^mlvhzcqtsa]*)/ig;
-// Consider case:
-// (1) delimiter can be comma or space, where continuous commas
-// or spaces should be seen as one comma.
-// (2) value can be like:
-// '2e-4', 'l.5.9' (ignore 0), 'M-10-10', 'l-2.43e-1,34.9983',
-// 'l-.5E1,54', '121-23-44-11' (no delimiter)
-var numberReg = /-?([0-9]*\.)?[0-9]+([eE]-?[0-9]+)?/g;
-// var valueSplitReg = /[\s,]+/;
-
 function createPathProxyFromString(data) {
     if (!data) {
-        return new PathProxy();
+        return [];
     }
 
-    // var data = data.replace(/-/g, ' -')
-    //     .replace(/  /g, ' ')
-    //     .replace(/ /g, ',')
-    //     .replace(/,,/g, ',');
+    // command string
+    var cs = data.replace(/-/g, ' -')
+        .replace(/  /g, ' ')
+        .replace(/ /g, ',')
+        .replace(/,,/g, ',');
 
-    // var n;
+    var n;
     // create pipes so that we can split the data
-    // for (n = 0; n < cc.length; n++) {
-    //     cs = cs.replace(new RegExp(cc[n], 'g'), '|' + cc[n]);
-    // }
-
-    // data = data.replace(/-/g, ',-');
+    for (n = 0; n < cc.length; n++) {
+        cs = cs.replace(new RegExp(cc[n], 'g'), '|' + cc[n]);
+    }
 
     // create array
-    // var arr = cs.split('|');
+    var arr = cs.split('|');
     // init context point
     var cpx = 0;
     var cpy = 0;
-    var subpathX = cpx;
-    var subpathY = cpy;
-    var prevCmd;
 
     var path = new PathProxy();
     var CMD = PathProxy.CMD;
 
-    // commandReg.lastIndex = 0;
-    // var cmdResult;
-    // while ((cmdResult = commandReg.exec(data)) != null) {
-    //     var cmdStr = cmdResult[1];
-    //     var cmdContent = cmdResult[2];
-
-    var cmdList = data.match(commandReg);
-    for (var l = 0; l < cmdList.length; l++) {
-        var cmdText = cmdList[l];
-        var cmdStr = cmdText.charAt(0);
-
+    var prevCmd;
+    for (n = 1; n < arr.length; n++) {
+        var str = arr[n];
+        var c = str.charAt(0);
+        var off = 0;
+        var p = str.slice(1).replace(/e,-/g, 'e-').split(',');
         var cmd;
 
-        // String#split is faster a little bit than String#replace or RegExp#exec.
-        // var p = cmdContent.split(valueSplitReg);
-        // var pLen = 0;
-        // for (var i = 0; i < p.length; i++) {
-        //     // '' and other invalid str => NaN
-        //     var val = parseFloat(p[i]);
-        //     !isNaN(val) && (p[pLen++] = val);
-        // }
-
-        var p = cmdText.match(numberReg) || [];
-        var pLen = p.length;
-        for (var i = 0; i < pLen; i++) {
-            p[i] = parseFloat(p[i]);
+        if (p.length > 0 && p[0] === '') {
+            p.shift();
         }
 
-        var off = 0;
-        while (off < pLen) {
+        for (var i = 0; i < p.length; i++) {
+            p[i] = parseFloat(p[i]);
+        }
+        while (off < p.length && !isNaN(p[off])) {
+            if (isNaN(p[0])) {
+                break;
+            }
             var ctlPtx;
             var ctlPty;
 
@@ -14932,7 +14549,7 @@ function createPathProxyFromString(data) {
             var y1 = cpy;
 
             // convert l, H, h, V, and v to L
-            switch (cmdStr) {
+            switch (c) {
                 case 'l':
                     cpx += p[off++];
                     cpy += p[off++];
@@ -14950,18 +14567,14 @@ function createPathProxyFromString(data) {
                     cpy += p[off++];
                     cmd = CMD.M;
                     path.addData(cmd, cpx, cpy);
-                    subpathX = cpx;
-                    subpathY = cpy;
-                    cmdStr = 'l';
+                    c = 'l';
                     break;
                 case 'M':
                     cpx = p[off++];
                     cpy = p[off++];
                     cmd = CMD.M;
                     path.addData(cmd, cpx, cpy);
-                    subpathX = cpx;
-                    subpathY = cpy;
-                    cmdStr = 'L';
+                    c = 'L';
                     break;
                 case 'h':
                     cpx += p[off++];
@@ -15111,12 +14724,9 @@ function createPathProxyFromString(data) {
             }
         }
 
-        if (cmdStr === 'z' || cmdStr === 'Z') {
+        if (c === 'z' || c === 'Z') {
             cmd = CMD.Z;
             path.addData(cmd);
-            // z may be in the middle of the path.
-            cpx = subpathX;
-            cpy = subpathY;
         }
 
         prevCmd = cmd;
@@ -15237,21 +14847,16 @@ Text.prototype = {
         // Convert to string
         text != null && (text += '');
 
-        // Do not apply style.bind in Text node. Because the real bind job
-        // is in textHelper.renderText, and performance of text render should
-        // be considered.
-        // style.bind(ctx, this, prevEl);
+        // Always bind style
+        style.bind(ctx, this, prevEl);
 
         if (!needDrawText(text, style)) {
-            // The current el.style is not applied
-            // and should not be used as cache.
-            ctx.__attrCachedBy = ContextCachedBy.NONE;
             return;
         }
 
         this.setTransform(ctx);
 
-        renderText(this, ctx, text, style, null, prevEl);
+        renderText(this, ctx, text, style);
 
         this.restoreTransform(ctx);
     },
@@ -15272,7 +14877,6 @@ Text.prototype = {
                 style.textAlign,
                 style.textVerticalAlign,
                 style.textPadding,
-                style.textLineHeight,
                 style.rich
             );
 
@@ -15312,7 +14916,7 @@ var Circle = Path.extend({
     },
 
 
-    buildPath: function (ctx, shape, inBundle) {
+    buildPath : function (ctx, shape, inBundle) {
         // Better stroking in ShapeBundle
         // Always do it may have performence issue ( fill may be 2x more cost)
         if (inBundle) {
@@ -15578,8 +15182,7 @@ var smoothBezier = function (points, smooth, isLoop, constraint) {
     var prevPoint;
     var nextPoint;
 
-    var min$$1;
-    var max$$1;
+    var min$$1, max$$1;
     if (constraint) {
         min$$1 = [Infinity, Infinity];
         max$$1 = [-Infinity, -Infinity];
@@ -15729,118 +15332,9 @@ var Polyline = Path.extend({
 });
 
 /**
- * Sub-pixel optimize for canvas rendering, prevent from blur
- * when rendering a thin vertical/horizontal line.
- */
-
-var round$1 = Math.round;
-
-/**
- * Sub pixel optimize line for canvas
- *
- * @param {Object} outputShape The modification will be performed on `outputShape`.
- *                 `outputShape` and `inputShape` can be the same object.
- *                 `outputShape` object can be used repeatly, because all of
- *                 the `x1`, `x2`, `y1`, `y2` will be assigned in this method.
- * @param {Object} [inputShape]
- * @param {number} [inputShape.x1]
- * @param {number} [inputShape.y1]
- * @param {number} [inputShape.x2]
- * @param {number} [inputShape.y2]
- * @param {Object} [style]
- * @param {number} [style.lineWidth]
- */
-function subPixelOptimizeLine$1(outputShape, inputShape, style) {
-    var lineWidth = style && style.lineWidth;
-
-    if (!inputShape || !lineWidth) {
-        return;
-    }
-
-    var x1 = inputShape.x1;
-    var x2 = inputShape.x2;
-    var y1 = inputShape.y1;
-    var y2 = inputShape.y2;
-
-    if (round$1(x1 * 2) === round$1(x2 * 2)) {
-        outputShape.x1 = outputShape.x2 = subPixelOptimize$1(x1, lineWidth, true);
-    }
-    else {
-        outputShape.x1 = x1;
-        outputShape.x2 = x2;
-    }
-    if (round$1(y1 * 2) === round$1(y2 * 2)) {
-        outputShape.y1 = outputShape.y2 = subPixelOptimize$1(y1, lineWidth, true);
-    }
-    else {
-        outputShape.y1 = y1;
-        outputShape.y2 = y2;
-    }
-}
-
-/**
- * Sub pixel optimize rect for canvas
- *
- * @param {Object} outputShape The modification will be performed on `outputShape`.
- *                 `outputShape` and `inputShape` can be the same object.
- *                 `outputShape` object can be used repeatly, because all of
- *                 the `x`, `y`, `width`, `height` will be assigned in this method.
- * @param {Object} [inputShape]
- * @param {number} [inputShape.x]
- * @param {number} [inputShape.y]
- * @param {number} [inputShape.width]
- * @param {number} [inputShape.height]
- * @param {Object} [style]
- * @param {number} [style.lineWidth]
- */
-function subPixelOptimizeRect$1(outputShape, inputShape, style) {
-    var lineWidth = style && style.lineWidth;
-
-    if (!inputShape || !lineWidth) {
-        return;
-    }
-
-    var originX = inputShape.x;
-    var originY = inputShape.y;
-    var originWidth = inputShape.width;
-    var originHeight = inputShape.height;
-
-    outputShape.x = subPixelOptimize$1(originX, lineWidth, true);
-    outputShape.y = subPixelOptimize$1(originY, lineWidth, true);
-    outputShape.width = Math.max(
-        subPixelOptimize$1(originX + originWidth, lineWidth, false) - outputShape.x,
-        originWidth === 0 ? 0 : 1
-    );
-    outputShape.height = Math.max(
-        subPixelOptimize$1(originY + originHeight, lineWidth, false) - outputShape.y,
-        originHeight === 0 ? 0 : 1
-    );
-}
-
-/**
- * Sub pixel optimize for canvas
- *
- * @param {number} position Coordinate, such as x, y
- * @param {number} lineWidth Should be nonnegative integer.
- * @param {boolean=} positiveOrNegative Default false (negative).
- * @return {number} Optimized position.
- */
-function subPixelOptimize$1(position, lineWidth, positiveOrNegative) {
-    // Assure that (position + lineWidth / 2) is near integer edge,
-    // otherwise line will be fuzzy in canvas.
-    var doubledPosition = round$1(position * 2);
-    return (doubledPosition + round$1(lineWidth)) % 2 === 0
-        ? doubledPosition / 2
-        : (doubledPosition + (positiveOrNegative ? 1 : -1)) / 2;
-}
-
-/**
  * 矩形
  * @module zrender/graphic/shape/Rect
  */
-
-// Avoid create repeatly.
-var subPixelOptimizeOutputShape = {};
 
 var Rect = Path.extend({
 
@@ -15861,27 +15355,10 @@ var Rect = Path.extend({
     },
 
     buildPath: function (ctx, shape) {
-        var x;
-        var y;
-        var width;
-        var height;
-
-        if (this.subPixelOptimize) {
-            subPixelOptimizeRect$1(subPixelOptimizeOutputShape, shape, this.style);
-            x = subPixelOptimizeOutputShape.x;
-            y = subPixelOptimizeOutputShape.y;
-            width = subPixelOptimizeOutputShape.width;
-            height = subPixelOptimizeOutputShape.height;
-            subPixelOptimizeOutputShape.r = shape.r;
-            shape = subPixelOptimizeOutputShape;
-        }
-        else {
-            x = shape.x;
-            y = shape.y;
-            width = shape.width;
-            height = shape.height;
-        }
-
+        var x = shape.x;
+        var y = shape.y;
+        var width = shape.width;
+        var height = shape.height;
         if (!shape.r) {
             ctx.rect(x, y, width, height);
         }
@@ -15897,9 +15374,6 @@ var Rect = Path.extend({
  * 直线
  * @module zrender/graphic/shape/Line
  */
-
-// Avoid create repeatly.
-var subPixelOptimizeOutputShape$1 = {};
 
 var Line = Path.extend({
 
@@ -15922,25 +15396,10 @@ var Line = Path.extend({
     },
 
     buildPath: function (ctx, shape) {
-        var x1;
-        var y1;
-        var x2;
-        var y2;
-
-        if (this.subPixelOptimize) {
-            subPixelOptimizeLine$1(subPixelOptimizeOutputShape$1, shape, this.style);
-            x1 = subPixelOptimizeOutputShape$1.x1;
-            y1 = subPixelOptimizeOutputShape$1.y1;
-            x2 = subPixelOptimizeOutputShape$1.x2;
-            y2 = subPixelOptimizeOutputShape$1.y2;
-        }
-        else {
-            x1 = shape.x1;
-            y1 = shape.y1;
-            x2 = shape.x2;
-            y2 = shape.y2;
-        }
-
+        var x1 = shape.x1;
+        var y1 = shape.y1;
+        var x2 = shape.x2;
+        var y2 = shape.y2;
         var percent = shape.percent;
 
         if (percent === 0) {
@@ -16297,7 +15756,7 @@ inherits(RadialGradient, Gradient);
 
 /**
  * Displayable for incremental rendering. It will be rendered in a separate layer
- * IncrementalDisplay have two main methods. `clearDisplayables` and `addDisplayables`
+ * IncrementalDisplay have too main methods. `clearDisplayables` and `addDisplayables`
  * addDisplayables will render the added displayables incremetally.
  *
  * It use a not clearFlag to tell the painter don't clear the layer if it's the first element.
@@ -16344,7 +15803,7 @@ IncrementalDisplayble.prototype.addDisplayables = function (displayables, notPer
     }
 };
 
-IncrementalDisplayble.prototype.eachPendingDisplayable = function (cb) {
+IncrementalDisplayble.prototype.eachPendingDisplayable = function  (cb) {
     for (var i = this._cursor; i < this._displayables.length; i++) {
         cb && cb(this._displayables[i]);
     }
@@ -16452,8 +15911,6 @@ var mathMin$1 = Math.min;
 
 var EMPTY_OBJ = {};
 
-var Z2_EMPHASIS_LIFT = 1;
-
 /**
  * Extend shape with parameters
  */
@@ -16477,10 +15934,12 @@ function extendPath(pathData, opts) {
  */
 function makePath(pathData, opts, rect, layout) {
     var path = createFromString(pathData, opts);
+    var boundingRect = path.getBoundingRect();
     if (rect) {
         if (layout === 'center') {
-            rect = centerGraphic(rect, path.getBoundingRect());
+            rect = centerGraphic(rect, boundingRect);
         }
+
         resizePath(path, rect);
     }
     return path;
@@ -16641,302 +16100,211 @@ function subPixelOptimize(position, lineWidth, positiveOrNegative) {
 }
 
 function hasFillOrStroke(fillOrStroke) {
-    return fillOrStroke != null && fillOrStroke !== 'none';
+    return fillOrStroke != null && fillOrStroke != 'none';
 }
-
-// Most lifted color are duplicated.
-var liftedColorMap = createHashMap();
-var liftedColorCount = 0;
 
 function liftColor(color) {
-    if (typeof color !== 'string') {
-        return color;
-    }
-    var liftedColor = liftedColorMap.get(color);
-    if (!liftedColor) {
-        liftedColor = lift(color, -0.1);
-        if (liftedColorCount < 10000) {
-            liftedColorMap.set(color, liftedColor);
-            liftedColorCount++;
-        }
-    }
-    return liftedColor;
+    return typeof color === 'string' ? lift(color, -0.1) : color;
 }
 
+/**
+ * @private
+ */
 function cacheElementStl(el) {
-    if (!el.__hoverStlDirty) {
-        return;
-    }
-    el.__hoverStlDirty = false;
+    if (el.__hoverStlDirty) {
+        var stroke = el.style.stroke;
+        var fill = el.style.fill;
 
-    var hoverStyle = el.__hoverStl;
-    if (!hoverStyle) {
-        el.__cachedNormalStl = el.__cachedNormalZ2 = null;
-        return;
-    }
+        // Create hoverStyle on mouseover
+        var hoverStyle = el.__hoverStl;
+        hoverStyle.fill = hoverStyle.fill
+            || (hasFillOrStroke(fill) ? liftColor(fill) : null);
+        hoverStyle.stroke = hoverStyle.stroke
+            || (hasFillOrStroke(stroke) ? liftColor(stroke) : null);
 
-    var normalStyle = el.__cachedNormalStl = {};
-    el.__cachedNormalZ2 = el.z2;
-    var elStyle = el.style;
-
-    for (var name in hoverStyle) {
-        // See comment in `doSingleEnterHover`.
-        if (hoverStyle[name] != null) {
-            normalStyle[name] = elStyle[name];
+        var normalStyle = {};
+        for (var name in hoverStyle) {
+            // See comment in `doSingleEnterHover`.
+            if (hoverStyle[name] != null) {
+                normalStyle[name] = el.style[name];
+            }
         }
-    }
 
-    // Always cache fill and stroke to normalStyle for lifting color.
-    normalStyle.fill = elStyle.fill;
-    normalStyle.stroke = elStyle.stroke;
+        el.__normalStl = normalStyle;
+
+        el.__hoverStlDirty = false;
+    }
 }
 
+/**
+ * @private
+ */
 function doSingleEnterHover(el) {
-    var hoverStl = el.__hoverStl;
-
-    if (!hoverStl || el.__highlighted) {
+    if (el.__isHover) {
         return;
     }
 
-    var useHoverLayer = el.useHoverLayer;
-    el.__highlighted = useHoverLayer ? 'layer' : 'plain';
+    cacheElementStl(el);
 
-    var zr = el.__zr;
-    if (!zr && useHoverLayer) {
-        return;
+    if (el.useHoverLayer) {
+        el.__zr && el.__zr.addHover(el, el.__hoverStl);
     }
+    else {
+        var style = el.style;
+        var insideRollbackOpt = style.insideRollbackOpt;
 
-    var elTarget = el;
-    var targetStyle = el.style;
+        // Consider case: only `position: 'top'` is set on emphasis, then text
+        // color should be returned to `autoColor`, rather than remain '#fff'.
+        // So we should rollback then apply again after style merging.
+        insideRollbackOpt && rollbackInsideStyle(style);
 
-    if (useHoverLayer) {
-        elTarget = zr.addHover(el);
-        targetStyle = elTarget.style;
-    }
+        // styles can be:
+        // {
+        //    label: {
+        //        show: false,
+        //        position: 'outside',
+        //        fontSize: 18
+        //    },
+        //    emphasis: {
+        //        label: {
+        //            show: true
+        //        }
+        //    }
+        // },
+        // where properties of `emphasis` may not appear in `normal`. We previously use
+        // module:echarts/util/model#defaultEmphasis to merge `normal` to `emphasis`.
+        // But consider rich text and setOption in merge mode, it is impossible to cover
+        // all properties in merge. So we use merge mode when setting style here, where
+        // only properties that is not `null/undefined` can be set. The disadventage:
+        // null/undefined can not be used to remove style any more in `emphasis`.
+        style.extendFrom(el.__hoverStl);
 
-    rollbackDefaultTextStyle(targetStyle);
+        // Do not save `insideRollback`.
+        if (insideRollbackOpt) {
+            applyInsideStyle(style, style.insideOriginalTextPosition, insideRollbackOpt);
 
-    if (!useHoverLayer) {
-        cacheElementStl(elTarget);
-    }
+            // textFill may be rollbacked to null.
+            if (style.textFill == null) {
+                style.textFill = insideRollbackOpt.autoColor;
+            }
+        }
 
-    // styles can be:
-    // {
-    //    label: {
-    //        show: false,
-    //        position: 'outside',
-    //        fontSize: 18
-    //    },
-    //    emphasis: {
-    //        label: {
-    //            show: true
-    //        }
-    //    }
-    // },
-    // where properties of `emphasis` may not appear in `normal`. We previously use
-    // module:echarts/util/model#defaultEmphasis to merge `normal` to `emphasis`.
-    // But consider rich text and setOption in merge mode, it is impossible to cover
-    // all properties in merge. So we use merge mode when setting style here, where
-    // only properties that is not `null/undefined` can be set. The disadventage:
-    // null/undefined can not be used to remove style any more in `emphasis`.
-    targetStyle.extendFrom(hoverStl);
-
-    setDefaultHoverFillStroke(targetStyle, hoverStl, 'fill');
-    setDefaultHoverFillStroke(targetStyle, hoverStl, 'stroke');
-
-    applyDefaultTextStyle(targetStyle);
-
-    if (!useHoverLayer) {
         el.dirty(false);
-        el.z2 += Z2_EMPHASIS_LIFT;
+        el.z2 += 1;
     }
+
+    el.__isHover = true;
 }
 
-function setDefaultHoverFillStroke(targetStyle, hoverStyle, prop) {
-    if (!hasFillOrStroke(hoverStyle[prop]) && hasFillOrStroke(targetStyle[prop])) {
-        targetStyle[prop] = liftColor(targetStyle[prop]);
-    }
-}
-
+/**
+ * @inner
+ */
 function doSingleLeaveHover(el) {
-    var highlighted = el.__highlighted;
-
-    if (!highlighted) {
+    if (!el.__isHover) {
         return;
     }
 
-    el.__highlighted = false;
-
-    if (highlighted === 'layer') {
+    var normalStl = el.__normalStl;
+    if (el.useHoverLayer) {
         el.__zr && el.__zr.removeHover(el);
     }
-    else if (highlighted) {
-        var style = el.style;
-
-        var normalStl = el.__cachedNormalStl;
-        if (normalStl) {
-            rollbackDefaultTextStyle(style);
-            // Consider null/undefined value, should use
-            // `setStyle` but not `extendFrom(stl, true)`.
-            el.setStyle(normalStl);
-            applyDefaultTextStyle(style);
-        }
-        // `__cachedNormalZ2` will not be reset if calling `setElementHoverStyle`
-        // when `el` is on emphasis state. So here by comparing with 1, we try
-        // hard to make the bug case rare.
-        var normalZ2 = el.__cachedNormalZ2;
-        if (normalZ2 != null && el.z2 - normalZ2 === Z2_EMPHASIS_LIFT) {
-            el.z2 = normalZ2;
-        }
+    else {
+        // Consider null/undefined value, should use
+        // `setStyle` but not `extendFrom(stl, true)`.
+        normalStl && el.setStyle(normalStl);
+        el.z2 -= 1;
     }
-}
 
-function traverseCall(el, method) {
-    el.isGroup
-        ? el.traverse(function (child) {
-            !child.isGroup && method(child);
-        })
-        : method(el);
+    el.__isHover = false;
 }
 
 /**
- * Set hover style (namely "emphasis style") of element, based on the current
- * style of the given `el`.
- * This method should be called after all of the normal styles have been adopted
- * to the `el`. See the reason on `setHoverStyle`.
- *
- * @param {module:zrender/Element} el Should not be `zrender/container/Group`.
- * @param {Object|boolean} [hoverStl] The specified hover style.
- *        If set as `false`, disable the hover style.
- *        Similarly, The `el.hoverStyle` can alse be set
- *        as `false` to disable the hover style.
- *        Otherwise, use the default hover style if not provided.
- * @param {Object} [opt]
- * @param {boolean} [opt.hoverSilentOnTouch=false] See `graphic.setAsHoverStyleTrigger`
+ * @inner
  */
-function setElementHoverStyle(el, hoverStl) {
-    // For performance consideration, it might be better to make the "hover style" only the
-    // difference properties from the "normal style", but not a entire copy of all styles.
-    hoverStl = el.__hoverStl = hoverStl !== false && (hoverStl || {});
+function doEnterHover(el) {
+    el.type === 'group'
+        ? el.traverse(function (child) {
+            if (child.type !== 'group') {
+                doSingleEnterHover(child);
+            }
+        })
+        : doSingleEnterHover(el);
+}
+
+function doLeaveHover(el) {
+    el.type === 'group'
+        ? el.traverse(function (child) {
+            if (child.type !== 'group') {
+                doSingleLeaveHover(child);
+            }
+        })
+        : doSingleLeaveHover(el);
+}
+
+/**
+ * @inner
+ */
+function setElementHoverStl(el, hoverStl) {
+    // If element has sepcified hoverStyle, then use it instead of given hoverStyle
+    // Often used when item group has a label element and it's hoverStyle is different
+    el.__hoverStl = el.hoverStyle || hoverStl || {};
     el.__hoverStlDirty = true;
 
-    // FIXME
-    // It is not completely right to save "normal"/"emphasis" flag on elements.
-    // It probably should be saved on `data` of series. Consider the cases:
-    // (1) A highlighted elements are moved out of the view port and re-enter
-    // again by dataZoom.
-    // (2) call `setOption` and replace elements totally when they are highlighted.
-    if (el.__highlighted) {
-        // Consider the case:
-        // The styles of a highlighted `el` is being updated. The new "emphasis style"
-        // should be adapted to the `el`. Notice here new "normal styles" should have
-        // been set outside and the cached "normal style" is out of date.
-        el.__cachedNormalStl = null;
-        // Do not clear `__cachedNormalZ2` here, because setting `z2` is not a constraint
-        // of this method. In most cases, `z2` is not set and hover style should be able
-        // to rollback. Of course, that would bring bug, but only in a rare case, see
-        // `doSingleLeaveHover` for details.
-        doSingleLeaveHover(el);
-
-        doSingleEnterHover(el);
+    if (el.__isHover) {
+        cacheElementStl(el);
     }
 }
 
 /**
- * Emphasis (called by API) has higher priority than `mouseover`.
- * When element has been called to be entered emphasis, mouse over
- * should not trigger the highlight effect (for example, animation
- * scale) again, and `mouseout` should not downplay the highlight
- * effect. So the listener of `mouseover` and `mouseout` should
- * check `isInEmphasis`.
- *
- * @param {module:zrender/Element} el
- * @return {boolean}
+ * @inner
  */
-function isInEmphasis(el) {
-    return el && el.__isEmphasisEntered;
-}
-
 function onElementMouseOver(e) {
     if (this.__hoverSilentOnTouch && e.zrByTouch) {
         return;
     }
 
     // Only if element is not in emphasis status
-    !this.__isEmphasisEntered && traverseCall(this, doSingleEnterHover);
+    !this.__isEmphasis && doEnterHover(this);
 }
 
+/**
+ * @inner
+ */
 function onElementMouseOut(e) {
     if (this.__hoverSilentOnTouch && e.zrByTouch) {
         return;
     }
 
     // Only if element is not in emphasis status
-    !this.__isEmphasisEntered && traverseCall(this, doSingleLeaveHover);
-}
-
-function enterEmphasis() {
-    this.__isEmphasisEntered = true;
-    traverseCall(this, doSingleEnterHover);
-}
-
-function leaveEmphasis() {
-    this.__isEmphasisEntered = false;
-    traverseCall(this, doSingleLeaveHover);
+    !this.__isEmphasis && doLeaveHover(this);
 }
 
 /**
- * Set hover style (namely "emphasis style") of element,
- * based on the current style of the given `el`.
- *
- * (1)
- * **CONSTRAINTS** for this method:
- * <A> This method MUST be called after all of the normal styles having been adopted
- * to the `el`.
- * <B> The input `hoverStyle` (that is, "emphasis style") MUST be the subset of the
- * "normal style" having been set to the el.
- * <C> `color` MUST be one of the "normal styles" (because color might be lifted as
- * a default hover style).
- *
- * The reason: this method treat the current style of the `el` as the "normal style"
- * and cache them when enter/update the "emphasis style". Consider the case: the `el`
- * is in "emphasis" state and `setOption`/`dispatchAction` trigger the style updating
- * logic, where the el should shift from the original emphasis style to the new
- * "emphasis style" and should be able to "downplay" back to the new "normal style".
- *
- * Indeed, it is error-prone to make a interface has so many constraints, but I have
- * not found a better solution yet to fit the backward compatibility, performance and
- * the current programming style.
- *
- * (2)
- * Call the method for a "root" element once. Do not call it for each descendants.
- * If the descendants elemenets of a group has itself hover style different from the
- * root group, we can simply mount the style on `el.hoverStyle` for them, but should
- * not call this method for them.
- *
- * @param {module:zrender/Element} el
- * @param {Object|boolean} [hoverStyle] See `graphic.setElementHoverStyle`.
- * @param {Object} [opt]
- * @param {boolean} [opt.hoverSilentOnTouch=false] See `graphic.setAsHoverStyleTrigger`.
+ * @inner
  */
-function setHoverStyle(el, hoverStyle, opt) {
-    el.isGroup
-        ? el.traverse(function (child) {
-            // If element has sepcified hoverStyle, then use it instead of given hoverStyle
-            // Often used when item group has a label element and it's hoverStyle is different
-            !child.isGroup && setElementHoverStyle(child, child.hoverStyle || hoverStyle);
-        })
-        : setElementHoverStyle(el, el.hoverStyle || hoverStyle);
-
-    setAsHoverStyleTrigger(el, opt);
+function enterEmphasis() {
+    this.__isEmphasis = true;
+    doEnterHover(this);
 }
 
 /**
- * @param {Object|boolean} [opt] If `false`, means disable trigger.
+ * @inner
+ */
+function leaveEmphasis() {
+    this.__isEmphasis = false;
+    doLeaveHover(this);
+}
+
+/**
+ * Set hover style of element.
+ * This method can be called repeatly without side-effects.
+ * @param {module:zrender/Element} el
+ * @param {Object} [hoverStyle]
+ * @param {Object} [opt]
  * @param {boolean} [opt.hoverSilentOnTouch=false]
  *        In touch device, mouseover event will be trigger on touchstart event
  *        (see module:zrender/dom/HandlerProxy). By this mechanism, we can
- *        conveniently use hoverStyle when tap on touch screen without additional
+ *        conviniently use hoverStyle when tap on touch screen without additional
  *        code for compatibility.
  *        But if the chart/component has select feature, which usually also use
  *        hoverStyle, there might be conflict between 'select-highlight' and
@@ -16944,26 +16312,27 @@ function setHoverStyle(el, hoverStyle, opt) {
  *        In this case, hoverSilentOnTouch should be used to disable hover-highlight
  *        on touch device.
  */
-function setAsHoverStyleTrigger(el, opt) {
-    var disable = opt === false;
-    el.__hoverSilentOnTouch = opt != null && opt.hoverSilentOnTouch;
+function setHoverStyle(el, hoverStyle, opt) {
+    el.__hoverSilentOnTouch = opt && opt.hoverSilentOnTouch;
 
-    // Simple optimize, since this method might be
-    // called for each elements of a group in some cases.
-    if (!disable || el.__hoverStyleTrigger) {
-        var method = disable ? 'off' : 'on';
+    el.type === 'group'
+        ? el.traverse(function (child) {
+            if (child.type !== 'group') {
+                setElementHoverStl(child, hoverStyle);
+            }
+        })
+        : setElementHoverStl(el, hoverStyle);
 
-        // Duplicated function will be auto-ignored, see Eventful.js.
-        el[method]('mouseover', onElementMouseOver)[method]('mouseout', onElementMouseOut);
-        // Emphasis, normal can be triggered manually
-        el[method]('emphasis', enterEmphasis)[method]('normal', leaveEmphasis);
+    // Duplicated function will be auto-ignored, see Eventful.js.
+    el.on('mouseover', onElementMouseOver)
+        .on('mouseout', onElementMouseOut);
 
-        el.__hoverStyleTrigger = !disable;
-    }
+    // Emphasis, normal can be triggered manually
+    el.on('emphasis', enterEmphasis)
+        .on('normal', leaveEmphasis);
 }
 
 /**
- * See more info in `setTextStyleCommon`.
  * @param {Object|module:zrender/graphic/Style} normalStyle
  * @param {Object} emphasisStyle
  * @param {module:echarts/model/Model} normalModel
@@ -17036,7 +16405,6 @@ function setLabelStyle(
 
 /**
  * Set basic textStyle properties.
- * See more info in `setTextStyleCommon`.
  * @param {Object|module:zrender/graphic/Style} textStyle
  * @param {module:echarts/model/Model} model
  * @param {Object} [specifiedTextStyle] Can be overrided by settings in model.
@@ -17048,14 +16416,13 @@ function setTextStyle(
 ) {
     setTextStyleCommon(textStyle, textStyleModel, opt, isEmphasis);
     specifiedTextStyle && extend(textStyle, specifiedTextStyle);
-    // textStyle.host && textStyle.host.dirty && textStyle.host.dirty(false);
+    textStyle.host && textStyle.host.dirty && textStyle.host.dirty(false);
 
     return textStyle;
 }
 
 /**
  * Set text option in the style.
- * See more info in `setTextStyleCommon`.
  * @deprecated
  * @param {Object} textStyle
  * @param {module:echarts/model/Model} labelModel
@@ -17074,27 +16441,11 @@ function setText(textStyle, labelModel, defaultColor) {
         opt.autoColor = defaultColor;
     }
     setTextStyleCommon(textStyle, labelModel, opt, isEmphasis);
-    // textStyle.host && textStyle.host.dirty && textStyle.host.dirty(false);
+    textStyle.host && textStyle.host.dirty && textStyle.host.dirty(false);
 }
 
 /**
- * The uniform entry of set text style, that is, retrieve style definitions
- * from `model` and set to `textStyle` object.
- *
- * Never in merge mode, but in overwrite mode, that is, all of the text style
- * properties will be set. (Consider the states of normal and emphasis and
- * default value can be adopted, merge would make the logic too complicated
- * to manage.)
- *
- * The `textStyle` object can either be a plain object or an instance of
- * `zrender/src/graphic/Style`, and either be the style of normal or emphasis.
- * After this mothod called, the `textStyle` object can then be used in
- * `el.setStyle(textStyle)` or `el.hoverStyle = textStyle`.
- *
- * Default value will be adopted and `insideRollbackOpt` will be created.
- * See `applyDefaultTextStyle` `rollbackDefaultTextStyle` for more details.
- *
- * opt: {
+ * {
  *      disableBox: boolean, Whether diable drawing box of block (outer most).
  *      isRectText: boolean,
  *      autoColor: string, specify a color when color is 'auto',
@@ -17215,14 +16566,15 @@ function setTokenTextStyle(textStyle, textStyleModel, globalTextStyle, opt, isEm
         globalTextStyle.textBorderWidth
     );
 
-    // Save original textPosition, because style.textPosition will be repalced by
-    // real location (like [10, 30]) in zrender.
-    textStyle.insideRawTextPosition = textStyle.textPosition;
-
     if (!isEmphasis) {
         if (isBlock) {
+            // Always set `insideRollback`, for clearing previous.
+            var originalTextPosition = textStyle.textPosition;
+            textStyle.insideRollback = applyInsideStyle(textStyle, originalTextPosition, opt);
+            // Save original textPosition, because style.textPosition will be repalced by
+            // real location (like [10, 30]) in zrender.
+            textStyle.insideOriginalTextPosition = originalTextPosition;
             textStyle.insideRollbackOpt = opt;
-            applyDefaultTextStyle(textStyle);
         }
 
         // Set default finally.
@@ -17275,38 +16627,12 @@ function getAutoColor(color, opt) {
     return color !== 'auto' ? color : (opt && opt.autoColor) ? opt.autoColor : null;
 }
 
-/**
- * Give some default value to the input `textStyle` object, based on the current settings
- * in this `textStyle` object.
- *
- * The Scenario:
- * when text position is `inside` and `textFill` is not specified, we show
- * text border by default for better view. But it should be considered that text position
- * might be changed when hovering or being emphasis, where the `insideRollback` is used to
- * restore the style.
- *
- * Usage (& NOTICE):
- * When a style object (eithor plain object or instance of `zrender/src/graphic/Style`) is
- * about to be modified on its text related properties, `rollbackDefaultTextStyle` should
- * be called before the modification and `applyDefaultTextStyle` should be called after that.
- * (For the case that all of the text related properties is reset, like `setTextStyleCommon`
- * does, `rollbackDefaultTextStyle` is not needed to be called).
- */
-function applyDefaultTextStyle(textStyle) {
-    var opt = textStyle.insideRollbackOpt;
-
-    // Only `insideRollbackOpt` created (in `setTextStyleCommon`),
-    // applyDefaultTextStyle works.
-    if (!opt || textStyle.textFill != null) {
-        return;
-    }
-
+function applyInsideStyle(textStyle, textPosition, opt) {
     var useInsideStyle = opt.useInsideStyle;
-    var textPosition = textStyle.insideRawTextPosition;
     var insideRollback;
-    var autoColor = opt.autoColor;
 
-    if (useInsideStyle !== false
+    if (textStyle.textFill == null
+        && useInsideStyle !== false
         && (useInsideStyle === true
             || (opt.isRectText
                 && textPosition
@@ -17324,38 +16650,20 @@ function applyDefaultTextStyle(textStyle) {
         textStyle.textFill = '#fff';
         // Consider text with #fff overflow its container.
         if (textStyle.textStroke == null) {
-            textStyle.textStroke = autoColor;
+            textStyle.textStroke = opt.autoColor;
             textStyle.textStrokeWidth == null && (textStyle.textStrokeWidth = 2);
         }
     }
-    else if (autoColor != null) {
-        insideRollback = {textFill: null};
-        textStyle.textFill = autoColor;
-    }
 
-    // Always set `insideRollback`, for clearing previous.
-    if (insideRollback) {
-        textStyle.insideRollback = insideRollback;
-    }
+    return insideRollback;
 }
 
-/**
- * Consider the case: in a scatter,
- * label: {
- *     normal: {position: 'inside'},
- *     emphasis: {position: 'top'}
- * }
- * In the normal state, the `textFill` will be set as '#fff' for pretty view (see
- * `applyDefaultTextStyle`), but when switching to emphasis state, the `textFill`
- * should be retured to 'autoColor', but not keep '#fff'.
- */
-function rollbackDefaultTextStyle(style) {
+function rollbackInsideStyle(style) {
     var insideRollback = style.insideRollback;
     if (insideRollback) {
         style.textFill = insideRollback.textFill;
         style.textStroke = insideRollback.textStroke;
         style.textStrokeWidth = insideRollback.textStrokeWidth;
-        style.insideRollback = null;
     }
 }
 
@@ -17570,8 +16878,6 @@ function groupTransition(g1, g2, animatableModel, cb) {
  * @return {Array.<Array.<number>>} A new clipped points.
  */
 function clipPointsByRect(points, rect) {
-    // FIXME: this way migth be incorrect when grpahic clipped by a corner.
-    // and when element have border.
     return map(points, function (point) {
         var x = point[0];
         x = mathMax$1(x, rect.x);
@@ -17594,8 +16900,6 @@ function clipRectByRect(targetRect, rect) {
     var y = mathMax$1(targetRect.y, rect.y);
     var y2 = mathMin$1(targetRect.y + targetRect.height, rect.y + rect.height);
 
-    // If the total rect is cliped, nothing, including the border,
-    // should be painted. So return undefined.
     if (x2 >= x && y2 >= y) {
         return {
             x: x,
@@ -17639,7 +16943,6 @@ function createIcon(iconStr, opt, rect) {
 
 
 var graphic = (Object.freeze || Object)({
-	Z2_EMPHASIS_LIFT: Z2_EMPHASIS_LIFT,
 	extendShape: extendShape,
 	extendPath: extendPath,
 	makePath: makePath,
@@ -17649,10 +16952,7 @@ var graphic = (Object.freeze || Object)({
 	subPixelOptimizeLine: subPixelOptimizeLine,
 	subPixelOptimizeRect: subPixelOptimizeRect,
 	subPixelOptimize: subPixelOptimize,
-	setElementHoverStyle: setElementHoverStyle,
-	isInEmphasis: isInEmphasis,
 	setHoverStyle: setHoverStyle,
-	setAsHoverStyleTrigger: setAsHoverStyleTrigger,
 	setLabelStyle: setLabelStyle,
 	setTextStyle: setTextStyle,
 	setText: setText,
@@ -17740,7 +17040,6 @@ var textStyleMixin = {
             this.getShallow('align'),
             this.getShallow('verticalAlign') || this.getShallow('baseline'),
             this.getShallow('padding'),
-            this.getShallow('lineHeight'),
             this.getShallow('rich'),
             this.getShallow('truncateText')
         );
@@ -17825,7 +17124,7 @@ var inner = makeInner();
 /**
  * @alias module:echarts/model/Model
  * @constructor
- * @param {Object} [option]
+ * @param {Object} option
  * @param {module:echarts/model/Model} [parentModel]
  * @param {module:echarts/model/Global} [ecModel]
  */
@@ -17948,7 +17247,7 @@ Model.prototype = {
     },
 
     // If path is null/undefined, return null/undefined.
-    parsePath: function (path) {
+    parsePath: function(path) {
         if (typeof path === 'string') {
             path = path.split('.');
         }
@@ -18211,15 +17510,6 @@ function enableTopologicalTravel(entity, dependencyGetter) {
 * under the License.
 */
 
-/*
-* A third-party license is embeded for some of the code in this file:
-* The method "quantile" was copied from "d3.js".
-* (See more details in the comment of the method below.)
-* The use of the source code of this file is also subject to the terms
-* and consitions of the license of "d3.js" (BSD-3Clause, see
-* </licenses/LICENSE-d3>).
-*/
-
 var RADIAN_EPSILON = 1e-4;
 
 function _trim(str) {
@@ -18323,7 +17613,7 @@ function parsePercent$1(percent, all) {
  * @param {boolean} [returnStr]
  * @return {number|string}
  */
-function round$2(x, precision, returnStr) {
+function round$1(x, precision, returnStr) {
     if (precision == null) {
         precision = 10;
     }
@@ -18481,9 +17771,7 @@ function isRadianAroundZero(val) {
     return val > -RADIAN_EPSILON && val < RADIAN_EPSILON;
 }
 
-/* eslint-disable */
 var TIME_REG = /^(?:(\d{4})(?:[-\/](\d{1,2})(?:[-\/](\d{1,2})(?:[T ](\d{1,2})(?::(\d\d)(?::(\d\d)(?:[.,](\d+))?)?)?(Z|[\+\-]\d\d:?\d\d)?)?)?)?)?$/; // jshint ignore:line
-/* eslint-enable */
 
 /**
  * @param {string|Date|number} value These values can be accepted:
@@ -18592,58 +17880,24 @@ function nice(val, round) {
     var f = val / exp10; // 1 <= f < 10
     var nf;
     if (round) {
-        if (f < 1.5) {
-            nf = 1;
-        }
-        else if (f < 2.5) {
-            nf = 2;
-        }
-        else if (f < 4) {
-            nf = 3;
-        }
-        else if (f < 7) {
-            nf = 5;
-        }
-        else {
-            nf = 10;
-        }
+        if (f < 1.5) { nf = 1; }
+        else if (f < 2.5) { nf = 2; }
+        else if (f < 4) { nf = 3; }
+        else if (f < 7) { nf = 5; }
+        else { nf = 10; }
     }
     else {
-        if (f < 1) {
-            nf = 1;
-        }
-        else if (f < 2) {
-            nf = 2;
-        }
-        else if (f < 3) {
-            nf = 3;
-        }
-        else if (f < 5) {
-            nf = 5;
-        }
-        else {
-            nf = 10;
-        }
+        if (f < 1) { nf = 1; }
+        else if (f < 2) { nf = 2; }
+        else if (f < 3) { nf = 3; }
+        else if (f < 5) { nf = 5; }
+        else { nf = 10; }
     }
     val = nf * exp10;
 
     // Fix 3 * 0.1 === 0.30000000000000004 issue (see IEEE 754).
     // 20 is the uppper bound of toFixed.
     return exponent >= -20 ? +val.toFixed(exponent < 0 ? -exponent : 0) : val;
-}
-
-/**
- * This code was copied from "d3.js"
- * <https://github.com/d3/d3/blob/9cc9a875e636a1dcf36cc1e07bdf77e1ad6e2c74/src/arrays/quantile.js>.
- * See the license statement at the head of this file.
- * @param {Array.<number>} ascArr
- */
-function quantile(ascArr, p) {
-    var H = (ascArr.length - 1) * p + 1;
-    var h = Math.floor(H);
-    var v = +ascArr[h - 1];
-    var e = H - h;
-    return e ? v + e * (ascArr[h] - v) : v;
 }
 
 /**
@@ -18726,7 +17980,7 @@ function isNumeric(v) {
 var number = (Object.freeze || Object)({
 	linearMap: linearMap,
 	parsePercent: parsePercent$1,
-	round: round$2,
+	round: round$1,
 	asc: asc,
 	getPrecision: getPrecision,
 	getPrecisionSafe: getPrecisionSafe,
@@ -18738,7 +17992,6 @@ var number = (Object.freeze || Object)({
 	parseDate: parseDate,
 	quantity: quantity,
 	nice: nice,
-	quantile: quantile,
 	reformIntervals: reformIntervals,
 	isNumeric: isNumeric
 });
@@ -18762,8 +18015,6 @@ var number = (Object.freeze || Object)({
 * under the License.
 */
 
-// import Text from 'zrender/src/graphic/Text';
-
 /**
  * 每三位默认加,格式化
  * @param {string|number} x
@@ -18774,7 +18025,7 @@ function addCommas(x) {
         return '-';
     }
     x = (x + '').split('.');
-    return x[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
+    return x[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g,'$1,')
             + (x.length > 1 ? ('.' + x[1]) : '');
 }
 
@@ -18784,7 +18035,7 @@ function addCommas(x) {
  * @return {string} str
  */
 function toCamelCase(str, upperCaseFirst) {
-    str = (str || '').toLowerCase().replace(/-(.)/g, function (match, group1) {
+    str = (str || '').toLowerCase().replace(/-(.)/g, function(match, group1) {
         return group1.toUpperCase();
     });
 
@@ -18878,8 +18129,6 @@ function formatTplSimple(tpl, param, encode) {
  * @param {string} [opt.color]
  * @param {string} [opt.extraCssText]
  * @param {string} [opt.type='item'] 'item' or 'subItem'
- * @param {string} [opt.renderMode='html'] render mode of tooltip, 'html' or 'richText'
- * @param {string} [opt.markerId='X'] id name for marker. If only one marker is in a rich text, this can be omitted.
  * @return {string}
  */
 function getTooltipMarker(opt, extraCssText) {
@@ -18887,32 +18136,18 @@ function getTooltipMarker(opt, extraCssText) {
     var color = opt.color;
     var type = opt.type;
     var extraCssText = opt.extraCssText;
-    var renderMode = opt.renderMode || 'html';
-    var markerId = opt.markerId || 'X';
 
     if (!color) {
         return '';
     }
 
-    if (renderMode === 'html') {
-        return type === 'subItem'
+    return type === 'subItem'
         ? '<span style="display:inline-block;vertical-align:middle;margin-right:8px;margin-left:3px;'
             + 'border-radius:4px;width:4px;height:4px;background-color:'
             + encodeHTML(color) + ';' + (extraCssText || '') + '"></span>'
         : '<span style="display:inline-block;margin-right:5px;'
             + 'border-radius:10px;width:10px;height:10px;background-color:'
             + encodeHTML(color) + ';' + (extraCssText || '') + '"></span>';
-    }
-    else {
-        // Space for rich element marker
-        return {
-            renderMode: renderMode,
-            content: '{marker' + markerId + '|}  ',
-            style: {
-                color: color
-            }
-        };
-    }
 }
 
 function pad(str, len) {
@@ -18978,45 +18213,7 @@ function capitalFirst(str) {
 
 var truncateText$1 = truncateText;
 
-/**
- * @public
- * @param {Object} opt
- * @param {string} opt.text
- * @param {string} opt.font
- * @param {string} [opt.textAlign='left']
- * @param {string} [opt.textVerticalAlign='top']
- * @param {Array.<number>} [opt.textPadding]
- * @param {number} [opt.textLineHeight]
- * @param {Object} [opt.rich]
- * @param {Object} [opt.truncate]
- * @return {Object} {x, y, width, height, lineHeight}
- */
-function getTextBoundingRect(opt) {
-    return getBoundingRect(
-        opt.text,
-        opt.font,
-        opt.textAlign,
-        opt.textVerticalAlign,
-        opt.textPadding,
-        opt.textLineHeight,
-        opt.rich,
-        opt.truncate
-    );
-}
-
-/**
- * @deprecated
- * the `textLineHeight` was added later.
- * For backward compatiblility, put it as the last parameter.
- * But deprecated this interface. Please use `getTextBoundingRect` instead.
- */
-function getTextRect(
-    text, font, textAlign, textVerticalAlign, textPadding, rich, truncate, textLineHeight
-) {
-    return getBoundingRect(
-        text, font, textAlign, textVerticalAlign, textPadding, textLineHeight, rich, truncate
-    );
-}
+var getTextRect = getBoundingRect;
 
 
 var format = (Object.freeze || Object)({
@@ -19030,7 +18227,6 @@ var format = (Object.freeze || Object)({
 	formatTime: formatTime,
 	capitalFirst: capitalFirst,
 	truncateText: truncateText$1,
-	getTextBoundingRect: getTextBoundingRect,
 	getTextRect: getTextRect
 });
 
@@ -19799,10 +18995,7 @@ var globalDefault = {
     // color: ['#bcd3bb', '#e88f70', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a'],
     // color: ['#cc5664', '#9bd6ec', '#ea946e', '#8acaaa', '#f1ec64', '#ee8686', '#a48dc1', '#5da6bc', '#b9dcae'],
     // Dark colors:
-    color: [
-        '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83',
-        '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'
-    ],
+    color: ['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
 
     gradientColor: ['#f6efa6', '#d88273', '#bf444c'],
 
@@ -20299,10 +19492,6 @@ function detectSourceFormat(datasetModel) {
     }
     else if (isArray(data)) {
         // FIXME Whether tolerate null in top level array?
-        if (data.length === 0) {
-            sourceFormat = SOURCE_FORMAT_ARRAY_ROWS;
-        }
-
         for (var i = 0, len = data.length; i < len; i++) {
             var item = data[i];
 
@@ -23073,30 +22262,21 @@ var dataFormatMixin = {
         var name = data.getName(dataIndex);
         var itemOpt = data.getRawDataItem(dataIndex);
         var color = data.getItemVisual(dataIndex, 'color');
-        var tooltipModel = this.ecModel.getComponent('tooltip');
-        var renderModeOption = tooltipModel && tooltipModel.get('renderMode');
-        var renderMode = getTooltipRenderMode(renderModeOption);
-        var mainType = this.mainType;
-        var isSeries = mainType === 'series';
 
         return {
-            componentType: mainType,
+            componentType: this.mainType,
             componentSubType: this.subType,
-            componentIndex: this.componentIndex,
-            seriesType: isSeries ? this.subType : null,
+            seriesType: this.mainType === 'series' ? this.subType : null,
             seriesIndex: this.seriesIndex,
-            seriesId: isSeries ? this.id : null,
-            seriesName: isSeries ? this.name : null,
+            seriesId: this.id,
+            seriesName: this.name,
             name: name,
             dataIndex: rawDataIndex,
             data: itemOpt,
             dataType: dataType,
             value: rawValue,
             color: color,
-            marker: getTooltipMarker({
-                color: color,
-                renderMode: renderMode
-            }),
+            marker: getTooltipMarker(color),
 
             // Param name list for mapping `a`, `b`, `c`, `d`, `e`
             $vars: ['seriesName', 'name', 'value']
@@ -23796,21 +22976,8 @@ var SeriesModel = ComponentModel.extend({
      * @param {number} dataIndex
      * @param {boolean} [multipleSeries=false]
      * @param {number} [dataType]
-     * @param {string} [renderMode='html'] valid values: 'html' and 'richText'.
-     *                                     'html' is used for rendering tooltip in extra DOM form, and the result
-     *                                     string is used as DOM HTML content.
-     *                                     'richText' is used for rendering tooltip in rich text form, for those where
-     *                                     DOM operation is not supported.
-     * @return {Object} formatted tooltip with `html` and `markers`
      */
-    formatTooltip: function (dataIndex, multipleSeries, dataType, renderMode) {
-
-        var series = this;
-        renderMode = renderMode || 'html';
-        var newLine = renderMode === 'html' ? '<br/>' : '\n';
-        var isRichText = renderMode === 'richText';
-        var markers = {};
-        var markerId = 0;
+    formatTooltip: function (dataIndex, multipleSeries, dataType) {
 
         function formatArrayValue(value) {
             // ??? TODO refactor these logic.
@@ -23836,17 +23003,9 @@ var SeriesModel = ComponentModel.extend({
                     return;
                 }
                 var dimType = dimInfo.type;
-                var markName = 'sub' + series.seriesIndex + 'at' + markerId;
-                var dimHead = getTooltipMarker({
-                    color: color,
-                    type: 'subItem',
-                    renderMode: renderMode,
-                    markerId: markName
-                });
-
-                var dimHeadStr = typeof dimHead === 'string' ? dimHead : dimHead.content;
+                var dimHead = getTooltipMarker({color: color, type: 'subItem'});
                 var valStr = (vertially
-                        ? dimHeadStr + encodeHTML(dimInfo.displayName || '-') + ': '
+                        ? dimHead + encodeHTML(dimInfo.displayName || '-') + ': '
                         : ''
                     )
                     // FIXME should not format time for raw data?
@@ -23857,29 +23016,13 @@ var SeriesModel = ComponentModel.extend({
                         : addCommas(val)
                     );
                 valStr && result.push(valStr);
-
-                if (isRichText) {
-                    markers[markName] = color;
-                    ++markerId;
-                }
             }
 
-            var newLine = vertially ? (isRichText ? '\n' : '<br/>') : '';
-            var content = newLine + result.join(newLine || ', ');
-            return {
-                renderMode: renderMode,
-                content: content,
-                style: markers
-            };
+            return (vertially ? '<br/>' : '') + result.join(vertially ? '<br/>' : ', ');
         }
 
         function formatSingleValue(val) {
-            // return encodeHTML(addCommas(val));
-            return {
-                renderMode: renderMode,
-                content: encodeHTML(addCommas(val)),
-                style: markers
-            };
+            return encodeHTML(addCommas(val));
         }
 
         var data = this.getData();
@@ -23900,17 +23043,8 @@ var SeriesModel = ComponentModel.extend({
             : tooltipDimLen
             ? formatSingleValue(retrieveRawValue(data, dataIndex, tooltipDims[0]))
             : formatSingleValue(isValueArr ? value[0] : value);
-        var content = formattedValue.content;
 
-        var markName = series.seriesIndex + 'at' + markerId;
-        var colorEl = getTooltipMarker({
-            color: color,
-            type: 'item',
-            renderMode: renderMode,
-            markerId: markName
-        });
-        markers[markName] = color;
-        ++markerId;
+        var colorEl = getTooltipMarker(color);
 
         var name = data.getName(dataIndex);
 
@@ -23919,22 +23053,16 @@ var SeriesModel = ComponentModel.extend({
             seriesName = '';
         }
         seriesName = seriesName
-            ? encodeHTML(seriesName) + (!multipleSeries ? newLine : ': ')
+            ? encodeHTML(seriesName) + (!multipleSeries ? '<br/>' : ': ')
             : '';
 
-        var colorStr = typeof colorEl === 'string' ? colorEl : colorEl.content;
-        var html = !multipleSeries
-            ? seriesName + colorStr
+        return !multipleSeries
+            ? seriesName + colorEl
                 + (name
-                    ? encodeHTML(name) + ': ' + content
-                    : content
+                    ? encodeHTML(name) + ': ' + formattedValue
+                    : formattedValue
                 )
-            : colorStr + seriesName + content;
-
-        return {
-            html: html,
-            markers: markers
-        };
+            : colorEl + seriesName + formattedValue;
     },
 
     /**
@@ -24151,16 +23279,7 @@ Component$1.prototype = {
 
     render: function (componentModel, ecModel, api, payload) {},
 
-    dispose: function () {},
-
-    /**
-     * @param {string} eventType
-     * @param {Object} query
-     * @param {module:zrender/Element} targetEl
-     * @param {Object} packedEvent
-     * @return {boolen} Pass only when return `true`.
-     */
-    filterForExposedEvent: null
+    dispose: function () {}
 
 };
 
@@ -24328,7 +23447,6 @@ Chart.prototype = {
 
     /**
      * Render in progressive mode.
-     * @param  {Object} params See taskParams in `stream/task.js`
      * @param  {module:echarts/model/Series} seriesModel
      * @param  {module:echarts/model/Global} ecModel
      * @param  {module:echarts/ExtensionAPI} api
@@ -24344,7 +23462,7 @@ Chart.prototype = {
      * @param  {Object} payload
      * @return {Object} {update: true}
      */
-    updateTransform: null,
+    updateTransform: null
 
     /**
      * The view contains the given point.
@@ -24353,15 +23471,6 @@ Chart.prototype = {
      * @return {boolean}
      */
     // containPoint: function () {}
-
-    /**
-     * @param {string} eventType
-     * @param {Object} query
-     * @param {module:zrender/Element} targetEl
-     * @param {Object} packedEvent
-     * @return {boolen} Pass only when return `true`.
-     */
-    filterForExposedEvent: null
 
 };
 
@@ -25208,7 +24317,7 @@ proto.getPerformArgs = function (task, isBlock) {
 
     var step = incremental ? pipeline.step : null;
     var modDataCount = pCtx && pCtx.modDataCount;
-    var modBy = modDataCount != null ? Math.ceil(modDataCount / step) : null;
+    var modBy = modDataCount != null ? Math.ceil(modDataCount / step): null;
 
     return {step: step, modBy: modBy, modDataCount: modDataCount};
 };
@@ -25646,12 +24755,10 @@ ecModelMock.eachComponent = function (cond) {
 };
 
 function mockMethods(target, Clz) {
-    /* eslint-disable */
     for (var name in Clz.prototype) {
         // Do not use hasOwnProperty
         target[name] = noop;
     }
-    /* eslint-enable */
 }
 
 /*
@@ -25673,10 +24780,7 @@ function mockMethods(target, Clz) {
 * under the License.
 */
 
-var colorAll = [
-    '#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f',
-    '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF'
-];
+var colorAll = ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C','#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF'];
 
 var lightTheme = {
 
@@ -25741,10 +24845,7 @@ var axisCommon = function () {
     };
 };
 
-var colorPalette = [
-    '#dd6b66', '#759aa0', '#e69d87', '#8dc1a9', '#ea7e53',
-    '#eedd78', '#73a373', '#73b9bc', '#7289ab', '#91ca8c', '#f49f42'
-];
+var colorPalette = ['#dd6b66','#759aa0','#e69d87','#8dc1a9','#ea7e53','#eedd78','#73a373','#73b9bc','#7289ab', '#91ca8c','#f49f42'];
 var theme = {
     color: colorPalette,
     backgroundColor: '#333',
@@ -25902,805 +25003,6 @@ Component$1.extend({
 
 });
 
-/**
- * 椭圆形状
- * @module zrender/graphic/shape/Ellipse
- */
-
-var Ellipse = Path.extend({
-
-    type: 'ellipse',
-
-    shape: {
-        cx: 0, cy: 0,
-        rx: 0, ry: 0
-    },
-
-    buildPath: function (ctx, shape) {
-        var k = 0.5522848;
-        var x = shape.cx;
-        var y = shape.cy;
-        var a = shape.rx;
-        var b = shape.ry;
-        var ox = a * k; // 水平控制点偏移量
-        var oy = b * k; // 垂直控制点偏移量
-        // 从椭圆的左端点开始顺时针绘制四条三次贝塞尔曲线
-        ctx.moveTo(x - a, y);
-        ctx.bezierCurveTo(x - a, y - oy, x - ox, y - b, x, y - b);
-        ctx.bezierCurveTo(x + ox, y - b, x + a, y - oy, x + a, y);
-        ctx.bezierCurveTo(x + a, y + oy, x + ox, y + b, x, y + b);
-        ctx.bezierCurveTo(x - ox, y + b, x - a, y + oy, x - a, y);
-        ctx.closePath();
-    }
-});
-
-// import RadialGradient from '../graphic/RadialGradient';
-// import Pattern from '../graphic/Pattern';
-// import * as vector from '../core/vector';
-// Most of the values can be separated by comma and/or white space.
-var DILIMITER_REG = /[\s,]+/;
-
-/**
- * For big svg string, this method might be time consuming.
- *
- * @param {string} svg xml string
- * @return {Object} xml root.
- */
-function parseXML(svg) {
-    if (isString(svg)) {
-        var parser = new DOMParser();
-        svg = parser.parseFromString(svg, 'text/xml');
-    }
-
-    // Document node. If using $.get, doc node may be input.
-    if (svg.nodeType === 9) {
-        svg = svg.firstChild;
-    }
-    // nodeName of <!DOCTYPE svg> is also 'svg'.
-    while (svg.nodeName.toLowerCase() !== 'svg' || svg.nodeType !== 1) {
-        svg = svg.nextSibling;
-    }
-
-    return svg;
-}
-
-function SVGParser() {
-    this._defs = {};
-    this._root = null;
-
-    this._isDefine = false;
-    this._isText = false;
-}
-
-SVGParser.prototype.parse = function (xml, opt) {
-    opt = opt || {};
-
-    var svg = parseXML(xml);
-
-    if (!svg) {
-        throw new Error('Illegal svg');
-    }
-
-    var root = new Group();
-    this._root = root;
-    // parse view port
-    var viewBox = svg.getAttribute('viewBox') || '';
-
-    // If width/height not specified, means "100%" of `opt.width/height`.
-    // TODO: Other percent value not supported yet.
-    var width = parseFloat(svg.getAttribute('width') || opt.width);
-    var height = parseFloat(svg.getAttribute('height') || opt.height);
-    // If width/height not specified, set as null for output.
-    isNaN(width) && (width = null);
-    isNaN(height) && (height = null);
-
-    // Apply inline style on svg element.
-    parseAttributes(svg, root, null, true);
-
-    var child = svg.firstChild;
-    while (child) {
-        this._parseNode(child, root);
-        child = child.nextSibling;
-    }
-
-    var viewBoxRect;
-    var viewBoxTransform;
-
-    if (viewBox) {
-        var viewBoxArr = trim(viewBox).split(DILIMITER_REG);
-        // Some invalid case like viewBox: 'none'.
-        if (viewBoxArr.length >= 4) {
-            viewBoxRect = {
-                x: parseFloat(viewBoxArr[0] || 0),
-                y: parseFloat(viewBoxArr[1] || 0),
-                width: parseFloat(viewBoxArr[2]),
-                height: parseFloat(viewBoxArr[3])
-            };
-        }
-    }
-
-    if (viewBoxRect && width != null && height != null) {
-        viewBoxTransform = makeViewBoxTransform(viewBoxRect, width, height);
-
-        if (!opt.ignoreViewBox) {
-            // If set transform on the output group, it probably bring trouble when
-            // some users only intend to show the clipped content inside the viewBox,
-            // but not intend to transform the output group. So we keep the output
-            // group no transform. If the user intend to use the viewBox as a
-            // camera, just set `opt.ignoreViewBox` as `true` and set transfrom
-            // manually according to the viewBox info in the output of this method.
-            var elRoot = root;
-            root = new Group();
-            root.add(elRoot);
-            elRoot.scale = viewBoxTransform.scale.slice();
-            elRoot.position = viewBoxTransform.position.slice();
-        }
-    }
-
-    // Some shapes might be overflow the viewport, which should be
-    // clipped despite whether the viewBox is used, as the SVG does.
-    if (!opt.ignoreRootClip && width != null && height != null) {
-        root.setClipPath(new Rect({
-            shape: {x: 0, y: 0, width: width, height: height}
-        }));
-    }
-
-    // Set width/height on group just for output the viewport size.
-    return {
-        root: root,
-        width: width,
-        height: height,
-        viewBoxRect: viewBoxRect,
-        viewBoxTransform: viewBoxTransform
-    };
-};
-
-SVGParser.prototype._parseNode = function (xmlNode, parentGroup) {
-
-    var nodeName = xmlNode.nodeName.toLowerCase();
-
-    // TODO
-    // support <style>...</style> in svg, where nodeName is 'style',
-    // CSS classes is defined globally wherever the style tags are declared.
-
-    if (nodeName === 'defs') {
-        // define flag
-        this._isDefine = true;
-    }
-    else if (nodeName === 'text') {
-        this._isText = true;
-    }
-
-    var el;
-    if (this._isDefine) {
-        var parser = defineParsers[nodeName];
-        if (parser) {
-            var def = parser.call(this, xmlNode);
-            var id = xmlNode.getAttribute('id');
-            if (id) {
-                this._defs[id] = def;
-            }
-        }
-    }
-    else {
-        var parser = nodeParsers[nodeName];
-        if (parser) {
-            el = parser.call(this, xmlNode, parentGroup);
-            parentGroup.add(el);
-        }
-    }
-
-    var child = xmlNode.firstChild;
-    while (child) {
-        if (child.nodeType === 1) {
-            this._parseNode(child, el);
-        }
-        // Is text
-        if (child.nodeType === 3 && this._isText) {
-            this._parseText(child, el);
-        }
-        child = child.nextSibling;
-    }
-
-    // Quit define
-    if (nodeName === 'defs') {
-        this._isDefine = false;
-    }
-    else if (nodeName === 'text') {
-        this._isText = false;
-    }
-};
-
-SVGParser.prototype._parseText = function (xmlNode, parentGroup) {
-    if (xmlNode.nodeType === 1) {
-        var dx = xmlNode.getAttribute('dx') || 0;
-        var dy = xmlNode.getAttribute('dy') || 0;
-        this._textX += parseFloat(dx);
-        this._textY += parseFloat(dy);
-    }
-
-    var text = new Text({
-        style: {
-            text: xmlNode.textContent,
-            transformText: true
-        },
-        position: [this._textX || 0, this._textY || 0]
-    });
-
-    inheritStyle(parentGroup, text);
-    parseAttributes(xmlNode, text, this._defs);
-
-    var fontSize = text.style.fontSize;
-    if (fontSize && fontSize < 9) {
-        // PENDING
-        text.style.fontSize = 9;
-        text.scale = text.scale || [1, 1];
-        text.scale[0] *= fontSize / 9;
-        text.scale[1] *= fontSize / 9;
-    }
-
-    var rect = text.getBoundingRect();
-    this._textX += rect.width;
-
-    parentGroup.add(text);
-
-    return text;
-};
-
-var nodeParsers = {
-    'g': function (xmlNode, parentGroup) {
-        var g = new Group();
-        inheritStyle(parentGroup, g);
-        parseAttributes(xmlNode, g, this._defs);
-
-        return g;
-    },
-    'rect': function (xmlNode, parentGroup) {
-        var rect = new Rect();
-        inheritStyle(parentGroup, rect);
-        parseAttributes(xmlNode, rect, this._defs);
-
-        rect.setShape({
-            x: parseFloat(xmlNode.getAttribute('x') || 0),
-            y: parseFloat(xmlNode.getAttribute('y') || 0),
-            width: parseFloat(xmlNode.getAttribute('width') || 0),
-            height: parseFloat(xmlNode.getAttribute('height') || 0)
-        });
-
-        // console.log(xmlNode.getAttribute('transform'));
-        // console.log(rect.transform);
-
-        return rect;
-    },
-    'circle': function (xmlNode, parentGroup) {
-        var circle = new Circle();
-        inheritStyle(parentGroup, circle);
-        parseAttributes(xmlNode, circle, this._defs);
-
-        circle.setShape({
-            cx: parseFloat(xmlNode.getAttribute('cx') || 0),
-            cy: parseFloat(xmlNode.getAttribute('cy') || 0),
-            r: parseFloat(xmlNode.getAttribute('r') || 0)
-        });
-
-        return circle;
-    },
-    'line': function (xmlNode, parentGroup) {
-        var line = new Line();
-        inheritStyle(parentGroup, line);
-        parseAttributes(xmlNode, line, this._defs);
-
-        line.setShape({
-            x1: parseFloat(xmlNode.getAttribute('x1') || 0),
-            y1: parseFloat(xmlNode.getAttribute('y1') || 0),
-            x2: parseFloat(xmlNode.getAttribute('x2') || 0),
-            y2: parseFloat(xmlNode.getAttribute('y2') || 0)
-        });
-
-        return line;
-    },
-    'ellipse': function (xmlNode, parentGroup) {
-        var ellipse = new Ellipse();
-        inheritStyle(parentGroup, ellipse);
-        parseAttributes(xmlNode, ellipse, this._defs);
-
-        ellipse.setShape({
-            cx: parseFloat(xmlNode.getAttribute('cx') || 0),
-            cy: parseFloat(xmlNode.getAttribute('cy') || 0),
-            rx: parseFloat(xmlNode.getAttribute('rx') || 0),
-            ry: parseFloat(xmlNode.getAttribute('ry') || 0)
-        });
-        return ellipse;
-    },
-    'polygon': function (xmlNode, parentGroup) {
-        var points = xmlNode.getAttribute('points');
-        if (points) {
-            points = parsePoints(points);
-        }
-        var polygon = new Polygon({
-            shape: {
-                points: points || []
-            }
-        });
-
-        inheritStyle(parentGroup, polygon);
-        parseAttributes(xmlNode, polygon, this._defs);
-
-        return polygon;
-    },
-    'polyline': function (xmlNode, parentGroup) {
-        var path = new Path();
-        inheritStyle(parentGroup, path);
-        parseAttributes(xmlNode, path, this._defs);
-
-        var points = xmlNode.getAttribute('points');
-        if (points) {
-            points = parsePoints(points);
-        }
-        var polyline = new Polyline({
-            shape: {
-                points: points || []
-            }
-        });
-
-        return polyline;
-    },
-    'image': function (xmlNode, parentGroup) {
-        var img = new ZImage();
-        inheritStyle(parentGroup, img);
-        parseAttributes(xmlNode, img, this._defs);
-
-        img.setStyle({
-            image: xmlNode.getAttribute('xlink:href'),
-            x: xmlNode.getAttribute('x'),
-            y: xmlNode.getAttribute('y'),
-            width: xmlNode.getAttribute('width'),
-            height: xmlNode.getAttribute('height')
-        });
-
-        return img;
-    },
-    'text': function (xmlNode, parentGroup) {
-        var x = xmlNode.getAttribute('x') || 0;
-        var y = xmlNode.getAttribute('y') || 0;
-        var dx = xmlNode.getAttribute('dx') || 0;
-        var dy = xmlNode.getAttribute('dy') || 0;
-
-        this._textX = parseFloat(x) + parseFloat(dx);
-        this._textY = parseFloat(y) + parseFloat(dy);
-
-        var g = new Group();
-        inheritStyle(parentGroup, g);
-        parseAttributes(xmlNode, g, this._defs);
-
-        return g;
-    },
-    'tspan': function (xmlNode, parentGroup) {
-        var x = xmlNode.getAttribute('x');
-        var y = xmlNode.getAttribute('y');
-        if (x != null) {
-            // new offset x
-            this._textX = parseFloat(x);
-        }
-        if (y != null) {
-            // new offset y
-            this._textY = parseFloat(y);
-        }
-        var dx = xmlNode.getAttribute('dx') || 0;
-        var dy = xmlNode.getAttribute('dy') || 0;
-
-        var g = new Group();
-
-        inheritStyle(parentGroup, g);
-        parseAttributes(xmlNode, g, this._defs);
-
-
-        this._textX += dx;
-        this._textY += dy;
-
-        return g;
-    },
-    'path': function (xmlNode, parentGroup) {
-        // TODO svg fill rule
-        // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule
-        // path.style.globalCompositeOperation = 'xor';
-        var d = xmlNode.getAttribute('d') || '';
-
-        // Performance sensitive.
-
-        var path = createFromString(d);
-
-        inheritStyle(parentGroup, path);
-        parseAttributes(xmlNode, path, this._defs);
-
-        return path;
-    }
-};
-
-var defineParsers = {
-
-    'lineargradient': function (xmlNode) {
-        var x1 = parseInt(xmlNode.getAttribute('x1') || 0, 10);
-        var y1 = parseInt(xmlNode.getAttribute('y1') || 0, 10);
-        var x2 = parseInt(xmlNode.getAttribute('x2') || 10, 10);
-        var y2 = parseInt(xmlNode.getAttribute('y2') || 0, 10);
-
-        var gradient = new LinearGradient(x1, y1, x2, y2);
-
-        _parseGradientColorStops(xmlNode, gradient);
-
-        return gradient;
-    },
-
-    'radialgradient': function (xmlNode) {
-
-    }
-};
-
-function _parseGradientColorStops(xmlNode, gradient) {
-
-    var stop = xmlNode.firstChild;
-
-    while (stop) {
-        if (stop.nodeType === 1) {
-            var offset = stop.getAttribute('offset');
-            if (offset.indexOf('%') > 0) {  // percentage
-                offset = parseInt(offset, 10) / 100;
-            }
-            else if (offset) {    // number from 0 to 1
-                offset = parseFloat(offset);
-            }
-            else {
-                offset = 0;
-            }
-
-            var stopColor = stop.getAttribute('stop-color') || '#000000';
-
-            gradient.addColorStop(offset, stopColor);
-        }
-        stop = stop.nextSibling;
-    }
-}
-
-function inheritStyle(parent, child) {
-    if (parent && parent.__inheritedStyle) {
-        if (!child.__inheritedStyle) {
-            child.__inheritedStyle = {};
-        }
-        defaults(child.__inheritedStyle, parent.__inheritedStyle);
-    }
-}
-
-function parsePoints(pointsString) {
-    var list = trim(pointsString).split(DILIMITER_REG);
-    var points = [];
-
-    for (var i = 0; i < list.length; i += 2) {
-        var x = parseFloat(list[i]);
-        var y = parseFloat(list[i + 1]);
-        points.push([x, y]);
-    }
-    return points;
-}
-
-var attributesMap = {
-    'fill': 'fill',
-    'stroke': 'stroke',
-    'stroke-width': 'lineWidth',
-    'opacity': 'opacity',
-    'fill-opacity': 'fillOpacity',
-    'stroke-opacity': 'strokeOpacity',
-    'stroke-dasharray': 'lineDash',
-    'stroke-dashoffset': 'lineDashOffset',
-    'stroke-linecap': 'lineCap',
-    'stroke-linejoin': 'lineJoin',
-    'stroke-miterlimit': 'miterLimit',
-    'font-family': 'fontFamily',
-    'font-size': 'fontSize',
-    'font-style': 'fontStyle',
-    'font-weight': 'fontWeight',
-
-    'text-align': 'textAlign',
-    'alignment-baseline': 'textBaseline'
-};
-
-function parseAttributes(xmlNode, el, defs, onlyInlineStyle) {
-    var zrStyle = el.__inheritedStyle || {};
-    var isTextEl = el.type === 'text';
-
-    // TODO Shadow
-    if (xmlNode.nodeType === 1) {
-        parseTransformAttribute(xmlNode, el);
-
-        extend(zrStyle, parseStyleAttribute(xmlNode));
-
-        if (!onlyInlineStyle) {
-            for (var svgAttrName in attributesMap) {
-                if (attributesMap.hasOwnProperty(svgAttrName)) {
-                    var attrValue = xmlNode.getAttribute(svgAttrName);
-                    if (attrValue != null) {
-                        zrStyle[attributesMap[svgAttrName]] = attrValue;
-                    }
-                }
-            }
-        }
-    }
-
-    var elFillProp = isTextEl ? 'textFill' : 'fill';
-    var elStrokeProp = isTextEl ? 'textStroke' : 'stroke';
-
-    el.style = el.style || new Style();
-    var elStyle = el.style;
-
-    zrStyle.fill != null && elStyle.set(elFillProp, getPaint(zrStyle.fill, defs));
-    zrStyle.stroke != null && elStyle.set(elStrokeProp, getPaint(zrStyle.stroke, defs));
-
-    each$1([
-        'lineWidth', 'opacity', 'fillOpacity', 'strokeOpacity', 'miterLimit', 'fontSize'
-    ], function (propName) {
-        var elPropName = (propName === 'lineWidth' && isTextEl) ? 'textStrokeWidth' : propName;
-        zrStyle[propName] != null && elStyle.set(elPropName, parseFloat(zrStyle[propName]));
-    });
-
-    if (!zrStyle.textBaseline || zrStyle.textBaseline === 'auto') {
-        zrStyle.textBaseline = 'alphabetic';
-    }
-    if (zrStyle.textBaseline === 'alphabetic') {
-        zrStyle.textBaseline = 'bottom';
-    }
-    if (zrStyle.textAlign === 'start') {
-        zrStyle.textAlign = 'left';
-    }
-    if (zrStyle.textAlign === 'end') {
-        zrStyle.textAlign = 'right';
-    }
-
-    each$1(['lineDashOffset', 'lineCap', 'lineJoin',
-        'fontWeight', 'fontFamily', 'fontStyle', 'textAlign', 'textBaseline'
-    ], function (propName) {
-        zrStyle[propName] != null && elStyle.set(propName, zrStyle[propName]);
-    });
-
-    if (zrStyle.lineDash) {
-        el.style.lineDash = trim(zrStyle.lineDash).split(DILIMITER_REG);
-    }
-
-    if (elStyle[elStrokeProp] && elStyle[elStrokeProp] !== 'none') {
-        // enable stroke
-        el[elStrokeProp] = true;
-    }
-
-    el.__inheritedStyle = zrStyle;
-}
-
-
-var urlRegex = /url\(\s*#(.*?)\)/;
-function getPaint(str, defs) {
-    // if (str === 'none') {
-    //     return;
-    // }
-    var urlMatch = defs && str && str.match(urlRegex);
-    if (urlMatch) {
-        var url = trim(urlMatch[1]);
-        var def = defs[url];
-        return def;
-    }
-    return str;
-}
-
-var transformRegex = /(translate|scale|rotate|skewX|skewY|matrix)\(([\-\s0-9\.e,]*)\)/g;
-
-function parseTransformAttribute(xmlNode, node) {
-    var transform = xmlNode.getAttribute('transform');
-    if (transform) {
-        transform = transform.replace(/,/g, ' ');
-        var m = null;
-        var transformOps = [];
-        transform.replace(transformRegex, function (str, type, value) {
-            transformOps.push(type, value);
-        });
-        for (var i = transformOps.length - 1; i > 0; i -= 2) {
-            var value = transformOps[i];
-            var type = transformOps[i - 1];
-            m = m || create$1();
-            switch (type) {
-                case 'translate':
-                    value = trim(value).split(DILIMITER_REG);
-                    translate(m, m, [parseFloat(value[0]), parseFloat(value[1] || 0)]);
-                    break;
-                case 'scale':
-                    value = trim(value).split(DILIMITER_REG);
-                    scale$1(m, m, [parseFloat(value[0]), parseFloat(value[1] || value[0])]);
-                    break;
-                case 'rotate':
-                    value = trim(value).split(DILIMITER_REG);
-                    rotate(m, m, parseFloat(value[0]));
-                    break;
-                case 'skew':
-                    value = trim(value).split(DILIMITER_REG);
-                    console.warn('Skew transform is not supported yet');
-                    break;
-                case 'matrix':
-                    var value = trim(value).split(DILIMITER_REG);
-                    m[0] = parseFloat(value[0]);
-                    m[1] = parseFloat(value[1]);
-                    m[2] = parseFloat(value[2]);
-                    m[3] = parseFloat(value[3]);
-                    m[4] = parseFloat(value[4]);
-                    m[5] = parseFloat(value[5]);
-                    break;
-            }
-        }
-        node.setLocalTransform(m);
-    }
-}
-
-// Value may contain space.
-var styleRegex = /([^\s:;]+)\s*:\s*([^:;]+)/g;
-function parseStyleAttribute(xmlNode) {
-    var style = xmlNode.getAttribute('style');
-    var result = {};
-
-    if (!style) {
-        return result;
-    }
-
-    var styleList = {};
-    styleRegex.lastIndex = 0;
-    var styleRegResult;
-    while ((styleRegResult = styleRegex.exec(style)) != null) {
-        styleList[styleRegResult[1]] = styleRegResult[2];
-    }
-
-    for (var svgAttrName in attributesMap) {
-        if (attributesMap.hasOwnProperty(svgAttrName) && styleList[svgAttrName] != null) {
-            result[attributesMap[svgAttrName]] = styleList[svgAttrName];
-        }
-    }
-
-    return result;
-}
-
-/**
- * @param {Array.<number>} viewBoxRect
- * @param {number} width
- * @param {number} height
- * @return {Object} {scale, position}
- */
-function makeViewBoxTransform(viewBoxRect, width, height) {
-    var scaleX = width / viewBoxRect.width;
-    var scaleY = height / viewBoxRect.height;
-    var scale = Math.min(scaleX, scaleY);
-    // preserveAspectRatio 'xMidYMid'
-    var viewBoxScale = [scale, scale];
-    var viewBoxPosition = [
-        -(viewBoxRect.x + viewBoxRect.width / 2) * scale + width / 2,
-        -(viewBoxRect.y + viewBoxRect.height / 2) * scale + height / 2
-    ];
-
-    return {
-        scale: viewBoxScale,
-        position: viewBoxPosition
-    };
-}
-
-/**
- * @param {string|XMLElement} xml
- * @param {Object} [opt]
- * @param {number} [opt.width] Default width if svg width not specified or is a percent value.
- * @param {number} [opt.height] Default height if svg height not specified or is a percent value.
- * @param {boolean} [opt.ignoreViewBox]
- * @param {boolean} [opt.ignoreRootClip]
- * @return {Object} result:
- * {
- *     root: Group, The root of the the result tree of zrender shapes,
- *     width: number, the viewport width of the SVG,
- *     height: number, the viewport height of the SVG,
- *     viewBoxRect: {x, y, width, height}, the declared viewBox rect of the SVG, if exists,
- *     viewBoxTransform: the {scale, position} calculated by viewBox and viewport, is exists.
- * }
- */
-
-/*
-* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
-
-var storage = createHashMap();
-
-// For minimize the code size of common echarts package,
-// do not put too much logic in this module.
-
-var mapDataStorage = {
-
-    // The format of record: see `echarts.registerMap`.
-    // Compatible with previous `echarts.registerMap`.
-    registerMap: function (mapName, rawGeoJson, rawSpecialAreas) {
-
-        var records;
-
-        if (isArray(rawGeoJson)) {
-            records = rawGeoJson;
-        }
-        else if (rawGeoJson.svg) {
-            records = [{
-                type: 'svg',
-                source: rawGeoJson.svg,
-                specialAreas: rawGeoJson.specialAreas
-            }];
-        }
-        else {
-            // Backward compatibility.
-            if (rawGeoJson.geoJson && !rawGeoJson.features) {
-                rawSpecialAreas = rawGeoJson.specialAreas;
-                rawGeoJson = rawGeoJson.geoJson;
-            }
-            records = [{
-                type: 'geoJSON',
-                source: rawGeoJson,
-                specialAreas: rawSpecialAreas
-            }];
-        }
-
-        each$1(records, function (record) {
-            var type = record.type;
-            type === 'geoJson' && (type = record.type = 'geoJSON');
-
-            var parse = parsers[type];
-
-            if (__DEV__) {
-                assert$1(parse, 'Illegal map type: ' + type);
-            }
-
-            parse(record);
-        });
-
-        return storage.set(mapName, records);
-    },
-
-    retrieveMap: function (mapName) {
-        return storage.get(mapName);
-    }
-
-};
-
-var parsers = {
-
-    geoJSON: function (record) {
-        var source = record.source;
-        record.geoJSON = !isString(source)
-            ? source
-            : (typeof JSON !== 'undefined' && JSON.parse)
-            ? JSON.parse(source)
-            : (new Function('return (' + source + ');'))();
-    },
-
-    // Only perform parse to XML object here, which might be time
-    // consiming for large SVG.
-    // Although convert XML to zrender element is also time consiming,
-    // if we do it here, the clone of zrender elements has to be
-    // required. So we do it once for each geo instance, util real
-    // performance issues call for optimizing it.
-    svg: function (record) {
-        record.svgXML = parseXML(record.source);
-    }
-
-};
-
 /*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
@@ -26725,10 +25027,10 @@ var isFunction = isFunction$1;
 var isObject = isObject$1;
 var parseClassType = ComponentModel.parseClassType;
 
-var version = '4.2.1';
+var version = '4.1.0';
 
 var dependencies = {
-    zrender: '4.0.6'
+    zrender: '4.0.4'
 };
 
 var TEST_FRAME_REMAIN_TIME = 1;
@@ -26896,7 +25198,7 @@ function ECharts(dom, theme$$1, opts) {
      */
     this._scheduler = new Scheduler(this, api, dataProcessorFuncs, visualFuncs);
 
-    Eventful.call(this, this._ecEventProcessor = new EventProcessor());
+    Eventful.call(this);
 
     /**
      * @type {module:echarts~MessageCenter}
@@ -27065,7 +25367,7 @@ echartsProto.setOption = function (option, notMerge, lazyUpdate) {
  * @DEPRECATED
  */
 echartsProto.setTheme = function () {
-    console.error('ECharts#setTheme() is DEPRECATED in ECharts 3.0');
+    console.log('ECharts#setTheme() is DEPRECATED in ECharts 3.0');
 };
 
 /**
@@ -28180,83 +26482,31 @@ var MOUSE_EVENT_NAMES = [
  */
 echartsProto._initEvents = function () {
     each(MOUSE_EVENT_NAMES, function (eveName) {
-        var handler = function (e) {
+        this._zr.on(eveName, function (e) {
             var ecModel = this.getModel();
             var el = e.target;
             var params;
-            var isGlobalOut = eveName === 'globalout';
 
             // no e.target when 'globalout'.
-            if (isGlobalOut) {
+            if (eveName === 'globalout') {
                 params = {};
             }
             else if (el && el.dataIndex != null) {
                 var dataModel = el.dataModel || ecModel.getSeriesByIndex(el.seriesIndex);
-                params = dataModel && dataModel.getDataParams(el.dataIndex, el.dataType, el) || {};
+                params = dataModel && dataModel.getDataParams(el.dataIndex, el.dataType) || {};
             }
             // If element has custom eventData of components
             else if (el && el.eventData) {
                 params = extend({}, el.eventData);
             }
 
-            // Contract: if params prepared in mouse event,
-            // these properties must be specified:
-            // {
-            //    componentType: string (component main type)
-            //    componentIndex: number
-            // }
-            // Otherwise event query can not work.
-
             if (params) {
-                var componentType = params.componentType;
-                var componentIndex = params.componentIndex;
-                // Special handling for historic reason: when trigger by
-                // markLine/markPoint/markArea, the componentType is
-                // 'markLine'/'markPoint'/'markArea', but we should better
-                // enable them to be queried by seriesIndex, since their
-                // option is set in each series.
-                if (componentType === 'markLine'
-                    || componentType === 'markPoint'
-                    || componentType === 'markArea'
-                ) {
-                    componentType = 'series';
-                    componentIndex = params.seriesIndex;
-                }
-                var model = componentType && componentIndex != null
-                    && ecModel.getComponent(componentType, componentIndex);
-                var view = model && this[
-                    model.mainType === 'series' ? '_chartsMap' : '_componentsMap'
-                ][model.__viewId];
-
-                if (__DEV__) {
-                    // `event.componentType` and `event[componentTpype + 'Index']` must not
-                    // be missed, otherwise there is no way to distinguish source component.
-                    // See `dataFormat.getDataParams`.
-                    if (!isGlobalOut && !(model && view)) {
-                        console.warn('model or view can not be found by params');
-                    }
-                }
-
                 params.event = e;
                 params.type = eveName;
-
-                this._ecEventProcessor.eventInfo = {
-                    targetEl: el,
-                    packedEvent: params,
-                    model: model,
-                    view: view
-                };
-
                 this.trigger(eveName, params);
             }
-        };
-        // Consider that some component (like tooltip, brush, ...)
-        // register zr event handler, but user event handler might
-        // do anything, such as call `setOption` or `dispatchAction`,
-        // which probably update any of the content and probably
-        // cause problem if it is called previous other inner handlers.
-        handler.zrEventfulCallAtLast = true;
-        this._zr.on(eveName, handler, this);
+
+        }, this);
     }, this);
 
     each(eventActionMap, function (actionType, eventType) {
@@ -28393,127 +26643,6 @@ function createExtensionAPI(ecInstance) {
     });
 }
 
-
-/**
- * @class
- * Usage of query:
- * `chart.on('click', query, handler);`
- * The `query` can be:
- * + The component type query string, only `mainType` or `mainType.subType`,
- *   like: 'xAxis', 'series', 'xAxis.category' or 'series.line'.
- * + The component query object, like:
- *   `{seriesIndex: 2}`, `{seriesName: 'xx'}`, `{seriesId: 'some'}`,
- *   `{xAxisIndex: 2}`, `{xAxisName: 'xx'}`, `{xAxisId: 'some'}`.
- * + The data query object, like:
- *   `{dataIndex: 123}`, `{dataType: 'link'}`, `{name: 'some'}`.
- * + The other query object (cmponent customized query), like:
- *   `{element: 'some'}` (only available in custom series).
- *
- * Caveat: If a prop in the `query` object is `null/undefined`, it is the
- * same as there is no such prop in the `query` object.
- */
-function EventProcessor() {
-    // These info required: targetEl, packedEvent, model, view
-    this.eventInfo;
-}
-EventProcessor.prototype = {
-    constructor: EventProcessor,
-
-    normalizeQuery: function (query) {
-        var cptQuery = {};
-        var dataQuery = {};
-        var otherQuery = {};
-
-        // `query` is `mainType` or `mainType.subType` of component.
-        if (isString(query)) {
-            var condCptType = parseClassType(query);
-            // `.main` and `.sub` may be ''.
-            cptQuery.mainType = condCptType.main || null;
-            cptQuery.subType = condCptType.sub || null;
-        }
-        // `query` is an object, convert to {mainType, index, name, id}.
-        else {
-            // `xxxIndex`, `xxxName`, `xxxId`, `name`, `dataIndex`, `dataType` is reserved,
-            // can not be used in `compomentModel.filterForExposedEvent`.
-            var suffixes = ['Index', 'Name', 'Id'];
-            var dataKeys = {name: 1, dataIndex: 1, dataType: 1};
-            each$1(query, function (val, key) {
-                var reserved = false;
-                for (var i = 0; i < suffixes.length; i++) {
-                    var propSuffix = suffixes[i];
-                    var suffixPos = key.lastIndexOf(propSuffix);
-                    if (suffixPos > 0 && suffixPos === key.length - propSuffix.length) {
-                        var mainType = key.slice(0, suffixPos);
-                        // Consider `dataIndex`.
-                        if (mainType !== 'data') {
-                            cptQuery.mainType = mainType;
-                            cptQuery[propSuffix.toLowerCase()] = val;
-                            reserved = true;
-                        }
-                    }
-                }
-                if (dataKeys.hasOwnProperty(key)) {
-                    dataQuery[key] = val;
-                    reserved = true;
-                }
-                if (!reserved) {
-                    otherQuery[key] = val;
-                }
-            });
-        }
-
-        return {
-            cptQuery: cptQuery,
-            dataQuery: dataQuery,
-            otherQuery: otherQuery
-        };
-    },
-
-    filter: function (eventType, query, args) {
-        // They should be assigned before each trigger call.
-        var eventInfo = this.eventInfo;
-
-        if (!eventInfo) {
-            return true;
-        }
-
-        var targetEl = eventInfo.targetEl;
-        var packedEvent = eventInfo.packedEvent;
-        var model = eventInfo.model;
-        var view = eventInfo.view;
-
-        // For event like 'globalout'.
-        if (!model || !view) {
-            return true;
-        }
-
-        var cptQuery = query.cptQuery;
-        var dataQuery = query.dataQuery;
-
-        return check(cptQuery, model, 'mainType')
-            && check(cptQuery, model, 'subType')
-            && check(cptQuery, model, 'index', 'componentIndex')
-            && check(cptQuery, model, 'name')
-            && check(cptQuery, model, 'id')
-            && check(dataQuery, packedEvent, 'name')
-            && check(dataQuery, packedEvent, 'dataIndex')
-            && check(dataQuery, packedEvent, 'dataType')
-            && (!view.filterForExposedEvent || view.filterForExposedEvent(
-                eventType, query.otherQuery, targetEl, packedEvent
-            ));
-
-        function check(query, host, prop, propOnHost) {
-            return query[prop] == null || host[propOnHost || prop] === query[prop];
-        }
-    },
-
-    afterTrigger: function () {
-        // Make sure the eventInfo wont be used in next trigger.
-        this.eventInfo = null;
-    }
-};
-
-
 /**
  * @type {Object} key: actionType.
  * @inner
@@ -28567,6 +26696,8 @@ var connectedGroups = {};
 var idBase = new Date() - 0;
 var groupIdBase = new Date() - 0;
 var DOM_ATTRIBUTE_KEY = '_echarts_instance_';
+
+var mapDataStores = {};
 
 function enableConnect(chart) {
     var STATUS_PENDING = 0;
@@ -28712,7 +26843,7 @@ function dispose(chart) {
     if (typeof chart === 'string') {
         chart = instances[chart];
     }
-    else if (!(chart instanceof ECharts)) {
+    else if (!(chart instanceof ECharts)){
         // Try to treat as dom
         chart = getInstanceByDom(chart);
     }
@@ -28961,10 +27092,10 @@ function setCanvasCreator(creator) {
 
 /**
  * @param {string} mapName
- * @param {Array.<Object>|Object|string} geoJson
+ * @param {Object|string} geoJson
  * @param {Object} [specialAreas]
  *
- * @example GeoJSON
+ * @example
  *     $.get('USA.json', function (geoJson) {
  *         echarts.registerMap('USA', geoJson);
  *         // Or
@@ -28973,20 +27104,20 @@ function setCanvasCreator(creator) {
  *             specialAreas: {}
  *         })
  *     });
- *
- *     $.get('airport.svg', function (svg) {
- *         echarts.registerMap('airport', {
- *             svg: svg
- *         }
- *     });
- *
- *     echarts.registerMap('eu', [
- *         {svg: eu-topographic.svg},
- *         {geoJSON: eu.json}
- *     ])
  */
 function registerMap(mapName, geoJson, specialAreas) {
-    mapDataStorage.registerMap(mapName, geoJson, specialAreas);
+    if (geoJson.geoJson && !geoJson.features) {
+        specialAreas = geoJson.specialAreas;
+        geoJson = geoJson.geoJson;
+    }
+    if (typeof geoJson === 'string') {
+        geoJson = (typeof JSON !== 'undefined' && JSON.parse)
+            ? JSON.parse(geoJson) : (new Function('return (' + geoJson + ');'))();
+    }
+    mapDataStores[mapName] = {
+        geoJson: geoJson,
+        specialAreas: specialAreas
+    };
 }
 
 /**
@@ -28994,12 +27125,7 @@ function registerMap(mapName, geoJson, specialAreas) {
  * @return {Object}
  */
 function getMap(mapName) {
-    // For backward compatibility, only return the first one.
-    var records = mapDataStorage.retrieveMap(mapName);
-    return records && records[0] && {
-        geoJson: records[0].geoJSON,
-        specialAreas: records[0].specialAreas
-    };
+    return mapDataStores[mapName];
 }
 
 registerVisual(PRIORITY_VISUAL_GLOBAL, seriesColor);
@@ -29333,8 +27459,6 @@ function mayLabelDimType(dimType) {
 * under the License.
 */
 
-/* global Float64Array, Int32Array, Uint32Array, Uint16Array */
-
 /**
  * List for data storage
  * @module echarts/data/List
@@ -29343,7 +27467,6 @@ function mayLabelDimType(dimType) {
 var isObject$4 = isObject$1;
 
 var UNDEFINED = 'undefined';
-var INDEX_NOT_FOUND = -1;
 
 // Use prefix to avoid index to be the same as otherIdList[idx],
 // which will cause weird udpate animation.
@@ -29363,7 +27486,6 @@ var dataCtors = {
 // Caution: MUST not use `new CtorUint32Array(arr, 0, len)`, because the Ctor of array is
 // different from the Ctor of typed array.
 var CtorUint32Array = typeof Uint32Array === UNDEFINED ? Array : Uint32Array;
-var CtorInt32Array = typeof Int32Array === UNDEFINED ? Array : Int32Array;
 var CtorUint16Array = typeof Uint16Array === UNDEFINED ? Array : Uint16Array;
 
 function getIndicesCtor(list) {
@@ -29697,7 +27819,7 @@ listProto.initData = function (data, nameList, dimValueGetter) {
     }
 
     if (__DEV__) {
-        if (!notProvider && (typeof data.getItem !== 'function' || typeof data.count !== 'function')) {
+        if (!notProvider && (typeof data.getItem != 'function' || typeof data.count != 'function')) {
             throw new Error('Inavlid data provider.');
         }
     }
@@ -29724,10 +27846,10 @@ listProto.initData = function (data, nameList, dimValueGetter) {
     this.defaultDimValueGetter = defaultDimValueGetters[
         this._rawData.getSource().sourceFormat
     ];
+
     // Default dim value getter
     this._dimValueGetter = dimValueGetter = dimValueGetter
         || this.defaultDimValueGetter;
-    this._dimValueGetterArrayRows = defaultDimValueGetters.arrayRows;
 
     // Reset raw extent.
     this._rawExtent = {};
@@ -29744,9 +27866,6 @@ listProto.getProvider = function () {
     return this._rawData;
 };
 
-/**
- * Caution: Can be only called on raw data (before `this._indices` created).
- */
 listProto.appendData = function (data) {
     if (__DEV__) {
         assert$1(!this._indices, 'appendData can only be called on raw data.');
@@ -29760,77 +27879,6 @@ listProto.appendData = function (data) {
         end += start;
     }
     this._initDataFromProvider(start, end);
-};
-
-/**
- * Caution: Can be only called on raw data (before `this._indices` created).
- * This method does not modify `rawData` (`dataProvider`), but only
- * add values to storage.
- *
- * The final count will be increased by `Math.max(values.length, names.length)`.
- *
- * @param {Array.<Array.<*>>} values That is the SourceType: 'arrayRows', like
- *        [
- *            [12, 33, 44],
- *            [NaN, 43, 1],
- *            ['-', 'asdf', 0]
- *        ]
- *        Each item is exaclty cooresponding to a dimension.
- * @param {Array.<string>} [names]
- */
-listProto.appendValues = function (values, names) {
-    var chunkSize = this._chunkSize;
-    var storage = this._storage;
-    var dimensions = this.dimensions;
-    var dimLen = dimensions.length;
-    var rawExtent = this._rawExtent;
-
-    var start = this.count();
-    var end = start + Math.max(values.length, names ? names.length : 0);
-    var originalChunkCount = this._chunkCount;
-
-    for (var i = 0; i < dimLen; i++) {
-        var dim = dimensions[i];
-        if (!rawExtent[dim]) {
-            rawExtent[dim] = getInitialExtent();
-        }
-        if (!storage[dim]) {
-            storage[dim] = [];
-        }
-        prepareChunks(storage, this._dimensionInfos[dim], chunkSize, originalChunkCount, end);
-        this._chunkCount = storage[dim].length;
-    }
-
-    var emptyDataItem = new Array(dimLen);
-    for (var idx = start; idx < end; idx++) {
-        var sourceIdx = idx - start;
-        var chunkIndex = Math.floor(idx / chunkSize);
-        var chunkOffset = idx % chunkSize;
-
-        // Store the data by dimensions
-        for (var k = 0; k < dimLen; k++) {
-            var dim = dimensions[k];
-            var val = this._dimValueGetterArrayRows(
-                values[sourceIdx] || emptyDataItem, dim, sourceIdx, k
-            );
-            storage[dim][chunkIndex][chunkOffset] = val;
-
-            var dimRawExtent = rawExtent[dim];
-            val < dimRawExtent[0] && (dimRawExtent[0] = val);
-            val > dimRawExtent[1] && (dimRawExtent[1] = val);
-        }
-
-        if (names) {
-            this._nameList[idx] = names[sourceIdx];
-        }
-    }
-
-    this._rawCount = this._count = end;
-
-    // Reset data extent
-    this._extent = {};
-
-    prepareInvertedIndex(this);
 };
 
 listProto._initDataFromProvider = function (start, end) {
@@ -29851,7 +27899,8 @@ listProto._initDataFromProvider = function (start, end) {
     var nameRepeatCount = this._nameRepeatCount = {};
     var nameDimIdx;
 
-    var originalChunkCount = this._chunkCount;
+    var chunkCount = this._chunkCount;
+    var lastChunkIndex = chunkCount - 1;
     for (var i = 0; i < dimLen; i++) {
         var dim = dimensions[i];
         if (!rawExtent[dim]) {
@@ -29865,13 +27914,26 @@ listProto._initDataFromProvider = function (start, end) {
         if (dimInfo.otherDims.itemId === 0) {
             this._idDimIdx = i;
         }
+        var DataCtor = dataCtors[dimInfo.type];
 
         if (!storage[dim]) {
             storage[dim] = [];
         }
+        var resizeChunkArray = storage[dim][lastChunkIndex];
+        if (resizeChunkArray && resizeChunkArray.length < chunkSize) {
+            var newStore = new DataCtor(Math.min(end - lastChunkIndex * chunkSize, chunkSize));
+            // The cost of the copy is probably inconsiderable
+            // within the initial chunkSize.
+            for (var j = 0; j < resizeChunkArray.length; j++) {
+                newStore[j] = resizeChunkArray[j];
+            }
+            storage[dim][lastChunkIndex] = newStore;
+        }
 
-        prepareChunks(storage, dimInfo, chunkSize, originalChunkCount, end);
-
+        // Create new chunks.
+        for (var k = chunkCount * chunkSize; k < end; k += chunkSize) {
+            storage[dim].push(new DataCtor(Math.min(end - k, chunkSize)));
+        }
         this._chunkCount = storage[dim].length;
     }
 
@@ -29897,8 +27959,12 @@ listProto._initDataFromProvider = function (start, end) {
             dimStorage[chunkOffset] = val;
 
             var dimRawExtent = rawExtent[dim];
-            val < dimRawExtent[0] && (dimRawExtent[0] = val);
-            val > dimRawExtent[1] && (dimRawExtent[1] = val);
+            if (val < dimRawExtent[0]) {
+                dimRawExtent[0] = val;
+            }
+            if (val > dimRawExtent[1]) {
+                dimRawExtent[1] = val;
+            }
         }
 
         // ??? FIXME not check by pure but sourceFormat?
@@ -29957,27 +28023,6 @@ listProto._initDataFromProvider = function (start, end) {
     prepareInvertedIndex(this);
 };
 
-function prepareChunks(storage, dimInfo, chunkSize, chunkCount, end) {
-    var DataCtor = dataCtors[dimInfo.type];
-    var lastChunkIndex = chunkCount - 1;
-    var dim = dimInfo.name;
-    var resizeChunkArray = storage[dim][lastChunkIndex];
-    if (resizeChunkArray && resizeChunkArray.length < chunkSize) {
-        var newStore = new DataCtor(Math.min(end - lastChunkIndex * chunkSize, chunkSize));
-        // The cost of the copy is probably inconsiderable
-        // within the initial chunkSize.
-        for (var j = 0; j < resizeChunkArray.length; j++) {
-            newStore[j] = resizeChunkArray[j];
-        }
-        storage[dim][lastChunkIndex] = newStore;
-    }
-
-    // Create new chunks.
-    for (var k = chunkCount * chunkSize; k < end; k += chunkSize) {
-        storage[dim].push(new DataCtor(Math.min(end - k, chunkSize)));
-    }
-}
-
 function prepareInvertedIndex(list) {
     var invertedIndicesMap = list._invertedIndicesMap;
     each$1(invertedIndicesMap, function (invertedIndices, dim) {
@@ -29986,13 +28031,13 @@ function prepareInvertedIndex(list) {
         // Currently, only dimensions that has ordinalMeta can create inverted indices.
         var ordinalMeta = dimInfo.ordinalMeta;
         if (ordinalMeta) {
-            invertedIndices = invertedIndicesMap[dim] = new CtorInt32Array(
+            invertedIndices = invertedIndicesMap[dim] = new CtorUint32Array(
                 ordinalMeta.categories.length
             );
             // The default value of TypedArray is 0. To avoid miss
-            // mapping to 0, we should set it as INDEX_NOT_FOUND.
+            // mapping to 0, we should set it as NaN.
             for (var i = 0; i < invertedIndices.length; i++) {
-                invertedIndices[i] = INDEX_NOT_FOUND;
+                invertedIndices[i] = NaN;
             }
             for (var i = 0; i < list._count; i++) {
                 // Only support the case that all values are distinct.
@@ -30304,16 +28349,14 @@ listProto.getMedian = function (dim /*, stack */) {
     // Use quick select?
 
     // immutability & sort
-    var sortedDimDataArray = [].concat(dimDataArray).sort(function (a, b) {
+    var sortedDimDataArray = [].concat(dimDataArray).sort(function(a, b) {
         return a - b;
     });
     var len = this.count();
     // calculate median
-    return len === 0
-        ? 0
-        : len % 2 === 1
-        ? sortedDimDataArray[(len - 1) / 2]
-        : (sortedDimDataArray[len / 2] + sortedDimDataArray[len / 2 - 1]) / 2;
+    return len === 0 ? 0 :
+        len % 2 === 1 ? sortedDimDataArray[(len - 1) / 2] :
+            (sortedDimDataArray[len / 2] + sortedDimDataArray[len / 2 - 1]) / 2;
 };
 
 // /**
@@ -30357,7 +28400,7 @@ listProto.rawIndexOf = function (dim, value) {
     }
     var rawIndex = invertedIndices[value];
     if (rawIndex == null || isNaN(rawIndex)) {
-        return INDEX_NOT_FOUND;
+        return -1;
     }
     return rawIndex;
 };
@@ -30754,7 +28797,7 @@ listProto.selectRange = function (range) {
             var max2 = range[dimensions[1]][1];
             for (var k = 0; k < this._chunkCount; k++) {
                 var chunkStorage = dimStorage[k];
-                var chunkStorage2 = dimStorage2[k];
+                var chunkStorage2= dimStorage2[k];
                 var len = Math.min(this._count - k * this._chunkSize, this._chunkSize);
                 for (var i = 0; i < len; i++) {
                     var val = chunkStorage[i];
@@ -31411,15 +29454,6 @@ function completeDimensions(sysDims, source, opt) {
     // Set `coordDim` and `coordDimIndex` by `encodeDef` and normalize `encodeDef`.
     encodeDef.each(function (dataDims, coordDim) {
         dataDims = normalizeToArray(dataDims).slice();
-
-        // Note: It is allowed that `dataDims.length` is `0`, e.g., options is
-        // `{encode: {x: -1, y: 1}}`. Should not filter anything in
-        // this case.
-        if (dataDims.length === 1 && dataDims[0] < 0) {
-            encodeDef.set(coordDim, false);
-            return;
-        }
-
         var validDataDims = encodeDef.set(coordDim, []);
         each$1(dataDims, function (resultDimIdx, idx) {
             // The input resultDimIdx can be dim name or index.
@@ -31455,15 +29489,7 @@ function completeDimensions(sysDims, source, opt) {
                 = sysDimItem.dimsDef = sysDimItem.otherDims = null;
         }
 
-        var dataDims = encodeDef.get(coordDim);
-
-        // negative resultDimIdx means no need to mapping.
-        if (dataDims === false) {
-            return;
-        }
-
-        var dataDims = normalizeToArray(dataDims);
-
+        var dataDims = normalizeToArray(encodeDef.get(coordDim));
         // dimensions provides default dim sequences.
         if (!dataDims.length) {
             for (var i = 0; i < (sysDimItemDimsDef && sysDimItemDimsDef.length || 1); i++) {
@@ -32364,7 +30390,7 @@ OrdinalScale.create = function () {
  * For testable.
  */
 
-var roundNumber$1 = round$2;
+var roundNumber$1 = round$1;
 
 /**
  * @param {Array.<number>} extent Both extent[0] and extent[1] should be valid number.
@@ -32485,7 +30511,7 @@ function intervalScaleGetTicks(interval, extent, niceTickExtent, intervalPrecisi
  */
 
 
-var roundNumber = round$2;
+var roundNumber = round$1;
 
 /**
  * @alias module:echarts/coord/scale/Interval
@@ -32684,8 +30710,6 @@ IntervalScale.create = function () {
 * specific language governing permissions and limitations
 * under the License.
 */
-
-/* global Float32Array */
 
 var STACK_PREFIX = '__ec_stack_';
 var LARGE_BAR_MIN_WIDTH = 0.5;
@@ -33054,25 +31078,13 @@ function isInLargeMode(seriesModel) {
     return seriesModel.pipelineContext && seriesModel.pipelineContext.large;
 }
 
-// See cases in `test/bar-start.html` and `#7412`, `#8747`.
 function getValueAxisStart(baseAxis, valueAxis, stacked) {
-    var extent = valueAxis.getGlobalExtent();
-    var min;
-    var max;
-    if (extent[0] > extent[1]) {
-        min = extent[1];
-        max = extent[0];
-    }
-    else {
-        min = extent[0];
-        max = extent[1];
-    }
-
-    var valueStart = valueAxis.toGlobalCoord(valueAxis.dataToCoord(0));
-    valueStart < min && (valueStart = min);
-    valueStart > max && (valueStart = max);
-
-    return valueStart;
+    return (
+        indexOf(baseAxis.getAxesOnZeroOf(), valueAxis) >= 0
+        || stacked
+    )
+    ? valueAxis.toGlobalCoord(valueAxis.dataToCoord(0))
+    : valueAxis.getGlobalExtent()[0];
 }
 
 /*
@@ -33093,17 +31105,6 @@ function getValueAxisStart(baseAxis, valueAxis, stacked) {
 * specific language governing permissions and limitations
 * under the License.
 */
-
-/*
-* A third-party license is embeded for some of the code in this file:
-* The "scaleLevels" was originally copied from "d3.js" with some
-* modifications made for this project.
-* (See more details in the comment on the definition of "scaleLevels" below.)
-* The use of the source code of this file is also subject to the terms
-* and consitions of the license of "d3.js" (BSD-3Clause, see
-* </licenses/LICENSE-d3>).
-*/
-
 
 // [About UTC and local time zone]:
 // In most cases, `number.parseDate` will treat input data string as local time
@@ -33132,7 +31133,7 @@ var bisect = function (a, x, lo, hi) {
             lo = mid + 1;
         }
         else {
-            hi = mid;
+            hi  = mid;
         }
     }
     return lo;
@@ -33180,10 +31181,10 @@ var TimeScale = IntervalScale.extend({
         var interval = this._interval;
 
         if (!opt.fixMin) {
-            extent[0] = round$2(mathFloor(extent[0] / interval) * interval);
+            extent[0] = round$1(mathFloor(extent[0] / interval) * interval);
         }
         if (!opt.fixMax) {
-            extent[1] = round$2(mathCeil(extent[1] / interval) * interval);
+            extent[1] = round$1(mathCeil(extent[1] / interval) * interval);
         }
     },
 
@@ -33247,12 +31248,7 @@ each$1(['contain', 'normalize'], function (methodName) {
     };
 });
 
-/**
- * This implementation was originally copied from "d3.js"
- * <https://github.com/d3/d3/blob/b516d77fb8566b576088e73410437494717ada26/src/time/scale.js>
- * with some modifications made for this program.
- * See the license statement at the head of this file.
- */
+// Steps from d3
 var scaleLevels = [
     // Format              interval
     ['hh:mm:ss', ONE_SECOND],          // 1s
@@ -33282,8 +31278,8 @@ var scaleLevels = [
     ['month', ONE_DAY * 31],           // 1M
     ['week', ONE_DAY * 42],            // 6w
     ['month', ONE_DAY * 62],           // 2M
-    ['week', ONE_DAY * 70],            // 10w
-    ['quarter', ONE_DAY * 95],         // 3M
+    ['week', ONE_DAY * 42],            // 10w
+    ['quarter', ONE_DAY * 380 / 4],    // 3M
     ['month', ONE_DAY * 31 * 4],       // 4M
     ['month', ONE_DAY * 31 * 5],       // 5M
     ['half-year', ONE_DAY * 380 / 2],  // 6M
@@ -33329,7 +31325,7 @@ var scaleProto$1 = Scale.prototype;
 var intervalScaleProto$1 = IntervalScale.prototype;
 
 var getPrecisionSafe$1 = getPrecisionSafe;
-var roundingErrorFix = round$2;
+var roundingErrorFix = round$1;
 
 var mathFloor$1 = Math.floor;
 var mathCeil$1 = Math.ceil;
@@ -33357,7 +31353,7 @@ var LogScale = Scale.extend({
         var originalExtent = originalScale.getExtent();
 
         return map(intervalScaleProto$1.getTicks.call(this), function (val) {
-            var powVal = round$2(mathPow$1(this.base, val));
+            var powVal = round$1(mathPow$1(this.base, val));
 
             // Fix #4158
             powVal = (val === extent[0] && originalScale.__fixMin)
@@ -33462,8 +31458,8 @@ var LogScale = Scale.extend({
         }
 
         var niceExtent = [
-            round$2(mathCeil$1(extent[0] / interval) * interval),
-            round$2(mathFloor$1(extent[1] / interval) * interval)
+            round$1(mathCeil$1(extent[0] / interval) * interval),
+            round$1(mathFloor$1(extent[1] / interval) * interval)
         ];
 
         this._interval = interval;
@@ -33775,9 +31771,6 @@ function makeLabelFormatter(axis) {
     if (typeof labelFormatter === 'string') {
         labelFormatter = (function (tpl) {
             return function (val) {
-                // For category axis, get raw value; for numeric axis,
-                // get foramtted label like '1,333,444'.
-                val = axis.scale.getLabel(val);
                 return tpl.replace('{value}', val != null ? val : '');
             };
         })(labelFormatter);
@@ -33872,26 +31865,6 @@ function rotateTextRect(textRect, rotate) {
     return rotatedRect;
 }
 
-/**
- * @param {module:echarts/src/model/Model} model axisLabelModel or axisTickModel
- * @return {number|String} Can be null|'auto'|number|function
- */
-function getOptionCategoryInterval(model) {
-    var interval = model.get('interval');
-    return interval == null ? 'auto' : interval;
-}
-
-/**
- * Set `categoryInterval` as 0 implicitly indicates that
- * show all labels reguardless of overlap.
- * @param {Object} axis axisModel.axis
- * @return {boolean}
- */
-function shouldShowAllLabels(axis) {
-    return axis.type === 'category'
-        && getOptionCategoryInterval(axis.getLabelModel()) === 0;
-}
-
 /*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
@@ -33910,8 +31883,6 @@ function shouldShowAllLabels(axis) {
 * specific language governing permissions and limitations
 * under the License.
 */
-
-// import * as axisHelper from './axisHelper';
 
 var axisModelCommonMixin = {
 
@@ -34494,7 +32465,7 @@ function contain$1(points, x, y) {
  */
 
 /**
- * @param {string|Region} name
+ * @param {string} name
  * @param {Array} geometries
  * @param {Array.<number>} cp
  */
@@ -34607,7 +32578,7 @@ Region.prototype = {
             width = aspect * height;
         }
         else if (!height) {
-            height = width / aspect;
+            height = width / aspect ;
         }
         var target = new BoundingRect(x, y, width, height);
         var transform = rect.calculateTransform(target);
@@ -34635,14 +32606,6 @@ Region.prototype = {
             rect.x + rect.width / 2,
             rect.y + rect.height / 2
         ];
-    },
-
-    cloneShallow: function (name) {
-        name == null && (name = this.name);
-        var newRegion = new Region(name, this.geometries, this.center);
-        newRegion._rect = this._rect;
-        newRegion.transformTo = null; // Simply avoid to be called.
-        return newRegion;
     }
 };
 
@@ -35004,6 +32967,7 @@ function calculateCategoryInterval(axis) {
         var width = 0;
         var height = 0;
 
+        // Polar is also calculated in assumptive linear layout here.
         // Not precise, do not consider align and vertical align
         // and each distance from axis line yet.
         var rect = getBoundingRect(
@@ -35091,11 +33055,12 @@ function makeLabelsByNumericCategoryInterval(axis, categoryInterval, onlyTick) {
     // suitable for splitLine and splitArea rendering.
     // (2) Scales except category always contain min max label so
     // do not need to perform this process.
-    var showAllLabel = shouldShowAllLabels(axis);
-    var includeMinLabel = labelModel.get('showMinLabel') || showAllLabel;
-    var includeMaxLabel = labelModel.get('showMaxLabel') || showAllLabel;
+    var showMinMax = {
+        min: labelModel.get('showMinLabel'),
+        max: labelModel.get('showMaxLabel')
+    };
 
-    if (includeMinLabel && startTick !== ordinalExtent[0]) {
+    if (showMinMax.min && startTick !== ordinalExtent[0]) {
         addItem(ordinalExtent[0]);
     }
 
@@ -35105,7 +33070,7 @@ function makeLabelsByNumericCategoryInterval(axis, categoryInterval, onlyTick) {
         addItem(tickValue);
     }
 
-    if (includeMaxLabel && tickValue !== ordinalExtent[1]) {
+    if (showMinMax.max && tickValue !== ordinalExtent[1]) {
         addItem(ordinalExtent[1]);
     }
 
@@ -35145,6 +33110,12 @@ function makeLabelsByCustomizedCategoryInterval(axis, categoryInterval, onlyTick
     });
 
     return result;
+}
+
+// Can be null|'auto'|number|function
+function getOptionCategoryInterval(model) {
+    var interval = model.get('interval');
+    return interval == null ? 'auto' : interval;
 }
 
 /*
@@ -35506,44 +33477,13 @@ function fixOnBandTicksCoords(axis, ticksCoords, tickCategoryInterval, alignWith
 var parseGeoJson = parseGeoJSON;
 
 var ecUtil = {};
-each$1(
-    [
+each$1([
         'map', 'each', 'filter', 'indexOf', 'inherits', 'reduce', 'filter',
         'bind', 'curry', 'isArray', 'isString', 'isObject', 'isFunction',
         'extend', 'defaults', 'clone', 'merge'
     ],
     function (name) {
         ecUtil[name] = zrUtil[name];
-    }
-);
-var graphic$1 = {};
-each$1(
-    [
-        'extendShape', 'extendPath', 'makePath', 'makeImage',
-        'mergePath', 'resizePath', 'createIcon',
-        'setHoverStyle', 'setLabelStyle', 'setTextStyle', 'setText',
-        'getFont', 'updateProps', 'initProps', 'getTransform',
-        'clipPointsByRect', 'clipRectByRect',
-        'Group',
-        'Image',
-        'Text',
-        'Circle',
-        'Sector',
-        'Ring',
-        'Polygon',
-        'Polyline',
-        'Rect',
-        'Line',
-        'BezierCurve',
-        'Arc',
-        'IncrementalDisplayable',
-        'CompoundPath',
-        'LinearGradient',
-        'RadialGradient',
-        'BoundingRect'
-    ],
-    function (name) {
-        graphic$1[name] = graphic[name];
     }
 );
 
@@ -36016,52 +33956,37 @@ symbolProto._updateCommon = function (data, idx, symbolSize, seriesScope) {
     // Do not use symbol.trigger('emphasis'), but use symbol.highlight() instead.
     setHoverStyle(symbolPath);
 
-    symbolPath.__symbolOriginalScale = getScale(symbolSize);
+    var scale = getScale(symbolSize);
 
     if (hoverAnimation && seriesModel.isAnimationEnabled()) {
-        // Note: consider `off`, should use static function here.
-        symbolPath.on('mouseover', onMouseOver)
-            .on('mouseout', onMouseOut)
+        var onEmphasis = function() {
+            // Do not support this hover animation util some scenario required.
+            // Animation can only be supported in hover layer when using `el.incremetal`.
+            if (this.incremental) {
+                return;
+            }
+            var ratio = scale[1] / scale[0];
+            this.animateTo({
+                scale: [
+                    Math.max(scale[0] * 1.1, scale[0] + 3),
+                    Math.max(scale[1] * 1.1, scale[1] + 3 * ratio)
+                ]
+            }, 400, 'elasticOut');
+        };
+        var onNormal = function() {
+            if (this.incremental) {
+                return;
+            }
+            this.animateTo({
+                scale: scale
+            }, 400, 'elasticOut');
+        };
+        symbolPath.on('mouseover', onEmphasis)
+            .on('mouseout', onNormal)
             .on('emphasis', onEmphasis)
             .on('normal', onNormal);
     }
 };
-
-function onMouseOver() {
-    // see comment in `graphic.isInEmphasis`
-    !isInEmphasis(this) && onEmphasis.call(this);
-}
-
-function onMouseOut() {
-    // see comment in `graphic.isInEmphasis`
-    !isInEmphasis(this) && onNormal.call(this);
-}
-
-function onEmphasis() {
-    // Do not support this hover animation util some scenario required.
-    // Animation can only be supported in hover layer when using `el.incremetal`.
-    if (this.incremental || this.useHoverLayer) {
-        return;
-    }
-    var scale = this.__symbolOriginalScale;
-    var ratio = scale[1] / scale[0];
-    this.animateTo({
-        scale: [
-            Math.max(scale[0] * 1.1, scale[0] + 3),
-            Math.max(scale[1] * 1.1, scale[1] + 3 * ratio)
-        ]
-    }, 400, 'elasticOut');
-}
-
-function onNormal() {
-    if (this.incremental || this.useHoverLayer) {
-        return;
-    }
-    this.animateTo({
-        scale: this.__symbolOriginalScale
-    }, 400, 'elasticOut');
-}
-
 
 /**
  * @param {Function} cb
@@ -36855,18 +34780,10 @@ function getBoundingBox(points, smoothConstraint) {
     if (smoothConstraint) {
         for (var i = 0; i < points.length; i++) {
             var pt = points[i];
-            if (pt[0] < ptMin[0]) {
-                ptMin[0] = pt[0];
-            }
-            if (pt[1] < ptMin[1]) {
-                ptMin[1] = pt[1];
-            }
-            if (pt[0] > ptMax[0]) {
-                ptMax[0] = pt[0];
-            }
-            if (pt[1] > ptMax[1]) {
-                ptMax[1] = pt[1];
-            }
+            if (pt[0] < ptMin[0]) { ptMin[0] = pt[0]; }
+            if (pt[1] < ptMin[1]) { ptMin[1] = pt[1]; }
+            if (pt[0] > ptMax[0]) { ptMax[0] = pt[0]; }
+            if (pt[1] > ptMax[1]) { ptMax[1] = pt[1]; }
         }
     }
     return {
@@ -37136,10 +35053,10 @@ function createPolarClipShape(polar, hasAnimation, forSymbol, seriesModel) {
 
     var clipPath = new Sector({
         shape: {
-            cx: round$2(polar.cx, 1),
-            cy: round$2(polar.cy, 1),
-            r0: round$2(radiusExtent[0], 1),
-            r: round$2(radiusExtent[1], 1),
+            cx: round$1(polar.cx, 1),
+            cy: round$1(polar.cy, 1),
+            r0: round$1(radiusExtent[0], 1),
+            r: round$1(radiusExtent[1], 1),
             startAngle: -angleExtent[0] * RADIAN,
             endAngle: -angleExtent[1] * RADIAN,
             clockwise: angleAxis.inverse
@@ -37771,12 +35688,12 @@ Chart.extend({
             }
         });
 
-        this._polyline
-            = this._polygon
-            = this._coordSys
-            = this._points
-            = this._stackedOnPoints
-            = this._data = null;
+        this._polyline =
+        this._polygon =
+        this._coordSys =
+        this._points =
+        this._stackedOnPoints =
+        this._data = null;
     }
 });
 
@@ -37842,8 +35759,8 @@ var visualSymbol = function (seriesType, defaultSymbolType, legendSymbol) {
                     var itemSymbolType = itemModel.getShallow('symbol', true);
                     var itemSymbolSize = itemModel.getShallow('symbolSize',
                         true);
-                    var itemSymbolKeepAspect
-                        = itemModel.getShallow('symbolKeepAspect', true);
+                    var itemSymbolKeepAspect =
+                        itemModel.getShallow('symbolKeepAspect',true);
 
                     // If has item symbol
                     if (itemSymbolType != null) {
@@ -37883,8 +35800,6 @@ var visualSymbol = function (seriesType, defaultSymbolType, legendSymbol) {
 * specific language governing permissions and limitations
 * under the License.
 */
-
-/* global Float32Array */
 
 var pointsLayout = function (seriesType) {
     return {
@@ -38544,7 +36459,7 @@ var defaultOption = {
     splitArea: {
         show: false,
         areaStyle: {
-            color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)']
+            color: ['rgba(250,250,250,0.3)','rgba(200,200,200,0.3)']
         }
     }
 };
@@ -38960,15 +36875,11 @@ gridProto.update = function (ecModel, api) {
     each$1(axesMap.y, function (yAxis) {
         niceScaleExtent(yAxis.scale, yAxis.model);
     });
-
-    // Key: axisDim_axisIndex, value: boolean, whether onZero target.
-    var onZeroRecords = {};
-
     each$1(axesMap.x, function (xAxis) {
-        fixAxisOnZero(axesMap, 'y', xAxis, onZeroRecords);
+        fixAxisOnZero(axesMap, 'y', xAxis);
     });
     each$1(axesMap.y, function (yAxis) {
-        fixAxisOnZero(axesMap, 'x', yAxis, onZeroRecords);
+        fixAxisOnZero(axesMap, 'x', yAxis);
     });
 
     // Resize again if containLabel is enabled
@@ -38976,11 +36887,11 @@ gridProto.update = function (ecModel, api) {
     this.resize(this.model, api);
 };
 
-function fixAxisOnZero(axesMap, otherAxisDim, axis, onZeroRecords) {
+function fixAxisOnZero(axesMap, otherAxisDim, axis) {
 
     axis.getAxesOnZeroOf = function () {
         // TODO: onZero of multiple axes.
-        return otherAxisOnZeroOf ? [otherAxisOnZeroOf] : [];
+        return otherAxis ? [otherAxis] : [];
     };
 
     // onZero can not be enabled in these two situations:
@@ -38988,7 +36899,7 @@ function fixAxisOnZero(axesMap, otherAxisDim, axis, onZeroRecords) {
     // 2. When no axis is cross 0 point.
     var otherAxes = axesMap[otherAxisDim];
 
-    var otherAxisOnZeroOf;
+    var otherAxis;
     var axisModel = axis.model;
     var onZero = axisModel.get('axisLine.onZero');
     var onZeroAxisIndex = axisModel.get('axisLine.onZeroAxisIndex');
@@ -39000,30 +36911,17 @@ function fixAxisOnZero(axesMap, otherAxisDim, axis, onZeroRecords) {
     // If target axis is specified.
     if (onZeroAxisIndex != null) {
         if (canOnZeroToAxis(otherAxes[onZeroAxisIndex])) {
-            otherAxisOnZeroOf = otherAxes[onZeroAxisIndex];
+            otherAxis = otherAxes[onZeroAxisIndex];
         }
-    }
-    else {
-        // Find the first available other axis.
-        for (var idx in otherAxes) {
-            if (otherAxes.hasOwnProperty(idx)
-                && canOnZeroToAxis(otherAxes[idx])
-                // Consider that two Y axes on one value axis,
-                // if both onZero, the two Y axes overlap.
-                && !onZeroRecords[getOnZeroRecordKey(otherAxes[idx])]
-            ) {
-                otherAxisOnZeroOf = otherAxes[idx];
-                break;
-            }
-        }
+        return;
     }
 
-    if (otherAxisOnZeroOf) {
-        onZeroRecords[getOnZeroRecordKey(otherAxisOnZeroOf)] = true;
-    }
-
-    function getOnZeroRecordKey(axis) {
-        return axis.dim + '_' + axis.index;
+    // Find the first available other axis.
+    for (var idx in otherAxes) {
+        if (otherAxes.hasOwnProperty(idx) && canOnZeroToAxis(otherAxes[idx])) {
+            otherAxis = otherAxes[idx];
+            break;
+        }
     }
 }
 
@@ -39062,7 +36960,7 @@ gridProto.resize = function (gridModel, api, ignoreContainLabel) {
                     if (axis.position === 'top') {
                         gridRect.y += labelUnionRect.height + margin;
                     }
-                    else if (axis.position === 'left') {
+                    else if (axis.position === 'left')  {
                         gridRect.x += labelUnionRect.width + margin;
                     }
                 }
@@ -39529,8 +37427,7 @@ var PI$2 = Math.PI;
 
 function makeAxisEventDataBase(axisModel) {
     var eventData = {
-        componentType: axisModel.mainType,
-        componentIndex: axisModel.componentIndex
+        componentType: axisModel.mainType
     };
     eventData[axisModel.mainType + 'Index'] = axisModel.componentIndex;
     return eventData;
@@ -39736,8 +37633,7 @@ var builders = {
                     symbol.attr({
                         rotation: point.rotate,
                         position: pos,
-                        silent: true,
-                        z2: 11
+                        silent: true
                     });
                     this.group.add(symbol);
                 }
@@ -39978,10 +37874,6 @@ function isSilent(axisModel) {
 }
 
 function fixMinMaxLabelShow(axisModel, labelEls, tickEls) {
-    if (shouldShowAllLabels(axisModel.axis)) {
-        return;
-    }
-
     // If min or max are user set, we need to check
     // If the tick on min(max) are overlap on their neighbour tick
     // If they are overlapped, we need to hide the min(max) tick label
@@ -40732,7 +38624,7 @@ function layout$1(gridModel, axisModel, opt) {
 
     if (otherAxisOnZeroOf) {
         var onZeroCoord = otherAxisOnZeroOf.toGlobalCoord(otherAxisOnZeroOf.dataToCoord(0));
-        posBound[idx.onZero] = Math.max(Math.min(onZeroCoord, posBound[1]), posBound[0]);
+        posBound[idx['onZero']] = Math.max(Math.min(onZeroCoord, posBound[1]), posBound[0]);
     }
 
     // Axis position
@@ -40748,7 +38640,7 @@ function layout$1(gridModel, axisModel, opt) {
     var dirMap = {top: -1, bottom: 1, left: -1, right: 1};
 
     layout.labelDirection = layout.tickDirection = layout.nameDirection = dirMap[rawAxisPosition];
-    layout.labelOffset = otherAxisOnZeroOf ? posBound[idx[rawAxisPosition]] - posBound[idx.onZero] : 0;
+    layout.labelOffset = otherAxisOnZeroOf ? posBound[idx[rawAxisPosition]] - posBound[idx['onZero']] : 0;
 
     if (axisModel.get('axisTick.inside')) {
         layout.tickDirection = -layout.tickDirection;
@@ -41172,7 +39064,7 @@ var BaseBarSeries = SeriesModel.extend({
 
         large: false,
         largeThreshold: 400,
-        progressive: 3e3,
+        progressive: 5e3,
         progressiveChunkMode: 'mod',
 
         // barMaxWidth: null,
@@ -42434,10 +40326,6 @@ var PieView = Chart.extend({
                 shape.cx, shape.cy, r, shape.startAngle, shape.clockwise, removeClipPath, seriesModel
             ));
         }
-        else {
-            // clipPath is used in first-time animation, so remove it when otherwise. See: #8994
-            group.removeClipPath();
-        }
 
         this._data = data;
     },
@@ -42644,6 +40532,7 @@ function adjustSingleSide(list, cx, cy, r, dir, viewWidth, viewHeight) {
         return a.y - b.y;
     });
 
+    // 压
     function shiftDown(start, end, delta, dir) {
         for (var j = start; j < end; j++) {
             list[j].y += delta;
@@ -42659,6 +40548,7 @@ function adjustSingleSide(list, cx, cy, r, dir, viewWidth, viewHeight) {
         shiftUp(end - 1, delta / 2);
     }
 
+    // 弹
     function shiftUp(end, delta) {
         for (var j = end; j >= 0; j--) {
             list[j].y -= delta;
@@ -42672,14 +40562,18 @@ function adjustSingleSide(list, cx, cy, r, dir, viewWidth, viewHeight) {
 
     function changeX(list, isDownList, cx, cy, r, dir) {
         var lastDeltaX = dir > 0
-            ? isDownList                // right-side
-                ? Number.MAX_VALUE      // down
-                : 0                     // up
-            : isDownList                // left-side
-                ? Number.MAX_VALUE      // down
-                : 0;                    // up
+            ? isDownList                // 右侧
+                ? Number.MAX_VALUE      // 下
+                : 0                     // 上
+            : isDownList                // 左侧
+                ? Number.MAX_VALUE      // 下
+                : 0;                    // 上
 
         for (var i = 0, l = list.length; i < l; i++) {
+            // Not change x for center label
+            if (list[i].position === 'center') {
+                continue;
+            }
             var deltaY = Math.abs(list[i].y - cy);
             var length = list[i].len;
             var length2 = list[i].len2;
@@ -42690,11 +40584,11 @@ function adjustSingleSide(list, cx, cy, r, dir, viewWidth, viewHeight) {
                     )
                 : Math.abs(list[i].x - cx);
             if (isDownList && deltaX >= lastDeltaX) {
-                // right-down, left-down
+                // 右下，左下
                 deltaX = lastDeltaX - 10;
             }
             if (!isDownList && deltaX <= lastDeltaX) {
-                // right-up, left-up
+                // 右上，左上
                 deltaX = lastDeltaX + 10;
             }
 
@@ -42734,9 +40628,6 @@ function avoidOverlap(labelLayoutList, cx, cy, r, viewWidth, viewHeight) {
     var leftList = [];
     var rightList = [];
     for (var i = 0; i < labelLayoutList.length; i++) {
-        if (isPositionCenter(labelLayoutList[i])) {
-            continue;
-        }
         if (labelLayoutList[i].x < cx) {
             leftList.push(labelLayoutList[i]);
         }
@@ -42749,9 +40640,6 @@ function avoidOverlap(labelLayoutList, cx, cy, r, viewWidth, viewHeight) {
     adjustSingleSide(leftList, cx, cy, r, -1, viewWidth, viewHeight);
 
     for (var i = 0; i < labelLayoutList.length; i++) {
-        if (isPositionCenter(labelLayoutList[i])) {
-            continue;
-        }
         var linePoints = labelLayoutList[i].linePoints;
         if (linePoints) {
             var dist = linePoints[1][0] - linePoints[2][0];
@@ -42765,11 +40653,6 @@ function avoidOverlap(labelLayoutList, cx, cy, r, viewWidth, viewHeight) {
             linePoints[1][0] = linePoints[2][0] + dist;
         }
     }
-}
-
-function isPositionCenter(layout) {
-    // Not change x for center label
-    return layout.position === 'center';
 }
 
 var labelLayout = function (seriesModel, r, viewWidth, viewHeight) {
@@ -43219,8 +41102,6 @@ SeriesModel.extend({
 * specific language governing permissions and limitations
 * under the License.
 */
-
-/* global Float32Array */
 
 // TODO Batch by color
 
@@ -43694,8 +41575,6 @@ var GraphicModel = extendComponentModel({
         //          This mode is similar to css behavior, which is useful when you
         //          want an element to be able to overflow its container. (Consider
         //          a rotated circle needs to be located in a corner.)
-        // info: custom info. enables user to mount some info on elements and use them
-        //      in event handlers. Update them only when user specified, otherwise, remain.
 
         // Note: elements is always behind its ancestors in this elements array.
         elements: [],
@@ -43874,7 +41753,7 @@ extendComponentView({
         }
         this._lastGraphicModel = graphicModel;
 
-        this._updateElements(graphicModel);
+        this._updateElements(graphicModel, api);
         this._relocate(graphicModel, api);
     },
 
@@ -43883,8 +41762,9 @@ extendComponentView({
      *
      * @private
      * @param {Object} graphicModel graphic model
+     * @param {module:echarts/ExtensionAPI} api extension API
      */
-    _updateElements: function (graphicModel) {
+    _updateElements: function (graphicModel, api) {
         var elOptionsToUpdate = graphicModel.useElOptionsToUpdate();
 
         if (!elOptionsToUpdate) {
@@ -43902,8 +41782,9 @@ extendComponentView({
             var parentId = elOption.parentId;
             var targetElParent = parentId != null ? elMap.get(parentId) : rootGroup;
 
-            var elOptionStyle = elOption.style;
-            if (elOption.type === 'text' && elOptionStyle) {
+            if (elOption.type === 'text') {
+                var elOptionStyle = elOption.style;
+
                 // In top/bottom mode, textVerticalAlign should not be used, which cause
                 // inaccurately locating.
                 if (elOption.hv && elOption.hv[1]) {
@@ -43948,7 +41829,6 @@ extendComponentView({
             if (el) {
                 el.__ecGraphicWidth = elOption.width;
                 el.__ecGraphicHeight = elOption.height;
-                setEventData(el, graphicModel, elOption);
             }
         });
     },
@@ -44137,24 +42017,6 @@ function setLayoutInfoToExist(existItem, newElOption) {
     if (existItem.type === 'group') {
         existItem.width == null && (existItem.width = newElOption.width = 0);
         existItem.height == null && (existItem.height = newElOption.height = 0);
-    }
-}
-
-function setEventData(el, graphicModel, elOption) {
-    var eventData = el.eventData;
-    // Simple optimize for large amount of elements that no need event.
-    if (!el.silent && !el.ignore && !eventData) {
-        eventData = el.eventData = {
-            componentType: 'graphic',
-            componentIndex: graphicModel.componentIndex,
-            name: el.name
-        };
-    }
-
-    // `elOption.info` enables user to mount some info on
-    // elements and use them in event handlers.
-    if (eventData) {
-        eventData.info = el.info;
     }
 }
 
@@ -44670,7 +42532,7 @@ var AxisPointerModel = extendComponentModel({
         zlevel: 0,
         z: 50,
 
-        type: 'line', // 'line' 'shadow' 'cross' 'none'.
+        type: 'line',
         // axispointer triggered by tootip determine snap automatically,
         // see `modelHelper`.
         snap: false,
@@ -44727,9 +42589,7 @@ var AxisPointerModel = extendComponentModel({
 
         handle: {
             show: false,
-            /* eslint-disable */
             icon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7v-1.2h6.6z M13.3,22H6.7v-1.2h6.6z M13.3,19.6H6.7v-1.2h6.6z', // jshint ignore:line
-            /* eslint-enable */
             size: 45,
             // handle margin is from symbol center to axis, which is stable when circular move.
             margin: 50,
@@ -44977,7 +42837,7 @@ var bind$1 = bind;
  * Base axis pointer class in 2D.
  * Implemenents {module:echarts/component/axis/IAxisPointer}.
  */
-function BaseAxisPointer() {
+function BaseAxisPointer () {
 }
 
 BaseAxisPointer.prototype = {
@@ -45072,8 +42932,8 @@ BaseAxisPointer.prototype = {
         }
         this._lastGraphicKey = graphicKey;
 
-        var moveAnimation = this._moveAnimation
-            = this.determineAnimation(axisModel, axisPointerModel);
+        var moveAnimation = this._moveAnimation =
+            this.determineAnimation(axisModel, axisPointerModel);
 
         if (!group) {
             group = this._group = new Group();
@@ -45635,7 +43495,7 @@ function getValueLabel(value, axis, ecModel, seriesDataIndices, opt) {
  *  rotation, position, labelOffset, labelDirection, labelMargin
  * }
  */
-function getTransformedPosition(axis, value, layoutInfo) {
+function getTransformedPosition (axis, value, layoutInfo) {
     var transform = create$1();
     rotate(transform, transform, layoutInfo.rotation);
     translate(transform, transform, layoutInfo.position);
@@ -45910,7 +43770,7 @@ extendComponentModel({
     defaultOption: {
         zlevel: 0,
 
-        z: 60,
+        z: 8,
 
         show: true,
 
@@ -45927,11 +43787,6 @@ extendComponentModel({
         alwaysShowContent: false,
 
         displayMode: 'single', // 'single' | 'multipleByCoordSys'
-
-        renderMode: 'auto', // 'auto' | 'html' | 'richText'
-        // 'auto': use html by default, and use non-html if `document` is not defined
-        // 'html': use html for tooltip
-        // 'richText': use canvas, svg, and etc. for tooltip
 
         // 位置 {Array} | {Function}
         // position: null
@@ -46064,8 +43919,8 @@ function assembleFont(textStyleModel) {
 
     cssText.push('font:' + textStyleModel.getFont());
 
-    fontSize
-        && cssText.push('line-height:' + Math.round(fontSize * 3 / 2) + 'px');
+    fontSize &&
+        cssText.push('line-height:' + Math.round(fontSize * 3 / 2) + 'px');
 
     each$10(['decoration', 'align'], function (name) {
         var val = textStyleModel.get(name);
@@ -46090,8 +43945,8 @@ function assembleCssText(tooltipModel) {
     var padding = tooltipModel.get('padding');
 
     // Animation transition. Do not animate when transitionDuration is 0.
-    transitionDuration
-        && cssText.push(assembleTransition(transitionDuration));
+    transitionDuration &&
+        cssText.push(assembleTransition(transitionDuration));
 
     if (backgroundColor) {
         if (env$1.canvasSupported) {
@@ -46111,8 +43966,8 @@ function assembleCssText(tooltipModel) {
         var borderName = 'border-' + name;
         var camelCase = toCamelCase$1(borderName);
         var val = tooltipModel.get(camelCase);
-        val != null
-            && cssText.push(borderName + ':' + val + (name === 'color' ? '' : 'px'));
+        val != null &&
+            cssText.push(borderName + ':' + val + (name === 'color' ? '' : 'px'));
     });
 
     // Text style
@@ -46220,14 +44075,7 @@ TooltipContent.prototype = {
             + ';left:' + this._x + 'px;top:' + this._y + 'px;'
             + (tooltipModel.get('extraCssText') || '');
 
-        el.style.display = el.innerHTML ? 'block' : 'none';
-
-        // If mouse occsionally move over the tooltip, a mouseout event will be
-        // triggered by canvas, and cuase some unexpectable result like dragging
-        // stop, "unfocusAdjacency". Here `pointer-events: none` is used to solve
-        // it. Although it is not suppored by IE8~IE10, fortunately it is a rare
-        // scenario.
-        el.style.pointerEvents = this._enterable ? 'auto' : 'none';
+        el.style.display = el.innerHTML ?  'block' : 'none';
 
         this._show = true;
     },
@@ -46285,206 +44133,6 @@ TooltipContent.prototype = {
 
     isShow: function () {
         return this._show;
-    },
-
-    getOuterSize: function () {
-        var width = this.el.clientWidth;
-        var height = this.el.clientHeight;
-
-        // Consider browser compatibility.
-        // IE8 does not support getComputedStyle.
-        if (document.defaultView && document.defaultView.getComputedStyle) {
-            var stl = document.defaultView.getComputedStyle(this.el);
-            if (stl) {
-                width += parseInt(stl.paddingLeft, 10) + parseInt(stl.paddingRight, 10)
-                    + parseInt(stl.borderLeftWidth, 10) + parseInt(stl.borderRightWidth, 10);
-                height += parseInt(stl.paddingTop, 10) + parseInt(stl.paddingBottom, 10)
-                    + parseInt(stl.borderTopWidth, 10) + parseInt(stl.borderBottomWidth, 10);
-            }
-        }
-
-        return {width: width, height: height};
-    }
-};
-
-/*
-* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-*
-*   http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
-
-// import Group from 'zrender/src/container/Group';
-/**
- * @alias module:echarts/component/tooltip/TooltipRichContent
- * @constructor
- */
-function TooltipRichContent(api) {
-
-    this._zr = api.getZr();
-
-    this._show = false;
-
-    /**
-     * @private
-     */
-    this._hideTimeout;
-}
-
-TooltipRichContent.prototype = {
-
-    constructor: TooltipRichContent,
-
-    /**
-     * @private
-     * @type {boolean}
-     */
-    _enterable: true,
-
-    /**
-     * Update when tooltip is rendered
-     */
-    update: function () {
-        // noop
-    },
-
-    show: function (tooltipModel) {
-        if (this._hideTimeout) {
-            clearTimeout(this._hideTimeout);
-        }
-
-        this.el.attr('show', true);
-        this._show = true;
-    },
-
-    /**
-     * Set tooltip content
-     *
-     * @param {string} content rich text string of content
-     * @param {Object} markerRich rich text style
-     * @param {Object} tooltipModel tooltip model
-     */
-    setContent: function (content, markerRich, tooltipModel) {
-        if (this.el) {
-            this._zr.remove(this.el);
-        }
-
-        var markers = {};
-        var text = content;
-        var prefix = '{marker';
-        var suffix = '|}';
-        var startId = text.indexOf(prefix);
-        while (startId >= 0) {
-            var endId = text.indexOf(suffix);
-            var name = text.substr(startId + prefix.length, endId - startId - prefix.length);
-            if (name.indexOf('sub') > -1) {
-                markers['marker' + name] = {
-                    textWidth: 4,
-                    textHeight: 4,
-                    textBorderRadius: 2,
-                    textBackgroundColor: markerRich[name],
-                    // TODO: textOffset is not implemented for rich text
-                    textOffset: [3, 0]
-                };
-            }
-            else {
-                markers['marker' + name] = {
-                    textWidth: 10,
-                    textHeight: 10,
-                    textBorderRadius: 5,
-                    textBackgroundColor: markerRich[name]
-                };
-            }
-
-            text = text.substr(endId + 1);
-            startId = text.indexOf('{marker');
-        }
-
-        this.el = new Text({
-            style: {
-                rich: markers,
-                text: content,
-                textLineHeight: 20,
-                textBackgroundColor: tooltipModel.get('backgroundColor'),
-                textBorderRadius: tooltipModel.get('borderRadius'),
-                textFill: tooltipModel.get('textStyle.color'),
-                textPadding: tooltipModel.get('padding')
-            },
-            z: tooltipModel.get('z')
-        });
-        this._zr.add(this.el);
-
-        var self = this;
-        this.el.on('mouseover', function () {
-            // clear the timeout in hideLater and keep showing tooltip
-            if (self._enterable) {
-                clearTimeout(self._hideTimeout);
-                self._show = true;
-            }
-            self._inContent = true;
-        });
-        this.el.on('mouseout', function () {
-            if (self._enterable) {
-                if (self._show) {
-                    self.hideLater(self._hideDelay);
-                }
-            }
-            self._inContent = false;
-        });
-    },
-
-    setEnterable: function (enterable) {
-        this._enterable = enterable;
-    },
-
-    getSize: function () {
-        var bounding = this.el.getBoundingRect();
-        return [bounding.width, bounding.height];
-    },
-
-    moveTo: function (x, y) {
-        if (this.el) {
-            this.el.attr('position', [x, y]);
-        }
-    },
-
-    hide: function () {
-        this.el.hide();
-        this._show = false;
-    },
-
-    hideLater: function (time) {
-        if (this._show && !(this._inContent && this._enterable)) {
-            if (time) {
-                this._hideDelay = time;
-                // Set show false to avoid invoke hideLater mutiple times
-                this._show = false;
-                this._hideTimeout = setTimeout(bind(this.hide, this), time);
-            }
-            else {
-                this.hide();
-            }
-        }
-    },
-
-    isShow: function () {
-        return this._show;
-    },
-
-    getOuterSize: function () {
-        return this.getSize();
     }
 };
 
@@ -46523,26 +44171,12 @@ extendComponentView({
         if (env$1.node) {
             return;
         }
-
-        var tooltipModel = ecModel.getComponent('tooltip');
-        var renderMode = tooltipModel.get('renderMode');
-        this._renderMode = getTooltipRenderMode(renderMode);
-
-        var tooltipContent;
-        if (this._renderMode === 'html') {
-            tooltipContent = new TooltipContent(api.getDom(), api);
-            this._newLine = '<br/>';
-        }
-        else {
-            tooltipContent = new TooltipRichContent(api);
-            this._newLine = '\n';
-        }
-
+        var tooltipContent = new TooltipContent(api.getDom(), api);
         this._tooltipContent = tooltipContent;
     },
 
     render: function (tooltipModel, ecModel, api) {
-        if (env$1.node) {
+        if (env$1.node || env$1.wxa) {
             return;
         }
 
@@ -46835,11 +44469,6 @@ extendComponentView({
             globalTooltipModel
         ]);
 
-        var renderMode = this._renderMode;
-        var newLine = this._newLine;
-
-        var markers = {};
-
         each$9(dataByCoordSys, function (itemCoordSys) {
             // var coordParamList = [];
             // var coordDefaultHTML = [];
@@ -46880,18 +44509,7 @@ extendComponentView({
 
                     if (dataParams) {
                         singleParamsList.push(dataParams);
-                        var seriesTooltip = series.formatTooltip(dataIndex, true, null, renderMode);
-
-                        var html;
-                        if (isObject$1(seriesTooltip)) {
-                            html = seriesTooltip.html;
-                            var newMarkers = seriesTooltip.markers;
-                            merge(markers, newMarkers);
-                        }
-                        else {
-                            html = seriesTooltip;
-                        }
-                        seriesDefaultHTML.push(html);
+                        seriesDefaultHTML.push(series.formatTooltip(dataIndex, true));
                     }
                 });
 
@@ -46900,21 +44518,16 @@ extendComponentView({
                 // (1) shold be the first data which has name?
                 // (2) themeRiver, firstDataIndex is array, and first line is unnecessary.
                 var firstLine = valueLabel;
-                if (renderMode !== 'html') {
-                    singleDefaultHTML.push(seriesDefaultHTML.join(newLine));
-                }
-                else {
-                    singleDefaultHTML.push(
-                        (firstLine ? encodeHTML(firstLine) + newLine : '')
-                        + seriesDefaultHTML.join(newLine)
-                    );
-                }
+                singleDefaultHTML.push(
+                    (firstLine ? encodeHTML(firstLine) + '<br />' : '')
+                    + seriesDefaultHTML.join('<br />')
+                );
             });
         }, this);
 
         // In most case, the second axis is shown upper than the first one.
         singleDefaultHTML.reverse();
-        singleDefaultHTML = singleDefaultHTML.join(this._newLine + this._newLine);
+        singleDefaultHTML = singleDefaultHTML.join('<br /><br />');
 
         var positionExpr = e.position;
         this._showOrMove(singleTooltipModel, function () {
@@ -46930,7 +44543,7 @@ extendComponentView({
             else {
                 this._showTooltipContent(
                     singleTooltipModel, singleDefaultHTML, singleParamsList, Math.random(),
-                    point[0], point[1], positionExpr, undefined, markers
+                    point[0], point[1], positionExpr
                 );
             }
         });
@@ -46966,24 +44579,13 @@ extendComponentView({
         }
 
         var params = dataModel.getDataParams(dataIndex, dataType);
-        var seriesTooltip = dataModel.formatTooltip(dataIndex, false, dataType, this._renderMode);
-        var defaultHtml;
-        var markers;
-        if (isObject$1(seriesTooltip)) {
-            defaultHtml = seriesTooltip.html;
-            markers = seriesTooltip.markers;
-        }
-        else {
-            defaultHtml = seriesTooltip;
-            markers = null;
-        }
-
+        var defaultHtml = dataModel.formatTooltip(dataIndex, false, dataType);
         var asyncTicket = 'item_' + dataModel.name + '_' + dataIndex;
 
         this._showOrMove(tooltipModel, function () {
             this._showTooltipContent(
                 tooltipModel, defaultHtml, params, asyncTicket,
-                e.offsetX, e.offsetY, e.position, e.target, markers
+                e.offsetX, e.offsetY, e.position, e.target
             );
         });
 
@@ -47031,7 +44633,7 @@ extendComponentView({
     },
 
     _showTooltipContent: function (
-        tooltipModel, defaultHtml, params, asyncTicket, x, y, positionExpr, el, markers
+        tooltipModel, defaultHtml, params, asyncTicket, x, y, positionExpr, el
     ) {
         // Reset ticket
         this._ticket = '';
@@ -47052,7 +44654,7 @@ extendComponentView({
         else if (typeof formatter === 'function') {
             var callback = bind$2(function (cbTicket, html) {
                 if (cbTicket === this._ticket) {
-                    tooltipContent.setContent(html, markers, tooltipModel);
+                    tooltipContent.setContent(html);
                     this._updatePosition(
                         tooltipModel, positionExpr, x, y, tooltipContent, params, el
                     );
@@ -47062,7 +44664,7 @@ extendComponentView({
             html = formatter(params, asyncTicket, callback);
         }
 
-        tooltipContent.setContent(html, markers, tooltipModel);
+        tooltipContent.setContent(html);
         tooltipContent.show(tooltipModel);
 
         this._updatePosition(
@@ -47126,7 +44728,7 @@ extendComponentView({
         }
         else {
             var pos = refixTooltipPosition(
-                x, y, content, viewWidth, viewHeight, align ? null : 20, vAlign ? null : 20
+                x, y, content.el, viewWidth, viewHeight, align ? null : 20, vAlign ? null : 20
             );
             x = pos[0];
             y = pos[1];
@@ -47137,7 +44739,7 @@ extendComponentView({
 
         if (tooltipModel.get('confine')) {
             var pos = confineTooltipPosition(
-                x, y, content, viewWidth, viewHeight
+                x, y, content.el, viewWidth, viewHeight
             );
             x = pos[0];
             y = pos[1];
@@ -47164,16 +44766,16 @@ extendComponentView({
                 var lastIndices = lastItem.seriesDataIndices || [];
                 var newIndices = thisItem.seriesDataIndices || [];
 
-                contentNotChanged
-                    &= lastItem.value === thisItem.value
+                contentNotChanged &=
+                    lastItem.value === thisItem.value
                     && lastItem.axisType === thisItem.axisType
                     && lastItem.axisId === thisItem.axisId
                     && lastIndices.length === newIndices.length;
 
                 contentNotChanged && each$9(lastIndices, function (lastIdxItem, j) {
                     var newIdxItem = newIndices[j];
-                    contentNotChanged
-                        &= lastIdxItem.seriesIndex === newIdxItem.seriesIndex
+                    contentNotChanged &=
+                        lastIdxItem.seriesIndex === newIdxItem.seriesIndex
                         && lastIdxItem.dataIndex === newIdxItem.dataIndex;
                 });
             });
@@ -47198,7 +44800,7 @@ extendComponentView({
     },
 
     dispose: function (ecModel, api) {
-        if (env$1.node) {
+        if (env$1.node || env$1.wxa) {
             return;
         }
         this._tooltipContent.hide();
@@ -47237,8 +44839,8 @@ function makeDispatchAction$1(payload, api) {
     return payload.dispatchAction || bind(api.dispatchAction, api);
 }
 
-function refixTooltipPosition(x, y, content, viewWidth, viewHeight, gapH, gapV) {
-    var size = content.getOuterSize();
+function refixTooltipPosition(x, y, el, viewWidth, viewHeight, gapH, gapV) {
+    var size = getOuterSize(el);
     var width = size.width;
     var height = size.height;
 
@@ -47261,8 +44863,8 @@ function refixTooltipPosition(x, y, content, viewWidth, viewHeight, gapH, gapV) 
     return [x, y];
 }
 
-function confineTooltipPosition(x, y, content, viewWidth, viewHeight) {
-    var size = content.getOuterSize();
+function confineTooltipPosition(x, y, el, viewWidth, viewHeight) {
+    var size = getOuterSize(el);
     var width = size.width;
     var height = size.height;
 
@@ -47272,6 +44874,25 @@ function confineTooltipPosition(x, y, content, viewWidth, viewHeight) {
     y = Math.max(y, 0);
 
     return [x, y];
+}
+
+function getOuterSize(el) {
+    var width = el.clientWidth;
+    var height = el.clientHeight;
+
+    // Consider browser compatibility.
+    // IE8 does not support getComputedStyle.
+    if (document.defaultView && document.defaultView.getComputedStyle) {
+        var stl = document.defaultView.getComputedStyle(el);
+        if (stl) {
+            width += parseInt(stl.paddingLeft, 10) + parseInt(stl.paddingRight, 10)
+                + parseInt(stl.borderLeftWidth, 10) + parseInt(stl.borderRightWidth, 10);
+            height += parseInt(stl.paddingTop, 10) + parseInt(stl.paddingBottom, 10)
+                + parseInt(stl.borderTopWidth, 10) + parseInt(stl.borderBottomWidth, 10);
+        }
+    }
+
+    return {width: width, height: height};
 }
 
 function calcTooltipPosition(position, rect, contentSize) {
@@ -47819,14 +45440,6 @@ var LegendView = extendComponentView({
          * @type {module:zrender/Element}
          */
         this._backgroundEl;
-
-        /**
-         * If first rendering, `contentGroup.position` is [0, 0], which
-         * does not make sense and may cause unexepcted animation if adopted.
-         * @private
-         * @type {boolean}
-         */
-        this._isFirstRender = true;
     },
 
     /**
@@ -47840,8 +45453,6 @@ var LegendView = extendComponentView({
      * @override
      */
     render: function (legendModel, ecModel, api) {
-        var isFirstRender = this._isFirstRender;
-        this._isFirstRender = false;
 
         this.resetInner();
 
@@ -47865,8 +45476,7 @@ var LegendView = extendComponentView({
         var padding = legendModel.get('padding');
 
         var maxSize = getLayoutRect(positionInfo, viewportSize, padding);
-
-        var mainRect = this.layoutInner(legendModel, itemAlign, maxSize, isFirstRender);
+        var mainRect = this.layoutInner(legendModel, itemAlign, maxSize);
 
         // Place mainGroup, based on the calculated `mainRect`.
         var layoutRect = getLayoutRect(
@@ -47945,8 +45555,8 @@ var LegendView = extendComponentView({
                 );
 
                 itemGroup.on('click', curry$3(dispatchSelectAction, name, api))
-                    .on('mouseover', curry$3(dispatchHighlightAction, seriesModel.name, null, api, excludeSeriesId))
-                    .on('mouseout', curry$3(dispatchDownplayAction, seriesModel.name, null, api, excludeSeriesId));
+                    .on('mouseover', curry$3(dispatchHighlightAction, seriesModel, null, api, excludeSeriesId))
+                    .on('mouseout', curry$3(dispatchDownplayAction, seriesModel, null, api, excludeSeriesId));
 
                 legendDrawnMap.set(name, true);
             }
@@ -47978,10 +45588,9 @@ var LegendView = extendComponentView({
 
                         // FIXME: consider different series has items with the same name.
                         itemGroup.on('click', curry$3(dispatchSelectAction, name, api))
-                            // Should not specify the series name, consider legend controls
-                            // more than one pie series.
-                            .on('mouseover', curry$3(dispatchHighlightAction, null, name, api, excludeSeriesId))
-                            .on('mouseout', curry$3(dispatchDownplayAction, null, name, api, excludeSeriesId));
+                            // FIXME Should not specify the series name
+                            .on('mouseover', curry$3(dispatchHighlightAction, seriesModel, name, api, excludeSeriesId))
+                            .on('mouseout', curry$3(dispatchDownplayAction, seriesModel, name, api, excludeSeriesId));
 
                         legendDrawnMap.set(name, true);
                     }
@@ -47991,9 +45600,7 @@ var LegendView = extendComponentView({
 
             if (__DEV__) {
                 if (!legendDrawnMap.get(name)) {
-                    console.warn(
-                        name + ' series not exists. Legend data should be same with series name or data name.'
-                    );
+                    console.warn(name + ' series not exists. Legend data should be same with series name or data name.');
                 }
             }
         }, this);
@@ -48036,7 +45643,7 @@ var LegendView = extendComponentView({
         // PENDING
         if (!itemIcon && symbolType
             // At least show one symbol, can't be all none
-            && ((symbolType !== legendSymbolType) || symbolType === 'none')
+            && ((symbolType !== legendSymbolType) || symbolType == 'none')
         ) {
             var size = itemHeight * 0.8;
             if (symbolType === 'none') {
@@ -48132,14 +45739,6 @@ var LegendView = extendComponentView({
         contentGroup.attr('position', [-contentRect.x, -contentRect.y]);
 
         return this.group.getBoundingRect();
-    },
-
-    /**
-     * @protected
-     */
-    remove: function () {
-        this.getContentGroup().removeAll();
-        this._isFirstRender = true;
     }
 
 });
@@ -48151,26 +45750,26 @@ function dispatchSelectAction(name, api) {
     });
 }
 
-function dispatchHighlightAction(seriesName, dataName, api, excludeSeriesId) {
+function dispatchHighlightAction(seriesModel, dataName, api, excludeSeriesId) {
     // If element hover will move to a hoverLayer.
     var el = api.getZr().storage.getDisplayList()[0];
     if (!(el && el.useHoverLayer)) {
         api.dispatchAction({
             type: 'highlight',
-            seriesName: seriesName,
+            seriesName: seriesModel.name,
             name: dataName,
             excludeSeriesId: excludeSeriesId
         });
     }
 }
 
-function dispatchDownplayAction(seriesName, dataName, api, excludeSeriesId) {
+function dispatchDownplayAction(seriesModel, dataName, api, excludeSeriesId) {
     // If element hover will move to a hoverLayer.
     var el = api.getZr().storage.getDisplayList()[0];
     if (!(el && el.useHoverLayer)) {
         api.dispatchAction({
             type: 'downplay',
-            seriesName: seriesName,
+            seriesName: seriesModel.name,
             name: dataName,
             excludeSeriesId: excludeSeriesId
         });
@@ -48420,8 +46019,6 @@ var ScrollableLegendView = LegendView.extend({
 
         var controllerGroup = this._controllerGroup;
 
-        // FIXME: support be 'auto' adapt to size number text length,
-        // e.g., '3/12345' should not overlap with the control arrow button.
         var pageIconSize = legendModel.get('pageIconSize', true);
         if (!isArray(pageIconSize)) {
             pageIconSize = [pageIconSize, pageIconSize];
@@ -48469,7 +46066,7 @@ var ScrollableLegendView = LegendView.extend({
     /**
      * @override
      */
-    layoutInner: function (legendModel, itemAlign, maxSize, isFirstRender) {
+    layoutInner: function (legendModel, itemAlign, maxSize) {
         var contentGroup = this.getContentGroup();
         var containerGroup = this._containerGroup;
         var controllerGroup = this._controllerGroup;
@@ -48501,11 +46098,7 @@ var ScrollableLegendView = LegendView.extend({
 
         var contentPos = [-contentRect.x, -contentRect.y];
         // Remain contentPos when scroll animation perfroming.
-        // If first rendering, `contentGroup.position` is [0, 0], which
-        // does not make sense and may cause unexepcted animation if adopted.
-        if (!isFirstRender) {
-            contentPos[orientIdx] = contentGroup.position[orientIdx];
-        }
+        contentPos[orientIdx] = contentGroup.position[orientIdx];
 
         // Layout container group based on 0.
         var containerPos = [0, 0];
@@ -48629,134 +46222,106 @@ var ScrollableLegendView = LegendView.extend({
      * }
      */
     _getPageInfo: function (legendModel) {
-        var scrollDataIndex = legendModel.get('scrollDataIndex', true);
+        // Align left or top by the current dataIndex.
+        var currDataIndex = legendModel.get('scrollDataIndex', true);
         var contentGroup = this.getContentGroup();
+        var contentRect = contentGroup.getBoundingRect();
         var containerRectSize = this._containerGroup.__rectSize;
+
         var orientIdx = legendModel.getOrient().index;
         var wh = WH[orientIdx];
+        var hw = WH[1 - orientIdx];
         var xy = XY[orientIdx];
-        var targetItemIndex = this._findTargetItemIndex(scrollDataIndex);
-        var children = contentGroup.children();
-        var targetItem = children[targetItemIndex];
-        var itemCount = children.length;
-        var pCount = !itemCount ? 0 : 1;
+        var contentPos = contentGroup.position.slice();
 
-        var result = {
-            contentPosition: contentGroup.position.slice(),
-            pageCount: pCount,
-            pageIndex: pCount - 1,
-            pagePrevDataIndex: null,
-            pageNextDataIndex: null
-        };
+        var pageIndex;
+        var pagePrevDataIndex;
+        var pageNextDataIndex;
 
-        if (!targetItem) {
-            return result;
-        }
-
-        var targetItemInfo = getItemInfo(targetItem);
-        result.contentPosition[orientIdx] = -targetItemInfo.s;
-
-        // Strategy:
-        // (1) Always align based on the left/top most item.
-        // (2) It is user-friendly that the last item shown in the
-        // current window is shown at the begining of next window.
-        // Otherwise if half of the last item is cut by the window,
-        // it will have no chance to display entirely.
-        // (3) Consider that item size probably be different, we
-        // have calculate pageIndex by size rather than item index,
-        // and we can not get page index directly by division.
-        // (4) The window is to narrow to contain more than
-        // one item, we should make sure that the page can be fliped.
-
-        for (var i = targetItemIndex + 1,
-            winStartItemInfo = targetItemInfo,
-            winEndItemInfo = targetItemInfo,
-            currItemInfo = null;
-            i <= itemCount;
-            ++i
-        ) {
-            currItemInfo = getItemInfo(children[i]);
-            if (
-                // Half of the last item is out of the window.
-                (!currItemInfo && winEndItemInfo.e > winStartItemInfo.s + containerRectSize)
-                // If the current item does not intersect with the window, the new page
-                // can be started at the current item or the last item.
-                || (currItemInfo && !intersect(currItemInfo, winStartItemInfo.s))
-            ) {
-                if (winEndItemInfo.i > winStartItemInfo.i) {
-                    winStartItemInfo = winEndItemInfo;
-                }
-                else { // e.g., when page size is smaller than item size.
-                    winStartItemInfo = currItemInfo;
-                }
-                if (winStartItemInfo) {
-                    if (result.pageNextDataIndex == null) {
-                        result.pageNextDataIndex = winStartItemInfo.i;
-                    }
-                    ++result.pageCount;
-                }
-            }
-            winEndItemInfo = currItemInfo;
-        }
-
-        for (var i = targetItemIndex - 1,
-            winStartItemInfo = targetItemInfo,
-            winEndItemInfo = targetItemInfo,
-            currItemInfo = null;
-            i >= -1;
-            --i
-        ) {
-            currItemInfo = getItemInfo(children[i]);
-            if (
-                // If the the end item does not intersect with the window started
-                // from the current item, a page can be settled.
-                (!currItemInfo || !intersect(winEndItemInfo, currItemInfo.s))
-                // e.g., when page size is smaller than item size.
-                && winStartItemInfo.i < winEndItemInfo.i
-            ) {
-                winEndItemInfo = winStartItemInfo;
-                if (result.pagePrevDataIndex == null) {
-                    result.pagePrevDataIndex = winStartItemInfo.i;
-                }
-                ++result.pageCount;
-                ++result.pageIndex;
-            }
-            winStartItemInfo = currItemInfo;
-        }
-
-        return result;
-
-        function getItemInfo(el) {
-            if (el) {
-                var itemRect = el.getBoundingRect();
-                var start = itemRect[xy] + el.position[orientIdx];
-                return {
-                    s: start,
-                    e: start + itemRect[wh],
-                    i: el.__legendDataIndex
-                };
-            }
-        }
-
-        function intersect(itemInfo, winStart) {
-            return itemInfo.e >= winStart && itemInfo.s <= winStart + containerRectSize;
-        }
-    },
-
-    _findTargetItemIndex: function (targetDataIndex) {
-        var index;
-        var contentGroup = this.getContentGroup();
+        var targetItemGroup;
         if (this._showController) {
-            contentGroup.eachChild(function (child, idx) {
-                if (child.__legendDataIndex === targetDataIndex) {
-                    index = idx;
+            contentGroup.eachChild(function (child) {
+                if (child.__legendDataIndex === currDataIndex) {
+                    targetItemGroup = child;
                 }
             });
         }
         else {
-            index = 0;
+            targetItemGroup = contentGroup.childAt(0);
         }
-        return index;
+
+        var pageCount = containerRectSize ? Math.ceil(contentRect[wh] / containerRectSize) : 0;
+
+        if (targetItemGroup) {
+            var itemRect = targetItemGroup.getBoundingRect();
+            var itemLoc = targetItemGroup.position[orientIdx] + itemRect[xy];
+            contentPos[orientIdx] = -itemLoc - contentRect[xy];
+            pageIndex = Math.floor(
+                pageCount * (itemLoc + itemRect[xy] + containerRectSize / 2) / contentRect[wh]
+            );
+            pageIndex = (contentRect[wh] && pageCount)
+                ? Math.max(0, Math.min(pageCount - 1, pageIndex))
+                : -1;
+
+            var winRect = {x: 0, y: 0};
+            winRect[wh] = containerRectSize;
+            winRect[hw] = contentRect[hw];
+            winRect[xy] = -contentPos[orientIdx] - contentRect[xy];
+
+            var startIdx;
+            var children = contentGroup.children();
+
+            contentGroup.eachChild(function (child, index) {
+                var itemRect = getItemRect(child);
+
+                if (itemRect.intersect(winRect)) {
+                    startIdx == null && (startIdx = index);
+                    // It is user-friendly that the last item shown in the
+                    // current window is shown at the begining of next window.
+                    pageNextDataIndex = child.__legendDataIndex;
+                }
+
+                // If the last item is shown entirely, no next page.
+                if (index === children.length - 1
+                    && itemRect[xy] + itemRect[wh] <= winRect[xy] + winRect[wh]
+                ) {
+                    pageNextDataIndex = null;
+                }
+            });
+
+            // Always align based on the left/top most item, so the left/top most
+            // item in the previous window is needed to be found here.
+            if (startIdx != null) {
+                var startItem = children[startIdx];
+                var startRect = getItemRect(startItem);
+                winRect[xy] = startRect[xy] + startRect[wh] - winRect[wh];
+
+                // If the first item is shown entirely, no previous page.
+                if (startIdx <= 0 && startRect[xy] >= winRect[xy]) {
+                    pagePrevDataIndex = null;
+                }
+                else {
+                    while (startIdx > 0 && getItemRect(children[startIdx - 1]).intersect(winRect)) {
+                        startIdx--;
+                    }
+                    pagePrevDataIndex = children[startIdx].__legendDataIndex;
+                }
+            }
+        }
+
+        return {
+            contentPosition: contentPos,
+            pageIndex: pageIndex,
+            pageCount: pageCount,
+            pagePrevDataIndex: pagePrevDataIndex,
+            pageNextDataIndex: pageNextDataIndex
+        };
+
+        function getItemRect(el) {
+            var itemRect = el.getBoundingRect().clone();
+            itemRect[xy] += el.position[orientIdx];
+            return itemRect;
+        }
     }
 
 });
@@ -48972,10 +46537,9 @@ extendComponentView({
 
         var link = titleModel.get('link');
         var sublink = titleModel.get('sublink');
-        var triggerEvent = titleModel.get('triggerEvent', true);
 
-        textEl.silent = !link && !triggerEvent;
-        subTextEl.silent = !sublink && !triggerEvent;
+        textEl.silent = !link;
+        subTextEl.silent = !sublink;
 
         if (link) {
             textEl.on('click', function () {
@@ -48987,13 +46551,6 @@ extendComponentView({
                 window.open(sublink, '_' + titleModel.get('subtarget'));
             });
         }
-
-        textEl.eventData = subTextEl.eventData = triggerEvent
-            ? {
-                componentType: 'title',
-                componentIndex: titleModel.componentIndex
-            }
-            : null;
 
         group.add(textEl);
         subText && group.add(subTextEl);
@@ -49697,7 +47254,7 @@ function createList$1(coordSys, seriesModel, mpModel) {
         });
     }
     else {
-        coordDimsInfos = [{
+        coordDimsInfos =[{
             name: 'value',
             type: 'float'
         }];
@@ -49951,7 +47508,7 @@ function setLinePoints(targetShape, points) {
     }
 }
 
-function updateSymbolAndLabelBeforeLineUpdate() {
+function updateSymbolAndLabelBeforeLineUpdate () {
     var lineGroup = this;
     var symbolFrom = lineGroup.childOfName('fromSymbol');
     var symbolTo = lineGroup.childOfName('toSymbol');
@@ -50083,11 +47640,7 @@ lineProto._createLine = function (lineData, idx, seriesScope) {
     this.add(line);
 
     var label = new Text({
-        name: 'label',
-        // FIXME
-        // Temporary solution for `focusNodeAdjacency`.
-        // line label do not use the opacity of lineStyle.
-        lineLabelOriginalOpacity: 1
+        name: 'label'
     });
     this.add(label);
 
@@ -50196,7 +47749,7 @@ lineProto._updateCommonStl = function (lineData, idx, seriesScope) {
             baseText = rawVal == null
                 ? lineData.getName(idx)
                 : isFinite(rawVal)
-                ? round$2(rawVal)
+                ? round$1(rawVal)
                 : rawVal;
         }
     }
@@ -50560,8 +48113,8 @@ function markLineFilter(coordSys, item) {
         //  }
         // }
         if (
-            fromCoord && toCoord
-            && (ifMarkLineHasOnlyDim(1, fromCoord, toCoord, coordSys)
+            fromCoord && toCoord &&
+            (ifMarkLineHasOnlyDim(1, fromCoord, toCoord, coordSys)
             || ifMarkLineHasOnlyDim(0, fromCoord, toCoord, coordSys))
         ) {
             return true;
@@ -50790,7 +48343,7 @@ function createList$2(coordSys, seriesModel, mlModel) {
         });
     }
     else {
-        coordDimsInfos = [{
+        coordDimsInfos =[{
             name: 'value',
             type: 'float'
         }];
@@ -50813,23 +48366,15 @@ function createList$2(coordSys, seriesModel, mlModel) {
         return item.value;
     };
     fromData.initData(
-        map(optData, function (item) {
-            return item[0];
-        }),
-        null,
-        dimValueGetter$$1
+        map(optData, function (item) { return item[0]; }),
+        null, dimValueGetter$$1
     );
     toData.initData(
-        map(optData, function (item) {
-            return item[1];
-        }),
-        null,
-        dimValueGetter$$1
+        map(optData, function (item) { return item[1]; }),
+        null, dimValueGetter$$1
     );
     lineData.initData(
-        map(optData, function (item) {
-            return item[2];
-        })
+        map(optData, function (item) { return item[2]; })
     );
     lineData.hasItemOption = true;
 
@@ -50985,8 +48530,8 @@ function markAreaFilter(coordSys, item) {
         //  }
         // }
         if (
-            fromCoord && toCoord
-            && (ifMarkLineHasOnlyDim$1(1, fromCoord, toCoord, coordSys)
+            fromCoord && toCoord &&
+            (ifMarkLineHasOnlyDim$1(1, fromCoord, toCoord, coordSys)
             || ifMarkLineHasOnlyDim$1(0, fromCoord, toCoord, coordSys))
         ) {
             return true;
@@ -51221,7 +48766,7 @@ function createList$3(coordSys, seriesModel, maModel) {
         }), maModel);
     }
     else {
-        coordDimsInfos = [{
+        coordDimsInfos =[{
             name: 'value',
             type: 'float'
         }];
@@ -51775,13 +49320,10 @@ AxisProxy.prototype = {
         // TODO
         // filterMode 'weakFilter' and 'empty' is not optimized for huge data yet.
 
+        // Process series data
         each$13(seriesModels, function (seriesModel) {
             var seriesData = seriesModel.getData();
             var dataDims = seriesData.mapDimension(axisDim, true);
-
-            if (!dataDims.length) {
-                return;
-            }
 
             if (filterMode === 'weakFilter') {
                 seriesData.filterSelf(function (dataIndex) {
@@ -52326,8 +49868,8 @@ var DataZoomModel = extendComponentModel({
         }
         if (this._autoThrottle) {
             var globalOption = this.ecModel.option;
-            this.option.throttle
-                = (globalOption.animation && globalOption.animationDurationUpdate > 0)
+            this.option.throttle =
+                (globalOption.animation && globalOption.animationDurationUpdate > 0)
                 ? 100 : 20;
         }
     },
@@ -52666,9 +50208,7 @@ var SliderZoomModel = DataZoomModel.extend({
         fillerColor: 'rgba(167,183,204,0.4)',     // Color of selected area.
         // handleColor: 'rgba(89,170,216,0.95)',     // Color of handle.
         // handleIcon: 'path://M4.9,17.8c0-1.4,4.5-10.5,5.5-12.4c0-0.1,0.6-1.1,0.9-1.1c0.4,0,0.9,1,0.9,1.1c1.1,2.2,5.4,11,5.4,12.4v17.8c0,1.5-0.6,2.1-1.3,2.1H6.1c-0.7,0-1.3-0.6-1.3-2.1V17.8z',
-        /* eslint-disable */
         handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-        /* eslint-enable */
         // Percent of the slider height
         handleSize: '100%',
 
@@ -53242,7 +50782,7 @@ var SliderZoomView = DataZoomView.extend({
             onmouseout: bind$3(this._showDataInfo, this, false),
             style: {
                 fill: dataZoomModel.get('fillerColor'),
-                textPosition: 'inside'
+                textPosition : 'inside'
             }
         }));
 
@@ -53627,7 +51167,6 @@ DataZoomModel.extend({
         zoomLock: false,   // Whether disable zoom but only pan.
         zoomOnMouseWheel: true, // Can be: true / false / 'shift' / 'ctrl' / 'alt'.
         moveOnMouseMove: true,   // Can be: true / false / 'shift' / 'ctrl' / 'alt'.
-        moveOnMouseWheel: false, // Can be: true / false / 'shift' / 'ctrl' / 'alt'.
         preventDefaultMouseMove: true
     }
 });
@@ -53758,9 +51297,8 @@ function RoamController(zr) {
      *                          which can be null/undefined or true/false
      *                          or 'pan/move' or 'zoom'/'scale'
      * @param {Object} [opt]
-     * @param {Object} [opt.zoomOnMouseWheel=true] The value can be: true / false / 'shift' / 'ctrl' / 'alt'.
-     * @param {Object} [opt.moveOnMouseMove=true] The value can be: true / false / 'shift' / 'ctrl' / 'alt'.
-     * @param {Object} [opt.moveOnMouseWheel=false] The value can be: true / false / 'shift' / 'ctrl' / 'alt'.
+     * @param {Object} [opt.zoomOnMouseWheel=true]
+     * @param {Object} [opt.moveOnMouseMove=true]
      * @param {Object} [opt.preventDefaultMouseMove=true] When pan.
      */
     this.enable = function (controlType, opt) {
@@ -53771,8 +51309,6 @@ function RoamController(zr) {
         this._opt = defaults(clone(opt) || {}, {
             zoomOnMouseWheel: true,
             moveOnMouseMove: true,
-            // By default, wheel do not trigger move.
-            moveOnMouseWheel: false,
             preventDefaultMouseMove: true
         });
 
@@ -53814,7 +51350,7 @@ mixin(RoamController, Eventful);
 
 
 function mousedown(e) {
-    if (isMiddleOrRightButtonOnMouseUpDown(e)
+    if (notLeftMouse(e)
         || (e.target && e.target.draggable)
     ) {
         return;
@@ -53833,8 +51369,9 @@ function mousedown(e) {
 }
 
 function mousemove(e) {
-    if (!this._dragging
-        || !isAvailableBehavior('moveOnMouseMove', e, this._opt)
+    if (notLeftMouse(e)
+        || !checkKeyBinding(this, 'moveOnMouseMove', e)
+        || !this._dragging
         || e.gestureEvent === 'pinch'
         || isTaken(this._zr, 'globalPan')
     ) {
@@ -53855,103 +51392,51 @@ function mousemove(e) {
 
     this._opt.preventDefaultMouseMove && stop(e.event);
 
-    trigger(this, 'pan', 'moveOnMouseMove', e, {
-        dx: dx, dy: dy, oldX: oldX, oldY: oldY, newX: x, newY: y
-    });
+    this.trigger('pan', dx, dy, oldX, oldY, x, y);
 }
 
 function mouseup(e) {
-    if (!isMiddleOrRightButtonOnMouseUpDown(e)) {
+    if (!notLeftMouse(e)) {
         this._dragging = false;
     }
 }
 
 function mousewheel(e) {
-    var shouldZoom = isAvailableBehavior('zoomOnMouseWheel', e, this._opt);
-    var shouldMove = isAvailableBehavior('moveOnMouseWheel', e, this._opt);
-    var wheelDelta = e.wheelDelta;
-    var absWheelDeltaDelta = Math.abs(wheelDelta);
-    var originX = e.offsetX;
-    var originY = e.offsetY;
-
     // wheelDelta maybe -0 in chrome mac.
-    if (wheelDelta === 0 || (!shouldZoom && !shouldMove)) {
+    if (!checkKeyBinding(this, 'zoomOnMouseWheel', e) || e.wheelDelta === 0) {
         return;
     }
 
-    // If both `shouldZoom` and `shouldMove` is true, trigger
-    // their event both, and the final behavior is determined
-    // by event listener themselves.
-
-    if (shouldZoom) {
-        // Convenience:
-        // Mac and VM Windows on Mac: scroll up: zoom out.
-        // Windows: scroll up: zoom in.
-
-        // FIXME: Should do more test in different environment.
-        // wheelDelta is too complicated in difference nvironment
-        // (https://developer.mozilla.org/en-US/docs/Web/Events/mousewheel),
-        // although it has been normallized by zrender.
-        // wheelDelta of mouse wheel is bigger than touch pad.
-        var factor = absWheelDeltaDelta > 3 ? 1.4 : absWheelDeltaDelta > 1 ? 1.2 : 1.1;
-        var scale = wheelDelta > 0 ? factor : 1 / factor;
-        checkPointerAndTrigger(this, 'zoom', 'zoomOnMouseWheel', e, {
-            scale: scale, originX: originX, originY: originY
-        });
-    }
-
-    if (shouldMove) {
-        // FIXME: Should do more test in different environment.
-        var absDelta = Math.abs(wheelDelta);
-        // wheelDelta of mouse wheel is bigger than touch pad.
-        var scrollDelta = (wheelDelta > 0 ? 1 : -1) * (absDelta > 3 ? 0.4 : absDelta > 1 ? 0.15 : 0.05);
-        checkPointerAndTrigger(this, 'scrollMove', 'moveOnMouseWheel', e, {
-            scrollDelta: scrollDelta, originX: originX, originY: originY
-        });
-    }
+    // Convenience:
+    // Mac and VM Windows on Mac: scroll up: zoom out.
+    // Windows: scroll up: zoom in.
+    var zoomDelta = e.wheelDelta > 0 ? 1.1 : 1 / 1.1;
+    zoom.call(this, e, zoomDelta, e.offsetX, e.offsetY);
 }
 
 function pinch(e) {
     if (isTaken(this._zr, 'globalPan')) {
         return;
     }
-    var scale = e.pinchScale > 1 ? 1.1 : 1 / 1.1;
-    checkPointerAndTrigger(this, 'zoom', null, e, {
-        scale: scale, originX: e.pinchX, originY: e.pinchY
-    });
+    var zoomDelta = e.pinchScale > 1 ? 1.1 : 1 / 1.1;
+    zoom.call(this, e, zoomDelta, e.pinchX, e.pinchY);
 }
 
-function checkPointerAndTrigger(controller, eventName, behaviorToCheck, e, contollerEvent) {
-    if (controller.pointerChecker
-        && controller.pointerChecker(e, contollerEvent.originX, contollerEvent.originY)
-    ) {
+function zoom(e, zoomDelta, zoomX, zoomY) {
+    if (this.pointerChecker && this.pointerChecker(e, zoomX, zoomY)) {
         // When mouse is out of roamController rect,
         // default befavoius should not be be disabled, otherwise
         // page sliding is disabled, contrary to expectation.
         stop(e.event);
 
-        trigger(controller, eventName, behaviorToCheck, e, contollerEvent);
+        this.trigger('zoom', zoomDelta, zoomX, zoomY);
     }
 }
 
-function trigger(controller, eventName, behaviorToCheck, e, contollerEvent) {
-    // Also provide behavior checker for event listener, for some case that
-    // multiple components share one listener.
-    contollerEvent.isAvailableBehavior = bind(isAvailableBehavior, null, behaviorToCheck, e);
-    controller.trigger(eventName, contollerEvent);
-}
-
-// settings: {
-//     zoomOnMouseWheel
-//     moveOnMouseMove
-//     moveOnMouseWheel
-// }
-// The value can be: true / false / 'shift' / 'ctrl' / 'alt'.
-function isAvailableBehavior(behaviorToCheck, e, settings) {
-    var setting = settings[behaviorToCheck];
-    return !behaviorToCheck || (
-        setting && (!isString(setting) || e.event[setting + 'Key'])
-    );
+function checkKeyBinding(roamController, prop, e) {
+    var setting = roamController._opt[prop];
+    return setting
+        && (!isString(setting) || e.event[setting + 'Key']);
 }
 
 /*
@@ -53979,6 +51464,8 @@ function isAvailableBehavior(behaviorToCheck, e, settings) {
 // pan or zoom, only dispatch one action for those data zoom
 // components.
 
+var curry$5 = curry;
+
 var ATTR = '\0_ec_dataZoom_roams';
 
 
@@ -53990,11 +51477,11 @@ var ATTR = '\0_ec_dataZoom_roams';
  * @param {Function} dataZoomInfo.containsPoint
  * @param {Array.<string>} dataZoomInfo.allCoordIds
  * @param {string} dataZoomInfo.dataZoomId
- * @param {Object} dataZoomInfo.getRange
- * @param {Function} dataZoomInfo.getRange.pan
- * @param {Function} dataZoomInfo.getRange.zoom
- * @param {Function} dataZoomInfo.getRange.scrollMove
- * @param {boolean} dataZoomInfo.dataZoomModel
+ * @param {number} dataZoomInfo.throttleRate
+ * @param {Function} dataZoomInfo.panGetRange
+ * @param {Function} dataZoomInfo.zoomGetRange
+ * @param {boolean} [dataZoomInfo.zoomLock]
+ * @param {boolean} [dataZoomInfo.disabled]
  */
 function register$1(api, dataZoomInfo) {
     var store = giveStore(api);
@@ -54041,7 +51528,7 @@ function register$1(api, dataZoomInfo) {
     createOrUpdate(
         record,
         'dispatchAction',
-        dataZoomInfo.dataZoomModel.get('throttle', true),
+        dataZoomInfo.throttleRate,
         'fixRate'
     );
 }
@@ -54086,31 +51573,8 @@ function giveStore(api) {
 
 function createController(api, newRecord) {
     var controller = new RoamController(api.getZr());
-
-    each$1(['pan', 'zoom', 'scrollMove'], function (eventName) {
-        controller.on(eventName, function (event) {
-            var batch = [];
-
-            each$1(newRecord.dataZoomInfos, function (info) {
-                // Check whether the behaviors (zoomOnMouseWheel, moveOnMouseMove,
-                // moveOnMouseWheel, ...) enabled.
-                if (!event.isAvailableBehavior(info.dataZoomModel.option)) {
-                    return;
-                }
-
-                var method = (info.getRange || {})[eventName];
-                var range = method && method(newRecord.controller, event);
-
-                !info.dataZoomModel.get('disabled', true) && range && batch.push({
-                    dataZoomId: info.dataZoomId,
-                    start: range[0],
-                    end: range[1]
-                });
-            });
-
-            batch.length && newRecord.dispatchAction(batch);
-        });
-    });
+    controller.on('pan', curry$5(onPan, newRecord));
+    controller.on('zoom', curry$5(onZoom, newRecord));
 
     return controller;
 }
@@ -54122,6 +51586,33 @@ function cleanStore(store) {
             delete store[coordId];
         }
     });
+}
+
+function onPan(record, dx, dy, oldX, oldY, newX, newY) {
+    wrapAndDispatch(record, function (info) {
+        return info.panGetRange(record.controller, dx, dy, oldX, oldY, newX, newY);
+    });
+}
+
+function onZoom(record, scale, mouseX, mouseY) {
+    wrapAndDispatch(record, function (info) {
+        return info.zoomGetRange(record.controller, scale, mouseX, mouseY);
+    });
+}
+
+function wrapAndDispatch(record, getRange) {
+    var batch = [];
+
+    each$1(record.dataZoomInfos, function (info) {
+        var range = getRange(info);
+        !info.disabled && range && batch.push({
+            dataZoomId: info.dataZoomId,
+            start: range[0],
+            end: range[1]
+        });
+    });
+
+    batch.length && record.dispatchAction(batch);
 }
 
 /**
@@ -54139,6 +51630,7 @@ function dispatchAction(api, batch) {
  */
 function mergeControllerParams(dataZoomInfos) {
     var controlType;
+    var opt = {};
     // DO NOT use reserved word (true, false, undefined) as key literally. Even if encapsulated
     // as string, it is probably revert to reserved word by compress tool. See #7411.
     var prefix = 'type_';
@@ -54148,35 +51640,18 @@ function mergeControllerParams(dataZoomInfos) {
         'type_false': 0,
         'type_undefined': -1
     };
-    var preventDefaultMouseMove = true;
-
     each$1(dataZoomInfos, function (dataZoomInfo) {
-        var dataZoomModel = dataZoomInfo.dataZoomModel;
-        var oneType = dataZoomModel.get('disabled', true)
-            ? false
-            : dataZoomModel.get('zoomLock', true)
-            ? 'move'
-            : true;
+        var oneType = dataZoomInfo.disabled ? false : dataZoomInfo.zoomLock ? 'move' : true;
         if (typePriority[prefix + oneType] > typePriority[prefix + controlType]) {
             controlType = oneType;
         }
-
-        // Prevent default move event by default. If one false, do not prevent. Otherwise
-        // users may be confused why it does not work when multiple insideZooms exist.
-        preventDefaultMouseMove &= dataZoomModel.get('preventDefaultMouseMove', true);
+        // Do not support that different 'shift'/'ctrl'/'alt' setting used in one coord sys.
+        extend(opt, dataZoomInfo.roamControllerOpt);
     });
 
     return {
         controlType: controlType,
-        opt: {
-            // RoamController will enable all of these functionalities,
-            // and the final behavior is determined by its event listener
-            // provided by each inside zoom.
-            zoomOnMouseWheel: true,
-            moveOnMouseMove: true,
-            moveOnMouseWheel: true,
-            preventDefaultMouseMove: !!preventDefaultMouseMove
-        }
+        opt: opt
     };
 }
 
@@ -54238,11 +51713,7 @@ var InsideZoomView = DataZoomView.extend({
 
             each$1(coordInfoList, function (coordInfo) {
                 var coordModel = coordInfo.model;
-
-                var getRange = {};
-                each$1(['pan', 'zoom', 'scrollMove'], function (eventName) {
-                    getRange[eventName] = bind$4(roamHandlers[eventName], this, coordInfo, coordSysName);
-                }, this);
+                var dataZoomOption = dataZoomModel.option;
 
                 register$1(
                     api,
@@ -54253,8 +51724,16 @@ var InsideZoomView = DataZoomView.extend({
                             return coordModel.coordinateSystem.containPoint([x, y]);
                         },
                         dataZoomId: dataZoomModel.id,
-                        dataZoomModel: dataZoomModel,
-                        getRange: getRange
+                        throttleRate: dataZoomModel.get('throttle', true),
+                        panGetRange: bind$4(this._onPan, this, coordInfo, coordSysName),
+                        zoomGetRange: bind$4(this._onZoom, this, coordInfo, coordSysName),
+                        zoomLock: dataZoomOption.zoomLock,
+                        disabled: dataZoomOption.disabled,
+                        roamControllerOpt: {
+                            zoomOnMouseWheel: dataZoomOption.zoomOnMouseWheel,
+                            moveOnMouseMove: dataZoomOption.moveOnMouseMove,
+                            preventDefaultMouseMove: dataZoomOption.preventDefaultMouseMove
+                        }
                     }
                 );
             }, this);
@@ -54269,16 +51748,12 @@ var InsideZoomView = DataZoomView.extend({
         unregister$1(this.api, this.dataZoomModel.id);
         InsideZoomView.superApply(this, 'dispose', arguments);
         this._range = null;
-    }
-
-});
-
-var roamHandlers = {
+    },
 
     /**
-     * @this {module:echarts/component/dataZoom/InsideZoomView}
+     * @private
      */
-    zoom: function (coordInfo, coordSysName, controller, e) {
+    _onPan: function (coordInfo, coordSysName, controller, dx, dy, oldX, oldY, newX, newY) {
         var lastRange = this._range;
         var range = lastRange.slice();
 
@@ -54289,7 +51764,37 @@ var roamHandlers = {
         }
 
         var directionInfo = getDirectionInfo[coordSysName](
-            null, [e.originX, e.originY], axisModel, controller, coordInfo
+            [oldX, oldY], [newX, newY], axisModel, controller, coordInfo
+        );
+
+        var percentDelta = directionInfo.signal
+            * (range[1] - range[0])
+            * directionInfo.pixel / directionInfo.pixelLength;
+
+        sliderMove(percentDelta, range, [0, 100], 'all');
+
+        this._range = range;
+
+        if (lastRange[0] !== range[0] || lastRange[1] !== range[1]) {
+            return range;
+        }
+    },
+
+    /**
+     * @private
+     */
+    _onZoom: function (coordInfo, coordSysName, controller, scale, mouseX, mouseY) {
+        var lastRange = this._range;
+        var range = lastRange.slice();
+
+        // Calculate transform by the first axis.
+        var axisModel = coordInfo.axisModels[0];
+        if (!axisModel) {
+            return;
+        }
+
+        var directionInfo = getDirectionInfo[coordSysName](
+            null, [mouseX, mouseY], axisModel, controller, coordInfo
         );
         var percentPoint = (
             directionInfo.signal > 0
@@ -54297,7 +51802,7 @@ var roamHandlers = {
                 : (directionInfo.pixel - directionInfo.pixelStart)
             ) / directionInfo.pixelLength * (range[1] - range[0]) + range[0];
 
-        var scale = Math.max(1 / e.scale, 0);
+        scale = Math.max(1 / scale, 0);
         range[0] = (range[0] - percentPoint) * scale + percentPoint;
         range[1] = (range[1] - percentPoint) * scale + percentPoint;
 
@@ -54311,56 +51816,9 @@ var roamHandlers = {
         if (lastRange[0] !== range[0] || lastRange[1] !== range[1]) {
             return range;
         }
-    },
+    }
 
-    /**
-     * @this {module:echarts/component/dataZoom/InsideZoomView}
-     */
-    pan: makeMover(function (range, axisModel, coordInfo, coordSysName, controller, e) {
-        var directionInfo = getDirectionInfo[coordSysName](
-            [e.oldX, e.oldY], [e.newX, e.newY], axisModel, controller, coordInfo
-        );
-
-        return directionInfo.signal
-            * (range[1] - range[0])
-            * directionInfo.pixel / directionInfo.pixelLength;
-    }),
-
-    /**
-     * @this {module:echarts/component/dataZoom/InsideZoomView}
-     */
-    scrollMove: makeMover(function (range, axisModel, coordInfo, coordSysName, controller, e) {
-        var directionInfo = getDirectionInfo[coordSysName](
-            [0, 0], [e.scrollDelta, e.scrollDelta], axisModel, controller, coordInfo
-        );
-        return directionInfo.signal * (range[1] - range[0]) * e.scrollDelta;
-    })
-};
-
-function makeMover(getPercentDelta) {
-    return function (coordInfo, coordSysName, controller, e) {
-        var lastRange = this._range;
-        var range = lastRange.slice();
-
-        // Calculate transform by the first axis.
-        var axisModel = coordInfo.axisModels[0];
-        if (!axisModel) {
-            return;
-        }
-
-        var percentDelta = getPercentDelta(
-            range, axisModel, coordInfo, coordSysName, controller, e
-        );
-
-        sliderMove(percentDelta, range, [0, 100], 'all');
-
-        this._range = range;
-
-        if (lastRange[0] !== range[0] || lastRange[1] !== range[1]) {
-            return range;
-        }
-    };
-}
+});
 
 var getDirectionInfo = {
 
@@ -54923,7 +52381,7 @@ extendComponentView({
                     needPutOnTop = true;
                 }
                 var topOffset = needPutOnTop ? (-5 - rect.height) : (itemSize + 8);
-                if (offsetX + rect.width / 2 > api.getWidth()) {
+                if (offsetX + rect.width /  2 > api.getWidth()) {
                     hoverStyle.textPosition = ['100%', topOffset];
                     hoverStyle.textAlign = 'right';
                 }
@@ -54984,8 +52442,6 @@ function isUserFeatureName(featureName) {
 * under the License.
 */
 
-/* global Uint8Array */
-
 var saveAsImageLang = lang.toolbox.saveAsImage;
 
 function SaveAsImage(model) {
@@ -55039,7 +52495,7 @@ proto$2.onclick = function (ecModel, api) {
             var bstr = atob(url.split(',')[1]);
             var n = bstr.length;
             var u8arr = new Uint8Array(n);
-            while (n--) {
+            while(n--) {
                 u8arr[n] = bstr.charCodeAt(n);
             }
             var blob = new Blob([u8arr]);
@@ -55047,10 +52503,10 @@ proto$2.onclick = function (ecModel, api) {
         }
         else {
             var lang$$1 = model.get('lang');
-            var html = ''
-                + '<body style="margin:0;">'
-                + '<img src="' + url + '" style="max-width:100%;" title="' + ((lang$$1 && lang$$1[0]) || '') + '" />'
-                + '</body>';
+            var html = '' +
+                '<body style="margin:0;">' +
+                '<img src="' + url + '" style="max-width:100%;" title="' + ((lang$$1 && lang$$1[0]) || '') + '" />' +
+                '</body>';
             var tab = window.open();
             tab.document.write(html);
         }
@@ -55091,12 +52547,10 @@ MagicType.defaultOption = {
     type: [],
     // Icon group
     icon: {
-        /* eslint-disable */
         line: 'M4.1,28.9h7.1l9.3-22l7.4,38l9.7-19.7l3,12.8h14.9M4.1,58h51.4',
         bar: 'M6.7,22.9h10V48h-10V22.9zM24.9,13h10v35h-10V13zM43.2,2h10v46h-10V2zM3.1,58h53.7',
         stack: 'M8.2,38.4l-8.4,4.1l30.6,15.3L60,42.5l-8.1-4.1l-21.5,11L8.2,38.4z M51.9,30l-8.1,4.2l-13.4,6.9l-13.9-6.9L8.2,30l-8.4,4.2l8.4,4.2l22.2,11l21.5-11l8.1-4.2L51.9,30z M51.9,21.7l-8.1,4.2L35.7,30l-5.3,2.8L24.9,30l-8.4-4.1l-8.3-4.2l-8.4,4.2L8.2,30l8.3,4.2l13.9,6.9l13.4-6.9l8.1-4.2l8.1-4.1L51.9,21.7zM30.4,2.2L-0.2,17.5l8.4,4.1l8.3,4.2l8.4,4.2l5.5,2.7l5.3-2.7l8.1-4.2l8.1-4.2l8.1-4.1L30.4,2.2z', // jshint ignore:line
         tiled: 'M2.3,2.2h22.8V25H2.3V2.2z M35,2.2h22.8V25H35V2.2zM2.3,35h22.8v22.8H2.3V35z M35,35h22.8v22.8H35V35z'
-        /* eslint-enable */
     },
     // `line`, `bar`, `stack`, `tiled`
     title: clone(magicTypeLang.title),
@@ -55207,7 +52661,7 @@ proto$3.onclick = function (ecModel, api, type) {
                 for (var i = 0; i <= axisIndex; i++) {
                     newOption[axisType][axisIndex] = newOption[axisType][axisIndex] || {};
                 }
-                newOption[axisType][axisIndex].boundaryGap = type === 'bar';
+                newOption[axisType][axisIndex].boundaryGap = type === 'bar' ? true : false;
             }
         }
     };
@@ -55351,7 +52805,7 @@ function assembleSeriesWithCategoryAxis(series) {
         }
         tables.push(lines.join('\n'));
     });
-    return tables.join('\n\n' + BLOCK_SPLITER + '\n\n');
+    return tables.join('\n\n' +  BLOCK_SPLITER + '\n\n');
 }
 
 /**
@@ -55753,7 +53207,7 @@ registerAction({
 * under the License.
 */
 
-var curry$5 = curry;
+var curry$6 = curry;
 var each$16 = each$1;
 var map$2 = map;
 var mathMin$4 = Math.min;
@@ -56204,7 +53658,7 @@ function clearCovers(controller) {
     return !!originalLength;
 }
 
-function trigger$1(controller, opt) {
+function trigger(controller, opt) {
     var areas = map$2(controller._covers, function (cover) {
         var brushOption = cover.__brushOption;
         var range = clone(brushOption.range);
@@ -56252,8 +53706,8 @@ function createBaseRectCover(doDrift, controller, brushOption, edgeNames) {
         silent: true,
         draggable: true,
         cursor: 'move',
-        drift: curry$5(doDrift, controller, cover, 'nswe'),
-        ondragend: curry$5(trigger$1, controller, {isEnd: true})
+        drift: curry$6(doDrift, controller, cover, 'nswe'),
+        ondragend: curry$6(trigger, controller, {isEnd: true})
     }));
 
     each$16(
@@ -56265,8 +53719,8 @@ function createBaseRectCover(doDrift, controller, brushOption, edgeNames) {
                 draggable: true,
                 silent: true,
                 invisible: true,
-                drift: curry$5(doDrift, controller, cover, name),
-                ondragend: curry$5(trigger$1, controller, {isEnd: true})
+                drift: curry$6(doDrift, controller, cover, name),
+                ondragend: curry$6(trigger, controller, {isEnd: true})
             }));
         }
     );
@@ -56391,7 +53845,7 @@ function driftRect(toRectRange, fromRectRange, controller, cover, name, dx, dy, 
     ));
 
     updateCoverAfterCreation(controller, cover);
-    trigger$1(controller, {isEnd: false});
+    trigger(controller, {isEnd: false});
 }
 
 function driftPolygon(controller, cover, dx, dy, e) {
@@ -56404,7 +53858,7 @@ function driftPolygon(controller, cover, dx, dy, e) {
     });
 
     updateCoverAfterCreation(controller, cover);
-    trigger$1(controller, {isEnd: false});
+    trigger(controller, {isEnd: false});
 }
 
 function toLocalDelta(controller, dx, dy) {
@@ -56578,7 +54032,7 @@ var mouseHandlers = {
 
             var eventParams = updateCoverByMouse(this, e, localCursorPoint, false);
 
-            eventParams && trigger$1(this, eventParams);
+            eventParams && trigger(this, eventParams);
         }
     },
 
@@ -56602,7 +54056,7 @@ function handleDragEnd(e) {
         this._creatingCover = null;
 
         // trigger event shoule be at final, after procedure will be nested.
-        eventParams && trigger$1(this, eventParams);
+        eventParams && trigger(this, eventParams);
     }
 }
 
@@ -56619,7 +54073,7 @@ var coverRenderers = {
     rect: {
         createCover: function (controller, brushOption) {
             return createBaseRectCover(
-                curry$5(
+                curry$6(
                     driftRect,
                     function (range) {
                         return range;
@@ -56667,8 +54121,8 @@ var coverRenderers = {
             cover.add(new Polygon({
                 name: 'main',
                 draggable: true,
-                drift: curry$5(driftPolygon, controller, cover),
-                ondragend: curry$5(trigger$1, controller, {isEnd: true})
+                drift: curry$6(driftPolygon, controller, cover),
+                ondragend: curry$6(trigger, controller, {isEnd: true})
             }));
         },
         updateCoverShape: function (controller, cover, localRange, brushOption) {
@@ -56685,7 +54139,7 @@ function getLineRenderer(xyIndex) {
     return {
         createCover: function (controller, brushOption) {
             return createBaseRectCover(
-                curry$5(
+                curry$6(
                     driftRect,
                     function (range) {
                         var rectRange = [range, [0, 100]];
@@ -56837,7 +54291,7 @@ function normalizeRect(rect) {
 
 var each$17 = each$1;
 var indexOf$2 = indexOf;
-var curry$6 = curry;
+var curry$7 = curry;
 
 var COORD_CONVERTS = ['dataToPoint', 'pointToData'];
 
@@ -57177,9 +54631,9 @@ var panelRectBuilder = {
 
 var coordConvert = {
 
-    lineX: curry$6(axisConvert, 0),
+    lineX: curry$7(axisConvert, 0),
 
-    lineY: curry$6(axisConvert, 1),
+    lineY: curry$7(axisConvert, 1),
 
     rect: function (to, coordSys, rangeOrCoordRange) {
         var xminymin = coordSys[COORD_CONVERTS[to]]([rangeOrCoordRange[0][0], rangeOrCoordRange[1][0]]);
@@ -57227,9 +54681,9 @@ function axisConvert(axisNameIndex, to, coordSys, rangeOrCoordRange) {
 }
 
 var diffProcessor = {
-    lineX: curry$6(axisDiffProcessor, 0),
+    lineX: curry$7(axisDiffProcessor, 0),
 
-    lineY: curry$6(axisDiffProcessor, 1),
+    lineY: curry$7(axisDiffProcessor, 1),
 
     rect: function (values, refer, scales) {
         return [
@@ -57727,7 +55181,7 @@ registerPreprocessor(function (option) {
         var axisIndicesName = axisName + 'Index';
         var givenAxisIndices = dataZoomOpt[axisIndicesName];
         if (givenAxisIndices != null
-            && givenAxisIndices !== 'all'
+            && givenAxisIndices != 'all'
             && !isArray(givenAxisIndices)
         ) {
             givenAxisIndices = (givenAxisIndices === false || givenAxisIndices === 'none') ? [] : [givenAxisIndices];
@@ -57735,7 +55189,7 @@ registerPreprocessor(function (option) {
 
         forEachComponent(axisName, function (axisOpt, axisIndex) {
             if (givenAxisIndices != null
-                && givenAxisIndices !== 'all'
+                && givenAxisIndices != 'all'
                 && indexOf(givenAxisIndices, axisIndex) === -1
             ) {
                 return;
@@ -57789,9 +55243,7 @@ function Restore(model) {
 
 Restore.defaultOption = {
     show: true,
-    /* eslint-disable */
     icon: 'M3.8,33.4 M47,18.9h9.8V8.7 M56.3,20.1 C52.1,9,40.5,0.6,26.8,2.1C12.6,3.7,1.6,16.2,2.1,30.6 M13,41.1H3.1v10.2 M3.7,39.9c4.2,11.1,15.8,19.5,29.5,18 c14.2-1.6,25.2-14.1,24.7-28.5',
-    /* eslint-enable */
     title: restoreLang.title
 };
 
@@ -57883,7 +55335,7 @@ function initVML() {
 // TODO Use proxy like svg instead of overwrite brush methods
 
 var CMD$3 = PathProxy.CMD;
-var round$3 = Math.round;
+var round$2 = Math.round;
 var sqrt = Math.sqrt;
 var abs$1 = Math.abs;
 var cos = Math.cos;
@@ -57903,7 +55355,7 @@ if (!env$1.canvasSupported) {
 
     var initRootElStyle = function (el) {
         el.style.cssText = 'position:absolute;left:0;top:0;width:1px;height:1px;';
-        el.coordsize = Z + ',' + Z;
+        el.coordsize = Z + ','  + Z;
         el.coordorigin = '0,0';
     };
 
@@ -58031,7 +55483,7 @@ if (!env$1.canvasSupported) {
                 // We need to sort the color stops in ascending order by offset,
                 // otherwise IE won't interpret it correctly.
                 var stops = fill.colorStops.slice();
-                stops.sort(function (cs1, cs2) {
+                stops.sort(function(cs1, cs2) {
                     return cs1.offset - cs2.offset;
                 });
 
@@ -58097,7 +55549,7 @@ if (!env$1.canvasSupported) {
     };
 
     var updateFillAndStroke = function (vmlEl, type, style, zrEl) {
-        var isFill = type === 'fill';
+        var isFill = type == 'fill';
         var el = vmlEl.getElementsByTagName(type)[0];
         // Stroke must have lineWidth
         if (style[type] != null && style[type] !== 'none' && (isFill || (!isFill && style.lineWidth))) {
@@ -58252,14 +55704,14 @@ if (!env$1.canvasSupported) {
                     }
                     str.push(
                         type,
-                        round$3(((cx - rx) * sx + x) * Z - Z2), comma,
-                        round$3(((cy - ry) * sy + y) * Z - Z2), comma,
-                        round$3(((cx + rx) * sx + x) * Z - Z2), comma,
-                        round$3(((cy + ry) * sy + y) * Z - Z2), comma,
-                        round$3((x0 * sx + x) * Z - Z2), comma,
-                        round$3((y0 * sy + y) * Z - Z2), comma,
-                        round$3((x1 * sx + x) * Z - Z2), comma,
-                        round$3((y1 * sy + y) * Z - Z2)
+                        round$2(((cx - rx) * sx + x) * Z - Z2), comma,
+                        round$2(((cy - ry) * sy + y) * Z - Z2), comma,
+                        round$2(((cx + rx) * sx + x) * Z - Z2), comma,
+                        round$2(((cy + ry) * sy + y) * Z - Z2), comma,
+                        round$2((x0 * sx + x) * Z - Z2), comma,
+                        round$2((y0 * sy + y) * Z - Z2), comma,
+                        round$2((x1 * sx + x) * Z - Z2), comma,
+                        round$2((y1 * sy + y) * Z - Z2)
                     );
 
                     xi = x1;
@@ -58280,10 +55732,10 @@ if (!env$1.canvasSupported) {
                         applyTransform(p1, p1, m);
                     }
 
-                    p0[0] = round$3(p0[0] * Z - Z2);
-                    p1[0] = round$3(p1[0] * Z - Z2);
-                    p0[1] = round$3(p0[1] * Z - Z2);
-                    p1[1] = round$3(p1[1] * Z - Z2);
+                    p0[0] = round$2(p0[0] * Z - Z2);
+                    p1[0] = round$2(p1[0] * Z - Z2);
+                    p0[1] = round$2(p0[1] * Z - Z2);
+                    p1[1] = round$2(p1[1] * Z - Z2);
                     str.push(
                         // x0, y0
                         ' m ', p0[0], comma, p0[1],
@@ -58308,7 +55760,7 @@ if (!env$1.canvasSupported) {
                     m && applyTransform(p, p, m);
                     // 不 round 会非常慢
                     str.push(
-                        round$3(p[0] * Z - Z2), comma, round$3(p[1] * Z - Z2),
+                        round$2(p[0] * Z - Z2), comma, round$2(p[1] * Z - Z2),
                         k < nPoint - 1 ? comma : ''
                     );
                 }
@@ -58352,7 +55804,6 @@ if (!env$1.canvasSupported) {
         var path = this.path || (this.path = new PathProxy());
         if (this.__dirtyPath) {
             path.beginPath();
-            path.subPixelOptimize = false;
             this.buildPath(path, this.shape);
             path.toStatic();
             this.__dirtyPath = false;
@@ -58498,10 +55949,10 @@ if (!env$1.canvasSupported) {
                         'M12=', m[2] / scaleY, comma,
                         'M21=', m[1] / scaleX, comma,
                         'M22=', m[3] / scaleY, comma,
-                        'Dx=', round$3(x * scaleX + m[4]), comma,
-                        'Dy=', round$3(y * scaleY + m[5]));
+                        'Dx=', round$2(x * scaleX + m[4]), comma,
+                        'Dy=', round$2(y * scaleY + m[5]));
 
-            vmlElStyle.padding = '0 ' + round$3(maxX) + 'px ' + round$3(maxY) + 'px 0';
+            vmlElStyle.padding = '0 ' + round$2(maxX) + 'px ' + round$2(maxY) + 'px 0';
             // FIXME DXImageTransform 在 IE11 的兼容模式下不起作用
             vmlElStyle.filter = imageTransformPrefix + '.Matrix('
                 + transformFilter.join('') + ', SizingMethod=clip)';
@@ -58513,8 +55964,8 @@ if (!env$1.canvasSupported) {
                 y = y * scaleY + m[5];
             }
             vmlElStyle.filter = '';
-            vmlElStyle.left = round$3(x) + 'px';
-            vmlElStyle.top = round$3(y) + 'px';
+            vmlElStyle.left = round$2(x) + 'px';
+            vmlElStyle.top = round$2(y) + 'px';
         }
 
         var imageEl = this._imageEl;
@@ -58527,7 +55978,7 @@ if (!env$1.canvasSupported) {
         var imageELStyle = imageEl.style;
         if (hasCrop) {
             // Needs know image original width and height
-            if (!(ow && oh)) {
+            if (! (ow && oh)) {
                 var tmpImage = new Image();
                 var self = this;
                 tmpImage.onload = function () {
@@ -58535,8 +55986,8 @@ if (!env$1.canvasSupported) {
                     ow = tmpImage.width;
                     oh = tmpImage.height;
                     // Adjust image width and height to fit the ratio destinationSize / sourceSize
-                    imageELStyle.width = round$3(scaleX * ow * dw / sw) + 'px';
-                    imageELStyle.height = round$3(scaleY * oh * dh / sh) + 'px';
+                    imageELStyle.width = round$2(scaleX * ow * dw / sw) + 'px';
+                    imageELStyle.height = round$2(scaleY * oh * dh / sh) + 'px';
 
                     // Caching image original width, height and src
                     self._imageWidth = ow;
@@ -58546,31 +55997,31 @@ if (!env$1.canvasSupported) {
                 tmpImage.src = image;
             }
             else {
-                imageELStyle.width = round$3(scaleX * ow * dw / sw) + 'px';
-                imageELStyle.height = round$3(scaleY * oh * dh / sh) + 'px';
+                imageELStyle.width = round$2(scaleX * ow * dw / sw) + 'px';
+                imageELStyle.height = round$2(scaleY * oh * dh / sh) + 'px';
             }
 
-            if (!cropEl) {
+            if (! cropEl) {
                 cropEl = doc.createElement('div');
                 cropEl.style.overflow = 'hidden';
                 this._cropEl = cropEl;
             }
             var cropElStyle = cropEl.style;
-            cropElStyle.width = round$3((dw + sx * dw / sw) * scaleX);
-            cropElStyle.height = round$3((dh + sy * dh / sh) * scaleY);
+            cropElStyle.width = round$2((dw + sx * dw / sw) * scaleX);
+            cropElStyle.height = round$2((dh + sy * dh / sh) * scaleY);
             cropElStyle.filter = imageTransformPrefix + '.Matrix(Dx='
                     + (-sx * dw / sw * scaleX) + ',Dy=' + (-sy * dh / sh * scaleY) + ')';
 
-            if (!cropEl.parentNode) {
+            if (! cropEl.parentNode) {
                 vmlEl.appendChild(cropEl);
             }
-            if (imageEl.parentNode !== cropEl) {
+            if (imageEl.parentNode != cropEl) {
                 cropEl.appendChild(imageEl);
             }
         }
         else {
-            imageELStyle.width = round$3(scaleX * dw) + 'px';
-            imageELStyle.height = round$3(scaleY * dh) + 'px';
+            imageELStyle.width = round$2(scaleX * dw) + 'px';
+            imageELStyle.height = round$2(scaleY * dh) + 'px';
 
             vmlEl.appendChild(imageEl);
 
@@ -58583,7 +56034,7 @@ if (!env$1.canvasSupported) {
         var filterStr = '';
         var alpha = style.opacity;
         if (alpha < 1) {
-            filterStr += '.Alpha(opacity=' + round$3(alpha * 100) + ') ';
+            filterStr += '.Alpha(opacity=' + round$2(alpha * 100) + ') ';
         }
         filterStr += imageTransformPrefix + '.AlphaImageLoader(src=' + image + ', SizingMethod=scale)';
 
@@ -58672,8 +56123,7 @@ if (!env$1.canvasSupported) {
 
         try {
             textMeasureEl.style.font = textFont;
-        }
-        catch (ex) {
+        } catch (ex) {
             // Ignore failures to set to invalid font.
         }
         textMeasureEl.innerHTML = '';
@@ -58726,9 +56176,7 @@ if (!env$1.canvasSupported) {
         var font = fontStyle.style + ' ' + fontStyle.variant + ' ' + fontStyle.weight + ' '
             + fontStyle.size + 'px "' + fontStyle.family + '"';
 
-        textRect = textRect || getBoundingRect(
-            text, font, align, verticalAlign, style.textPadding, style.textLineHeight
-        );
+        textRect = textRect || getBoundingRect(text, font, align, verticalAlign);
 
         // Transform rect to view space
         var m = this.transform;
@@ -58854,11 +56302,11 @@ if (!env$1.canvasSupported) {
 
             skewEl.on = true;
 
-            skewEl.matrix = m[0].toFixed(3) + comma + m[2].toFixed(3) + comma
-                            + m[1].toFixed(3) + comma + m[3].toFixed(3) + ',0,0';
+            skewEl.matrix = m[0].toFixed(3) + comma + m[2].toFixed(3) + comma +
+            m[1].toFixed(3) + comma + m[3].toFixed(3) + ',0,0';
 
             // Text position
-            skewEl.offset = (round$3(coords[0]) || 0) + ',' + (round$3(coords[1]) || 0);
+            skewEl.offset = (round$2(coords[0]) || 0) + ',' + (round$2(coords[1]) || 0);
             // Left top point as origin
             skewEl.origin = '0 0';
 
@@ -58867,8 +56315,8 @@ if (!env$1.canvasSupported) {
         }
         else {
             skewEl.on = false;
-            textVmlElStyle.left = round$3(x) + 'px';
-            textVmlElStyle.top = round$3(y) + 'px';
+            textVmlElStyle.left = round$2(x) + 'px';
+            textVmlElStyle.top = round$2(y) + 'px';
         }
 
         textPathEl.string = encodeHtmlAttribute(text);
@@ -59067,7 +56515,7 @@ VMLPainter.prototype = {
         var width = width == null ? this._getWidth() : width;
         var height = height == null ? this._getHeight() : height;
 
-        if (this._width !== width || this._height !== height) {
+        if (this._width != width || this._height != height) {
             this._width = width;
             this._height = height;
 
@@ -59185,6 +56633,9 @@ function setTransform(svgEl, m) {
 function attr(el, key, val) {
     if (!val || val.type !== 'linear' && val.type !== 'radial') {
         // Don't set attribute for gradient, since it need new dom nodes
+        if (typeof val === 'string' && val.indexOf('NaN') > -1) {
+            console.log(val);
+        }
         el.setAttribute(key, val);
     }
 }
@@ -59193,7 +56644,7 @@ function attrXLink(el, key, val) {
     el.setAttributeNS('http://www.w3.org/1999/xlink', key, val);
 }
 
-function bindStyle(svgEl, style, isText, el) {
+function bindStyle(svgEl, style, isText) {
     if (pathHasFill(style, isText)) {
         var fill = isText ? style.textFill : style.fill;
         fill = fill === 'transparent' ? NONE : fill;
@@ -59218,7 +56669,7 @@ function bindStyle(svgEl, style, isText, el) {
         }
 
         attr(svgEl, 'fill', fill);
-        attr(svgEl, 'fill-opacity', style.fillOpacity != null ? style.fillOpacity * style.opacity : style.opacity);
+        attr(svgEl, 'fill-opacity', style.opacity);
     }
     else {
         attr(svgEl, 'fill', NONE);
@@ -59232,12 +56683,12 @@ function bindStyle(svgEl, style, isText, el) {
             ? style.textStrokeWidth
             : style.lineWidth;
         var strokeScale = !isText && style.strokeNoScale
-            ? el.getLineScale()
+            ? style.host.getLineScale()
             : 1;
         attr(svgEl, 'stroke-width', strokeWidth / strokeScale);
         // stroke then fill for text; fill then stroke for others
         attr(svgEl, 'paint-order', isText ? 'stroke' : 'fill');
-        attr(svgEl, 'stroke-opacity', style.strokeOpacity != null ? style.strokeOpacity : style.opacity);
+        attr(svgEl, 'stroke-opacity', style.opacity);
         var lineDash = style.lineDash;
         if (lineDash) {
             attr(svgEl, 'stroke-dasharray', style.lineDash.join(','));
@@ -59387,7 +56838,6 @@ svgPath.brush = function (el) {
 
     if (el.__dirtyPath) {
         path.beginPath();
-        path.subPixelOptimize = false;
         el.buildPath(path, el.shape);
         el.__dirtyPath = false;
 
@@ -59399,7 +56849,7 @@ svgPath.brush = function (el) {
         }
     }
 
-    bindStyle(svgEl, style, false, el);
+    bindStyle(svgEl, style);
     setTransform(svgEl, el.transform);
 
     if (style.text != null) {
@@ -59419,7 +56869,7 @@ svgImage.brush = function (el) {
         var src = image.src;
         image = src;
     }
-    if (!image) {
+    if (! image) {
         return;
     }
 
@@ -59430,7 +56880,7 @@ svgImage.brush = function (el) {
     var dh = style.height;
 
     var svgEl = el.__svgEl;
-    if (!svgEl) {
+    if (! svgEl) {
         svgEl = createElement('image');
         el.__svgEl = svgEl;
     }
@@ -59476,7 +56926,7 @@ var svgTextDrawRectText = function (el, rect, textRect) {
     }
 
     var textSvgEl = el.__textSvgEl;
-    if (!textSvgEl) {
+    if (! textSvgEl) {
         textSvgEl = createElement('text');
         el.__textSvgEl = textSvgEl;
     }
@@ -59497,14 +56947,12 @@ var svgTextDrawRectText = function (el, rect, textRect) {
             style.fontSize || '',
             style.fontFamily || ''
         ].join(' ')
-        || DEFAULT_FONT$1;
+        || DEFAULT_FONT;
 
     var verticalAlign = getVerticalAlignForSvg(style.textVerticalAlign);
 
-    textRect = getBoundingRect(
-        text, font, align,
-        verticalAlign, style.textPadding, style.textLineHeight
-    );
+    textRect = getBoundingRect(text, font, align,
+        verticalAlign);
 
     var lineHeight = textRect.lineHeight;
     // Text position represented by coord
@@ -59534,7 +56982,7 @@ var svgTextDrawRectText = function (el, rect, textRect) {
     attr(textSvgEl, 'x', x);
     attr(textSvgEl, 'y', y);
 
-    bindStyle(textSvgEl, style, true, el);
+    bindStyle(textSvgEl, style, true);
     if (el instanceof Text || el.style.transformText) {
         // Transform text with element
         setTransform(textSvgEl, el.transform);
@@ -59549,7 +56997,6 @@ var svgTextDrawRectText = function (el, rect, textRect) {
             var pos = el.transformCoordToGlobal(rect.x, rect.y);
             rect.x = pos[0];
             rect.y = pos[1];
-            el.transform = identity(create$1());
         }
 
         // Text rotation, but no element transform
@@ -59565,10 +57012,7 @@ var svgTextDrawRectText = function (el, rect, textRect) {
         var rotate$$1 = -style.textRotation || 0;
         var transform = create$1();
         // Apply textRotate to element matrix
-        rotate(transform, transform, rotate$$1);
-
-        var pos = [el.transform[4], el.transform[5]];
-        translate(transform, transform, pos);
+        rotate(transform, el.transform, rotate$$1);
         setTransform(textSvgEl, transform);
     }
 
@@ -59576,7 +57020,7 @@ var svgTextDrawRectText = function (el, rect, textRect) {
     var nTextLines = textLines.length;
     var textAnchor = align;
     // PENDING
-    if (textAnchor === 'left') {
+    if (textAnchor === 'left')  {
         textAnchor = 'start';
         textPadding && (x += textPadding[3]);
     }
@@ -59590,7 +57034,7 @@ var svgTextDrawRectText = function (el, rect, textRect) {
     }
 
     var dy = 0;
-    if (verticalAlign === 'after-edge') {
+    if (verticalAlign === 'baseline') {
         dy = -textRect.height + lineHeight;
         textPadding && (dy -= textPadding[2]);
     }
@@ -59609,7 +57053,7 @@ var svgTextDrawRectText = function (el, rect, textRect) {
         for (var i = 0; i < nTextLines; i++) {
             // Using cached tspan elements
             var tspan = tspanList[i];
-            if (!tspan) {
+            if (! tspan) {
                 tspan = tspanList[i] = createElement('tspan');
                 textSvgEl.appendChild(tspan);
                 attr(tspan, 'alignment-baseline', verticalAlign);
@@ -59649,7 +57093,7 @@ function getVerticalAlignForSvg(verticalAlign) {
         return 'middle';
     }
     else if (verticalAlign === 'bottom') {
-        return 'after-edge';
+        return 'baseline';
     }
     else {
         return 'hanging';
@@ -60273,25 +57717,7 @@ GradientManager.prototype.updateDom = function (gradient, dom) {
     for (var i = 0, len = colors.length; i < len; ++i) {
         var stop = this.createElement('stop');
         stop.setAttribute('offset', colors[i].offset * 100 + '%');
-
-        var color = colors[i].color;
-        if (color.indexOf('rgba' > -1)) {
-            // Fix Safari bug that stop-color not recognizing alpha #9014
-            var opacity = parse(color)[3];
-            var hex = toHex(color);
-
-            // stop-color cannot be color, since:
-            // The opacity value used for the gradient calculation is the
-            // *product* of the value of stop-opacity and the opacity of the
-            // value of stop-color.
-            // See https://www.w3.org/TR/SVG2/pservers.html#StopOpacityProperty
-            stop.setAttribute('stop-color', '#' + hex);
-            stop.setAttribute('stop-opacity', opacity);
-        }
-        else {
-            stop.setAttribute('stop-color', colors[i].color);
-        }
-
+        stop.setAttribute('stop-color', colors[i].color);
         dom.appendChild(stop);
     }
 
@@ -60914,9 +58340,9 @@ SVGPainter.prototype = {
             else if (!item.removed) {
                 for (var k = 0; k < item.count; k++) {
                     var displayable = newVisibleList[item.indices[k]];
-                    prevSvgElement =
-                        svgElement =
-                        getTextSvgElement(displayable)
+                    prevSvgElement
+                        = svgElement
+                        = getTextSvgElement(displayable)
                         || getSvgElement(displayable)
                         || prevSvgElement;
 
@@ -61045,10 +58471,10 @@ SVGPainter.prototype = {
     dispose: function () {
         this.root.innerHTML = '';
 
-        this._svgRoot =
-            this._viewport =
-            this.storage =
-            null;
+        this._svgRoot
+            = this._viewport
+            = this.storage
+            = null;
     },
 
     clear: function () {
@@ -61130,6 +58556,7 @@ exports.registerMap = registerMap;
 exports.getMap = getMap;
 exports.dataTool = dataTool;
 exports.zrender = zrender;
+exports.graphic = graphic;
 exports.number = number;
 exports.format = format;
 exports.throttle = throttle;
@@ -61140,7 +58567,6 @@ exports.color = color;
 exports.parseGeoJSON = parseGeoJSON;
 exports.parseGeoJson = parseGeoJson;
 exports.util = ecUtil;
-exports.graphic = graphic$1;
 exports.List = List;
 exports.Model = Model;
 exports.Axis = Axis;

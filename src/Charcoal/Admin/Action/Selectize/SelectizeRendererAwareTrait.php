@@ -42,11 +42,6 @@ trait SelectizeRendererAwareTrait
     /**
      * @var string
      */
-    protected $selectizeObjType;
-
-    /**
-     * @var string
-     */
     protected $selectizePropIdent;
 
     /**
@@ -59,20 +54,6 @@ trait SelectizeRendererAwareTrait
      */
     protected function selectizeProperty()
     {
-        if ($this->selectizeProperty) {
-            return $this->selectizeProperty;
-        }
-
-        $objType       = $this->selectizeObjType();
-        $propertyIdent = $this->selectizePropIdent();
-
-        if ($objType && $propertyIdent) {
-            $model = $this->modelFactory()->create($objType);
-            $prop  = $model->property($propertyIdent);
-
-            $this->selectizeProperty = $prop;
-        }
-
         return $this->selectizeProperty;
     }
 
@@ -104,7 +85,9 @@ trait SelectizeRendererAwareTrait
         $input = $this->propertyInputFactory()->create($type);
         $input->setInputType($type);
         $input->setProperty($prop);
-        $input->setData($prop->data());
+        $data = $prop->data();
+        $data['deferred'] = true;
+        $input->setData($data);
 
         return $input;
     }
@@ -205,30 +188,11 @@ trait SelectizeRendererAwareTrait
      * @param string $data The data set by setData().
      * @return $this
      */
-    public function setSelectizeObjType($data)
-    {
-        $this->selectizeObjType = $data;
-
-        return $this;
-    }
-
-    /**
-     * @param string $data The data set by setData().
-     * @return $this
-     */
     public function setSelectizePropIdent($data)
     {
         $this->selectizePropIdent = $data;
 
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function selectizeObjType()
-    {
-        return $this->selectizeObjType;
     }
 
     /**

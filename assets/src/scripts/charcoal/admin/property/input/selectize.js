@@ -389,6 +389,10 @@
     };
 
     Selectize.prototype.load_items = function (query, callback) {
+        if (!query.length && this.selectize_options.preload === false) {
+            return callback();
+        }
+
         var type = this.obj_type;
         var selectize_property_ident = this.selectize_property_ident;
         var selectize_obj_type = this.selectize_obj_type;
@@ -401,8 +405,14 @@
             selectize_property: selectize_property
         };
 
+        var url = Charcoal.Admin.admin_url() + 'selectize/load';
+
+        if (query) {
+            url += '/' + encodeURIComponent(query);
+        }
+
         $.ajax({
-            url: Charcoal.Admin.admin_url() + 'selectize/load',
+            url: url,
             data: form_data,
             type: 'GET',
             error: function () {

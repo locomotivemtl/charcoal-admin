@@ -30,6 +30,11 @@ class LoadAction extends BaseLoadAction
     private $selectizeCollection;
 
     /**
+     * @var string $query
+     */
+    private $query;
+
+    /**
      * Retrieve the list of parameters to extract from the HTTP request.
      *
      * @return string[]
@@ -37,7 +42,7 @@ class LoadAction extends BaseLoadAction
     protected function validDataFromRequest()
     {
         return array_merge([
-            'selectize_obj_type', 'selectize_prop_ident', 'selectize_property'
+            'selectize_prop_ident', 'selectize_property'
         ], parent::validDataFromRequest());
     }
 
@@ -60,23 +65,26 @@ class LoadAction extends BaseLoadAction
             '{{ parameter }} required, must be a {{ expectedType }}, received {{ actualType }}'
         );
 
-        $objType = $this->selectizeObjType();
-
-        if (!$objType) {
-            $actualType = is_object($objType) ? get_class($objType) : gettype($objType);
-            $this->addFeedback('error', strtr($reqMessage, [
-                '{{ parameter }}'    => '"obj_type"',
-                '{{ expectedType }}' => 'string',
-                '{{ actualType }}'   => $actualType,
-            ]));
-            $this->setSuccess(false);
-
-            return $response->withStatus(400);
-        }
-
         try {
             $selectizeInput = $this->selectizeInput();
-            $choices = $selectizeInput->p()->choices();
+            $sp = $selectizeInput->p();
+
+            $searchField = isset($selectizeInput->selectizeOptions()['searchField']) ?
+                $selectizeInput->selectizeOptions()['searchField'] :
+                $selectizeInput->choiceObjMap()['label'];
+
+            if ($this->query()) {
+                $sp->setFilters(array_merge($sp->filters(), [
+                    [
+                        'property' => $searchField,
+                        'operator' => 'LIKE',
+                        'value' => '%'.$this->query().'%'
+                    ]
+                ]));
+            }
+
+            $choices = $sp->choices();
+
             $this->setSelectizeCollection($this->selectizeVal($choices));
 
             $count = count($choices);
@@ -107,6 +115,25 @@ class LoadAction extends BaseLoadAction
 
             return $response->withStatus(500);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function query()
+    {
+        return $this->query;
+    }
+
+    /**
+     * @param string $query Query for LoadAction.
+     * @return self
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
+
+        return $this;
     }
 
     /**

@@ -36,23 +36,23 @@ $selectize-width-item-buttons: 40px;
     }
 }
 
-.selectize-control.loading +
-.selectize-loader {
-    opacity: 1;
-}
-
-.selectize-loader {
-    position: absolute;
-    right: 10px;
-    z-index: 50;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition: opacity $speed $easing;
-}
-
 // @todo Evaluate all these overide styles.
 .selectize-control {
+    position: relative;
+    &.loading::after {
+        @extend .fa;
+        content: "\f110";
+        @extend .fa-spin;
+        position: absolute;
+        right: 10px;
+        z-index: 50;
+        top: 50%;
+        margin-top: -0.5em;
+    }
+
+    &.single.loading::after {
+        right: 40px;
+    }
 
     .selectize-input {
         display: block;

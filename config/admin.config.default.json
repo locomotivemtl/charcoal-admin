@@ -112,7 +112,7 @@
                     "disposition": "attachment"
                 }
             },
-            "selectize/load": {
+            "selectize/load[/{query}]": {
                 "methods": [ "GET", "POST" ],
                 "ident": "charcoal/admin/action/selectize/load"
             },

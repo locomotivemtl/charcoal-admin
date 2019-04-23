@@ -211,12 +211,6 @@ class SelectizeInput extends SelectInput
      */
     public function choices()
     {
-        if ($this->p()->allowNull() && !$this->p()->multiple()) {
-            $prepend = $this->parseChoice('', $this->emptyChoice());
-
-            yield $prepend;
-        }
-
         // When deferred, we want to fetch choices for current values only.
         if ($this->deferred()) {
             $choices = $this->selectizeVal($this->propertyVal());
@@ -443,6 +437,13 @@ class SelectizeInput extends SelectInput
             $options = $this->parseSelectizeOptions($options);
         }
 
+        if ($this->deferred()) {
+            $placeholder = $this->translator()->trans('Search...');
+        } else {
+            $placeholder = $this->translator()->trans('Select...');
+        }
+
+        $options['placeholder'] = $placeholder;
         $prop = $this->property();
         if ($prop instanceof SelectablePropertyInterface) {
             $choices = iterator_to_array($this->choices());
@@ -606,10 +607,15 @@ class SelectizeInput extends SelectInput
                 }
             }
 
+            if (empty($val)) {
+                return $choices;
+            }
+
             $model = $this->modelFactory()->get($prop->objType());
             if (!$model->source()->tableExists()) {
                 return $choices;
             }
+
             $loader = $this->collectionLoader();
             $loader->reset()
                 ->setModel($model)
@@ -774,7 +780,6 @@ class SelectizeInput extends SelectInput
             'selectize_options'        => $this->selectizeOptions(),
             'choice_obj_map'           => $this->choiceObjMap(),
             'selectize_property_ident' => $prop->ident(),
-            'selectize_obj_type'       => $this->render('{{& objType }}'),
             'selectize_templates'      => $this->selectizeTemplates(),
             'selectize_property'       => json_encode($this->property()),
             'remote_source'            => $this->remoteSource(),

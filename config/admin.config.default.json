@@ -228,6 +228,9 @@
             "tools/check-links": {
                 "ident": "charcoal/admin/script/tools/check-links"
             },
+            "tools/copy-assets": {
+                "ident": "charcoal/admin/script/tools/copy-assets"
+            },
             "tools/optimize-images": {
                 "ident": "charcoal/admin/script/tools/optimize-images"
             },

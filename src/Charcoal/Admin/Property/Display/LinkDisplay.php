@@ -21,23 +21,51 @@ class LinkDisplay extends AbstractPropertyDisplay
     use BaseUrlTrait;
 
     /**
-     * Retrieve display value for anchor link.
-     *
-     * @see    \Charcoal\Admin\Property\Display\ImageDisplay::displayVal()
      * @return string
      */
-    public function hrefVal()
+    public function displayVal()
     {
-        $val = parent::displayVal();
-        if (empty($val)) {
-            return '';
+        $prop = $this->p();
+        $value = (array)$this->propertyVal();
+        $links = [];
+
+        foreach ($value as $val) {
+            if (empty($val)) {
+                continue;
+            }
+
+            $links[] = sprintf(
+                '<a href="%s">%s</a>',
+                $this->getLocalUrl($val),
+                $val
+            );
         }
 
-        $val = $this->getLocalUrl($val);
-
-        return $val;
+        return $prop->displayVal($links);
     }
 
+    /**
+     * @return string[]|\Generator
+     */
+    public function displayValList()
+    {
+        $prop = $this->p();
+        $value = (array)$this->propertyVal();
+
+        foreach ($value as $val) {
+            if (empty($val)) {
+                continue;
+            }
+
+            $link = sprintf(
+                '<a href="%s">%s</a>',
+                $this->getLocalUrl($val),
+                basename($val)
+            );
+
+            yield $prop->displayVal($link);
+        }
+    }
 
     /**
      * Get the URL for the file at the given path.

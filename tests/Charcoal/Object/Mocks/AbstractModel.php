@@ -13,6 +13,7 @@ use Charcoal\Translator\TranslatorAwareTrait;
  */
 abstract class AbstractModel
 {
+    // phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.Found
     use TranslatorAwareTrait;
 
     /**
@@ -206,4 +207,5 @@ abstract class AbstractModel
     {
         return null;
     }
+    // phpcs:enable
 }

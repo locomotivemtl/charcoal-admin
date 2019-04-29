@@ -17,7 +17,7 @@ use Charcoal\Object\ObjectRevisionInterface;
 trait RevisionableTrait
 {
     /**
-     * @var bool $revisionEnabled
+     * @var boolean $revisionEnabled
      */
     protected $revisionEnabled = true;
 

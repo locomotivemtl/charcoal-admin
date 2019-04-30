@@ -330,9 +330,11 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function showSidebarActions()
     {
-        $actions = $this->sidebarActions();
+        $actions = array_filter($this->sidebarActions(), function($action) {
+            return $action['active'] === true;
+        });
 
-        return count($actions);
+        return count($actions) > 0;
     }
 
     /**

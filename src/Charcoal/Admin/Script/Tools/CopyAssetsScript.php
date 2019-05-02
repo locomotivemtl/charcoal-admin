@@ -30,7 +30,7 @@ class CopyAssetsScript extends AdminScript
         $arguments = [
             'dir' => [
                 'longPrefix' => 'dir',
-                'description' => 'Directory (relative) to copy files into.',
+                'description' => 'Directory to copy files into; relative to the base path.',
                 'defaultValue' => 'www/assets/admin/'
             ]
         ];
@@ -55,8 +55,8 @@ class CopyAssetsScript extends AdminScript
         $dirPath = $this->basePath.$dirArg;
         $this->dir = realpath($dirPath);
         if (!$this->dir) {
-            $climate->orange('Directory does not exist. Creating it.');
-            mkdir($dirPath);
+            $climate->orange('Directory does not exist. Creating it…');
+            mkdir($dirPath, null, true);
             $this->dir = realpath($dirPath);
         }
 
@@ -78,6 +78,10 @@ class CopyAssetsScript extends AdminScript
             return $response;
         }
 
+        /**
+         * @todo Store the Charcoal Admin package base directory somewhere.
+         * @see \Charcoal\Admin\Config::L50 for similar relative path usage.
+         */
         $assetsDirectory = realpath(__DIR__.'/../../../../../assets/dist');
 
         $this->copy($assetsDirectory, $this->dir);
@@ -121,7 +125,7 @@ class CopyAssetsScript extends AdminScript
 
         // Make destination directory
         if (!is_dir($dest)) {
-            mkdir($dest, $permissions);
+            mkdir($dest, $permissions, true);
         }
 
         // Loop through the folder

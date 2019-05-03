@@ -106,10 +106,10 @@ class CopyAssetsScript extends AdminScript
      * @author      Aidan Lister <aidan@php.net>
      * @version     1.0.1
      * @link        http://aidanlister.com/2004/04/recursively-copying-directories-in-php/
-     * @param       string   $source    Source path
-     * @param       string   $dest      Destination path
-     * @param       int      $permissions New folder creation permissions
-     * @return      bool     Returns true on success, false on failure
+     * @param       string  $source      Source path.
+     * @param       string  $dest        Destination path.
+     * @param       integer $permissions New folder creation permissions.
+     * @return      boolean     Returns true on success, false on failure.
      */
     private function copy($source, $dest, $permissions = 0755)
     {
@@ -137,7 +137,7 @@ class CopyAssetsScript extends AdminScript
             }
 
             // Deep copy directories
-            $this->copy("$source/$entry", "$dest/$entry", $permissions);
+            $this->copy($source.'/'.$entry, $dest.'/'.$entry, $permissions);
         }
 
         // Clean up

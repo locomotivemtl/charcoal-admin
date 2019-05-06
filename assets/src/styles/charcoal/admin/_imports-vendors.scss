@@ -38,30 +38,22 @@
 @import "../../../../../node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";
 
 // Bootstrap Select
-// @todo Update temporary import. Waiting for a real vendor to support Bootstrap 4.
 @import "../../../../../node_modules/bootstrap-select/sass/bootstrap-select";
 
 // Bootstrap 4 Datepicker
-// @see below
 @import "../../../../../node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4";
 
 // jQuery MiniColors
 @import "../../../../../node_modules/@claviska/jquery-minicolors/jquery.minicolors";
-
-
-// Decentralized dependencies
-// ==========================================================================
-
-// Bootstrap Dialog
-// @todo Update temporary import. Waiting for a real vendor to support Bootstrap 4.
-@import "vendors/bootstrap-dialog";
-
 
 // Dependency overrides
 // ==========================================================================
 
 // Awesome Bootstrap Checkbox
 @import "vendors/awesome-bootstrap-checkbox";
+
+// Bootstrap Dialog
+@import "vendors/bootstrap-dialog";
 
 // Bootstrap Select
 @import "vendors/bootstrap-select";
@@ -75,9 +67,10 @@
 // jQuery MiniColors
 @import "vendors/minicolors";
 
+// CLDNR
 @import "vendors/clndr";
 
-// Formio modal style overrides
+// Form.io modal style overrides
 @import "vendors/formio-modal";
 
 // Overrides for Bootstrap pre-4.0 glyphicons

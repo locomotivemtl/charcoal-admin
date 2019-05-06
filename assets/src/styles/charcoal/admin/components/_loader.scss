@@ -1,0 +1,51 @@
+// ==========================================================================
+// Loading indicator
+// ==========================================================================
+
+.c-loader {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $charcoal-gray-0;
+    transition: opacity $speed $easing;
+
+    z-index: 100;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity, visibility, transform;
+    transition-duration: $speed, 0s, $speed;
+    transition-delay: $speed * 1, $speed * 2, 0s;
+    transition-timing-function: $easing;
+    will-change: opacity, visibility, transform;
+
+    &::after {
+        background-color: $white;
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 0;
+    }
+
+    .is-loading &,
+    &.is-loading {
+        opacity: 1;
+        visibility: visible;
+        transition-delay: 0s;
+    }
+}
+
+.c-loader_inner {
+    position: absolute;
+    color: $charcoal-blue-1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    z-index: 1;
+}

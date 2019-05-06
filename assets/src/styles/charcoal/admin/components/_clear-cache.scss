@@ -39,25 +39,25 @@
 
         @media (min-width: $from-small) and (max-width: $to-medium) {
             .card {
-                @include card-deck-column-count(2)
+                @include card-deck-column-count(2);
             }
         }
 
         @media (min-width: $from-medium) and (max-width: $to-large) {
             .card {
-                @include card-deck-column-count(3)
+                @include card-deck-column-count(3);
             }
         }
 
         @media (min-width: $from-large) and (max-width: $to-big) {
             .card {
-                @include card-deck-column-count(2)
+                @include card-deck-column-count(2);
             }
         }
 
         @media (min-width: $from-big) {
             .card {
-                @include card-deck-column-count(3)
+                @include card-deck-column-count(3);
             }
         }
     }

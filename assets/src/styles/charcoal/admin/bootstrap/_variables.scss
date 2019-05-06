@@ -7,20 +7,13 @@
 
 $primary:      $charcoal-blue-1;
 $danger:       $charcoal-red-1;
-$light:        $charcoal-gray-2;
 $dark:         $charcoal-gray-5;
 
 $theme-colors: (
     "primary": $primary,
     "danger":  $danger,
-    "light":   $light,
     "dark":    $dark
 );
-
-// Options
-// ==========================================================================
-
-// $enable-shadows: true;
 
 // Typography
 // ==========================================================================
@@ -46,23 +39,17 @@ $caret-width: .35em;
 
 $table-border-color: #cccccc;
 
-// $table-cell-padding:            rem(15px);
-// $table-bg-accent:               $charcoal-lightblue;
-// $table-bg-hover:                $charcoal-lightblue;
-
 // Forms
 // ==========================================================================
 
-$input-padding-y:    rem(10px); // .375rem
-$input-padding-y-sm: rem(7px);  //  .25rem
-$input-padding-y-lg: rem(13px); //   .5rem
+$input-padding-y:    rem(10px);
+$input-padding-y-sm: rem(8px);
+$input-padding-y-lg: rem(14px);
 
 $input-color:              $charcoal-gray-6;
 $input-border-color:       $charcoal-gray-2;
 
 $input-focus-border-color: $charcoal-blue-1;
-
-// $form-group-margin-bottom: 20px;
 
 // Grid system
 // ==========================================================================

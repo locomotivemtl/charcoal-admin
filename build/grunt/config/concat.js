@@ -18,8 +18,7 @@ module.exports = {
             '<%= paths.js.src %>/charcoal/admin/property/input/**/*.js',
             '<%= paths.js.src %>/charcoal/admin/template.js',
             '<%= paths.js.src %>/charcoal/admin/template/*.js',
-            '<%= paths.js.src %>/charcoal/admin/template/**/*.js',
-            '<%= paths.js.src %>/charcoal/admin/bootstrap-dialog.js',
+            '<%= paths.js.src %>/charcoal/admin/template/**/*.js'
         ],
         dest: '<%= paths.js.dist %>/charcoal.admin.js'
     },
@@ -37,6 +36,8 @@ module.exports = {
             '<%= paths.npm %>/jquery-ui-bundle/jquery-ui.js',
             // Bootstrap
             '<%= paths.npm %>/bootstrap/dist/js/bootstrap.bundle.js',
+            // Bootstrap Dialog
+            '<%= paths.js.src %>/charcoal/admin/bootstrap-dialog.js',
             // URL Search Params
             '<%= paths.npm %>/@ungap/url-search-params/min.js',
             // Bootstrap Datepicker

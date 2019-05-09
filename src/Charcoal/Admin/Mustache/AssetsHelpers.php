@@ -121,10 +121,6 @@ class AssetsHelpers implements HelpersInterface
      */
     public function __get($macro)
     {
-        if ($macro === 'assets') {
-            return $this;
-        }
-
         if (!$this->action) {
             $macro = '__'.$macro;
             if (!method_exists($this, $macro)) {
@@ -189,6 +185,7 @@ class AssetsHelpers implements HelpersInterface
      */
     protected function __output($collection)
     {
-        return $this->assets->get($collection)->dump();
+        $dump = $this->assets->get($collection)->dump();
+        return '{{=<<<<% %>>>>=}}'.$dump.'<<<<%={{ }}=%>>>>';
     }
 }

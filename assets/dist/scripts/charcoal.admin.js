@@ -5360,9 +5360,6 @@ Charcoal.Admin.Property_Input_Audio = function (data)
     // Navigation
     this.active_pane = data.data.active_pane || 'text';
 
-    // Recorder
-    this._recorder = undefined;
-
     this.init();
 };
 
@@ -5416,21 +5413,22 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
     // File properties
     // ====================
     // Elements
-    this.file_properties.$file_audio = $('.js-file-audio', this.element());
-    this.file_properties.$file_reset = $('.js-file-reset', this.element());
-    this.file_properties.$file_input = $('.js-file-input', this.element());
-    this.file_properties.$file_input_hiden = $('.js-file-input-hidden', this.element());
+    this.file_properties.$file_audio        = $('.js-file-audio', this.element());
+    this.file_properties.$file_reset        = $('.js-file-reset', this.element());
+    this.file_properties.$file_input        = $('.js-file-input', this.element());
+    this.file_properties.$file_input_hiden  = $('.js-file-input-hidden', this.element());
     this.file_properties.reset_button_class = 'js-file-reset';
 
-    //var current_value = this.element().find('input[type=hidden]').val();
+    /*
+    var current_value = this.element().find('input[type=hidden]').val();
 
-    //if (current_value) {
-    // Do something with current values
-    //}
+    if (current_value) {
+        // Do something with current values
+    }
+    */
 
     // Set active nav and bind listeners for controls.
     this.set_nav(this.active_pane).bind_nav_controls();
-
 };
 
 /**
@@ -5438,7 +5436,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.init = function ()
  */
 Charcoal.Admin.Property_Input_Audio.prototype.bind_nav_controls = function ()
 {
-    // Scope
     var that = this;
 
     this.element().on('click', '.js-toggle-pane', function () {
@@ -5448,17 +5445,18 @@ Charcoal.Admin.Property_Input_Audio.prototype.bind_nav_controls = function ()
 };
 
 /**
- * Display active pane
- * @param   {Object}          $toggle  Pane toggle button (jQuery Object)
- * @param   {String}          pane     Ident of pane to activate
- * @return  {ThisExpression}
+ * Display active pane.
+ *
+ * @param   {Object}          $toggle - Pane toggle button jQuery Element.
+ * @param   {String}          pane    - Ident of pane to activate.
+ * @return  {this}
  */
 Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
 {
     if (pane) {
-        var $toggles = $('.js-toggle-pane'),
-            $panes = $('.js-pane'),
-            $pane = $panes.filter('[data-pane="' + pane + '"]');
+        var $toggles = $('.js-toggle-pane', this.element()),
+            $panes   = $('.js-pane', this.element()),
+            $pane    = $panes.filter('[data-pane="' + pane + '"]');
 
         // Already active
         if (!$pane.hasClass('is-active')) {
@@ -5482,8 +5480,9 @@ Charcoal.Admin.Property_Input_Audio.prototype.set_nav = function (pane)
 };
 
 /**
- * Prepare pane content on its first display
- * @param  {String}  pane  Ident of pane to activate
+ * Prepare pane content on its first display.
+ *
+ * @param  {String}  pane - Ident of pane to activate
  */
 Charcoal.Admin.Property_Input_Audio.prototype.prepare_pane = function (pane)
 {
@@ -5499,8 +5498,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.prepare_pane = function (pane)
 /**
  * Mainly allows us to target focus to the textarea
  */
-Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
-
+Charcoal.Admin.Property_Input_Audio.prototype.init_text = function ()
+{
     // Don't reinitialized this pane
     if (this.initialized_types.indexOf('text') !== -1) {
         return;
@@ -5513,36 +5512,44 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_text = function () {
     message = this.text_strip_tags(message);
 
     this.text_properties.$voice_message.val(message);
-
 };
 
 /**
  * @see http://phpjs.org/functions/strip_tags/
  */
-Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input, allowed) {
+Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input, allowed)
+{
+    var htmlTags    = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+        otherTags   = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi,
+        replacement = '';
 
-    allowed = ((String(allowed) || '')
-        .toLowerCase()
-        .match(/<[a-z][a-z0-9]*>/g) || [])
-        .join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+    input = input.replace(otherTags, replacement);
 
-    var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
-        commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
+    if (allowed) {
+        allowed = (
+            (String(allowed) || '')
+                .toLowerCase()
+                .match(/<[a-z][a-z0-9]*>/g) || []
+            ).join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
 
-    return input.replace(commentsAndPhpTags, '')
-        .replace(tags, function ($0, $1) {
+        replacement = function ($0, $1) {
             return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
-        });
+        };
+    }
+
+    return input.replace(htmlTags, replacement).trim();
 };
 
 /**
  * Mainly allows us to bind reset click
  */
-Charcoal.Admin.Property_Input_Audio.prototype.init_file = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.init_file = function ()
+{
     // Don't reinitialized this pane
     if (this.initialized_types.indexOf('file') !== -1) {
         return;
     }
+
     this.initialized_types.push('file');
     this.file_bind_events();
 };
@@ -5561,7 +5568,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.file_bind_events = function ()
 /**
  * Reset the file input
  */
-Charcoal.Admin.Property_Input_Audio.prototype.file_reset_input = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.file_reset_input = function ()
+{
     this.file_properties.$file_audio.attr('src', '').addClass('hide');
     this.file_properties.$file_reset.addClass('hide');
     this.file_properties.$file_input
@@ -5574,8 +5582,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.file_reset_input = function () {
 /**
  * Check for browser capabilities
  */
-Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function () {
-
+Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function ()
+{
     // Don't reinitialized this pane
     if (this.initialized_types.indexOf('recording') !== -1) {
         return;
@@ -5585,22 +5593,25 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function () {
 
     that.initialized_types.push('recording');
 
-    if (!window.navigator.getUserMedia){
+    if (!window.navigator.getUserMedia) {
         window.navigator.getUserMedia =
             window.navigator.webkitGetUserMedia ||
             window.navigator.mozGetUserMedia;
     }
-    if (!window.navigator.cancelAnimationFrame){
+
+    if (!window.navigator.cancelAnimationFrame) {
         window.navigator.cancelAnimationFrame =
             window.navigator.webkitCancelAnimationFrame ||
             window.navigator.mozCancelAnimationFrame;
     }
-    if (!window.navigator.requestAnimationFrame){
+
+    if (!window.navigator.requestAnimationFrame) {
         window.navigator.requestAnimationFrame =
             window.navigator.webkitRequestAnimationFrame ||
             window.navigator.mozRequestAnimationFrame;
     }
-    if (!window.AudioContext){
+
+    if (!window.AudioContext) {
         window.AudioContext =
             window.AudioContext ||
             window.webkitAudioContext;
@@ -5622,9 +5633,9 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_recording = function () {
             that.recording_bind_events();
             that.recording_got_stream(stream);
         },
-        function (e) {
+        function (event) {
             window.alert(audioPropertyL10n.captureFailed + ' ' + commonL10n.errorOccurred);
-            window.console.log(e);
+            window.console.log(event);
         }
     );
 };
@@ -5646,7 +5657,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_bind_events = function (
 
     that.element().on('click', '.' + that.recording_properties.playback_button_class, function () {
         // Test for existing recording first
-        if (that.recording_properties.recording_index !== 0 && that.recording_properties.audio_player !== null){
+        if (that.recording_properties.recording_index !== 0 && that.recording_properties.audio_player !== null) {
             that.recording_toggle_playback();
         }
     });
@@ -5654,15 +5665,14 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_bind_events = function (
     that.element().on('click', '.' + that.recording_properties.reset_button_class, function () {
         that.recording_reset_audio();
     });
-
 };
 
 /**
  * Setup audio recording and analyser displays once audio stream is captured
  * @param MediaStream stream
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_got_stream = function (stream) {
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_got_stream = function (stream)
+{
     var that = this;
 
     that.recording_properties.audio_context = new window.AudioContext();
@@ -5679,8 +5689,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_got_stream = function (s
     });
 
     var input_point = that.recording_properties.audio_context.createGain(),
-        audio_node = that.recording_properties.audio_context.createMediaStreamSource(stream),
-        zero_gain  = null;
+        audio_node  = that.recording_properties.audio_context.createMediaStreamSource(stream),
+        zero_gain   = null;
 
     audio_node.connect(input_point);
     window.analyserNode = that.recording_properties.audio_context.createAnalyser();
@@ -5697,14 +5707,15 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_got_stream = function (s
 };
 
 /**
- * Manage button states while recording audio
- * @param  {string}  action  What action needs to be managed
+ * Manage button states while recording audio.
+ *
+ * @param  {string}  action - What action needs to be managed.
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = function (action) {
+Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = function (action)
+{
+    switch (action) {
 
-    switch (action){
-
-        case 'start_recording' :
+        case 'start_recording':
             /**
              * General actions
              * - Clear previous recordings if any
@@ -5732,7 +5743,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
 
             break;
 
-        case 'pause_recording' :
+        case 'pause_recording':
             /**
              * Record button
              * - Label = Record
@@ -5758,7 +5769,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
 
             break;
 
-        case 'stop_recording' :
+        case 'stop_recording':
             /**
              * Record button
              * - Label = Record
@@ -5783,7 +5794,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
 
             break;
 
-        case 'start_playback' :
+        case 'start_playback':
             /**
              * Record button
              *
@@ -5800,7 +5811,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
 
             break;
 
-        case 'pause_playback' :
+        case 'pause_playback':
             /**
              * Record button
              *
@@ -5817,7 +5828,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
 
             break;
 
-        case 'reset' :
+        case 'reset':
             /**
              * Record button
              * - Label = Record
@@ -5847,11 +5858,12 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_button_states = f
 };
 
 /**
- * Manage display of play time
+ * Manage display of play time.
+ *
  * @param  {Object}  audio_element
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_render_timer = function (audio_element) {
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_render_timer = function (audio_element)
+{
     var formatted_time = '';
 
     // If no element is passed, set to default values
@@ -5873,12 +5885,13 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_render_timer = function 
 };
 
 /**
- * Manage recording of audio and button states
- * @param   {String}           state  Recording state
+ * Manage recording of audio and button states.
+ *
+ * @param   {String}           state - Recording state
  * @return  {EmptyExpression}
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_recorder = function (state) {
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_recorder = function (state)
+{
     var that = this;
 
     if (state === 'stop') {
@@ -5888,17 +5901,21 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_recorder = functi
             that.recording_properties.audio_recorder.clear();
             that.recording_display_canvas('waves');
         });
+
         that.recording_manage_button_states('stop_recording');
         return;
     }
+
     if (that.recording_properties.audio_recorder.is_recording()) {
         that.recording_properties.audio_recorder.stop();
         that.recording_manage_button_states('pause_recording');
+
     // Start recording
     } else {
         if (!that.recording_properties.audio_recorder) {
             return;
         }
+
         that.recording_properties.audio_recorder.record();
         that.recording_manage_button_states('start_recording');
         that.recording_display_canvas('analyser');
@@ -5908,19 +5925,19 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_recorder = functi
 /**
  * Toggle playback of recorded audio
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_toggle_playback = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.recording_toggle_playback = function ()
+{
     // Stop playback
     if (this.recording_properties.audio_player.is_playing()) {
-
         this.recording_properties.audio_player.pause();
         this.recording_manage_button_states('pause_playback');
 
     // Start playback
     } else {
-
         if (!this.recording_properties.audio_player) {
             return;
         }
+
         this.recording_properties.audio_player.play();
         this.recording_manage_button_states('start_playback');
     }
@@ -5929,8 +5946,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_toggle_playback = functi
 /**
  * Reset the recorder and player
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_reset_audio = function () {
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_reset_audio = function ()
+{
     // Visuals
     var analyser = this.recording_properties.$analyser_canvas[0],
         analyser_context = analyser.getContext('2d');
@@ -5960,17 +5977,20 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_reset_audio = function (
 
     // Input val
     var input = document.getElementById(this.recording_properties.hidden_input_id);
-    if (input){
+    if (input) {
         input.value = '';
     }
 };
 
 /**
- * Audio is recorded and can be output
- * The ONLY time recording_got_buffers is called is right after a new recording is completed
+ * Audio is recorded and can be output.
+ *
+ * The ONLY time recording_got_buffers is called is right after a new recording is completed.
+ *
  * @param  {Array}  buffers
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_got_buffers = function (buffers) {
+Charcoal.Admin.Property_Input_Audio.prototype.recording_got_buffers = function (buffers)
+{
     var canvas = this.recording_properties.$waves_canvas[0],
         that   = this;
 
@@ -5982,42 +6002,46 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_got_buffers = function (
 };
 
 /**
- * Draw recording as waves in canvas
+ * Draw recording as waves in canvas.
+ *
  * @param  {Integer}           width
  * @param  {Integer}           height
  * @param  {RenderingContext}  context
  * @param  {Array}             data
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_draw_buffer = function (width, height, context, data) {
+Charcoal.Admin.Property_Input_Audio.prototype.recording_draw_buffer = function (width, height, context, data)
+{
     var step = Math.ceil(data.length / width),
         amp = height / 2;
 
     context.fillStyle = '#DDDDDD';
     context.clearRect(0,0,width,height);
 
-    for (var i = 0; i < width; i++){
+    for (var i = 0; i < width; i++) {
         var min = 1.0,
             max = -1.0;
 
         for (var j = 0; j < step; j++) {
             var datum = data[(i * step) + j];
-            if (datum < min){
+            if (datum < min) {
                 min = datum;
             }
-            if (datum > max){
+            if (datum > max) {
                 max = datum;
             }
         }
-        context.fillRect(i,(1 + min) * amp,1,Math.max(1,(max -min) * amp));
+
+        context.fillRect(i, ((1 + min) * amp), 1, Math.max(1, ((max - min) * amp)));
     }
 };
 
 /**
- * Convert the blob into base64 data
- * @param  Blob  blob  Audio data blob
+ * Convert the blob into base64 data.
+ *
+ * @param  {Blob}  blob - Audio data blob
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_done_encoding = function (blob) {
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_done_encoding = function (blob)
+{
     var reader = new window.FileReader(),
         data   = null,
         that   = this;
@@ -6029,19 +6053,19 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_done_encoding = function
         that.recording_properties.recording_index++;
         that.recording_manage_audio_data(data);
     };
-
 };
 
 /**
- * Manage base64 audio data
- * @param  {String}  data  Base64 audio data
+ * Manage base64 audio data.
+ *
+ * @param  {String}  data - Base64 audio data
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_audio_data = function (data) {
-    if (data){
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_audio_data = function (data)
+{
+    if (data) {
         // Write the data to an input for saving
         var input = document.getElementById(this.recording_properties.hidden_input_id);
-        if (input){
+        if (input) {
             input.value = data;
         }
 
@@ -6054,7 +6078,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_manage_audio_data = func
 /**
  * Manage display of canvas
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = function (canvas) {
+Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = function (canvas)
+{
     switch (canvas) {
         case 'waves':
             this.recording_properties.$analyser_canvas.addClass('d-none');
@@ -6070,7 +6095,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_display_canvas = functio
 /**
  * Stop refreshing the analyser
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_cancel_analyser_update = function () {
+Charcoal.Admin.Property_Input_Audio.prototype.recording_cancel_analyser_update = function ()
+{
     window.cancelAnimationFrame(this.recording_properties.animation_frame);
     this.recording_properties.animation_frame = null;
 };
@@ -6078,8 +6104,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_cancel_analyser_update =
 /**
  * Update analyser graph according to microphone input
  */
-Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = function () {
-
+Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = function ()
+{
     if (!this.recording_properties.analyser_context) {
         this.recording_properties.analyser_context = this.recording_properties.$analyser_canvas[0].getContext('2d');
     }
@@ -6112,11 +6138,10 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
         );
 
         for (var i = 0; i < num_bars; ++i) {
-
             var magnitude = 0,
                 offset = Math.floor(i * multiplier);
 
-            for (var j = 0; j < multiplier; j++){
+            for (var j = 0; j < multiplier; j++) {
                 magnitude += freqByteData[offset + j];
             }
 
@@ -6149,7 +6174,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
 
 (function (window) {
     /**
-     * Recorder worker that handles saving microphone input to buffers
+     * Recorder worker that handles saving microphone input to buffers.
+     *
      * @param  {GainNode}  source
      * @param  {Object}    cfg
      */
@@ -6162,7 +6188,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
 
         this.context = source.context;
 
-        if (!this.context.createScriptProcessor){
+        if (!this.context.createScriptProcessor) {
             this.node = this.context.createJavaScriptNode(buffer_length, 2, 2);
         } else {
             this.node = this.context.createScriptProcessor(buffer_length, 2, 2);
@@ -6175,22 +6201,22 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
             }
         });
 
-        this.node.onaudioprocess = function (e) {
-            if (!recording){
+        this.node.onaudioprocess = function (event) {
+            if (!recording) {
                 return;
             }
             worker.postMessage({
                 command: 'record',
                 buffer: [
-                    e.inputBuffer.getChannelData(0),
-                    e.inputBuffer.getChannelData(1)
+                    event.inputBuffer.getChannelData(0),
+                    event.inputBuffer.getChannelData(1)
                 ]
             });
         };
 
         this.configure = function (cfg) {
-            for (var prop in cfg){
-                if (cfg.hasOwnProperty(prop)){
+            for (var prop in cfg) {
+                if (cfg.hasOwnProperty(prop)) {
                     config[prop] = cfg[prop];
                 }
             }
@@ -6216,12 +6242,12 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
         this.export_wav = function (cb, type) {
             current_callback = cb || config.callback;
             type = type || config.type || 'audio/wav';
-            if (!current_callback){
+            if (!current_callback) {
                 throw new Error('Callback not set');
             }
             worker.postMessage({
                 command: 'exportWAV',
-                type: type
+                type:    type
             });
         };
 
@@ -6229,8 +6255,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
             return recording;
         };
 
-        worker.onmessage = function (e) {
-            var blob = e.data;
+        worker.onmessage = function (event) {
+            var blob = event.data;
             current_callback(blob);
         };
 
@@ -6240,17 +6266,15 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
     };
 
     window.Recorder = Recorder;
-
 })(window);
 
 (function (window) {
-
     /**
-     * Enhanced HTMLAudioElement player
-     * @param    Object   cfg
+     * Enhanced HTMLAudioElement player.
+     *
+     * @param  {Object}  cfg
      */
     var Audio_Player = function (cfg) {
-
         this.callbacks = {
             on_ended: cfg.on_ended || function () {},
             on_pause: cfg.on_pause || function () {},
@@ -6290,7 +6314,6 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
         /*
          * Events
          */
-
         that.element().addEventListener('ended', function () {
             that.callbacks.on_ended();
         });
@@ -6310,11 +6333,9 @@ Charcoal.Admin.Property_Input_Audio.prototype.recording_update_analysers = funct
         that.element().addEventListener('loadedmetadata', function () {
             that.callbacks.on_loadedmetadata(that.element());
         });
-
     };
 
     window.Audio_Player = Audio_Player;
-
 })(window);
 ;/**
  * Color picker

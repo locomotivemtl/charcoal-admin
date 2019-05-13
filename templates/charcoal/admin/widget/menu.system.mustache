@@ -16,6 +16,9 @@
                 <a
                     href="{{ url }}"
                     class="c-nav-system_link dropdown-item{{# ident }} -{{ . }}{{/ ident }}"
+                    {{# target }}
+                    target="{{ . }}"
+                    {{/ target }}
                     {{# id }}
                     id="{{ . }}"
                     {{/ id }}

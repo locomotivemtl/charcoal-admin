@@ -1068,7 +1068,7 @@ class AdminTemplate extends AbstractTemplate implements
 
         $menuItem['url'] = $url;
 
-        if ($menuItem['icon_css']) {
+        if (isset($menuItem['icon_css'])) {
             $menuItem['iconCss'] = $menuItem['icon_css'];
         }
 

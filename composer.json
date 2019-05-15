@@ -33,7 +33,7 @@
         "locomotivemtl/charcoal-app": "~0.8.1",
         "locomotivemtl/charcoal-cache": "~0.1",
         "locomotivemtl/charcoal-core": "~0.4",
-        "locomotivemtl/charcoal-email": "~0.3",
+        "locomotivemtl/charcoal-email": "~0.4",
         "locomotivemtl/charcoal-object": "~0.6",
         "locomotivemtl/charcoal-translator": "~0.3",
         "locomotivemtl/charcoal-ui": "~0.3.10",

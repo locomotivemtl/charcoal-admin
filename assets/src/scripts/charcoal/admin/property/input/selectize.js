@@ -1,4 +1,4 @@
-/* global Clipboard */
+/* global ClipboardJS */
 /**
  * Selectize Picker
  * Search.
@@ -267,12 +267,21 @@
             cssClass: '-quick-form',
             dialog_options: {
                 onhide: function () {
+                    if (self.widget_id !== undefined) {
+                        var widget = Charcoal.Admin.manager().get_widget(self.widget_id);
+                        if (typeof widget.destroy === 'function') {
+                            widget.destroy();
+                        }
+                        Charcoal.Admin.manager().remove_component('widgets', self.widget_id);
+                    }
+
                     callback({
                         return: false
                     });
                 }
             },
             widget_type: 'charcoal/admin/widget/quick-form',
+            with_data: true,
             widget_options: {
                 obj_type: type,
                 obj_id: id,
@@ -292,12 +301,12 @@
                     return false;
                 }
 
+                self.widget_id = response.widget_id;
+
                 Charcoal.Admin.manager().add_widget({
                     id: response.widget_id,
                     type: 'charcoal/admin/widget/quick-form',
-                    data: {
-                        obj_type: type
-                    },
+                    data: response.widget_data,
                     obj_id: id,
                     extra_form_data: {
                         selectize_obj_type: selectize_obj_type,
@@ -335,6 +344,7 @@
                 // Re render.
                 // This is not good.
                 Charcoal.Admin.manager().render();
+
             }
         });
     };
@@ -379,6 +389,10 @@
     };
 
     Selectize.prototype.load_items = function (query, callback) {
+        if (!query.length && this.selectize_options.preload === false) {
+            return callback();
+        }
+
         var type = this.obj_type;
         var selectize_property_ident = this.selectize_property_ident;
         var selectize_obj_type = this.selectize_obj_type;
@@ -391,8 +405,14 @@
             selectize_property: selectize_property
         };
 
+        var url = Charcoal.Admin.admin_url() + 'selectize/load';
+
+        if (query) {
+            url += '/' + encodeURIComponent(query);
+        }
+
         $.ajax({
-            url: Charcoal.Admin.admin_url() + 'selectize/load',
+            url: url,
             data: form_data,
             type: 'GET',
             error: function () {
@@ -532,7 +552,7 @@
 
         var selectize = this.selectize;
 
-        this.clipboard = new Clipboard(this.selectize_selector + '_copy', {
+        this.clipboard = new ClipboardJS(this.selectize_selector + '_copy', {
             text: function () {
                 return selectize.$input.val();
             }

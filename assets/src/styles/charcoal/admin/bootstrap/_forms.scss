@@ -61,6 +61,14 @@ label {
     }
 }
 
+.form-field-note {
+    font-size: 90%;
+
+    @media (min-width: $from-big) {
+        font-size: 72%;
+    }
+}
+
 .form-check-color {
     position: relative;
     margin-bottom: $form-check-inline-margin-x;
@@ -89,8 +97,8 @@ label {
     }
 
     .o-swatch {
-        width:  calc(#{$input-height-inner} - 6px);
-        height: calc(#{$input-height-inner} - 6px);
+        width:  calc(#{$input-height} - 6px);
+        height: calc(#{$input-height} - 6px);
     }
 
     .o-swatch_color {
@@ -99,15 +107,15 @@ label {
 
     &.form-check-color-lg {
         .o-swatch {
-            width:  calc(#{$input-height-inner-lg} - 6px);
-            height: calc(#{$input-height-inner-lg} - 6px);
+            width:  calc(#{$input-height-lg} - 6px);
+            height: calc(#{$input-height-lg} - 6px);
         }
     }
 
     &.form-check-color-sm {
         .o-swatch {
-            width:  calc(#{$input-height-inner-sm} - 6px);
-            height: calc(#{$input-height-inner-sm} - 6px);
+            width:  calc(#{$input-height-sm} - 6px);
+            height: calc(#{$input-height-sm} - 6px);
         }
     }
 }

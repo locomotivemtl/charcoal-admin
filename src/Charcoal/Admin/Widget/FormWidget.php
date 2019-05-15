@@ -140,6 +140,9 @@ class FormWidget extends AdminWidget implements
 
         if ($prop->hidden()) {
             $prop->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
+            if ($prop->prop()->val()) {
+                $prop->setPropertyVal($prop->prop()->val());
+            }
 
             $this->hiddenProperties[$ident] = $prop;
 

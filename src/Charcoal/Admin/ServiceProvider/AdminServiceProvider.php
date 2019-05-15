@@ -196,26 +196,50 @@ class AdminServiceProvider implements ServiceProviderInterface
         /**
          * Alters the application's metadata configset.
          *
-         * Changes:
-         * 1. Add "admin" suffix to metadata search paths
-         * 2. Merge metadata configset from  "admin/config", if any
+         * This extension will duplicate each previously defined
+         * metadata include path to introduce an "admin" subdirectory
+         * which adds support for Admin-only metadata settings.
+         *
+         * For example, if a developer defines the following paths:
+         *
+         * ```json
+         * "paths": [
+         *     "my-app/metadata/",
+         *     "vendor/locomotivemtl/charcoal-cms/metadata/"
+         * ]
+         * ```
+         *
+         * The Admin's service provider will duplicate like so:
+         *
+         * ```json
+         * "paths": [
+         *     "my-app/metadata/admin/",
+         *     "my-app/metadata/",
+         *     "vendor/locomotivemtl/charcoal-cms/metadata/admin/"
+         *     "vendor/locomotivemtl/charcoal-cms/metadata/"
+         * ]
+         * ```
+         *
+         * Any data included from the "admin" subdirectory will override
+         * any "base" data that's been imported.
          *
          * @param  MetadataConfig $metaConfig The metadata configset.
          * @param  Container      $container  The Pimple DI container.
          * @return MetadataConfig
          */
         $container->extend('metadata/config', function (MetadataConfig $metaConfig, Container $container) {
-            /** 1. Search for metadata in admin sub-directories, if any */
-            $metaPaths  = $metaConfig->paths();
-            $adminPaths = array_map(function ($path) {
-                return rtrim($path, '/').'/admin/';
-            }, $metaPaths);
-            $metaConfig->addPaths($adminPaths);
+            $adminConfig = $container['admin/config'];
+            $adminDir    = '/'.trim($adminConfig['base_path'], '/');
 
-            /** 2. Merge admin metadata configset */
-            if (isset($container['admin/config']['metadata'])) {
-                $metaConfig->merge($container['admin/config']['metadata']);
+            $metaPaths   = $metaConfig->paths();
+            $parsedPaths = [];
+            foreach ($metaPaths as $basePath) {
+                $adminPath = rtrim($basePath, '/').$adminDir;
+
+                array_push($parsedPaths, $adminPath, $basePath);
             }
+
+            $metaConfig->setPaths($parsedPaths);
 
             return $metaConfig;
         });

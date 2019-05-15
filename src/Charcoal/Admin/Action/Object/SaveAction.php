@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Charcoal\Model\ModelValidator;
 
 // From 'charcoal-object'
-use Charcoal\Object\ContentInterface;
+use Charcoal\Object\AuthorableInterface;
 
 /**
  * Action: Create an object and insert into storage.
@@ -146,7 +146,7 @@ class SaveAction extends AbstractSaveAction
                 return $response->withStatus(400);
             }
 
-            if ($obj instanceof ContentInterface) {
+            if ($obj instanceof AuthorableInterface) {
                 $authorIdent = $this->authorIdent();
                 if (!$obj->lastModifiedBy()) {
                     $obj->setLastModifiedBy($authorIdent);

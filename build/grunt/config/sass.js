@@ -1,7 +1,8 @@
 module.exports = {
     options: {
-        sourceMap:   false,
-        outputStyle: 'expanded'
+        implementation: require('node-sass'),
+        sourceMap:      false,
+        outputStyle:    'expanded'
     },
     app: {
         files: {

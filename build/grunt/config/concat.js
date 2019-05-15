@@ -18,7 +18,7 @@ module.exports = {
             '<%= paths.js.src %>/charcoal/admin/property/input/**/*.js',
             '<%= paths.js.src %>/charcoal/admin/template.js',
             '<%= paths.js.src %>/charcoal/admin/template/*.js',
-            '<%= paths.js.src %>/charcoal/admin/template/**/*.js',
+            '<%= paths.js.src %>/charcoal/admin/template/**/*.js'
         ],
         dest: '<%= paths.js.dist %>/charcoal.admin.js'
     },
@@ -32,55 +32,33 @@ module.exports = {
         src: [
             // jQuery
             '<%= paths.npm %>/jquery/dist/jquery.js',
-
             // jQuery UI
             '<%= paths.npm %>/jquery-ui-bundle/jquery-ui.js',
-
             // Bootstrap
             '<%= paths.npm %>/bootstrap/dist/js/bootstrap.bundle.js',
-
+            // Bootstrap Dialog
+            '<%= paths.js.src %>/charcoal/admin/bootstrap-dialog.js',
             // URL Search Params
-            '<%= paths.npm %>/url-search-params/build/url-search-params.js',
-
-            /**
-             * Bootstrap Dialog (temporary)
-             *
-             * @todo Too precarious
-             * @see  https://github.com/pYr0x/bootstrap-dialog)
-             * @see  https://gist.github.com/dominiclord/49d0a84cca789a5be3c532d8f0bc8b75)
-             */
-            '<%= paths.npm %>/bootstrap-dialog-temporary/bootstrap-dialog.js',
-
+            '<%= paths.npm %>/@ungap/url-search-params/min.js',
             // Bootstrap Datepicker
             '<%= paths.npm %>/moment/min/moment.min.js',
             '<%= paths.npm %>/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js',
-
             // BB Map
             '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
-
             // Bootstrap Select (@see paramono/bootstrap-select)
-            '<%= paths.npm %>/bootstrap-select-temporary/dist/js/bootstrap-select.js',
-            // '<%= paths.npm %>/bootstrap-select/dist/js/bootstrap-select.js',
-
+            '<%= paths.npm %>/bootstrap-select/dist/js/bootstrap-select.js',
             // jQuery MiniColors
             '<%= paths.npm %>/@claviska/jquery-minicolors/jquery.minicolors.min.js',
-
             // Shopify Draggable
             '<%= paths.npm %>/@shopify/draggable/lib/es5/sortable.js',
-            // '<%= paths.npm %>/@shopify/draggable/lib/es5/plugins/resize-mirror.js',
-
             // Multiselect Two-sides
             '<%= paths.npm %>/multiselect-two-sides/dist/js/multiselect.min.js',
-
             // Selectize
             '<%= paths.npm %>/selectize/dist/js/standalone/selectize.min.js',
-
             // Selectize
             '<%= paths.npm %>/clipboard/dist/clipboard.min.js',
-
             // jQuery Timeago
             '<%= paths.npm %>/timeago/jquery.timeago.js',
-
             // Moment.js
             '<%= paths.npm %>/moment/min/moment-with-locales.min.js',
         ],

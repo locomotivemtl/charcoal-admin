@@ -3,6 +3,7 @@
 namespace Charcoal\Admin\Widget;
 
 use Charcoal\Object\RevisionableInterface;
+use Charcoal\User\AuthAwareInterface;
 use InvalidArgumentException;
 
 // From Pimple
@@ -311,6 +312,13 @@ class FormSidebarWidget extends AdminWidget implements
                 }
             }
 
+            if (!empty($formProperty['required_acl_permissions']) && $this instanceof AuthAwareInterface) {
+                $formProperty['active'] = $this->hasPermissions($formProperty['required_acl_permissions']);
+                if (!$this->hasPermissions($formProperty['required_acl_permissions'])) {
+                    continue;
+                }
+            }
+
             yield $propertyIdent => $formProperty;
         }
     }
@@ -322,9 +330,11 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function showSidebarActions()
     {
-        $actions = $this->sidebarActions();
+        $actions = array_filter($this->sidebarActions(), function($action) {
+            return $action['active'] === true;
+        });
 
-        return count($actions);
+        return count($actions) > 0;
     }
 
     /**

@@ -106,8 +106,18 @@
 }
 
 .table-cell-sort {
-    background-color: $white;
     padding: 0px 5px;
+
+    &::after {
+        content: "";
+        background: $white;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 0;
+    }
 
     @media (min-width: $from-small) {
         @include u-auto-cell-width;
@@ -126,14 +136,12 @@
     padding: 5px;
     font-size: 12px;
     opacity: 0;
+    position: relative;
+    z-index: 1;
 
     .table tr.draggable-mirror &,
     .table tr:hover & {
         opacity: 1;
-
-        // & + .table-foot {
-        //     margin-top: -($line-height-computed * 3);
-        // }
     }
 }
 
@@ -166,7 +174,6 @@
      * Apply `.card-footer`
      */
     .fixed-table-pagination {
-        // padding: $card-spacer-y $card-spacer-x;
         padding-right: $card-spacer-x;
         padding-left: $card-spacer-x;
         background-color: $card-cap-bg;

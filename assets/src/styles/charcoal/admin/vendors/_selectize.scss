@@ -38,6 +38,22 @@ $selectize-width-item-buttons: 40px;
 
 // @todo Evaluate all these overide styles.
 .selectize-control {
+    position: relative;
+    &.loading::after {
+        @extend .fa;
+        content: "\f110";
+        @extend .fa-spin;
+        position: absolute;
+        right: 10px;
+        z-index: 50;
+        top: 50%;
+        margin-top: -0.5em;
+    }
+
+    &.single.loading::after {
+        right: 40px;
+    }
+
     .selectize-input {
         display: block;
 
@@ -84,7 +100,8 @@ $selectize-width-item-buttons: 40px;
                 padding: 3px 3px 0;
             }
 
-            > div, > div.active {
+            > div,
+            > div.active {
                 padding: 7px 10px;
                 box-sizing: border-box;
                 border-width: 1px;
@@ -97,22 +114,22 @@ $selectize-width-item-buttons: 40px;
         }
     }
 
-//     .selectize-input > div.new {
-//         font-style: italic;
-//     }
+    // .selectize-input > div.new {
+    //     font-style: italic;
+    // }
 
-//     .selectize-input .item > .email {
-//         margin-left: 5px;
-//         opacity: 0.75;
+    // .selectize-input .item > .email {
+    //     margin-left: 5px;
+    //     opacity: 0.75;
 
-//         &:before {
-//             content: "<";
-//         }
-//         &:after {
-//             content: ">";
-//         }
+    //     &:before {
+    //         content: "<";
+    //     }
+    //     &:after {
+    //         content: ">";
+    //     }
 
-//     }
+    // }
 
      &.selectize-list {
          .selectize-input,
@@ -158,31 +175,31 @@ $selectize-width-item-buttons: 40px;
          }
      }
 
-//     .selectize-input::before {
-//         content:        "\200B";
-//         position:       static;
-//         display:        inline-block;
-//         width:          1px;
-//         height:         auto;
-//         padding:        $selectize-padding-item-y 0;
-//         background:     none transparent;
-//         vertical-align: baseline;
-//     }
+    // .selectize-input::before {
+    //     content:        "\200B";
+    //     position:       static;
+    //     display:        inline-block;
+    //     width:          1px;
+    //     height:         auto;
+    //     padding:        $selectize-padding-item-y 0;
+    //     background:     none transparent;
+    //     vertical-align: baseline;
+    // }
 
-//     .selectize-input.dropdown-active::before {
-//         display: inline-block;
-//     }
+    // .selectize-input.dropdown-active::before {
+    //     display: inline-block;
+    // }
 
-//     &.plugin-remove_button {
-//         [data-value] {
-//             padding: $selectize-padding-item-y $selectize-offset-item-remove $selectize-padding-item-y $selectize-padding-item-x !important;
+    // &.plugin-remove_button {
+    //     [data-value] {
+    //         padding: $selectize-padding-item-y $selectize-offset-item-remove $selectize-padding-item-y $selectize-padding-item-x !important;
 
-//             .remove {
-//                 width:   $selectize-width-item-remove;
-//                 // padding: $selectize-padding-x 0 0 0;
-//             }
-//         }
-//     }
+    //         .remove {
+    //             width:   $selectize-width-item-remove;
+    //             // padding: $selectize-padding-x 0 0 0;
+    //         }
+    //     }
+    // }
 
     &.plugin-buttons.multi {
         [data-value] {
@@ -259,39 +276,47 @@ $selectize-width-item-buttons: 40px;
     }
 }
 
-// .selectize-grid {
-//     .items {
-//         display:flex;
-//         flex-wrap:wrap;
-//     }
+///
+/// @deprecated .selectize-grid in favour of .selectize-control.grid
+/// ```
+/// .selectize-control.grid.items@1/4
+///     .selectize-input.items
+///         .item
+/// ```
+///
+.selectize-grid,
+.selectize-control.grid {
+    .selectize-input {
+        display:   flex;
+        flex-wrap: wrap;
 
-//     .item {
-//         display: inline-block;
-//         align-items: stretch;
-//         margin: 0;
-//     }
+        > .item {
+            display: inline-block;
+            align-items: stretch;
+        }
+    }
 
-//     &.item\@1\/4 {
-//         .item {
-//             @media (min-width: $from-medium){
-//                 width: 22.5%;
-//             }
-//         }
-//     }
+    &.item\@1\/4 {
+        .selectize-input > .item {
+            @media (min-width: $from-medium) {
+                width: calc(25% - #{$selectize-margin-item-x});
+            }
+        }
+    }
 
-//     .item\@1\/3 & {
-//         .item {
-//             @media (min-width: $from-medium) {
-//                 width: 30%;
-//             }
-//         }
-//     }
+     &.item\@1\/3 {
+        .selectize-input > .item {
+            @media (min-width: $from-medium) {
+                width: calc(33.333333% - #{$selectize-margin-item-x});
+            }
+        }
+    }
 
-//     .item\@1\/2 & {
-//         .item {
-//             @media (min-width: $from-medium){
-//                 width: 48%;
-//             }
-//         }
-//     }
-// }
+     &.item\@1\/2 {
+        .selectize-input > .item {
+            @media (min-width: $from-medium) {
+                width: calc(50% - #{$selectize-margin-item-x});
+            }
+        }
+    }
+}

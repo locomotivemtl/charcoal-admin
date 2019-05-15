@@ -688,7 +688,7 @@ class AdminTemplate extends AbstractTemplate implements
         $this->setAuthorizer($container['admin/authorizer']);
 
         // Satisfies AdminTrait dependencies
-        $this->setDebug($container['config']);
+        $this->setDebug($container['debug']);
         $this->setAppConfig($container['config']);
         $this->setAdminConfig($container['admin/config']);
 
@@ -1068,7 +1068,7 @@ class AdminTemplate extends AbstractTemplate implements
 
         $menuItem['url'] = $url;
 
-        if ($menuItem['icon_css']) {
+        if (isset($menuItem['icon_css'])) {
             $menuItem['iconCss'] = $menuItem['icon_css'];
         }
 

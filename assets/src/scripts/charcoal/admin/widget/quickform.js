@@ -11,10 +11,14 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.save_callback = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
 
+    this.form_selector = opts.data.form_selector;
+    this.$form         = $(this.form_selector);
+
     this.save_action   = opts.save_action || 'object/save';
     this.update_action = opts.update_action || 'object/update';
     this.extra_form_data = opts.extra_form_data || {};
 
+    this.group_conditions = opts.data.group_conditions;
     this.form_working = false;
     this.suppress_feedback = opts.suppress_feedback || false;
     this.is_new_object = false;
@@ -46,6 +50,136 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
             }
         }
     );
+
+    this.parse_group_conditions();
+};
+
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @return self
+ */
+Charcoal.Admin.Widget_Quick_Form.prototype.parse_group_conditions = function () {
+    var that = this;
+
+    $.each(this.group_conditions, function (target, conditions) {
+        var isValid = that.validate_group_conditions(target);
+        if (!isValid) {
+            that.toggle_conditional_group(target, isValid, false);
+        }
+
+        $.each(conditions, function (index, condition) {
+            that.$form.on('change.charcoal.quick.form', '#' + condition.input_id, {
+                condition_target: target
+            }, function (event) {
+                var isValid = that.validate_group_conditions(event.data.condition_target);
+                that.toggle_conditional_group(event.data.condition_target, isValid);
+            });
+        });
+    });
+};
+
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @return self
+ */
+Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = function (target) {
+    var conditions = this.group_conditions[target];
+    var that       = this;
+    var valid      = true;
+
+    $.each(conditions, function (index, condition) {
+        var $input    = that.$form.find('#' + condition.input_id);
+        var input_val = that.get_input_value($input);
+
+        switch (JSON.stringify(condition.operator)) {
+            case '"!=="':
+            case '"!="':
+            case '"!"':
+            case '"not"':
+                if (input_val === condition.value) {
+                    valid = false;
+                    return;
+                }
+                break;
+            default:
+            case '"==="':
+            case '"=="':
+            case '"="':
+            case '"is"':
+                if (input_val !== condition.value) {
+                    valid = false;
+                    return;
+                }
+                break;
+        }
+
+    });
+
+    return valid;
+};
+
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @return self
+ */
+Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
+    var $group  = this.$form.find('#form_group_' + group);
+    var $inputs = $group.find('select, input, textarea');
+    animate     = animate || true;
+
+    var complete = function () {
+        $inputs.each(function () {
+            $(this).attr('disabled', !flag);
+        });
+    };
+
+    if (flag) {
+        if (animate) {
+            $group.slideDown({
+                easing: 'easeInOutQuad',
+                start:  complete
+            });
+        } else {
+            $group.show(0, complete);
+        }
+    } else {
+        if (animate) {
+            $group.slideUp({
+                easing:   'easeInOutQuad',
+                complete: complete
+            });
+        } else {
+            $group.hide(0, complete);
+        }
+    }
+};
+
+/**
+ * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
+ * @return self
+ */
+Charcoal.Admin.Widget_Quick_Form.prototype.get_input_value = function ($input) {
+    // skip if disabled
+    if ($input.attr('disabled') === 'disabled') {
+        return null;
+    }
+
+    var val;
+
+    var $inputType = $input.attr('type');
+    switch ($inputType) {
+        case 'select':
+            val = $input.find(':selected').val();
+            break;
+        case 'checkbox':
+            val = $input.is(':checked');
+            break;
+        default:
+            val = $input.val();
+            break;
+    }
+
+    return val;
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
@@ -131,4 +265,8 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
     if (typeof this.save_callback === 'function') {
         this.save_callback(response);
     }
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.destroy = function () {
+    this.$form.off('charcoal.quick.form');
 };

@@ -1,4 +1,4 @@
-/* global Clipboard */
+/* global ClipboardJS */
 /**
  * Selectize Picker
  *
@@ -315,7 +315,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_clipboard = function
     }
 
     var selectize  = this.selectize;
-    this.clipboard = new Clipboard(this.selectize_selector + '_copy', {
+    this.clipboard = new ClipboardJS(this.selectize_selector + '_copy', {
         text: function (/*trigger*/) {
             /*
              if (selectize.$activeItems.length) {

@@ -11,12 +11,12 @@
             {{# form.layout }}
                 {{> charcoal/admin/widget/layout.start }}
             {{/ form.layout }}
-
             <div class="c-form-widget_group{{# ident }} form-group-{{ . }}{{/ ident }}{{# form.layout.cellSpanBy12 }} col-md-{{ . }}{{/ form.layout.cellSpanBy12 }} js-group-tab{{# form.isTabbable }} tab-pane{{^ isHidden }} active{{/ isHidden }}{{/ form.isTabbable }}{{^ form.isTabbable }}{{# isHidden }} hidden{{/ isHidden }}{{/ form.isTabbable }}"
                 id="form_group_{{ widgetId }}"
+                style="{{# conditionalLogicUnmet }}display:none;{{/ conditionalLogicUnmet }}"
                 {{# form.isTabbable }}
                 role="tabpanel"
-                aria-labelledby="form_group_{{ widgetId }}_tab_{{ident}}"
+                 aria-labelledby="form_group_{{ widgetId }}_tab_{{ident}}"
                 {{/ form.isTabbable }}>
 
                 {{> $widget_template }}

@@ -15,6 +15,9 @@
     .bootstrap-dialog-message {
         font-size: 14px;
     }
+    .bootstrap-dialog-message > :last-child {
+        margin-bottom: 0;
+    }
     .bootstrap-dialog-button-icon {
         margin-right: 3px;
     }

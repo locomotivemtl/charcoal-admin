@@ -202,6 +202,19 @@ class SelectizeInput extends SelectInput
     }
 
     /**
+     * Retrieve the default empty option structure.
+     *
+     * @return array
+     */
+    protected function defaultEmptyChoice()
+    {
+        return [
+            'value' => '',
+            'label' => ''
+        ];
+    }
+
+    /**
      * Retrieve the selectable options.
      *
      * Note: This method is also featured in {@see \Charcoal\Admin\Property\Input\SelectInput}.
@@ -211,6 +224,11 @@ class SelectizeInput extends SelectInput
      */
     public function choices()
     {
+        if ($this->p()->allowNull() && !$this->p()->multiple()) {
+            $prepend = $this->parseChoice('', $this->emptyChoice());
+            yield $prepend;
+        }
+
         // When deferred, we want to fetch choices for current values only.
         if ($this->deferred()) {
             $choices = $this->selectizeVal($this->propertyVal());

@@ -5,9 +5,8 @@ Audio Property Input
 `charcoal/admin/property/input/audio`
 
 --}}
-
 {{# displayAudioWidget }}
-    <div class="o-toolbox -small" id="{{ inputId }}">
+    <div id="{{ inputId }}" class="o-toolbox -small">
         <div class="o-toolbox_actions">
             <div class="btn-group-vertical btn-group-toggle d-flex h-100" role="group" aria-label="{{# _t }}Audio Actions{{/ _t }}">
                 {{# textEnabled }}
@@ -68,9 +67,9 @@ Audio Property Input
             {{/ recordingEnabled }}
             {{# fileEnabled }}
                 <div class="o-toolbox_pane p-3 js-pane d-none" data-pane="file">
-                    <p><audio class="js-file-audio{{^ hasAudioPropertyVal }} hide{{/ hasAudioPropertyVal }}"{{# audioInputVal }} src="{{ . }}"{{/ audioInputVal }} controls></audio></p>
+                    <p><audio class="js-file-audio{{^ hasAudioPropertyVal }} hide{{/ hasAudioPropertyVal }}"{{# audioInputVal }} src="{{# withBaseUrl }}{{ . }}{{/ withBaseUrl }}"{{/ audioInputVal }} controls></audio></p>
                     <div class="row">
-                        <div class="col-6"><input type="file"id="audio_file_{{ inputId }}" name="{{ audioInputName }}" class="form-control js-file-input{{# hasAudioPropertyVal }} hide{{/ hasAudioPropertyVal }}"></div>
+                        <div class="col-6"><input type="file" id="audio_file_{{ inputId }}" name="{{ audioInputName }}" class="form-control js-file-input{{# hasAudioPropertyVal }} hide{{/ hasAudioPropertyVal }}"></div>
                         <div class="col-6"><button type="button" class="btn btn-danger js-file-reset{{^ hasAudioPropertyVal }} hide{{/ hasAudioPropertyVal }}">{{# _t }}Delete{{/ _t }}</button></div>
                     </div>
                 </div>

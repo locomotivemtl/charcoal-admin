@@ -4,10 +4,11 @@ namespace Charcoal\Admin\Template\Object;
 
 use Exception;
 
+// From psr-7
+use Psr\Http\Message\RequestInterface;
+
 // From Pimple
 use Pimple\Container;
-
-use Psr\Http\Message\RequestInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
@@ -17,9 +18,9 @@ use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 
 /**
- * Object Edit Template
+ * Object Create Template
  */
-class EditTemplate extends AdminTemplate implements
+class CreateTemplate extends AdminTemplate implements
     DashboardContainerInterface,
     ObjectContainerInterface
 {
@@ -34,8 +35,8 @@ class EditTemplate extends AdminTemplate implements
     {
         $ret = parent::init($request);
 
-        if (!$this->obj()->id()) {
-            $path = str_replace('object/edit', 'object/create', $request->getUri()->getPath());
+        if ($this->obj()->id()) {
+            $path = str_replace('object/create', 'object/edit', $request->getUri()->getPath());
             header('Location: '.(string)$request->getUri()->withPath($path));
             die();
         }
@@ -77,7 +78,6 @@ class EditTemplate extends AdminTemplate implements
                 $title = $translator->translation($config['title']);
             } else {
                 $obj      = $this->obj();
-                $objId    = $this->objId();
                 $objType  = $this->objType();
                 $metadata = $obj->metadata();
 
@@ -94,26 +94,38 @@ class EditTemplate extends AdminTemplate implements
                     }
                 }
 
-                $labels = $metadata['labels'];
-                if (!$title && isset($labels['edit_item'])) {
-                    $title = $translator->translation($labels['edit_item']);
+                if (!$title && isset($metadata['labels']['new_item'])) {
+                    $title = $translator->translation($metadata['labels']['new_item']);
                 }
 
-                if (!$title && isset($labels['edit_model'])) {
-                    $title = $translator->translation($labels['edit_model']);
+                if (!$title && isset($metadata['labels']['new_model'])) {
+                    $title = $translator->translation($metadata['labels']['new_model']);
                 }
+
 
                 if (!$title) {
-                    $title = $translator->translation('Edit: {{ objType }} #{{ id }}');
-                    if (isset($labels['singular_name'])) {
+                    $objType = (isset($metadata['labels']['singular_name'])
+                        ? $translator->translation($metadata['labels']['singular_name'])
+                        : null);
+
+                    if (!empty($_GET['clone_id'])) {
+                        $title = sprintf(
+                            $translator->translation('Create: {{ objType }} from ID ""%s""'),
+                            $_GET['clone_id']
+                        );
+                    } else {
+                        $title = $translator->translation('Create: {{ objType }}');
+                    }
+
+                    if ($objType) {
                         $title = strtr($title, [
-                            '{{ objType }}' => $translator->translation($labels['singular_name'])
+                            '{{ objType }}' => $objType
                         ]);
                     }
                 }
             }
 
-            $this->title = $this->renderTitle($title);
+            $this->title = $title;
         }
 
         return $this->title;
@@ -140,7 +152,7 @@ class EditTemplate extends AdminTemplate implements
                 $title = '';
             }
 
-            $this->subtitle = $this->renderTitle($title);
+            $this->subtitle = $title;
         }
 
         return $this->subtitle;
@@ -171,23 +183,19 @@ class EditTemplate extends AdminTemplate implements
         $dashboardIdent = $this->dashboardIdent();
 
         if (empty($dashboardIdent)) {
-            $dashboardIdent = filter_input(INPUT_GET, 'dashboard_ident', FILTER_SANITIZE_STRING);
-        }
-
-        if (empty($dashboardIdent)) {
-            if (!isset($adminMetadata['default_edit_dashboard'])) {
+            if (!isset($adminMetadata['default_create_dashboard'])) {
                 throw new Exception(sprintf(
-                    'No default edit dashboard defined in admin metadata for %s',
+                    'Can not show object creation dashboard: No default create dashboard defined in admin metadata for %s',
                     get_class($this->obj())
                 ));
             }
 
-            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+                $dashboardIdent = $adminMetadata['default_create_dashboard'];
         }
 
         if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {
             throw new Exception(
-                'Dashboard config is not defined.'
+                sprintf('Can not show object creation dashboard: Dashboard config is not defined for "%s".', $dashboardIdent)
             );
         }
 
@@ -196,21 +204,6 @@ class EditTemplate extends AdminTemplate implements
         return $dashboardConfig;
     }
 
-    /**
-     * Retrieve the page's sub-title.
-     *
-     * @param  mixed $title The title to render.
-     * @return string|null
-     */
-    protected function renderTitle($title)
-    {
-        $obj = $this->obj();
-        if ($obj->view()) {
-            return $obj->render((string)$title, $obj);
-        } else {
-            return (string)$title;
-        }
-    }
 
     /**
      * @throws Exception If the object's admin metadata is not set.

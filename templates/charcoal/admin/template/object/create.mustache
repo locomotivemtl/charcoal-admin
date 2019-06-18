@@ -1,0 +1,27 @@
+{{!--
+
+    Object Create Template
+    ====================
+
+    `charcoal/admin/template/objet/create`
+
+    Display the object's "create" dashboard.
+
+    This template expects a `Charcoal\Admin\Template\Object\CreateTemplate` model as context.
+
+--}}
+{{> charcoal/admin/template/inc.header }}
+
+{{! @todo See if broken, feedbacks partial used to be right here L15 }}
+
+<main class="c-page-container o-flex_main">
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -bottom">
+        {{> charcoal/admin/widget/feedbacks }}
+        {{# dashboard }}
+            {{> charcoal/admin/widget/dashboard }}
+        {{/ dashboard }}
+    </section>
+</main>
+
+{{> charcoal/admin/template/inc.footer }}

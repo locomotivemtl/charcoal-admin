@@ -5519,11 +5519,12 @@ Charcoal.Admin.Property_Input_Audio.prototype.init_text = function ()
  */
 Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input, allowed)
 {
-    var htmlTags    = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+    var output      = '',
+        htmlTags    = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
         otherTags   = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi,
-        replacement = '';
+        replacement = ' ';
 
-    input = input.replace(otherTags, replacement);
+    output = input.replace(otherTags, replacement);
 
     if (allowed) {
         allowed = (
@@ -5537,7 +5538,9 @@ Charcoal.Admin.Property_Input_Audio.prototype.text_strip_tags = function (input,
         };
     }
 
-    return input.replace(htmlTags, replacement).trim();
+    output = output.replace(htmlTags, replacement).replace(/\s{2,}/g, ' ').trim();
+
+    return output;
 };
 
 /**

@@ -50,7 +50,8 @@
         "cache/void-adapter": "^0.3",
         "mustache/mustache": "^2.11",
         "tedivm/stash": "~0.14",
-        "league/csv": "^8.1"
+        "league/csv": "^8.1",
+        "seld/jsonlint": "^1.7"
     },
     "suggest": {
         "league/csv": "To use the exporter (to CSV).",
@@ -71,10 +72,12 @@
             "@tests"
         ],
         "tests": [
+            "@jsonlint",
             "@phplint",
             "@phpcs",
             "@phpunit"
         ],
+        "jsonlint": "find metadata config -type f -name \"*.json\" -exec ./vendor/bin/jsonlint -q {} \\;",
         "phplint": "find src tests -type f -name '*.php' -print0 | xargs -0 -n1 -P8 php -l | grep -v '^No syntax errors detected'; test $? -eq 1",
         "phpcs": "php vendor/bin/phpcs -ps --colors src/",
         "phpcbf": "php vendor/bin/phpcbf -ps --colors src/ tests/",

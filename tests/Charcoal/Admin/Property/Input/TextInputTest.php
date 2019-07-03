@@ -25,7 +25,6 @@ class TextInputTest extends AbstractTestCase
      */
     public function setUp()
     {
-        // $container = $GLOBALS['container'];
         $container = new Container();
         $containerProvider = new ContainerProvider();
         $containerProvider->registerTranslator($container);

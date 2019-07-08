@@ -5,7 +5,14 @@
             "label": {
                 "en": "Category",
                 "fr": "Catégorie"
-            }
+            },
+            "orders": [
+                {
+                    "property": "position",
+                    "mode": "asc"
+                }
+            ]
+
         }
     }
 }

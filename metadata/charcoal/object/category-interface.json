@@ -15,6 +15,15 @@
         "position": {
             "type": "number",
             "label": "Position"
+        },
+        "num_category_items": {
+            "type": "number",
+            "read_only": true,
+            "storable": false,
+            "label": {
+                "en": "# items",
+                "fr": "# d'items"
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ interface UserDataInterface extends ModelInterface
      * Set the client IP address.
      *
      * @param  integer|null $ip The remote IP at object creation.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setIp($ip);
 
@@ -31,7 +31,7 @@ interface UserDataInterface extends ModelInterface
      * Set the origin language.
      *
      * @param  string $lang The language code.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setLang($lang);
 
@@ -46,7 +46,7 @@ interface UserDataInterface extends ModelInterface
      * Set the origin of the object submission.
      *
      * @param  string $origin The source URL or identifier of the submission.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setOrigin($origin);
 
@@ -61,7 +61,7 @@ interface UserDataInterface extends ModelInterface
      * Set when the object was created.
      *
      * @param  \DateTime|string|null $timestamp The timestamp at object's creation.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setTs($timestamp);
 

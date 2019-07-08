@@ -73,7 +73,7 @@ class UserData extends AbstractModel implements
      * Set the client IP address.
      *
      * @param  integer|null $ip The remote IP at object creation.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setIp($ip)
     {
@@ -110,7 +110,7 @@ class UserData extends AbstractModel implements
      *
      * @param  string $lang The language code.
      * @throws InvalidArgumentException If the argument is not a string.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setLang($lang)
     {
@@ -142,7 +142,7 @@ class UserData extends AbstractModel implements
      *
      * @param  string $origin The source URL or identifier of the submission.
      * @throws InvalidArgumentException If the argument is not a string.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setOrigin($origin)
     {
@@ -199,7 +199,7 @@ class UserData extends AbstractModel implements
      *     NULL is accepted and instances of DateTimeInterface are recommended;
      *     any other value will be converted (if possible) into one.
      * @throws InvalidArgumentException If the timestamp is invalid.
-     * @return UserDataInterface Chainable
+     * @return self
      */
     public function setTs($timestamp)
     {

@@ -474,7 +474,7 @@ class SelectizeInput extends SelectInput
 
             $items = $this->propertyVal();
 
-            if ($prop instanceof AbstractProperty) {
+            if ($items !== null && $prop instanceof AbstractProperty) {
                 $items = $prop->parseVal($items);
 
                 if ($prop->l10n()) {

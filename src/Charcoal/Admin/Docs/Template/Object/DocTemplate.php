@@ -90,7 +90,7 @@ class DocTemplate extends AdminTemplate implements
             if (!$formIdent) {
                 if (isset($adminMetadata['defaultForm'])) {
                         $fomIdent = $adminMetadata['defaultForm'];
-                } elseif(isset($adminMetadata['default_form'])) {
+                } elseif (isset($adminMetadata['default_form'])) {
                     $formIdent = $adminMetadata['default_form'];
                 } else {
                     $formIdent = '';

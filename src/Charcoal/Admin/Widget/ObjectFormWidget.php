@@ -450,8 +450,8 @@ class ObjectFormWidget extends FormWidget implements
     protected function acceptedRequestData()
     {
         return array_merge([
-            'obj_type', 
-            'obj_id', 
+            'obj_type',
+            'obj_id',
             'template'
         ], parent::acceptedRequestData());
     }

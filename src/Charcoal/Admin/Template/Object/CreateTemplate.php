@@ -51,7 +51,7 @@ class CreateTemplate extends AdminTemplate implements
     protected function validDataFromRequest()
     {
         return array_merge([
-            'obj_type', 
+            'obj_type',
             'obj_id'
         ], parent::validDataFromRequest());
     }
@@ -89,7 +89,7 @@ class CreateTemplate extends AdminTemplate implements
                     if (!$formIdent) {
                         if (isset($adminMetadata['defaultForm'])) {
                             $fomIdent = $adminMetadata['defaultForm'];
-                        } elseif(isset($adminMetadata['default_form'])) {
+                        } elseif (isset($adminMetadata['default_form'])) {
                             $formIdent = $adminMetadata['default_form'];
                         } else {
                             $formIdent = '';

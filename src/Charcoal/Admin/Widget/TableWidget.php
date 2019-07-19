@@ -419,7 +419,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             if (isset($options['label'])) {
                 $label = $this->translator()->translate($options['label']);
             } else {
-                $label = strval($p->label());
+                $label = strval($p['label']);
             }
 
             $column = [

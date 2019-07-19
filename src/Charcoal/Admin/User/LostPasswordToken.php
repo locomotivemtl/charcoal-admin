@@ -4,7 +4,10 @@ namespace Charcoal\Admin\User;
 
 use DateTime;
 use DateTimeInterface;
+use Exception;
 use InvalidArgumentException;
+
+use Pimple\Container;
 
 // From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
@@ -30,6 +33,11 @@ class LostPasswordToken extends AbstractModel
     private $expiry;
 
     /**
+     * @var mixed
+     */
+    private $defaultExpiry = '30 minutes';
+
+    /**
      * @return string
      */
     public function key()
@@ -39,7 +47,7 @@ class LostPasswordToken extends AbstractModel
 
     /**
      * @param  string $token The token.
-     * @return LostPasswordToken Chainable
+     * @return self
      */
     public function setToken($token)
     {
@@ -57,7 +65,7 @@ class LostPasswordToken extends AbstractModel
 
     /**
      * @param  string $user The user.
-     * @return LostPasswordToken Chainable
+     * @return self
      */
     public function setUser($user)
     {
@@ -76,7 +84,7 @@ class LostPasswordToken extends AbstractModel
     /**
      * @param  DateTimeInterface|string|null $expiry The date/time at object's creation.
      * @throws InvalidArgumentException If the date/time is invalid.
-     * @return LostPasswordToken Chainable
+     * @return self
      */
     public function setExpiry($expiry)
     {
@@ -86,7 +94,11 @@ class LostPasswordToken extends AbstractModel
         }
 
         if (is_string($expiry)) {
-            $expiry = new DateTime($expiry);
+            try {
+                $expiry = new DateTime($expiry);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage());
+            }
         }
 
         if (!($expiry instanceof DateTimeInterface)) {
@@ -109,13 +121,23 @@ class LostPasswordToken extends AbstractModel
     }
 
     /**
+     * @param Container $container Pimple DI Container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+        $this->defaultExpiry = $container['config']['admin']['login']['token_expiry'];
+    }
+
+    /**
      * @see    \Charcoal\Source\StorableTrait::preSave() For the "create" Event.
      * @return boolean
      */
     protected function preSave()
     {
         if ($this->expiry === null) {
-            $this->setExpiry('now +15 minutes');
+            $this->setExpiry('now +'.$this->defaultExpiry);
         }
 
         return parent::preSave();

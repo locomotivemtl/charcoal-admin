@@ -294,7 +294,8 @@
     },
 
     "login": {
-        "visit_site": null
+        "visit_site": null,
+        "token_expiry": "2 hours"
     },
 
     "main_menu": {

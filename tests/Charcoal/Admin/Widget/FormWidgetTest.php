@@ -50,5 +50,4 @@ class FormWidgetTest extends AbstractTestCase
     {
         $this->assertInstanceOf(FormWidget::class, $this->obj);
     }
-
 }

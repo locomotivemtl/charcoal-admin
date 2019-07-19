@@ -272,7 +272,7 @@ abstract class AbstractPropertyInput implements
      */
     public function hidden()
     {
-        if ($this->p()->l10n()) {
+        if ($this->p()['l10n']) {
             if ($this->lang() != $this->translator()->getLocale()) {
                 return true;
             }
@@ -516,7 +516,7 @@ abstract class AbstractPropertyInput implements
             $name = $this->propertyIdent();
         }
 
-        if ($this->p()->l10n()) {
+        if ($this->p()['l10n']) {
             $name .= '['.$this->lang().']';
         }
 

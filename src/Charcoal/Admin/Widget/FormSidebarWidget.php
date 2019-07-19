@@ -534,7 +534,7 @@ class FormSidebarWidget extends AdminWidget implements
                     return $this->isObjRevisionable;
                 }
 
-                if ($obj instanceof RevisionableInterface && $obj->revisionEnabled()) {
+                if ($obj instanceof RevisionableInterface && $obj['revisionEnabled']) {
                     $this->isObjRevisionable = !!count($obj->allRevisions());
                 }
             }
@@ -782,7 +782,7 @@ class FormSidebarWidget extends AdminWidget implements
             $locales = count($this->translator()->availableLocales());
             if ($locales > 1) {
                 foreach ($this->form()->formProperties() as $formProp) {
-                    if ($formProp->property()->l10n()) {
+                    if ($formProp->property()['l10n']) {
                         return true;
                     }
                 }

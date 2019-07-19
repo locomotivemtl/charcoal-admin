@@ -349,7 +349,7 @@ class AudioInput extends AbstractPropertyInput
             $name = $this->textPropertyIdent();
         }
 
-        if ($this->textProperty()->l10n()) {
+        if ($this->textProperty()['l10n']) {
             $name .= '['.$this->lang().']';
         }
 

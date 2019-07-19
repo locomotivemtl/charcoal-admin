@@ -224,7 +224,7 @@ class SelectizeInput extends SelectInput
      */
     public function choices()
     {
-        if ($this->p()->allowNull() && !$this->p()->multiple()) {
+        if ($this->p()['allowNull'] && !$this->p()['multiple']) {
             $prepend = $this->parseChoice('', $this->emptyChoice());
             yield $prepend;
         }
@@ -477,7 +477,7 @@ class SelectizeInput extends SelectInput
             if ($items !== null && $prop instanceof AbstractProperty) {
                 $items = $prop->parseVal($items);
 
-                if ($prop->l10n()) {
+                if ($prop['l10n']) {
                     $items = (string)$this->translator()->translation($items);
                 }
 
@@ -486,7 +486,7 @@ class SelectizeInput extends SelectInput
                 }
             }
 
-            if (!$prop->multiple()) {
+            if (!$prop['multiple']) {
                 $items = (array)$items;
             }
 
@@ -605,7 +605,7 @@ class SelectizeInput extends SelectInput
             }
         }
 
-        if (!$prop->multiple()) {
+        if (!$prop['multiple']) {
             $val = (array)$val;
         }
 
@@ -629,7 +629,7 @@ class SelectizeInput extends SelectInput
                 return $choices;
             }
 
-            $model = $this->modelFactory()->get($prop->objType());
+            $model = $this->modelFactory()->get($prop['objType']);
             if (!$model->source()->tableExists()) {
                 return $choices;
             }
@@ -736,7 +736,7 @@ class SelectizeInput extends SelectInput
             $prop = $this->property();
             if ($prop instanceof ObjectProperty) {
                 /** @var ModelInterface $model */
-                $model = $this->modelFactory()->get($prop->objType());
+                $model = $this->modelFactory()->get($prop['objType']);
                 $objProperties = $model->properties();
 
                 if ($objProperties instanceof \Iterator) {
@@ -785,7 +785,7 @@ class SelectizeInput extends SelectInput
 
         $data = [
             // Selectize Control
-            'title'                    => (string)$prop->label(),
+            'title'                    => (string)$prop['label'],
             'translations'             => [
                 'statusTemplate'       => $this->translator()->translate('Step [[ current ]] of [[ total ]]'),
             ],
@@ -804,16 +804,16 @@ class SelectizeInput extends SelectInput
 
             // Base Property
             'required'                 => $this->required(),
-            'l10n'                     => $this->property()->l10n(),
+            'l10n'                     => $this->property()['l10n'],
             'multiple'                 => $this->multiple(),
             'multiple_separator'       => $this->property()->multipleSeparator(),
-            'multiple_options'         => $this->property()->multipleOptions(),
+            'multiple_options'         => $this->property()['multipleOptions'],
         ];
 
         if ($prop instanceof ObjectProperty) {
             if ($prop->objType()) {
-                $data['pattern']  = $prop->pattern();
-                $data['obj_type'] = $prop->objType();
+                $data['pattern']  = $prop['pattern'];
+                $data['obj_type'] = $prop['objType'];
             }
         }
 

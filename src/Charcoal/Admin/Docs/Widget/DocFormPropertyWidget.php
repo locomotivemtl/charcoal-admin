@@ -106,7 +106,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
         $prop = $this->prop();
         $out = [];
 
-        if ($prop->l10n()) {
+        if ($prop['l10n']) {
             $out[] = [
                 'feature'     => $this->translator()->translation('multilingual'),
                 'description' => $this->translator()->translation('
@@ -115,7 +115,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
             ];
         }
 
-        if ($prop->multiple()) {
+        if ($prop['multiple']) {
             $out[] = [
                 'feature'     => $this->translator()->translation('multiple'),
                 'description' => $this->translator()->translation('
@@ -124,7 +124,7 @@ class DocFormPropertyWidget extends FormPropertyWidget
             ];
         }
 
-        if ($prop->required()) {
+        if ($prop['required']) {
             $out[] = [
                 'feature'     => $this->translator()->translation('required'),
                 'description' => $this->translator()->translation('

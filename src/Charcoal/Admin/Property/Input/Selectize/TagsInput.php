@@ -69,7 +69,7 @@ class TagsInput extends AbstractSelectableInput
             $name = $this->propertyIdent();
         }
 
-        if ($this->p()->l10n()) {
+        if ($this->p()['l10n']) {
             $name .= '['.$this->lang().']';
         }
 
@@ -86,7 +86,7 @@ class TagsInput extends AbstractSelectableInput
      */
     public function choices()
     {
-        if ($this->p()->allowNull() && !$this->p()->multiple()) {
+        if ($this->p()['allowNull'] && !$this->p()['multiple']) {
             $prepend = $this->parseChoice('', $this->emptyChoice());
 
             yield $prepend;
@@ -262,7 +262,7 @@ class TagsInput extends AbstractSelectableInput
 
         $data = [
             // Selectize Control
-            'title'                    => (string)$prop->label(),
+            'title'                    => (string)$prop['label'],
             'copy_items'               => $this->allowClipboardCopy(),
 
             'selectize_selector'       => '#'.$this->inputId(),
@@ -270,16 +270,16 @@ class TagsInput extends AbstractSelectableInput
 
             // Base Property
             'required'                 => $this->required(),
-            'l10n'                     => $this->property()->l10n(),
+            'l10n'                     => $this->property()['l10n'],
             'multiple'                 => $this->multiple(),
             'multiple_separator'       => $this->property()->multipleSeparator(),
-            'multiple_options'         => $this->property()->multipleOptions(),
+            'multiple_options'         => $this->property()['multipleOptions'],
         ];
 
         if ($prop instanceof ObjectProperty) {
             if ($prop->objType()) {
-                $data['pattern']  = $prop->pattern();
-                $data['obj_type'] = $prop->objType();
+                $data['pattern']  = $prop['pattern'];
+                $data['obj_type'] = $prop['objType'];
             }
         }
 
@@ -383,7 +383,7 @@ class TagsInput extends AbstractSelectableInput
             }
 
             if ($prop instanceof ObjectProperty) {
-                $model = $this->modelFactory()->get($prop->objType());
+                $model = $this->modelFactory()->get($prop['objType']);
                 if (!$model->source()->tableExists()) {
                     return $choices;
                 }

@@ -32,7 +32,7 @@ class SelectInput extends AbstractSelectableInput
      */
     public function choices()
     {
-        if ($this->p()->allowNull() && !$this->p()->multiple()) {
+        if ($this->p()['allowNull'] && !$this->p()['multiple']) {
             $prepend = $this->parseChoice('', $this->emptyChoice());
 
             yield $prepend;

@@ -188,7 +188,9 @@ class DocWidget extends FormWidget implements
     {
         $metadata = $this->obj()->metadata();
 
-        if (isset($metadata['admin']['default_form'])) {
+        if (isset($metadata['admin']['defaultForm'])) {
+            return $metadata['admin']['defaultForm'];
+        } elseif (isset($metadata['admin']['default_form'])) {
             return $metadata['admin']['default_form'];
         }
 

@@ -50,7 +50,8 @@ class EditTemplate extends AdminTemplate implements
     protected function validDataFromRequest()
     {
         return array_merge([
-            'obj_type', 'obj_id'
+            'obj_type', 
+            'obj_id'
         ], parent::validDataFromRequest());
     }
 
@@ -86,7 +87,13 @@ class EditTemplate extends AdminTemplate implements
 
                     $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
                     if (!$formIdent) {
-                        $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+                        if (isset($adminMetadata['defaultForm'])) {
+                            $fomIdent = $adminMetadata['defaultForm'];
+                        } elseif(isset($adminMetadata['default_form'])) {
+                            $formIdent = $adminMetadata['default_form'];
+                        } else {
+                            $formIdent = '';
+                        }
                     }
 
                     if (isset($adminMetadata['forms'][$formIdent]['label'])) {
@@ -175,14 +182,16 @@ class EditTemplate extends AdminTemplate implements
         }
 
         if (empty($dashboardIdent)) {
-            if (!isset($adminMetadata['default_edit_dashboard'])) {
+            if (isset($adminMetadata['defaultEditDashboard'])) {
+                $dashboardIdent = $adminMetadata['defaultEditDashboard'];
+            } elseif (isset($adminMetadata['default_edit_dashboard'])) {
+                 $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+            } else {
                 throw new Exception(sprintf(
                     'No default edit dashboard defined in admin metadata for %s',
                     get_class($this->obj())
                 ));
             }
-
-            $dashboardIdent = $adminMetadata['default_edit_dashboard'];
         }
 
         if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {

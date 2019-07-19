@@ -309,7 +309,9 @@ trait CollectionContainerTrait
     {
         $metadata = $this->proto()->metadata();
 
-        if (isset($metadata['admin']['default_list'])) {
+        if (isset($metadata['admin']['defaultList'])) {
+            return $metadata['admin']['defaultList'];
+        } elseif (isset($metadata['admin']['default_list'])) {
             return $metadata['admin']['default_list'];
         }
 
@@ -748,7 +750,7 @@ trait CollectionContainerTrait
      */
     protected function setupDisplayPropertyValue(ModelInterface $object, PropertyInterface $property)
     {
-        $displayType = $property->displayType();
+        $displayType = $property['displayType'];
 
         $this->display = $this->propertyDisplayFactory()->create($displayType);
         $this->display->setDisplayType($displayType);

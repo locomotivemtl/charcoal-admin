@@ -51,7 +51,8 @@ class CreateTemplate extends AdminTemplate implements
     protected function validDataFromRequest()
     {
         return array_merge([
-            'obj_type', 'obj_id'
+            'obj_type', 
+            'obj_id'
         ], parent::validDataFromRequest());
     }
 
@@ -86,7 +87,13 @@ class CreateTemplate extends AdminTemplate implements
 
                     $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
                     if (!$formIdent) {
-                        $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+                        if (isset($adminMetadata['defaultForm'])) {
+                            $fomIdent = $adminMetadata['defaultForm'];
+                        } elseif(isset($adminMetadata['default_form'])) {
+                            $formIdent = $adminMetadata['default_form'];
+                        } else {
+                            $formIdent = '';
+                        }
                     }
 
                     if (isset($adminMetadata['forms'][$formIdent]['label'])) {
@@ -183,14 +190,16 @@ class CreateTemplate extends AdminTemplate implements
         $dashboardIdent = $this->dashboardIdent();
 
         if (empty($dashboardIdent)) {
-            if (!isset($adminMetadata['default_create_dashboard'])) {
+            if (isset($adminMetadata['defaultCreateDashboard'])) {
+                $dashboardIdent = $adminMetadata['defaultCreateDashboard'];
+            } elseif (isset($adminMetadata['default_create_dashboard'])) {
+                 $dashboardIdent = $adminMetadata['default_create_dashboard'];
+            } else {
                 throw new Exception(sprintf(
                     'Can not show object creation dashboard: No default create dashboard defined in admin metadata for %s',
                     get_class($this->obj())
                 ));
             }
-
-                $dashboardIdent = $adminMetadata['default_create_dashboard'];
         }
 
         if (!isset($adminMetadata['dashboards']) || !isset($adminMetadata['dashboards'][$dashboardIdent])) {

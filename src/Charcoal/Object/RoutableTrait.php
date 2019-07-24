@@ -232,7 +232,7 @@ trait RoutableTrait
     {
         $languages = $this->translator()->availableLocales();
         $patterns  = $this->slugPattern();
-        $curSlug   = $this->slug();
+        $curSlug   = $this->getSlug();
         $newSlug   = [];
 
         $origLang = $this->translator()->getLocale();
@@ -263,7 +263,7 @@ trait RoutableTrait
 
             if (!$newRoute->isSlugUnique()) {
                 $newRoute->generateUniqueSlug();
-                $newSlug[$lang] = $newRoute->slug();
+                $newSlug[$lang] = $newRoute->getSlug();
             }
         }
         $this->translator()->setLocale($origLang);
@@ -416,7 +416,7 @@ trait RoutableTrait
             $newData = array_merge($defaultData, $data, $immutableData);
 
             // Unchanged but sync extra properties
-            if ($slug === $oldRoute->slug()) {
+            if ($slug === $oldRoute->getSlug()) {
                 $oldRoute->setData([
                     'route_template'      => $newData['route_template'],
                     'route_options'       => $newData['route_options'],
@@ -520,7 +520,7 @@ trait RoutableTrait
             return $slug;
         }
 
-        $url = (string)$this->getLatestObjectRoute($lang)->slug();
+        $url = (string)$this->getLatestObjectRoute($lang)->getSlug();
         return $url;
     }
 

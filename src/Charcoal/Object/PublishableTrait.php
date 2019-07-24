@@ -195,9 +195,9 @@ trait PublishableTrait
     public function publishDateStatus()
     {
         $now = new DateTime();
-        $publish = $this['publishDate'];
-        $expiry  = $this['expiryDate'];
-        $status  = $this['publishStatus'];
+        $publish = $this->getPublishDate();
+        $expiry  = $this->getExpiryDate();
+        $status  = $this->getPublishStatus()        ;
 
         if ($status !== static::STATUS_PUBLISHED) {
             return $status;

@@ -50,7 +50,7 @@ trait TimestampableTrait
     /**
      * @return DateTimeInterface|null
      */
-    public function created()
+    public function getCreated()
     {
         return $this->created;
     }
@@ -81,7 +81,7 @@ trait TimestampableTrait
     /**
      * @return DateTimeInterface|null
      */
-    public function lastModified()
+    public function getLastModified()
     {
         return $this->lastModified;
     }

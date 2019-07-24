@@ -44,7 +44,7 @@ trait RevisionableTrait
     /**
      * @return boolean
      */
-    public function revisionEnabled()
+    public function getRevisionEnabled()
     {
         return $this->revisionEnabled;
     }

@@ -20,7 +20,7 @@ interface AuthorableInterface
      *
      * @return mixed
      */
-    public function createdBy();
+    public function getCreatedBy();
 
     /**
      * Set the object last editor (author at the last modification time).
@@ -35,5 +35,5 @@ interface AuthorableInterface
      *
      * @return mixed
      */
-    public function lastModifiedBy();
+    public function getLastModifiedBy();
 }

@@ -217,7 +217,7 @@ trait RoutableTrait
      *
      * @return \Charcoal\Translator\Translation|null
      */
-    public function slug()
+    public function getSlug()
     {
         return $this->slug;
     }
@@ -510,7 +510,7 @@ trait RoutableTrait
      */
     public function url($lang = null)
     {
-        $slug = $this->slug();
+        $slug = $this->getSlug();
 
         if ($slug instanceof Translation && $lang) {
             return $slug[$lang];

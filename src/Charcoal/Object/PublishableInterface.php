@@ -42,7 +42,7 @@ interface PublishableInterface
      *
      * @return \DateTimeInterface|null
      */
-    public function publishDate();
+    public function getPublishDate();
 
     /**
      * Set the object's expiration date.
@@ -57,7 +57,7 @@ interface PublishableInterface
      *
      * @return \DateTimeInterface|null
      */
-    public function expiryDate();
+    public function getExpiryDate();
 
     /**
      * Set the object's publication status.
@@ -72,7 +72,7 @@ interface PublishableInterface
      *
      * @return string
      */
-    public function publishStatus();
+    public function getPublishStatus();
 
     /**
      * Determine if the object is published.

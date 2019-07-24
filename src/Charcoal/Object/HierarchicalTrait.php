@@ -94,7 +94,7 @@ trait HierarchicalTrait
      *
      * @return HierarchicalInterface|null
      */
-    public function master()
+    public function getMaster()
     {
         return $this->master;
     }
@@ -106,7 +106,7 @@ trait HierarchicalTrait
      */
     public function hasMaster()
     {
-        return ($this->master() !== null);
+        return ($this->getMaster() !== null);
     }
 
     /**
@@ -118,7 +118,7 @@ trait HierarchicalTrait
      */
     public function isTopLevel()
     {
-        return ($this->master() === null);
+        return ($this->getMaster() === null);
     }
 
     /**
@@ -184,10 +184,10 @@ trait HierarchicalTrait
     {
         if (!isset($this->hierarchy)) {
             $hierarchy = [];
-            $master = $this->master();
+            $master = $this->getMaster();
             while ($master) {
                 $hierarchy[] = $master;
-                $master = $master->master();
+                $master = $master->getMaster();
             }
 
             $this->hierarchy = $hierarchy;
@@ -216,7 +216,7 @@ trait HierarchicalTrait
     public function isMasterOf($child)
     {
         $child = $this->objFromIdent($child);
-        return ($child->master() == $this);
+        return ($child->getMaster() == $this);
     }
 
     /**
@@ -329,7 +329,7 @@ trait HierarchicalTrait
         if ($master === null) {
             return false;
         }
-        return ($master == $this->master());
+        return ($master == $this->getMaster());
     }
 
     /**
@@ -372,7 +372,7 @@ trait HierarchicalTrait
         if ($this->siblings !== null) {
             return $this->siblings;
         }
-        $master = $this->master();
+        $master = $this->getMaster();
         if ($master === null) {
             // Todo: return all top-level objects.
             $siblings = [];
@@ -391,7 +391,7 @@ trait HierarchicalTrait
     public function isSiblingOf($sibling)
     {
         $sibling = $this->objFromIdent($sibling);
-        return ($sibling->master() == $this->master());
+        return ($sibling->getMaster() == $this->getMaster());
     }
 
     /**

@@ -46,7 +46,7 @@ interface HierarchicalInterface
      *
      * @return HierarchicalInterface|null
      */
-    public function master();
+    public function getMaster();
 
     /**
      * Retrieve the top-level ancestor of this object.

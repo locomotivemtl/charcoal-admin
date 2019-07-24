@@ -106,7 +106,7 @@ class Content extends AbstractModel implements
     /**
      * @return boolean
      */
-    public function active()
+    public function getActive()
     {
         return $this->active;
     }
@@ -137,7 +137,7 @@ class Content extends AbstractModel implements
     /**
      * @return integer
      */
-    public function position()
+    public function getPosition()
     {
         return $this->position;
     }
@@ -170,7 +170,7 @@ class Content extends AbstractModel implements
     /**
      * @return string[]
      */
-    public function requiredAclPermissions()
+    public function getRequiredAclPermissions()
     {
         return $this->requiredAclPermissions;
     }

@@ -22,7 +22,7 @@ interface TimestampableInterface
      *
      * @return \DateTimeInterface|null
      */
-    public function created();
+    public function getCreated();
 
     /**
      * Set the object last modification timestamp.
@@ -39,5 +39,5 @@ interface TimestampableInterface
      *
      * @return \DateTimeInterface|null
      */
-    public function lastModified();
+    public function getLastModified();
 }

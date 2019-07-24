@@ -25,7 +25,7 @@ interface UserDataInterface extends ModelInterface
      *
      * @return integer|null
      */
-    public function ip();
+    public function getIp();
 
     /**
      * Set the origin language.
@@ -40,7 +40,7 @@ interface UserDataInterface extends ModelInterface
      *
      * @return string
      */
-    public function lang();
+    public function getLang();
 
     /**
      * Set the origin of the object submission.
@@ -55,7 +55,7 @@ interface UserDataInterface extends ModelInterface
      *
      * @return string
      */
-    public function origin();
+    public function getOrigin();
 
     /**
      * Set when the object was created.
@@ -70,5 +70,5 @@ interface UserDataInterface extends ModelInterface
      *
      * @return \DateTime|null
      */
-    public function ts();
+    public function getTs();
 }

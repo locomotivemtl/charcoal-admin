@@ -100,7 +100,7 @@ class UserData extends AbstractModel implements
      *
      * @return integer|null
      */
-    public function ip()
+    public function getIp()
     {
         return $this->ip;
     }
@@ -132,7 +132,7 @@ class UserData extends AbstractModel implements
      *
      * @return string
      */
-    public function lang()
+    public function getLang()
     {
         return $this->lang;
     }
@@ -187,7 +187,7 @@ class UserData extends AbstractModel implements
      *
      * @return string
      */
-    public function origin()
+    public function getOrigin()
     {
         return $this->origin;
     }
@@ -235,7 +235,7 @@ class UserData extends AbstractModel implements
      *
      * @return DateTimeInterface|null
      */
-    public function ts()
+    public function getTs()
     {
         return $this->ts;
     }

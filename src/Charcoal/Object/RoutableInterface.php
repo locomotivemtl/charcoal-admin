@@ -41,7 +41,7 @@ interface RoutableInterface
      *
      * @return string|null
      */
-    public function slug();
+    public function getSlug();
 
     /**
      * Set the object's route options

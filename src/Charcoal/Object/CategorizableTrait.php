@@ -76,7 +76,7 @@ trait CategorizableTrait
      *
      * @return mixed
      */
-    public function category()
+    public function getCategory()
     {
         return $this->category;
     }

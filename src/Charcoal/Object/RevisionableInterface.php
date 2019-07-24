@@ -16,7 +16,7 @@ interface RevisionableInterface
     /**
      * @return boolean
      */
-    public function revisionEnabled();
+    public function getRevisionEnabled();
 
     /**
      * Create a revision object.

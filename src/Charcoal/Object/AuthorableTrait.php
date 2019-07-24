@@ -30,7 +30,7 @@ trait AuthorableTrait
     /**
      * @return mixed
      */
-    public function createdBy()
+    public function getCreatedBy()
     {
         return $this->createdBy;
     }
@@ -48,7 +48,7 @@ trait AuthorableTrait
     /**
      * @return mixed
      */
-    public function lastModifiedBy()
+    public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
     }

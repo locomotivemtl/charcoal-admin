@@ -78,7 +78,7 @@ trait PublishableTrait
      *
      * @return DateTimeInterface|null
      */
-    public function publishDate()
+    public function getPublishDate()
     {
         return $this->publishDate;
     }
@@ -125,7 +125,7 @@ trait PublishableTrait
      *
      * @return DateTimeInterface|null
      */
-    public function expiryDate()
+    public function getExpiryDate()
     {
         return $this->expiryDate;
     }
@@ -177,7 +177,7 @@ trait PublishableTrait
      *
      * @return string|null
      */
-    public function publishStatus()
+    public function getPublishStatus()
     {
         return $this->publishStatus;
     }
@@ -195,9 +195,9 @@ trait PublishableTrait
     public function publishDateStatus()
     {
         $now = new DateTime();
-        $publish = $this->publishDate();
-        $expiry  = $this->expiryDate();
-        $status  = $this->publishStatus();
+        $publish = $this['publishDate'];
+        $expiry  = $this['expiryDate'];
+        $status  = $this['publishStatus'];
 
         if ($status !== static::STATUS_PUBLISHED) {
             return $status;

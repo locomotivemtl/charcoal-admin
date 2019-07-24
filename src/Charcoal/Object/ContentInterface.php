@@ -19,7 +19,7 @@ interface ContentInterface extends ModelInterface
     /**
      * @return boolean
      */
-    public function active();
+    public function getActive();
 
     /**
      * @param integer $position The position index.
@@ -30,5 +30,5 @@ interface ContentInterface extends ModelInterface
     /**
      * @return integer
      */
-    public function position();
+    public function getPosition();
 }

@@ -37,5 +37,5 @@ interface CategorizableInterface
      *
      * @return CategoryInterface
      */
-    public function category();
+    public function getCategory();
 }

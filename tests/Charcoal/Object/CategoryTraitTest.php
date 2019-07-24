@@ -30,7 +30,7 @@ class CategoryTraitTest extends AbstractTestCase
         $mock = $this->createTrait();
 
         $this->expectException('\Exception');
-        $mock->categoryItemType();
+        $mock->getCategoryItemType();
     }
 
     /**
@@ -42,7 +42,7 @@ class CategoryTraitTest extends AbstractTestCase
 
         $ret = $mock->setCategoryItemType('foobar');
         $this->assertSame($ret, $mock);
-        $this->assertEquals('foobar', $mock->categoryItemType());
+        $this->assertEquals('foobar', $mock->getCategoryItemType());
 
         $this->expectException('\InvalidArgumentException');
         $mock->setCategoryItemType(false);

@@ -66,13 +66,13 @@ class PublishableTraitTest extends AbstractTestCase
 
         $ret = $obj->setPublishDate('2015-01-01 00:00:00');
         $this->assertSame($ret, $obj);
-        $this->assertEquals($time, $obj->publishDate());
+        $this->assertEquals($time, $obj->getPublishDate());
 
         $obj->setPublishDate('');
-        $this->assertNull($obj->publishDate());
+        $this->assertNull($obj->getPublishDate());
 
         $obj->setPublishDate($time);
-        $this->assertEquals($time, $obj->publishDate());
+        $this->assertEquals($time, $obj->getPublishDate());
     }
 
     /**
@@ -113,13 +113,13 @@ class PublishableTraitTest extends AbstractTestCase
 
         $ret = $obj->setExpiryDate('2015-01-01 00:00:00');
         $this->assertSame($ret, $obj);
-        $this->assertEquals($time, $obj->expiryDate());
+        $this->assertEquals($time, $obj->getExpiryDate());
 
         $obj->setExpiryDate('');
-        $this->assertNull($obj->expiryDate());
+        $this->assertNull($obj->getExpiryDate());
 
         $obj->setExpiryDate($time);
-        $this->assertEquals($time, $obj->expiryDate());
+        $this->assertEquals($time, $obj->getExpiryDate());
     }
 
     /**
@@ -152,22 +152,22 @@ class PublishableTraitTest extends AbstractTestCase
         $obj = $this->obj;
 
         $obj->setPublishStatus(Publishable::STATUS_DRAFT);
-        $this->assertEquals(Publishable::STATUS_DRAFT, $obj->publishStatus());
+        $this->assertEquals(Publishable::STATUS_DRAFT, $obj->getPublishStatus());
 
         $obj->setPublishStatus(Publishable::STATUS_PENDING);
-        $this->assertEquals(Publishable::STATUS_PENDING, $obj->publishStatus());
+        $this->assertEquals(Publishable::STATUS_PENDING, $obj->getPublishStatus());
 
         $obj->setPublishStatus(Publishable::STATUS_PUBLISHED);
-        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->publishStatus());
+        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->getPublishStatus());
 
         $obj->setPublishStatus(Publishable::STATUS_UPCOMING);
-        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->publishStatus());
+        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->getPublishStatus());
 
         $obj->setPublishStatus(Publishable::STATUS_EXPIRED);
-        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->publishStatus());
+        $this->assertEquals(Publishable::STATUS_PUBLISHED, $obj->getPublishStatus());
 
         $obj->setPublishStatus('');
-        $this->assertNull($obj->publishStatus());
+        $this->assertNull($obj->getPublishStatus());
 
         $this->expectException(InvalidArgumentException::class);
         $obj->setPublishStatus('foobar');

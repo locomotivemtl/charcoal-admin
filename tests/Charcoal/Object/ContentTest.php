@@ -48,20 +48,20 @@ class ContentTest extends AbstractTestCase
      */
     public function testDefaults()
     {
-        $this->assertTrue($this->obj->active());
-        $this->assertEquals(0, $this->obj->position());
-        $this->assertEquals([], $this->obj->requiredAclPermissions());
+        $this->assertTrue($this->obj['active']);
+        $this->assertEquals(0, $this->obj['position']);
+        $this->assertEquals([], $this->obj['requiredAclPermissions']);
 
         // Timestampable properties
-        $this->assertNull($this->obj->created());
-        $this->assertNull($this->obj->lastModified());
+        $this->assertNull($this->obj['created']);
+        $this->assertNull($this->obj['lastModified']);
 
         // Authorable properties
-        $this->assertNull($this->obj->createdBy());
-        $this->assertNull($this->obj->lastModifiedBy());
+        $this->assertNull($this->obj['createdBy']);
+        $this->assertNull($this->obj['lastModifiedBy']);
 
         // Revisionable properties
-        $this->assertTrue($this->obj->revisionEnabled());
+        $this->assertTrue($this->obj['revisionEnabled']);
     }
 
     /**
@@ -79,15 +79,15 @@ class ContentTest extends AbstractTestCase
             'required_acl_permissions' => ['foo', 'bar']
         ]);
         $this->assertSame($ret, $this->obj);
-        $this->assertNotTrue($this->obj->active());
-        $this->assertEquals(42, $this->obj->position());
+        $this->assertNotTrue($this->obj['active']);
+        $this->assertEquals(42, $this->obj['position']);
         $expected = new DateTime('2015-01-01 13:05:45');
-        $this->assertEquals($expected, $this->obj->created());
-        $this->assertEquals('Me', $this->obj->createdBy());
+        $this->assertEquals($expected, $this->obj['created']);
+        $this->assertEquals('Me', $this->obj['createdBy']);
         $expected = new DateTime('2015-04-01 22:10:30');
-        $this->assertEquals($expected, $this->obj->lastModified());
-        $this->assertEquals('You', $this->obj->lastModifiedBy());
-        $this->assertEquals(['foo', 'bar'], $this->obj->requiredAclPermissions());
+        $this->assertEquals($expected, $this->obj['lastModified']);
+        $this->assertEquals('You', $this->obj['lastModifiedBy']);
+        $this->assertEquals(['foo', 'bar'], $this->obj['requiredAclPermissions']);
     }
 
     /**
@@ -95,16 +95,16 @@ class ContentTest extends AbstractTestCase
      */
     public function testSetActive()
     {
-        $this->assertTrue($this->obj->active());
+        $this->assertTrue($this->obj['active']);
         $ret = $this->obj->setActive(false);
         $this->assertSame($ret, $this->obj);
-        $this->assertFalse($this->obj->active());
+        $this->assertFalse($this->obj['active']);
 
         $this->obj->setActive(1);
-        $this->assertTrue($this->obj->active());
+        $this->assertTrue($this->obj['active']);
 
         $this->obj['active'] = false;
-        $this->assertFalse($this->obj->active());
+        $this->assertFalse($this->obj['active']);
 
         $this->obj->set('active', true);
         $this->assertTrue($this->obj['active']);
@@ -116,19 +116,19 @@ class ContentTest extends AbstractTestCase
     public function testSetPosition()
     {
         $this->obj = $this->obj;
-        $this->assertEquals(0, $this->obj->position());
+        $this->assertEquals(0, $this->obj['position']);
         $ret = $this->obj->setPosition(42);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(42, $this->obj->position());
+        $this->assertEquals(42, $this->obj['position']);
 
         $this->obj['position'] = '3';
-        $this->assertEquals(3, $this->obj->position());
+        $this->assertEquals(3, $this->obj['position']);
 
         $this->obj->set('position', 1);
         $this->assertEquals(1, $this->obj['position']);
 
         $this->obj->setPosition(null);
-        $this->assertEquals(0, $this->obj->position());
+        $this->assertEquals(0, $this->obj['position']);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->obj->setPosition('foo');
@@ -142,11 +142,11 @@ class ContentTest extends AbstractTestCase
         $ret = $this->obj->setCreated('2015-01-01 13:05:45');
         $this->assertSame($ret, $this->obj);
         $expected = new DateTime('2015-01-01 13:05:45');
-        $this->assertEquals($expected, $this->obj->created());
+        $this->assertEquals($expected, $this->obj['created']);
 
         $this->obj['created'] = 'today';
         $expected = new DateTime('today');
-        $this->assertEquals($expected, $this->obj->created());
+        $this->assertEquals($expected, $this->obj['created']);
 
         $this->obj->set('created', 'tomorrow');
         $expected = new DateTime('tomorrow');
@@ -172,7 +172,7 @@ class ContentTest extends AbstractTestCase
     {
         $ret = $this->obj->setCreatedBy('Me');
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals('Me', $this->obj->createdBy());
+        $this->assertEquals('Me', $this->obj['createdBy']);
 
         //$this->expectException(\InvalidArgumentException::class);
         //$this->obj->setCreatedBy(false);
@@ -186,11 +186,11 @@ class ContentTest extends AbstractTestCase
         $ret = $this->obj->setLastModified('2015-01-01 13:05:45');
         $this->assertSame($ret, $this->obj);
         $expected = new DateTime('2015-01-01 13:05:45');
-        $this->assertEquals($expected, $this->obj->lastModified());
+        $this->assertEquals($expected, $this->obj['lastModified']);
 
         $this->obj['last_modified'] = 'today';
         $expected = new DateTime('today');
-        $this->assertEquals($expected, $this->obj->lastModified());
+        $this->assertEquals($expected, $this->obj['lastModified']);
 
         $this->obj->set('last_modified', 'tomorrow');
         $expected = new DateTime('tomorrow');
@@ -216,7 +216,7 @@ class ContentTest extends AbstractTestCase
     {
         $ret = $this->obj->setLastModifiedBy('Me');
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals('Me', $this->obj->lastModifiedBy());
+        $this->assertEquals('Me', $this->obj['lastModifiedBy']);
 
         //$this->expectException(\InvalidArgumentException::class);
         //$this->obj->setLastModifiedBy(false);
@@ -233,13 +233,13 @@ class ContentTest extends AbstractTestCase
         $this->assertEquals(['a', 'b', 'c'], $this->obj['required_acl_permissions']);
 
         $this->obj->setRequiredAclPermissions('foo, bar');
-        $this->assertEquals(['foo', 'bar'], $this->obj->requiredAclPermissions());
+        $this->assertEquals(['foo', 'bar'], $this->obj['requiredAclPermissions']);
 
         $this->obj->setRequiredAclPermissions(null);
-        $this->assertEquals([], $this->obj->requiredAclPermissions());
+        $this->assertEquals([], $this->obj['requiredAclPermissions']);
 
         $this->obj->setRequiredAclPermissions(false);
-        $this->assertEquals([], $this->obj->requiredAclPermissions());
+        $this->assertEquals([], $this->obj['requiredAclPermissions']);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->obj->setRequiredAclPermissions(true);

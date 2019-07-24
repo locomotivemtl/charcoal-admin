@@ -48,7 +48,7 @@ class ObjectRouteTest extends AbstractTestCase
      */
     public function testDefaults()
     {
-        $this->assertNull($this->obj->id());
+        $this->assertNull($this->obj['id']);
     }
 
     /**
@@ -58,7 +58,7 @@ class ObjectRouteTest extends AbstractTestCase
     {
         $ret = $this->obj->setData([
             'id' => 42,
-            'creation_date' => 'today',
+            'creationDate' => 'today',
             'last_modification_date' => 'today',
             'lang' => 'es',
             'slug' => 'foobar',
@@ -69,14 +69,14 @@ class ObjectRouteTest extends AbstractTestCase
 
         $this->assertSame($ret, $this->obj);
 
-        $this->assertEquals(42, $this->obj->id());
+        $this->assertEquals(42, $this->obj['id']);
 
         $expected = new DateTime('today');
-        $this->assertEquals($expected, $this->obj->creationDate());
-        $this->assertEquals($expected, $this->obj->lastModificationDate());
+        $this->assertEquals($expected, $this->obj['creationDate']);
+        $this->assertEquals($expected, $this->obj['lastModificationDate']);
 
-        $this->assertEquals('es', $this->obj->lang());
-        $this->assertEquals('foobar', $this->obj->slug());
+        $this->assertEquals('es', $this->obj['lang']);
+        $this->assertEquals('foobar', $this->obj['slug']);
         $this->assertEquals('foo', $this->obj->routeObjType());
         $this->assertEquals(3, $this->obj->routeObjId());
         $this->assertEquals('baz', $this->obj->routeTemplate());
@@ -89,10 +89,10 @@ class ObjectRouteTest extends AbstractTestCase
     {
         $ret = $this->obj->setId(3);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(3, $this->obj->id());
+        $this->assertEquals(3, $this->obj['id']);
 
         $this->obj['id'] = 42;
-        $this->assertEquals(42, $this->obj->id());
+        $this->assertEquals(42, $this->obj['id']);
 
         $this->obj->set('id', 10);
         $this->assertEquals(10, $this->obj['id']);
@@ -103,7 +103,7 @@ class ObjectRouteTest extends AbstractTestCase
      */
     public function testSetCreationDate()
     {
-        $this->assertNull($this->obj->creationDate());
+        $this->assertNull($this->obj['creationDate']);
     }
 
     /**
@@ -125,19 +125,19 @@ class ObjectRouteTest extends AbstractTestCase
      */
     public function testSetSlug()
     {
-        $this->assertNull($this->obj->slug());
+        $this->assertNull($this->obj['slug']);
         $ret = $this->obj->setSlug('foo');
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals('foo', $this->obj->slug());
+        $this->assertEquals('foo', $this->obj['slug']);
 
         $this->obj['slug'] = 'foobar';
-        $this->assertEquals('foobar', $this->obj->slug());
+        $this->assertEquals('foobar', $this->obj['slug']);
 
         $this->obj->set('slug', 'bar');
-        $this->assertEquals('bar', $this->obj->slug());
+        $this->assertEquals('bar', $this->obj['slug']);
 
         $this->obj['slug'] = null;
-        $this->assertNull($this->obj->slug());
+        $this->assertNull($this->obj['slug']);
 
         $this->expectException('\InvalidArgumentException');
         $this->obj->setSlug(false);

@@ -39,7 +39,7 @@ class HierarchicalTraitTest extends AbstractTestCase
         $master = $this->createMock(get_class($obj));
         $ret = $obj->setMaster($master);
         $this->assertSame($ret, $obj);
-        $this->assertSame($master, $obj->master());
+        $this->assertSame($master, $obj->getMaster());
 
         $this->expectException('\InvalidArgumentException');
         $obj->setMaster(['foobar']);
@@ -99,7 +99,7 @@ class HierarchicalTraitTest extends AbstractTestCase
         $this->assertEquals(2, $obj->hierarchyLevel());
 
         $master2 = $this->createMock(get_class($obj));
-        $obj->master()->setMaster($master2);
+        $obj->getMaster()->setMaster($master2);
 
         //$this->assertEquals(3, $obj->hierarchyLevel());
     }

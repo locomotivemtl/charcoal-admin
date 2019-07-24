@@ -48,12 +48,12 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetObjType()
     {
-        $this->assertNull($this->obj->targetType());
+        $this->assertNull($this->obj['targetType']);
         $ret = $this->obj->setTargetType('foobar');
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals('foobar', $this->obj->targetType());
+        $this->assertEquals('foobar', $this->obj['targetType']);
 
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setTargetType(false);
     }
 
@@ -62,10 +62,10 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetObjId()
     {
-        $this->assertNull($this->obj->targetId());
+        $this->assertNull($this->obj['targetId']);
         $ret = $this->obj->setTargetId(42);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(42, $this->obj->targetId());
+        $this->assertEquals(42, $this->obj['targetId']);
     }
 
     /**
@@ -73,15 +73,15 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetRevNum()
     {
-        $this->assertNull($this->obj->revNum());
+        $this->assertNull($this->obj['revNum']);
         $ret = $this->obj->setRevNum(66);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(66, $this->obj->revNum());
+        $this->assertEquals(66, $this->obj['revNum']);
 
         $this->obj->setRevNum('42');
-        $this->assertEquals(42, $this->obj->revNum());
+        $this->assertEquals(42, $this->obj['revNum']);
 
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setRevNum([]);
     }
 
@@ -91,16 +91,16 @@ class ObjectRevisionTest extends AbstractTestCase
     public function testSetRevTs()
     {
         $obj = $this->obj;
-        $this->assertNull($obj->revTs());
+        $this->assertNull($obj['revTs']);
         $ret = $obj->setRevTs('2015-01-01 13:05:45');
         $this->assertSame($ret, $obj);
         $expected = new DateTime('2015-01-01 13:05:45');
-        $this->assertEquals($expected, $obj->revTs());
+        $this->assertEquals($expected, $obj['revTs']);
 
         $obj->setRevTs(null);
-        $this->assertNull($obj->revTs());
+        $this->assertNull($obj['revTs']);
 
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $obj->setRevTs(false);
     }
 
@@ -109,15 +109,15 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetRevUser()
     {
-        $this->assertNull($this->obj->revUser());
+        $this->assertNull($this->obj['revUser']);
         $ret = $this->obj->setRevUser('me');
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals('me', $this->obj->revUser());
+        $this->assertEquals('me', $this->obj['revUser']);
 
         $this->obj->setRevUser(null);
-        $this->assertNull($this->obj->revUser());
+        $this->assertNull($this->obj['revUser']);
 
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->obj->setRevUser(false);
     }
 
@@ -126,13 +126,13 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetDataPrev()
     {
-        $this->assertNull($this->obj->dataPrev());
+        $this->assertNull($this->obj['dataPrev']);
         $ret = $this->obj->setDataPrev(['foo'=>1]);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(['foo'=>1], $this->obj->dataPrev());
+        $this->assertEquals(['foo'=>1], $this->obj['dataPrev']);
 
-        $this->assertEquals(['bar'], $this->obj->setDataPrev('["bar"]')->dataPrev());
-        $this->assertEquals([], $this->obj->setDataPrev(null)->dataPrev());
+        $this->assertEquals(['bar'], $this->obj->setDataPrev('["bar"]')['dataPrev']);
+        $this->assertEquals([], $this->obj->setDataPrev(null)['dataPrev']);
     }
 
     /**
@@ -140,13 +140,13 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetDataObj()
     {
-        $this->assertNull($this->obj->dataObj());
+        $this->assertNull($this->obj['dataObj']);
         $ret = $this->obj->setDataObj(['foo'=>1]);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(['foo'=>1], $this->obj->dataObj());
+        $this->assertEquals(['foo'=>1], $this->obj['dataObj']);
 
-        $this->assertEquals(['bar'], $this->obj->setDataObj('["bar"]')->dataObj());
-        $this->assertEquals([], $this->obj->setDataObj(null)->dataObj());
+        $this->assertEquals(['bar'], $this->obj->setDataObj('["bar"]')['dataObj']);
+        $this->assertEquals([], $this->obj->setDataObj(null)['dataObj']);
     }
 
     /**
@@ -154,13 +154,13 @@ class ObjectRevisionTest extends AbstractTestCase
      */
     public function testSetDataDiff()
     {
-        $this->assertNull($this->obj->dataDiff());
+        $this->assertNull($this->obj['dataDiff']);
         $ret = $this->obj->setDataDiff(['foo'=>1]);
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals(['foo'=>1], $this->obj->dataDiff());
+        $this->assertEquals(['foo'=>1], $this->obj['dataDiff']);
 
-        $this->assertEquals(['bar'], $this->obj->setDataDiff('["bar"]')->dataDiff());
-        $this->assertEquals([], $this->obj->setDataDiff(null)->dataDiff());
+        $this->assertEquals(['bar'], $this->obj->setDataDiff('["bar"]')['dataDiff']);
+        $this->assertEquals([], $this->obj->setDataDiff(null)['dataDiff']);
     }
 
     /**

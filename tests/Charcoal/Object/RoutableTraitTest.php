@@ -170,14 +170,14 @@ class RoutableTraitTest extends AbstractTestCase
      */
     public function testSlug()
     {
-        $this->assertNull($this->obj->slug());
+        $this->assertNull($this->obj->getSlug());
 
         $ret = $this->obj->setSlug('test123');
         $this->assertSame($ret, $this->obj);
-        $this->assertEquals('test123', $this->obj->slug());
+        $this->assertEquals('test123', $this->obj->getSlug());
 
         $this->obj->setSlug(null);
-        $this->assertNull($this->obj->slug());
+        $this->assertNull($this->obj->getSlug());
     }
 
     /**

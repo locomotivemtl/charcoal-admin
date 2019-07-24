@@ -28,6 +28,7 @@ install:
     - mkdir -p build/logs/
 
 script:
+    - composer jsonlint
     - composer phplint
     - composer phpcs
     - composer phpunit -- --coverage-clover "build/logs/clover.xml"

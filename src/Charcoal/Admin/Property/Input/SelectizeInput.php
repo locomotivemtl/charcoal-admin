@@ -811,7 +811,7 @@ class SelectizeInput extends SelectInput
         ];
 
         if ($prop instanceof ObjectProperty) {
-            if ($prop->objType()) {
+            if ($prop['objType']) {
                 $data['pattern']  = $prop['pattern'];
                 $data['obj_type'] = $prop['objType'];
             }

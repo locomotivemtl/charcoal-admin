@@ -416,7 +416,7 @@ trait RoutableTrait
             $newData = array_merge($defaultData, $data, $immutableData);
 
             // Unchanged but sync extra properties
-            if ($slug === $oldRoute->getSlug()) {
+            if ($slug === $oldRoute['slug']) {
                 $oldRoute->setData([
                     'route_template'      => $newData['route_template'],
                     'route_options'       => $newData['route_options'],

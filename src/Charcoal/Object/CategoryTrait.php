@@ -51,6 +51,16 @@ trait CategoryTrait
     }
 
     /**
+     * Legacy support for old-style getter.
+     *
+     * @return string
+     */
+    public function categoryItemType()
+    {
+        return $this->categoryItemType();
+    }
+
+    /**
      * Gets the number of items, directly within this category.
      *
      * @return integer

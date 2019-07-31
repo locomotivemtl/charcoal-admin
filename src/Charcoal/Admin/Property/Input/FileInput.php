@@ -78,7 +78,7 @@ class FileInput extends AbstractPropertyInput
     public function abridgedInputVal()
     {
         $val = (string)$this->inputVal();
-        $val = preg_replace('!^'.preg_quote($this->p()->uploadPath(), '!').'!', '', $val);
+        $val = preg_replace('!^'.preg_quote($this->p()['uploadPath'], '!').'!', '', $val);
 
         if (strpos($val, '://') !== false) {
             $host = parse_url($val, PHP_URL_HOST);

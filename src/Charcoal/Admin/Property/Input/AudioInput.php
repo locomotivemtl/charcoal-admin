@@ -319,7 +319,7 @@ class AudioInput extends AbstractPropertyInput
      */
     public function textPropertyIdent()
     {
-        return $this->textProperty()->ident();
+        return $this->textProperty()['ident'];
     }
 
     /**

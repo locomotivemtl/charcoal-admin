@@ -38,7 +38,7 @@
             .ready(function() {
                 var $html = $(document.documentElement);
                 $html.removeClass('has-no-js').addClass('has-js');
-                if ($html.hasClass('s-admin-debug') || $html.hasClass('debug-mode')) {
+                if ($html.hasClass('s-admin-debug') || $html.hasClass('debug-mode') || $html.data('debug')) {
                     Charcoal.Admin.debug(true);
                 }
 

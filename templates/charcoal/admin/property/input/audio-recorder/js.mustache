@@ -1,0 +1,21 @@
+{{!--
+    Audio Property Input \ Recorder \ JS Component
+    ==============================================
+
+    `charcoal/admin/property/input/audio-recorder`
+--}}
+{{# addJsRequirement }}
+    <script rel="l10n">
+        {{> charcoal/admin/l10n/audio.js }}
+    </script>
+{{/ addJsRequirement }}
+
+{{# addJs }}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id:   '{{ inputId }}',
+    type: '{{ inputType }}',
+    data: {{& controlDataForJsAsJson }}
+});
+</script>
+{{/ addJs }}

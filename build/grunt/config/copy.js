@@ -21,6 +21,12 @@ module.exports = {
             },
             {
                 expand: true,
+                cwd:   '<%= paths.npm %>/recorderjs/dist/',
+                src:   [ '**/*.*', '*/*.*', '*.*' ],
+                dest:  '<%= paths.js.dist %>/vendors/recorderjs/'
+            },
+            {
+                expand: true,
                 cwd:   '<%= paths.npm %>/tinymce/',
                 src:   [ 'skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/**/theme.min.js', 'tinymce.min.js' ],
                 dest:  '<%= paths.js.dist %>/vendors/tinymce/'

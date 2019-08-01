@@ -28,7 +28,41 @@ $.fn.disable = function () {
  * @return    {boolean}
  */
 $.fn.exists = function () {
-    return $(this).length > 0;
+    return (this.length > 0);
+};
+
+/**
+ * Return the fallback if a jQuery selection does not exists.
+ *
+ * @link      https://github.com/byrichardpowell/jquery-or
+ * @copyright Richard Powell
+ * @param     {mixed} selector  - A sselector expression.
+ * @param     {mixed} [context] -A DOM Element, Document, or jQuery to use as context.
+ * @return    {jQuery}
+ */
+$.fn.or = function () {
+    return this.length ? this : $.apply($, arguments);
+};
+
+/**
+ * Return a cached script.
+ *
+ * @link   https://api.jquery.com/jQuery.getScript/#caching-requests
+ * @param  {String} url     - A string containing the URL to which the request is sent.
+ * @param  {Object} options - A set of key/value pairs that configure the Ajax request.
+ * @return {jqXHR}
+ */
+jQuery.getCachedScript = function (url, options) {
+    // Allow user to set any option except for dataType, cache, and url
+    options = $.extend(options || {}, {
+        dataType: 'script',
+        cache: true,
+        url: url
+    });
+
+    // Use $.ajax() since it is more flexible than $.getScript
+    // Return the jqXHR object so we can chain callbacks
+    return jQuery.ajax(options);
 };
 
 if (!RegExp.escape) {
@@ -43,17 +77,115 @@ if (!RegExp.escape) {
     };
 }
 
-if (!Array.prototype.find) {
-    /**
-     * Function to execute on each value in the array, taking three arguments:
-     *
-     * @callback arrayFind
-     * @param  {*}      element - The current element being processed in the array.
-     * @param  {Number} index   - The index of the current element being processed in the array.
-     * @param  {Array}  array   - The array `find` was called upon.
-     * @return {Boolean}
-     */
+/*
+ * Polyfill for IE9, IE10 and IE11
+ */
+if (!window.CustomEvent || typeof window.CustomEvent !== 'function') {
+    window.CustomEvent = (function () {
+        function _Class(event, params) {
+            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            var evt = document.createEvent('CustomEvent');
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
 
+        _Class.prototype = window.Event.prototype;
+
+        return _Class;
+    })();
+}
+
+if (!window.Promise) {
+    /**
+     * Polyfill for Promise with jQuery Deferreds
+     *
+     * @link https://makandracards.com/makandra/46682
+     */
+    window.Promise = (function () {
+        function _Class(executor) {
+            this['catch'] = this['catch'].bind(this);
+            this.then     = this.then.bind(this);
+            this.deferred = $.Deferred();
+            executor(this.deferred.resolve, this.deferred.reject);
+        }
+
+        _Class.prototype.then = function (onFulfilled, onRejected) {
+            return this.deferred.then(onFulfilled, onRejected);
+        };
+
+        _Class.prototype['catch'] = function (onRejected) {
+            return this.then(void 0, onRejected);
+        };
+
+        _Class.prototype['finally'] = function (onFinally) {
+            return this.deferred.always(onFinally);
+        };
+
+        _Class.all = function (promises) {
+            return $.when.apply($, [ this.resolve() ].concat(promises.slice()));
+        };
+
+        _Class.allSettled = function (promises) {
+            var wrappedPromises = promises.map(function (p) {
+                _Class.resolve(p).then(
+                    function (val) {
+                        return {
+                            state: 'fulfilled',
+                            value: val
+                        };
+                    },
+                    function (err) {
+                        return {
+                            state: 'rejected',
+                            reason: err
+                        };
+                    }
+                );
+            });
+
+            return this.all(wrappedPromises);
+        };
+
+        _Class.race = function (promises) {
+            var fulfilled, i, len, promise, rejected, settle, settled, winner;
+
+            settled = false;
+            winner  = $.Deferred();
+            settle  = function (settler, value) {
+                if (!settled) {
+                    settled = true;
+                    winner[settler](value);
+                }
+                return void 0;
+            };
+            fulfilled = settle.apply(this, 'resolve');
+            rejected  = settle.apply(this, 'reject');
+            for (i = 0, len = promises.length; i < len; i++) {
+                promise = promises[i];
+                promise.then(fulfilled, rejected);
+            }
+            return winner.promise();
+        };
+
+        _Class.reject = function (value) {
+            var deferred;
+            deferred = $.Deferred();
+            deferred.reject(value);
+            return deferred.promise();
+        };
+
+        _Class.resolve = function (value) {
+            var deferred;
+            deferred = $.Deferred();
+            deferred.resolve(value);
+            return deferred.promise();
+        };
+
+        return _Class;
+    })();
+}
+
+if (!Array.prototype.find) {
     /**
      * Retrieve the value of the first element in the array that satisfies the provided
      * testing function. Otherwise `undefined` is returned.
@@ -93,8 +225,37 @@ if (!Array.prototype.find) {
     });
 }
 
-if (!String.prototype.replacePairs) {
+if (typeof Object.assign !== 'function') {
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, 'assign', {
+        value: function assign (target/*, varArgs*/) {
+            'use strict';
+            if (target === null || target === undefined) {
+                throw new TypeError('Cannot convert undefined or null to object');
+            }
 
+            var to = Object(target);
+
+            for (var index = 1; index < arguments.length; index++) {
+                var nextSource = arguments[index];
+
+                if (nextSource !== null && nextSource !== undefined) {
+                    for (var nextKey in nextSource) {
+                        // Avoid bugs when hasOwnProperty is shadowed
+                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
+                    }
+                }
+            }
+            return to;
+        },
+        writable: true,
+        configurable: true
+    });
+}
+
+if (!String.prototype.replacePairs) {
     /**
      * Replace all occurrences from a map of patterns and replacements.
      *

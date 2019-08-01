@@ -4,17 +4,14 @@
 
     @used-by `charcoal/admin/property/input/tinymce`
 --}}
+{{# prepareFilePickerUrl }}{{!-- NOOP --}}{{/ prepareFilePickerUrl }}
 {{# addJs }}
 <script>
 Charcoal.Admin.manager().add_property_input({
     id:       '{{ inputId }}',
     input_id: '{{ inputId }}',
-    type:     'charcoal/admin/property/input/tinymce',
-    data: {
-        editor_options: {{& editorOptionsAsJson }},
-        dialog_title:   '{{ dialogTitle }}',
-        elfinder_url:   '{{ admin_url }}elfinder?obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}'
-    }
+    type:     '{{ inputType }}',
+    data:     {{& controlDataForJsAsJson }}
 });
 </script>
 {{/ addJs }}

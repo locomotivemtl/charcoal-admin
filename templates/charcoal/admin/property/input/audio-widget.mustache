@@ -1,0 +1,112 @@
+{{!--
+    Audio Widget Property Input
+    ===========================
+
+    `charcoal/admin/property/input/audio-widget`
+--}}
+{{# displayAudioWidget }}
+    <div id="{{ inputId }}" class="o-toolbox -small">
+        <div class="o-toolbox_actions">
+            <div id="{{ inputId }}_tablist" class="nav btn-group-vertical btn-group-toggle flex-nowrap h-100" role="tablist" aria-label="{{# _t }}Audio Actions{{/ _t }}" aria-orientation="vertical">
+                {{# textEnabled }}
+                    <button id="{{ inputId }}_text_tab" type="button" data-pane="text" data-toggle="tab" data-target="#{{ inputId }}_text_panel" role="tab" aria-controls="{{ inputId }}_text_panel" aria-selected="true" class="o-toolbox_button btn btn-outline-secondary active">
+                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-text"></use></svg>
+                        <span class="sr-only">{{# _t }}Enter text here{{/ _t }}</span>
+                    </button>
+                {{/ textEnabled }}
+                {{# captureEnabled }}
+                    <button id="{{ inputId }}_capture_tab" type="button" data-pane="capture" data-toggle="tab" data-target="#{{ inputId }}_capture_panel" role="tab" aria-controls="{{ inputId }}_capture_panel" aria-selected="false" class="o-toolbox_button btn btn-outline-secondary">
+                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-microphone"></use></svg>
+                        <span class="sr-only">{{# _t }}Record A Message{{/ _t }}</span>
+                    </button>
+                {{/ captureEnabled }}
+                {{# uploadEnabled }}
+                    <button id="{{ inputId }}_upload_tab" type="button" data-pane="upload" data-toggle="tab" data-target="#{{ inputId }}_upload_panel" role="tab" aria-controls="{{ inputId }}_upload_panel" aria-selected="false" class="o-toolbox_button btn btn-outline-secondary">
+                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-file"></use></svg>
+                        <span class="sr-only">{{# _t }}Upload Audio File{{/ _t }}</span>
+                    </button>
+                {{/ uploadEnabled }}
+            </div>
+        </div>
+        <div class="o-toolbox_content">
+            {{# textEnabled }}
+                <div id="{{ inputId }}_text_panel" role="tabpanel" aria-labelledby="{{ inputId }}_text_tab" class="o-toolbox_pane active">
+                    {{# textPropertyContext }}
+                        {{!--
+                            Note:
+                            The textarea input contains any previous value.
+                            This input will be posted on save / update.
+                        --}}
+                        <textarea id="{{ inputId }}" name="{{ textInputName }}" class="form-control -noborder js-text-voice-message" style="height:100%;">{{& textInputVal }}</textarea>
+                    {{/ textPropertyContext }}
+                </div>
+            {{/ textEnabled }}
+            {{# captureEnabled }}
+                <div id="{{ inputId }}_capture_panel" role="tabpanel" aria-labelledby="{{ inputId }}_capture_tab" class="o-toolbox_pane">
+                    {{# capturePropertyContext }}
+                        {{!--
+                            Note:
+                            The audio recording widget.
+                            Any recorded audio will be assigned to the hidden input below.
+                        --}}
+                        {{! charcoal/admin/property/input/audio-recorder }}
+                        <div id="{{ inputId }}" class="c-audio-player -complex" tabindex="0" role="application" aria-label="{{# _t }}Audio Recorder/Player{{/ _t }}">
+                            {{> charcoal/admin/property/input/audio-recorder/player }}
+                        </div>
+                    {{/ capturePropertyContext }}
+                </div>
+            {{/ captureEnabled }}
+            {{# uploadEnabled }}
+                <div id="{{ inputId }}_upload_panel" role="tabpanel" aria-labelledby="{{ inputId }}_upload_tab" class="o-toolbox_pane p-3">
+                    {{# uploadPropertyContext }}
+                        {{!--
+                            Note:
+                            The file input allows one to upload a local recording or pick an existing one.
+                            This input will be posted on save / update if a file is selected.
+                        --}}
+                        {{! charcoal/admin/property/input/file/control }}
+                        <div class="form-group">
+                            {{# showFileUpload }}
+                                <input
+                                    type="file"
+                                    id="{{ inputId }}"
+                                    name="{{ audioInputName }}"
+                                    class="js-file-input"
+                                    {{# accept }}accept="{{ . }}"{{/ accept }}
+                                    {{# readOnly }}readonly{{/ readOnly }}
+                                    {{# required }}required{{/ required }}
+                                    {{# disabled }}disabled{{/ disabled }}
+                                >
+                            {{/ showFileUpload }}
+                            {{# showFilePicker }}
+                                <button type="button" class="btn btn-primary js-elfinder">{{ chooseButtonLabel }}</button>
+                            {{/ showFilePicker }}
+                            {{^ showFilePreview }}
+                                <button type="button" class="btn btn-link js-remove-file hide-if-no-file{{^ audioInputVal }} d-none{{/ audioInputVal }}">{{ removeButtonLabel }}</button>
+                            {{/ showFilePreview }}
+                        </div>
+                        {{> charcoal/admin/property/input/file/preview-container }}
+                        {{> charcoal/admin/property/input/file/placeholder-container }}
+                    {{/ uploadPropertyContext }}
+                </div>
+            {{/ uploadEnabled }}
+        </div>
+        {{!--
+            Note:
+            The hidden input contains any previous value or any recorded audio.
+            This input will be posted on save / update.
+        --}}
+        <input
+            type="hidden"
+            id="audio_hidden_{{ inputId }}"
+            name="{{ audioInputName }}"
+            value="{{ audioInputVal }}"
+            class="js-file-input-hidden">
+    </div>
+    {{> charcoal/admin/property/input/audio-widget/js }}
+{{/ displayAudioWidget }}
+{{^ displayAudioWidget }}
+    <div class="o-toolbox -small">
+        <p>{{# _t }}You must activate at least one of the following methods: text, record, or file{{/ _t }}</p>
+    </div>
+{{/ displayAudioWidget }}

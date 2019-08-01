@@ -28,7 +28,7 @@ class FormWidgetTest extends AbstractTestCase
     {
         $logger = new NullLogger();
         $this->obj = new FormWidget([
-            'logger' => $logger
+            'logger' => $logger,
         ]);
     }
 
@@ -39,7 +39,7 @@ class FormWidgetTest extends AbstractTestCase
     {
         $logger = new NullLogger();
         return new FormSidebarWidget([
-            'logger' => $logger
+            'logger' => $logger,
         ]);
     }
 

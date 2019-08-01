@@ -400,9 +400,12 @@ class ElfinderTemplate extends AdminTemplate
             if ($mimeTypes) {
                 if ($mimeTypes === 'file') {
                     $mimeTypes = [];
+                } elseif (!is_array($mimeTypes)) {
+                    $mimeTypes = explode(',', $mimeTypes);
+                    $mimeTypes = array_filter($mimeTypes, 'strlen');
                 }
 
-                $settings['onlyMimes'] = (array)$mimeTypes;
+                $settings['onlyMimes'] = $mimeTypes;
             } elseif ($property instanceof FileProperty) {
                 $settings['onlyMimes'] = $property->acceptedMimetypes();
             }

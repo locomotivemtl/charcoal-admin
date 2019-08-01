@@ -2,9 +2,6 @@
 
 namespace Charcoal\Admin\Property\Input;
 
-// From 'charcoal-view'
-use Charcoal\View\ViewableInterface;
-
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\ImageAttributesTrait;
 use Charcoal\Admin\Property\Input\FileInput;

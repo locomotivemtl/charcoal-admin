@@ -5,6 +5,9 @@ namespace Charcoal\Admin\Property\Input;
 // From Pimple
 use Pimple\Container;
 
+// From Mustache
+use Mustache_LambdaHelper as LambdaHelper;
+
 // // From 'charcoal-admin'
 use Charcoal\Admin\Property\AbstractPropertyInput;
 
@@ -19,6 +22,13 @@ class FileInput extends AbstractPropertyInput
      * @var \Psr\Http\Message\UriInterface|string
      */
     public $baseUrl;
+
+    /**
+     * A string of accepted file types.
+     *
+     * @var string
+     */
+    private $accept;
 
     /**
      * Flag wether the "file preview" should be displayed.
@@ -40,6 +50,13 @@ class FileInput extends AbstractPropertyInput
      * @var boolean
      */
     private $showFilePicker;
+
+    /**
+     * URL for the "file picker" popup.
+     *
+     * @var string
+     */
+    private $filePickerUrl;
 
     /**
      * Label for the file picker dialog.
@@ -70,6 +87,38 @@ class FileInput extends AbstractPropertyInput
     public function type()
     {
         return 'file';
+    }
+
+    /**
+     * Set a list of unique file type specifiers.
+     *
+     * @link   https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
+     * @param  string|string[] $types The accepted MIME types.
+     * @return self
+     */
+    public function setAccept($types)
+    {
+        if (is_array($types)) {
+            $types = implode(',', $types);
+        }
+
+        $this->accept = $types;
+        return $this;
+    }
+
+    /**
+     * Retrieving a comma-separated list of unique file type specifiers.
+     *
+     * @return string
+     */
+    public function accept()
+    {
+        if ($this->accept === null) {
+            $types = $this->property()['acceptedMimetypes'];
+            return implode(',', $types);
+        }
+
+        return $this->accept;
     }
 
     /**
@@ -189,7 +238,7 @@ class FileInput extends AbstractPropertyInput
     public function showFileUpload()
     {
         if ($this->showFileUpload === null) {
-            return !($this->showFilePicker === true);
+            return !($this->showFilePicker === true && $this->hasFilePicker());
         }
 
         return $this->showFileUpload;
@@ -215,7 +264,66 @@ class FileInput extends AbstractPropertyInput
             return !($this->showFileUpload === true);
         }
 
-        return $this->showFilePicker;
+        return $this->showFilePicker && $this->hasFilePicker();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasFilePicker()
+    {
+        return class_exists('\\elFinder');
+    }
+
+    /**
+     * @param  string $url The file picker AJAX URL.
+     * @return FileInput Chainable
+     */
+    public function setFilePickerUrl($url)
+    {
+        $this->filePickerUrl = $url;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function filePickerUrl()
+    {
+        if (!$this->showFilePicker()) {
+            return null;
+        }
+
+        return $this->filePickerUrl;
+    }
+
+    /**
+     * Necessary evil to render the file picker URL
+     * with the correct object model context.
+     *
+     * @see \Charcoal\Admin\Property\Input\TinymceInput::prepareFilePickerUrl()
+     *
+     * @return callable|null
+     */
+    public function prepareFilePickerUrl()
+    {
+        if (!$this->showFilePicker()) {
+            return null;
+        }
+
+        if ($this->filePickerUrl !== null) {
+            return null;
+        }
+
+        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}';
+        $uri = '{{# withAdminUrl }}elfinder?'.$uri.'{{/ withAdminUrl }}';
+
+        return function ($noop, LambdaHelper $helper) use ($uri) {
+            $uri = $helper->render($uri);
+            $this->filePickerUrl = $uri;
+
+            return null;
+        };
     }
 
     /**
@@ -258,8 +366,6 @@ class FileInput extends AbstractPropertyInput
         return $this;
     }
 
-
-
     /**
      * Retrieve the label for the file picker button.
      *
@@ -287,7 +393,6 @@ class FileInput extends AbstractPropertyInput
         return $this;
     }
 
-
     /**
      * Retrieve the label for the file removal button.
      *
@@ -301,7 +406,6 @@ class FileInput extends AbstractPropertyInput
 
         return $this->removeButtonLabel;
     }
-
 
     /**
      * Inject dependencies from a DI Container.
@@ -344,5 +448,20 @@ class FileInput extends AbstractPropertyInput
     protected function defaultRemoveButtonLabel()
     {
         return $this->translator()->translation('Remove File');
+    }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        return [
+            'input_name'   => $this->inputName(),
+            # 'input_val'    => $this->inputVal(),
+            'dialog_title' => (string)$this->dialogTitle(),
+            'elfinder_url' => $this->filePickerUrl(),
+        ];
     }
 }

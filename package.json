@@ -18,7 +18,7 @@
         "elfinder-theme-moono": "git+https://github.com/lokothodida/elfinder-theme-moono.git",
         "jquery": "^3.4",
         "jquery-ui-bundle": "1.12.1",
-        "jsoneditor": "^5.32.0",
+        "jsoneditor": "^5.34.0",
         "moment": "^2.22.2",
         "multiselect-two-sides": "~2.5.0",
         "recorderjs": "https://github.com/mattdiamond/Recorderjs.git",

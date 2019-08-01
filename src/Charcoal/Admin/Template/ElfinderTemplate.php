@@ -407,7 +407,7 @@ class ElfinderTemplate extends AdminTemplate
 
                 $settings['onlyMimes'] = $mimeTypes;
             } elseif ($property instanceof FileProperty) {
-                $settings['onlyMimes'] = $property->acceptedMimetypes();
+                $settings['onlyMimes'] = $property['acceptedMimetypes'];
             }
 
             $settings['rememberLastDir'] = !($property instanceof FileProperty);

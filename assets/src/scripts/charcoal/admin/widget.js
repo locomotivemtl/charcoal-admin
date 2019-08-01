@@ -1,6 +1,8 @@
 /* globals widgetL10n */
+
 /**
- * charcoal/admin/widget
+ * Base Widget (charcoal/admin/widget)
+ *
  * This should be the base for all widgets
  * It is still possible to add a widget without passing
  * throught this class, but not suggested
@@ -23,151 +25,58 @@
  * ## Others
  * - `init()`
  * - `reload( callback )`
+ *
+ * @param  {Object} opts - The component instance arguments.
+ * @return {Charcoal.Admin.Widget}
  */
 Charcoal.Admin.Widget = function (opts) {
-    this._element = undefined;
-    this._id      = undefined;
-    this._type    = undefined;
-    this._opts    = undefined;
+    Charcoal.Admin.Component.call(this, opts);
 
-    if (!opts) {
-        return this;
+    /* jshint ignore:start */
+    this.widget_id;
+    this.widget_type;
+    /* jshint ignore:end */
+
+    if (opts.widget_id) {
+        this.widget_id = opts.widget_id;
     }
 
-    if (typeof opts.id === 'string') {
-        this.set_element($('#' + opts.id));
-        this.set_id(opts.id);
-        this.widget_id = opts.widget_id || opts.id;
-    }
-
-    if (typeof opts.type === 'string') {
-        this.set_type(opts.type);
-        this.widget_type = opts.widget_type || opts.type;
-    }
-
-    this.set_opts(opts);
-
-    return this;
-};
-
-/**
- * Set options
- * @param {Object} opts
- * @return this (chainable)
- */
-Charcoal.Admin.Widget.prototype.set_opts = function (opts) {
-    this._opts = opts;
-
-    return this;
-};
-
-/**
- * Add option
- * @param {String} ident
- * @param {Mixed} val
- * @return this (chainable)
- */
-Charcoal.Admin.Widget.prototype.add_opts = function (ident, val) {
-    if (typeof ident === 'string') {
-        this._opts[ident] = val;
+    if (opts.widget_type) {
+        this.widget_type = opts.widget_type;
     }
 
     return this;
 };
 
+Charcoal.Admin.Widget.prototype = Object.create(Charcoal.Admin.Component.prototype);
+Charcoal.Admin.Widget.prototype.constructor = Charcoal.Admin.Widget;
+Charcoal.Admin.Widget.prototype.parent = Charcoal.Admin.Component.prototype;
+
 /**
- * If a ident is specified, the method tries to return
- * the options pointed out.
- * If no ident is specified, the method returns
- * the whole opts object
- *
- * @param {String} [ident]
- * @return {Object|Mixed|false}
+ * @return {?String} The component type or subtype.
  */
-Charcoal.Admin.Widget.prototype.opts = function (ident) {
-    if (typeof ident === 'string') {
-        if (typeof this._opts[ident] === 'undefined') {
-            return false;
-        }
-        return this._opts[ident];
-    }
-
-    return this._opts;
+Charcoal.Admin.Widget.prototype.widget_id = function () {
+    return this.widget_id || this.id();
 };
 
 /**
- * Default init
- * @return this (chainable)
+ * @return {?String} The component type or subtype.
  */
-Charcoal.Admin.Widget.prototype.init = function () {
-    // Default init. Nothing!
-    return this;
+Charcoal.Admin.Widget.prototype.widget_type = function () {
+    return this.widget_type || this.type();
 };
 
 /**
- *
- */
-Charcoal.Admin.Widget.prototype.set_id = function (id) {
-    this._id = id;
-};
-
-Charcoal.Admin.Widget.prototype.id = function () {
-    return this._id;
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget.prototype.set_type = function (type) {
-    //
-    this._type = type;
-
-    // Should we update anything? Change the container ID or replace it?
-    // Maybe reinit the plugin?
-};
-
-Charcoal.Admin.Widget.prototype.type = function () {
-    return this._type;
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget.prototype.set_element = function (elem) {
-    this._element = elem;
-
-    return this;
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget.prototype.element = function () {
-    return this._element;
-};
-
-/**
- * Default widget options
- * Can be overwritten by widget
- * @return {Object}
+ * @return {Object} The component instance options.
  */
 Charcoal.Admin.Widget.prototype.widget_options = function () {
     return this.opts();
 };
 
 /**
- * Default widget type
- * Can be overwritten by widget
- * @return {String}
- */
-Charcoal.Admin.Widget.prototype.widget_type = function () {
-    return this.type();
-};
-
-/**
  * Called upon save by the component manager
  *
- * @return {boolean} Default action is set to true.
+ * @return {Boolean} Default action is set to true.
  */
 Charcoal.Admin.Widget.prototype.save = function () {
     return true;
@@ -177,18 +86,22 @@ Charcoal.Admin.Widget.prototype.save = function () {
  * Animate the widget out on reload
  * Use callback to define what to do after the animation.
  *
- * @param  {Function} callback What to do after the anim_out?
- * @return {thisArg}           Chainable
+ * @param  {Function} [callback] - What to do after the anim_out?
+ * @return {this}
  */
 Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
     if (typeof callback !== 'function') {
-        callback = function () {
-        };
+        callback = null;
     }
     this.element().fadeOut(400, callback);
     return this;
 };
 
+/**
+ * @param  {Function} [callback]  - What to do after the reload?
+ * @param  {*}        [with_data] - Additional data to passthrough.
+ * @return {this}
+ */
 Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     var that = this;
 
@@ -196,7 +109,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     var data = {
         widget_type:    that.widget_type || that.type(),
         widget_options: that.widget_options(),
-        with_data: with_data
+        with_data:      with_data
     };
 
     // Response from the reload action should always include a
@@ -243,10 +156,15 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
         }
     });
 
+    return this;
 };
 
 /**
  * Load the widget into a dialog
+ *
+ * @param  {Object}   [dialog_opts] - Dialog settings.
+ * @param  {Function} [callback]    - What to do after the dialog?
+ * @return {BootstrapDialog}
  */
 Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
     var title       = dialog_opts.title || '',
@@ -345,6 +263,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
 
                 $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
             });
+
         Charcoal.Admin.manager().render();
     };
 
@@ -379,6 +298,14 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
     return new BootstrapDialog.show(dialogOptions);
 };
 
+/**
+ * Load the widget into a dialog
+ *
+ * @param  {Object}   [dialog_opts]        - Dialog settings.
+ * @param  {Function} [confirmed_callback] - What to do after the dialog is confirmed?
+ * @param  {Function} [cancel_callback]    - What to do after the dialog is canceled?
+ * @return {void}
+ */
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
     var defaults = {
         type:     BootstrapDialog.TYPE_DANGER,

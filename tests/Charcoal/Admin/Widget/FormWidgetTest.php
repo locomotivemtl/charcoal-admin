@@ -28,7 +28,7 @@ class FormWidgetTest extends AbstractTestCase
     {
         $logger = new NullLogger();
         $this->obj = new FormWidget([
-            'logger' => $logger
+            'logger' => $logger,
         ]);
     }
 
@@ -39,7 +39,7 @@ class FormWidgetTest extends AbstractTestCase
     {
         $logger = new NullLogger();
         return new FormSidebarWidget([
-            'logger' => $logger
+            'logger' => $logger,
         ]);
     }
 
@@ -49,20 +49,5 @@ class FormWidgetTest extends AbstractTestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(FormWidget::class, $this->obj);
-    }
-
-    /**
-     * @return void
-     */
-    public function testSidebars()
-    {
-        $sidebars = iterator_to_array($this->obj->sidebars());
-        $this->assertEquals([], $sidebars);
-
-        $sidebarWidget = $this->sidebarWidget();
-        $this->obj->addSidebar('foo', $sidebarWidget);
-
-        $sidebars = iterator_to_array($this->obj->sidebars());
-        $this->assertEquals(['foo'=>$sidebarWidget], $sidebars);
     }
 }

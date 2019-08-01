@@ -19,7 +19,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.16.x-dev"
+            "dev-master": "0.17.x-dev"
         }
     },
     "require": {

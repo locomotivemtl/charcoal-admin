@@ -224,6 +224,7 @@
 "Remove File";"Remove File"
 "Choose Image…";"Choose Image…"
 "Remove Image";"Remove Image"
+"Remove Audio";"Remove Audio"
 "Library";"Library"
 "Support";"Support"
 "Database table created for ""{{ objType }}"".";"Database table created for ""{{ objType }}""."

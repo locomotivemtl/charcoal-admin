@@ -1,0 +1,32 @@
+{{!--
+    Audio Property Input \ Recorder \ Player
+    =========================================
+
+    `charcoal/admin/property/input/audio-recorder`
+--}}
+<p id="{{ inputId }}_status" class="sr-only" role="status">{{# _t }}Idle{{/ _t }}</p>
+<div class="c-audio-player_wrap p-3">
+    <button type="button" class="c-audio-player_button -playback btn btn-secondary js-recording-playback" aria-controls="{{ inputId }}" aria-live="polite" disabled>
+        <span class="fa fa-play" aria-hidden="true"></span>
+        <span class="fa fa-pause" aria-hidden="true"></span>
+        <span class="sr-only">{{# _t }}Toggle playback state of a recording{{/ _t }}</span>
+    </button>
+    <button type="button" class="c-audio-player_button -stop btn btn-secondary js-recording-stop" aria-controls="{{ inputId }}" aria-live="polite" disabled>
+        <span class="fa fa-stop" aria-hidden="true"></span>
+        <span class="sr-only">{{# _t }}Stop playback{{/ _t }} / {{#_t }}Complete recording{{/ _t }}</span>
+    </button>
+    <button type="button" class="c-audio-player_button -reset btn btn-secondary js-recording-reset" aria-controls="{{ inputId }}" disabled>
+        <span class="fa fa-refresh" aria-hidden="true"></span>
+        <span class="sr-only">{{# _t }}Discard recording{{/ _t }}</span>
+    </button>
+    <button type="button" class="c-audio-player_button -record btn btn-outline-secondary js-recording-record" aria-controls="{{ inputId }}" aria-live="polite" disabled>
+        <span class="c-audio-player_button_circle"></span>
+        <span class="fa fa-pause" aria-hidden="true"></span>
+        <span class="sr-only">{{# _t }}Toggle recording state{{/ _t }}</span>
+    </button>
+    <div class="c-audio-player_time" role="presentation">
+        <span class="c-audio-player_time_elapsed js-recording-time-elapsed" role="timer" aria-live="off" aria-label="{{# _t }}Current Time{{/ _t }}">--:--</span>
+        <span class="c-audio-player_time_duration js-recording-time-duration" aria-label="{{# _t }}Duration{{/ _t }}">--:--</span>
+    </div>
+</div>
+<canvas class="c-audio-player_visualizer js-recording-visualizer"></canvas>

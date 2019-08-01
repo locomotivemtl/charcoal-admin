@@ -7,13 +7,11 @@ Charcoal.Admin.Property_Input_File = function (opts)
     this.EVENT_NAMESPACE = '.charcoal.property.file';
     this.input_type = 'charcoal/admin/property/input/file';
 
-    this.opts = opts;
-    this.data = opts.data;
+    this.opts   = opts;
+    this.data   = opts.data;
     this.dialog = null;
 
     this.set_input_id(this.opts.id).init();
-
-    return this;
 };
 
 Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Property.prototype);
@@ -27,8 +25,8 @@ Charcoal.Admin.Property_Input_File.prototype.init = function ()
     }
 
     this.$input   = $('#' + this.input_id);
-    this.$file    = this.$input.find('input[type="file"]');
-    this.$hidden  = this.$input.find('input[type="hidden"]');
+    this.$file    = $('#' + this.data.file_input_id).or('input[type="file"]', this.$input);
+    this.$hidden  = $('#' + this.data.hidden_input_id).or('input[type="hidden"]', this.$input);
     this.$preview = this.$input.find('.js-preview');
 
     if (!window.elFinderCallback) {
@@ -58,6 +56,7 @@ Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
     event.preventDefault();
 
     this.$hidden.val('');
+    this.$preview.empty();
     this.$input.find('.form-control-plaintext').empty();
     this.$input.find('.hide-if-no-file').addClass('d-none');
     this.$input.find('.show-if-no-file').removeClass('d-none');
@@ -110,6 +109,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
 /**
  * SETTERS
  */
+
 /**
  * Set input id
  * @param {string} input_id ID of the input.
@@ -120,6 +120,7 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id)
     this.input_id = input_id;
     return this;
 };
+
 /**
  * Required
  * @param {String} input_name Name of the current input
@@ -130,6 +131,7 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_na
     this.input_name = input_name;
     return this;
 };
+
 /**
  * Required
  * @param {String} input_val Value of the current input
@@ -139,4 +141,9 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_val = function (input_val
 {
     this.input_val = input_val;
     return this;
+};
+
+Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
+{
+    this.$input.off(this.EVENT_NAMESPACE);
 };

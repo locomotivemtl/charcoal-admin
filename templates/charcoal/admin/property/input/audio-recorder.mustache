@@ -1,0 +1,11 @@
+{{!--
+    Audio Recorder Property Input
+    =============================
+
+    `charcoal/admin/property/input/audio-recorder`
+--}}
+<div id="{{ inputId }}" class="c-audio-player -complex" tabindex="0" role="application" aria-label="{{# _t }}Audio Recorder/Player{{/ _t }}">
+    <input type="hidden" name="{{ inputName }}" value="{{ inputVal }}">
+    {{> charcoal/admin/property/input/audio-recorder/player }}
+</div>
+{{> charcoal/admin/property/input/audio-recorder/js }}

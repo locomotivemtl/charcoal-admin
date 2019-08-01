@@ -20,6 +20,7 @@
 
 .o-toolbox_button {
     height: 100%;
+    border-color: $input-border-color;
 
     &:first-child {
         border-top-right-radius: 0;
@@ -31,13 +32,21 @@
 }
 
 .o-toolbox_content {
-    border: 1px solid #ccc;
+    border: $input-border-width solid $input-border-color;
     height: 100%;
     width: calc(100% - #{rem(60px)});
     border-left: none;
-    border-bottom-right-radius: $btn-border-radius;
-    border-top-right-radius: $btn-border-radius;
+    border-bottom-right-radius: $border-radius;
+    border-top-right-radius: $border-radius;
     float: left;
+
+    > .o-toolbox_pane {
+        display: none;
+    }
+
+    > .active {
+        display: block;
+    }
 }
 
 .o-toolbox_pane {

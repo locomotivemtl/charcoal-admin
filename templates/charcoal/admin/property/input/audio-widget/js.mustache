@@ -1,0 +1,14 @@
+{{!--
+    Audio Property Input \ Widget \ JS Component
+    ============================================
+
+    `charcoal/admin/property/input/audio-widget`
+--}}
+{{# addJsRequirement }}
+    <script rel="l10n">
+        {{> charcoal/admin/l10n/audio.js }}
+    </script>
+{{/ addJsRequirement }}
+
+{{# prepareRecorderPluginUrl }}{{!-- NOOP --}}{{/ prepareRecorderPluginUrl }}
+{{> charcoal/admin/property/input/file/js }}

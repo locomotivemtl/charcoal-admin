@@ -21,6 +21,13 @@ class FileInput extends AbstractPropertyInput
     public $baseUrl;
 
     /**
+     * A string of accepted file types.
+     *
+     * @var string
+     */
+    private $accept;
+
+    /**
      * Flag wether the "file preview" should be displayed.
      *
      * @var boolean
@@ -70,6 +77,38 @@ class FileInput extends AbstractPropertyInput
     public function type()
     {
         return 'file';
+    }
+
+    /**
+     * Set a list of unique file type specifiers.
+     *
+     * @link   https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
+     * @param  string|string[] $types The accepted MIME types.
+     * @return self
+     */
+    public function setAccept($types)
+    {
+        if (is_array($types)) {
+            $types = implode(',', $types);
+        }
+
+        $this->accept = $types;
+        return $this;
+    }
+
+    /**
+     * Retrieving a comma-separated list of unique file type specifiers.
+     *
+     * @return string
+     */
+    public function accept()
+    {
+        if ($this->accept === null) {
+            $types = $this->property()->acceptedMimetypes();
+            return implode(',', $types);
+        }
+
+        return $this->accept;
     }
 
     /**
@@ -258,8 +297,6 @@ class FileInput extends AbstractPropertyInput
         return $this;
     }
 
-
-
     /**
      * Retrieve the label for the file picker button.
      *
@@ -287,7 +324,6 @@ class FileInput extends AbstractPropertyInput
         return $this;
     }
 
-
     /**
      * Retrieve the label for the file removal button.
      *
@@ -301,7 +337,6 @@ class FileInput extends AbstractPropertyInput
 
         return $this->removeButtonLabel;
     }
-
 
     /**
      * Inject dependencies from a DI Container.

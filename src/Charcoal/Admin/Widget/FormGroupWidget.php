@@ -186,11 +186,12 @@ class FormGroupWidget extends AbstractUiItem implements
         $form = $this->form();
         $obj  = ($form instanceof ObjectContainerInterface) ? $form->obj() : null;
 
-        $groupProperties = $this->groupProperties();
+        $groupProperties = array_map([$this, 'camelize'], $this->groupProperties());
         $formProperties  = $this->parsedFormProperties();
         $propOptions     = $this->propertiesOptions();
 
         foreach ($formProperties as $propertyIdent => $formProperty) {
+            $this->camelize($propertyIdent);
             if (in_array($propertyIdent, $groupProperties)) {
                 if (!empty($propOptions[$propertyIdent])) {
                     $propertyOptions = $propOptions[$propertyIdent];

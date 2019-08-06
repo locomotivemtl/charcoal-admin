@@ -66,7 +66,7 @@ class HierarchicalObjectProperty extends ObjectProperty
         if (property_exists($obj, 'auxiliary') && $obj->auxiliary) {
             $choice['parent'] = true;
         } elseif ($obj instanceof HierarchicalInterface && $obj->hasMaster()) {
-            $choice['group'] = parent::parseChoice($obj->master());
+            $choice['group'] = parent::parseChoice($obj['master']);
         } else {
             $choice['group'] = null;
         }

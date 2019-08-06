@@ -472,13 +472,13 @@ class ElfinderConnectorAction extends AdminAction
     public function getCurrentRoots()
     {
         $formProperty     = $this->formProperty();
-        $targetFilesystem = $formProperty ? $formProperty->filesystem() : null;
+        $targetFilesystem = $formProperty ? $formProperty['filesystem-'] : null;
 
         if ($this->hasFilesystem($targetFilesystem)) {
             $disk = $this->getNamedRoot($targetFilesystem);
 
-            $startPath = $formProperty->uploadPath();
-            $isPublic = $formProperty->publicAccess();
+            $startPath = $formProperty['uploadPath'];
+            $isPublic = $formProperty['publicAccess'];
             $basePath = $isPublic ? $this->publicPath : $this->basePath;
 
             if (!file_exists($basePath.$startPath)) {

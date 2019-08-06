@@ -332,7 +332,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
             if ($listProperties) {
                 $props = [];
-                foreach($listProperties as $k=>$v) {
+                foreach ($listProperties as $k => $v) {
                     $k = lcfirst(implode('', array_map('ucfirst', explode('_', $k))));
                     $props[$k] = $v;
                 }

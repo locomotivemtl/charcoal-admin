@@ -544,7 +544,7 @@ class ObjectFormWidget extends FormWidget implements
     public function parseFormProperties()
     {
         $props = [];
-        foreach($this->formProperties as $k => $v) {
+        foreach ($this->formProperties as $k => $v) {
             $props[$this->camelize($k)] = $v;
         }
         return $props;

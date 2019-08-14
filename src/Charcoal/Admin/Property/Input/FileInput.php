@@ -312,7 +312,7 @@ class FileInput extends AbstractPropertyInput
         }
 
         if ($this->filePickerUrl !== null) {
-            return null;
+            // return null;
         }
 
         $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}';

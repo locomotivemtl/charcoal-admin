@@ -241,9 +241,9 @@ class TinymceInput extends TextareaInput
             return null;
         }
 
-        if ($this->filePickerUrl !== null) {
+        // if ($this->filePickerUrl !== null) {
             // return null;
-        }
+        // }
 
         $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}';
         $uri = '{{# withAdminUrl }}elfinder?'.$uri.'{{/ withAdminUrl }}';

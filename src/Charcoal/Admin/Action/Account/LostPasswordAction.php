@@ -223,7 +223,7 @@ class LostPasswordAction extends AdminAction
     {
         $token = $this->modelFactory()->create(LostPasswordToken::class);
         $token->setData([
-            'user' => $user->id()
+            'user' => $user['id']
         ]);
         $token->save();
         return $token;
@@ -238,7 +238,7 @@ class LostPasswordAction extends AdminAction
     private function sendLostPasswordEmail(User $user, $token)
     {
         $translator = $this->translator();
-        $userEmail  = $user->email();
+        $userEmail  = $user['email'];
         $siteName   = $this->siteName();
 
         if ($siteName) {

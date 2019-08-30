@@ -307,7 +307,7 @@ abstract class AbstractPropertyDisplay implements
             $name = $this->propertyIdent();
         }
 
-        if ($this->p()->l10n()) {
+        if ($this->p()['l10n']) {
             $name .= '['.$this->lang().']';
         }
 
@@ -359,7 +359,7 @@ abstract class AbstractPropertyDisplay implements
      */
     public function propertyIdent()
     {
-        return $this->p()->ident();
+        return $this->p()['ident'];
     }
 
     /**

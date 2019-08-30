@@ -331,12 +331,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
 
             if ($listProperties) {
+                $props = [];
+                foreach ($listProperties as $k => $v) {
+                    $k = lcfirst(implode('', array_map('ucfirst', explode('_', $k))));
+                    $props[$k] = $v;
+                }
                 // Replacing values of listProperties from index to actual property values
-                $properties = array_replace($listProperties, $properties);
+                $properties = array_replace($props, $properties);
                 // Get only the keys that are in listProperties from props
-                $properties = array_intersect_key($properties, $listProperties);
+                $properties = array_intersect_key($properties, $props);
             }
-
             $this->properties = $properties;
         }
 
@@ -419,7 +423,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             if (isset($options['label'])) {
                 $label = $this->translator()->translate($options['label']);
             } else {
-                $label = strval($p->label());
+                $label = strval($p['label']);
             }
 
             $column = [

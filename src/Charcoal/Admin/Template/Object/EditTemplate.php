@@ -7,6 +7,8 @@ use Exception;
 // From Pimple
 use Pimple\Container;
 
+use Psr\Http\Message\RequestInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\DashboardContainerInterface;
@@ -25,6 +27,22 @@ class EditTemplate extends AdminTemplate implements
     use ObjectContainerTrait;
 
     /**
+     * @param RequestInterface $request PSR-7 HTTP Server Request.
+     * @return boolean
+     */
+    public function init(RequestInterface $request)
+    {
+        $ret = parent::init($request);
+
+        if (!$this->obj()->id()) {
+            $path = str_replace('object/edit', 'object/create', $request->getUri()->getPath());
+            header('Location: '.(string)$request->getUri()->withPath($path));
+            die();
+        }
+        return $ret;
+    }
+
+    /**
      * Retrieve the list of parameters to extract from the HTTP request.
      *
      * @return string[]
@@ -32,7 +50,8 @@ class EditTemplate extends AdminTemplate implements
     protected function validDataFromRequest()
     {
         return array_merge([
-            'obj_type', 'obj_id'
+            'obj_type',
+            'obj_id'
         ], parent::validDataFromRequest());
     }
 
@@ -68,7 +87,13 @@ class EditTemplate extends AdminTemplate implements
 
                     $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
                     if (!$formIdent) {
-                        $formIdent = (isset($adminMetadata['default_form']) ? $adminMetadata['default_form'] : '');
+                        if (isset($adminMetadata['defaultForm'])) {
+                            $fomIdent = $adminMetadata['defaultForm'];
+                        } elseif (isset($adminMetadata['default_form'])) {
+                            $formIdent = $adminMetadata['default_form'];
+                        } else {
+                            $formIdent = '';
+                        }
                     }
 
                     if (isset($adminMetadata['forms'][$formIdent]['label'])) {
@@ -76,43 +101,20 @@ class EditTemplate extends AdminTemplate implements
                     }
                 }
 
-                if ($objId) {
-                    if (!$title && isset($metadata['labels']['edit_item'])) {
-                        $title = $translator->translation($metadata['labels']['edit_item']);
-                    }
+                $labels = $metadata['labels'];
+                if (!$title && isset($labels['edit_item'])) {
+                    $title = $translator->translation($labels['edit_item']);
+                }
 
-                    if (!$title && isset($metadata['labels']['edit_model'])) {
-                        $title = $translator->translation($metadata['labels']['edit_model']);
-                    }
-                } else {
-                    if (!$title && isset($metadata['labels']['new_item'])) {
-                        $title = $translator->translation($metadata['labels']['new_item']);
-                    }
-
-                    if (!$title && isset($metadata['labels']['new_model'])) {
-                        $title = $translator->translation($metadata['labels']['new_model']);
-                    }
+                if (!$title && isset($labels['edit_model'])) {
+                    $title = $translator->translation($labels['edit_model']);
                 }
 
                 if (!$title) {
-                    $objType = (isset($metadata['labels']['singular_name'])
-                                ? $translator->translation($metadata['labels']['singular_name'])
-                                : null);
-
-                    if ($objId) {
-                        $title = $translator->translation('Edit: {{ objType }} #{{ id }}');
-                    } elseif (!empty($_GET['clone_id'])) {
-                        $title = sprintf(
-                            $translator->translation('Create: {{ objType }} from ID ""%s""'),
-                            $_GET['clone_id']
-                        );
-                    } else {
-                        $title = $translator->translation('Create: {{ objType }}');
-                    }
-
-                    if ($objType) {
+                    $title = $translator->translation('Edit: {{ objType }} #{{ id }}');
+                    if (isset($labels['singular_name'])) {
                         $title = strtr($title, [
-                            '{{ objType }}' => $objType
+                            '{{ objType }}' => $translator->translation($labels['singular_name'])
                         ]);
                     }
                 }
@@ -180,24 +182,15 @@ class EditTemplate extends AdminTemplate implements
         }
 
         if (empty($dashboardIdent)) {
-            if (!$this->objId()) {
-                if (!isset($adminMetadata['default_create_dashboard'])) {
-                    throw new Exception(sprintf(
-                        'No default create dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    ));
-                }
-
-                $dashboardIdent = $adminMetadata['default_create_dashboard'];
+            if (isset($adminMetadata['defaultEditDashboard'])) {
+                $dashboardIdent = $adminMetadata['defaultEditDashboard'];
+            } elseif (isset($adminMetadata['default_edit_dashboard'])) {
+                 $dashboardIdent = $adminMetadata['default_edit_dashboard'];
             } else {
-                if (!isset($adminMetadata['default_edit_dashboard'])) {
-                    throw new Exception(sprintf(
-                        'No default edit dashboard defined in admin metadata for %s',
-                        get_class($this->obj())
-                    ));
-                }
-
-                $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+                throw new Exception(sprintf(
+                    'No default edit dashboard defined in admin metadata for %s',
+                    get_class($this->obj())
+                ));
             }
         }
 

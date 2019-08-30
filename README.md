@@ -1,7 +1,7 @@
 Charcoal Admin Module
 =====================
 
-The standard Charcoal Admin Panel (Backend Dashboard).
+The standard Charcoal Admin Control Panel (Backend Dashboard).
 
 # How to install
 
@@ -38,11 +38,11 @@ $ composer require locomotivemtl/charcoal-admin
 
 Which, in turn, require:
 
--	`PHP 5.5+`
-	-	Older versions of PHP are deprecated, therefore not supported.
-	-	`ext-fileinfo` File / MIME identification.
-	-	`ext-mbstring` Multi-bytes string support.
-	-	`ext-pdo` PDO Database driver.
+-	`PHP 5.5+`, 7+ highly recommended.
+    +	Older versions of PHP are deprecated, therefore not supported.
+	+	`ext-fileinfo` File / MIME identification.
+	+	`ext-mbstring` Multi-bytes string support.
+    +	`ext-pdo` PDO Database driver.
 -	MySQL
 	-	Other databases (_postgresql_, _sqlite_) should work but are not supported.
 -	Apache with `mod_rewrite`
@@ -56,7 +56,15 @@ Which, in turn, require:
 
 # Core concepts
 
-**todo**
+The _charcoal admin control panel_ is:
+
+- Additional `admin` metadata on charcoal objects and models, which controls automatically how they can be customized in the backend.
+- A user / authentication system, which uses ACL for permissions.
+- A customizable 2-level menu, which builds custom backend for every install.
+- Dashboards and widgets. With some prebuilt functionalities for:
+    - Listing collection of objects (`admin/object/collection`), customizable from the object's _admin metadata_.
+    - Creating and editing objects (`admin/object/edit`), customizable from the objects's _admin metadata_.
+- Set of _scripts_ to manage objects and the backend from the CLI.
 
 # What's inside this module?
 
@@ -87,6 +95,7 @@ Like all Charcoal projects / modules, the main components are:
 	-	Optionnally, templates metadata in `metdata/boilerplate/template/`
 -	**Actions**
 	-	Actions handle input and provide a response to a request
+	-   They create the charcoal-admin REST API.
 	-	The PHP classes in `src/Charcoal/Boilerplate/Action`
 -	**Assets**
 	-	Assets are files required to be on the webserver root
@@ -98,7 +107,7 @@ Like all Charcoal projects / modules, the main components are:
 
 ## Users
 
-Authentication is done through the `Charcoal\Admin\User` class.
+Authentication is done through the `Charcoal\Admin\User` class. It reuses the authentication, authorization and user model provided by [charcoal-user](https://github.com/locomotivemtl/charcoal-user.
 
 # UI Elements
 
@@ -142,7 +151,7 @@ The following base widgets are available to build the various _admin_ templates:
 
 ## Property Inputs
 
-Similar to other UI elements, _Inputs_ are specialized widgets that are meant to display a "form element" for a `Property`.
+Similar to other UI elements, _Inputs_ are specialized widgets that are meant to display a "form element" for a `Property`. Properties models are defined in the [charcoal-property](https://github.com/locomotivemtl/charcoal-property) package.
 
 The following property inputs are available  to build forms in the _admin_ module:
 
@@ -446,13 +455,3 @@ Every classes, methods and functions should be covered by unit tests. PHP code c
 
 Charcoal is licensed under the MIT license. See [LICENSE](LICENSE) for details.
 
-# Changelog
-
-### 0.1
-
-_Unreleased_
--	Initial release
-
-## TODOs
-
--	Unit test coverage

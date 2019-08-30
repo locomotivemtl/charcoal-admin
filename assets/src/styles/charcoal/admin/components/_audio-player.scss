@@ -10,43 +10,106 @@
 
 .c-audio-player_wrap {
     height: 100%;
-    position: absolute;
+    width: 100%;
     z-index: 3;
+
+    @media (max-width: $to-medium) {
+        position: relative;
+    }
+
+    @media (min-width: $from-medium) {
+        position: absolute;
+    }
 }
 
-.c-audio-player_canvas {
+.c-audio-player_visualizer {
     background: $white;
     display: block;
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
+    padding: 1rem 0 0 0;
     width: 100%;
     z-index: 0;
+
+    .o-toolbox_content & {
+        border-bottom-right-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+    }
+}
+
+.c-audio-player_error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
 }
 
 .c-audio-player_button {
-    background-color: $gray-light;
-    box-shadow: 0px 5px 8px -4px rgba(0, 0, 0, 0.1);
-    border: none;
     border-radius: 50%;
     display: inline-block;
     height: rem(45px);
-    outline: none;
     padding: 0;
     position: relative;
-    vertical-align: middle;
     width: rem(45px);
 
     &.-record {
-        background: linear-gradient(to top, #f1f1f1, #ffffff);
-        border: 1px solid #d7d7d7;
+        background: linear-gradient(to top, #F1F1F1, #FFFFFF);
+        border-color: $input-border-color;
         font-size: rem(30px);
         height: rem(107px);
         width: rem(107px);
 
         .fa {
-            color: $gray;
+            color: $secondary;
+        }
+
+        &:hover {
+            background: linear-gradient(to top, #F1F1F1, $gray-200);
+        }
+
+        &:focus,
+        &.focus {
+            background: darken($light, 7.5%);
+            border-color: darken($light, 10%);
+        }
+
+        &.disabled,
+        &:disabled {
+            background: $light;
+            border-color: $secondary;
+        }
+
+        &:not(:disabled):not(.disabled):active,
+        &:not(:disabled):not(.disabled).active {
+            background: darken($light, 10%);
+            border-color: $input-border-color;
+        }
+    }
+
+    .fa {
+        left: 50%;
+        position: absolute;
+        pointer-events: none;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .fa-pause {
+        opacity: 0;
+    }
+
+    &.disabled,
+    &:disabled {
+        opacity: 0.35;
+    }
+
+    // Button placement
+    @media (max-width: $to-medium) {
+        .-complex & {
+            margin: 0.5rem;
         }
     }
 
@@ -78,40 +141,10 @@
             }
         }
     }
-
-    &.is-playing {
-        .fa-pause {
-            opacity: 1;
-        }
-        .fa-play {
-            opacity: 0;
-        }
-    }
-
-    &.is-recording {
-        .fa-pause {
-            opacity: 1;
-        }
-        .c-audio-player_button_circle {
-            opacity: 0;
-        }
-    }
-
-    .fa {
-        color: $white;
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .fa-pause {
-        opacity: 0;
-    }
 }
 
 .c-audio-player_button_circle {
-    background-color: #ff6b6b;
+    background-color: currentColor;
     border-radius: 50%;
     height: rem(28px);
     left: 50%;
@@ -119,19 +152,57 @@
     top: 50%;
     transform: translate(-50%, -50%);
     width: rem(28px);
+
+    .c-audio-player_button:hover & {
+        background-color: darken($secondary, 7.5%);
+    }
+
+    .c-audio-player:not(.is-recording):not(.is-playing) & {
+        background-color: #FF6B6B;
+    }
+
+    .c-audio-player:not(.is-recording):not(.is-playing) .c-audio-player_button:hover & {
+        background-color: darken(#FF6B6B, 7.5%);
+    }
+
+    .c-audio-player_button.disabled > &,
+    .c-audio-player_button:disabled > & {
+        background-color: currentColor !important;
+    }
+}
+
+.c-audio-player.is-playing:not(.is-paused) .c-audio-player_button.-playback,
+.c-audio-player_button.-playback.active {
+    .fa-pause {
+        opacity: 1;
+    }
+
+    .fa-play {
+        opacity: 0;
+    }
+}
+
+.c-audio-player.is-recording:not(.is-paused) .c-audio-player_button.-record,
+.c-audio-player_button.-record.active {
+    .fa-pause {
+        opacity: 1;
+    }
+
+    .c-audio-player_button_circle {
+        opacity: 0;
+    }
 }
 
 .c-audio-player_time {
-    color: $gray-light;
+    color: $gray-400;
     display: inline-block;
-    font-size: rem(50px);
     font-weight: $weight-light;
-    padding-left: rem(15px);
+    line-height: 1;
+    pointer-events: none;
     vertical-align: middle;
     width: calc(100% - #{rem(60px)});
 
     .-complex & {
-        font-size: rem(100px);
         width: auto;
 
         // Button placement
@@ -140,6 +211,31 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
+        }
+    }
+}
+
+.c-audio-player_time_elapsed {
+    color: $gray-500;
+    font-size: rem(50px);
+
+    .-complex & {
+        font-size: rem(100px);
+    }
+}
+
+.c-audio-player_time_duration {
+    color: $gray-400;
+    font-size: rem(25px);
+
+    .-complex & {
+        font-size: rem(50px);
+
+        &::before {
+            content: '/';
+            display: inline;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
         }
     }
 }

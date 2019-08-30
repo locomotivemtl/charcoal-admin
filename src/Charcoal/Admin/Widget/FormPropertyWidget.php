@@ -639,7 +639,7 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         if ($this->showLabel !== false) {
-            return !!strval($this->property()->label());
+            return !!strval($this->property()['label']);
         } else {
             return false;
         }
@@ -676,7 +676,7 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         if ($this->showDescription !== false) {
-            return !!strval($this->property()->description());
+            return !!strval($this->property()['description']);
         } else {
             return false;
         }
@@ -713,7 +713,7 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         if ($this->showNotes !== false) {
-            return !!strval($this->property()->notes());
+            return !!strval($this->property()['notes']);
         } else {
             return false;
         }
@@ -734,7 +734,7 @@ class FormPropertyWidget extends AdminWidget implements
             return false;
         }
 
-        $notes = $this->property()->notes();
+        $notes = $this->property()['notes'];
 
         return !!$notes;
     }
@@ -744,7 +744,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function description()
     {
-        return $this->renderTemplate((string)$this->property()->description());
+        return $this->renderTemplate((string)$this->property()['description']);
     }
 
     /**
@@ -752,7 +752,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function notes()
     {
-        return $this->renderTemplate((string)$this->property()->notes());
+        return $this->renderTemplate((string)$this->property()['notes']);
     }
 
     /**
@@ -760,7 +760,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function hidden()
     {
-        return ($this->inputType() === static::HIDDEN_FORM_CONTROL || $this->property()->hidden());
+        return ($this->inputType() === static::HIDDEN_FORM_CONTROL || $this->property()['hidden']);
     }
 
     /**
@@ -933,7 +933,7 @@ class FormPropertyWidget extends AdminWidget implements
         $property = $this->property();
         $locales  = count($this->translator()->availableLocales());
 
-        return ($locales > 1 && $property->l10n());
+        return ($locales > 1 && $property['l10n']);
     }
 
     /**
@@ -1068,7 +1068,7 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function l10n()
     {
-        return $this->property()->l10n();
+        return $this->property()['l10n'];
     }
 
     /**
@@ -1125,7 +1125,7 @@ class FormPropertyWidget extends AdminWidget implements
                 break;
         }
 
-        $GLOBALS['widget_template'] = $type;
+        $this->setDynamicTemplate('widget_template', $type);
 
         if ($this->l10n() && $this->loopL10n()) {
             $locales  = $this->translator()->availableLocales();
@@ -1138,12 +1138,9 @@ class FormPropertyWidget extends AdminWidget implements
                 yield $prop;
             }
 
-            $GLOBALS['widget_template'] = '';
             $prop->{$setter}($outputId);
         } else {
             yield $prop;
-
-            $GLOBALS['widget_template'] = '';
         }
     }
 
@@ -1260,7 +1257,7 @@ class FormPropertyWidget extends AdminWidget implements
                 $classes[] = 'form-property-'.$this->prop()->type();
             }
 
-            if ($this->prop()->multiple()) {
+            if ($this->prop()['multiple']) {
                 $classes[] = '-multiple';
             }
         }
@@ -1362,7 +1359,7 @@ class FormPropertyWidget extends AdminWidget implements
             $property = $this->property();
             $metadata = $property->metadata();
 
-            if ($property->hidden()) {
+            if ($property['hidden']) {
                 $type = static::HIDDEN_FORM_CONTROL;
             }
 

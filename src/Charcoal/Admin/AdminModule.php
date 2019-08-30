@@ -38,7 +38,7 @@ class AdminModule extends AbstractModule
     {
         // Hack: skip if the request does not start with '/admin'
         $container = $this->app()->getContainer();
-        if (substr(ltrim($container['request']->getUri()->getPath(), '/'), 0, 5) !== 'admin') {
+        if ($this->isPathAdmin($container['request']->getUri()->getPath()) !== true) {
             return $this;
         }
 
@@ -216,5 +216,23 @@ class AdminModule extends AbstractModule
         });
 
         return $next($request, $response);
+    }
+
+    /**
+     * @param string $path The path to check.
+     * @return boolean
+     */
+    private function isPathAdmin($path)
+    {
+        $path = ltrim($path, '/');
+        if ($path === 'admin') {
+            return true;
+        }
+
+        if (substr($path, 0, 6) === 'admin/') {
+            return true;
+        }
+
+        return false;
     }
 }

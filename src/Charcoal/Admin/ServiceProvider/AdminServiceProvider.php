@@ -189,8 +189,29 @@ class AdminServiceProvider implements ServiceProviderInterface
              * @return MetadataConfig
              */
             $container['metadata/config'] = function () {
-                return new MetadataConfig();
+                $settings   = $container['admin/config']['metadata'];
+                $metaConfig = new MetadataConfig($settings);
+
+                return $metaConfig;
             };
+        } else {
+            /**
+             * Alters the application's metadata configset.
+             *
+             * This extension will merge any Admin-only metadata settings.
+             *
+             * @param  MetadataConfig $metaConfig The metadata configset.
+             * @param  Container      $container  The Pimple DI container.
+             * @return MetadataConfig
+             */
+            $container->extend('metadata/config', function (MetadataConfig $metaConfig, Container $container) {
+                $settings = $container['admin/config']['metadata'];
+                if (is_array($settings) && !empty($settings)) {
+                    $metaConfig->merge($settings);
+                }
+
+                return $metaConfig;
+            });
         }
 
         /**

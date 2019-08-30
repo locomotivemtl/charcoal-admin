@@ -1,89 +1,108 @@
 /**
- * charcoal/admin/property
+ * Base Property Input (charcoal/admin/property/input)
+ *
  * Should mimic the PHP equivalent AbstractProperty
  * This will prevent multiple directions in property implementation
  * by giving multiple usefull methods such as ident, val, etc.
+ *
+ * @param  {Object} opts - The component instance arguments.
+ * @return {Charcoal.Admin.Property}
  */
-Charcoal.Admin.Property = function (opts)
-{
-    this._ident      = undefined;
-    this._val        = undefined;
-    this._type       = undefined;
-    this._input_type = undefined;
+Charcoal.Admin.Property = function (opts) {
+    Charcoal.Admin.Component.call(this, opts);
 
-    if (typeof opts.ident === 'string') {
-        this.set_ident(opts.ident);
+    /* jshint ignore:start */
+    this._ident;
+    this._val;
+    this._input_type;
+    this.data;
+    /* jshint ignore:end */
+
+    if (opts) {
+        if (typeof opts.ident === 'string') {
+            this.set_ident(opts.ident);
+        }
+
+        if (typeof opts.val !== 'undefined') {
+            this.set_val(opts.val);
+        }
+
+        if (typeof opts.input_type !== 'undefined') {
+            this.set_input_type(opts.input_type);
+        }
+
+        this.data = opts;
     }
-
-    if (typeof opts.val !== 'undefined') {
-        this.set_val(opts.val);
-    }
-
-    if (typeof opts.type !== 'undefined') {
-        this.set_type(opts.type);
-    }
-
-    if (typeof opts.input_type !== 'undefined') {
-        this.set_input_type(opts.input_type);
-    }
-
-    this.data = opts;
 
     return this;
 };
 
+Charcoal.Admin.Property.prototype = Object.create(Charcoal.Admin.Component.prototype);
+Charcoal.Admin.Property.prototype.constructor = Charcoal.Admin.Property;
+Charcoal.Admin.Property.prototype.parent = Charcoal.Admin.Component.prototype;
+
 /**
- * Setters
- * The following are all defined setters we wanna use for all properties
+ * @override Charcoal.Admin.Property.prototype.element
+ *
+ * @return {?jQuery} The related jQuery element.
  */
-Charcoal.Admin.Property.prototype.set_ident = function (ident)
-{
-    this._ident = ident;
-};
-Charcoal.Admin.Property.prototype.set_val = function (val)
-{
-    this._val = val;
-};
-Charcoal.Admin.Property.prototype.set_type = function (type)
-{
-    this._type = type;
-};
-Charcoal.Admin.Property.prototype.set_input_type = function (input_type)
-{
-    this._input_type = input_type;
+Charcoal.Admin.Property.prototype.element = function () {
+    if (!this._element) {
+        if (!this.id()) {
+            return null;
+        }
+        this.set_element('#' + this.id());
+    }
+
+    return this._element;
 };
 
 /**
- * Getters
- * The following are defined getters
+ * @param  {String} ident - The component instance identifier.
+ * @return {this}
+ */
+Charcoal.Admin.Property.prototype.set_ident = function (ident) {
+    this._ident = ident;
+    return this;
+};
+
+/**
+ * @return {?String} The component instance identifier.
  */
 Charcoal.Admin.Property.prototype.ident = function () {
     return this._ident;
 };
-Charcoal.Admin.Property.prototype.val = function () {
-    return this._val;
+
+/**
+ * @param  {String} input_type - The component form control type.
+ * @return {this}
+ */
+Charcoal.Admin.Property.prototype.set_input_type = function (input_type) {
+    this._input_type = input_type;
+    return this;
 };
-Charcoal.Admin.Property.prototype.type = function () {
-    return this._type;
-};
+
+/**
+ * @return {?String} The component form control type.
+ */
 Charcoal.Admin.Property.prototype.input_type = function () {
     return this._input_type;
 };
+
 /**
- * Return the DOMElement element
- * @return {jQuery Object} $( '#' + this.data.id );
- * If not set, creates it
+ * @param  {*} val - The component instance value.
+ * @return {this}
  */
-Charcoal.Admin.Property.prototype.element = function ()
-{
-    if (!this._element) {
-        if (!this.data.id) {
-            // Error...
-            return false;
-        }
-        this._element = $('#' + this.data.id);
-    }
-    return this._element;
+Charcoal.Admin.Property.prototype.set_val = function (val) {
+    this._val = val;
+    return this;
+};
+
+/**
+ * @return {?String} The component instance value.
+ */
+Charcoal.Admin.Property.prototype.val = function () {
+    return this._val;
 };
 
 /**
@@ -99,11 +118,13 @@ Charcoal.Admin.Property.prototype.element = function ()
 Charcoal.Admin.Property.prototype.validate = function ()
 {
     // Validate the current
+    return {};
 };
 
 /**
  * Default save action
- * @return this (chainable)
+ *
+ * @return {this}
  */
 Charcoal.Admin.Property.prototype.save = function ()
 {
@@ -113,8 +134,9 @@ Charcoal.Admin.Property.prototype.save = function ()
 
 /**
  * Error handling
- * @param  {Mixed} data  Could be a simple message, an array, wtv.
- * @return {thisArg}     Chainable.
+ *
+ * @param  {*} data - Could be a simple message, an array, wtv.
+ * @return {void}
  */
 Charcoal.Admin.Property.prototype.error = function (data)
 {

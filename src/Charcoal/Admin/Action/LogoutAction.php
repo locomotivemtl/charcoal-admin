@@ -83,7 +83,7 @@ class LogoutAction extends AdminAction
 
     /**
      * @param User $user The user to clear auth tokens for.
-     * @return LogoutTemplate Chainable
+     * @return self
      */
     private function deleteUserAuthTokens(User $user)
     {

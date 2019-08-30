@@ -175,7 +175,7 @@ class PermalinkInput extends TextInput
      */
     public function samples()
     {
-        if ($this->p()->l10n() === false) {
+        if ($this->p()['l10n'] === false) {
             $origLang = $this->lang();
             $locales  = $this->translator()->availableLocales();
             $sampleId = $this->sampleId();

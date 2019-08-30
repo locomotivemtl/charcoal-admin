@@ -74,10 +74,10 @@ class LoginTemplate extends AdminTemplate
     {
         $token = $this->modelFactory()->create(AuthToken::class);
 
-        if ($token->metadata()->enabled() === false) {
+        if ($token->metadata()['enabled'] === false) {
             return false;
         }
-        if ($token->metadata()->httpsOnly() === true) {
+        if ($token->metadata()['httpsOnly'] === true) {
             return $this->isHttps();
         } else {
             return true;

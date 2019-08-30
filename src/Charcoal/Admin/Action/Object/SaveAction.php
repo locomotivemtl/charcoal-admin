@@ -148,11 +148,11 @@ class SaveAction extends AbstractSaveAction
 
             if ($obj instanceof AuthorableInterface) {
                 $authorIdent = $this->authorIdent();
-                if (!$obj->lastModifiedBy()) {
+                if (!$obj['lastModifiedBy']) {
                     $obj->setLastModifiedBy($authorIdent);
                 }
 
-                if (!$obj->createdBy()) {
+                if (!$obj['createdBy']) {
                     $obj->setCreatedBy($authorIdent);
                 }
             }

@@ -15,13 +15,13 @@
         "clipboard": "^2.0.0",
         "components-font-awesome": "~4.7.0",
         "echarts": "^4.2.0",
-        "elfinder-theme-moono": "https://github.com/lokothodida/elfinder-theme-moono.git",
+        "elfinder-theme-moono": "git+https://github.com/lokothodida/elfinder-theme-moono.git",
         "jquery": "^3.4",
         "jquery-ui-bundle": "1.12.1",
-        "jsoneditor": "^5.32.0",
+        "jsoneditor": "^5.34.0",
         "moment": "^2.22.2",
         "multiselect-two-sides": "~2.5.0",
-        "recorderjs": "1.0.1",
+        "recorderjs": "https://github.com/mattdiamond/Recorderjs.git",
         "selectize": "~0.12.4",
         "selectize-scss": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "~5.1.0",
@@ -48,6 +48,7 @@
         "grunt-svg-sprite": "1.5.0",
         "load-grunt-config": "1.0.2",
         "node-sass": "4.12.0",
-        "postcss-banner": "3.0.1"
+        "postcss-banner": "3.0.1",
+        "selectizebootstrap": "git+https://github.com/papakay/selectize-bootstrap-4-style.git"
     }
 }

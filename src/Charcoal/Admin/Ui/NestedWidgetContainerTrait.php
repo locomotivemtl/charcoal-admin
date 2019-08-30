@@ -53,12 +53,8 @@ trait NestedWidgetContainerTrait
     public function widget()
     {
         $widget = $this->getWidget();
-
-        $GLOBALS['widget_template'] = $widget->template();
-
+        $this->setDynamicTemplate('widget_template', $widget->template());
         yield $widget;
-
-        $GLOBALS['widget_template'] = '';
     }
 
     /**

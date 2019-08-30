@@ -82,9 +82,8 @@ class CardCollectionWidget extends TableWidget
     public function objectCardRow()
     {
         foreach ($this->objectRows() as $obj) {
-            $GLOBALS['widget_template'] = $this->cardTemplate();
+            $this->setDynamicTemplate('widget_template', $this->cardTemplate());
             yield $obj;
-            $GLOBALS['widget_template'] = '';
         }
     }
 
@@ -136,12 +135,12 @@ class CardCollectionWidget extends TableWidget
      */
     public function isChipSuccess(ModelInterface $object)
     {
-        if (is_callable([$object, 'isViewable'])) {
-            return !!$object->isViewable();
+        if (is_callable([$object, 'getIsViewable'])) {
+            return !!$object['isViewable'];
         }
 
-        if (is_callable([$object, 'active'])) {
-            return !!$object->active();
+        if (is_callable([$object, 'getActive'])) {
+            return !!$object['active'];
         }
     }
 

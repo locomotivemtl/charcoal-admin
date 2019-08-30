@@ -296,9 +296,9 @@ class LoadAction extends AdminAction
         }
 
         // filenameFallback is not ASCII.
-        if (!preg_match('/^[\x20-\x7e]*$/', $filenameFallback)) {
-            throw new InvalidArgumentException('The filename fallback must only contain ASCII characters.');
-        }
+        // if (!preg_match('/^[\x20-\x7e]*$/', $filenameFallback)) {
+        //     throw new InvalidArgumentException('The filename fallback must only contain ASCII characters.');
+        // }
 
         // percent characters aren't safe in fallback.
         if (strpos($filenameFallback, '%') !== false) {

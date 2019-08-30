@@ -27,6 +27,9 @@
                 "route":"/account/reset-password[/{token}]",
                 "ident": "charcoal/admin/template/account/reset-password"
             },
+            "object/create": {
+                "ident": "charcoal/admin/template/object/create"
+            },
             "object/edit": {
                 "ident": "charcoal/admin/template/object/edit"
             },
@@ -291,7 +294,8 @@
     },
 
     "login": {
-        "visit_site": null
+        "visit_site": null,
+        "token_expiry": "2 hours"
     },
 
     "main_menu": {

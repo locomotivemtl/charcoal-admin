@@ -235,9 +235,8 @@ class FormWidget extends AdminWidget implements
                 $template = 'charcoal/admin/widget/form.sidebar';
             }
 
-            $GLOBALS['widget_template'] = $template;
+            $this->setDynamicTemplate('widget_template', $template);
             yield $sidebarIdent => $sidebar;
-            $GLOBALS['widget_template'] = '';
         }
     }
 
@@ -317,12 +316,8 @@ class FormWidget extends AdminWidget implements
                 if ($formProperty->active() === false) {
                     continue;
                 }
-
-                $GLOBALS['widget_template'] = $formProperty->inputType();
-
+                $this->setDynamicTemplate('widget_template', $formProperty->inputType());
                 yield $formProperty->propertyIdent() => $formProperty;
-
-                $GLOBALS['widget_template'] = '';
             }
         }
     }

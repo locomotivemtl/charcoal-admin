@@ -102,7 +102,7 @@ class ChoiceDisplay extends AbstractPropertyDisplay
             return $prop->displayVal($val);
         }
 
-        if ($prop->allowNull()) {
+        if ($prop['allowNull']) {
             $nil = $this->emptyChoice();
             return (string)$nil['label'];
         }

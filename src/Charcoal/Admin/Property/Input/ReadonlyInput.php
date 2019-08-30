@@ -82,7 +82,7 @@ class ReadonlyInput extends AbstractPropertyInput
         }
 
         $property    = $this->p();
-        $displayType = $property->displayType();
+        $displayType = $property['displayType'];
 
         $value = $this->propertyVal();
         if ($value === null || $value === '') {

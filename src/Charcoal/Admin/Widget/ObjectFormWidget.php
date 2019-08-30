@@ -111,7 +111,9 @@ class ObjectFormWidget extends FormWidget implements
     {
         $metadata = $this->obj()->metadata();
 
-        if (isset($metadata['admin']['default_form'])) {
+        if (isset($metadata['admin']['defaultForm'])) {
+            return $metadata['admin']['defaultForm'];
+        } elseif (isset($metadata['admin']['default_form'])) {
             return $metadata['admin']['default_form'];
         }
 
@@ -209,10 +211,12 @@ class ObjectFormWidget extends FormWidget implements
 
         // We need to sort form properties by form group property order if a group exists
         if (!empty($group)) {
+            $group = array_map([$this, 'camelize'], $group);
             $props = array_merge(array_flip($group), $props);
         }
 
         foreach ($props as $propertyIdent => $propertyMetadata) {
+            $propertyIdent = $this->camelize($propertyIdent);
             if (method_exists($obj, 'filterPropertyMetadata')) {
                 $propertyMetadata = $obj->filterPropertyMetadata($propertyMetadata, $propertyIdent);
             }
@@ -248,6 +252,8 @@ class ObjectFormWidget extends FormWidget implements
                 'Property ident must be a string'
             );
         }
+
+        $propertyIdent = $this->camelize($propertyIdent);
 
         if (isset($this->formProperties[$propertyIdent])) {
             return $this->formProperties[$propertyIdent];
@@ -447,10 +453,11 @@ class ObjectFormWidget extends FormWidget implements
      */
     protected function acceptedRequestData()
     {
-        return array_merge(
-            ['obj_type', 'obj_id', 'template'],
-            parent::acceptedRequestData()
-        );
+        return array_merge([
+            'obj_type',
+            'obj_id',
+            'template'
+        ], parent::acceptedRequestData());
     }
 
     /**
@@ -536,7 +543,11 @@ class ObjectFormWidget extends FormWidget implements
      */
     public function parseFormProperties()
     {
-        return $this->formProperties;
+        $props = [];
+        foreach ($this->formProperties as $k => $v) {
+            $props[$this->camelize($k)] = $v;
+        }
+        return $props;
     }
 
     /**

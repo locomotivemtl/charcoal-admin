@@ -232,6 +232,7 @@
 "Remove File";"Retirer le fichier"
 "Choose Image…";"Choisissez une image…"
 "Remove Image";"Retirer l’image"
+"Remove Audio";"Retirer l’audio"
 "Library";"Librairie"
 "Support";"Support"
 "Database table created for ""{{ objType }}"".";"Table de base de données créée pour ""{{ objType }}""."

@@ -7,33 +7,19 @@ Charcoal.Admin.Property_Input_Image = function (opts)
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
 
-    this.opts = opts;
-    this.data = opts.data;
+    this.opts   = opts;
+    this.data   = opts.data;
+    this.dialog = null;
 
     this.set_input_id(this.opts.id).init();
-
-    return this;
 };
 
 Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
 Charcoal.Admin.Property_Input_Image.prototype.constructor = Charcoal.Admin.Property_Input_Image;
 Charcoal.Admin.Property_Input_Image.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Image.prototype.remove_file = function (event)
-{
-    event.preventDefault();
-
-    this.$hidden.val('');
-    this.$preview.empty();
-    this.$input.find('.form-control-plaintext').empty();
-    this.$input.find('.hide-if-no-file').addClass('d-none');
-    this.$input.find('.show-if-no-file').removeClass('d-none');
-};
-
 Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
 {
-    // console.log('Change Image');
-
     var img, target, file, src;
 
     img = new File();

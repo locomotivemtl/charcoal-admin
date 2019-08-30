@@ -220,8 +220,12 @@ class CollectionTemplate extends AdminTemplate implements
     {
         $adminMetadata = $this->objAdminMetadata();
 
-        if (isset($adminMetadata['default_search_list'])) {
+        if (isset($adminMetadata['defaultSearchList'])) {
+            $listIdent = $adminMetadata['defaultSearchList'];
+        } elseif (isset($adminMetadata['default_search_list'])) {
             $listIdent = $adminMetadata['default_search_list'];
+        } elseif (isset($adminMetadata['defaultList'])) {
+            $listIdent = $adminMetadata['defaultList'];
         } elseif (isset($adminMetadata['default_list'])) {
             $listIdent = $adminMetadata['default_list'];
         } else {
@@ -243,14 +247,17 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         $adminMetadata = $this->objAdminMetadata();
-        if (!isset($adminMetadata['default_collection_dashboard'])) {
-            throw new Exception(sprintf(
-                'No default collection dashboard defined in admin metadata for %s.',
-                get_class($this->proto())
-            ));
+        if (isset($adminMetadata['defaultCollectionDashboard'])) {
+            return $adminMetadata['defaultCollectionDashboard'];
+        } elseif (isset($adminMetadata['default_collection_dashboard'])) {
+            return $adminMetadata['default_collection_dashboard'];
         }
 
-        return $adminMetadata['default_collection_dashboard'];
+        // You've reached error.
+        throw new Exception(sprintf(
+            'No default collection dashboard defined in admin metadata for %s.',
+            get_class($this->proto())
+        ));
     }
 
     /**
@@ -259,12 +266,8 @@ class CollectionTemplate extends AdminTemplate implements
      */
     private function objAdminMetadata()
     {
-        $obj = $this->proto();
-
-        $objMetadata = $obj->metadata();
-
+        $objMetadata = $this->proto()->metadata();
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : [];
-
         return $adminMetadata;
     }
 }

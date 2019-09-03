@@ -263,7 +263,7 @@ trait RoutableTrait
 
             if (!$newRoute->isSlugUnique()) {
                 $newRoute->generateUniqueSlug();
-                $newSlug[$lang] = $newRoute->getSlug();
+                $newSlug[$lang] = $newRoute['slug'];
             }
         }
         $this->translator()->setLocale($origLang);

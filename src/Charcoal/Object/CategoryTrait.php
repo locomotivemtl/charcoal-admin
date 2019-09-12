@@ -68,7 +68,7 @@ trait CategoryTrait
     public function numCategoryItems()
     {
         $items = $this->categoryItems();
-        return count($items);
+        return is_countable($items) ? count($items) : 0;
     }
 
     /**

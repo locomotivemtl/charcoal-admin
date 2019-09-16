@@ -24,6 +24,7 @@ use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
 use Charcoal\App\Action\AbstractAction;
+use Charcoal\App\DebugAwareTrait;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
@@ -40,6 +41,7 @@ abstract class AdminAction extends AbstractAction implements
     use AdminTrait;
     use AuthAwareTrait;
     use BaseUrlTrait;
+    use DebugAwareTrait;
     use FeedbackContainerTrait;
     use SecurityTrait;
     use TranslatorAwareTrait;

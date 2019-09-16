@@ -4,7 +4,7 @@ namespace Charcoal\Admin;
 
 use InvalidArgumentException;
 
-// From Pimple
+// From 'pimple/pimple'
 use Pimple\Container;
 
 // From 'charcoal-factory'
@@ -25,7 +25,10 @@ use Charcoal\Ui\PrioritizableInterface;
 use Charcoal\Ui\PrioritizableTrait;
 
 // From 'charcoal-app'
+use Charcoal\App\DebugAwareTrait;
 use Charcoal\App\Template\AbstractWidget;
+
+// From 'charcoal-admin'
 use Charcoal\Admin\Support\AdminTrait;
 use Charcoal\Admin\Support\BaseUrlTrait;
 
@@ -40,6 +43,7 @@ class AdminWidget extends AbstractWidget implements
     use AdminTrait;
     use AuthAwareTrait;
     use BaseUrlTrait;
+    use DebugAwareTrait;
     use PrioritizableTrait;
     use ConditionalizableTrait;
     use TranslatorAwareTrait;

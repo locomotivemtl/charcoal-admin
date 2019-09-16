@@ -28,34 +28,6 @@ trait AdminTrait
     protected $appConfig;
 
     /**
-     * Whether the debug mode is enabled.
-     *
-     * @var boolean
-     */
-    private $debug = false;
-
-    /**
-     * Set application debug mode.
-     *
-     * @param  boolean $debug The debug flag.
-     * @return void
-     */
-    protected function setDebug($debug)
-    {
-        $this->debug = !!$debug;
-    }
-
-    /**
-     * Retrieve the application debug mode.
-     *
-     * @return boolean
-     */
-    public function debug()
-    {
-        return $this->debug;
-    }
-
-    /**
      * Set the admin's configset.
      *
      * @param  AdminConfig $config A configset.

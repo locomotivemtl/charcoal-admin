@@ -22,6 +22,7 @@ use Charcoal\User\AuthAwareTrait;
 use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-app'
+use Charcoal\App\DebugAwareTrait;
 use Charcoal\App\Template\AbstractTemplate;
 
 // From 'charcoal-admin'
@@ -48,6 +49,7 @@ class AdminTemplate extends AbstractTemplate implements
     use AdminTrait;
     use AuthAwareTrait;
     use BaseUrlTrait;
+    use DebugAwareTrait;
     use FeedbackContainerTrait;
     use SecurityTrait;
     use TranslatorAwareTrait;
@@ -130,13 +132,6 @@ class AdminTemplate extends AbstractTemplate implements
      * @var FactoryInterface $widgetFactory
      */
     private $widgetFactory;
-
-    /**
-     * The cache of parsed template names.
-     *
-     * @var array
-     */
-    protected static $templateNameCache = [];
 
     /**
      * Template's init method is called automatically from `charcoal-app`'s Template Route.
@@ -1130,34 +1125,5 @@ class AdminTemplate extends AbstractTemplate implements
     public function isFullscreenTemplate()
     {
         return false;
-    }
-
-    /**
-     * Retrieve the template's identifier.
-     *
-     * @return string
-     */
-    public function templateName()
-    {
-        $key = substr(strrchr('\\'.get_class($this), '\\'), 1);
-
-        if (!isset(static::$templateNameCache[$key])) {
-            $value = $key;
-
-            if (!ctype_lower($value)) {
-                $value = preg_replace('/\s+/u', '', $value);
-                $value = mb_strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1-', $value), 'UTF-8');
-            }
-
-            $value = str_replace(
-                [ 'abstract', 'trait', 'interface', 'template', '\\' ],
-                '',
-                $value
-            );
-
-            static::$templateNameCache[$key] = trim($value, '-');
-        }
-
-        return static::$templateNameCache[$key];
     }
 }

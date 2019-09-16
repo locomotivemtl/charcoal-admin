@@ -130,7 +130,7 @@ class CreateScript extends AdminScript
         $ret = $user->save();
 
         if ($ret) {
-            $this->climate()->green()->out("\n".sprintf('Success! User "%s" created.', $user->email()));
+            $this->climate()->green()->out("\n".sprintf('Success! User "%s" created.', $user['email']));
         } else {
             $this->climate()->red()->out("\nError. User could not be created.");
         }
@@ -204,7 +204,7 @@ class CreateScript extends AdminScript
         }
         $user = $this->modelFactory()->create(User::class);
         $user->loadFrom('email', $email);
-        if ($user->id() !== null) {
+        if ($user['id'] !== null) {
             throw new Exception(sprintf(
                 $this->translator()->translate('Email "%s" already exists in database.'),
                 $email

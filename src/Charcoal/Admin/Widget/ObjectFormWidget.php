@@ -471,12 +471,10 @@ class ObjectFormWidget extends FormWidget implements
         $objMetadata   = $obj->metadata();
         $adminMetadata = (isset($objMetadata['admin']) ? $objMetadata['admin'] : null);
 
-
         $formIdent = $this->formIdent();
         if (!$formIdent) {
             $formIdent = $this->formIdentFallback();
         }
-
 
         if ($formIdent && $obj->view()) {
             $formIdent = $obj->render($formIdent);
@@ -488,27 +486,42 @@ class ObjectFormWidget extends FormWidget implements
             $objFormData = [];
         }
 
-        if (isset($objFormData['groups']) && isset($adminMetadata['form_groups'])) {
+        $formGroups = [];
+        if (isset($adminMetadata['form_groups'])) {
+            $formGroups = array_merge($formGroups, $adminMetadata['form_groups']);
+        }
+        if (isset($adminMetadata['formGroups'])) {
+            $formGroups = array_merge($formGroups, $adminMetadata['formGroups']);
+        }
+        if (isset($objFormData['groups']) && !empty($formGroups)) {
+
             $extraFormGroups = array_intersect(
-                array_keys($adminMetadata['form_groups']),
+                array_keys($formGroups),
                 array_keys($objFormData['groups'])
             );
             foreach ($extraFormGroups as $groupIdent) {
                 $objFormData['groups'][$groupIdent] = array_replace_recursive(
-                    $adminMetadata['form_groups'][$groupIdent],
+                    $formGroups[$groupIdent],
                     $objFormData['groups'][$groupIdent]
                 );
             }
         }
 
-        if (isset($objFormData['sidebars']) && isset($adminMetadata['form_sidebars'])) {
+        $formSidebars = [];
+        if (isset($adminMetadata['form_sidebars'])) {
+            $formGroups = array_merge($formGroups, $adminMetadata['form_sidebars']);
+        }
+        if (isset($adminMetadata['formSidebars'])) {
+            $formGroups = array_merge($formGroups, $adminMetadata['formSidebars']);
+        }
+        if (isset($objFormData['sidebars']) && !empty($formSidebars)) {
             $extraFormSidebars = array_intersect(
-                array_keys($adminMetadata['form_sidebars']),
+                array_keys($formSidebars),
                 array_keys($objFormData['sidebars'])
             );
             foreach ($extraFormSidebars as $sidebarIdent) {
                 $objFormData['sidebars'][$sidebarIdent] = array_replace_recursive(
-                    $adminMetadata['form_sidebars'][$sidebarIdent],
+                    $formSidebars[$sidebarIdent],
                     $objFormData['sidebars'][$sidebarIdent]
                 );
             }

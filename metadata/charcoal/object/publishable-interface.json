@@ -1,6 +1,6 @@
 {
     "properties": {
-        "publish_date": {
+        "publishDate": {
             "type": "date-time",
             "label": {
                 "en": "Publish Date",
@@ -15,7 +15,7 @@
                 "fr": "Laissez ce champ vide pour déclencher la publication de l’objet lors de l’enregistrement."
             }
         },
-        "expiry_date": {
+        "expiryDate": {
             "type": "date-time",
             "label": {
                 "en": "Expiry Date",
@@ -30,7 +30,7 @@
                 "fr": "Vous permet de planifier l’expiration de l’objet. Un objet expiré est toujours présent, mais n’est plus visible sur le site."
             }
         },
-        "publish_status": {
+        "publishStatus": {
             "type": "string",
             "input_type": "charcoal/admin/property/input/select",
             "label": {

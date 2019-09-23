@@ -217,9 +217,9 @@ _The archivable behavior is not yet documented. It is still under heavy developm
 
 | Property           | Type         | Default    | Description |
 | ------------------ | ------------ | ---------- | ----------- |
-| **publish_date**   | `date-time`  | `null`     | …           |
-| **expiry_date**    | `date-time`  | `null`     | …           |
-| **publish_status** | `string` [1] | `'draft'`  | …           |
+| **publishDate**   | `date-time`  | `null`     | …           |
+| **expiryDate**    | `date-time`  | `null`     | …           |
+| **publishStatus** | `string` [1] | `'draft'`  | …           |
 
 > Default metadata is defined in `metadata/charcoal/object/publishable-interface.json`.
 

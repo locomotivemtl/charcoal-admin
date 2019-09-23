@@ -487,14 +487,16 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         $formGroups = [];
+
         if (isset($adminMetadata['form_groups'])) {
             $formGroups = array_merge($formGroups, $adminMetadata['form_groups']);
         }
+
         if (isset($adminMetadata['formGroups'])) {
             $formGroups = array_merge($formGroups, $adminMetadata['formGroups']);
         }
-        if (isset($objFormData['groups']) && !empty($formGroups)) {
 
+        if (isset($objFormData['groups']) && !empty($formGroups)) {
             $extraFormGroups = array_intersect(
                 array_keys($formGroups),
                 array_keys($objFormData['groups'])
@@ -508,12 +510,15 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         $formSidebars = [];
+
         if (isset($adminMetadata['form_sidebars'])) {
-            $formGroups = array_merge($formGroups, $adminMetadata['form_sidebars']);
+            $formSidebars = array_merge($formSidebars, $adminMetadata['form_sidebars']);
         }
+
         if (isset($adminMetadata['formSidebars'])) {
-            $formGroups = array_merge($formGroups, $adminMetadata['formSidebars']);
+            $formSidebars = array_merge($formSidebars, $adminMetadata['formSidebars']);
         }
+
         if (isset($objFormData['sidebars']) && !empty($formSidebars)) {
             $extraFormSidebars = array_intersect(
                 array_keys($formSidebars),

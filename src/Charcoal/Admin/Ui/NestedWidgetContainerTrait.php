@@ -12,6 +12,7 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewInterface;
 
 // From 'charcoal-app'
 use Charcoal\App\Template\WidgetInterface;
@@ -286,7 +287,7 @@ trait NestedWidgetContainerTrait
         $obj = $this->form()->obj();
 
         // Make sure there's an "out"
-        if ($obj instanceof ViewableInterface && $obj->view()) {
+        if ($obj instanceof ViewableInterface && ($obj->view() instanceof ViewInterface)) {
             $data = $obj->view()->render($data, $obj->viewController());
         } else {
             $data = preg_replace_callback('~\{\{\s*(.*?)\s*\}\}~i', [ $this, 'parseDataToken' ], $data);

@@ -11,7 +11,6 @@ use Psr\Http\Message\RequestInterface;
 // From Pimple
 use Pimple\Container;
 
-
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Ui\CollectionContainerInterface;
@@ -100,6 +99,7 @@ class CollectionTemplate extends AdminTemplate implements
         }
 
         $model    = $this->proto();
+        $hasView  = $this->isObjRenderable($model);
         $metadata = $model->metadata();
         $objLabel = null;
 
@@ -115,7 +115,7 @@ class CollectionTemplate extends AdminTemplate implements
                 $listIdent = $this->collectionIdentFallback();
             }
 
-            if ($listIdent && $model->view()) {
+            if ($listIdent && $hasView) {
                 $listIdent = $model->render($listIdent);
             }
 
@@ -142,7 +142,7 @@ class CollectionTemplate extends AdminTemplate implements
             }
         }
 
-        if ($model->view()) {
+        if ($hasView) {
             $this->title = $model->render((string)$objLabel, $model);
         } else {
             $this->title = (string)$objLabel;

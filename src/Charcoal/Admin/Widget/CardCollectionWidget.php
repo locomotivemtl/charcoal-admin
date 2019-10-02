@@ -135,13 +135,20 @@ class CardCollectionWidget extends TableWidget
      */
     public function isChipSuccess(ModelInterface $object)
     {
-        if (is_callable([$object, 'getIsViewable'])) {
-            return !!$object['isViewable'];
+        $method = [ $object, 'isViewable' ];
+        if (is_callable($method)) {
+            return call_user_func($method);
         }
 
-        if (is_callable([$object, 'getActive'])) {
-            return !!$object['active'];
+        if (isset($object['isViewable'])) {
+            return (bool)$object['isViewable'];
         }
+
+        if (isset($object['active'])) {
+            return (bool)$object['active'];
+        }
+
+        return true;
     }
 
     /**

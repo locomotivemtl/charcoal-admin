@@ -9,6 +9,7 @@ use Charcoal\Translator\Translation;
 
 // From 'charcoal-view'
 use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewInterface;
 
 // From 'charcoal-user'
 use Charcoal\User\AuthAwareInterface;
@@ -32,6 +33,15 @@ trait ActionContainerTrait
      * @var integer|null
      */
     protected $actionsPriority;
+
+    /**
+     * Holds a list of all renderable classes.
+     *
+     * Format: `class => boolean`
+     *
+     * @var boolean[]
+     */
+    protected static $objRenderableCache = [];
 
     /**
      * Parse the given UI actions.
@@ -231,7 +241,7 @@ trait ActionContainerTrait
             }
 
             if (isset($action['extraTemplate'])) {
-                    $action['extraTemplate'] = $this->render($action['extraTemplate']);
+                $action['extraTemplate'] = $this->render($action['extraTemplate']);
             }
 
             if (isset($action['dataAttributes']) && is_array($action['dataAttributes'])) {
@@ -315,7 +325,11 @@ trait ActionContainerTrait
             $obj = isset($this->currentObj) ? $this->currentObj : $this->proto();
         }
 
-        return $obj instanceof ViewableInterface ? $obj : null;
+        if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {
+            return $obj;
+        }
+
+        return null;
     }
 
     /**

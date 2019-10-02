@@ -143,17 +143,12 @@ class ObjectFormWidget extends FormWidget implements
             );
         }
 
-        if (!$this->obj()) {
-            $this->nextUrl = $url;
-
-            return $this;
-        }
-
         $obj = $this->obj();
-        if ($obj->view()) {
-            $this->nextUrl = $obj->render($url);
+        if ($obj && $this->isObjRenderable($obj)) {
+            $url = $obj->render($url);
         }
 
+        $this->nextUrl = $url;
         return $this;
     }
 
@@ -476,7 +471,7 @@ class ObjectFormWidget extends FormWidget implements
             $formIdent = $this->formIdentFallback();
         }
 
-        if ($formIdent && $obj->view()) {
+        if ($formIdent && $this->isObjRenderable($obj)) {
             $formIdent = $obj->render($formIdent);
         }
 

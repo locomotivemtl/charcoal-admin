@@ -6,6 +6,9 @@ namespace Charcoal\Admin\Script\User\AclRole;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From 'charcoal-core'
+use Charcoal\Validator\ValidatableInterface;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 
@@ -32,7 +35,7 @@ class CreateScript extends AdminScript
         $role = $this->modelFactory()->create('charcoal/admin/user/acl-role');
         $properties = $role->properties();
 
-        $shown_props = [
+        $shownProps = [
             'ident',
             'parent',
             'allowed',
@@ -42,15 +45,21 @@ class CreateScript extends AdminScript
 
         $vals = [];
         foreach ($properties as $prop) {
-            if (!in_array($prop->ident(), $shown_props)) {
+            $ident = $prop->ident();
+
+            if (!in_array($ident, $shownProps)) {
                 continue;
             }
-            $input = $this->propertyToInput($prop);
-            $v = $input->prompt();
 
-            $prop->setVal($v);
-            $valid = $prop->validate();
-            $vals[$prop->ident()] = $v;
+            $input = $this->propertyToInput($prop);
+            $value = $input->prompt();
+
+            if ($prop instanceof ValidatableInterface) {
+                $valid = $prop->setVal($value)->validate();
+                $prop->clearVal();
+            }
+
+            $vals[$ident] = $value;
         }
 
         $role->setFlatData($vals);

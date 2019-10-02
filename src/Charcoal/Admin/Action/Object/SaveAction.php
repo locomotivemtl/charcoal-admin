@@ -10,7 +10,12 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
 use Charcoal\Model\ModelValidator;
+use Charcoal\Source\StorableInterface;
+
+// From 'charcoal-property'
+use Charcoal\Property\DescribablePropertyInterface;
 
 // From 'charcoal-object'
 use Charcoal\Object\AuthorableInterface;
@@ -100,6 +105,37 @@ class SaveAction extends AbstractSaveAction
     }
 
     /**
+     * @param  ModelInterface $obj The object to validate.
+     * @return boolean
+     */
+    public function validate(ModelInterface $obj)
+    {
+        $this->parsePrimaryKey($obj);
+        $result = parent::validate($obj);
+
+        return $result;
+    }
+
+    /**
+     * Prepare the primary key for the object.
+     *
+     * @param  ModelInterface $obj The object to validate.
+     * @return void
+     */
+    public function parsePrimaryKey(ModelInterface $obj)
+    {
+        if (($obj instanceof StorableInterface) && ($obj instanceof DescribablePropertyInterface)) {
+            $pk = $obj->key();
+            $id = $obj[$pk];
+
+            $id = $obj->property($pk)->save($id);
+            if (!empty($id)) {
+                $obj[$pk] = $id;
+            }
+        }
+    }
+
+    /**
      * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
      * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
@@ -132,7 +168,7 @@ class SaveAction extends AbstractSaveAction
             $obj = $this->obj();
             $obj->setFlatData($this->saveData());
 
-            $valid = $obj->validate();
+            $valid = $this->validate($obj);
             if (!$valid) {
                 if (!$this->hasFeedbacks()) {
                     $this->addFeedback('error', strtr($errorThrown, [

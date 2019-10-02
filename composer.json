@@ -19,7 +19,7 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.18.x-dev"
+            "dev-master": "0.19.x-dev"
         }
     },
     "require": {
@@ -33,7 +33,7 @@
         "locomotivemtl/charcoal-app": "~0.8.1",
         "locomotivemtl/charcoal-cache": "~0.1",
         "locomotivemtl/charcoal-cms": "~0.8",
-        "locomotivemtl/charcoal-core": "~0.4",
+        "locomotivemtl/charcoal-core": "~0.5",
         "locomotivemtl/charcoal-email": "~0.4",
         "locomotivemtl/charcoal-object": "~0.6",
         "locomotivemtl/charcoal-translator": "~0.3",

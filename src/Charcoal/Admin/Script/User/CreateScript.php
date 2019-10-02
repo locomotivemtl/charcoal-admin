@@ -8,6 +8,13 @@ use Exception;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-user'
+use Charcoal\User\AuthAwareInterface;
+use Charcoal\User\AuthAwareTrait;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 use Charcoal\Admin\User;
@@ -15,8 +22,11 @@ use Charcoal\Admin\User;
 /**
  * Create admin user script.
  */
-class CreateScript extends AdminScript
+class CreateScript extends AdminScript implements
+    AuthAwareInterface
 {
+    use AuthAwareTrait;
+
     const MIN_PASSWORD_LENGTH = 5;
 
     /**
@@ -28,6 +38,18 @@ class CreateScript extends AdminScript
 
         $arguments = $this->defaultArguments();
         $this->setArguments($arguments);
+    }
+
+    /**
+     * @param  Container $container Pimple DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Satisfies AuthAwareInterface
+        $this->setAuthenticator($container['admin/authenticator']);
     }
 
     /**
@@ -93,11 +115,15 @@ class CreateScript extends AdminScript
      */
     private function createUser()
     {
-        $this->climate()->underline()->out(
+        $authenticator = $this->authenticator();
+
+        $climate = $this->climate();
+
+        $climate->underline()->out(
             $this->translator()->translate('Create a new Charcoal Administrator User')
         );
 
-        $user       = $this->modelFactory()->create(User::class);
+        $user       = $authenticator->createUser();
         $prompts    = $this->userPrompts();
         $properties = $user->properties(array_keys($prompts));
 
@@ -123,16 +149,16 @@ class CreateScript extends AdminScript
         }
 
         // Trigger reset password
-        $user->resetPassword($vals['password']);
+        $authenticator->changeUserPassword($user, $password, false);
         unset($vals['password']);
 
         $user->setFlatData($vals);
-        $ret = $user->save();
+        $result = $user->save();
 
-        if ($ret) {
-            $this->climate()->green()->out("\n".sprintf('Success! User "%s" created.', $user['email']));
+        if ($result) {
+            $climate->green()->out("\n".sprintf('Success! User "%s" created.', $user['email']));
         } else {
-            $this->climate()->red()->out("\nError. User could not be created.");
+            $climate->red()->out("\nError. User could not be created.");
         }
     }
 
@@ -142,28 +168,29 @@ class CreateScript extends AdminScript
     private function userPrompts()
     {
         $translator = $this->translator();
+        $climate    = $this->climate();
 
         return [
             'email' => [
                 'label'      => $translator->translate('Please enter email: '),
-                'property'   => $this->climate()->arguments->get('email'),
-                'validation' => [$this, 'validateEmail']
+                'property'   => $climate->arguments->get('email'),
+                'validation' => [ $this, 'validateEmail' ],
             ],
             'password' => [
                 'label'      => $translator->translate('Please enter password: '),
-                'property'   => $this->climate()->arguments->get('password'),
-                'validation' => [$this, 'validatePassword']
+                'property'   => $climate->arguments->get('password'),
+                'validation' => [ $this, 'validatePassword' ],
             ],
             'roles' => [
                 'label'      => $translator->translate('Please enter role(s) [ex: admin], comma separated: '),
-                'property'   => $this->climate()->arguments->get('roles'),
-                'validation' => null
+                'property'   => $climate->arguments->get('roles'),
+                'validation' => null,
             ],
             'display_name' => [
                 'label'      => $translator->translate('Please enter a name: '),
-                'property'   => $this->climate()->arguments->get('display_name'),
-                'validation' => null
-            ]
+                'property'   => $climate->arguments->get('display_name'),
+                'validation' => null,
+            ],
         ];
     }
 
@@ -175,12 +202,12 @@ class CreateScript extends AdminScript
     private function promptProperty($prop, $label)
     {
         $input = $this->propertyToInput($prop, $label);
-        $v     = $input->prompt();
+        $value = $input->prompt();
         if ($prop->type() === 'password') {
             $this->climate()->dim()->out('');
         }
 
-        return $v;
+        return $value;
     }
 
     /**

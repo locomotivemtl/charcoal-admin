@@ -147,7 +147,7 @@ class GridStackDashboardWidget extends AdminWidget implements
             return $this->adminUser;
         }
 
-        $this->adminUser = $this->authenticator()->authenticate();
+        $this->adminUser = $this->authenticator()->user();
 
         return $this->adminUser;
     }

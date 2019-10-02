@@ -9,7 +9,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-admin'
-use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
@@ -37,8 +36,6 @@ use Charcoal\Admin\User\LostPasswordToken;
  */
 class ResetPasswordAction extends AdminAction
 {
-    use AuthActionTrait;
-
     /**
      * @return boolean
      */
@@ -123,8 +120,16 @@ class ResetPasswordAction extends AdminAction
 
         $failMessage = $translator->translation('An error occurred while processing the password change.');
 
-        $user = $this->loadUser($email);
-        if ($user === null) {
+        $authenticator = $this->authenticator();
+
+        $user = $authenticator->createUser();
+        $user->loadFrom('email', $email);
+
+        if (!$authenticator->validateAuthentication($user)) {
+            /**
+             * Fail silently — Never confirm or deny the existence
+             * of an account with a given email or email.
+             */
             if ($ip) {
                 $logMessage = sprintf(
                     '[Admin] Reset Password — Can not find "%s" user in database for %s.',
@@ -154,7 +159,7 @@ class ResetPasswordAction extends AdminAction
         }
 
         try {
-            $user->resetPassword($password1);
+            $authenticator->changeUserPassword($user, $password1);
             $this->deleteToken($token);
 
             $this->addFeedback('success', $translator->translate('Your password has been successfully changed.'));
@@ -195,7 +200,7 @@ class ResetPasswordAction extends AdminAction
     {
         $ret = [
             'success'   => $this->success(),
-            'feedbacks' => $this->feedbacks()
+            'feedbacks' => $this->feedbacks(),
         ];
 
         return $ret;
@@ -219,11 +224,11 @@ class ResetPasswordAction extends AdminAction
     {
         $obj = $this->modelFactory()->create(LostPasswordToken::class);
         $sql = strtr('SELECT * FROM `%table` WHERE `token` = :token AND `user` = :userId AND `expiry` > NOW()', [
-            '%table' => $obj->source()->table()
+            '%table' => $obj->source()->table(),
         ]);
         $obj->loadFromQuery($sql, [
             'token'  => $token,
-            'userId' => $userId
+            'userId' => $userId,
         ]);
 
         return !!$obj->token();

@@ -79,7 +79,7 @@ class LogoutActionTest extends AbstractTestCase
         $response = new Response();
 
         $response = $this->obj->run($request, $response);
-        $this->assertEquals(500, $response->getStatusCode());
+        $this->assertEquals(401, $response->getStatusCode());
 
         $results = $this->obj->results();
         $this->assertFalse($results['success']);
@@ -91,13 +91,13 @@ class LogoutActionTest extends AbstractTestCase
     public function testRunWithAuthenticatedUser()
     {
         $user = $this->createUser('foo@bar.com');
-        $user->login();
+        $this->getAuthenticator()->setUser($user);
 
         $request  = Request::createFromEnvironment(Environment::mock());
         $response = new Response();
 
         $response = $this->obj->run($request, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(204, $response->getStatusCode());
 
         $results = $this->obj->results();
         $this->assertTrue($results['success']);

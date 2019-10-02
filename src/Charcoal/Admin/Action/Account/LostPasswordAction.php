@@ -16,7 +16,6 @@ use Pimple\Container;
 use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-admin'
-use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
 use Charcoal\Admin\User;
 use Charcoal\Admin\User\LostPasswordToken;
@@ -43,8 +42,6 @@ use Charcoal\Admin\User\LostPasswordToken;
  */
 class LostPasswordAction extends AdminAction
 {
-    use AuthActionTrait;
-
     /**
      * Store the factory instance for the current class.
      *
@@ -71,7 +68,8 @@ class LostPasswordAction extends AdminAction
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         $translator = $this->translator();
-        $ip   = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
 
         $email = $request->getParam('email');
         if (!$email) {
@@ -103,8 +101,12 @@ class LostPasswordAction extends AdminAction
         $doneMessage = $translator->translate('If a registered user matches the given email address, instructions to reset your password will be sent to the email address registered with that account.');
         $failMessage = $translator->translate('An error occurred while processing the password reset request.');
 
-        $user = $this->loadUser($email);
-        if ($user === null) {
+        $authenticator = $this->authenticator();
+
+        $user = $authenticator->createUser();
+        $user->loadFrom('email', $email);
+
+        if (!$authenticator->validateAuthentication($user)) {
             /**
              * Fail silently — Never confirm or deny the existence
              * of an account with a given email or email.
@@ -169,7 +171,7 @@ class LostPasswordAction extends AdminAction
     {
         $ret = [
             'success'   => $this->success(),
-            'feedbacks' => $this->feedbacks()
+            'feedbacks' => $this->feedbacks(),
         ];
 
         return $ret;
@@ -223,7 +225,7 @@ class LostPasswordAction extends AdminAction
     {
         $token = $this->modelFactory()->create(LostPasswordToken::class);
         $token->setData([
-            'user' => $user['id']
+            'user' => $user['id'],
         ]);
         $token->save();
         return $token;
@@ -270,8 +272,8 @@ class LostPasswordAction extends AdminAction
                 'adminUrl'         => $this->adminUrl(),
                 'urlResetPassword' => $this->adminUrl().'account/reset-password/'.$token->id(),
                 'expiry'           => $token->expiry()->format('Y-m-d H:i:s'),
-                'ipAddress'        => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : ''
-            ]
+                'ipAddress'        => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+            ],
         ]);
         $emailObj->send();
     }

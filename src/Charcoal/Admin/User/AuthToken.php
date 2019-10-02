@@ -6,7 +6,7 @@ namespace Charcoal\Admin\User;
 use Charcoal\User\AuthToken as BaseAuthToken;
 
 /**
- * Authorization token; to keep a user logged in
+ * Admin Authorization Token Model
  */
 class AuthToken extends BaseAuthToken
 {

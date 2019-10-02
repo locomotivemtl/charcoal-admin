@@ -30,7 +30,7 @@ trait SecurityTrait
      */
     public function isAuthenticated()
     {
-        return !!$this->authenticator()->authenticate();
+        return $this->authenticator()->check();
     }
 
     /**
@@ -40,7 +40,7 @@ trait SecurityTrait
      */
     public function getAuthenticatedUser()
     {
-        return $this->authenticator()->authenticate();
+        return $this->authenticator()->user();
     }
 
     /**

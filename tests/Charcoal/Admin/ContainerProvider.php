@@ -69,6 +69,8 @@ use Charcoal\Translator\Translator;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Config as AdminConfig;
+use Charcoal\Admin\User as AdminUser;
+use Charcoal\Tests\Admin\Mock\AuthToken as AdminAuthToken;
 
 /**
  *
@@ -558,9 +560,9 @@ class ContainerProvider
         $container['admin/authenticator'] = function (Container $container) {
             return new Authenticator([
                 'logger'        => $container['logger'],
-                'user_type'     => 'charcoal/admin/user',
+                'user_type'     => AdminUser::class,
                 'user_factory'  => $container['model/factory'],
-                'token_type'    => 'charcoal/admin/user/auth-token',
+                'token_type'    => AdminAuthToken::class,
                 'token_factory' => $container['model/factory']
             ]);
         };
@@ -687,5 +689,27 @@ class ContainerProvider
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerScriptDependencies(Container $container)
+    {
+        $this->registerDebug($container);
+
+        $this->registerLogger($container);
+
+        $this->registerModelFactory($container);
+        $this->registerTranslator($container);
+
+        $this->registerAdminConfig($container);
+        $this->registerBaseUrl($container);
+
+        $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
+
+        $this->registerClimate($container);
     }
 }

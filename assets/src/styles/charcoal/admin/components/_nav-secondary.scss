@@ -3,19 +3,27 @@
 // ==========================================================================
 
 .c-nav-secondary {
-    position: absolute;
     z-index: 800;
-    top: rem($header-height);
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: space-between;
+    flex: 1 1 0;
+
+    @media (max-width: $to-large) {
+        top: 40px;
+        bottom: 0;
+        position: fixed;
+        width: 0;
+    }
 }
 
 .c-nav-secondary_pane {
+    position: relative;
+
     @media (max-width: $to-small) {
         left: $unit;
-        width: calc(100% - #{$unit});
+        width: calc(100vw - #{$unit});
         transform: translateX(-100%) translateX(-$unit);
     }
 
@@ -27,12 +35,8 @@
 
     @media (max-width: $to-large) {
         background-color: $charcoal-gray-6;
-        position: fixed;
-        top: $unit;
-        bottom: 0;
-        padding: 0 $unit / 2;
-        padding-bottom: $unit;
-        overflow-y: auto;
+        padding: $unit / 2;
+
         -webkit-overflow-scrolling: touch;
         transition: transform 0.5s;
     }
@@ -53,6 +57,9 @@
             padding-top: rem($unit / 2);
         }
     }
+
+    flex: 1 1 0;
+    overflow-y: scroll;
 
     .has-nav-open & {
         transform: translateX(0%);
@@ -212,13 +219,10 @@
     background-color: $charcoal-gray-4;
     color: $charcoal-gray-1;
     padding: $unit / 2;
-    right: 0;
-    bottom: 0;
-    left: 0;
 
     @media (max-width: $to-small) {
         left: $unit;
-        width: calc(100% - #{$unit});
+        width: calc(100vw - #{$unit});
         transform: translateX(-100%) translateX(-$unit);
     }
 
@@ -228,15 +232,9 @@
         transform: translateX(-100%) translateX(-$nav-main-width);
     }
 
-    @media (max-width: $to-large) {
-        position: fixed;
-        transition: transform 0.5s;
-    }
-
-    @media (min-width: $from-large) {
-        padding: rem($unit / 2);
-        position: absolute;
-    }
+    position: relative;
+    flex: 0 0 auto;
+    transition: transform 0.5s;
 
     .has-nav-open & {
         transform: translateX(0%);

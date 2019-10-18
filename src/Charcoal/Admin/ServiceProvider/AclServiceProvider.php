@@ -70,5 +70,15 @@ class AclServiceProvider implements ServiceProviderInterface
 
             return $acl;
         };
+
+        /**
+         * Replace default ACL ('charcoal-user') with the Admin ACL.
+         *
+         * @todo   Do this right!
+         * @return Acl
+         */
+        $container['authorizer/acl'] = function () {
+            return $container['admin/acl'];
+        };
     }
 }

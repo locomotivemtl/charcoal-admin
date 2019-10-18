@@ -289,7 +289,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         };
 
         /**
-         * For 'charcoal-ui'
+         * Replace default Authenticator ('charcoal-ui') with the Admin Authenticator.
          *
          * @todo   Do this right!
          * @param  Container $container The Pimple DI Container.
@@ -312,7 +312,7 @@ class AdminServiceProvider implements ServiceProviderInterface
         };
 
         /**
-         * For 'charcoal-ui'
+         * Replace default Authorizer ('charcoal-ui') with the Admin Authorizer.
          *
          * @todo   Do this right!
          * @param  Container $container The Pimple DI Container.

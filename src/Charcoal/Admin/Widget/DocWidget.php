@@ -48,6 +48,13 @@ class DocWidget extends FormWidget implements
     protected $showTitle;
 
     /**
+     * The class name of the form property widget.
+     *
+     * @var string
+     */
+    protected $formPropertyClass = DocFormPropertyWidget::class;
+
+    /**
      * Display options.
      *
      * @var array
@@ -378,20 +385,6 @@ class DocWidget extends FormWidget implements
         $p->setViewController($this->viewController());
         $p->setPropertyIdent($propertyIdent);
         $p->setData($propertyMetadata);
-
-        return $p;
-    }
-
-    /**
-     * @param array $data Optional. The form property data to set.
-     * @return FormPropertyWidget
-     */
-    public function createFormProperty(array $data = null)
-    {
-        $p = $this->widgetFactory()->create(DocFormPropertyWidget::class);
-        if ($data !== null) {
-            $p->setData($data);
-        }
 
         return $p;
     }

@@ -74,6 +74,17 @@ class FormWidget extends AdminWidget implements
     protected $submitLabel;
 
     /**
+     * The class name of the form property widget.
+     *
+     * Must be a fully-qualified PHP namespace and an implementation of
+     * {@see \Charcoal\Admin\Widget\FormPropertyWidget}.
+     * Used by the widget factory.
+     *
+     * @var string
+     */
+    protected $formPropertyClass = FormPropertyWidget::class;
+
+    /**
      * Store the factory instance for the current class.
      *
      * @var FactoryInterface
@@ -86,12 +97,41 @@ class FormWidget extends AdminWidget implements
      */
     public function createFormProperty(array $data = null)
     {
-        $p = $this->widgetFactory()->create(FormPropertyWidget::class);
+        $p = $this->widgetFactory()->create($this->formPropertyClass());
         if ($data !== null) {
             $p->setData($data);
         }
 
         return $p;
+    }
+
+    /**
+     * Set the class name of the form property widget.
+     *
+     * @param  string $className The class name of the form property widget.
+     * @throws InvalidArgumentException If the class name is not a string.
+     * @return FormWidget Chainable
+     */
+    protected function setFormPropertyClass($className)
+    {
+        if (!is_string($className)) {
+            throw new InvalidArgumentException(
+                'Form property class name must be a string.'
+            );
+        }
+
+        $this->formPropertyClass = $className;
+        return $this;
+    }
+
+    /**
+     * Retrieve the class name of the form property widget.
+     *
+     * @return string
+     */
+    public function formPropertyClass()
+    {
+        return $this->formPropertyClass;
     }
 
     /**

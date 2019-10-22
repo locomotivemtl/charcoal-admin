@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin\Widget;
 
-use Charcoal\Admin\Property\HierarchicalObjectProperty;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
@@ -25,9 +24,10 @@ use Charcoal\Ui\PrioritizableInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Property\HierarchicalObjectProperty;
+use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\FormSidebarInterface;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
-use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
 /**
@@ -467,6 +467,17 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Set an widget factory.
+     *
+     * @param  FactoryInterface $factory The factory to create widgets.
+     * @return void
+     */
+    protected function setWidgetFactory(FactoryInterface $factory)
+    {
+        $this->widgetFactory = $factory;
+    }
+
+    /**
      * Fetch metadata from the current request.
      *
      * @return array
@@ -533,16 +544,5 @@ class FormWidget extends AdminWidget implements
         }
 
         return ($a < $b) ? (-1) : 1;
-    }
-
-    /**
-     * Set an widget factory.
-     *
-     * @param FactoryInterface $factory The factory to create widgets.
-     * @return void
-     */
-    private function setWidgetFactory(FactoryInterface $factory)
-    {
-        $this->widgetFactory = $factory;
     }
 }
